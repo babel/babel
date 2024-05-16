@@ -28,11 +28,10 @@ interface Helper {
 export interface HelperMetadata {
   globals: string[];
   localBindingNames: string[];
-  dependencies: Map<string, string>;
+  dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportPath: string;
   exportName: string;
-  importBindingsReferences: string[];
 }
 
 function helper(minVersion: string, source: string, metadata: HelperMetadata): Helper {
@@ -173,11 +172,10 @@ if (!process.env.BABEL_8_BREAKING) {
  * @typedef {Object} HelperMetadata
  * @property {string[]} globals
  * @property {string[]} localBindingNames
- * @property {Map<string, string>} dependencies
+ * @property {{ [name: string]: string[] }} dependencies
  * @property {string[]} exportBindingAssignments
  * @property {string} exportPath
  * @property {string} exportName
- * @property {string[]} importBindingsReferences
  */
 
 /**
@@ -189,13 +187,14 @@ if (!process.env.BABEL_8_BREAKING) {
 export function getHelperMetadata(code, helperName) {
   const globals = new Set();
   const localBindingNames = new Set();
-  // Maps imported identifier -> helper name
-  const dependencies = new Map();
+  // Maps imported identifier name -> helper name
+  const dependenciesBindings = new Map();
 
   let exportName;
   let exportPath;
   const exportBindingAssignments = [];
-  const importBindingsReferences = [];
+  // helper name -> reference paths
+  const dependencies = new Map();
 
   const spansToRemove = [];
 
@@ -204,7 +203,6 @@ export function getHelperMetadata(code, helperName) {
     Program(path) {
       for (const child of path.get("body")) {
         if (child.isImportDeclaration()) {
-          const name = child.node.source.value;
           if (
             child.get("specifiers").length !== 1 ||
             !child.get("specifiers.0").isImportDefaultSpecifier()
@@ -213,7 +211,11 @@ export function getHelperMetadata(code, helperName) {
               `Helpers can only import a default value (in ${helperName})`
             );
           }
-          dependencies.set(child.node.specifiers[0].local.name, name);
+          dependenciesBindings.set(
+            child.node.specifiers[0].local.name,
+            child.node.source.value
+          );
+          dependencies.set(child.node.source.value, []);
           spansToRemove.push([child.node.start, child.node.end]);
           child.remove();
         }
@@ -252,14 +254,13 @@ export function getHelperMetadata(code, helperName) {
       const name = child.node.name;
       const binding = child.scope.getBinding(name);
       if (!binding) {
-        if (dependencies.has(name)) {
-          importBindingsReferences.push(makePath(child));
+        if (dependenciesBindings.has(name)) {
+          dependencies
+            .get(dependenciesBindings.get(name))
+            .push(makePath(child));
         } else if (name !== "arguments" || child.scope.path.isProgram()) {
           globals.add(name);
         }
-      }
-      if (helperName === "AsyncGenerator" && name === "OverloadYield") {
-        //debugger;
       }
     },
     AssignmentExpression(child) {
@@ -303,11 +304,10 @@ export function getHelperMetadata(code, helperName) {
     {
       globals: Array.from(globals),
       localBindingNames: Array.from(localBindingNames),
-      dependencies,
+      dependencies: Object.fromEntries(dependencies),
       exportBindingAssignments,
       exportPath,
       exportName,
-      importBindingsReferences,
     },
   ];
 }
@@ -328,11 +328,10 @@ export function stringifyMetadata(metadata) {
     {
       globals: ${JSON.stringify(metadata.globals)},
       localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
-      dependencies: new Map(${JSON.stringify(Array.from(metadata.dependencies))}),
       exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
       exportPath: ${JSON.stringify(metadata.exportPath)},
       exportName: ${JSON.stringify(metadata.exportName)},
-      importBindingsReferences: ${JSON.stringify(metadata.importBindingsReferences)},
+      dependencies: ${JSON.stringify(metadata.dependencies)},
     }
   `;
 }

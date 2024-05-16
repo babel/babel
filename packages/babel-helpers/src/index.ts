@@ -32,15 +32,14 @@ function permuteHelperAST(
     exportBindingAssignments,
     exportPath,
     exportName,
-    importBindingsReferences,
   } = metadata;
 
   const dependenciesRefs: Record<string, t.Expression> = {};
-  dependencies.forEach((name, id) => {
-    dependenciesRefs[id] =
+  for (const name of Object.keys(dependencies)) {
+    dependenciesRefs[name] =
       (typeof getDependency === "function" && getDependency(name)) ||
-      identifier(id);
-  });
+      identifier(name);
+  }
 
   const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
@@ -61,8 +60,12 @@ function permuteHelperAST(
   // We need to compute these in advance because removing nodes would
   // invalidate the paths.
   const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
-  const impsBindingRefs: NodePath<t.Identifier>[] =
-    importBindingsReferences.map(p => path.get(p));
+  const impsBindingRefs: Map<string, NodePath<t.Identifier>[]> = new Map(
+    Object.entries(dependencies).map(([name, ps]) => [
+      name,
+      ps.map(p => path.get(p) as NodePath<t.Identifier>),
+    ]),
+  );
 
   // We assert that this is a FunctionDeclaration in dependencyVisitor.
   const decl = exp.get("declaration") as NodePath<t.FunctionDeclaration>;
@@ -89,9 +92,11 @@ function permuteHelperAST(
     path.scope.rename(name, toRename[name]);
   });
 
-  for (const path of impsBindingRefs) {
-    const node = cloneNode(dependenciesRefs[path.node.name]);
-    path.replaceWith(node);
+  for (const [name, paths] of impsBindingRefs) {
+    for (const path of paths) {
+      const node = cloneNode(dependenciesRefs[name]);
+      path.replaceWith(node);
+    }
   }
 }
 
@@ -157,7 +162,7 @@ function loadHelper(name: string) {
         };
       },
       getDependencies() {
-        return Array.from(helper.metadata.dependencies.values());
+        return Object.keys(helper.metadata.dependencies);
       },
     };
   }

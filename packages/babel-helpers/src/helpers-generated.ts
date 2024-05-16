@@ -15,11 +15,10 @@ interface Helper {
 export interface HelperMetadata {
   globals: string[];
   localBindingNames: string[];
-  dependencies: Map<string, string>;
+  dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportPath: string;
   exportName: string;
-  importBindingsReferences: string[];
 }
 
 function helper(
@@ -44,13 +43,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Promise", "Symbol"],
       localBindingNames: [],
-      dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "AsyncGenerator",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
-      ],
+      dependencies: {
+        OverloadYield: [
+          "body.0.declaration.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
+        ],
+      },
     },
   ),
   // size: 62, gzip size: 78
@@ -60,11 +60,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_OverloadYield",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 465, gzip size: 279
@@ -74,11 +73,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_applyDecoratedDescriptor",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 2855, gzip size: 1478
@@ -88,20 +86,21 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Object", "TypeError", "Error"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["checkInRHS", "checkInRHS"],
-        ["setFunctionName", "setFunctionName"],
-        ["toPropertyKey", "toPropertyKey"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "applyDecs2311",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.0.consequent.right.properties.0.value.callee",
-        "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.1.right.callee",
-        "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
-        "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.10.consequent.body.body.0.argument.left.callee",
-      ],
+      dependencies: {
+        checkInRHS: [
+          "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.10.consequent.body.body.0.argument.left.callee",
+        ],
+        setFunctionName: [
+          "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.0.consequent.right.properties.0.value.callee",
+          "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.1.right.callee",
+        ],
+        toPropertyKey: [
+          "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
+        ],
+      },
     },
   ),
   // size: 133, gzip size: 133
@@ -111,11 +110,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Array"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_arrayLikeToArray",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 72, gzip size: 86
@@ -125,11 +123,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Array"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_arrayWithHoles",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 93, gzip size: 98
@@ -139,13 +136,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Array"],
       localBindingNames: [],
-      dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_arrayWithoutHoles",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.consequent.argument.callee",
-      ],
+      dependencies: {
+        arrayLikeToArray: [
+          "body.0.declaration.body.body.0.consequent.argument.callee",
+        ],
+      },
     },
   ),
   // size: 187, gzip size: 167
@@ -155,11 +153,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_assertClassBrand",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 159, gzip size: 141
@@ -169,11 +166,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["ReferenceError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_assertThisInitialized",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 503, gzip size: 287
@@ -183,13 +179,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Promise", "Symbol"],
       localBindingNames: [],
-      dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_asyncGeneratorDelegate",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
-      ],
+      dependencies: {
+        OverloadYield: [
+          "body.0.declaration.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
+        ],
+      },
     },
   ),
   // size: 1096, gzip size: 439
@@ -199,11 +196,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "TypeError", "Object", "Promise"],
       localBindingNames: ["AsyncFromSyncIterator"],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_asyncIterator",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 429, gzip size: 251
@@ -213,11 +209,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Promise"],
       localBindingNames: ["asyncGeneratorStep"],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_asyncToGenerator",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 78, gzip size: 95
@@ -227,13 +222,12 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_awaitAsyncGenerator",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.callee",
-      ],
+      dependencies: {
+        OverloadYield: ["body.0.declaration.body.body.0.argument.callee"],
+      },
     },
   ),
   // size: 195, gzip size: 153
@@ -243,20 +237,21 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Reflect"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["getPrototypeOf", "getPrototypeOf"],
-        ["isNativeReflectConstruct", "isNativeReflectConstruct"],
-        ["possibleConstructorReturn", "possibleConstructorReturn"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_callSuper",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.right.callee",
-        "body.0.declaration.body.body.0.argument.expressions.1.callee",
-        "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.test.callee",
-        "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.consequent.arguments.2.object.callee",
-      ],
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.declaration.body.body.0.argument.expressions.0.right.callee",
+          "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.consequent.arguments.2.object.callee",
+        ],
+        isNativeReflectConstruct: [
+          "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.test.callee",
+        ],
+        possibleConstructorReturn: [
+          "body.0.declaration.body.body.0.argument.expressions.1.callee",
+        ],
+      },
     },
   ),
   // size: 161, gzip size: 154
@@ -266,11 +261,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object", "TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_checkInRHS",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 154, gzip size: 142
@@ -280,11 +274,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_checkPrivateRedeclaration",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 123, gzip size: 120
@@ -294,11 +287,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classCallCheck",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 136, gzip size: 131
@@ -308,11 +300,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["ReferenceError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classNameTDZError",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 88, gzip size: 101
@@ -322,13 +313,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateFieldGet2",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.arguments.0.callee",
-      ],
+      dependencies: {
+        assertClassBrand: [
+          "body.0.declaration.body.body.0.argument.arguments.0.callee",
+        ],
+      },
     },
   ),
   // size: 100, gzip size: 105
@@ -338,15 +330,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["checkPrivateRedeclaration", "checkPrivateRedeclaration"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateFieldInitSpec",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.expression.expressions.0.callee",
-      ],
+      dependencies: {
+        checkPrivateRedeclaration: [
+          "body.0.declaration.body.body.0.expression.expressions.0.callee",
+        ],
+      },
     },
   ),
   // size: 163, gzip size: 150
@@ -356,11 +347,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateFieldBase",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 88, gzip size: 103
@@ -370,11 +360,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: ["id"],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_classPrivateFieldKey",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 94, gzip size: 105
@@ -384,13 +373,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateFieldSet2",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
-      ],
+      dependencies: {
+        assertClassBrand: [
+          "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
+        ],
+      },
     },
   ),
   // size: 83, gzip size: 96
@@ -400,13 +390,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateGetter",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.arguments.0.callee",
-      ],
+      dependencies: {
+        assertClassBrand: [
+          "body.0.declaration.body.body.0.argument.arguments.0.callee",
+        ],
+      },
     },
   ),
   // size: 97, gzip size: 104
@@ -416,15 +407,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["checkPrivateRedeclaration", "checkPrivateRedeclaration"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateMethodInitSpec",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.expression.expressions.0.callee",
-      ],
+      dependencies: {
+        checkPrivateRedeclaration: [
+          "body.0.declaration.body.body.0.expression.expressions.0.callee",
+        ],
+      },
     },
   ),
   // size: 89, gzip size: 99
@@ -434,13 +424,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classPrivateSetter",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
-      ],
+      dependencies: {
+        assertClassBrand: [
+          "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
+        ],
+      },
     },
   ),
   // size: 91, gzip size: 103
@@ -450,13 +441,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_classStaticPrivateMethodGet",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.callee",
-      ],
+      dependencies: {
+        assertClassBrand: [
+          "body.0.declaration.body.body.0.argument.expressions.0.callee",
+        ],
+      },
     },
   ),
   // size: 221, gzip size: 170
@@ -466,17 +458,17 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Reflect"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["isNativeReflectConstruct", "isNativeReflectConstruct"],
-        ["setPrototypeOf", "setPrototypeOf"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_construct",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.test.callee",
-        "body.0.declaration.body.body.4.argument.expressions.0.right.callee",
-      ],
+      dependencies: {
+        isNativeReflectConstruct: [
+          "body.0.declaration.body.body.0.test.callee",
+        ],
+        setPrototypeOf: [
+          "body.0.declaration.body.body.4.argument.expressions.0.right.callee",
+        ],
+      },
     },
   ),
   // size: 363, gzip size: 228
@@ -486,13 +478,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: ["_defineProperties"],
-      dependencies: new Map([["toPropertyKey", "toPropertyKey"]]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_createClass",
-      importBindingsReferences: [
-        "body.0.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
-      ],
+      dependencies: {
+        toPropertyKey: [
+          "body.0.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
+        ],
+      },
     },
   ),
   // size: 707, gzip size: 431
@@ -502,15 +495,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Array", "TypeError"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_createForOfIteratorHelper",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.consequent.body.0.test.left.right.right.callee",
-      ],
+      dependencies: {
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.1.consequent.body.0.test.left.right.right.callee",
+        ],
+      },
     },
   ),
   // size: 503, gzip size: 346
@@ -520,15 +512,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Array", "TypeError"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_createForOfIteratorHelperLoose",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.2.test.left.right.right.callee",
-      ],
+      dependencies: {
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.2.test.left.right.right.callee",
+        ],
+      },
     },
   ),
   // size: 270, gzip size: 180
@@ -538,20 +529,21 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Reflect"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["getPrototypeOf", "getPrototypeOf"],
-        ["isNativeReflectConstruct", "isNativeReflectConstruct"],
-        ["possibleConstructorReturn", "possibleConstructorReturn"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_createSuper",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.declarations.0.init.callee",
-        "body.0.declaration.body.body.1.argument.body.body.0.declarations.1.init.callee",
-        "body.0.declaration.body.body.1.argument.body.body.1.consequent.body.0.declarations.0.init.object.callee",
-        "body.0.declaration.body.body.1.argument.body.body.2.argument.callee",
-      ],
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.declaration.body.body.1.argument.body.body.0.declarations.1.init.callee",
+          "body.0.declaration.body.body.1.argument.body.body.1.consequent.body.0.declarations.0.init.object.callee",
+        ],
+        isNativeReflectConstruct: [
+          "body.0.declaration.body.body.0.declarations.0.init.callee",
+        ],
+        possibleConstructorReturn: [
+          "body.0.declaration.body.body.1.argument.body.body.2.argument.callee",
+        ],
+      },
     },
   ),
   // size: 7044, gzip size: 2068
@@ -569,18 +561,18 @@ const helpers: Record<string, Helper> = {
         "_isDataDescriptor",
         "_optionalCallableProperty",
       ],
-      dependencies: new Map([
-        ["toArray", "toArray"],
-        ["toPropertyKey", "toPropertyKey"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_decorate",
-      importBindingsReferences: [
-        "body.1.body.body.1.declarations.0.init.properties.9.value.body.body.0.consequent.argument.callee.object.callee",
-        "body.1.body.body.1.declarations.0.init.properties.10.value.body.body.2.declarations.0.init.callee",
-        "body.2.body.body.0.declarations.1.init.callee",
-      ],
+      dependencies: {
+        toArray: [
+          "body.1.body.body.1.declarations.0.init.properties.9.value.body.body.0.consequent.argument.callee.object.callee",
+        ],
+        toPropertyKey: [
+          "body.1.body.body.1.declarations.0.init.properties.10.value.body.body.2.declarations.0.init.callee",
+          "body.2.body.body.0.declarations.1.init.callee",
+        ],
+      },
     },
   ),
   // size: 221, gzip size: 176
@@ -590,11 +582,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_defaults",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 130, gzip size: 130
@@ -604,11 +595,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_defineAccessor",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 166, gzip size: 140
@@ -618,13 +608,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([["toPropertyKey", "toPropertyKey"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_defineProperty",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.test.left.right.callee",
-      ],
+      dependencies: {
+        toPropertyKey: [
+          "body.0.declaration.body.body.0.argument.expressions.0.test.left.right.callee",
+        ],
+      },
     },
   ),
   // size: 252, gzip size: 188
@@ -634,13 +625,12 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.0.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_extends",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 278, gzip size: 211
@@ -650,15 +640,16 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Reflect", "Object"],
       localBindingNames: [],
-      dependencies: new Map([["superPropBase", "superPropBase"]]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.0.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_get",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
-      ],
+      dependencies: {
+        superPropBase: [
+          "body.0.declaration.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
+        ],
+      },
     },
   ),
   // size: 194, gzip size: 120
@@ -668,24 +659,22 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.0.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_getPrototypeOf",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 46, gzip size: 66
   identity: helper("7.17.0", "export default function _identity(t){return t}", {
     globals: [],
     localBindingNames: [],
-    dependencies: new Map([]),
     exportBindingAssignments: [],
     exportPath: "body.0",
     exportName: "_identity",
-    importBindingsReferences: [],
+    dependencies: {},
   }),
   // size: 552, gzip size: 267
   importDeferProxy: helper(
@@ -694,11 +683,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Proxy", "Reflect"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_importDeferProxy",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 315, gzip size: 227
@@ -708,13 +696,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError", "Object"],
       localBindingNames: [],
-      dependencies: new Map([["setPrototypeOf", "setPrototypeOf"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_inherits",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.expression.expressions.2.right.callee",
-      ],
+      dependencies: {
+        setPrototypeOf: [
+          "body.0.declaration.body.body.1.expression.expressions.2.right.callee",
+        ],
+      },
     },
   ),
   // size: 129, gzip size: 116
@@ -724,13 +713,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([["setPrototypeOf", "setPrototypeOf"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_inheritsLoose",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.expression.expressions.2.callee",
-      ],
+      dependencies: {
+        setPrototypeOf: [
+          "body.0.declaration.body.body.0.expression.expressions.2.callee",
+        ],
+      },
     },
   ),
   // size: 213, gzip size: 150
@@ -740,11 +730,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_initializerDefineProperty",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 202, gzip size: 165
@@ -754,11 +743,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Error"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_initializerWarningHelper",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 149, gzip size: 130
@@ -768,11 +756,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_instanceof",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 87, gzip size: 98
@@ -782,11 +769,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_interopRequireDefault",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 679, gzip size: 358
@@ -796,11 +782,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["WeakMap", "Object"],
       localBindingNames: ["_getRequireWildcardCache"],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_interopRequireWildcard",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 148, gzip size: 136
@@ -810,11 +795,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Function"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_isNativeFunction",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 208, gzip size: 154
@@ -824,13 +808,12 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Boolean", "Reflect"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.1.argument.callee",
       ],
       exportPath: "body.0",
       exportName: "_isNativeReflectConstruct",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 144, gzip size: 133
@@ -840,11 +823,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Array"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_iterableToArray",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 431, gzip size: 303
@@ -854,11 +836,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_iterableToArrayLimit",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 228, gzip size: 196
@@ -868,11 +849,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_iterableToArrayLimitLoose",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 535, gzip size: 348
@@ -882,11 +862,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "Array"],
       localBindingNames: ["REACT_ELEMENT_TYPE"],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_createRawReactElement",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 175, gzip size: 154
@@ -896,13 +875,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Array"],
       localBindingNames: [],
-      dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_maybeArrayLike",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.consequent.body.1.argument.callee",
-      ],
+      dependencies: {
+        arrayLikeToArray: [
+          "body.0.declaration.body.body.0.consequent.body.1.argument.callee",
+        ],
+      },
     },
   ),
   // size: 113, gzip size: 117
@@ -912,11 +892,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_newArrowCheck",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 204, gzip size: 171
@@ -926,11 +905,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_nonIterableRest",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 201, gzip size: 165
@@ -940,11 +918,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_nonIterableSpread",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 114, gzip size: 117
@@ -954,11 +931,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_nullishReceiverError",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 109, gzip size: 116
@@ -968,11 +944,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_objectDestructuringEmpty",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 634, gzip size: 304
@@ -982,13 +957,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: ["ownKeys"],
-      dependencies: new Map([["defineProperty", "defineProperty"]]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_objectSpread2",
-      importBindingsReferences: [
-        "body.1.declaration.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
-      ],
+      dependencies: {
+        defineProperty: [
+          "body.1.declaration.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
+        ],
+      },
     },
   ),
   // size: 292, gzip size: 213
@@ -998,15 +974,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["objectWithoutPropertiesLoose", "objectWithoutPropertiesLoose"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_objectWithoutProperties",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.declarations.2.init.callee",
-      ],
+      dependencies: {
+        objectWithoutPropertiesLoose: [
+          "body.0.declaration.body.body.1.declarations.2.init.callee",
+        ],
+      },
     },
   ),
   // size: 182, gzip size: 164
@@ -1016,11 +991,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_objectWithoutPropertiesLoose",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 240, gzip size: 190
@@ -1030,15 +1004,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["assertThisInitialized", "assertThisInitialized"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_possibleConstructorReturn",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.2.argument.callee",
-      ],
+      dependencies: {
+        assertThisInitialized: [
+          "body.0.declaration.body.body.2.argument.callee",
+        ],
+      },
     },
   ),
   // size: 86, gzip size: 99
@@ -1048,11 +1021,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_readOnlyError",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 7631, gzip size: 2661
@@ -1062,11 +1034,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object", "Symbol", "Error", "TypeError", "isNaN", "Promise"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: ["body.0.declaration.body.body.0.expression"],
       exportPath: "body.0",
       exportName: "_regeneratorRuntime",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 509, gzip size: 283
@@ -1076,17 +1047,17 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Reflect", "Object", "TypeError"],
       localBindingNames: ["set"],
-      dependencies: new Map([
-        ["superPropBase", "superPropBase"],
-        ["defineProperty", "defineProperty"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.1",
       exportName: "_set",
-      importBindingsReferences: [
-        "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.1.init.callee",
-        "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
-      ],
+      dependencies: {
+        superPropBase: [
+          "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.1.init.callee",
+        ],
+        defineProperty: [
+          "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
+        ],
+      },
     },
   ),
   // size: 193, gzip size: 179
@@ -1096,11 +1067,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "setFunctionName",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 178, gzip size: 116
@@ -1110,13 +1080,12 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.0.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_setPrototypeOf",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 118, gzip size: 118
@@ -1126,11 +1095,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_skipFirstGeneratorNext",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 148, gzip size: 129
@@ -1140,21 +1108,23 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["arrayWithHoles", "arrayWithHoles"],
-        ["iterableToArrayLimit", "iterableToArrayLimit"],
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-        ["nonIterableRest", "nonIterableRest"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_slicedToArray",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.left.left.left.callee",
-        "body.0.declaration.body.body.0.argument.left.left.right.callee",
-        "body.0.declaration.body.body.0.argument.left.right.callee",
-        "body.0.declaration.body.body.0.argument.right.callee",
-      ],
+      dependencies: {
+        arrayWithHoles: [
+          "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        ],
+        iterableToArrayLimit: [
+          "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        ],
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableRest: [
+          "body.0.declaration.body.body.0.argument.right.callee",
+        ],
+      },
     },
   ),
   // size: 158, gzip size: 130
@@ -1164,21 +1134,23 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["arrayWithHoles", "arrayWithHoles"],
-        ["iterableToArrayLimitLoose", "iterableToArrayLimitLoose"],
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-        ["nonIterableRest", "nonIterableRest"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_slicedToArrayLoose",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.left.left.left.callee",
-        "body.0.declaration.body.body.0.argument.left.left.right.callee",
-        "body.0.declaration.body.body.0.argument.left.right.callee",
-        "body.0.declaration.body.body.0.argument.right.callee",
-      ],
+      dependencies: {
+        arrayWithHoles: [
+          "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        ],
+        iterableToArrayLimitLoose: [
+          "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        ],
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableRest: [
+          "body.0.declaration.body.body.0.argument.right.callee",
+        ],
+      },
     },
   ),
   // size: 119, gzip size: 125
@@ -1188,13 +1160,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["getPrototypeOf", "getPrototypeOf"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_superPropBase",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.test.right.right.right.callee",
-      ],
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.declaration.body.body.0.test.right.right.right.callee",
+        ],
+      },
     },
   ),
   // size: 150, gzip size: 137
@@ -1204,11 +1177,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_taggedTemplateLiteral",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 92, gzip size: 103
@@ -1218,11 +1190,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_taggedTemplateLiteralLoose",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 104, gzip size: 107
@@ -1232,11 +1203,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["ReferenceError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_tdzError",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 68, gzip size: 87
@@ -1246,17 +1216,15 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["undef", "temporalUndefined"],
-        ["err", "tdz"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_temporalRef",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.test.right",
-        "body.0.declaration.body.body.0.argument.consequent.callee",
-      ],
+      dependencies: {
+        temporalUndefined: [
+          "body.0.declaration.body.body.0.argument.test.right",
+        ],
+        tdz: ["body.0.declaration.body.body.0.argument.consequent.callee"],
+      },
     },
   ),
   // size: 46, gzip size: 66
@@ -1266,11 +1234,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_temporalUndefined",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 131, gzip size: 113
@@ -1280,21 +1247,23 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["arrayWithHoles", "arrayWithHoles"],
-        ["iterableToArray", "iterableToArray"],
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-        ["nonIterableRest", "nonIterableRest"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_toArray",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.left.left.left.callee",
-        "body.0.declaration.body.body.0.argument.left.left.right.callee",
-        "body.0.declaration.body.body.0.argument.left.right.callee",
-        "body.0.declaration.body.body.0.argument.right.callee",
-      ],
+      dependencies: {
+        arrayWithHoles: [
+          "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        ],
+        iterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        ],
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableRest: [
+          "body.0.declaration.body.body.0.argument.right.callee",
+        ],
+      },
     },
   ),
   // size: 146, gzip size: 124
@@ -1304,21 +1273,23 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([
-        ["arrayWithoutHoles", "arrayWithoutHoles"],
-        ["iterableToArray", "iterableToArray"],
-        ["unsupportedIterableToArray", "unsupportedIterableToArray"],
-        ["nonIterableSpread", "nonIterableSpread"],
-      ]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_toConsumableArray",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.left.left.left.callee",
-        "body.0.declaration.body.body.0.argument.left.left.right.callee",
-        "body.0.declaration.body.body.0.argument.left.right.callee",
-        "body.0.declaration.body.body.0.argument.right.callee",
-      ],
+      dependencies: {
+        arrayWithoutHoles: [
+          "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        ],
+        iterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        ],
+        unsupportedIterableToArray: [
+          "body.0.declaration.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableSpread: [
+          "body.0.declaration.body.body.0.argument.right.callee",
+        ],
+      },
     },
   ),
   // size: 285, gzip size: 210
@@ -1328,11 +1299,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "TypeError", "String", "Number"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "toPrimitive",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 103, gzip size: 114
@@ -1342,13 +1312,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["toPrimitive", "toPrimitive"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "toPropertyKey",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.declarations.0.init.callee",
-      ],
+      dependencies: {
+        toPrimitive: [
+          "body.0.declaration.body.body.0.declarations.0.init.callee",
+        ],
+      },
     },
   ),
   // size: 144, gzip size: 141
@@ -1358,11 +1329,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_toSetter",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 289, gzip size: 165
@@ -1372,13 +1342,12 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.0.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_typeof",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 343, gzip size: 256
@@ -1388,14 +1357,15 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Array"],
       localBindingNames: [],
-      dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_unsupportedIterableToArray",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.consequent.body.0.consequent.argument.callee",
-        "body.0.declaration.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
-      ],
+      dependencies: {
+        arrayLikeToArray: [
+          "body.0.declaration.body.body.0.consequent.body.0.consequent.argument.callee",
+          "body.0.declaration.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
+        ],
+      },
     },
   ),
   // size: 922, gzip size: 481
@@ -1412,11 +1382,10 @@ const helpers: Record<string, Helper> = {
         "Promise",
       ],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_usingCtx",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
   // size: 117, gzip size: 104
@@ -1426,13 +1395,14 @@ const helpers: Record<string, Helper> = {
     {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["AsyncGenerator", "AsyncGenerator"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_wrapAsyncGenerator",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.0.argument.body.body.0.argument.callee",
-      ],
+      dependencies: {
+        AsyncGenerator: [
+          "body.0.declaration.body.body.0.argument.body.body.0.argument.callee",
+        ],
+      },
     },
   ),
   // size: 578, gzip size: 325
@@ -1442,23 +1412,25 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Map", "TypeError", "Object"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["getPrototypeOf", "getPrototypeOf"],
-        ["setPrototypeOf", "setPrototypeOf"],
-        ["isNativeFunction", "isNativeFunction"],
-        ["construct", "construct"],
-      ]),
       exportBindingAssignments: [
         "body.0.declaration.body.body.1.argument.expressions.0",
       ],
       exportPath: "body.0",
       exportName: "_wrapNativeSuper",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.0.test.right.argument.callee",
-        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
-        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.arguments.2.object.callee",
-        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.4.argument.expressions.1.callee",
-      ],
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.arguments.2.object.callee",
+        ],
+        setPrototypeOf: [
+          "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.4.argument.expressions.1.callee",
+        ],
+        isNativeFunction: [
+          "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.0.test.right.argument.callee",
+        ],
+        construct: [
+          "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
+        ],
+      },
     },
   ),
   // size: 1178, gzip size: 548
@@ -1468,17 +1440,17 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["RegExp", "WeakMap", "Object", "Symbol", "Array"],
       localBindingNames: [],
-      dependencies: new Map([
-        ["setPrototypeOf", "setPrototypeOf"],
-        ["inherits", "inherits"],
-      ]),
       exportBindingAssignments: ["body.0.declaration.body.body.0.expression"],
       exportPath: "body.0",
       exportName: "_wrapRegExp",
-      importBindingsReferences: [
-        "body.0.declaration.body.body.2.body.body.1.argument.expressions.1.callee",
-        "body.0.declaration.body.body.4.argument.expressions.0.callee",
-      ],
+      dependencies: {
+        setPrototypeOf: [
+          "body.0.declaration.body.body.2.body.body.1.argument.expressions.1.callee",
+        ],
+        inherits: [
+          "body.0.declaration.body.body.4.argument.expressions.0.callee",
+        ],
+      },
     },
   ),
   // size: 88, gzip size: 100
@@ -1488,11 +1460,10 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["TypeError"],
       localBindingNames: [],
-      dependencies: new Map([]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "_writeOnlyError",
-      importBindingsReferences: [],
+      dependencies: {},
     },
   ),
 };
@@ -1506,11 +1477,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_AwaitValue",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 5782, gzip size: 2191
@@ -1542,18 +1512,18 @@ if (!process.env.BABEL_8_BREAKING) {
           "old_pushInitializers",
           "old_applyClassDecs",
         ],
-        dependencies: new Map([
-          ["setFunctionName", "setFunctionName"],
-          ["toPropertyKey", "toPropertyKey"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.13",
         exportName: "applyDecs",
-        importBindingsReferences: [
-          "body.3.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
-        ],
+        dependencies: {
+          setFunctionName: [
+            "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+            "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          ],
+          toPropertyKey: [
+            "body.3.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          ],
+        },
       },
     ),
     // size: 3860, gzip size: 1578
@@ -1563,11 +1533,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Error", "TypeError", "Object", "Map", "Array"],
         localBindingNames: ["applyDecs2203Factory", "applyDecs2203Impl"],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.2",
         exportName: "applyDecs2203",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 3997, gzip size: 1629
@@ -1577,20 +1546,20 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Error", "TypeError", "Object", "Map", "Array"],
         localBindingNames: ["applyDecs2203RFactory"],
-        dependencies: new Map([
-          ["setFunctionName", "setFunctionName"],
-          ["toPropertyKey", "toPropertyKey"],
-        ]),
         exportBindingAssignments: [
           "body.1.declaration.body.body.0.argument.callee",
         ],
         exportPath: "body.1",
         exportName: "applyDecs2203R",
-        importBindingsReferences: [
-          "body.0.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
-        ],
+        dependencies: {
+          setFunctionName: [
+            "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+            "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          ],
+          toPropertyKey: [
+            "body.0.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          ],
+        },
       },
     ),
     // size: 4541, gzip size: 1816
@@ -1600,22 +1569,23 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Error", "TypeError", "Object", "Map", "Array"],
         localBindingNames: ["applyDecs2301Factory"],
-        dependencies: new Map([
-          ["checkInRHS", "checkInRHS"],
-          ["setFunctionName", "setFunctionName"],
-          ["toPropertyKey", "toPropertyKey"],
-        ]),
         exportBindingAssignments: [
           "body.1.declaration.body.body.0.argument.callee",
         ],
         exportPath: "body.1",
         exportName: "applyDecs2301",
-        importBindingsReferences: [
-          "body.0.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
-          "body.0.body.body.7.body.body.0.body.body.1.consequent.body.1.test.expressions.0.consequent.expressions.2.right.right.body.body.0.argument.left.callee",
-        ],
+        dependencies: {
+          checkInRHS: [
+            "body.0.body.body.7.body.body.0.body.body.1.consequent.body.1.test.expressions.0.consequent.expressions.2.right.right.body.body.0.argument.left.callee",
+          ],
+          setFunctionName: [
+            "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+            "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          ],
+          toPropertyKey: [
+            "body.0.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          ],
+        },
       },
     ),
     // size: 3124, gzip size: 1578
@@ -1625,20 +1595,21 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError", "Array", "Object", "Error", "Symbol", "Map"],
         localBindingNames: [],
-        dependencies: new Map([
-          ["checkInRHS", "checkInRHS"],
-          ["setFunctionName", "setFunctionName"],
-          ["toPropertyKey", "toPropertyKey"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "applyDecs2305",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.0.consequent.right.properties.0.value.callee",
-          "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.1.right.callee",
-          "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.0.declarations.3.init.body.body.0.argument.left.callee",
-          "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
-        ],
+        dependencies: {
+          checkInRHS: [
+            "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.0.declarations.3.init.body.body.0.argument.left.callee",
+          ],
+          setFunctionName: [
+            "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.0.consequent.right.properties.0.value.callee",
+            "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.1.right.callee",
+          ],
+          toPropertyKey: [
+            "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
+          ],
+        },
       },
     ),
     // size: 246, gzip size: 197
@@ -1648,11 +1619,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classApplyDescriptorDestructureSet",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 89, gzip size: 102
@@ -1662,11 +1632,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classApplyDescriptorGet",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 176, gzip size: 158
@@ -1676,11 +1645,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classApplyDescriptorSet",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 93, gzip size: 103
@@ -1690,13 +1658,12 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classCheckPrivateStaticAccess",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.callee",
-        ],
+        dependencies: {
+          assertClassBrand: ["body.0.declaration.body.body.0.argument.callee"],
+        },
       },
     ),
     // size: 169, gzip size: 154
@@ -1706,11 +1673,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classCheckPrivateStaticFieldDescriptor",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 92, gzip size: 101
@@ -1720,15 +1686,14 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          ["classPrivateFieldGet2", "classPrivateFieldGet2"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classExtractFieldDescriptor",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.callee",
-        ],
+        dependencies: {
+          classPrivateFieldGet2: [
+            "body.0.declaration.body.body.0.argument.callee",
+          ],
+        },
       },
     ),
     // size: 142, gzip size: 122
@@ -1738,20 +1703,17 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          [
-            "classApplyDescriptorDestructureSet",
-            "classApplyDescriptorDestructureSet",
-          ],
-          ["classPrivateFieldGet2", "classPrivateFieldGet2"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classPrivateFieldDestructureSet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.declarations.0.init.callee",
-          "body.0.declaration.body.body.1.argument.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorDestructureSet: [
+            "body.0.declaration.body.body.1.argument.callee",
+          ],
+          classPrivateFieldGet2: [
+            "body.0.declaration.body.body.0.declarations.0.init.callee",
+          ],
+        },
       },
     ),
     // size: 120, gzip size: 115
@@ -1761,17 +1723,17 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          ["classApplyDescriptorGet", "classApplyDescriptorGet"],
-          ["classPrivateFieldGet2", "classPrivateFieldGet2"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classPrivateFieldGet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.declarations.0.init.callee",
-          "body.0.declaration.body.body.1.argument.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorGet: [
+            "body.0.declaration.body.body.1.argument.callee",
+          ],
+          classPrivateFieldGet2: [
+            "body.0.declaration.body.body.0.declarations.0.init.callee",
+          ],
+        },
       },
     ),
     // size: 126, gzip size: 120
@@ -1781,17 +1743,17 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          ["classApplyDescriptorSet", "classApplyDescriptorSet"],
-          ["classPrivateFieldGet2", "classPrivateFieldGet2"],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classPrivateFieldSet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.declarations.0.init.callee",
-          "body.0.declaration.body.body.1.argument.expressions.0.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorSet: [
+            "body.0.declaration.body.body.1.argument.expressions.0.callee",
+          ],
+          classPrivateFieldGet2: [
+            "body.0.declaration.body.body.0.declarations.0.init.callee",
+          ],
+        },
       },
     ),
     // size: 85, gzip size: 99
@@ -1801,13 +1763,14 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classPrivateMethodGet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.expressions.0.callee",
-        ],
+        dependencies: {
+          assertClassBrand: [
+            "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          ],
+        },
       },
     ),
     // size: 109, gzip size: 113
@@ -1817,11 +1780,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classPrivateMethodSet",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 187, gzip size: 144
@@ -1831,25 +1793,20 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          [
-            "classApplyDescriptorDestructureSet",
-            "classApplyDescriptorDestructureSet",
-          ],
-          ["assertClassBrand", "assertClassBrand"],
-          [
-            "classCheckPrivateStaticFieldDescriptor",
-            "classCheckPrivateStaticFieldDescriptor",
-          ],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classStaticPrivateFieldDestructureSet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.expressions.0.callee",
-          "body.0.declaration.body.body.0.argument.expressions.1.callee",
-          "body.0.declaration.body.body.0.argument.expressions.2.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorDestructureSet: [
+            "body.0.declaration.body.body.0.argument.expressions.2.callee",
+          ],
+          assertClassBrand: [
+            "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          ],
+          classCheckPrivateStaticFieldDescriptor: [
+            "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          ],
+        },
       },
     ),
     // size: 169, gzip size: 142
@@ -1859,22 +1816,20 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          ["classApplyDescriptorGet", "classApplyDescriptorGet"],
-          ["assertClassBrand", "assertClassBrand"],
-          [
-            "classCheckPrivateStaticFieldDescriptor",
-            "classCheckPrivateStaticFieldDescriptor",
-          ],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classStaticPrivateFieldSpecGet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.expressions.0.callee",
-          "body.0.declaration.body.body.0.argument.expressions.1.callee",
-          "body.0.declaration.body.body.0.argument.expressions.2.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorGet: [
+            "body.0.declaration.body.body.0.argument.expressions.2.callee",
+          ],
+          assertClassBrand: [
+            "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          ],
+          classCheckPrivateStaticFieldDescriptor: [
+            "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          ],
+        },
       },
     ),
     // size: 175, gzip size: 144
@@ -1884,22 +1839,20 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: [],
         localBindingNames: [],
-        dependencies: new Map([
-          ["classApplyDescriptorSet", "classApplyDescriptorSet"],
-          ["assertClassBrand", "assertClassBrand"],
-          [
-            "classCheckPrivateStaticFieldDescriptor",
-            "classCheckPrivateStaticFieldDescriptor",
-          ],
-        ]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classStaticPrivateFieldSpecSet",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.argument.expressions.0.callee",
-          "body.0.declaration.body.body.0.argument.expressions.1.callee",
-          "body.0.declaration.body.body.0.argument.expressions.2.callee",
-        ],
+        dependencies: {
+          classApplyDescriptorSet: [
+            "body.0.declaration.body.body.0.argument.expressions.2.callee",
+          ],
+          assertClassBrand: [
+            "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          ],
+          classCheckPrivateStaticFieldDescriptor: [
+            "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          ],
+        },
       },
     ),
     // size: 126, gzip size: 122
@@ -1909,11 +1862,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["TypeError"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_classStaticPrivateMethodSet",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 383, gzip size: 218
@@ -1923,11 +1875,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Object"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_defineEnumerableProperties",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 668, gzip size: 330
@@ -1937,11 +1888,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["SuppressedError", "Error", "Object", "Promise"],
         localBindingNames: ["dispose_SuppressedError"],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.1",
         exportName: "_dispose",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
     // size: 378, gzip size: 245
@@ -1951,13 +1901,14 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Object"],
         localBindingNames: [],
-        dependencies: new Map([["defineProperty", "defineProperty"]]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_objectSpread",
-        importBindingsReferences: [
-          "body.0.declaration.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
-        ],
+        dependencies: {
+          defineProperty: [
+            "body.0.declaration.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
+          ],
+        },
       },
     ),
     // size: 432, gzip size: 261
@@ -1967,11 +1918,10 @@ if (!process.env.BABEL_8_BREAKING) {
       {
         globals: ["Object", "TypeError", "Symbol"],
         localBindingNames: [],
-        dependencies: new Map([]),
         exportBindingAssignments: [],
         exportPath: "body.0",
         exportName: "_using",
-        importBindingsReferences: [],
+        dependencies: {},
       },
     ),
   });

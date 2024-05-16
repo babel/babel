@@ -4,10 +4,9 @@ _$_variableSameNameDependency_main;
 /*"main" metadata:    {
       globals: [],
       localBindingNames: [],
-      dependencies: new Map([["dep","_$_variable-same-name-dependency_dependency"]]),
       exportBindingAssignments: [],
       exportPath: "body.0",
       exportName: "helper",
-      importBindingsReferences: ["body.0.declaration.body.body.0.declarations.0.init"],
+      dependencies: {"_$_variable-same-name-dependency_dependency":["body.0.declaration.body.body.0.declarations.0.init"]},
     }
   */
