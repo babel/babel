@@ -1,5 +1,5 @@
 var id = 0;
-function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
+function _classPrivateFieldLooseKey(e) { return "__private_" + id++ + "_" + e; }
 var _message = /*#__PURE__*/_classPrivateFieldLooseKey("message");
 export class TypeError {
   constructor() {

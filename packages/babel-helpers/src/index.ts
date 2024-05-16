@@ -9,7 +9,7 @@ import {
   identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import helpers from "./helpers.ts";
+import helpers from "./helpers-generated.ts";
 
 function makePath(path: NodePath) {
   const parts = [];
@@ -39,7 +39,7 @@ interface HelperMetadata {
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
  */
-function getHelperMetadata(file: File): HelperMetadata {
+function getHelperMetadata(file: File, helperName: string): HelperMetadata {
   const globals = new Set<string>();
   const localBindingNames = new Set<string>();
   // Maps imported identifier -> helper name
@@ -55,14 +55,14 @@ function getHelperMetadata(file: File): HelperMetadata {
     ImportDeclaration(child) {
       const name = child.node.source.value;
       if (!helpers[name]) {
-        throw child.buildCodeFrameError(`Unknown helper ${name}`);
+        throw new Error(`Unknown helper ${name} (in ${helperName})`);
       }
       if (
         child.get("specifiers").length !== 1 ||
         !child.get("specifiers.0").isImportDefaultSpecifier()
       ) {
-        throw child.buildCodeFrameError(
-          "Helpers can only import a default value",
+        throw new Error(
+          `Helpers can only import a default value (in ${helperName})`,
         );
       }
       const bindingIdentifier = child.node.specifiers[0].local;
@@ -73,19 +73,19 @@ function getHelperMetadata(file: File): HelperMetadata {
       const decl = child.get("declaration");
 
       if (!decl.isFunctionDeclaration() || !decl.node.id) {
-        throw decl.buildCodeFrameError(
-          "Helpers can only export named function declarations",
+        throw new Error(
+          `Helpers can only export named function declarations (in ${helperName})`,
         );
       }
 
       exportName = decl.node.id.name;
       exportPath = makePath(child);
     },
-    ExportAllDeclaration(child) {
-      throw child.buildCodeFrameError("Helpers can only export default");
+    ExportAllDeclaration() {
+      throw new Error(`Helpers can only export default (in ${helperName})`);
     },
-    ExportNamedDeclaration(child) {
-      throw child.buildCodeFrameError("Helpers can only export default");
+    ExportNamedDeclaration() {
+      throw new Error(`Helpers can only export default (in ${helperName})`);
     },
     Statement(child) {
       if (child.isImportDeclaration() || child.isExportDeclaration()) return;
@@ -122,8 +122,8 @@ function getHelperMetadata(file: File): HelperMetadata {
       if (!(exportName in left.getBindingIdentifiers())) return;
 
       if (!left.isIdentifier()) {
-        throw left.buildCodeFrameError(
-          "Only simple assignments to exports are allowed in helpers",
+        throw new Error(
+          `Only simple assignments to exports are allowed in helpers (in ${helperName})`,
         );
       }
 
@@ -300,7 +300,7 @@ function loadHelper(name: string) {
       minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
         const file = fn();
-        metadata ||= getHelperMetadata(file);
+        metadata ||= getHelperMetadata(file, name);
         permuteHelperAST(file, metadata, id, localBindings, getDependency);
 
         return {
@@ -309,7 +309,7 @@ function loadHelper(name: string) {
         };
       },
       getDependencies() {
-        metadata ||= getHelperMetadata(fn());
+        metadata ||= getHelperMetadata(fn(), name);
         return Array.from(metadata.dependencies.values());
       },
     };

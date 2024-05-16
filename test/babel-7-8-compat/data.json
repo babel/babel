@@ -1,7 +1,12 @@
 {
   "babel7plugins-babel8core": [
     "babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
-    "babel-plugin-proposal-decorators",
+    [
+      "babel-plugin-proposal-decorators",
+      {
+        "excludeFixtures": ["2021-12-*", "2022-03-*", "2023-01-*", "2023-05-*"]
+      }
+    ],
     "babel-plugin-proposal-duplicate-named-capturing-groups-regex",
     "babel-plugin-proposal-explicit-resource-management",
     "babel-plugin-proposal-import-attributes-to-assertions",
@@ -14,7 +19,12 @@
     "babel-plugin-syntax-import-attributes",
     "babel-plugin-transform-async-generator-functions",
     "babel-plugin-transform-async-to-generator",
-    "babel-plugin-transform-class-properties",
+    [
+      "babel-plugin-transform-class-properties",
+      {
+        "excludeFixtures": ["regression/old-helpers"]
+      }
+    ],
     "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-dotall-regex",
     "babel-plugin-transform-exponentiation-operator",

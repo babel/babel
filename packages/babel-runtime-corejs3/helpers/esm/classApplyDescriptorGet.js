@@ -1,6 +1,3 @@
-export default function _classApplyDescriptorGet(receiver, descriptor) {
-  if (descriptor.get) {
-    return descriptor.get.call(receiver);
-  }
-  return descriptor.value;
+export default function _classApplyDescriptorGet(e, t) {
+  return t.get ? t.get.call(e) : t.value;
 }

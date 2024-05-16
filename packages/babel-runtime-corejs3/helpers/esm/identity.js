@@ -1,3 +1,3 @@
-export default function _identity(x) {
-  return x;
+export default function _identity(t) {
+  return t;
 }

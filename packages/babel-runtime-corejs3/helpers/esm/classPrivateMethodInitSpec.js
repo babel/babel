@@ -1,5 +1,4 @@
 import checkPrivateRedeclaration from "./checkPrivateRedeclaration.js";
-export default function _classPrivateMethodInitSpec(obj, privateSet) {
-  checkPrivateRedeclaration(obj, privateSet);
-  privateSet.add(obj);
+export default function _classPrivateMethodInitSpec(e, a) {
+  checkPrivateRedeclaration(e, a), a.add(e);
 }

@@ -1,3 +1,3 @@
-export default function _tdzError(name) {
-  throw new ReferenceError(name + " is not defined - temporal dead zone");
+export default function _tdzError(e) {
+  throw new ReferenceError(e + " is not defined - temporal dead zone");
 }

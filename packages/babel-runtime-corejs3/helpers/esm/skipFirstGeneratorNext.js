@@ -1,7 +1,6 @@
-export default function _skipFirstGeneratorNext(fn) {
+export default function _skipFirstGeneratorNext(t) {
   return function () {
-    var it = fn.apply(this, arguments);
-    it.next();
-    return it;
+    var r = t.apply(this, arguments);
+    return r.next(), r;
   };
 }
