@@ -8,7 +8,7 @@ import { gzipSync } from "zlib";
 import { IS_BABEL_8 } from "$repo-utils";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
-const IGNORED_FILES = new Set(["package.json"]);
+const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
 
 export default async function generateHelpers() {
   let output = `/*

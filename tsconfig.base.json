@@ -19,5 +19,9 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "incremental": true
-  }
+  },
+  "exclude": ["./packages/babel-helpers/src/helpers/**/*"],
+  "references": [{
+    "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
+  }]
 }
