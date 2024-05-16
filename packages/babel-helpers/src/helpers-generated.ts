@@ -20,7 +20,6 @@ export interface HelperMetadata {
   exportPath: string;
   exportName: string;
   importBindingsReferences: string[];
-  importPaths: string[];
 }
 
 function helper(
@@ -38,21 +37,20 @@ function helper(
 export { helpers as default };
 const helpers: Record<string, Helper> = {
   __proto__: null,
-  // size: 1126, gzip size: 512
+  // size: 1085, gzip size: 500
   AsyncGenerator: helper(
     "7.0.0-beta.0",
-    'import OverloadYield from"OverloadYield";export default function AsyncGenerator(e){var r,t;function resume(r,t){try{var n=e[r](t),o=n.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then((function(t){if(u){var i="return"===r?"return":"next";if(!o.k||t.done)return resume(i,t);t=e[i](t).value}settle(n.done?"return":"normal",t)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":r.resolve({value:n,done:!0});break;case"throw":r.reject(n);break;default:r.resolve({value:n,done:!1})}(r=r.next)?resume(r.key,r.arg):t=null}this._invoke=function(e,n){return new Promise((function(o,u){var i={key:e,arg:n,resolve:o,reject:u,next:null};t?t=t.next=i:(r=t=i,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
+    'export default function AsyncGenerator(e){var r,t;function resume(r,t){try{var n=e[r](t),o=n.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then((function(t){if(u){var i="return"===r?"return":"next";if(!o.k||t.done)return resume(i,t);t=e[i](t).value}settle(n.done?"return":"normal",t)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":r.resolve({value:n,done:!0});break;case"throw":r.reject(n);break;default:r.resolve({value:n,done:!1})}(r=r.next)?resume(r.key,r.arg):t=null}this._invoke=function(e,n){return new Promise((function(o,u){var i={key:e,arg:n,resolve:o,reject:u,next:null};t?t=t.next=i:(r=t=i,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
     {
       globals: ["Promise", "Symbol"],
       localBindingNames: [],
       dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "AsyncGenerator",
       importBindingsReferences: [
-        "body.1.declaration.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
+        "body.0.declaration.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 62, gzip size: 78
@@ -67,7 +65,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_OverloadYield",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 465, gzip size: 279
@@ -82,13 +79,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_applyDecoratedDescriptor",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 2976, gzip size: 1510
+  // size: 2855, gzip size: 1478
   applyDecs2311: helper(
     "7.24.0",
-    'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";export default function applyDecs2311(e,t,n,r,o,i){var a,c,u,s,f,l,p,d=Symbol.metadata||Symbol.for("Symbol.metadata"),m=Object.defineProperty,h=Object.create,y=[h(null),h(null)],v=t.length;function g(t,n,r){return function(o,i){n&&(i=o,o=e);for(var a=0;a<t.length;a++)i=t[a].apply(o,r?[i]:[]);return r?i:o}}function b(e,t,n,r){if("function"!=typeof e&&(r||void 0!==e))throw new TypeError(t+" must "+(n||"be")+" a function"+(r?"":" or undefined"));return e}function applyDec(e,t,n,r,o,i,u,s,f,l,p){function d(e){if(!p(e))throw new TypeError("Attempted to access private element on non-instance")}var h=[].concat(t[0]),v=t[3],w=!u,D=1===o,S=3===o,j=4===o,E=2===o;function I(t,n,r){return function(o,i){return n&&(i=o,o=e),r&&r(o),P[t].call(o,i)}}if(!w){var P={},k=[],F=S?"get":j||D?"set":"value";if(f?(l||D?P={get:setFunctionName((function(){return v(this)}),r,"get"),set:function(e){t[4](this,e)}}:P[F]=v,l||setFunctionName(P[F],r,E?"":F)):l||(P=Object.getOwnPropertyDescriptor(e,r)),!l&&!f){if((c=y[+s][r])&&7!=(c^o))throw Error("Decorating two elements with the same name ("+P[F].name+") is not supported yet");y[+s][r]=o<3?1:o}}for(var N=e,O=h.length-1;O>=0;O-=n?2:1){var T=b(h[O],"A decorator","be",!0),z=n?h[O-1]:void 0,A={},H={kind:["field","accessor","method","getter","setter","class"][o],name:r,metadata:a,addInitializer:function(e,t){if(e.v)throw new TypeError("attempted to call addInitializer after decoration was finished");b(t,"An initializer","be",!0),i.push(t)}.bind(null,A)};if(w)c=T.call(z,N,H),A.v=1,b(c,"class decorators","return")&&(N=c);else if(H.static=s,H.private=f,c=H.access={has:f?p.bind():function(e){return r in e}},j||(c.get=f?E?function(e){return d(e),P.value}:I("get",0,d):function(e){return e[r]}),E||S||(c.set=f?I("set",0,d):function(e,t){e[r]=t}),N=T.call(z,D?{get:P.get,set:P.set}:P[F],H),A.v=1,D){if("object"==typeof N&&N)(c=b(N.get,"accessor.get"))&&(P.get=c),(c=b(N.set,"accessor.set"))&&(P.set=c),(c=b(N.init,"accessor.init"))&&k.unshift(c);else if(void 0!==N)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else b(N,(l?"field":"method")+" decorators","return")&&(l?k.unshift(N):P[F]=N)}return o<2&&u.push(g(k,s,1),g(i,s,0)),l||w||(f?D?u.splice(-1,0,I("get",s),I("set",s)):u.push(E?P[F]:b.call.bind(P[F])):m(e,r,P)),N}function w(e){return m(e,d,{configurable:!0,enumerable:!0,value:a})}return void 0!==i&&(a=i[d]),a=h(null==a?null:a),f=[],l=function(e){e&&f.push(g(e))},p=function(t,r){for(var i=0;i<n.length;i++){var a=n[i],c=a[1],l=7&c;if((8&c)==t&&!l==r){var p=a[2],d=!!a[3],m=16&c;applyDec(t?e:e.prototype,a,m,d?"#"+p:toPropertyKey(p),l,l<2?[]:t?s=s||[]:u=u||[],f,!!t,d,r,t&&d?function(t){return checkInRHS(t)===e}:o)}}},p(8,0),p(0,0),p(8,1),p(0,1),l(u),l(s),c=f,v||w(e),{e:c,get c(){var n=[];return v&&[w(e=applyDec(e,[t],r,e.name,5,n)),g(n,1)]}}}',
+    'export default function applyDecs2311(e,t,n,r,o,i){var a,c,u,s,f,l,p,d=Symbol.metadata||Symbol.for("Symbol.metadata"),m=Object.defineProperty,h=Object.create,y=[h(null),h(null)],v=t.length;function g(t,n,r){return function(o,i){n&&(i=o,o=e);for(var a=0;a<t.length;a++)i=t[a].apply(o,r?[i]:[]);return r?i:o}}function b(e,t,n,r){if("function"!=typeof e&&(r||void 0!==e))throw new TypeError(t+" must "+(n||"be")+" a function"+(r?"":" or undefined"));return e}function applyDec(e,t,n,r,o,i,u,s,f,l,p){function d(e){if(!p(e))throw new TypeError("Attempted to access private element on non-instance")}var h=[].concat(t[0]),v=t[3],w=!u,D=1===o,S=3===o,j=4===o,E=2===o;function I(t,n,r){return function(o,i){return n&&(i=o,o=e),r&&r(o),P[t].call(o,i)}}if(!w){var P={},k=[],F=S?"get":j||D?"set":"value";if(f?(l||D?P={get:setFunctionName((function(){return v(this)}),r,"get"),set:function(e){t[4](this,e)}}:P[F]=v,l||setFunctionName(P[F],r,E?"":F)):l||(P=Object.getOwnPropertyDescriptor(e,r)),!l&&!f){if((c=y[+s][r])&&7!=(c^o))throw Error("Decorating two elements with the same name ("+P[F].name+") is not supported yet");y[+s][r]=o<3?1:o}}for(var N=e,O=h.length-1;O>=0;O-=n?2:1){var T=b(h[O],"A decorator","be",!0),z=n?h[O-1]:void 0,A={},H={kind:["field","accessor","method","getter","setter","class"][o],name:r,metadata:a,addInitializer:function(e,t){if(e.v)throw new TypeError("attempted to call addInitializer after decoration was finished");b(t,"An initializer","be",!0),i.push(t)}.bind(null,A)};if(w)c=T.call(z,N,H),A.v=1,b(c,"class decorators","return")&&(N=c);else if(H.static=s,H.private=f,c=H.access={has:f?p.bind():function(e){return r in e}},j||(c.get=f?E?function(e){return d(e),P.value}:I("get",0,d):function(e){return e[r]}),E||S||(c.set=f?I("set",0,d):function(e,t){e[r]=t}),N=T.call(z,D?{get:P.get,set:P.set}:P[F],H),A.v=1,D){if("object"==typeof N&&N)(c=b(N.get,"accessor.get"))&&(P.get=c),(c=b(N.set,"accessor.set"))&&(P.set=c),(c=b(N.init,"accessor.init"))&&k.unshift(c);else if(void 0!==N)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else b(N,(l?"field":"method")+" decorators","return")&&(l?k.unshift(N):P[F]=N)}return o<2&&u.push(g(k,s,1),g(i,s,0)),l||w||(f?D?u.splice(-1,0,I("get",s),I("set",s)):u.push(E?P[F]:b.call.bind(P[F])):m(e,r,P)),N}function w(e){return m(e,d,{configurable:!0,enumerable:!0,value:a})}return void 0!==i&&(a=i[d]),a=h(null==a?null:a),f=[],l=function(e){e&&f.push(g(e))},p=function(t,r){for(var i=0;i<n.length;i++){var a=n[i],c=a[1],l=7&c;if((8&c)==t&&!l==r){var p=a[2],d=!!a[3],m=16&c;applyDec(t?e:e.prototype,a,m,d?"#"+p:toPropertyKey(p),l,l<2?[]:t?s=s||[]:u=u||[],f,!!t,d,r,t&&d?function(t){return checkInRHS(t)===e}:o)}}},p(8,0),p(0,0),p(8,1),p(0,1),l(u),l(s),c=f,v||w(e),{e:c,get c(){var n=[];return v&&[w(e=applyDec(e,[t],r,e.name,5,n)),g(n,1)]}}}',
     {
       globals: ["Symbol", "Object", "TypeError", "Error"],
       localBindingNames: [],
@@ -98,15 +94,14 @@ const helpers: Record<string, Helper> = {
         ["toPropertyKey", "toPropertyKey"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.3",
+      exportPath: "body.0",
       exportName: "applyDecs2311",
       importBindingsReferences: [
-        "body.3.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.0.consequent.right.properties.0.value.callee",
-        "body.3.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.1.right.callee",
-        "body.3.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
-        "body.3.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.10.consequent.body.body.0.argument.left.callee",
+        "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.0.consequent.right.properties.0.value.callee",
+        "body.0.declaration.body.body.3.body.body.3.consequent.body.1.test.expressions.0.consequent.expressions.1.right.callee",
+        "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
+        "body.0.declaration.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.10.consequent.body.body.0.argument.left.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2"],
     },
   ),
   // size: 133, gzip size: 133
@@ -121,7 +116,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_arrayLikeToArray",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 72, gzip size: 86
@@ -136,24 +130,22 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_arrayWithHoles",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 140, gzip size: 116
+  // size: 93, gzip size: 98
   arrayWithoutHoles: helper(
     "7.0.0-beta.0",
-    'import arrayLikeToArray from"arrayLikeToArray";export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}',
+    "export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}",
     {
       globals: ["Array"],
       localBindingNames: [],
       dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_arrayWithoutHoles",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.consequent.argument.callee",
+        "body.0.declaration.body.body.0.consequent.argument.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 187, gzip size: 167
@@ -168,7 +160,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_assertClassBrand",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 159, gzip size: 141
@@ -183,24 +174,22 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_assertThisInitialized",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 544, gzip size: 300
+  // size: 503, gzip size: 287
   asyncGeneratorDelegate: helper(
     "7.0.0-beta.0",
-    'import OverloadYield from"OverloadYield";export default function _asyncGeneratorDelegate(t){var e={},n=!1;function pump(e,r){return n=!0,r=new Promise((function(n){n(t[e](r))})),{done:!1,value:new OverloadYield(r,1)}}return e["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},e.next=function(t){return n?(n=!1,t):pump("next",t)},"function"==typeof t.throw&&(e.throw=function(t){if(n)throw n=!1,t;return pump("throw",t)}),"function"==typeof t.return&&(e.return=function(t){return n?(n=!1,t):pump("return",t)}),e}',
+    'export default function _asyncGeneratorDelegate(t){var e={},n=!1;function pump(e,r){return n=!0,r=new Promise((function(n){n(t[e](r))})),{done:!1,value:new OverloadYield(r,1)}}return e["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},e.next=function(t){return n?(n=!1,t):pump("next",t)},"function"==typeof t.throw&&(e.throw=function(t){if(n)throw n=!1,t;return pump("throw",t)}),"function"==typeof t.return&&(e.return=function(t){return n?(n=!1,t):pump("return",t)}),e}',
     {
       globals: ["Promise", "Symbol"],
       localBindingNames: [],
       dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_asyncGeneratorDelegate",
       importBindingsReferences: [
-        "body.1.declaration.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
+        "body.0.declaration.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 1096, gzip size: 439
@@ -215,7 +204,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_asyncIterator",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 429, gzip size: 251
@@ -230,30 +218,28 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.1",
       exportName: "_asyncToGenerator",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 119, gzip size: 113
+  // size: 78, gzip size: 95
   awaitAsyncGenerator: helper(
     "7.0.0-beta.0",
-    'import OverloadYield from"OverloadYield";export default function _awaitAsyncGenerator(e){return new OverloadYield(e,0)}',
+    "export default function _awaitAsyncGenerator(e){return new OverloadYield(e,0)}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["OverloadYield", "OverloadYield"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_awaitAsyncGenerator",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.callee",
+        "body.0.declaration.body.body.0.argument.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 366, gzip size: 187
+  // size: 195, gzip size: 153
   callSuper: helper(
     "7.23.8",
-    'import getPrototypeOf from"getPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";import possibleConstructorReturn from"possibleConstructorReturn";export default function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}',
+    "export default function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}",
     {
       globals: ["Reflect"],
       localBindingNames: [],
@@ -263,15 +249,14 @@ const helpers: Record<string, Helper> = {
         ["possibleConstructorReturn", "possibleConstructorReturn"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.3",
+      exportPath: "body.0",
       exportName: "_callSuper",
       importBindingsReferences: [
-        "body.3.declaration.body.body.0.argument.expressions.0.right.callee",
-        "body.3.declaration.body.body.0.argument.expressions.1.callee",
-        "body.3.declaration.body.body.0.argument.expressions.1.arguments.1.test.callee",
-        "body.3.declaration.body.body.0.argument.expressions.1.arguments.1.consequent.arguments.2.object.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.right.callee",
+        "body.0.declaration.body.body.0.argument.expressions.1.callee",
+        "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.test.callee",
+        "body.0.declaration.body.body.0.argument.expressions.1.arguments.1.consequent.arguments.2.object.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2"],
     },
   ),
   // size: 161, gzip size: 154
@@ -286,7 +271,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_checkInRHS",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 154, gzip size: 142
@@ -301,7 +285,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_checkPrivateRedeclaration",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 123, gzip size: 120
@@ -316,7 +299,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_classCallCheck",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 136, gzip size: 131
@@ -331,30 +313,28 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_classNameTDZError",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 135, gzip size: 116
+  // size: 88, gzip size: 101
   classPrivateFieldGet2: helper(
     "7.24.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldGet2(s,a){return s.get(assertClassBrand(s,a))}',
+    "export default function _classPrivateFieldGet2(s,a){return s.get(assertClassBrand(s,a))}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateFieldGet2",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.arguments.0.callee",
+        "body.0.declaration.body.body.0.argument.arguments.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 165, gzip size: 123
+  // size: 100, gzip size: 105
   classPrivateFieldInitSpec: helper(
     "7.14.1",
-    'import checkPrivateRedeclaration from"checkPrivateRedeclaration";export default function _classPrivateFieldInitSpec(e,t,a){checkPrivateRedeclaration(e,t),t.set(e,a)}',
+    "export default function _classPrivateFieldInitSpec(e,t,a){checkPrivateRedeclaration(e,t),t.set(e,a)}",
     {
       globals: [],
       localBindingNames: [],
@@ -362,12 +342,11 @@ const helpers: Record<string, Helper> = {
         ["checkPrivateRedeclaration", "checkPrivateRedeclaration"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateFieldInitSpec",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.expression.expressions.0.callee",
+        "body.0.declaration.body.body.0.expression.expressions.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 163, gzip size: 150
@@ -382,7 +361,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_classPrivateFieldBase",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 88, gzip size: 103
@@ -397,47 +375,44 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.1",
       exportName: "_classPrivateFieldKey",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 141, gzip size: 123
+  // size: 94, gzip size: 105
   classPrivateFieldSet2: helper(
     "7.24.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}',
+    "export default function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateFieldSet2",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 130, gzip size: 112
+  // size: 83, gzip size: 96
   classPrivateGetter: helper(
     "7.24.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}',
+    "export default function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateGetter",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.arguments.0.callee",
+        "body.0.declaration.body.body.0.argument.arguments.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 162, gzip size: 121
+  // size: 97, gzip size: 104
   classPrivateMethodInitSpec: helper(
     "7.14.1",
-    'import checkPrivateRedeclaration from"checkPrivateRedeclaration";export default function _classPrivateMethodInitSpec(e,a){checkPrivateRedeclaration(e,a),a.add(e)}',
+    "export default function _classPrivateMethodInitSpec(e,a){checkPrivateRedeclaration(e,a),a.add(e)}",
     {
       globals: [],
       localBindingNames: [],
@@ -445,52 +420,49 @@ const helpers: Record<string, Helper> = {
         ["checkPrivateRedeclaration", "checkPrivateRedeclaration"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateMethodInitSpec",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.expression.expressions.0.callee",
+        "body.0.declaration.body.body.0.expression.expressions.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 136, gzip size: 118
+  // size: 89, gzip size: 99
   classPrivateSetter: helper(
     "7.24.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}',
+    "export default function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classPrivateSetter",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.arguments.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 138, gzip size: 122
+  // size: 91, gzip size: 103
   classStaticPrivateMethodGet: helper(
     "7.3.2",
-    'import assertClassBrand from"assertClassBrand";export default function _classStaticPrivateMethodGet(s,a,t){return assertClassBrand(a,s),t}',
+    "export default function _classStaticPrivateMethodGet(s,a,t){return assertClassBrand(a,s),t}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_classStaticPrivateMethodGet",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.expressions.0.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 327, gzip size: 200
+  // size: 221, gzip size: 170
   construct: helper(
     "7.0.0-beta.0",
-    'import isNativeReflectConstruct from"isNativeReflectConstruct";import setPrototypeOf from"setPrototypeOf";export default function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}',
+    "export default function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}",
     {
       globals: ["Reflect"],
       localBindingNames: [],
@@ -499,36 +471,34 @@ const helpers: Record<string, Helper> = {
         ["setPrototypeOf", "setPrototypeOf"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.2",
+      exportPath: "body.0",
       exportName: "_construct",
       importBindingsReferences: [
-        "body.2.declaration.body.body.0.test.callee",
-        "body.2.declaration.body.body.4.argument.expressions.0.right.callee",
+        "body.0.declaration.body.body.0.test.callee",
+        "body.0.declaration.body.body.4.argument.expressions.0.right.callee",
       ],
-      importPaths: ["body.0", "body.1"],
     },
   ),
-  // size: 404, gzip size: 243
+  // size: 363, gzip size: 228
   createClass: helper(
     "7.0.0-beta.0",
-    'import toPropertyKey from"toPropertyKey";function _defineProperties(e,r){for(var t=0;t<r.length;t++){var o=r[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(o.key),o)}}export default function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
+    'function _defineProperties(e,r){for(var t=0;t<r.length;t++){var o=r[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(o.key),o)}}export default function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
     {
       globals: ["Object"],
       localBindingNames: ["_defineProperties"],
       dependencies: new Map([["toPropertyKey", "toPropertyKey"]]),
       exportBindingAssignments: [],
-      exportPath: "body.2",
+      exportPath: "body.1",
       exportName: "_createClass",
       importBindingsReferences: [
-        "body.1.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
+        "body.0.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 774, gzip size: 447
+  // size: 707, gzip size: 431
   createForOfIteratorHelper: helper(
     "7.9.0",
-    'import unsupportedIterableToArray from"unsupportedIterableToArray";export default function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,u=!1;return{s:function(){t=t.call(r)},n:function(){var r=t.next();return a=r.done,r},e:function(r){u=!0,o=r},f:function(){try{a||null==t.return||t.return()}finally{if(u)throw o}}}}',
+    'export default function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,u=!1;return{s:function(){t=t.call(r)},n:function(){var r=t.next();return a=r.done,r},e:function(r){u=!0,o=r},f:function(){try{a||null==t.return||t.return()}finally{if(u)throw o}}}}',
     {
       globals: ["Symbol", "Array", "TypeError"],
       localBindingNames: [],
@@ -536,18 +506,17 @@ const helpers: Record<string, Helper> = {
         ["unsupportedIterableToArray", "unsupportedIterableToArray"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_createForOfIteratorHelper",
       importBindingsReferences: [
-        "body.1.declaration.body.body.1.consequent.body.0.test.left.right.right.callee",
+        "body.0.declaration.body.body.1.consequent.body.0.test.left.right.right.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 570, gzip size: 361
+  // size: 503, gzip size: 346
   createForOfIteratorHelperLoose: helper(
     "7.9.0",
-    'import unsupportedIterableToArray from"unsupportedIterableToArray";export default function _createForOfIteratorHelperLoose(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(t)return(t=t.call(r)).next.bind(t);if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var o=0;return function(){return o>=r.length?{done:!0}:{done:!1,value:r[o++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
+    'export default function _createForOfIteratorHelperLoose(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(t)return(t=t.call(r)).next.bind(t);if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var o=0;return function(){return o>=r.length?{done:!0}:{done:!1,value:r[o++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
     {
       globals: ["Symbol", "Array", "TypeError"],
       localBindingNames: [],
@@ -555,18 +524,17 @@ const helpers: Record<string, Helper> = {
         ["unsupportedIterableToArray", "unsupportedIterableToArray"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_createForOfIteratorHelperLoose",
       importBindingsReferences: [
-        "body.1.declaration.body.body.2.test.left.right.right.callee",
+        "body.0.declaration.body.body.2.test.left.right.right.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 441, gzip size: 213
+  // size: 270, gzip size: 180
   createSuper: helper(
     "7.9.0",
-    'import getPrototypeOf from"getPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";import possibleConstructorReturn from"possibleConstructorReturn";export default function _createSuper(t){var r=isNativeReflectConstruct();return function(){var e,o=getPrototypeOf(t);if(r){var s=getPrototypeOf(this).constructor;e=Reflect.construct(o,arguments,s)}else e=o.apply(this,arguments);return possibleConstructorReturn(this,e)}}',
+    "export default function _createSuper(t){var r=isNativeReflectConstruct();return function(){var e,o=getPrototypeOf(t);if(r){var s=getPrototypeOf(this).constructor;e=Reflect.construct(o,arguments,s)}else e=o.apply(this,arguments);return possibleConstructorReturn(this,e)}}",
     {
       globals: ["Reflect"],
       localBindingNames: [],
@@ -576,21 +544,20 @@ const helpers: Record<string, Helper> = {
         ["possibleConstructorReturn", "possibleConstructorReturn"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.3",
+      exportPath: "body.0",
       exportName: "_createSuper",
       importBindingsReferences: [
-        "body.3.declaration.body.body.0.declarations.0.init.callee",
-        "body.3.declaration.body.body.1.argument.body.body.0.declarations.1.init.callee",
-        "body.3.declaration.body.body.1.argument.body.body.1.consequent.body.0.declarations.0.init.object.callee",
-        "body.3.declaration.body.body.1.argument.body.body.2.argument.callee",
+        "body.0.declaration.body.body.0.declarations.0.init.callee",
+        "body.0.declaration.body.body.1.argument.body.body.0.declarations.1.init.callee",
+        "body.0.declaration.body.body.1.argument.body.body.1.consequent.body.0.declarations.0.init.object.callee",
+        "body.0.declaration.body.body.1.argument.body.body.2.argument.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2"],
     },
   ),
-  // size: 7114, gzip size: 2089
+  // size: 7044, gzip size: 2068
   decorate: helper(
     "7.1.5",
-    'import toArray from"toArray";import toPropertyKey from"toPropertyKey";export default function _decorate(e,r,t,i){var o=_getDecoratorsApi();if(i)for(var n=0;n<i.length;n++)o=i[n](o);var s=r((function(e){o.initializeInstanceElements(e,a.elements)}),t),a=o.decorateClass(_coalesceClassElements(s.d.map(_createElementDescriptor)),e);return o.initializeClassElements(s.F,a.elements),o.runClassFinishers(s.F,a.finishers)}function _getDecoratorsApi(){_getDecoratorsApi=function(){return e};var e={elementsDefinitionOrder:[["method"],["field"]],initializeInstanceElements:function(e,r){["method","field"].forEach((function(t){r.forEach((function(r){r.kind===t&&"own"===r.placement&&this.defineClassElement(e,r)}),this)}),this)},initializeClassElements:function(e,r){var t=e.prototype;["method","field"].forEach((function(i){r.forEach((function(r){var o=r.placement;if(r.kind===i&&("static"===o||"prototype"===o)){var n="static"===o?e:t;this.defineClassElement(n,r)}}),this)}),this)},defineClassElement:function(e,r){var t=r.descriptor;if("field"===r.kind){var i=r.initializer;t={enumerable:t.enumerable,writable:t.writable,configurable:t.configurable,value:void 0===i?void 0:i.call(e)}}Object.defineProperty(e,r.key,t)},decorateClass:function(e,r){var t=[],i=[],o={static:[],prototype:[],own:[]};if(e.forEach((function(e){this.addElementPlacement(e,o)}),this),e.forEach((function(e){if(!_hasDecorators(e))return t.push(e);var r=this.decorateElement(e,o);t.push(r.element),t.push.apply(t,r.extras),i.push.apply(i,r.finishers)}),this),!r)return{elements:t,finishers:i};var n=this.decorateConstructor(t,r);return i.push.apply(i,n.finishers),n.finishers=i,n},addElementPlacement:function(e,r,t){var i=r[e.placement];if(!t&&-1!==i.indexOf(e.key))throw new TypeError("Duplicated element ("+e.key+")");i.push(e.key)},decorateElement:function(e,r){for(var t=[],i=[],o=e.decorators,n=o.length-1;n>=0;n--){var s=r[e.placement];s.splice(s.indexOf(e.key),1);var a=this.fromElementDescriptor(e),l=this.toElementFinisherExtras((0,o[n])(a)||a);e=l.element,this.addElementPlacement(e,r),l.finisher&&i.push(l.finisher);var c=l.extras;if(c){for(var p=0;p<c.length;p++)this.addElementPlacement(c[p],r);t.push.apply(t,c)}}return{element:e,finishers:i,extras:t}},decorateConstructor:function(e,r){for(var t=[],i=r.length-1;i>=0;i--){var o=this.fromClassDescriptor(e),n=this.toClassDescriptor((0,r[i])(o)||o);if(void 0!==n.finisher&&t.push(n.finisher),void 0!==n.elements){e=n.elements;for(var s=0;s<e.length-1;s++)for(var a=s+1;a<e.length;a++)if(e[s].key===e[a].key&&e[s].placement===e[a].placement)throw new TypeError("Duplicated element ("+e[s].key+")")}}return{elements:e,finishers:t}},fromElementDescriptor:function(e){var r={kind:e.kind,key:e.key,placement:e.placement,descriptor:e.descriptor};return Object.defineProperty(r,Symbol.toStringTag,{value:"Descriptor",configurable:!0}),"field"===e.kind&&(r.initializer=e.initializer),r},toElementDescriptors:function(e){if(void 0!==e)return toArray(e).map((function(e){var r=this.toElementDescriptor(e);return this.disallowProperty(e,"finisher","An element descriptor"),this.disallowProperty(e,"extras","An element descriptor"),r}),this)},toElementDescriptor:function(e){var r=e.kind+"";if("method"!==r&&"field"!==r)throw new TypeError(\'An element descriptor\\\'s .kind property must be either "method" or "field", but a decorator created an element descriptor with .kind "\'+r+\'"\');var t=toPropertyKey(e.key),i=e.placement+"";if("static"!==i&&"prototype"!==i&&"own"!==i)throw new TypeError(\'An element descriptor\\\'s .placement property must be one of "static", "prototype" or "own", but a decorator created an element descriptor with .placement "\'+i+\'"\');var o=e.descriptor;this.disallowProperty(e,"elements","An element descriptor");var n={kind:r,key:t,placement:i,descriptor:Object.assign({},o)};return"field"!==r?this.disallowProperty(e,"initializer","A method descriptor"):(this.disallowProperty(o,"get","The property descriptor of a field descriptor"),this.disallowProperty(o,"set","The property descriptor of a field descriptor"),this.disallowProperty(o,"value","The property descriptor of a field descriptor"),n.initializer=e.initializer),n},toElementFinisherExtras:function(e){return{element:this.toElementDescriptor(e),finisher:_optionalCallableProperty(e,"finisher"),extras:this.toElementDescriptors(e.extras)}},fromClassDescriptor:function(e){var r={kind:"class",elements:e.map(this.fromElementDescriptor,this)};return Object.defineProperty(r,Symbol.toStringTag,{value:"Descriptor",configurable:!0}),r},toClassDescriptor:function(e){var r=e.kind+"";if("class"!==r)throw new TypeError(\'A class descriptor\\\'s .kind property must be "class", but a decorator created a class descriptor with .kind "\'+r+\'"\');this.disallowProperty(e,"key","A class descriptor"),this.disallowProperty(e,"placement","A class descriptor"),this.disallowProperty(e,"descriptor","A class descriptor"),this.disallowProperty(e,"initializer","A class descriptor"),this.disallowProperty(e,"extras","A class descriptor");var t=_optionalCallableProperty(e,"finisher");return{elements:this.toElementDescriptors(e.elements),finisher:t}},runClassFinishers:function(e,r){for(var t=0;t<r.length;t++){var i=(0,r[t])(e);if(void 0!==i){if("function"!=typeof i)throw new TypeError("Finishers must return a constructor.");e=i}}return e},disallowProperty:function(e,r,t){if(void 0!==e[r])throw new TypeError(t+" can\'t have a ."+r+" property.")}};return e}function _createElementDescriptor(e){var r,t=toPropertyKey(e.key);"method"===e.kind?r={value:e.value,writable:!0,configurable:!0,enumerable:!1}:"get"===e.kind?r={get:e.value,configurable:!0,enumerable:!1}:"set"===e.kind?r={set:e.value,configurable:!0,enumerable:!1}:"field"===e.kind&&(r={configurable:!0,writable:!0,enumerable:!0});var i={kind:"field"===e.kind?"field":"method",key:t,placement:e.static?"static":"field"===e.kind?"own":"prototype",descriptor:r};return e.decorators&&(i.decorators=e.decorators),"field"===e.kind&&(i.initializer=e.value),i}function _coalesceGetterSetter(e,r){void 0!==e.descriptor.get?r.descriptor.get=e.descriptor.get:r.descriptor.set=e.descriptor.set}function _coalesceClassElements(e){for(var r=[],isSameElement=function(e){return"method"===e.kind&&e.key===o.key&&e.placement===o.placement},t=0;t<e.length;t++){var i,o=e[t];if("method"===o.kind&&(i=r.find(isSameElement)))if(_isDataDescriptor(o.descriptor)||_isDataDescriptor(i.descriptor)){if(_hasDecorators(o)||_hasDecorators(i))throw new ReferenceError("Duplicated methods ("+o.key+") can\'t be decorated.");i.descriptor=o.descriptor}else{if(_hasDecorators(o)){if(_hasDecorators(i))throw new ReferenceError("Decorators can\'t be placed on different accessors with for the same property ("+o.key+").");i.decorators=o.decorators}_coalesceGetterSetter(o,i)}else r.push(o)}return r}function _hasDecorators(e){return e.decorators&&e.decorators.length}function _isDataDescriptor(e){return void 0!==e&&!(void 0===e.value&&void 0===e.writable)}function _optionalCallableProperty(e,r){var t=e[r];if(void 0!==t&&"function"!=typeof t)throw new TypeError("Expected \'"+r+"\' to be a function");return t}',
+    'export default function _decorate(e,r,t,i){var o=_getDecoratorsApi();if(i)for(var n=0;n<i.length;n++)o=i[n](o);var s=r((function(e){o.initializeInstanceElements(e,a.elements)}),t),a=o.decorateClass(_coalesceClassElements(s.d.map(_createElementDescriptor)),e);return o.initializeClassElements(s.F,a.elements),o.runClassFinishers(s.F,a.finishers)}function _getDecoratorsApi(){_getDecoratorsApi=function(){return e};var e={elementsDefinitionOrder:[["method"],["field"]],initializeInstanceElements:function(e,r){["method","field"].forEach((function(t){r.forEach((function(r){r.kind===t&&"own"===r.placement&&this.defineClassElement(e,r)}),this)}),this)},initializeClassElements:function(e,r){var t=e.prototype;["method","field"].forEach((function(i){r.forEach((function(r){var o=r.placement;if(r.kind===i&&("static"===o||"prototype"===o)){var n="static"===o?e:t;this.defineClassElement(n,r)}}),this)}),this)},defineClassElement:function(e,r){var t=r.descriptor;if("field"===r.kind){var i=r.initializer;t={enumerable:t.enumerable,writable:t.writable,configurable:t.configurable,value:void 0===i?void 0:i.call(e)}}Object.defineProperty(e,r.key,t)},decorateClass:function(e,r){var t=[],i=[],o={static:[],prototype:[],own:[]};if(e.forEach((function(e){this.addElementPlacement(e,o)}),this),e.forEach((function(e){if(!_hasDecorators(e))return t.push(e);var r=this.decorateElement(e,o);t.push(r.element),t.push.apply(t,r.extras),i.push.apply(i,r.finishers)}),this),!r)return{elements:t,finishers:i};var n=this.decorateConstructor(t,r);return i.push.apply(i,n.finishers),n.finishers=i,n},addElementPlacement:function(e,r,t){var i=r[e.placement];if(!t&&-1!==i.indexOf(e.key))throw new TypeError("Duplicated element ("+e.key+")");i.push(e.key)},decorateElement:function(e,r){for(var t=[],i=[],o=e.decorators,n=o.length-1;n>=0;n--){var s=r[e.placement];s.splice(s.indexOf(e.key),1);var a=this.fromElementDescriptor(e),l=this.toElementFinisherExtras((0,o[n])(a)||a);e=l.element,this.addElementPlacement(e,r),l.finisher&&i.push(l.finisher);var c=l.extras;if(c){for(var p=0;p<c.length;p++)this.addElementPlacement(c[p],r);t.push.apply(t,c)}}return{element:e,finishers:i,extras:t}},decorateConstructor:function(e,r){for(var t=[],i=r.length-1;i>=0;i--){var o=this.fromClassDescriptor(e),n=this.toClassDescriptor((0,r[i])(o)||o);if(void 0!==n.finisher&&t.push(n.finisher),void 0!==n.elements){e=n.elements;for(var s=0;s<e.length-1;s++)for(var a=s+1;a<e.length;a++)if(e[s].key===e[a].key&&e[s].placement===e[a].placement)throw new TypeError("Duplicated element ("+e[s].key+")")}}return{elements:e,finishers:t}},fromElementDescriptor:function(e){var r={kind:e.kind,key:e.key,placement:e.placement,descriptor:e.descriptor};return Object.defineProperty(r,Symbol.toStringTag,{value:"Descriptor",configurable:!0}),"field"===e.kind&&(r.initializer=e.initializer),r},toElementDescriptors:function(e){if(void 0!==e)return toArray(e).map((function(e){var r=this.toElementDescriptor(e);return this.disallowProperty(e,"finisher","An element descriptor"),this.disallowProperty(e,"extras","An element descriptor"),r}),this)},toElementDescriptor:function(e){var r=e.kind+"";if("method"!==r&&"field"!==r)throw new TypeError(\'An element descriptor\\\'s .kind property must be either "method" or "field", but a decorator created an element descriptor with .kind "\'+r+\'"\');var t=toPropertyKey(e.key),i=e.placement+"";if("static"!==i&&"prototype"!==i&&"own"!==i)throw new TypeError(\'An element descriptor\\\'s .placement property must be one of "static", "prototype" or "own", but a decorator created an element descriptor with .placement "\'+i+\'"\');var o=e.descriptor;this.disallowProperty(e,"elements","An element descriptor");var n={kind:r,key:t,placement:i,descriptor:Object.assign({},o)};return"field"!==r?this.disallowProperty(e,"initializer","A method descriptor"):(this.disallowProperty(o,"get","The property descriptor of a field descriptor"),this.disallowProperty(o,"set","The property descriptor of a field descriptor"),this.disallowProperty(o,"value","The property descriptor of a field descriptor"),n.initializer=e.initializer),n},toElementFinisherExtras:function(e){return{element:this.toElementDescriptor(e),finisher:_optionalCallableProperty(e,"finisher"),extras:this.toElementDescriptors(e.extras)}},fromClassDescriptor:function(e){var r={kind:"class",elements:e.map(this.fromElementDescriptor,this)};return Object.defineProperty(r,Symbol.toStringTag,{value:"Descriptor",configurable:!0}),r},toClassDescriptor:function(e){var r=e.kind+"";if("class"!==r)throw new TypeError(\'A class descriptor\\\'s .kind property must be "class", but a decorator created a class descriptor with .kind "\'+r+\'"\');this.disallowProperty(e,"key","A class descriptor"),this.disallowProperty(e,"placement","A class descriptor"),this.disallowProperty(e,"descriptor","A class descriptor"),this.disallowProperty(e,"initializer","A class descriptor"),this.disallowProperty(e,"extras","A class descriptor");var t=_optionalCallableProperty(e,"finisher");return{elements:this.toElementDescriptors(e.elements),finisher:t}},runClassFinishers:function(e,r){for(var t=0;t<r.length;t++){var i=(0,r[t])(e);if(void 0!==i){if("function"!=typeof i)throw new TypeError("Finishers must return a constructor.");e=i}}return e},disallowProperty:function(e,r,t){if(void 0!==e[r])throw new TypeError(t+" can\'t have a ."+r+" property.")}};return e}function _createElementDescriptor(e){var r,t=toPropertyKey(e.key);"method"===e.kind?r={value:e.value,writable:!0,configurable:!0,enumerable:!1}:"get"===e.kind?r={get:e.value,configurable:!0,enumerable:!1}:"set"===e.kind?r={set:e.value,configurable:!0,enumerable:!1}:"field"===e.kind&&(r={configurable:!0,writable:!0,enumerable:!0});var i={kind:"field"===e.kind?"field":"method",key:t,placement:e.static?"static":"field"===e.kind?"own":"prototype",descriptor:r};return e.decorators&&(i.decorators=e.decorators),"field"===e.kind&&(i.initializer=e.value),i}function _coalesceGetterSetter(e,r){void 0!==e.descriptor.get?r.descriptor.get=e.descriptor.get:r.descriptor.set=e.descriptor.set}function _coalesceClassElements(e){for(var r=[],isSameElement=function(e){return"method"===e.kind&&e.key===o.key&&e.placement===o.placement},t=0;t<e.length;t++){var i,o=e[t];if("method"===o.kind&&(i=r.find(isSameElement)))if(_isDataDescriptor(o.descriptor)||_isDataDescriptor(i.descriptor)){if(_hasDecorators(o)||_hasDecorators(i))throw new ReferenceError("Duplicated methods ("+o.key+") can\'t be decorated.");i.descriptor=o.descriptor}else{if(_hasDecorators(o)){if(_hasDecorators(i))throw new ReferenceError("Decorators can\'t be placed on different accessors with for the same property ("+o.key+").");i.decorators=o.decorators}_coalesceGetterSetter(o,i)}else r.push(o)}return r}function _hasDecorators(e){return e.decorators&&e.decorators.length}function _isDataDescriptor(e){return void 0!==e&&!(void 0===e.value&&void 0===e.writable)}function _optionalCallableProperty(e,r){var t=e[r];if(void 0!==t&&"function"!=typeof t)throw new TypeError("Expected \'"+r+"\' to be a function");return t}',
     {
       globals: ["Object", "TypeError", "Symbol", "ReferenceError"],
       localBindingNames: [
@@ -607,14 +574,13 @@ const helpers: Record<string, Helper> = {
         ["toPropertyKey", "toPropertyKey"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.2",
+      exportPath: "body.0",
       exportName: "_decorate",
       importBindingsReferences: [
-        "body.3.body.body.1.declarations.0.init.properties.9.value.body.body.0.consequent.argument.callee.object.callee",
-        "body.3.body.body.1.declarations.0.init.properties.10.value.body.body.2.declarations.0.init.callee",
-        "body.4.body.body.0.declarations.1.init.callee",
+        "body.1.body.body.1.declarations.0.init.properties.9.value.body.body.0.consequent.argument.callee.object.callee",
+        "body.1.body.body.1.declarations.0.init.properties.10.value.body.body.2.declarations.0.init.callee",
+        "body.2.body.body.0.declarations.1.init.callee",
       ],
-      importPaths: ["body.0", "body.1"],
     },
   ),
   // size: 221, gzip size: 176
@@ -629,7 +595,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_defaults",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 130, gzip size: 130
@@ -644,24 +609,22 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_defineAccessor",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 207, gzip size: 155
+  // size: 166, gzip size: 140
   defineProperty: helper(
     "7.0.0-beta.0",
-    'import toPropertyKey from"toPropertyKey";export default function _defineProperty(e,r,t){return(r=toPropertyKey(r))in e?Object.defineProperty(e,r,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[r]=t,e}',
+    "export default function _defineProperty(e,r,t){return(r=toPropertyKey(r))in e?Object.defineProperty(e,r,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[r]=t,e}",
     {
       globals: ["Object"],
       localBindingNames: [],
       dependencies: new Map([["toPropertyKey", "toPropertyKey"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_defineProperty",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.expressions.0.test.left.right.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.test.left.right.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 252, gzip size: 188
@@ -678,26 +641,24 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_extends",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 319, gzip size: 225
+  // size: 278, gzip size: 211
   get: helper(
     "7.0.0-beta.0",
-    'import superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(null,arguments)}',
+    'export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(null,arguments)}',
     {
       globals: ["Reflect", "Object"],
       localBindingNames: [],
       dependencies: new Map([["superPropBase", "superPropBase"]]),
       exportBindingAssignments: [
-        "body.1.declaration.body.body.0.argument.expressions.0",
+        "body.0.declaration.body.body.0.argument.expressions.0",
       ],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_get",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
+        "body.0.declaration.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 194, gzip size: 120
@@ -714,7 +675,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_getPrototypeOf",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 46, gzip size: 66
@@ -726,7 +686,6 @@ const helpers: Record<string, Helper> = {
     exportPath: "body.0",
     exportName: "_identity",
     importBindingsReferences: [],
-    importPaths: [],
   }),
   // size: 552, gzip size: 267
   importDeferProxy: helper(
@@ -740,41 +699,38 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_importDeferProxy",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 358, gzip size: 243
+  // size: 315, gzip size: 227
   inherits: helper(
     "7.0.0-beta.0",
-    'import setPrototypeOf from"setPrototypeOf";export default function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&setPrototypeOf(t,e)}',
+    'export default function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&setPrototypeOf(t,e)}',
     {
       globals: ["TypeError", "Object"],
       localBindingNames: [],
       dependencies: new Map([["setPrototypeOf", "setPrototypeOf"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_inherits",
       importBindingsReferences: [
-        "body.1.declaration.body.body.1.expression.expressions.2.right.callee",
+        "body.0.declaration.body.body.1.expression.expressions.2.right.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 172, gzip size: 132
+  // size: 129, gzip size: 116
   inheritsLoose: helper(
     "7.0.0-beta.0",
-    'import setPrototypeOf from"setPrototypeOf";export default function _inheritsLoose(t,o){t.prototype=Object.create(o.prototype),t.prototype.constructor=t,setPrototypeOf(t,o)}',
+    "export default function _inheritsLoose(t,o){t.prototype=Object.create(o.prototype),t.prototype.constructor=t,setPrototypeOf(t,o)}",
     {
       globals: ["Object"],
       localBindingNames: [],
       dependencies: new Map([["setPrototypeOf", "setPrototypeOf"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_inheritsLoose",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.expression.expressions.2.callee",
+        "body.0.declaration.body.body.0.expression.expressions.2.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 213, gzip size: 150
@@ -789,7 +745,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_initializerDefineProperty",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 202, gzip size: 165
@@ -804,7 +759,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_initializerWarningHelper",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 149, gzip size: 130
@@ -819,7 +773,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_instanceof",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 87, gzip size: 98
@@ -834,7 +787,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_interopRequireDefault",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 679, gzip size: 358
@@ -849,7 +801,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.1",
       exportName: "_interopRequireWildcard",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 148, gzip size: 136
@@ -864,7 +815,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_isNativeFunction",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 208, gzip size: 154
@@ -881,7 +831,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_isNativeReflectConstruct",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 144, gzip size: 133
@@ -896,7 +845,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_iterableToArray",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 431, gzip size: 303
@@ -911,7 +859,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_iterableToArrayLimit",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 228, gzip size: 196
@@ -926,7 +873,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_iterableToArrayLimitLoose",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 535, gzip size: 348
@@ -941,24 +887,22 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.1",
       exportName: "_createRawReactElement",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 222, gzip size: 168
+  // size: 175, gzip size: 154
   maybeArrayLike: helper(
     "7.9.0",
-    'import arrayLikeToArray from"arrayLikeToArray";export default function _maybeArrayLike(r,a,e){if(a&&!Array.isArray(a)&&"number"==typeof a.length){var y=a.length;return arrayLikeToArray(a,void 0!==e&&e<y?e:y)}return r(a,e)}',
+    'export default function _maybeArrayLike(r,a,e){if(a&&!Array.isArray(a)&&"number"==typeof a.length){var y=a.length;return arrayLikeToArray(a,void 0!==e&&e<y?e:y)}return r(a,e)}',
     {
       globals: ["Array"],
       localBindingNames: [],
       dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_maybeArrayLike",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.consequent.body.1.argument.callee",
+        "body.0.declaration.body.body.0.consequent.body.1.argument.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 113, gzip size: 117
@@ -973,7 +917,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_newArrowCheck",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 204, gzip size: 171
@@ -988,7 +931,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_nonIterableRest",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 201, gzip size: 165
@@ -1003,7 +945,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_nonIterableSpread",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 114, gzip size: 117
@@ -1018,7 +959,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_nullishReceiverError",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 109, gzip size: 116
@@ -1033,30 +973,28 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_objectDestructuringEmpty",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 677, gzip size: 316
+  // size: 634, gzip size: 304
   objectSpread2: helper(
     "7.5.0",
-    'import defineProperty from"defineProperty";function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);r&&(o=o.filter((function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable}))),t.push.apply(t,o)}return t}export default function _objectSpread2(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?arguments[r]:{};r%2?ownKeys(Object(t),!0).forEach((function(r){defineProperty(e,r,t[r])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):ownKeys(Object(t)).forEach((function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))}))}return e}',
+    "function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);r&&(o=o.filter((function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable}))),t.push.apply(t,o)}return t}export default function _objectSpread2(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?arguments[r]:{};r%2?ownKeys(Object(t),!0).forEach((function(r){defineProperty(e,r,t[r])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):ownKeys(Object(t)).forEach((function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))}))}return e}",
     {
       globals: ["Object"],
       localBindingNames: ["ownKeys"],
       dependencies: new Map([["defineProperty", "defineProperty"]]),
       exportBindingAssignments: [],
-      exportPath: "body.2",
+      exportPath: "body.1",
       exportName: "_objectSpread2",
       importBindingsReferences: [
-        "body.2.declaration.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
+        "body.1.declaration.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 363, gzip size: 228
+  // size: 292, gzip size: 213
   objectWithoutProperties: helper(
     "7.0.0-beta.0",
-    'import objectWithoutPropertiesLoose from"objectWithoutPropertiesLoose";export default function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],t.indexOf(o)>=0||{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}',
+    "export default function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],t.indexOf(o)>=0||{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
     {
       globals: ["Object"],
       localBindingNames: [],
@@ -1064,12 +1002,11 @@ const helpers: Record<string, Helper> = {
         ["objectWithoutPropertiesLoose", "objectWithoutPropertiesLoose"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_objectWithoutProperties",
       importBindingsReferences: [
-        "body.1.declaration.body.body.1.declarations.2.init.callee",
+        "body.0.declaration.body.body.1.declarations.2.init.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 182, gzip size: 164
@@ -1084,13 +1021,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_objectWithoutPropertiesLoose",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 297, gzip size: 204
+  // size: 240, gzip size: 190
   possibleConstructorReturn: helper(
     "7.0.0-beta.0",
-    'import assertThisInitialized from"assertThisInitialized";export default function _possibleConstructorReturn(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return assertThisInitialized(t)}',
+    'export default function _possibleConstructorReturn(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return assertThisInitialized(t)}',
     {
       globals: ["TypeError"],
       localBindingNames: [],
@@ -1098,12 +1034,11 @@ const helpers: Record<string, Helper> = {
         ["assertThisInitialized", "assertThisInitialized"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_possibleConstructorReturn",
       importBindingsReferences: [
-        "body.1.declaration.body.body.2.argument.callee",
+        "body.0.declaration.body.body.2.argument.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 86, gzip size: 99
@@ -1118,7 +1053,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_readOnlyError",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 7631, gzip size: 2661
@@ -1133,13 +1067,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_regeneratorRuntime",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 593, gzip size: 303
+  // size: 509, gzip size: 283
   set: helper(
     "7.0.0-beta.0",
-    'import superPropBase from"superPropBase";import defineProperty from"defineProperty";function set(e,r,t,o){return set="undefined"!=typeof Reflect&&Reflect.set?Reflect.set:function(e,r,t,o){var f,i=superPropBase(e,r);if(i){if((f=Object.getOwnPropertyDescriptor(i,r)).set)return f.set.call(o,t),!0;if(!f.writable)return!1}if(f=Object.getOwnPropertyDescriptor(o,r)){if(!f.writable)return!1;f.value=t,Object.defineProperty(o,r,f)}else defineProperty(o,r,t);return!0},set(e,r,t,o)}export default function _set(e,r,t,o,f){if(!set(e,r,t,o||e)&&f)throw new TypeError("failed to set property");return t}',
+    'function set(e,r,t,o){return set="undefined"!=typeof Reflect&&Reflect.set?Reflect.set:function(e,r,t,o){var f,i=superPropBase(e,r);if(i){if((f=Object.getOwnPropertyDescriptor(i,r)).set)return f.set.call(o,t),!0;if(!f.writable)return!1}if(f=Object.getOwnPropertyDescriptor(o,r)){if(!f.writable)return!1;f.value=t,Object.defineProperty(o,r,f)}else defineProperty(o,r,t);return!0},set(e,r,t,o)}export default function _set(e,r,t,o,f){if(!set(e,r,t,o||e)&&f)throw new TypeError("failed to set property");return t}',
     {
       globals: ["Reflect", "Object", "TypeError"],
       localBindingNames: ["set"],
@@ -1148,13 +1081,12 @@ const helpers: Record<string, Helper> = {
         ["defineProperty", "defineProperty"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.3",
+      exportPath: "body.1",
       exportName: "_set",
       importBindingsReferences: [
-        "body.2.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.1.init.callee",
-        "body.2.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
+        "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.1.init.callee",
+        "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
       ],
-      importPaths: ["body.0", "body.1"],
     },
   ),
   // size: 193, gzip size: 179
@@ -1169,7 +1101,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "setFunctionName",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 178, gzip size: 116
@@ -1186,7 +1117,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_setPrototypeOf",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 118, gzip size: 118
@@ -1201,13 +1131,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_skipFirstGeneratorNext",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 358, gzip size: 171
+  // size: 148, gzip size: 129
   slicedToArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithHoles from"arrayWithHoles";import iterableToArrayLimit from"iterableToArrayLimit";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _slicedToArray(r,e){return arrayWithHoles(r)||iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}',
+    "export default function _slicedToArray(r,e){return arrayWithHoles(r)||iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
     {
       globals: [],
       localBindingNames: [],
@@ -1218,21 +1147,20 @@ const helpers: Record<string, Helper> = {
         ["nonIterableRest", "nonIterableRest"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.4",
+      exportPath: "body.0",
       exportName: "_slicedToArray",
       importBindingsReferences: [
-        "body.4.declaration.body.body.0.argument.left.left.left.callee",
-        "body.4.declaration.body.body.0.argument.left.left.right.callee",
-        "body.4.declaration.body.body.0.argument.left.right.callee",
-        "body.4.declaration.body.body.0.argument.right.callee",
+        "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        "body.0.declaration.body.body.0.argument.left.right.callee",
+        "body.0.declaration.body.body.0.argument.right.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2", "body.3"],
     },
   ),
-  // size: 378, gzip size: 176
+  // size: 158, gzip size: 130
   slicedToArrayLoose: helper(
     "7.0.0-beta.0",
-    'import arrayWithHoles from"arrayWithHoles";import iterableToArrayLimitLoose from"iterableToArrayLimitLoose";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _slicedToArrayLoose(r,e){return arrayWithHoles(r)||iterableToArrayLimitLoose(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}',
+    "export default function _slicedToArrayLoose(r,e){return arrayWithHoles(r)||iterableToArrayLimitLoose(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
     {
       globals: [],
       localBindingNames: [],
@@ -1243,32 +1171,30 @@ const helpers: Record<string, Helper> = {
         ["nonIterableRest", "nonIterableRest"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.4",
+      exportPath: "body.0",
       exportName: "_slicedToArrayLoose",
       importBindingsReferences: [
-        "body.4.declaration.body.body.0.argument.left.left.left.callee",
-        "body.4.declaration.body.body.0.argument.left.left.right.callee",
-        "body.4.declaration.body.body.0.argument.left.right.callee",
-        "body.4.declaration.body.body.0.argument.right.callee",
+        "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        "body.0.declaration.body.body.0.argument.left.right.callee",
+        "body.0.declaration.body.body.0.argument.right.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2", "body.3"],
     },
   ),
-  // size: 162, gzip size: 139
+  // size: 119, gzip size: 125
   superPropBase: helper(
     "7.0.0-beta.0",
-    'import getPrototypeOf from"getPrototypeOf";export default function _superPropBase(t,o){for(;!{}.hasOwnProperty.call(t,o)&&null!==(t=getPrototypeOf(t)););return t}',
+    "export default function _superPropBase(t,o){for(;!{}.hasOwnProperty.call(t,o)&&null!==(t=getPrototypeOf(t)););return t}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["getPrototypeOf", "getPrototypeOf"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_superPropBase",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.test.right.right.right.callee",
+        "body.0.declaration.body.body.0.test.right.right.right.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 150, gzip size: 137
@@ -1283,7 +1209,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_taggedTemplateLiteral",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 92, gzip size: 103
@@ -1298,7 +1223,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_taggedTemplateLiteralLoose",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 104, gzip size: 107
@@ -1313,13 +1237,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_tdzError",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 126, gzip size: 117
+  // size: 68, gzip size: 87
   temporalRef: helper(
     "7.0.0-beta.0",
-    'import undef from"temporalUndefined";import err from"tdz";export default function _temporalRef(r,e){return r===undef?err(e):r}',
+    "export default function _temporalRef(r,e){return r===undef?err(e):r}",
     {
       globals: [],
       localBindingNames: [],
@@ -1328,13 +1251,12 @@ const helpers: Record<string, Helper> = {
         ["err", "tdz"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.2",
+      exportPath: "body.0",
       exportName: "_temporalRef",
       importBindingsReferences: [
-        "body.2.declaration.body.body.0.argument.test.right",
-        "body.2.declaration.body.body.0.argument.consequent.callee",
+        "body.0.declaration.body.body.0.argument.test.right",
+        "body.0.declaration.body.body.0.argument.consequent.callee",
       ],
-      importPaths: ["body.0", "body.1"],
     },
   ),
   // size: 46, gzip size: 66
@@ -1349,13 +1271,12 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_temporalUndefined",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 331, gzip size: 156
+  // size: 131, gzip size: 113
   toArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithHoles from"arrayWithHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}',
+    "export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}",
     {
       globals: [],
       localBindingNames: [],
@@ -1366,21 +1287,20 @@ const helpers: Record<string, Helper> = {
         ["nonIterableRest", "nonIterableRest"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.4",
+      exportPath: "body.0",
       exportName: "_toArray",
       importBindingsReferences: [
-        "body.4.declaration.body.body.0.argument.left.left.left.callee",
-        "body.4.declaration.body.body.0.argument.left.left.right.callee",
-        "body.4.declaration.body.body.0.argument.left.right.callee",
-        "body.4.declaration.body.body.0.argument.right.callee",
+        "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        "body.0.declaration.body.body.0.argument.left.right.callee",
+        "body.0.declaration.body.body.0.argument.right.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2", "body.3"],
     },
   ),
-  // size: 356, gzip size: 165
+  // size: 146, gzip size: 124
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithoutHoles from"arrayWithoutHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}',
+    "export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}",
     {
       globals: [],
       localBindingNames: [],
@@ -1391,15 +1311,14 @@ const helpers: Record<string, Helper> = {
         ["nonIterableSpread", "nonIterableSpread"],
       ]),
       exportBindingAssignments: [],
-      exportPath: "body.4",
+      exportPath: "body.0",
       exportName: "_toConsumableArray",
       importBindingsReferences: [
-        "body.4.declaration.body.body.0.argument.left.left.left.callee",
-        "body.4.declaration.body.body.0.argument.left.left.right.callee",
-        "body.4.declaration.body.body.0.argument.left.right.callee",
-        "body.4.declaration.body.body.0.argument.right.callee",
+        "body.0.declaration.body.body.0.argument.left.left.left.callee",
+        "body.0.declaration.body.body.0.argument.left.left.right.callee",
+        "body.0.declaration.body.body.0.argument.left.right.callee",
+        "body.0.declaration.body.body.0.argument.right.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2", "body.3"],
     },
   ),
   // size: 285, gzip size: 210
@@ -1414,24 +1333,22 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "toPrimitive",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 140, gzip size: 127
+  // size: 103, gzip size: 114
   toPropertyKey: helper(
     "7.1.5",
-    'import toPrimitive from"toPrimitive";export default function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:i+""}',
+    'export default function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:i+""}',
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["toPrimitive", "toPrimitive"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "toPropertyKey",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.declarations.0.init.callee",
+        "body.0.declaration.body.body.0.declarations.0.init.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 144, gzip size: 141
@@ -1446,7 +1363,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_toSetter",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
   // size: 289, gzip size: 165
@@ -1463,25 +1379,23 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_typeof",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 390, gzip size: 271
+  // size: 343, gzip size: 256
   unsupportedIterableToArray: helper(
     "7.9.0",
-    'import arrayLikeToArray from"arrayLikeToArray";export default function _unsupportedIterableToArray(r,a){if(r){if("string"==typeof r)return arrayLikeToArray(r,a);var t={}.toString.call(r).slice(8,-1);return"Object"===t&&r.constructor&&(t=r.constructor.name),"Map"===t||"Set"===t?Array.from(r):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?arrayLikeToArray(r,a):void 0}}',
+    'export default function _unsupportedIterableToArray(r,a){if(r){if("string"==typeof r)return arrayLikeToArray(r,a);var t={}.toString.call(r).slice(8,-1);return"Object"===t&&r.constructor&&(t=r.constructor.name),"Map"===t||"Set"===t?Array.from(r):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?arrayLikeToArray(r,a):void 0}}',
     {
       globals: ["Array"],
       localBindingNames: [],
       dependencies: new Map([["arrayLikeToArray", "arrayLikeToArray"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_unsupportedIterableToArray",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.consequent.body.0.consequent.argument.callee",
-        "body.1.declaration.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
+        "body.0.declaration.body.body.0.consequent.body.0.consequent.argument.callee",
+        "body.0.declaration.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
   // size: 922, gzip size: 481
@@ -1503,30 +1417,28 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_usingCtx",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
-  // size: 160, gzip size: 121
+  // size: 117, gzip size: 104
   wrapAsyncGenerator: helper(
     "7.0.0-beta.0",
-    'import AsyncGenerator from"AsyncGenerator";export default function _wrapAsyncGenerator(r){return function(){return new AsyncGenerator(r.apply(this,arguments))}}',
+    "export default function _wrapAsyncGenerator(r){return function(){return new AsyncGenerator(r.apply(this,arguments))}}",
     {
       globals: [],
       localBindingNames: [],
       dependencies: new Map([["AsyncGenerator", "AsyncGenerator"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "_wrapAsyncGenerator",
       importBindingsReferences: [
-        "body.1.declaration.body.body.0.argument.body.body.0.argument.callee",
+        "body.0.declaration.body.body.0.argument.body.body.0.argument.callee",
       ],
-      importPaths: ["body.0"],
     },
   ),
-  // size: 744, gzip size: 366
+  // size: 578, gzip size: 325
   wrapNativeSuper: helper(
     "7.0.0-beta.0",
-    'import getPrototypeOf from"getPrototypeOf";import setPrototypeOf from"setPrototypeOf";import isNativeFunction from"isNativeFunction";import construct from"construct";export default function _wrapNativeSuper(t){var r="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(t){if(null===t||!isNativeFunction(t))return t;if("function"!=typeof t)throw new TypeError("Super expression must either be null or a function");if(void 0!==r){if(r.has(t))return r.get(t);r.set(t,Wrapper)}function Wrapper(){return construct(t,arguments,getPrototypeOf(this).constructor)}return Wrapper.prototype=Object.create(t.prototype,{constructor:{value:Wrapper,enumerable:!1,writable:!0,configurable:!0}}),setPrototypeOf(Wrapper,t)},_wrapNativeSuper(t)}',
+    'export default function _wrapNativeSuper(t){var r="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(t){if(null===t||!isNativeFunction(t))return t;if("function"!=typeof t)throw new TypeError("Super expression must either be null or a function");if(void 0!==r){if(r.has(t))return r.get(t);r.set(t,Wrapper)}function Wrapper(){return construct(t,arguments,getPrototypeOf(this).constructor)}return Wrapper.prototype=Object.create(t.prototype,{constructor:{value:Wrapper,enumerable:!1,writable:!0,configurable:!0}}),setPrototypeOf(Wrapper,t)},_wrapNativeSuper(t)}',
     {
       globals: ["Map", "TypeError", "Object"],
       localBindingNames: [],
@@ -1537,23 +1449,22 @@ const helpers: Record<string, Helper> = {
         ["construct", "construct"],
       ]),
       exportBindingAssignments: [
-        "body.4.declaration.body.body.1.argument.expressions.0",
+        "body.0.declaration.body.body.1.argument.expressions.0",
       ],
-      exportPath: "body.4",
+      exportPath: "body.0",
       exportName: "_wrapNativeSuper",
       importBindingsReferences: [
-        "body.4.declaration.body.body.1.argument.expressions.0.right.body.body.0.test.right.argument.callee",
-        "body.4.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
-        "body.4.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.arguments.2.object.callee",
-        "body.4.declaration.body.body.1.argument.expressions.0.right.body.body.4.argument.expressions.1.callee",
+        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.0.test.right.argument.callee",
+        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
+        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.arguments.2.object.callee",
+        "body.0.declaration.body.body.1.argument.expressions.0.right.body.body.4.argument.expressions.1.callee",
       ],
-      importPaths: ["body.0", "body.1", "body.2", "body.3"],
     },
   ),
-  // size: 1252, gzip size: 572
+  // size: 1178, gzip size: 548
   wrapRegExp: helper(
     "7.19.0",
-    'import setPrototypeOf from"setPrototypeOf";import inherits from"inherits";export default function _wrapRegExp(){_wrapRegExp=function(e,r){return new BabelRegExp(e,void 0,r)};var e=RegExp.prototype,r=new WeakMap;function BabelRegExp(e,t,p){var o=RegExp(e,t);return r.set(o,p||r.get(e)),setPrototypeOf(o,BabelRegExp.prototype)}function buildGroups(e,t){var p=r.get(t);return Object.keys(p).reduce((function(r,t){var o=p[t];if("number"==typeof o)r[t]=e[o];else{for(var i=0;void 0===e[o[i]]&&i+1<o.length;)i++;r[t]=e[o[i]]}return r}),Object.create(null))}return inherits(BabelRegExp,RegExp),BabelRegExp.prototype.exec=function(r){var t=e.exec.call(this,r);if(t){t.groups=buildGroups(t,this);var p=t.indices;p&&(p.groups=buildGroups(p,this))}return t},BabelRegExp.prototype[Symbol.replace]=function(t,p){if("string"==typeof p){var o=r.get(this);return e[Symbol.replace].call(this,t,p.replace(/\\$<([^>]+)>/g,(function(e,r){var t=o[r];return"$"+(Array.isArray(t)?t.join("$"):t)})))}if("function"==typeof p){var i=this;return e[Symbol.replace].call(this,t,(function(){var e=arguments;return"object"!=typeof e[e.length-1]&&(e=[].slice.call(e)).push(buildGroups(e,i)),p.apply(this,e)}))}return e[Symbol.replace].call(this,t,p)},_wrapRegExp.apply(this,arguments)}',
+    'export default function _wrapRegExp(){_wrapRegExp=function(e,r){return new BabelRegExp(e,void 0,r)};var e=RegExp.prototype,r=new WeakMap;function BabelRegExp(e,t,p){var o=RegExp(e,t);return r.set(o,p||r.get(e)),setPrototypeOf(o,BabelRegExp.prototype)}function buildGroups(e,t){var p=r.get(t);return Object.keys(p).reduce((function(r,t){var o=p[t];if("number"==typeof o)r[t]=e[o];else{for(var i=0;void 0===e[o[i]]&&i+1<o.length;)i++;r[t]=e[o[i]]}return r}),Object.create(null))}return inherits(BabelRegExp,RegExp),BabelRegExp.prototype.exec=function(r){var t=e.exec.call(this,r);if(t){t.groups=buildGroups(t,this);var p=t.indices;p&&(p.groups=buildGroups(p,this))}return t},BabelRegExp.prototype[Symbol.replace]=function(t,p){if("string"==typeof p){var o=r.get(this);return e[Symbol.replace].call(this,t,p.replace(/\\$<([^>]+)>/g,(function(e,r){var t=o[r];return"$"+(Array.isArray(t)?t.join("$"):t)})))}if("function"==typeof p){var i=this;return e[Symbol.replace].call(this,t,(function(){var e=arguments;return"object"!=typeof e[e.length-1]&&(e=[].slice.call(e)).push(buildGroups(e,i)),p.apply(this,e)}))}return e[Symbol.replace].call(this,t,p)},_wrapRegExp.apply(this,arguments)}',
     {
       globals: ["RegExp", "WeakMap", "Object", "Symbol", "Array"],
       localBindingNames: [],
@@ -1561,14 +1472,13 @@ const helpers: Record<string, Helper> = {
         ["setPrototypeOf", "setPrototypeOf"],
         ["inherits", "inherits"],
       ]),
-      exportBindingAssignments: ["body.2.declaration.body.body.0.expression"],
-      exportPath: "body.2",
+      exportBindingAssignments: ["body.0.declaration.body.body.0.expression"],
+      exportPath: "body.0",
       exportName: "_wrapRegExp",
       importBindingsReferences: [
-        "body.2.declaration.body.body.2.body.body.1.argument.expressions.1.callee",
-        "body.2.declaration.body.body.4.argument.expressions.0.callee",
+        "body.0.declaration.body.body.2.body.body.1.argument.expressions.1.callee",
+        "body.0.declaration.body.body.4.argument.expressions.0.callee",
       ],
-      importPaths: ["body.0", "body.1"],
     },
   ),
   // size: 88, gzip size: 100
@@ -1583,7 +1493,6 @@ const helpers: Record<string, Helper> = {
       exportPath: "body.0",
       exportName: "_writeOnlyError",
       importBindingsReferences: [],
-      importPaths: [],
     },
   ),
 };
@@ -1602,13 +1511,12 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_AwaitValue",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 5868, gzip size: 2216
+    // size: 5782, gzip size: 2191
     applyDecs: helper(
       "7.17.8",
-      'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function old_createMetadataMethodsForProperty(e,t,a,r){return{getMetadata:function(o){old_assertNotFinished(r,"getMetadata"),old_assertMetadataKey(o);var i=e[o];if(void 0!==i)if(1===t){var n=i.public;if(void 0!==n)return n[a]}else if(2===t){var l=i.private;if(void 0!==l)return l.get(a)}else if(Object.hasOwnProperty.call(i,"constructor"))return i.constructor},setMetadata:function(o,i){old_assertNotFinished(r,"setMetadata"),old_assertMetadataKey(o);var n=e[o];if(void 0===n&&(n=e[o]={}),1===t){var l=n.public;void 0===l&&(l=n.public={}),l[a]=i}else if(2===t){var s=n.priv;void 0===s&&(s=n.private=new Map),s.set(a,i)}else n.constructor=i}}}function old_convertMetadataMapToFinal(e,t){var a=e[Symbol.metadata||Symbol.for("Symbol.metadata")],r=Object.getOwnPropertySymbols(t);if(0!==r.length){for(var o=0;o<r.length;o++){var i=r[o],n=t[i],l=a?a[i]:null,s=n.public,c=l?l.public:null;s&&c&&Object.setPrototypeOf(s,c);var d=n.private;if(d){var u=Array.from(d.values()),f=l?l.private:null;f&&(u=u.concat(f)),n.private=u}l&&Object.setPrototypeOf(n,l)}a&&Object.setPrototypeOf(t,a),e[Symbol.metadata||Symbol.for("Symbol.metadata")]=t}}function old_createAddInitializerMethod(e,t){return function(a){old_assertNotFinished(t,"addInitializer"),old_assertCallable(a,"An initializer"),e.push(a)}}function old_memberDec(e,t,a,r,o,i,n,l,s){var c;switch(i){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var d,u,f={kind:c,name:l?"#"+t:toPropertyKey(t),isStatic:n,isPrivate:l},p={v:!1};if(0!==i&&(f.addInitializer=old_createAddInitializerMethod(o,p)),l){d=2,u=Symbol(t);var v={};0===i?(v.get=a.get,v.set=a.set):2===i?v.get=function(){return a.value}:(1!==i&&3!==i||(v.get=function(){return a.get.call(this)}),1!==i&&4!==i||(v.set=function(e){a.set.call(this,e)})),f.access=v}else d=1,u=t;try{return e(s,Object.assign(f,old_createMetadataMethodsForProperty(r,d,u,p)))}finally{p.v=!0}}function old_assertNotFinished(e,t){if(e.v)throw Error("attempted to call "+t+" after decoration was finished")}function old_assertMetadataKey(e){if("symbol"!=typeof e)throw new TypeError("Metadata keys must be symbols, received: "+e)}function old_assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function old_assertValidReturnValue(e,t){var a=typeof t;if(1===e){if("object"!==a||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&old_assertCallable(t.get,"accessor.get"),void 0!==t.set&&old_assertCallable(t.set,"accessor.set"),void 0!==t.init&&old_assertCallable(t.init,"accessor.init"),void 0!==t.initializer&&old_assertCallable(t.initializer,"accessor.initializer")}else if("function"!==a)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function old_getInit(e){var t;return null==(t=e.init)&&(t=e.initializer)&&void 0!==console&&console.warn(".initializer has been renamed to .init as of March 2022"),t}function old_applyMemberDec(e,t,a,r,o,i,n,l,s){var c,d,u,f,p,v,y,h=a[0];if(n?(0===o||1===o?(c={get:a[3],set:a[4]},u="get"):3===o?(c={get:a[3]},u="get"):4===o?(c={set:a[3]},u="set"):c={value:a[3]},0!==o&&(1===o&&setFunctionName(a[4],"#"+r,"set"),setFunctionName(a[3],"#"+r,u))):0!==o&&(c=Object.getOwnPropertyDescriptor(t,r)),1===o?f={get:c.get,set:c.set}:2===o?f=c.value:3===o?f=c.get:4===o&&(f=c.set),"function"==typeof h)void 0!==(p=old_memberDec(h,r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?d=p:1===o?(d=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p);else for(var m=h.length-1;m>=0;m--){var b;void 0!==(p=old_memberDec(h[m],r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?b=p:1===o?(b=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p,void 0!==b&&(void 0===d?d=b:"function"==typeof d?d=[d,b]:d.push(b)))}if(0===o||1===o){if(void 0===d)d=function(e,t){return t};else if("function"!=typeof d){var g=d;d=function(e,t){for(var a=t,r=0;r<g.length;r++)a=g[r].call(e,a);return a}}else{var _=d;d=function(e,t){return _.call(e,t)}}e.push(d)}0!==o&&(1===o?(c.get=f.get,c.set=f.set):2===o?c.value=f:3===o?c.get=f:4===o&&(c.set=f),n?1===o?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===o?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,r,c))}function old_applyMemberDecs(e,t,a,r,o){for(var i,n,l=new Map,s=new Map,c=0;c<o.length;c++){var d=o[c];if(Array.isArray(d)){var u,f,p,v=d[1],y=d[2],h=d.length>3,m=v>=5;if(m?(u=t,f=r,0!=(v-=5)&&(p=n=n||[])):(u=t.prototype,f=a,0!==v&&(p=i=i||[])),0!==v&&!h){var b=m?s:l,g=b.get(y)||0;if(!0===g||3===g&&4!==v||4===g&&3!==v)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+y);!g&&v>2?b.set(y,v):b.set(y,!0)}old_applyMemberDec(e,u,d,y,v,m,h,f,p)}}old_pushInitializers(e,i),old_pushInitializers(e,n)}function old_pushInitializers(e,t){t&&e.push((function(e){for(var a=0;a<t.length;a++)t[a].call(e);return e}))}function old_applyClassDecs(e,t,a,r){if(r.length>0){for(var o=[],i=t,n=t.name,l=r.length-1;l>=0;l--){var s={v:!1};try{var c=Object.assign({kind:"class",name:n,addInitializer:old_createAddInitializerMethod(o,s)},old_createMetadataMethodsForProperty(a,0,n,s)),d=r[l](i,c)}finally{s.v=!0}void 0!==d&&(old_assertValidReturnValue(10,d),i=d)}e.push(i,(function(){for(var e=0;e<o.length;e++)o[e].call(i)}))}}export default function applyDecs(e,t,a){var r=[],o={},i={};return old_applyMemberDecs(r,e,i,o,t),old_convertMetadataMapToFinal(e.prototype,i),old_applyClassDecs(r,e,o,a),old_convertMetadataMapToFinal(e,o),r}',
+      'function old_createMetadataMethodsForProperty(e,t,a,r){return{getMetadata:function(o){old_assertNotFinished(r,"getMetadata"),old_assertMetadataKey(o);var i=e[o];if(void 0!==i)if(1===t){var n=i.public;if(void 0!==n)return n[a]}else if(2===t){var l=i.private;if(void 0!==l)return l.get(a)}else if(Object.hasOwnProperty.call(i,"constructor"))return i.constructor},setMetadata:function(o,i){old_assertNotFinished(r,"setMetadata"),old_assertMetadataKey(o);var n=e[o];if(void 0===n&&(n=e[o]={}),1===t){var l=n.public;void 0===l&&(l=n.public={}),l[a]=i}else if(2===t){var s=n.priv;void 0===s&&(s=n.private=new Map),s.set(a,i)}else n.constructor=i}}}function old_convertMetadataMapToFinal(e,t){var a=e[Symbol.metadata||Symbol.for("Symbol.metadata")],r=Object.getOwnPropertySymbols(t);if(0!==r.length){for(var o=0;o<r.length;o++){var i=r[o],n=t[i],l=a?a[i]:null,s=n.public,c=l?l.public:null;s&&c&&Object.setPrototypeOf(s,c);var d=n.private;if(d){var u=Array.from(d.values()),f=l?l.private:null;f&&(u=u.concat(f)),n.private=u}l&&Object.setPrototypeOf(n,l)}a&&Object.setPrototypeOf(t,a),e[Symbol.metadata||Symbol.for("Symbol.metadata")]=t}}function old_createAddInitializerMethod(e,t){return function(a){old_assertNotFinished(t,"addInitializer"),old_assertCallable(a,"An initializer"),e.push(a)}}function old_memberDec(e,t,a,r,o,i,n,l,s){var c;switch(i){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var d,u,f={kind:c,name:l?"#"+t:toPropertyKey(t),isStatic:n,isPrivate:l},p={v:!1};if(0!==i&&(f.addInitializer=old_createAddInitializerMethod(o,p)),l){d=2,u=Symbol(t);var v={};0===i?(v.get=a.get,v.set=a.set):2===i?v.get=function(){return a.value}:(1!==i&&3!==i||(v.get=function(){return a.get.call(this)}),1!==i&&4!==i||(v.set=function(e){a.set.call(this,e)})),f.access=v}else d=1,u=t;try{return e(s,Object.assign(f,old_createMetadataMethodsForProperty(r,d,u,p)))}finally{p.v=!0}}function old_assertNotFinished(e,t){if(e.v)throw Error("attempted to call "+t+" after decoration was finished")}function old_assertMetadataKey(e){if("symbol"!=typeof e)throw new TypeError("Metadata keys must be symbols, received: "+e)}function old_assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function old_assertValidReturnValue(e,t){var a=typeof t;if(1===e){if("object"!==a||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&old_assertCallable(t.get,"accessor.get"),void 0!==t.set&&old_assertCallable(t.set,"accessor.set"),void 0!==t.init&&old_assertCallable(t.init,"accessor.init"),void 0!==t.initializer&&old_assertCallable(t.initializer,"accessor.initializer")}else if("function"!==a)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function old_getInit(e){var t;return null==(t=e.init)&&(t=e.initializer)&&void 0!==console&&console.warn(".initializer has been renamed to .init as of March 2022"),t}function old_applyMemberDec(e,t,a,r,o,i,n,l,s){var c,d,u,f,p,v,y,h=a[0];if(n?(0===o||1===o?(c={get:a[3],set:a[4]},u="get"):3===o?(c={get:a[3]},u="get"):4===o?(c={set:a[3]},u="set"):c={value:a[3]},0!==o&&(1===o&&setFunctionName(a[4],"#"+r,"set"),setFunctionName(a[3],"#"+r,u))):0!==o&&(c=Object.getOwnPropertyDescriptor(t,r)),1===o?f={get:c.get,set:c.set}:2===o?f=c.value:3===o?f=c.get:4===o&&(f=c.set),"function"==typeof h)void 0!==(p=old_memberDec(h,r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?d=p:1===o?(d=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p);else for(var m=h.length-1;m>=0;m--){var b;void 0!==(p=old_memberDec(h[m],r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?b=p:1===o?(b=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p,void 0!==b&&(void 0===d?d=b:"function"==typeof d?d=[d,b]:d.push(b)))}if(0===o||1===o){if(void 0===d)d=function(e,t){return t};else if("function"!=typeof d){var g=d;d=function(e,t){for(var a=t,r=0;r<g.length;r++)a=g[r].call(e,a);return a}}else{var _=d;d=function(e,t){return _.call(e,t)}}e.push(d)}0!==o&&(1===o?(c.get=f.get,c.set=f.set):2===o?c.value=f:3===o?c.get=f:4===o&&(c.set=f),n?1===o?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===o?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,r,c))}function old_applyMemberDecs(e,t,a,r,o){for(var i,n,l=new Map,s=new Map,c=0;c<o.length;c++){var d=o[c];if(Array.isArray(d)){var u,f,p,v=d[1],y=d[2],h=d.length>3,m=v>=5;if(m?(u=t,f=r,0!=(v-=5)&&(p=n=n||[])):(u=t.prototype,f=a,0!==v&&(p=i=i||[])),0!==v&&!h){var b=m?s:l,g=b.get(y)||0;if(!0===g||3===g&&4!==v||4===g&&3!==v)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+y);!g&&v>2?b.set(y,v):b.set(y,!0)}old_applyMemberDec(e,u,d,y,v,m,h,f,p)}}old_pushInitializers(e,i),old_pushInitializers(e,n)}function old_pushInitializers(e,t){t&&e.push((function(e){for(var a=0;a<t.length;a++)t[a].call(e);return e}))}function old_applyClassDecs(e,t,a,r){if(r.length>0){for(var o=[],i=t,n=t.name,l=r.length-1;l>=0;l--){var s={v:!1};try{var c=Object.assign({kind:"class",name:n,addInitializer:old_createAddInitializerMethod(o,s)},old_createMetadataMethodsForProperty(a,0,n,s)),d=r[l](i,c)}finally{s.v=!0}void 0!==d&&(old_assertValidReturnValue(10,d),i=d)}e.push(i,(function(){for(var e=0;e<o.length;e++)o[e].call(i)}))}}export default function applyDecs(e,t,a){var r=[],o={},i={};return old_applyMemberDecs(r,e,i,o,t),old_convertMetadataMapToFinal(e.prototype,i),old_applyClassDecs(r,e,o,a),old_convertMetadataMapToFinal(e,o),r}',
       {
         globals: [
           "Object",
@@ -1639,14 +1547,13 @@ if (!process.env.BABEL_8_BREAKING) {
           ["toPropertyKey", "toPropertyKey"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.15",
+        exportPath: "body.13",
         exportName: "applyDecs",
         importBindingsReferences: [
-          "body.5.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.11.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.11.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          "body.3.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+          "body.9.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
         ],
-        importPaths: ["body.0", "body.1"],
       },
     ),
     // size: 3860, gzip size: 1578
@@ -1661,13 +1568,12 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.2",
         exportName: "applyDecs2203",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 4083, gzip size: 1651
+    // size: 3997, gzip size: 1629
     applyDecs2203R: helper(
       "7.20.0",
-      'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2203RFactory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,n,a,i,o,s){var c;switch(a){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:o?"#"+t:toPropertyKey(t),static:i,private:o},p={v:!1};0!==a&&(f.addInitializer=createAddInitializerMethod(n,p)),0===a?o?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===a?l=function(){return r.value}:(1!==a&&3!==a||(l=function(){return r.get.call(this)}),1!==a&&4!==a||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(s,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,n,a,i,o,s){var c,l,u,f,p,d,h,v=r[0];if(o?(0===a||1===a?(c={get:r[3],set:r[4]},u="get"):3===a?(c={get:r[3]},u="get"):4===a?(c={set:r[3]},u="set"):c={value:r[3]},0!==a&&(1===a&&setFunctionName(r[4],"#"+n,"set"),setFunctionName(r[3],"#"+n,u))):0!==a&&(c=Object.getOwnPropertyDescriptor(t,n)),1===a?f={get:c.get,set:c.set}:2===a?f=c.value:3===a?f=c.get:4===a&&(f=c.set),"function"==typeof v)void 0!==(p=memberDec(v,n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?l=p:1===a?(l=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p);else for(var g=v.length-1;g>=0;g--){var y;void 0!==(p=memberDec(v[g],n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?y=p:1===a?(y=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p,void 0!==y&&(void 0===l?l=y:"function"==typeof l?l=[l,y]:l.push(y)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var m=l;l=function(e,t){for(var r=t,n=0;n<m.length;n++)r=m[n].call(e,r);return r}}else{var b=l;l=function(e,t){return b.call(e,t)}}e.push(l)}0!==a&&(1===a?(c.get=f.get,c.set=f.set):2===a?c.value=f:3===a?c.get=f:4===a&&(c.set=f),o?1===a?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===a?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,n,c))}function applyMemberDecs(e,t){for(var r,n,a=[],i=new Map,o=new Map,s=0;s<t.length;s++){var c=t[s];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=e,0!=(f-=5)&&(u=n=n||[])):(l=e.prototype,0!==f&&(u=r=r||[])),0!==f&&!d){var v=h?o:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(a,l,c,p,f,h,d,u)}}return pushInitializers(a,r),pushInitializers(a,n),a}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){return{e:applyMemberDecs(e,t),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var o={v:!1};try{var s=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,o)})}finally{o.v=!0}void 0!==s&&(assertValidReturnValue(10,s),n=s)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2203R(e,t,r){return(applyDecs2203R=applyDecs2203RFactory())(e,t,r)}',
+      'function applyDecs2203RFactory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,n,a,i,o,s){var c;switch(a){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:o?"#"+t:toPropertyKey(t),static:i,private:o},p={v:!1};0!==a&&(f.addInitializer=createAddInitializerMethod(n,p)),0===a?o?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===a?l=function(){return r.value}:(1!==a&&3!==a||(l=function(){return r.get.call(this)}),1!==a&&4!==a||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(s,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,n,a,i,o,s){var c,l,u,f,p,d,h,v=r[0];if(o?(0===a||1===a?(c={get:r[3],set:r[4]},u="get"):3===a?(c={get:r[3]},u="get"):4===a?(c={set:r[3]},u="set"):c={value:r[3]},0!==a&&(1===a&&setFunctionName(r[4],"#"+n,"set"),setFunctionName(r[3],"#"+n,u))):0!==a&&(c=Object.getOwnPropertyDescriptor(t,n)),1===a?f={get:c.get,set:c.set}:2===a?f=c.value:3===a?f=c.get:4===a&&(f=c.set),"function"==typeof v)void 0!==(p=memberDec(v,n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?l=p:1===a?(l=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p);else for(var g=v.length-1;g>=0;g--){var y;void 0!==(p=memberDec(v[g],n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?y=p:1===a?(y=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p,void 0!==y&&(void 0===l?l=y:"function"==typeof l?l=[l,y]:l.push(y)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var m=l;l=function(e,t){for(var r=t,n=0;n<m.length;n++)r=m[n].call(e,r);return r}}else{var b=l;l=function(e,t){return b.call(e,t)}}e.push(l)}0!==a&&(1===a?(c.get=f.get,c.set=f.set):2===a?c.value=f:3===a?c.get=f:4===a&&(c.set=f),o?1===a?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===a?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,n,c))}function applyMemberDecs(e,t){for(var r,n,a=[],i=new Map,o=new Map,s=0;s<t.length;s++){var c=t[s];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=e,0!=(f-=5)&&(u=n=n||[])):(l=e.prototype,0!==f&&(u=r=r||[])),0!==f&&!d){var v=h?o:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(a,l,c,p,f,h,d,u)}}return pushInitializers(a,r),pushInitializers(a,n),a}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){return{e:applyMemberDecs(e,t),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var o={v:!1};try{var s=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,o)})}finally{o.v=!0}void 0!==s&&(assertValidReturnValue(10,s),n=s)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2203R(e,t,r){return(applyDecs2203R=applyDecs2203RFactory())(e,t,r)}',
       {
         globals: ["Error", "TypeError", "Object", "Map", "Array"],
         localBindingNames: ["applyDecs2203RFactory"],
@@ -1676,22 +1582,21 @@ if (!process.env.BABEL_8_BREAKING) {
           ["toPropertyKey", "toPropertyKey"],
         ]),
         exportBindingAssignments: [
-          "body.3.declaration.body.body.0.argument.callee",
+          "body.1.declaration.body.body.0.argument.callee",
         ],
-        exportPath: "body.3",
+        exportPath: "body.1",
         exportName: "applyDecs2203R",
         importBindingsReferences: [
-          "body.2.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.2.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.2.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          "body.0.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+          "body.0.body.body.4.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
         ],
-        importPaths: ["body.0", "body.1"],
       },
     ),
-    // size: 4662, gzip size: 1848
+    // size: 4541, gzip size: 1816
     applyDecs2301: helper(
       "7.21.0",
-      'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2301Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function assertInstanceIfPrivate(e,t){if(!e(t))throw new TypeError("Attempted to access private element on non-instance")}function memberDec(e,t,r,n,a,i,s,o,c){var u;switch(a){case 1:u="accessor";break;case 2:u="method";break;case 3:u="getter";break;case 4:u="setter";break;default:u="field"}var l,f,p={kind:u,name:s?"#"+t:toPropertyKey(t),static:i,private:s},d={v:!1};if(0!==a&&(p.addInitializer=createAddInitializerMethod(n,d)),s||0!==a&&2!==a)if(2===a)l=function(e){return assertInstanceIfPrivate(c,e),r.value};else{var h=0===a||1===a;(h||3===a)&&(l=s?function(e){return assertInstanceIfPrivate(c,e),r.get.call(e)}:function(e){return r.get.call(e)}),(h||4===a)&&(f=s?function(e,t){assertInstanceIfPrivate(c,e),r.set.call(e,t)}:function(e,t){r.set.call(e,t)})}else l=function(e){return e[t]},0===a&&(f=function(e,r){e[t]=r});var v=s?c.bind():function(e){return t in e};p.access=l&&f?{get:l,set:f,has:v}:l?{get:l,has:v}:{set:f,has:v};try{return e(o,p)}finally{d.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function curryThis2(e){return function(t){e(this,t)}}function applyMemberDec(e,t,r,n,a,i,s,o,c){var u,l,f,p,d,h,v,y,g=r[0];if(s?(0===a||1===a?(u={get:(d=r[3],function(){return d(this)}),set:curryThis2(r[4])},f="get"):3===a?(u={get:r[3]},f="get"):4===a?(u={set:r[3]},f="set"):u={value:r[3]},0!==a&&(1===a&&setFunctionName(u.set,"#"+n,"set"),setFunctionName(u[f||"value"],"#"+n,f))):0!==a&&(u=Object.getOwnPropertyDescriptor(t,n)),1===a?p={get:u.get,set:u.set}:2===a?p=u.value:3===a?p=u.get:4===a&&(p=u.set),"function"==typeof g)void 0!==(h=memberDec(g,n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?l=h:1===a?(l=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h);else for(var m=g.length-1;m>=0;m--){var b;void 0!==(h=memberDec(g[m],n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?b=h:1===a?(b=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h,void 0!==b&&(void 0===l?l=b:"function"==typeof l?l=[l,b]:l.push(b)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var I=l;l=function(e,t){for(var r=t,n=0;n<I.length;n++)r=I[n].call(e,r);return r}}else{var w=l;l=function(e,t){return w.call(e,t)}}e.push(l)}0!==a&&(1===a?(u.get=p.get,u.set=p.set):2===a?u.value=p:3===a?u.get=p:4===a&&(u.set=p),s?1===a?(e.push((function(e,t){return p.get.call(e,t)})),e.push((function(e,t){return p.set.call(e,t)}))):2===a?e.push(p):e.push((function(e,t){return p.call(e,t)})):Object.defineProperty(t,n,u))}function applyMemberDecs(e,t,r){for(var n,a,i,s=[],o=new Map,c=new Map,u=0;u<t.length;u++){var l=t[u];if(Array.isArray(l)){var f,p,d=l[1],h=l[2],v=l.length>3,y=d>=5,g=r;if(y?(f=e,0!=(d-=5)&&(p=a=a||[]),v&&!i&&(i=function(t){return checkInRHS(t)===e}),g=i):(f=e.prototype,0!==d&&(p=n=n||[])),0!==d&&!v){var m=y?c:o,b=m.get(h)||0;if(!0===b||3===b&&4!==d||4===b&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);!b&&d>2?m.set(h,d):m.set(h,!0)}applyMemberDec(s,f,l,h,d,y,v,p,g)}}return pushInitializers(s,n),pushInitializers(s,a),s}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r,n){return{e:applyMemberDecs(e,t,n),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var s={v:!1};try{var o=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,s)})}finally{s.v=!0}void 0!==o&&(assertValidReturnValue(10,o),n=o)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2301(e,t,r,n){return(applyDecs2301=applyDecs2301Factory())(e,t,r,n)}',
+      'function applyDecs2301Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function assertInstanceIfPrivate(e,t){if(!e(t))throw new TypeError("Attempted to access private element on non-instance")}function memberDec(e,t,r,n,a,i,s,o,c){var u;switch(a){case 1:u="accessor";break;case 2:u="method";break;case 3:u="getter";break;case 4:u="setter";break;default:u="field"}var l,f,p={kind:u,name:s?"#"+t:toPropertyKey(t),static:i,private:s},d={v:!1};if(0!==a&&(p.addInitializer=createAddInitializerMethod(n,d)),s||0!==a&&2!==a)if(2===a)l=function(e){return assertInstanceIfPrivate(c,e),r.value};else{var h=0===a||1===a;(h||3===a)&&(l=s?function(e){return assertInstanceIfPrivate(c,e),r.get.call(e)}:function(e){return r.get.call(e)}),(h||4===a)&&(f=s?function(e,t){assertInstanceIfPrivate(c,e),r.set.call(e,t)}:function(e,t){r.set.call(e,t)})}else l=function(e){return e[t]},0===a&&(f=function(e,r){e[t]=r});var v=s?c.bind():function(e){return t in e};p.access=l&&f?{get:l,set:f,has:v}:l?{get:l,has:v}:{set:f,has:v};try{return e(o,p)}finally{d.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function curryThis2(e){return function(t){e(this,t)}}function applyMemberDec(e,t,r,n,a,i,s,o,c){var u,l,f,p,d,h,v,y,g=r[0];if(s?(0===a||1===a?(u={get:(d=r[3],function(){return d(this)}),set:curryThis2(r[4])},f="get"):3===a?(u={get:r[3]},f="get"):4===a?(u={set:r[3]},f="set"):u={value:r[3]},0!==a&&(1===a&&setFunctionName(u.set,"#"+n,"set"),setFunctionName(u[f||"value"],"#"+n,f))):0!==a&&(u=Object.getOwnPropertyDescriptor(t,n)),1===a?p={get:u.get,set:u.set}:2===a?p=u.value:3===a?p=u.get:4===a&&(p=u.set),"function"==typeof g)void 0!==(h=memberDec(g,n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?l=h:1===a?(l=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h);else for(var m=g.length-1;m>=0;m--){var b;void 0!==(h=memberDec(g[m],n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?b=h:1===a?(b=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h,void 0!==b&&(void 0===l?l=b:"function"==typeof l?l=[l,b]:l.push(b)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var I=l;l=function(e,t){for(var r=t,n=0;n<I.length;n++)r=I[n].call(e,r);return r}}else{var w=l;l=function(e,t){return w.call(e,t)}}e.push(l)}0!==a&&(1===a?(u.get=p.get,u.set=p.set):2===a?u.value=p:3===a?u.get=p:4===a&&(u.set=p),s?1===a?(e.push((function(e,t){return p.get.call(e,t)})),e.push((function(e,t){return p.set.call(e,t)}))):2===a?e.push(p):e.push((function(e,t){return p.call(e,t)})):Object.defineProperty(t,n,u))}function applyMemberDecs(e,t,r){for(var n,a,i,s=[],o=new Map,c=new Map,u=0;u<t.length;u++){var l=t[u];if(Array.isArray(l)){var f,p,d=l[1],h=l[2],v=l.length>3,y=d>=5,g=r;if(y?(f=e,0!=(d-=5)&&(p=a=a||[]),v&&!i&&(i=function(t){return checkInRHS(t)===e}),g=i):(f=e.prototype,0!==d&&(p=n=n||[])),0!==d&&!v){var m=y?c:o,b=m.get(h)||0;if(!0===b||3===b&&4!==d||4===b&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);!b&&d>2?m.set(h,d):m.set(h,!0)}applyMemberDec(s,f,l,h,d,y,v,p,g)}}return pushInitializers(s,n),pushInitializers(s,a),s}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r,n){return{e:applyMemberDecs(e,t,n),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var s={v:!1};try{var o=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,s)})}finally{s.v=!0}void 0!==o&&(assertValidReturnValue(10,o),n=o)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2301(e,t,r,n){return(applyDecs2301=applyDecs2301Factory())(e,t,r,n)}',
       {
         globals: ["Error", "TypeError", "Object", "Map", "Array"],
         localBindingNames: ["applyDecs2301Factory"],
@@ -1701,23 +1606,22 @@ if (!process.env.BABEL_8_BREAKING) {
           ["toPropertyKey", "toPropertyKey"],
         ]),
         exportBindingAssignments: [
-          "body.4.declaration.body.body.0.argument.callee",
+          "body.1.declaration.body.body.0.argument.callee",
         ],
-        exportPath: "body.4",
+        exportPath: "body.1",
         exportName: "applyDecs2301",
         importBindingsReferences: [
-          "body.3.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
-          "body.3.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
-          "body.3.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
-          "body.3.body.body.7.body.body.0.body.body.1.consequent.body.1.test.expressions.0.consequent.expressions.2.right.right.body.body.0.argument.left.callee",
+          "body.0.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
+          "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.0.right.callee",
+          "body.0.body.body.6.body.body.1.test.expressions.0.consequent.expressions.1.right.expressions.1.callee",
+          "body.0.body.body.7.body.body.0.body.body.1.consequent.body.1.test.expressions.0.consequent.expressions.2.right.right.body.body.0.argument.left.callee",
         ],
-        importPaths: ["body.0", "body.1", "body.2"],
       },
     ),
-    // size: 3245, gzip size: 1611
+    // size: 3124, gzip size: 1578
     applyDecs2305: helper(
       "7.21.0",
-      'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";export default function applyDecs2305(e,t,r,n,o,a){function i(e,t,r){return function(n,o){return r&&r(n),e[t].call(n,o)}}function c(e,t){for(var r=0;r<e.length;r++)e[r].call(t);return t}function s(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,t,r,n,o,a,c,u,l,f,p,d,h){function m(e){if(!h(e))throw new TypeError("Attempted to access private element on non-instance")}var y,v=t[0],g=t[3],b=!u;if(!b){r||Array.isArray(v)||(v=[v]);var w={},S=[],A=3===o?"get":4===o||d?"set":"value";f?(p||d?w={get:setFunctionName((function(){return g(this)}),n,"get"),set:function(e){t[4](this,e)}}:w[A]=g,p||setFunctionName(w[A],n,2===o?"":A)):p||(w=Object.getOwnPropertyDescriptor(e,n))}for(var P=e,j=v.length-1;j>=0;j-=r?2:1){var D=v[j],E=r?v[j-1]:void 0,I={},O={kind:["field","accessor","method","getter","setter","class"][o],name:n,metadata:a,addInitializer:function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished");s(t,"An initializer","be",!0),c.push(t)}.bind(null,I)};try{if(b)(y=s(D.call(E,P,O),"class decorators","return"))&&(P=y);else{var k,F;O.static=l,O.private=f,f?2===o?k=function(e){return m(e),w.value}:(o<4&&(k=i(w,"get",m)),3!==o&&(F=i(w,"set",m))):(k=function(e){return e[n]},(o<2||4===o)&&(F=function(e,t){e[n]=t}));var N=O.access={has:f?h.bind():function(e){return n in e}};if(k&&(N.get=k),F&&(N.set=F),P=D.call(E,d?{get:w.get,set:w.set}:w[A],O),d){if("object"==typeof P&&P)(y=s(P.get,"accessor.get"))&&(w.get=y),(y=s(P.set,"accessor.set"))&&(w.set=y),(y=s(P.init,"accessor.init"))&&S.push(y);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0")}else s(P,(p?"field":"method")+" decorators","return")&&(p?S.push(P):w[A]=P)}}finally{I.v=!0}}return(p||d)&&u.push((function(e,t){for(var r=S.length-1;r>=0;r--)t=S[r].call(e,t);return t})),p||b||(f?d?u.push(i(w,"get"),i(w,"set")):u.push(2===o?w[A]:i.call.bind(w[A])):Object.defineProperty(e,n,w)),P}function u(e,t){return Object.defineProperty(e,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:t})}if(arguments.length>=6)var l=a[Symbol.metadata||Symbol.for("Symbol.metadata")];var f=Object.create(null==l?null:l),p=function(e,t,r,n){var o,a,i=[],s=function(t){return checkInRHS(t)===e},u=new Map;function l(e){e&&i.push(c.bind(null,e))}for(var f=0;f<t.length;f++){var p=t[f];if(Array.isArray(p)){var d=p[1],h=p[2],m=p.length>3,y=16&d,v=!!(8&d),g=0==(d&=7),b=h+"/"+v;if(!g&&!m){var w=u.get(b);if(!0===w||3===w&&4!==d||4===w&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);u.set(b,!(d>2)||d)}applyDec(v?e:e.prototype,p,y,m?"#"+h:toPropertyKey(h),d,n,v?a=a||[]:o=o||[],i,v,m,g,1===d,v&&m?s:r)}}return l(o),l(a),i}(e,t,o,f);return r.length||u(e,f),{e:p,get c(){var t=[];return r.length&&[u(applyDec(e,[r],n,e.name,5,f,t),f),c.bind(null,t,e)]}}}',
+      'export default function applyDecs2305(e,t,r,n,o,a){function i(e,t,r){return function(n,o){return r&&r(n),e[t].call(n,o)}}function c(e,t){for(var r=0;r<e.length;r++)e[r].call(t);return t}function s(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,t,r,n,o,a,c,u,l,f,p,d,h){function m(e){if(!h(e))throw new TypeError("Attempted to access private element on non-instance")}var y,v=t[0],g=t[3],b=!u;if(!b){r||Array.isArray(v)||(v=[v]);var w={},S=[],A=3===o?"get":4===o||d?"set":"value";f?(p||d?w={get:setFunctionName((function(){return g(this)}),n,"get"),set:function(e){t[4](this,e)}}:w[A]=g,p||setFunctionName(w[A],n,2===o?"":A)):p||(w=Object.getOwnPropertyDescriptor(e,n))}for(var P=e,j=v.length-1;j>=0;j-=r?2:1){var D=v[j],E=r?v[j-1]:void 0,I={},O={kind:["field","accessor","method","getter","setter","class"][o],name:n,metadata:a,addInitializer:function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished");s(t,"An initializer","be",!0),c.push(t)}.bind(null,I)};try{if(b)(y=s(D.call(E,P,O),"class decorators","return"))&&(P=y);else{var k,F;O.static=l,O.private=f,f?2===o?k=function(e){return m(e),w.value}:(o<4&&(k=i(w,"get",m)),3!==o&&(F=i(w,"set",m))):(k=function(e){return e[n]},(o<2||4===o)&&(F=function(e,t){e[n]=t}));var N=O.access={has:f?h.bind():function(e){return n in e}};if(k&&(N.get=k),F&&(N.set=F),P=D.call(E,d?{get:w.get,set:w.set}:w[A],O),d){if("object"==typeof P&&P)(y=s(P.get,"accessor.get"))&&(w.get=y),(y=s(P.set,"accessor.set"))&&(w.set=y),(y=s(P.init,"accessor.init"))&&S.push(y);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0")}else s(P,(p?"field":"method")+" decorators","return")&&(p?S.push(P):w[A]=P)}}finally{I.v=!0}}return(p||d)&&u.push((function(e,t){for(var r=S.length-1;r>=0;r--)t=S[r].call(e,t);return t})),p||b||(f?d?u.push(i(w,"get"),i(w,"set")):u.push(2===o?w[A]:i.call.bind(w[A])):Object.defineProperty(e,n,w)),P}function u(e,t){return Object.defineProperty(e,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:t})}if(arguments.length>=6)var l=a[Symbol.metadata||Symbol.for("Symbol.metadata")];var f=Object.create(null==l?null:l),p=function(e,t,r,n){var o,a,i=[],s=function(t){return checkInRHS(t)===e},u=new Map;function l(e){e&&i.push(c.bind(null,e))}for(var f=0;f<t.length;f++){var p=t[f];if(Array.isArray(p)){var d=p[1],h=p[2],m=p.length>3,y=16&d,v=!!(8&d),g=0==(d&=7),b=h+"/"+v;if(!g&&!m){var w=u.get(b);if(!0===w||3===w&&4!==d||4===w&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);u.set(b,!(d>2)||d)}applyDec(v?e:e.prototype,p,y,m?"#"+h:toPropertyKey(h),d,n,v?a=a||[]:o=o||[],i,v,m,g,1===d,v&&m?s:r)}}return l(o),l(a),i}(e,t,o,f);return r.length||u(e,f),{e:p,get c(){var t=[];return r.length&&[u(applyDec(e,[r],n,e.name,5,f,t),f),c.bind(null,t,e)]}}}',
       {
         globals: ["TypeError", "Array", "Object", "Error", "Symbol", "Map"],
         localBindingNames: [],
@@ -1727,15 +1631,14 @@ if (!process.env.BABEL_8_BREAKING) {
           ["toPropertyKey", "toPropertyKey"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.3",
+        exportPath: "body.0",
         exportName: "applyDecs2305",
         importBindingsReferences: [
-          "body.3.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.0.consequent.right.properties.0.value.callee",
-          "body.3.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.1.right.callee",
-          "body.3.declaration.body.body.6.declarations.1.init.callee.body.body.0.declarations.3.init.body.body.0.argument.left.callee",
-          "body.3.declaration.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
+          "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.0.consequent.right.properties.0.value.callee",
+          "body.0.declaration.body.body.3.body.body.2.consequent.body.2.expression.consequent.expressions.1.right.callee",
+          "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.0.declarations.3.init.body.body.0.argument.left.callee",
+          "body.0.declaration.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
         ],
-        importPaths: ["body.0", "body.1", "body.2"],
       },
     ),
     // size: 246, gzip size: 197
@@ -1750,7 +1653,6 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classApplyDescriptorDestructureSet",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
     // size: 89, gzip size: 102
@@ -1765,7 +1667,6 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classApplyDescriptorGet",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
     // size: 176, gzip size: 158
@@ -1780,24 +1681,22 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classApplyDescriptorSet",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 140, gzip size: 123
+    // size: 93, gzip size: 103
     classCheckPrivateStaticAccess: helper(
       "7.13.10",
-      'import assertClassBrand from"assertClassBrand";export default function _classCheckPrivateStaticAccess(s,a,r){return assertClassBrand(a,s,r)}',
+      "export default function _classCheckPrivateStaticAccess(s,a,r){return assertClassBrand(a,s,r)}",
       {
         globals: [],
         localBindingNames: [],
         dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
         exportBindingAssignments: [],
-        exportPath: "body.1",
+        exportPath: "body.0",
         exportName: "_classCheckPrivateStaticAccess",
         importBindingsReferences: [
-          "body.1.declaration.body.body.0.argument.callee",
+          "body.0.declaration.body.body.0.argument.callee",
         ],
-        importPaths: ["body.0"],
       },
     ),
     // size: 169, gzip size: 154
@@ -1812,13 +1711,12 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classCheckPrivateStaticFieldDescriptor",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 149, gzip size: 118
+    // size: 92, gzip size: 101
     classExtractFieldDescriptor: helper(
       "7.13.10",
-      'import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classExtractFieldDescriptor(e,t){return classPrivateFieldGet2(t,e)}',
+      "export default function _classExtractFieldDescriptor(e,t){return classPrivateFieldGet2(t,e)}",
       {
         globals: [],
         localBindingNames: [],
@@ -1826,18 +1724,17 @@ if (!process.env.BABEL_8_BREAKING) {
           ["classPrivateFieldGet2", "classPrivateFieldGet2"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.1",
+        exportPath: "body.0",
         exportName: "_classExtractFieldDescriptor",
         importBindingsReferences: [
-          "body.1.declaration.body.body.0.argument.callee",
+          "body.0.declaration.body.body.0.argument.callee",
         ],
-        importPaths: ["body.0"],
       },
     ),
-    // size: 282, gzip size: 150
+    // size: 142, gzip size: 122
     classPrivateFieldDestructureSet: helper(
       "7.4.4",
-      'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldDestructureSet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorDestructureSet(e,r)}',
+      "export default function _classPrivateFieldDestructureSet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorDestructureSet(e,r)}",
       {
         globals: [],
         localBindingNames: [],
@@ -1849,19 +1746,18 @@ if (!process.env.BABEL_8_BREAKING) {
           ["classPrivateFieldGet2", "classPrivateFieldGet2"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.2",
+        exportPath: "body.0",
         exportName: "_classPrivateFieldDestructureSet",
         importBindingsReferences: [
-          "body.2.declaration.body.body.0.declarations.0.init.callee",
-          "body.2.declaration.body.body.1.argument.callee",
+          "body.0.declaration.body.body.0.declarations.0.init.callee",
+          "body.0.declaration.body.body.1.argument.callee",
         ],
-        importPaths: ["body.0", "body.1"],
       },
     ),
-    // size: 238, gzip size: 139
+    // size: 120, gzip size: 115
     classPrivateFieldGet: helper(
       "7.0.0-beta.0",
-      'import classApplyDescriptorGet from"classApplyDescriptorGet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldGet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorGet(e,r)}',
+      "export default function _classPrivateFieldGet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorGet(e,r)}",
       {
         globals: [],
         localBindingNames: [],
@@ -1870,19 +1766,18 @@ if (!process.env.BABEL_8_BREAKING) {
           ["classPrivateFieldGet2", "classPrivateFieldGet2"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.2",
+        exportPath: "body.0",
         exportName: "_classPrivateFieldGet",
         importBindingsReferences: [
-          "body.2.declaration.body.body.0.declarations.0.init.callee",
-          "body.2.declaration.body.body.1.argument.callee",
+          "body.0.declaration.body.body.0.declarations.0.init.callee",
+          "body.0.declaration.body.body.1.argument.callee",
         ],
-        importPaths: ["body.0", "body.1"],
       },
     ),
-    // size: 244, gzip size: 145
+    // size: 126, gzip size: 120
     classPrivateFieldSet: helper(
       "7.0.0-beta.0",
-      'import classApplyDescriptorSet from"classApplyDescriptorSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldSet(e,t,r){var s=classPrivateFieldGet2(t,e);return classApplyDescriptorSet(e,s,r),r}',
+      "export default function _classPrivateFieldSet(e,t,r){var s=classPrivateFieldGet2(t,e);return classApplyDescriptorSet(e,s,r),r}",
       {
         globals: [],
         localBindingNames: [],
@@ -1891,30 +1786,28 @@ if (!process.env.BABEL_8_BREAKING) {
           ["classPrivateFieldGet2", "classPrivateFieldGet2"],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.2",
+        exportPath: "body.0",
         exportName: "_classPrivateFieldSet",
         importBindingsReferences: [
-          "body.2.declaration.body.body.0.declarations.0.init.callee",
-          "body.2.declaration.body.body.1.argument.expressions.0.callee",
+          "body.0.declaration.body.body.0.declarations.0.init.callee",
+          "body.0.declaration.body.body.1.argument.expressions.0.callee",
         ],
-        importPaths: ["body.0", "body.1"],
       },
     ),
-    // size: 132, gzip size: 116
+    // size: 85, gzip size: 99
     classPrivateMethodGet: helper(
       "7.1.6",
-      'import assertClassBrand from"assertClassBrand";export default function _classPrivateMethodGet(s,a,r){return assertClassBrand(a,s),r}',
+      "export default function _classPrivateMethodGet(s,a,r){return assertClassBrand(a,s),r}",
       {
         globals: [],
         localBindingNames: [],
         dependencies: new Map([["assertClassBrand", "assertClassBrand"]]),
         exportBindingAssignments: [],
-        exportPath: "body.1",
+        exportPath: "body.0",
         exportName: "_classPrivateMethodGet",
         importBindingsReferences: [
-          "body.1.declaration.body.body.0.argument.expressions.0.callee",
+          "body.0.declaration.body.body.0.argument.expressions.0.callee",
         ],
-        importPaths: ["body.0"],
       },
     ),
     // size: 109, gzip size: 113
@@ -1929,13 +1822,12 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classPrivateMethodSet",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 408, gzip size: 186
+    // size: 187, gzip size: 144
     classStaticPrivateFieldDestructureSet: helper(
       "7.13.10",
-      'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldDestructureSet(t,r,s){return assertClassBrand(r,t),classCheckPrivateStaticFieldDescriptor(s,"set"),classApplyDescriptorDestructureSet(t,s)}',
+      'export default function _classStaticPrivateFieldDestructureSet(t,r,s){return assertClassBrand(r,t),classCheckPrivateStaticFieldDescriptor(s,"set"),classApplyDescriptorDestructureSet(t,s)}',
       {
         globals: [],
         localBindingNames: [],
@@ -1951,20 +1843,19 @@ if (!process.env.BABEL_8_BREAKING) {
           ],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.3",
+        exportPath: "body.0",
         exportName: "_classStaticPrivateFieldDestructureSet",
         importBindingsReferences: [
-          "body.3.declaration.body.body.0.argument.expressions.0.callee",
-          "body.3.declaration.body.body.0.argument.expressions.1.callee",
-          "body.3.declaration.body.body.0.argument.expressions.2.callee",
+          "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          "body.0.declaration.body.body.0.argument.expressions.2.callee",
         ],
-        importPaths: ["body.0", "body.1", "body.2"],
       },
     ),
-    // size: 368, gzip size: 182
+    // size: 169, gzip size: 142
     classStaticPrivateFieldSpecGet: helper(
       "7.0.2",
-      'import classApplyDescriptorGet from"classApplyDescriptorGet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecGet(t,s,r){return assertClassBrand(s,t),classCheckPrivateStaticFieldDescriptor(r,"get"),classApplyDescriptorGet(t,r)}',
+      'export default function _classStaticPrivateFieldSpecGet(t,s,r){return assertClassBrand(s,t),classCheckPrivateStaticFieldDescriptor(r,"get"),classApplyDescriptorGet(t,r)}',
       {
         globals: [],
         localBindingNames: [],
@@ -1977,20 +1868,19 @@ if (!process.env.BABEL_8_BREAKING) {
           ],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.3",
+        exportPath: "body.0",
         exportName: "_classStaticPrivateFieldSpecGet",
         importBindingsReferences: [
-          "body.3.declaration.body.body.0.argument.expressions.0.callee",
-          "body.3.declaration.body.body.0.argument.expressions.1.callee",
-          "body.3.declaration.body.body.0.argument.expressions.2.callee",
+          "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          "body.0.declaration.body.body.0.argument.expressions.2.callee",
         ],
-        importPaths: ["body.0", "body.1", "body.2"],
       },
     ),
-    // size: 374, gzip size: 183
+    // size: 175, gzip size: 144
     classStaticPrivateFieldSpecSet: helper(
       "7.0.2",
-      'import classApplyDescriptorSet from"classApplyDescriptorSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecSet(s,t,r,e){return assertClassBrand(t,s),classCheckPrivateStaticFieldDescriptor(r,"set"),classApplyDescriptorSet(s,r,e),e}',
+      'export default function _classStaticPrivateFieldSpecSet(s,t,r,e){return assertClassBrand(t,s),classCheckPrivateStaticFieldDescriptor(r,"set"),classApplyDescriptorSet(s,r,e),e}',
       {
         globals: [],
         localBindingNames: [],
@@ -2003,14 +1893,13 @@ if (!process.env.BABEL_8_BREAKING) {
           ],
         ]),
         exportBindingAssignments: [],
-        exportPath: "body.3",
+        exportPath: "body.0",
         exportName: "_classStaticPrivateFieldSpecSet",
         importBindingsReferences: [
-          "body.3.declaration.body.body.0.argument.expressions.0.callee",
-          "body.3.declaration.body.body.0.argument.expressions.1.callee",
-          "body.3.declaration.body.body.0.argument.expressions.2.callee",
+          "body.0.declaration.body.body.0.argument.expressions.0.callee",
+          "body.0.declaration.body.body.0.argument.expressions.1.callee",
+          "body.0.declaration.body.body.0.argument.expressions.2.callee",
         ],
-        importPaths: ["body.0", "body.1", "body.2"],
       },
     ),
     // size: 126, gzip size: 122
@@ -2025,7 +1914,6 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_classStaticPrivateMethodSet",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
     // size: 383, gzip size: 218
@@ -2040,7 +1928,6 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_defineEnumerableProperties",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
     // size: 668, gzip size: 330
@@ -2055,24 +1942,22 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.1",
         exportName: "_dispose",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
-    // size: 421, gzip size: 258
+    // size: 378, gzip size: 245
     objectSpread: helper(
       "7.0.0-beta.0",
-      'import defineProperty from"defineProperty";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
+      'export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
       {
         globals: ["Object"],
         localBindingNames: [],
         dependencies: new Map([["defineProperty", "defineProperty"]]),
         exportBindingAssignments: [],
-        exportPath: "body.1",
+        exportPath: "body.0",
         exportName: "_objectSpread",
         importBindingsReferences: [
-          "body.1.declaration.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
+          "body.0.declaration.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
         ],
-        importPaths: ["body.0"],
       },
     ),
     // size: 432, gzip size: 261
@@ -2087,7 +1972,6 @@ if (!process.env.BABEL_8_BREAKING) {
         exportPath: "body.0",
         exportName: "_using",
         importBindingsReferences: [],
-        importPaths: [],
       },
     ),
   });

@@ -17,7 +17,8 @@ export function defineHelperAndGetMetadata(baseURL, name, code) {
     throw new Error(`The ${id} helper is already defined.`);
   }
 
-  const metadata = getHelperMetadata(code, name);
+  let metadata;
+  [code, metadata] = getHelperMetadata(code, name);
 
   Object.defineProperty(helpers, id, {
     value: {

@@ -26,12 +26,6 @@ function permuteHelperAST(
   localBindings?: string[],
   getDependency?: GetDependency,
 ) {
-  if (localBindings && !id) {
-    throw new Error("Unexpected local bindings for module-based helpers.");
-  }
-
-  if (!id) return;
-
   const {
     localBindingNames,
     dependencies,
@@ -39,7 +33,6 @@ function permuteHelperAST(
     exportPath,
     exportName,
     importBindingsReferences,
-    importPaths,
   } = metadata;
 
   const dependenciesRefs: Record<string, t.Expression> = {};
@@ -51,7 +44,7 @@ function permuteHelperAST(
 
   const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
-  if (id.type === "Identifier") bindings.add(id.name);
+  if (id?.type === "Identifier") bindings.add(id.name);
   localBindingNames.forEach(name => {
     let newName = name;
     while (bindings.has(newName)) newName = "_" + newName;
@@ -59,7 +52,7 @@ function permuteHelperAST(
     if (newName !== name) toRename[name] = newName;
   });
 
-  if (id.type === "Identifier" && exportName !== id.name) {
+  if (id?.type === "Identifier" && exportName !== id.name) {
     toRename[exportName] = id.name;
   }
 
@@ -68,18 +61,15 @@ function permuteHelperAST(
   // We need to compute these in advance because removing nodes would
   // invalidate the paths.
   const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
-  const imps: NodePath<t.ImportDeclaration>[] = importPaths.map(p =>
-    path.get(p),
-  );
   const impsBindingRefs: NodePath<t.Identifier>[] =
     importBindingsReferences.map(p => path.get(p));
 
   // We assert that this is a FunctionDeclaration in dependencyVisitor.
   const decl = exp.get("declaration") as NodePath<t.FunctionDeclaration>;
 
-  if (id.type === "Identifier") {
+  if (id?.type === "Identifier") {
     exp.replaceWith(decl);
-  } else if (id.type === "MemberExpression") {
+  } else if (id?.type === "MemberExpression") {
     exportBindingAssignments.forEach(assignPath => {
       const assign = path.get(assignPath) as NodePath<t.Expression>;
       assign.replaceWith(assignmentExpression("=", id, assign.node));
@@ -91,7 +81,7 @@ function permuteHelperAST(
         assignmentExpression("=", id, identifier(exportName)),
       ),
     );
-  } else {
+  } else if (id) {
     throw new Error("Unexpected helper format.");
   }
 
@@ -99,7 +89,6 @@ function permuteHelperAST(
     path.scope.rename(name, toRename[name]);
   });
 
-  for (const path of imps) path.remove();
   for (const path of impsBindingRefs) {
     const node = cloneNode(dependenciesRefs[path.node.name]);
     path.replaceWith(node);

@@ -6,9 +6,8 @@ _$_variableSameNameDependency_main;
       localBindingNames: [],
       dependencies: new Map([["dep","_$_variable-same-name-dependency_dependency"]]),
       exportBindingAssignments: [],
-      exportPath: "body.1",
+      exportPath: "body.0",
       exportName: "helper",
-      importBindingsReferences: ["body.1.declaration.body.body.0.declarations.0.init"],
-      importPaths: ["body.0"],
+      importBindingsReferences: ["body.0.declaration.body.body.0.declarations.0.init"],
     }
   */
