@@ -1,6 +1,6 @@
 /* @minVersion 7.9.0 */
 
-import arrayLikeToArray from "arrayLikeToArray";
+import arrayLikeToArray from "./arrayLikeToArray.ts";
 
 export default function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;

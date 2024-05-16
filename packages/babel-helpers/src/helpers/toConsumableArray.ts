@@ -1,9 +1,10 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import arrayWithoutHoles from "arrayWithoutHoles";
-import iterableToArray from "iterableToArray";
-import unsupportedIterableToArray from "unsupportedIterableToArray";
-import nonIterableSpread from "nonIterableSpread";
+import arrayWithoutHoles from "./arrayWithoutHoles.ts";
+import iterableToArray from "./iterableToArray.ts";
+import unsupportedIterableToArray from "./unsupportedIterableToArray.ts";
+// @ts-expect-error nonIterableSpread is still being converted to TS.
+import nonIterableSpread from "./nonIterableSpread.ts";
 
 export default function _toConsumableArray(arr) {
   return (
