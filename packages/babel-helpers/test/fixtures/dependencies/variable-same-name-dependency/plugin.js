@@ -1,10 +1,20 @@
-import defineHelper from "../../../helpers/define-helper.js";
+import { stringifyMetadata } from "../../../../scripts/generate-helpers.js";
+import defineHelper, {
+  defineHelperAndGetMetadata,
+} from "../../../helpers/define-helper.js";
 
-const dependency = defineHelper(import.meta.url, "dependency", `
+const dependency = defineHelper(
+  import.meta.url,
+  "dependency",
+  `
   export default function fn() {}
-`);
+`
+);
 
-const main = defineHelper(import.meta.url, "main", `
+const { id: main, metadata } = defineHelperAndGetMetadata(
+  import.meta.url,
+  "main",
+  `
   import dep from "${dependency}";
 
   export default function helper() {
@@ -13,9 +23,10 @@ const main = defineHelper(import.meta.url, "main", `
       return x() + dep;
     }
   }
-`);
+`
+);
 
-export default function() {
+export default function ({ types: t }) {
   return {
     visitor: {
       Identifier(path) {
@@ -23,6 +34,13 @@ export default function() {
         const helper = this.addHelper(main);
         path.replaceWith(helper);
       },
+      Program(path) {
+        t.addComment(
+          path.node,
+          "trailing",
+          `"main" metadata:${stringifyMetadata(metadata)}`
+        );
+      },
     },
   };
-};
+}

@@ -141,16 +141,7 @@ const helpers: Record<string, Helper> = {
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
     ${JSON.stringify(code)},
-    {
-      globals: ${JSON.stringify(metadata.globals)},
-      localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
-      dependencies: new Map(${JSON.stringify(Array.from(metadata.dependencies))}),
-      exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
-      exportPath: ${JSON.stringify(metadata.exportPath)},
-      exportName: ${JSON.stringify(metadata.exportName)},
-      importBindingsReferences: ${JSON.stringify(metadata.importBindingsReferences)},
-      importPaths: ${JSON.stringify(metadata.importPaths)},
-    }
+    ${stringifyMetadata(metadata)}
   ),
 `;
 
@@ -325,4 +316,19 @@ function makePath(path) {
   }
 
   return parts.reverse().join(".");
+}
+
+export function stringifyMetadata(metadata) {
+  return `\
+    {
+      globals: ${JSON.stringify(metadata.globals)},
+      localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
+      dependencies: new Map(${JSON.stringify(Array.from(metadata.dependencies))}),
+      exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
+      exportPath: ${JSON.stringify(metadata.exportPath)},
+      exportName: ${JSON.stringify(metadata.exportName)},
+      importBindingsReferences: ${JSON.stringify(metadata.importBindingsReferences)},
+      importPaths: ${JSON.stringify(metadata.importPaths)},
+    }
+  `;
 }
