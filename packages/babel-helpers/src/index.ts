@@ -1,5 +1,4 @@
 import type { File } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import {
   assignmentExpression,
@@ -16,11 +15,30 @@ let FileClass: typeof File | undefined = undefined;
 
 type GetDependency = (name: string) => t.Expression;
 
+function deep(obj: any, path: string, value?: unknown) {
+  try {
+    const parts = path.split(".");
+    let last = parts.shift();
+    while (parts.length > 0) {
+      obj = obj[last];
+      last = parts.shift();
+    }
+    if (arguments.length > 2) {
+      obj[last] = value;
+    } else {
+      return obj[last];
+    }
+  } catch (e) {
+    e.message += ` (when accessing ${path})`;
+    throw e;
+  }
+}
+
 /**
  * Given a helper AST and information about how it will be used, update the AST to match the usage.
  */
 function permuteHelperAST(
-  file: File,
+  ast: t.Program,
   metadata: HelperMetadata,
   id?: t.Identifier | t.MemberExpression,
   localBindings?: string[],
@@ -55,31 +73,24 @@ function permuteHelperAST(
     toRename[exportName] = id.name;
   }
 
-  const { path } = file;
-
-  // We need to compute these in advance because removing nodes would
-  // invalidate the paths.
-  const exp: NodePath<t.ExportDefaultDeclaration> = path.get(exportPath);
-  const impsBindingRefs: Map<string, NodePath<t.Identifier>[]> = new Map(
-    Object.entries(dependencies).map(([name, ps]) => [
-      name,
-      ps.map(p => path.get(p) as NodePath<t.Identifier>),
-    ]),
-  );
-
-  // We assert that this is a FunctionDeclaration in dependencyVisitor.
-  const decl = exp.get("declaration") as NodePath<t.FunctionDeclaration>;
+  for (const [name, paths] of Object.entries(dependencies)) {
+    for (const path of paths) {
+      deep(ast, path, cloneNode(dependenciesRefs[name]));
+    }
+  }
 
   if (id?.type === "Identifier") {
-    exp.replaceWith(decl);
+    deep(ast, exportPath, deep(ast, `${exportPath}.declaration`));
   } else if (id?.type === "MemberExpression") {
     exportBindingAssignments.forEach(assignPath => {
-      const assign = path.get(assignPath) as NodePath<t.Expression>;
-      assign.replaceWith(assignmentExpression("=", id, assign.node));
+      deep(
+        ast,
+        assignPath,
+        assignmentExpression("=", id, deep(ast, assignPath)),
+      );
     });
-    exp.replaceWith(decl);
-    path.pushContainer(
-      "body",
+    deep(ast, exportPath, deep(ast, `${exportPath}.declaration`));
+    ast.body.push(
       expressionStatement(
         assignmentExpression("=", id, identifier(exportName)),
       ),
@@ -88,16 +99,7 @@ function permuteHelperAST(
     throw new Error("Unexpected helper format.");
   }
 
-  Object.keys(toRename).forEach(name => {
-    path.scope.rename(name, toRename[name]);
-  });
-
-  for (const [name, paths] of impsBindingRefs) {
-    for (const path of paths) {
-      const node = cloneNode(dependenciesRefs[name]);
-      path.replaceWith(node);
-    }
-  }
+  return toRename;
 }
 
 interface HelperData {
@@ -124,10 +126,10 @@ function loadHelper(name: string) {
       });
     }
 
-    const fn = (): File => {
+    const fn = (ast: t.Program): File => {
       if (!process.env.BABEL_8_BREAKING) {
         if (!FileClass) {
-          const fakeFile = { ast: file(helper.ast()), path: null } as File;
+          const fakeFile = { ast: file(ast), path: null } as File;
           traverse(fakeFile.ast, {
             Program: path => (fakeFile.path = path).stop(),
           });
@@ -137,7 +139,7 @@ function loadHelper(name: string) {
       return new FileClass(
         { filename: `babel-helper://${name}` },
         {
-          ast: file(helper.ast()),
+          ast: file(ast),
           code: "[internal Babel helper code]",
           inputMap: null,
         },
@@ -147,14 +149,19 @@ function loadHelper(name: string) {
     helperData[name] = {
       minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
-        const file = fn();
-        permuteHelperAST(
-          file,
+        const ast = helper.ast();
+        const toRename = permuteHelperAST(
+          ast,
           helper.metadata,
           id,
           localBindings,
           getDependency,
         );
+
+        const file = fn(ast);
+        Object.keys(toRename).forEach(name => {
+          file.path.scope.rename(name, toRename[name]);
+        });
 
         return {
           nodes: file.ast.program.body,
