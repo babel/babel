@@ -2,7 +2,7 @@ import _Reflect$get from "core-js-pure/features/reflect/get.js";
 import _Reflect$getOwnPropertyDescriptor from "core-js-pure/features/reflect/get-own-property-descriptor.js";
 import _Reflect$has from "core-js-pure/features/reflect/has.js";
 import _Reflect$ownKeys from "core-js-pure/features/reflect/own-keys.js";
-export default function _importDeferProxy(e) {
+function _importDeferProxy(e) {
   var t = null,
     constValue = function constValue(e) {
       return function () {
@@ -28,3 +28,4 @@ export default function _importDeferProxy(e) {
     setPrototypeOf: constValue(!1)
   });
 }
+export { _importDeferProxy as default };

@@ -1,7 +1,7 @@
 import _Object$create from "core-js-pure/features/object/create.js";
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 import setPrototypeOf from "./setPrototypeOf.js";
-export default function _inherits(t, e) {
+function _inherits(t, e) {
   if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
   t.prototype = _Object$create(e && e.prototype, {
     constructor: {
@@ -13,3 +13,4 @@ export default function _inherits(t, e) {
     writable: !1
   }), e && setPrototypeOf(t, e);
 }
+export { _inherits as default };

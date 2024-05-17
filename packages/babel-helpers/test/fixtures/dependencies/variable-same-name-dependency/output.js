@@ -5,8 +5,7 @@ _$_variableSameNameDependency_main;
       globals: [],
       localBindingNames: [],
       exportBindingAssignments: [],
-      exportPath: "body.0",
       exportName: "helper",
-      dependencies: {"_$_variable-same-name-dependency_dependency":["body.0.declaration.body.body.0.declarations.0.init"]},
+      dependencies: {"_$_variable-same-name-dependency_dependency":["body.0.body.body.0.declarations.0.init"]},
     }
   */

@@ -4,7 +4,7 @@ import _reduceInstanceProperty from "core-js-pure/features/instance/reduce.js";
 import _reverseInstanceProperty from "core-js-pure/features/instance/reverse.js";
 import _sliceInstanceProperty from "core-js-pure/features/instance/slice.js";
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
-export default function _applyDecoratedDescriptor(i, e, r, n, l) {
+function _applyDecoratedDescriptor(i, e, r, n, l) {
   var _context, _context2, _context3;
   var a = {};
   return _forEachInstanceProperty(_context = _Object$keys(n)).call(_context, function (i) {
@@ -13,3 +13,4 @@ export default function _applyDecoratedDescriptor(i, e, r, n, l) {
     return n(i, e, r) || r;
   }, a), l && void 0 !== a.initializer && (a.value = a.initializer ? a.initializer.call(l) : void 0, a.initializer = void 0), void 0 === a.initializer && (_Object$defineProperty(i, e, a), a = null), a;
 }
+export { _applyDecoratedDescriptor as default };

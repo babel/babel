@@ -1,3 +1,4 @@
-export default function _AwaitValue(t) {
+function _AwaitValue(t) {
   this.wrapped = t;
 }
+export { _AwaitValue as default };

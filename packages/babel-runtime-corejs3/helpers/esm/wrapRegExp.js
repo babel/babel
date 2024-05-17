@@ -9,7 +9,7 @@ import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
 import _sliceInstanceProperty from "core-js-pure/features/instance/slice.js";
 import setPrototypeOf from "./setPrototypeOf.js";
 import inherits from "./inherits.js";
-export default function _wrapRegExp() {
+function _wrapRegExp() {
   _wrapRegExp = function _wrapRegExp(e, r) {
     return new BabelRegExp(e, void 0, r);
   };
@@ -58,3 +58,4 @@ export default function _wrapRegExp() {
     return e[_Symbol$replace].call(this, t, p);
   }, _wrapRegExp.apply(this, arguments);
 }
+export { _wrapRegExp as default };

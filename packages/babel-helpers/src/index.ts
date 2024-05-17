@@ -4,6 +4,8 @@ import {
   assignmentExpression,
   cloneNode,
   expressionStatement,
+  exportNamedDeclaration,
+  exportSpecifier,
   file,
   identifier,
 } from "@babel/types";
@@ -48,7 +50,6 @@ function permuteHelperAST(
     localBindingNames,
     dependencies,
     exportBindingAssignments,
-    exportPath,
     exportName,
   } = metadata;
 
@@ -79,9 +80,13 @@ function permuteHelperAST(
     }
   }
 
-  if (id?.type === "Identifier") {
-    deep(ast, exportPath, deep(ast, `${exportPath}.declaration`));
-  } else if (id?.type === "MemberExpression") {
+  if (!id) {
+    ast.body.push(
+      exportNamedDeclaration(null, [
+        exportSpecifier(identifier(exportName), identifier("default")),
+      ]),
+    );
+  } else if (id.type === "MemberExpression") {
     exportBindingAssignments.forEach(assignPath => {
       deep(
         ast,
@@ -89,13 +94,12 @@ function permuteHelperAST(
         assignmentExpression("=", id, deep(ast, assignPath)),
       );
     });
-    deep(ast, exportPath, deep(ast, `${exportPath}.declaration`));
     ast.body.push(
       expressionStatement(
         assignmentExpression("=", id, identifier(exportName)),
       ),
     );
-  } else if (id) {
+  } else if (id.type !== "Identifier") {
     throw new Error("Unexpected helper format.");
   }
 

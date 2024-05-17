@@ -9,7 +9,7 @@ import _Object$assign from "core-js-pure/features/object/assign.js";
 import _findInstanceProperty from "core-js-pure/features/instance/find.js";
 import toArray from "./toArray.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function _decorate(e, r, t, i) {
+function _decorate(e, r, t, i) {
   var _context;
   var o = _getDecoratorsApi();
   if (i) for (var n = 0; n < i.length; n++) o = i[n](o);
@@ -260,3 +260,4 @@ function _optionalCallableProperty(e, r) {
   if (void 0 !== t && "function" != typeof t) throw new TypeError("Expected '" + r + "' to be a function");
   return t;
 }
+export { _decorate as default };

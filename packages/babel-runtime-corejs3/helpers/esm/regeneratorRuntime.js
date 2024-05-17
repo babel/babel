@@ -9,7 +9,7 @@ import _Object$setPrototypeOf from "core-js-pure/features/object/set-prototype-o
 import _Promise from "core-js-pure/features/promise/index.js";
 import _reverseInstanceProperty from "core-js-pure/features/instance/reverse.js";
 import _sliceInstanceProperty from "core-js-pure/features/instance/slice.js";
-export default function _regeneratorRuntime() {
+function _regeneratorRuntime() {
   "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   _regeneratorRuntime = function _regeneratorRuntime() {
     return e;
@@ -314,3 +314,4 @@ export default function _regeneratorRuntime() {
     }
   }, e;
 }
+export { _regeneratorRuntime as default };

@@ -30,7 +30,6 @@ export interface HelperMetadata {
   localBindingNames: string[];
   dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
-  exportPath: string;
   exportName: string;
 }
 
@@ -174,7 +173,6 @@ if (!process.env.BABEL_8_BREAKING) {
  * @property {string[]} localBindingNames
  * @property {{ [name: string]: string[] }} dependencies
  * @property {string[]} exportBindingAssignments
- * @property {string} exportPath
  * @property {string} exportName
  */
 
@@ -191,7 +189,6 @@ export function getHelperMetadata(code, helperName) {
   const dependenciesBindings = new Map();
 
   let exportName;
-  let exportPath;
   const exportBindingAssignments = [];
   // helper name -> reference paths
   const dependencies = new Map();
@@ -231,7 +228,8 @@ export function getHelperMetadata(code, helperName) {
           }
 
           exportName = decl.node.id.name;
-          exportPath = makePath(child);
+          spansToRemove.push([child.node.start, decl.node.start]);
+          child.replaceWith(decl.node);
         } else if (
           child.isExportAllDeclaration() ||
           child.isExportNamedDeclaration()
@@ -288,13 +286,13 @@ export function getHelperMetadata(code, helperName) {
     plugins: [() => ({ visitor: dependencyVisitor })],
   });
 
-  if (!exportPath) throw new Error("Helpers must have a default export.");
+  if (!exportName) throw new Error("Helpers must have a named default export.");
 
   // Process these in reverse so that mutating the references does not invalidate any later paths in
   // the list.
   exportBindingAssignments.reverse();
-  spansToRemove.reverse();
 
+  spansToRemove.sort(([start1], [start2]) => start2 - start1);
   for (const [start, end] of spansToRemove) {
     code = code.slice(0, start) + code.slice(end);
   }
@@ -306,7 +304,6 @@ export function getHelperMetadata(code, helperName) {
       localBindingNames: Array.from(localBindingNames),
       dependencies: Object.fromEntries(dependencies),
       exportBindingAssignments,
-      exportPath,
       exportName,
     },
   ];
@@ -329,7 +326,6 @@ export function stringifyMetadata(metadata) {
       globals: ${JSON.stringify(metadata.globals)},
       localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
       exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
-      exportPath: ${JSON.stringify(metadata.exportPath)},
       exportName: ${JSON.stringify(metadata.exportName)},
       dependencies: ${JSON.stringify(metadata.dependencies)},
     }

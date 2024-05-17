@@ -12,7 +12,7 @@ function dispose_SuppressedError(r, e) {
     }
   })), new dispose_SuppressedError(r, e);
 }
-export default function _dispose(r, e, s) {
+function _dispose(r, e, s) {
   function next() {
     for (; r.length > 0;) try {
       var o = r.pop(),
@@ -28,3 +28,4 @@ export default function _dispose(r, e, s) {
   }
   return next();
 }
+export { _dispose as default };

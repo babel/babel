@@ -222,6 +222,7 @@ function applyDecs2301Factory() {
     };
   };
 }
-export default function applyDecs2301(e, t, r, n) {
+function applyDecs2301(e, t, r, n) {
   return (applyDecs2301 = applyDecs2301Factory())(e, t, r, n);
 }
+export { applyDecs2301 as default };

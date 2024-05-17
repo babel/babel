@@ -8,7 +8,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) {
   }
   i.done ? t(u) : _Promise.resolve(u).then(r, o);
 }
-export default function _asyncToGenerator(n) {
+function _asyncToGenerator(n) {
   return function () {
     var t = this,
       e = arguments;
@@ -24,3 +24,4 @@ export default function _asyncToGenerator(n) {
     });
   };
 }
+export { _asyncToGenerator as default };

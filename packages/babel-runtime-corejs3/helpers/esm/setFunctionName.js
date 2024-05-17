@@ -1,6 +1,6 @@
 import _typeof from "./typeof.js";
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
-export default function setFunctionName(e, t, n) {
+function setFunctionName(e, t, n) {
   "symbol" == _typeof(t) && (t = (t = t.description) ? "[" + t + "]" : "");
   try {
     _Object$defineProperty(e, "name", {
@@ -10,3 +10,4 @@ export default function setFunctionName(e, t, n) {
   } catch (e) {}
   return e;
 }
+export { setFunctionName as default };

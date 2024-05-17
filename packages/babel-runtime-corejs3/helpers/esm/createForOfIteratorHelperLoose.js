@@ -3,7 +3,7 @@ import _getIteratorMethod from "core-js-pure/features/get-iterator-method.js";
 import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
 import _Array$isArray from "core-js-pure/features/array/is-array.js";
 import unsupportedIterableToArray from "./unsupportedIterableToArray.js";
-export default function _createForOfIteratorHelperLoose(r, e) {
+function _createForOfIteratorHelperLoose(r, e) {
   var _context;
   var t = "undefined" != typeof _Symbol && _getIteratorMethod(r) || r["@@iterator"];
   if (t) return _bindInstanceProperty(_context = (t = t.call(r)).next).call(_context, t);
@@ -21,3 +21,4 @@ export default function _createForOfIteratorHelperLoose(r, e) {
   }
   throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
+export { _createForOfIteratorHelperLoose as default };

@@ -2,7 +2,7 @@ import _Reflect$construct from "core-js-pure/features/reflect/construct.js";
 import getPrototypeOf from "./getPrototypeOf.js";
 import isNativeReflectConstruct from "./isNativeReflectConstruct.js";
 import possibleConstructorReturn from "./possibleConstructorReturn.js";
-export default function _createSuper(t) {
+function _createSuper(t) {
   var r = isNativeReflectConstruct();
   return function () {
     var e,
@@ -14,3 +14,4 @@ export default function _createSuper(t) {
     return possibleConstructorReturn(this, e);
   };
 }
+export { _createSuper as default };
