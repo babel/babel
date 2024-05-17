@@ -7,8 +7,8 @@ export default function _get() {
   return _get = "undefined" != typeof Reflect && _Reflect$get ? _bindInstanceProperty(_context = _Reflect$get).call(_context) : function (e, t, r) {
     var p = superPropBase(e, t);
     if (p) {
-      var o = _Object$getOwnPropertyDescriptor(p, t);
-      return o && o.get ? o.get.call(arguments.length < 3 ? e : r) : o ? o.value : void 0;
+      var n = _Object$getOwnPropertyDescriptor(p, t);
+      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
     }
   }, _get.apply(this, arguments);
 }

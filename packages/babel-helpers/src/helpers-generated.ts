@@ -206,10 +206,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _extends(){return _extends=Object.assign?Object.assign.bind():function(n){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var r in t)({}).hasOwnProperty.call(t,r)&&(n[r]=t[r])}return n},_extends.apply(null,arguments)}",
   ),
-  // size: 331, gzip size: 234
+  // size: 319, gzip size: 225
   get: helper(
     "7.0.0-beta.0",
-    'import superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var o=Object.getOwnPropertyDescriptor(p,t);return o&&o.get?o.get.call(arguments.length<3?e:r):o?o.value:void 0}},_get.apply(this,arguments)}',
+    'import superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(this,arguments)}',
   ),
   // size: 194, gzip size: 120
   getPrototypeOf: helper(
