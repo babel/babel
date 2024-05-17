@@ -7,20 +7,21 @@
  */
 
 // _OverloadYield is actually a class
-// @ts-expect-error -- intentionally overload the class
-declare class _OverloadYield<T = any, K = any> {
+declare class _OverloadYield<T = any> {
   v: T;
-  k: K;
-  constructor(value: T, kind: K);
+  /** 0: await 1: delegate */
+  k: 0 | 1;
+  constructor(value: T, kind: 0 | 1);
 }
 
 // The actual implementation of _OverloadYield starts here
-// @ts-expect-error -- intentionally overload the class
-export default function _OverloadYield<T, K>(
-  this: _OverloadYield<T, K>,
+function _OverloadYield<T>(
+  this: _OverloadYield<T>,
   value: T,
-  kind: K,
+  /** 0: await 1: delegate */ kind: 0 | 1,
 ) {
   this.v = value;
   this.k = kind;
 }
+
+export default _OverloadYield;
