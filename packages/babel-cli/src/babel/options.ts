@@ -211,6 +211,8 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   //
   commander.parse(args);
 
+  const opts = commander.opts();
+
   const errors: string[] = [];
 
   let filenames = commander.args.reduce(function (globbed: string[], input) {
@@ -234,20 +236,20 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     }
   });
 
-  if (commander.outDir && !filenames.length) {
+  if (opts.outDir && !filenames.length) {
     errors.push("--out-dir requires filenames");
   }
 
-  if (commander.outFile && commander.outDir) {
+  if (opts.outFile && opts.outDir) {
     errors.push("--out-file and --out-dir cannot be used together");
   }
 
-  if (commander.relative && !commander.outDir) {
+  if (opts.relative && !opts.outDir) {
     errors.push("--relative requires --out-dir usage");
   }
 
-  if (commander.watch) {
-    if (!commander.outFile && !commander.outDir) {
+  if (opts.watch) {
+    if (!opts.outFile && !opts.outDir) {
       errors.push("--watch requires --out-file or --out-dir");
     }
 
@@ -256,29 +258,29 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     }
   }
 
-  if (commander.skipInitialBuild && !commander.watch) {
+  if (opts.skipInitialBuild && !opts.watch) {
     errors.push("--skip-initial-build requires --watch");
   }
-  if (commander.deleteDirOnStart && !commander.outDir) {
+  if (opts.deleteDirOnStart && !opts.outDir) {
     errors.push("--delete-dir-on-start requires --out-dir");
   }
 
-  if (commander.verbose && commander.quiet) {
+  if (opts.verbose && opts.quiet) {
     errors.push("--verbose and --quiet cannot be used together");
   }
 
   if (
-    !commander.outDir &&
+    !opts.outDir &&
     filenames.length === 0 &&
-    typeof commander.filename !== "string" &&
-    commander.babelrc !== false
+    typeof opts.filename !== "string" &&
+    opts.babelrc !== false
   ) {
     errors.push(
       "stdin compilation requires either -f/--filename [filename] or --no-babelrc",
     );
   }
 
-  if (commander.keepFileExtension && commander.outFileExtension) {
+  if (opts.keepFileExtension && opts.outFileExtension) {
     errors.push(
       "--out-file-extension cannot be used with --keep-file-extension",
     );
@@ -291,8 +293,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     });
     return null;
   }
-
-  const opts = commander.opts();
 
   const babelOptions: InputOptions = {
     presets: opts.presets,

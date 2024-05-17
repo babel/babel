@@ -73,24 +73,25 @@ program.option("-b, --presets [string]", "", collect);
 program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
+const opts = program.opts();
 
 const babelOptions = {
   caller: {
     name: "@babel/node",
   },
-  extensions: program.extensions,
-  ignore: program.ignore,
-  only: program.only,
-  plugins: program.plugins,
-  presets: program.presets,
-  configFile: program.configFile,
-  envName: program.envName,
-  rootMode: program.rootMode,
+  extensions: opts.extensions,
+  ignore: opts.ignore,
+  only: opts.only,
+  plugins: opts.plugins,
+  presets: opts.presets,
+  configFile: opts.configFile,
+  envName: opts.envName,
+  rootMode: opts.rootMode,
 
   // Commander will default the "--no-" arguments to true, but we want to
   // leave them undefined so that @babel/core can handle the
   // default-assignment logic on its own.
-  babelrc: program.babelrc === true ? undefined : program.babelrc,
+  babelrc: opts.babelrc === true ? undefined : opts.babelrc,
 };
 
 for (const key of Object.keys(babelOptions) as Array<
@@ -145,8 +146,8 @@ const _eval = function (code: string, filename: string) {
 
   code = babel.transformSync(code, {
     filename: filename,
-    presets: program.presets,
-    plugins: (program.plugins || []).concat([replPlugin]),
+    presets: opts.presets,
+    plugins: (opts.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
@@ -154,9 +155,9 @@ const _eval = function (code: string, filename: string) {
   });
 };
 
-if (program.eval || program.print) {
-  let code = program.eval;
-  if (!code || code === true) code = program.print;
+if (opts.eval || opts.print) {
+  let code = opts.eval;
+  if (!code || code === true) code = opts.print;
 
   global.__filename = "[eval]";
   global.__dirname = process.cwd();
@@ -171,7 +172,7 @@ if (program.eval || program.print) {
   global.require = module.require.bind(module);
 
   const result = _eval(code, global.__filename);
-  if (program.print) {
+  if (opts.print) {
     const output = typeof result === "string" ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
@@ -196,7 +197,7 @@ if (program.eval || program.print) {
           return;
         }
         const optionName = parsedOption.attributeName();
-        const parsedArg = program[optionName];
+        const parsedArg = opts[optionName];
         if (optionName === "require" || (parsedArg && parsedArg !== true)) {
           ignoreNext = true;
         }
@@ -228,9 +229,9 @@ if (program.eval || program.print) {
 
 // We have to handle require ourselves, as we want to require it in the context of babel-register
 function requireArgs() {
-  if (program.require) {
+  if (opts.require) {
     require(
-      require.resolve(program.require, {
+      require.resolve(opts.require, {
         paths: [process.cwd()],
       }),
     );

@@ -27,5 +27,6 @@ commander.option(
 
 commander.usage("[options]");
 commander.parse(process.argv);
+const opts = commander.opts();
 
-console.log(buildExternalHelpers(commander.whitelist, commander.outputType));
+console.log(buildExternalHelpers(opts.whitelist, opts.outputType));
