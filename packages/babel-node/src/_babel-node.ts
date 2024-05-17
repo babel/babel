@@ -1,4 +1,4 @@
-import commander from "commander";
+import * as commander from "commander";
 import Module from "module";
 import { inspect } from "util";
 import path from "path";
@@ -16,7 +16,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
-const program = new commander.Command("babel-node");
+const { program } = commander.default;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
@@ -31,6 +31,7 @@ function collect(value: unknown, previousValue: string[]): Array<string> {
   return values;
 }
 
+program.name("babel-node");
 program.option("-e, --eval [script]", "Evaluate script");
 program.option(
   "--no-babelrc",
