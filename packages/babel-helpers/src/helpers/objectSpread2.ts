@@ -7,7 +7,10 @@ import defineProperty from "defineProperty";
 // filters on symbol properties only. Returned string properties are always
 // enumerable. It is good to use in objectSpread.
 
-function ownKeys(object: object, enumerableOnly = false): PropertyKey[] {
+function ownKeys(
+  object: object,
+  enumerableOnly?: boolean | undefined,
+): PropertyKey[] {
   var keys: PropertyKey[] = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
