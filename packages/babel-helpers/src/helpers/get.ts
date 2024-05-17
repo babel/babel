@@ -1,6 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import _superPropBase from "./superPropBase.ts";
+import superPropBase from "./superPropBase.ts";
 
 // https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
 //
@@ -15,7 +15,7 @@ export default function _get<T extends object, P extends string | symbol>(
   } else {
     // @ts-expect-error function reassign
     _get = function _get(target, property, receiver) {
-      var base = _superPropBase(target, property);
+      var base = superPropBase(target, property);
 
       if (!base) return;
 
@@ -32,5 +32,3 @@ export default function _get<T extends object, P extends string | symbol>(
   // @ts-expect-error IArgument interface as any[]
   return _get.apply(this, arguments);
 }
-
-// ...args: [target: T, property: P, receiver?: unknown]
