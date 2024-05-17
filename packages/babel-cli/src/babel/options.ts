@@ -364,18 +364,15 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: "false" | 0 | ""): false;
-function booleanify(val: "true" | 1): true;
-function booleanify(val: any): any {
-  if (val === undefined) return undefined;
-
-  // eslint-disable-next-line eqeqeq
-  if (val === "true" || val == 1) {
+function booleanify(val: "false" | "0" | ""): false;
+function booleanify(val: "true" | "1"): true;
+function booleanify(val: string): boolean | string {
+  if (val === "true" || val === "1") {
     return true;
   }
 
-  // eslint-disable-next-line eqeqeq
-  if (val === "false" || val == 0 || !val) {
+  // false for --opt=false; 0 for --opt=0 or --opt 0; "" for --opt=
+  if (val === "false" || val === "0" || val === "") {
     return false;
   }
 
