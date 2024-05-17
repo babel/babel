@@ -4,22 +4,14 @@
 // @ts-expect-error Migrate in another PR
 import defineProperty from "./defineProperty.ts";
 
-export default function _objectSpread<T extends {}, U>(
+type Intersection<R extends any[]> = R extends [infer H, ...infer S]
+  ? H & Intersection<S>
+  : unknown;
+
+export default function _objectSpread<T extends object, U extends unknown[]>(
   target: T,
-  source: U,
-): T & U;
-export default function _objectSpread<T extends {}, U, V>(
-  target: T,
-  source1: U,
-  source2: V,
-): T & U & V;
-export default function _objectSpread<T extends {}, U, V, W>(
-  target: T,
-  source1: U,
-  source2: V,
-  source3: W,
-): T & U & V & W;
-export default function _objectSpread(target: object, ...sources: any[]): any;
+  ...sources: U
+): T & Intersection<U>;
 export default function _objectSpread(target: object) {
   for (var i = 1; i < arguments.length; i++) {
     var source: object = arguments[i] != null ? Object(arguments[i]) : {};
