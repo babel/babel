@@ -7,21 +7,24 @@
  */
 
 // _OverloadYield is actually a class
-declare class _OverloadYield<T = any> {
+interface _OverloadYield<T = any> {
   v: T;
   /** 0: await 1: delegate */
   k: 0 | 1;
-  constructor(value: T, kind: 0 | 1);
+}
+
+interface _OverloadYieldConstructor {
+  new <T>(value: T, /** 0: await 1: delegate */ kind: 0 | 1): _OverloadYield<T>;
 }
 
 // The actual implementation of _OverloadYield starts here
-function _OverloadYield<T>(
+var _OverloadYield = function <T>(
   this: _OverloadYield<T>,
   value: T,
   /** 0: await 1: delegate */ kind: 0 | 1,
 ) {
   this.v = value;
   this.k = kind;
-}
+} as any as _OverloadYieldConstructor;
 
 export default _OverloadYield;

@@ -4,11 +4,8 @@ import OverloadYield from "./OverloadYield.ts";
 
 type AsyncIteratorMethod = "next" | "throw" | "return";
 
-declare class AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
-  implements AsyncGenerator<T, TReturn, TNext>
-{
-  constructor(generator: Generator<T, TReturn, TNext>);
-
+interface AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
+  extends AsyncGenerator<T, TReturn, TNext> {
   _invoke: (
     key: AsyncIteratorMethod,
     arg: IteratorResult<T>,
@@ -22,6 +19,13 @@ declare class AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
   [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
 }
 
+interface AsyncGeneratorImplConstructor {
+  new <T = unknown, TReturn = any, TNext = unknown>(
+    gen: Generator<T, TReturn, TNext>,
+  ): AsyncGeneratorImpl<T, TReturn, TNext>;
+  prototype: AsyncGeneratorImpl;
+}
+
 interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
   key: AsyncIteratorMethod;
   arg: IteratorResult<T>;
@@ -30,7 +34,7 @@ interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
   next: AsyncGeneratorRequest<T, TReturn, TNext> | null;
 }
 
-function AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>(
+var AsyncGeneratorImpl = function <T = unknown, TReturn = any, TNext = unknown>(
   this: AsyncGeneratorImpl<T, TReturn, TNext>,
   gen: Generator<T, TReturn, TNext>,
 ) {
@@ -133,7 +137,7 @@ function AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>(
     // @ts-expect-error -- intentionally remove "return" when not supported
     this.return = undefined;
   }
-}
+} as any as AsyncGeneratorImplConstructor;
 
 AsyncGeneratorImpl.prototype[
   ((typeof Symbol === "function" && Symbol.asyncIterator) ||
@@ -142,13 +146,13 @@ AsyncGeneratorImpl.prototype[
   return this;
 };
 
-AsyncGeneratorImpl.prototype.next = function (arg) {
+AsyncGeneratorImpl.prototype.next = function (arg: IteratorResult<any>) {
   return this._invoke("next", arg);
 };
-AsyncGeneratorImpl.prototype.throw = function (arg) {
+AsyncGeneratorImpl.prototype.throw = function (arg: IteratorResult<any>) {
   return this._invoke("throw", arg);
 };
-AsyncGeneratorImpl.prototype.return = function (arg) {
+AsyncGeneratorImpl.prototype.return = function (arg: IteratorResult<any>) {
   return this._invoke("return", arg);
 };
 
