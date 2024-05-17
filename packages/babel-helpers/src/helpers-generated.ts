@@ -206,10 +206,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _extends(){return _extends=Object.assign?Object.assign.bind():function(n){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var r in t)({}).hasOwnProperty.call(t,r)&&(n[r]=t[r])}return n},_extends.apply(null,arguments)}",
   ),
-  // size: 333, gzip size: 237
+  // size: 333, gzip size: 235
   get: helper(
     "7.0.0-beta.0",
-    'import _superPropBase from"superPropBase";export default function _get(...e){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind(null):function(e,t,r){var p=_superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n&&n.get?n.get.call(arguments.length<3?e:r):n?n.value:void 0}},_get.apply(this,e)}',
+    'import _superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=_superPropBase(e,t);if(p){var o=Object.getOwnPropertyDescriptor(p,t);return o&&o.get?o.get.call(arguments.length<3?e:r):o?o.value:void 0}},_get.apply(this,arguments)}',
   ),
   // size: 194, gzip size: 120
   getPrototypeOf: helper(
@@ -358,10 +358,10 @@ const helpers: Record<string, Helper> = {
     "7.23.6",
     'export default function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
   ),
-  // size: 154, gzip size: 123
+  // size: 183, gzip size: 121
   setPrototypeOf: helper(
     "7.0.0-beta.0",
-    "export default function _setPrototypeOf(t,e){var o=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t};return o(t,e)}",
+    "export default function _setPrototypeOf(t,e){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return e&&(t.__proto__=e),t},_setPrototypeOf(t,e)}",
   ),
   // size: 118, gzip size: 118
   skipFirstGeneratorNext: helper(
@@ -577,20 +577,20 @@ if (!process.env.BABEL_8_BREAKING) {
       "7.3.2",
       'export default function _classStaticPrivateMethodSet(){throw new TypeError("attempted to set read only static private field")}',
     ),
-    // size: 441, gzip size: 241
+    // size: 439, gzip size: 240
     defineEnumerableProperties: helper(
       "7.0.0-beta.0",
-      'import toPropertyKey from"toPropertyKey";export default function _defineEnumerableProperties(e,r){for(var t in r){var o=r[t];o.configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,t,o)}if(Object.getOwnPropertySymbols)for(var n=Object.getOwnPropertySymbols(r),i=0;i<n.length;i++){const t=n[i];(o=r[t]).configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(t),o)}return e}',
+      'import toPropertyKey from"toPropertyKey";export default function _defineEnumerableProperties(e,r){for(var t in r){var o=r[t];o.configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,t,o)}if(Object.getOwnPropertySymbols)for(var n=Object.getOwnPropertySymbols(r),a=0;a<n.length;a++){var i=n[a];(o=r[i]).configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(i),o)}return e}',
     ),
     // size: 668, gzip size: 330
     dispose: helper(
       "7.22.0",
       'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=e,this.error=r,this.stack=Error().stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(e,r):r,s=!0,next()}return next()}',
     ),
-    // size: 477, gzip size: 274
+    // size: 421, gzip size: 258
     objectSpread: helper(
       "7.0.0-beta.0",
-      'import defineProperty from"defineProperty";import toPropertyKey from"toPropertyKey";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,toPropertyKey(r),t[r])}))}return e}',
+      'import defineProperty from"defineProperty";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
     ),
     // size: 432, gzip size: 261
     using: helper(

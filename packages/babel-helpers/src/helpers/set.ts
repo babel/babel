@@ -5,7 +5,7 @@ import superPropBase from "./superPropBase.ts";
 
 function set(
   target: object,
-  property: string | symbol,
+  property: PropertyKey,
   value: any,
   receiver?: any,
 ): boolean {

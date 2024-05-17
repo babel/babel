@@ -2,7 +2,6 @@
 /* @onlyBabel7 */
 
 import defineProperty from "./defineProperty.ts";
-import toPropertyKey from "./toPropertyKey.ts";
 
 type Intersection<R extends any[]> = R extends [infer H, ...infer S]
   ? H & Intersection<S>
@@ -26,11 +25,7 @@ export default function _objectSpread(target: object) {
       );
     }
     ownKeys.forEach(function (key) {
-      defineProperty(
-        target,
-        toPropertyKey(key),
-        source[key as keyof typeof source],
-      );
+      defineProperty(target, key, source[key as keyof typeof source]);
     });
   }
   return target;

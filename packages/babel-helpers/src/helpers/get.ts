@@ -7,12 +7,11 @@ import _superPropBase from "./superPropBase.ts";
 //  28.1ak.5 Reflect.get ( target, propertyKey [ , receiver ] )
 export default function _get<T extends object, P extends string | symbol>(
   this: unknown,
-  ...args: [target: T, property: P, receiver?: unknown]
 ): P extends keyof T ? T[P] : any {
   if (typeof Reflect !== "undefined" && Reflect.get) {
     // need a bind because https://github.com/babel/babel/issues/14527
     // @ts-expect-error function reassign
-    _get = Reflect.get.bind(null);
+    _get = Reflect.get.bind(/* undefined */);
   } else {
     // @ts-expect-error function reassign
     _get = function _get(target, property, receiver) {
@@ -30,5 +29,8 @@ export default function _get<T extends object, P extends string | symbol>(
     };
   }
 
-  return _get.apply(this, args);
+  // @ts-expect-error IArgument interface as any[]
+  return _get.apply(this, arguments);
 }
+
+// ...args: [target: T, property: P, receiver?: unknown]
