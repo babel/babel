@@ -19,7 +19,7 @@ export default function _defineEnumerableProperties<T>(
   // symbol properties and define them on our target object too.
   if (Object.getOwnPropertySymbols) {
     var objectSymbols: Array<Symbol> = Object.getOwnPropertySymbols(descs);
-    for (let i = 0; i < objectSymbols.length; i++) {
+    for (var i = 0; i < objectSymbols.length; i++) {
       const sym = objectSymbols[i];
       // @ts-expect-error Fixme: document symbol properties
       desc = descs[sym];
