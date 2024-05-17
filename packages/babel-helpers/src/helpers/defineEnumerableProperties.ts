@@ -1,7 +1,16 @@
 /* @minVersion 7.0.0-beta.0 */
 /* @onlyBabel7 */
+import toPropertyKey from "./toPropertyKey.ts";
 
-export default function _defineEnumerableProperties(obj, descs) {
+type Descs = {
+  [key: string]: {
+    configurable: boolean;
+    enumerable: boolean;
+    writable: boolean;
+  };
+};
+
+export default function _defineEnumerableProperties<T>(obj: T, descs: Descs) {
   // eslint-disable-next-line guard-for-in
   for (var key in descs) {
     var desc = descs[key];
@@ -14,13 +23,13 @@ export default function _defineEnumerableProperties(obj, descs) {
   // Symbols are available, fetch all of the descs object's own
   // symbol properties and define them on our target object too.
   if (Object.getOwnPropertySymbols) {
-    var objectSymbols = Object.getOwnPropertySymbols(descs);
-    for (var i = 0; i < objectSymbols.length; i++) {
-      var sym = objectSymbols[i];
+    var objectSymbols: Array<Symbol> = Object.getOwnPropertySymbols(descs);
+    for (const sym of objectSymbols) {
+      // @ts-expect-error Fixme: document symbol properties
       desc = descs[sym];
       desc.configurable = desc.enumerable = true;
       if ("value" in desc) desc.writable = true;
-      Object.defineProperty(obj, sym, desc);
+      Object.defineProperty(obj, toPropertyKey(sym), desc);
     }
   }
   return obj;
