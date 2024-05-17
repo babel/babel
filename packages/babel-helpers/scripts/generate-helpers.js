@@ -27,7 +27,7 @@ interface Helper {
 
 export interface HelperMetadata {
   globals: string[];
-  localBindingNames: string[];
+  locals: { [name: string]: string[] };
   dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportName: string;
@@ -170,7 +170,7 @@ if (!process.env.BABEL_8_BREAKING) {
 /**
  * @typedef {Object} HelperMetadata
  * @property {string[]} globals
- * @property {string[]} localBindingNames
+ * @property {{ [name: string]: string[] }} locals
  * @property {{ [name: string]: string[] }} dependencies
  * @property {string[]} exportBindingAssignments
  * @property {string} exportName
@@ -184,7 +184,6 @@ if (!process.env.BABEL_8_BREAKING) {
  */
 export function getHelperMetadata(code, helperName) {
   const globals = new Set();
-  const localBindingNames = new Set();
   // Maps imported identifier name -> helper name
   const dependenciesBindings = new Map();
 
@@ -192,6 +191,8 @@ export function getHelperMetadata(code, helperName) {
   const exportBindingAssignments = [];
   // helper name -> reference paths
   const dependencies = new Map();
+  // local variable name -> reference paths
+  const locals = new Map();
 
   const spansToRemove = [];
 
@@ -245,7 +246,19 @@ export function getHelperMetadata(code, helperName) {
         if (name === exportName) return;
         if (dependencies.has(name)) return;
 
-        localBindingNames.add(name);
+        const binding = bindings[name];
+
+        const references = [
+          ...binding.path.getBindingIdentifierPaths(true)[name].map(makePath),
+          ...binding.referencePaths.map(makePath),
+        ];
+        for (const violation of binding.constantViolations) {
+          violation.getBindingIdentifierPaths(true)[name].forEach(path => {
+            references.push(makePath(path));
+          });
+        }
+
+        locals.set(name, references);
       });
     },
     ReferencedIdentifier(child) {
@@ -301,7 +314,7 @@ export function getHelperMetadata(code, helperName) {
     code,
     {
       globals: Array.from(globals),
-      localBindingNames: Array.from(localBindingNames),
+      locals: Object.fromEntries(locals),
       dependencies: Object.fromEntries(dependencies),
       exportBindingAssignments,
       exportName,
@@ -324,7 +337,7 @@ export function stringifyMetadata(metadata) {
   return `\
     {
       globals: ${JSON.stringify(metadata.globals)},
-      localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
+      locals: ${JSON.stringify(metadata.locals)},
       exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
       exportName: ${JSON.stringify(metadata.exportName)},
       dependencies: ${JSON.stringify(metadata.dependencies)},

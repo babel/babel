@@ -46,12 +46,8 @@ function permuteHelperAST(
   localBindings?: string[],
   getDependency?: GetDependency,
 ) {
-  const {
-    localBindingNames,
-    dependencies,
-    exportBindingAssignments,
-    exportName,
-  } = metadata;
+  const { locals, dependencies, exportBindingAssignments, exportName } =
+    metadata;
 
   const dependenciesRefs: Record<string, t.Expression> = {};
   for (const name of Object.keys(dependencies)) {
@@ -63,11 +59,15 @@ function permuteHelperAST(
   const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
   if (id?.type === "Identifier") bindings.add(id.name);
-  localBindingNames.forEach(name => {
+  Object.keys(locals).forEach(name => {
     let newName = name;
     while (bindings.has(newName)) newName = "_" + newName;
 
-    if (newName !== name) toRename[name] = newName;
+    if (newName !== name) {
+      for (const path of locals[name]) {
+        deep(ast, path, identifier(newName));
+      }
+    }
   });
 
   if (id?.type === "Identifier" && exportName !== id.name) {
@@ -103,7 +103,11 @@ function permuteHelperAST(
     throw new Error("Unexpected helper format.");
   }
 
-  return toRename;
+  if (id?.type === "Identifier" && exportName !== id.name) {
+    return { [exportName]: id.name };
+  }
+
+  return {};
 }
 
 interface HelperData {
