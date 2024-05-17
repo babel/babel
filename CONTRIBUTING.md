@@ -123,36 +123,36 @@ $ make test
 
 ```sh
 # ~13 sec on a MacBook Pro (Late 2021)
-$ make test-only
+$ yarn jest
 ```
 
 #### Run tests for Babel 8
 
 ```sh
-$ BABEL_8_BREAKING=true make test-only
+$ BABEL_8_BREAKING=true yarn jest
 ```
 
 #### Run tests for a specific package
 
-When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/main/packages). Using `TEST_ONLY` will only run tests for that specific package.
+When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/main/packages). For example, to run tests on `babel-cli`:
 
 ```sh
-$ TEST_ONLY=babel-cli make test-only
+$ yarn jest babel-cli
 ```
 
 <details>
   <summary>More options</summary>
-  <code>TEST_ONLY</code> will also match substrings of the package name:
+  It will also match substrings of the package name:
 
 ```sh
 # Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=babel-plugin-transform-classes make test
+$ yarn jest classes
 ```
 
-Or you can use Yarn:
+Or you can use the `TEST_ONLY` environment variable:
 
 ```sh
-$ yarn jest babel-cli
+$ TEST_ONLY=babel-cli make test-only
 ```
 
 </details>
@@ -160,10 +160,10 @@ $ yarn jest babel-cli
 
 #### Run a subset of tests
 
-Use the `TEST_GREP` variable to run a subset of tests by name:
+Use the [Jest CLI `-t` option](https://jestjs.io/docs/cli#--testnamepatternregex) to to run a subset of tests with a name that matches the regex:
 
 ```sh
-$ TEST_GREP=transformation make test
+$ yarn jest -t transformation
 ```
 
 Substitute spaces for hyphens and forward slashes when targeting specific test names:
@@ -177,40 +177,53 @@ packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/de
 You can use:
 
 ```sh
-$ TEST_GREP="arrow functions destructuring parameters" make test
+$ yarn jest -t "arrow functions destructuring parameters"
 ```
 
-Or you can directly use Yarn:
+Or you can use the `TEST_GREP` environment variable:
 
 ```sh
-$ yarn jest -t "arrow functions destructuring parameters"
+$ TEST_GREP="arrow functions destructuring parameters" make test-only
 ```
 
 #### Run test with Node debugger
 
-To enable the Node.js debugger, set the <code>TEST_DEBUG</code> environment variable:
+To enable the Node.js debugger, run node with `--inspect-brk` option and include the [Jest CLI `-i` option](https://jestjs.io/docs/cli#--runinband) or you [may not hit breakpoints with the chrome debugger](https://github.com/nodejs/node/issues/26609).
 
 ```sh
-$ TEST_DEBUG=true make test
+yarn run --inspect-brk jest -i packages/package-to-test
 ```
 
 <details>
   <summary>More options</summary>
 
-  You can also run `jest` directly, but you must remember to include `--runInBand` or `-i` or you [may not hit breakpoints with the chrome debugger](https://github.com/nodejs/node/issues/26609).
+You can also set the <code>TEST_DEBUG</code> environment variable
 
-  ```sh
-  yarn run --inspect-brk jest -i packages/package-to-test
-  ```
+```sh
+$ TEST_DEBUG=true make test-only
+```
+
 </details>
 <br>
 
-You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
+You can combine `-i` with `-t` to debug a subset of tests. For example,
+
+```sh
+yarn run --inspect-brk jest -i babel-plugin-arrow-functions -t "destructuring parameters"
+```
+
+If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
 
 To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
 
 ```sh
-$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+$ OVERWRITE=true yarn jest babel-plugin-transform-classes
+```
+
+Sometimes you may have to update Babel 8 test fixtures as well, run `OVERWRITE=true` with `BABEL_8_BREAKING=true`:
+
+```sh
+$ BABEL_8_BREAKING=true OVERWRITE=true yarn jest babel-parser
 ```
 
 #### Test coverage
