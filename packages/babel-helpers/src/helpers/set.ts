@@ -7,7 +7,7 @@ type Object = {
   __proto__?: any;
 } & { [key: string]: unknown };
 
-function set<T extends Object, P extends PropertyKey>(
+function set<T extends Object, P extends string | symbol>(
   target: T,
   property: P,
   value: P extends keyof T ? T[P] : any,
@@ -59,7 +59,7 @@ function set<T extends Object, P extends PropertyKey>(
 
 export default function _set(
   target: Object,
-  property: PropertyKey,
+  property: string | symbol,
   value: any,
   receiver?: any,
   isStrict: boolean = false,

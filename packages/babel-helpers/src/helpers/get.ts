@@ -10,7 +10,7 @@ type Object = {
   __proto__?: any;
 } & { [key: string]: unknown };
 
-export default function _get<T extends Object, P extends PropertyKey>(
+export default function _get<T extends Object, P extends string | symbol>(
   this: unknown,
   ...args: [target: T, property: P, receiver?: unknown]
 ): P extends keyof T ? T[P] : any {

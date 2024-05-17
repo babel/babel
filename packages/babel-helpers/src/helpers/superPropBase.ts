@@ -6,9 +6,9 @@ type Object = {
   __proto__?: any;
 } & { [key: string]: unknown };
 
-export default function _superPropBase<T extends PropertyKey>(
+export default function _superPropBase(
   object: Object,
-  property: T,
+  property: string | symbol,
 ) {
   // Yes, this throws if object is null to being with, that's on purpose.
   while (!Object.prototype.hasOwnProperty.call(object, property)) {

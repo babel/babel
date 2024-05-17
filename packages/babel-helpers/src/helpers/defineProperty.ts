@@ -5,7 +5,7 @@ type Object = { [key: symbol | string]: unknown };
 
 export default function _defineProperty<T extends Object>(
   obj: T,
-  key: PropertyKey,
+  key: string | symbol,
   value: any,
 ) {
   key = toPropertyKey(key);
