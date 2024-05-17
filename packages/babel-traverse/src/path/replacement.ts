@@ -4,6 +4,7 @@ import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index.ts";
 import NodePath from "./index.ts";
 import { getCachedPaths } from "../cache.ts";
+import { _verifyNodeList, _containerInsertAfter } from "./modification.ts";
 import { parse } from "@babel/parser";
 import {
   FUNCTION_TYPES,
@@ -52,7 +53,7 @@ export function replaceWithMultiple(
 ): NodePath[] {
   this.resync();
 
-  nodes = this._verifyNodeList(nodes);
+  nodes = _verifyNodeList.call(this, nodes);
   inheritLeadingComments(nodes[0], this.node);
   inheritTrailingComments(nodes[nodes.length - 1], this.node);
   getCachedPaths(this.hub, this.parent)?.delete(this.node);
@@ -192,7 +193,7 @@ export function replaceWith(
   }
 
   // replace the node
-  this._replaceWith(replacement);
+  _replaceWith.call(this, replacement);
   this.type = replacement.type;
 
   // potentially create new scope
@@ -203,10 +204,6 @@ export function replaceWith(
 
   return [nodePath ? this.get(nodePath) : this];
 }
-
-/**
- * Description
- */
 
 export function _replaceWith(this: NodePath, node: t.Node) {
   if (!this.container) {
@@ -413,8 +410,8 @@ export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
 
   if (Array.isArray(nodes)) {
     if (Array.isArray(this.container)) {
-      nodes = this._verifyNodeList(nodes);
-      const paths = this._containerInsertAfter(nodes);
+      nodes = _verifyNodeList.call(this, nodes);
+      const paths = _containerInsertAfter.call(this, nodes);
       this.remove();
       return paths;
     } else {
