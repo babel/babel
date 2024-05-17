@@ -56,12 +56,15 @@ function permuteHelperAST(
       identifier(name);
   }
 
-  const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
   if (id?.type === "Identifier") bindings.add(id.name);
   Object.keys(locals).forEach(name => {
     let newName = name;
-    while (bindings.has(newName)) newName = "_" + newName;
+    if (name === exportName && id?.type === "Identifier") {
+      newName = id.name;
+    } else {
+      while (bindings.has(newName)) newName = "_" + newName;
+    }
 
     if (newName !== name) {
       for (const path of locals[name]) {
@@ -69,10 +72,6 @@ function permuteHelperAST(
       }
     }
   });
-
-  if (id?.type === "Identifier" && exportName !== id.name) {
-    toRename[exportName] = id.name;
-  }
 
   for (const [name, paths] of Object.entries(dependencies)) {
     for (const path of paths) {
@@ -102,12 +101,6 @@ function permuteHelperAST(
   } else if (id.type !== "Identifier") {
     throw new Error("Unexpected helper format.");
   }
-
-  if (id?.type === "Identifier" && exportName !== id.name) {
-    return { [exportName]: id.name };
-  }
-
-  return {};
 }
 
 interface HelperData {
@@ -158,7 +151,7 @@ function loadHelper(name: string) {
       minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
         const ast = helper.ast();
-        const toRename = permuteHelperAST(
+        permuteHelperAST(
           ast,
           helper.metadata,
           id,
@@ -167,9 +160,6 @@ function loadHelper(name: string) {
         );
 
         const file = fn(ast);
-        Object.keys(toRename).forEach(name => {
-          file.path.scope.rename(name, toRename[name]);
-        });
 
         return {
           nodes: file.ast.program.body,

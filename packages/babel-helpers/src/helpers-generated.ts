@@ -41,7 +41,15 @@ const helpers: Record<string, Helper> = {
     'function AsyncGenerator(e){var r,t;function resume(r,t){try{var n=e[r](t),o=n.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then((function(t){if(u){var i="return"===r?"return":"next";if(!o.k||t.done)return resume(i,t);t=e[i](t).value}settle(n.done?"return":"normal",t)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":r.resolve({value:n,done:!0});break;case"throw":r.reject(n);break;default:r.resolve({value:n,done:!1})}(r=r.next)?resume(r.key,r.arg):t=null}this._invoke=function(e,n){return new Promise((function(o,u){var i={key:e,arg:n,resolve:o,reject:u,next:null};t?t=t.next=i:(r=t=i,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
     {
       globals: ["Promise", "Symbol"],
-      locals: {},
+      locals: {
+        AsyncGenerator: [
+          "body.0.id",
+          "body.1.expression.expressions.0.left.object.object",
+          "body.1.expression.expressions.1.left.object.object",
+          "body.1.expression.expressions.2.left.object.object",
+          "body.1.expression.expressions.3.left.object.object",
+        ],
+      },
       exportBindingAssignments: [],
       exportName: "AsyncGenerator",
       dependencies: {
@@ -57,7 +65,7 @@ const helpers: Record<string, Helper> = {
     "function _OverloadYield(t,e){this.v=t,this.k=e}",
     {
       globals: [],
-      locals: {},
+      locals: { _OverloadYield: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_OverloadYield",
       dependencies: {},
@@ -69,7 +77,7 @@ const helpers: Record<string, Helper> = {
     'function _applyDecoratedDescriptor(i,e,r,n,l){var a={};return Object.keys(n).forEach((function(i){a[i]=n[i]})),a.enumerable=!!a.enumerable,a.configurable=!!a.configurable,("value"in a||a.initializer)&&(a.writable=!0),a=r.slice().reverse().reduce((function(r,n){return n(i,e,r)||r}),a),l&&void 0!==a.initializer&&(a.value=a.initializer?a.initializer.call(l):void 0,a.initializer=void 0),void 0===a.initializer&&(Object.defineProperty(i,e,a),a=null),a}',
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _applyDecoratedDescriptor: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_applyDecoratedDescriptor",
       dependencies: {},
@@ -81,7 +89,7 @@ const helpers: Record<string, Helper> = {
     'function applyDecs2311(e,t,n,r,o,i){var a,c,u,s,f,l,p,d=Symbol.metadata||Symbol.for("Symbol.metadata"),m=Object.defineProperty,h=Object.create,y=[h(null),h(null)],v=t.length;function g(t,n,r){return function(o,i){n&&(i=o,o=e);for(var a=0;a<t.length;a++)i=t[a].apply(o,r?[i]:[]);return r?i:o}}function b(e,t,n,r){if("function"!=typeof e&&(r||void 0!==e))throw new TypeError(t+" must "+(n||"be")+" a function"+(r?"":" or undefined"));return e}function applyDec(e,t,n,r,o,i,u,s,f,l,p){function d(e){if(!p(e))throw new TypeError("Attempted to access private element on non-instance")}var h=[].concat(t[0]),v=t[3],w=!u,D=1===o,S=3===o,j=4===o,E=2===o;function I(t,n,r){return function(o,i){return n&&(i=o,o=e),r&&r(o),P[t].call(o,i)}}if(!w){var P={},k=[],F=S?"get":j||D?"set":"value";if(f?(l||D?P={get:setFunctionName((function(){return v(this)}),r,"get"),set:function(e){t[4](this,e)}}:P[F]=v,l||setFunctionName(P[F],r,E?"":F)):l||(P=Object.getOwnPropertyDescriptor(e,r)),!l&&!f){if((c=y[+s][r])&&7!=(c^o))throw Error("Decorating two elements with the same name ("+P[F].name+") is not supported yet");y[+s][r]=o<3?1:o}}for(var N=e,O=h.length-1;O>=0;O-=n?2:1){var T=b(h[O],"A decorator","be",!0),z=n?h[O-1]:void 0,A={},H={kind:["field","accessor","method","getter","setter","class"][o],name:r,metadata:a,addInitializer:function(e,t){if(e.v)throw new TypeError("attempted to call addInitializer after decoration was finished");b(t,"An initializer","be",!0),i.push(t)}.bind(null,A)};if(w)c=T.call(z,N,H),A.v=1,b(c,"class decorators","return")&&(N=c);else if(H.static=s,H.private=f,c=H.access={has:f?p.bind():function(e){return r in e}},j||(c.get=f?E?function(e){return d(e),P.value}:I("get",0,d):function(e){return e[r]}),E||S||(c.set=f?I("set",0,d):function(e,t){e[r]=t}),N=T.call(z,D?{get:P.get,set:P.set}:P[F],H),A.v=1,D){if("object"==typeof N&&N)(c=b(N.get,"accessor.get"))&&(P.get=c),(c=b(N.set,"accessor.set"))&&(P.set=c),(c=b(N.init,"accessor.init"))&&k.unshift(c);else if(void 0!==N)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else b(N,(l?"field":"method")+" decorators","return")&&(l?k.unshift(N):P[F]=N)}return o<2&&u.push(g(k,s,1),g(i,s,0)),l||w||(f?D?u.splice(-1,0,I("get",s),I("set",s)):u.push(E?P[F]:b.call.bind(P[F])):m(e,r,P)),N}function w(e){return m(e,d,{configurable:!0,enumerable:!0,value:a})}return void 0!==i&&(a=i[d]),a=h(null==a?null:a),f=[],l=function(e){e&&f.push(g(e))},p=function(t,r){for(var i=0;i<n.length;i++){var a=n[i],c=a[1],l=7&c;if((8&c)==t&&!l==r){var p=a[2],d=!!a[3],m=16&c;applyDec(t?e:e.prototype,a,m,d?"#"+p:toPropertyKey(p),l,l<2?[]:t?s=s||[]:u=u||[],f,!!t,d,r,t&&d?function(t){return checkInRHS(t)===e}:o)}}},p(8,0),p(0,0),p(8,1),p(0,1),l(u),l(s),c=f,v||w(e),{e:c,get c(){var n=[];return v&&[w(e=applyDec(e,[t],r,e.name,5,n)),g(n,1)]}}}',
     {
       globals: ["Symbol", "Object", "TypeError", "Error"],
-      locals: {},
+      locals: { applyDecs2311: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "applyDecs2311",
       dependencies: {
@@ -104,7 +112,7 @@ const helpers: Record<string, Helper> = {
     "function _arrayLikeToArray(r,a){(null==a||a>r.length)&&(a=r.length);for(var e=0,n=Array(a);e<a;e++)n[e]=r[e];return n}",
     {
       globals: ["Array"],
-      locals: {},
+      locals: { _arrayLikeToArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_arrayLikeToArray",
       dependencies: {},
@@ -116,7 +124,7 @@ const helpers: Record<string, Helper> = {
     "function _arrayWithHoles(r){if(Array.isArray(r))return r}",
     {
       globals: ["Array"],
-      locals: {},
+      locals: { _arrayWithHoles: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_arrayWithHoles",
       dependencies: {},
@@ -128,7 +136,7 @@ const helpers: Record<string, Helper> = {
     "function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}",
     {
       globals: ["Array"],
-      locals: {},
+      locals: { _arrayWithoutHoles: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_arrayWithoutHoles",
       dependencies: {
@@ -142,7 +150,7 @@ const helpers: Record<string, Helper> = {
     'function _assertClassBrand(e,t,n){if("function"==typeof e?e===t:e.has(t))return arguments.length<3?t:n;throw new TypeError("Private element is not present on this object")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _assertClassBrand: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_assertClassBrand",
       dependencies: {},
@@ -154,7 +162,7 @@ const helpers: Record<string, Helper> = {
     "function _assertThisInitialized(e){if(void 0===e)throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");return e}",
     {
       globals: ["ReferenceError"],
-      locals: {},
+      locals: { _assertThisInitialized: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_assertThisInitialized",
       dependencies: {},
@@ -166,7 +174,7 @@ const helpers: Record<string, Helper> = {
     'function _asyncGeneratorDelegate(t){var e={},n=!1;function pump(e,r){return n=!0,r=new Promise((function(n){n(t[e](r))})),{done:!1,value:new OverloadYield(r,1)}}return e["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},e.next=function(t){return n?(n=!1,t):pump("next",t)},"function"==typeof t.throw&&(e.throw=function(t){if(n)throw n=!1,t;return pump("throw",t)}),"function"==typeof t.return&&(e.return=function(t){return n?(n=!1,t):pump("return",t)}),e}',
     {
       globals: ["Promise", "Symbol"],
-      locals: {},
+      locals: { _asyncGeneratorDelegate: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_asyncGeneratorDelegate",
       dependencies: {
@@ -183,6 +191,7 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Symbol", "TypeError", "Object", "Promise"],
       locals: {
+        _asyncIterator: ["body.0.id"],
         AsyncFromSyncIterator: [
           "body.1.id",
           "body.0.body.body.1.body.body.1.consequent.argument.callee",
@@ -208,6 +217,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.argument.body.body.1.argument.arguments.0.body.body.1.body.body.0.expression.callee",
           "body.1.body.body.0.argument.body.body.1.argument.arguments.0.body.body.2.body.body.0.expression.callee",
         ],
+        _asyncToGenerator: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_asyncToGenerator",
@@ -220,7 +230,7 @@ const helpers: Record<string, Helper> = {
     "function _awaitAsyncGenerator(e){return new OverloadYield(e,0)}",
     {
       globals: [],
-      locals: {},
+      locals: { _awaitAsyncGenerator: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_awaitAsyncGenerator",
       dependencies: { OverloadYield: ["body.0.body.body.0.argument.callee"] },
@@ -232,7 +242,7 @@ const helpers: Record<string, Helper> = {
     "function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}",
     {
       globals: ["Reflect"],
-      locals: {},
+      locals: { _callSuper: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_callSuper",
       dependencies: {
@@ -255,7 +265,7 @@ const helpers: Record<string, Helper> = {
     'function _checkInRHS(e){if(Object(e)!==e)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==e?typeof e:"null"));return e}',
     {
       globals: ["Object", "TypeError"],
-      locals: {},
+      locals: { _checkInRHS: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_checkInRHS",
       dependencies: {},
@@ -267,7 +277,7 @@ const helpers: Record<string, Helper> = {
     'function _checkPrivateRedeclaration(e,t){if(t.has(e))throw new TypeError("Cannot initialize the same private elements twice on an object")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _checkPrivateRedeclaration: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_checkPrivateRedeclaration",
       dependencies: {},
@@ -279,7 +289,7 @@ const helpers: Record<string, Helper> = {
     'function _classCallCheck(a,n){if(!(a instanceof n))throw new TypeError("Cannot call a class as a function")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _classCallCheck: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classCallCheck",
       dependencies: {},
@@ -291,7 +301,7 @@ const helpers: Record<string, Helper> = {
     "function _classNameTDZError(e){throw new ReferenceError('Class \"'+e+'\" cannot be referenced in computed property keys.')}",
     {
       globals: ["ReferenceError"],
-      locals: {},
+      locals: { _classNameTDZError: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classNameTDZError",
       dependencies: {},
@@ -303,7 +313,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateFieldGet2(s,a){return s.get(assertClassBrand(s,a))}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateFieldGet2: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldGet2",
       dependencies: {
@@ -317,7 +327,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateFieldInitSpec(e,t,a){checkPrivateRedeclaration(e,t),t.set(e,a)}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateFieldInitSpec: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldInitSpec",
       dependencies: {
@@ -333,7 +343,7 @@ const helpers: Record<string, Helper> = {
     'function _classPrivateFieldBase(e,t){if(!{}.hasOwnProperty.call(e,t))throw new TypeError("attempted to use private field on non-instance");return e}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _classPrivateFieldBase: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldBase",
       dependencies: {},
@@ -351,6 +361,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.argument.left.left.right.argument",
           "body.1.body.body.0.argument.left.left.right.argument",
         ],
+        _classPrivateFieldKey: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldKey",
@@ -363,7 +374,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateFieldSet2: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldSet2",
       dependencies: {
@@ -379,7 +390,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateGetter: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateGetter",
       dependencies: {
@@ -393,7 +404,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateMethodInitSpec(e,a){checkPrivateRedeclaration(e,a),a.add(e)}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateMethodInitSpec: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateMethodInitSpec",
       dependencies: {
@@ -409,7 +420,7 @@ const helpers: Record<string, Helper> = {
     "function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}",
     {
       globals: [],
-      locals: {},
+      locals: { _classPrivateSetter: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classPrivateSetter",
       dependencies: {
@@ -425,7 +436,7 @@ const helpers: Record<string, Helper> = {
     "function _classStaticPrivateMethodGet(s,a,t){return assertClassBrand(a,s),t}",
     {
       globals: [],
-      locals: {},
+      locals: { _classStaticPrivateMethodGet: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_classStaticPrivateMethodGet",
       dependencies: {
@@ -439,7 +450,7 @@ const helpers: Record<string, Helper> = {
     "function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}",
     {
       globals: ["Reflect"],
-      locals: {},
+      locals: { _construct: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_construct",
       dependencies: {
@@ -462,6 +473,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.argument.expressions.0.right.callee",
           "body.1.body.body.0.argument.expressions.1.right.callee",
         ],
+        _createClass: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_createClass",
@@ -478,7 +490,7 @@ const helpers: Record<string, Helper> = {
     'function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,u=!1;return{s:function(){t=t.call(r)},n:function(){var r=t.next();return a=r.done,r},e:function(r){u=!0,o=r},f:function(){try{a||null==t.return||t.return()}finally{if(u)throw o}}}}',
     {
       globals: ["Symbol", "Array", "TypeError"],
-      locals: {},
+      locals: { _createForOfIteratorHelper: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_createForOfIteratorHelper",
       dependencies: {
@@ -494,7 +506,7 @@ const helpers: Record<string, Helper> = {
     'function _createForOfIteratorHelperLoose(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(t)return(t=t.call(r)).next.bind(t);if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var o=0;return function(){return o>=r.length?{done:!0}:{done:!1,value:r[o++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
     {
       globals: ["Symbol", "Array", "TypeError"],
-      locals: {},
+      locals: { _createForOfIteratorHelperLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_createForOfIteratorHelperLoose",
       dependencies: {
@@ -510,7 +522,7 @@ const helpers: Record<string, Helper> = {
     "function _createSuper(t){var r=isNativeReflectConstruct();return function(){var e,o=getPrototypeOf(t);if(r){var s=getPrototypeOf(this).constructor;e=Reflect.construct(o,arguments,s)}else e=o.apply(this,arguments);return possibleConstructorReturn(this,e)}}",
     {
       globals: ["Reflect"],
-      locals: {},
+      locals: { _createSuper: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_createSuper",
       dependencies: {
@@ -534,6 +546,7 @@ const helpers: Record<string, Helper> = {
     {
       globals: ["Object", "TypeError", "Symbol", "ReferenceError"],
       locals: {
+        _decorate: ["body.0.id"],
         _getDecoratorsApi: [
           "body.1.id",
           "body.0.body.body.0.declarations.0.init.callee",
@@ -589,7 +602,7 @@ const helpers: Record<string, Helper> = {
     "function _defaults(e,r){for(var t=Object.getOwnPropertyNames(r),o=0;o<t.length;o++){var n=t[o],a=Object.getOwnPropertyDescriptor(r,n);a&&a.configurable&&void 0===e[n]&&Object.defineProperty(e,n,a)}return e}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _defaults: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_defaults",
       dependencies: {},
@@ -601,7 +614,7 @@ const helpers: Record<string, Helper> = {
     "function _defineAccessor(e,r,n,t){var c={configurable:!0,enumerable:!0};return c[e]=t,Object.defineProperty(r,n,c)}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _defineAccessor: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_defineAccessor",
       dependencies: {},
@@ -613,7 +626,7 @@ const helpers: Record<string, Helper> = {
     "function _defineProperty(e,r,t){return(r=toPropertyKey(r))in e?Object.defineProperty(e,r,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[r]=t,e}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _defineProperty: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_defineProperty",
       dependencies: {
@@ -629,7 +642,13 @@ const helpers: Record<string, Helper> = {
     "function _extends(){return _extends=Object.assign?Object.assign.bind():function(n){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var r in t)({}).hasOwnProperty.call(t,r)&&(n[r]=t[r])}return n},_extends.apply(null,arguments)}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: {
+        _extends: [
+          "body.0.id",
+          "body.0.body.body.0.argument.expressions.1.callee.object",
+          "body.0.body.body.0.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_extends",
       dependencies: {},
@@ -641,7 +660,13 @@ const helpers: Record<string, Helper> = {
     'function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(null,arguments)}',
     {
       globals: ["Reflect", "Object"],
-      locals: {},
+      locals: {
+        _get: [
+          "body.0.id",
+          "body.0.body.body.0.argument.expressions.1.callee.object",
+          "body.0.body.body.0.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_get",
       dependencies: {
@@ -657,7 +682,13 @@ const helpers: Record<string, Helper> = {
     "function _getPrototypeOf(t){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(t){return t.__proto__||Object.getPrototypeOf(t)},_getPrototypeOf(t)}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: {
+        _getPrototypeOf: [
+          "body.0.id",
+          "body.0.body.body.0.argument.expressions.1.callee",
+          "body.0.body.body.0.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_getPrototypeOf",
       dependencies: {},
@@ -666,7 +697,7 @@ const helpers: Record<string, Helper> = {
   // size: 31, gzip size: 51
   identity: helper("7.17.0", "function _identity(t){return t}", {
     globals: [],
-    locals: {},
+    locals: { _identity: ["body.0.id"] },
     exportBindingAssignments: [],
     exportName: "_identity",
     dependencies: {},
@@ -677,7 +708,7 @@ const helpers: Record<string, Helper> = {
     "function _importDeferProxy(e){var t=null,constValue=function(e){return function(){return e}},proxy=function(r){return function(n,o,f){return null===t&&(t=e()),r(t,o,f)}};return new Proxy({},{defineProperty:constValue(!1),deleteProperty:constValue(!1),get:proxy(Reflect.get),getOwnPropertyDescriptor:proxy(Reflect.getOwnPropertyDescriptor),getPrototypeOf:constValue(null),isExtensible:constValue(!1),has:proxy(Reflect.has),ownKeys:proxy(Reflect.ownKeys),preventExtensions:constValue(!0),set:constValue(!1),setPrototypeOf:constValue(!1)})}",
     {
       globals: ["Proxy", "Reflect"],
-      locals: {},
+      locals: { _importDeferProxy: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_importDeferProxy",
       dependencies: {},
@@ -689,7 +720,7 @@ const helpers: Record<string, Helper> = {
     'function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&setPrototypeOf(t,e)}',
     {
       globals: ["TypeError", "Object"],
-      locals: {},
+      locals: { _inherits: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_inherits",
       dependencies: {
@@ -705,7 +736,7 @@ const helpers: Record<string, Helper> = {
     "function _inheritsLoose(t,o){t.prototype=Object.create(o.prototype),t.prototype.constructor=t,setPrototypeOf(t,o)}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _inheritsLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_inheritsLoose",
       dependencies: {
@@ -719,7 +750,7 @@ const helpers: Record<string, Helper> = {
     "function _initializerDefineProperty(e,i,r,l){r&&Object.defineProperty(e,i,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(l):void 0})}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _initializerDefineProperty: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_initializerDefineProperty",
       dependencies: {},
@@ -731,7 +762,7 @@ const helpers: Record<string, Helper> = {
     'function _initializerWarningHelper(r,e){throw Error("Decorating class property failed. Please ensure that transform-class-properties is enabled and runs after the decorators transform.")}',
     {
       globals: ["Error"],
-      locals: {},
+      locals: { _initializerWarningHelper: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_initializerWarningHelper",
       dependencies: {},
@@ -743,7 +774,7 @@ const helpers: Record<string, Helper> = {
     'function _instanceof(n,e){return null!=e&&"undefined"!=typeof Symbol&&e[Symbol.hasInstance]?!!e[Symbol.hasInstance](n):n instanceof e}',
     {
       globals: ["Symbol"],
-      locals: {},
+      locals: { _instanceof: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_instanceof",
       dependencies: {},
@@ -755,7 +786,7 @@ const helpers: Record<string, Helper> = {
     "function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}",
     {
       globals: [],
-      locals: {},
+      locals: { _interopRequireDefault: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_interopRequireDefault",
       dependencies: {},
@@ -773,6 +804,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.2.declarations.0.init.callee",
           "body.0.body.body.2.argument.callee.left",
         ],
+        _interopRequireWildcard: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_interopRequireWildcard",
@@ -785,7 +817,7 @@ const helpers: Record<string, Helper> = {
     'function _isNativeFunction(t){try{return-1!==Function.toString.call(t).indexOf("[native code]")}catch(n){return"function"==typeof t}}',
     {
       globals: ["Function"],
-      locals: {},
+      locals: { _isNativeFunction: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_isNativeFunction",
       dependencies: {},
@@ -797,7 +829,12 @@ const helpers: Record<string, Helper> = {
     "function _isNativeReflectConstruct(){try{var t=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}catch(t){}return(_isNativeReflectConstruct=function(){return!!t})()}",
     {
       globals: ["Boolean", "Reflect"],
-      locals: {},
+      locals: {
+        _isNativeReflectConstruct: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
       exportName: "_isNativeReflectConstruct",
       dependencies: {},
@@ -809,7 +846,7 @@ const helpers: Record<string, Helper> = {
     'function _iterableToArray(r){if("undefined"!=typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}',
     {
       globals: ["Symbol", "Array"],
-      locals: {},
+      locals: { _iterableToArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_iterableToArray",
       dependencies: {},
@@ -821,7 +858,7 @@ const helpers: Record<string, Helper> = {
     'function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a=[],f=!0,o=!1;try{if(i=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;f=!1}else for(;!(f=(e=i.call(t)).done)&&(a.push(e.value),a.length!==l);f=!0);}catch(r){o=!0,n=r}finally{try{if(!f&&null!=t.return&&(u=t.return(),Object(u)!==u))return}finally{if(o)throw n}}return a}}',
     {
       globals: ["Symbol", "Object"],
-      locals: {},
+      locals: { _iterableToArrayLimit: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_iterableToArrayLimit",
       dependencies: {},
@@ -833,7 +870,7 @@ const helpers: Record<string, Helper> = {
     'function _iterableToArrayLimitLoose(e,r){var t=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null!=t){var o,l=[];for(t=t.call(e);e.length<r&&!(o=t.next()).done;)l.push(o.value);return l}}',
     {
       globals: ["Symbol"],
-      locals: {},
+      locals: { _iterableToArrayLimitLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_iterableToArrayLimitLoose",
       dependencies: {},
@@ -852,6 +889,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.4.argument.properties.0.value",
           "body.1.body.body.0.expression.right.left",
         ],
+        _createRawReactElement: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_createRawReactElement",
@@ -864,7 +902,7 @@ const helpers: Record<string, Helper> = {
     'function _maybeArrayLike(r,a,e){if(a&&!Array.isArray(a)&&"number"==typeof a.length){var y=a.length;return arrayLikeToArray(a,void 0!==e&&e<y?e:y)}return r(a,e)}',
     {
       globals: ["Array"],
-      locals: {},
+      locals: { _maybeArrayLike: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_maybeArrayLike",
       dependencies: {
@@ -880,7 +918,7 @@ const helpers: Record<string, Helper> = {
     'function _newArrowCheck(n,r){if(n!==r)throw new TypeError("Cannot instantiate an arrow function")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _newArrowCheck: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_newArrowCheck",
       dependencies: {},
@@ -892,7 +930,7 @@ const helpers: Record<string, Helper> = {
     'function _nonIterableRest(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _nonIterableRest: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_nonIterableRest",
       dependencies: {},
@@ -904,7 +942,7 @@ const helpers: Record<string, Helper> = {
     'function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _nonIterableSpread: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_nonIterableSpread",
       dependencies: {},
@@ -916,7 +954,7 @@ const helpers: Record<string, Helper> = {
     'function _nullishReceiverError(r){throw new TypeError("Cannot set property of null or undefined.")}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _nullishReceiverError: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_nullishReceiverError",
       dependencies: {},
@@ -928,7 +966,7 @@ const helpers: Record<string, Helper> = {
     'function _objectDestructuringEmpty(t){if(null==t)throw new TypeError("Cannot destructure "+t)}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _objectDestructuringEmpty: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectDestructuringEmpty",
       dependencies: {},
@@ -946,6 +984,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.body.body.1.expression.consequent.callee.object.callee",
           "body.1.body.body.0.body.body.1.expression.alternate.alternate.callee.object.callee",
         ],
+        _objectSpread2: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_objectSpread2",
@@ -962,7 +1001,7 @@ const helpers: Record<string, Helper> = {
     "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],t.indexOf(o)>=0||{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _objectWithoutProperties: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectWithoutProperties",
       dependencies: {
@@ -978,7 +1017,7 @@ const helpers: Record<string, Helper> = {
     "function _objectWithoutPropertiesLoose(r,e){if(null==r)return{};var t={};for(var n in r)if({}.hasOwnProperty.call(r,n)){if(e.indexOf(n)>=0)continue;t[n]=r[n]}return t}",
     {
       globals: [],
-      locals: {},
+      locals: { _objectWithoutPropertiesLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectWithoutPropertiesLoose",
       dependencies: {},
@@ -990,7 +1029,7 @@ const helpers: Record<string, Helper> = {
     'function _possibleConstructorReturn(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return assertThisInitialized(t)}',
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _possibleConstructorReturn: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_possibleConstructorReturn",
       dependencies: {
@@ -1004,7 +1043,7 @@ const helpers: Record<string, Helper> = {
     "function _readOnlyError(r){throw new TypeError('\"'+r+'\" is read-only')}",
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _readOnlyError: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_readOnlyError",
       dependencies: {},
@@ -1016,7 +1055,12 @@ const helpers: Record<string, Helper> = {
     'function _regeneratorRuntime(){"use strict";\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */_regeneratorRuntime=function(){return e};var t,e={},r=Object.prototype,n=r.hasOwnProperty,o=Object.defineProperty||function(t,e,r){t[e]=r.value},i="function"==typeof Symbol?Symbol:{},a=i.iterator||"@@iterator",c=i.asyncIterator||"@@asyncIterator",u=i.toStringTag||"@@toStringTag";function define(t,e,r){return Object.defineProperty(t,e,{value:r,enumerable:!0,configurable:!0,writable:!0}),t[e]}try{define({},"")}catch(t){define=function(t,e,r){return t[e]=r}}function wrap(t,e,r,n){var i=e&&e.prototype instanceof Generator?e:Generator,a=Object.create(i.prototype),c=new Context(n||[]);return o(a,"_invoke",{value:makeInvokeMethod(t,r,c)}),a}function tryCatch(t,e,r){try{return{type:"normal",arg:t.call(e,r)}}catch(t){return{type:"throw",arg:t}}}e.wrap=wrap;var h="suspendedStart",l="suspendedYield",f="executing",s="completed",y={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var p={};define(p,a,(function(){return this}));var d=Object.getPrototypeOf,v=d&&d(d(values([])));v&&v!==r&&n.call(v,a)&&(p=v);var g=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(p);function defineIteratorMethods(t){["next","throw","return"].forEach((function(e){define(t,e,(function(t){return this._invoke(e,t)}))}))}function AsyncIterator(t,e){function invoke(r,o,i,a){var c=tryCatch(t[r],t,o);if("throw"!==c.type){var u=c.arg,h=u.value;return h&&"object"==typeof h&&n.call(h,"__await")?e.resolve(h.__await).then((function(t){invoke("next",t,i,a)}),(function(t){invoke("throw",t,i,a)})):e.resolve(h).then((function(t){u.value=t,i(u)}),(function(t){return invoke("throw",t,i,a)}))}a(c.arg)}var r;o(this,"_invoke",{value:function(t,n){function callInvokeWithMethodAndArg(){return new e((function(e,r){invoke(t,n,e,r)}))}return r=r?r.then(callInvokeWithMethodAndArg,callInvokeWithMethodAndArg):callInvokeWithMethodAndArg()}})}function makeInvokeMethod(e,r,n){var o=h;return function(i,a){if(o===f)throw Error("Generator is already running");if(o===s){if("throw"===i)throw a;return{value:t,done:!0}}for(n.method=i,n.arg=a;;){var c=n.delegate;if(c){var u=maybeInvokeDelegate(c,n);if(u){if(u===y)continue;return u}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(o===h)throw o=s,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);o=f;var p=tryCatch(e,r,n);if("normal"===p.type){if(o=n.done?s:l,p.arg===y)continue;return{value:p.arg,done:n.done}}"throw"===p.type&&(o=s,n.method="throw",n.arg=p.arg)}}}function maybeInvokeDelegate(e,r){var n=r.method,o=e.iterator[n];if(o===t)return r.delegate=null,"throw"===n&&e.iterator.return&&(r.method="return",r.arg=t,maybeInvokeDelegate(e,r),"throw"===r.method)||"return"!==n&&(r.method="throw",r.arg=new TypeError("The iterator does not provide a \'"+n+"\' method")),y;var i=tryCatch(o,e.iterator,r.arg);if("throw"===i.type)return r.method="throw",r.arg=i.arg,r.delegate=null,y;var a=i.arg;return a?a.done?(r[e.resultName]=a.value,r.next=e.nextLoc,"return"!==r.method&&(r.method="next",r.arg=t),r.delegate=null,y):a:(r.method="throw",r.arg=new TypeError("iterator result is not an object"),r.delegate=null,y)}function pushTryEntry(t){var e={tryLoc:t[0]};1 in t&&(e.catchLoc=t[1]),2 in t&&(e.finallyLoc=t[2],e.afterLoc=t[3]),this.tryEntries.push(e)}function resetTryEntry(t){var e=t.completion||{};e.type="normal",delete e.arg,t.completion=e}function Context(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(pushTryEntry,this),this.reset(!0)}function values(e){if(e||""===e){var r=e[a];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var o=-1,i=function next(){for(;++o<e.length;)if(n.call(e,o))return next.value=e[o],next.done=!1,next;return next.value=t,next.done=!0,next};return i.next=i}}throw new TypeError(typeof e+" is not iterable")}return GeneratorFunction.prototype=GeneratorFunctionPrototype,o(g,"constructor",{value:GeneratorFunctionPrototype,configurable:!0}),o(GeneratorFunctionPrototype,"constructor",{value:GeneratorFunction,configurable:!0}),GeneratorFunction.displayName=define(GeneratorFunctionPrototype,u,"GeneratorFunction"),e.isGeneratorFunction=function(t){var e="function"==typeof t&&t.constructor;return!!e&&(e===GeneratorFunction||"GeneratorFunction"===(e.displayName||e.name))},e.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,GeneratorFunctionPrototype):(t.__proto__=GeneratorFunctionPrototype,define(t,u,"GeneratorFunction")),t.prototype=Object.create(g),t},e.awrap=function(t){return{__await:t}},defineIteratorMethods(AsyncIterator.prototype),define(AsyncIterator.prototype,c,(function(){return this})),e.AsyncIterator=AsyncIterator,e.async=function(t,r,n,o,i){void 0===i&&(i=Promise);var a=new AsyncIterator(wrap(t,r,n,o),i);return e.isGeneratorFunction(r)?a:a.next().then((function(t){return t.done?t.value:a.next()}))},defineIteratorMethods(g),define(g,u,"Generator"),define(g,a,(function(){return this})),define(g,"toString",(function(){return"[object Generator]"})),e.keys=function(t){var e=Object(t),r=[];for(var n in e)r.push(n);return r.reverse(),function next(){for(;r.length;){var t=r.pop();if(t in e)return next.value=t,next.done=!1,next}return next.done=!0,next}},e.values=values,Context.prototype={constructor:Context,reset:function(e){if(this.prev=0,this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(resetTryEntry),!e)for(var r in this)"t"===r.charAt(0)&&n.call(this,r)&&!isNaN(+r.slice(1))&&(this[r]=t)},stop:function(){this.done=!0;var t=this.tryEntries[0].completion;if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var r=this;function handle(n,o){return a.type="throw",a.arg=e,r.next=n,o&&(r.method="next",r.arg=t),!!o}for(var o=this.tryEntries.length-1;o>=0;--o){var i=this.tryEntries[o],a=i.completion;if("root"===i.tryLoc)return handle("end");if(i.tryLoc<=this.prev){var c=n.call(i,"catchLoc"),u=n.call(i,"finallyLoc");if(c&&u){if(this.prev<i.catchLoc)return handle(i.catchLoc,!0);if(this.prev<i.finallyLoc)return handle(i.finallyLoc)}else if(c){if(this.prev<i.catchLoc)return handle(i.catchLoc,!0)}else{if(!u)throw Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return handle(i.finallyLoc)}}}},abrupt:function(t,e){for(var r=this.tryEntries.length-1;r>=0;--r){var o=this.tryEntries[r];if(o.tryLoc<=this.prev&&n.call(o,"finallyLoc")&&this.prev<o.finallyLoc){var i=o;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=e&&e<=i.finallyLoc&&(i=null);var a=i?i.completion:{};return a.type=t,a.arg=e,i?(this.method="next",this.next=i.finallyLoc,y):this.complete(a)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),y},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),resetTryEntry(r),y}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.tryLoc===t){var n=r.completion;if("throw"===n.type){var o=n.arg;resetTryEntry(r)}return o}}throw Error("illegal catch attempt")},delegateYield:function(e,r,n){return this.delegate={iterator:values(e),resultName:r,nextLoc:n},"next"===this.method&&(this.arg=t),y}},e}',
     {
       globals: ["Object", "Symbol", "Error", "TypeError", "isNaN", "Promise"],
-      locals: {},
+      locals: {
+        _regeneratorRuntime: [
+          "body.0.id",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.expression"],
       exportName: "_regeneratorRuntime",
       dependencies: {},
@@ -1035,6 +1079,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.test.left.argument.callee",
           "body.0.body.body.0.argument.expressions.0.left",
         ],
+        _set: ["body.1.id"],
       },
       exportBindingAssignments: [],
       exportName: "_set",
@@ -1054,7 +1099,7 @@ const helpers: Record<string, Helper> = {
     'function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
     {
       globals: ["Object"],
-      locals: {},
+      locals: { setFunctionName: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "setFunctionName",
       dependencies: {},
@@ -1066,7 +1111,13 @@ const helpers: Record<string, Helper> = {
     "function _setPrototypeOf(t,e){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t},_setPrototypeOf(t,e)}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: {
+        _setPrototypeOf: [
+          "body.0.id",
+          "body.0.body.body.0.argument.expressions.1.callee",
+          "body.0.body.body.0.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_setPrototypeOf",
       dependencies: {},
@@ -1078,7 +1129,7 @@ const helpers: Record<string, Helper> = {
     "function _skipFirstGeneratorNext(t){return function(){var r=t.apply(this,arguments);return r.next(),r}}",
     {
       globals: [],
-      locals: {},
+      locals: { _skipFirstGeneratorNext: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_skipFirstGeneratorNext",
       dependencies: {},
@@ -1090,7 +1141,7 @@ const helpers: Record<string, Helper> = {
     "function _slicedToArray(r,e){return arrayWithHoles(r)||iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
     {
       globals: [],
-      locals: {},
+      locals: { _slicedToArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_slicedToArray",
       dependencies: {
@@ -1111,7 +1162,7 @@ const helpers: Record<string, Helper> = {
     "function _slicedToArrayLoose(r,e){return arrayWithHoles(r)||iterableToArrayLimitLoose(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
     {
       globals: [],
-      locals: {},
+      locals: { _slicedToArrayLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_slicedToArrayLoose",
       dependencies: {
@@ -1132,7 +1183,7 @@ const helpers: Record<string, Helper> = {
     "function _superPropBase(t,o){for(;!{}.hasOwnProperty.call(t,o)&&null!==(t=getPrototypeOf(t)););return t}",
     {
       globals: [],
-      locals: {},
+      locals: { _superPropBase: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_superPropBase",
       dependencies: {
@@ -1146,7 +1197,7 @@ const helpers: Record<string, Helper> = {
     "function _taggedTemplateLiteral(e,t){return t||(t=e.slice(0)),Object.freeze(Object.defineProperties(e,{raw:{value:Object.freeze(t)}}))}",
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _taggedTemplateLiteral: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteral",
       dependencies: {},
@@ -1158,7 +1209,7 @@ const helpers: Record<string, Helper> = {
     "function _taggedTemplateLiteralLoose(e,t){return t||(t=e.slice(0)),e.raw=t,e}",
     {
       globals: [],
-      locals: {},
+      locals: { _taggedTemplateLiteralLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteralLoose",
       dependencies: {},
@@ -1170,7 +1221,7 @@ const helpers: Record<string, Helper> = {
     'function _tdzError(e){throw new ReferenceError(e+" is not defined - temporal dead zone")}',
     {
       globals: ["ReferenceError"],
-      locals: {},
+      locals: { _tdzError: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_tdzError",
       dependencies: {},
@@ -1182,7 +1233,7 @@ const helpers: Record<string, Helper> = {
     "function _temporalRef(r,e){return r===undef?err(e):r}",
     {
       globals: [],
-      locals: {},
+      locals: { _temporalRef: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_temporalRef",
       dependencies: {
@@ -1194,7 +1245,7 @@ const helpers: Record<string, Helper> = {
   // size: 31, gzip size: 51
   temporalUndefined: helper("7.0.0-beta.0", "function _temporalUndefined(){}", {
     globals: [],
-    locals: {},
+    locals: { _temporalUndefined: ["body.0.id"] },
     exportBindingAssignments: [],
     exportName: "_temporalUndefined",
     dependencies: {},
@@ -1205,7 +1256,7 @@ const helpers: Record<string, Helper> = {
     "function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}",
     {
       globals: [],
-      locals: {},
+      locals: { _toArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toArray",
       dependencies: {
@@ -1224,7 +1275,7 @@ const helpers: Record<string, Helper> = {
     "function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}",
     {
       globals: [],
-      locals: {},
+      locals: { _toConsumableArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toConsumableArray",
       dependencies: {
@@ -1245,7 +1296,7 @@ const helpers: Record<string, Helper> = {
     'function toPrimitive(t,r){if("object"!=typeof t||!t)return t;var e=t[Symbol.toPrimitive];if(void 0!==e){var i=e.call(t,r||"default");if("object"!=typeof i)return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===r?String:Number)(t)}',
     {
       globals: ["Symbol", "TypeError", "String", "Number"],
-      locals: {},
+      locals: { toPrimitive: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "toPrimitive",
       dependencies: {},
@@ -1257,7 +1308,7 @@ const helpers: Record<string, Helper> = {
     'function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:i+""}',
     {
       globals: [],
-      locals: {},
+      locals: { toPropertyKey: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "toPropertyKey",
       dependencies: {
@@ -1271,7 +1322,7 @@ const helpers: Record<string, Helper> = {
     'function _toSetter(t,e,n){e||(e=[]);var r=e.length++;return Object.defineProperty({},"_",{set:function(o){e[r]=o,t.apply(n,e)}})}',
     {
       globals: ["Object"],
-      locals: {},
+      locals: { _toSetter: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toSetter",
       dependencies: {},
@@ -1283,7 +1334,13 @@ const helpers: Record<string, Helper> = {
     'function _typeof(o){"@babel/helpers - typeof";return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(o){return typeof o}:function(o){return o&&"function"==typeof Symbol&&o.constructor===Symbol&&o!==Symbol.prototype?"symbol":typeof o},_typeof(o)}',
     {
       globals: ["Symbol"],
-      locals: {},
+      locals: {
+        _typeof: [
+          "body.0.id",
+          "body.0.body.body.0.argument.expressions.1.callee",
+          "body.0.body.body.0.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_typeof",
       dependencies: {},
@@ -1295,7 +1352,7 @@ const helpers: Record<string, Helper> = {
     'function _unsupportedIterableToArray(r,a){if(r){if("string"==typeof r)return arrayLikeToArray(r,a);var t={}.toString.call(r).slice(8,-1);return"Object"===t&&r.constructor&&(t=r.constructor.name),"Map"===t||"Set"===t?Array.from(r):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?arrayLikeToArray(r,a):void 0}}',
     {
       globals: ["Array"],
-      locals: {},
+      locals: { _unsupportedIterableToArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_unsupportedIterableToArray",
       dependencies: {
@@ -1319,7 +1376,7 @@ const helpers: Record<string, Helper> = {
         "Symbol",
         "Promise",
       ],
-      locals: {},
+      locals: { _usingCtx: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_usingCtx",
       dependencies: {},
@@ -1331,7 +1388,7 @@ const helpers: Record<string, Helper> = {
     "function _wrapAsyncGenerator(r){return function(){return new AsyncGenerator(r.apply(this,arguments))}}",
     {
       globals: [],
-      locals: {},
+      locals: { _wrapAsyncGenerator: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_wrapAsyncGenerator",
       dependencies: {
@@ -1347,7 +1404,13 @@ const helpers: Record<string, Helper> = {
     'function _wrapNativeSuper(t){var r="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(t){if(null===t||!isNativeFunction(t))return t;if("function"!=typeof t)throw new TypeError("Super expression must either be null or a function");if(void 0!==r){if(r.has(t))return r.get(t);r.set(t,Wrapper)}function Wrapper(){return construct(t,arguments,getPrototypeOf(this).constructor)}return Wrapper.prototype=Object.create(t.prototype,{constructor:{value:Wrapper,enumerable:!1,writable:!0,configurable:!0}}),setPrototypeOf(Wrapper,t)},_wrapNativeSuper(t)}',
     {
       globals: ["Map", "TypeError", "Object"],
-      locals: {},
+      locals: {
+        _wrapNativeSuper: [
+          "body.0.id",
+          "body.0.body.body.1.argument.expressions.1.callee",
+          "body.0.body.body.1.argument.expressions.0.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.1.argument.expressions.0"],
       exportName: "_wrapNativeSuper",
       dependencies: {
@@ -1372,7 +1435,13 @@ const helpers: Record<string, Helper> = {
     'function _wrapRegExp(){_wrapRegExp=function(e,r){return new BabelRegExp(e,void 0,r)};var e=RegExp.prototype,r=new WeakMap;function BabelRegExp(e,t,p){var o=RegExp(e,t);return r.set(o,p||r.get(e)),setPrototypeOf(o,BabelRegExp.prototype)}function buildGroups(e,t){var p=r.get(t);return Object.keys(p).reduce((function(r,t){var o=p[t];if("number"==typeof o)r[t]=e[o];else{for(var i=0;void 0===e[o[i]]&&i+1<o.length;)i++;r[t]=e[o[i]]}return r}),Object.create(null))}return inherits(BabelRegExp,RegExp),BabelRegExp.prototype.exec=function(r){var t=e.exec.call(this,r);if(t){t.groups=buildGroups(t,this);var p=t.indices;p&&(p.groups=buildGroups(p,this))}return t},BabelRegExp.prototype[Symbol.replace]=function(t,p){if("string"==typeof p){var o=r.get(this);return e[Symbol.replace].call(this,t,p.replace(/\\$<([^>]+)>/g,(function(e,r){var t=o[r];return"$"+(Array.isArray(t)?t.join("$"):t)})))}if("function"==typeof p){var i=this;return e[Symbol.replace].call(this,t,(function(){var e=arguments;return"object"!=typeof e[e.length-1]&&(e=[].slice.call(e)).push(buildGroups(e,i)),p.apply(this,e)}))}return e[Symbol.replace].call(this,t,p)},_wrapRegExp.apply(this,arguments)}',
     {
       globals: ["RegExp", "WeakMap", "Object", "Symbol", "Array"],
-      locals: {},
+      locals: {
+        _wrapRegExp: [
+          "body.0.id",
+          "body.0.body.body.4.argument.expressions.3.callee.object",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
       exportBindingAssignments: ["body.0.body.body.0.expression"],
       exportName: "_wrapRegExp",
       dependencies: {
@@ -1389,7 +1458,7 @@ const helpers: Record<string, Helper> = {
     "function _writeOnlyError(r){throw new TypeError('\"'+r+'\" is write-only')}",
     {
       globals: ["TypeError"],
-      locals: {},
+      locals: { _writeOnlyError: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_writeOnlyError",
       dependencies: {},
@@ -1405,7 +1474,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _AwaitValue(t){this.wrapped=t}",
       {
         globals: [],
-        locals: {},
+        locals: { _AwaitValue: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_AwaitValue",
         dependencies: {},
@@ -1493,6 +1562,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.12.id",
             "body.13.body.body.1.argument.expressions.2.callee",
           ],
+          applyDecs: ["body.13.id"],
         },
         exportBindingAssignments: [],
         exportName: "applyDecs",
@@ -1523,6 +1593,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.2.body.body.0.argument.callee.right.left",
             "body.2.body.body.0.argument.callee.left",
           ],
+          applyDecs2203: ["body.2.id"],
         },
         exportBindingAssignments: [],
         exportName: "applyDecs2203",
@@ -1539,6 +1610,10 @@ if (!process.env.BABEL_8_BREAKING) {
           applyDecs2203RFactory: [
             "body.0.id",
             "body.1.body.body.0.argument.callee.right.callee",
+          ],
+          applyDecs2203R: [
+            "body.1.id",
+            "body.1.body.body.0.argument.callee.left",
           ],
         },
         exportBindingAssignments: ["body.1.body.body.0.argument.callee"],
@@ -1565,6 +1640,10 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.id",
             "body.1.body.body.0.argument.callee.right.callee",
           ],
+          applyDecs2301: [
+            "body.1.id",
+            "body.1.body.body.0.argument.callee.left",
+          ],
         },
         exportBindingAssignments: ["body.1.body.body.0.argument.callee"],
         exportName: "applyDecs2301",
@@ -1588,7 +1667,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function applyDecs2305(e,t,r,n,o,a){function i(e,t,r){return function(n,o){return r&&r(n),e[t].call(n,o)}}function c(e,t){for(var r=0;r<e.length;r++)e[r].call(t);return t}function s(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,t,r,n,o,a,c,u,l,f,p,d,h){function m(e){if(!h(e))throw new TypeError("Attempted to access private element on non-instance")}var y,v=t[0],g=t[3],b=!u;if(!b){r||Array.isArray(v)||(v=[v]);var w={},S=[],A=3===o?"get":4===o||d?"set":"value";f?(p||d?w={get:setFunctionName((function(){return g(this)}),n,"get"),set:function(e){t[4](this,e)}}:w[A]=g,p||setFunctionName(w[A],n,2===o?"":A)):p||(w=Object.getOwnPropertyDescriptor(e,n))}for(var P=e,j=v.length-1;j>=0;j-=r?2:1){var D=v[j],E=r?v[j-1]:void 0,I={},O={kind:["field","accessor","method","getter","setter","class"][o],name:n,metadata:a,addInitializer:function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished");s(t,"An initializer","be",!0),c.push(t)}.bind(null,I)};try{if(b)(y=s(D.call(E,P,O),"class decorators","return"))&&(P=y);else{var k,F;O.static=l,O.private=f,f?2===o?k=function(e){return m(e),w.value}:(o<4&&(k=i(w,"get",m)),3!==o&&(F=i(w,"set",m))):(k=function(e){return e[n]},(o<2||4===o)&&(F=function(e,t){e[n]=t}));var N=O.access={has:f?h.bind():function(e){return n in e}};if(k&&(N.get=k),F&&(N.set=F),P=D.call(E,d?{get:w.get,set:w.set}:w[A],O),d){if("object"==typeof P&&P)(y=s(P.get,"accessor.get"))&&(w.get=y),(y=s(P.set,"accessor.set"))&&(w.set=y),(y=s(P.init,"accessor.init"))&&S.push(y);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0")}else s(P,(p?"field":"method")+" decorators","return")&&(p?S.push(P):w[A]=P)}}finally{I.v=!0}}return(p||d)&&u.push((function(e,t){for(var r=S.length-1;r>=0;r--)t=S[r].call(e,t);return t})),p||b||(f?d?u.push(i(w,"get"),i(w,"set")):u.push(2===o?w[A]:i.call.bind(w[A])):Object.defineProperty(e,n,w)),P}function u(e,t){return Object.defineProperty(e,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:t})}if(arguments.length>=6)var l=a[Symbol.metadata||Symbol.for("Symbol.metadata")];var f=Object.create(null==l?null:l),p=function(e,t,r,n){var o,a,i=[],s=function(t){return checkInRHS(t)===e},u=new Map;function l(e){e&&i.push(c.bind(null,e))}for(var f=0;f<t.length;f++){var p=t[f];if(Array.isArray(p)){var d=p[1],h=p[2],m=p.length>3,y=16&d,v=!!(8&d),g=0==(d&=7),b=h+"/"+v;if(!g&&!m){var w=u.get(b);if(!0===w||3===w&&4!==d||4===w&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);u.set(b,!(d>2)||d)}applyDec(v?e:e.prototype,p,y,m?"#"+h:toPropertyKey(h),d,n,v?a=a||[]:o=o||[],i,v,m,g,1===d,v&&m?s:r)}}return l(o),l(a),i}(e,t,o,f);return r.length||u(e,f),{e:p,get c(){var t=[];return r.length&&[u(applyDec(e,[r],n,e.name,5,f,t),f),c.bind(null,t,e)]}}}',
       {
         globals: ["TypeError", "Array", "Object", "Error", "Symbol", "Map"],
-        locals: {},
+        locals: { applyDecs2305: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "applyDecs2305",
         dependencies: {
@@ -1611,7 +1690,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classApplyDescriptorDestructureSet(e,t){if(t.set)return"__destrObj"in t||(t.__destrObj={set value(r){t.set.call(e,r)}}),t.__destrObj;if(!t.writable)throw new TypeError("attempted to set read only private field");return t}',
       {
         globals: ["TypeError"],
-        locals: {},
+        locals: { _classApplyDescriptorDestructureSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorDestructureSet",
         dependencies: {},
@@ -1623,7 +1702,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classApplyDescriptorGet(e,t){return t.get?t.get.call(e):t.value}",
       {
         globals: [],
-        locals: {},
+        locals: { _classApplyDescriptorGet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorGet",
         dependencies: {},
@@ -1635,7 +1714,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classApplyDescriptorSet(e,t,l){if(t.set)t.set.call(e,l);else{if(!t.writable)throw new TypeError("attempted to set read only private field");t.value=l}}',
       {
         globals: ["TypeError"],
-        locals: {},
+        locals: { _classApplyDescriptorSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorSet",
         dependencies: {},
@@ -1647,7 +1726,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classCheckPrivateStaticAccess(s,a,r){return assertClassBrand(a,s,r)}",
       {
         globals: [],
-        locals: {},
+        locals: { _classCheckPrivateStaticAccess: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classCheckPrivateStaticAccess",
         dependencies: {
@@ -1661,7 +1740,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classCheckPrivateStaticFieldDescriptor(t,e){if(void 0===t)throw new TypeError("attempted to "+e+" private static field before its declaration")}',
       {
         globals: ["TypeError"],
-        locals: {},
+        locals: { _classCheckPrivateStaticFieldDescriptor: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classCheckPrivateStaticFieldDescriptor",
         dependencies: {},
@@ -1673,7 +1752,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classExtractFieldDescriptor(e,t){return classPrivateFieldGet2(t,e)}",
       {
         globals: [],
-        locals: {},
+        locals: { _classExtractFieldDescriptor: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classExtractFieldDescriptor",
         dependencies: {
@@ -1687,7 +1766,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classPrivateFieldDestructureSet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorDestructureSet(e,r)}",
       {
         globals: [],
-        locals: {},
+        locals: { _classPrivateFieldDestructureSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classPrivateFieldDestructureSet",
         dependencies: {
@@ -1706,7 +1785,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classPrivateFieldGet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorGet(e,r)}",
       {
         globals: [],
-        locals: {},
+        locals: { _classPrivateFieldGet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classPrivateFieldGet",
         dependencies: {
@@ -1723,7 +1802,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classPrivateFieldSet(e,t,r){var s=classPrivateFieldGet2(t,e);return classApplyDescriptorSet(e,s,r),r}",
       {
         globals: [],
-        locals: {},
+        locals: { _classPrivateFieldSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classPrivateFieldSet",
         dependencies: {
@@ -1742,7 +1821,7 @@ if (!process.env.BABEL_8_BREAKING) {
       "function _classPrivateMethodGet(s,a,r){return assertClassBrand(a,s),r}",
       {
         globals: [],
-        locals: {},
+        locals: { _classPrivateMethodGet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classPrivateMethodGet",
         dependencies: {
@@ -1758,7 +1837,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classPrivateMethodSet(){throw new TypeError("attempted to reassign private method")}',
       {
         globals: ["TypeError"],
-        locals: {},
+        locals: { _classPrivateMethodSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classPrivateMethodSet",
         dependencies: {},
@@ -1770,7 +1849,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classStaticPrivateFieldDestructureSet(t,r,s){return assertClassBrand(r,t),classCheckPrivateStaticFieldDescriptor(s,"set"),classApplyDescriptorDestructureSet(t,s)}',
       {
         globals: [],
-        locals: {},
+        locals: { _classStaticPrivateFieldDestructureSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateFieldDestructureSet",
         dependencies: {
@@ -1792,7 +1871,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classStaticPrivateFieldSpecGet(t,s,r){return assertClassBrand(s,t),classCheckPrivateStaticFieldDescriptor(r,"get"),classApplyDescriptorGet(t,r)}',
       {
         globals: [],
-        locals: {},
+        locals: { _classStaticPrivateFieldSpecGet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateFieldSpecGet",
         dependencies: {
@@ -1814,7 +1893,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classStaticPrivateFieldSpecSet(s,t,r,e){return assertClassBrand(t,s),classCheckPrivateStaticFieldDescriptor(r,"set"),classApplyDescriptorSet(s,r,e),e}',
       {
         globals: [],
-        locals: {},
+        locals: { _classStaticPrivateFieldSpecSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateFieldSpecSet",
         dependencies: {
@@ -1836,7 +1915,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _classStaticPrivateMethodSet(){throw new TypeError("attempted to set read only static private field")}',
       {
         globals: ["TypeError"],
-        locals: {},
+        locals: { _classStaticPrivateMethodSet: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateMethodSet",
         dependencies: {},
@@ -1848,7 +1927,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _defineEnumerableProperties(e,r){for(var t in r){var n=r[t];n.configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,t,n)}if(Object.getOwnPropertySymbols)for(var a=Object.getOwnPropertySymbols(r),b=0;b<a.length;b++){var i=a[b];(n=r[i]).configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,i,n)}return e}',
       {
         globals: ["Object"],
-        locals: {},
+        locals: { _defineEnumerableProperties: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_defineEnumerableProperties",
         dependencies: {},
@@ -1870,6 +1949,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.0.consequent.left",
             "body.0.body.body.0.argument.expressions.0.alternate.expressions.0.left",
           ],
+          _dispose: ["body.1.id"],
         },
         exportBindingAssignments: [],
         exportName: "_dispose",
@@ -1882,7 +1962,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
       {
         globals: ["Object"],
-        locals: {},
+        locals: { _objectSpread: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_objectSpread",
         dependencies: {
@@ -1898,7 +1978,7 @@ if (!process.env.BABEL_8_BREAKING) {
       'function _using(o,n,e){if(null==n)return n;if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(e)var r=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==r&&(r=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof r)throw new TypeError("Property [Symbol.dispose] is not a function.");return o.push({v:n,d:r,a:e}),n}',
       {
         globals: ["Object", "TypeError", "Symbol"],
-        locals: {},
+        locals: { _using: ["body.0.id"] },
         exportBindingAssignments: [],
         exportName: "_using",
         dependencies: {},

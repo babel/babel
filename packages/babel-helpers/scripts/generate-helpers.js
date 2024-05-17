@@ -243,7 +243,6 @@ export function getHelperMetadata(code, helperName) {
 
       const bindings = path.scope.getAllBindings();
       Object.keys(bindings).forEach(name => {
-        if (name === exportName) return;
         if (dependencies.has(name)) return;
 
         const binding = bindings[name];
