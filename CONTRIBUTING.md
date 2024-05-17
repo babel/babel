@@ -80,7 +80,7 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
-## Develop compiling to CommonJS or to ECMAScript modules
+### Develop compiling to CommonJS or to ECMAScript modules
 
 Babel can currently be compiled both to CJS and to ESM. You can toggle between those two
 modes by running one of the following commands:
@@ -102,7 +102,7 @@ If you never run a `make use-*` (or if you delete the `.module-type` file that t
 #### Lint
 
 ```sh
-# ~6 sec on a MacBook Pro (Mid 2015)
+# ~19 sec on a MacBook Pro (Late 2021)
 $ make lint
 ```
 
@@ -115,14 +115,14 @@ $ make fix
 #### Tests + lint for all packages (slow) via:
 
 ```sh
-# ~46 sec on a MacBook Pro (Mid 2015)
+# ~32 sec on a MacBook Pro (Late 2021)
 $ make test
 ```
 
 #### All tests:
 
 ```sh
-# ~40 sec on a MacBook Pro (Mid 2015)
+# ~13 sec on a MacBook Pro (Late 2021)
 $ make test-only
 ```
 
