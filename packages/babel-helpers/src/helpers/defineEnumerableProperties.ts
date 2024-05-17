@@ -2,16 +2,11 @@
 /* @onlyBabel7 */
 import toPropertyKey from "./toPropertyKey.ts";
 
-type Descs = {
-  [key: string]: {
-    configurable: boolean;
-    enumerable: boolean;
-    writable: boolean;
-  };
-};
-
-export default function _defineEnumerableProperties<T>(obj: T, descs: Descs) {
-  // eslint-disable-next-line guard-for-in
+export default function _defineEnumerableProperties<T>(
+  obj: T,
+  descs: PropertyDescriptor[],
+) {
+  // eslint-disable-next-line -- both guard-for-in and iterables are proposital
   for (var key in descs) {
     var desc = descs[key];
     desc.configurable = desc.enumerable = true;
