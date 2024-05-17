@@ -160,7 +160,7 @@ $ TEST_ONLY=babel-cli make test-only
 
 #### Run a subset of tests
 
-Use the [Jest CLI `-t` option](https://jestjs.io/docs/cli#--testnamepatternregex) to to run a subset of tests with a name that matches the regex:
+Use the [Jest CLI `-t` option](https://jestjs.io/docs/cli#--testnamepatternregex) to run a subset of tests with a name that matches the regex:
 
 ```sh
 $ yarn jest -t transformation
