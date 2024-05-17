@@ -6,7 +6,7 @@ type Object = { [key: symbol | string]: unknown };
 export default function _defineProperty<T extends Object>(
   obj: T,
   key: PropertyKey,
-  value: keyof T,
+  value: any,
 ) {
   key = toPropertyKey(key);
   // Shortcircuit the slow defineProperty path when possible.
