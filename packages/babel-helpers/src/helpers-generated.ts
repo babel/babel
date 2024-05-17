@@ -358,10 +358,10 @@ const helpers: Record<string, Helper> = {
     "7.23.6",
     'export default function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
   ),
-  // size: 183, gzip size: 121
+  // size: 178, gzip size: 116
   setPrototypeOf: helper(
     "7.0.0-beta.0",
-    "export default function _setPrototypeOf(t,e){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return e&&(t.__proto__=e),t},_setPrototypeOf(t,e)}",
+    "export default function _setPrototypeOf(t,e){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t},_setPrototypeOf(t,e)}",
   ),
   // size: 118, gzip size: 118
   skipFirstGeneratorNext: helper(
