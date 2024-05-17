@@ -3,30 +3,28 @@
 import defineProperty from "./defineProperty.ts";
 import superPropBase from "./superPropBase.ts";
 
-type Object = {
-  __proto__?: any;
-} & { [key: string]: unknown };
-
 function set(
-  target: Object,
+  target: object,
   property: string | symbol,
   value: any,
   receiver?: any,
 ): boolean {
-  var setImpl = set;
   if (typeof Reflect !== "undefined" && Reflect.set) {
-    setImpl = Reflect.set;
+    // @ts-expect-error explicit function reassign
+    set = Reflect.set;
   } else {
-    setImpl = function set(target, property, value, receiver) {
+    // @ts-expect-error explicit function reassign
+    set = function set(target, property, value, receiver) {
       var base = superPropBase(target, property);
       var desc;
 
       if (base) {
-        desc = Object.getOwnPropertyDescriptor(base, property);
-        if (desc && desc.set) {
+        desc = Object.getOwnPropertyDescriptor(base, property)!;
+        if (desc.set) {
           desc.set.call(receiver, value);
           return true;
-        } else if (!desc || !desc.writable) {
+          // so getOwnPropertyDescriptor should always be defined
+        } else if (!desc.writable) {
           // Both getter and non-writable fall into this.
           return false;
         }
@@ -53,15 +51,15 @@ function set(
     };
   }
 
-  return setImpl(target, property, value, receiver);
+  return set(target, property, value, receiver);
 }
 
 export default function _set(
   target: Object,
-  property: string | symbol,
+  property: PropertyKey,
   value: any,
   receiver?: any,
-  isStrict: boolean = false,
+  isStrict?: boolean,
 ) {
   var s = set(target, property, value, receiver || target);
   if (!s && isStrict) {

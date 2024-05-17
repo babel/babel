@@ -1,10 +1,12 @@
 /* @minVersion 7.0.0-beta.0 */
 
-type Object = {
-  __proto__?: any;
-} & { [key: string]: unknown };
+declare global {
+  interface Object {
+    __proto__: object;
+  }
+}
 
-export default function _getPrototypeOf<T extends Object>(o: T) {
+export default function _getPrototypeOf(o: object) {
   // @ts-expect-error explicitly assign to function
   _getPrototypeOf = Object.setPrototypeOf
     ? // @ts-expect-error -- intentionally omitting the argument

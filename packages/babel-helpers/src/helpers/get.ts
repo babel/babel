@@ -5,22 +5,17 @@ import _superPropBase from "./superPropBase.ts";
 // https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
 //
 //  28.1ak.5 Reflect.get ( target, propertyKey [ , receiver ] )
-
-type Object = {
-  __proto__?: any;
-} & { [key: string]: unknown };
-
-export default function _get<T extends Object, P extends string | symbol>(
+export default function _get<T extends object, P extends string | symbol>(
   this: unknown,
   ...args: [target: T, property: P, receiver?: unknown]
 ): P extends keyof T ? T[P] : any {
-  let _getImpl = _get;
-
   if (typeof Reflect !== "undefined" && Reflect.get) {
     // need a bind because https://github.com/babel/babel/issues/14527
-    _getImpl = Reflect.get.bind(null);
+    // @ts-expect-error function reassign
+    _get = Reflect.get.bind(null);
   } else {
-    _getImpl = function _get(target, property, receiver) {
+    // @ts-expect-error function reassign
+    _get = function _get(target, property, receiver) {
       var base = _superPropBase(target, property);
 
       if (!base) return;
@@ -34,5 +29,6 @@ export default function _get<T extends Object, P extends string | symbol>(
       return desc ? desc.value : undefined;
     };
   }
-  return _getImpl.apply(this, args);
+
+  return _get.apply(this, args);
 }

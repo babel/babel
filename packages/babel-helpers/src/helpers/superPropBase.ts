@@ -2,14 +2,7 @@
 
 import getPrototypeOf from "./getPrototypeOf.ts";
 
-type Object = {
-  __proto__?: any;
-} & { [key: string]: unknown };
-
-export default function _superPropBase(
-  object: Object,
-  property: string | symbol,
-) {
+export default function _superPropBase(object: object, property: PropertyKey) {
   // Yes, this throws if object is null to being with, that's on purpose.
   while (!Object.prototype.hasOwnProperty.call(object, property)) {
     object = getPrototypeOf(object);

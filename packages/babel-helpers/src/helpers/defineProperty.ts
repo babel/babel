@@ -3,7 +3,7 @@ import toPropertyKey from "./toPropertyKey.ts";
 
 export default function _defineProperty<T extends object>(
   obj: T,
-  key: string | symbol,
+  key: PropertyKey,
   value: any,
 ) {
   key = toPropertyKey(key);

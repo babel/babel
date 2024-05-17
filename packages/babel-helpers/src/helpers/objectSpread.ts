@@ -8,11 +8,7 @@ type Intersection<R extends any[]> = R extends [infer H, ...infer S]
   ? H & Intersection<S>
   : unknown;
 
-type Object = {
-  __proto__?: any;
-} & { [key: string]: unknown };
-
-export default function _objectSpread<T extends Object, U extends unknown[]>(
+export default function _objectSpread<T extends object, U extends unknown[]>(
   target: T,
   ...sources: U
 ): T & Intersection<U>;
