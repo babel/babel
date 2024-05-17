@@ -16,7 +16,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
-const { program } = commander.default;
+const program = commander.default.program as commander.Command;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
