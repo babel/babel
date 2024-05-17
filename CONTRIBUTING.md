@@ -212,7 +212,11 @@ You can combine `-i` with `-t` to debug a subset of tests. For example,
 yarn run --inspect-brk jest -i babel-plugin-arrow-functions -t "destructuring parameters"
 ```
 
-If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/testSetupFile.js](https://github.com/babel/babel/blob/main/test/testSetupFile.js).
+If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by the [Jest CLI `--testTimeout` option](https://jestjs.io/docs/cli#--testtimeoutnumber). For example to increase test timeout to 500 seconds
+
+```sh
+yarn run --inspect-brk jest -i babel-parser -t "my new test" --testTimeout=500000
+```
 
 To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
 
