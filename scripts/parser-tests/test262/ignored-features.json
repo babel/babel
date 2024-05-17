@@ -115,6 +115,7 @@
   "object-spread",
   "optional-catch-binding",
   "optional-chaining",
+  "promise-try",
   "promise-with-resolvers",
   "proxy-missing-checks",
   "regexp-dotall",
