@@ -204,7 +204,7 @@ const helpers: Record<string, Helper> = {
   // size: 252, gzip size: 188
   extends: helper(
     "7.0.0-beta.0",
-    "export default function _extends(){return _extends=Object.assign?Object.assign.bind():function(n){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var r in t)({}).hasOwnProperty.call(t,r)&&(n[r]=t[r])}return n},_extends.apply(this,arguments)}",
+    "export default function _extends(){return _extends=Object.assign?Object.assign.bind():function(n){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var r in t)({}).hasOwnProperty.call(t,r)&&(n[r]=t[r])}return n},_extends.apply(null,arguments)}",
   ),
   // size: 319, gzip size: 225
   get: helper(
