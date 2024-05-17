@@ -587,10 +587,10 @@ if (!process.env.BABEL_8_BREAKING) {
       "7.22.0",
       'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=e,this.error=r,this.stack=Error().stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(e,r):r,s=!0,next()}return next()}',
     ),
-    // size: 421, gzip size: 258
+    // size: 477, gzip size: 274
     objectSpread: helper(
       "7.0.0-beta.0",
-      'import defineProperty from"defineProperty";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
+      'import defineProperty from"defineProperty";import toPropertyKey from"toPropertyKey";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,toPropertyKey(r),t[r])}))}return e}',
     ),
     // size: 432, gzip size: 261
     using: helper(

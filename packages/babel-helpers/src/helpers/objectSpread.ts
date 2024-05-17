@@ -1,14 +1,18 @@
 /* @minVersion 7.0.0-beta.0 */
 /* @onlyBabel7 */
 
-// @ts-expect-error Migrate in another PR
 import defineProperty from "./defineProperty.ts";
+import toPropertyKey from "./toPropertyKey.ts";
 
 type Intersection<R extends any[]> = R extends [infer H, ...infer S]
   ? H & Intersection<S>
   : unknown;
 
-export default function _objectSpread<T extends object, U extends unknown[]>(
+type Object = {
+  __proto__?: any;
+} & { [key: string]: unknown };
+
+export default function _objectSpread<T extends Object, U extends unknown[]>(
   target: T,
   ...sources: U
 ): T & Intersection<U>;
@@ -26,7 +30,11 @@ export default function _objectSpread(target: object) {
       );
     }
     ownKeys.forEach(function (key) {
-      defineProperty(target, key, source[key as keyof typeof source]);
+      defineProperty(
+        target,
+        toPropertyKey(key),
+        source[key as keyof typeof source],
+      );
     });
   }
   return target;

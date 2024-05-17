@@ -1,9 +1,7 @@
 /* @minVersion 7.0.0-beta.0 */
 import toPropertyKey from "./toPropertyKey.ts";
 
-type Object = { [key: symbol | string]: unknown };
-
-export default function _defineProperty<T extends Object>(
+export default function _defineProperty<T extends object>(
   obj: T,
   key: string | symbol,
   value: any,
