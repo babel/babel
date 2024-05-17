@@ -4,7 +4,7 @@ import _helpers from "../../lib/helpers-generated.js";
 const template = _template.default || _template;
 const helpers = _helpers.default || _helpers;
 
-import { getHelperMetadata } from "../../scripts/generate-helpers.js";
+import { getHelperMetadata } from "../../scripts/build-helper-metadata.js";
 
 function getHelperId(baseURL, name) {
   const testName = path.basename(new URL(".", baseURL).pathname);
