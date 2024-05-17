@@ -1,4 +1,5 @@
 /* @minVersion 7.0.0-beta.0 */
+
 export default function _defaults<T extends object, S extends object>(
   obj: T,
   defaults: S,

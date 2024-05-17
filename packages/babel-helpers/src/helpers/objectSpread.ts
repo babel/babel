@@ -2,7 +2,7 @@
 /* @onlyBabel7 */
 
 // @ts-expect-error Migrate in another PR
-import defineProperty from "defineProperty.ts";
+import defineProperty from "./defineProperty.ts";
 
 export default function _objectSpread<T extends {}, U>(
   target: T,
