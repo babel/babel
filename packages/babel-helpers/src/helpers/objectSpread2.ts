@@ -10,8 +10,8 @@ import defineProperty from "./defineProperty.ts";
 function ownKeys(
   object: object,
   enumerableOnly?: boolean | undefined,
-): PropertyKey[] {
-  var keys: PropertyKey[] = Object.keys(object);
+): (string | symbol)[] {
+  var keys: (string | symbol)[] = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
     if (enumerableOnly) {
@@ -25,22 +25,14 @@ function ownKeys(
   return keys;
 }
 
-export default function _objectSpread2<T extends {}, U>(
+type Intersection<R extends any[]> = R extends [infer H, ...infer S]
+  ? H & Intersection<S>
+  : unknown;
+
+export default function _objectSpread2<T extends object, U extends object[]>(
   target: T,
-  source: U,
-): T & U;
-export default function _objectSpread2<T extends {}, U, V>(
-  target: T,
-  source1: U,
-  source2: V,
-): T & U & V;
-export default function _objectSpread2<T extends {}, U, V, W>(
-  target: T,
-  source1: U,
-  source2: V,
-  source3: W,
-): T & U & V & W;
-export default function _objectSpread2(target: object, ...sources: any[]): any;
+  ...sources: U
+): T & Intersection<U>;
 export default function _objectSpread2(target: object) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
