@@ -27,7 +27,8 @@ export default function _extends(this: any) {
   // @ts-expect-error explicitly assign to function
   _extends = Object.assign
     ? // need a bind because https://github.com/babel/babel/issues/14527
-      Object.assign.bind(undefined)
+      // @ts-expect-error -- intentionally omitting the argument
+      Object.assign.bind(/* undefined */)
     : function (this: any, target: any) {
         for (var i = 1; i < arguments.length; i++) {
           var source = arguments[i];
