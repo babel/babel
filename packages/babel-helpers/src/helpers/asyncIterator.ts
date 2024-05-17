@@ -36,7 +36,7 @@ export default function _asyncIterator<T>(
   throw new TypeError("Object is not async iterable");
 }
 
-// AsyncFromSyncIterator is actually a class that implements AsyncIterator
+// AsyncFromSyncIterator is actually a class that implements AsyncIterator interface
 declare class AsyncFromSyncIterator<T = any, TReturn = any, TNext = undefined>
   implements AsyncIterator<T, TReturn, TNext>
 {
@@ -79,7 +79,8 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
       var ret = this.s.return;
       if (ret === undefined) {
         return Promise.resolve<IteratorReturnResult<TReturn>>({
-          // "value" should have been unwrapped by Awaited<T>, but TypeScript choked, let's just use "as"
+          // "TReturn | PromiseLike<TReturn>" should have been unwrapped by Awaited<T>,
+          // but TypeScript choked, let's just casting it away
           value: value as TReturn,
           done: true,
         });
