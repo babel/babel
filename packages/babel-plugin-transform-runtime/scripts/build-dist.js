@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import * as helpers from "@babel/helpers";
-import { transformFromAstSync, File, template, types as t } from "@babel/core";
+import { transformFromAstSync, template, types as t } from "@babel/core";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";
@@ -280,8 +280,6 @@ function buildHelper(
   helperName,
   { esm, polyfillProvider }
 ) {
-  helpers.ensure(helperName, File);
-
   const tree = t.program([], [], esm ? "module" : "script");
   const dependencies = {};
   const bindings = [];

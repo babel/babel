@@ -23,7 +23,6 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import File from "../transformation/file/file.ts";
 import type { Replacements } from "@babel/template";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
@@ -174,7 +173,6 @@ function buildHelpers(
 
     const ref = (refs[name] = getHelperReference(name));
 
-    helpers.ensure(name, File);
     const { nodes } = helpers.get(name, getHelperReference, ref);
 
     body.push(...nodes);

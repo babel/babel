@@ -44,16 +44,9 @@ function permuteHelperAST(
   const { locals, dependencies, exportBindingAssignments, exportName } =
     metadata;
 
-  const dependenciesRefs: Record<string, t.Expression> = {};
-  for (const name of Object.keys(dependencies)) {
-    dependenciesRefs[name] =
-      (typeof getDependency === "function" && getDependency(name)) ||
-      identifier(name);
-  }
-
   const bindings = new Set(localBindings || []);
   if (id?.type === "Identifier") bindings.add(id.name);
-  Object.keys(locals).forEach(name => {
+  for (const [name, paths] of Object.entries(locals)) {
     let newName = name;
     if (name === exportName && id?.type === "Identifier") {
       newName = id.name;
@@ -62,15 +55,18 @@ function permuteHelperAST(
     }
 
     if (newName !== name) {
-      for (const path of locals[name]) {
+      for (const path of paths) {
         deep(ast, path, identifier(newName));
       }
     }
-  });
+  }
 
   for (const [name, paths] of Object.entries(dependencies)) {
+    const ref =
+      (typeof getDependency === "function" && getDependency(name)) ||
+      identifier(name);
     for (const path of paths) {
-      deep(ast, path, cloneNode(dependenciesRefs[name]));
+      deep(ast, path, cloneNode(ref));
     }
   }
 
@@ -165,8 +161,11 @@ export function getDependencies(name: string): ReadonlyArray<string> {
   return loadHelper(name).getDependencies();
 }
 
-export function ensure(name: string) {
-  loadHelper(name);
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.ensure = (name: string) => {
+    loadHelper(name);
+  };
 }
 
 export const list = Object.keys(helpers).map(name => name.replace(/^_/, ""));
