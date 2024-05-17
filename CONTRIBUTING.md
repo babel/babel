@@ -37,9 +37,9 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^12.20 || >= 14.13`. You can check this with `node -v`.
+_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^20.10.0 || >=22.0.0`. You can check this with `node -v`.
 
-_Yarn_: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
+_Yarn_: Make sure that Yarn is [installed](https://yarnpkg.com/getting-started/install) with version `>=4.0.0`.
 
 _Make_: If you are running Windows 10, you'll need to do one of the following:
 
@@ -48,7 +48,7 @@ _Make_: If you are running Windows 10, you'll need to do one of the following:
 
 ### Setup
 
-Fork the `babel` repository to your GitHub Account.
+[Fork](https://github.com/babel/babel/fork) the `babel` repository to your GitHub Account.
 
 Then, run:
 
@@ -84,9 +84,11 @@ $ make build-dist
 
 Babel can currently be compiled both to CJS and to ESM. You can toggle between those two
 modes by running one of the following commands:
+
 ```sh
 make use-esm
 ```
+
 ```sh
 make use-cjs
 ```
@@ -124,12 +126,18 @@ $ make test
 $ make test-only
 ```
 
+#### Run tests for Babel 8
+
+```sh
+$ BABEL_8_BREAKING=true make test-only
+```
+
 #### Run tests for a specific package
 
 When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/main/packages). Using `TEST_ONLY` will only run tests for that specific package.
 
 ```sh
-$ TEST_ONLY=babel-cli make test
+$ TEST_ONLY=babel-cli make test-only
 ```
 
 <details>
@@ -361,6 +369,7 @@ For both `@babel/plugin-x` and `@babel/parser`, you can easily generate an `outp
 #### Editor setup
 
 We have JSON Schema definitions so that your editor can provide autocomplete for `options.json` files in fixtures:
+
 - `./packages/babel-helper-fixtures/data/schema.json` for plugins/presets tests
 - `./packages/babel-parser/test/schema.json` for parser tests
 
