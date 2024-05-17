@@ -3,11 +3,16 @@ export default function _defaults<T extends object, S extends object>(
   obj: T,
   defaults: S,
 ): NonNullable<T & S> {
-  const keys: string[] = Object.getOwnPropertyNames(defaults);
-  for (let i = 0; i < keys.length; i++) {
-    const key: string = keys[i];
-    const value: PropertyDescriptor | undefined =
-      Object.getOwnPropertyDescriptor(defaults, key);
+  for (
+    var keys: string[] = Object.getOwnPropertyNames(defaults), i = 0;
+    i < keys.length;
+    i++
+  ) {
+    var key: string = keys[i],
+      value: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(
+        defaults,
+        key,
+      );
     if (value && value.configurable && obj[key as keyof T] === undefined) {
       Object.defineProperty(obj, key, value);
     }
