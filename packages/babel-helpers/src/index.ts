@@ -1,19 +1,14 @@
-import type { File } from "@babel/core";
-import traverse from "@babel/traverse";
 import {
   assignmentExpression,
   cloneNode,
   expressionStatement,
   exportNamedDeclaration,
   exportSpecifier,
-  file,
   identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers-generated.ts";
 import type { HelperMetadata } from "./helpers-generated.ts";
-
-let FileClass: typeof File | undefined = undefined;
 
 type GetDependency = (name: string) => t.Expression;
 
@@ -127,26 +122,6 @@ function loadHelper(name: string) {
       });
     }
 
-    const fn = (ast: t.Program): File => {
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!FileClass) {
-          const fakeFile = { ast: file(ast), path: null } as File;
-          traverse(fakeFile.ast, {
-            Program: path => (fakeFile.path = path).stop(),
-          });
-          return fakeFile;
-        }
-      }
-      return new FileClass(
-        { filename: `babel-helper://${name}` },
-        {
-          ast: file(ast),
-          code: "[internal Babel helper code]",
-          inputMap: null,
-        },
-      );
-    };
-
     helperData[name] = {
       minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
@@ -159,10 +134,8 @@ function loadHelper(name: string) {
           getDependency,
         );
 
-        const file = fn(ast);
-
         return {
-          nodes: file.ast.program.body,
+          nodes: ast.body,
           globals: helper.metadata.globals,
         };
       },
@@ -192,11 +165,7 @@ export function getDependencies(name: string): ReadonlyArray<string> {
   return loadHelper(name).getDependencies();
 }
 
-export function ensure(name: string, newFileClass: typeof File) {
-  // We inject the File class here rather than importing it to avoid
-  // circular dependencies between @babel/core and @babel/helpers.
-  FileClass ||= newFileClass;
-
+export function ensure(name: string) {
   loadHelper(name);
 }
 
