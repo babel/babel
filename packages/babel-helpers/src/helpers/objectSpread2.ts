@@ -29,7 +29,7 @@ type Intersection<R extends any[]> = R extends [infer H, ...infer S]
   ? H & Intersection<S>
   : unknown;
 
-export default function _objectSpread2<T extends object, U extends object[]>(
+export default function _objectSpread2<T extends object, U extends unknown[]>(
   target: T,
   ...sources: U
 ): T & Intersection<U>;
