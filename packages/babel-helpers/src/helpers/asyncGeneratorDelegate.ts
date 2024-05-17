@@ -2,13 +2,7 @@
 
 import OverloadYield from "./OverloadYield.ts";
 
-export default function /* _asyncGeneratorDelegate is a function that acts as a delegate for an inner
-generator. It creates a new generator that delegates the calls to methods
-like next, throw, and return to the inner generator. This function handles
-the asynchronous behavior of the generator by using Promises to resolve the
-values returned by the inner generator. It also manages the waiting state to
-ensure that the inner generator is properly handled when it yields values. */
-_asyncGeneratorDelegate<T>(inner: Generator<T>) {
+export default function _asyncGeneratorDelegate<T>(inner: Generator<T>) {
   var iter = {} as Generator<T>,
     // See the comment in AsyncGenerator to understand what this is.
     waiting = false;
