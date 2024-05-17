@@ -176,7 +176,7 @@ export default class File {
     const { nodes, globals } = helpers.get(
       name,
       dep => dependencies[dep],
-      uid,
+      uid.name,
       Object.keys(this.scope.getAllBindings()),
     );
 

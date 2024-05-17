@@ -173,7 +173,24 @@ function buildHelpers(
 
     const ref = (refs[name] = getHelperReference(name));
 
-    const { nodes } = helpers.get(name, getHelperReference, ref);
+    const { nodes } = helpers.get(
+      name,
+      getHelperReference,
+      namespace ? null : `_${name}`,
+      [],
+      namespace
+        ? (ast, exportName, mapExportBindingAssignments) => {
+            mapExportBindingAssignments(node =>
+              assignmentExpression("=", ref, node),
+            );
+            ast.body.push(
+              expressionStatement(
+                assignmentExpression("=", ref, identifier(exportName)),
+              ),
+            );
+          }
+        : null,
+    );
 
     body.push(...nodes);
   });

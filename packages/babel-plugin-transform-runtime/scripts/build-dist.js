@@ -274,6 +274,24 @@ function getRuntimeRoot(runtimeName) {
   );
 }
 
+function adjustEsmHelperAst(ast, exportName) {
+  ast.body.push(
+    template.statement({ sourceType: "module" }).ast`
+      export { ${t.identifier(exportName)} as default };
+    `
+  );
+}
+function adjustCjsHelperAst(ast, exportName, mapExportBindingAssignments) {
+  mapExportBindingAssignments(
+    node => template.expression.ast`module.exports = ${node}`
+  );
+  ast.body.push(
+    template.statement.ast`
+      module.exports = ${t.identifier(exportName)};
+    `
+  );
+}
+
 function buildHelper(
   runtimeName,
   helperFilename,
@@ -294,8 +312,9 @@ function buildHelper(
   const helper = helpers.get(
     helperName,
     dep => dependencies[dep],
-    esm ? null : template.expression.ast`module.exports`,
-    bindings
+    null,
+    bindings,
+    esm ? adjustEsmHelperAst : adjustCjsHelperAst
   );
   tree.body.push(...helper.nodes);
 

@@ -1,11 +1,4 @@
-import {
-  assignmentExpression,
-  cloneNode,
-  expressionStatement,
-  exportNamedDeclaration,
-  exportSpecifier,
-  identifier,
-} from "@babel/types";
+import { cloneNode, identifier } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers-generated.ts";
 import type { HelperMetadata } from "./helpers-generated.ts";
@@ -31,25 +24,34 @@ function deep(obj: any, path: string, value?: unknown) {
   }
 }
 
+type AdjustAst = (
+  ast: t.Program,
+  exportName: string,
+  mapExportBindingAssignments: (
+    map: (node: t.Expression) => t.Expression,
+  ) => void,
+) => void;
+
 /**
  * Given a helper AST and information about how it will be used, update the AST to match the usage.
  */
 function permuteHelperAST(
   ast: t.Program,
   metadata: HelperMetadata,
-  id?: t.Identifier | t.MemberExpression,
-  localBindings?: string[],
-  getDependency?: GetDependency,
+  bindingName: string | undefined,
+  localBindings: string[] | undefined,
+  getDependency: GetDependency | undefined,
+  adjustAst: AdjustAst | undefined,
 ) {
   const { locals, dependencies, exportBindingAssignments, exportName } =
     metadata;
 
   const bindings = new Set(localBindings || []);
-  if (id?.type === "Identifier") bindings.add(id.name);
+  if (bindingName) bindings.add(bindingName);
   for (const [name, paths] of Object.entries(locals)) {
     let newName = name;
-    if (name === exportName && id?.type === "Identifier") {
-      newName = id.name;
+    if (bindingName && name === exportName) {
+      newName = bindingName;
     } else {
       while (bindings.has(newName)) newName = "_" + newName;
     }
@@ -70,35 +72,17 @@ function permuteHelperAST(
     }
   }
 
-  if (!id) {
-    ast.body.push(
-      exportNamedDeclaration(null, [
-        exportSpecifier(identifier(exportName), identifier("default")),
-      ]),
-    );
-  } else if (id.type === "MemberExpression") {
-    exportBindingAssignments.forEach(assignPath => {
-      deep(
-        ast,
-        assignPath,
-        assignmentExpression("=", id, deep(ast, assignPath)),
-      );
-    });
-    ast.body.push(
-      expressionStatement(
-        assignmentExpression("=", id, identifier(exportName)),
-      ),
-    );
-  } else if (id.type !== "Identifier") {
-    throw new Error("Unexpected helper format.");
-  }
+  adjustAst?.(ast, exportName, map => {
+    exportBindingAssignments.forEach(p => deep(ast, p, map(deep(ast, p))));
+  });
 }
 
 interface HelperData {
   build: (
-    getDependency: GetDependency,
-    id: t.Identifier | t.MemberExpression,
-    localBindings: string[],
+    getDependency: GetDependency | undefined,
+    bindingName: string | undefined,
+    localBindings: string[] | undefined,
+    adjustAst: AdjustAst | undefined,
   ) => {
     nodes: t.Program["body"];
     globals: string[];
@@ -120,14 +104,15 @@ function loadHelper(name: string) {
 
     helperData[name] = {
       minVersion: helper.minVersion,
-      build(getDependency, id, localBindings) {
+      build(getDependency, bindingName, localBindings, adjustAst) {
         const ast = helper.ast();
         permuteHelperAST(
           ast,
           helper.metadata,
-          id,
+          bindingName,
           localBindings,
           getDependency,
+          adjustAst,
         );
 
         return {
@@ -147,10 +132,27 @@ function loadHelper(name: string) {
 export function get(
   name: string,
   getDependency?: GetDependency,
-  id?: t.Identifier | t.MemberExpression,
+  bindingName?: string,
   localBindings?: string[],
+  adjustAst?: AdjustAst,
 ) {
-  return loadHelper(name).build(getDependency, id, localBindings);
+  if (!process.env.BABEL_8_BREAKING) {
+    // In older versions, bindingName was a t.Identifier | t.MemberExpression
+    if (typeof bindingName === "object") {
+      const id = bindingName as t.Identifier | t.MemberExpression | null;
+      if (id?.type === "Identifier") {
+        bindingName = id.name;
+      } else {
+        bindingName = undefined;
+      }
+    }
+  }
+  return loadHelper(name).build(
+    getDependency,
+    bindingName,
+    localBindings,
+    adjustAst,
+  );
 }
 
 export function minVersion(name: string) {
