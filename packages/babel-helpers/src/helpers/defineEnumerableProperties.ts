@@ -1,7 +1,5 @@
 /* @minVersion 7.0.0-beta.0 */
 /* @onlyBabel7 */
-import toPropertyKey from "./toPropertyKey.ts";
-
 export default function _defineEnumerableProperties<T>(
   obj: T,
   descs: PropertyDescriptor[],
@@ -18,14 +16,14 @@ export default function _defineEnumerableProperties<T>(
   // Symbols are available, fetch all of the descs object's own
   // symbol properties and define them on our target object too.
   if (Object.getOwnPropertySymbols) {
-    var objectSymbols: Array<Symbol> = Object.getOwnPropertySymbols(descs);
+    var objectSymbols = Object.getOwnPropertySymbols(descs);
     for (var i = 0; i < objectSymbols.length; i++) {
       var sym = objectSymbols[i];
       // @ts-expect-error Fixme: document symbol properties
       desc = descs[sym];
       desc.configurable = desc.enumerable = true;
       if ("value" in desc) desc.writable = true;
-      Object.defineProperty(obj, toPropertyKey(sym), desc);
+      Object.defineProperty(obj, sym, desc);
     }
   }
   return obj;
