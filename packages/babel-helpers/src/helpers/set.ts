@@ -7,18 +7,17 @@ type Object = {
   __proto__?: any;
 } & { [key: string]: unknown };
 
-function set<T extends Object, P extends string | symbol>(
-  target: T,
-  property: P,
-  value: P extends keyof T ? T[P] : any,
+function set(
+  target: Object,
+  property: string | symbol,
+  value: any,
   receiver?: any,
 ): boolean {
-  var _setImpl = set;
-
+  var setImpl = set;
   if (typeof Reflect !== "undefined" && Reflect.set) {
-    _setImpl = Reflect.set;
+    setImpl = Reflect.set;
   } else {
-    _setImpl = function set(target, property, value, receiver) {
+    setImpl = function set(target, property, value, receiver) {
       var base = superPropBase(target, property);
       var desc;
 
@@ -54,7 +53,7 @@ function set<T extends Object, P extends string | symbol>(
     };
   }
 
-  return _setImpl(target, property, value, receiver);
+  return setImpl(target, property, value, receiver);
 }
 
 export default function _set(

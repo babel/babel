@@ -577,10 +577,10 @@ if (!process.env.BABEL_8_BREAKING) {
       "7.3.2",
       'export default function _classStaticPrivateMethodSet(){throw new TypeError("attempted to set read only static private field")}',
     ),
-    // size: 422, gzip size: 226
+    // size: 441, gzip size: 241
     defineEnumerableProperties: helper(
       "7.0.0-beta.0",
-      'import toPropertyKey from"toPropertyKey";export default function _defineEnumerableProperties(e,r){for(var t in r){var o=r[t];o.configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,t,o)}if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(r);for(const t of n)(o=r[t]).configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(t),o)}return e}',
+      'import toPropertyKey from"toPropertyKey";export default function _defineEnumerableProperties(e,r){for(var t in r){var o=r[t];o.configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,t,o)}if(Object.getOwnPropertySymbols)for(var n=Object.getOwnPropertySymbols(r),i=0;i<n.length;i++){const t=n[i];(o=r[t]).configurable=o.enumerable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(t),o)}return e}',
     ),
     // size: 668, gzip size: 330
     dispose: helper(
