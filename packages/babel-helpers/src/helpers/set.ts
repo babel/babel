@@ -1,22 +1,33 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import superPropBase from "superPropBase";
-import defineProperty from "defineProperty";
+import defineProperty from "./defineProperty.ts";
+import superPropBase from "./superPropBase.ts";
 
-function set(target, property, value, receiver) {
+type Object = {
+  __proto__?: any;
+} & { [key: string]: unknown };
+
+function set<T extends Object, P extends PropertyKey>(
+  target: T,
+  property: P,
+  value: P extends keyof T ? T[P] : any,
+  receiver?: any,
+): boolean {
+  var _setImpl = set;
+
   if (typeof Reflect !== "undefined" && Reflect.set) {
-    set = Reflect.set;
+    _setImpl = Reflect.set;
   } else {
-    set = function set(target, property, value, receiver) {
+    _setImpl = function set(target, property, value, receiver) {
       var base = superPropBase(target, property);
       var desc;
 
       if (base) {
         desc = Object.getOwnPropertyDescriptor(base, property);
-        if (desc.set) {
+        if (desc && desc.set) {
           desc.set.call(receiver, value);
           return true;
-        } else if (!desc.writable) {
+        } else if (!desc || !desc.writable) {
           // Both getter and non-writable fall into this.
           return false;
         }
@@ -43,10 +54,16 @@ function set(target, property, value, receiver) {
     };
   }
 
-  return set(target, property, value, receiver);
+  return _setImpl(target, property, value, receiver);
 }
 
-export default function _set(target, property, value, receiver, isStrict) {
+export default function _set(
+  target: Object,
+  property: PropertyKey,
+  value: any,
+  receiver?: any,
+  isStrict: boolean = false,
+) {
   var s = set(target, property, value, receiver || target);
   if (!s && isStrict) {
     throw new TypeError("failed to set property");
