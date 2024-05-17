@@ -1,8 +1,8 @@
 import _Reflect$set from "core-js-pure/features/reflect/set.js";
 import _Object$getOwnPropertyDescriptor from "core-js-pure/features/object/get-own-property-descriptor.js";
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
-import defineProperty from "./defineProperty.js";
 import superPropBase from "./superPropBase.js";
+import defineProperty from "./defineProperty.js";
 function set(e, r, t, o) {
   return set = "undefined" != typeof Reflect && _Reflect$set ? _Reflect$set : function (e, r, t, o) {
     var f,

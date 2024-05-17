@@ -1,7 +1,7 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import defineProperty from "./defineProperty.ts";
 import superPropBase from "./superPropBase.ts";
+import defineProperty from "./defineProperty.ts";
 
 function set(
   target: object,
