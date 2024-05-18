@@ -5,9 +5,12 @@ import superPropBase from "./superPropBase.ts";
 // https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
 //
 //  28.1ak.5 Reflect.get ( target, propertyKey [ , receiver ] )
-export default function _get<T extends object, P extends string | symbol>(
-  this: unknown,
-): P extends keyof T ? T[P] : any {
+export default function _get<T extends object, P extends PropertyKey>(
+  target: T,
+  property: P,
+  receiver?: unknown,
+): P extends keyof T ? T[P] : any;
+export default function _get(): any {
   if (typeof Reflect !== "undefined" && Reflect.get) {
     // need a bind because https://github.com/babel/babel/issues/14527
     // @ts-expect-error function reassign
@@ -29,6 +32,5 @@ export default function _get<T extends object, P extends string | symbol>(
     };
   }
 
-  // @ts-expect-error IArgument interface as any[]
-  return _get.apply(this, arguments);
+  return _get.apply(null, arguments as any as Parameters<typeof Reflect.get>);
 }
