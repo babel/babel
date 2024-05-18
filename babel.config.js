@@ -499,6 +499,13 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       replacement: template`hasOwnProperty.call`,
     },
     {
+      name: "Object.entries",
+      necessary: () => true,
+      supported: path =>
+        path.parentPath.isCallExpression({ callee: path.node }),
+      replacement: template`Object.entries || (o => Object.keys(o).map(k => [k, o[k]]))`,
+    },
+    {
       name: "fs.rmSync",
       necessary({ node, parent }) {
         // To avoid infinite replacement loops
