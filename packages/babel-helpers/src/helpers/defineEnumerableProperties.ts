@@ -2,9 +2,9 @@
 /* @onlyBabel7 */
 export default function _defineEnumerableProperties<T>(
   obj: T,
-  descs: PropertyDescriptor[],
-) {
-  // eslint-disable-next-line -- both guard-for-in and iterables are proposital
+  descs: { [key: string | symbol]: PropertyDescriptor },
+): T {
+  // eslint-disable-next-line guard-for-in
   for (var key in descs) {
     var desc = descs[key];
     desc.configurable = desc.enumerable = true;
@@ -19,7 +19,6 @@ export default function _defineEnumerableProperties<T>(
     var objectSymbols = Object.getOwnPropertySymbols(descs);
     for (var i = 0; i < objectSymbols.length; i++) {
       var sym = objectSymbols[i];
-      // @ts-expect-error Fixme: document symbol properties
       desc = descs[sym];
       desc.configurable = desc.enumerable = true;
       if ("value" in desc) desc.writable = true;
