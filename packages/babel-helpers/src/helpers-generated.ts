@@ -161,10 +161,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'import setPrototypeOf from"setPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";export default function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}',
   ),
-  // size: 404, gzip size: 243
+  // size: 406, gzip size: 243
   createClass: helper(
     "7.0.0-beta.0",
-    'import toPropertyKey from"toPropertyKey";function _defineProperties(e,r){for(var t=0;t<r.length;t++){var o=r[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(o.key),o)}}export default function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
+    'import toPropertyKey from"toPropertyKey";function _defineProperties(e,r){for(let t=0;t<r.length;t++){const o=r[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(o.key),o)}}export default function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
   ),
   // size: 774, gzip size: 447
   createForOfIteratorHelper: helper(
