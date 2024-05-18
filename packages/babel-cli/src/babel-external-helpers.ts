@@ -1,5 +1,7 @@
-import commander from "commander";
+import * as commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
+
+const program = commander.default.program as commander.Command;
 
 function collect(value: unknown, previousValue: Array<string>): Array<string> {
   // If the user passed the option with no value, like "babel-external-helpers --whitelist", do nothing.
@@ -14,18 +16,19 @@ function collect(value: unknown, previousValue: Array<string>): Array<string> {
   return values;
 }
 
-commander.option(
+program.option(
   "-l, --whitelist [whitelist]",
   "Whitelist of helpers to ONLY include",
   collect,
 );
-commander.option(
+program.option(
   "-t, --output-type [type]",
   "Type of output (global|umd|var)",
   "global",
 );
 
-commander.usage("[options]");
-commander.parse(process.argv);
+program.usage("[options]");
+program.parse(process.argv);
+const opts = program.opts();
 
-console.log(buildExternalHelpers(commander.whitelist, commander.outputType));
+console.log(buildExternalHelpers(opts.whitelist, opts.outputType));
