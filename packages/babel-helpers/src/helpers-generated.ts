@@ -209,7 +209,7 @@ const helpers: Record<string, Helper> = {
   // size: 319, gzip size: 225
   get: helper(
     "7.0.0-beta.0",
-    'import superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(this,arguments)}',
+    'import superPropBase from"superPropBase";export default function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(null,arguments)}',
   ),
   // size: 194, gzip size: 120
   getPrototypeOf: helper(
