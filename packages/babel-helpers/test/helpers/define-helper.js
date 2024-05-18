@@ -11,14 +11,14 @@ function getHelperId(baseURL, name) {
   return `_$_${testName}_${name}`;
 }
 
-export function defineHelperAndGetMetadata(baseURL, name, code) {
+export function defineHelperAndGetMetadata(babel, baseURL, name, code) {
   const id = getHelperId(baseURL, name);
   if (id in helpers) {
     throw new Error(`The ${id} helper is already defined.`);
   }
 
   let metadata;
-  [code, metadata] = getHelperMetadata(code, name);
+  [code, metadata] = getHelperMetadata(babel, code, name);
 
   Object.defineProperty(helpers, id, {
     value: {
@@ -30,6 +30,6 @@ export function defineHelperAndGetMetadata(baseURL, name, code) {
   return { id, metadata };
 }
 
-export default function defineHelper(baseURL, name, code) {
-  return defineHelperAndGetMetadata(baseURL, name, code).id;
+export default function defineHelper(babel, baseURL, name, code) {
+  return defineHelperAndGetMetadata(babel, baseURL, name, code).id;
 }

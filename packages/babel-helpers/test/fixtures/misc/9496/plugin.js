@@ -1,10 +1,10 @@
 import defineHelper from "../../../helpers/define-helper.js";
 
-const main = defineHelper(import.meta.url, "main", `
-  export default function helper() {}
-`);
+export default function(babel) {
+  const main = defineHelper(babel, import.meta.url, "main", `
+    export default function helper() {}
+  `);
 
-export default function() {
   return {
     visitor: {
       Identifier(path) {

@@ -1,8 +1,6 @@
 // NOTE: This file must be compatible with old Node.js versions, since it runs
 // during testing.
 
-import { babel } from "$repo-utils/babel-top-level";
-
 /**
  * @typedef {Object} HelperMetadata
  * @property {string[]} globals
@@ -16,9 +14,11 @@ import { babel } from "$repo-utils/babel-top-level";
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
  *
+ * @param {typeof import("@babel/core")} babel
+ *
  * @returns {HelperMetadata}
  */
-export function getHelperMetadata(code, helperName) {
+export function getHelperMetadata(babel, code, helperName) {
   const globals = new Set();
   // Maps imported identifier name -> helper name
   const dependenciesBindings = new Map();

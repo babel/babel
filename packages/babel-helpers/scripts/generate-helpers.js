@@ -138,7 +138,7 @@ const helpers: Record<string, Helper> = {
 
     let metadata;
     // eslint-disable-next-line prefer-const
-    [code, metadata] = getHelperMetadata(code, helperName);
+    [code, metadata] = getHelperMetadata(babel, code, helperName);
 
     const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}
