@@ -438,7 +438,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         innerBinding,
         noUninitializedPrivateFieldAccess,
       } = this;
-      const { name } = (member.node.property as t.PrivateName).id;
+      const privateName = member.node.property as t.PrivateName;
+      const { name } = privateName.id;
       const {
         id,
         static: isStatic,
@@ -448,6 +449,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         setId,
       } = privateNamesMap.get(name);
       const isGetterOrSetter = getId || setId;
+
+      const cloneId = (id: t.Identifier) =>
+        t.inherits(t.cloneNode(id), privateName);
 
       if (isStatic) {
         // if there are any local variable shadowing classRef, unshadow it
@@ -465,7 +469,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           return t.callExpression(file.addHelper(helperName), [
             this.receiver(member),
             t.cloneNode(classRef),
-            t.cloneNode(id),
+            cloneId(id),
           ]);
         }
 
@@ -476,7 +480,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         if (!isMethod) {
           if (skipCheck) {
             return buildStaticPrivateFieldAccess(
-              t.cloneNode(id),
+              cloneId(id),
               noUninitializedPrivateFieldAccess,
             );
           }
@@ -485,7 +489,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             t.callExpression(file.addHelper("assertClassBrand"), [
               t.cloneNode(classRef),
               receiver,
-              t.cloneNode(id),
+              cloneId(id),
             ]),
             noUninitializedPrivateFieldAccess,
           );
@@ -493,12 +497,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
         if (getId) {
           if (skipCheck) {
-            return t.callExpression(t.cloneNode(getId), [receiver]);
+            return t.callExpression(cloneId(getId), [receiver]);
           }
           return t.callExpression(file.addHelper("classPrivateGetter"), [
             t.cloneNode(classRef),
             receiver,
-            t.cloneNode(getId),
+            cloneId(getId),
           ]);
         }
 
@@ -514,11 +518,11 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           ]);
         }
 
-        if (skipCheck) return t.cloneNode(id);
+        if (skipCheck) return cloneId(id);
         return t.callExpression(file.addHelper("assertClassBrand"), [
           t.cloneNode(classRef),
           receiver,
-          t.cloneNode(id),
+          cloneId(id),
         ]);
       }
 
@@ -533,38 +537,38 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
             return t.callExpression(file.addHelper("classPrivateFieldGet"), [
               this.receiver(member),
-              t.cloneNode(id),
+              cloneId(id),
             ]);
           }
           return t.callExpression(file.addHelper("classPrivateGetter"), [
             t.cloneNode(id),
             this.receiver(member),
-            t.cloneNode(getId),
+            cloneId(getId),
           ]);
         }
         if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
           return t.callExpression(file.addHelper("classPrivateMethodGet"), [
             this.receiver(member),
             t.cloneNode(id),
-            t.cloneNode(methodId),
+            cloneId(methodId),
           ]);
         }
         return t.callExpression(file.addHelper("assertClassBrand"), [
           t.cloneNode(id),
           this.receiver(member),
-          t.cloneNode(methodId),
+          cloneId(methodId),
         ]);
       }
       if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
         return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
-          t.cloneNode(id),
+          cloneId(id),
           this.receiver(member),
         ]);
       }
 
       return t.callExpression(file.addHelper("classPrivateFieldGet"), [
         this.receiver(member),
-        t.cloneNode(id),
+        cloneId(id),
       ]);
     },
 
@@ -584,7 +588,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         file,
         noUninitializedPrivateFieldAccess,
       } = this;
-      const { name } = (member.node.property as t.PrivateName).id;
+      const privateName = member.node.property as t.PrivateName;
+      const { name } = privateName.id;
       const {
         id,
         static: isStatic,
@@ -593,6 +598,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         getId,
       } = privateNamesMap.get(name);
       const isGetterOrSetter = getId || setId;
+
+      const cloneId = (id: t.Identifier) =>
+        t.inherits(t.cloneNode(id), privateName);
 
       if (isStatic) {
         if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
@@ -604,7 +612,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           return t.callExpression(file.addHelper(helperName), [
             this.receiver(member),
             t.cloneNode(classRef),
-            t.cloneNode(id),
+            cloneId(id),
             value,
           ]);
         }
@@ -632,7 +640,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
             t.cloneNode(classRef),
-            t.cloneNode(setId),
+            cloneId(setId),
             receiver,
             value,
           ]);
@@ -640,7 +648,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         return t.assignmentExpression(
           "=",
           buildStaticPrivateFieldAccess(
-            t.cloneNode(id),
+            cloneId(id),
             noUninitializedPrivateFieldAccess,
           ),
           skipCheck
@@ -657,13 +665,13 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
             return t.callExpression(file.addHelper("classPrivateFieldSet"), [
               this.receiver(member),
-              t.cloneNode(id),
+              cloneId(id),
               value,
             ]);
           }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
             t.cloneNode(id),
-            t.cloneNode(setId),
+            cloneId(setId),
             this.receiver(member),
             value,
           ]);
@@ -677,7 +685,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
       if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
         return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
-          t.cloneNode(id),
+          cloneId(id),
           this.receiver(member),
           value,
         ]);
@@ -685,7 +693,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
       return t.callExpression(file.addHelper("classPrivateFieldSet"), [
         this.receiver(member),
-        t.cloneNode(id),
+        cloneId(id),
         value,
       ]);
     },
@@ -697,13 +705,17 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         file,
         noUninitializedPrivateFieldAccess,
       } = this;
-      const { name } = (member.node.property as t.PrivateName).id;
+      const privateName = member.node.property as t.PrivateName;
+      const { name } = privateName.id;
       const {
         id,
         static: isStatic,
         method: isMethod,
         setId,
       } = privateNamesMap.get(name);
+
+      const cloneId = (id: t.Identifier) =>
+        t.inherits(t.cloneNode(id), privateName);
 
       if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
         if (isStatic) {
@@ -723,7 +735,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             t.callExpression(helper, [
               this.receiver(member),
               t.cloneNode(classRef),
-              t.cloneNode(id),
+              cloneId(id),
             ]),
             t.identifier("value"),
           );
@@ -732,7 +744,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         return t.memberExpression(
           t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
             this.receiver(member),
-            t.cloneNode(id),
+            cloneId(id),
           ]),
           t.identifier("value"),
         );
