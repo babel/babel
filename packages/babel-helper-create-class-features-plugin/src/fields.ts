@@ -406,6 +406,16 @@ function buildStaticPrivateFieldAccess<N extends t.Expression>(
   return t.memberExpression(expr, t.identifier("_"));
 }
 
+function autoInherits<
+  Member extends { node: t.Node },
+  Result extends t.Node,
+  Fn extends (member: Member, ...args: unknown[]) => Result,
+>(fn: Fn): Fn {
+  return function (this: ThisParameterType<Fn>, member) {
+    return t.inherits(fn.apply(this, arguments as any), member.node);
+  } as Fn;
+}
+
 const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
   {
     memoise(member, count) {
@@ -430,7 +440,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       return t.cloneNode(object);
     },
 
-    get(member) {
+    get: autoInherits(function (member) {
       const {
         classRef,
         privateNamesMap,
@@ -570,7 +580,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         this.receiver(member),
         cloneId(id),
       ]);
-    },
+    }),
 
     boundGet(member) {
       this.memoise(member, 1);
@@ -581,7 +591,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       );
     },
 
-    set(member, value) {
+    set: autoInherits(function (member, value) {
       const {
         classRef,
         privateNamesMap,
@@ -696,7 +706,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         cloneId(id),
         value,
       ]);
-    },
+    }),
 
     destructureSet(member) {
       const {
