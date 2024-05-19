@@ -230,7 +230,7 @@ __metadata:
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
     chokidar: "npm:^3.4.0"
-    commander: "condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
     glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync|default)"
@@ -1256,7 +1256,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
-    commander: "condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0"
     core-js: "npm:^3.30.2"
     node-environment-flags: "condition:BABEL_8_BREAKING ? : ^1.0.5"
     regenerator-runtime: "npm:^0.14.0"
@@ -8123,20 +8123,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander-BABEL_8_BREAKING-true@npm:commander@^12.0.0":
-  version: 12.0.0
-  resolution: "commander@npm:12.0.0"
-  checksum: 10/62062e2ffe6abd5aa42a551e62fd5eb9b2620f6ac4299382b2aa9fb02f95cda0242d7e84acb890479bd6491edb805f7f91aecb5b4f5c70dc57df49ed7f02ef14
+"commander-BABEL_8_BREAKING-true@npm:commander@^12.1.0":
+  version: 12.1.0
+  resolution: "commander@npm:12.1.0"
+  checksum: 10/cdaeb672d979816853a4eed7f1310a9319e8b976172485c2a6b437ed0db0a389a44cfb222bfbde772781efa9f215bdd1b936f80d6b249485b465c6cb906e1f93
   languageName: node
   linkType: hard
 
-"commander@condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0":
-  version: 0.0.0-condition-3490ed
-  resolution: "commander@condition:BABEL_8_BREAKING?^12.0.0:^6.2.0#3490ed"
+"commander@condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0":
+  version: 0.0.0-condition-5eb315
+  resolution: "commander@condition:BABEL_8_BREAKING?^12.1.0:^6.2.0#5eb315"
   dependencies:
     commander-BABEL_8_BREAKING-false: "npm:commander@^6.2.0"
-    commander-BABEL_8_BREAKING-true: "npm:commander@^12.0.0"
-  checksum: 10/0f72a1ef05986d7ce60ddc8a7abc5e167858e8c77dc73e3f26e34127bad695f9051f2f2dc45afd01a88275991da05e21999d810474e77f550f96f14411477fba
+    commander-BABEL_8_BREAKING-true: "npm:commander@^12.1.0"
+  checksum: 10/722f3bcc78ac4f7d1ef5c38e0ce058c5959d52ae42e2ac811bd9dd9bc6ad61a12d8d13c702c03dd2de1d2521e56b5f8c98f2ee47d76c3e1547cfbb73d482b3f1
   languageName: node
   linkType: hard
 
