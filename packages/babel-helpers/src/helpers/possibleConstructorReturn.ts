@@ -1,8 +1,10 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import assertThisInitialized from "assertThisInitialized";
+import assertThisInitialized from "./assertThisInitialized.ts";
 
-export default function _possibleConstructorReturn(self, call) {
+export default function _possibleConstructorReturn<
+  T extends object | undefined,
+>(self: T, call: T | ((...args: any[]) => T) | undefined) {
   if (call && (typeof call === "object" || typeof call === "function")) {
     return call;
   } else if (call !== void 0) {
