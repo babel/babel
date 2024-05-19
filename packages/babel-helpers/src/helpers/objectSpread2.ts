@@ -1,6 +1,5 @@
 /* @minVersion 7.5.0 */
 
-// @ts-expect-error Migrate in another PR
 import defineProperty from "./defineProperty.ts";
 
 // This function is different to "Reflect.ownKeys". The enumerableOnly

@@ -1,21 +1,29 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import superPropBase from "superPropBase";
-import defineProperty from "defineProperty";
+import superPropBase from "./superPropBase.ts";
+import defineProperty from "./defineProperty.ts";
 
-function set(target, property, value, receiver) {
+function set(
+  target: object,
+  property: PropertyKey,
+  value: any,
+  receiver?: any,
+): boolean {
   if (typeof Reflect !== "undefined" && Reflect.set) {
+    // @ts-expect-error explicit function reassign
     set = Reflect.set;
   } else {
+    // @ts-expect-error explicit function reassign
     set = function set(target, property, value, receiver) {
       var base = superPropBase(target, property);
       var desc;
 
       if (base) {
-        desc = Object.getOwnPropertyDescriptor(base, property);
+        desc = Object.getOwnPropertyDescriptor(base, property)!;
         if (desc.set) {
           desc.set.call(receiver, value);
           return true;
+          // so getOwnPropertyDescriptor should always be defined
         } else if (!desc.writable) {
           // Both getter and non-writable fall into this.
           return false;
@@ -46,7 +54,13 @@ function set(target, property, value, receiver) {
   return set(target, property, value, receiver);
 }
 
-export default function _set(target, property, value, receiver, isStrict) {
+export default function _set(
+  target: Object,
+  property: PropertyKey,
+  value: any,
+  receiver?: any,
+  isStrict?: boolean,
+) {
   var s = set(target, property, value, receiver || target);
   if (!s && isStrict) {
     throw new TypeError("failed to set property");

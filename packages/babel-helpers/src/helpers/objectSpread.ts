@@ -1,7 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 /* @onlyBabel7 */
 
-// @ts-expect-error Migrate in another PR
 import defineProperty from "./defineProperty.ts";
 
 type Intersection<R extends any[]> = R extends [infer H, ...infer S]

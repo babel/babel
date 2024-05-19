@@ -1,7 +1,9 @@
 /* @minVersion 7.0.0-beta.0 */
 /* @onlyBabel7 */
-
-export default function _defineEnumerableProperties(obj, descs) {
+export default function _defineEnumerableProperties<T>(
+  obj: T,
+  descs: { [key: string | symbol]: PropertyDescriptor },
+): T {
   // eslint-disable-next-line guard-for-in
   for (var key in descs) {
     var desc = descs[key];

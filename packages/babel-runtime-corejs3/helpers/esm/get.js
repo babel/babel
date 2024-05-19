@@ -10,5 +10,5 @@ export default function _get() {
       var n = _Object$getOwnPropertyDescriptor(p, t);
       return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
     }
-  }, _get.apply(this, arguments);
+  }, _get.apply(null, arguments);
 }

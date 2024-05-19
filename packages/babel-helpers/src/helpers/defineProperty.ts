@@ -1,7 +1,11 @@
 /* @minVersion 7.0.0-beta.0 */
+import toPropertyKey from "./toPropertyKey.ts";
 
-import toPropertyKey from "toPropertyKey";
-export default function _defineProperty(obj, key, value) {
+export default function _defineProperty<T extends object>(
+  obj: T,
+  key: PropertyKey,
+  value: any,
+) {
   key = toPropertyKey(key);
   // Shortcircuit the slow defineProperty path when possible.
   // We are trying to avoid issues where setters defined on the
@@ -16,6 +20,7 @@ export default function _defineProperty(obj, key, value) {
       writable: true,
     });
   } else {
+    // @ts-expect-error - Explicitly assigning to generic type key
     obj[key] = value;
   }
   return obj;
