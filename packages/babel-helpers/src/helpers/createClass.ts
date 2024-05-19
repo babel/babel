@@ -9,7 +9,7 @@ interface Prop extends PropertyDescriptor {
 
 function _defineProperties(target: object, props: Prop[]): void {
   for (var i = 0; i < props.length; i++) {
-    const descriptor = props[i];
+    var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
