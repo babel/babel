@@ -9,6 +9,7 @@ class A {
     babelHelpers.classPrivateFieldGet2(_field, this);
     babelHelpers.classPrivateGetter(_A_brand, this, _get_getter);
     babelHelpers.assertClassBrand(_A_brand, this, _method);
+    inExpr(babelHelpers.classPrivateFieldGet2(_field, this));
   }
 }
 function _get_getter(_this) {}

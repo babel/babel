@@ -9,5 +9,7 @@ class A {
     this.#field;
     this.#getter;
     this.#method;
+
+    inExpr(this.#field);
   }
 }

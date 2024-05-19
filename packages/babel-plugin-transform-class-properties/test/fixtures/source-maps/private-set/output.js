@@ -8,6 +8,7 @@ class A {
   method() {
     babelHelpers.classPrivateFieldSet2(_field, this, 42);
     babelHelpers.classPrivateSetter(_A_brand, _set_setter, this, 43);
+    inExpr(babelHelpers.classPrivateFieldSet2(_field, this, 5));
   }
 }
 function _set_setter(_this, value) {}
