@@ -1110,7 +1110,7 @@ class Printer {
     const nodeLoc = node.loc;
     const len = comments.length;
     let hasLoc = !!nodeLoc;
-    const nodeStartLine = hasLoc ? nodeLoc.start.line : 0;
+    const nodeStartLine = hasLoc ? (nodeLoc?.start?.line ? nodeLoc.start.line : 0) : 0;
     const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
     let lastLine = 0;
     let leadingCommentNewline = 0;
