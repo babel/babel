@@ -7,6 +7,7 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
+// @ts-expect-error TS2339: Property 'default' does not exist on type 'typeof import("./node_modules/commander-BABEL_8_BREAKING-true/typings/index")'
 const program = commander.default.program as commander.Command;
 
 // Standard Babel input configs.

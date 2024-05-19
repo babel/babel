@@ -1,6 +1,7 @@
 import * as commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
 
+// @ts-expect-error TS2339: Property 'default' does not exist on type 'typeof import("./node_modules/commander-BABEL_8_BREAKING-true/typings/index")'
 const program = commander.default.program as commander.Command;
 
 function collect(value: unknown, previousValue: Array<string>): Array<string> {

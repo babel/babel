@@ -230,7 +230,7 @@ __metadata:
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
     chokidar: "npm:^3.4.0"
-    commander: "npm:^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
     glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync|default)"
@@ -1256,7 +1256,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
-    commander: "npm:^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0"
     core-js: "npm:^3.30.2"
     node-environment-flags: "condition:BABEL_8_BREAKING ? : ^1.0.5"
     regenerator-runtime: "npm:^0.14.0"
@@ -8116,6 +8116,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander-BABEL_8_BREAKING-false@npm:commander@^6.2.0":
+  version: 6.2.1
+  resolution: "commander@npm:6.2.1"
+  checksum: 10/25b88c2efd0380c84f7844b39cf18510da7bfc5013692d68cdc65f764a1c34e6c8a36ea6d72b6620e3710a930cf8fab2695bdec2bf7107a0f4fa30a3ef3b7d0e
+  languageName: node
+  linkType: hard
+
+"commander-BABEL_8_BREAKING-true@npm:commander@^12.0.0":
+  version: 12.0.0
+  resolution: "commander@npm:12.0.0"
+  checksum: 10/62062e2ffe6abd5aa42a551e62fd5eb9b2620f6ac4299382b2aa9fb02f95cda0242d7e84acb890479bd6491edb805f7f91aecb5b4f5c70dc57df49ed7f02ef14
+  languageName: node
+  linkType: hard
+
+"commander@condition:BABEL_8_BREAKING ? ^12.0.0 : ^6.2.0":
+  version: 0.0.0-condition-3490ed
+  resolution: "commander@condition:BABEL_8_BREAKING?^12.0.0:^6.2.0#3490ed"
+  dependencies:
+    commander-BABEL_8_BREAKING-false: "npm:commander@^6.2.0"
+    commander-BABEL_8_BREAKING-true: "npm:commander@^12.0.0"
+  checksum: 10/0f72a1ef05986d7ce60ddc8a7abc5e167858e8c77dc73e3f26e34127bad695f9051f2f2dc45afd01a88275991da05e21999d810474e77f550f96f14411477fba
+  languageName: node
+  linkType: hard
+
 "commander@npm:11.1.0":
   version: 11.1.0
   resolution: "commander@npm:11.1.0"
@@ -8134,13 +8158,6 @@ __metadata:
   version: 4.0.1
   resolution: "commander@npm:4.0.1"
   checksum: 10/90cf3f01bce830a927cf9759099683a274ce64015ea3d5f1f2215463dbe04e3ef2ffbbe25c5c733f12bf076b1eef592704ac02e31d4da183aa715ef75f662056
-  languageName: node
-  linkType: hard
-
-"commander@npm:^6.2.0":
-  version: 6.2.1
-  resolution: "commander@npm:6.2.1"
-  checksum: 10/25b88c2efd0380c84f7844b39cf18510da7bfc5013692d68cdc65f764a1c34e6c8a36ea6d72b6620e3710a930cf8fab2695bdec2bf7107a0f4fa30a3ef3b7d0e
   languageName: node
   linkType: hard
 

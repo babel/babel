@@ -16,6 +16,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
+// @ts-expect-error TS2339: Property 'default' does not exist on type 'typeof import("./node_modules/commander-BABEL_8_BREAKING-true/typings/index")'
 const program = commander.default.program as commander.Command;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {

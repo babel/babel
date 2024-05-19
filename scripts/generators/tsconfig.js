@@ -265,6 +265,7 @@ fs.writeFileSync(
               "babel-plugin-dynamic-import-node/utils",
               ["./lib/babel-plugin-dynamic-import-node.d.ts"],
             ],
+            ["commander", ["./node_modules/commander-BABEL_8_BREAKING-true"]],
             ["glob", ["./node_modules/glob-BABEL_8_BREAKING-true"]],
             ["globals", ["./node_modules/globals-BABEL_8_BREAKING-true"]],
             ["js-tokens", ["./node_modules/js-tokens-BABEL_8_BREAKING-true"]],
