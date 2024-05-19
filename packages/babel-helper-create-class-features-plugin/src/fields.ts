@@ -979,17 +979,20 @@ function buildPrivateInstanceFieldInitSpec(
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  return inheritPropComments(
-    t.expressionStatement(
-      t.callExpression(helper, [
-        t.thisExpression(),
-        t.cloneNode(id),
-        process.env.BABEL_8_BREAKING || newHelpers(state)
-          ? value
-          : template.expression.ast`{ writable: true, value: ${value} }`,
-      ]),
+  return inheritLoc(
+    inheritPropComments(
+      t.expressionStatement(
+        t.callExpression(helper, [
+          t.thisExpression(),
+          inheritLoc(t.cloneNode(id), prop.node.key),
+          process.env.BABEL_8_BREAKING || newHelpers(state)
+            ? value
+            : template.expression.ast`{ writable: true, value: ${value} }`,
+        ]),
+      ),
+      prop,
     ),
-    prop,
+    prop.node,
   );
 }
 
@@ -1164,8 +1167,9 @@ function buildPrivateAccessorInitialization(
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  return inheritPropComments(
-    template.statement.ast`${helper}(
+  return inheritLoc(
+    inheritPropComments(
+      template.statement.ast`${helper}(
       ${t.thisExpression()},
       ${t.cloneNode(id)},
       {
@@ -1173,7 +1177,9 @@ function buildPrivateAccessorInitialization(
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       },
     )` as t.ExpressionStatement,
-    prop,
+      prop,
+    ),
+    prop.node,
   );
 }
 
@@ -1490,6 +1496,13 @@ function isNameOrLength({ key, computed }: t.ClassProperty) {
 function inheritPropComments<T extends t.Node>(node: T, prop: PropPath) {
   t.inheritLeadingComments(node, prop.node);
   t.inheritInnerComments(node, prop.node);
+  return node;
+}
+
+function inheritLoc<T extends t.Node>(node: T, original: t.Node) {
+  node.start = original.start;
+  node.end = original.end;
+  node.loc = original.loc;
   return node;
 }
 
