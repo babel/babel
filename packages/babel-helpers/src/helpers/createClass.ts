@@ -8,7 +8,7 @@ interface Prop extends PropertyDescriptor {
 }
 
 function _defineProperties(target: object, props: Prop[]): void {
-  for (let i = 0; i < props.length; i++) {
+  for (var i = 0; i < props.length; i++) {
     const descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
