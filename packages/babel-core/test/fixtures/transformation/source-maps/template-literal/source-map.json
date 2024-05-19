@@ -10,6 +10,6 @@
   "sourcesContent": [
     "let a = `a${b}c`;"
   ],
-  "mappings": "AAAA,IAAIA,CAAC,GAAI,IAAGC,CAAE,GAAE",
+  "mappings": "AAAA,IAAIA,CAAC,GAAG,IAAIC,CAAC,GAAG",
   "ignoreList": []
 }
