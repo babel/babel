@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "names": [
+    "A",
+    "constructor",
+    "babelHelpers",
+    "classPrivateFieldInitSpec",
+    "_field",
+    "method",
+    "classPrivateFieldSet2"
+  ],
+  "sources": [
+    "source-maps/private-field-set/input.js"
+  ],
+  "sourcesContent": [
+    "class A {\n  #field;\n\n  method() {\n    this.#field = 42;\n  }\n}"
+  ],
+  "mappings": ";AAAA,MAAMA,CAAC,CAAC;EAAAC,YAAA;IAAAC,YAAA,CAAAC,yBAAA,OAAAC,MAAA;EAAA;EAGNC,MAAMA,CAAA,EAAG;IACPH,YAAA,CAAAI,qBAAA,CAAAF,MAAA,MAAI,EAAU,EAAE;EAClB;AACF",
+  "ignoreList": []
+}
