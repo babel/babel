@@ -51,10 +51,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _arrayWithHoles(r){if(Array.isArray(r))return r}",
   ),
-  // size: 145, gzip size: 121
+  // size: 140, gzip size: 116
   arrayWithoutHoles: helper(
     "7.0.0-beta.0",
-    'import arrayLikeToArray from"arrayLikeToArray";export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r,null)}',
+    'import arrayLikeToArray from"arrayLikeToArray";export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}',
   ),
   // size: 187, gzip size: 167
   assertClassBrand: helper(
@@ -408,15 +408,15 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _temporalUndefined(){}",
   ),
-  // size: 336, gzip size: 162
+  // size: 331, gzip size: 156
   toArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithHoles from"arrayWithHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r,null)||nonIterableRest()}',
+    'import arrayWithHoles from"arrayWithHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}',
   ),
-  // size: 361, gzip size: 172
+  // size: 356, gzip size: 165
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithoutHoles from"arrayWithoutHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r,null)||nonIterableSpread()}',
+    'import arrayWithoutHoles from"arrayWithoutHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}',
   ),
   // size: 285, gzip size: 210
   toPrimitive: helper(
