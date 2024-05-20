@@ -8,23 +8,23 @@ export default function _iterableToArrayLimit(r, l) {
       n,
       i,
       u,
-      a = [],
-      f = !0,
+      a,
+      f = [],
       o = !1;
     try {
-      if (i = (t = t.call(r)).next, 0 === l) {
+      if (u = (t = t.call(r)).next, 0 === l) {
         if (Object(t) !== t) return;
-        f = !1;
-      } else for (; !(f = (e = i.call(t)).done) && (_pushInstanceProperty(a).call(a, e.value), a.length !== l); f = !0);
+        e = !1;
+      } else for (; l < f.length && (e = !0, !(e = (n = u.call(t)).done));) _pushInstanceProperty(f).call(f, n.value);
     } catch (r) {
-      o = !0, n = r;
+      o = !0, i = r;
     } finally {
       try {
-        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
+        if (!e && null != t["return"] && (a = t["return"](), Object(a) !== a)) return;
       } finally {
-        if (o) throw n;
+        if (o) throw i;
       }
     }
-    return a;
+    return f;
   }
 }

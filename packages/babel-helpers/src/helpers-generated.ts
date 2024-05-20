@@ -273,10 +273,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'export default function _iterableToArray(r){if("undefined"!=typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}',
   ),
-  // size: 431, gzip size: 303
+  // size: 425, gzip size: 302
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",
-    'export default function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a=[],f=!0,o=!1;try{if(i=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;f=!1}else for(;!(f=(e=i.call(t)).done)&&(a.push(e.value),a.length!==l);f=!0);}catch(r){o=!0,n=r}finally{try{if(!f&&null!=t.return&&(u=t.return(),Object(u)!==u))return}finally{if(o)throw n}}return a}}',
+    'export default function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a,f=[],o=!1;try{if(u=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;e=!1}else for(;l<f.length&&(e=!0,!(e=(n=u.call(t)).done));)f.push(n.value)}catch(r){o=!0,i=r}finally{try{if(!e&&null!=t.return&&(a=t.return(),Object(a)!==a))return}finally{if(o)throw i}}return f}}',
   ),
   // size: 228, gzip size: 196
   iterableToArrayLimitLoose: helper(

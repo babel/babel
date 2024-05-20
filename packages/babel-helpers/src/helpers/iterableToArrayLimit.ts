@@ -12,7 +12,7 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
   if (iterator == null) return;
 
   var _arr: T[] = [];
-  var iteratorNormalCompletion = true;
+  var iteratorNormalCompletion;
   var didIteratorError = false;
   var step, iteratorError, next, _return;
   try {
@@ -21,10 +21,12 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
       if (Object(iterator) !== iterator) return;
       iteratorNormalCompletion = false;
     } else {
-      while (!(iteratorNormalCompletion = (step = next.call(iterator)).done)) {
+      while (
+        i < _arr.length &&
+        !((iteratorNormalCompletion = true),
+        (iteratorNormalCompletion = (step = next.call(iterator)).done))
+      ) {
         _arr.push(step.value);
-        if (_arr.length === i) break;
-        iteratorNormalCompletion = true;
       }
     }
   } catch (err) {
