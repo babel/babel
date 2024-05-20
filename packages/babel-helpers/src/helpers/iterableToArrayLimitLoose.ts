@@ -1,13 +1,13 @@
 /* @minVersion 7.0.0-beta.0 */
 
 export default function _iterableToArrayLimitLoose<T>(
-  arr: Iterable<T> & { "@@iterator"?: any },
+  arr: Array<T>,
   i: number,
 ) {
-  let iterator: Iterator<T> =
+  let iterator: Iterator<T> & Function =
     arr &&
     ((typeof Symbol !== "undefined" && arr[Symbol.iterator]) ||
-      arr["@@iterator"]);
+      (arr as any)["@@iterator"]);
   if (iterator == null) return;
 
   const _arr: T[] = [];

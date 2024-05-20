@@ -1,9 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _iterableToArrayLimit<T>(
-  arr: Iterable<T> & { "@@iterator"?: any },
-  i: number,
-) {
+export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
   // this is an expanded form of \`for...of\` that properly supports abrupt completions of
   // iterators etc.
 
@@ -11,7 +8,7 @@ export default function _iterableToArrayLimit<T>(
     arr == null
       ? null
       : (typeof Symbol !== "undefined" && arr[Symbol.iterator]) ||
-        arr["@@iterator"];
+        (arr as any)["@@iterator"];
   if (iterator == null) return;
 
   const _arr: T[] = [];
@@ -19,7 +16,7 @@ export default function _iterableToArrayLimit<T>(
   let didIteratorError = false;
   let step, iteratorError, next, _return;
   try {
-    next = (iterator = iterator.call(arr)).next;
+    next = (iterator = (iterator as unknown as Function).call(arr)).next;
     if (i === 0) {
       if (Object(iterator) !== iterator) return;
       iteratorNormalCompletion = false;

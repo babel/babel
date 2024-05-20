@@ -6,11 +6,11 @@ import unsupportedIterableToArray from "./unsupportedIterableToArray.ts";
 // @ts-expect-error nonIterableSpread is still being converted to TS.
 import nonIterableSpread from "./nonIterableSpread.ts";
 
-export default function _toConsumableArray(arr) {
+export default function _toConsumableArray<T>(arr: any): T[] {
   return (
-    arrayWithoutHoles(arr) ||
-    iterableToArray(arr) ||
-    unsupportedIterableToArray(arr) ||
+    arrayWithoutHoles<T>(arr) ||
+    iterableToArray<T>(arr) ||
+    unsupportedIterableToArray<T>(arr, null) ||
     nonIterableSpread()
   );
 }

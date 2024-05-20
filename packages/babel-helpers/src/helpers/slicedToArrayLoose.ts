@@ -6,11 +6,11 @@ import unsupportedIterableToArray from "./unsupportedIterableToArray.ts";
 // @ts-expect-error nonIterableRest is still being converted to TS.
 import nonIterableRest from "./nonIterableRest.ts";
 
-export default function _slicedToArrayLoose(arr, i) {
+export default function _slicedToArrayLoose<T>(arr: any, i: number): T[] {
   return (
-    arrayWithHoles(arr) ||
-    iterableToArrayLimitLoose(arr, i) ||
-    unsupportedIterableToArray(arr, i) ||
+    arrayWithHoles<T>(arr) ||
+    iterableToArrayLimitLoose<T>(arr, i) ||
+    unsupportedIterableToArray<T>(arr, i) ||
     nonIterableRest()
   );
 }

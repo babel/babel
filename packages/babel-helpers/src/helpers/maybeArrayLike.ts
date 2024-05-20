@@ -3,8 +3,8 @@
 import arrayLikeToArray from "./arrayLikeToArray.ts";
 
 export default function _maybeArrayLike<T>(
-  next: (arr: any, i: number) => any,
-  arr: any,
+  next: (arr: ArrayLike<T>, i: number) => T[] | undefined,
+  arr: ArrayLike<T>,
   i: number,
 ) {
   if (arr && !Array.isArray(arr) && typeof arr.length === "number") {
