@@ -1,7 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-// @ts-expect-error Migrate in another PR
-import toPropertyKey from "toPropertyKey.ts";
+import toPropertyKey from "./toPropertyKey.ts";
 
 interface Prop extends PropertyDescriptor {
   key: PropertyKey;
