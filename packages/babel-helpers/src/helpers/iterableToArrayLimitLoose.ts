@@ -4,14 +4,14 @@ export default function _iterableToArrayLimitLoose<T>(
   arr: Array<T>,
   i: number,
 ) {
-  let iterator: Iterator<T> & Function =
+  var iterator: Iterator<T> & Function =
     arr &&
     ((typeof Symbol !== "undefined" && arr[Symbol.iterator]) ||
       (arr as any)["@@iterator"]);
   if (iterator == null) return;
 
-  const _arr: T[] = [];
-  let step;
+  var _arr: T[] = [];
+  var step;
   for (
     iterator = iterator.call(arr);
     arr.length < i && !(step = iterator.next()).done;

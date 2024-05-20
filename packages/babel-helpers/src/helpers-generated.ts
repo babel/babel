@@ -273,15 +273,15 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'export default function _iterableToArray(r){if("undefined"!=typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}',
   ),
-  // size: 442, gzip size: 308
+  // size: 431, gzip size: 303
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",
-    'export default function _iterableToArrayLimit(t,e){let l=null==t?null:"undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(null==l)return;const r=[];let n,u,i,f,o=!0,a=!1;try{if(i=(l=l.call(t)).next,0===e){if(Object(l)!==l)return;o=!1}else for(;!(o=(n=i.call(l)).done)&&(r.push(n.value),r.length!==e);o=!0);}catch(t){a=!0,u=t}finally{try{if(!o&&null!=l.return&&(f=l.return(),Object(f)!==f))return}finally{if(a)throw u}}return r}',
+    'export default function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a=[],f=!0,o=!1;try{if(i=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;f=!1}else for(;!(f=(e=i.call(t)).done)&&(a.push(e.value),a.length!==l);f=!0);}catch(r){o=!0,n=r}finally{try{if(!f&&null!=t.return&&(u=t.return(),Object(u)!==u))return}finally{if(o)throw n}}return a}}',
   ),
-  // size: 239, gzip size: 201
+  // size: 228, gzip size: 196
   iterableToArrayLimitLoose: helper(
     "7.0.0-beta.0",
-    'export default function _iterableToArrayLimitLoose(e,t){let o=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null==o)return;const r=[];let l;for(o=o.call(e);e.length<t&&!(l=o.next()).done;)r.push(l.value);return r}',
+    'export default function _iterableToArrayLimitLoose(e,r){var t=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null!=t){var o,l=[];for(t=t.call(e);e.length<r&&!(o=t.next()).done;)l.push(o.value);return l}}',
   ),
   // size: 535, gzip size: 348
   jsx: helper(
