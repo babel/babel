@@ -51,10 +51,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _arrayWithHoles(r){if(Array.isArray(r))return r}",
   ),
-  // size: 140, gzip size: 116
+  // size: 145, gzip size: 121
   arrayWithoutHoles: helper(
     "7.0.0-beta.0",
-    'import arrayLikeToArray from"arrayLikeToArray";export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}',
+    'import arrayLikeToArray from"arrayLikeToArray";export default function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r,null)}',
   ),
   // size: 187, gzip size: 167
   assertClassBrand: helper(
@@ -273,15 +273,15 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'export default function _iterableToArray(r){if("undefined"!=typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}',
   ),
-  // size: 431, gzip size: 303
+  // size: 442, gzip size: 308
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",
-    'export default function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a=[],f=!0,o=!1;try{if(i=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;f=!1}else for(;!(f=(e=i.call(t)).done)&&(a.push(e.value),a.length!==l);f=!0);}catch(r){o=!0,n=r}finally{try{if(!f&&null!=t.return&&(u=t.return(),Object(u)!==u))return}finally{if(o)throw n}}return a}}',
+    'export default function _iterableToArrayLimit(t,e){let l=null==t?null:"undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(null==l)return;const r=[];let n,u,i,f,o=!0,a=!1;try{if(i=(l=l.call(t)).next,0===e){if(Object(l)!==l)return;o=!1}else for(;!(o=(n=i.call(l)).done)&&(r.push(n.value),r.length!==e);o=!0);}catch(t){a=!0,u=t}finally{try{if(!o&&null!=l.return&&(f=l.return(),Object(f)!==f))return}finally{if(a)throw u}}return r}',
   ),
-  // size: 228, gzip size: 196
+  // size: 239, gzip size: 201
   iterableToArrayLimitLoose: helper(
     "7.0.0-beta.0",
-    'export default function _iterableToArrayLimitLoose(e,r){var t=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null!=t){var o,l=[];for(t=t.call(e);e.length<r&&!(o=t.next()).done;)l.push(o.value);return l}}',
+    'export default function _iterableToArrayLimitLoose(e,t){let o=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null==o)return;const r=[];let l;for(o=o.call(e);e.length<t&&!(l=o.next()).done;)r.push(l.value);return r}',
   ),
   // size: 535, gzip size: 348
   jsx: helper(
@@ -408,15 +408,15 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     "export default function _temporalUndefined(){}",
   ),
-  // size: 331, gzip size: 156
+  // size: 336, gzip size: 162
   toArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithHoles from"arrayWithHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}',
+    'import arrayWithHoles from"arrayWithHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableRest from"nonIterableRest";export default function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r,null)||nonIterableRest()}',
   ),
-  // size: 356, gzip size: 165
+  // size: 361, gzip size: 172
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    'import arrayWithoutHoles from"arrayWithoutHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}',
+    'import arrayWithoutHoles from"arrayWithoutHoles";import iterableToArray from"iterableToArray";import unsupportedIterableToArray from"unsupportedIterableToArray";import nonIterableSpread from"nonIterableSpread";export default function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r,null)||nonIterableSpread()}',
   ),
   // size: 285, gzip size: 210
   toPrimitive: helper(

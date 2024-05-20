@@ -3,5 +3,5 @@ import iterableToArray from "./iterableToArray.js";
 import unsupportedIterableToArray from "./unsupportedIterableToArray.js";
 import nonIterableRest from "./nonIterableRest.js";
 export default function _toArray(r) {
-  return arrayWithHoles(r) || iterableToArray(r) || unsupportedIterableToArray(r) || nonIterableRest();
+  return arrayWithHoles(r) || iterableToArray(r) || unsupportedIterableToArray(r, null) || nonIterableRest();
 }
