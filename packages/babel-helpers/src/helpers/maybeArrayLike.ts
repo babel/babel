@@ -3,7 +3,7 @@
 import arrayLikeToArray from "./arrayLikeToArray.ts";
 
 export default function _maybeArrayLike<T>(
-  next: (arr: ArrayLike<T>, i: number) => T[] | undefined,
+  orElse: (arr: any, i: number) => T[] | undefined,
   arr: ArrayLike<T>,
   i: number,
 ) {
@@ -11,5 +11,5 @@ export default function _maybeArrayLike<T>(
     var len = arr.length;
     return arrayLikeToArray<T>(arr, i !== void 0 && i < len ? i : len);
   }
-  return next(arr, i);
+  return orElse(arr, i);
 }
