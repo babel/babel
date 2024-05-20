@@ -4,7 +4,7 @@ import arrayLikeToArray from "./arrayLikeToArray.ts";
 
 export default function _unsupportedIterableToArray<T>(
   o: any,
-  minLen: number | null,
+  minLen?: number | null,
 ): T[] | string[] | undefined {
   if (!o) return;
   if (typeof o === "string") return arrayLikeToArray<string>(o, minLen);

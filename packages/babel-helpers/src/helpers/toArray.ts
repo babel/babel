@@ -10,7 +10,7 @@ export default function _toArray<T>(arr: any): T[] {
   return (
     arrayWithHoles<T>(arr) ||
     iterableToArray<T>(arr) ||
-    unsupportedIterableToArray<T>(arr, null) ||
+    unsupportedIterableToArray<T>(arr) ||
     nonIterableRest()
   );
 }

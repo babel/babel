@@ -3,5 +3,5 @@
 import arrayLikeToArray from "./arrayLikeToArray.ts";
 
 export default function _arrayWithoutHoles<T>(arr: Array<T>) {
-  if (Array.isArray(arr)) return arrayLikeToArray<T>(arr, null);
+  if (Array.isArray(arr)) return arrayLikeToArray<T>(arr);
 }

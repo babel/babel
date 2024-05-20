@@ -10,7 +10,7 @@ export default function _toConsumableArray<T>(arr: any): T[] {
   return (
     arrayWithoutHoles<T>(arr) ||
     iterableToArray<T>(arr) ||
-    unsupportedIterableToArray<T>(arr, null) ||
+    unsupportedIterableToArray<T>(arr) ||
     nonIterableSpread()
   );
 }
