@@ -21,13 +21,10 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
       if (Object(iterator) !== iterator) return;
       iteratorNormalCompletion = false;
     } else {
-      for (
-        ;
-        !(iteratorNormalCompletion = (step = next.call(iterator)).done);
-        iteratorNormalCompletion = true
-      ) {
+      while (!(iteratorNormalCompletion = (step = next.call(iterator)).done)) {
         _arr.push(step.value);
         if (_arr.length === i) break;
+        iteratorNormalCompletion = true;
       }
     }
   } catch (err) {
