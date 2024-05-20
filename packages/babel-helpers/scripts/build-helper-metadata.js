@@ -32,6 +32,20 @@ export function getHelperMetadata(babel, code, helperName) {
 
   const spansToRemove = [];
 
+  const validateDefaultExport = decl => {
+    if (exportName) {
+      throw new Error(
+        `Helpers can have only one default export (in ${helperName})`
+      );
+    }
+
+    if (!decl.isFunctionDeclaration() || !decl.node.id) {
+      throw new Error(
+        `Helpers can only export named function declarations (in ${helperName})`
+      );
+    }
+  };
+
   /** @type {import("@babel/traverse").Visitor} */
   const dependencyVisitor = {
     Program(path) {
@@ -57,16 +71,23 @@ export function getHelperMetadata(babel, code, helperName) {
       for (const child of path.get("body")) {
         if (child.isExportDefaultDeclaration()) {
           const decl = child.get("declaration");
-
-          if (!decl.isFunctionDeclaration() || !decl.node.id) {
-            throw new Error(
-              `Helpers can only export named function declarations (in ${helperName})`
-            );
-          }
+          validateDefaultExport(decl);
 
           exportName = decl.node.id.name;
           spansToRemove.push([child.node.start, decl.node.start]);
           child.replaceWith(decl.node);
+        } else if (
+          child.isExportNamedDeclaration() &&
+          child.node.specifiers.length === 1 &&
+          child.get("specifiers.0.exported").isIdentifier({ name: "default" })
+        ) {
+          const { name } = child.node.specifiers[0].local;
+
+          validateDefaultExport(child.scope.getBinding(name).path);
+
+          exportName = name;
+          spansToRemove.push([child.node.start, child.node.end]);
+          child.remove();
         } else if (
           child.isExportAllDeclaration() ||
           child.isExportNamedDeclaration()

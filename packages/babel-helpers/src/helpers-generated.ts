@@ -62,7 +62,7 @@ const helpers: Record<string, Helper> = {
   // size: 47, gzip size: 63
   OverloadYield: helper(
     "7.18.14",
-    "function _OverloadYield(t,e){this.v=t,this.k=e}",
+    "function _OverloadYield(e,d){this.v=e,this.k=d}",
     {
       globals: [],
       locals: { _OverloadYield: ["body.0.id"] },
