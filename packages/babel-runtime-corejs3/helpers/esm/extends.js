@@ -8,5 +8,5 @@ export default function _extends() {
       for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
     }
     return n;
-  }, _extends.apply(this, arguments);
+  }, _extends.apply(null, arguments);
 }

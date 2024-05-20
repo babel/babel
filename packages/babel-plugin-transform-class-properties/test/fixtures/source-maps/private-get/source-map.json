@@ -1,0 +1,28 @@
+{
+  "version": 3,
+  "names": [
+    "A",
+    "constructor",
+    "babelHelpers",
+    "classPrivateMethodInitSpec",
+    "_A_brand",
+    "classPrivateFieldInitSpec",
+    "_field",
+    "method",
+    "classPrivateFieldGet2",
+    "classPrivateGetter",
+    "_get_getter",
+    "assertClassBrand",
+    "_method",
+    "inExpr",
+    "_this"
+  ],
+  "sources": [
+    "source-maps/private-get/input.js"
+  ],
+  "sourcesContent": [
+    "class A {\n  #field;\n\n  get #getter() {}\n\n  #method() {}\n\n  method() {\n    this.#field;\n    this.#getter;\n    this.#method;\n\n    inExpr(this.#field);\n  }\n}"
+  ],
+  "mappings": ";;AAAA,MAAMA,CAAC,CAAC;EAAAC,YAAA;IAAAC,YAAA,CAAAC,0BAAA,OAAAC,QAAA;IACNF,YAAA,CAAAG,yBAAA,OAAAC,MAAM;EAAC;EAMPC,MAAMA,CAAA,EAAG;IACPL,YAAA,CAAAM,qBAAA,CAAKF,MAAM,EAAX,IAAU,CAAC;IACXJ,YAAA,CAAAO,kBAAA,CAAAL,QAAA,MAAI,EAACM,WAAM,CAAC;IACZR,YAAA,CAAAS,gBAAA,CAAAP,QAAA,MAAI,EAACQ,OAAM,CAAC;IAEZC,MAAM,CAACX,YAAA,CAAAM,qBAAA,CAAKF,MAAM,EAAX,IAAU,CAAC,CAAC;EACrB;AACF;AAAC,SAAAI,YAAAI,KAAA,EAXe,CAAC;AAAC,SAAAF,QAAA,EAEN,CAAC",
+  "ignoreList": []
+}

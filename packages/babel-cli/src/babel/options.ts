@@ -1,188 +1,187 @@
 import fs from "fs";
 
-import commander from "commander";
+import * as Commander from "commander";
 import { version, DEFAULT_EXTENSIONS } from "@babel/core";
 import * as glob from "glob";
 import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
+const program = Commander.default.program as Commander.Command;
+
 // Standard Babel input configs.
-commander.option(
+program.option(
   "-f, --filename [filename]",
   "The filename to use when reading from stdin. This will be used in source-maps, errors etc.",
 );
-commander.option(
+program.option(
   "--presets [list]",
   "A comma-separated list of preset names.",
   collect,
 );
-commander.option(
+program.option(
   "--plugins [list]",
   "A comma-separated list of plugin names.",
   collect,
 );
-commander.option("--config-file [path]", "Path to a .babelrc file to use.");
-commander.option(
+program.option("--config-file [path]", "Path to a .babelrc file to use.");
+program.option(
   "--env-name [name]",
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
-commander.option(
+program.option(
   "--root-mode [mode]",
   "The project-root resolution mode. " +
     "One of 'root' (the default), 'upward', or 'upward-optional'.",
 );
 
 // Basic file input configuration.
-commander.option("--source-type [script|module]", "");
-commander.option(
+program.option("--source-type [script|module]", "");
+program.option(
   "--no-babelrc",
   "Whether or not to look up .babelrc and .babelignore files.",
 );
-commander.option(
+program.option(
   "--ignore [list]",
   "List of glob paths to **not** compile.",
   collect,
 );
-commander.option(
+program.option(
   "--only [list]",
   "List of glob paths to **only** compile.",
   collect,
 );
 
 // Misc babel config.
-commander.option(
+program.option(
   "--no-highlight-code",
   "Enable or disable ANSI syntax highlighting of code frames. (on by default)",
 );
 
 // General output formatting.
-commander.option(
+program.option(
   "--no-comments",
   "Write comments to generated output. (true by default)",
 );
-commander.option(
+program.option(
   "--retain-lines",
   "Retain line numbers. This will result in really ugly code.",
 );
-commander.option(
+program.option(
   "--compact [true|false|auto]",
   "Do not include superfluous whitespace characters and line terminators.",
   booleanify,
 );
-commander.option(
+program.option(
   "--minified",
   "Save as many bytes when printing. (false by default)",
 );
-commander.option(
+program.option(
   "--auxiliary-comment-before [string]",
   "Print a comment before any injected non-user code.",
 );
-commander.option(
+program.option(
   "--auxiliary-comment-after [string]",
   "Print a comment after any injected non-user code.",
 );
 
 // General source map formatting.
-commander.option(
+program.option(
   "-s, --source-maps [true|false|inline|both]",
   "",
   booleanify,
   undefined,
 );
-commander.option(
+program.option(
   "--source-map-target [string]",
   "Set `file` on returned source map.",
 );
-commander.option(
+program.option(
   "--source-file-name [string]",
   "Set `sources[0]` on returned source map.",
 );
-commander.option(
+program.option(
   "--source-root [filename]",
   "The root from which all sources are relative.",
 );
 
 if (!process.env.BABEL_8_BREAKING) {
   // Config params for certain module output formats.
-  commander.option(
+  program.option(
     "--module-root [filename]",
     "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
   );
-  commander.option("-M, --module-ids", "Insert an explicit id for modules.");
-  commander.option(
+  program.option("-M, --module-ids", "Insert an explicit id for modules.");
+  program.option(
     "--module-id [string]",
     "Specify a custom name for module ids.",
   );
 }
 
 // "babel" command specific arguments that are not passed to @babel/core.
-commander.option(
+program.option(
   "-x, --extensions [extensions]",
   "List of extensions to compile when a directory has been the input. [" +
     DEFAULT_EXTENSIONS.join() +
     "]",
   collect,
 );
-commander.option(
+program.option(
   "--keep-file-extension",
   "Preserve the file extensions of the input files.",
 );
-commander.option("-w, --watch", "Recompile files on changes.");
-commander.option(
-  "--skip-initial-build",
-  "Do not compile files before watching.",
-);
-commander.option(
+program.option("-w, --watch", "Recompile files on changes.");
+program.option("--skip-initial-build", "Do not compile files before watching.");
+program.option(
   "-o, --out-file [out]",
   "Compile all input files into a single file.",
 );
-commander.option(
+program.option(
   "-d, --out-dir [out]",
   "Compile an input directory of modules into an output directory.",
 );
-commander.option(
+program.option(
   "--relative",
   "Compile into an output directory relative to input directory or file. Requires --out-dir [out]",
 );
 
-commander.option(
+program.option(
   "-D, --copy-files",
   "When compiling a directory copy over non-compilable files.",
 );
-commander.option(
+program.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files.",
 );
-commander.option(
+program.option(
   "--no-copy-ignored",
   "Exclude ignored files when copying non-compilable files.",
 );
 
-commander.option(
+program.option(
   "--verbose",
   "Log everything. This option conflicts with --quiet",
 );
-commander.option(
+program.option(
   "--quiet",
   "Don't log anything. This option conflicts with --verbose",
 );
-commander.option(
+program.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation.",
 );
-commander.option(
+program.option(
   "--out-file-extension [string]",
   "Use a specific extension for the output files",
 );
 
-commander.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
-commander.usage("[options] <files ...>");
-// register an empty action handler so that commander.js can throw on
+program.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
+program.usage("[options] <files ...>");
+// register an empty action handler so that program.js can throw on
 // unknown options _after_ args
-// see https://github.com/tj/commander.js/issues/561#issuecomment-522209408
-commander.action(() => {});
+// see https://github.com/tj/program.js/issues/561#issuecomment-522209408
+program.action(() => {});
 
 export type CmdOptions = {
   babelOptions: InputOptions;
@@ -209,11 +208,13 @@ export type CmdOptions = {
 
 export default function parseArgv(args: Array<string>): CmdOptions | null {
   //
-  commander.parse(args);
+  program.parse(args);
+
+  const opts = program.opts();
 
   const errors: string[] = [];
 
-  let filenames = commander.args.reduce(function (globbed: string[], input) {
+  let filenames = program.args.reduce(function (globbed: string[], input) {
     let files = process.env.BABEL_8_BREAKING
       ? // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
         // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
@@ -234,20 +235,20 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     }
   });
 
-  if (commander.outDir && !filenames.length) {
+  if (opts.outDir && !filenames.length) {
     errors.push("--out-dir requires filenames");
   }
 
-  if (commander.outFile && commander.outDir) {
+  if (opts.outFile && opts.outDir) {
     errors.push("--out-file and --out-dir cannot be used together");
   }
 
-  if (commander.relative && !commander.outDir) {
+  if (opts.relative && !opts.outDir) {
     errors.push("--relative requires --out-dir usage");
   }
 
-  if (commander.watch) {
-    if (!commander.outFile && !commander.outDir) {
+  if (opts.watch) {
+    if (!opts.outFile && !opts.outDir) {
       errors.push("--watch requires --out-file or --out-dir");
     }
 
@@ -256,29 +257,29 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     }
   }
 
-  if (commander.skipInitialBuild && !commander.watch) {
+  if (opts.skipInitialBuild && !opts.watch) {
     errors.push("--skip-initial-build requires --watch");
   }
-  if (commander.deleteDirOnStart && !commander.outDir) {
+  if (opts.deleteDirOnStart && !opts.outDir) {
     errors.push("--delete-dir-on-start requires --out-dir");
   }
 
-  if (commander.verbose && commander.quiet) {
+  if (opts.verbose && opts.quiet) {
     errors.push("--verbose and --quiet cannot be used together");
   }
 
   if (
-    !commander.outDir &&
+    !opts.outDir &&
     filenames.length === 0 &&
-    typeof commander.filename !== "string" &&
-    commander.babelrc !== false
+    typeof opts.filename !== "string" &&
+    opts.babelrc !== false
   ) {
     errors.push(
       "stdin compilation requires either -f/--filename [filename] or --no-babelrc",
     );
   }
 
-  if (commander.keepFileExtension && commander.outFileExtension) {
+  if (opts.keepFileExtension && opts.outFileExtension) {
     errors.push(
       "--out-file-extension cannot be used with --keep-file-extension",
     );
@@ -291,8 +292,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     });
     return null;
   }
-
-  const opts = commander.opts();
 
   const babelOptions: InputOptions = {
     presets: opts.presets,
@@ -364,18 +363,15 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: "false" | 0 | ""): false;
-function booleanify(val: "true" | 1): true;
-function booleanify(val: any): any {
-  if (val === undefined) return undefined;
-
-  // eslint-disable-next-line eqeqeq
-  if (val === "true" || val == 1) {
+function booleanify(val: "false" | "0" | ""): false;
+function booleanify(val: "true" | "1"): true;
+function booleanify(val: string): boolean | string {
+  if (val === "true" || val === "1") {
     return true;
   }
 
-  // eslint-disable-next-line eqeqeq
-  if (val === "false" || val == 0 || !val) {
+  // false for --opt=false; 0 for --opt=0 or --opt 0; "" for --opt=
+  if (val === "false" || val === "0" || val === "") {
     return false;
   }
 
