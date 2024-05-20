@@ -12,11 +12,8 @@ export default function _iterableToArrayLimitLoose<T>(
 
   var _arr: T[] = [];
   var step;
-  for (
-    iterator = iterator.call(arr);
-    arr.length < i && !(step = iterator.next()).done;
-
-  ) {
+  iterator = iterator.call(arr);
+  while (arr.length < i && !(step = iterator.next()).done) {
     _arr.push(step.value);
   }
   return _arr;
