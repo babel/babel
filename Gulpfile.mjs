@@ -3,8 +3,9 @@ import fs from "fs";
 import { cpus } from "os";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import { Transform as TransformStream } from "stream";
+import { callbackify } from "util";
 import plumber from "gulp-plumber";
-import through from "through2";
 import colors from "picocolors";
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -110,15 +111,18 @@ function generateHelpers(generator, dest, filename, message) {
     .src(".", { base: monorepoRoot })
     .pipe(errorsLogger())
     .pipe(
-      through.obj(async (file, enc, callback) => {
-        const { default: generateCode } = await import(generator);
+      new TransformStream({
+        objectMode: true,
+        transform: callbackify(async file => {
+          const { default: generateCode } = await import(generator);
 
-        file.path = filename;
-        file.contents = Buffer.from(
-          await formatCode(await generateCode(filename), dest + file.path)
-        );
-        log(`${colors.green("✔")} Generated ${message}`);
-        callback(null, file);
+          file.path = filename;
+          file.contents = Buffer.from(
+            await formatCode(await generateCode(filename), dest + file.path)
+          );
+          log(`${colors.green("✔")} Generated ${message}`);
+          return file;
+        }),
       })
     )
     .pipe(gulp.dest(dest, { mode: 0o644 }));
@@ -178,40 +182,44 @@ function generateStandalone() {
   return gulp
     .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
     .pipe(
-      through.obj(async (file, enc, callback) => {
-        log("Generating @babel/standalone files");
-        const pluginConfig = JSON.parse(file.contents);
-        let imports = `import makeNoopPlugin from "../make-noop-plugin.ts";`;
-        let exportDecls = "";
-        let exportsList = "";
-        let allList = "";
+      new TransformStream({
+        objectMode: true,
+        transform: callbackify(async file => {
+          log("Generating @babel/standalone files");
+          const pluginConfig = JSON.parse(file.contents);
+          let imports = `import makeNoopPlugin from "../make-noop-plugin.ts";`;
+          let exportDecls = "";
+          let exportsList = "";
+          let allList = "";
 
-        for (const plugin of pluginConfig.noopPlugins) {
-          const camelPlugin = kebabToCamel(plugin);
-          exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
-          allList += `"${plugin}": ${camelPlugin},`;
-        }
+          for (const plugin of pluginConfig.noopPlugins) {
+            const camelPlugin = kebabToCamel(plugin);
+            exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
+            allList += `"${plugin}": ${camelPlugin},`;
+          }
 
-        for (const plugin of pluginConfig.externalPlugins) {
-          const camelPlugin = kebabToCamel(plugin);
-          imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
-          exportsList += `${camelPlugin},`;
-          allList += `"${plugin}": ${camelPlugin},`;
-        }
+          for (const plugin of pluginConfig.externalPlugins) {
+            const camelPlugin = kebabToCamel(plugin);
+            imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
+            exportsList += `${camelPlugin},`;
+            allList += `"${plugin}": ${camelPlugin},`;
+          }
 
-        const fileContents = `/*
- * This file is auto-generated! Do not modify it directly.
- * To re-generate run 'yarn gulp generate-standalone'
- */
-${imports}
-export const ${exportDecls.slice(0, -1)};
-export {${exportsList}};
-export const all: { [k: string]: any } = {${allList}};`;
-        file.path = "plugins.ts";
-        file.contents = Buffer.from(
-          await formatCode(fileContents, dest + file.path)
-        );
-        callback(null, file);
+          const fileContents = `/*
+   * This file is auto-generated! Do not modify it directly.
+   * To re-generate run 'yarn gulp generate-standalone'
+   */
+  ${imports}
+  export const ${exportDecls.slice(0, -1)};
+  export {${exportsList}};
+  export const all: { [k: string]: any } = {${allList}};`;
+          file.path = "plugins.ts";
+          file.contents = Buffer.from(
+            await formatCode(fileContents, dest + file.path)
+          );
+
+          return file;
+        }),
       })
     )
     .pipe(gulp.dest(dest));
