@@ -34,9 +34,6 @@
                     "start":22,"end":23,"loc":{"start":{"line":3,"column":2,"index":22},"end":{"line":3,"column":3,"index":23},"identifierName":"x"},
                     "name": "x"
                   },
-                  "extra": {
-                    "shorthand": true
-                  },
                   "trailingComments": [
                     {
                       "type": "CommentBlock",

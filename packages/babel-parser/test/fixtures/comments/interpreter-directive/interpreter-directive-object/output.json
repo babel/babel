@@ -37,9 +37,6 @@
                     "type": "Identifier",
                     "start":33,"end":38,"loc":{"start":{"line":3,"column":6,"index":33},"end":{"line":3,"column":11,"index":38},"identifierName":"spawn"},
                     "name": "spawn"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]

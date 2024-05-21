@@ -33,9 +33,6 @@
                   "type": "Identifier",
                   "start":7,"end":8,"loc":{"start":{"line":2,"column":4,"index":7},"end":{"line":2,"column":5,"index":8},"identifierName":"a"},
                   "name": "a"
-                },
-                "extra": {
-                  "shorthand": true
                 }
               },
               {
@@ -111,9 +108,6 @@
                         "type": "Identifier",
                         "start":39,"end":40,"loc":{"start":{"line":5,"column":9,"index":39},"end":{"line":5,"column":10,"index":40},"identifierName":"a"},
                         "name": "a"
-                      },
-                      "extra": {
-                        "shorthand": true
                       }
                     }
                   ]
