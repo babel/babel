@@ -1,7 +1,7 @@
 /* @minVersion 7.0.0-beta.0 */
 
 export default function _iterableToArrayLimitLoose<T>(
-  arr: Array<T>,
+  arr: Iterable<T>,
   i: number,
 ) {
   var iterator: Iterator<T> & Function =
