@@ -161,10 +161,6 @@ export default declare(api => {
       }
     },
     SwitchStatement(path, state) {
-      if (!process.env.BABEL_8_BREAKING && !state.availableHelper("usingCtx")) {
-        return;
-      }
-
       let ctx: t.Identifier | null = null;
       let needsAwait = false;
 
@@ -191,6 +187,12 @@ export default declare(api => {
         }
       }
       if (!ctx) return;
+
+      if (!process.env.BABEL_8_BREAKING && !state.availableHelper("usingCtx")) {
+        throw path.buildCodeFrameError(
+          "We cannot transpile this, please update `@babel/core`.",
+        );
+      }
 
       const disposeCall = t.callExpression(
         t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
