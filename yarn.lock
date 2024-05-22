@@ -855,6 +855,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-imports@workspace:packages/babel-helper-module-imports"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
