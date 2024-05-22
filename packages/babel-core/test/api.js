@@ -876,7 +876,7 @@ describe("api", function () {
                   var n = Object.getOwnPropertyDescriptor(p, t);
                   return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
                 }
-              }, _get.apply(this, arguments);
+              }, _get.apply(null, arguments);
             }
             babelHelpers.get = _get;
           })(typeof global === \\"undefined\\" ? self : global);"
@@ -903,7 +903,7 @@ describe("api", function () {
                   var n = Object.getOwnPropertyDescriptor(p, t);
                   return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
                 }
-              }, _get.apply(this, arguments);
+              }, _get.apply(null, arguments);
             }
             babelHelpers.get = _get;
           });"
@@ -921,7 +921,7 @@ describe("api", function () {
                 var n = Object.getOwnPropertyDescriptor(p, t);
                 return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
               }
-            }, _get.apply(this, arguments);
+            }, _get.apply(null, arguments);
           }
           babelHelpers.get = _get;
           babelHelpers;"
@@ -939,7 +939,7 @@ describe("api", function () {
                 var n = Object.getOwnPropertyDescriptor(p, t);
                 return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
               }
-            }, _get.apply(this, arguments);
+            }, _get.apply(null, arguments);
           }"
         `);
       });
