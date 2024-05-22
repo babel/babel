@@ -190,6 +190,7 @@ function applyDecs2203RFactory() {
     };
   };
 }
-export default function applyDecs2203R(e, t, r) {
+function applyDecs2203R(e, t, r) {
   return (applyDecs2203R = applyDecs2203RFactory())(e, t, r);
 }
+export { applyDecs2203R as default };

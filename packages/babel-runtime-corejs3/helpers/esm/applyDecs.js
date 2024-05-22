@@ -241,9 +241,10 @@ function old_applyClassDecs(e, t, a, r) {
     });
   }
 }
-export default function applyDecs(e, t, a) {
+function applyDecs(e, t, a) {
   var r = [],
     o = {},
     i = {};
   return old_applyMemberDecs(r, e, i, o, t), old_convertMetadataMapToFinal(e.prototype, i), old_applyClassDecs(r, e, o, a), old_convertMetadataMapToFinal(e, o), r;
 }
+export { applyDecs as default };

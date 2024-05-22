@@ -2,7 +2,7 @@ import _Symbol from "core-js-pure/features/symbol/index.js";
 import _getIteratorMethod from "core-js-pure/features/get-iterator-method.js";
 import _Array$isArray from "core-js-pure/features/array/is-array.js";
 import unsupportedIterableToArray from "./unsupportedIterableToArray.js";
-export default function _createForOfIteratorHelper(r, e) {
+function _createForOfIteratorHelper(r, e) {
   var t = "undefined" != typeof _Symbol && _getIteratorMethod(r) || r["@@iterator"];
   if (!t) {
     if (_Array$isArray(r) || (t = unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) {
@@ -50,3 +50,4 @@ export default function _createForOfIteratorHelper(r, e) {
     }
   };
 }
+export { _createForOfIteratorHelper as default };

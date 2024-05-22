@@ -6,8 +6,9 @@ function _defineProperties(e, r) {
     o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), _Object$defineProperty(e, toPropertyKey(o.key), o);
   }
 }
-export default function _createClass(e, r, t) {
+function _createClass(e, r, t) {
   return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), _Object$defineProperty(e, "prototype", {
     writable: !1
   }), e;
 }
+export { _createClass as default };

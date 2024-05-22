@@ -1,5 +1,5 @@
 import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
-export default function _objectWithoutPropertiesLoose(r, e) {
+function _objectWithoutPropertiesLoose(r, e) {
   if (null == r) return {};
   var t = {};
   for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
@@ -8,3 +8,4 @@ export default function _objectWithoutPropertiesLoose(r, e) {
   }
   return t;
 }
+export { _objectWithoutPropertiesLoose as default };

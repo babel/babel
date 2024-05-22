@@ -18,7 +18,8 @@ function set(e, r, t, o) {
     return !0;
   }, set(e, r, t, o);
 }
-export default function _set(e, r, t, o, f) {
+function _set(e, r, t, o, f) {
   if (!set(e, r, t, o || e) && f) throw new TypeError("failed to set property");
   return t;
 }
+export { _set as default };

@@ -4,8 +4,13 @@ import { join } from "path";
 import { URL, fileURLToPath } from "url";
 import { minify } from "terser";
 import { babel, presetTypescript } from "$repo-utils/babel-top-level";
-import { gzipSync } from "zlib";
 import { IS_BABEL_8 } from "$repo-utils";
+import { gzipSync } from "zlib";
+
+import {
+  getHelperMetadata,
+  stringifyMetadata,
+} from "./build-helper-metadata.js";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
@@ -22,12 +27,22 @@ import type * as t from "@babel/types";
 interface Helper {
   minVersion: string;
   ast: () => t.Program;
+  metadata: HelperMetadata;
 }
 
-function helper(minVersion: string, source: string): Helper {
+export interface HelperMetadata {
+  globals: string[];
+  locals: { [name: string]: string[] };
+  dependencies: { [name: string]: string[] };
+  exportBindingAssignments: string[];
+  exportName: string;
+}
+
+function helper(minVersion: string, source: string, metadata: HelperMetadata): Helper {
   return Object.freeze({
     minVersion,
     ast: () => template.program.ast(source, { preserveComments: true }),
+    metadata,
   })
 }
 
@@ -121,11 +136,16 @@ const helpers: Record<string, Helper> = {
       })
     ).code;
 
+    let metadata;
+    // eslint-disable-next-line prefer-const
+    [code, metadata] = getHelperMetadata(babel, code, helperName);
+
     const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
     ${JSON.stringify(code)},
+    ${stringifyMetadata(metadata)}
   ),
 `;
 

@@ -4,7 +4,7 @@ import getPrototypeOf from "./getPrototypeOf.js";
 import setPrototypeOf from "./setPrototypeOf.js";
 import isNativeFunction from "./isNativeFunction.js";
 import construct from "./construct.js";
-export default function _wrapNativeSuper(t) {
+function _wrapNativeSuper(t) {
   var r = "function" == typeof _Map ? new _Map() : void 0;
   return _wrapNativeSuper = function _wrapNativeSuper(t) {
     if (null === t || !isNativeFunction(t)) return t;
@@ -26,3 +26,4 @@ export default function _wrapNativeSuper(t) {
     }), setPrototypeOf(Wrapper, t);
   }, _wrapNativeSuper(t);
 }
+export { _wrapNativeSuper as default };

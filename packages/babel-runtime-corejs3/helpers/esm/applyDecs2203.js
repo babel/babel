@@ -183,6 +183,7 @@ function applyDecs2203Factory() {
   };
 }
 var applyDecs2203Impl;
-export default function applyDecs2203(e, t, r) {
+function applyDecs2203(e, t, r) {
   return (applyDecs2203Impl = applyDecs2203Impl || applyDecs2203Factory())(e, t, r);
 }
+export { applyDecs2203 as default };

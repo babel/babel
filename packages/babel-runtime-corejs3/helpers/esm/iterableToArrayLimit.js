@@ -1,7 +1,7 @@
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _getIteratorMethod from "core-js-pure/features/get-iterator-method.js";
 import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
-export default function _iterableToArrayLimit(r, l) {
+function _iterableToArrayLimit(r, l) {
   var t = null == r ? null : "undefined" != typeof _Symbol && _getIteratorMethod(r) || r["@@iterator"];
   if (null != t) {
     var e,
@@ -28,3 +28,4 @@ export default function _iterableToArrayLimit(r, l) {
     return a;
   }
 }
+export { _iterableToArrayLimit as default };

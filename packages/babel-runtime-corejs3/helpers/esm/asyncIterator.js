@@ -2,7 +2,7 @@ import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$asyncIterator from "core-js-pure/features/symbol/async-iterator.js";
 import _Symbol$iterator from "core-js-pure/features/symbol/iterator.js";
 import _Promise from "core-js-pure/features/promise/index.js";
-export default function _asyncIterator(r) {
+function _asyncIterator(r) {
   var n,
     t,
     o,
@@ -46,3 +46,4 @@ function AsyncFromSyncIterator(r) {
     }
   }, new AsyncFromSyncIterator(r);
 }
+export { _asyncIterator as default };

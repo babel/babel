@@ -2,7 +2,7 @@ import _Symbol$asyncDispose from "core-js-pure/features/symbol/async-dispose.js"
 import _Symbol$for from "core-js-pure/features/symbol/for.js";
 import _Symbol$dispose from "core-js-pure/features/symbol/dispose.js";
 import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
-export default function _using(o, n, e) {
+function _using(o, n, e) {
   if (null == n) return n;
   if (Object(n) !== n) throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");
   if (e) var r = n[_Symbol$asyncDispose || _Symbol$for("Symbol.asyncDispose")];
@@ -13,3 +13,4 @@ export default function _using(o, n, e) {
     a: e
   }), n;
 }
+export { _using as default };

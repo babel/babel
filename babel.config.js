@@ -499,6 +499,16 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       replacement: template`hasOwnProperty.call`,
     },
     {
+      name: "Object.entries",
+      necessary({ parent, node }) {
+        // To avoid infinite replacement loops
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
+      },
+      supported: path =>
+        path.parentPath.isCallExpression({ callee: path.node }),
+      replacement: template`Object.entries || (o => Object.keys(o).map(k => [k, o[k]]))`,
+    },
+    {
       name: "fs.rmSync",
       necessary({ node, parent }) {
         // To avoid infinite replacement loops
@@ -543,7 +553,8 @@ function pluginPolyfillsOldNode({ template, types: t }) {
           if (!polyfill.necessary(path)) return;
           if (!polyfill.supported(path)) {
             throw path.buildCodeFrameError(
-              `This '${polyfill.name}' usage is not supported by the inline polyfill.`
+              `This '${polyfill.name}' usage is not supported by the inline polyfill.\n` +
+                path.parentPath.toString()
             );
           }
 

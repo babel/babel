@@ -11,7 +11,7 @@ import _Map from "core-js-pure/features/map/index.js";
 import checkInRHS from "./checkInRHS.js";
 import setFunctionName from "./setFunctionName.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function applyDecs2305(e, t, r, n, o, a) {
+function applyDecs2305(e, t, r, n, o, a) {
   function i(e, t, r) {
     return function (n, o) {
       return r && r(n), e[t].call(n, o);
@@ -141,3 +141,4 @@ export default function applyDecs2305(e, t, r, n, o, a) {
     }
   };
 }
+export { applyDecs2305 as default };

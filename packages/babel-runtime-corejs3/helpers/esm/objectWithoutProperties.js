@@ -1,7 +1,7 @@
 import _Object$getOwnPropertySymbols from "core-js-pure/features/object/get-own-property-symbols.js";
 import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
 import objectWithoutPropertiesLoose from "./objectWithoutPropertiesLoose.js";
-export default function _objectWithoutProperties(e, t) {
+function _objectWithoutProperties(e, t) {
   if (null == e) return {};
   var o,
     r,
@@ -12,3 +12,4 @@ export default function _objectWithoutProperties(e, t) {
   }
   return i;
 }
+export { _objectWithoutProperties as default };

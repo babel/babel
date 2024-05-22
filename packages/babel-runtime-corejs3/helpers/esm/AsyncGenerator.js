@@ -2,7 +2,7 @@ import _Promise from "core-js-pure/features/promise/index.js";
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$asyncIterator from "core-js-pure/features/symbol/async-iterator.js";
 import OverloadYield from "./OverloadYield.js";
-export default function AsyncGenerator(e) {
+function AsyncGenerator(e) {
   var r, t;
   function resume(r, t) {
     try {
@@ -64,3 +64,4 @@ AsyncGenerator.prototype["function" == typeof _Symbol && _Symbol$asyncIterator |
 }, AsyncGenerator.prototype["return"] = function (e) {
   return this._invoke("return", e);
 };
+export { AsyncGenerator as default };

@@ -1,5 +1,5 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
-export default function _toSetter(t, e, n) {
+function _toSetter(t, e, n) {
   e || (e = []);
   var r = e.length++;
   return _Object$defineProperty({}, "_", {
@@ -8,3 +8,4 @@ export default function _toSetter(t, e, n) {
     }
   });
 }
+export { _toSetter as default };

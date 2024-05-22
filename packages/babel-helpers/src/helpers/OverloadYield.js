@@ -5,7 +5,9 @@
  *   0 => This yield was an await expression
  *   1 => This yield comes from yield*
  */
-export default function _OverloadYield(value, kind) {
+function _OverloadYield(value, kind) {
   this.v = value;
   this.k = kind;
 }
+
+export { _OverloadYield as default };

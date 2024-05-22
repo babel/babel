@@ -12,7 +12,7 @@ import _spliceInstanceProperty from "core-js-pure/features/instance/splice.js";
 import checkInRHS from "./checkInRHS.js";
 import setFunctionName from "./setFunctionName.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function applyDecs2311(e, t, n, r, o, i) {
+function applyDecs2311(e, t, n, r, o, i) {
   var a,
     c,
     u,
@@ -133,3 +133,4 @@ export default function applyDecs2311(e, t, n, r, o, i) {
     }
   };
 }
+export { applyDecs2311 as default };

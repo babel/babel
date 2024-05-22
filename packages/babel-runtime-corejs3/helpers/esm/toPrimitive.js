@@ -1,6 +1,6 @@
 import _typeof from "./typeof.js";
 import _Symbol$toPrimitive from "core-js-pure/features/symbol/to-primitive.js";
-export default function toPrimitive(t, r) {
+function toPrimitive(t, r) {
   if ("object" != _typeof(t) || !t) return t;
   var e = t[_Symbol$toPrimitive];
   if (void 0 !== e) {
@@ -10,3 +10,4 @@ export default function toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+export { toPrimitive as default };

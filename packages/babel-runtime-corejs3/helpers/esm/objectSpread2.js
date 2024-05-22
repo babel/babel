@@ -18,7 +18,7 @@ function ownKeys(e, r) {
   }
   return t;
 }
-export default function _objectSpread2(e) {
+function _objectSpread2(e) {
   for (var r = 1; r < arguments.length; r++) {
     var _context, _context2;
     var t = null != arguments[r] ? arguments[r] : {};
@@ -30,3 +30,4 @@ export default function _objectSpread2(e) {
   }
   return e;
 }
+export { _objectSpread2 as default };

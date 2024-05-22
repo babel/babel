@@ -5,7 +5,7 @@ import _filterInstanceProperty from "core-js-pure/features/instance/filter.js";
 import _Object$getOwnPropertyDescriptor from "core-js-pure/features/object/get-own-property-descriptor.js";
 import _forEachInstanceProperty from "core-js-pure/features/instance/for-each.js";
 import defineProperty from "./defineProperty.js";
-export default function _objectSpread(e) {
+function _objectSpread(e) {
   for (var r = 1; r < arguments.length; r++) {
     var _context;
     var t = null != arguments[r] ? Object(arguments[r]) : {},
@@ -18,3 +18,4 @@ export default function _objectSpread(e) {
   }
   return e;
 }
+export { _objectSpread as default };

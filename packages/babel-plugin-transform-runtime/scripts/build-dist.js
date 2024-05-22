@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import * as helpers from "@babel/helpers";
-import { transformFromAstSync, File, template, types as t } from "@babel/core";
+import { transformFromAstSync, template, types as t } from "@babel/core";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";
@@ -15,6 +15,13 @@ import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
+
+const importTemplate = template.statement({ sourceType: "module" })(`
+  import ID from "SOURCE";
+`);
+const requireTemplate = template.statement(`
+  const ID = require("SOURCE");
+`);
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
@@ -267,6 +274,24 @@ function getRuntimeRoot(runtimeName) {
   );
 }
 
+function adjustEsmHelperAst(ast, exportName) {
+  ast.body.push(
+    template.statement({ sourceType: "module" }).ast`
+      export { ${t.identifier(exportName)} as default };
+    `
+  );
+}
+function adjustCjsHelperAst(ast, exportName, mapExportBindingAssignments) {
+  mapExportBindingAssignments(
+    node => template.expression.ast`module.exports = ${node}`
+  );
+  ast.body.push(
+    template.statement.ast`
+      module.exports = ${t.identifier(exportName)};
+    `
+  );
+}
+
 function buildHelper(
   runtimeName,
   helperFilename,
@@ -275,25 +300,21 @@ function buildHelper(
 ) {
   const tree = t.program([], [], esm ? "module" : "script");
   const dependencies = {};
-  let bindings = null;
+  const bindings = [];
 
-  if (!esm) {
-    bindings = [];
-    helpers.ensure(helperName, File);
-    for (const dep of helpers.getDependencies(helperName)) {
-      const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
-      tree.body.push(template.statement.ast`
-        var ${id} = require("${dep}");
-      `);
-      bindings.push(id.name);
-    }
+  const depTemplate = esm ? importTemplate : requireTemplate;
+  for (const dep of helpers.getDependencies(helperName)) {
+    const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
+    tree.body.push(depTemplate({ ID: id, SOURCE: dep }));
+    bindings.push(id.name);
   }
 
   const helper = helpers.get(
     helperName,
     dep => dependencies[dep],
-    esm ? null : template.expression.ast`module.exports`,
-    bindings
+    null,
+    bindings,
+    esm ? adjustEsmHelperAst : adjustCjsHelperAst
   );
   tree.body.push(...helper.nodes);
 
