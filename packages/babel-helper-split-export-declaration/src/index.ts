@@ -7,6 +7,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
+// eslint-disable-next-line import/no-extraneous-dependencies -- TODO: Avoid cycle
 import type { NodePath } from "@babel/traverse";
 
 export default function splitExportDeclaration(

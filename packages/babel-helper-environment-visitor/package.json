@@ -21,8 +21,10 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
