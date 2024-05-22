@@ -160,6 +160,58 @@ export default declare(api => {
         }
       }
     },
+    SwitchStatement(path, state) {
+      if (!process.env.BABEL_8_BREAKING && !state.availableHelper("usingCtx")) {
+        return;
+      }
+
+      let ctx: t.Identifier | null = null;
+      let needsAwait = false;
+
+      const { cases } = path.node;
+      for (const c of cases) {
+        for (const stmt of c.consequent) {
+          if (isUsingDeclaration(stmt)) {
+            ctx ??= path.scope.generateUidIdentifier("usingCtx");
+
+            const isAwaitUsing = stmt.kind === "await using";
+            needsAwait ||= isAwaitUsing;
+
+            stmt.kind = "const";
+            for (const decl of stmt.declarations) {
+              decl.init = t.callExpression(
+                t.memberExpression(
+                  t.cloneNode(ctx),
+                  isAwaitUsing ? t.identifier("a") : t.identifier("u"),
+                ),
+                [decl.init],
+              );
+            }
+          }
+        }
+      }
+      if (!ctx) return;
+
+      const disposeCall = t.callExpression(
+        t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
+        [],
+      );
+
+      const replacement = template.statement.ast`
+        try {
+          var ${t.cloneNode(ctx)} = ${state.addHelper("usingCtx")}();
+          ${path.node}
+        } catch (_) {
+          ${t.cloneNode(ctx)}.e = _;
+        } finally {
+          ${needsAwait ? t.awaitExpression(disposeCall) : disposeCall}
+        }
+      ` as t.TryStatement;
+
+      t.inherits(replacement, path.node);
+
+      path.replaceWith(replacement);
+    },
   };
 
   const transformUsingDeclarationsVisitorSkipFn: Visitor<PluginPass> =
