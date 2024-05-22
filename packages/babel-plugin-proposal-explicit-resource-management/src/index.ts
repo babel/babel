@@ -43,7 +43,7 @@ export default declare(api => {
       path: NodePath<t.BlockStatement | t.StaticBlock>,
       state,
     ) {
-      if (state.availableHelper("usingCtx")) {
+      if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
         let ctx: t.Identifier | null = null;
         let needsAwait = false;
 
