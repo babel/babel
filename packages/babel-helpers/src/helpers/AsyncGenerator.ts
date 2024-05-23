@@ -4,12 +4,15 @@ import OverloadYield from "./OverloadYield.ts";
 
 type AsyncIteratorMethod = "next" | "throw" | "return";
 
-interface AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
-  extends AsyncGenerator<T, TReturn, TNext> {
+declare class AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
+  implements AsyncGenerator<T, TReturn, TNext>
+{
   _invoke: (
     key: AsyncIteratorMethod,
     arg: IteratorResult<T>,
   ) => Promise<IteratorResult<T, TReturn>>;
+
+  constructor(gen: Generator<T, TReturn, TNext>);
 
   next(...args: [] | [TNext]): Promise<IteratorResult<T, TReturn>>;
   return(
@@ -17,13 +20,6 @@ interface AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>
   ): Promise<IteratorResult<T, TReturn>>;
   throw(e: any): Promise<IteratorResult<T, TReturn>>;
   [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
-}
-
-interface AsyncGeneratorImplConstructor {
-  new <T = unknown, TReturn = any, TNext = unknown>(
-    gen: Generator<T, TReturn, TNext>,
-  ): AsyncGeneratorImpl<T, TReturn, TNext>;
-  prototype: AsyncGeneratorImpl;
 }
 
 interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
@@ -34,7 +30,7 @@ interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
   next: AsyncGeneratorRequest<T, TReturn, TNext> | null;
 }
 
-var AsyncGeneratorImpl = function <T = unknown, TReturn = any, TNext = unknown>(
+function AsyncGeneratorImpl<T = unknown, TReturn = any, TNext = unknown>(
   this: AsyncGeneratorImpl<T, TReturn, TNext>,
   gen: Generator<T, TReturn, TNext>,
 ) {
@@ -137,7 +133,7 @@ var AsyncGeneratorImpl = function <T = unknown, TReturn = any, TNext = unknown>(
     // @ts-expect-error -- intentionally remove "return" when not supported
     this.return = undefined;
   }
-} as any as AsyncGeneratorImplConstructor;
+}
 
 AsyncGeneratorImpl.prototype[
   ((typeof Symbol === "function" && Symbol.asyncIterator) ||
@@ -156,4 +152,4 @@ AsyncGeneratorImpl.prototype.return = function (arg: IteratorResult<any>) {
   return this._invoke("return", arg);
 };
 
-export default AsyncGeneratorImpl;
+export { AsyncGeneratorImpl as default };
