@@ -1,18 +1,22 @@
 /* @minVersion 7.14.0 */
 
-function _getRequireWildcardCache(nodeInterop) {
+var _getRequireWildcardCache = function (nodeInterop: boolean) {
   if (typeof WeakMap !== "function") return null;
 
   var cacheBabelInterop = new WeakMap();
   var cacheNodeInterop = new WeakMap();
-  return (_getRequireWildcardCache = function (nodeInterop) {
+
+  return (_getRequireWildcardCache = function (nodeInterop: boolean) {
     return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
   })(nodeInterop);
-}
+};
 
-export default function _interopRequireWildcard(obj, nodeInterop) {
-  if (!nodeInterop && obj && obj.__esModule) {
-    return obj;
+export default function _interopRequireWildcard<T>(
+  obj: T,
+  nodeInterop: boolean,
+): { default: T; [key: string]: any } {
+  if (!nodeInterop && obj && typeof obj === "object" && "__esModule" in obj) {
+    return obj as any;
   }
 
   if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
@@ -24,9 +28,14 @@ export default function _interopRequireWildcard(obj, nodeInterop) {
     return cache.get(obj);
   }
 
-  var newObj = { __proto__: null };
+  var newObj: { __proto__: null; default: T; [key: string]: any } = {
+    __proto__: null,
+    default: obj,
+  };
+
   var hasPropertyDescriptor =
-    Object.defineProperty && Object.getOwnPropertyDescriptor;
+    "defineProperty" in Object ? Object.getOwnPropertyDescriptor : undefined;
+
   for (var key in obj) {
     if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
       var desc = hasPropertyDescriptor
@@ -39,7 +48,6 @@ export default function _interopRequireWildcard(obj, nodeInterop) {
       }
     }
   }
-  newObj.default = obj;
   if (cache) {
     cache.set(obj, newObj);
   }

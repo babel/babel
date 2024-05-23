@@ -792,17 +792,17 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 664, gzip size: 351
+  // size: 701, gzip size: 359
   interopRequireWildcard: helper(
     "7.14.0",
-    'function _getRequireWildcardCache(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)}function _interopRequireWildcard(e,r){if(!r&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var u in e)if("default"!==u&&{}.hasOwnProperty.call(e,u)){var i=a?Object.getOwnPropertyDescriptor(e,u):null;i&&(i.get||i.set)?Object.defineProperty(n,u,i):n[u]=e[u]}return n.default=e,t&&t.set(e,n),n}',
+    'var _getRequireWildcardCache=function(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)};function _interopRequireWildcard(e,r){if(!r&&e&&"object"==typeof e&&"__esModule"in e)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null,default:e},i="defineProperty"in Object?Object.getOwnPropertyDescriptor:void 0;for(var a in e)if("default"!==a&&{}.hasOwnProperty.call(e,a)){var o=i?Object.getOwnPropertyDescriptor(e,a):null;o&&(o.get||o.set)?Object.defineProperty(n,a,o):n[a]=e[a]}return t&&t.set(e,n),n}',
     {
       globals: ["WeakMap", "Object"],
       locals: {
         _getRequireWildcardCache: [
-          "body.0.id",
+          "body.0.declarations.0.id",
           "body.1.body.body.2.declarations.0.init.callee",
-          "body.0.body.body.2.argument.callee.left",
+          "body.0.declarations.0.init.body.body.2.argument.callee.left",
         ],
         _interopRequireWildcard: ["body.1.id"],
       },
