@@ -253,10 +253,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'export default function _interopRequireDefault(e){return e&&"__esModule"in e?e:{default:e}}',
   ),
-  // size: 679, gzip size: 358
+  // size: 716, gzip size: 369
   interopRequireWildcard: helper(
     "7.14.0",
-    'function _getRequireWildcardCache(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)}export default function _interopRequireWildcard(e,r){if(!r&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var u in e)if("default"!==u&&{}.hasOwnProperty.call(e,u)){var i=a?Object.getOwnPropertyDescriptor(e,u):null;i&&(i.get||i.set)?Object.defineProperty(n,u,i):n[u]=e[u]}return n.default=e,t&&t.set(e,n),n}',
+    'var _getRequireWildcardCache=function(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)};export default function _interopRequireWildcard(e,r){if(!r&&e&&"object"==typeof e&&"__esModule"in e)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null,default:e},i="defineProperty"in Object?Object.getOwnPropertyDescriptor:void 0;for(var a in e)if("default"!==a&&{}.hasOwnProperty.call(e,a)){var o=i?Object.getOwnPropertyDescriptor(e,a):null;o&&(o.get||o.set)?Object.defineProperty(n,a,o):n[a]=e[a]}return t&&t.set(e,n),n}',
   ),
   // size: 148, gzip size: 136
   isNativeFunction: helper(
