@@ -1,17 +1,23 @@
 /* @minVersion 7.23.0 */
-export default function _importDeferProxy(init) {
-  var ns = null;
-  var constValue = function (v) {
-    return function () {
+
+export default function _importDeferProxy<T extends object>(
+  init: () => T,
+): ProxyHandler<T> {
+  var ns: T | null = null;
+
+  var constValue = function <V extends boolean | null>(v: V) {
+    return function (): V {
       return v;
     };
   };
-  var proxy = function (run) {
-    return function (arg1, arg2, arg3) {
+
+  var proxy = function (run: Function) {
+    return function (_target: T, p?: string | symbol, receiver?: any) {
       if (ns === null) ns = init();
-      return run(ns, arg2, arg3);
+      return run(ns, p, receiver);
     };
   };
+
   return new Proxy(
     {},
     {
