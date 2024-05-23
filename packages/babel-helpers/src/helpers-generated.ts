@@ -780,10 +780,10 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 72, gzip size: 88
+  // size: 76, gzip size: 92
   interopRequireDefault: helper(
     "7.0.0-beta.0",
-    "function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}",
+    'function _interopRequireDefault(e){return e&&"__esModule"in e?e:{default:e}}',
     {
       globals: [],
       locals: { _interopRequireDefault: ["body.0.id"] },
