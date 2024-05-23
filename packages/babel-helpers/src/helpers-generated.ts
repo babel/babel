@@ -248,10 +248,10 @@ const helpers: Record<string, Helper> = {
     "7.0.0-beta.0",
     'export default function _instanceof(n,e){return null!=e&&"undefined"!=typeof Symbol&&e[Symbol.hasInstance]?!!e[Symbol.hasInstance](n):n instanceof e}',
   ),
-  // size: 87, gzip size: 98
+  // size: 91, gzip size: 101
   interopRequireDefault: helper(
     "7.0.0-beta.0",
-    "export default function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}",
+    'export default function _interopRequireDefault(e){return e&&"__esModule"in e?e:{default:e}}',
   ),
   // size: 679, gzip size: 358
   interopRequireWildcard: helper(
