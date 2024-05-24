@@ -24,6 +24,32 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.6 (2024-05-24)
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-class-properties`
+  * [#16514](https://github.com/babel/babel/pull/16514) Fix source maps for private member expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-generator`, `babel-plugin-transform-modules-commonjs`
+  * [#16515](https://github.com/babel/babel/pull/16515) Fix source maps for template literals ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16485](https://github.com/babel/babel/pull/16485) Support undecorated static accessor in anonymous classes ([@JLHwung](https://github.com/JLHwung))
+  * [#16484](https://github.com/babel/babel/pull/16484) Fix decorator bare yield await ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-runtime-corejs3`
+  * [#16483](https://github.com/babel/babel/pull/16483) Fix: throw TypeError if addInitializer is called after finished ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#16476](https://github.com/babel/babel/pull/16476) fix: Correctly parse `cls.fn<C> = x` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-core`, `babel-helpers`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16501](https://github.com/babel/babel/pull/16501) Generate helper metadata at build time ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`
+  * [#16499](https://github.com/babel/babel/pull/16499) Add `tsconfig.json` for `@babel/helpers/src/helpers` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-helpers`, `babel-plugin-external-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16495](https://github.com/babel/babel/pull/16495) Move all runtime helpers to individual files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`, `babel-traverse`
+  * [#16482](https://github.com/babel/babel/pull/16482) Statically generate boilerplate for bitfield accessors ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#16466](https://github.com/babel/babel/pull/16466) Migrate import assertions syntax ([@JLHwung](https://github.com/JLHwung))
 ## v7.24.5 (2024-04-29)
 
 #### :bug: Bug Fix
