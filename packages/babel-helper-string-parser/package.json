@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-string-parser",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "A utility package to parse strings",
   "repository": {
     "type": "git",

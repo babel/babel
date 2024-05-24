@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-sent",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile the function.sent meta property to valid ES2015 code",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-regexp-modifiers",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile inline regular expression modifiers",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-regexp-modifiers",
   "license": "MIT",

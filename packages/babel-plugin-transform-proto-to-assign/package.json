@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-proto-to-assign",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Babel plugin for turning __proto__ into a shallow property clone",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-do-expressions",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile do expressions to ES5",
   "repository": {
     "type": "git",

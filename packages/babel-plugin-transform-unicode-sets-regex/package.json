@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-unicode-sets-regex",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile regular expressions' unicodeSets (v) flag.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-sets-regex",
   "license": "MIT",
