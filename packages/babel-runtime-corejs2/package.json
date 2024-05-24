@@ -18,15 +18,6 @@
     "regenerator-runtime": "^0.14.0"
   },
   "exports": {
-    "./helpers/AsyncGenerator": [
-      {
-        "node": "./helpers/AsyncGenerator.js",
-        "import": "./helpers/esm/AsyncGenerator.js",
-        "default": "./helpers/AsyncGenerator.js"
-      },
-      "./helpers/AsyncGenerator.js"
-    ],
-    "./helpers/esm/AsyncGenerator": "./helpers/esm/AsyncGenerator.js",
     "./helpers/OverloadYield": [
       {
         "node": "./helpers/OverloadYield.js",
