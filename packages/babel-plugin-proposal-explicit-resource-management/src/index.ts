@@ -168,6 +168,21 @@ export default declare(api => {
       for (const c of cases) {
         for (const stmt of c.consequent) {
           if (isUsingDeclaration(stmt)) {
+            if (
+              !process.env.BABEL_8_BREAKING &&
+              !state.availableHelper("usingCtx")
+            ) {
+              path.traverse({
+                VariableDeclaration(path) {
+                  const { node } = path;
+                  if (!isUsingDeclaration(node)) return;
+                  throw path.buildCodeFrameError(
+                    "`using` declarations inside `switch` statements are not supported by your current `@babel/core` version, please update to a more recent one",
+                  );
+                },
+              });
+            }
+
             ctx ??= path.scope.generateUidIdentifier("usingCtx");
 
             const isAwaitUsing = stmt.kind === "await using";
@@ -187,12 +202,6 @@ export default declare(api => {
         }
       }
       if (!ctx) return;
-
-      if (!process.env.BABEL_8_BREAKING && !state.availableHelper("usingCtx")) {
-        throw path.buildCodeFrameError(
-          "We cannot transpile this, please update `@babel/core`.",
-        );
-      }
 
       const disposeCall = t.callExpression(
         t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
