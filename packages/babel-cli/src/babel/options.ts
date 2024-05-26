@@ -7,7 +7,7 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
-const program = commander.default.program as commander.Command;
+const program = commander.default.program;
 
 // Standard Babel input configs.
 program.option(
