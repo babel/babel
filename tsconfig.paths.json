@@ -602,6 +602,9 @@
       "babel-plugin-dynamic-import-node/utils": [
         "./lib/babel-plugin-dynamic-import-node.d.ts"
       ],
+      "commander": [
+        "./lib/third-party-libs.d.ts"
+      ],
       "glob": [
         "./node_modules/glob-BABEL_8_BREAKING-true"
       ],
