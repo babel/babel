@@ -780,10 +780,10 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 76, gzip size: 92
+  // size: 72, gzip size: 88
   interopRequireDefault: helper(
     "7.0.0-beta.0",
-    'function _interopRequireDefault(e){return e&&"__esModule"in e?e:{default:e}}',
+    "function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}",
     {
       globals: [],
       locals: { _interopRequireDefault: ["body.0.id"] },
@@ -792,17 +792,17 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 701, gzip size: 359
+  // size: 696, gzip size: 363
   interopRequireWildcard: helper(
     "7.14.0",
-    'var _getRequireWildcardCache=function(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)};function _interopRequireWildcard(e,r){if(!r&&e&&"object"==typeof e&&"__esModule"in e)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null,default:e},i="defineProperty"in Object?Object.getOwnPropertyDescriptor:void 0;for(var a in e)if("default"!==a&&{}.hasOwnProperty.call(e,a)){var o=i?Object.getOwnPropertyDescriptor(e,a):null;o&&(o.get||o.set)?Object.defineProperty(n,a,o):n[a]=e[a]}return t&&t.set(e,n),n}',
+    'function _getRequireWildcardCache(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)}function _interopRequireWildcard(e,r){if(!r&&e&&"object"==typeof e&&"__esModule"in e)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null,default:e},i="defineProperty"in Object?Object.getOwnPropertyDescriptor:void 0;for(var a in e)if("default"!==a&&{}.hasOwnProperty.call(e,a)){var o=i?Object.getOwnPropertyDescriptor(e,a):null;o&&(o.get||o.set)?Object.defineProperty(n,a,o):n[a]=e[a]}return t&&t.set(e,n),n}',
     {
       globals: ["WeakMap", "Object"],
       locals: {
         _getRequireWildcardCache: [
-          "body.0.declarations.0.id",
+          "body.0.id",
           "body.1.body.body.2.declarations.0.init.callee",
-          "body.0.declarations.0.init.body.body.2.argument.callee.left",
+          "body.0.body.body.2.argument.callee.left",
         ],
         _interopRequireWildcard: ["body.1.id"],
       },

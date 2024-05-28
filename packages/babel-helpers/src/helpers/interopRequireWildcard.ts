@@ -1,22 +1,26 @@
 /* @minVersion 7.14.0 */
 
-var _getRequireWildcardCache = function (nodeInterop: boolean) {
+function _getRequireWildcardCache<K extends WeakKey, V = any>(
+  nodeInterop: boolean,
+): WeakMap<K, V> | null {
   if (typeof WeakMap !== "function") return null;
 
   var cacheBabelInterop = new WeakMap();
   var cacheNodeInterop = new WeakMap();
 
-  return (_getRequireWildcardCache = function (nodeInterop: boolean) {
-    return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-  })(nodeInterop);
-};
+  return ((_getRequireWildcardCache as (n: boolean) => WeakMap<K, V>) =
+    function (nodeInterop: boolean) {
+      return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
+}
 
+type TReturnType<T> = { default: T; [key: string]: any };
 export default function _interopRequireWildcard<T>(
   obj: T,
   nodeInterop: boolean,
-): { default: T; [key: string]: any } {
+): TReturnType<T> {
   if (!nodeInterop && obj && typeof obj === "object" && "__esModule" in obj) {
-    return obj as any;
+    return obj as unknown as TReturnType<T>;
   }
 
   if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
