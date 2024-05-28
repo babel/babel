@@ -485,15 +485,6 @@
       "./helpers/iterableToArrayLimit.js"
     ],
     "./helpers/esm/iterableToArrayLimit": "./helpers/esm/iterableToArrayLimit.js",
-    "./helpers/iterableToArrayLimitLoose": [
-      {
-        "node": "./helpers/iterableToArrayLimitLoose.js",
-        "import": "./helpers/esm/iterableToArrayLimitLoose.js",
-        "default": "./helpers/iterableToArrayLimitLoose.js"
-      },
-      "./helpers/iterableToArrayLimitLoose.js"
-    ],
-    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/esm/iterableToArrayLimitLoose.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
@@ -656,15 +647,6 @@
       "./helpers/slicedToArray.js"
     ],
     "./helpers/esm/slicedToArray": "./helpers/esm/slicedToArray.js",
-    "./helpers/slicedToArrayLoose": [
-      {
-        "node": "./helpers/slicedToArrayLoose.js",
-        "import": "./helpers/esm/slicedToArrayLoose.js",
-        "default": "./helpers/slicedToArrayLoose.js"
-      },
-      "./helpers/slicedToArrayLoose.js"
-    ],
-    "./helpers/esm/slicedToArrayLoose": "./helpers/esm/slicedToArrayLoose.js",
     "./helpers/superPropBase": [
       {
         "node": "./helpers/superPropBase.js",
