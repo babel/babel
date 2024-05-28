@@ -6,6 +6,12 @@ declare module "js-tokens" {
   export * from "js-tokens-BABEL_8_BREAKING-true";
 }
 
+declare module "commander" {
+  import type { Command } from "commander-BABEL_8_BREAKING-true";
+  const _default: { program: Command };
+  export { _default as default };
+}
+
 declare module "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js" {
   import type { declare } from "@babel/helper-plugin-utils";
   let plugin: ReturnType<typeof declare>;

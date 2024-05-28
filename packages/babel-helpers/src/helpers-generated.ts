@@ -840,18 +840,6 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 213, gzip size: 184
-  iterableToArrayLimitLoose: helper(
-    "7.0.0-beta.0",
-    'function _iterableToArrayLimitLoose(e,r){var t=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null!=t){var o,l=[];for(t=t.call(e);e.length<r&&!(o=t.next()).done;)l.push(o.value);return l}}',
-    {
-      globals: ["Symbol"],
-      locals: { _iterableToArrayLimitLoose: ["body.0.id"] },
-      exportBindingAssignments: [],
-      exportName: "_iterableToArrayLimitLoose",
-      dependencies: {},
-    },
-  ),
   // size: 520, gzip size: 341
   jsx: helper(
     "7.0.0-beta.0",
@@ -1123,27 +1111,6 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
         iterableToArrayLimit: [
-          "body.0.body.body.0.argument.left.left.right.callee",
-        ],
-        unsupportedIterableToArray: [
-          "body.0.body.body.0.argument.left.right.callee",
-        ],
-        nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
-      },
-    },
-  ),
-  // size: 143, gzip size: 121
-  slicedToArrayLoose: helper(
-    "7.0.0-beta.0",
-    "function _slicedToArrayLoose(r,e){return arrayWithHoles(r)||iterableToArrayLimitLoose(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
-    {
-      globals: [],
-      locals: { _slicedToArrayLoose: ["body.0.id"] },
-      exportBindingAssignments: [],
-      exportName: "_slicedToArrayLoose",
-      dependencies: {
-        arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
-        iterableToArrayLimitLoose: [
           "body.0.body.body.0.argument.left.left.right.callee",
         ],
         unsupportedIterableToArray: [
