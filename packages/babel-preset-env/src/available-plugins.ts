@@ -151,6 +151,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "bugfix/transform-v8-static-class-fields-redefine-readonly": "7.12.0",
     "syntax-import-attributes": "7.22.0",
     "transform-class-static-block": "7.12.0",
+    "transform-duplicate-named-capturing-groups-regex": "7.19.0",
     "transform-private-property-in-object": "7.10.0",
   });
 
