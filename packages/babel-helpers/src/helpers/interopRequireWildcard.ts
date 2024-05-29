@@ -1,16 +1,20 @@
 /* @minVersion 7.14.0 */
 
-function _getRequireWildcardCache(nodeInterop) {
+function _getRequireWildcardCache(nodeInterop: boolean) {
   if (typeof WeakMap !== "function") return null;
 
   var cacheBabelInterop = new WeakMap();
   var cacheNodeInterop = new WeakMap();
-  return (_getRequireWildcardCache = function (nodeInterop) {
+  // @ts-expect-error assign to function
+  return (_getRequireWildcardCache = function (nodeInterop: boolean) {
     return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
   })(nodeInterop);
 }
 
-export default function _interopRequireWildcard(obj, nodeInterop) {
+export default function _interopRequireWildcard(
+  obj: any,
+  nodeInterop: boolean,
+) {
   if (!nodeInterop && obj && obj.__esModule) {
     return obj;
   }
@@ -24,9 +28,12 @@ export default function _interopRequireWildcard(obj, nodeInterop) {
     return cache.get(obj);
   }
 
-  var newObj = { __proto__: null };
+  var newObj: { [key: string]: any } = { __proto__: null };
   var hasPropertyDescriptor =
-    Object.defineProperty && Object.getOwnPropertyDescriptor;
+    // @ts-expect-error check if Object.defineProperty is available
+    (Object.defineProperty && Object.getOwnPropertyDescriptor) as
+      | typeof Object.getOwnPropertyDescriptor
+      | undefined;
   for (var key in obj) {
     if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
       var desc = hasPropertyDescriptor
