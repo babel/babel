@@ -1,4 +1,7 @@
 {
+  "transform-duplicate-named-capturing-groups-regex": {
+    "safari": "tp"
+  },
   "transform-unicode-sets-regex": {
     "chrome": "112",
     "opera": "98",
