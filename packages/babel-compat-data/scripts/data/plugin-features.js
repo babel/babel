@@ -194,12 +194,18 @@ const es2024 = {
   },
 };
 
+const es2025 = {
+  "transform-duplicate-named-capturing-groups-regex":
+    "Duplicate named capturing groups",
+};
+
 const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2025,
   es2024,
   es2022,
   es2021,
