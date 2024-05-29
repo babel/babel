@@ -2,7 +2,8 @@
 {
   "extends": [
     "../../tsconfig.base.json",
-    "../../tsconfig.paths.json"
+    "../../tsconfig.paths.json",
+    "./tsconfig.overrides.json"
   ],
   "include": [
     "../../packages/babel-standalone/src/**/*.ts",

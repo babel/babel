@@ -197,7 +197,11 @@ for (let i = 0; i < topoSorted.length; i++) {
   });
   chunk.forEach(({ name }) => allDeps.delete(name));
 
-  const tsConfig = buildTSConfig(chunk, allDeps);
+  const tsConfig = buildTSConfig(
+    chunk,
+    allDeps,
+    fs.existsSync(new URL(root.relative + "/tsconfig.overrides.json", rootURL))
+  );
 
   fs.writeFileSync(
     new URL(root.relative + "/tsconfig.json", rootURL),
@@ -206,7 +210,7 @@ for (let i = 0; i < topoSorted.length; i++) {
   );
 }
 
-function buildTSConfig(pkgs, allDeps) {
+function buildTSConfig(pkgs, allDeps, hasOverrides) {
   const paths = {};
   const referencePaths = new Set();
 
@@ -219,7 +223,11 @@ function buildTSConfig(pkgs, allDeps) {
   }
 
   return {
-    extends: ["../../tsconfig.base.json", "../../tsconfig.paths.json"],
+    extends: [
+      "../../tsconfig.base.json",
+      "../../tsconfig.paths.json",
+      hasOverrides && "./tsconfig.overrides.json",
+    ].filter(Boolean),
     include: pkgs
       .map(({ name, relative }) => {
         return name === "@babel/eslint-parser"
@@ -293,7 +301,11 @@ fs.writeFileSync(
         compilerOptions: {
           skipLibCheck: false,
         },
-        include: ["packages/babel-parser/typings/*.d.ts", "dts/**/*.d.ts"],
+        include: [
+          "./lib/libdom-minimal.d.ts",
+          "packages/babel-parser/typings/*.d.ts",
+          "dts/**/*.d.ts",
+        ],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),
