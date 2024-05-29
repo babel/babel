@@ -18,5 +18,5 @@
     "@babel/preset-react": "workspace:^",
     "eslint": "^8.22.0"
   },
-  "type": "module"
+  "type": "commonjs"
 }

@@ -4,7 +4,7 @@
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
   "private": true,
   "main": "./index.js",
-  "type": "module",
+  "type": "commonjs",
   "exports": {
     ".": "./index.js",
     "./package.json": "./package.json"
