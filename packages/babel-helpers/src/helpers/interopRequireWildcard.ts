@@ -1,26 +1,22 @@
 /* @minVersion 7.14.0 */
 
-function _getRequireWildcardCache<K extends WeakKey, V = any>(
-  nodeInterop: boolean,
-): WeakMap<K, V> | null {
+function _getRequireWildcardCache(nodeInterop: boolean) {
   if (typeof WeakMap !== "function") return null;
 
   var cacheBabelInterop = new WeakMap();
   var cacheNodeInterop = new WeakMap();
-
-  return ((_getRequireWildcardCache as (n: boolean) => WeakMap<K, V>) =
-    function (nodeInterop: boolean) {
-      return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
+  // @ts-expect-error assign to function
+  return (_getRequireWildcardCache = function (nodeInterop: boolean) {
+    return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+  })(nodeInterop);
 }
 
-type TReturnType<T> = { default: T; [key: string]: any };
-export default function _interopRequireWildcard<T>(
-  obj: T,
+export default function _interopRequireWildcard(
+  obj: any,
   nodeInterop: boolean,
-): TReturnType<T> {
-  if (!nodeInterop && obj && typeof obj === "object" && "__esModule" in obj) {
-    return obj as unknown as TReturnType<T>;
+) {
+  if (!nodeInterop && obj && obj.__esModule) {
+    return obj;
   }
 
   if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
@@ -32,14 +28,12 @@ export default function _interopRequireWildcard<T>(
     return cache.get(obj);
   }
 
-  var newObj: { __proto__: null; default: T; [key: string]: any } = {
-    __proto__: null,
-    default: obj,
-  };
-
+  var newObj: { [key: string]: any } = { __proto__: null };
   var hasPropertyDescriptor =
-    "defineProperty" in Object ? Object.getOwnPropertyDescriptor : undefined;
-
+    // @ts-expect-error check if Object.defineProperty is available
+    (Object.defineProperty && Object.getOwnPropertyDescriptor) as
+      | typeof Object.getOwnPropertyDescriptor
+      | undefined;
   for (var key in obj) {
     if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
       var desc = hasPropertyDescriptor
@@ -52,6 +46,7 @@ export default function _interopRequireWildcard<T>(
       }
     }
   }
+  newObj.default = obj;
   if (cache) {
     cache.set(obj, newObj);
   }
