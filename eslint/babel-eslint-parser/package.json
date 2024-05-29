@@ -20,7 +20,7 @@
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
   "main": "./lib/index.cjs",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./lib/index.cjs",
     "./experimental-worker": "./lib/experimental-worker.cjs",

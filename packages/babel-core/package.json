@@ -99,7 +99,6 @@
     ],
     "USE_ESM": [
       {
-        "type": "module",
         "exports": {
           ".": {
             "types": "./lib/index.d.ts",
@@ -109,7 +108,9 @@
           "./package.json": "./package.json"
         }
       },
-      null
+      {
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
@@ -120,5 +121,5 @@
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

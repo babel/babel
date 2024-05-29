@@ -12,7 +12,7 @@
     "directory": "packages/babel-register"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "commonjs",
+  "type": "module",
   "main": "./lib/index.js",
   "dependencies": {
     "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
@@ -49,6 +49,12 @@
       },
       {
         "exports": null
+      }
+    ],
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
       }
     ]
   },

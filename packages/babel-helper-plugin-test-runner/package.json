@@ -55,11 +55,11 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
-  "type": "commonjs"
+  "type": "module"
 }

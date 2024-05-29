@@ -38,10 +38,10 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
@@ -51,7 +51,7 @@
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@babel/core": "workspace:^"
   }

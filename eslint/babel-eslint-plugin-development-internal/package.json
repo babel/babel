@@ -22,5 +22,5 @@
   "devDependencies": {
     "eslint": "^8.22.0"
   },
-  "type": "commonjs"
+  "type": "module"
 }
