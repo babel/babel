@@ -42,10 +42,10 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
@@ -56,5 +56,5 @@
       {}
     ]
   },
-  "type": "commonjs"
+  "type": "module"
 }

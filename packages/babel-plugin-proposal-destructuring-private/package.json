@@ -42,13 +42,13 @@
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs",
+  "type": "module",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {

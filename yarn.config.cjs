@@ -164,9 +164,8 @@ gen_enforced_field(WorkspaceCwd, 'type', 'commonjs') :-
  */
 function enforceType({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    const { type } = workspace.manifest;
-    if (type !== "module") {
-      workspace.set("type", "commonjs");
+    if (!workspace.manifest.private && workspace.manifest.type !== "commonjs") {
+      workspace.set("type", "module");
     }
   }
 }
@@ -234,8 +233,14 @@ function enforceConditions({ Yarn }) {
     if (workspace.manifest.private) continue;
     if (workspace.manifest.main === "./lib/index.cjs") continue;
     if (workspace.ident === "@babel/compat-data") continue;
-    if (!workspace.manifest.conditions) {
-      workspace.set("conditions", { USE_ESM: [{ type: "module" }, null] });
+    if (workspace.manifest.type !== "commonjs") {
+      if (!workspace.manifest.conditions) {
+        workspace.set("conditions", { USE_ESM: [null, { type: "commonjs" }] });
+      } else if (!workspace.manifest.conditions.USE_ESM) {
+        workspace.set("conditions.USE_ESM", [null, { type: "commonjs" }]);
+      } else {
+        workspace.set("conditions.USE_ESM.1", { type: "commonjs" });
+      }
     }
   }
 }

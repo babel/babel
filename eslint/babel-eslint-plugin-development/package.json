@@ -9,7 +9,7 @@
   ],
   "author": "The Babel Team (https://babel.dev/team)",
   "main": "./lib/index.cjs",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./lib/index.cjs",
     "./package.json": "./package.json"

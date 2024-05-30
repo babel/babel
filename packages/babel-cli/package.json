@@ -66,13 +66,14 @@
     ],
     "USE_ESM": [
       {
-        "type": "module",
         "bin": {
           "babel": "./bin/babel.mjs",
           "babel-external-helpers": "./bin/babel-external-helpers.mjs"
         }
       },
-      null
+      {
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
@@ -82,5 +83,5 @@
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

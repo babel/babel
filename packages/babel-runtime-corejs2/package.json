@@ -1141,12 +1141,6 @@
   },
   "type": "commonjs",
   "conditions": {
-    "USE_ESM": [
-      {
-        "type": "module"
-      },
-      null
-    ],
     "BABEL_8_BREAKING": [
       {
         "private": true
