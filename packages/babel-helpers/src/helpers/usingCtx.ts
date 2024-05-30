@@ -67,7 +67,7 @@ export default function _usingCtx(): UsingCtxReturn {
         ];
       }
       if (typeof dispose !== "function") {
-        throw new TypeError(`Property [Symbol.dispose] is not a function.`);
+        throw new TypeError("Object is not disposable.");
       }
       stack.push({ v: value, d: dispose, a: isAwait });
     } else if (isAwait) {
