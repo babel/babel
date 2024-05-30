@@ -95,8 +95,8 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
               arg.done
             ) {
               // await or end of yield*
-              resume(nextKey, arg);
-              return;
+              // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression -- smaller bundle size
+              return resume(nextKey, arg);
             } else {
               // yield*, not done
               arg = gen[nextKey](arg).value;
