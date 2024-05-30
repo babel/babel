@@ -65,9 +65,21 @@ export default function _usingCtx(): UsingCtxReturn {
         dispose = (value as Disposable)[
           Symbol.dispose || Symbol.for("Symbol.dispose")
         ];
+        if (isAwait) {
+          var inner = dispose;
+        }
       }
       if (typeof dispose !== "function") {
         throw new TypeError("Object is not disposable.");
+      }
+      if (inner) {
+        dispose = function () {
+          try {
+            inner.call(value);
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        };
       }
       stack.push({ v: value, d: dispose, a: isAwait });
     } else if (isAwait) {
