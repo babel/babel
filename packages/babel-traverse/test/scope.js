@@ -1140,7 +1140,7 @@ describe("scope", () => {
   });
 
   describe("constantViolations", () => {
-    it("should not treat as constantViolations 1", () => {
+    it("var redeclarations should not be treated as constantViolations", () => {
       const program = getPath(`
         function v() { }
         const G2 = () => {
