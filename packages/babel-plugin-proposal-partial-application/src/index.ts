@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
-import { types as t } from "@babel/core";
-import type { Scope } from "@babel/traverse";
+import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));

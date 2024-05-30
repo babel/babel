@@ -1,8 +1,7 @@
 import { types as t } from "@babel/core";
-import type { PluginPass } from "@babel/core";
+import type { PluginPass, Scope } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 import template from "@babel/template";
-import type { Scope } from "@babel/traverse";
 
 export interface Options {
   loose?: boolean;

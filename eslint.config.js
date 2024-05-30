@@ -177,6 +177,20 @@ module.exports = [
       "import/no-unresolved": "error",
     },
   },
+  {
+    files: sourceFiles("js,ts,cjs,mjs"),
+    ignores: [
+      // These are bundled
+      "packages/babel-parser/**/*.{js,ts}",
+      "packages/babel-standalone/**/*.{js,ts}",
+    ],
+    rules: {
+      "import/no-extraneous-dependencies": [
+        "error",
+        { includeTypes: true, devDependencies: false },
+      ],
+    },
+  },
   ...compat.extends("plugin:jest/recommended").map(config => {
     if (config.files == null) {
       config.files = [

@@ -1,7 +1,5 @@
-import type * as t from "@babel/types";
-import type { Scope } from "@babel/traverse";
-import { types } from "@babel/core";
-import type { File } from "@babel/core";
+import { types as t } from "@babel/core";
+import type { File, Scope } from "@babel/core";
 import { buildObjectExcludingKeys } from "@babel/plugin-transform-destructuring";
 const {
   assignmentExpression,
@@ -17,7 +15,7 @@ const {
   variableDeclarator,
   variableDeclaration,
   unaryExpression,
-} = types;
+} = t;
 
 function buildUndefinedNode() {
   return unaryExpression("void", numericLiteral(0));

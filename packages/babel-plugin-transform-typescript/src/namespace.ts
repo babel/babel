@@ -1,5 +1,4 @@
-import { template, types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { template, types as t, type NodePath } from "@babel/core";
 
 import { registerGlobalType } from "./global-types.ts";
 

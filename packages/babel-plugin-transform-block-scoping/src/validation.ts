@@ -1,5 +1,5 @@
-import { types as t, type PluginPass } from "@babel/core";
-import type { Binding, NodePath } from "@babel/traverse";
+import { types as t } from "@babel/core";
+import type { Scope, NodePath, PluginPass } from "@babel/core";
 
 export function validateUsage(
   path: NodePath<t.VariableDeclaration>,
@@ -25,7 +25,7 @@ export function validateUsage(
 
 function disallowConstantViolations(
   name: string,
-  binding: Binding,
+  binding: Scope.Binding,
   state: PluginPass,
 ) {
   for (const violation of binding.constantViolations) {
@@ -151,7 +151,7 @@ function getTDZReplacement(
   return { status, node: buildTDZAssert(status, id, state) };
 }
 
-function injectTDZChecks(binding: Binding, state: PluginPass) {
+function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
   const allUsages = new Set(binding.referencePaths);
   binding.constantViolations.forEach(allUsages.add, allUsages);
 

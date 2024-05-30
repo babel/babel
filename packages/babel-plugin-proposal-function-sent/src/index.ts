@@ -1,8 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
-import { types as t } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import { types as t, type Visitor } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));

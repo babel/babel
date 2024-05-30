@@ -571,6 +571,8 @@ __metadata:
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -726,6 +728,8 @@ __metadata:
     "@jridgewell/gen-mapping": "npm:^0.3.5"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -897,7 +901,6 @@ __metadata:
     "@babel/helper-simple-access": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -949,6 +952,8 @@ __metadata:
   resolution: "@babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils"
   dependencies:
     "@babel/core": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 

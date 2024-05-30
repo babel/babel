@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
-import type { PluginPass } from "@babel/core";
-import type { NodePath, Scope } from "@babel/traverse";
+import type { PluginPass, NodePath, Scope } from "@babel/core";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";

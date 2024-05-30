@@ -14,7 +14,7 @@
  */
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
-import type { Visitor, NodePath } from "@babel/traverse";
+import type { Visitor, NodePath } from "@babel/core";
 
 const TRACE_ID = "__self";
 

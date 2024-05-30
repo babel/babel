@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template } from "@babel/core";
-import type { Visitor, Scope, NodePath } from "@babel/traverse";
+import type { Visitor, Scope, NodePath } from "@babel/core";
 
 export interface Options {
   allowMutablePropsOnTags?: null | string[];

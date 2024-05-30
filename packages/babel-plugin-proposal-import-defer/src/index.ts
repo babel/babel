@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { types as t } from "@babel/core";
-import type { Scope } from "@babel/traverse";
+import type { types as t, Scope } from "@babel/core";
 import { defineCommonJSHook } from "@babel/plugin-transform-modules-commonjs";
 
 import syntaxImportDefer from "@babel/plugin-syntax-import-defer";

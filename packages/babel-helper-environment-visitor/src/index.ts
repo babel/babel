@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies -- TODO: Avoid cycle
 import type { NodePath, Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 

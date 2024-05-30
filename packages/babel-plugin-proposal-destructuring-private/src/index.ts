@@ -9,9 +9,7 @@ import {
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 
-import type { PluginPass } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
   assertVersion(REQUIRED_VERSION("^7.17.0"));

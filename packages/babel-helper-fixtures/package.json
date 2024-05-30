@@ -15,12 +15,15 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "./lib/index.js",
   "dependencies": {
+    "@jridgewell/gen-mapping": "^0.3.5",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@jridgewell/gen-mapping": "^0.3.5",
     "@types/semver": "^7.3.4"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -33,7 +36,8 @@
         }
       },
       {
-        "exports": null
+        "exports": null,
+        "peerDependencies": null
       }
     ],
     "USE_ESM": [

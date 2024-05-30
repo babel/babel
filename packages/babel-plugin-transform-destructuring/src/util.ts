@@ -1,7 +1,5 @@
 import { types as t } from "@babel/core";
-import type { File } from "@babel/core";
-import type { Scope, NodePath } from "@babel/traverse";
-import type { TraversalAncestors } from "@babel/types";
+import type { File, Scope, NodePath } from "@babel/core";
 
 function isPureVoid(node: t.Node) {
   return (
@@ -61,7 +59,7 @@ interface ArrayUnpackVisitorState {
 // NOTE: This visitor is meant to be used via t.traverse
 const arrayUnpackVisitor = (
   node: t.Node,
-  ancestors: TraversalAncestors,
+  ancestors: t.TraversalAncestors,
   state: ArrayUnpackVisitorState,
 ) => {
   if (!ancestors.length) {

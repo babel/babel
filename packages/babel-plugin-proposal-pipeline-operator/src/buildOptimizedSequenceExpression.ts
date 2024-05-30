@@ -1,5 +1,4 @@
-import { types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, type NodePath } from "@babel/core";
 
 // tries to optimize sequence expressions in the format
 //   (a = b, (c => c + e)(a))

@@ -1,5 +1,4 @@
-import { types as t, template } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, template, type NodePath } from "@babel/core";
 import type { Targets } from "@babel/helper-compilation-targets";
 import { addNamed } from "@babel/helper-module-imports";
 

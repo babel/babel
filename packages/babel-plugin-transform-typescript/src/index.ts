@@ -1,8 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { PluginPass, types as t } from "@babel/core";
+import type { PluginPass, types as t, Scope, NodePath } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { Binding, NodePath } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum.ts";
@@ -724,7 +723,7 @@ export default declare((api, opts: Options) => {
     pragmaImportName,
     pragmaFragImportName,
   }: {
-    binding: Binding;
+    binding: Scope.Binding;
     programPath: NodePath<t.Program>;
     pragmaImportName: string;
     pragmaFragImportName: string;

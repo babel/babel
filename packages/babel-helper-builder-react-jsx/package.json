@@ -21,6 +21,9 @@
     "@babel/core": "workspace:^",
     "@babel/traverse": "workspace:^"
   },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
   "engines": {
     "node": ">=6.9.0"
   },
@@ -33,7 +36,8 @@
         }
       },
       {
-        "exports": null
+        "exports": null,
+        "peerDependencies": null
       }
     ],
     "USE_ESM": [

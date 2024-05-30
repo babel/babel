@@ -9,16 +9,16 @@ import {
   isTSInterfaceBody,
   isTSEnumDeclaration,
 } from "@babel/types";
-import type {
-  RecordAndTuplePluginOptions,
-  PipelineOperatorPluginOptions,
-} from "@babel/parser";
 import type { Opts as jsescOptions } from "jsesc";
 
+import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
 import type SourceMap from "./source-map.ts";
-import * as charCodes from "charcodes";
 import type { TraceMap } from "@jridgewell/trace-mapping";
+
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as charCodes from "charcodes";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -63,7 +63,7 @@ export type Format = {
   /**
    * @deprecated Removed in Babel 8, syntax type is always 'hash'
    */
-  recordAndTupleSyntaxType?: RecordAndTuplePluginOptions["syntaxType"];
+  recordAndTupleSyntaxType?: GeneratorOptions["recordAndTupleSyntaxType"];
   jsescOption: jsescOptions;
   /**
    * @deprecated Removed in Babel 8, use `jsescOption` instead
@@ -73,7 +73,7 @@ export type Format = {
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
-  topicToken?: PipelineOperatorPluginOptions["topicToken"];
+  topicToken?: GeneratorOptions["topicToken"];
   /**
    * @deprecated Removed in Babel 8
    */

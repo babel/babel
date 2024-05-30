@@ -1,4 +1,7 @@
 import type SourceMap from "./source-map.ts";
+
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charcodes from "charcodes";
 
 export type Pos = {

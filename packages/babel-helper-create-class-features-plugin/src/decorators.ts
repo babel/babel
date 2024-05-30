@@ -2,7 +2,6 @@ import type { NodePath, Scope, Visitor } from "@babel/core";
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import {
@@ -11,6 +10,9 @@ import {
 } from "./fields.ts";
 import { memoiseComputedKey } from "./misc.ts";
 
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as charCodes from "charcodes";
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
   loose?: boolean;

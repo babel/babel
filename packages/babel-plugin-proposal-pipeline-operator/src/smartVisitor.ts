@@ -1,6 +1,5 @@
 import { types as t } from "@babel/core";
-import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import type { PluginPass, Visitor } from "@babel/core";
 
 const updateTopicReferenceVisitor: Visitor<{ topicId: t.Identifier }> = {
   PipelinePrimaryTopicReference(path) {

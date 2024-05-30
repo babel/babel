@@ -20,9 +20,11 @@
     },
     "./package.json": "./package.json"
   },
-  "devDependencies": {
-    "@babel/traverse": "workspace:^",
+  "dependencies": {
     "@babel/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

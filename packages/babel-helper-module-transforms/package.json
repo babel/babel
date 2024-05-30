@@ -22,8 +22,7 @@
     "@babel/helper-validator-identifier": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"

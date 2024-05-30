@@ -1,6 +1,5 @@
 import rewritePattern from "regexpu-core";
-import type { NodePath } from "@babel/traverse";
-import { types as t, type PluginObject } from "@babel/core";
+import { types as t, type PluginObject, type NodePath } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import semver from "semver";
