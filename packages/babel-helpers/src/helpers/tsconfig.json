@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "target": "ESNext",
-    "module": "preserve",
+    "module": "Preserve",
     "lib": ["ESNext"],
     "declaration": false,
     "noEmit": true,
@@ -13,10 +13,5 @@
     "strict": true
   },
   "include": ["./*.ts"],
-  "exclude": [
-    "./applyDecs2305.ts",
-    "./applyDecs2311.ts",
-    "./construct.ts",
-    "./setFunctionName.ts"
-  ]
+  "exclude": ["./applyDecs2305.ts", "./construct.ts", "./usingCtx.ts"]
 }

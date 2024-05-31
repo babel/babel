@@ -7,7 +7,8 @@ export default function setFunctionName<T extends Function>(
   prefix?: string,
 ): T {
   if (typeof name === "symbol") {
-    name = name.description;
+    // Here `undefined` is possible, we check for it in the next line.
+    name = name.description!;
     name = name ? "[" + name + "]" : "";
   }
   // In some older browsers .name was non-configurable, here we catch any
