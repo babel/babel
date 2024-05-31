@@ -13,7 +13,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { chrome < 112, edge < 112, firefox < 116, ie, ios, safari < tp }
+  transform-unicode-sets-regex { chrome < 112, edge < 112, firefox < 116, ie, ios < 17, safari < 17 }
   transform-class-static-block { chrome < 94, edge < 94, firefox < 93, ie, ios < 16.4, safari < 16.4 }
   transform-private-property-in-object { chrome < 91, edge < 91, firefox < 90, ie, ios < 15, safari < 15 }
   transform-class-properties { chrome < 74, edge < 79, firefox < 90, ie, ios < 14.5, safari < 14.1 }
