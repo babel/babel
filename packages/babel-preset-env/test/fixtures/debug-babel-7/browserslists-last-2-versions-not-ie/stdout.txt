@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { ios, safari < tp, samsung }
+  transform-unicode-sets-regex { samsung }
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   syntax-class-static-block
   syntax-private-property-in-object
