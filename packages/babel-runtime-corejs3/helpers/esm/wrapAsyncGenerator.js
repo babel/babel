@@ -17,7 +17,7 @@ function AsyncGenerator(e) {
       _Promise.resolve(u ? o.v : o).then(function (t) {
         if (u) {
           var i = "return" === r ? "return" : "next";
-          if (!o.k || t.done) return void resume(i, t);
+          if (!o.k || t.done) return resume(i, t);
           t = e[i](t).value;
         }
         settle(n.done ? "return" : "normal", t);
