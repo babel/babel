@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-duplicate-named-capturing-groups-regex { electron }
   transform-unicode-sets-regex { electron < 24.0 }
   transform-class-static-block { electron < 15.0 }
   transform-private-property-in-object { electron < 13.0 }
@@ -37,7 +38,6 @@ Using plugins:
   transform-export-namespace-from { electron < 5.0 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-duplicate-named-capturing-groups-regex { chrome }
   transform-unicode-sets-regex { chrome < 112 }
   transform-class-static-block { chrome < 94 }
   transform-private-property-in-object { chrome < 91 }
@@ -20,13 +21,11 @@ Using plugins:
   transform-json-strings { chrome < 66 }
   transform-optional-catch-binding { chrome < 66 }
   transform-async-generator-functions { chrome < 63 }
-  syntax-object-rest-spread
   transform-dotall-regex { chrome < 62 }
   transform-unicode-property-regex { chrome < 64 }
   transform-named-capturing-groups-regex { chrome < 64 }
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
