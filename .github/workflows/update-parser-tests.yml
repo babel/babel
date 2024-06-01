@@ -36,6 +36,7 @@ jobs:
       - name: Build babel parser
         run: |
           yarn install --immutable --mode=skip-build
+          yarn node ./scripts/set-module-type.js module
           yarn gulp build-rollup
       - name: Update test262 allow list
         run: |
