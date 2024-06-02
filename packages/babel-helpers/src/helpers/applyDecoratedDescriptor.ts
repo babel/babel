@@ -1,14 +1,24 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _applyDecoratedDescriptor(
-  target,
-  property,
-  decorators,
-  descriptor,
-  context,
+interface DescriptorWithInitializer extends PropertyDescriptor {
+  initializer?: () => any;
+  [key: string]: any;
+}
+
+export default function _applyDecoratedDescriptor<T>(
+  target: T,
+  property: PropertyKey,
+  decorators: ((
+    t: T,
+    p: PropertyKey,
+    desc: DescriptorWithInitializer,
+  ) => any)[],
+  descriptor: DescriptorWithInitializer,
+  context: DecoratorContext,
 ) {
-  var desc = {};
+  var desc: DescriptorWithInitializer | null = {};
   Object.keys(descriptor).forEach(function (key) {
+    // @ts-ignore(Babel 7 vs Babel 8) we are sure it's not null
     desc[key] = descriptor[key];
   });
   desc.enumerable = !!desc.enumerable;
