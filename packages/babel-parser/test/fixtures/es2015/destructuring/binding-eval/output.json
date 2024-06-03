@@ -45,9 +45,6 @@
                     "start":23,"end":31,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":31,"index":31},"identifierName":"defValue"},
                     "name": "defValue"
                   }
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
             ]

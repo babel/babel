@@ -36,9 +36,6 @@
                     "type": "Identifier",
                     "start":22,"end":31,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":17,"index":31},"identifierName":"arguments"},
                     "name": "arguments"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]

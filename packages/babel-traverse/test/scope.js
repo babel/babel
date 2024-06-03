@@ -1,5 +1,6 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+import { IS_BABEL_8 } from "$repo-utils";
 
 import _traverse, { NodePath } from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
@@ -1050,7 +1051,12 @@ describe("scope", () => {
       const renamedPropertyMatcher = expect.objectContaining({
         type: "ObjectProperty",
         shorthand: false,
-        extra: expect.objectContaining({ shorthand: false }),
+        ...(IS_BABEL_8()
+          ? {}
+          : {
+              // eslint-disable-next-line jest/no-conditional-expect
+              extra: expect.objectContaining({ shorthand: false }),
+            }),
         key: expect.objectContaining({ name: "a" }),
         value: expect.objectContaining({
           name: expect.not.stringMatching(/^a$/),
@@ -1095,7 +1101,12 @@ describe("scope", () => {
       const originalPropertyMatcher = expect.objectContaining({
         type: "ObjectProperty",
         shorthand: true,
-        extra: expect.objectContaining({ shorthand: true }),
+        ...(IS_BABEL_8()
+          ? {}
+          : {
+              // eslint-disable-next-line jest/no-conditional-expect
+              extra: expect.objectContaining({ shorthand: true }),
+            }),
         key: expect.objectContaining({ name: "b" }),
         value: expect.objectContaining({ name: "b" }),
       });

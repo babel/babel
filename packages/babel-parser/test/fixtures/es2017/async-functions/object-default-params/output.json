@@ -58,9 +58,6 @@
                           },
                           "value": "bar"
                         }
-                      },
-                      "extra": {
-                        "shorthand": true
                       }
                     }
                   ]

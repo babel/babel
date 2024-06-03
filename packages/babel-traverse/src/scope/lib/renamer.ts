@@ -41,7 +41,9 @@ const renameVisitor: Visitor<Renamer> = {
       scope.getBindingIdentifier(name) === state.binding.identifier
     ) {
       node.shorthand = false;
-      if (node.extra?.shorthand) node.extra.shorthand = false;
+      if (!process.env.BABEL_8_BREAKING) {
+        if (node.extra?.shorthand) node.extra.shorthand = false;
+      }
     }
   },
 

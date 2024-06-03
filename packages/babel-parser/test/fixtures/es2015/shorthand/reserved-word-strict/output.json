@@ -43,9 +43,6 @@
                     "type": "Identifier",
                     "start":25,"end":35,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":21,"index":35},"identifierName":"implements"},
                     "name": "implements"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 },
                 {
@@ -63,9 +60,6 @@
                     "type": "Identifier",
                     "start":37,"end":46,"loc":{"start":{"line":2,"column":23,"index":37},"end":{"line":2,"column":32,"index":46},"identifierName":"interface"},
                     "name": "interface"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 },
                 {
@@ -83,9 +77,6 @@
                     "type": "Identifier",
                     "start":48,"end":55,"loc":{"start":{"line":2,"column":34,"index":48},"end":{"line":2,"column":41,"index":55},"identifierName":"package"},
                     "name": "package"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ],

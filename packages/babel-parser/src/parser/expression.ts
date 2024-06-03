@@ -2093,9 +2093,11 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.InvalidRecordProperty, prop);
       }
 
-      // @ts-expect-error shorthand may not index prop
-      if (prop.shorthand) {
-        this.addExtra(prop, "shorthand", true);
+      if (!process.env.BABEL_8_BREAKING) {
+        // @ts-expect-error shorthand may not index prop
+        if (prop.shorthand) {
+          this.addExtra(prop, "shorthand", true);
+        }
       }
 
       // @ts-expect-error Fixme: refine typings

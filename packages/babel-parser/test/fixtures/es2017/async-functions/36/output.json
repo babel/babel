@@ -50,9 +50,6 @@
                       "start":23,"end":27,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":27,"index":27}},
                       "value": true
                     }
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ],

@@ -52,9 +52,6 @@
                       "type": "Identifier",
                       "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"c"},
                       "name": "c"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   },
                   {
@@ -141,9 +138,6 @@
                         "start":42,"end":43,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":43,"index":43},"identifierName":"i"},
                         "name": "i"
                       }
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]
