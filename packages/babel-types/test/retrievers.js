@@ -1,3 +1,7 @@
+import {
+  describeBabel7,
+  describeBabel8,
+} from "../../../scripts/repo-utils/index.cjs";
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
@@ -158,11 +162,6 @@ describe("retrievers", function () {
       ],
       ["class declarations", getBody("class C { a(b) { let c } }")[0], ["C"]],
       [
-        "class expressions",
-        getBody("(class C { a(b) { let c } })")[0].expression,
-        [],
-      ],
-      [
         "object methods",
         getBody("({ a(b) { let c } })")[0].expression.properties[0],
         ["b"],
@@ -233,6 +232,30 @@ describe("retrievers", function () {
       ["unary expression", getBody("void x")[0].expression, ["x"]],
       ["update expression", getBody("++x")[0].expression, ["x"]],
       ["assignment expression", getBody("x ??= 1")[0].expression, ["x"]],
+    ])("%s", (_, program, bindingNames) => {
+      const ids = t.getOuterBindingIdentifiers(program);
+      expect(Object.keys(ids)).toEqual(bindingNames);
+    });
+  });
+  describeBabel7("getOuterBindingIdentifiers - Babel 7", function () {
+    it.each([
+      [
+        "class expressions",
+        getBody("(class C { a(b) { let c } })")[0].expression,
+        ["C"],
+      ],
+    ])("%s", (_, program, bindingNames) => {
+      const ids = t.getOuterBindingIdentifiers(program);
+      expect(Object.keys(ids)).toEqual(bindingNames);
+    });
+  });
+  describeBabel8("getOuterBindingIdentifiers - Babel 8", function () {
+    it.each([
+      [
+        "class expressions",
+        getBody("(class C { a(b) { let c } })")[0].expression,
+        [],
+      ],
     ])("%s", (_, program, bindingNames) => {
       const ids = t.getOuterBindingIdentifiers(program);
       expect(Object.keys(ids)).toEqual(bindingNames);

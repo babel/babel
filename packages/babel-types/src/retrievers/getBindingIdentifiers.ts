@@ -88,7 +88,10 @@ function getBindingIdentifiers(
         continue;
       }
 
-      if (isFunctionExpression(id) || isClassExpression(id)) {
+      if (
+        isFunctionExpression(id) ||
+        (process.env.BABEL_8_BREAKING && isClassExpression(id))
+      ) {
         continue;
       }
     }
