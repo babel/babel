@@ -1143,7 +1143,7 @@ describe("scope", () => {
     it("var redeclarations should not be treated as constantViolations", () => {
       const program = getPath(`
         function v() { }
-        const G2 = () => {
+        function f() {
           var a = 1;
           var {
             currentPoint: a,
@@ -1151,8 +1151,12 @@ describe("scope", () => {
           } = {};
         }
       `);
+
       const bindingV = program.scope.getBinding("v");
-      expect(a.constantViolations).toHaveLength(0);
+      expect(bindingV.constantViolations).toHaveLength(0);
+
+      const bindingA = program.get("body.1.body").scope.getBinding("a");
+      expect(bindingA.constantViolations).toHaveLength(1);
     });
   });
 });
