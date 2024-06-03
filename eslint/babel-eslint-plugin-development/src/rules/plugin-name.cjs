@@ -32,7 +32,16 @@ module.exports = {
     };
 
     function functionVisitor(node) {
-      if (!isBabelPluginFactory(node, context.getScope())) return;
+      if (
+        !isBabelPluginFactory(
+          node,
+          context.sourceCode
+            ? context.sourceCode.getScope(node)
+            : context.getScope(),
+        )
+      ) {
+        return;
+      }
 
       const returnValue = getReturnValue(node);
       if (!returnValue || returnValue.type !== "ObjectExpression") return;

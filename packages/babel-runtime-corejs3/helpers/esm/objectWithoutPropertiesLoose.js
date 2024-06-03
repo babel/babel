@@ -1,12 +1,11 @@
 import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
-export default function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  for (var key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      if (_indexOfInstanceProperty(excluded).call(excluded, key) >= 0) continue;
-      target[key] = source[key];
-    }
+function _objectWithoutPropertiesLoose(r, e) {
+  if (null == r) return {};
+  var t = {};
+  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
+    if (_indexOfInstanceProperty(e).call(e, n) >= 0) continue;
+    t[n] = r[n];
   }
-  return target;
+  return t;
 }
+export { _objectWithoutPropertiesLoose as default };

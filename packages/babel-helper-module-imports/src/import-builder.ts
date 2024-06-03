@@ -14,8 +14,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { Scope } from "@babel/traverse";
-import type { File } from "@babel/core";
+import type { Scope, HubInterface } from "@babel/traverse";
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually
@@ -26,10 +25,10 @@ export default class ImportBuilder {
   private _resultName: t.Identifier | t.MemberExpression = null;
 
   declare _scope: Scope;
-  declare _hub: File["hub"];
+  declare _hub: HubInterface;
   private _importedSource: string;
 
-  constructor(importedSource: string, scope: Scope, hub: File["hub"]) {
+  constructor(importedSource: string, scope: Scope, hub: HubInterface) {
     this._scope = scope;
     this._hub = hub;
     this._importedSource = importedSource;

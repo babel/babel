@@ -24,7 +24,7 @@ export default function toSequenceExpression(
   if (!nodes?.length) return;
 
   const declars: DeclarationInfo[] = [];
-  const result = gatherSequenceExpressions(nodes, scope, declars);
+  const result = gatherSequenceExpressions(nodes, declars);
   if (!result) return;
 
   for (const declar of declars) {

@@ -12,7 +12,7 @@ import _spliceInstanceProperty from "core-js-pure/features/instance/splice.js";
 import checkInRHS from "./checkInRHS.js";
 import setFunctionName from "./setFunctionName.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function applyDecs2311(e, t, n, r, o, i) {
+function applyDecs2311(e, t, n, r, o, i) {
   var a,
     c,
     u,
@@ -71,19 +71,19 @@ export default function applyDecs2311(e, t, n, r, o, i) {
     }
     for (var N = e, O = h.length - 1; O >= 0; O -= n ? 2 : 1) {
       var _context2;
-      var z = b(h[O], "A decorator", "be", !0),
-        A = n ? h[O - 1] : void 0,
-        H = {},
-        K = {
+      var T = b(h[O], "A decorator", "be", !0),
+        z = n ? h[O - 1] : void 0,
+        A = {},
+        H = {
           kind: ["field", "accessor", "method", "getter", "setter", "class"][o],
           name: r,
           metadata: a,
           addInitializer: _bindInstanceProperty(_context2 = function _context2(e, t) {
-            if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
+            if (e.v) throw new TypeError("attempted to call addInitializer after decoration was finished");
             b(t, "An initializer", "be", !0), _pushInstanceProperty(i).call(i, t);
-          }).call(_context2, null, H)
+          }).call(_context2, null, A)
         };
-      if (w) c = z.call(A, N, K), H.v = 1, b(c, "class decorators", "return") && (N = c);else if (K["static"] = s, K["private"] = f, c = K.access = {
+      if (w) c = T.call(z, N, H), A.v = 1, b(c, "class decorators", "return") && (N = c);else if (H["static"] = s, H["private"] = f, c = H.access = {
         has: f ? _bindInstanceProperty(p).call(p) : function (e) {
           return r in e;
         }
@@ -93,10 +93,10 @@ export default function applyDecs2311(e, t, n, r, o, i) {
         return e[r];
       }), E || S || (c.set = f ? I("set", 0, d) : function (e, t) {
         e[r] = t;
-      }), N = z.call(A, D ? {
+      }), N = T.call(z, D ? {
         get: P.get,
         set: P.set
-      } : P[F], K), H.v = 1, D) {
+      } : P[F], H), A.v = 1, D) {
         if ("object" == _typeof(N) && N) (c = b(N.get, "accessor.get")) && (P.get = c), (c = b(N.set, "accessor.set")) && (P.set = c), (c = b(N.init, "accessor.init")) && _unshiftInstanceProperty(k).call(k, c);else if (void 0 !== N) throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined");
       } else b(N, (l ? "field" : "method") + " decorators", "return") && (l ? _unshiftInstanceProperty(k).call(k, N) : P[F] = N);
     }
@@ -133,3 +133,4 @@ export default function applyDecs2311(e, t, n, r, o, i) {
     }
   };
 }
+export { applyDecs2311 as default };

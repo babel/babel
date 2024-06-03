@@ -14,6 +14,9 @@ import {
   isOptionalMemberExpression,
   isStringLiteral,
 } from "@babel/types";
+
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 import type { NodeHandlers } from "./index.ts";

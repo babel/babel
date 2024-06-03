@@ -20,6 +20,7 @@ import {
 } from "./tokenizer/types.ts";
 
 import type { Expression, File } from "./types.ts";
+export type { Expression, File };
 
 export function parse(input: string, options?: Options): File {
   if (options?.sourceType === "unambiguous") {

@@ -2399,7 +2399,6 @@ export default abstract class StatementParser extends ExpressionParser {
     this.unexpected(null, tt.braceL);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   eatExportStar(
     node: Undone<N.Node>,
   ): node is Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration> {
@@ -3386,11 +3385,10 @@ export default abstract class StatementParser extends ExpressionParser {
   parseImportSpecifier(
     specifier: Undone<N.ImportSpecifier>,
     importedIsString: boolean,
-    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
+    /* used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
     bindingType: BindingFlag | undefined,
-    /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();

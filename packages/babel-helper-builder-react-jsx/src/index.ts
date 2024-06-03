@@ -23,9 +23,7 @@ import {
   thisExpression,
 } from "@babel/types";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type { NodePath, Visitor } from "@babel/traverse";
-import type { PluginPass } from "@babel/core";
-import type * as t from "@babel/types";
+import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
 
 type ElementState = {
   tagExpr: t.Expression; // tag node,

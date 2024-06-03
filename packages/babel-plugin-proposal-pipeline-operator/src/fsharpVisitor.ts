@@ -1,5 +1,4 @@
-import { types as t, type PluginObject } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, type PluginObject, type NodePath } from "@babel/core";
 import buildOptimizedSequenceExpression from "./buildOptimizedSequenceExpression.ts";
 
 const fsharpVisitor: PluginObject["visitor"] = {

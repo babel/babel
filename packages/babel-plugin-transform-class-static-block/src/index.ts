@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { Scope } from "@babel/traverse";
+import type { Scope } from "@babel/core";
 
 import {
   enableFeature,

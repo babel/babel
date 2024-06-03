@@ -100,3 +100,63 @@ const noop = () => {};
   expect([...log].join()).toBe("0,1,2,3,4,5,6,7,8,9,10,11");
   expect(Foo).toHaveProperty("accessor");
 }
+
+{
+  const id = function* (x) {
+    yield x;
+  }
+  const log = {
+    *[Symbol.iterator]() {
+      @(yield 0, noop)
+      @(yield 1, noop)
+      class Foo {
+        method() {}
+        static method() {}
+        field;
+        static field;
+        get getter() {
+          return;
+        }
+        static get getter() {
+          return;
+        }
+        set setter(x) {}
+        static set setter(x) {}
+        accessor accessor;
+        static accessor accessor;
+      }
+    },
+  };
+  expect([...log].join()).toBe("0,1");
+}
+
+{
+  let C;
+  const iter = (function* iterFactory() {
+    C =
+      @(yield)
+      @(yield)
+      class C {
+        method() {}
+        static method() {}
+        field;
+        static field;
+        get getter() {
+          return;
+        }
+        static get getter() {
+          return;
+        }
+        set setter(x) {}
+        static set setter(x) {}
+        accessor accessor;
+        static accessor accessor;
+      };
+  })();
+  const C1 = class {},
+    C2 = class {};
+  iter.next();
+  iter.next(() => C1);
+  iter.next(() => C2);
+  expect(C).toBe(C1);
+}

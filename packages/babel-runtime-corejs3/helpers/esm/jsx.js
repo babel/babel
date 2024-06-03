@@ -1,7 +1,7 @@
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$for from "core-js-pure/features/symbol/for.js";
 var REACT_ELEMENT_TYPE;
-export default function _createRawReactElement(e, r, E, l) {
+function _createRawReactElement(e, r, E, l) {
   REACT_ELEMENT_TYPE || (REACT_ELEMENT_TYPE = "function" == typeof _Symbol && _Symbol$for && _Symbol$for("react.element") || 60103);
   var o = e && e.defaultProps,
     n = arguments.length - 3;
@@ -21,3 +21,4 @@ export default function _createRawReactElement(e, r, E, l) {
     _owner: null
   };
 }
+export { _createRawReactElement as default };

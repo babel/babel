@@ -1,7 +1,7 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
-import { template, types as t, type PluginPass } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import { template, types as t } from "@babel/core";
+import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const buildClassDecorator = template.statement(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;

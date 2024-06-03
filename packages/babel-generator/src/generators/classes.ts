@@ -4,6 +4,9 @@ import {
   isExportNamedDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
+
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 export function ClassDeclaration(

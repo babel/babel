@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { safari < tp }
+  transform-unicode-sets-regex { safari < 17 }
   transform-class-static-block { safari < 16.4 }
   syntax-private-property-in-object
   syntax-class-properties

@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { transform, transformOptionalChain } from "./transform.ts";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { NodePath, types as t } from "@babel/core";
 
 export interface Options {
   loose?: boolean;

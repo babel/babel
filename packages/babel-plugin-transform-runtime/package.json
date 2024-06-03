@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.24.3",
+  "version": "7.24.6",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -57,15 +57,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

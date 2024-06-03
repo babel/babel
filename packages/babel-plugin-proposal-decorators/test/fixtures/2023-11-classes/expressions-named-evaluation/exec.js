@@ -13,6 +13,8 @@ export const atypical = @dec class {}
 
 expect(logs).toEqual(["default", "atypical"]);
 
+const noop = () => {}
+
 {
   const logs = [];
   const dec = decFactory(logs);
@@ -127,6 +129,55 @@ expect(logs).toEqual(["default", "atypical"]);
     static accessor [f()] = @dec class { @dec static 7() {} };
     static accessor [{ [Symbol.toPrimitive]: () => (logs.push("computing symbol"), Symbol(9)) }] = @dec class { p; };
     static accessor #_10 = @dec class {};
+  }
+
+  expect(logs).toEqual(["computing f", "computing symbol", "A0", "1", "2", "3", "4", "5", "6", "7", "8", "[9]", "#_10"]);
+}
+
+{
+  const logs = [];
+  const dec = decFactory(logs);
+  const f = () => { logs.push("computing f"); return 8. }
+
+  class C {
+    static accessor A0 = @dec class {};
+    static accessor "1" = @dec class { static {} };
+    static accessor 2 = @dec class extends class {} {};
+    static accessor 3n = @dec class extends class {} { static {} };
+    static accessor ["4"] = @dec class { static accessor p; };
+    static accessor [5] = @dec class { @noop static accessor #p; };
+    static accessor [6n] = @dec class { accessor p; };
+    static accessor [f()] = @dec class { @dec static 7() {} };
+    static accessor [{ [Symbol.toPrimitive]: () => (logs.push("computing symbol"), Symbol(9)) }] = @dec class { @noop accessor p; };
+    static accessor #_10 = @dec class {};
+  }
+
+  expect(logs).toEqual(["computing f", "computing symbol", "A0", "1", "2", "3", "4", "5", "6", "7", "8", "[9]", "#_10"]);
+}
+
+{
+  const logs = [];
+  const dec = () => {
+    return {
+      init(v) {
+        logs.push(v.name);
+        return v;
+      }
+    }
+  };
+  const f = () => { logs.push("computing f"); return 8. }
+
+  class C {
+    @dec static accessor A0 = class { static accessor q; };
+    @dec static accessor "1" = class { accessor q; };
+    @dec static accessor 2 = class extends class {} { static accessor p; };
+    @dec static accessor 3n = class extends class {} { accessor #q; };
+    @dec static accessor ["4"] = class { static accessor p; };
+    @dec static accessor [5] = class { static accessor #p; };
+    @dec static accessor [6n] = class { accessor p; };
+    @dec static accessor [f()] = class { @dec static accessor 7 = class { static accessor p }; };
+    @dec static accessor [{ [Symbol.toPrimitive]: () => (logs.push("computing symbol"), Symbol(9)) }] = class { static accessor p; };
+    @dec static accessor #_10 = class { static accessor #p; };
   }
 
   expect(logs).toEqual(["computing f", "computing symbol", "A0", "1", "2", "3", "4", "5", "6", "7", "8", "[9]", "#_10"]);

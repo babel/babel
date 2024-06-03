@@ -33,6 +33,8 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
+declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<any>;
+
 const NodePath_Final = class NodePath {
   constructor(hub: HubInterface, parent: t.Node | null) {
     this.parent = parent;
@@ -53,8 +55,12 @@ const NodePath_Final = class NodePath {
   contexts: Array<TraversalContext> = [];
   state: any = null;
   opts: ExplodedTraverseOptions | null = null;
-  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
-  _traverseFlags: number = 0;
+
+  @bit.storage _traverseFlags: number;
+  @bit(REMOVED) accessor removed = false;
+  @bit(SHOULD_STOP) accessor shouldStop = false;
+  @bit(SHOULD_SKIP) accessor shouldSkip = false;
+
   skipKeys: Record<string, boolean> | null = null;
   parentPath: NodePath_Final | null = null;
   container: t.Node | Array<t.Node> | null = null;
@@ -180,57 +186,148 @@ const NodePath_Final = class NodePath {
   get parentKey(): string {
     return (this.listKey || this.key) as string;
   }
-
-  get shouldSkip() {
-    return !!(this._traverseFlags & SHOULD_SKIP);
-  }
-
-  set shouldSkip(v) {
-    if (v) {
-      this._traverseFlags |= SHOULD_SKIP;
-    } else {
-      this._traverseFlags &= ~SHOULD_SKIP;
-    }
-  }
-
-  get shouldStop() {
-    return !!(this._traverseFlags & SHOULD_STOP);
-  }
-
-  set shouldStop(v) {
-    if (v) {
-      this._traverseFlags |= SHOULD_STOP;
-    } else {
-      this._traverseFlags &= ~SHOULD_STOP;
-    }
-  }
-
-  get removed() {
-    return !!(this._traverseFlags & REMOVED);
-  }
-  set removed(v) {
-    if (v) {
-      this._traverseFlags |= REMOVED;
-    } else {
-      this._traverseFlags &= ~REMOVED;
-    }
-  }
 };
 
-Object.assign(
-  NodePath_Final.prototype,
-  NodePath_ancestry,
-  NodePath_inference,
-  NodePath_replacement,
-  NodePath_evaluation,
-  NodePath_conversion,
-  NodePath_introspection,
-  NodePath_context,
-  NodePath_removal,
-  NodePath_modification,
-  NodePath_family,
-  NodePath_comments,
-);
+const methods = {
+  // NodePath_ancestry
+  findParent: NodePath_ancestry.findParent,
+  find: NodePath_ancestry.find,
+  getFunctionParent: NodePath_ancestry.getFunctionParent,
+  getStatementParent: NodePath_ancestry.getStatementParent,
+  getEarliestCommonAncestorFrom:
+    NodePath_ancestry.getEarliestCommonAncestorFrom,
+  getDeepestCommonAncestorFrom: NodePath_ancestry.getDeepestCommonAncestorFrom,
+  getAncestry: NodePath_ancestry.getAncestry,
+  isAncestor: NodePath_ancestry.isAncestor,
+  isDescendant: NodePath_ancestry.isDescendant,
+  inType: NodePath_ancestry.inType,
+
+  // NodePath_inference
+  getTypeAnnotation: NodePath_inference.getTypeAnnotation,
+  _getTypeAnnotation: NodePath_inference._getTypeAnnotation,
+  isBaseType: NodePath_inference.isBaseType,
+  couldBeBaseType: NodePath_inference.couldBeBaseType,
+  baseTypeStrictlyMatches: NodePath_inference.baseTypeStrictlyMatches,
+  isGenericType: NodePath_inference.isGenericType,
+
+  // NodePath_replacement
+  replaceWithMultiple: NodePath_replacement.replaceWithMultiple,
+  replaceWithSourceString: NodePath_replacement.replaceWithSourceString,
+  replaceWith: NodePath_replacement.replaceWith,
+  _replaceWith: NodePath_replacement._replaceWith,
+  replaceExpressionWithStatements:
+    NodePath_replacement.replaceExpressionWithStatements,
+  replaceInline: NodePath_replacement.replaceInline,
+
+  // NodePath_evaluation
+  evaluateTruthy: NodePath_evaluation.evaluateTruthy,
+  evaluate: NodePath_evaluation.evaluate,
+
+  // NodePath_conversion
+  toComputedKey: NodePath_conversion.toComputedKey,
+  ensureBlock: NodePath_conversion.ensureBlock,
+  unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
+  arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,
+
+  // NodePath_introspection
+  matchesPattern: NodePath_introspection.matchesPattern,
+  has: NodePath_introspection.has,
+  isStatic: NodePath_introspection.isStatic,
+  is: NodePath_introspection.is,
+  isnt: NodePath_introspection.isnt,
+  equals: NodePath_introspection.equals,
+  isNodeType: NodePath_introspection.isNodeType,
+  canHaveVariableDeclarationOrExpression:
+    NodePath_introspection.canHaveVariableDeclarationOrExpression,
+  canSwapBetweenExpressionAndStatement:
+    NodePath_introspection.canSwapBetweenExpressionAndStatement,
+  isCompletionRecord: NodePath_introspection.isCompletionRecord,
+  isStatementOrBlock: NodePath_introspection.isStatementOrBlock,
+  referencesImport: NodePath_introspection.referencesImport,
+  getSource: NodePath_introspection.getSource,
+  willIMaybeExecuteBefore: NodePath_introspection.willIMaybeExecuteBefore,
+  _guessExecutionStatusRelativeTo:
+    NodePath_introspection._guessExecutionStatusRelativeTo,
+  resolve: NodePath_introspection.resolve,
+  _resolve: NodePath_introspection._resolve,
+  isConstantExpression: NodePath_introspection.isConstantExpression,
+  isInStrictMode: NodePath_introspection.isInStrictMode,
+
+  // NodePath_context
+  call: NodePath_context.call,
+  _call: NodePath_context._call,
+  isDenylisted: NodePath_context.isDenylisted,
+  isBlacklisted: NodePath_context.isBlacklisted,
+  visit: NodePath_context.visit,
+  skip: NodePath_context.skip,
+  skipKey: NodePath_context.skipKey,
+  stop: NodePath_context.stop,
+  setScope: NodePath_context.setScope,
+  setContext: NodePath_context.setContext,
+  resync: NodePath_context.resync,
+  _resyncParent: NodePath_context._resyncParent,
+  _resyncKey: NodePath_context._resyncKey,
+  _resyncList: NodePath_context._resyncList,
+  _resyncRemoved: NodePath_context._resyncRemoved,
+  popContext: NodePath_context.popContext,
+  pushContext: NodePath_context.pushContext,
+  setup: NodePath_context.setup,
+  setKey: NodePath_context.setKey,
+  requeue: NodePath_context.requeue,
+  _getQueueContexts: NodePath_context._getQueueContexts,
+
+  // NodePath_removal
+  remove: NodePath_removal.remove,
+  _removeFromScope: NodePath_removal._removeFromScope,
+  _callRemovalHooks: NodePath_removal._callRemovalHooks,
+  _remove: NodePath_removal._remove,
+  _markRemoved: NodePath_removal._markRemoved,
+  _assertUnremoved: NodePath_removal._assertUnremoved,
+
+  // NodePath_modification
+  insertBefore: NodePath_modification.insertBefore,
+  _containerInsert: NodePath_modification._containerInsert,
+  _containerInsertBefore: NodePath_modification._containerInsertBefore,
+  _containerInsertAfter: NodePath_modification._containerInsertAfter,
+  insertAfter: NodePath_modification.insertAfter,
+  updateSiblingKeys: NodePath_modification.updateSiblingKeys,
+  _verifyNodeList: NodePath_modification._verifyNodeList,
+  unshiftContainer: NodePath_modification.unshiftContainer,
+  pushContainer: NodePath_modification.pushContainer,
+  hoist: NodePath_modification.hoist,
+
+  // NodePath_family
+  getOpposite: NodePath_family.getOpposite,
+  getCompletionRecords: NodePath_family.getCompletionRecords,
+  getSibling: NodePath_family.getSibling,
+  getPrevSibling: NodePath_family.getPrevSibling,
+  getNextSibling: NodePath_family.getNextSibling,
+  getAllNextSiblings: NodePath_family.getAllNextSiblings,
+  getAllPrevSiblings: NodePath_family.getAllPrevSiblings,
+  get: NodePath_family.get,
+  _getKey: NodePath_family._getKey,
+  _getPattern: NodePath_family._getPattern,
+  getBindingIdentifiers: NodePath_family.getBindingIdentifiers,
+  getOuterBindingIdentifiers: NodePath_family.getOuterBindingIdentifiers,
+  getBindingIdentifierPaths: NodePath_family.getBindingIdentifierPaths,
+  getOuterBindingIdentifierPaths:
+    NodePath_family.getOuterBindingIdentifierPaths,
+
+  // NodePath_comments
+  shareCommentsWithSiblings: NodePath_comments.shareCommentsWithSiblings,
+  addComment: NodePath_comments.addComment,
+  addComments: NodePath_comments.addComments,
+};
+
+Object.assign(NodePath_Final.prototype, methods);
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // @ts-expect-error babel 7 only
+  NodePath_Final.prototype.arrowFunctionToShadowed =
+    // workaround for rollup
+    // @ts-expect-error babel 7 only
+    NodePath_conversion[String("arrowFunctionToShadowed")];
+}
 
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
@@ -299,20 +396,7 @@ interface NodePathOverwrites {
   ): this is NodePath_Final<t.Statement | t.Block>;
 }
 
-type NodePathMixins = Omit<
-  typeof NodePath_ancestry &
-    typeof NodePath_inference &
-    typeof NodePath_replacement &
-    typeof NodePath_evaluation &
-    typeof NodePath_conversion &
-    typeof NodePath_introspection &
-    typeof NodePath_context &
-    typeof NodePath_removal &
-    typeof NodePath_modification &
-    typeof NodePath_family &
-    typeof NodePath_comments,
-  keyof NodePathOverwrites
->;
+type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
 interface NodePath<T extends t.Node>
   extends InstanceType<typeof NodePath_Final>,

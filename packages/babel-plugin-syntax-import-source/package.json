@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-source",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Allow parsing of the `import source` proposal.",
   "repository": {
     "type": "git",
@@ -30,10 +30,10 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
@@ -45,8 +45,11 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
-import { type PluginPass, types as t, traverse } from "@babel/core";
+import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
+import { types as t, traverse } from "@babel/core";
 
 import {
   getLoopBodyBindings,

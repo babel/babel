@@ -428,6 +428,8 @@ async function run(task: Test) {
     } catch (e) {
       if (!process.env.OVERWRITE && task.sourceMap) throw e;
 
+      task.sourceMapFile.loc ??= task.taskDir + "/source-map.json";
+
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(
         task.sourceMapFile.loc,

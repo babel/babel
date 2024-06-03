@@ -1,9 +1,10 @@
 import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
-export default function _isNativeFunction(fn) {
+function _isNativeFunction(t) {
   try {
     var _context;
-    return _indexOfInstanceProperty(_context = Function.toString.call(fn)).call(_context, "[native code]") !== -1;
-  } catch (e) {
-    return typeof fn === "function";
+    return -1 !== _indexOfInstanceProperty(_context = Function.toString.call(t)).call(_context, "[native code]");
+  } catch (n) {
+    return "function" == typeof t;
   }
 }
+export { _isNativeFunction as default };

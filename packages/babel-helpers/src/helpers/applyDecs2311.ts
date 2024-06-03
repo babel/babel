@@ -373,7 +373,7 @@ export default /* @no-mangle */ function applyDecs2311(
           initializer: Function,
         ) {
           if (decoratorFinishedRef.v) {
-            throw new Error(
+            throw new TypeError(
               "attempted to call addInitializer after decoration was finished",
             );
           }

@@ -3,41 +3,23 @@ import _Object$getOwnPropertyDescriptor from "core-js-pure/features/object/get-o
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 import superPropBase from "./superPropBase.js";
 import defineProperty from "./defineProperty.js";
-function set(target, property, value, receiver) {
-  if (typeof Reflect !== "undefined" && _Reflect$set) {
-    set = _Reflect$set;
-  } else {
-    set = function set(target, property, value, receiver) {
-      var base = superPropBase(target, property);
-      var desc;
-      if (base) {
-        desc = _Object$getOwnPropertyDescriptor(base, property);
-        if (desc.set) {
-          desc.set.call(receiver, value);
-          return true;
-        } else if (!desc.writable) {
-          return false;
-        }
-      }
-      desc = _Object$getOwnPropertyDescriptor(receiver, property);
-      if (desc) {
-        if (!desc.writable) {
-          return false;
-        }
-        desc.value = value;
-        _Object$defineProperty(receiver, property, desc);
-      } else {
-        defineProperty(receiver, property, value);
-      }
-      return true;
-    };
-  }
-  return set(target, property, value, receiver);
+function set(e, r, t, o) {
+  return set = "undefined" != typeof Reflect && _Reflect$set ? _Reflect$set : function (e, r, t, o) {
+    var f,
+      i = superPropBase(e, r);
+    if (i) {
+      if ((f = _Object$getOwnPropertyDescriptor(i, r)).set) return f.set.call(o, t), !0;
+      if (!f.writable) return !1;
+    }
+    if (f = _Object$getOwnPropertyDescriptor(o, r)) {
+      if (!f.writable) return !1;
+      f.value = t, _Object$defineProperty(o, r, f);
+    } else defineProperty(o, r, t);
+    return !0;
+  }, set(e, r, t, o);
 }
-export default function _set(target, property, value, receiver, isStrict) {
-  var s = set(target, property, value, receiver || target);
-  if (!s && isStrict) {
-    throw new TypeError('failed to set property');
-  }
-  return value;
+function _set(e, r, t, o, f) {
+  if (!set(e, r, t, o || e) && f) throw new TypeError("failed to set property");
+  return t;
 }
+export { _set as default };

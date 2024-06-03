@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
-import { template, types as t, type PluginPass } from "@babel/core";
+import { template, types as t } from "@babel/core";
+import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
 import {
   buildDynamicImport,
   getModuleName,
@@ -8,7 +9,6 @@ import {
 } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
 const buildTemplate = template.statement(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {

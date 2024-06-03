@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 import {
   DestructuringTransformer,
   convertVariableDeclaration,
@@ -8,7 +8,6 @@ import {
   type DestructuringTransformerNode,
 } from "./util.ts";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
-import type { NodePath } from "@babel/traverse";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.

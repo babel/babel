@@ -3,22 +3,22 @@ import _getIteratorMethod from "core-js-pure/features/get-iterator-method.js";
 import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
 import _Array$isArray from "core-js-pure/features/array/is-array.js";
 import unsupportedIterableToArray from "./unsupportedIterableToArray.js";
-export default function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+function _createForOfIteratorHelperLoose(r, e) {
   var _context;
-  var it = typeof _Symbol !== "undefined" && _getIteratorMethod(o) || o["@@iterator"];
-  if (it) return _bindInstanceProperty(_context = (it = it.call(o)).next).call(_context, it);
-  if (_Array$isArray(o) || (it = unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-    if (it) o = it;
-    var i = 0;
+  var t = "undefined" != typeof _Symbol && _getIteratorMethod(r) || r["@@iterator"];
+  if (t) return _bindInstanceProperty(_context = (t = t.call(r)).next).call(_context, t);
+  if (_Array$isArray(r) || (t = unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) {
+    t && (r = t);
+    var o = 0;
     return function () {
-      if (i >= o.length) return {
-        done: true
-      };
-      return {
-        done: false,
-        value: o[i++]
+      return o >= r.length ? {
+        done: !0
+      } : {
+        done: !1,
+        value: r[o++]
       };
     };
   }
   throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
+export { _createForOfIteratorHelperLoose as default };

@@ -1,21 +1,14 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 import _Object$getOwnPropertySymbols from "core-js-pure/features/object/get-own-property-symbols.js";
-export default function _defineEnumerableProperties(obj, descs) {
-  for (var key in descs) {
-    var desc = descs[key];
-    desc.configurable = desc.enumerable = true;
-    if ("value" in desc) desc.writable = true;
-    _Object$defineProperty(obj, key, desc);
+function _defineEnumerableProperties(e, r) {
+  for (var t in r) {
+    var n = r[t];
+    n.configurable = n.enumerable = !0, "value" in n && (n.writable = !0), _Object$defineProperty(e, t, n);
   }
-  if (_Object$getOwnPropertySymbols) {
-    var objectSymbols = _Object$getOwnPropertySymbols(descs);
-    for (var i = 0; i < objectSymbols.length; i++) {
-      var sym = objectSymbols[i];
-      var desc = descs[sym];
-      desc.configurable = desc.enumerable = true;
-      if ("value" in desc) desc.writable = true;
-      _Object$defineProperty(obj, sym, desc);
-    }
+  if (_Object$getOwnPropertySymbols) for (var a = _Object$getOwnPropertySymbols(r), b = 0; b < a.length; b++) {
+    var i = a[b];
+    (n = r[i]).configurable = n.enumerable = !0, "value" in n && (n.writable = !0), _Object$defineProperty(e, i, n);
   }
-  return obj;
+  return e;
 }
+export { _defineEnumerableProperties as default };

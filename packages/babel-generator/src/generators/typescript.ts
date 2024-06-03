@@ -1,6 +1,5 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
 
 export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
   this.token(":");
@@ -77,7 +76,7 @@ export function TSParameterProperty(
 export function TSDeclareFunction(
   this: Printer,
   node: t.TSDeclareFunction,
-  parent: NodePath<t.TSDeclareFunction>["parent"],
+  parent: t.ParentMaps["TSDeclareFunction"],
 ) {
   if (node.declare) {
     this.word("declare");

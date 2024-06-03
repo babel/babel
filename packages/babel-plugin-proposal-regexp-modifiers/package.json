@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-regexp-modifiers",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile inline regular expression modifiers",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-regexp-modifiers",
   "license": "MIT",
@@ -36,10 +36,10 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
@@ -51,8 +51,11 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

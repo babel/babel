@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-duplicate-named-capturing-groups-regex",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile regular expressions using duplicate named groups to index-based groups.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-duplicate-named-capturing-groups-regex",
   "license": "MIT",
@@ -38,10 +38,10 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
@@ -53,8 +53,11 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

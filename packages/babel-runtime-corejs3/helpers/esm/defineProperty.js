@@ -1,16 +1,11 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function _defineProperty(obj, key, value) {
-  key = toPropertyKey(key);
-  if (key in obj) {
-    _Object$defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
+function _defineProperty(e, r, t) {
+  return (r = toPropertyKey(r)) in e ? _Object$defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
 }
+export { _defineProperty as default };

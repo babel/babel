@@ -119,6 +119,8 @@ function loadCtsDefault(filepath: string) {
           );
         } catch (error) {
           if (!hasTsSupport) {
+            // TODO(Babel 8): Add this as an optional peer dependency
+            // eslint-disable-next-line import/no-extraneous-dependencies
             const packageJson = require("@babel/preset-typescript/package.json");
             if (semver.lt(packageJson.version, "7.21.4")) {
               console.error(

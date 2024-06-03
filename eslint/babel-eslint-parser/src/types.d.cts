@@ -3,7 +3,6 @@ import type { InputOptions } from "@babel/core";
 import type { Token as tokenizerToken } from "../../../packages/babel-parser/src/tokenizer";
 import type { ExportedTokenType } from "../../../packages/babel-parser/src/tokenizer/types";
 import type * as estree from "estree";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type {
   PatternVisitor,
   Reference,

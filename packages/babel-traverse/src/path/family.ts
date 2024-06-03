@@ -10,8 +10,8 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-const NORMAL_COMPLETION = 0 as const;
-const BREAK_COMPLETION = 1 as const;
+const NORMAL_COMPLETION = 0;
+const BREAK_COMPLETION = 1;
 
 type Completion = {
   path: NodePath;
@@ -30,11 +30,11 @@ type CompletionContext = {
   shouldPopulateBreak: boolean;
 };
 
-function NormalCompletion(path: NodePath) {
+function NormalCompletion(path: NodePath): Completion {
   return { type: NORMAL_COMPLETION, path };
 }
 
-function BreakCompletion(path: NodePath) {
+function BreakCompletion(path: NodePath): Completion {
   return { type: BREAK_COMPLETION, path };
 }
 

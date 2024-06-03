@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
-import { types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, type NodePath } from "@babel/core";
 
 export interface Options {
   requireDirective?: boolean;

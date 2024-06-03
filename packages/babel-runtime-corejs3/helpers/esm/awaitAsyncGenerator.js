@@ -1,4 +1,5 @@
 import OverloadYield from "./OverloadYield.js";
-export default function _awaitAsyncGenerator(e) {
+function _awaitAsyncGenerator(e) {
   return new OverloadYield(e, 0);
 }
+export { _awaitAsyncGenerator as default };

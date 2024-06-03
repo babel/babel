@@ -10,7 +10,7 @@ function _getRequireWildcardCache(e) {
     return e ? t : r;
   })(e);
 }
-export default function _interopRequireWildcard(e, r) {
+function _interopRequireWildcard(e, r) {
   if (!r && e && e.__esModule) return e;
   if (null === e || "object" != _typeof(e) && "function" != typeof e) return {
     "default": e
@@ -27,3 +27,4 @@ export default function _interopRequireWildcard(e, r) {
   }
   return n["default"] = e, t && t.set(e, n), n;
 }
+export { _interopRequireWildcard as default };

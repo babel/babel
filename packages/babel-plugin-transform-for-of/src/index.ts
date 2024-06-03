@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { template, types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { template, types as t, type NodePath } from "@babel/core";
 
 import transformWithoutHelper from "./no-helper-implementation.ts";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";

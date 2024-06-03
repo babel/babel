@@ -6,8 +6,7 @@ import {
   buildCheckInRHS,
 } from "@babel/helper-create-class-features-plugin";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type * as t from "@babel/types";
-import type { NodePath, Scope } from "@babel/traverse";
+import type { NodePath, Scope, types as t } from "@babel/core";
 
 export interface Options {
   loose?: boolean;

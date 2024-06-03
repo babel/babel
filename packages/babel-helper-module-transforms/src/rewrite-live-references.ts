@@ -1,6 +1,6 @@
 import assert from "assert";
 import { template, types as t } from "@babel/core";
-import type { NodePath, Visitor, Scope } from "@babel/traverse";
+import type { NodePath, Visitor, Scope } from "@babel/core";
 import simplifyAccess from "@babel/helper-simple-access";
 
 import type { ModuleMetadata } from "./normalize-and-load-metadata.ts";

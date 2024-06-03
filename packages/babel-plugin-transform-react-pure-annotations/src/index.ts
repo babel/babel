@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import { types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, type NodePath } from "@babel/core";
 
 // Mapping of React top-level methods that are pure.
 // This plugin adds a /*#__PURE__#/ annotation to calls to these methods,

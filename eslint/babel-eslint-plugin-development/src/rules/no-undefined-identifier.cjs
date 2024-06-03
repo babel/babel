@@ -17,7 +17,9 @@ module.exports = {
     return {
       CallExpression(node) {
         const { callee } = node;
-        const scope = context.getScope();
+        const scope = context.sourceCode
+          ? context.sourceCode.getScope(node)
+          : context.getScope();
 
         const origin = getReferenceOrigin(callee, scope);
         if (!origin) return;

@@ -1,7 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { FlowPluginOptions } from "@babel/parser";
 
-export default declare((api, options: FlowPluginOptions) => {
+export interface Options {
+  all?: boolean;
+  enums?: boolean;
+}
+
+export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   // When enabled and plugins includes flow, all files should be parsed as if

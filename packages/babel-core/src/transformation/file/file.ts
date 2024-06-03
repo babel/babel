@@ -163,7 +163,7 @@ export default class File {
     }
 
     // make sure that the helper exists
-    helpers.ensure(name, File);
+    helpers.minVersion(name);
 
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
@@ -176,7 +176,7 @@ export default class File {
     const { nodes, globals } = helpers.get(
       name,
       dep => dependencies[dep],
-      uid,
+      uid.name,
       Object.keys(this.scope.getAllBindings()),
     );
 

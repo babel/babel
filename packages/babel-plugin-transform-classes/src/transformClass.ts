@@ -1,8 +1,8 @@
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+import type { NodePath, Scope, Visitor, File } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import environmentVisitor from "@babel/helper-environment-visitor";
-import { traverse, template, types as t, type File } from "@babel/core";
+import { traverse, template, types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import addCallSuperHelper from "./inline-callSuper-helpers.ts";

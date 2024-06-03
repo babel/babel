@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxOptionalChainingAssign from "@babel/plugin-syntax-optional-chaining-assign";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { NodePath, types as t } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import { transformOptionalChain } from "@babel/plugin-transform-optional-chaining";
 

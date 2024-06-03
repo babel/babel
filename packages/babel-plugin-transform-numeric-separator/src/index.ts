@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { NodePath, types as t } from "@babel/core";
 
 /**
  * Given a bigIntLiteral or NumericLiteral, remove numeric

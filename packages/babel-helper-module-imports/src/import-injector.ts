@@ -7,8 +7,7 @@ import {
   isImportDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { NodePath, Scope } from "@babel/traverse";
-import type { File } from "@babel/core";
+import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 
 import ImportBuilder from "./import-builder.ts";
 import isModule from "./is-module.ts";
@@ -121,7 +120,7 @@ export default class ImportInjector {
   /**
    * The file used to inject helpers and resolve paths.
    */
-  declare _hub: File["hub"];
+  declare _hub: HubInterface;
 
   /**
    * The default options to use with this instance when imports are added.
@@ -145,7 +144,7 @@ export default class ImportInjector {
 
     this._programPath = programPath;
     this._programScope = programPath.scope;
-    this._hub = programPath.hub as File["hub"];
+    this._hub = programPath.hub;
 
     this._defaultOpts = this._applyDefaults(importedSource, opts, true);
   }

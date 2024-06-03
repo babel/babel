@@ -1,6 +1,5 @@
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
-import type { NodePath } from "@babel/traverse";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 // https://crbug.com/v8/11558
 
 // check if there is a spread element followed by another argument.

@@ -1,5 +1,5 @@
 import { template, types as t } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/core";
 
 import {
   iifeVisitor,

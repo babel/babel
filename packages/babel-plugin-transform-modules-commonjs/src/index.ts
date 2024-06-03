@@ -10,9 +10,9 @@ import {
   getModuleName,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
-import { template, types as t, type PluginPass } from "@babel/core";
+import { template, types as t } from "@babel/core";
+import type { PluginPass, Visitor, Scope, NodePath } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
-import type { Visitor, Scope, NodePath } from "@babel/traverse";
 
 import { transformDynamicImport } from "./dynamic-import.ts";
 import { lazyImportsHook } from "./lazy.ts";

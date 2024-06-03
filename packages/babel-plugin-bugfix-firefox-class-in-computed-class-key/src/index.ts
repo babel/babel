@@ -1,5 +1,4 @@
-import type { NodePath, Visitor } from "@babel/traverse";
-import type { types as t } from "@babel/core";
+import type { types as t, NodePath, Visitor } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 import environmentVisitor from "@babel/helper-environment-visitor";
 

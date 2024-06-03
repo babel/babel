@@ -381,7 +381,8 @@ let uid = 0;
 
 export type { Binding };
 
-export default class Scope {
+export { Scope as default };
+class Scope {
   uid;
 
   path: NodePath;
@@ -440,7 +441,7 @@ export default class Scope {
       const shouldSkip = path.key === "key" || path.listKey === "decorators";
       path = path.parentPath;
       if (shouldSkip && path.isMethod()) path = path.parentPath;
-      if (path && path.isScope()) parent = path;
+      if (path?.isScope()) parent = path;
     } while (path && !parent);
 
     return parent?.scope;
@@ -1363,4 +1364,9 @@ export default class Scope {
       }
     } while ((scope = scope.parent));
   }
+}
+
+type _Binding = Binding;
+namespace Scope {
+  export type Binding = _Binding;
 }

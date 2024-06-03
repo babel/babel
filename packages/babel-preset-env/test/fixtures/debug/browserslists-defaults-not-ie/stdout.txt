@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, safari < tp, samsung }
+  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios < 17, samsung }
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   transform-class-static-block { ios < 16.4 }
   transform-export-namespace-from { }

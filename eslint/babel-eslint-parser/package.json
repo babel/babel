@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-parser",
-  "version": "7.24.5",
+  "version": "7.24.6",
   "description": "ESLint parser that allows for linting of experimental syntax transformed by Babel",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
   "main": "./lib/index.cjs",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./lib/index.cjs",
     "./experimental-worker": "./lib/experimental-worker.cjs",

@@ -9,347 +9,255 @@ import _Object$assign from "core-js-pure/features/object/assign.js";
 import _findInstanceProperty from "core-js-pure/features/instance/find.js";
 import toArray from "./toArray.js";
 import toPropertyKey from "./toPropertyKey.js";
-export default function _decorate(decorators, factory, superClass, mixins) {
+function _decorate(e, r, t, i) {
   var _context;
-  var api = _getDecoratorsApi();
-  if (mixins) {
-    for (var i = 0; i < mixins.length; i++) {
-      api = mixins[i](api);
-    }
-  }
-  var r = factory(function initialize(O) {
-    api.initializeInstanceElements(O, decorated.elements);
-  }, superClass);
-  var decorated = api.decorateClass(_coalesceClassElements(_mapInstanceProperty(_context = r.d).call(_context, _createElementDescriptor)), decorators);
-  api.initializeClassElements(r.F, decorated.elements);
-  return api.runClassFinishers(r.F, decorated.finishers);
+  var o = _getDecoratorsApi();
+  if (i) for (var n = 0; n < i.length; n++) o = i[n](o);
+  var s = r(function (e) {
+      o.initializeInstanceElements(e, a.elements);
+    }, t),
+    a = o.decorateClass(_coalesceClassElements(_mapInstanceProperty(_context = s.d).call(_context, _createElementDescriptor)), e);
+  return o.initializeClassElements(s.F, a.elements), o.runClassFinishers(s.F, a.finishers);
 }
 function _getDecoratorsApi() {
   _getDecoratorsApi = function _getDecoratorsApi() {
-    return api;
+    return e;
   };
-  var api = {
+  var e = {
     elementsDefinitionOrder: [["method"], ["field"]],
-    initializeInstanceElements: function initializeInstanceElements(O, elements) {
+    initializeInstanceElements: function initializeInstanceElements(e, r) {
       var _context2;
-      _forEachInstanceProperty(_context2 = ["method", "field"]).call(_context2, function (kind) {
-        _forEachInstanceProperty(elements).call(elements, function (element) {
-          if (element.kind === kind && element.placement === "own") {
-            this.defineClassElement(O, element);
-          }
+      _forEachInstanceProperty(_context2 = ["method", "field"]).call(_context2, function (t) {
+        _forEachInstanceProperty(r).call(r, function (r) {
+          r.kind === t && "own" === r.placement && this.defineClassElement(e, r);
         }, this);
       }, this);
     },
-    initializeClassElements: function initializeClassElements(F, elements) {
+    initializeClassElements: function initializeClassElements(e, r) {
       var _context3;
-      var proto = F.prototype;
-      _forEachInstanceProperty(_context3 = ["method", "field"]).call(_context3, function (kind) {
-        _forEachInstanceProperty(elements).call(elements, function (element) {
-          var placement = element.placement;
-          if (element.kind === kind && (placement === "static" || placement === "prototype")) {
-            var receiver = placement === "static" ? F : proto;
-            this.defineClassElement(receiver, element);
+      var t = e.prototype;
+      _forEachInstanceProperty(_context3 = ["method", "field"]).call(_context3, function (i) {
+        _forEachInstanceProperty(r).call(r, function (r) {
+          var o = r.placement;
+          if (r.kind === i && ("static" === o || "prototype" === o)) {
+            var n = "static" === o ? e : t;
+            this.defineClassElement(n, r);
           }
         }, this);
       }, this);
     },
-    defineClassElement: function defineClassElement(receiver, element) {
-      var descriptor = element.descriptor;
-      if (element.kind === "field") {
-        var initializer = element.initializer;
-        descriptor = {
-          enumerable: descriptor.enumerable,
-          writable: descriptor.writable,
-          configurable: descriptor.configurable,
-          value: initializer === void 0 ? void 0 : initializer.call(receiver)
+    defineClassElement: function defineClassElement(e, r) {
+      var t = r.descriptor;
+      if ("field" === r.kind) {
+        var i = r.initializer;
+        t = {
+          enumerable: t.enumerable,
+          writable: t.writable,
+          configurable: t.configurable,
+          value: void 0 === i ? void 0 : i.call(e)
         };
       }
-      _Object$defineProperty(receiver, element.key, descriptor);
+      _Object$defineProperty(e, r.key, t);
     },
-    decorateClass: function decorateClass(elements, decorators) {
-      var newElements = [];
-      var finishers = [];
-      var placements = {
-        "static": [],
-        prototype: [],
-        own: []
+    decorateClass: function decorateClass(e, r) {
+      var t = [],
+        i = [],
+        o = {
+          "static": [],
+          prototype: [],
+          own: []
+        };
+      if (_forEachInstanceProperty(e).call(e, function (e) {
+        this.addElementPlacement(e, o);
+      }, this), _forEachInstanceProperty(e).call(e, function (e) {
+        if (!_hasDecorators(e)) return _pushInstanceProperty(t).call(t, e);
+        var r = this.decorateElement(e, o);
+        _pushInstanceProperty(t).call(t, r.element), _pushInstanceProperty(t).apply(t, r.extras), _pushInstanceProperty(i).apply(i, r.finishers);
+      }, this), !r) return {
+        elements: t,
+        finishers: i
       };
-      _forEachInstanceProperty(elements).call(elements, function (element) {
-        this.addElementPlacement(element, placements);
-      }, this);
-      _forEachInstanceProperty(elements).call(elements, function (element) {
-        if (!_hasDecorators(element)) return _pushInstanceProperty(newElements).call(newElements, element);
-        var elementFinishersExtras = this.decorateElement(element, placements);
-        _pushInstanceProperty(newElements).call(newElements, elementFinishersExtras.element);
-        _pushInstanceProperty(newElements).apply(newElements, elementFinishersExtras.extras);
-        _pushInstanceProperty(finishers).apply(finishers, elementFinishersExtras.finishers);
-      }, this);
-      if (!decorators) {
-        return {
-          elements: newElements,
-          finishers: finishers
-        };
-      }
-      var result = this.decorateConstructor(newElements, decorators);
-      _pushInstanceProperty(finishers).apply(finishers, result.finishers);
-      result.finishers = finishers;
-      return result;
+      var n = this.decorateConstructor(t, r);
+      return _pushInstanceProperty(i).apply(i, n.finishers), n.finishers = i, n;
     },
-    addElementPlacement: function addElementPlacement(element, placements, silent) {
-      var keys = placements[element.placement];
-      if (!silent && _indexOfInstanceProperty(keys).call(keys, element.key) !== -1) {
-        throw new TypeError("Duplicated element (" + element.key + ")");
-      }
-      _pushInstanceProperty(keys).call(keys, element.key);
+    addElementPlacement: function addElementPlacement(e, r, t) {
+      var i = r[e.placement];
+      if (!t && -1 !== _indexOfInstanceProperty(i).call(i, e.key)) throw new TypeError("Duplicated element (" + e.key + ")");
+      _pushInstanceProperty(i).call(i, e.key);
     },
-    decorateElement: function decorateElement(element, placements) {
-      var extras = [];
-      var finishers = [];
-      for (var decorators = element.decorators, i = decorators.length - 1; i >= 0; i--) {
-        var keys = placements[element.placement];
-        _spliceInstanceProperty(keys).call(keys, _indexOfInstanceProperty(keys).call(keys, element.key), 1);
-        var elementObject = this.fromElementDescriptor(element);
-        var elementFinisherExtras = this.toElementFinisherExtras((0, decorators[i])(elementObject) || elementObject);
-        element = elementFinisherExtras.element;
-        this.addElementPlacement(element, placements);
-        if (elementFinisherExtras.finisher) {
-          _pushInstanceProperty(finishers).call(finishers, elementFinisherExtras.finisher);
-        }
-        var newExtras = elementFinisherExtras.extras;
-        if (newExtras) {
-          for (var j = 0; j < newExtras.length; j++) {
-            this.addElementPlacement(newExtras[j], placements);
-          }
-          _pushInstanceProperty(extras).apply(extras, newExtras);
+    decorateElement: function decorateElement(e, r) {
+      for (var t = [], i = [], o = e.decorators, n = o.length - 1; n >= 0; n--) {
+        var s = r[e.placement];
+        _spliceInstanceProperty(s).call(s, _indexOfInstanceProperty(s).call(s, e.key), 1);
+        var a = this.fromElementDescriptor(e),
+          l = this.toElementFinisherExtras((0, o[n])(a) || a);
+        e = l.element, this.addElementPlacement(e, r), l.finisher && _pushInstanceProperty(i).call(i, l.finisher);
+        var c = l.extras;
+        if (c) {
+          for (var p = 0; p < c.length; p++) this.addElementPlacement(c[p], r);
+          _pushInstanceProperty(t).apply(t, c);
         }
       }
       return {
-        element: element,
-        finishers: finishers,
-        extras: extras
+        element: e,
+        finishers: i,
+        extras: t
       };
     },
-    decorateConstructor: function decorateConstructor(elements, decorators) {
-      var finishers = [];
-      for (var i = decorators.length - 1; i >= 0; i--) {
-        var obj = this.fromClassDescriptor(elements);
-        var elementsAndFinisher = this.toClassDescriptor((0, decorators[i])(obj) || obj);
-        if (elementsAndFinisher.finisher !== undefined) {
-          _pushInstanceProperty(finishers).call(finishers, elementsAndFinisher.finisher);
-        }
-        if (elementsAndFinisher.elements !== undefined) {
-          elements = elementsAndFinisher.elements;
-          for (var j = 0; j < elements.length - 1; j++) {
-            for (var k = j + 1; k < elements.length; k++) {
-              if (elements[j].key === elements[k].key && elements[j].placement === elements[k].placement) {
-                throw new TypeError("Duplicated element (" + elements[j].key + ")");
-              }
-            }
-          }
+    decorateConstructor: function decorateConstructor(e, r) {
+      for (var t = [], i = r.length - 1; i >= 0; i--) {
+        var o = this.fromClassDescriptor(e),
+          n = this.toClassDescriptor((0, r[i])(o) || o);
+        if (void 0 !== n.finisher && _pushInstanceProperty(t).call(t, n.finisher), void 0 !== n.elements) {
+          e = n.elements;
+          for (var s = 0; s < e.length - 1; s++) for (var a = s + 1; a < e.length; a++) if (e[s].key === e[a].key && e[s].placement === e[a].placement) throw new TypeError("Duplicated element (" + e[s].key + ")");
         }
       }
       return {
-        elements: elements,
-        finishers: finishers
+        elements: e,
+        finishers: t
       };
     },
-    fromElementDescriptor: function fromElementDescriptor(element) {
-      var obj = {
-        kind: element.kind,
-        key: element.key,
-        placement: element.placement,
-        descriptor: element.descriptor
+    fromElementDescriptor: function fromElementDescriptor(e) {
+      var r = {
+        kind: e.kind,
+        key: e.key,
+        placement: e.placement,
+        descriptor: e.descriptor
       };
-      var desc = {
+      return _Object$defineProperty(r, _Symbol$toStringTag, {
         value: "Descriptor",
-        configurable: true
-      };
-      _Object$defineProperty(obj, _Symbol$toStringTag, desc);
-      if (element.kind === "field") obj.initializer = element.initializer;
-      return obj;
+        configurable: !0
+      }), "field" === e.kind && (r.initializer = e.initializer), r;
     },
-    toElementDescriptors: function toElementDescriptors(elementObjects) {
+    toElementDescriptors: function toElementDescriptors(e) {
       var _context4;
-      if (elementObjects === undefined) return;
-      return _mapInstanceProperty(_context4 = toArray(elementObjects)).call(_context4, function (elementObject) {
-        var element = this.toElementDescriptor(elementObject);
-        this.disallowProperty(elementObject, "finisher", "An element descriptor");
-        this.disallowProperty(elementObject, "extras", "An element descriptor");
-        return element;
+      if (void 0 !== e) return _mapInstanceProperty(_context4 = toArray(e)).call(_context4, function (e) {
+        var r = this.toElementDescriptor(e);
+        return this.disallowProperty(e, "finisher", "An element descriptor"), this.disallowProperty(e, "extras", "An element descriptor"), r;
       }, this);
     },
-    toElementDescriptor: function toElementDescriptor(elementObject) {
-      var kind = String(elementObject.kind);
-      if (kind !== "method" && kind !== "field") {
-        throw new TypeError('An element descriptor\'s .kind property must be either "method" or' + ' "field", but a decorator created an element descriptor with' + ' .kind "' + kind + '"');
-      }
-      var key = toPropertyKey(elementObject.key);
-      var placement = String(elementObject.placement);
-      if (placement !== "static" && placement !== "prototype" && placement !== "own") {
-        throw new TypeError('An element descriptor\'s .placement property must be one of "static",' + ' "prototype" or "own", but a decorator created an element descriptor' + ' with .placement "' + placement + '"');
-      }
-      var descriptor = elementObject.descriptor;
-      this.disallowProperty(elementObject, "elements", "An element descriptor");
-      var element = {
-        kind: kind,
-        key: key,
-        placement: placement,
-        descriptor: _Object$assign({}, descriptor)
+    toElementDescriptor: function toElementDescriptor(e) {
+      var r = e.kind + "";
+      if ("method" !== r && "field" !== r) throw new TypeError('An element descriptor\'s .kind property must be either "method" or "field", but a decorator created an element descriptor with .kind "' + r + '"');
+      var t = toPropertyKey(e.key),
+        i = e.placement + "";
+      if ("static" !== i && "prototype" !== i && "own" !== i) throw new TypeError('An element descriptor\'s .placement property must be one of "static", "prototype" or "own", but a decorator created an element descriptor with .placement "' + i + '"');
+      var o = e.descriptor;
+      this.disallowProperty(e, "elements", "An element descriptor");
+      var n = {
+        kind: r,
+        key: t,
+        placement: i,
+        descriptor: _Object$assign({}, o)
       };
-      if (kind !== "field") {
-        this.disallowProperty(elementObject, "initializer", "A method descriptor");
-      } else {
-        this.disallowProperty(descriptor, "get", "The property descriptor of a field descriptor");
-        this.disallowProperty(descriptor, "set", "The property descriptor of a field descriptor");
-        this.disallowProperty(descriptor, "value", "The property descriptor of a field descriptor");
-        element.initializer = elementObject.initializer;
-      }
-      return element;
+      return "field" !== r ? this.disallowProperty(e, "initializer", "A method descriptor") : (this.disallowProperty(o, "get", "The property descriptor of a field descriptor"), this.disallowProperty(o, "set", "The property descriptor of a field descriptor"), this.disallowProperty(o, "value", "The property descriptor of a field descriptor"), n.initializer = e.initializer), n;
     },
-    toElementFinisherExtras: function toElementFinisherExtras(elementObject) {
-      var element = this.toElementDescriptor(elementObject);
-      var finisher = _optionalCallableProperty(elementObject, "finisher");
-      var extras = this.toElementDescriptors(elementObject.extras);
+    toElementFinisherExtras: function toElementFinisherExtras(e) {
       return {
-        element: element,
-        finisher: finisher,
-        extras: extras
+        element: this.toElementDescriptor(e),
+        finisher: _optionalCallableProperty(e, "finisher"),
+        extras: this.toElementDescriptors(e.extras)
       };
     },
-    fromClassDescriptor: function fromClassDescriptor(elements) {
-      var obj = {
+    fromClassDescriptor: function fromClassDescriptor(e) {
+      var r = {
         kind: "class",
-        elements: _mapInstanceProperty(elements).call(elements, this.fromElementDescriptor, this)
+        elements: _mapInstanceProperty(e).call(e, this.fromElementDescriptor, this)
       };
-      var desc = {
+      return _Object$defineProperty(r, _Symbol$toStringTag, {
         value: "Descriptor",
-        configurable: true
-      };
-      _Object$defineProperty(obj, _Symbol$toStringTag, desc);
-      return obj;
+        configurable: !0
+      }), r;
     },
-    toClassDescriptor: function toClassDescriptor(obj) {
-      var kind = String(obj.kind);
-      if (kind !== "class") {
-        throw new TypeError('A class descriptor\'s .kind property must be "class", but a decorator' + ' created a class descriptor with .kind "' + kind + '"');
-      }
-      this.disallowProperty(obj, "key", "A class descriptor");
-      this.disallowProperty(obj, "placement", "A class descriptor");
-      this.disallowProperty(obj, "descriptor", "A class descriptor");
-      this.disallowProperty(obj, "initializer", "A class descriptor");
-      this.disallowProperty(obj, "extras", "A class descriptor");
-      var finisher = _optionalCallableProperty(obj, "finisher");
-      var elements = this.toElementDescriptors(obj.elements);
+    toClassDescriptor: function toClassDescriptor(e) {
+      var r = e.kind + "";
+      if ("class" !== r) throw new TypeError('A class descriptor\'s .kind property must be "class", but a decorator created a class descriptor with .kind "' + r + '"');
+      this.disallowProperty(e, "key", "A class descriptor"), this.disallowProperty(e, "placement", "A class descriptor"), this.disallowProperty(e, "descriptor", "A class descriptor"), this.disallowProperty(e, "initializer", "A class descriptor"), this.disallowProperty(e, "extras", "A class descriptor");
+      var t = _optionalCallableProperty(e, "finisher");
       return {
-        elements: elements,
-        finisher: finisher
+        elements: this.toElementDescriptors(e.elements),
+        finisher: t
       };
     },
-    runClassFinishers: function runClassFinishers(constructor, finishers) {
-      for (var i = 0; i < finishers.length; i++) {
-        var newConstructor = (0, finishers[i])(constructor);
-        if (newConstructor !== undefined) {
-          if (typeof newConstructor !== "function") {
-            throw new TypeError("Finishers must return a constructor.");
-          }
-          constructor = newConstructor;
+    runClassFinishers: function runClassFinishers(e, r) {
+      for (var t = 0; t < r.length; t++) {
+        var i = (0, r[t])(e);
+        if (void 0 !== i) {
+          if ("function" != typeof i) throw new TypeError("Finishers must return a constructor.");
+          e = i;
         }
       }
-      return constructor;
+      return e;
     },
-    disallowProperty: function disallowProperty(obj, name, objectType) {
-      if (obj[name] !== undefined) {
-        throw new TypeError(objectType + " can't have a ." + name + " property.");
-      }
+    disallowProperty: function disallowProperty(e, r, t) {
+      if (void 0 !== e[r]) throw new TypeError(t + " can't have a ." + r + " property.");
     }
   };
-  return api;
+  return e;
 }
-function _createElementDescriptor(def) {
-  var key = toPropertyKey(def.key);
-  var descriptor;
-  if (def.kind === "method") {
-    descriptor = {
-      value: def.value,
-      writable: true,
-      configurable: true,
-      enumerable: false
-    };
-  } else if (def.kind === "get") {
-    descriptor = {
-      get: def.value,
-      configurable: true,
-      enumerable: false
-    };
-  } else if (def.kind === "set") {
-    descriptor = {
-      set: def.value,
-      configurable: true,
-      enumerable: false
-    };
-  } else if (def.kind === "field") {
-    descriptor = {
-      configurable: true,
-      writable: true,
-      enumerable: true
-    };
-  }
-  var element = {
-    kind: def.kind === "field" ? "field" : "method",
-    key: key,
-    placement: def["static"] ? "static" : def.kind === "field" ? "own" : "prototype",
-    descriptor: descriptor
+function _createElementDescriptor(e) {
+  var r,
+    t = toPropertyKey(e.key);
+  "method" === e.kind ? r = {
+    value: e.value,
+    writable: !0,
+    configurable: !0,
+    enumerable: !1
+  } : "get" === e.kind ? r = {
+    get: e.value,
+    configurable: !0,
+    enumerable: !1
+  } : "set" === e.kind ? r = {
+    set: e.value,
+    configurable: !0,
+    enumerable: !1
+  } : "field" === e.kind && (r = {
+    configurable: !0,
+    writable: !0,
+    enumerable: !0
+  });
+  var i = {
+    kind: "field" === e.kind ? "field" : "method",
+    key: t,
+    placement: e["static"] ? "static" : "field" === e.kind ? "own" : "prototype",
+    descriptor: r
   };
-  if (def.decorators) element.decorators = def.decorators;
-  if (def.kind === "field") element.initializer = def.value;
-  return element;
+  return e.decorators && (i.decorators = e.decorators), "field" === e.kind && (i.initializer = e.value), i;
 }
-function _coalesceGetterSetter(element, other) {
-  if (element.descriptor.get !== undefined) {
-    other.descriptor.get = element.descriptor.get;
-  } else {
-    other.descriptor.set = element.descriptor.set;
-  }
+function _coalesceGetterSetter(e, r) {
+  void 0 !== e.descriptor.get ? r.descriptor.get = e.descriptor.get : r.descriptor.set = e.descriptor.set;
 }
-function _coalesceClassElements(elements) {
-  var newElements = [];
-  var isSameElement = function isSameElement(other) {
-    return other.kind === "method" && other.key === element.key && other.placement === element.placement;
-  };
-  for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
-    var other;
-    if (element.kind === "method" && (other = _findInstanceProperty(newElements).call(newElements, isSameElement))) {
-      if (_isDataDescriptor(element.descriptor) || _isDataDescriptor(other.descriptor)) {
-        if (_hasDecorators(element) || _hasDecorators(other)) {
-          throw new ReferenceError("Duplicated methods (" + element.key + ") can't be decorated.");
-        }
-        other.descriptor = element.descriptor;
+function _coalesceClassElements(e) {
+  for (var r = [], isSameElement = function isSameElement(e) {
+      return "method" === e.kind && e.key === o.key && e.placement === o.placement;
+    }, t = 0; t < e.length; t++) {
+    var i,
+      o = e[t];
+    if ("method" === o.kind && (i = _findInstanceProperty(r).call(r, isSameElement))) {
+      if (_isDataDescriptor(o.descriptor) || _isDataDescriptor(i.descriptor)) {
+        if (_hasDecorators(o) || _hasDecorators(i)) throw new ReferenceError("Duplicated methods (" + o.key + ") can't be decorated.");
+        i.descriptor = o.descriptor;
       } else {
-        if (_hasDecorators(element)) {
-          if (_hasDecorators(other)) {
-            throw new ReferenceError("Decorators can't be placed on different accessors with for " + "the same property (" + element.key + ").");
-          }
-          other.decorators = element.decorators;
+        if (_hasDecorators(o)) {
+          if (_hasDecorators(i)) throw new ReferenceError("Decorators can't be placed on different accessors with for the same property (" + o.key + ").");
+          i.decorators = o.decorators;
         }
-        _coalesceGetterSetter(element, other);
+        _coalesceGetterSetter(o, i);
       }
-    } else {
-      _pushInstanceProperty(newElements).call(newElements, element);
-    }
+    } else _pushInstanceProperty(r).call(r, o);
   }
-  return newElements;
+  return r;
 }
-function _hasDecorators(element) {
-  return element.decorators && element.decorators.length;
+function _hasDecorators(e) {
+  return e.decorators && e.decorators.length;
 }
-function _isDataDescriptor(desc) {
-  return desc !== undefined && !(desc.value === undefined && desc.writable === undefined);
+function _isDataDescriptor(e) {
+  return void 0 !== e && !(void 0 === e.value && void 0 === e.writable);
 }
-function _optionalCallableProperty(obj, name) {
-  var value = obj[name];
-  if (value !== undefined && typeof value !== "function") {
-    throw new TypeError("Expected '" + name + "' to be a function");
-  }
-  return value;
+function _optionalCallableProperty(e, r) {
+  var t = e[r];
+  if (void 0 !== t && "function" != typeof t) throw new TypeError("Expected '" + r + "' to be a function");
+  return t;
 }
+export { _decorate as default };

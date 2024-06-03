@@ -19,9 +19,9 @@ import {
   assignmentExpression,
   conditionalExpression,
 } from "../builders/generated/index.ts";
+import { buildUndefinedNode } from "../builders/productions.ts";
 import cloneNode from "../clone/cloneNode.ts";
 import type * as t from "../index.ts";
-import type { Scope } from "@babel/traverse";
 
 export type DeclarationInfo = {
   kind: t.VariableDeclaration["kind"];
@@ -30,7 +30,6 @@ export type DeclarationInfo = {
 
 export default function gatherSequenceExpressions(
   nodes: ReadonlyArray<t.Node>,
-  scope: Scope,
   declars: Array<DeclarationInfo>,
 ) {
   const exprs: t.Expression[] = [];
@@ -67,16 +66,16 @@ export default function gatherSequenceExpressions(
       ensureLastUndefined = true;
     } else if (isIfStatement(node)) {
       const consequent = node.consequent
-        ? gatherSequenceExpressions([node.consequent], scope, declars)
-        : scope.buildUndefinedNode();
+        ? gatherSequenceExpressions([node.consequent], declars)
+        : buildUndefinedNode();
       const alternate = node.alternate
-        ? gatherSequenceExpressions([node.alternate], scope, declars)
-        : scope.buildUndefinedNode();
+        ? gatherSequenceExpressions([node.alternate], declars)
+        : buildUndefinedNode();
       if (!consequent || !alternate) return; // bailed
 
       exprs.push(conditionalExpression(node.test, consequent, alternate));
     } else if (isBlockStatement(node)) {
-      const body = gatherSequenceExpressions(node.body, scope, declars);
+      const body = gatherSequenceExpressions(node.body, declars);
       if (!body) return; // bailed
 
       exprs.push(body);
@@ -93,7 +92,7 @@ export default function gatherSequenceExpressions(
   }
 
   if (ensureLastUndefined) {
-    exprs.push(scope.buildUndefinedNode());
+    exprs.push(buildUndefinedNode());
   }
 
   if (exprs.length === 1) {

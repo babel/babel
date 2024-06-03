@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.23.6",
+  "version": "7.24.6",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Helper functions on Babel compilation targets",
@@ -11,7 +11,10 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -36,13 +39,13 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "type": "commonjs",
+  "type": "module",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {

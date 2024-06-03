@@ -18,6 +18,7 @@ import {
   toBindingIdentifierName,
 } from "@babel/types";
 import type * as t from "@babel/types";
+// eslint-disable-next-line import/no-extraneous-dependencies -- TODO: Avoid cycle
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
 function getFunctionArity(node: t.Function): number {

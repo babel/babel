@@ -5,29 +5,31 @@ import type { PluginList } from "./plugin-utils.ts";
 
 export type SourceType = "script" | "module" | "unambiguous";
 
-export type Options = {
-  sourceType: SourceType;
+export interface Options {
+  sourceType?: SourceType;
   sourceFilename?: string;
-  startColumn: number;
-  startLine: number;
-  allowAwaitOutsideFunction: boolean;
-  allowReturnOutsideFunction: boolean;
-  allowNewTargetOutsideFunction: boolean;
-  allowImportExportEverywhere: boolean;
-  allowSuperOutsideMethod: boolean;
-  allowUndeclaredExports: boolean;
-  plugins: PluginList;
-  strictMode: boolean | undefined | null;
-  ranges: boolean;
-  tokens: boolean;
-  createImportExpressions: boolean;
-  createParenthesizedExpressions: boolean;
-  errorRecovery: boolean;
-  attachComment: boolean;
-  annexB: boolean;
-};
+  startColumn?: number;
+  startLine?: number;
+  allowAwaitOutsideFunction?: boolean;
+  allowReturnOutsideFunction?: boolean;
+  allowNewTargetOutsideFunction?: boolean;
+  allowImportExportEverywhere?: boolean;
+  allowSuperOutsideMethod?: boolean;
+  allowUndeclaredExports?: boolean;
+  plugins?: PluginList;
+  strictMode?: boolean | undefined | null;
+  ranges?: boolean;
+  tokens?: boolean;
+  createImportExpressions?: boolean;
+  createParenthesizedExpressions?: boolean;
+  errorRecovery?: boolean;
+  attachComment?: boolean;
+  annexB?: boolean;
+}
 
-export const defaultOptions: Options = {
+type OptionsWithDefaults = { [P in keyof Options]-?: Options[P] };
+
+export const defaultOptions: OptionsWithDefaults = {
   // Source type ("script" or "module") for different semantics
   sourceType: "script",
   // Source filename.
@@ -90,7 +92,7 @@ export const defaultOptions: Options = {
 
 // Interpret and default an options object
 
-export function getOptions(opts?: Options | null): Options {
+export function getOptions(opts?: Options | null): OptionsWithDefaults {
   if (opts == null) {
     return { ...defaultOptions };
   }

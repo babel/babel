@@ -37,6 +37,7 @@ import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
 import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
+export type { Options };
 
 // TODO: Remove in Babel 8
 export function isPluginRequired(targets: Targets, support: Targets) {

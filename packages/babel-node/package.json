@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.23.9",
+  "version": "7.24.6",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "@babel/register": "workspace:^",
-    "commander": "^4.0.1",
+    "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0",
     "core-js": "^3.30.2",
     "node-environment-flags": "condition:BABEL_8_BREAKING ? : ^1.0.5",
     "regenerator-runtime": "^0.14.0",
@@ -58,15 +58,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

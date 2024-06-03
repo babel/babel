@@ -293,11 +293,17 @@ target["prepublish-prepare-dts"] = function () {
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
+  yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
 };
 
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.js", "."]);
+  target["tscheck-helpers"]();
+};
+
+target["tscheck-helpers"] = function () {
+  yarn(["tsc", "-p", "./packages/babel-helpers/src/helpers/tsconfig.json"]);
 };
 
 target["clean-ts"] = function () {
@@ -336,7 +342,6 @@ target["clone-license"] = function () {
  */
 
 function eslint(...extraArgs) {
-  const eslintEnv = { BABEL_ENV: "test" };
   const eslintArgs = ["--format", "codeframe", ...extraArgs.filter(Boolean)];
 
   const packagesPackages = readdirSync("packages").filter(n =>
@@ -361,10 +366,15 @@ function eslint(...extraArgs) {
 
   if (process.env.ESLINT_GO_BRRRR) {
     // Run as a single process. Needs a lot of memory (12GB).
-    env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), eslintEnv);
+    env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), {
+      BABEL_ENV: "test",
+      NODE_OPTIONS: "--max-old-space-size=16384",
+    });
   } else {
     for (const chunk of chunks) {
-      env(() => yarn(["eslint", ...chunk, ...eslintArgs]), eslintEnv);
+      env(() => yarn(["eslint", ...chunk, ...eslintArgs]), {
+        BABEL_ENV: "test",
+      });
     }
   }
 }

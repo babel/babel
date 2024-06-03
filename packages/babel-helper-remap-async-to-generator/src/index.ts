@@ -1,6 +1,6 @@
 /* @noflow */
 
-import type { NodePath } from "@babel/traverse";
+import type { NodePath } from "@babel/core";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import environmentVisitor from "@babel/helper-environment-visitor";

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-unicode-property-regex",
-  "version": "7.24.1",
+  "version": "7.24.6",
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-property-regex",
   "license": "MIT",
@@ -49,15 +49,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.24.5",
+  "version": "7.24.6",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
@@ -158,12 +158,6 @@
       {
         "exports": null
       }
-    ],
-    "USE_ESM": [
-      {
-        "type": "module"
-      },
-      null
     ]
   },
   "exports": {

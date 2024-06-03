@@ -5,7 +5,7 @@ import _Symbol$dispose from "core-js-pure/features/symbol/dispose.js";
 import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
 import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
 import _Promise from "core-js-pure/features/promise/index.js";
-export default function _usingCtx() {
+function _usingCtx() {
   var r = "function" == typeof _SuppressedError ? _SuppressedError : function (r, n) {
       var e = Error();
       return e.name = "SuppressedError", e.error = r, e.suppressed = n, e;
@@ -51,3 +51,4 @@ export default function _usingCtx() {
     }
   };
 }
+export { _usingCtx as default };

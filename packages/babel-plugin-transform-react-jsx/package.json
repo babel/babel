@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx",
-  "version": "7.23.4",
+  "version": "7.24.6",
   "description": "Turn JSX into React function calls",
   "repository": {
     "type": "git",
@@ -47,16 +47,22 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
-    "./lib/development": "./lib/development.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./lib/development": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/development.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

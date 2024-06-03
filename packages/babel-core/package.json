@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.24.5",
+  "version": "7.24.6",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
@@ -99,24 +99,27 @@
     ],
     "USE_ESM": [
       {
-        "type": "module",
         "exports": {
           ".": {
+            "types": "./lib/index.d.ts",
             "require": "./cjs-proxy.cjs",
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
         }
       },
-      null
+      {
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "require": "./cjs-proxy-dev.cjs",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

@@ -2,7 +2,7 @@ import _Promise from "core-js-pure/features/promise/index.js";
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$iterator from "core-js-pure/features/symbol/iterator.js";
 import OverloadYield from "./OverloadYield.js";
-export default function _asyncGeneratorDelegate(t) {
+function _asyncGeneratorDelegate(t) {
   var e = {},
     n = !1;
   function pump(e, r) {
@@ -24,3 +24,4 @@ export default function _asyncGeneratorDelegate(t) {
     return n ? (n = !1, t) : pump("return", t);
   }), e;
 }
+export { _asyncGeneratorDelegate as default };
