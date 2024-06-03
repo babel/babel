@@ -15,7 +15,8 @@ export default function _interopRequireWildcard(
       return obj;
     }
     // Temporary variable for output size
-    var _: any = nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    var _;
+    _ = nodeInterop ? cacheNodeInterop : cacheBabelInterop;
     var newObj: { [key: string]: any } = { __proto__: null, default: obj };
     var desc: PropertyDescriptor | undefined;
 
