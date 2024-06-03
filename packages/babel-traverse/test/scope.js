@@ -1151,7 +1151,7 @@ describe("scope", () => {
           } = {};
         }
       `);
-      const a = program.scope.getBinding("v");
+      const bindingV = program.scope.getBinding("v");
       expect(a.constantViolations).toHaveLength(0);
     });
   });
