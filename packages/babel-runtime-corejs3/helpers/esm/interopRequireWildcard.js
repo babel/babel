@@ -8,17 +8,17 @@ function _interopRequireWildcard(e, t) {
   return (_interopRequireWildcard = function _interopRequireWildcard(e, t) {
     if (!t && e && e.__esModule) return e;
     var o,
-      i = t ? n : r,
+      i,
       f = {
         __proto__: null,
         "default": e
       };
     if (null === e || "object" != _typeof(e) && "function" != typeof e) return f;
-    if (i) {
-      if (i.has(e)) return i.get(e);
-      i.set(e, f);
+    if (o = t ? n : r) {
+      if (o.has(e)) return o.get(e);
+      o.set(e, f);
     }
-    for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((o = (i = _Object$defineProperty) && _Object$getOwnPropertyDescriptor(e, _t)) && (o.get || o.set) ? i(f, _t, o) : f[_t] = e[_t]);
+    for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = _Object$defineProperty) && _Object$getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]);
     return f;
   })(e, t);
 }
