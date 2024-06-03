@@ -1,6 +1,7 @@
 import {
   isExportDeclaration,
   isIdentifier,
+  isClassExpression,
   isDeclaration,
   isFunctionDeclaration,
   isFunctionExpression,
@@ -61,10 +62,6 @@ function getBindingIdentifiers(
       continue;
     }
 
-    const keys =
-      // @ts-expect-error getBindingIdentifiers.keys do not cover all AST types
-      getBindingIdentifiers.keys[id.type];
-
     if (isIdentifier(id)) {
       if (duplicates) {
         const _ids = (ids[id.name] = ids[id.name] || []);
@@ -88,10 +85,14 @@ function getBindingIdentifiers(
         continue;
       }
 
-      if (isFunctionExpression(id)) {
+      if (isFunctionExpression(id) || isClassExpression(id)) {
         continue;
       }
     }
+
+    const keys =
+      // @ts-expect-error getBindingIdentifiers.keys do not cover all AST types
+      getBindingIdentifiers.keys[id.type];
 
     if (keys) {
       for (let i = 0; i < keys.length; i++) {

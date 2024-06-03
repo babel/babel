@@ -159,7 +159,7 @@ describe("retrievers", function () {
       [
         "class expressions",
         getBody("(class C { a(b) { let c } })")[0].expression,
-        ["C"],
+        [],
       ],
       [
         "object methods",
