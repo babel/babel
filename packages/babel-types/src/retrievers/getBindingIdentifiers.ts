@@ -8,6 +8,7 @@ import {
   isExportAllDeclaration,
   isAssignmentExpression,
   isUnaryExpression,
+  isUpdateExpression,
 } from "../validators/generated/index.ts";
 import type * as t from "../index.ts";
 
@@ -52,12 +53,14 @@ function getBindingIdentifiers(
 
     if (
       newBindingsOnly &&
-      // These two nodes do not introduce _new_ bindings, but they are included
+      // These nodes do not introduce _new_ bindings, but they are included
       // in getBindingIdentifiers.keys for backwards compatibility.
       // TODO(@nicolo-ribaudo): Check if we can remove them from .keys in a
       // backward-compatible way, and if not what we need to do to remove them
       // in Babel 8.
-      (isAssignmentExpression(id) || isUnaryExpression(id))
+      (isAssignmentExpression(id) ||
+        isUnaryExpression(id) ||
+        isUpdateExpression(id))
     ) {
       continue;
     }

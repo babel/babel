@@ -106,6 +106,7 @@ describe("retrievers", function () {
         getBody("var [ a, ...{ b, ...c } ] = {}"),
         ["a", "b", "c"],
       ],
+      ["unary expression", getBody("void x")[0].expression, ["x"]],
       ["update expression", getBody("++x")[0].expression, ["x"]],
       ["assignment expression", getBody("x ??= 1")[0].expression, ["x"]],
     ])("%s", (_, program, bindingNames) => {
@@ -229,10 +230,21 @@ describe("retrievers", function () {
         getBody("var [ a, ...{ b, ...c } ] = {}"),
         ["a", "b", "c"],
       ],
+      ["unary expression", getBody("void x")[0].expression, ["x"]],
       ["update expression", getBody("++x")[0].expression, ["x"]],
       ["assignment expression", getBody("x ??= 1")[0].expression, ["x"]],
     ])("%s", (_, program, bindingNames) => {
       const ids = t.getOuterBindingIdentifiers(program);
+      expect(Object.keys(ids)).toEqual(bindingNames);
+    });
+  });
+  describe("getBindingIdentifiers(%, false, false, /* newBindingsOnly */ true)", function () {
+    it.each([
+      ["unary expression", getBody("void x")[0].expression, []],
+      ["update expression", getBody("++x")[0].expression, []],
+      ["assignment expression", getBody("x ??= 1")[0].expression, []],
+    ])("%s", (_, program, bindingNames) => {
+      const ids = t.getBindingIdentifiers(program, false, false, true);
       expect(Object.keys(ids)).toEqual(bindingNames);
     });
   });
