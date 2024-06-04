@@ -112,8 +112,6 @@ function getBindingIdentifiers(
       }
     }
   }
-
-  // $FlowIssue Object.create() seems broken
   return ids;
 }
 
