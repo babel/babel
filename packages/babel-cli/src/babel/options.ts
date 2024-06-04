@@ -7,7 +7,9 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
-const program = commander.default.program;
+const program = process.env.BABEL_8_BREAKING
+  ? commander.program
+  : commander.default.program;
 
 // Standard Babel input configs.
 program.option(

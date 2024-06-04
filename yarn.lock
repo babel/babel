@@ -230,7 +230,7 @@ __metadata:
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
     chokidar: "npm:^3.4.0"
-    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
     glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync|default)"
@@ -1259,7 +1259,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
-    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0"
+    commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)"
     core-js: "npm:^3.30.2"
     node-environment-flags: "condition:BABEL_8_BREAKING ? : ^1.0.5"
     regenerator-runtime: "npm:^0.14.0"
@@ -8132,13 +8132,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0":
-  version: 0.0.0-condition-5eb315
-  resolution: "commander@condition:BABEL_8_BREAKING?^12.1.0:^6.2.0#5eb315"
+"commander@condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)":
+  version: 0.0.0-condition-c20610
+  resolution: "commander@condition:BABEL_8_BREAKING?^12.1.0:^6.2.0(esm:program|default)#c20610"
   dependencies:
     commander-BABEL_8_BREAKING-false: "npm:commander@^6.2.0"
     commander-BABEL_8_BREAKING-true: "npm:commander@^12.1.0"
-  checksum: 10/722f3bcc78ac4f7d1ef5c38e0ce058c5959d52ae42e2ac811bd9dd9bc6ad61a12d8d13c702c03dd2de1d2521e56b5f8c98f2ee47d76c3e1547cfbb73d482b3f1
+  checksum: 10/458a757b162d00d72fe2b0541253a182dcce77378adb4f3c3233bf2c0a1bb2de3ea481ad7525852a603632fbea0d2a09e10ece50c5e975e5770da9d2ef436826
   languageName: node
   linkType: hard
 
