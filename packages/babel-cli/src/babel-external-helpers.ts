@@ -1,7 +1,9 @@
 import * as commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
 
-const program = commander.default.program;
+const program = process.env.BABEL_8_BREAKING
+  ? commander.program
+  : commander.default.program;
 
 function collect(value: unknown, previousValue: Array<string>): Array<string> {
   // If the user passed the option with no value, like "babel-external-helpers --whitelist", do nothing.

@@ -8,8 +8,10 @@ declare module "js-tokens" {
 
 declare module "commander" {
   import type { Command } from "commander-BABEL_8_BREAKING-true";
+  // TODO(Babel 8): Remove default export typings, they are for Babel 7 CJS only
   const _default: { program: Command };
   export { _default as default };
+  export type * from "commander-BABEL_8_BREAKING-true";
 }
 
 declare module "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js" {
