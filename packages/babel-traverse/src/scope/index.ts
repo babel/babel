@@ -833,7 +833,7 @@ class Scope {
 
         // A redeclaration of an existing variable is a modification
         if (local) {
-          this.registerConstantViolation(bindingPath);
+          local.reassign(bindingPath);
         } else {
           this.bindings[name] = new Binding({
             identifier: id,

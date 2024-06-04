@@ -1138,4 +1138,25 @@ describe("scope", () => {
       `);
     });
   });
+
+  describe("constantViolations", () => {
+    it("var redeclarations should not be treated as constantViolations", () => {
+      const program = getPath(`
+        function v() { }
+        function f() {
+          var a = 1;
+          var {
+            currentPoint: a,
+            centp: v,
+          } = {};
+        }
+      `);
+
+      const bindingV = program.scope.getBinding("v");
+      expect(bindingV.constantViolations).toHaveLength(0);
+
+      const bindingA = program.get("body.1.body").scope.getBinding("a");
+      expect(bindingA.constantViolations).toHaveLength(1);
+    });
+  });
 });
