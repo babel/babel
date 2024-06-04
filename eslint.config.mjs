@@ -5,19 +5,17 @@ import configInternal from "@babel/eslint-config-internal";
 import pluginImport from "eslint-plugin-import";
 import pluginN from "eslint-plugin-n";
 import pluginPrettier from "eslint-plugin-prettier";
-// @ts-expect-error no types
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
-// @ts-expect-error no types
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
-import { createRequire } from "module";
+import { commonJS } from "$repo-utils";
+
+const { __dirname, require } = commonJS(import.meta.url);
 
 import { FlatCompat } from "@eslint/eslintrc";
 
-const require = createRequire(import.meta.url);
-
 const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
+  baseDirectory: __dirname,
 });
 
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
