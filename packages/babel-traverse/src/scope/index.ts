@@ -369,7 +369,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       // @ts-expect-error Fixme: document symbol ast properties
       !path.get("id").node[NOT_LOCAL_BINDING]
     ) {
-      path.scope.registerBinding("local", path);
+      path.scope.registerBinding("local", path.get("id"), path);
     }
   },
   TSTypeAnnotation(path) {
