@@ -48,11 +48,15 @@ const renameVisitor: Visitor<Renamer> = {
   },
 
   "AssignmentExpression|Declaration|VariableDeclarator"(
-    path: NodePath<t.AssignmentPattern | t.Declaration | t.VariableDeclarator>,
+    path: NodePath<
+      t.AssignmentExpression | t.Declaration | t.VariableDeclarator
+    >,
     state,
   ) {
     if (path.isVariableDeclaration()) return;
-    const ids = path.getOuterBindingIdentifiers();
+    const ids = path.isAssignmentExpression()
+      ? path.getAssignmentIdentifiers()
+      : path.getOuterBindingIdentifiers();
 
     for (const name in ids) {
       if (name === state.oldName) ids[name].name = state.newName;

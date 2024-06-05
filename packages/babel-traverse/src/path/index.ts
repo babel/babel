@@ -287,6 +287,7 @@ const methods = {
   getAllNextSiblings: NodePath_family.getAllNextSiblings,
   getAllPrevSiblings: NodePath_family.getAllPrevSiblings,
   get: NodePath_family.get,
+  getAssignmentIdentifiers: NodePath_family.getAssignmentIdentifiers,
   getBindingIdentifiers: NodePath_family.getBindingIdentifiers,
   getOuterBindingIdentifiers: NodePath_family.getOuterBindingIdentifiers,
   getBindingIdentifierPaths: NodePath_family.getBindingIdentifierPaths,

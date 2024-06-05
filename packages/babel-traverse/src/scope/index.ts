@@ -793,7 +793,7 @@ class Scope {
   }
 
   registerConstantViolation(path: NodePath) {
-    const ids = path.getBindingIdentifiers();
+    const ids = path.getAssignmentIdentifiers();
     for (const name of Object.keys(ids)) {
       this.getBinding(name)?.reassign(path);
     }
@@ -1045,7 +1045,7 @@ class Scope {
     // register assignments
     for (const path of state.assignments) {
       // register undeclared bindings as globals
-      const ids = path.getBindingIdentifiers();
+      const ids = path.getAssignmentIdentifiers();
       for (const name of Object.keys(ids)) {
         if (path.scope.getBinding(name)) continue;
         programParent.addGlobal(ids[name]);
