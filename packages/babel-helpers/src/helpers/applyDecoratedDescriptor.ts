@@ -17,7 +17,7 @@ export default function _applyDecoratedDescriptor<T>(
 ) {
   var desc: DescriptorWithInitializer | null = {};
   Object.keys(descriptor).forEach(function (key) {
-    // @ts-ignore(Babel 7 vs Babel 8) we are sure it's not null
+    // @ts-expect-error - we are sure it's not null
     desc[key] = descriptor[key];
   });
   desc.enumerable = !!desc.enumerable;
