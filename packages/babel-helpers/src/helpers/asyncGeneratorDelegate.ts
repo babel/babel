@@ -1,13 +1,16 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import OverloadYield from "OverloadYield";
+import OverloadYield from "./OverloadYield.ts";
 
-export default function _asyncGeneratorDelegate(inner) {
-  var iter = {},
+export default function _asyncGeneratorDelegate<T>(inner: Generator<T>) {
+  var iter = {} as Generator<T>,
     // See the comment in AsyncGenerator to understand what this is.
     waiting = false;
 
-  function pump(key, value) {
+  function pump(
+    key: "next" | "throw" | "return",
+    value: any,
+  ): IteratorYieldResult<any> {
     waiting = true;
     value = new Promise(function (resolve) {
       resolve(inner[key](value));
@@ -18,12 +21,14 @@ export default function _asyncGeneratorDelegate(inner) {
     };
   }
 
-  iter[(typeof Symbol !== "undefined" && Symbol.iterator) || "@@iterator"] =
-    function () {
-      return this;
-    };
+  iter[
+    ((typeof Symbol !== "undefined" && Symbol.iterator) ||
+      "@@iterator") as typeof Symbol.iterator
+  ] = function () {
+    return this;
+  };
 
-  iter.next = function (value) {
+  iter.next = function (value: any) {
     if (waiting) {
       waiting = false;
       return value;
@@ -32,7 +37,7 @@ export default function _asyncGeneratorDelegate(inner) {
   };
 
   if (typeof inner.throw === "function") {
-    iter.throw = function (value) {
+    iter.throw = function (value: any) {
       if (waiting) {
         waiting = false;
         throw value;
@@ -42,7 +47,7 @@ export default function _asyncGeneratorDelegate(inner) {
   }
 
   if (typeof inner.return === "function") {
-    iter.return = function (value) {
+    iter.return = function (value: any) {
       if (waiting) {
         waiting = false;
         return value;
