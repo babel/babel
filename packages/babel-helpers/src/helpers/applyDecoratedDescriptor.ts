@@ -2,7 +2,6 @@
 
 interface DescriptorWithInitializer extends PropertyDescriptor {
   initializer?: () => any;
-  [key: string]: any;
 }
 
 export default function _applyDecoratedDescriptor<T>(
