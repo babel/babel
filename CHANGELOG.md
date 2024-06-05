@@ -24,6 +24,19 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.7 (2024-06-05)
+
+#### :bug: Bug Fix
+* `babel-node`
+  * [#16554](https://github.com/babel/babel/pull/16554) Allow extra flags in babel-node ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#16522](https://github.com/babel/babel/pull/16522) fix: incorrect `constantViolations` with destructuring ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-transform-fixture-test-runner`, `babel-plugin-proposal-explicit-resource-management`
+  * [#16524](https://github.com/babel/babel/pull/16524) fix: Transform `using` in `switch` correctly ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-helpers`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16525](https://github.com/babel/babel/pull/16525) Delete unused array helpers ([@blakewilson](https://github.com/blakewilson))
 ## v7.24.6 (2024-05-24)
 
 #### :bug: Bug Fix
