@@ -87,7 +87,6 @@ export default [
     languageOptions: {
       parser: typescriptEslint.parser,
       parserOptions: {
-        allowAutomaticSingleRunInference: true,
         projectService: true,
       },
     },
