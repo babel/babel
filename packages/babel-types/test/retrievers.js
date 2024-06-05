@@ -5,8 +5,8 @@ import {
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
-function getBody(program) {
-  return parse(program, { sourceType: "module" }).program.body;
+function getBody(program, parseOption = { sourceType: "module" }) {
+  return parse(program, parseOption).program.body;
 }
 
 describe("retrievers", function () {
@@ -268,6 +268,57 @@ describe("retrievers", function () {
       ["assignment expression", getBody("x ??= 1")[0].expression, []],
     ])("%s", (_, program, bindingNames) => {
       const ids = t.getBindingIdentifiers(program, false, false, true);
+      expect(Object.keys(ids)).toEqual(bindingNames);
+    });
+  });
+  describe("getAssignmentIdentifiers", function () {
+    it.each([
+      [
+        "assignment expression",
+        getBody(
+          "[a, { b }, c = 1, [{ _: [ d ], ...e }], ...f] = [g, h] = [];",
+        )[0].expression,
+        ["f", "e", "d", "c", "b", "a"],
+      ],
+      [
+        "assignment expression",
+        getBody(
+          "[a, { b }, c = 1, [{ _: [ d ], ...e }], ...f] = [g, h] = [];",
+        )[0].expression.right,
+        ["h", "g"],
+      ],
+      [
+        "for-in statement",
+        getBody(
+          "for ([a, { b }, c = 1, [{ _: [ d ], ...e }], ...f] in [[]]);",
+        )[0],
+        ["f", "e", "d", "c", "b", "a"],
+      ],
+      [
+        "for-of statement",
+        getBody(
+          "for ([a, { b }, c = 1, [{ _: [ d ], ...e }], ...f] of [[]]);",
+        )[0],
+        ["f", "e", "d", "c", "b", "a"],
+      ],
+      [
+        "unary expression",
+        getBody("delete x", { sourceType: "script" })[0].expression,
+        ["x"],
+      ],
+      ["update expression", getBody("++x")[0].expression, ["x"]],
+      [
+        "logical assignment expression",
+        getBody("x ??= 1")[0].expression,
+        ["x"],
+      ],
+      [
+        "supports `__proto__` as an identifier name",
+        getBody("__proto__ = {}")[0].expression,
+        ["__proto__"],
+      ],
+    ])("%s", (_, program, bindingNames) => {
+      const ids = t.getAssignmentIdentifiers(program);
       expect(Object.keys(ids)).toEqual(bindingNames);
     });
   });
