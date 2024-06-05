@@ -66,7 +66,7 @@ export function createRegExpFeaturePlugin({
           throw new Error(
             `The 'runtime' option must be the same for ` +
               `'@babel/plugin-transform-named-capturing-groups-regex' and ` +
-              `'@babel/plugin-proposal-duplicate-named-capturing-groups-regex'.`,
+              `'@babel/plugin-transform-duplicate-named-capturing-groups-regex'.`,
           );
         }
 

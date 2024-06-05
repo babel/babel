@@ -7,7 +7,6 @@
         "excludeFixtures": ["2021-12-*", "2022-03-*", "2023-01-*", "2023-05-*"]
       }
     ],
-    "babel-plugin-proposal-duplicate-named-capturing-groups-regex",
     "babel-plugin-proposal-explicit-resource-management",
     "babel-plugin-proposal-import-attributes-to-assertions",
     "babel-plugin-proposal-import-wasm-source",
@@ -27,6 +26,7 @@
     ],
     "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-dotall-regex",
+    "babel-plugin-transform-duplicate-named-capturing-groups-regex",
     "babel-plugin-transform-exponentiation-operator",
     "babel-plugin-transform-json-strings",
     "babel-plugin-transform-logical-assignment-operators",

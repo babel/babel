@@ -9,6 +9,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-duplicate-named-capturing-groups-regex { firefox, node }
   transform-unicode-sets-regex { firefox < 116, node < 20 }
   transform-class-static-block { firefox < 93, node < 16.11 }
   transform-private-property-in-object { firefox < 90, node < 16.9 }
@@ -35,6 +36,5 @@ Using plugins:
   bugfix/transform-async-arrows-in-class { node < 7.6 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
