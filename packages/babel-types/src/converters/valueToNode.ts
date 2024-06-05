@@ -104,7 +104,7 @@ function valueToNode(value: unknown): t.Expression {
   // regexes
   if (isRegExp(value)) {
     const pattern = value.source;
-    const flags = value.toString().match(/\/([a-z]+|)$/)[1];
+    const flags = /\/([a-z]+|)$/.exec(value.toString())[1];
     return regExpLiteral(pattern, flags);
   }
 

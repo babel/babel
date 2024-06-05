@@ -24,7 +24,7 @@ export function mergeOptions(
   }
 }
 
-function mergeDefaultFields<T extends {}>(target: T, source: T) {
+function mergeDefaultFields<T extends object>(target: T, source: T) {
   for (const k of Object.keys(source) as (keyof T)[]) {
     const val = source[k];
     if (val !== undefined) target[k] = val;

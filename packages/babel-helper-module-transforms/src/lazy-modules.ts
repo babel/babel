@@ -16,10 +16,10 @@ export function toGetWrapperPayload(lazy: Lazy) {
     if (lazy === true) {
       // 'true' means that local relative files are eagerly loaded and
       // dependency modules are loaded lazily.
-      return /\./.test(source) ? null : "lazy";
+      return source.includes(".") ? null : "lazy";
     }
     if (Array.isArray(lazy)) {
-      return lazy.indexOf(source) === -1 ? null : "lazy";
+      return !lazy.includes(source) ? null : "lazy";
     }
     if (typeof lazy === "function") {
       return lazy(source) ? "lazy" : null;

@@ -39,7 +39,7 @@ export default class File {
     buildError: this.buildCodeFrameError.bind(this),
   };
 
-  constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
+  constructor(options: any, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
     this.code = code;
     this.ast = ast;

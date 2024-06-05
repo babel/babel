@@ -32,7 +32,7 @@ import type { ExpressionErrors } from "./util.ts";
 import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
 
-const getOwn = <T extends {}>(object: T, key: keyof T) =>
+const getOwn = <T extends object>(object: T, key: keyof T) =>
   Object.hasOwn(object, key) && object[key];
 
 const unwrapParenthesizedExpression = (node: Node): Node => {

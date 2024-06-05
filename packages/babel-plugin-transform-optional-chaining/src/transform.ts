@@ -163,7 +163,11 @@ export function transformOptionalChain(
         chainWithTypes as t.Expression,
       );
 
-      isCall ? (node.callee = ref) : (node.object = ref);
+      if (isCall) {
+        node.callee = ref;
+      } else {
+        node.object = ref;
+      }
     }
 
     // Ensure call expressions have the proper `this`

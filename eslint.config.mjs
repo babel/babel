@@ -88,10 +88,7 @@ export default [
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        // @ts-expect-error types are old
-        EXPERIMENTAL_useProjectService: {
-          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 1000,
-        },
+        projectService: true,
       },
     },
     plugins: {
@@ -99,7 +96,12 @@ export default [
     },
     rules: {
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "no-dupe-class-members": "off",
       "@typescript-eslint/no-dupe-class-members": "error",
       "no-undef": "off",
@@ -165,6 +167,9 @@ export default [
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/no-unsafe-return": "off",
+
+      // v8
+      "@typescript-eslint/no-require-imports": "off",
     },
   }),
   {

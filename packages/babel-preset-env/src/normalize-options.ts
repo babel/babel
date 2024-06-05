@@ -71,7 +71,7 @@ const expandIncludesAndExcludes = (
     if (typeof filter === "string") {
       try {
         re = new RegExp(`^${normalizePluginName(filter)}$`);
-      } catch (e) {
+      } catch (_) {
         invalidFilters.push(filter);
         return [];
       }
@@ -105,7 +105,7 @@ export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],
   exclude: Array<string> = [],
 ) => {
-  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
+  const duplicates = include.filter(opt => exclude.includes(opt));
 
   v.invariant(
     duplicates.length === 0,

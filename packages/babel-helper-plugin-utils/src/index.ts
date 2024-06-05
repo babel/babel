@@ -35,7 +35,7 @@ if (!process.env.BABEL_8_BREAKING) {
   });
 }
 
-export function declare<State = {}, Option = {}>(
+export function declare<State = object, Option = object>(
   builder: (
     api: PluginAPI,
     options: Option,
@@ -63,7 +63,7 @@ export function declare<State = {}, Option = {}>(
   };
 }
 
-export const declarePreset = declare as <Option = {}>(
+export const declarePreset = declare as <Option = object>(
   builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
 ) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
