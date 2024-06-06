@@ -1,12 +1,30 @@
 /* @minVersion 7.23.9 */
 
-type Stack = {
-  v?: any;
-  d: null | undefined | (() => any);
-  a: boolean;
-};
+type Stack =
+  | {
+      v: Disposable | AsyncDisposable;
+      d: null | undefined | DisposeLike;
+      a: boolean;
+    }
+  | {
+      d: null | undefined;
+      a: true;
+    };
 
-export default function _usingCtx() {
+type DisposeLike = () => void | PromiseLike<void>;
+
+interface UsingCtxReturn {
+  e: {};
+  u: (
+    value: Disposable | AsyncDisposable | null | undefined,
+  ) => Disposable | AsyncDisposable | null | undefined;
+  a: (
+    value: Disposable | AsyncDisposable | null | undefined,
+  ) => Disposable | AsyncDisposable | null | undefined;
+  d: DisposeLike;
+}
+
+export default function _usingCtx(): UsingCtxReturn {
   var _disposeSuppressedError =
       typeof SuppressedError === "function"
         ? SuppressedError
@@ -19,7 +37,10 @@ export default function _usingCtx() {
           } as SuppressedErrorConstructor),
     empty = {},
     stack: Stack[] = [];
-  function using(isAwait: boolean, value: any) {
+  function using(
+    isAwait: boolean,
+    value: Disposable | AsyncDisposable | null | undefined,
+  ) {
     if (value != null) {
       if (Object(value) !== value) {
         throw new TypeError(
@@ -28,11 +49,15 @@ export default function _usingCtx() {
       }
       // core-js-pure uses Symbol.for for polyfilling well-known symbols
       if (isAwait) {
-        var dispose =
-          value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
+        var dispose: DisposeLike = (value as AsyncDisposable)[
+          Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")
+        ];
       }
+      // @ts-expect-error -- use of var
       if (dispose == null) {
-        dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
+        dispose = (value as Disposable)[
+          Symbol.dispose || Symbol.for("Symbol.dispose")
+        ];
       }
       if (typeof dispose !== "function") {
         throw new TypeError(`Property [Symbol.dispose] is not a function.`);
@@ -55,7 +80,7 @@ export default function _usingCtx() {
     d: function () {
       var error = this.e;
 
-      function next(): any {
+      function next(): Promise<void> | void {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         while ((resource = stack.pop())) {
           try {
@@ -65,13 +90,13 @@ export default function _usingCtx() {
               return Promise.resolve(disposalResult).then(next, err);
             }
           } catch (e) {
-            return err(e);
+            return err(e as Error);
           }
         }
         if (error !== empty) throw error;
       }
 
-      function err(e: Error) {
+      function err(e: Error): Promise<void> | void {
         error = error !== empty ? new _disposeSuppressedError(e, error) : e;
 
         return next();
@@ -79,5 +104,5 @@ export default function _usingCtx() {
 
       return next();
     },
-  };
+  } satisfies UsingCtxReturn;
 }

@@ -17,7 +17,6 @@
     "./applyDecs2305.ts",
     "./applyDecs2311.ts",
     "./construct.ts",
-    "./setFunctionName.ts",
-    "./usingCtx.ts"
+    "./setFunctionName.ts"
   ]
 }
