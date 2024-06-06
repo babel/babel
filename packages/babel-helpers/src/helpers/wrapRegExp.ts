@@ -45,7 +45,10 @@ export default function _wrapRegExp(this: any): RegExp {
   }
   inherits(BabelRegExp, RegExp);
 
-  BabelRegExp.prototype.exec = function (str: string): RegExpExecArray | null {
+  BabelRegExp.prototype.exec = function (
+    this: BabelRegExp,
+    str: string,
+  ): RegExpExecArray | null {
     var result = _super.exec.call(this, str);
     if (result) {
       result.groups = buildGroups(result, this);
@@ -56,6 +59,7 @@ export default function _wrapRegExp(this: any): RegExp {
   };
 
   BabelRegExp.prototype[Symbol.replace] = function (
+    this: BabelRegExp,
     str: string,
     substitution: string | Function,
   ): string {
