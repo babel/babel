@@ -4,6 +4,10 @@ interface DescriptorWithInitializer extends PropertyDescriptor {
   initializer?: () => any;
 }
 
+declare const Object: Omit<typeof globalThis.Object, "keys"> & {
+  keys<T>(o: T): Array<keyof T>;
+};
+
 export default function _applyDecoratedDescriptor<T>(
   target: T,
   property: PropertyKey,
@@ -15,9 +19,8 @@ export default function _applyDecoratedDescriptor<T>(
   descriptor: DescriptorWithInitializer,
   context: DecoratorContext,
 ) {
-  var desc: DescriptorWithInitializer | null = {};
+  var desc: DescriptorWithInitializer = {};
   Object.keys(descriptor).forEach(function (key) {
-    // @ts-expect-error - we are sure it's not null
     desc[key] = descriptor[key];
   });
   desc.enumerable = !!desc.enumerable;
@@ -35,12 +38,12 @@ export default function _applyDecoratedDescriptor<T>(
 
   if (context && desc.initializer !== void 0) {
     desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-    desc.initializer = undefined;
+    desc.initializer = void 0;
   }
 
   if (desc.initializer === void 0) {
     Object.defineProperty(target, property, desc);
-    desc = null;
+    return null;
   }
 
   return desc;
