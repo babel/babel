@@ -135,25 +135,28 @@ jobs:
           # is true. Use the empry string instead.
           BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
-      - name: Generate babel-types docs
-        continue-on-error: true
-        run: |
-          mkdir build
-          node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
-
-      - name: Upload babel-types docs
-        continue-on-error: true
-        uses: actions/upload-artifact@v3
-        with:
-          name: babel-types-docs
-          path: build/types.md
-          retention-days: 3
-
       - name: Publish to npm (Babel 7)
         run: yarn release-tool publish --yes
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Generate babel-types docs
+        continue-on-error: true
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
+        run: |
+          mkdir build
+          node ./scripts/set-module-type.js commonjs
+          node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
+
+      - name: Upload babel-types docs
+        continue-on-error: true
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
+        uses: actions/upload-artifact@v3
+        with:
+          name: babel-types-docs
+          path: build/types.md
+          retention-days: 3
 
       - name: Publish to npm (Babel 8)
         # --tag-version-prefix must match the one set in `make new-babel-8-version-create-branch`
