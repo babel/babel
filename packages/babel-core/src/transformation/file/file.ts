@@ -5,7 +5,6 @@ import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import { cloneNode, interpreterDirective } from "@babel/types";
 import type * as t from "@babel/types";
-import { getModuleName } from "@babel/helper-module-transforms";
 import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file.ts";
@@ -95,10 +94,6 @@ export default class File {
 
   has(key: unknown): boolean {
     return this._map.has(key);
-  }
-
-  getModuleName(): string | undefined | null {
-    return getModuleName(this.opts, this.opts);
   }
 
   /**
@@ -266,4 +261,14 @@ if (!process.env.BABEL_8_BREAKING) {
       "This function has been moved into the template literal transform itself.",
     );
   };
+
+  if (!USE_ESM) {
+    // eslint-disable-next-line no-restricted-globals
+    const helperModuleTransforms = require("@babel/helper-module-transforms");
+
+    // @ts-expect-error Babel 7
+    File.prototype.getModuleName = function getModuleName() {
+      return helperModuleTransforms.getModuleName(this.opts, this.opts);
+    };
+  }
 }

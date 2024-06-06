@@ -374,7 +374,7 @@ __metadata:
     "@babel/code-frame": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
+    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
@@ -861,6 +861,30 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-module-transforms-BABEL_8_BREAKING-false@npm:@babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
+    "@babel/helper-module-imports": "workspace:^"
+    "@babel/helper-simple-access": "workspace:^"
+    "@babel/helper-split-export-declaration": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/helper-module-transforms@condition:BABEL_8_BREAKING ? : workspace:^":
+  version: 0.0.0-condition-4045c9
+  resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^#4045c9"
+  dependencies:
+    "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^"
+  checksum: 10/ec948efd3766f791dcbce3236fc95be8e1824c39960c0360d5f87bce845e698887f2a31aa4408f1201d68ad49e2b241c6d618d245a0bcbdc55a85fc330a1ba15
+  languageName: node
+  linkType: hard
+
 "@babel/helper-module-transforms@npm:^7.12.1, @babel/helper-module-transforms@npm:^7.23.0":
   version: 7.23.0
   resolution: "@babel/helper-module-transforms@npm:7.23.0"
@@ -890,21 +914,6 @@ __metadata:
   checksum: 10/429d227247b66a9213900d1d62b0f3a0157475c14a26a32f06e40df8fdaf362cba936d38425efe68b258a6a7481834c2501e8be62789a4f29f60cfc3bb8ed4a5
   languageName: node
   linkType: hard
-
-"@babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-simple-access": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
 
 "@babel/helper-optimise-call-expression@npm:^8.0.0-alpha.8":
   version: 8.0.0-alpha.8
