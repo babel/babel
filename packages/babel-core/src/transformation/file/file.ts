@@ -263,12 +263,13 @@ if (!process.env.BABEL_8_BREAKING) {
   };
 
   if (!USE_ESM) {
-    // eslint-disable-next-line no-restricted-globals
-    const helperModuleTransforms = require("@babel/helper-module-transforms");
-
     // @ts-expect-error Babel 7
     File.prototype.getModuleName = function getModuleName() {
-      return helperModuleTransforms.getModuleName(this.opts, this.opts);
+      // eslint-disable-next-line no-restricted-globals
+      return require("@babel/helper-module-transforms").getModuleName(
+        this.opts,
+        this.opts,
+      );
     };
   }
 }
