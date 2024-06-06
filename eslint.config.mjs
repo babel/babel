@@ -1,15 +1,18 @@
 // @ts-check
-"use strict";
 
-const configInternal = require("@babel/eslint-config-internal");
-const pluginImport = require("eslint-plugin-import");
-const pluginN = require("eslint-plugin-n");
-const pluginPrettier = require("eslint-plugin-prettier");
-const pluginBabelDevelopment = require("@babel/eslint-plugin-development");
-const pluginBabelDevelopmentInternal = require("@babel/eslint-plugin-development-internal");
-const typescriptEslint = require("typescript-eslint");
+import configInternal from "@babel/eslint-config-internal";
+// @ts-expect-error no types
+import pluginImport from "eslint-plugin-import";
+import pluginN from "eslint-plugin-n";
+import pluginPrettier from "eslint-plugin-prettier";
+import pluginBabelDevelopment from "@babel/eslint-plugin-development";
+import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
+import typescriptEslint from "typescript-eslint";
+import { commonJS } from "$repo-utils";
 
-const { FlatCompat } = require("@eslint/eslintrc");
+const { __dirname, require } = commonJS(import.meta.url);
+
+import { FlatCompat } from "@eslint/eslintrc";
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -28,7 +31,7 @@ const sourceFiles = exts => [
   `eslint/*/src/**/*.{${exts}}`,
 ];
 
-module.exports = [
+export default [
   ...configInternal,
   {
     ignores: [
