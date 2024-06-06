@@ -1,6 +1,5 @@
 /* @minVersion 7.19.0 */
 
-// Assuming the necessary type definitions for external functions are available
 import setPrototypeOf from "./setPrototypeOf.ts";
 // @ts-expect-error -- not migrated
 import inherits from "./inherits.ts";

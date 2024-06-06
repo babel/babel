@@ -15,12 +15,10 @@ type DisposeLike = () => void | PromiseLike<void>;
 
 interface UsingCtxReturn {
   e: {};
-  u: (
-    value: Disposable | AsyncDisposable | null | undefined,
-  ) => Disposable | AsyncDisposable | null | undefined;
+  u: (value: Disposable | null | undefined) => Disposable | null | undefined;
   a: (
-    value: Disposable | AsyncDisposable | null | undefined,
-  ) => Disposable | AsyncDisposable | null | undefined;
+    value: AsyncDisposable | Disposable | null | undefined,
+  ) => AsyncDisposable | Disposable | null | undefined;
   d: DisposeLike;
 }
 
@@ -38,9 +36,17 @@ export default function _usingCtx(): UsingCtxReturn {
     empty = {},
     stack: Stack[] = [];
   function using(
+    isAwait: true,
+    value: AsyncDisposable | Disposable | null | undefined,
+  ): AsyncDisposable | Disposable | null | undefined;
+  function using(
+    isAwait: false,
+    value: Disposable | null | undefined,
+  ): Disposable | null | undefined;
+  function using(
     isAwait: boolean,
-    value: Disposable | AsyncDisposable | null | undefined,
-  ) {
+    value: AsyncDisposable | Disposable | null | undefined,
+  ): AsyncDisposable | Disposable | null | undefined {
     if (value != null) {
       if (Object(value) !== value) {
         throw new TypeError(
@@ -49,6 +55,8 @@ export default function _usingCtx(): UsingCtxReturn {
       }
       // core-js-pure uses Symbol.for for polyfilling well-known symbols
       if (isAwait) {
+        // value can either be an AsyncDisposable or a Disposable
+        // Try AsyncDisposable first
         var dispose: DisposeLike = (value as AsyncDisposable)[
           Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")
         ];
@@ -75,7 +83,13 @@ export default function _usingCtx(): UsingCtxReturn {
     // using
     u: using.bind(null, false),
     // await using
-    a: using.bind(null, true),
+    // full generic signature to avoid type widening
+    a: using.bind<
+      null,
+      [true],
+      [AsyncDisposable | Disposable | null | undefined],
+      AsyncDisposable | Disposable | null | undefined
+    >(null, true),
     // dispose
     d: function () {
       var error = this.e;
