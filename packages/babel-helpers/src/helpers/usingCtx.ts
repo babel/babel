@@ -57,11 +57,10 @@ export default function _usingCtx(): UsingCtxReturn {
       if (isAwait) {
         // value can either be an AsyncDisposable or a Disposable
         // Try AsyncDisposable first
-        var dispose: DisposeLike = (value as AsyncDisposable)[
-          Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")
-        ];
+        var dispose: DisposeLike | null | undefined = (
+          value as AsyncDisposable
+        )[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
       }
-      // @ts-expect-error -- use of var
       if (dispose == null) {
         dispose = (value as Disposable)[
           Symbol.dispose || Symbol.for("Symbol.dispose")
