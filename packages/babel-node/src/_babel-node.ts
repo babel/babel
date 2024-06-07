@@ -16,7 +16,9 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
-const program = commander.default.program;
+const program = process.env.BABEL_8_BREAKING
+  ? commander.program
+  : commander.default.program;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
@@ -70,6 +72,8 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
+
+program.allowUnknownOption(true);
 
 program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");

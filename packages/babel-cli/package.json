@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.24.6",
+  "version": "7.24.7",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "@jridgewell/trace-mapping": "^0.3.25",
-    "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0",
+    "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)",
     "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "glob": "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync|default)",

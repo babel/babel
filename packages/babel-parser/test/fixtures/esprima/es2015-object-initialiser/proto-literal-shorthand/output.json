@@ -49,9 +49,6 @@
                 "type": "Identifier",
                 "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31},"identifierName":"__proto__"},
                 "name": "__proto__"
-              },
-              "extra": {
-                "shorthand": true
               }
             }
           ],

@@ -1,11 +1,15 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _initializerDefineProperty(
-  target,
-  property,
-  descriptor,
-  context,
-) {
+interface DescriptorWithInitializer extends PropertyDescriptor {
+  initializer?: () => any;
+}
+
+export default function _initializerDefineProperty<T>(
+  target: T,
+  property: PropertyKey,
+  descriptor: DescriptorWithInitializer | undefined,
+  context: DecoratorContext,
+): void {
   if (!descriptor) return;
 
   Object.defineProperty(target, property, {

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-reflection",
-  "version": "7.24.6",
+  "version": "7.24.7",
   "description": "Allow parsing of the reflection attributes in the import statement",
   "repository": {
     "type": "git",

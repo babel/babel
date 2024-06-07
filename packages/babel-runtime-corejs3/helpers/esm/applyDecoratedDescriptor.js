@@ -11,6 +11,6 @@ function _applyDecoratedDescriptor(i, e, r, n, l) {
     a[i] = n[i];
   }), a.enumerable = !!a.enumerable, a.configurable = !!a.configurable, ("value" in a || a.initializer) && (a.writable = !0), a = _reduceInstanceProperty(_context2 = _reverseInstanceProperty(_context3 = _sliceInstanceProperty(r).call(r)).call(_context3)).call(_context2, function (r, n) {
     return n(i, e, r) || r;
-  }, a), l && void 0 !== a.initializer && (a.value = a.initializer ? a.initializer.call(l) : void 0, a.initializer = void 0), void 0 === a.initializer && (_Object$defineProperty(i, e, a), a = null), a;
+  }, a), l && void 0 !== a.initializer && (a.value = a.initializer ? a.initializer.call(l) : void 0, a.initializer = void 0), void 0 === a.initializer ? (_Object$defineProperty(i, e, a), null) : a;
 }
 export { _applyDecoratedDescriptor as default };

@@ -29,9 +29,6 @@
                 "type": "Identifier",
                 "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"x"},
                 "name": "x"
-              },
-              "extra": {
-                "shorthand": true
               }
             },
             {
@@ -58,9 +55,6 @@
                 "type": "Identifier",
                 "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"a"},
                 "name": "a"
-              },
-              "extra": {
-                "shorthand": true
               }
             },
             {
@@ -87,9 +81,6 @@
                 "type": "Identifier",
                 "start":20,"end":21,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":21,"index":21},"identifierName":"c"},
                 "name": "c"
-              },
-              "extra": {
-                "shorthand": true
               }
             }
           ],

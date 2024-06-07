@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-record-and-tuple",
-  "version": "7.24.6",
+  "version": "7.24.7",
   "description": "Allow parsing of records and tuples.",
   "repository": {
     "type": "git",

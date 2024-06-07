@@ -44,9 +44,6 @@
                       "type": "Identifier",
                       "start":27,"end":28,"loc":{"start":{"line":2,"column":13,"index":27},"end":{"line":2,"column":14,"index":28},"identifierName":"a"},
                       "name": "a"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]

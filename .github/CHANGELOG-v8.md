@@ -16,6 +16,36 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.10 (2024-06-04)
+
+#### :bug: Bug Fix
+* `babel-traverse`, `babel-types`
+  * [#16544](https://github.com/babel/babel/pull/16544) Improve `getBindingIdentifiers` ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-node`
+  * [#16548](https://github.com/babel/babel/pull/16548) fix Babel 8 commander import ([@JLHwung](https://github.com/JLHwung))
+## v8.0.0-alpha.9 (2024-06-03)
+
+#### :boom: Breaking Change
+* `babel-parser`, `babel-traverse`
+  * [#16521](https://github.com/babel/babel/pull/16521) [Babel 8] Remove `extra.shorthand` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-syntax-record-and-tuple`, `babel-standalone`, `babel-traverse`
+  * [#16458](https://github.com/babel/babel/pull/16458) Remove `syntaxType` option for record-and-tuple (parser&plugin) ([@JLHwung](https://github.com/JLHwung))
+* _Every package_
+  * [#16457](https://github.com/babel/babel/pull/16457) [babel 8] Require Node.js `^18.20.0 || ^20.10.0 || >=21.0.0` ([@JLHwung](https://github.com/JLHwung))
+
+#### :rocket: New Feature
+* _Every package_
+  * [#16416](https://github.com/babel/babel/pull/16416) [babel 8] Publish `.d.ts` files for every package ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* _Every package_
+  * [#16494](https://github.com/babel/babel/pull/16494) Only import types from declared dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-node`
+  * [#16517](https://github.com/babel/babel/pull/16517) [Babel 8] Bump commander to 12.1.0 ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-helper-transform-fixture-test-runner`
+  * [#16459](https://github.com/babel/babel/pull/16459) [Babel 8] Use more native fs methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#16450](https://github.com/babel/babel/pull/16450) Bump glob to 10.3.12 ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.0-alpha.8 (2024-04-04)
 
 #### :boom: Breaking Change

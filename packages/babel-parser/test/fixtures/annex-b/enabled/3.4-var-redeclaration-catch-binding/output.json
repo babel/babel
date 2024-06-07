@@ -85,9 +85,6 @@
                   "type": "Identifier",
                   "start":44,"end":45,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":17,"index":45},"identifierName":"f"},
                   "name": "f"
-                },
-                "extra": {
-                  "shorthand": true
                 }
               }
             ]

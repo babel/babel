@@ -55,9 +55,6 @@
                           "type": "Identifier",
                           "start":19,"end":20,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":20,"index":20},"identifierName":"w"},
                           "name": "w"
-                        },
-                        "extra": {
-                          "shorthand": true
                         }
                       },
                       {
@@ -75,9 +72,6 @@
                           "type": "Identifier",
                           "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23},"identifierName":"x"},
                           "name": "x"
-                        },
-                        "extra": {
-                          "shorthand": true
                         }
                       }
                     ]

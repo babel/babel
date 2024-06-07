@@ -1,13 +1,25 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _applyDecoratedDescriptor(
-  target,
-  property,
-  decorators,
-  descriptor,
-  context,
+interface DescriptorWithInitializer extends PropertyDescriptor {
+  initializer?: () => any;
+}
+
+declare const Object: Omit<typeof globalThis.Object, "keys"> & {
+  keys<T>(o: T): Array<keyof T>;
+};
+
+export default function _applyDecoratedDescriptor<T>(
+  target: T,
+  property: PropertyKey,
+  decorators: ((
+    t: T,
+    p: PropertyKey,
+    desc: DescriptorWithInitializer,
+  ) => any)[],
+  descriptor: DescriptorWithInitializer,
+  context: DecoratorContext,
 ) {
-  var desc = {};
+  var desc: DescriptorWithInitializer = {};
   Object.keys(descriptor).forEach(function (key) {
     desc[key] = descriptor[key];
   });
@@ -26,12 +38,12 @@ export default function _applyDecoratedDescriptor(
 
   if (context && desc.initializer !== void 0) {
     desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-    desc.initializer = undefined;
+    desc.initializer = void 0;
   }
 
   if (desc.initializer === void 0) {
     Object.defineProperty(target, property, desc);
-    desc = null;
+    return null;
   }
 
   return desc;

@@ -1,5 +1,6 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+import { IS_BABEL_8 } from "$repo-utils";
 
 import _traverse, { NodePath } from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
@@ -1050,7 +1051,12 @@ describe("scope", () => {
       const renamedPropertyMatcher = expect.objectContaining({
         type: "ObjectProperty",
         shorthand: false,
-        extra: expect.objectContaining({ shorthand: false }),
+        ...(IS_BABEL_8()
+          ? {}
+          : {
+              // eslint-disable-next-line jest/no-conditional-expect
+              extra: expect.objectContaining({ shorthand: false }),
+            }),
         key: expect.objectContaining({ name: "a" }),
         value: expect.objectContaining({
           name: expect.not.stringMatching(/^a$/),
@@ -1095,7 +1101,12 @@ describe("scope", () => {
       const originalPropertyMatcher = expect.objectContaining({
         type: "ObjectProperty",
         shorthand: true,
-        extra: expect.objectContaining({ shorthand: true }),
+        ...(IS_BABEL_8()
+          ? {}
+          : {
+              // eslint-disable-next-line jest/no-conditional-expect
+              extra: expect.objectContaining({ shorthand: true }),
+            }),
         key: expect.objectContaining({ name: "b" }),
         value: expect.objectContaining({ name: "b" }),
       });
@@ -1125,6 +1136,27 @@ describe("scope", () => {
           };
         }"
       `);
+    });
+  });
+
+  describe("constantViolations", () => {
+    it("var redeclarations should not be treated as constantViolations", () => {
+      const program = getPath(`
+        function v() { }
+        function f() {
+          var a = 1;
+          var {
+            currentPoint: a,
+            centp: v,
+          } = {};
+        }
+      `);
+
+      const bindingV = program.scope.getBinding("v");
+      expect(bindingV.constantViolations).toHaveLength(0);
+
+      const bindingA = program.get("body.1.body").scope.getBinding("a");
+      expect(bindingA.constantViolations).toHaveLength(1);
     });
   });
 });

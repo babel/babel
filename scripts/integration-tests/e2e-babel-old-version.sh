@@ -69,6 +69,6 @@ sed -i 's#with { type: "json" }##g' packages/babel-preset-env/src/normalize-opti
 
 # Update deps, build and test
 rm yarn.lock
-YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
+IS_BABEL_OLD_E2E=1 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 
 cleanup
