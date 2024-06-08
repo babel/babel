@@ -4173,6 +4173,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
     }
+    checkIdentifier(
+      at: N.Identifier,
+      bindingType: BindingFlag,
+      strictModeChanged: boolean = false,
+    ) {
+      let oldStrict;
+      if (this.state.isAmbientContext && this.state.strict) {
+        oldStrict = this.state.strict;
+        this.state.strict = false;
+      }
+      super.checkIdentifier(at, bindingType, strictModeChanged);
+      if (oldStrict) {
+        this.state.strict = oldStrict;
+      }
+    }
   };
 
 function isPossiblyLiteralEnum(expression: N.Expression): boolean {
