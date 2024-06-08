@@ -3905,12 +3905,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsInAmbientContext<T>(cb: () => T): T {
-      const oldIsAmbientContext = this.state.isAmbientContext;
+      const { isAmbientContext: oldIsAmbientContext, strict: oldStrict } =
+        this.state;
       this.state.isAmbientContext = true;
+      this.state.strict = false;
       try {
         return cb();
       } finally {
         this.state.isAmbientContext = oldIsAmbientContext;
+        this.state.strict = oldStrict;
       }
     }
 
@@ -4171,21 +4174,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             ? BindingFlag.TYPE_TS_TYPE_IMPORT
             : BindingFlag.TYPE_TS_VALUE_IMPORT,
         );
-      }
-    }
-    checkIdentifier(
-      at: N.Identifier,
-      bindingType: BindingFlag,
-      strictModeChanged: boolean = false,
-    ) {
-      let oldStrict;
-      if (this.state.isAmbientContext && this.state.strict) {
-        oldStrict = this.state.strict;
-        this.state.strict = false;
-      }
-      super.checkIdentifier(at, bindingType, strictModeChanged);
-      if (oldStrict) {
-        this.state.strict = oldStrict;
       }
     }
   };
