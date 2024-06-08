@@ -7182,7 +7182,7 @@ __metadata:
     semver: "npm:^6.3.1"
     shelljs: "npm:^0.8.5"
     test262-stream: "npm:^1.4.0"
-    typescript: "npm:5.5.0-dev.20240601"
+    typescript: "npm:5.5.1-rc"
     typescript-eslint: "npm:^7.8.0"
   languageName: unknown
   linkType: soft
@@ -16863,23 +16863,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.5.0-dev.20240601":
-  version: 5.5.0-dev.20240601
-  resolution: "typescript@npm:5.5.0-dev.20240601"
+"typescript@npm:5.5.1-rc":
+  version: 5.5.1-rc
+  resolution: "typescript@npm:5.5.1-rc"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/99ce71a573c9b50eaa9bea4b3631f99367a9c0418d0f161da422ed8c671b943ec175af1bf59b5cf026bd667ddacf88f1303aa8080463cfc66348bda44ed12738
+  checksum: 10/c4412a2f9a351c0cd566464da8794c25f86dc1da087bf04776eb3a1ae16e1f9f52ec3f3b9e972bfd6bd7845af94f46de062b848e4e1001b7d58b4e02ccd61136
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.5.0-dev.20240601#optional!builtin<compat/typescript>":
-  version: 5.5.0-dev.20240601
-  resolution: "typescript@patch:typescript@npm%3A5.5.0-dev.20240601#optional!builtin<compat/typescript>::version=5.5.0-dev.20240601&hash=b45daf"
+"typescript@patch:typescript@npm%3A5.5.1-rc#optional!builtin<compat/typescript>":
+  version: 5.5.1-rc
+  resolution: "typescript@patch:typescript@npm%3A5.5.1-rc#optional!builtin<compat/typescript>::version=5.5.1-rc&hash=b45daf"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/8a7e3c3da510f0ee474bd6c86ea9b5d9a2f162bbc0499c786e86a3212c13468e2c791fbbbb12b0ed7ef701ca4595a6ee3e707b138e4ba6e12fbf5ac1e210a2ec
+  checksum: 10/2f3cdded7c8c273e483f041a6dbd1bebb202403b2623d1e71242f530e6c927f37a1135a7069b3e7e038416b5b9db8bdd8ca8ab0c4493b11da8f32cd3d7c9829a
   languageName: node
   linkType: hard
 
