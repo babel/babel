@@ -125,6 +125,9 @@
       "@babel/plugin-bugfix-firefox-class-in-computed-class-key": [
         "./packages/babel-plugin-bugfix-firefox-class-in-computed-class-key/src"
       ],
+      "@babel/plugin-bugfix-safari-class-field-initializer-scope": [
+        "./packages/babel-plugin-bugfix-safari-class-field-initializer-scope/src"
+      ],
       "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
         "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"
       ],
