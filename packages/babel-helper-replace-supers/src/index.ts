@@ -1,9 +1,9 @@
 import type { File, NodePath, Scope } from "@babel/core";
-import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import { traverse, template, types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 const {
   assignmentExpression,
   booleanLiteral,
@@ -18,11 +18,16 @@ const {
 
 if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   // eslint-disable-next-line no-restricted-globals
-  const ns = require("@babel/helper-environment-visitor");
+  exports.environmentVisitor = visitors.environmentVisitor({});
   // eslint-disable-next-line no-restricted-globals
-  exports.environmentVisitor = ns.default;
-  // eslint-disable-next-line no-restricted-globals
-  exports.skipAllButComputedKey = ns.skipAllButComputedKey;
+  exports.skipAllButComputedKey = function skipAllButComputedKey(
+    path: NodePath<t.Method | t.ClassProperty>,
+  ) {
+    path.skip();
+    if (path.node.computed) {
+      path.context.maybeQueue(path.get("key"));
+    }
+  };
 }
 
 type ThisRef = {
@@ -56,33 +61,27 @@ function getPrototypeOfExpression(
   return callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-const visitor = traverse.visitors.merge<
+const visitor = visitors.environmentVisitor<
   HandlerState<ReplaceState> & ReplaceState
->([
-  environmentVisitor,
-  {
-    Super(path, state) {
-      const { node, parentPath } = path;
-      if (!parentPath.isMemberExpression({ object: node })) return;
-      state.handle(parentPath);
-    },
+>({
+  Super(path, state) {
+    const { node, parentPath } = path;
+    if (!parentPath.isMemberExpression({ object: node })) return;
+    state.handle(parentPath);
   },
-]);
+});
 
-const unshadowSuperBindingVisitor = traverse.visitors.merge<{
+const unshadowSuperBindingVisitor = visitors.environmentVisitor<{
   refName: string;
-}>([
-  environmentVisitor,
-  {
-    Scopable(path, { refName }) {
-      // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
-      const binding = path.scope.getOwnBinding(refName);
-      if (binding && binding.identifier.name === refName) {
-        path.scope.rename(refName);
-      }
-    },
+}>({
+  Scopable(path, { refName }) {
+    // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
+    const binding = path.scope.getOwnBinding(refName);
+    if (binding && binding.identifier.name === refName) {
+      path.scope.rename(refName);
+    }
   },
-]);
+});
 
 type SharedState = {
   file: File;

@@ -5,7 +5,7 @@ import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
 import type TraversalContext from "../context.ts";
 import type { VisitPhase } from "../types.ts";
 import type NodePath from "./index.ts";
-import type * as t from "@babel/types";
+import * as t from "@babel/types";
 
 export function call(this: NodePath, key: VisitPhase): boolean {
   const opts = this.opts;
@@ -310,6 +310,20 @@ export function requeue(this: NodePath, pathToQueue = this) {
 
   for (const context of contexts) {
     context.maybeQueue(pathToQueue);
+  }
+}
+
+export function requeueComputedKeyAndDecorators(
+  this: NodePath<t.Method | t.Property>,
+) {
+  const { context, node } = this;
+  if (!t.isPrivate(node) && node.computed) {
+    context.maybeQueue(this.get("key"));
+  }
+  if (node.decorators) {
+    for (const decorator of this.get("decorators")) {
+      context.maybeQueue(decorator);
+    }
   }
 }
 
