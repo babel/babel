@@ -1,8 +1,8 @@
-import type { NodePath, Scope, Visitor, File } from "@babel/core";
+import type { NodePath, Scope, File } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import environmentVisitor from "@babel/helper-environment-visitor";
-import { traverse, template, types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import addCallSuperHelper from "./inline-callSuper-helpers.ts";
@@ -144,14 +144,11 @@ export default function transformClass(
     Object.assign(classState, newState);
   };
 
-  const findThisesVisitor = traverse.visitors.merge([
-    environmentVisitor,
-    {
-      ThisExpression(path) {
-        classState.superThises.push(path);
-      },
+  const findThisesVisitor = visitors.environmentVisitor({
+    ThisExpression(path) {
+      classState.superThises.push(path);
     },
-  ]);
+  });
 
   function createClassHelper(args: t.Expression[]) {
     return t.callExpression(classState.file.addHelper("createClass"), args);
@@ -235,16 +232,13 @@ export default function transformClass(
 
         const superReturns: NodePath<t.ReturnStatement>[] = [];
         path.traverse(
-          traverse.visitors.merge([
-            environmentVisitor,
-            {
-              ReturnStatement(path) {
-                if (!path.getFunctionParent().isArrowFunctionExpression()) {
-                  superReturns.push(path);
-                }
-              },
+          visitors.environmentVisitor({
+            ReturnStatement(path) {
+              if (!path.getFunctionParent().isArrowFunctionExpression()) {
+                superReturns.push(path);
+              }
             },
-          ]),
+          }),
         );
 
         if (isConstructor) {
@@ -420,17 +414,14 @@ export default function transformClass(
 
     const bareSupers: NodePath<t.CallExpression>[] = [];
     path.traverse(
-      traverse.visitors.merge([
-        environmentVisitor,
-        {
-          Super(path) {
-            const { node, parentPath } = path;
-            if (parentPath.isCallExpression({ callee: node })) {
-              bareSupers.unshift(parentPath);
-            }
-          },
-        } as Visitor,
-      ]),
+      visitors.environmentVisitor({
+        Super(path) {
+          const { node, parentPath } = path;
+          if (parentPath.isCallExpression({ callee: node })) {
+            bareSupers.unshift(parentPath);
+          }
+        },
+      }),
     );
 
     for (const bareSuper of bareSupers) {
