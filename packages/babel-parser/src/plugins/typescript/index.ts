@@ -3905,12 +3905,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsInAmbientContext<T>(cb: () => T): T {
-      const oldIsAmbientContext = this.state.isAmbientContext;
+      const { isAmbientContext: oldIsAmbientContext, strict: oldStrict } =
+        this.state;
       this.state.isAmbientContext = true;
+      this.state.strict = false;
       try {
         return cb();
       } finally {
         this.state.isAmbientContext = oldIsAmbientContext;
+        this.state.strict = oldStrict;
       }
     }
 
