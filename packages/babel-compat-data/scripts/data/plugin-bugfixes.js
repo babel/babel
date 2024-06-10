@@ -24,6 +24,10 @@ module.exports = {
     ],
     replaces: "transform-block-scoping",
   },
+  "bugfix/transform-safari-class-field-initializer-scope": {
+    features: ["instance class fields / resolving identifier in parent scope"],
+    replaces: "transform-class-properties",
+  },
   "bugfix/transform-safari-for-shadowing": {
     features: [
       "let / for-in loop binding shadowing parameter",

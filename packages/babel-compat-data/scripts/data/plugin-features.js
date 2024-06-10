@@ -178,6 +178,7 @@ const es2022 = {
       "instance class fields / public instance class fields",
       "instance class fields / private instance class fields basic support",
       "instance class fields / computed instance class fields",
+      "instance class fields / resolving identifier in parent scope",
     ],
   },
   "transform-private-methods": "private class methods",

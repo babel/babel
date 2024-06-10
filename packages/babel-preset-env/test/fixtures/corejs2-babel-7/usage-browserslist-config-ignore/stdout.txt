@@ -21,7 +21,7 @@ Using plugins:
   transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox < 116, ios < 17, node < 20, opera < 98, safari < 17, samsung }
   transform-class-static-block { android, chrome < 94, edge < 94, firefox < 93, ios < 16.4, node < 16.11, opera < 80, safari < 16.4, samsung < 17 }
   transform-private-property-in-object { android, chrome < 91, edge < 91, firefox < 90, ios < 15, node < 16.9, opera < 77, safari < 15, samsung < 16 }
-  transform-class-properties { android, chrome < 74, edge < 79, firefox < 90, ios < 14.5, opera < 62, safari < 14.1, samsung < 11 }
+  transform-class-properties { android, chrome < 74, edge < 79, firefox < 90, ios < 16, opera < 62, safari < 16, samsung < 11 }
   transform-private-methods { android, chrome < 84, edge < 84, firefox < 90, ios < 15, node < 14.6, opera < 70, safari < 15, samsung < 14 }
   transform-numeric-separator { android, chrome < 75, edge < 79, firefox < 70, ios < 13, opera < 62, safari < 13, samsung < 11 }
   transform-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera < 71, safari < 14, samsung < 14 }

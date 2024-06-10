@@ -21,6 +21,7 @@ Using plugins:
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   transform-class-static-block { ios < 16.4 }
   transform-export-namespace-from { }
+  bugfix/transform-safari-class-field-initializer-scope { ios < 16 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import

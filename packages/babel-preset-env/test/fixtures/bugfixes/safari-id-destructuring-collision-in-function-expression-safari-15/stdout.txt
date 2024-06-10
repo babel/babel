@@ -12,6 +12,7 @@ Using plugins:
   transform-unicode-sets-regex { safari < 17 }
   transform-class-static-block { safari < 16.4 }
   syntax-private-property-in-object
+  transform-class-properties { safari < 16 }
   syntax-class-properties
   syntax-numeric-separator
   syntax-nullish-coalescing-operator

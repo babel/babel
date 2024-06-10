@@ -21,6 +21,7 @@ Using plugins:
   syntax-async-generators
   syntax-object-rest-spread
   transform-export-namespace-from { }
+  bugfix/transform-safari-class-field-initializer-scope { safari < 16 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
