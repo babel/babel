@@ -96,9 +96,7 @@ function getBindingIdentifiers(
       }
     }
 
-    const keys =
-      // @ts-expect-error getBindingIdentifiers.keys do not cover all AST types
-      getBindingIdentifiers.keys[id.type];
+    const keys = getBindingIdentifiers.keys[id.type];
 
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
@@ -118,7 +116,11 @@ function getBindingIdentifiers(
 /**
  * Mapping of types to their identifier keys.
  */
-getBindingIdentifiers.keys = {
+type KeysMap = {
+  [N in t.Node as N["type"]]?: (keyof N)[];
+};
+
+const keys: KeysMap = {
   DeclareClass: ["id"],
   DeclareFunction: ["id"],
   DeclareModule: ["id"],
@@ -169,3 +171,5 @@ getBindingIdentifiers.keys = {
   VariableDeclaration: ["declarations"],
   VariableDeclarator: ["id"],
 };
+
+getBindingIdentifiers.keys = keys;

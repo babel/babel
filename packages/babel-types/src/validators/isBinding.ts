@@ -19,9 +19,7 @@ export default function isBinding(
     return false;
   }
 
-  const keys =
-    // @ts-expect-error getBindingIdentifiers.keys does not cover all AST types
-    getBindingIdentifiers.keys[parent.type];
+  const keys = getBindingIdentifiers.keys[parent.type];
   if (keys) {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
