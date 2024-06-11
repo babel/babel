@@ -520,9 +520,7 @@ function getBindingIdentifierPaths(
     if (!id) continue;
     if (!id.node) continue;
 
-    const keys =
-      // @ts-expect-error _getBindingIdentifiers.keys do not cover all node types
-      _getBindingIdentifiers.keys[id.node.type];
+    const keys = _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {
       if (duplicates) {
