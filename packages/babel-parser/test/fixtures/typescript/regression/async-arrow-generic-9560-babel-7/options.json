@@ -1,4 +1,4 @@
 {
-  "plugins": ["typescript", "classProperties"],
+  "plugins": ["typescript"],
   "BABEL_8_BREAKING": false
 }
