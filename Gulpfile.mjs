@@ -637,14 +637,16 @@ function buildRollupDts(packages) {
     await build(input, output, "", packageName);
   });
 
-  tasks.push(
-    build(
-      "packages/babel-parser/typings/babel-parser.source.d.ts",
-      "packages/babel-parser/typings/babel-parser.d.ts",
-      "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable @typescript-eslint/consistent-type-imports, prettier/prettier */",
-      "packages/babel-parser"
-    )
-  );
+  if (bool(process.env.BABEL_8_BREAKING)) {
+    tasks.push(
+      build(
+        "packages/babel-parser/typings/babel-parser.source.d.ts",
+        "packages/babel-parser/typings/babel-parser.d.ts",
+        "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable @typescript-eslint/consistent-type-imports, prettier/prettier */",
+        "packages/babel-parser"
+      )
+    );
+  }
 
   return Promise.all(tasks);
 }
