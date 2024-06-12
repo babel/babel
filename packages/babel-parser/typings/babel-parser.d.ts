@@ -1,6 +1,6 @@
 // This file is auto-generated! Do not modify it directly.
 /* eslint-disable @typescript-eslint/consistent-type-imports, prettier/prettier */
-import * as _babel_types from "@babel/types";
+import * as _babel_types from '@babel/types';
 
 type Plugin =
   | "asyncDoExpressions"
@@ -215,6 +215,7 @@ interface ParserOptions {
 
 type ParserPlugin = PluginConfig;
 
+
 declare const tokTypes: {
   // todo(flow->ts) real token type
   [name: string]: any;
@@ -229,18 +230,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export {
-  DecoratorsPluginOptions,
-  FlowPluginOptions,
-  ParseError,
-  ParseResult,
-  ParserOptions,
-  ParserPlugin,
-  ParserPluginWithOptions,
-  PipelineOperatorPluginOptions,
-  RecordAndTuplePluginOptions,
-  TypeScriptPluginOptions,
-  parse,
-  parseExpression,
-  tokTypes,
-};
+export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
