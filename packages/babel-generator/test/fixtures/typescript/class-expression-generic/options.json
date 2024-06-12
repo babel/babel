@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": ["typescript", "classProperties"]
+  "plugins": ["typescript"]
 }

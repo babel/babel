@@ -1,49 +1,31 @@
 // This file is auto-generated! Do not modify it directly.
 /* eslint-disable @typescript-eslint/consistent-type-imports, prettier/prettier */
-import * as _babel_types from '@babel/types';
+import * as _babel_types from "@babel/types";
 
 type Plugin =
   | "asyncDoExpressions"
-  | "asyncGenerators"
-  | "bigInt"
-  | "classPrivateMethods"
-  | "classPrivateProperties"
-  | "classProperties"
-  | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators-legacy"
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
-  | "dynamicImport"
   | "explicitResourceManagement"
   | "exportDefaultFrom"
-  | "exportNamespaceFrom" // deprecated
   | "flow"
   | "flowComments"
   | "functionBind"
   | "functionSent"
   | "importMeta"
   | "jsx"
-  | "logicalAssignment"
   | "importAssertions" // deprecated
   | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
-  | "moduleStringNames"
-  | "nullishCoalescingOperator"
-  | "numericSeparator"
-  | "objectRestSpread"
-  | "optionalCatchBinding"
-  | "optionalChaining"
   | "partialApplication"
   | "placeholders"
-  | "privateIn" // Enabled by default
-  | "regexpUnicodeSets" // Enabled by default
   | "sourcePhaseImports"
   | "throwExpressions"
-  | "topLevelAwait"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
 
@@ -233,7 +215,6 @@ interface ParserOptions {
 
 type ParserPlugin = PluginConfig;
 
-
 declare const tokTypes: {
   // todo(flow->ts) real token type
   [name: string]: any;
@@ -248,4 +229,18 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export {
+  DecoratorsPluginOptions,
+  FlowPluginOptions,
+  ParseError,
+  ParseResult,
+  ParserOptions,
+  ParserPlugin,
+  ParserPluginWithOptions,
+  PipelineOperatorPluginOptions,
+  RecordAndTuplePluginOptions,
+  TypeScriptPluginOptions,
+  parse,
+  parseExpression,
+  tokTypes,
+};
