@@ -21,6 +21,7 @@ export default declare((api, options: Options) => {
     loose: options.loose,
 
     manipulateOptions(opts, parserOpts) {
+      // @ts-expect-error for old Babel
       parserOpts.plugins.push("classProperties", "classPrivateProperties");
     },
   });

@@ -50,6 +50,7 @@ export default declare((api, opts: Options) => {
 
         // These are now enabled by default in @babel/parser, but we push
         // them for compat with older versions.
+        // @ts-expect-error for old Babel
         plugins.push("objectRestSpread", "classProperties");
 
         if (isTSX) {

@@ -1,45 +1,27 @@
 export type Plugin =
   | "asyncDoExpressions"
-  | "asyncGenerators"
-  | "bigInt"
-  | "classPrivateMethods"
-  | "classPrivateProperties"
-  | "classProperties"
-  | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators-legacy"
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
-  | "dynamicImport"
   | "explicitResourceManagement"
   | "exportDefaultFrom"
-  | "exportNamespaceFrom" // deprecated
   | "flow"
   | "flowComments"
   | "functionBind"
   | "functionSent"
   | "importMeta"
   | "jsx"
-  | "logicalAssignment"
   | "importAssertions" // deprecated
   | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
-  | "moduleStringNames"
-  | "nullishCoalescingOperator"
-  | "numericSeparator"
-  | "objectRestSpread"
-  | "optionalCatchBinding"
-  | "optionalChaining"
   | "partialApplication"
   | "placeholders"
-  | "privateIn" // Enabled by default
-  | "regexpUnicodeSets" // Enabled by default
   | "sourcePhaseImports"
   | "throwExpressions"
-  | "topLevelAwait"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
 

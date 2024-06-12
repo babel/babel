@@ -1,1 +1,1 @@
-{ "plugins": ["jsx", "optionalChaining", "flow"] }
+{ "plugins": ["jsx", "flow"] }
