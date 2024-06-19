@@ -13,6 +13,16 @@
     "bugfix/transform-safari-block-shadowing",
     "bugfix/transform-safari-for-shadowing"
   ],
+  "transform-class-properties": [
+    "bugfix/transform-safari-class-field-initializer-scope",
+    "bugfix/transform-v8-static-class-fields-redefine-readonly",
+    "bugfix/transform-firefox-class-in-computed-class-key"
+  ],
+  "proposal-class-properties": [
+    "bugfix/transform-safari-class-field-initializer-scope",
+    "bugfix/transform-v8-static-class-fields-redefine-readonly",
+    "bugfix/transform-firefox-class-in-computed-class-key"
+  ],
   "transform-template-literals": [
     "bugfix/transform-tagged-template-caching"
   ],
@@ -21,13 +31,5 @@
   ],
   "proposal-optional-chaining": [
     "bugfix/transform-v8-spread-parameters-in-optional-chaining"
-  ],
-  "transform-class-properties": [
-    "bugfix/transform-v8-static-class-fields-redefine-readonly",
-    "bugfix/transform-firefox-class-in-computed-class-key"
-  ],
-  "proposal-class-properties": [
-    "bugfix/transform-v8-static-class-fields-redefine-readonly",
-    "bugfix/transform-firefox-class-in-computed-class-key"
   ]
 }
