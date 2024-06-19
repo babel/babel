@@ -30,7 +30,7 @@ import type { Expression } from "../../types.ts";
 import type { IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 
-const getOwn = <T extends {}>(object: T, key: keyof T) =>
+const getOwn = <T extends object>(object: T, key: keyof T) =>
   Object.hasOwn(object, key) && object[key];
 
 type TsModifier =
@@ -322,7 +322,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const modifier = this.state.value;
-      if (allowedModifiers.indexOf(modifier) !== -1) {
+      if (allowedModifiers.includes(modifier)) {
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }

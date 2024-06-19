@@ -33,7 +33,7 @@ export type OptionsAndDescriptors = {
 // Represents a plugin or presets at a given location in a config object.
 // At this point these have been resolved to a specific object or function,
 // but have not yet been executed to call functions with options.
-export interface UnloadedDescriptor<API, Options = {} | undefined | false> {
+export interface UnloadedDescriptor<API, Options = object | undefined | false> {
   name: string | undefined;
   value: object | ((api: API, options: Options, dirname: string) => unknown);
   options: Options;
@@ -199,7 +199,10 @@ const DEFAULT_OPTIONS = {};
  * next time.
  */
 function loadCachedDescriptor<API>(
-  cache: WeakMap<{} | Function, WeakMap<{}, Array<UnloadedDescriptor<API>>>>,
+  cache: WeakMap<
+    object | Function,
+    WeakMap<object, Array<UnloadedDescriptor<API>>>
+  >,
   desc: UnloadedDescriptor<API>,
 ) {
   const { value, options = DEFAULT_OPTIONS } = desc;
@@ -217,7 +220,7 @@ function loadCachedDescriptor<API>(
     cacheByOptions.set(options, possibilities);
   }
 
-  if (possibilities.indexOf(desc) === -1) {
+  if (!possibilities.includes(desc)) {
     const matches = possibilities.filter(possibility =>
       isEqualDescriptor(possibility, desc),
     );

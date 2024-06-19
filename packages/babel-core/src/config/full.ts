@@ -37,8 +37,8 @@ import type * as Context from "./cache-contexts.ts";
 import ConfigError from "../errors/config-error.ts";
 
 type LoadedDescriptor = {
-  value: {};
-  options: {};
+  value: any;
+  options: object;
   dirname: string;
   alias: string;
   externalDependencies: ReadonlyDeepArray<string>;
@@ -259,7 +259,7 @@ const makeDescriptorLoader = <Context, API>(
     let item: unknown = value;
     if (typeof value === "function") {
       const factory = maybeAsync(
-        value as (api: API, options: {}, dirname: string) => unknown,
+        value as (api: API, options: object, dirname: string) => unknown,
         `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
       );
 

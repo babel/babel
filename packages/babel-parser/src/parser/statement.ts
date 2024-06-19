@@ -2827,7 +2827,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseModuleExportName(): N.StringLiteral | N.Identifier {
     if (this.match(tt.string)) {
       const result = this.parseStringLiteral(this.state.value);
-      const surrogate = result.value.match(loneSurrogate);
+      const surrogate = loneSurrogate.exec(result.value);
       if (surrogate) {
         this.raise(Errors.ModuleExportNameHasLoneSurrogate, result, {
           surrogateCharCode: surrogate[0].charCodeAt(0),

@@ -363,7 +363,7 @@ async function run(task: Test) {
         if (expected.loc !== expectedFile) {
           try {
             fs.unlinkSync(expected.loc);
-          } catch (e) {}
+          } catch (_) {}
         }
       } else {
         validateFile(outputCode, expected.loc, expectedCode);

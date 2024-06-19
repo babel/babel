@@ -187,7 +187,7 @@ function verify$1(visitor: Visitor) {
 
     if (shouldIgnoreKey(nodeType)) continue;
 
-    if (TYPES.indexOf(nodeType) < 0) {
+    if (!TYPES.includes(nodeType)) {
       throw new Error(
         `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
       );

@@ -27,7 +27,7 @@ export default function isBinding(
         // @ts-expect-error key must present in parent
         parent[key];
       if (Array.isArray(val)) {
-        if (val.indexOf(node) >= 0) return true;
+        if (val.includes(node)) return true;
       } else {
         if (val === node) return true;
       }

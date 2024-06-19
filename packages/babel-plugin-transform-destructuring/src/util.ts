@@ -73,6 +73,7 @@ const arrayUnpackVisitor = (
     state.bindings[node.name]
   ) {
     state.deopt = true;
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw STOP_TRAVERSAL;
   }
 };

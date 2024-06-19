@@ -959,10 +959,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 277, gzip size: 204
+  // size: 275, gzip size: 198
   objectWithoutProperties: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],t.indexOf(o)>=0||{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
+    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(e);for(r=0;r<s.length;r++)o=s[r],t.includes(o)||{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
     {
       globals: ["Object"],
       locals: { _objectWithoutProperties: ["body.0.id"] },
@@ -975,10 +975,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 167, gzip size: 155
+  // size: 165, gzip size: 151
   objectWithoutPropertiesLoose: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutPropertiesLoose(r,e){if(null==r)return{};var t={};for(var n in r)if({}.hasOwnProperty.call(r,n)){if(e.indexOf(n)>=0)continue;t[n]=r[n]}return t}",
+    "function _objectWithoutPropertiesLoose(r,e){if(null==r)return{};var t={};for(var n in r)if({}.hasOwnProperty.call(r,n)){if(e.includes(n))continue;t[n]=r[n]}return t}",
     {
       globals: [],
       locals: { _objectWithoutPropertiesLoose: ["body.0.id"] },

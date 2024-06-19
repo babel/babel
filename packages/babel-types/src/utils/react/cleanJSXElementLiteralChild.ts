@@ -11,7 +11,7 @@ export default function cleanJSXElementLiteralChild(
   let lastNonEmptyLine = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].match(/[^ \t]/)) {
+    if (/[^ \t]/.exec(lines[i])) {
       lastNonEmptyLine = i;
     }
   }

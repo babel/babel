@@ -169,7 +169,7 @@ function buildHelpers(
 
   const refs: { [key: string]: t.Identifier | t.MemberExpression } = {};
   helpers.list.forEach(function (name) {
-    if (allowlist && allowlist.indexOf(name) < 0) return;
+    if (allowlist && !allowlist.includes(name)) return;
 
     const ref = (refs[name] = getHelperReference(name));
 

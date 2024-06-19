@@ -77,7 +77,7 @@ class ConfigItem<API> {
   /**
    * The resolved value of the item itself.
    */
-  value: {} | Function;
+  value: object | Function;
 
   /**
    * The options, if any, that were passed to the item.
@@ -85,7 +85,7 @@ class ConfigItem<API> {
    *
    * "false" means that this item has been disabled.
    */
-  options: {} | void | false;
+  options: object | void | false;
 
   /**
    * The directory that the options for this item are relative to.

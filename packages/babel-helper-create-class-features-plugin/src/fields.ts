@@ -1574,7 +1574,9 @@ export function buildFieldsInitNodes(
   ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {
-    prop.isClassProperty() && ts.assertFieldTransformed(prop);
+    if (prop.isClassProperty()) {
+      ts.assertFieldTransformed(prop);
+    }
 
     // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
     const isStatic = !t.isStaticBlock?.(prop.node) && prop.node.static;

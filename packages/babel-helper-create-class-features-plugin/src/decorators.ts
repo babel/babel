@@ -915,6 +915,7 @@ function usesPrivateField(expression: t.Node) {
     t.traverseFast(expression, node => {
       if (t.isPrivateName(node)) {
         // TODO: Add early return support to t.traverseFast
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw null;
       }
     });
@@ -1077,6 +1078,7 @@ function transformClass(
           (t.isMetaProperty(node) && node.meta.name !== "import")
         ) {
           // TODO: Add early return support to t.traverseFast
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
           throw null;
         }
       });
