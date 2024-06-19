@@ -14,7 +14,7 @@ type Stack =
 type DisposeLike = () => void | PromiseLike<void>;
 
 interface UsingCtxReturn {
-  e: {};
+  e: object;
   u: (value: Disposable | null | undefined) => Disposable | null | undefined;
   a: (
     value: AsyncDisposable | Disposable | null | undefined,
@@ -106,6 +106,7 @@ export default function _usingCtx(): UsingCtxReturn {
             return err(e as Error);
           }
         }
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         if (error !== empty) throw error;
       }
 
