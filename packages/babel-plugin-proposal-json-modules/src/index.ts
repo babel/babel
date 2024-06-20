@@ -8,7 +8,11 @@ import {
   type Builders,
 } from "@babel/helper-import-to-platform-api";
 
-export default declare(api => {
+export interface Options {
+  uncheckedRequire: boolean;
+}
+
+export default declare((api, options: Options) => {
   const { types: t, template } = api;
   api.assertVersion(REQUIRED_VERSION("^7.22.0"));
 
@@ -18,6 +22,10 @@ export default declare(api => {
   let helperCJS: Builders;
 
   const transformers: Pieces = {
+    commonJS: options.uncheckedRequire
+      ? (require: t.Expression, specifier: t.Expression) =>
+          t.callExpression(require, [specifier])
+      : null,
     webFetch: (fetch: t.Expression) =>
       template.expression.ast`${fetch}.then(r => r.json())`,
     nodeFsSync: (read: t.Expression) =>

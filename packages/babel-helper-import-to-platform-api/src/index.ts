@@ -9,6 +9,7 @@ function imp(path: NodePath, name: string, module: string) {
 }
 
 export interface Pieces {
+  commonJS?: (require: t.Expression, specifier: t.Expression) => t.Expression;
   webFetch: (fetch: t.Expression) => t.Expression;
   nodeFsSync: (read: t.Expression) => t.Expression;
   nodeFsAsync: () => t.Expression;
@@ -39,6 +40,7 @@ export function importToPlatformApi(
     webSupportsIMR,
     nodeSupportsFsPromises,
   } = getSupport(targets);
+  const supportIsomorphicCJS = transformers.commonJS != null;
 
   let buildFetchAsync: (
     specifier: t.Expression,
@@ -48,21 +50,29 @@ export function importToPlatformApi(
 
   // "p" stands for pattern matching :)
   const p = ({
-    web: w,
-    node: n,
+    web: w = needsWebSupport,
+    node: n = needsNodeSupport,
     nodeFSP: nF = nodeSupportsFsPromises,
     webIMR: wI = webSupportsIMR,
     nodeIMR: nI = nodeSupportsIMR,
     toCJS: c = toCommonJS,
+    supportIsomorphicCJS: iC = supportIsomorphicCJS,
   }: {
-    web: boolean;
-    node: boolean;
+    web?: boolean;
+    node?: boolean;
     nodeFSP?: boolean;
     webIMR?: boolean;
     nodeIMR?: boolean;
     toCJS?: boolean;
-    preferSync?: boolean;
-  }) => +w + (+n << 1) + (+wI << 2) + (+nI << 3) + (+c << 4) + (+nF << 5);
+    supportIsomorphicCJS?: boolean;
+  }) =>
+    +w +
+    (+n << 1) +
+    (+wI << 2) +
+    (+nI << 3) +
+    (+c << 4) +
+    (+nF << 5) +
+    (+iC << 6);
 
   const readFileP = (fs: t.Expression, arg: t.Expression) => {
     if (nodeSupportsFsPromises) {
@@ -85,6 +95,10 @@ export function importToPlatformApi(
       toCJS: toCommonJS,
     })
   ) {
+    case p({ toCJS: true, supportIsomorphicCJS: true }):
+      buildFetchSync = specifier =>
+        transformers.commonJS(t.identifier("require"), specifier);
+      break;
     case p({ web: true, node: true }):
       buildFetchAsync = specifier => {
         const web = transformers.webFetch(
@@ -92,8 +106,15 @@ export function importToPlatformApi(
             (webSupportsIMR ? imr : imrWithFallback)(t.cloneNode(specifier)),
           ]),
         );
-        const node = nodeSupportsIMR
+        const node = supportIsomorphicCJS
           ? template.expression.ast`
+              import("module").then(module => ${transformers.commonJS(
+                template.expression.ast`module.createRequire(import.meta.url)`,
+                specifier,
+              )})
+            `
+          : nodeSupportsIMR
+            ? template.expression.ast`
                 import("fs").then(
                   fs => ${readFileP(
                     t.identifier("fs"),
@@ -101,7 +122,7 @@ export function importToPlatformApi(
                   )}
                 ).then(${transformers.nodeFsAsync()})
               `
-          : template.expression.ast`
+            : template.expression.ast`
                 Promise.all([import("fs"), import("module")])
                   .then(([fs, module]) =>
                     ${readFileP(
@@ -142,6 +163,20 @@ export function importToPlatformApi(
             require("fs").promises.readFile(require.resolve(${specifier}))
               .then(${transformers.nodeFsAsync()})
           `;
+      break;
+    case p({
+      web: false,
+      node: true,
+      toCJS: false,
+      supportIsomorphicCJS: true,
+    }):
+      buildFetchSync = (specifier, path) =>
+        transformers.commonJS(
+          template.expression.ast`
+            ${imp(path, "createRequire", "module")}(import.meta.url)
+          `,
+          specifier,
+        );
       break;
     case p({ web: false, node: true, toCJS: false, nodeIMR: true }):
       buildFetchSync = (specifier, path) =>
