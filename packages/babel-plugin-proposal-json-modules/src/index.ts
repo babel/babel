@@ -110,6 +110,7 @@ export default declare(api => {
           data.push({ id, fetch });
           decl.remove();
         }
+        if (data.length === 0) return;
 
         const decl = buildParallelStaticImports(data, helper.needsAwait);
         if (decl) path.unshiftContainer("body", decl);

@@ -194,8 +194,21 @@ export function importToPlatformApi(
     }
   };
 
+  let buildFetch = buildFetchSync;
+  if (!buildFetchSync) {
+    if (toCommonJS) {
+      buildFetch = (specifier, path) => {
+        throw path.buildCodeFrameError(
+          "Cannot compile to CommonJS, since it would require top-level await.",
+        );
+      };
+    } else {
+      buildFetch = buildFetchAsync;
+    }
+  }
+
   return {
-    buildFetch: buildFetchSync || buildFetchAsync,
+    buildFetch,
     buildFetchAsync: buildFetchAsyncWrapped,
     needsAwait: !buildFetchSync,
   };
