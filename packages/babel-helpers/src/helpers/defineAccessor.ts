@@ -1,13 +1,12 @@
 /* @minVersion 7.20.7 */
 
-export default function _defineAccessor(
-  type: "get" | "set",
+export default function _defineAccessor<Type extends "get" | "set">(
+  type: Type,
   obj: any,
   key: string | symbol,
-  fn: (() => any) | ((v: any) => void),
+  fn: PropertyDescriptor[Type],
 ) {
   var desc: PropertyDescriptor = { configurable: true, enumerable: true };
-  // type should be "get" or "set"
-  desc[type] = fn as any;
+  desc[type] = fn;
   return Object.defineProperty(obj, key, desc);
 }
