@@ -24,7 +24,10 @@ export const hooks = [
       // remove an entire declaration if there are no declarators left
       (self.listKey === "declarations" &&
         parent.isVariableDeclaration() &&
-        parent.node.declarations.length === 1) ||
+        // parent.node.declarations.length === 1) ||
+        // https://github.com/babel/babel/issues/16583
+        // hotfix for the issue above
+        parent.node.declarations.length <= 1) ||
       // NODE;
       // remove the entire expression statement if there's no expression
       (self.key === "expression" && parent.isExpressionStatement());

@@ -14,6 +14,13 @@ export function remove(this: NodePath) {
     this._removeFromScope();
   }
 
+  // https://github.com/babel/babel/issues/16583
+  // this is a hotfix for the issue above
+  // TODO: solve this gracefully
+  if (this.isVariableDeclarator()) {
+    this.parent.declarations.splice(this.key as number, 1);
+  }
+
   if (this._callRemovalHooks()) {
     this._markRemoved();
     return;
