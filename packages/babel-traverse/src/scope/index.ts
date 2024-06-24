@@ -1349,6 +1349,13 @@ class Scope {
   }
 
   removeOwnBinding(name: string) {
+    Object.defineProperty(
+      this.bindings[name].path.node,
+      "hasAlreadyBeenDeleted",
+      {
+        value: true,
+      },
+    );
     delete this.bindings[name];
   }
 
