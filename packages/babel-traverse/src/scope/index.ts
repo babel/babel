@@ -1349,19 +1349,12 @@ class Scope {
   }
 
   removeOwnBinding(name: string) {
-    Object.defineProperty(
-      this.bindings[name].path.node,
-      "hasAlreadyBeenDeleted",
-      {
-        value: true,
-      },
-    );
     delete this.bindings[name];
   }
 
   removeBinding(name: string) {
     // clear literal binding
-    this.getBinding(name)?.scope.removeOwnBinding(name);
+    this.getOwnBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
     let scope: Scope = this;

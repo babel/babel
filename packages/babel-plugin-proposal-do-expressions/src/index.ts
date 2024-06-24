@@ -20,7 +20,8 @@ export default declare(api => {
           if (body.length) {
             path.replaceExpressionWithStatements(body);
           } else {
-            path.replaceWith(path.scope.buildUndefinedNode());
+            // path.replaceWith(path.scope.buildUndefinedNode());
+            path.remove();
           }
         },
       },

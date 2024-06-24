@@ -51,15 +51,6 @@ function getBindingIdentifiers(
     const id = search.shift();
     if (!id) continue;
 
-    // hotfix
-    if (
-      "hasAlreadyBeenDeleted" in id &&
-      id.hasAlreadyBeenDeleted === true &&
-      id.type === "VariableDeclarator"
-    ) {
-      continue;
-    }
-
     if (
       newBindingsOnly &&
       // These nodes do not introduce _new_ bindings, but they are included
