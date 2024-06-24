@@ -77,6 +77,7 @@ export default function _usingCtx(): UsingCtxReturn {
           try {
             inner.call(value);
           } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             return Promise.reject(e);
           }
         };
