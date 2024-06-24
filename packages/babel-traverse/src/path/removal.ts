@@ -26,7 +26,7 @@ export function remove(this: NodePath) {
 
 export function _removeFromScope(this: NodePath) {
   const bindings = getBindingIdentifiers(this.node, false, false, true);
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+  Object.keys(bindings).forEach(name => this.scope.removeOwnBinding(name));
 }
 
 export function _callRemovalHooks(this: NodePath) {

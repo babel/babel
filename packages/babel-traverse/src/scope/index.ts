@@ -1354,7 +1354,7 @@ class Scope {
 
   removeBinding(name: string) {
     // clear literal binding
-    this.getOwnBinding(name)?.scope.removeOwnBinding(name);
+    this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
     let scope: Scope = this;
