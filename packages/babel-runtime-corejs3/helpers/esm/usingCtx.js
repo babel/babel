@@ -40,19 +40,24 @@ function _usingCtx() {
     u: _bindInstanceProperty(using).call(using, null, !1),
     a: _bindInstanceProperty(using).call(using, null, !0),
     d: function d() {
-      var o = this.e;
+      var o,
+        t = this.e,
+        s = 0;
       function next() {
-        for (; r = n.pop();) try {
-          var r,
-            t = r.d && r.d.call(r.v);
-          if (r.a) return _Promise.resolve(t).then(next, err);
+        for (; o = n.pop();) try {
+          if (!o.a && 1 === s) return s = 0, _pushInstanceProperty(n).call(n, o), _Promise.resolve().then(next);
+          if (o.d) {
+            var r = o.d.call(o.v);
+            if (o.a) return s |= 2, _Promise.resolve(r).then(next, err);
+          } else s |= 1;
         } catch (r) {
           return err(r);
         }
-        if (o !== e) throw o;
+        if (1 === s) return t !== e ? _Promise.reject(t) : _Promise.resolve();
+        if (t !== e) throw t;
       }
       function err(n) {
-        return o = o !== e ? new r(n, o) : n, next();
+        return t = t !== e ? new r(n, t) : n, next();
       }
       return next();
     }
