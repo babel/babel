@@ -475,18 +475,6 @@ export default class Buffer {
     this._normalizePosition(prop, loc, columnOffset);
   }
 
-  /**
-   * Call a callback with a specific source location
-   */
-
-  withSource(prop: "start" | "end", loc: Loc, cb: () => void): void {
-    if (this._map) {
-      this.source(prop, loc);
-    }
-
-    cb();
-  }
-
   _normalizePosition(prop: "start" | "end", loc: Loc, columnOffset: number) {
     const pos = loc[prop];
     const target = this._sourcePosition;
