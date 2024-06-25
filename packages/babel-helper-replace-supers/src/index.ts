@@ -72,6 +72,11 @@ type SuperMember = NodePath<
   }
 >;
 
+const enum Flags {
+  Prototype = 0b1,
+  Call = 0b10,
+}
+
 interface SpecHandler
   extends Pick<
     Handler,
@@ -153,13 +158,15 @@ const specHandlers: SpecHandler = {
 
   get(this: Handler & SpecHandler, superMember: SuperMember) {
     const objectRef = cloneNode(this.getObjectRef());
-    return callExpression(this.file.addHelper("superPropertyGetCall"), [
+    return callExpression(this.file.addHelper("superPropGet"), [
       this.isDerivedConstructor
         ? sequenceExpression([thisExpression(), objectRef])
         : objectRef,
       this.prop(superMember),
       thisExpression(),
-      ...(this.isStatic || this.isPrivateMethod ? [] : [t.numericLiteral(1)]),
+      ...(this.isStatic || this.isPrivateMethod
+        ? []
+        : [t.numericLiteral(Flags.Prototype)]),
     ]);
   },
 
@@ -181,26 +188,22 @@ const specHandlers: SpecHandler = {
     } else {
       argsNode = t.arrayExpression(args as t.Expression[]);
     }
-    const buildArgs = [
-      this.file.addHelper("superPropertyGetCall"),
-      [
-        this.isDerivedConstructor
-          ? sequenceExpression([thisExpression(), objectRef])
-          : objectRef,
-        this.prop(superMember),
-        thisExpression(),
-        t.numericLiteral(this.isStatic || this.isPrivateMethod ? 0 : 1),
-        argsNode,
-      ],
-    ] as Parameters<typeof t.callExpression>;
+
+    const call = t.callExpression(this.file.addHelper("superPropGet"), [
+      this.isDerivedConstructor
+        ? sequenceExpression([thisExpression(), objectRef])
+        : objectRef,
+      this.prop(superMember),
+      thisExpression(),
+      t.numericLiteral(
+        Flags.Call |
+          (this.isStatic || this.isPrivateMethod ? 0 : Flags.Prototype),
+      ),
+    ]);
     if (optional) {
-      return t.optionalCallExpression(
-        buildArgs[0] as t.Expression,
-        buildArgs[1],
-        true,
-      );
+      return t.optionalCallExpression(call, [argsNode], true);
     }
-    return callExpression(...buildArgs);
+    return callExpression(call, [argsNode]);
   },
 
   set(
@@ -210,7 +213,7 @@ const specHandlers: SpecHandler = {
   ) {
     const objectRef = cloneNode(this.getObjectRef());
 
-    return callExpression(this.file.addHelper("superPropertySet"), [
+    return callExpression(this.file.addHelper("superPropSet"), [
       this.isDerivedConstructor
         ? sequenceExpression([thisExpression(), objectRef])
         : objectRef,
@@ -557,7 +560,7 @@ export default class ReplaceSupers {
     const handler = this.constantSuper
       ? looseHandlers
       : process.env.BABEL_8_BREAKING ||
-          this.file.availableHelper("superPropertySet")
+          this.file.availableHelper("superPropSet")
         ? specHandlers
         : specHandlers_old;
 

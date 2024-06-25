@@ -27,7 +27,7 @@ new (_Class_brand = /*#__PURE__*/new WeakSet(), _Foo2 = (_x = /*#__PURE__*/new W
 }, (() => {
   [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo3, [dec], [], 0, void 0, Base).c;
   _method = function () {
-    babelHelpers.superPropertyGetCall(_Foo, "id", this, 0, [this]);
+    babelHelpers.superPropGet(_Foo, "id", this, 2)([this]);
     hasX = o => _x.has(babelHelpers.checkInRHS(o));
     hasA = o => _Foo3_brand.has(babelHelpers.checkInRHS(o));
     hasM = o => _Foo3_brand.has(babelHelpers.checkInRHS(o));

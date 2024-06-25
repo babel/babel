@@ -3,12 +3,12 @@ var Test = /*#__PURE__*/function () {
 
   function Test() {
     babelHelpers.classCallCheck(this, Test);
-    return babelHelpers.superPropertyGetCall(Test, "constructor", this, 1);
+    return babelHelpers.superPropGet(Test, "constructor", this, 1);
   }
   return babelHelpers.createClass(Test, null, [{
     key: "test",
     value: function test() {
-      return babelHelpers.superPropertyGetCall(Test, "constructor", this);
+      return babelHelpers.superPropGet(Test, "constructor", this);
     }
   }]);
 }(); // Instances

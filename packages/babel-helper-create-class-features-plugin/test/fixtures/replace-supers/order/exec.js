@@ -1,8 +1,7 @@
 let argsEval = false;
-let err = {};
 
 class A {
-  get x() { throw {} }
+  get x() { throw "err" }
 }
 
 class B extends A {
@@ -11,5 +10,5 @@ class B extends A {
   }
 }
 
-expect(() => new B().method()).toThrow(err);
+expect(() => new B().method()).toThrow("err");
 expect(argsEval).toBe(false);

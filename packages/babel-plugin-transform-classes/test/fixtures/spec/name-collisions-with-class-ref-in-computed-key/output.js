@@ -15,7 +15,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
       }]);
     }((() => {
       var _Foo;
-      babelHelpers.superPropertyGetCall((_this, Foo), "method", _this, 1, []);
+      babelHelpers.superPropGet((_this, Foo), "method", _this, 3)([]);
     })());
     return _this;
   }

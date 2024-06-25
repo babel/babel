@@ -15,7 +15,7 @@ class Sub extends Base {
 }
 _Sub = Sub;
 function _subStaticPrivateMethod2() {
-  return babelHelpers.superPropertyGetCall(_Sub, "basePublicStaticMethod", this, 0, []);
+  return babelHelpers.superPropGet(_Sub, "basePublicStaticMethod", this, 2)([]);
 }
 Object.defineProperty(Sub, _subStaticPrivateMethod, {
   value: _subStaticPrivateMethod2

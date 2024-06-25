@@ -7,7 +7,7 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "method",
     value: function method(_Foo) {
-      return babelHelpers.superPropertyGetCall(Foo, "method", this, 1, [_Foo]);
+      return babelHelpers.superPropGet(Foo, "method", this, 3)([_Foo]);
     }
   }]);
 }();
@@ -22,7 +22,7 @@ var Bar = /*#__PURE__*/function () {
     value: function method() {
       return () => {
         var _Bar;
-        return babelHelpers.superPropertyGetCall(Bar, "method", this, 1, [_Bar]);
+        return babelHelpers.superPropGet(Bar, "method", this, 3)([_Bar]);
       };
     }
   }]);
@@ -48,7 +48,7 @@ var Baz = /*#__PURE__*/function () {
           }
         }]);
       }();
-      return babelHelpers.superPropertyGetCall(Baz, "method", this, 1, [_Baz]);
+      return babelHelpers.superPropGet(Baz, "method", this, 3)([_Baz]);
     }
   }]);
 }();

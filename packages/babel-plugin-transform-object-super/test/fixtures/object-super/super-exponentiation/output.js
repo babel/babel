@@ -1,6 +1,6 @@
 var _obj;
 foo = _obj = {
   bar: function () {
-    return babelHelpers.superPropertySet(_obj, "baz", babelHelpers.superPropertyGetCall(_obj, "baz", this) ** 12, this, 0);
+    return babelHelpers.superPropSet(_obj, "baz", babelHelpers.superPropGet(_obj, "baz", this) ** 12, this, 0);
   }
 };

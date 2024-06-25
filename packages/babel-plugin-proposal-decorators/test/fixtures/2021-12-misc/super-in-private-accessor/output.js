@@ -3,7 +3,7 @@ const dec = () => {};
 class Foo extends Bar {
   static {
     [_call_x, _initProto] = babelHelpers.applyDecs(this, [[dec, 3, "x", function () {
-      return babelHelpers.superPropertyGetCall(Foo, "foo", this, 0, []);
+      return babelHelpers.superPropGet(Foo, "foo", this, 2)([]);
     }]], []);
   }
   constructor(...args) {

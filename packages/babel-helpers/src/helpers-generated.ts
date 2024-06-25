@@ -1134,10 +1134,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 113, gzip size: 119
-  superPropertyGetCall: helper(
+  // size: 135, gzip size: 131
+  superPropGet: helper(
     "7.24.4",
-    "function _superPropertyGetCall(t,e,o,r,p){var f=get(getPrototypeOf(r?t.prototype:t),e,o);return p?f.apply(o,p):f}",
+    "function _superPropertyGetCall(t,e,r,o){var p=get(getPrototypeOf(1&o?t.prototype:t),e,r);return 2&o?function(t){return p.apply(r,t)}:p}",
     {
       globals: [],
       locals: { _superPropertyGetCall: ["body.0.id"] },
@@ -1152,7 +1152,7 @@ const helpers: Record<string, Helper> = {
     },
   ),
   // size: 92, gzip size: 98
-  superPropertySet: helper(
+  superPropSet: helper(
     "7.24.4",
     "function _superPropertySet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
     {
