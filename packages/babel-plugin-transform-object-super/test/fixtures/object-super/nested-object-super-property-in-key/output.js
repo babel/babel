@@ -9,7 +9,7 @@ const Hello = {
 const Outer = _obj = {
   constructor: function () {
     const Inner = {
-      [babelHelpers.superPropertyGetCall(_obj, "toString", this, 0, [])]: function () {
+      [babelHelpers.superPropGet(_obj, "toString", this, 2)([])]: function () {
         return 'hello';
       }
     };

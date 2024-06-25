@@ -9,7 +9,7 @@ for (const proto of [{
     objects.push(_obj = {
       __proto__: proto,
       foo: function () {
-        return babelHelpers.superPropertyGetCall(_obj, "x", this);
+        return babelHelpers.superPropGet(_obj, "x", this);
       }
     });
   }

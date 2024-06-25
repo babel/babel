@@ -648,24 +648,24 @@
       "./helpers/superPropBase.js"
     ],
     "./helpers/esm/superPropBase": "./helpers/esm/superPropBase.js",
-    "./helpers/superPropertyGetCall": [
+    "./helpers/superPropGet": [
       {
-        "node": "./helpers/superPropertyGetCall.js",
-        "import": "./helpers/esm/superPropertyGetCall.js",
-        "default": "./helpers/superPropertyGetCall.js"
+        "node": "./helpers/superPropGet.js",
+        "import": "./helpers/esm/superPropGet.js",
+        "default": "./helpers/superPropGet.js"
       },
-      "./helpers/superPropertyGetCall.js"
+      "./helpers/superPropGet.js"
     ],
-    "./helpers/esm/superPropertyGetCall": "./helpers/esm/superPropertyGetCall.js",
-    "./helpers/superPropertySet": [
+    "./helpers/esm/superPropGet": "./helpers/esm/superPropGet.js",
+    "./helpers/superPropSet": [
       {
-        "node": "./helpers/superPropertySet.js",
-        "import": "./helpers/esm/superPropertySet.js",
-        "default": "./helpers/superPropertySet.js"
+        "node": "./helpers/superPropSet.js",
+        "import": "./helpers/esm/superPropSet.js",
+        "default": "./helpers/superPropSet.js"
       },
-      "./helpers/superPropertySet.js"
+      "./helpers/superPropSet.js"
     ],
-    "./helpers/esm/superPropertySet": "./helpers/esm/superPropertySet.js",
+    "./helpers/esm/superPropSet": "./helpers/esm/superPropSet.js",
     "./helpers/taggedTemplateLiteral": [
       {
         "node": "./helpers/taggedTemplateLiteral.js",

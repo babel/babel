@@ -14,7 +14,7 @@ class B extends A {
 }
 _B = B;
 function _getA() {
-  return babelHelpers.superPropertyGetCall(_B, "a", this);
+  return babelHelpers.superPropGet(_B, "a", this);
 }
 function _getB() {
   return this.b;

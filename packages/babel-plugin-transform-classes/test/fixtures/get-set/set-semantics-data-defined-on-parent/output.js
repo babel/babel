@@ -17,7 +17,7 @@ let Obj = /*#__PURE__*/function (_Base) {
   return babelHelpers.createClass(Obj, [{
     key: "set",
     value: function set() {
-      return babelHelpers.superPropertySet(Obj, "test", 3, this, 1, 1);
+      return babelHelpers.superPropSet(Obj, "test", 3, this, 1, 1);
     }
   }]);
 }(Base);

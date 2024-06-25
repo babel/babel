@@ -29,13 +29,13 @@ let Obj = /*#__PURE__*/function (_Base) {
     key: "assign",
     value: function assign() {
       var _proper$prop;
-      babelHelpers.superPropertySet(Obj, _proper$prop = proper.prop, babelHelpers.superPropertyGetCall(Obj, _proper$prop, this, 1) + 1, this, 1, 1);
+      babelHelpers.superPropSet(Obj, _proper$prop = proper.prop, babelHelpers.superPropGet(Obj, _proper$prop, this, 1) + 1, this, 1, 1);
     }
   }, {
     key: "assign2",
     value: function assign2() {
       var _i;
-      babelHelpers.superPropertySet(Obj, _i = i, babelHelpers.superPropertyGetCall(Obj, _i, this, 1) + 1, this, 1, 1);
+      babelHelpers.superPropSet(Obj, _i = i, babelHelpers.superPropGet(Obj, _i, this, 1) + 1, this, 1, 1);
     }
   }]);
 }(Base);

@@ -12,7 +12,7 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
       }
       _this = babelHelpers.callSuper(this, Other, [].concat(args));
       babelHelpers.defineProperty(_this, "a", function () {
-        return babelHelpers.superPropertyGetCall((_this, Other), "test", _this, 1);
+        return babelHelpers.superPropGet((_this, Other), "test", _this, 1);
       });
       return _this;
     }
@@ -21,6 +21,6 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   }(Test);
   _Other = Other;
   babelHelpers.defineProperty(Other, "a", function () {
-    return babelHelpers.superPropertyGetCall(_Other, "test", _Other);
+    return babelHelpers.superPropGet(_Other, "test", _Other);
   });
 });

@@ -22,10 +22,10 @@ let Obj = /*#__PURE__*/function (_Base) {
   return babelHelpers.createClass(Obj, [{
     key: "call",
     value: function call() {
-      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, 2, 3]);
-      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, ...[2, 3]]);
-      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, 2, 3]);
-      return babelHelpers.superPropertyGetCall(Obj, "test", this, 1, arguments);
+      babelHelpers.superPropGet(Obj, "test", this, 3)([1, 2, 3]);
+      babelHelpers.superPropGet(Obj, "test", this, 3)([1, ...[2, 3]]);
+      babelHelpers.superPropGet(Obj, "test", this, 3)([1, 2, 3]);
+      return babelHelpers.superPropGet(Obj, "test", this, 3)(arguments);
     }
   }, {
     key: "test",

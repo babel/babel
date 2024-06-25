@@ -18,7 +18,7 @@ let Outer = /*#__PURE__*/function (_Hello) {
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
     var _A = /*#__PURE__*/new WeakMap();
-    _computedKey = babelHelpers.toPropertyKey(babelHelpers.superPropertyGetCall((_this, Outer), "toString", _this, 1, []));
+    _computedKey = babelHelpers.toPropertyKey(babelHelpers.superPropGet((_this, Outer), "toString", _this, 3)([]));
     let Inner = /*#__PURE__*/function (_computedKey4, _computedKey5) {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
