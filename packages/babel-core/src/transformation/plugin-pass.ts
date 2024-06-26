@@ -1,7 +1,7 @@
 import type * as t from "@babel/types";
 import type File from "./file/file.ts";
 
-export default class PluginPass<Options = {}> {
+export default class PluginPass<Options = object> {
   _map: Map<unknown, unknown> = new Map();
   key: string | undefined | null;
   file: File;

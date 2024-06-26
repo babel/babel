@@ -101,7 +101,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 
           all[target] = semverMin(version, parsedBrowserVersion);
         }
-      } catch (e) {}
+      } catch (_) {}
 
       return all;
     },
@@ -129,7 +129,7 @@ getting parsed as 6.1, which can lead to unexpected behavior.
 function semverifyTarget(target: Target, value: string) {
   try {
     return semverify(value);
-  } catch (error) {
+  } catch (_) {
     throw new Error(
       v.formatMessage(
         `'${value}' is not a valid value for 'targets.${target}'.`,

@@ -341,6 +341,7 @@ function computeConstantValue(
       case "+":
         return value;
       case "-":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-unary-minus
         return -value;
       case "~":
         return ~value;

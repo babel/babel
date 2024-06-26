@@ -1,14 +1,26 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _typeof(obj) {
+export default function _typeof(
+  obj: unknown,
+):
+  | "string"
+  | "number"
+  | "bigint"
+  | "boolean"
+  | "symbol"
+  | "undefined"
+  | "object"
+  | "function" {
   "@babel/helpers - typeof";
 
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
+    // @ts-expect-error -- deliberate re-defining typeof
+    _typeof = function (obj: unknown) {
       return typeof obj;
     };
   } else {
-    _typeof = function (obj) {
+    // @ts-expect-error -- deliberate re-defining typeof
+    _typeof = function (obj: unknown) {
       return obj &&
         typeof Symbol === "function" &&
         obj.constructor === Symbol &&

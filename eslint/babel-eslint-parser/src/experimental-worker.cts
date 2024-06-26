@@ -10,9 +10,9 @@ import normalizeESLintConfig = require("./configuration.cts");
 import analyzeScope = require("./analyze-scope.cts");
 import baseParse = require("./parse.cts");
 
-import { WorkerClient } from "./client.cts";
+import Clients = require("./client.cts");
 
-const client = new WorkerClient();
+const client = new Clients.WorkerClient();
 
 export const meta = {
   name: "@babel/eslint-parser/experimental-worker",

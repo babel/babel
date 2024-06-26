@@ -10,7 +10,7 @@ import type { FileResult, InputOptions } from "@babel/core";
 export function chmod(src: string, dest: string): void {
   try {
     fs.chmodSync(dest, fs.statSync(src).mode);
-  } catch (err) {
+  } catch (_) {
     console.warn(`Cannot change permissions of ${dest}`);
   }
 }

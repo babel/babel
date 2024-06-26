@@ -97,7 +97,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
   // eslint-disable-next-line no-restricted-globals
   exports.OptionManager = class OptionManager {
-    init(opts: {}) {
+    init(opts: unknown) {
       return loadOptionsSync(opts);
     }
   };

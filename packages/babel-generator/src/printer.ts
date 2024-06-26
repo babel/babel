@@ -1247,6 +1247,7 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 
 type GeneratorFunctions = typeof generatorFunctions;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 

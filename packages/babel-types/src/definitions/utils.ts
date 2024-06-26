@@ -49,7 +49,7 @@ export type Validator = (
   | { oneOfNodeTypes: NodeTypes[] }
   | { oneOfNodeOrValueTypes: (NodeTypes | PrimitiveTypes)[] }
   | { shapeOf: { [x: string]: FieldOptions } }
-  | {}
+  | object
 ) &
   ((node: t.Node, key: string, val: any) => void);
 
@@ -113,7 +113,7 @@ export function assertEach(callback: Validator): Validator {
 
 export function assertOneOf(...values: Array<any>): Validator {
   function validate(node: any, key: string, val: any) {
-    if (values.indexOf(val) < 0) {
+    if (!values.includes(val)) {
       throw new TypeError(
         `Property ${key} expected value to be one of ${JSON.stringify(
           values,
@@ -331,7 +331,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     opts.builder || inherits.builder || opts.visitor || [];
 
   for (const k of Object.keys(opts)) {
-    if (validTypeOpts.indexOf(k) === -1) {
+    if (!validTypeOpts.includes(k)) {
       throw new Error(`Unknown type option "${k}" on ${type}`);
     }
   }
@@ -348,7 +348,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   for (const key of Object.keys(fields)) {
     const field = fields[key];
 
-    if (field.default !== undefined && builder.indexOf(key) === -1) {
+    if (field.default !== undefined && !builder.includes(key)) {
       field.optional = true;
     }
     if (field.default === undefined) {
@@ -358,7 +358,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     }
 
     for (const k of Object.keys(field)) {
-      if (validFieldKeys.indexOf(k) === -1) {
+      if (!validFieldKeys.includes(k)) {
         throw new Error(`Unknown field key "${k}" on ${type}.${key}`);
       }
     }

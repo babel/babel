@@ -1,8 +1,38 @@
 /* @minVersion 7.0.0-beta.0 */
 
-var REACT_ELEMENT_TYPE;
+var REACT_ELEMENT_TYPE: symbol | 0xeac7;
 
-export default function _createRawReactElement(type, props, key, children) {
+interface Props {
+  children?: any;
+  [propName: string]: any;
+}
+
+interface ReactElement {
+  $$typeof: typeof REACT_ELEMENT_TYPE;
+  type: any;
+  key: string | null;
+  ref: null;
+  props: Props;
+  _owner: null;
+}
+
+type ReactElementType = any;
+type ReactKey = string | number | bigint;
+type ReactNode =
+  | ReactElement
+  | string
+  | number
+  | Iterable<ReactNode>
+  | boolean
+  | null
+  | undefined;
+
+export default function _createRawReactElement(
+  type: ReactElementType,
+  props: Props,
+  key?: ReactKey,
+  children?: ReactNode[],
+): ReactElement {
   if (!REACT_ELEMENT_TYPE) {
     REACT_ELEMENT_TYPE =
       (typeof Symbol === "function" &&
@@ -12,7 +42,7 @@ export default function _createRawReactElement(type, props, key, children) {
       0xeac7;
   }
 
-  var defaultProps = type && type.defaultProps;
+  var defaultProps: Props = type && type.defaultProps;
   var childrenLength = arguments.length - 3;
 
   if (!props && childrenLength !== 0) {

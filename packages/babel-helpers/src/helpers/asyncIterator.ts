@@ -96,7 +96,10 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
     },
     throw: function (maybeError?: any) {
       var thr = this.s.return;
-      if (thr === undefined) return Promise.reject(maybeError);
+      if (thr === undefined) {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+        return Promise.reject(maybeError);
+      }
       return AsyncFromSyncIteratorContinuation<T, TReturn>(
         // Use "arguments" here for better compatibility and smaller bundle size
         // Itentionally casting "arguments" to an array for the type of func.apply

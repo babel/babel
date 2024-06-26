@@ -9,12 +9,15 @@ import type { Undone } from "../parser/node.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
 
 const { defineProperty } = Object;
-const toUnenumerable = (object: any, key: string) =>
-  defineProperty(object, key, { enumerable: false, value: object[key] });
+const toUnenumerable = (object: any, key: string) => {
+  if (object) {
+    defineProperty(object, key, { enumerable: false, value: object[key] });
+  }
+};
 
 function toESTreeLocation(node: any) {
-  node.loc.start && toUnenumerable(node.loc.start, "index");
-  node.loc.end && toUnenumerable(node.loc.end, "index");
+  toUnenumerable(node.loc.start, "index");
+  toUnenumerable(node.loc.end, "index");
 
   return node;
 }
@@ -36,7 +39,7 @@ export default (superClass: typeof Parser) =>
       let regex: RegExp | null = null;
       try {
         regex = new RegExp(pattern, flags);
-      } catch (e) {
+      } catch (_) {
         // In environments that don't support these flags value will
         // be null as the regex can't be represented natively.
       }

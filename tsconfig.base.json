@@ -3,7 +3,7 @@
     "composite": true,
     "rootDir": ".",
     "target": "ESNext",
-    "module": "preserve",
+    "module": "Preserve",
     "lib": ["ESNext"],
     "declaration": true,
     "declarationMap": true,

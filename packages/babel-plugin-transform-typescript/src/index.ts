@@ -604,7 +604,7 @@ export default declare((api, opts: Options) => {
         path: NodePath<t.TSImportEqualsDeclaration>,
         pass,
       ) {
-        const { id, moduleReference } = path.node;
+        const { id, moduleReference, isExport } = path.node;
 
         let init: t.Expression;
         let varKind: "var" | "const";
@@ -626,9 +626,12 @@ export default declare((api, opts: Options) => {
           init = entityNameToExpr(moduleReference);
           varKind = "var";
         }
+        const newNode = t.variableDeclaration(varKind, [
+          t.variableDeclarator(id, init),
+        ]);
 
         path.replaceWith(
-          t.variableDeclaration(varKind, [t.variableDeclarator(id, init)]),
+          isExport ? t.exportNamedDeclaration(newNode) : newNode,
         );
         path.scope.registerDeclaration(path);
       },
