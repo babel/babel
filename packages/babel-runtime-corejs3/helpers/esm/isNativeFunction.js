@@ -1,8 +1,8 @@
-import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
+import _includesInstanceProperty from "core-js-pure/features/instance/includes.js";
 function _isNativeFunction(t) {
   try {
     var _context;
-    return -1 !== _indexOfInstanceProperty(_context = Function.toString.call(t)).call(_context, "[native code]");
+    return _includesInstanceProperty(_context = Function.toString.call(t)).call(_context, "[native code]");
   } catch (n) {
     return "function" == typeof t;
   }
