@@ -307,7 +307,8 @@ export function YieldExpression(
     hasPostfixPart(node, parent) ||
     (parentType === "AwaitExpression" && isYieldExpression(node)) ||
     (parentType === "ConditionalExpression" && node === parent.test) ||
-    isClassExtendsClause(node, parent)
+    isClassExtendsClause(node, parent) ||
+    isTSTypeExpression(parentType)
   );
 }
 
