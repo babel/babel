@@ -1,0 +1,60 @@
+{
+  "name": "@babel/plugin-experimental-source-map-scopes",
+  "version": "7.24.7",
+  "description": "This plugins enables support for the 'scopes' source map proposal",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-experimental-source-map-scopes"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-experimental-source-map-scopes",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "keywords": [
+    "babel-plugin",
+    "scopes",
+    "source maps",
+    "source map"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
+        }
+      },
+      null
+    ],
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
+      }
+    ]
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
+}

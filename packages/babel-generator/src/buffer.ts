@@ -528,4 +528,11 @@ export default class Buffer {
 
     return this._position.line + count;
   }
+
+  getCurrentPosition(): Pos {
+    return {
+      line: this.getCurrentLine(),
+      column: this.getCurrentColumn(),
+    };
+  }
 }

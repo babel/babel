@@ -80,6 +80,9 @@
       "path": "./packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
     },
     {
+      "path": "./packages/babel-plugin-experimental-source-map-scopes"
+    },
+    {
       "path": "./packages/babel-plugin-external-helpers"
     },
     {

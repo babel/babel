@@ -8,6 +8,7 @@ import type {
   DecodedSourceMap,
   Mapping,
 } from "@jridgewell/gen-mapping";
+import type { ScopeInfo } from "./source-map.ts";
 
 /**
  * Normalize generator options, setting defaults.
@@ -24,6 +25,7 @@ function normalizeOptions(
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     shouldPrintComment: opts.shouldPrintComment,
+    getScopeInfo: opts.getScopeInfo,
     retainLines: opts.retainLines,
     retainFunctionParens: opts.retainFunctionParens,
     comments: opts.comments == null || opts.comments,
@@ -203,6 +205,8 @@ export interface GeneratorOptions {
    * - "with-legacy" : `import { a } from "b" with type: "json";`
    */
   importAttributesKeyword?: "with" | "assert" | "with-legacy";
+
+  getScopeInfo?(node: t.Node): ScopeInfo;
 }
 
 export interface GeneratorResult {

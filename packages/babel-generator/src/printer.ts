@@ -8,12 +8,13 @@ import {
   isClassBody,
   isTSInterfaceBody,
   isTSEnumDeclaration,
+  isBinding,
 } from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
 
 import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
-import type SourceMap from "./source-map.ts";
+import type { default as SourceMap, ScopeInfo } from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 
 // We inline this package
@@ -48,6 +49,7 @@ const enum PRINT_COMMENT_HINT {
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
+  getScopeInfo?: (node: t.Node) => ScopeInfo | null;
   retainLines: boolean;
   retainFunctionParens: boolean;
   comments: boolean;
@@ -139,6 +141,11 @@ class Printer {
   generate(ast: t.Node) {
     this.print(ast);
     this._maybeAddAuxComment();
+
+    while (this._scopeInfoStack.length > 0) {
+      this._scopeInfoStack.pop();
+      this._buf._map.endScope(this._buf._position);
+    }
 
     return this._buf.get();
   }
@@ -401,12 +408,25 @@ class Printer {
     this._buf.withSource(prop, loc, cb);
   }
 
-  sourceIdentifierName(identifierName: string, pos?: Pos): void {
+  sourceIdentifierName(
+    generatedName: string,
+    originalName?: string,
+    originalPos?: Pos,
+  ): void {
+    if (originalName && this._buf._map) {
+      const node = this._printStack[this._printStack.length - 1];
+      const parent = this._printStack[this._printStack.length - 2];
+      const grandparent = this._printStack[this._printStack.length - 3];
+      if (isBinding(node, parent, grandparent)) {
+        this._buf._map.addBinding(originalName, generatedName);
+      }
+    }
+
     if (!this._buf._canMarkIdName) return;
 
     const sourcePosition = this._buf._sourcePosition;
-    sourcePosition.identifierNamePos = pos;
-    sourcePosition.identifierName = identifierName;
+    sourcePosition.identifierNamePos = originalPos;
+    sourcePosition.identifierName = originalName ?? generatedName;
   }
 
   _space(): void {
@@ -619,6 +639,9 @@ class Printer {
     }
   }
 
+  _scopeInfoStack: ScopeInfo[] = [];
+  _seenOriginalScopes: Set<ScopeInfo> = new Set();
+
   print(
     node: t.Node | null,
     parent?: t.Node,
@@ -709,6 +732,50 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
+    let started = false;
+    const scopeInfo = this._buf._map && this.format.getScopeInfo?.(node);
+    if (scopeInfo) {
+      if (
+        this._scopeInfoStack.length === 0 ||
+        this._scopeInfoStack[this._scopeInfoStack.length - 1] !== scopeInfo
+      ) {
+        let i;
+        for (i = this._scopeInfoStack.length - 1; i >= 0; i--) {
+          if (this._scopeInfoStack[i] === scopeInfo) {
+            break;
+          }
+        }
+        if (i >= 0) {
+          while (this._scopeInfoStack.length > i + 1) {
+            this._scopeInfoStack.pop();
+            this._buf._map.endScope(this._buf._position);
+            //this._seenOriginalScopes.delete(scopeInfo);
+          }
+        }
+        if (i === -1) {
+          this._scopeInfoStack.push(scopeInfo);
+
+          if (!this._seenOriginalScopes.has(scopeInfo)) {
+            started = true;
+            this._seenOriginalScopes.add(scopeInfo);
+            this._buf._map.startScope(
+              {
+                start: scopeInfo.loc.start,
+                end: scopeInfo.loc.end,
+                source: scopeInfo.source,
+                name: scopeInfo.name,
+                kind: scopeInfo.kind,
+                variables: scopeInfo.bindings,
+              },
+              this._buf.getCurrentPosition(),
+              scopeInfo.isScope,
+              scopeInfo.callsite,
+            );
+          }
+        }
+      }
+    }
+
     this.exactSource(
       loc,
       // We must use @ts-ignore because this error appears in VSCode but not
@@ -717,6 +784,11 @@ class Printer {
       // @ts-ignore https://github.com/microsoft/TypeScript/issues/58468
       printMethod.bind(this, node, parent),
     );
+
+    if (started) {
+      //this._buf._map.endScope(this._buf._position);
+      //this._seenOriginalScopes.delete(scopeInfo);
+    }
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);

@@ -134,6 +134,9 @@
       "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": [
         "./packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/src"
       ],
+      "@babel/plugin-experimental-source-map-scopes": [
+        "./packages/babel-plugin-experimental-source-map-scopes/src"
+      ],
       "@babel/plugin-external-helpers": [
         "./packages/babel-plugin-external-helpers/src"
       ],

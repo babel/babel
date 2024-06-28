@@ -14,7 +14,7 @@ export function _params(
 
   const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
   if (nameInfo) {
-    this.sourceIdentifierName(nameInfo.name, nameInfo.pos);
+    this.sourceIdentifierName(nameInfo.name, nameInfo.name, nameInfo.pos);
   }
 
   this.token("(");

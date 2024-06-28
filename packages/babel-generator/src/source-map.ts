@@ -5,6 +5,10 @@ import {
   allMappings,
   toEncodedMap,
   toDecodedMap,
+  addOriginalScope,
+  addGeneratedRange,
+  addBinding,
+  setEndPosition,
 } from "@jridgewell/gen-mapping";
 
 import type {
@@ -18,6 +22,21 @@ import {
   originalPositionFor,
   TraceMap,
 } from "@jridgewell/trace-mapping";
+
+interface Pos {
+  line: number;
+  column: number;
+}
+
+export interface ScopeInfo {
+  kind: string;
+  loc: { start: Pos; end: Pos };
+  source: string;
+  name?: string;
+  bindings: string[];
+  callsite?: Pos & { source: string };
+  isScope: boolean;
+}
 
 /**
  * Build a sourcemap.
@@ -98,11 +117,11 @@ export default class SourceMap {
    */
 
   mark(
-    generated: { line: number; column: number },
+    generated: Pos,
     line: number,
     column: number,
     identifierName?: string | null,
-    identifierNamePos?: { line: number; column: number },
+    identifierNamePos?: Pos,
     filename?: string | null,
   ) {
     this._rawMappings = undefined;
@@ -153,5 +172,61 @@ export default class SourceMap {
       source: originalMapping?.source,
       original: originalMapping,
     });
+  }
+
+  _generatedRangesStack: any[] = [];
+
+  startScope(
+    originalScopeInfo: {
+      start: Pos;
+      end: Pos;
+      source: string;
+      kind: string;
+      name?: string;
+      variables?: string[];
+    },
+    generatedStart: Pos,
+    isScope: boolean,
+    callsite?: Pos & { source: string },
+  ) {
+    console.log(`CALL addOriginalScope with`, originalScopeInfo);
+    const originalScope = addOriginalScope(this._map, originalScopeInfo);
+
+    console.log(`CALL addGeneratedRange with`, {
+      start: generatedStart,
+      isScope,
+      originalScope,
+      callsite,
+    });
+    const generatedRange = addGeneratedRange(this._map, {
+      start: generatedStart,
+      isScope,
+      originalScope,
+      callsite,
+    });
+
+    this._generatedRangesStack.push(generatedRange);
+  }
+
+  addBinding(originalName: string, generatedName: string) {
+    const generatedRange =
+      this._generatedRangesStack[this._generatedRangesStack.length - 1];
+
+    console.log(
+      `CALL addBinding with`,
+      generatedRange,
+      originalName,
+      generatedName,
+    );
+
+    addBinding(this._map, generatedRange, originalName, generatedName);
+  }
+
+  endScope(generatedEnd: Pos) {
+    const generatedRange = this._generatedRangesStack.pop();
+
+    console.log(`CALL setEndPosition with`, generatedRange, generatedEnd);
+
+    setEndPosition(generatedRange, generatedEnd);
   }
 }

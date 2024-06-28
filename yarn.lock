@@ -518,7 +518,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.5"
+    "@jridgewell/gen-mapping": "npm:0.3.6-beta.4"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/jsesc": "npm:^2.5.0"
@@ -725,7 +725,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     "@babel/core": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.5"
+    "@jridgewell/gen-mapping": "npm:0.3.6-beta.4"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
@@ -1429,6 +1429,18 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/plugin-syntax-optional-catch-binding": "condition:BABEL_8_BREAKING ? : ^7.8.3"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-experimental-source-map-scopes@workspace:packages/babel-plugin-experimental-source-map-scopes":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-experimental-source-map-scopes@workspace:packages/babel-plugin-experimental-source-map-scopes"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -4895,6 +4907,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/gen-mapping@npm:0.3.6-beta.4":
+  version: 0.3.6-beta.4
+  resolution: "@jridgewell/gen-mapping@npm:0.3.6-beta.4"
+  dependencies:
+    "@jridgewell/set-array": "npm:^1.2.1"
+    "@jridgewell/sourcemap-codec": "npm:1.4.16-beta.0"
+    "@jridgewell/trace-mapping": "npm:^0.3.24"
+  checksum: 10/dac233a1d7f8986d84021dc8d7d4ed7b2810f8924838b259dae4808bae4fe47d21ca6c5567c382ecc5a3ff4051311e5611fbd9a3e7b602ce45b18d4a4afcad65
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.1.0":
   version: 0.1.1
   resolution: "@jridgewell/gen-mapping@npm:0.1.1"
@@ -4937,6 +4960,13 @@ __metadata:
     "@jridgewell/gen-mapping": "npm:^0.3.0"
     "@jridgewell/trace-mapping": "npm:^0.3.9"
   checksum: 10/73838ac43235edecff5efc850c0d759704008937a56b1711b28c261e270fe4bf2dc06d0b08663aeb1ab304f81f6de4f5fb844344403cf53ba7096967a9953cae
+  languageName: node
+  linkType: hard
+
+"@jridgewell/sourcemap-codec@npm:1.4.16-beta.0":
+  version: 1.4.16-beta.0
+  resolution: "@jridgewell/sourcemap-codec@npm:1.4.16-beta.0"
+  checksum: 10/63f527142dc09cdd96171ed31953ec1905316bed84692ca2c9d2ddb15961f058159f2a5a45709c93897b44eee1074a263f8ac88e2ba0668d540069553e45e38c
   languageName: node
   linkType: hard
 
