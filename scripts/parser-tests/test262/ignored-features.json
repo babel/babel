@@ -127,6 +127,8 @@
   "resizable-arraybuffer",
   "rest-parameters",
   "set-methods",
+  "source-phase-imports",
+  "source-phase-imports-module-source",
   "string-trimming",
   "super",
   "symbols-as-weakmap-keys",
