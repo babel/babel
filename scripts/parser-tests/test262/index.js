@@ -41,6 +41,8 @@ const featuresToPlugins = new Map([
     ],
   ],
   ["explicit-resource-management", "explicitResourceManagement"],
+  ["source-phase-imports", "sourcePhaseImports"],
+  ["source-phase-imports-module-source", "sourcePhaseImports"],
 ]);
 
 const unmappedFeatures = new Set();
@@ -88,6 +90,7 @@ const runner = new TestRunner({
       if (fileName.endsWith(".md")) continue;
 
       yield {
+        createImportExpressions: true,
         contents: test.contents,
         fileName,
         id: `${fileName}(${test.scenario})`,
