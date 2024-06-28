@@ -42,6 +42,7 @@ const featuresToPlugins = new Map([
   ],
   ["explicit-resource-management", "explicitResourceManagement"],
   ["source-phase-imports", "sourcePhaseImports"],
+  ["source-phase-imports-module-source", "sourcePhaseImports"],
 ]);
 
 const unmappedFeatures = new Set();
