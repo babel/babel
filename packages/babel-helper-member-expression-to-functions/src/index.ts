@@ -588,7 +588,7 @@ export interface Handler<State> {
   delete(this: HandlerState<State> & State, member: Member): t.Expression;
 }
 
-export interface HandlerState<State = {}> extends Handler<State> {
+export interface HandlerState<State = object> extends Handler<State> {
   handle(
     this: HandlerState<State> & State,
     member: Member,
@@ -604,7 +604,7 @@ export interface HandlerState<State = {}> extends Handler<State> {
 // get, set, and call methods.
 // Optionally, a memoise method may be defined on the state, which will be
 // called when the member is a self-referential update.
-export default function memberExpressionToFunctions<CustomState = {}>(
+export default function memberExpressionToFunctions<CustomState extends object>(
   path: NodePath,
   visitor: Visitor<HandlerState<CustomState>>,
   state: Handler<CustomState> & CustomState,

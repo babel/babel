@@ -1,7 +1,7 @@
 {
   "name": "babel",
   "version": "7.24.7",
-  "version_babel8": "8.0.0-alpha.10",
+  "version_babel8": "8.0.0-alpha.11",
   "private": true,
   "type": "commonjs",
   "scripts": {
@@ -81,8 +81,8 @@
     "semver": "^6.3.1",
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^7.8.0"
+    "typescript": "5.5.1-rc",
+    "typescript-eslint": "rc-v8"
   },
   "workspaces": [
     "codemods/*",

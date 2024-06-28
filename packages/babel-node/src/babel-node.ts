@@ -30,7 +30,7 @@ if (argSeparator > -1) {
 function getNormalizedV8Flag(arg: string) {
   // v8 uses the "no" prefix to negate boolean flags (e.g. --nolazy),
   // but they are not listed by v8flags
-  const matches = arg.match(/--(?:no)?(.+)/);
+  const matches = /--(?:no)?(.+)/.exec(arg);
 
   if (matches) {
     return `--${matches[1].replace(/_/g, "-")}`;

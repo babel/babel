@@ -1,6 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _instanceof(left, right) {
+export default function _instanceof(left: any, right: Function) {
   if (
     right != null &&
     typeof Symbol !== "undefined" &&

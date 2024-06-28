@@ -14,10 +14,10 @@ export const lazyImportsHook = (lazy: Lazy): CommonJSHook => ({
     if (lazy === true) {
       // 'true' means that local relative files are eagerly loaded and
       // dependency modules are loaded lazily.
-      return /\./.test(source) ? null : "lazy/function";
+      return source.includes(".") ? null : "lazy/function";
     }
     if (Array.isArray(lazy)) {
-      return lazy.indexOf(source) === -1 ? null : "lazy/function";
+      return !lazy.includes(source) ? null : "lazy/function";
     }
     if (typeof lazy === "function") {
       return lazy(source) ? "lazy/function" : null;

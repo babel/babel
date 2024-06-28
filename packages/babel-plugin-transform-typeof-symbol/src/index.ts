@@ -22,9 +22,9 @@ export default declare(api => {
 
         if (
           path.parentPath.isBinaryExpression() &&
-          t.EQUALITY_BINARY_OPERATORS.indexOf(
+          t.EQUALITY_BINARY_OPERATORS.includes(
             (parent as t.BinaryExpression).operator,
-          ) >= 0
+          )
         ) {
           // optimise `typeof foo === "string"` since we can determine that they'll never
           // need to handle symbols

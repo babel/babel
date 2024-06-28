@@ -140,10 +140,10 @@ export function ParseErrorEnum(a: TemplateStringsArray): <
     T[K] extends { message: string | ToMessage<any> }
       ? T[K]["message"] extends ToMessage<any>
         ? Parameters<T[K]["message"]>[0]
-        : {}
+        : object
       : T[K] extends ToMessage<any>
         ? Parameters<T[K]>[0]
-        : {}
+        : object
   >;
 };
 
@@ -155,10 +155,10 @@ export function ParseErrorEnum<T extends ParseErrorTemplates>(
     T[K] extends { message: string | ToMessage<any> }
       ? T[K]["message"] extends ToMessage<any>
         ? Parameters<T[K]["message"]>[0]
-        : {}
+        : object
       : T[K] extends ToMessage<any>
         ? Parameters<T[K]>[0]
-        : {}
+        : object
   >;
 };
 

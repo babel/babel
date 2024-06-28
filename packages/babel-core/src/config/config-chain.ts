@@ -301,7 +301,7 @@ function babelrcLoadEnabled(
   // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
   if (babelrcRoots === undefined) {
-    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+    return pkgData.directories.includes(absoluteRoot);
   }
 
   let babelrcPatterns = babelrcRoots;
@@ -317,7 +317,7 @@ function babelrcLoadEnabled(
   // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
   if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
-    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+    return pkgData.directories.includes(absoluteRoot);
   }
 
   return babelrcPatterns.some(pat => {

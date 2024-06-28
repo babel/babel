@@ -12,13 +12,13 @@ export default class Plugin {
   parserOverride?: Function;
   generatorOverride?: Function;
 
-  options: {};
+  options: object;
 
   externalDependencies: ReadonlyDeepArray<string>;
 
   constructor(
     plugin: PluginObject,
-    options: {},
+    options: object,
     key?: string,
     externalDependencies: ReadonlyDeepArray<string> = finalize([]),
   ) {

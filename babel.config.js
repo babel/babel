@@ -935,6 +935,7 @@ function pluginImportMetaUrl({ types: t, template }) {
   };
 }
 
+/** @returns {import("@babel/core").PluginObj} */
 function pluginReplaceTSImportExtension() {
   return {
     visitor: {
@@ -945,7 +946,9 @@ function pluginReplaceTSImportExtension() {
         }
       },
       TSImportEqualsDeclaration({ node }) {
-        const { expression } = node.moduleReference;
+        const { moduleReference } = node;
+        if (moduleReference.type !== "TSExternalModuleReference") return;
+        const { expression } = moduleReference;
         expression.value = expression.value.replace(/(\.[mc]?)ts$/, "$1js");
       },
     },

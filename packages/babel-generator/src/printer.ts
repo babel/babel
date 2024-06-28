@@ -386,21 +386,6 @@ class Printer {
     this._buf.sourceWithOffset(prop, loc, columnOffset);
   }
 
-  withSource(
-    prop: "start" | "end",
-    loc: Loc | undefined,
-    cb: () => void,
-  ): void {
-    if (!loc) {
-      cb();
-      return;
-    }
-
-    this._catchUp(prop, loc);
-
-    this._buf.withSource(prop, loc, cb);
-  }
-
   sourceIdentifierName(identifierName: string, pos?: Pos): void {
     if (!this._buf._canMarkIdName) return;
 
@@ -1247,6 +1232,7 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 
 type GeneratorFunctions = typeof generatorFunctions;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 

@@ -1487,7 +1487,7 @@ export default abstract class Tokenizer extends CommentsParser {
    * The return type is marked as `never` for simplicity, as error recovery
    * will create types in an invalid AST shape.
    */
-  raise<ErrorDetails = {}>(
+  raise<ErrorDetails = object>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
@@ -1564,7 +1564,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
   }
 
-  errorBuilder(error: ParseErrorConstructor<{}>) {
+  errorBuilder(error: ParseErrorConstructor<object>) {
     return (pos: number, lineStart: number, curLine: number) => {
       this.raise(error, buildPosition(pos, lineStart, curLine));
     };

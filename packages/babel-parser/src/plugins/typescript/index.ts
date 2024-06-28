@@ -317,7 +317,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const modifier = this.state.value;
-      if (allowedModifiers.indexOf(modifier) !== -1) {
+      if (allowedModifiers.includes(modifier)) {
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }
@@ -2333,7 +2333,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return elt;
     }
 
-    isSimpleParameter(node: N.Pattern | N.TSParameterProperty) {
+    isSimpleParameter(node: N.Pattern | N.TSParameterProperty): boolean {
       return (
         (node.type === "TSParameterProperty" &&
           super.isSimpleParameter(node.parameter)) ||
@@ -3900,12 +3900,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsInAmbientContext<T>(cb: () => T): T {
-      const oldIsAmbientContext = this.state.isAmbientContext;
+      const { isAmbientContext: oldIsAmbientContext, strict: oldStrict } =
+        this.state;
       this.state.isAmbientContext = true;
+      this.state.strict = false;
       try {
         return cb();
       } finally {
         this.state.isAmbientContext = oldIsAmbientContext;
+        this.state.strict = oldStrict;
       }
     }
 

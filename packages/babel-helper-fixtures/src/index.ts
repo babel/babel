@@ -71,7 +71,7 @@ type Suite = {
 function tryResolve(module: string) {
   try {
     return require.resolve(module);
-  } catch (e) {
+  } catch (_) {
     return null;
   }
 }
@@ -82,7 +82,7 @@ function assertDirectory(loc: string) {
 }
 
 function shouldIgnore(name: string, ignore?: Array<string>) {
-  if (ignore && ignore.indexOf(name) >= 0) {
+  if (ignore?.includes(name)) {
     return true;
   }
 
@@ -185,7 +185,7 @@ function pushTask(
     stderrLoc = taskDir + "/stderr.txt";
   } else if (taskDirStats.isFile()) {
     const ext = path.extname(taskDir);
-    if (EXTENSIONS.indexOf(ext) === -1) return;
+    if (!EXTENSIONS.includes(ext)) return;
 
     execLoc = taskDir;
     execLocAlias = suiteName + "/" + taskName;
@@ -386,7 +386,7 @@ function wrapPackagesArray(
       val[0] = path.resolve(optionsDir, val[0]);
     } else {
       let name = val[0];
-      const match = name.match(/^(@babel\/(?:plugin-|preset-)?)(.*)$/);
+      const match = /^(@babel\/(?:plugin-|preset-)?)(.*)$/.exec(name);
       if (match) {
         name = match[2];
       }
@@ -419,12 +419,12 @@ function wrapPackagesArray(
  * @export
  * @param {{}} options the imported options.json
  * @param {string} optionsDir the directory where options.json is placed
- * @returns {{}} options whose plugins/presets are resolved
+ * @returns {any} options whose plugins/presets are resolved
  */
 export function resolveOptionPluginOrPreset(
   options: any,
   optionsDir: string,
-): {} {
+): any {
   if (options.overrides) {
     for (const subOption of options.overrides) {
       resolveOptionPluginOrPreset(subOption, optionsDir);

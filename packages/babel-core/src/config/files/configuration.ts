@@ -57,7 +57,7 @@ const runConfig = makeWeakCache(function* runConfig(
   yield* [];
 
   return {
-    options: endHiddenCallStack(options as any as (api: ConfigAPI) => {})(
+    options: endHiddenCallStack(options as any as (api: ConfigAPI) => unknown)(
       makeConfigAPI(cache),
     ),
     cacheNeedsConfiguration: !cache.configured(),

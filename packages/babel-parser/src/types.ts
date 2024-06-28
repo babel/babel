@@ -53,7 +53,7 @@ export interface NodeBase {
   };
 }
 
-type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
+type NodeAny<T extends string, KnownProps = object> = NodeBase & {
   type: T;
   [key: string]: any;
 } & KnownProps;

@@ -16,6 +16,11 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.11 (2024-06-07)
+
+#### :boom: Breaking Change
+* `babel-core`
+  * [#16561](https://github.com/babel/babel/pull/16561) [babel 8] Remove `File.prototype.getModuleName` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.0-alpha.10 (2024-06-04)
 
 #### :bug: Bug Fix

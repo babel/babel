@@ -559,7 +559,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   // Overridden by the estree plugin
-  isOptionalMemberExpression(expression: Node) {
+  isOptionalMemberExpression(expression: Node): boolean {
     return expression.type === "OptionalMemberExpression";
   }
 

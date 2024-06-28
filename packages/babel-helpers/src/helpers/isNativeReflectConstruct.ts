@@ -11,7 +11,7 @@ export default function _isNativeReflectConstruct() {
     var result = !Boolean.prototype.valueOf.call(
       Reflect.construct(Boolean, [], function () {}),
     );
-  } catch (e) {}
+  } catch (_) {}
   // @ts-expect-error assign to function
   return (_isNativeReflectConstruct = function () {
     return !!result;

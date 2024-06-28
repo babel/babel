@@ -1,6 +1,8 @@
 /* @minVersion 7.24.0 */
 /* @mangleFns */
 
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion -- `typescript-eslint` complains when using `!` */
+
 import checkInRHS from "./checkInRHS.ts";
 import setFunctionName from "./setFunctionName.ts";
 import toPropertyKey from "./toPropertyKey.ts";
@@ -266,14 +268,14 @@ export default /* @no-mangle */ function applyDecs2311(
     hasPrivateBrand?: Function,
   ) {
     function assertInstanceIfPrivate(target: any) {
-      if (!hasPrivateBrand(target)) {
+      if (!hasPrivateBrand!(target)) {
         throw new TypeError(
           "Attempted to access private element on non-instance",
         );
       }
     }
 
-    var decs = [].concat(decInfo[0]),
+    var decs = ([] as Function[]).concat(decInfo[0]),
       decVal = decInfo[3],
       isClass = !ret;
 
@@ -314,13 +316,13 @@ export default /* @no-mangle */ function applyDecs2311(
           desc = {
             get: setFunctionName(
               function (this: any) {
-                return decVal(this);
+                return decVal!(this);
               },
               name,
               "get",
             ),
             set: function (this: any, value: any) {
-              decInfo[4](this, value);
+              decInfo[4]!(this, value);
             },
           };
         } else {
@@ -331,11 +333,11 @@ export default /* @no-mangle */ function applyDecs2311(
           setFunctionName(desc[key], name, isMethod ? "" : key);
         }
       } else if (!isField) {
-        desc = Object.getOwnPropertyDescriptor(Class, name);
+        desc = Object.getOwnPropertyDescriptor(Class, name)!;
       }
 
       if (!isField && !isPrivate) {
-        _ = existingNonFields[+isStatic][name];
+        _ = existingNonFields[+isStatic!][name];
         // flag is 1, 3, or 4; kind is 0, 1, 2, 3, or 4
         // flag ^ kind is 7 if and only if one of them is 3 and the other one is 4.
         if (_ && (_ ^ kind) !== 7) {
@@ -347,7 +349,7 @@ export default /* @no-mangle */ function applyDecs2311(
         }
         // We use PROP_KIND.ACCESSOR to mark a name as "fully used":
         // either a get/set pair, or a non-getter/setter.
-        existingNonFields[+isStatic][name] =
+        existingNonFields[+isStatic!][name] =
           kind < PROP_KIND.GETTER
             ? PROP_KIND.ACCESSOR
             : (kind as PROP_KIND.GETTER | PROP_KIND.SETTER);
@@ -426,10 +428,10 @@ export default /* @no-mangle */ function applyDecs2311(
           decThis,
           isAccessor
             ? {
-                get: desc.get,
-                set: desc.set,
+                get: desc!.get,
+                set: desc!.set,
               }
-            : desc[key],
+            : desc![key!],
           ctx,
         );
         decoratorFinishedRef.v = 1;
@@ -437,13 +439,13 @@ export default /* @no-mangle */ function applyDecs2311(
         if (isAccessor) {
           if (typeof newValue === "object" && newValue) {
             if ((_ = assertCallable(newValue.get, "accessor.get"))) {
-              desc.get = _;
+              desc!.get = _;
             }
             if ((_ = assertCallable(newValue.set, "accessor.set"))) {
-              desc.set = _;
+              desc!.set = _;
             }
             if ((_ = assertCallable(newValue.init, "accessor.init"))) {
-              init.unshift(_);
+              init!.unshift(_);
             }
           } else if (newValue !== void 0) {
             throw new TypeError(
@@ -458,9 +460,9 @@ export default /* @no-mangle */ function applyDecs2311(
           )
         ) {
           if (isField) {
-            init.unshift(newValue);
+            init!.unshift(newValue);
           } else {
-            desc[key] = newValue;
+            desc![key!] = newValue;
           }
         }
       }
@@ -468,9 +470,9 @@ export default /* @no-mangle */ function applyDecs2311(
 
     // isField || isAccessor
     if (kind < PROP_KIND.METHOD) {
-      ret.push(
+      ret!.push(
         // init
-        createRunInitializers(init, isStatic, 1),
+        createRunInitializers(init!, isStatic, 1),
         // init_extra
         createRunInitializers(initializers, isStatic, 0),
       );
@@ -480,22 +482,22 @@ export default /* @no-mangle */ function applyDecs2311(
       if (isPrivate) {
         if (isAccessor) {
           // get and set should be returned before init_extra
-          ret.splice(
+          ret!.splice(
             -1,
             0,
-            _bindPropCall("get", isStatic),
-            _bindPropCall("set", isStatic),
+            _bindPropCall("get", isStatic!),
+            _bindPropCall("set", isStatic!),
           );
         } else {
-          ret.push(
+          ret!.push(
             isMethod
-              ? desc[key]
+              ? desc![key!]
               : // Equivalent to `Function.call`, just to reduce code size
-                assertCallable.call.bind(desc[key]),
+                assertCallable.call.bind(desc![key!]),
           );
         }
       } else {
-        defineProperty(Class, name, desc);
+        defineProperty(Class, name, desc!);
       }
     }
     return newValue;
@@ -520,7 +522,7 @@ export default /* @no-mangle */ function applyDecs2311(
       for (var i = 0; i < memberDecs.length; i++) {
         var decInfo = memberDecs[i];
 
-        var kind = decInfo[1];
+        var kind = decInfo[1]!;
         var kindOnly: PROP_KIND = kind & PROP_KIND.KIND_MASK;
         if (
           // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison, eqeqeq
@@ -565,8 +567,8 @@ export default /* @no-mangle */ function applyDecs2311(
     applyMemberDecsOfKind(PROP_KIND.STATIC, 1);
     applyMemberDecsOfKind(0, 1);
 
-    pushInitializers(protoInitializers);
-    pushInitializers(staticInitializers);
+    pushInitializers(protoInitializers!);
+    pushInitializers(staticInitializers!);
     return ret;
   }
 

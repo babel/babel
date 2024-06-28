@@ -153,7 +153,9 @@ export default abstract class UtilParser extends Tokenizer {
   // raise an unexpected token error at given pos.
 
   expect(type: TokenType, loc?: Position | null): void {
-    this.eat(type) || this.unexpected(loc, type);
+    if (!this.eat(type)) {
+      this.unexpected(loc, type);
+    }
   }
 
   // tryParse will clone parser state.
@@ -171,6 +173,7 @@ export default abstract class UtilParser extends Tokenizer {
     try {
       const node = fn((node = null) => {
         abortSignal.node = node;
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw abortSignal;
       });
       if (this.state.errors.length > oldState.errors.length) {
