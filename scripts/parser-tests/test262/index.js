@@ -41,6 +41,7 @@ const featuresToPlugins = new Map([
     ],
   ],
   ["explicit-resource-management", "explicitResourceManagement"],
+  ["source-phase-imports", "sourcePhaseImports"],
 ]);
 
 const unmappedFeatures = new Set();
@@ -92,6 +93,7 @@ const runner = new TestRunner({
         fileName,
         id: `${fileName}(${test.scenario})`,
         sourceType: test.attrs.flags.module ? "module" : "script",
+        createImportExpressions: true,
         plugins: Array.from(getPlugins(test.attrs.features)).flat(),
         expectedError:
           !!test.attrs.negative &&
