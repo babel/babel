@@ -1,26 +1,18 @@
 function f() {
   var _this = this;
-  let g = /*#__PURE__*/function () {
-    var _ref = babelHelpers.asyncToGenerator(function* () {
-      _this;
-    });
-    return function g() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+  let g = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+    _this;
+  });
 }
 class Class {
   m() {
     var _this2 = this;
-    return babelHelpers.asyncToGenerator(function* () {
-      var c = /*#__PURE__*/function () {
-        var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
+    return babelHelpers.callAsync(function* () {
+      var c = function (_x) {
+        return babelHelpers.callAsync(function* (b) {
           _this2;
-        });
-        return function c(_x) {
-          return _ref2.apply(this, arguments);
-        };
-      }();
-    })();
+        }, this, arguments);
+      };
+    });
   }
 }
