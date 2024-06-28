@@ -1,7 +1,7 @@
-import { template, traverse, types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
 import type { File, NodePath, Visitor, Scope } from "@babel/core";
+import { visitors } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type {
   Handler,
@@ -205,10 +205,7 @@ export function privateNameVisitorFactory<S, V>(
 ) {
   // Traverses the outer portion of a class, without touching the class's inner
   // scope, for private names.
-  const nestedVisitor = traverse.visitors.merge([
-    { ...visitor },
-    environmentVisitor,
-  ]);
+  const nestedVisitor = visitors.environmentVisitor({ ...visitor });
 
   const privateNameVisitor: Visitor<
     PrivateNameVisitorState<V & PrivateNameMetadata> & S
@@ -1404,38 +1401,35 @@ type ReplaceThisState = {
 
 type ReplaceInnerBindingReferenceState = ReplaceThisState;
 
-const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
-  {
-    Identifier(path, state) {
-      if (state.argumentsPath && path.node.name === "arguments") {
-        state.argumentsPath.push(path);
-      }
-    },
-    UnaryExpression(path) {
-      // Replace `delete this` with `true`
-      const { node } = path;
-      if (node.operator === "delete") {
-        const argument = skipTransparentExprWrapperNodes(node.argument);
-        if (t.isThisExpression(argument)) {
-          path.replaceWith(t.booleanLiteral(true));
-        }
-      }
-    },
-    ThisExpression(path, state) {
-      state.needsClassRef = true;
-      path.replaceWith(t.cloneNode(state.thisRef));
-    },
-    MetaProperty(path) {
-      const { node, scope } = path;
-      // if there are `new.target` in static field
-      // we should replace it with `undefined`
-      if (node.meta.name === "new" && node.property.name === "target") {
-        path.replaceWith(scope.buildUndefinedNode());
-      }
-    },
+const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
+  Identifier(path, state) {
+    if (state.argumentsPath && path.node.name === "arguments") {
+      state.argumentsPath.push(path);
+    }
   },
-  environmentVisitor,
-]);
+  UnaryExpression(path) {
+    // Replace `delete this` with `true`
+    const { node } = path;
+    if (node.operator === "delete") {
+      const argument = skipTransparentExprWrapperNodes(node.argument);
+      if (t.isThisExpression(argument)) {
+        path.replaceWith(t.booleanLiteral(true));
+      }
+    }
+  },
+  ThisExpression(path, state) {
+    state.needsClassRef = true;
+    path.replaceWith(t.cloneNode(state.thisRef));
+  },
+  MetaProperty(path) {
+    const { node, scope } = path;
+    // if there are `new.target` in static field
+    // we should replace it with `undefined`
+    if (node.meta.name === "new" && node.property.name === "target") {
+      path.replaceWith(scope.buildUndefinedNode());
+    }
+  },
+});
 
 const innerReferencesVisitor: Visitor<ReplaceInnerBindingReferenceState> = {
   ReferencedIdentifier(path, state) {

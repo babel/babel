@@ -47,9 +47,6 @@
       "@babel/helper-create-regexp-features-plugin": [
         "./packages/babel-helper-create-regexp-features-plugin/src"
       ],
-      "@babel/helper-environment-visitor": [
-        "./packages/babel-helper-environment-visitor/src"
-      ],
       "@babel/helper-fixtures": [
         "./packages/babel-helper-fixtures/src"
       ],

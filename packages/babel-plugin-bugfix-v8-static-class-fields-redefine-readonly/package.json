@@ -25,8 +25,8 @@
     "bugfix"
   ],
   "dependencies": {
-    "@babel/helper-environment-visitor": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
