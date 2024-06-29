@@ -32,20 +32,21 @@ export const annexB33FunctionsVisitor: Visitor = {
       names: Object.keys(path.getBindingIdentifiers()),
     });
   },
-
-  // NOTE: These two visitors target the same nodes as the
-  // block-scoped-functions plugin
-
-  BlockStatement(path) {
-    if (isStrict(path)) return;
-    if (t.isFunction(path.parent, { body: path.node })) return;
-    transformStatementList(path.get("body"));
-  },
-
-  SwitchCase(path) {
-    if (isStrict(path)) return;
-    transformStatementList(path.get("consequent"));
-  },
+  ...(process.env.BABEL_8_BREAKING
+    ? {}
+    : {
+        // NOTE: These two visitors target the same nodes as the
+        // block-scoped-functions plugin
+        BlockStatement(path) {
+          if (isStrict(path)) return;
+          if (t.isFunction(path.parent, { body: path.node })) return;
+          transformStatementList(path.get("body"));
+        },
+        SwitchCase(path) {
+          if (isStrict(path)) return;
+          transformStatementList(path.get("consequent"));
+        },
+      }),
 };
 
 function transformStatementList(paths: NodePath<t.Statement>[]) {
