@@ -37,7 +37,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^20.10.0 || >=22.0.0`. You can check this with `node -v`.
+_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^20.11.0 || >=22.0.0`. You can check this with `node -v`.
 
 _Yarn_: Make sure that Yarn is [installed](https://yarnpkg.com/getting-started/install) with version `>=4.0.0`.
 
