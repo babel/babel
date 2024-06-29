@@ -12,7 +12,7 @@ new class extends babelHelpers.identity {
     static {
       [_Foo, _initClass] = babelHelpers.applyDecs2311(this, [dec], [], 0, void 0, Base).c;
       _method = function () {
-        babelHelpers.get(babelHelpers.getPrototypeOf(_Foo), "id", this).call(this, this);
+        babelHelpers.superPropGet(_Foo, "id", this, 2)([this]);
         hasX = o => #x in o;
         hasA = o => #a in o;
         hasM = o => #m in o;

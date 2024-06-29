@@ -5,8 +5,8 @@ var Test = /*#__PURE__*/function (_Foo) {
     var _this;
     babelHelpers.classCallCheck(this, Test);
     _this = babelHelpers.callSuper(this, Test);
-    babelHelpers.get((_this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _this);
-    babelHelpers.get((_this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _this).whatever;
+    babelHelpers.superPropGet((_this, Test), "test", _this, 1);
+    babelHelpers.superPropGet((_this, Test), "test", _this, 1).whatever;
     return _this;
   }
   babelHelpers.inherits(Test, _Foo);

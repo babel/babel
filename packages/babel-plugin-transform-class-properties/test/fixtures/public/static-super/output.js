@@ -17,5 +17,5 @@ var B = /*#__PURE__*/function (_A2) {
 }(A);
 _B = B;
 babelHelpers.defineProperty(B, "prop", 2);
-babelHelpers.defineProperty(B, "propA", babelHelpers.get(babelHelpers.getPrototypeOf(_B), "prop", _B));
-babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.get(babelHelpers.getPrototypeOf(_B), "prop", _B));
+babelHelpers.defineProperty(B, "propA", babelHelpers.superPropGet(_B, "prop", _B));
+babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.superPropGet(_B, "prop", _B));

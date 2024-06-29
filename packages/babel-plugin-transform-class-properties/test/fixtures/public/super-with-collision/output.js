@@ -3,5 +3,5 @@ var A = /*#__PURE__*/babelHelpers.createClass(function A(_force) {
 
   babelHelpers.classCallCheck(this, A);
   babelHelpers.defineProperty(this, "force", force);
-  babelHelpers.defineProperty(this, "foo", babelHelpers.get(babelHelpers.getPrototypeOf(A.prototype), "method", this).call(this));
+  babelHelpers.defineProperty(this, "foo", babelHelpers.superPropGet(A, "method", this, 3)([]));
 });

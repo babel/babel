@@ -12,7 +12,7 @@ let Obj = /*#__PURE__*/function (_Base) {
   return babelHelpers.createClass(Obj, [{
     key: "call",
     value: function call() {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this).call(this);
+      return babelHelpers.superPropGet(Obj, "test", this, 3)([]);
     }
   }, {
     key: "test",
