@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    ["pipelineOperator", { "proposal": "hack", "topicToken": "^" }],
-    "classPrivateProperties",
-    "classPrivateMethods"
-  ]
+  "plugins": [["pipelineOperator", { "proposal": "hack", "topicToken": "^" }]]
 }

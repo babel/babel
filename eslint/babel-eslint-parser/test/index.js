@@ -482,11 +482,7 @@ describe("Babel and Espree", () => {
       babelOptions: {
         filename: "test.js",
         parserOpts: {
-          plugins: [
-            ["estree", { classFeatures: true }],
-            "classPrivateProperties",
-            "classProperties",
-          ],
+          plugins: [["estree", { classFeatures: true }]],
         },
       },
     }).ast;
