@@ -393,10 +393,10 @@ function get(
   if (parts.length === 1) {
     // "foo"
     // @ts-expect-error key may not index T
-    return this._getKey(key, context);
+    return _getKey.call(this, key, context);
   } else {
     // "foo.bar"
-    return this._getPattern(parts, context);
+    return _getPattern.call(this, parts, context);
   }
 }
 

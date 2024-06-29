@@ -33,7 +33,7 @@ export function getTypeAnnotation(this: NodePath): t.FlowType | t.TSType {
   if (type != null) {
     return type;
   }
-  type = this._getTypeAnnotation() || anyTypeAnnotation();
+  type = _getTypeAnnotation.call(this) || anyTypeAnnotation();
   if (isTypeAnnotation(type) || isTSTypeAnnotation(type)) {
     type = type.typeAnnotation;
   }

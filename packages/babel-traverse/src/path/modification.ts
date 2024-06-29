@@ -3,6 +3,8 @@
 import { getCachedPaths } from "../cache.ts";
 import PathHoister from "./lib/hoister.ts";
 import NodePath from "./index.ts";
+import { _getQueueContexts } from "./context.ts";
+import { _assertUnremoved } from "./removal.ts";
 import {
   arrowFunctionExpression,
   assertExpression,
@@ -31,9 +33,9 @@ export function insertBefore(
   this: NodePath,
   nodes_: t.Node | t.Node[],
 ): NodePath[] {
-  this._assertUnremoved();
+  _assertUnremoved.call(this);
 
-  const nodes = this._verifyNodeList(nodes_);
+  const nodes = _verifyNodeList.call(this, nodes_);
 
   const { parentPath, parent } = this;
 
@@ -59,7 +61,7 @@ export function insertBefore(
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
-    return this._containerInsertBefore(nodes);
+    return _containerInsertBefore.call(this, nodes);
   } else if (this.isStatementOrBlock()) {
     const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
@@ -102,7 +104,7 @@ export function _containerInsert<N extends t.Node>(
     }
   }
 
-  const contexts = this._getQueueContexts();
+  const contexts = _getQueueContexts.call(this);
 
   for (const path of paths) {
     path.setScope();
@@ -120,14 +122,14 @@ export function _containerInsertBefore<N extends t.Node>(
   this: NodePath,
   nodes: N[],
 ) {
-  return this._containerInsert(this.key as number, nodes);
+  return _containerInsert.call(this, this.key as number, nodes);
 }
 
 export function _containerInsertAfter<N extends t.Node>(
   this: NodePath,
   nodes: N[],
 ) {
-  return this._containerInsert((this.key as number) + 1, nodes);
+  return _containerInsert.call(this, (this.key as number) + 1, nodes);
 }
 
 const last = <T>(arr: T[]) => arr[arr.length - 1];
@@ -169,13 +171,13 @@ export function insertAfter(
   this: NodePath,
   nodes_: t.Node | t.Node[],
 ): NodePath[] {
-  this._assertUnremoved();
+  _assertUnremoved.call(this);
 
   if (this.isSequenceExpression()) {
     return last(this.get("expressions")).insertAfter(nodes_);
   }
 
-  const nodes = this._verifyNodeList(nodes_);
+  const nodes = _verifyNodeList.call(this, nodes_);
 
   const { parentPath, parent } = this;
   if (
@@ -250,7 +252,7 @@ export function insertAfter(
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
-    return this._containerInsertAfter(nodes);
+    return _containerInsertAfter.call(this, nodes);
   } else if (this.isStatementOrBlock()) {
     const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
@@ -338,10 +340,10 @@ export function unshiftContainer<N extends t.Node, K extends keyof N & string>(
       never,
 ) {
   // todo: NodePaths<Nodes>
-  this._assertUnremoved();
+  _assertUnremoved.call(this);
 
   // @ts-expect-error fixme
-  nodes = this._verifyNodeList(nodes);
+  nodes = _verifyNodeList.call(this, nodes);
 
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
@@ -353,7 +355,8 @@ export function unshiftContainer<N extends t.Node, K extends keyof N & string>(
     key: 0,
   }).setContext(this.context);
 
-  return path._containerInsertBefore(
+  return _containerInsertBefore.call(
+    path,
     // @ts-expect-error typings needed to narrow down nodes as t.Node[]
     nodes,
   );
@@ -373,9 +376,10 @@ export function pushContainer<
       //    : never
       never,
 ) {
-  this._assertUnremoved();
+  _assertUnremoved.call(this);
 
-  const verifiedNodes = this._verifyNodeList(
+  const verifiedNodes = _verifyNodeList.call(
+    this,
     // @ts-expect-error refine typings
     nodes,
   );

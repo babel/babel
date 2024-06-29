@@ -539,7 +539,7 @@ export function resolve(
   dangerous?: boolean,
   resolved?: NodePath[],
 ) {
-  return this._resolve(dangerous, resolved) || this;
+  return _resolve.call(this, dangerous, resolved) || this;
 }
 
 export function _resolve(
