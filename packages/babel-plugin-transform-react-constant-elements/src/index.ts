@@ -244,7 +244,8 @@ export default declare((api, options: Options) => {
         `;
         if (
           path.parentPath.isJSXElement() ||
-          path.parentPath.isJSXAttribute()
+          path.parentPath.isJSXAttribute() ||
+          path.parentPath.isJSXFragment()
         ) {
           replacement = t.jsxExpressionContainer(replacement);
         }
