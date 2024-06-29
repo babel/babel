@@ -407,7 +407,7 @@ __metadata:
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   dependencies:
     "@eslint/js": "npm:^8.44.0"
-    globals: "npm:^13.20.0"
+    globals: "npm:^15.6.0"
   peerDependencies:
     "@babel/eslint-parser": ^7.16.0
   languageName: unknown
@@ -2613,7 +2613,7 @@ __metadata:
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/traverse": "workspace:^"
-    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -4430,7 +4430,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
     debug: "npm:^4.3.1"
-    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
   languageName: unknown
   linkType: soft
 
@@ -10631,26 +10631,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals-BABEL_8_BREAKING-true@npm:globals@^13.5.0":
-  version: 13.5.0
-  resolution: "globals@npm:13.5.0"
-  dependencies:
-    type-fest: "npm:^0.20.2"
-  checksum: 10/0c46b15656517a52c85d8a4e0e077758cb61d9cb6b725295ecbdd2251a8f588e4624a3d30ac8a1e53d9ea39d70afcad0ca60527da2bdd6719b6cf215b62f83fc
+"globals-BABEL_8_BREAKING-true@npm:globals@^15.6.0, globals@npm:^15.0.0, globals@npm:^15.6.0":
+  version: 15.6.0
+  resolution: "globals@npm:15.6.0"
+  checksum: 10/9b522b1eff444acaf331b0da7f072d5ef75b1cde02d89b3656039252f01b6bcda7a9ea42128e8644117c0ede9116249b1bcf830458b7dbe19fafd4de916a3dc0
   languageName: node
   linkType: hard
 
-"globals@condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0":
-  version: 0.0.0-condition-efcc6d
-  resolution: "globals@condition:BABEL_8_BREAKING?^13.5.0:^11.1.0#efcc6d"
+"globals@condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0":
+  version: 0.0.0-condition-14f002
+  resolution: "globals@condition:BABEL_8_BREAKING?^15.6.0:^11.1.0#14f002"
   dependencies:
     globals-BABEL_8_BREAKING-false: "npm:globals@^11.1.0"
-    globals-BABEL_8_BREAKING-true: "npm:globals@^13.5.0"
-  checksum: 10/c7016348cce37a8be7ea03d30c7d49a68af42e2b73c80c9f37730408f19add8ff072c4c81f41848103556f47a955d16f5236156569d35bdb3edec9eb5ac96a8c
+    globals-BABEL_8_BREAKING-true: "npm:globals@^15.6.0"
+  checksum: 10/fff1013d11c1ad3ef9ee549840751654ed316de5b7a98b314e2d6555c9d0b697fb834dda75ab6690dcb180aa429193b76db8f028a85412bc7b65623e6b19d0dd
   languageName: node
   linkType: hard
 
-"globals@npm:^13.19.0, globals@npm:^13.20.0, globals@npm:^13.5.0":
+"globals@npm:^13.19.0, globals@npm:^13.5.0":
   version: 13.24.0
   resolution: "globals@npm:13.24.0"
   dependencies:
@@ -10663,13 +10661,6 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10/03939c8af95c6df5014b137cac83aa909090c3a3985caef06ee9a5a669790877af8698ab38007e4c0186873adc14c0b13764acc754b16a754c216cc56aa5f021
-  languageName: node
-  linkType: hard
-
-"globals@npm:^15.0.0":
-  version: 15.1.0
-  resolution: "globals@npm:15.1.0"
-  checksum: 10/441931212b8b629940484aa6e505a4b7f590bed9f04f381d22e65d412bdb0c1e463aa6ca997ca0ce8a1a4966e934dc68c80ddbe74769adb33b6c7765ee6bef21
   languageName: node
   linkType: hard
 
