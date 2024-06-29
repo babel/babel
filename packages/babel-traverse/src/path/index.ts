@@ -307,6 +307,7 @@ const methods = {
   get: NodePath_family.get,
   _getKey: NodePath_family._getKey,
   _getPattern: NodePath_family._getPattern,
+  getAssignmentIdentifiers: NodePath_family.getAssignmentIdentifiers,
   getBindingIdentifiers: NodePath_family.getBindingIdentifiers,
   getOuterBindingIdentifiers: NodePath_family.getOuterBindingIdentifiers,
   getBindingIdentifierPaths: NodePath_family.getBindingIdentifierPaths,

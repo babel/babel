@@ -3,6 +3,7 @@
 import type TraversalContext from "../context.ts";
 import NodePath from "./index.ts";
 import {
+  getAssignmentIdentifiers as _getAssignmentIdentifiers,
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
   numericLiteral,
@@ -451,6 +452,10 @@ export function _getPattern(
     }
   }
   return path;
+}
+
+export function getAssignmentIdentifiers(this: NodePath) {
+  return _getAssignmentIdentifiers(this.node);
 }
 
 function getBindingIdentifiers(
