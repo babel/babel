@@ -787,10 +787,10 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 130, gzip size: 121
+  // size: 133, gzip size: 128
   isNativeFunction: helper(
     "7.0.0-beta.0",
-    'function _isNativeFunction(t){try{return Function.toString.call(t).includes("[native code]")}catch(n){return"function"==typeof t}}',
+    'function _isNativeFunction(t){try{return-1!==Function.toString.call(t).indexOf("[native code]")}catch(n){return"function"==typeof t}}',
     {
       globals: ["Function"],
       locals: { _isNativeFunction: ["body.0.id"] },
