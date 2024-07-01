@@ -244,6 +244,7 @@ function createWorker(useWorker) {
     return require("./babel-worker.cjs");
   }
   const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
+    enableWorkerThreads: true,
     numWorkers,
     exposedMethods: ["transform"],
   });
@@ -942,7 +943,10 @@ gulp.task(
 );
 
 function watch() {
-  gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
+  gulp.watch(
+    defaultSourcesGlob,
+    gulp.series("build-no-bundle-watch", "build-cjs-bundles")
+  );
   gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(

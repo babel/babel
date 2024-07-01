@@ -1,10 +1,11 @@
-import Benchmark from "benchmark";
-import baseline from "@babel-baseline/parser";
-import current from "@babel/parser";
-import { report } from "../../util.mjs";
-import { readFileSync } from "fs";
+import { copyFileSync, readFileSync, rmSync } from "fs";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { commonJS } from "$repo-utils";
+import { Benchmark } from "../../util.mjs";
 
-const suite = new Benchmark.Suite();
+const { require } = commonJS(import.meta.url);
+
+const benchmark = new Benchmark();
 
 function createInput(length) {
   return readFileSync(new URL("ts-parser.txt", import.meta.url), {
@@ -19,7 +20,7 @@ const inputs = [1].map(length => ({
 
 function benchCases(name, implementation, options) {
   for (const input of inputs) {
-    suite.add(`${name} ${input.tag} typescript parser.ts`, () => {
+    benchmark.add(`${name} ${input.tag} typescript parser.ts`, () => {
       implementation(input.body, {
         sourceType: "module",
         plugins: ["typescript"],
@@ -28,10 +29,25 @@ function benchCases(name, implementation, options) {
     });
   }
 }
+copyFileSync(
+  require.resolve("@babel-baseline/parser"),
+  "./parser-baseline.cjs"
+);
+copyFileSync(
+  "../../../packages/babel-parser/lib/index.js",
+  "./parser-current.cjs"
+);
+
+const baseline = require("./parser-baseline.cjs");
+const current = require("./parser-current.cjs");
 
 benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
 benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
 
-suite.on("cycle", report).run();
+benchmark.suite.on("complete", () => {
+  rmSync("./parser-current.cjs");
+  rmSync("./parser-baseline.cjs");
+});
+benchmark.run();

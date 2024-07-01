@@ -13,7 +13,7 @@ import type {
   ObjectProperty,
   PrivateName,
 } from "../types.d.ts";
-import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace.ts";
+import { hasNewLine } from "../util/whitespace.ts";
 import { isIdentifierChar } from "../util/identifier.ts";
 import ClassScopeHandler from "../util/class-scope.ts";
 import ExpressionScopeHandler from "../util/expression-scope.ts";
@@ -52,7 +52,12 @@ export default abstract class UtilParser extends Tokenizer {
   ): void {
     if (!node) return;
 
-    const extra = (node.extra = node.extra || {});
+    let { extra } = node;
+    if (extra == null) {
+      extra = {};
+      node.extra = extra;
+    }
+
     if (enumerable) {
       extra[key] = value;
     } else {
@@ -121,14 +126,15 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   hasPrecedingLineBreak(): boolean {
-    return lineBreak.test(
-      this.input.slice(this.state.lastTokEndLoc.index, this.state.start),
+    return hasNewLine(
+      this.input,
+      this.state.lastTokEndLoc.index,
+      this.state.start,
     );
   }
 
   hasFollowingLineBreak(): boolean {
-    skipWhiteSpaceToLineBreak.lastIndex = this.state.end;
-    return skipWhiteSpaceToLineBreak.test(this.input);
+    return hasNewLine(this.input, this.state.end, this.nextTokenStart());
   }
 
   isLineTerminator(): boolean {
