@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@eslint/js": "^8.44.0",
-    "globals": "^13.20.0"
+    "globals": "^15.6.0"
   },
   "peerDependencies": {
     "@babel/eslint-parser": "^7.16.0"
