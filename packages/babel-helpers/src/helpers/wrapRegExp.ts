@@ -1,7 +1,6 @@
 /* @minVersion 7.19.0 */
 
 import setPrototypeOf from "./setPrototypeOf.ts";
-// @ts-expect-error -- not migrated
 import inherits from "./inherits.ts";
 
 // Define interfaces for clarity and type safety

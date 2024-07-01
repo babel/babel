@@ -15,7 +15,7 @@ export default function _construct(
   }
   // NOTE: If Parent !== Class, the correct __proto__ is set *after*
   //       calling the constructor.
-  var a: any[] = [null];
+  var a: [any, ...any[]] = [null];
   a.push.apply(a, args);
   var instance = new (Parent.bind.apply(Parent, a))();
   if (Class) setPrototypeOf(instance, Class.prototype);
