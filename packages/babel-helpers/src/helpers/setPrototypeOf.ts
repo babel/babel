@@ -5,7 +5,7 @@ export default function _setPrototypeOf(o: object, p: object) {
   _setPrototypeOf = Object.setPrototypeOf
     ? // @ts-expect-error - intentionally omitted argument
       Object.setPrototypeOf.bind(/* undefined */)
-    : function _setPrototypeOf(o: Object, p: object) {
+    : function _setPrototypeOf(o: object, p: object) {
         (o as any).__proto__ = p;
         return o;
       };

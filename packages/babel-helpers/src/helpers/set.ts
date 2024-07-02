@@ -55,7 +55,7 @@ function set(
 }
 
 export default function _set(
-  target: Object,
+  target: object,
   property: PropertyKey,
   value: any,
   receiver?: any,
