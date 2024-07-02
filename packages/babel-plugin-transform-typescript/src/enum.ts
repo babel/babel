@@ -1,6 +1,7 @@
 import { template, types as t, type NodePath } from "@babel/core";
 import assert from "assert";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 type t = typeof t;
 
@@ -101,7 +102,7 @@ const buildEnumMember = (isString: boolean, options: Record<string, unknown>) =>
 function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
   const { enumValues: x, data, isPure } = translateEnumValues(path, t);
   const assignments = x.map(([memberName, memberValue]) =>
-    buildEnumMember(t.isStringLiteral(memberValue), {
+    buildEnumMember(isSyntacticallyString(memberValue), {
       ENUM: t.cloneNode(id),
       NAME: memberName,
       VALUE: memberValue,
@@ -116,6 +117,25 @@ function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
     data,
     isPure,
   };
+}
+
+export function isSyntacticallyString(expr: t.Expression): boolean {
+  expr = skipTransparentExprWrapperNodes(expr);
+  switch (expr.type) {
+    case "BinaryExpression": {
+      const left = expr.left;
+      const right = expr.right;
+      return (
+        expr.operator === "+" &&
+        (isSyntacticallyString(left as t.Expression) ||
+          isSyntacticallyString(right))
+      );
+    }
+    case "TemplateLiteral":
+    case "StringLiteral":
+      return true;
+  }
+  return false;
 }
 
 /**

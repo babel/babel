@@ -20,6 +20,7 @@
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/helper-create-class-features-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
     "@babel/plugin-syntax-typescript": "workspace:^"
   },
   "peerDependencies": {
