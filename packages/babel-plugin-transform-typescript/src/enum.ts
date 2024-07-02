@@ -120,6 +120,7 @@ function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
 }
 
 export function isSyntacticallyString(expr: t.Expression): boolean {
+  // @ts-ignore(Babel 7 vs Babel 8) Type 'Expression | Super' is not assignable to type 'Expression' in Babel 8
   expr = skipTransparentExprWrapperNodes(expr);
   switch (expr.type) {
     case "BinaryExpression": {
