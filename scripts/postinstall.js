@@ -3,8 +3,8 @@ import isCI from "is-ci";
 import husky from "husky";
 
 if (!isCI) {
-  if (!existsSync(".husky/_/husky.sh")) {
-    husky.install();
+  if (!existsSync(".husky/_/h")) {
+    husky();
   }
 
   if (!existsSync(".vscode/settings.json")) {

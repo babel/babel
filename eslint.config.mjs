@@ -170,6 +170,7 @@ export default [
 
       // v8
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unsafe-function-type": "off",
     },
   }),
   {

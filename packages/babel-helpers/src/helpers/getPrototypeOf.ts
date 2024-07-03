@@ -5,7 +5,7 @@ export default function _getPrototypeOf(o: object) {
   _getPrototypeOf = Object.setPrototypeOf
     ? // @ts-expect-error -- intentionally omitting the argument
       Object.getPrototypeOf.bind(/* undefined */)
-    : function _getPrototypeOf<T extends Object>(o: T) {
+    : function _getPrototypeOf<T extends object>(o: T) {
         return (o as any).__proto__ || Object.getPrototypeOf(o);
       };
   return _getPrototypeOf(o);
