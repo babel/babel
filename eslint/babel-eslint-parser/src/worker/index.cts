@@ -5,6 +5,7 @@ import worker_threads = require("worker_threads");
 
 worker_threads.parentPort.addListener(
   "message",
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async ({ signal, port, action, payload }) => {
     let response;
 
