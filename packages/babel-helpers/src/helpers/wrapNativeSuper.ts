@@ -10,7 +10,7 @@ import construct from "./construct.ts";
 export default function _wrapNativeSuper(Class: Function | null) {
   var _cache = typeof Map === "function" ? new Map() : undefined;
 
-  // @ts-expect-error -- test
+  // @ts-expect-error -- reuse function id for helper size
   _wrapNativeSuper = function _wrapNativeSuper(Class: Function | null) {
     if (Class === null || !isNativeFunction(Class)) return Class;
     if (typeof Class !== "function") {
@@ -22,7 +22,7 @@ export default function _wrapNativeSuper(Class: Function | null) {
     }
 
     function Wrapper() {
-      // @ts-expect-error -- where are sure Class is a function here
+      // @ts-expect-error -- we are sure Class is a function here
       return construct(Class, arguments, getPrototypeOf(this).constructor);
     }
     Wrapper.prototype = Object.create(Class.prototype, {
