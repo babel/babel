@@ -1,5 +1,4 @@
 version: 2.1
-
 aliases:
   - &restore-yarn-cache
     key: v2-yarn-cache-{{ checksum "yarn.lock" }}
