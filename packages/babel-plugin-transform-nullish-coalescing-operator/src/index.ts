@@ -24,8 +24,8 @@ export default declare((api, { loose = false }: Options) => {
 
         let ref;
         let assignment;
-        // skip creating extra reference when `left` is static
-        if (scope.isStatic(node.left)) {
+        // skip creating extra reference when `left` is pure
+        if (scope.isPure(node.left)) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
         } else if (scope.path.isPattern()) {
