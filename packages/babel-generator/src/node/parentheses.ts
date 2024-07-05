@@ -41,6 +41,23 @@ const PRECEDENCE = new Map([
   ["**", 10],
 ]);
 
+function getBinaryPrecedence(
+  node: t.Binary | t.TSAsExpression | t.TSSatisfiesExpression,
+  nodeType: string,
+): number;
+function getBinaryPrecedence(
+  node: t.Node,
+  nodeType: string,
+): number | undefined;
+function getBinaryPrecedence(node: t.Node, nodeType: string) {
+  if (nodeType === "BinaryExpression" || nodeType === "LogicalExpression") {
+    return PRECEDENCE.get((node as t.Binary).operator);
+  }
+  if (nodeType === "TSAsExpression" || nodeType === "TSSatisfiesExpression") {
+    return PRECEDENCE.get("in");
+  }
+}
+
 const enum CheckParam {
   expressionStatement = 1 << 0,
   arrowBody = 1 << 1,
@@ -143,11 +160,12 @@ export function DoExpression(
 }
 
 export function Binary(
-  node: t.BinaryExpression,
+  node: t.Binary | t.TSAsExpression | t.TSSatisfiesExpression,
   parent: t.Node,
 ): boolean | undefined {
   const parentType = parent.type;
   if (
+    node.type === "BinaryExpression" &&
     node.operator === "**" &&
     parentType === "BinaryExpression" &&
     parent.operator === "**"
@@ -168,15 +186,14 @@ export function Binary(
     return true;
   }
 
-  if (parentType === "BinaryExpression" || parentType === "LogicalExpression") {
-    const parentPos = PRECEDENCE.get(parent.operator);
-    const nodePos = PRECEDENCE.get(node.operator);
-
+  const parentPos = getBinaryPrecedence(parent, parentType);
+  if (parentPos != null) {
+    const nodePos = getBinaryPrecedence(node, node.type);
     if (
       // Logical expressions with the same precedence don't need parens.
       (parentPos === nodePos &&
-        parent.right === node &&
-        parentType !== "LogicalExpression") ||
+        parentType === "BinaryExpression" &&
+        parent.right === node) ||
       parentPos > nodePos
     ) {
       return true;
@@ -208,14 +225,23 @@ export function OptionalIndexedAccessType(
   return isIndexedAccessType(parent) && parent.objectType === node;
 }
 
-export function TSAsExpression() {
-  return true;
+export function TSAsExpression(
+  node: t.TSAsExpression | t.TSSatisfiesExpression,
+  parent: t.Node,
+): boolean {
+  if (
+    parent.type === "BinaryExpression" &&
+    (parent.operator === "|" || parent.operator === "&") &&
+    node === parent.left
+  ) {
+    return true;
+  }
+  return Binary(node, parent);
 }
 
-export {
-  TSAsExpression as TSSatisfiesExpression,
-  TSAsExpression as TSTypeAssertion,
-};
+export { TSAsExpression as TSSatisfiesExpression };
+
+export { UnaryLike as TSTypeAssertion };
 
 export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   const parentType = parent.type;
@@ -328,6 +354,7 @@ export function ClassExpression(
 export function UnaryLike(
   node:
     | t.UnaryLike
+    | t.TSTypeAssertion
     | t.ArrowFunctionExpression
     | t.ConditionalExpression
     | t.AssignmentExpression,
