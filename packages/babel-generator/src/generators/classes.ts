@@ -205,10 +205,12 @@ export function _classMethodHead(
 ) {
   this.printJoin(node.decorators);
 
-  // catch up to method key, avoid line break
-  // between member modifiers/method heads and the method key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!this.format.preserveFormat) {
+    // catch up to method key, avoid line break
+    // between member modifiers/method heads and the method key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
   this.tsPrintClassMemberModifiers(node);
   this._methodHead(node);
