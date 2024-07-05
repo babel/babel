@@ -18,6 +18,7 @@
   "Intl-enumeration",
   "IsHTMLDDA",
   "Map",
+  "Math.sumPrecise",
   "Object.fromEntries",
   "Object.hasOwn",
   "Object.is",
