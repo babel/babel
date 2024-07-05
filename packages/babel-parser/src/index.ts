@@ -18,6 +18,7 @@ import {
   tt as internalTokenTypes,
   type InternalTokenTypes,
 } from "./tokenizer/types.ts";
+export type { Token } from "./tokenizer/index.ts";
 
 import type { Expression, File } from "./types.ts";
 export type { Expression, File };

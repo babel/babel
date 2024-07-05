@@ -1,8 +1,14 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
 
-export function TSTypeAnnotation(this: Printer, node: t.TSTypeAnnotation) {
-  this.token(":");
+export function TSTypeAnnotation(
+  this: Printer,
+  node: t.TSTypeAnnotation,
+  parent: t.Node,
+) {
+  // TODO(@nicolo-ribaudo): investigate not including => in the range
+  // of the return type of an arrow function type
+  this.token(parent.type === "TSFunctionType" ? "=>" : ":");
   this.space();
   // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
   if (node.optional) this.token("?");
@@ -246,14 +252,12 @@ export function tsPrintFunctionOrConstructorType(
   this._parameters(parameters);
   this.token(")");
   this.space();
-  this.token("=>");
-  this.space();
   const returnType = process.env.BABEL_8_BREAKING
     ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
       node.returnType
     : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
       node.typeAnnotation;
-  this.print(returnType.typeAnnotation);
+  this.print(returnType);
 }
 
 export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
@@ -358,9 +362,9 @@ function tsPrintUnionOrIntersectionType(
   sep: "|" | "&",
 ) {
   printer.printJoin(node.types, {
-    separator() {
+    separator(i) {
       this.space();
-      this.token(sep);
+      this.token(sep, null, i);
       this.space();
     },
   });

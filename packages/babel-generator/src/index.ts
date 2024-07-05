@@ -20,10 +20,17 @@ function normalizeOptions(
   code: string | { [filename: string]: string },
   opts: GeneratorOptions,
 ): Format {
+  if (opts.preserveFormat && !opts.retainLines) {
+    throw new Error(
+      "`preserveFormat` requires `retainLines` to be set to `true`",
+    );
+  }
+
   const format: Format = {
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     shouldPrintComment: opts.shouldPrintComment,
+    preserveFormat: opts.preserveFormat,
     retainLines: opts.retainLines,
     retainFunctionParens: opts.retainFunctionParens,
     comments: opts.comments == null || opts.comments,
@@ -109,6 +116,8 @@ export interface GeneratorOptions {
    * contains `@preserve` or `@license`.
    */
   shouldPrintComment?(comment: string): boolean;
+
+  preserveFormat?: boolean;
 
   /**
    * Attempt to use the same line numbers in the output code as in the source code (helps preserve stack traces).
@@ -252,7 +261,7 @@ export default function generate(
   const format = normalizeOptions(code, opts);
   const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
 
-  const printer = new Printer(format, map);
+  const printer = new Printer(format, map, (ast as any).tokens);
 
   return printer.generate(ast);
 }

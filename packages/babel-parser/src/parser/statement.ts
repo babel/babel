@@ -76,24 +76,30 @@ function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
           tokens.splice(
             i,
             1,
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.hash),
-              value: "#",
-              start: start,
-              end: hashEndPos,
-              startLoc: loc.start,
-              endLoc: hashEndLoc,
-            }),
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.name),
-              value: value,
-              start: hashEndPos,
-              end: end,
-              startLoc: hashEndLoc,
-              endLoc: loc.end,
-            }),
+            new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.hash),
+                value: "#",
+                start: start,
+                end: hashEndPos,
+                startLoc: loc.start,
+                endLoc: hashEndLoc,
+              },
+              "#",
+            ),
+            new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.name),
+                value: value,
+                start: hashEndPos,
+                end: end,
+                startLoc: hashEndLoc,
+                endLoc: loc.end,
+              },
+              input.slice(hashEndPos, end),
+            ),
           );
           i++;
           continue;
@@ -105,25 +111,31 @@ function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
           const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
           let startToken;
           if (input.charCodeAt(start) === charCodes.graveAccent) {
-            startToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.backQuote),
-              value: "`",
-              start: start,
-              end: backquoteEnd,
-              startLoc: loc.start,
-              endLoc: backquoteEndLoc,
-            });
+            startToken = new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.backQuote),
+                value: "`",
+                start: start,
+                end: backquoteEnd,
+                startLoc: loc.start,
+                endLoc: backquoteEndLoc,
+              },
+              "`",
+            );
           } else {
-            startToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.braceR),
-              value: "}",
-              start: start,
-              end: backquoteEnd,
-              startLoc: loc.start,
-              endLoc: backquoteEndLoc,
-            });
+            startToken = new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.braceR),
+                value: "}",
+                start: start,
+                end: backquoteEnd,
+                startLoc: loc.start,
+                endLoc: backquoteEndLoc,
+              },
+              "}",
+            );
           }
           let templateValue,
             templateElementEnd,
@@ -134,43 +146,52 @@ function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
             templateElementEnd = end - 1;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
             templateValue = value === null ? null : value.slice(1, -1);
-            endToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.backQuote),
-              value: "`",
-              start: templateElementEnd,
-              end: end,
-              startLoc: templateElementEndLoc,
-              endLoc: loc.end,
-            });
+            endToken = new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.backQuote),
+                value: "`",
+                start: templateElementEnd,
+                end: end,
+                startLoc: templateElementEndLoc,
+                endLoc: loc.end,
+              },
+              "`",
+            );
           } else {
             // ends with `${`
             templateElementEnd = end - 2;
             templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
             templateValue = value === null ? null : value.slice(1, -2);
-            endToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.dollarBraceL),
-              value: "${",
-              start: templateElementEnd,
-              end: end,
-              startLoc: templateElementEndLoc,
-              endLoc: loc.end,
-            });
+            endToken = new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.dollarBraceL),
+                value: "${",
+                start: templateElementEnd,
+                end: end,
+                startLoc: templateElementEndLoc,
+                endLoc: loc.end,
+              },
+              "${",
+            );
           }
           tokens.splice(
             i,
             1,
             startToken,
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.template),
-              value: templateValue,
-              start: backquoteEnd,
-              end: templateElementEnd,
-              startLoc: backquoteEndLoc,
-              endLoc: templateElementEndLoc,
-            }),
+            new Token(
+              {
+                // @ts-expect-error: hacky way to create token
+                type: getExportedToken(tt.template),
+                value: templateValue,
+                start: backquoteEnd,
+                end: templateElementEnd,
+                startLoc: backquoteEndLoc,
+                endLoc: templateElementEndLoc,
+              },
+              input.slice(backquoteEnd, templateElementEnd),
+            ),
             endToken,
           );
           i += 2;

@@ -96,14 +96,14 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (i < len - 1) this.token(",");
+      if (i < len - 1) this.token(",", false, i);
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      this.token(",");
+      this.token(",", false, i);
     }
   }
 
