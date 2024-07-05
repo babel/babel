@@ -8,6 +8,7 @@ export interface Options {
 export default declare((api, { loose = false }: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
   const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
+  const pureGetters = api.assumption("pureGetters") ?? false;
 
   return {
     name: "transform-nullish-coalescing-operator",
@@ -22,10 +23,23 @@ export default declare((api, { loose = false }: Options) => {
           return;
         }
 
+        let pureMember = false;
+        if (pureGetters) {
+          let obj: t.Expression = node.left;
+          while (t.isMemberExpression(obj)) {
+            if (obj.computed) break;
+            obj = obj.object;
+          }
+          if (t.isIdentifier(obj)) {
+            pureMember = true;
+          }
+        }
+
         let ref;
         let assignment;
         // skip creating extra reference when `left` is pure
         if (
+          pureMember ||
           // globalThis
           t.isIdentifier(node.left) ||
           scope.isPure(node.left)
