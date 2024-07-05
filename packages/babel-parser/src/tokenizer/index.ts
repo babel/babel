@@ -66,9 +66,10 @@ const VALID_REGEX_FLAGS = new Set([
 // used for the onToken callback and the external tokenizer.
 
 export class Token {
-  constructor(state: State) {
+  constructor(state: State, raw: string) {
     this.type = state.type;
     this.value = state.value;
+    this.raw = raw;
     this.start = state.start;
     this.end = state.end;
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
@@ -76,6 +77,7 @@ export class Token {
 
   declare type: TokenType;
   declare value: any;
+  declare raw: string;
   declare start: number;
   declare end: number;
   declare loc: SourceLocation;
@@ -112,7 +114,12 @@ export default abstract class Tokenizer extends CommentsParser {
   next(): void {
     this.checkKeywordEscapes();
     if (this.options.tokens) {
-      this.pushToken(new Token(this.state));
+      this.pushToken(
+        new Token(
+          this.state,
+          this.input.slice(this.state.start, this.state.end),
+        ),
+      );
     }
 
     this.state.lastTokEndLoc = this.state.endLoc;

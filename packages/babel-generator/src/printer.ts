@@ -8,6 +8,7 @@ import {
   isClassBody,
   isTSInterfaceBody,
   isTSEnumDeclaration,
+  VISITOR_KEYS,
 } from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
 
@@ -15,6 +16,7 @@ import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
 import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
+import type { Token } from "@babel/parser";
 
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -48,6 +50,7 @@ const enum PRINT_COMMENT_HINT {
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
+  preserveFormat: boolean;
   retainLines: boolean;
   retainFunctionParens: boolean;
   comments: boolean;
@@ -99,7 +102,7 @@ interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
 }
 
 interface PrintListOptions {
-  separator?: (this: Printer) => void;
+  separator?: (this: Printer, occurrenceCount: number) => void;
   iterator?: (node: t.Node, index: number) => void;
   statement?: boolean;
   indent?: boolean;
@@ -107,8 +110,10 @@ interface PrintListOptions {
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
-  constructor(format: Format, map: SourceMap) {
+  constructor(format: Format, map: SourceMap, tokens?: Token[]) {
     this.format = format;
+
+    this._tokens = tokens;
 
     this._indentRepeat = format.indent.style.length;
 
@@ -131,6 +136,8 @@ class Printer {
   }
 
   tokenContext: number = 0;
+
+  _tokens: Token[] = null;
 
   declare _buf: Buffer;
   _currentNode: t.Node = null;
@@ -159,6 +166,8 @@ class Printer {
    */
 
   indent(): void {
+    if (this.format.preserveFormat) return;
+
     if (this.format.compact || this.format.concise) return;
 
     this._indent++;
@@ -169,6 +178,8 @@ class Printer {
    */
 
   dedent(): void {
+    if (this.format.preserveFormat) return;
+
     if (this.format.compact || this.format.concise) return;
 
     this._indent--;
@@ -210,7 +221,7 @@ class Printer {
    */
 
   space(force: boolean = false): void {
-    if (this.format.compact) return;
+    if (this.format.compact || this.format.preserveFormat) return;
 
     if (force) {
       this._space();
@@ -278,7 +289,7 @@ class Printer {
   /**
    * Writes a simple token.
    */
-  token(str: string, maybeNewline = false): void {
+  token(str: string, maybeNewline = false, occurrenceCount = 0): void {
     this.tokenContext = 0;
 
     this._maybePrintInnerComments();
@@ -302,7 +313,7 @@ class Printer {
     }
 
     this._maybeAddAuxComment();
-    this._append(str, maybeNewline);
+    this._append(str, maybeNewline, occurrenceCount);
     this._noLineTerminator = false;
   }
 
@@ -396,7 +407,7 @@ class Printer {
     loc: Loc | undefined,
     columnOffset: number,
   ): void {
-    if (!loc) return;
+    if (!loc || this.format.preserveFormat) return;
 
     this._catchUp(prop, loc);
 
@@ -419,7 +430,105 @@ class Printer {
     this._queue(charCodes.lineFeed);
   }
 
-  _append(str: string, maybeNewline: boolean): void {
+  _findFirstTokenOfNode(start: number, low: number, high: number): number {
+    while (low <= high) {
+      const mid = (high + low) >> 1;
+      if (start < this._tokens[mid].start) {
+        high = mid - 1;
+      } else if (start > this._tokens[mid].start) {
+        low = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+    return low;
+  }
+
+  _findLastTokenOfNode(end: number, low: number, high: number): number {
+    while (low <= high) {
+      const mid = (high + low) >> 1;
+      if (end < this._tokens[mid].end) {
+        high = mid - 1;
+      } else if (end > this._tokens[mid].end) {
+        low = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+    return high;
+  }
+
+  _tokensCache = new WeakMap<t.Node, { first: number; last: number }>();
+  _findTokensOfNode(
+    node: t.Node,
+    low: number = 0,
+    high: number = this._tokens.length - 1,
+  ) {
+    //const cached = this._tokensCache.get(node);
+    //if (cached) return cached;
+
+    const first = this._findFirstTokenOfNode(node.start, low, high);
+    const last = this._findLastTokenOfNode(node.end, first, high);
+
+    this._tokensCache.set(node, { first, last });
+    return { first, last };
+  }
+
+  _findToken(str: string, occurrenceCount: number = 0): Token | null {
+    const node = this._currentNode;
+    if (node.start == null || node.end == null) return null;
+
+    const { first, last } = this._findTokensOfNode(node);
+
+    let low = first;
+
+    const keys = VISITOR_KEYS[node.type];
+    for (const key of keys) {
+      let children = (node as any)[key] as t.Node | t.Node[];
+      if (!children) continue;
+      if (!Array.isArray(children)) children = [children];
+      for (const child of children) {
+        if (!child) continue;
+
+        const childTok = this._findTokensOfNode(child, low, last);
+
+        const high = childTok.first;
+
+        for (let k = low; k < high; k++) {
+          if (this._tokens[k].raw === str) {
+            if (occurrenceCount === 0) return this._tokens[k];
+            occurrenceCount--;
+          }
+        }
+
+        low = childTok.last + 1;
+      }
+    }
+
+    for (let k = low; k <= last; k++) {
+      if (this._tokens[k].raw === str) {
+        if (occurrenceCount === 0) return this._tokens[k];
+        occurrenceCount--;
+      }
+    }
+
+    return null;
+  }
+
+  _retainPos(str: string, occurrenceCount: number = 0) {
+    const token = this._findToken(str, occurrenceCount);
+    if (token) this._catchUpTo(token.loc.start);
+  }
+
+  _append(
+    str: string,
+    maybeNewline: boolean,
+    occurrenceCount: number = 0,
+  ): void {
+    if (this.format.preserveFormat && this._tokens) {
+      this._retainPos(str, occurrenceCount);
+    }
+
     this._maybeAddParen(str);
     this._maybeIndent(str.charCodeAt(0));
 
@@ -430,6 +539,10 @@ class Printer {
   }
 
   _appendChar(char: number): void {
+    if (this.format.preserveFormat && this._tokens) {
+      this._retainPos(String.fromCharCode(char));
+    }
+
     this._maybeAddParenChar(char);
     this._maybeIndent(char);
 
@@ -564,16 +677,29 @@ class Printer {
   }
 
   _catchUp(prop: "start" | "end", loc?: Loc) {
-    if (!this.format.retainLines) return;
+    if (this.format.retainLines && !this.format.preserveFormat && loc?.[prop]) {
+      this.catchUp(loc[prop].line);
+      return;
+    }
+    if (!this.format.preserveFormat) return;
 
     // catch up to this nodes newline if we're behind
-    const line = loc?.[prop]?.line;
-    if (line != null) {
-      const count = line - this._buf.getCurrentLine();
+    const pos = loc?.[prop];
+    if (pos != null) this._catchUpTo(pos);
+  }
 
-      for (let i = 0; i < count; i++) {
-        this._newline();
-      }
+  _catchUpTo({ line, column }: Pos) {
+    const count = line - this._buf.getCurrentLine();
+
+    for (let i = 0; i < count; i++) {
+      this._newline();
+    }
+
+    if (count > 0) {
+      this._append(" ".repeat(column), false);
+    } else {
+      const col = this._buf.getCurrentColumn();
+      if (column > col) this._append(" ".repeat(column - col), false);
     }
   }
 
@@ -673,6 +799,7 @@ class Printer {
     const parenthesized = node.extra?.parenthesized as boolean | undefined;
     let shouldPrintParens =
       forceParens ||
+      (parenthesized && format.preserveFormat) ||
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
@@ -836,7 +963,7 @@ class Printer {
 
       opts.iterator?.(node, i);
 
-      if (i < len - 1) separator?.();
+      if (i < len - 1) separator?.(i);
 
       if (opts.statement) {
         if (!node.trailingComments?.length) {
@@ -1256,7 +1383,7 @@ type GeneratorFunctions = typeof generatorFunctions;
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 
-function commaSeparator(this: Printer) {
-  this.token(",");
+function commaSeparator(this: Printer, occurrenceCount: number) {
+  this.token(",", false, occurrenceCount);
   this.space();
 }

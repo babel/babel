@@ -82,7 +82,7 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
     this.space();
     this.print(node.test, node);
   }
-  this.token(";");
+  this.token(";", false, 1);
 
   if (node.update) {
     this.space();
@@ -310,8 +310,8 @@ export function VariableDeclaration(
 
   this.printList(node.declarations, node, {
     separator: hasInits
-      ? function (this: Printer) {
-          this.token(",");
+      ? function (this: Printer, occurrenceCount: number) {
+          this.token(",", false, occurrenceCount);
           this.newline();
         }
       : undefined,
