@@ -23,25 +23,19 @@ export default declare((api, { loose = false }: Options) => {
           return;
         }
 
-        let pureMember = false;
-        if (pureGetters) {
-          let obj: t.Expression = node.left;
-          while (t.isMemberExpression(obj)) {
-            if (obj.computed) break;
-            obj = obj.object;
-          }
-          if (t.isIdentifier(obj)) {
-            pureMember = true;
-          }
-        }
-
         let ref;
         let assignment;
         // skip creating extra reference when `left` is pure
         if (
-          pureMember ||
-          // globalThis
-          t.isIdentifier(node.left) ||
+          (pureGetters &&
+            t.isMemberExpression(node.left) &&
+            !node.left.computed &&
+            t.isIdentifier(node.left.object) &&
+            t.isIdentifier(node.left.property)) ||
+          (t.isIdentifier(node.left) &&
+            (pureGetters ||
+              // globalThis
+              scope.hasBinding(node.left.name))) ||
           scope.isPure(node.left)
         ) {
           ref = node.left;
