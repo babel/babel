@@ -17,3 +17,8 @@ var obj2 = {
     get foo() { return counter2++; }
 };
 expect(obj2.foo ?? -1).toBe(0);
+
+var access_a = 0;
+Object.assign(globalThis, { get a() { access_a++ } });
+a ?? {};
+expect(access_a).toBe(1);
