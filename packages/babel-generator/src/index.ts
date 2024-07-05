@@ -82,7 +82,7 @@ function normalizeOptions(
     }
   }
 
-  if (format.compact) {
+  if (format.compact || format.preserveFormat) {
     format.indent.adjustMultilineComment = false;
   }
 
