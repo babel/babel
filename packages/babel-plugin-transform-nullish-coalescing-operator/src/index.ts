@@ -25,7 +25,11 @@ export default declare((api, { loose = false }: Options) => {
         let ref;
         let assignment;
         // skip creating extra reference when `left` is pure
-        if (scope.isPure(node.left)) {
+        if (
+          // globalThis
+          t.isIdentifier(node.left) ||
+          scope.isPure(node.left)
+        ) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
         } else if (scope.path.isPattern()) {
