@@ -1,6 +1,10 @@
 {
   "transform-duplicate-named-capturing-groups-regex": {
-    "safari": "17.4"
+    "chrome": "126",
+    "edge": "126",
+    "firefox": "129",
+    "safari": "17.4",
+    "electron": "31.0"
   },
   "transform-unicode-sets-regex": {
     "chrome": "112",
