@@ -2,8 +2,7 @@
   "type": "File",
   "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":26,"index":53}},
   "errors": [
-    "SyntaxError: Using declaration cannot have destructuring patterns. (1:16)",
-    "SyntaxError: Using declaration cannot have destructuring patterns. (2:16)"
+    "SyntaxError: Using declaration cannot have destructuring patterns. (1:16)"
   ],
   "program": {
     "type": "Program",

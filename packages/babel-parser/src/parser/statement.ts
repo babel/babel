@@ -1567,7 +1567,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     const id = this.parseBindingAtom();
     if (kind === "using" || kind === "await using") {
-      if (id.type !== "Identifier") {
+      if (id.type !== "Identifier" && id.type !== "ArrayPattern") {
         this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
       }
     }
