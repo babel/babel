@@ -100,12 +100,12 @@ function getParser(options: Options | undefined | null, input: string): Parser {
   return new cls(options, input);
 }
 
-const parserClassCache: { [key: string]: { new (...args: any): Parser } } = {};
+const parserClassCache: { [key: string]: new (...args: any) => Parser } = {};
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions: PluginList): {
-  new (...args: any): Parser;
-} {
+function getParserClass(
+  pluginsFromOptions: PluginList,
+): new (...args: any) => Parser {
   const pluginList = mixinPluginNames.filter(name =>
     hasPlugin(pluginsFromOptions, name),
   );
