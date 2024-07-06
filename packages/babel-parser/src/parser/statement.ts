@@ -323,10 +323,13 @@ export default abstract class StatementParser extends ExpressionParser {
    * starts a variable declaration in the same line so that it should be interpreted as
    * a keyword.
    */
-  hasInLineFollowingBindingIdentifier(): boolean {
+  hasInLineFollowingBindingIdentifierOrBrace(): boolean {
     const next = this.nextTokenInLineStart();
     const nextCh = this.codePointAtPos(next);
-    return this.chStartsBindingIdentifier(nextCh, next);
+    return (
+      nextCh === charCodes.leftCurlyBrace ||
+      this.chStartsBindingIdentifier(nextCh, next)
+    );
   }
 
   startsUsingForOf(): boolean {
@@ -506,19 +509,11 @@ export default abstract class StatementParser extends ExpressionParser {
         // using [no LineTerminator here] BindingList[+Using]
         if (
           this.state.containsEsc ||
-          !this.hasInLineFollowingBindingIdentifier()
+          !this.hasInLineFollowingBindingIdentifierOrBrace()
         ) {
           break;
         }
         this.expectPlugin("explicitResourceManagement");
-
-        if (this.lookahead().type === tt.braceL) {
-          this.raise(
-            Errors.UsingDeclarationHasBindingPattern,
-            this.state.startLoc,
-          );
-        }
-
         if (!this.scope.inModule && this.scope.inTopLevel) {
           this.raise(Errors.UnexpectedUsingDeclaration, this.state.startLoc);
         } else if (!allowDeclaration) {
