@@ -511,6 +511,14 @@ export default abstract class StatementParser extends ExpressionParser {
           break;
         }
         this.expectPlugin("explicitResourceManagement");
+
+        if (this.lookahead().type === tt.braceL) {
+          this.raise(
+            Errors.UsingDeclarationHasBindingPattern,
+            this.state.startLoc,
+          );
+        }
+
         if (!this.scope.inModule && this.scope.inTopLevel) {
           this.raise(Errors.UnexpectedUsingDeclaration, this.state.startLoc);
         } else if (!allowDeclaration) {
@@ -1567,7 +1575,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     const id = this.parseBindingAtom();
     if (kind === "using" || kind === "await using") {
-      if (id.type !== "Identifier" && id.type !== "ArrayPattern") {
+      if (id.type === "ArrayPattern" || id.type === "ObjectPattern") {
         this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
       }
     }
