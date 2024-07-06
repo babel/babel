@@ -2,16 +2,14 @@
 
 // This is duplicated to packages/babel-plugin-transform-classes/src/inline-callSuper-helpers.ts
 
-// @ts-expect-error helper
-import getPrototypeOf from "getPrototypeOf";
+import getPrototypeOf from "./getPrototypeOf.ts";
 import isNativeReflectConstruct from "./isNativeReflectConstruct.ts";
-// @ts-expect-error helper
-import possibleConstructorReturn from "possibleConstructorReturn";
+import possibleConstructorReturn from "./possibleConstructorReturn.ts";
 
 export default function _callSuper(
-  _this: Function,
+  _this: object,
   derived: Function,
-  args: any[],
+  args: ArrayLike<any>,
 ) {
   // Super
   derived = getPrototypeOf(derived);
@@ -22,6 +20,7 @@ export default function _callSuper(
         Reflect.construct(
           derived,
           args || [],
+          // @ts-expect-error -- getPrototypeOf needs better typing
           getPrototypeOf(_this).constructor,
         )
       : derived.apply(_this, args),

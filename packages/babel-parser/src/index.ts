@@ -110,12 +110,10 @@ function getParser(options: Options | undefined | null, input: string): Parser {
   return new cls(options, input, pluginsMap);
 }
 
-const parserClassCache = new Map<string, { new (...args: any): Parser }>();
+const parserClassCache = new Map<string, new (...args: any) => Parser>();
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(pluginsMap: Map<string, any>): {
-  new (...args: any): Parser;
-} {
+function getParserClass(pluginsMap: Map<string, any>): new (...args: any) => Parser {
   const pluginList = [];
   for (const name of mixinPluginNames) {
     if (pluginsMap.has(name)) {

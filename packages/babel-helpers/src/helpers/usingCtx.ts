@@ -106,7 +106,6 @@ export default function _usingCtx(): UsingCtxReturn {
             return err(e as Error);
           }
         }
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
         if (error !== empty) throw error;
       }
 

@@ -5,9 +5,9 @@ export type Plugin = PluginConfig;
 
 export type PluginList = PluginConfig[];
 
-export type MixinPlugin = (superClass: { new (...args: any): Parser }) => {
-  new (...args: any): Parser;
-};
+export type MixinPlugin = (
+  superClass: new (...args: any) => Parser,
+) => new (...args: any) => Parser;
 
 const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];

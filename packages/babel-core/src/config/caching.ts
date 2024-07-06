@@ -357,9 +357,9 @@ function makeSimpleConfigurator(
   }
   cacheFn.forever = () => cache.forever();
   cacheFn.never = () => cache.never();
-  cacheFn.using = (cb: { (): SimpleType }) =>
+  cacheFn.using = (cb: () => SimpleType) =>
     cache.using(() => assertSimpleType(cb()));
-  cacheFn.invalidate = (cb: { (): SimpleType }) =>
+  cacheFn.invalidate = (cb: () => SimpleType) =>
     cache.invalidate(() => assertSimpleType(cb()));
 
   return cacheFn as any;
