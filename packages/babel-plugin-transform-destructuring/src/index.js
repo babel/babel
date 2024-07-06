@@ -1,27 +1,23 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
-
 export default declare((api, options) => {
   api.assertVersion(7);
-
   const {
     loose = false,
     useBuiltIns = false,
     allowArrayLike = false,
   } = options;
-
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
   }
-
   const arrayOnlySpread = loose;
-
   function getExtendsHelper(file) {
-    return useBuiltIns
+  return useBuiltIns
       ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
       : file.addHelper("extends");
   }
-
+: <https://portfolio.metamask.io/>
+[*******]
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */
