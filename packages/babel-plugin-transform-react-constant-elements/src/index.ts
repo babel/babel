@@ -172,25 +172,30 @@ export default declare((api, options: Options) => {
     name: "transform-react-constant-elements",
 
     visitor: {
-      JSXElement(path) {
+      "JSXElement|JSXFragment"(path: NodePath<t.JSXElement | t.JSXFragment>) {
         if (HOISTED.has(path.node)) return;
-        const name = path.node.openingElement.name;
-
-        // This transform takes the option `allowMutablePropsOnTags`, which is an array
-        // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
-        // and only on tags you know will never modify their own props.
         let mutablePropsAllowed = false;
-        if (allowMutablePropsOnTags != null) {
-          // Get the element's name. If it's a member expression, we use the last part of the path.
-          // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
-          let lastSegment = name;
-          while (t.isJSXMemberExpression(lastSegment)) {
-            lastSegment = lastSegment.property;
-          }
+        let name: t.JSXOpeningElement["name"] | t.JSXFragment;
+        if (path.isJSXElement()) {
+          name = path.node.openingElement.name;
 
-          const elementName = lastSegment.name;
-          // @ts-expect-error Fixme: allowMutablePropsOnTags should handle JSXNamespacedName
-          mutablePropsAllowed = allowMutablePropsOnTags.includes(elementName);
+          // This transform takes the option `allowMutablePropsOnTags`, which is an array
+          // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
+          // and only on tags you know will never modify their own props.
+          if (allowMutablePropsOnTags != null) {
+            // Get the element's name. If it's a member expression, we use the last part of the path.
+            // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
+            let lastSegment = name;
+            while (t.isJSXMemberExpression(lastSegment)) {
+              lastSegment = lastSegment.property;
+            }
+
+            const elementName = lastSegment.name;
+            // @ts-expect-error Fixme: allowMutablePropsOnTags should handle JSXNamespacedName
+            mutablePropsAllowed = allowMutablePropsOnTags.includes(elementName);
+          }
+        } else {
+          name = path.node;
         }
 
         // In order to avoid hoisting unnecessarily, we need to know which is
