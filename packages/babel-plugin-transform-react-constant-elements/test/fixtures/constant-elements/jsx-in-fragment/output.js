@@ -1,4 +1,4 @@
-var _div;
+var _Fragment;
 function F() {
-  return <>{_div || (_div = <div>f</div>)}</>;
+  return _Fragment || (_Fragment = <><div>f</div></>);
 }
