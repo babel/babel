@@ -226,10 +226,18 @@ function gatherNodeParts(node: t.Node, parts: NodePart[]) {
 }
 
 function resetScope(scope: Scope) {
-  scope.references = Object.create(null);
+  if (!process.env.BABEL_8_BREAKING) {
+    // @ts-expect-error(Babel 7 vs Babel 8)
+    scope.references = Object.create(null);
+    // @ts-expect-error(Babel 7 vs Babel 8)
+    scope.uids = Object.create(null);
+  } else if (scope.path.type === "Program") {
+    scope.referencesSet = new Set();
+    scope.uidsSet = new Set();
+  }
+
   scope.bindings = Object.create(null);
   scope.globals = Object.create(null);
-  scope.uids = Object.create(null);
 }
 
 interface CollectVisitorState {
@@ -420,9 +428,9 @@ class Scope {
 
   labels: Map<string, NodePath<t.LabeledStatement>>;
   bindings: { [name: string]: Binding };
-  references: { [name: string]: true };
+  referencesSet?: Set<string>;
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
-  uids: { [name: string]: boolean };
+  uidsSet?: Set<string>;
   data: { [key: string | symbol]: unknown };
   crawling: boolean;
 
@@ -447,6 +455,24 @@ class Scope {
 
     this.labels = new Map();
     this.inited = false;
+
+    if (!process.env.BABEL_8_BREAKING) {
+      // Shadow the Babel 8 removal getters
+      Object.defineProperties(this, {
+        references: {
+          enumerable: true,
+          configurable: true,
+          writable: true,
+          value: Object.create(null),
+        },
+        uids: {
+          enumerable: true,
+          configurable: true,
+          writable: true,
+          value: Object.create(null),
+        },
+      });
+    }
   }
 
   /**
@@ -473,6 +499,18 @@ class Scope {
     } while (path && !parent);
 
     return parent?.scope;
+  }
+
+  get references() {
+    throw new Error(
+      "Scope#references is not available in Babel 8. Use Scope#referencesSet instead.",
+    );
+  }
+
+  get uids() {
+    throw new Error(
+      "Scope#uids is not available in Babel 8. Use Scope#uidsSet instead.",
+    );
   }
 
   /**
@@ -522,8 +560,15 @@ class Scope {
     );
 
     const program = this.getProgramParent();
-    program.references[uid] = true;
-    program.uids[uid] = true;
+    if (process.env.BABEL_8_BREAKING) {
+      program.referencesSet.add(uid);
+      program.uidsSet.add(uid);
+    } else {
+      // @ts-expect-error Babel 7
+      program.references[uid] = true;
+      // @ts-expect-error Babel 7
+      program.uids[uid] = true;
+    }
 
     return uid;
   }
@@ -746,7 +791,12 @@ class Scope {
     const ids = path.getOuterBindingIdentifiers(true);
 
     for (const name of Object.keys(ids)) {
-      parent.references[name] = true;
+      if (process.env.BABEL_8_BREAKING) {
+        parent.referencesSet.add(name);
+      } else {
+        // @ts-expect-error Babel 7
+        parent.references[name] = true;
+      }
 
       for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
@@ -779,13 +829,18 @@ class Scope {
   }
 
   hasUid(name: string): boolean {
-    let scope: Scope = this;
+    if (process.env.BABEL_8_BREAKING) {
+      return this.getProgramParent().uidsSet.has(name);
+    } else {
+      let scope: Scope = this;
 
-    do {
-      if (scope.uids[name]) return true;
-    } while ((scope = scope.parent));
+      do {
+        // @ts-expect-error Babel 7
+        if (scope.uids[name]) return true;
+      } while ((scope = scope.parent));
 
-    return false;
+      return false;
+    }
   }
 
   hasGlobal(name: string): boolean {
@@ -799,7 +854,12 @@ class Scope {
   }
 
   hasReference(name: string): boolean {
-    return !!this.getProgramParent().references[name];
+    if (process.env.BABEL_8_BREAKING) {
+      return this.getProgramParent().referencesSet.has(name);
+    } else {
+      // @ts-expect-error Babel 7
+      return !!this.getProgramParent().references[name];
+    }
   }
 
   isPure(node: t.Node, constantsOnly?: boolean): boolean {
@@ -1293,12 +1353,18 @@ class Scope {
     this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
-    let scope: Scope = this;
-    do {
-      if (scope.uids[name]) {
-        scope.uids[name] = false;
-      }
-    } while ((scope = scope.parent));
+    if (process.env.BABEL_8_BREAKING) {
+      this.getProgramParent().uidsSet.delete(name);
+    } else {
+      let scope: Scope = this;
+      do {
+        // @ts-expect-error Babel 7
+        if (scope.uids[name]) {
+          // @ts-expect-error Babel 7
+          scope.uids[name] = false;
+        }
+      } while ((scope = scope.parent));
+    }
   }
 
   /**
