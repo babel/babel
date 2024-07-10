@@ -262,7 +262,7 @@ class Printer {
   word(str: string, noLineTerminatorAfter: boolean = false): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(str);
 
     // prevent concatenating words and creating // comment out of division and regex
     if (
@@ -314,7 +314,7 @@ class Printer {
   token(str: string, maybeNewline = false, occurrenceCount = 0): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(str, occurrenceCount);
 
     const lastChar = this.getLastChar();
     const strFirst = str.charCodeAt(0);
@@ -342,7 +342,7 @@ class Printer {
   tokenChar(char: number): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(String.fromCharCode(char));
 
     const lastChar = this.getLastChar();
     if (
@@ -533,14 +533,14 @@ class Printer {
     return null;
   }
 
-  _retainPos(str: string, occurrenceCount: number = 0) {
-    const token = this._findToken(token => {
-      if (token.raw !== str) return false;
+  _getOriginalToken(str: string, occurrenceCount: number = 0) {
+    if (!this._tokens) return null;
+    return this._findToken(token => {
+      if ((token.value ?? token.raw) !== str) return false;
       if (occurrenceCount === 0) return true;
       occurrenceCount--;
       return false;
     });
-    if (token) this._catchUpTo(token.loc.start);
   }
 
   _append(
@@ -548,8 +548,9 @@ class Printer {
     maybeNewline: boolean,
     occurrenceCount: number = 0,
   ): void {
-    if (this.format.preserveFormat && this._tokens) {
-      this._retainPos(str, occurrenceCount);
+    if (this.format.preserveFormat) {
+      const token = this._getOriginalToken(str, occurrenceCount);
+      if (token) this._catchUpTo(token.loc.start);
     }
 
     this._maybeIndent(str.charCodeAt(0));
@@ -563,8 +564,9 @@ class Printer {
   }
 
   _appendChar(char: number): void {
-    if (this.format.preserveFormat && this._tokens) {
-      this._retainPos(String.fromCharCode(char));
+    if (this.format.preserveFormat) {
+      const token = this._getOriginalToken(String.fromCharCode(char));
+      if (token) this._catchUpTo(token.loc.start);
     }
 
     this._maybeIndent(char);
@@ -639,7 +641,7 @@ class Printer {
     }
 
     if (count > 0) {
-      this._append(" ".repeat(column), false);
+      if (column > 0) this._append(" ".repeat(column), false);
     } else {
       const col = this._buf.getCurrentColumn();
       if (column > col) this._append(" ".repeat(column - col), false);
@@ -1004,13 +1006,22 @@ class Printer {
     this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
   }
 
-  _maybePrintInnerComments() {
-    if (this._endsWithInnerRaw) this.printInnerComments();
+  _maybePrintInnerComments(
+    nextTokenStr: string,
+    nextTokenOccurrenceCount?: number,
+  ) {
+    if (this._endsWithInnerRaw) {
+      this.printInnerComments(
+        this.format.preserveFormat
+          ? this._getOriginalToken(nextTokenStr, nextTokenOccurrenceCount)
+          : null,
+      );
+    }
     this._endsWithInnerRaw = true;
     this._indentInnerComments = true;
   }
 
-  printInnerComments() {
+  printInnerComments(nextToken?: Token) {
     const node = this._currentNode;
     const comments = node.innerComments;
     if (!comments?.length) return;
@@ -1019,7 +1030,14 @@ class Printer {
     const indent = this._indentInnerComments;
     const printedCommentsCount = this._printedComments.size;
     if (indent) this.indent();
-    this._printComments(COMMENT_TYPE.INNER, comments, node);
+    this._printComments(
+      COMMENT_TYPE.INNER,
+      comments,
+      node,
+      undefined,
+      undefined,
+      nextToken,
+    );
     if (hasSpace && printedCommentsCount !== this._printedComments.size) {
       this.space();
     }
@@ -1094,7 +1112,10 @@ class Printer {
   // resume printing comments at the next possible position. This happens when
   // printing inner comments, since if we have an inner comment with a multiline
   // there is at least one inner position where line terminators are allowed.
-  _shouldPrintComment(comment: t.Comment): PRINT_COMMENT_HINT {
+  _shouldPrintComment(
+    comment: t.Comment,
+    nextToken?: Token,
+  ): PRINT_COMMENT_HINT {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return PRINT_COMMENT_HINT.SKIP;
@@ -1106,6 +1127,15 @@ class Printer {
       HAS_NEWLINE_OR_BlOCK_COMMENT_END.test(comment.value)
     ) {
       return PRINT_COMMENT_HINT.DEFER;
+    }
+
+    if (nextToken && this.format.preserveFormat) {
+      const commentTok = this._findToken(
+        token => token.value === comment.value,
+      );
+      if (commentTok && commentTok.start > nextToken.start) {
+        return PRINT_COMMENT_HINT.DEFER;
+      }
     }
 
     this._printedComments.add(comment);
@@ -1198,6 +1228,7 @@ class Printer {
     node: t.Node,
     parent?: t.Node,
     lineOffset: number = 0,
+    nextToken?: Token,
   ) {
     const nodeLoc = node.loc;
     const len = comments.length;
@@ -1214,7 +1245,7 @@ class Printer {
     for (let i = 0; i < len; i++) {
       const comment = comments[i];
 
-      const shouldPrint = this._shouldPrintComment(comment);
+      const shouldPrint = this._shouldPrintComment(comment, nextToken);
       if (shouldPrint === PRINT_COMMENT_HINT.DEFER) {
         hasLoc = false;
         break;
