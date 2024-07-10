@@ -45,6 +45,9 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
     const exit = this.enterDelimited();
     this.space();
     this.printList(props, { indent: true, statement: true });
+    if (this.format.preserveFormat && node.extra?.trailingComma) {
+      this.token(",", false, props.length - 1);
+    }
     this.space();
     exit();
   }
@@ -113,7 +116,12 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (i < len - 1) this.token(",", false, i);
+      if (
+        i < len - 1 ||
+        (this.format.preserveFormat && node.extra?.trailingComma)
+      ) {
+        this.token(",", false, i);
+      }
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
