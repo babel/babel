@@ -2,26 +2,27 @@
 
 import { hooks } from "./lib/removal-hooks.ts";
 import { getCachedPaths } from "../cache.ts";
+import { _replaceWith } from "./replacement.ts";
 import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
 import { getBindingIdentifiers } from "@babel/types";
 
 export function removeInternal(this: NodePath, noScope?: boolean) {
-  this._assertUnremoved();
+  _assertUnremoved.call(this);
 
   this.resync();
   if (!noScope && !this.opts?.noScope) {
-    this._removeFromScope();
+    _removeFromScope.call(this);
   }
 
-  if (this._callRemovalHooks()) {
-    this._markRemoved();
+  if (_callRemovalHooks.call(this)) {
+    _markRemoved.call(this);
     return;
   }
 
   this.shareCommentsWithSiblings();
-  this._remove();
-  this._markRemoved();
+  _remove.call(this);
+  _markRemoved.call(this);
 }
 
 export function remove(this: NodePath) {
@@ -46,7 +47,7 @@ export function _remove(this: NodePath) {
     this.container.splice(this.key as number, 1);
     this.updateSiblingKeys(this.key as number, -1);
   } else {
-    this._replaceWith(null);
+    _replaceWith.call(this, null);
   }
 }
 

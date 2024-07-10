@@ -303,9 +303,7 @@ export default (superClass: typeof Parser) =>
     // past the initial comment.
     flowPragma: void | null | "flow" | "noflow" = undefined;
 
-    getScopeHandler(): {
-      new (...args: any): FlowScopeHandler;
-    } {
+    getScopeHandler(): new (...args: any) => FlowScopeHandler {
       return FlowScopeHandler;
     }
 

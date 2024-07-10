@@ -323,10 +323,13 @@ export default abstract class StatementParser extends ExpressionParser {
    * starts a variable declaration in the same line so that it should be interpreted as
    * a keyword.
    */
-  hasInLineFollowingBindingIdentifier(): boolean {
+  hasInLineFollowingBindingIdentifierOrBrace(): boolean {
     const next = this.nextTokenInLineStart();
     const nextCh = this.codePointAtPos(next);
-    return this.chStartsBindingIdentifier(nextCh, next);
+    return (
+      nextCh === charCodes.leftCurlyBrace ||
+      this.chStartsBindingIdentifier(nextCh, next)
+    );
   }
 
   startsUsingForOf(): boolean {
@@ -506,7 +509,7 @@ export default abstract class StatementParser extends ExpressionParser {
         // using [no LineTerminator here] BindingList[+Using]
         if (
           this.state.containsEsc ||
-          !this.hasInLineFollowingBindingIdentifier()
+          !this.hasInLineFollowingBindingIdentifierOrBrace()
         ) {
           break;
         }
@@ -1566,6 +1569,11 @@ export default abstract class StatementParser extends ExpressionParser {
     kind: "var" | "let" | "const" | "using" | "await using",
   ): void {
     const id = this.parseBindingAtom();
+    if (kind === "using" || kind === "await using") {
+      if (id.type === "ArrayPattern" || id.type === "ObjectPattern") {
+        this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
+      }
+    }
     this.checkLVal(id, {
       in: { type: "VariableDeclarator" },
       binding: kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,

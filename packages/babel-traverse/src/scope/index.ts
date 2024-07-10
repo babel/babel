@@ -1316,15 +1316,26 @@ class Scope {
     opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
   ) {
     if (!name) return false;
-    if (this.hasOwnBinding(name)) return true;
-    {
-      // TODO: Only accept the object form.
-      if (typeof opts === "boolean") opts = { noGlobals: opts };
+    let scope: Scope = this;
+    do {
+      if (scope.hasOwnBinding(name)) {
+        return true;
+      }
+    } while ((scope = scope.parent));
+
+    // TODO: Only accept the object form.
+    let noGlobals;
+    let noUids;
+    if (typeof opts === "object") {
+      noGlobals = opts.noGlobals;
+      noUids = opts.noUids;
+    } else if (typeof opts === "boolean") {
+      noGlobals = opts;
     }
-    if (this.parentHasBinding(name, opts)) return true;
-    if (!opts?.noUids && this.hasUid(name)) return true;
-    if (!opts?.noGlobals && Scope.globals.includes(name)) return true;
-    if (!opts?.noGlobals && Scope.contextVariables.includes(name)) return true;
+
+    if (!noUids && this.hasUid(name)) return true;
+    if (!noGlobals && Scope.globals.includes(name)) return true;
+    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
@@ -1367,6 +1378,7 @@ class Scope {
 }
 
 type _Binding = Binding;
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace Scope {
   export type Binding = _Binding;
 }

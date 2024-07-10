@@ -15,7 +15,7 @@ export class OptionValidator {
    *   The property values of `TopLevelOptionShape` can be arbitrary
    * @memberof OptionValidator
    */
-  validateTopLevelOptions(options: Object, TopLevelOptionShape: Object): void {
+  validateTopLevelOptions(options: object, TopLevelOptionShape: object): void {
     const validOptionNames = Object.keys(TopLevelOptionShape);
     for (const option of Object.keys(options)) {
       if (!validOptionNames.includes(option)) {

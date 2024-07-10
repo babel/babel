@@ -9,9 +9,9 @@ export type Plugin = PluginConfig;
 
 export type PluginList = PluginConfig[];
 
-export type MixinPlugin = (superClass: { new (...args: any): Parser }) => {
-  new (...args: any): Parser;
-};
+export type MixinPlugin = (
+  superClass: new (...args: any) => Parser,
+) => new (...args: any) => Parser;
 
 // This function’s second parameter accepts either a string (plugin name) or an
 // array pair (plugin name and options object). If an options object is given,

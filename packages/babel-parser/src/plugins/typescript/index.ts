@@ -275,9 +275,7 @@ type ClassWithMixin<
 
 export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
   class TypeScriptParserMixin extends superClass implements Parser {
-    getScopeHandler(): {
-      new (...args: any): TypeScriptScopeHandler;
-    } {
+    getScopeHandler(): new (...args: any) => TypeScriptScopeHandler {
       return TypeScriptScopeHandler;
     }
 
