@@ -89,7 +89,6 @@ const FAILURES = [
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
   "decoratorsBeforeExport/true-to-true/input.js",
-  "edgecase/for-await-async-of/input.js",
   "edgecase/for-in-no-in/input.js",
   "edgecase/for-loop-in/input.js",
   "edgecase/large-file-concise/input.js",
