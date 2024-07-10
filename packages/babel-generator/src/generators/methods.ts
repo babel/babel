@@ -134,18 +134,22 @@ export function _functionHead(
 ) {
   if (node.async) {
     this.word("async");
-    // We prevent inner comments from being printed here,
-    // so that they are always consistently printed in the
-    // same place regardless of the function type.
-    this._endsWithInnerRaw = false;
+    if (!this.format.preserveFormat) {
+      // We prevent inner comments from being printed here,
+      // so that they are always consistently printed in the
+      // same place regardless of the function type.
+      this._endsWithInnerRaw = false;
+    }
     this.space();
   }
   this.word("function");
   if (node.generator) {
-    // We prevent inner comments from being printed here,
-    // so that they are always consistently printed in the
-    // same place regardless of the function type.
-    this._endsWithInnerRaw = false;
+    if (!this.format.preserveFormat) {
+      // We prevent inner comments from being printed here,
+      // so that they are always consistently printed in the
+      // same place regardless of the function type.
+      this._endsWithInnerRaw = false;
+    }
     this.token("*");
   }
 
