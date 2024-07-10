@@ -132,13 +132,12 @@ function isDecoratorMemberExpression(
 function shouldParenthesizeDecoratorExpression(
   node: t.Expression | t.Super | t.V8IntrinsicIdentifier,
 ) {
-  if (node.type === "ParenthesizedExpression") {
+  const callee = node.type === "CallExpression" ? node.callee : node;
+  if (callee.type === "ParenthesizedExpression") {
     // We didn't check extra?.parenthesized here because we don't track decorators in needsParen
     return false;
   }
-  return !isDecoratorMemberExpression(
-    node.type === "CallExpression" ? node.callee : node,
-  );
+  return !isDecoratorMemberExpression(callee);
 }
 
 export function _shouldPrintDecoratorsBeforeExport(
