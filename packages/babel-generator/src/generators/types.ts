@@ -3,9 +3,26 @@ import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
+let lastRawIdentNode: t.Identifier | null = null;
+let lastRawIdentResult: string = "";
+export function _getRawIdentifier(this: Printer, node: t.Identifier) {
+  if (node === lastRawIdentNode) return lastRawIdentResult;
+  lastRawIdentNode = node;
+
+  const identifierName = node.loc?.identifierName;
+  if (identifierName) {
+    const token = this._findToken(tok => tok.value === identifierName);
+    if (token?.raw) return (lastRawIdentResult = token.raw);
+  }
+  return (lastRawIdentResult = node.name);
+}
+
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
-  this.word(node.name);
+
+  this.word(
+    this.format.preserveFormat ? this._getRawIdentifier(node) : node.name,
+  );
 }
 
 export function ArgumentPlaceholder(this: Printer) {
