@@ -3,9 +3,11 @@ import * as parens from "./parentheses.ts";
 import {
   FLIPPED_ALIAS_KEYS,
   isCallExpression,
+  isDecorator,
   isExpressionStatement,
   isMemberExpression,
   isNewExpression,
+  isParenthesizedExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -106,5 +108,27 @@ export function needsParens(
     if (isOrHasCallExpression(node)) return true;
   }
 
+  if (isDecorator(parent)) {
+    const callee = isCallExpression(node) ? node.callee : node;
+    return (
+      !isDecoratorMemberExpression(callee) && !isParenthesizedExpression(callee)
+    );
+  }
+
   return expandedParens.get(node.type)?.(node, parent, printStack);
+}
+
+function isDecoratorMemberExpression(node: t.Node): boolean {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return (
+        !node.computed &&
+        node.property.type === "Identifier" &&
+        isDecoratorMemberExpression(node.object)
+      );
+    default:
+      return false;
+  }
 }

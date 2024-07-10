@@ -113,33 +113,6 @@ export function Super(this: Printer) {
   this.word("super");
 }
 
-function isDecoratorMemberExpression(
-  node: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-): boolean {
-  switch (node.type) {
-    case "Identifier":
-      return true;
-    case "MemberExpression":
-      return (
-        !node.computed &&
-        node.property.type === "Identifier" &&
-        isDecoratorMemberExpression(node.object)
-      );
-    default:
-      return false;
-  }
-}
-function shouldParenthesizeDecoratorExpression(
-  node: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-) {
-  const callee = node.type === "CallExpression" ? node.callee : node;
-  if (callee.type === "ParenthesizedExpression") {
-    // We didn't check extra?.parenthesized here because we don't track decorators in needsParen
-    return false;
-  }
-  return !isDecoratorMemberExpression(callee);
-}
-
 export function _shouldPrintDecoratorsBeforeExport(
   this: Printer,
   node: t.ExportDeclaration & { declaration: t.ClassDeclaration },
@@ -154,14 +127,7 @@ export function _shouldPrintDecoratorsBeforeExport(
 
 export function Decorator(this: Printer, node: t.Decorator) {
   this.token("@");
-  const { expression } = node;
-  if (shouldParenthesizeDecoratorExpression(expression)) {
-    this.token("(");
-    this.print(expression, node);
-    this.token(")");
-  } else {
-    this.print(expression, node);
-  }
+  this.print(node.expression, node);
   this.newline();
 }
 
