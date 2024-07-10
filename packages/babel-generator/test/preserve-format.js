@@ -66,7 +66,6 @@ describe("preserveFormat", () => {
 const FAILURES = [
   "auto-indentation/hard-tab/input.js",
   "auto-string/jsx/input.js",
-  "comments/computed-property-comments-2/input.js",
   "comments/decorators-after-export-to-before/input.js",
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
@@ -141,7 +140,6 @@ const FAILURES = [
   "sourcemaps/real-world-babel-file1/input.ts",
   "sourcemaps/real-world-babel-file2/input.ts",
   "sourcemaps/ts-class-properties-with-retainlines/input.ts",
-  "types/ArrayExpression-ArrayPattern/input.js",
   "types/ArrowFunctionExpression/input.js",
   "types/ClassBody-ClassProperty/input.js",
   "types/Decorator/input.js",
