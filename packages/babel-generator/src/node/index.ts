@@ -32,6 +32,7 @@ type NodeHandler<R> = (
   parent: t.Node,
   tokenContext?: number,
   inForStatementInit?: boolean,
+  getRawIdentifier?: (node: t.Node) => string,
 ) => R;
 
 export type NodeHandlers<R> = {
@@ -46,10 +47,10 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     map.set(
       type,
       fn
-        ? function (node, parent, stack, inForInit) {
+        ? function (node, parent, stack, inForInit, getRawIdentifier) {
             return (
-              fn(node, parent, stack, inForInit) ??
-              func(node, parent, stack, inForInit)
+              fn(node, parent, stack, inForInit, getRawIdentifier) ??
+              func(node, parent, stack, inForInit, getRawIdentifier)
             );
           }
         : func,
@@ -116,6 +117,7 @@ export function needsParens(
   parent: t.Node,
   tokenContext?: number,
   inForInit?: boolean,
+  getRawIdentifier?: (node: t.Node) => string,
 ) {
   if (!parent) return false;
 
@@ -131,7 +133,13 @@ export function needsParens(
     );
   }
 
-  return expandedParens.get(node.type)?.(node, parent, tokenContext, inForInit);
+  return expandedParens.get(node.type)?.(
+    node,
+    parent,
+    tokenContext,
+    inForInit,
+    getRawIdentifier,
+  );
 }
 
 function isDecoratorMemberExpression(node: t.Node): boolean {

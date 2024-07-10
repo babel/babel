@@ -474,7 +474,9 @@ class Printer {
     return { first, last };
   }
 
-  _findToken(str: string, occurrenceCount: number = 0): Token | null {
+  _findToken(condition: (token: Token) => boolean): Token | null {
+    if (!this._tokens) return null;
+
     const node = this._currentNode;
     if (node.start == null || node.end == null) return null;
 
@@ -495,10 +497,7 @@ class Printer {
         const high = childTok.first;
 
         for (let k = low; k < high; k++) {
-          if (this._tokens[k].raw === str) {
-            if (occurrenceCount === 0) return this._tokens[k];
-            occurrenceCount--;
-          }
+          if (condition(this._tokens[k])) return this._tokens[k];
         }
 
         low = childTok.last + 1;
@@ -506,17 +505,19 @@ class Printer {
     }
 
     for (let k = low; k <= last; k++) {
-      if (this._tokens[k].raw === str) {
-        if (occurrenceCount === 0) return this._tokens[k];
-        occurrenceCount--;
-      }
+      if (condition(this._tokens[k])) return this._tokens[k];
     }
 
     return null;
   }
 
   _retainPos(str: string, occurrenceCount: number = 0) {
-    const token = this._findToken(str, occurrenceCount);
+    const token = this._findToken(token => {
+      if (token.raw !== str) return false;
+      if (occurrenceCount === 0) return true;
+      occurrenceCount--;
+      return false;
+    });
     if (token) this._catchUpTo(token.loc.start);
   }
 
@@ -803,7 +804,13 @@ class Printer {
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
-      needsParens(node, parent, this.tokenContext, this.inForStatementInit);
+      needsParens(
+        node,
+        parent,
+        this.tokenContext,
+        this.inForStatementInit,
+        (node: t.Identifier) => this._getRawIdentifier(node),
+      );
 
     if (
       !shouldPrintParens &&

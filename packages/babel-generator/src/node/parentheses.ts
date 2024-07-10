@@ -449,6 +449,8 @@ export function Identifier(
   node: t.Identifier,
   parent: t.Node,
   tokenContext: number,
+  _inForInit: boolean,
+  getRawIdentifier: (node: t.Node) => string,
 ): boolean {
   const parentType = parent.type;
   // 13.15.2 AssignmentExpression RS: Evaluation
@@ -466,6 +468,11 @@ export function Identifier(
       return true;
     }
   }
+
+  if (getRawIdentifier(node) !== node.name) {
+    return false;
+  }
+
   // Non-strict code allows the identifier `let`, but it cannot occur as-is in
   // certain contexts to avoid ambiguity with contextual keyword `let`.
   if (node.name === "let") {
