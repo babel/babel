@@ -479,7 +479,10 @@ export function Identifier(
   // some tools (including earlier Babel versions) can't parse
   // `for await (async of [])` without them.
   return (
-    node.name === "async" && isForOfStatement(parent) && node === parent.left
+    node.name === "async" &&
+    isForOfStatement(parent) &&
+    node === parent.left &&
+    !parent.await
   );
 }
 
