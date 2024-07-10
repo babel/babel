@@ -71,7 +71,6 @@ const FAILURES = [
   "comments/decorators-before-export-to-before/input.js",
   "comments/decorators-legacy-before-export/input.js",
   "comments/dynamic-import/input.js",
-  "comments/function-inner-comment/input.js",
   "comments/newlines/input.js",
   "compact/expression-statement/input.js",
   "decorators/decorator-parenthesized-expression/input.js",
