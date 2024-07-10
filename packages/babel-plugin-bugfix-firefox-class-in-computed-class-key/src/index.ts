@@ -28,6 +28,14 @@ export default declare(({ types: t, assertVersion }) => {
       if (state.yield) path.stop();
     },
   });
+  if (!process.env.BABEL_8_BREAKING && !t.staticBlock) {
+    // StaticBlock was only introduced in Babel 7.12.0.
+    // If this plugin is being called by an old version
+    // of Babel, but `environmentVisitor` is being imported
+    // by a new one, we would get an error about an
+    // unknown visitor.
+    delete containsYieldOrAwaitVisitor.StaticBlock;
+  }
 
   function containsClassExpression(path: NodePath<t.Node>) {
     if (t.isClassExpression(path.node)) return true;
