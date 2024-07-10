@@ -66,7 +66,6 @@ describe("preserveFormat", () => {
 const FAILURES = [
   "auto-indentation/hard-tab/input.js",
   "auto-string/jsx/input.js",
-  "await-using-declarations/basic/input.js",
   "await-using-declarations/for-using-init/input.js",
   "await-using-declarations/for-using-of/input.js",
   "comments/async-class-method-computed-key-comment/input.js",
