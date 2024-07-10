@@ -16,6 +16,11 @@ class C extends class {} {
       @decs
       @decs.one
       @decs.two()
+      p;
+    }
+
+    class ShouldAddParens {
+      // NOTE: This is not actually valid syntax in newer versions of the proposal
       @(decs[three])()
       p;
     }

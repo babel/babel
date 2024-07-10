@@ -109,9 +109,10 @@ export function needsParens(
   }
 
   if (isDecorator(parent)) {
-    const callee = isCallExpression(node) ? node.callee : node;
     return (
-      !isDecoratorMemberExpression(callee) && !isParenthesizedExpression(callee)
+      !isDecoratorMemberExpression(node) &&
+      !(isCallExpression(node) && isDecoratorMemberExpression(node.callee)) &&
+      !isParenthesizedExpression(node)
     );
   }
 
