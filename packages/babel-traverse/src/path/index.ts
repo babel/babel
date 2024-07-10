@@ -204,7 +204,6 @@ const methods = {
 
   // NodePath_inference
   getTypeAnnotation: NodePath_inference.getTypeAnnotation,
-  _getTypeAnnotation: NodePath_inference._getTypeAnnotation,
   isBaseType: NodePath_inference.isBaseType,
   couldBeBaseType: NodePath_inference.couldBeBaseType,
   baseTypeStrictlyMatches: NodePath_inference.baseTypeStrictlyMatches,
@@ -214,7 +213,6 @@ const methods = {
   replaceWithMultiple: NodePath_replacement.replaceWithMultiple,
   replaceWithSourceString: NodePath_replacement.replaceWithSourceString,
   replaceWith: NodePath_replacement.replaceWith,
-  _replaceWith: NodePath_replacement._replaceWith,
   replaceExpressionWithStatements:
     NodePath_replacement.replaceExpressionWithStatements,
   replaceInline: NodePath_replacement.replaceInline,
@@ -249,13 +247,11 @@ const methods = {
   _guessExecutionStatusRelativeTo:
     NodePath_introspection._guessExecutionStatusRelativeTo,
   resolve: NodePath_introspection.resolve,
-  _resolve: NodePath_introspection._resolve,
   isConstantExpression: NodePath_introspection.isConstantExpression,
   isInStrictMode: NodePath_introspection.isInStrictMode,
 
   // NodePath_context
   call: NodePath_context.call,
-  _call: NodePath_context._call,
   isDenylisted: NodePath_context.isDenylisted,
   isBlacklisted: NodePath_context.isBlacklisted,
   visit: NodePath_context.visit,
@@ -265,33 +261,19 @@ const methods = {
   setScope: NodePath_context.setScope,
   setContext: NodePath_context.setContext,
   resync: NodePath_context.resync,
-  _resyncParent: NodePath_context._resyncParent,
-  _resyncKey: NodePath_context._resyncKey,
-  _resyncList: NodePath_context._resyncList,
-  _resyncRemoved: NodePath_context._resyncRemoved,
   popContext: NodePath_context.popContext,
   pushContext: NodePath_context.pushContext,
   setup: NodePath_context.setup,
   setKey: NodePath_context.setKey,
   requeue: NodePath_context.requeue,
-  _getQueueContexts: NodePath_context._getQueueContexts,
 
   // NodePath_removal
   remove: NodePath_removal.remove,
-  _removeFromScope: NodePath_removal._removeFromScope,
-  _callRemovalHooks: NodePath_removal._callRemovalHooks,
-  _remove: NodePath_removal._remove,
-  _markRemoved: NodePath_removal._markRemoved,
-  _assertUnremoved: NodePath_removal._assertUnremoved,
 
   // NodePath_modification
   insertBefore: NodePath_modification.insertBefore,
-  _containerInsert: NodePath_modification._containerInsert,
-  _containerInsertBefore: NodePath_modification._containerInsertBefore,
-  _containerInsertAfter: NodePath_modification._containerInsertAfter,
   insertAfter: NodePath_modification.insertAfter,
   updateSiblingKeys: NodePath_modification.updateSiblingKeys,
-  _verifyNodeList: NodePath_modification._verifyNodeList,
   unshiftContainer: NodePath_modification.unshiftContainer,
   pushContainer: NodePath_modification.pushContainer,
   hoist: NodePath_modification.hoist,
@@ -305,8 +287,6 @@ const methods = {
   getAllNextSiblings: NodePath_family.getAllNextSiblings,
   getAllPrevSiblings: NodePath_family.getAllPrevSiblings,
   get: NodePath_family.get,
-  _getKey: NodePath_family._getKey,
-  _getPattern: NodePath_family._getPattern,
   getBindingIdentifiers: NodePath_family.getBindingIdentifiers,
   getOuterBindingIdentifiers: NodePath_family.getOuterBindingIdentifiers,
   getBindingIdentifierPaths: NodePath_family.getBindingIdentifierPaths,
@@ -334,6 +314,49 @@ if (!process.env.BABEL_8_BREAKING) {
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
   NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
     NodePath_introspection._guessExecutionStatusRelativeTo;
+}
+
+if (!process.env.BABEL_8_BREAKING) {
+  // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
+  // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
+  NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
+    NodePath_introspection._guessExecutionStatusRelativeTo;
+
+  Object.assign(NodePath_Final.prototype, {
+    // NodePath_inference
+    _getTypeAnnotation: NodePath_inference._getTypeAnnotation,
+
+    // NodePath_replacement
+    _replaceWith: NodePath_replacement._replaceWith,
+
+    // NodePath_introspection
+    _resolve: NodePath_introspection._resolve,
+
+    // NodePath_context
+    _call: NodePath_context._call,
+    _resyncParent: NodePath_context._resyncParent,
+    _resyncKey: NodePath_context._resyncKey,
+    _resyncList: NodePath_context._resyncList,
+    _resyncRemoved: NodePath_context._resyncRemoved,
+    _getQueueContexts: NodePath_context._getQueueContexts,
+
+    // NodePath_removal
+    _removeFromScope: NodePath_removal._removeFromScope,
+    _callRemovalHooks: NodePath_removal._callRemovalHooks,
+    _remove: NodePath_removal._remove,
+    _markRemoved: NodePath_removal._markRemoved,
+    _assertUnremoved: NodePath_removal._assertUnremoved,
+
+    // NodePath_modification
+    _containerInsert: NodePath_modification._containerInsert,
+    _containerInsertBefore: NodePath_modification._containerInsertBefore,
+    _containerInsertAfter: NodePath_modification._containerInsertAfter,
+    _verifyNodeList: NodePath_modification._verifyNodeList,
+
+    // NodePath_family
+    _getKey: NodePath_family._getKey,
+    _getPattern: NodePath_family._getPattern,
+  });
 }
 
 // we can not use `import { TYPES } from "@babel/types"` here
