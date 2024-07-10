@@ -475,9 +475,7 @@ export function Identifier(
   // `for (async of => {};;)`, so we need to add extra parentheses.
   return (
     node.name === "async" &&
-    isForOfStatement(parent) &&
-    node === parent.left &&
-    !parent.await
+    isForOfStatement(parent, { left: node, await: false })
   );
 }
 
