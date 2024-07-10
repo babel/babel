@@ -473,11 +473,6 @@ export function Identifier(
   // ECMAScript specifically forbids a for-of loop from starting with the
   // token sequence `for (async of`, because it would be ambiguous with
   // `for (async of => {};;)`, so we need to add extra parentheses.
-  //
-  // If the parent is a for-await-of loop (i.e. parent.await === true), the
-  // parentheses aren't strictly needed, but we add them anyway because
-  // some tools (including earlier Babel versions) can't parse
-  // `for await (async of [])` without them.
   return (
     node.name === "async" &&
     isForOfStatement(parent) &&
