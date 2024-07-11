@@ -19,22 +19,6 @@ import type {
 import * as Lazy from "./lazy-modules.ts";
 import type { NodePath } from "@babel/core";
 
-const {
-  booleanLiteral,
-  callExpression,
-  cloneNode,
-  directive,
-  directiveLiteral,
-  expressionStatement,
-  identifier,
-  isIdentifier,
-  memberExpression,
-  stringLiteral,
-  valueToNode,
-  variableDeclaration,
-  variableDeclarator,
-} = t;
-
 export { buildDynamicImport } from "./dynamic-import.ts";
 
 if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
@@ -128,7 +112,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     if (!hasStrict) {
       path.unshiftContainer(
         "directives",
-        directive(directiveLiteral("use strict")),
+        t.directive(t.directiveLiteral("use strict")),
       );
     }
   }
@@ -185,9 +169,9 @@ export function wrapInterop(
   }
 
   if (type === "node-namespace") {
-    return callExpression(programPath.hub.addHelper("interopRequireWildcard"), [
+    return t.callExpression(programPath.hub.addHelper("interopRequireWildcard"), [
       expr,
-      booleanLiteral(true),
+      t.booleanLiteral(true),
     ]);
   } else if (type === "node-default") {
     return null;
@@ -202,7 +186,7 @@ export function wrapInterop(
     throw new Error(`Unknown interop: ${type}`);
   }
 
-  return callExpression(programPath.hub.addHelper(helper), [expr]);
+  return t.callExpression(programPath.hub.addHelper(helper), [expr]);
 }
 
 /**
@@ -222,7 +206,7 @@ export function buildNamespaceInitStatements(
 ) {
   const statements = [];
 
-  const srcNamespaceId = identifier(sourceMetadata.name);
+  const srcNamespaceId = t.identifier(sourceMetadata.name);
 
   for (const localName of sourceMetadata.importsNamespace) {
     if (localName === sourceMetadata.name) continue;
@@ -231,7 +215,7 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: cloneNode(srcNamespaceId),
+        SOURCE: t.cloneNode(srcNamespaceId),
       }),
     );
   }
@@ -259,14 +243,14 @@ export function buildNamespaceInitStatements(
         : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
-        NAMESPACE: cloneNode(srcNamespace),
+        NAMESPACE: t.cloneNode(srcNamespace),
       }),
     );
   }
   if (sourceMetadata.reexportAll) {
     const statement = buildNamespaceReexport(
       metadata,
-      cloneNode(srcNamespace),
+      t.cloneNode(srcNamespace),
       constantReexports,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
@@ -278,13 +262,13 @@ export function buildNamespaceInitStatements(
 }
 
 const ReexportTemplate = {
-  constant: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
-  constantComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
-  spec: template.statement`
-    Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+  constant: ({ exports, exportName, namespaceImport }) => template.statement.ast`${exports}.${exportName} = ${namespaceImport};`,
+  constantComputed: ({ exports, exportName, namespaceImport }) => template.statement.ast`${exports}["${exportName}"] = ${namespaceImport};`,
+  spec: ({ exports, exportName, namespaceImport }) => template.statement.ast`
+    Object.defineProperty(${exports}, "${exportName}", {
       enumerable: true,
       get: function() {
-        return NAMESPACE_IMPORT;
+        return ${namespaceImport};
       },
     });
     `,
@@ -296,24 +280,24 @@ function buildReexportsFromMeta(
   constantReexports: boolean,
   wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
 ) {
-  let namespace: t.Expression = identifier(metadata.name);
+  let namespace: t.Expression = t.identifier(metadata.name);
   namespace = wrapReference(namespace, metadata.wrap) ?? namespace;
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
-    let NAMESPACE_IMPORT: t.Expression = cloneNode(namespace);
+    let NAMESPACE_IMPORT: t.Expression = t.cloneNode(namespace);
     if (importName === "default" && metadata.interop === "node-default") {
       // Nothing, it's ok as-is
     } else if (stringSpecifiers.has(importName)) {
-      NAMESPACE_IMPORT = memberExpression(
+      NAMESPACE_IMPORT = t.memberExpression(
         NAMESPACE_IMPORT,
-        stringLiteral(importName),
+        t.stringLiteral(importName),
         true,
       );
     } else {
-      NAMESPACE_IMPORT = memberExpression(
+      NAMESPACE_IMPORT = t.memberExpression(
         NAMESPACE_IMPORT,
-        identifier(importName),
+        t.identifier(importName),
       );
     }
     const astNodes = {
@@ -321,7 +305,7 @@ function buildReexportsFromMeta(
       EXPORT_NAME: exportName,
       NAMESPACE_IMPORT,
     };
-    if (constantReexports || isIdentifier(NAMESPACE_IMPORT)) {
+    if (constantReexports || t.isIdentifier(NAMESPACE_IMPORT)) {
       if (stringSpecifiers.has(exportName)) {
         return ReexportTemplate.constantComputed(astNodes);
       } else {
@@ -439,8 +423,8 @@ function buildExportNameListDeclaration(
 
   return {
     name: name.name,
-    statement: variableDeclaration("var", [
-      variableDeclarator(name, valueToNode(exportedVars)),
+    statement: t.variableDeclaration("var", [
+      t.variableDeclarator(name, t.valueToNode(exportedVars)),
     ]),
   };
 }
@@ -466,7 +450,7 @@ function buildExportInitializationStatements(
         // data.names is always of length 1 because a hoisted export
         // name must be id of a function declaration
         data.names[0],
-        buildInitStatement(metadata, data.names, identifier(localName)),
+        buildInitStatement(metadata, data.names, t.identifier(localName)),
       ]);
     } else if (!noIncompleteNsImportDetection) {
       for (const exportName of data.names) {
@@ -555,9 +539,9 @@ function buildExportInitializationStatements(
  * initialize them all to a given expression.
  */
 const InitTemplate = {
-  computed: template.expression`EXPORTS["NAME"] = VALUE`,
-  default: template.expression`EXPORTS.NAME = VALUE`,
-  define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, value: void 0, writable: true })["NAME"] = VALUE`,
+  computed: ({ exports, name, value }) => template.expression.ast`${exports}["${name}"] = ${value}`,
+  default: ({ exports, name, value }) => template.expression.ast`${exports}.${name} = ${value}`,
+  define: ({ exports, name, value }) => template.expression.ast`Object.defineProperty(${exports}, "${name}", { enumerable: true, value: void 0, wrwitable: true })["${name}"] = ${value}`,
 };
 
 function buildInitStatement(
@@ -565,20 +549,20 @@ function buildInitStatement(
   exportNames: string[],
   initExpr: t.Expression,
 ) {
-  const { stringSpecifiers, exportName: EXPORTS } = metadata;
-  return expressionStatement(
-    exportNames.reduce((acc, exportName) => {
+  const { stringSpecifiers, exportName: exports } = metadata;
+  return t.expressionStatement(
+    exportNames.reduce((value, name) => {
       const params = {
-        EXPORTS,
-        NAME: exportName,
-        VALUE: acc,
+        exports,
+        name,
+        value,
       };
 
-      if (exportName === "__proto__") {
+      if (name === "__proto__") {
         return InitTemplate.define(params);
       }
 
-      if (stringSpecifiers.has(exportName)) {
+      if (stringSpecifiers.has(name)) {
         return InitTemplate.computed(params);
       }
 

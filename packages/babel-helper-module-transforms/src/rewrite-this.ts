@@ -5,19 +5,23 @@ const { numericLiteral, unaryExpression } = t;
 import type { NodePath, Visitor } from "@babel/core";
 
 /**
- * A visitor to walk the tree, rewriting all `this` references in the top-level scope to be
- * `void 0` (undefined).
+ * A lazily constructed visitor to walk the tree, rewriting all `this` references in the
+ * top-level scope to be `void 0` (undefined).
+ * 
  */
-const rewriteThisVisitor: Visitor = traverse.visitors.merge([
-  environmentVisitor,
-  {
-    ThisExpression(path) {
-      path.replaceWith(unaryExpression("void", numericLiteral(0), true));
-    },
-  },
-]);
+let rewriteThisVisitor: Visitor;
 
 export default function rewriteThis(programPath: NodePath) {
+  if (!rewriteThisVisitor) {
+    rewriteThisVisitor = traverse.visitors.merge([
+      environmentVisitor,
+      {
+        ThisExpression(path) {
+          path.replaceWith(unaryExpression("void", numericLiteral(0), true));
+        },
+      },
+    ]);
+  }
   // Rewrite "this" to be "undefined".
   traverse(programPath.node, { ...rewriteThisVisitor, noScope: true });
 }
