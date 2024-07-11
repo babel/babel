@@ -6,7 +6,6 @@ import {
   isNewExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import * as n from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;
@@ -97,7 +96,9 @@ export function NewExpression(
     this.token("?.");
   }
   this.token("(");
+  const exit = this.enterForStatementInit(false);
   this.printList(node.arguments, node);
+  exit();
   this.rightParens(node);
 }
 
@@ -179,7 +180,9 @@ export function OptionalCallExpression(
   this.print(node.typeArguments, node); // Flow
 
   this.token("(");
+  const exit = this.enterForStatementInit(false);
   this.printList(node.arguments, node);
+  exit();
   this.rightParens(node);
 }
 
@@ -189,7 +192,9 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeArguments, node); // Flow
   this.print(node.typeParameters, node); // TS
   this.token("(");
+  const exit = this.enterForStatementInit(false);
   this.printList(node.arguments, node);
+  exit();
   this.rightParens(node);
 }
 
@@ -251,19 +256,7 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 export function AssignmentExpression(
   this: Printer,
   node: t.AssignmentExpression,
-  parent: t.Node,
 ) {
-  // Somewhere inside a for statement `init` node but doesn't usually
-  // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  const parens =
-    this.inForStatementInitCounter &&
-    node.operator === "in" &&
-    !n.needsParens(node, parent);
-
-  if (parens) {
-    this.token("(");
-  }
-
   this.print(node.left, node);
 
   this.space();
@@ -275,10 +268,6 @@ export function AssignmentExpression(
   this.space();
 
   this.print(node.right, node);
-
-  if (parens) {
-    this.token(")");
-  }
 }
 
 export function BindExpression(this: Printer, node: t.BindExpression) {
@@ -306,9 +295,11 @@ export function MemberExpression(this: Printer, node: t.MemberExpression) {
   }
 
   if (computed) {
+    const exit = this.enterForStatementInit(false);
     this.token("[");
     this.print(node.property, node);
     this.token("]");
+    exit();
   } else {
     this.token(".");
     this.print(node.property, node);

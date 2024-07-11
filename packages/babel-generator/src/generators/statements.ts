@@ -68,9 +68,12 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
   this.space();
   this.token("(");
 
-  this.inForStatementInitCounter++;
-  this.print(node.init, node);
-  this.inForStatementInitCounter--;
+  {
+    const exit = this.enterForStatementInit(true);
+    this.print(node.init, node);
+    exit();
+  }
+
   this.token(";");
 
   if (node.test) {
@@ -107,7 +110,11 @@ function ForXStatement(this: Printer, node: t.ForXStatement) {
   }
   this.noIndentInnerCommentsHere();
   this.token("(");
-  this.print(node.left, node);
+  {
+    const exit = isForOf ? null : this.enterForStatementInit(true);
+    this.print(node.left, node);
+    exit?.();
+  }
   this.space();
   this.word(isForOf ? "of" : "in");
   this.space();
