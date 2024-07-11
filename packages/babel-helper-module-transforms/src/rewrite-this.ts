@@ -2,14 +2,14 @@ import environmentVisitor from "@babel/helper-environment-visitor";
 import { traverse, types as t } from "@babel/core";
 const { numericLiteral, unaryExpression } = t;
 
-import type { NodePath, Visitor } from "@babel/core";
+import type { NodePath } from "@babel/core";
 
 /**
  * A lazily constructed visitor to walk the tree, rewriting all `this` references in the
  * top-level scope to be `void 0` (undefined).
- * 
+ *
  */
-let rewriteThisVisitor: Visitor;
+let rewriteThisVisitor: Parameters<typeof traverse>[1];
 
 export default function rewriteThis(programPath: NodePath) {
   if (!rewriteThisVisitor) {
@@ -21,7 +21,8 @@ export default function rewriteThis(programPath: NodePath) {
         },
       },
     ]);
+    rewriteThisVisitor.noScope = true;
   }
   // Rewrite "this" to be "undefined".
-  traverse(programPath.node, { ...rewriteThisVisitor, noScope: true });
+  traverse(programPath.node, rewriteThisVisitor);
 }

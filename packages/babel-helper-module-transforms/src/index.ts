@@ -169,10 +169,10 @@ export function wrapInterop(
   }
 
   if (type === "node-namespace") {
-    return t.callExpression(programPath.hub.addHelper("interopRequireWildcard"), [
-      expr,
-      t.booleanLiteral(true),
-    ]);
+    return t.callExpression(
+      programPath.hub.addHelper("interopRequireWildcard"),
+      [expr, t.booleanLiteral(true)],
+    );
   } else if (type === "node-default") {
     return null;
   }
@@ -261,16 +261,29 @@ export function buildNamespaceInitStatements(
   return statements;
 }
 
+interface ReexportParts {
+  exports: string;
+  exportName: string;
+  namespaceImport: t.Expression;
+}
+
 const ReexportTemplate = {
-  constant: ({ exports, exportName, namespaceImport }) => template.statement.ast`${exports}.${exportName} = ${namespaceImport};`,
-  constantComputed: ({ exports, exportName, namespaceImport }) => template.statement.ast`${exports}["${exportName}"] = ${namespaceImport};`,
-  spec: ({ exports, exportName, namespaceImport }) => template.statement.ast`
-    Object.defineProperty(${exports}, "${exportName}", {
-      enumerable: true,
-      get: function() {
-        return ${namespaceImport};
-      },
-    });
+  constant: ({ exports, exportName, namespaceImport }: ReexportParts) =>
+    template.statement.ast`
+      ${exports}.${exportName} = ${namespaceImport};
+    `,
+  constantComputed: ({ exports, exportName, namespaceImport }: ReexportParts) =>
+    template.statement.ast`
+      ${exports}["${exportName}"] = ${namespaceImport};
+    `,
+  spec: ({ exports, exportName, namespaceImport }: ReexportParts) =>
+    template.statement.ast`
+      Object.defineProperty(${exports}, "${exportName}", {
+        enumerable: true,
+        get: function() {
+          return ${namespaceImport};
+        },
+      });
     `,
 };
 
@@ -279,7 +292,7 @@ function buildReexportsFromMeta(
   metadata: SourceModuleMetadata,
   constantReexports: boolean,
   wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
-) {
+): t.Statement[] {
   let namespace: t.Expression = t.identifier(metadata.name);
   namespace = wrapReference(namespace, metadata.wrap) ?? namespace;
 
@@ -300,7 +313,7 @@ function buildReexportsFromMeta(
         t.identifier(importName),
       );
     }
-    const astNodes = {
+    const astNodes: ReexportParts = {
       exports: meta.exportName,
       exportName,
       namespaceImport,
@@ -534,14 +547,28 @@ function buildExportInitializationStatements(
   return results;
 }
 
+interface InitParts {
+  exports: string;
+  name: string;
+  value: t.Expression;
+}
+
 /**
  * Given a set of export names, create a set of nested assignments to
  * initialize them all to a given expression.
  */
 const InitTemplate = {
-  computed: ({ exports, name, value }) => template.expression.ast`${exports}["${name}"] = ${value}`,
-  default: ({ exports, name, value }) => template.expression.ast`${exports}.${name} = ${value}`,
-  define: ({ exports, name, value }) => template.expression.ast`Object.defineProperty(${exports}, "${name}", { enumerable: true, value: void 0, wrwitable: true })["${name}"] = ${value}`,
+  computed: ({ exports, name, value }: InitParts) =>
+    template.expression.ast`${exports}["${name}"] = ${value}`,
+  default: ({ exports, name, value }: InitParts) =>
+    template.expression.ast`${exports}.${name} = ${value}`,
+  define: ({ exports, name, value }: InitParts) =>
+    template.expression.ast`
+      Object.defineProperty(${exports}, "${name}", {
+        enumerable: true,
+        value: void 0,
+        writable: true
+      })["${name}"] = ${value}`,
 };
 
 function buildInitStatement(
