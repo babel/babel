@@ -252,19 +252,12 @@ export function TSInstantiationExpression(
 export function BinaryExpression(
   node: t.BinaryExpression,
   parent: t.Node,
+  stack: unknown,
+  inForStatementInit: boolean,
 ): boolean {
-  // let i = (1 in []);
   // for ((1 in []);;);
-  if (node.operator === "in") {
-    const parentType = parent.type;
-    return (
-      parentType === "VariableDeclarator" ||
-      parentType === "ForStatement" ||
-      parentType === "ForInStatement" ||
-      parentType === "ForOfStatement"
-    );
-  }
-  return false;
+  // for (var x = (1 in []) in 2);
+  return node.operator === "in" && inForStatementInit;
 }
 
 export function SequenceExpression(
