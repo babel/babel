@@ -285,27 +285,27 @@ function buildReexportsFromMeta(
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
-    let NAMESPACE_IMPORT: t.Expression = t.cloneNode(namespace);
+    let namespaceImport: t.Expression = t.cloneNode(namespace);
     if (importName === "default" && metadata.interop === "node-default") {
       // Nothing, it's ok as-is
     } else if (stringSpecifiers.has(importName)) {
-      NAMESPACE_IMPORT = t.memberExpression(
-        NAMESPACE_IMPORT,
+      namespaceImport = t.memberExpression(
+        namespaceImport,
         t.stringLiteral(importName),
         true,
       );
     } else {
-      NAMESPACE_IMPORT = t.memberExpression(
-        NAMESPACE_IMPORT,
+      namespaceImport = t.memberExpression(
+        namespaceImport,
         t.identifier(importName),
       );
     }
     const astNodes = {
-      EXPORTS: meta.exportName,
-      EXPORT_NAME: exportName,
-      NAMESPACE_IMPORT,
+      exports: meta.exportName,
+      exportName,
+      namespaceImport,
     };
-    if (constantReexports || t.isIdentifier(NAMESPACE_IMPORT)) {
+    if (constantReexports || t.isIdentifier(namespaceImport)) {
       if (stringSpecifiers.has(exportName)) {
         return ReexportTemplate.constantComputed(astNodes);
       } else {
