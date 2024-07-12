@@ -1487,6 +1487,7 @@ describe("NodePath", () => {
           "replaceWithMultiple",
           "replaceWithSourceString",
           "requeue",
+          "requeueComputedKeyAndDecorators",
           "resolve",
           "resync",
           "setContext",
