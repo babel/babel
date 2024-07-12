@@ -15,6 +15,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
+    "assert": "^2.1.0",
     "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-simple-access": "workspace:^",
