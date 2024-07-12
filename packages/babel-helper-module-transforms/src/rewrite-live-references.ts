@@ -402,7 +402,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
               t.assignmentExpression(
                 "=",
                 t.cloneNode(ref),
-                t.cloneNode(update)
+                t.cloneNode(update),
               ),
               buildBindingExportAssignmentExpression(
                 this.metadata,
