@@ -399,7 +399,11 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
 
           path.replaceWith(
             t.sequenceExpression([
-              t.assignmentExpression("=", t.cloneNode(ref), t.cloneNode(update)),
+              t.assignmentExpression(
+                "=",
+                t.cloneNode(ref),
+                t.cloneNode(update)
+              ),
               buildBindingExportAssignmentExpression(
                 this.metadata,
                 exportedNames,
