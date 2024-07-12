@@ -32,7 +32,7 @@ function expectError(run) {
     );
     // Remove node internal frames, since they change by version
     stack = stack.replace(
-      /(?:\n\s*at ((?:async )?[\w.]+)? ?\((?:node:)?internal\/[^\n]+)+/g,
+      /(?:\n\s*at ((?:async )?[\w.]+)? ?\((?:node:)?(internal|diagnostics_channel)[^\n]+)+/g,
       "\n    at $1 (... internal node frames ...)",
     );
     // Replace line/column numbers, since they are affected by how
