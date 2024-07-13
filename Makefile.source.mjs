@@ -508,14 +508,14 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (0) {
+  if (1) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! Write any important message here, and change the  !!!!!!
-!!!!!! if (0) above to if (1)                            !!!!!!
+!!!!!! Update minVersion for superPropGet & superPropGet !!!!!!
+!!!!!!                                                   !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

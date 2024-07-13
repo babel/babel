@@ -1,9 +1,7 @@
 /* @minVersion 7.24.4 */
 
-// @ts-expect-error helper
-import set from "set";
-// @ts-expect-error helper
-import getPrototypeOf from "getPrototypeOf";
+import set from "./set.ts";
+import getPrototypeOf from "./getPrototypeOf.ts";
 
 export default function _superPropertySet(
   classArg: any,
