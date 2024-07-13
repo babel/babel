@@ -151,8 +151,8 @@ const _eval = function (code: string, filename: string) {
 
   code = babel.transformSync(code, {
     filename: filename,
-    presets: opts.presets,
-    plugins: (opts.plugins || []).concat([replPlugin]),
+    ...babelOptions,
+    plugins: (opts.babelOptions || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
