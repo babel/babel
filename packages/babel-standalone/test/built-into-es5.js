@@ -22,7 +22,7 @@ describe("@babel/standalone", () => {
     }).not.toThrow();
   });
 
-  const nodeGte20 = itGte("12.0.0");
+  const nodeGte20 = itGte("20.0.0");
   nodeGte20("should not contain extra require() calls", () => {
     // When the number of `require(` calls changes, make sure that none of
     // them is an actual CommonJS require call. The bundle must be self-contained.
