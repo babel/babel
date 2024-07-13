@@ -111,14 +111,6 @@ register(babelOptions);
 
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
-    VariableDeclaration(path) {
-      if (path.node.kind !== "var") {
-        throw path.buildCodeFrameError(
-          "Only `var` variables are supported in the REPL",
-        );
-      }
-    },
-
     Program(path) {
       let hasExpressionStatement: boolean;
       for (const bodyPath of path.get("body")) {
