@@ -644,7 +644,6 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@types/charcodes": "npm:^0.2.0"
@@ -859,7 +858,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
@@ -1072,15 +1070,6 @@ __metadata:
   checksum: 10/2b093a2ca8b203ebc9c081bd248a8e8badb626db0fde2e9594074fd54b25230081963de2fc454cefb448836a5e706ecafa8f9b58ab075bcb708ae8f834c85cbc
   languageName: node
   linkType: hard
-
-"@babel/helper-split-export-declaration@workspace:^, @babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration"
-  dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
 
 "@babel/helper-string-parser@npm:^7.22.5":
   version: 7.22.5
@@ -2598,7 +2587,6 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/traverse": "workspace:^"
     globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
   peerDependencies:
@@ -4412,7 +4400,6 @@ __metadata:
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-hoist-variables": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
     debug: "npm:^4.3.1"
