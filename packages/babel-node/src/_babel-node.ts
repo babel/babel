@@ -144,7 +144,7 @@ const _eval = function (code: string, filename: string) {
   code = babel.transformSync(code, {
     filename: filename,
     ...babelOptions,
-    plugins: (opts.babelOptions || []).concat([replPlugin]),
+    plugins: (opts.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
