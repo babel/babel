@@ -2,7 +2,6 @@ import type Binding from "../binding.ts";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../../index.ts";
-import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import type { Identifier } from "@babel/types";
@@ -23,7 +22,7 @@ const renameVisitor: Visitor<Renamer> = {
     ) {
       path.skip();
       if (path.isMethod()) {
-        requeueComputedKeyAndDecorators(path);
+        path.requeueComputedKeyAndDecorators();
       }
     }
   },
