@@ -53,9 +53,6 @@
       "@babel/helper-function-name": [
         "./packages/babel-helper-function-name/src"
       ],
-      "@babel/helper-hoist-variables": [
-        "./packages/babel-helper-hoist-variables/src"
-      ],
       "@babel/helper-import-to-platform-api": [
         "./packages/babel-helper-import-to-platform-api/src"
       ],
