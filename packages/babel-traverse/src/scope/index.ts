@@ -1379,6 +1379,16 @@ class Scope {
     } while ((scope = scope.parent));
   }
 
+  /**
+   * Hoist all the `var` variable to the beginning of the function/program
+   * scope where their binding will be actually defined. For exmaple,
+   *     { var x = 2 }
+   * will be transformed to
+   *     var x; { x = 2 }
+   *
+   * @param emit A custom function to emit `var` declarations, for example to
+   *   emit them in a different scope.
+   */
   hoistVariables(
     emit: (id: t.Identifier, hasInit: boolean) => void = id =>
       this.push({ id }),
