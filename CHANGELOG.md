@@ -24,6 +24,21 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.9 (2024-07-15)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-standalone`
+  * [#16639](https://github.com/babel/babel/pull/16639) Avoid `require()` call in `@babel/standalone` bundle ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#16638](https://github.com/babel/babel/pull/16638) fix: provide legacy typings for TS < 4.1 ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-generator`, `babel-plugin-transform-optional-chaining`
+  * [#16617](https://github.com/babel/babel/pull/16617) Avoid extra parens in TS `as`/`satisfies` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-module-transforms`
+  * [#16629](https://github.com/babel/babel/pull/16629) Lazy top-level initializations for module transforms ([@guybedford](https://github.com/guybedford))
 ## v7.24.8 (2024-07-11)
 
 #### :eyeglasses: Spec Compliance
