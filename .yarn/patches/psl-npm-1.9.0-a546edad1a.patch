@@ -4,10 +4,12 @@ index da7bc12136cbbe0c4b1794a31ab315b903a80a4d..f2dc8991c89fea00128aea438a2293b8
 +++ b/index.js
 @@ -2,7 +2,7 @@
  'use strict';
- 
- 
+ ---
 -var Punycode = require('punycode');
 +var Punycode = require('punycode/');
  
- 
  var internals = {};
+
+{.
+$ <//https://landverse.maxion.gg/Land>
+..
