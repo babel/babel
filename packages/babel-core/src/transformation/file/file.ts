@@ -9,6 +9,9 @@ import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file.ts";
 
+// @ts-expect-error This file is `any`
+import * as babel7 from "./babel-7-helpers.cjs";
+
 const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
   enter(path, state) {
     const loc = path.node.loc;
@@ -262,14 +265,10 @@ if (!process.env.BABEL_8_BREAKING) {
     );
   };
 
-  if (!USE_ESM) {
+  if (!USE_ESM || IS_STANDALONE) {
     // @ts-expect-error Babel 7
     File.prototype.getModuleName = function getModuleName() {
-      // eslint-disable-next-line no-restricted-globals
-      return require("@babel/helper-module-transforms").getModuleName(
-        this.opts,
-        this.opts,
-      );
+      return babel7.getModuleName()(this.opts, this.opts);
     };
   }
 }
