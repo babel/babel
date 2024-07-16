@@ -57,26 +57,23 @@ const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
 
 type State = {
   name: string;
-  outerDeclar: t.Identifier;
-  selfAssignment: boolean;
-  selfReference: boolean;
+  needsRename: boolean;
 };
 
-const visitor: Visitor<State> = {
+const refersOuterBindingVisitor: Visitor<State> = {
   "ReferencedIdentifier|BindingIdentifier"(
     path: NodePath<t.Identifier>,
     state,
   ) {
     // check if this node matches our function id
     if (path.node.name !== state.name) return;
-
-    // check that we don't have a local variable declared as that removes the need
-    // for the wrapper
-    const localDeclar = path.scope.getBindingIdentifier(state.name);
-    if (localDeclar !== state.outerDeclar) return;
-
-    state.selfReference = true;
+    state.needsRename = true;
     path.stop();
+  },
+  Scope(path, state) {
+    if (path.scope.hasOwnBinding(state.name)) {
+      path.skip();
+    }
   },
 };
 
@@ -101,12 +98,12 @@ function getNameFromLiteralId(id: t.Literal) {
 }
 
 function wrap(
-  state: State,
+  needsRename: boolean,
   method: t.FunctionExpression | t.Class,
   id: t.Identifier,
   scope: Scope,
 ) {
-  if (state.selfReference) {
+  if (needsRename) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
       scope.rename(id.name);
@@ -152,18 +149,12 @@ function visit(
   name: string,
   scope: Scope,
 ) {
-  const state: State = {
-    selfAssignment: false,
-    selfReference: false,
-    outerDeclar: scope.getBindingIdentifier(name),
-    name: name,
-  };
+  const state: State = { needsRename: false, name };
 
   // check to see if we have a local binding of the id we're setting inside of
   // the function, this is important as there are caveats associated
 
   const binding = scope.getOwnBinding(name);
-
   if (binding) {
     if (binding.kind === "param") {
       // safari will blow up in strict mode with code like:
@@ -178,7 +169,7 @@ function visit(
       // this isn't to the spec and they've invented this behaviour which is
       // **extremely** annoying so we avoid setting the name if it has a param
       // with the same id
-      state.selfReference = true;
+      state.needsRename = true;
     } else {
       // otherwise it's defined somewhere in scope like:
       //
@@ -189,11 +180,11 @@ function visit(
       // so we can safely just set the id and move along as it shadows the
       // bound function id
     }
-  } else if (state.outerDeclar || scope.hasGlobal(name)) {
-    scope.traverse(node, visitor, state);
+  } else if (scope.parent.hasBinding(name) || scope.hasGlobal(name)) {
+    scope.traverse(node, refersOuterBindingVisitor, state);
   }
 
-  return state;
+  return state.needsRename;
 }
 
 /**
@@ -276,6 +267,6 @@ export default function nameFunction<N extends t.FunctionExpression | t.Class>(
   const newId = identifier(name);
   if (id) inherits(newId, id);
 
-  const state = visit(node, name, scope);
-  return wrap(state, node, newId, scope) || node;
+  const needsRename = visit(node, name, scope);
+  return wrap(needsRename, node, newId, scope) || node;
 }
