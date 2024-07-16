@@ -546,7 +546,10 @@ function isFirstInContext(
         ((parentType === "BinaryExpression" ||
           parentType === "LogicalExpression") &&
           parent.left === node) ||
-        (parentType === "AssignmentExpression" && parent.left === node))
+        (parentType === "AssignmentExpression" && parent.left === node) ||
+        ((parentType === "TSAsExpression" ||
+          parentType === "TSSatisfiesExpression") &&
+          parent.expression === node))
     ) {
       node = parent;
       i--;
