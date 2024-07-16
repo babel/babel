@@ -20,6 +20,7 @@ class C extends class {} {
     }
 
     class ShouldAddParens {
+      // NOTE: This is not actually valid syntax in newer versions of the proposal
       @(decs[three])()
       p;
     }

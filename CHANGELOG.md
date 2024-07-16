@@ -24,6 +24,45 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.9 (2024-07-15)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-standalone`
+  * [#16639](https://github.com/babel/babel/pull/16639) Avoid `require()` call in `@babel/standalone` bundle ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#16638](https://github.com/babel/babel/pull/16638) fix: provide legacy typings for TS < 4.1 ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-generator`, `babel-plugin-transform-optional-chaining`
+  * [#16617](https://github.com/babel/babel/pull/16617) Avoid extra parens in TS `as`/`satisfies` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-module-transforms`
+  * [#16629](https://github.com/babel/babel/pull/16629) Lazy top-level initializations for module transforms ([@guybedford](https://github.com/guybedford))
+## v7.24.8 (2024-07-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#16567](https://github.com/babel/babel/pull/16567) Do not use strict mode in TS `declare` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16630](https://github.com/babel/babel/pull/16630) Correctly print parens around `in` in `for` heads ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16626](https://github.com/babel/babel/pull/16626) Fix printing of comments in `await using` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16591](https://github.com/babel/babel/pull/16591) fix typescript code generation for yield expression inside type expre… ([@SreeXD](https://github.com/SreeXD))
+* `babel-parser`
+  * [#16613](https://github.com/babel/babel/pull/16613) Disallow destructuring assignment in `using` declarations ([@H0onnn](https://github.com/H0onnn))
+  * [#16490](https://github.com/babel/babel/pull/16490) fix: do not add `.value: undefined` to regexp literals ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#16615](https://github.com/babel/babel/pull/16615) Remove boolean props from `ObjectTypeInternalSlot` visitor keys ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#16566](https://github.com/babel/babel/pull/16566) fix: Correctly handle `export import x =` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#16625](https://github.com/babel/babel/pull/16625) Avoid unnecessary parens around `async` in `for await` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#16619](https://github.com/babel/babel/pull/16619) Avoid checking `Scope.globals` multiple times ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.24.7 (2024-06-05)
 
 #### :bug: Bug Fix

@@ -38,6 +38,8 @@ export function _parameters(
     | t.TSFunctionType
     | t.TSConstructorType,
 ) {
+  const exit = this.enterForStatementInit(false);
+
   const paramLength = parameters.length;
   for (let i = 0; i < paramLength; i++) {
     this._param(parameters[i], parent);
@@ -47,6 +49,8 @@ export function _parameters(
       this.space();
     }
   }
+
+  exit();
 }
 
 export function _param(

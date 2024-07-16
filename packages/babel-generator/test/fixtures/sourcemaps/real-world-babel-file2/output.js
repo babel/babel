@@ -437,11 +437,11 @@ class Printer {
     node._compact) {
       format.concise = true;
     }
-    const printMethod = this[(nodeType as Exclude<t.Node["type"],
+    const printMethod = this[nodeType as Exclude<t.Node["type"],
     // removed
     "Noop"
     // renamed
-    | t.DeprecatedAliases["type"]>)];
+    | t.DeprecatedAliases["type"]>];
     if (printMethod === undefined) {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(nodeType)} with constructor ${JSON.stringify(node.constructor.name)}`);
     }

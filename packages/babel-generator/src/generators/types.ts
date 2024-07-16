@@ -25,9 +25,11 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   this.token("{");
 
   if (props.length) {
+    const exit = this.enterForStatementInit(false);
     this.space();
     this.printList(props, node, { indent: true, statement: true });
     this.space();
+    exit();
   }
 
   this.sourceWithOffset("end", node.loc, -1);
@@ -87,6 +89,8 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
 
   this.token("[");
 
+  const exit = this.enterForStatementInit(false);
+
   for (let i = 0; i < elems.length; i++) {
     const elem = elems[i];
     if (elem) {
@@ -102,6 +106,8 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
       this.token(",");
     }
   }
+
+  exit();
 
   this.token("]");
 }

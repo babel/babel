@@ -75,7 +75,9 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
+    const exit = this.enterForStatementInit(false);
     this.printSequence(node.body, node, { indent: true });
+    exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 

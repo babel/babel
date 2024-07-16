@@ -1,6 +1,6 @@
 {
   "name": "@babel/types",
-  "version": "7.24.7",
+  "version": "7.24.9",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-types",
@@ -17,7 +17,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index-legacy.d.ts",
   "typesVersions": {
-    ">=3.7": {
+    ">=4.1": {
       "lib/index-legacy.d.ts": [
         "lib/index.d.ts"
       ]
@@ -56,7 +56,7 @@
   },
   "exports": {
     ".": {
-      "types@>=3.7": "./lib/index.d.ts",
+      "types@>=4.1": "./lib/index.d.ts",
       "types": "./lib/index-legacy.d.ts",
       "default": "./lib/index.js"
     },

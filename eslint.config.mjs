@@ -229,6 +229,7 @@ export default [
               "itESM",
               "nodeGte8",
               "nodeGte12",
+              "nodeGte20",
               "nodeGte12NoESM",
               "testFn",
             ],

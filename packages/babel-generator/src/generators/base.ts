@@ -46,7 +46,9 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
     }
   }
 
+  const exit = this.enterForStatementInit(false);
   this.printSequence(node.body, node, { indent: true });
+  exit();
 
   this.rightBrace(node);
 }
