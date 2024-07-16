@@ -16,11 +16,11 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-function-name": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
+    "@babel/traverse": "workspace:^",
     "globals": "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
   },
   "keywords": [
@@ -31,8 +31,7 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
