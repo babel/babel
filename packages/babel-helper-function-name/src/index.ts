@@ -27,7 +27,7 @@ function getFunctionArity(node: t.Function): number {
   return count === -1 ? node.params.length : count;
 }
 
-const buildPropertyMethodAssignmentWrapper = template.statement(`
+const buildPropertyMethodAssignmentWrapper = template.expression(`
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -36,20 +36,6 @@ const buildPropertyMethodAssignmentWrapper = template.statement(`
     FUNCTION_ID.toString = function () {
       return FUNCTION_KEY.toString();
     }
-
-    return FUNCTION_ID;
-  })(FUNCTION)
-`);
-
-const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
-  (function (FUNCTION_KEY) {
-    function* FUNCTION_ID() {
-      return yield* FUNCTION_KEY.apply(this, arguments);
-    }
-
-    FUNCTION_ID.toString = function () {
-      return FUNCTION_KEY.toString();
-    };
 
     return FUNCTION_ID;
   })(FUNCTION)
@@ -77,7 +63,7 @@ const refersOuterBindingVisitor: Visitor<State> = {
   },
 };
 
-function getNameFromLiteralId(id: t.Literal) {
+function getNameFromLiteralId(id: t.Literal): string {
   if (isNullLiteral(id)) {
     return "null";
   }
@@ -112,25 +98,17 @@ function wrap(
       if (!isFunction(method)) return;
 
       // need to add a wrapper since we can't change the references
-      let build = buildPropertyMethodAssignmentWrapper;
-      if (method.generator) {
-        build = buildGeneratorPropertyMethodAssignmentWrapper;
-      }
 
-      const template = (
-        build({
-          FUNCTION: method,
-          FUNCTION_ID: id,
-          FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-        }) as t.ExpressionStatement
-      ).expression as t.CallExpression;
+      const template = buildPropertyMethodAssignmentWrapper({
+        FUNCTION: method,
+        FUNCTION_ID: id,
+        FUNCTION_KEY: scope.generateUidIdentifier(id.name),
+      }) as t.CallExpression;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      const params = (
-        (template.callee as t.FunctionExpression).body
-          .body[0] as any as t.FunctionExpression
-      ).params;
+      const { params } = (template.callee as t.FunctionExpression).body
+        .body[0] as any as t.FunctionExpression;
 
       for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));
