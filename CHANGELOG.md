@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.10 (2024-07-16)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16648](https://github.com/babel/babel/pull/16648) Fix parens detection for object&function in `as`/`satisfies` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.24.9 (2024-07-15)
 
 #### :bug: Bug Fix
