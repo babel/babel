@@ -2,6 +2,7 @@ import type Printer from "../printer.ts";
 import { isDeclareExportDeclaration, isStatement } from "@babel/types";
 import type * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules.ts";
+import { TokenContext } from "../node/index.ts";
 
 export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
@@ -521,11 +522,21 @@ export function TypeAlias(
   this.semicolon();
 }
 
-export function TypeAnnotation(this: Printer, node: t.TypeAnnotation) {
+export function TypeAnnotation(
+  this: Printer,
+  node: t.TypeAnnotation,
+  parent: t.Node,
+) {
   this.token(":");
   this.space();
-  // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
-  if (node.optional) this.token("?");
+  if (parent.type === "ArrowFunctionExpression") {
+    this.tokenContext |= TokenContext.arrowFlowReturnType;
+  } else if (
+    // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
+    node.optional
+  ) {
+    this.token("?");
+  }
   this.print(node.typeAnnotation, node);
 }
 
