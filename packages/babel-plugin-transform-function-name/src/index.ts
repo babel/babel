@@ -28,7 +28,7 @@ export default declare(api => {
           const newNode = nameFunction(
             // @ts-expect-error Fixme: should check ArrowFunctionExpression
             value,
-            false,
+            undefined,
             supportUnicodeId,
           );
           if (newNode) value.replaceWith(newNode);
