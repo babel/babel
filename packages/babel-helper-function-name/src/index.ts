@@ -1,8 +1,7 @@
 import template from "@babel/template";
 import {
-  NOT_LOCAL_BINDING,
-  cloneNode,
   identifier,
+  inherits,
   isAssignmentExpression,
   isAssignmentPattern,
   isFunction,
@@ -215,7 +214,7 @@ function visit(
  * - an IIFE when `node` contains a binding shadowing the inferred function name (e.g. `let f = function (f) {}`),
  * - `void` when `node` has `id` property or the helper can not inferred the name or the inferred name contains non-BMP characters that is not supported by current target
  */
-export default function <N extends t.FunctionExpression | t.Class>(
+export default function nameFunction<N extends t.FunctionExpression | t.Class>(
   {
     node,
     parent,
@@ -231,7 +230,8 @@ export default function <N extends t.FunctionExpression | t.Class>(
       | t.NumericLiteral
       | t.BigIntLiteral;
   },
-  localBinding = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  localBinding = false, // TODO: Remove this unused param
   supportUnicodeId = false,
 ): N | t.CallExpression | void {
   // has an `id` so we don't need to infer one
@@ -250,22 +250,6 @@ export default function <N extends t.FunctionExpression | t.Class>(
   } else if (isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
-
-    // but not "let foo = () => {};" being converted to function expression
-    if (isIdentifier(id) && !localBinding) {
-      const binding = scope.parent.getBinding(id.name);
-      if (
-        binding &&
-        binding.constant &&
-        scope.getBinding(id.name) === binding
-      ) {
-        // always going to reference this method
-        node.id = cloneNode(id);
-        // @ts-expect-error Fixme: avoid mutating AST nodes
-        node.id[NOT_LOCAL_BINDING] = true;
-        return;
-      }
-    }
   } else if (isAssignmentExpression(parent, { operator: "=" })) {
     // foo = function () {};
     id = parent.left;
@@ -290,12 +274,7 @@ export default function <N extends t.FunctionExpression | t.Class>(
 
   name = toBindingIdentifierName(name);
   const newId = identifier(name);
-
-  // The id shouldn't be considered a local binding to the function because
-  // we are simply trying to set the function name and not actually create
-  // a local binding.
-  // @ts-expect-error Fixme: avoid mutating AST nodes
-  newId[NOT_LOCAL_BINDING] = true;
+  if (id) inherits(newId, id);
 
   const state = visit(node, name, scope);
   return wrap(state, node, newId, scope) || node;

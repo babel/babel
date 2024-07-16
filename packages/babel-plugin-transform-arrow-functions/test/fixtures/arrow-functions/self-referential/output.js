@@ -1,13 +1,13 @@
 var fooCalls = [];
-var jumpTable = function jumpTable(name, arg) {
-  if (jumpTable[name]) {
-    jumpTable[name](arg);
+var _jumpTable = function jumpTable(name, arg) {
+  if (_jumpTable[name]) {
+    _jumpTable[name](arg);
   }
 };
-Object.assign(jumpTable, {
+Object.assign(_jumpTable, {
   foo(arg) {
     fooCalls.push(arg);
   }
 });
-jumpTable('foo', 'bar');
+_jumpTable('foo', 'bar');
 expect(fooCalls[0]).toBe('bar');
