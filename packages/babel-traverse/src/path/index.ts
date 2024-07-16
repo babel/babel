@@ -266,8 +266,6 @@ const methods = {
   setup: NodePath_context.setup,
   setKey: NodePath_context.setKey,
   requeue: NodePath_context.requeue,
-  requeueComputedKeyAndDecorators:
-    NodePath_context.requeueComputedKeyAndDecorators,
 
   // NodePath_removal
   remove: NodePath_removal.remove,

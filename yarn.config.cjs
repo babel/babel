@@ -198,15 +198,20 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') 
  */
 function enforceNoDualTypeDependencies({ Yarn }) {
   for (const dependency of Yarn.dependencies({ type: "devDependencies" })) {
+    if (
+      // TODO(Babel 8): Remove this check
+      // We use conditions to remove the dependency, but we still need it as a devDependency
+      dependency.workspace.ident === "@babel/plugin-transform-runtime" &&
+      dependency.ident === "babel-plugin-polyfill-corejs3"
+    ) {
+      continue;
+    }
     const otherDependency = Yarn.dependency({
       workspace: dependency.workspace,
       ident: dependency.ident,
       type: "dependencies",
     });
-    if (
-      otherDependency !== null &&
-      !otherDependency.range.includes("condition:")
-    ) {
+    if (otherDependency !== null) {
       dependency.delete();
     }
   }
@@ -259,10 +264,9 @@ function enforceBabelHelperBabelDeps({ Yarn }) {
         workspace.manifest.conditions?.BABEL_8_BREAKING?.[1]
           ?.peerDependencies !== null
       ) {
+        workspace.unset("dependencies['@babel/traverse']");
         workspace.unset("dependencies['@babel/template']");
         workspace.unset("dependencies['@babel/types']");
-        // TODO: Consider re-enforcing this in Babel 8
-        // workspace.unset("dependencies['@babel/traverse']");
       }
     }
   }

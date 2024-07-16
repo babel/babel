@@ -17,10 +17,10 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-remap-async-to-generator": "workspace:^",
-    "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4",
-    "@babel/traverse": "workspace:^"
+    "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

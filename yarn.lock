@@ -638,6 +638,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
@@ -646,7 +647,6 @@ __metadata:
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/preset-env": "workspace:^"
-    "@babel/traverse": "workspace:^"
     "@types/charcodes": "npm:^0.2.0"
     charcodes: "npm:^0.2.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
@@ -710,6 +710,15 @@ __metadata:
   checksum: 10/6db21300f69cdd02da5eb51a0be8f95349f3526caaca49c8cc54eb09b97330a16ff788d27c3c9651202ec1e4b309252402b54c6306e8e4a364c8dc08cbbc4e11
   languageName: node
   linkType: hard
+
+"@babel/helper-environment-visitor@workspace:^, @babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor"
+  dependencies:
+    "@babel/traverse": "workspace:^"
+    "@babel/types": "workspace:^"
+  languageName: unknown
+  linkType: soft
 
 "@babel/helper-fixtures@workspace:^, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
   version: 0.0.0-use.local
@@ -857,11 +866,11 @@ __metadata:
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -976,6 +985,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
@@ -1001,9 +1011,9 @@ __metadata:
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
-    "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -1312,6 +1322,7 @@ __metadata:
   resolution: "@babel/plugin-bugfix-firefox-class-in-computed-class-key@workspace:packages/babel-plugin-bugfix-firefox-class-in-computed-class-key"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
@@ -1390,6 +1401,7 @@ __metadata:
   resolution: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
@@ -2429,11 +2441,11 @@ __metadata:
   resolution: "@babel/plugin-transform-async-generator-functions@workspace:packages/babel-plugin-transform-async-generator-functions"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"
     "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
-    "@babel/traverse": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.10.4"
     core-js-pure: "npm:^3.30.2"
   peerDependencies:
@@ -2594,6 +2606,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
@@ -4409,6 +4422,7 @@ __metadata:
     "@babel/code-frame": "workspace:^"
     "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-hoist-variables": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"

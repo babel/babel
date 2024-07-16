@@ -1,17 +1,18 @@
-import { template, types as t } from "@babel/core";
+import { template, traverse, types as t } from "@babel/core";
 import type { File, NodePath, Scope, Visitor } from "@babel/core";
-import { visitors } from "@babel/traverse";
+import environmentVisitor from "@babel/helper-environment-visitor";
 
-const findBareSupers = visitors.environmentVisitor<
-  NodePath<t.CallExpression>[]
->({
-  Super(path) {
-    const { node, parentPath } = path;
-    if (parentPath.isCallExpression({ callee: node })) {
-      this.push(parentPath);
-    }
+const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
+  {
+    Super(path) {
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        this.push(parentPath);
+      }
+    },
   },
-});
+  environmentVisitor,
+]);
 
 const referenceVisitor: Visitor<{ scope: Scope }> = {
   "TSTypeAnnotation|TypeAnnotation"(

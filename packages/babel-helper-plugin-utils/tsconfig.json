@@ -11,6 +11,7 @@
     "../../packages/babel-generator/src/**/*.ts",
     "../../packages/babel-helper-check-duplicate-nodes/src/**/*.ts",
     "../../packages/babel-helper-compilation-targets/src/**/*.ts",
+    "../../packages/babel-helper-environment-visitor/src/**/*.ts",
     "../../packages/babel-helper-fixtures/src/**/*.ts",
     "../../packages/babel-helper-function-name/src/**/*.ts",
     "../../packages/babel-helper-hoist-variables/src/**/*.ts",
