@@ -3,8 +3,8 @@
 import type { NodePath } from "@babel/core";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import { types as t } from "@babel/core";
-import { visitors } from "@babel/traverse";
+import environmentVisitor from "@babel/helper-environment-visitor";
+import { traverse, types as t } from "@babel/core";
 const {
   callExpression,
   cloneNode,
@@ -13,23 +13,26 @@ const {
   yieldExpression,
 } = t;
 
-const awaitVisitor = visitors.environmentVisitor<{ wrapAwait: t.Expression }>({
-  ArrowFunctionExpression(path) {
-    path.skip();
-  },
+const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
+  {
+    ArrowFunctionExpression(path) {
+      path.skip();
+    },
 
-  AwaitExpression(path, { wrapAwait }) {
-    const argument = path.get("argument");
+    AwaitExpression(path, { wrapAwait }) {
+      const argument = path.get("argument");
 
-    path.replaceWith(
-      yieldExpression(
-        wrapAwait
-          ? callExpression(cloneNode(wrapAwait), [argument.node])
-          : argument.node,
-      ),
-    );
+      path.replaceWith(
+        yieldExpression(
+          wrapAwait
+            ? callExpression(cloneNode(wrapAwait), [argument.node])
+            : argument.node,
+        ),
+      );
+    },
   },
-});
+  environmentVisitor,
+]);
 
 export default function (
   path: NodePath<t.Function>,

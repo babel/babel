@@ -1,4 +1,5 @@
 import { types as t, type NodePath, type Visitor } from "@babel/core";
+import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 
 function isNameOrLength(key: t.Node): boolean {
   if (t.isIdentifier(key)) {
@@ -52,19 +53,7 @@ const hasReferenceOrThisVisitor: Visitor<{ name?: string; ref: () => void }> = {
     }
     path.skip();
     if (path.isMethod()) {
-      if (
-        process.env.BABEL_8_BREAKING ||
-        USE_ESM ||
-        IS_STANDALONE ||
-        path.requeueComputedKeyAndDecorators
-      ) {
-        path.requeueComputedKeyAndDecorators();
-      } else {
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.requeueComputedKeyAndDecorators.call(
-          path,
-        );
-      }
+      requeueComputedKeyAndDecorators(path);
     }
   },
 };

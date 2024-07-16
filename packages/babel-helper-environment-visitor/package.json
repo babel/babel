@@ -1,13 +1,13 @@
 {
-  "name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
+  "name": "@babel/helper-environment-visitor",
   "version": "7.24.7",
-  "description": "Transform static class fields assignments that are affected by https://crbug.com/v8/12421",
+  "description": "Helper visitor to only visit nodes in the current 'this' context",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
+    "directory": "packages/babel-helper-environment-visitor"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-environment-visitor",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -20,26 +20,17 @@
     },
     "./package.json": "./package.json"
   },
-  "keywords": [
-    "babel-plugin",
-    "bugfix"
-  ],
   "dependencies": {
-    "@babel/helper-environment-visitor": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
-  },
-  "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
+  "type": "module",
   "conditions": {
     "USE_ESM": [
       null,
@@ -55,6 +46,5 @@
       },
       {}
     ]
-  },
-  "type": "module"
+  }
 }
