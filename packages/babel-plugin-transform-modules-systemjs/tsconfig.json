@@ -11,7 +11,16 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-core"
+    },
+    {
       "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "../../packages/babel-helper-validator-identifier"
+    },
+    {
+      "path": "../../packages/babel-traverse"
     }
   ]
 }

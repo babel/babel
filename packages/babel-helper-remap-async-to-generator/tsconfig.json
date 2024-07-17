@@ -11,13 +11,16 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
       "path": "../../packages/babel-helper-annotate-as-pure"
     },
     {
       "path": "../../packages/babel-helper-wrap-function"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

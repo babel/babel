@@ -15,6 +15,9 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-function-bind"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

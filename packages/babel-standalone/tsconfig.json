@@ -12,7 +12,13 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-core"
+    },
+    {
+      "path": "../../packages/babel-generator"
+    },
+    {
+      "path": "../../packages/babel-parser"
     },
     {
       "path": "../../packages/babel-plugin-external-helpers"
@@ -328,6 +334,15 @@
     },
     {
       "path": "../../packages/babel-preset-typescript"
+    },
+    {
+      "path": "../../packages/babel-template"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-types"
     }
   ]
 }

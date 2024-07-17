@@ -14,7 +14,13 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
+      "path": "../../packages/babel-helper-validator-option"
+    },
+    {
       "path": "../../packages/babel-plugin-transform-flow-strip-types"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

@@ -11,19 +11,22 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
       "path": "../../packages/babel-helper-annotate-as-pure"
     },
     {
       "path": "../../packages/babel-helper-create-class-features-plugin"
     },
     {
+      "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
       "path": "../../packages/babel-helper-skip-transparent-expression-wrappers"
     },
     {
       "path": "../../packages/babel-plugin-syntax-typescript"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

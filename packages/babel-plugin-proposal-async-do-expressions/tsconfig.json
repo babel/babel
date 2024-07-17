@@ -15,6 +15,12 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-async-do-expressions"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

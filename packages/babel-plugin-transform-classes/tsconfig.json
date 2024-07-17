@@ -11,13 +11,22 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
       "path": "../../packages/babel-helper-annotate-as-pure"
     },
     {
+      "path": "../../packages/babel-helper-compilation-targets"
+    },
+    {
+      "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
       "path": "../../packages/babel-helper-replace-supers"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

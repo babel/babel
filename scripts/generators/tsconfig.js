@@ -20,6 +20,15 @@ const thirdPartyBabelPlugins = [
 
 const rootURL = new URL("../../", import.meta.url);
 
+// used in /lib/third-party.d.ts
+const dependencyAliases = new Map([
+  ["babel-plugin-polyfill-corejs2", "@babel/helper-plugin-utils"],
+  ["babel-plugin-polyfill-corejs3", "@babel/helper-plugin-utils"],
+  ["babel-plugin-polyfill-regenerator", "@babel/helper-plugin-utils"],
+  ["@babel/preset-modules", "@babel/helper-plugin-utils"],
+  ["regenerator-transform", "@babel/helper-plugin-utils"],
+]);
+
 function getTsPkgs(subRoot) {
   return fs
     .readdirSync(new URL(subRoot, rootURL))
@@ -89,15 +98,19 @@ function getTsPkgs(subRoot) {
         }
       );
       const dependencies = new Set([
-        "@babel/helper-plugin-utils", // used in /lib/third-party.d.ts
         ...Object.keys(packageJSON.dependencies ?? {}),
-        ...Object.keys(packageJSON.devDependencies ?? {}).filter(
-          n =>
-            name === "@babel/standalone" ||
-            (!n.startsWith("@babel/plugin-") && !n.startsWith("@babel/preset-"))
-        ),
+        ...(name === "@babel/standalone"
+          ? Object.keys(packageJSON.devDependencies ?? {})
+          : []),
         ...Object.keys(packageJSON.peerDependencies ?? {}),
       ]);
+      if (name === "@babel/parser") {
+        // TODO: This should be listed in dependencies
+        dependencies.add("@babel/types");
+      }
+      dependencyAliases.forEach((alias, dep) => {
+        if (dependencies.has(dep)) dependencies.add(alias);
+      });
       return [
         name,
         {

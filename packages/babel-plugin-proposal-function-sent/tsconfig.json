@@ -18,6 +18,9 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-function-sent"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

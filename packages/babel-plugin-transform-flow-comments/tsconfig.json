@@ -11,10 +11,16 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-generator"
+    },
+    {
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
       "path": "../../packages/babel-plugin-syntax-flow"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }
