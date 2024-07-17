@@ -1,8 +1,8 @@
 import type { types as t, NodePath, Visitor } from "@babel/core";
+import { visitors } from "@babel/traverse";
 import { declare } from "@babel/helper-plugin-utils";
-import environmentVisitor from "@babel/helper-environment-visitor";
 
-export default declare(({ types: t, traverse, assertVersion }) => {
+export default declare(({ types: t, assertVersion }) => {
   assertVersion(REQUIRED_VERSION(7));
 
   const containsClassExpressionVisitor: Visitor<{ found: boolean }> = {
@@ -15,19 +15,27 @@ export default declare(({ types: t, traverse, assertVersion }) => {
     },
   };
 
-  const containsYieldOrAwaitVisitor = traverse.visitors.merge([
-    {
-      YieldExpression(path, state) {
-        state.yield = true;
-        if (state.await) path.stop();
-      },
-      AwaitExpression(path, state) {
-        state.await = true;
-        if (state.yield) path.stop();
-      },
-    } satisfies Visitor<{ yield: boolean; await: boolean }>,
-    environmentVisitor,
-  ]);
+  const containsYieldOrAwaitVisitor = visitors.environmentVisitor<{
+    yield: boolean;
+    await: boolean;
+  }>({
+    YieldExpression(path, state) {
+      state.yield = true;
+      if (state.await) path.stop();
+    },
+    AwaitExpression(path, state) {
+      state.await = true;
+      if (state.yield) path.stop();
+    },
+  });
+  if (!process.env.BABEL_8_BREAKING && !t.staticBlock) {
+    // StaticBlock was only introduced in Babel 7.12.0.
+    // If this plugin is being called by an old version
+    // of Babel, but `environmentVisitor` is being imported
+    // by a new one, we would get an error about an
+    // unknown visitor.
+    delete containsYieldOrAwaitVisitor.StaticBlock;
+  }
 
   function containsClassExpression(path: NodePath<t.Node>) {
     if (t.isClassExpression(path.node)) return true;

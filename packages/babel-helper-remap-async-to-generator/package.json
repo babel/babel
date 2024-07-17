@@ -15,12 +15,11 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/helper-environment-visitor": "workspace:^",
-    "@babel/helper-wrap-function": "workspace:^"
+    "@babel/helper-wrap-function": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"

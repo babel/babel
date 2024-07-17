@@ -18,7 +18,6 @@
   "dependencies": {
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
-    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-function-name": "workspace:^",
     "@babel/helper-hoist-variables": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
