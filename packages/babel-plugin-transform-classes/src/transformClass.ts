@@ -831,7 +831,7 @@ export default function transformClass(
     }
 
     const isStrict = path.isInStrictMode();
-    let constructorOnly = classState.classId && body.length === 0;
+    let constructorOnly = body.length === 0;
     if (constructorOnly && !isStrict) {
       for (const param of classState.construct.params) {
         // It's illegal to put a use strict directive into the body of a function

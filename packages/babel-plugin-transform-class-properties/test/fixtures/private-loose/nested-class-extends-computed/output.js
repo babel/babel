@@ -27,13 +27,10 @@ var Foo = /*#__PURE__*/function () {
         }
         babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
-      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo], /*#__PURE__*/function () {
-        function _class() {
-          babelHelpers.classCallCheck(this, _class);
-          this[_babelHelpers$classPr] = 2;
-        }
-        return babelHelpers.createClass(_class);
-      }()));
+      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo], /*#__PURE__*/babelHelpers.createClass(function _class() {
+        babelHelpers.classCallCheck(this, _class);
+        this[_babelHelpers$classPr] = 2;
+      })));
     }
   }]);
 }();

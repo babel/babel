@@ -22,14 +22,11 @@ let Foo = /*#__PURE__*/function () {
         }
         babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
-      }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_foo3, this), /*#__PURE__*/function () {
-        function _class() {
-          babelHelpers.classCallCheck(this, _class);
-          babelHelpers.classPrivateFieldInitSpec(this, _foo3, 2);
-          babelHelpers.defineProperty(this, _babelHelpers$classPr, 2);
-        }
-        return babelHelpers.createClass(_class);
-      }()));
+      }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_foo3, this), /*#__PURE__*/babelHelpers.createClass(function _class() {
+        babelHelpers.classCallCheck(this, _class);
+        babelHelpers.classPrivateFieldInitSpec(this, _foo3, 2);
+        babelHelpers.defineProperty(this, _babelHelpers$classPr, 2);
+      })));
     }
   }]);
 }();

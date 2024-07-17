@@ -7,14 +7,11 @@ var TestEmpty = /*#__PURE__*/function (_ref) {
   }
   babelHelpers.inherits(TestEmpty, _ref);
   return babelHelpers.createClass(TestEmpty);
-}( /*#__PURE__*/function () {
+}( /*#__PURE__*/babelHelpers.createClass(function _class() {
   "use strict";
 
-  function _class() {
-    babelHelpers.classCallCheck(this, _class);
-  }
-  return babelHelpers.createClass(_class);
-}());
+  babelHelpers.classCallCheck(this, _class);
+}));
 var TestConstructorOnly = /*#__PURE__*/function (_ref2) {
   "use strict";
 
@@ -24,14 +21,11 @@ var TestConstructorOnly = /*#__PURE__*/function (_ref2) {
   }
   babelHelpers.inherits(TestConstructorOnly, _ref2);
   return babelHelpers.createClass(TestConstructorOnly);
-}( /*#__PURE__*/function () {
+}( /*#__PURE__*/babelHelpers.createClass(function _class2() {
   "use strict";
 
-  function _class2() {
-    babelHelpers.classCallCheck(this, _class2);
-  }
-  return babelHelpers.createClass(_class2);
-}());
+  babelHelpers.classCallCheck(this, _class2);
+}));
 var TestMethodOnly = /*#__PURE__*/function (_ref3) {
   "use strict";
 
