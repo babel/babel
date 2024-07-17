@@ -28,17 +28,14 @@ var Foo = /*#__PURE__*/function () {
         }
         babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
-      }((_foo3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo3)[_foo3], /*#__PURE__*/function () {
-        function _class() {
-          babelHelpers.classCallCheck(this, _class);
-          Object.defineProperty(this, _foo3, {
-            writable: true,
-            value: 2
-          });
-          this[_babelHelpers$classPr] = 2;
-        }
-        return babelHelpers.createClass(_class);
-      }()));
+      }((_foo3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo3)[_foo3], /*#__PURE__*/babelHelpers.createClass(function _class() {
+        babelHelpers.classCallCheck(this, _class);
+        Object.defineProperty(this, _foo3, {
+          writable: true,
+          value: 2
+        });
+        this[_babelHelpers$classPr] = 2;
+      })));
     }
   }]);
 }();
