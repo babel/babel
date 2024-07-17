@@ -37,7 +37,6 @@ import {
   yieldExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import hoistVariables from "@babel/helper-hoist-variables";
 
 /**
  * Replace a node with an array of multiple. This method performs the following steps:
@@ -261,18 +260,10 @@ export function replaceExpressionWithStatements(
   // hoist variable declaration in do block
   // `(do { var x = 1; x;})` -> `var x; (() => { x = 1; return x; })()`
   const callee = (this as ThisType).get("callee");
-  hoistVariables(
-    callee.get("body"),
-    (id: t.Identifier) => {
-      this.scope.push({ id });
-    },
-    "var",
-  );
+  callee.get("body").scope.hoistVariables(id => this.scope.push({ id }));
 
   // add implicit returns to all ending expression statements
-  const completionRecords: Array<NodePath> = (this as ThisType)
-    .get("callee")
-    .getCompletionRecords();
+  const completionRecords: Array<NodePath> = callee.getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
 

@@ -13,10 +13,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-hoist-variables": "workspace:^",
     "@babel/helper-module-transforms": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "keywords": [
     "babel-plugin"
