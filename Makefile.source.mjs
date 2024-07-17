@@ -357,9 +357,14 @@ function eslint(...extraArgs) {
   // Linting everything at the same time needs too much memory and crashes
   // Do it in batches packages
   for (let i = 0, chunkSize = 40; i < packagesPackages.length; i += chunkSize) {
-    chunks.push([
-      `packages/{${packagesPackages.slice(i, i + chunkSize)}}/**/*`,
-    ]);
+    if (packagesPackages.length - i === 1) {
+      // Only one package remaining
+      chunks.push([`packages/${packagesPackages[i]}/**/*`]);
+    } else {
+      chunks.push([
+        `packages/{${packagesPackages.slice(i, i + chunkSize)}}/**/*`,
+      ]);
+    }
   }
   const rest = [
     "eslint",
