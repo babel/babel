@@ -429,7 +429,7 @@ export default abstract class StatementParser extends ExpressionParser {
     flags: ParseStatementFlag,
     decorators?: N.Decorator[] | null,
   ): N.Statement {
-    const starttype = this.state.type;
+    const startType = this.state.type;
     const node = this.startNode();
     const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
     const allowFunctionDeclaration = !!(
@@ -441,7 +441,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // start with. Many are trivial to parse, some require a bit of
     // complexity.
 
-    switch (starttype) {
+    switch (startType) {
       case tt._break:
         return this.parseBreakContinueStatement(node, /* isBreak */ true);
       case tt._continue:
@@ -581,7 +581,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.next(); // eat `import`/`export`
 
         let result;
-        if (starttype === tt._import) {
+        if (startType === tt._import) {
           result = this.parseImport(node as Undone<N.ImportDeclaration>);
 
           if (
@@ -643,7 +643,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const expr = this.parseExpression();
 
     if (
-      tokenIsIdentifier(starttype) &&
+      tokenIsIdentifier(startType) &&
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
@@ -1002,7 +1002,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.checkDestructuringPrivate(refExpressionErrors);
       this.toAssignable(init, /* isLHS */ true);
       const type = isForOf ? "ForOfStatement" : "ForInStatement";
-      this.checkLVal(init, { in: { type } });
+      this.checkLVal(init, { type });
       return this.parseForIn(
         node as Undone<N.ForInStatement | N.ForOfStatement>,
         // @ts-expect-error init has been transformed to an assignable
@@ -1136,10 +1136,11 @@ export default abstract class StatementParser extends ExpressionParser {
         ? ScopeFlag.SIMPLE_CATCH
         : 0,
     );
-    this.checkLVal(param, {
-      in: { type: "CatchClause" },
-      binding: BindingFlag.TYPE_CATCH_PARAM,
-    });
+    this.checkLVal(
+      param,
+      { type: "CatchClause" },
+      BindingFlag.TYPE_CATCH_PARAM,
+    );
 
     return param;
   }
@@ -1574,10 +1575,11 @@ export default abstract class StatementParser extends ExpressionParser {
         this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
       }
     }
-    this.checkLVal(id, {
-      in: { type: "VariableDeclarator" },
-      binding: kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,
-    });
+    this.checkLVal(
+      id,
+      { type: "VariableDeclarator" },
+      kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,
+    );
     decl.id = id;
   }
 
@@ -3153,10 +3155,7 @@ export default abstract class StatementParser extends ExpressionParser {
     type: T["type"],
     bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
   ) {
-    this.checkLVal(specifier.local, {
-      in: { type },
-      binding: bindingType,
-    });
+    this.checkLVal(specifier.local, { type }, bindingType);
     return this.finishNode(specifier, type);
   }
 
