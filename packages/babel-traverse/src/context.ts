@@ -4,6 +4,7 @@ import type Scope from "./scope/index.ts";
 import type { ExplodedTraverseOptions } from "./index.ts";
 import type * as t from "@babel/types";
 import type { Visitor } from "./types.ts";
+import { popContext, pushContext, resync } from "./path/context.ts";
 
 export default class TraversalContext<S = unknown> {
   constructor(
@@ -124,7 +125,7 @@ export default class TraversalContext<S = unknown> {
     for (; visitIndex < queue.length; ) {
       const path = queue[visitIndex];
       visitIndex++;
-      path.resync();
+      resync.call(path);
 
       if (
         path.contexts.length === 0 ||
@@ -133,7 +134,7 @@ export default class TraversalContext<S = unknown> {
         // The context might already have been pushed when this path was inserted and queued.
         // If we always re-pushed here, we could get duplicates and risk leaving contexts
         // on the stack after the traversal has completed, which could break things.
-        path.pushContext(this);
+        pushContext.call(path, this);
       }
 
       // this path no longer belongs to the tree
@@ -159,7 +160,7 @@ export default class TraversalContext<S = unknown> {
 
     // pop contexts
     for (let i = 0; i < visitIndex; i++) {
-      queue[i].popContext();
+      popContext.call(queue[i]);
     }
 
     // clear queue
