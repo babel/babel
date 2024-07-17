@@ -1,7 +1,6 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
-import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import createDecoratorTransform from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
 
@@ -372,7 +371,13 @@ export function createClassFeaturePlugin({
               // export default class Foo {}
               //   -->
               // class Foo {} export { Foo as default }
-              splitExportDeclaration(path);
+              if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+                // polyfill when being run by an older Babel version
+                path.splitExportDeclaration ??=
+                  // eslint-disable-next-line no-restricted-globals
+                  require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
+              }
+              path.splitExportDeclaration();
             } else {
               // @ts-expect-error Anonymous class declarations can be
               // transformed as if they were expressions

@@ -226,6 +226,7 @@ const methods = {
   ensureBlock: NodePath_conversion.ensureBlock,
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
   arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,
+  splitExportDeclaration: NodePath_conversion.splitExportDeclaration,
 
   // NodePath_introspection
   matchesPattern: NodePath_introspection.matchesPattern,

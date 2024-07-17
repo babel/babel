@@ -89,9 +89,6 @@
       "@babel/helper-skip-transparent-expression-wrappers": [
         "./packages/babel-helper-skip-transparent-expression-wrappers/src"
       ],
-      "@babel/helper-split-export-declaration": [
-        "./packages/babel-helper-split-export-declaration/src"
-      ],
       "@babel/helper-string-parser": [
         "./packages/babel-helper-string-parser/src"
       ],
