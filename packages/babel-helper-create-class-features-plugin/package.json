@@ -19,7 +19,6 @@
   ],
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
     "@babel/helper-member-expression-to-functions": "workspace:^",
     "@babel/helper-optimise-call-expression": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",

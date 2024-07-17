@@ -1,6 +1,5 @@
 import { isRequired } from "@babel/helper-compilation-targets";
 import { declare } from "@babel/helper-plugin-utils";
-import nameFunction from "@babel/helper-function-name";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
@@ -16,8 +15,13 @@ export default declare(api => {
       FunctionExpression: {
         exit(path) {
           if (path.key !== "value" && !path.parentPath.isObjectProperty()) {
-            const replacement = nameFunction(path);
-            if (replacement) path.replaceWith(replacement);
+            if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+              // polyfill when being run by an older Babel version
+              path.ensureFunctionName ??=
+                // eslint-disable-next-line no-restricted-globals
+                require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+            }
+            path.ensureFunctionName(supportUnicodeId);
           }
         },
       },
@@ -25,13 +29,14 @@ export default declare(api => {
       ObjectProperty(path) {
         const value = path.get("value");
         if (value.isFunction()) {
-          const newNode = nameFunction(
-            // @ts-expect-error Fixme: should check ArrowFunctionExpression
-            value,
-            undefined,
-            supportUnicodeId,
-          );
-          if (newNode) value.replaceWith(newNode);
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.ensureFunctionName ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+          }
+          // @ts-expect-error Fixme: should check ArrowFunctionExpression
+          value.ensureFunctionName(supportUnicodeId);
         }
       },
     },

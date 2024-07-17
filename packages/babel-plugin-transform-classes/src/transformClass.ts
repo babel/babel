@@ -1,5 +1,4 @@
 import type { NodePath, Scope, File } from "@babel/core";
-import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { template, types as t } from "@babel/core";
 import { visitors } from "@babel/traverse";
@@ -219,6 +218,20 @@ export default function transformClass(
       if (t.isClassMethod(node)) {
         const isConstructor = node.kind === "constructor";
 
+        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+          // polyfill when being run by an older Babel version
+          path.ensureFunctionName ??=
+            // eslint-disable-next-line no-restricted-globals
+            require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+        }
+        path.ensureFunctionName(supportUnicodeId);
+        let wrapped;
+        if (node !== path.node) {
+          wrapped = path.node;
+          // The node has been wrapped. Reset it to the original once, but store the wrapper.
+          path.replaceWith(node);
+        }
+
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
           objectRef: classState.classRef,
@@ -244,7 +257,7 @@ export default function transformClass(
         if (isConstructor) {
           pushConstructor(superReturns, node as ClassConstructor, path);
         } else {
-          pushMethod(node, path);
+          pushMethod(node, wrapped);
         }
       }
     }
@@ -546,11 +559,9 @@ export default function transformClass(
   /**
    * Push a method to its respective mutatorMap.
    */
-  function pushMethod(node: t.ClassMethod, path?: NodePath) {
-    const scope = path ? path.scope : classState.scope;
-
+  function pushMethod(node: t.ClassMethod, wrapped?: t.Expression) {
     if (node.kind === "method") {
-      if (processMethod(node, scope)) return;
+      if (processMethod(node)) return;
     }
 
     const placement = node.static ? "static" : "instance";
@@ -561,27 +572,9 @@ export default function transformClass(
       t.isNumericLiteral(node.key) || t.isBigIntLiteral(node.key)
         ? t.stringLiteral(String(node.key.value))
         : t.toComputedKey(node);
+    methods.hasComputed = !t.isStringLiteral(key);
 
-    let fn: t.Expression = t.toExpression(node);
-
-    if (t.isStringLiteral(key)) {
-      // infer function name
-      if (node.kind === "method") {
-        // @ts-expect-error Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
-        // does not seem to support it
-        fn =
-          nameFunction(
-            // @ts-expect-error Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
-            // does not seem to support it
-            { id: key, node: node, scope },
-            undefined,
-            supportUnicodeId,
-          ) ?? fn;
-      }
-    } else {
-      // todo(flow->ts) find a way to avoid "key as t.StringLiteral" below which relies on this assignment
-      methods.hasComputed = true;
-    }
+    const fn: t.Expression = wrapped ?? t.toExpression(node);
 
     let descriptor: Descriptor;
     if (
@@ -612,7 +605,7 @@ export default function transformClass(
     }
   }
 
-  function processMethod(node: t.ClassMethod, scope: Scope) {
+  function processMethod(node: t.ClassMethod) {
     if (assumptions.setClassMethods && !node.decorators) {
       // use assignments instead of define properties for loose classes
       let { classRef } = classState;
@@ -626,8 +619,9 @@ export default function transformClass(
         node.computed || t.isLiteral(node.key),
       );
 
-      let func: t.Expression = t.functionExpression(
-        null,
+      const func: t.Expression = t.functionExpression(
+        // @ts-expect-error We actually set and id through .ensureFunctionName
+        node.id,
         // @ts-expect-error Fixme: should throw when we see TSParameterProperty
         node.params,
         node.body,
@@ -635,21 +629,6 @@ export default function transformClass(
         node.async,
       );
       t.inherits(func, node);
-
-      const key = t.toComputedKey(node, node.key);
-      if (t.isStringLiteral(key)) {
-        // @ts-expect-error: requires strictNullCheck
-        func =
-          nameFunction(
-            {
-              node: func,
-              id: key,
-              scope,
-            },
-            undefined,
-            supportUnicodeId,
-          ) ?? func;
-      }
 
       const expr = t.expressionStatement(
         t.assignmentExpression("=", methodName, func),

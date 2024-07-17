@@ -50,9 +50,6 @@
       "@babel/helper-fixtures": [
         "./packages/babel-helper-fixtures/src"
       ],
-      "@babel/helper-function-name": [
-        "./packages/babel-helper-function-name/src"
-      ],
       "@babel/helper-import-to-platform-api": [
         "./packages/babel-helper-import-to-platform-api/src"
       ],

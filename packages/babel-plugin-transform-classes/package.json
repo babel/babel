@@ -16,7 +16,6 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/traverse": "workspace:^",

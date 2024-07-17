@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { isRequired } from "@babel/helper-compilation-targets";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
 import globals from "globals";
 import transformClass from "./transformClass.ts";
@@ -67,11 +66,14 @@ export default declare((api, options: Options) => {
         const { node } = path;
         if (VISITED.has(node)) return;
 
-        const inferred = nameFunction(path, undefined, supportUnicodeId);
-        if (inferred && inferred !== node) {
-          path.replaceWith(inferred);
-          return;
+        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+          // polyfill when being run by an older Babel version
+          path.ensureFunctionName ??=
+            // eslint-disable-next-line no-restricted-globals
+            require("@babel/traverse").NodePath.prototype.ensureFunctionName;
         }
+        const replacement = path.ensureFunctionName(supportUnicodeId);
+        if (replacement && replacement.node !== node) return;
 
         VISITED.add(node);
 

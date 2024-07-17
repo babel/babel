@@ -1,5 +1,4 @@
 import type { NodePath } from "@babel/traverse";
-import nameFunction from "@babel/helper-function-name";
 import template from "@babel/template";
 import {
   blockStatement,
@@ -94,6 +93,7 @@ function plainFunction(
   callId: t.Expression,
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
+  hadName: boolean,
 ) {
   let path: NodePath<
     | t.FunctionDeclaration
@@ -142,7 +142,8 @@ function plainFunction(
 
   const wrapperArgs = {
     NAME: functionId || null,
-    REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
+    // TODO: Use `functionId` rather than `hadName` for the condition
+    REF: path.scope.generateUidIdentifier(hadName ? functionId.name : "ref"),
     FUNCTION: built,
     PARAMS: params,
   };
@@ -154,18 +155,10 @@ function plainFunction(
   } else {
     let container;
 
-    if (functionId) {
+    if (hadName) {
       container = buildNamedExpressionWrapper(wrapperArgs);
     } else {
       container = buildAnonymousExpressionWrapper(wrapperArgs);
-
-      const returnFn = container.callee.body.body[1].argument;
-      nameFunction({
-        node: returnFn,
-        parent: (path as NodePath<t.FunctionExpression>).parent,
-        scope: path.scope,
-      });
-      functionId = returnFn.id;
     }
 
     if (functionId || (!ignoreFunctionLength && params.length)) {
@@ -187,11 +180,22 @@ export default function wrapFunction(
   if (path.isMethod()) {
     classOrObjectMethod(path, callId);
   } else {
+    const hadName = "id" in path.node && !!path.node.id;
+    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+      // polyfill when being run by an older Babel version
+      path.ensureFunctionName ??=
+        // eslint-disable-next-line no-restricted-globals
+        require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+    }
+    // @ts-expect-error It is invalid to call this on an arrow expression,
+    // but we'll convert it to a function expression anyway.
+    path = path.ensureFunctionName(false);
     plainFunction(
       path as NodePath<Exclude<t.Function, t.Method>>,
       callId,
       noNewArrows,
       ignoreFunctionLength,
+      hadName,
     );
   }
 }

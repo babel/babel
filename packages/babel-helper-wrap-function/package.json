@@ -14,7 +14,6 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"

@@ -12,7 +12,6 @@
     "../../packages/babel-helper-check-duplicate-nodes/src/**/*.ts",
     "../../packages/babel-helper-compilation-targets/src/**/*.ts",
     "../../packages/babel-helper-fixtures/src/**/*.ts",
-    "../../packages/babel-helper-function-name/src/**/*.ts",
     "../../packages/babel-helper-module-imports/src/**/*.ts",
     "../../packages/babel-helper-module-transforms/src/**/*.ts",
     "../../packages/babel-helper-plugin-test-runner/src/**/*.ts",

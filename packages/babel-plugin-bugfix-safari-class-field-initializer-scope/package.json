@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^"
   },
