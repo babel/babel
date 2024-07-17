@@ -17,7 +17,6 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-simple-access": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
     "@babel/traverse": "workspace:^"
   },

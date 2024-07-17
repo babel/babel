@@ -2,7 +2,6 @@ import { basename, extname } from "path";
 import type { types as t, NodePath } from "@babel/core";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";
-import splitExportDeclaration from "@babel/helper-split-export-declaration";
 
 export interface ModuleMetadata {
   exportName: string;
@@ -567,7 +566,13 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
   // Name anonymous exported locals.
   programPath.get("body").forEach(child => {
     if (!child.isExportDefaultDeclaration()) return;
-    splitExportDeclaration(child);
+    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+      // polyfill when being run by an older Babel version
+      child.splitExportDeclaration ??=
+        // eslint-disable-next-line no-restricted-globals
+        require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
+    }
+    child.splitExportDeclaration();
   });
 }
 

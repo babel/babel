@@ -1,5 +1,4 @@
 import type Binding from "../binding.ts";
-import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
@@ -92,11 +91,7 @@ export default class Renamer {
       return;
     }
 
-    splitExportDeclaration(
-      maybeExportDeclar as NodePath<
-        Exclude<t.ExportDeclaration, t.ExportAllDeclaration>
-      >,
-    );
+    maybeExportDeclar.splitExportDeclaration();
   }
 
   maybeConvertFromClassFunctionDeclaration(path: NodePath) {

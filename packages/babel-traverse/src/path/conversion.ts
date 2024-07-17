@@ -26,6 +26,11 @@ import {
   thisExpression,
   toExpression,
   unaryExpression,
+  cloneNode,
+  variableDeclaration,
+  variableDeclarator,
+  exportNamedDeclaration,
+  exportSpecifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import nameFunction from "@babel/helper-function-name";
@@ -813,4 +818,83 @@ function getScopeInformation(fnPath: NodePath) {
     superProps,
     superCalls,
   };
+}
+
+export function splitExportDeclaration(
+  this: NodePath<t.ExportDefaultDeclaration | t.ExportNamedDeclaration>,
+): NodePath<t.Declaration> {
+  if (!this.isExportDeclaration() || this.isExportAllDeclaration()) {
+    throw new Error("Only default and named export declarations can be split.");
+  }
+  if (this.isExportNamedDeclaration() && this.get("specifiers").length > 0) {
+    throw new Error("It doesn't make sense to split exported specifiers.");
+  }
+
+  const declaration = this.get("declaration");
+
+  if (this.isExportDefaultDeclaration()) {
+    const standaloneDeclaration =
+      declaration.isFunctionDeclaration() || declaration.isClassDeclaration();
+    const exportExpr =
+      declaration.isFunctionExpression() || declaration.isClassExpression();
+
+    const scope = declaration.isScope()
+      ? declaration.scope.parent
+      : declaration.scope;
+
+    // @ts-expect-error id is not defined in expressions other than function/class
+    let id = declaration.node.id;
+    let needBindingRegistration = false;
+
+    if (!id) {
+      needBindingRegistration = true;
+
+      id = scope.generateUidIdentifier("default");
+
+      if (standaloneDeclaration || exportExpr) {
+        declaration.node.id = cloneNode(id);
+      }
+    } else if (exportExpr && scope.hasBinding(id.name)) {
+      needBindingRegistration = true;
+
+      id = scope.generateUidIdentifier(id.name);
+    }
+
+    const updatedDeclaration = standaloneDeclaration
+      ? declaration.node
+      : variableDeclaration("var", [
+          variableDeclarator(
+            cloneNode(id),
+            // @ts-expect-error When `standaloneDeclaration` is false, declaration must not be a Function/ClassDeclaration
+            declaration.node,
+          ),
+        ]);
+
+    const updatedExportDeclaration = exportNamedDeclaration(null, [
+      exportSpecifier(cloneNode(id), identifier("default")),
+    ]);
+
+    this.insertAfter(updatedExportDeclaration);
+    this.replaceWith(updatedDeclaration);
+
+    if (needBindingRegistration) {
+      scope.registerDeclaration(this);
+    }
+
+    return this;
+  } else if (this.get("specifiers").length > 0) {
+    throw new Error("It doesn't make sense to split exported specifiers.");
+  }
+
+  const bindingIdentifiers = declaration.getOuterBindingIdentifiers();
+
+  const specifiers = Object.keys(bindingIdentifiers).map(name => {
+    return exportSpecifier(identifier(name), identifier(name));
+  });
+
+  const aliasDeclar = exportNamedDeclaration(null, specifiers);
+
+  this.insertAfter(aliasDeclar);
+  this.replaceWith(declaration.node);
+  return this;
 }

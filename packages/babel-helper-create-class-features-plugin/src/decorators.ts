@@ -1,7 +1,6 @@
 import type { NodePath, Scope, Visitor } from "@babel/core";
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import {
@@ -2466,9 +2465,14 @@ export default function (
           isDecorated(declaration)
         ) {
           const isAnonymous = !declaration.id;
-          const updatedVarDeclarationPath = splitExportDeclaration(
-            path,
-          ) as unknown as NodePath<t.ClassDeclaration>;
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.splitExportDeclaration ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
+          }
+          const updatedVarDeclarationPath =
+            path.splitExportDeclaration() as NodePath<t.ClassDeclaration>;
           if (isAnonymous) {
             visitClass(
               updatedVarDeclarationPath,
@@ -2486,7 +2490,13 @@ export default function (
           // binding, so we must split it in two separate declarations.
           isDecorated(declaration)
         ) {
-          splitExportDeclaration(path);
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.splitExportDeclaration ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
+          }
+          path.splitExportDeclaration();
         }
       },
 

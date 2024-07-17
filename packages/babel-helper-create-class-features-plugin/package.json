@@ -24,7 +24,6 @@
     "@babel/helper-optimise-call-expression": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
     "@babel/traverse": "workspace:^",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
