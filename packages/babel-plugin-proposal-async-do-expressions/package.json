@@ -23,18 +23,16 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-hoist-variables": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-async-do-expressions": "workspace:^"
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.13.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions",
   "engines": {

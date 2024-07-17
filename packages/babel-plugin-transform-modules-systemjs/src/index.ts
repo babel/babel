@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
 import {
@@ -629,12 +628,19 @@ export default declare<PluginState>((api, options: Options) => {
           // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          hoistVariables(path, (id, name, hasInit) => {
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.scope.hoistVariables ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").Scope.prototype.hoistVariables;
+          }
+
+          path.scope.hoistVariables((id, hasInit) => {
             variableIds.push(id);
-            if (!hasInit && name in exportMap) {
-              for (const exported of exportMap[name]) {
+            if (!hasInit && id.name in exportMap) {
+              for (const exported of exportMap[id.name]) {
                 exportNames.push(exported);
-                exportValues.push(scope.buildUndefinedNode());
+                exportValues.push(t.buildUndefinedNode());
               }
             }
           });

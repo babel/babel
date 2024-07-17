@@ -787,15 +787,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-hoist-variables@workspace:^, @babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables"
-  dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-import-to-platform-api@npm:^8.0.0-alpha.8":
   version: 8.0.0-alpha.8
   resolution: "@babel/helper-import-to-platform-api@npm:8.0.0-alpha.8"
@@ -1479,12 +1470,10 @@ __metadata:
   resolution: "@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-async-do-expressions": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   peerDependencies:
     "@babel/core": ^7.13.0
   languageName: unknown
@@ -3086,12 +3075,12 @@ __metadata:
   resolution: "@babel/plugin-transform-modules-systemjs@workspace:packages/babel-plugin-transform-modules-systemjs"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
     "@babel/helper-module-transforms": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
     core-js: "npm:^3.35.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -4426,6 +4415,31 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/traverse-BABEL_8_BREAKING-false@npm:@babel/traverse@workspace:^, @babel/traverse@workspace:^, @babel/traverse@workspace:packages/babel-traverse":
+  version: 0.0.0-use.local
+  resolution: "@babel/traverse@workspace:packages/babel-traverse"
+  dependencies:
+    "@babel/code-frame": "workspace:^"
+    "@babel/core": "workspace:^"
+    "@babel/generator": "workspace:^"
+    "@babel/helper-function-name": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/parser": "workspace:^"
+    "@babel/types": "workspace:^"
+    debug: "npm:^4.3.1"
+    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
+  languageName: unknown
+  linkType: soft
+
+"@babel/traverse@condition:BABEL_8_BREAKING ? : workspace:^":
+  version: 0.0.0-condition-4045c9
+  resolution: "@babel/traverse@condition:BABEL_8_BREAKING?:workspace:^#4045c9"
+  dependencies:
+    "@babel/traverse-BABEL_8_BREAKING-false": "npm:@babel/traverse@workspace:^"
+  checksum: 10/a037d630fcde5c534208bdac3b1624a75b40d0c41e5315a2ccd2ca9112676bfc7c13304cdba59728d1cc8c36058e0b770d80803e2ae2b2eb703beb2ec6e71f46
+  languageName: node
+  linkType: hard
+
 "@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.24.1, @babel/traverse@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/traverse@npm:7.24.7"
@@ -4461,23 +4475,6 @@ __metadata:
   checksum: 10/32133259bfb0ef5b92b1af2a7df51aaefda743fe3b716ff1ed3ea6c175409be98c76c0ab0beab37a321077fd7c7df516f5fd5e50cd0eaa229691e57d70990d23
   languageName: node
   linkType: hard
-
-"@babel/traverse@workspace:^, @babel/traverse@workspace:packages/babel-traverse":
-  version: 0.0.0-use.local
-  resolution: "@babel/traverse@workspace:packages/babel-traverse"
-  dependencies:
-    "@babel/code-frame": "workspace:^"
-    "@babel/core": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
-    debug: "npm:^4.3.1"
-    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
-  languageName: unknown
-  linkType: soft
 
 "@babel/types@npm:^7.12.7, @babel/types@npm:^7.24.0, @babel/types@npm:^7.24.7, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
   version: 7.24.7
