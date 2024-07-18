@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.24.7",
+  "version": "7.24.8",
   "description": "A Babel preset for each environment.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
@@ -95,7 +95,7 @@
     "babel-plugin-polyfill-corejs2": "condition:BABEL_8_BREAKING ? : ^0.4.10 (peer:@babel/core) (esm:default)",
     "babel-plugin-polyfill-corejs3": "^0.10.4",
     "babel-plugin-polyfill-regenerator": "condition:BABEL_8_BREAKING ? : ^0.6.1 (peer:@babel/core) (esm:default)",
-    "core-js-compat": "^3.31.0",
+    "core-js-compat": "^3.37.1",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {

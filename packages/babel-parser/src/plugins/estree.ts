@@ -52,7 +52,7 @@ export default (superClass: typeof Parser) =>
     // @ts-expect-error ESTree plugin changes node types
     parseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
-      let bigInt: BigInt | null;
+      let bigInt: bigint | null;
       try {
         bigInt = BigInt(value);
       } catch {

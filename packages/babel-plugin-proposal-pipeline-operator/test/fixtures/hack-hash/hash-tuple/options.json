@@ -4,5 +4,5 @@
     ["proposal-pipeline-operator", { "proposal": "hack", "topicToken": "#" }],
     ["proposal-record-and-tuple"]
   ],
-  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"hack\", topicToken: \"#\" }]` and `\"recordAndTuple\"`."
+  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"hack\", topicToken: \"#\" }]` and `[\"recordAndTuple\",{}]`."
 }

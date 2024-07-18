@@ -7,7 +7,9 @@
         "proposal": "smart"
       }
     ],
-    ["recordAndTuple"]
+    [
+      "recordAndTuple"
+    ]
   ],
-  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"smart\" }]` and `\"recordAndTuple\"`."
+  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"smart\" }]` and `[\"recordAndTuple\",{}]`."
 }

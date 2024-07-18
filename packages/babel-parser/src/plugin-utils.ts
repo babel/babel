@@ -1,91 +1,27 @@
 import type Parser from "./parser/index.ts";
-import type {
-  ParserPluginWithOptions,
-  PluginConfig,
-  PluginOptions,
-} from "./typings.ts";
+import type { PluginConfig } from "./typings.ts";
 
 export type Plugin = PluginConfig;
 
 export type PluginList = PluginConfig[];
 
-export type MixinPlugin = (superClass: { new (...args: any): Parser }) => {
-  new (...args: any): Parser;
-};
-
-// This function’s second parameter accepts either a string (plugin name) or an
-// array pair (plugin name and options object). If an options object is given,
-// then each value is non-recursively checked for identity with the actual
-// option value of each plugin in the first argument (which is an array of
-// plugin names or array pairs).
-export function hasPlugin(
-  plugins: PluginList,
-  expectedConfig: PluginConfig,
-): boolean {
-  // The expectedOptions object is by default an empty object if the given
-  // expectedConfig argument does not give an options object (i.e., if it is a
-  // string).
-  const [expectedName, expectedOptions] =
-    typeof expectedConfig === "string" ? [expectedConfig, {}] : expectedConfig;
-
-  const expectedKeys = Object.keys(expectedOptions);
-
-  const expectedOptionsIsEmpty = expectedKeys.length === 0;
-
-  return plugins.some(p => {
-    if (typeof p === "string") {
-      return expectedOptionsIsEmpty && p === expectedName;
-    } else {
-      const [pluginName, pluginOptions] = p;
-      if (pluginName !== expectedName) {
-        return false;
-      }
-      for (const key of expectedKeys) {
-        // @ts-expect-error key may not exist in plugin options
-        if (pluginOptions[key] !== expectedOptions[key]) {
-          return false;
-        }
-      }
-      return true;
-    }
-  });
-}
-
-export function getPluginOption<
-  PluginName extends ParserPluginWithOptions[0],
-  OptionName extends keyof PluginOptions<PluginName>,
->(plugins: PluginList, name: PluginName, option: OptionName) {
-  const plugin = plugins.find(plugin => {
-    if (Array.isArray(plugin)) {
-      return plugin[0] === name;
-    } else {
-      return plugin === name;
-    }
-  });
-
-  if (plugin && Array.isArray(plugin) && plugin.length > 1) {
-    return (plugin[1] as PluginOptions<PluginName>)[option];
-  }
-
-  return null;
-}
+export type MixinPlugin = (
+  superClass: new (...args: any) => Parser,
+) => new (...args: any) => Parser;
 
 const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
-export function validatePlugins(plugins: PluginList) {
-  if (hasPlugin(plugins, "decorators")) {
-    if (hasPlugin(plugins, "decorators-legacy")) {
+export function validatePlugins(pluginsMap: Map<string, any>) {
+  if (pluginsMap.has("decorators")) {
+    if (pluginsMap.has("decorators-legacy")) {
       throw new Error(
         "Cannot use the decorators and decorators-legacy plugin together",
       );
     }
 
-    const decoratorsBeforeExport = getPluginOption(
-      plugins,
-      "decorators",
-      "decoratorsBeforeExport",
-    );
+    const decoratorsBeforeExport =
+      pluginsMap.get("decorators").decoratorsBeforeExport;
     if (
       decoratorsBeforeExport != null &&
       typeof decoratorsBeforeExport !== "boolean"
@@ -95,11 +31,8 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
 
-    const allowCallParenthesized = getPluginOption(
-      plugins,
-      "decorators",
-      "allowCallParenthesized",
-    );
+    const allowCallParenthesized =
+      pluginsMap.get("decorators").allowCallParenthesized;
     if (
       allowCallParenthesized != null &&
       typeof allowCallParenthesized !== "boolean"
@@ -108,16 +41,16 @@ export function validatePlugins(plugins: PluginList) {
     }
   }
 
-  if (hasPlugin(plugins, "flow") && hasPlugin(plugins, "typescript")) {
+  if (pluginsMap.has("flow") && pluginsMap.has("typescript")) {
     throw new Error("Cannot combine flow and typescript plugins.");
   }
 
-  if (hasPlugin(plugins, "placeholders") && hasPlugin(plugins, "v8intrinsic")) {
+  if (pluginsMap.has("placeholders") && pluginsMap.has("v8intrinsic")) {
     throw new Error("Cannot combine placeholders and v8intrinsic plugins.");
   }
 
-  if (hasPlugin(plugins, "pipelineOperator")) {
-    const proposal = getPluginOption(plugins, "pipelineOperator", "proposal");
+  if (pluginsMap.has("pipelineOperator")) {
+    const proposal = pluginsMap.get("pipelineOperator").proposal;
 
     if (!PIPELINE_PROPOSALS.includes(proposal)) {
       const proposalList = PIPELINE_PROPOSALS.map(p => `"${p}"`).join(", ");
@@ -126,32 +59,24 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
 
-    const recordAndTupleConfigItem:
-      | "recordAndTuple"
-      | ["recordAndTuple", { syntaxType: "hash" }] = process.env
-      .BABEL_8_BREAKING
-      ? "recordAndTuple"
-      : ["recordAndTuple", { syntaxType: "hash" }];
-    const tupleSyntaxIsHash = hasPlugin(plugins, recordAndTupleConfigItem);
+    const tupleSyntaxIsHash = process.env.BABEL_8_BREAKING
+      ? pluginsMap.has("recordAndTuple")
+      : pluginsMap.get("recordAndTuple")?.syntaxType === "hash";
 
     if (proposal === "hack") {
-      if (hasPlugin(plugins, "placeholders")) {
+      if (pluginsMap.has("placeholders")) {
         throw new Error(
           "Cannot combine placeholders plugin and Hack-style pipes.",
         );
       }
 
-      if (hasPlugin(plugins, "v8intrinsic")) {
+      if (pluginsMap.has("v8intrinsic")) {
         throw new Error(
           "Cannot combine v8intrinsic plugin and Hack-style pipes.",
         );
       }
 
-      const topicToken = getPluginOption(
-        plugins,
-        "pipelineOperator",
-        "topicToken",
-      );
+      const topicToken = pluginsMap.get("pipelineOperator").topicToken;
 
       if (!TOPIC_TOKENS.includes(topicToken)) {
         const tokenList = TOPIC_TOKENS.map(t => `"${t}"`).join(", ");
@@ -163,35 +88,32 @@ export function validatePlugins(plugins: PluginList) {
 
       if (topicToken === "#" && tupleSyntaxIsHash) {
         throw new Error(
-          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(recordAndTupleConfigItem)}\`.`,
+          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
         );
       }
     } else if (proposal === "smart" && tupleSyntaxIsHash) {
       throw new Error(
-        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(recordAndTupleConfigItem)}\`.`,
+        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
       );
     }
   }
 
-  if (hasPlugin(plugins, "moduleAttributes")) {
+  if (pluginsMap.has("moduleAttributes")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
         "`moduleAttributes` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`.",
       );
     } else {
       if (
-        hasPlugin(plugins, "importAssertions") ||
-        hasPlugin(plugins, "importAttributes")
+        pluginsMap.has("importAttributes") ||
+        pluginsMap.has("importAssertions")
       ) {
         throw new Error(
           "Cannot combine importAssertions, importAttributes and moduleAttributes plugins.",
         );
       }
-      const moduleAttributesVersionPluginOption = getPluginOption(
-        plugins,
-        "moduleAttributes",
-        "version",
-      );
+      const moduleAttributesVersionPluginOption =
+        pluginsMap.get("moduleAttributes").version;
       if (moduleAttributesVersionPluginOption !== "may-2020") {
         throw new Error(
           "The 'moduleAttributes' plugin requires a 'version' option," +
@@ -202,16 +124,16 @@ export function validatePlugins(plugins: PluginList) {
     }
   }
   if (
-    hasPlugin(plugins, "importAssertions") &&
-    hasPlugin(plugins, "importAttributes")
+    pluginsMap.has("importAttributes") &&
+    pluginsMap.has("importAssertions")
   ) {
     throw new Error(
       "Cannot combine importAssertions and importAttributes plugins.",
     );
   }
 
-  if (hasPlugin(plugins, "recordAndTuple")) {
-    const syntaxType = getPluginOption(plugins, "recordAndTuple", "syntaxType");
+  if (pluginsMap.has("recordAndTuple")) {
+    const syntaxType = pluginsMap.get("recordAndTuple").syntaxType;
     if (syntaxType != null) {
       if (process.env.BABEL_8_BREAKING) {
         if (syntaxType === "hash") {
@@ -236,8 +158,8 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (
-    hasPlugin(plugins, "asyncDoExpressions") &&
-    !hasPlugin(plugins, "doExpressions")
+    pluginsMap.has("asyncDoExpressions") &&
+    !pluginsMap.has("doExpressions")
   ) {
     const error = new Error(
       "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
@@ -248,8 +170,8 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (
-    hasPlugin(plugins, "optionalChainingAssign") &&
-    getPluginOption(plugins, "optionalChainingAssign", "version") !== "2023-07"
+    pluginsMap.has("optionalChainingAssign") &&
+    pluginsMap.get("optionalChainingAssign").version !== "2023-07"
   ) {
     throw new Error(
       "The 'optionalChainingAssign' plugin requires a 'version' option," +

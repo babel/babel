@@ -1,8 +1,7 @@
 import template from "@babel/template";
 import {
-  NOT_LOCAL_BINDING,
-  cloneNode,
   identifier,
+  inherits,
   isAssignmentExpression,
   isAssignmentPattern,
   isFunction,
@@ -28,7 +27,7 @@ function getFunctionArity(node: t.Function): number {
   return count === -1 ? node.params.length : count;
 }
 
-const buildPropertyMethodAssignmentWrapper = template.statement(`
+const buildPropertyMethodAssignmentWrapper = template.expression(`
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -42,46 +41,29 @@ const buildPropertyMethodAssignmentWrapper = template.statement(`
   })(FUNCTION)
 `);
 
-const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
-  (function (FUNCTION_KEY) {
-    function* FUNCTION_ID() {
-      return yield* FUNCTION_KEY.apply(this, arguments);
-    }
-
-    FUNCTION_ID.toString = function () {
-      return FUNCTION_KEY.toString();
-    };
-
-    return FUNCTION_ID;
-  })(FUNCTION)
-`);
-
 type State = {
   name: string;
-  outerDeclar: t.Identifier;
-  selfAssignment: boolean;
-  selfReference: boolean;
+  needsRename: boolean;
 };
 
-const visitor: Visitor<State> = {
+const refersOuterBindingVisitor: Visitor<State> = {
   "ReferencedIdentifier|BindingIdentifier"(
     path: NodePath<t.Identifier>,
     state,
   ) {
     // check if this node matches our function id
     if (path.node.name !== state.name) return;
-
-    // check that we don't have a local variable declared as that removes the need
-    // for the wrapper
-    const localDeclar = path.scope.getBindingIdentifier(state.name);
-    if (localDeclar !== state.outerDeclar) return;
-
-    state.selfReference = true;
+    state.needsRename = true;
     path.stop();
+  },
+  Scope(path, state) {
+    if (path.scope.hasOwnBinding(state.name)) {
+      path.skip();
+    }
   },
 };
 
-function getNameFromLiteralId(id: t.Literal) {
+function getNameFromLiteralId(id: t.Literal): string {
   if (isNullLiteral(id)) {
     return "null";
   }
@@ -102,12 +84,12 @@ function getNameFromLiteralId(id: t.Literal) {
 }
 
 function wrap(
-  state: State,
+  needsRename: boolean,
   method: t.FunctionExpression | t.Class,
   id: t.Identifier,
   scope: Scope,
 ) {
-  if (state.selfReference) {
+  if (needsRename) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
       scope.rename(id.name);
@@ -116,25 +98,17 @@ function wrap(
       if (!isFunction(method)) return;
 
       // need to add a wrapper since we can't change the references
-      let build = buildPropertyMethodAssignmentWrapper;
-      if (method.generator) {
-        build = buildGeneratorPropertyMethodAssignmentWrapper;
-      }
 
-      const template = (
-        build({
-          FUNCTION: method,
-          FUNCTION_ID: id,
-          FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-        }) as t.ExpressionStatement
-      ).expression as t.CallExpression;
+      const template = buildPropertyMethodAssignmentWrapper({
+        FUNCTION: method,
+        FUNCTION_ID: id,
+        FUNCTION_KEY: scope.generateUidIdentifier(id.name),
+      }) as t.CallExpression;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      const params = (
-        (template.callee as t.FunctionExpression).body
-          .body[0] as any as t.FunctionExpression
-      ).params;
+      const { params } = (template.callee as t.FunctionExpression).body
+        .body[0] as any as t.FunctionExpression;
 
       for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));
@@ -153,18 +127,12 @@ function visit(
   name: string,
   scope: Scope,
 ) {
-  const state: State = {
-    selfAssignment: false,
-    selfReference: false,
-    outerDeclar: scope.getBindingIdentifier(name),
-    name: name,
-  };
+  const state: State = { needsRename: false, name };
 
   // check to see if we have a local binding of the id we're setting inside of
   // the function, this is important as there are caveats associated
 
   const binding = scope.getOwnBinding(name);
-
   if (binding) {
     if (binding.kind === "param") {
       // safari will blow up in strict mode with code like:
@@ -179,7 +147,7 @@ function visit(
       // this isn't to the spec and they've invented this behaviour which is
       // **extremely** annoying so we avoid setting the name if it has a param
       // with the same id
-      state.selfReference = true;
+      state.needsRename = true;
     } else {
       // otherwise it's defined somewhere in scope like:
       //
@@ -190,11 +158,11 @@ function visit(
       // so we can safely just set the id and move along as it shadows the
       // bound function id
     }
-  } else if (state.outerDeclar || scope.hasGlobal(name)) {
-    scope.traverse(node, visitor, state);
+  } else if (scope.parent.hasBinding(name) || scope.hasGlobal(name)) {
+    scope.traverse(node, refersOuterBindingVisitor, state);
   }
 
-  return state;
+  return state.needsRename;
 }
 
 /**
@@ -215,7 +183,7 @@ function visit(
  * - an IIFE when `node` contains a binding shadowing the inferred function name (e.g. `let f = function (f) {}`),
  * - `void` when `node` has `id` property or the helper can not inferred the name or the inferred name contains non-BMP characters that is not supported by current target
  */
-export default function <N extends t.FunctionExpression | t.Class>(
+export default function nameFunction<N extends t.FunctionExpression | t.Class>(
   {
     node,
     parent,
@@ -231,7 +199,8 @@ export default function <N extends t.FunctionExpression | t.Class>(
       | t.NumericLiteral
       | t.BigIntLiteral;
   },
-  localBinding = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  localBinding = false, // TODO: Remove this unused param
   supportUnicodeId = false,
 ): N | t.CallExpression | void {
   // has an `id` so we don't need to infer one
@@ -250,22 +219,6 @@ export default function <N extends t.FunctionExpression | t.Class>(
   } else if (isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
-
-    // but not "let foo = () => {};" being converted to function expression
-    if (isIdentifier(id) && !localBinding) {
-      const binding = scope.parent.getBinding(id.name);
-      if (
-        binding &&
-        binding.constant &&
-        scope.getBinding(id.name) === binding
-      ) {
-        // always going to reference this method
-        node.id = cloneNode(id);
-        // @ts-expect-error Fixme: avoid mutating AST nodes
-        node.id[NOT_LOCAL_BINDING] = true;
-        return;
-      }
-    }
   } else if (isAssignmentExpression(parent, { operator: "=" })) {
     // foo = function () {};
     id = parent.left;
@@ -290,13 +243,8 @@ export default function <N extends t.FunctionExpression | t.Class>(
 
   name = toBindingIdentifierName(name);
   const newId = identifier(name);
+  if (id) inherits(newId, id);
 
-  // The id shouldn't be considered a local binding to the function because
-  // we are simply trying to set the function name and not actually create
-  // a local binding.
-  // @ts-expect-error Fixme: avoid mutating AST nodes
-  newId[NOT_LOCAL_BINDING] = true;
-
-  const state = visit(node, name, scope);
-  return wrap(state, node, newId, scope) || node;
+  const needsRename = visit(node, name, scope);
+  return wrap(needsRename, node, newId, scope) || node;
 }

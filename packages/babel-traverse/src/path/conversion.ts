@@ -217,7 +217,7 @@ export function arrowFunctionToExpression(
       callExpression(
         memberExpression(
           // @ts-expect-error TS can't infer nameFunction returns CallExpression | ArrowFunctionExpression here
-          nameFunction(this, true) || fn.node,
+          nameFunction(this) || fn.node,
           identifier("bind"),
         ),
         [checkBinding ? identifier(checkBinding.name) : thisExpression()],

@@ -39,6 +39,7 @@ function getNormalizedV8Flag(arg: string) {
   return arg;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 getV8Flags(async function (err, v8Flags) {
   if (!process.env.BABEL_8_BREAKING) {
     // The version of v8flags used by Babel 7 uses _, while the one used

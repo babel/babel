@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # Specifying `config` manually avoids `lint-staged` scanning the entire repository, even `package.json` containing test suites.
 # Use `--no-stash` to skip backup files as we don't automatically fix lint errors.
 ./node_modules/.bin/lint-staged --config package.json --no-stash

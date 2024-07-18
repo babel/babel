@@ -1,6 +1,12 @@
 import "shelljs/make.js";
 import path from "path";
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  existsSync,
+  mkdirSync,
+} from "fs";
 import semver from "semver";
 import { execaSync } from "execa";
 
@@ -458,7 +464,8 @@ function bootstrapParserTests(name, repoURL, subPaths) {
   const dir = "./build/" + name.toLowerCase();
 
   shell.rm("-rf", dir);
-  shell.mkdir("-p", "build");
+  print("mkdir -p build");
+  mkdirSync("build", { recursive: true });
 
   exec("git", [
     "clone",

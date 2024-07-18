@@ -230,6 +230,7 @@ export default async function ({
 
     watcher.startWatcher();
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     watcher.onFilesChange(async filenames => {
       processing++;
       if (startTime === null) startTime = process.hrtime();

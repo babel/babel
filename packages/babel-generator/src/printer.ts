@@ -119,7 +119,16 @@ class Printer {
   declare _inputMap: TraceMap;
 
   declare format: Format;
-  inForStatementInitCounter: number = 0;
+
+  inForStatementInit: boolean = false;
+  enterForStatementInit(val: boolean) {
+    const old = this.inForStatementInit;
+    if (old === val) return () => {};
+    this.inForStatementInit = val;
+    return () => {
+      this.inForStatementInit = old;
+    };
+  }
 
   declare _buf: Buffer;
   _printStack: Array<t.Node> = [];
@@ -658,7 +667,7 @@ class Printer {
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
-      needsParens(node, parent, this._printStack);
+      needsParens(node, parent, this._printStack, this.inForStatementInit);
 
     if (
       !shouldPrintParens &&
@@ -683,9 +692,11 @@ class Printer {
       }
     }
 
+    let exitInForStatementInit;
     if (shouldPrintParens) {
       this.token("(");
       this._endsWithInnerRaw = false;
+      exitInForStatementInit = this.enterForStatementInit(false);
     }
 
     this._lastCommentLine = 0;
@@ -707,6 +718,7 @@ class Printer {
       this._printTrailingComments(node, parent);
       this.token(")");
       this._noLineTerminator = noLineTerminatorAfter;
+      exitInForStatementInit();
     } else if (noLineTerminatorAfter && !this._noLineTerminator) {
       this._noLineTerminator = true;
       this._printTrailingComments(node, parent);

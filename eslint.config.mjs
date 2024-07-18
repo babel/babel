@@ -131,6 +131,14 @@ export default [
         { ignoreArrowShorthand: true },
       ],
       "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          checksConditionals: false,
+        },
+      ],
+      "require-await": "off",
+      "@typescript-eslint/require-await": "error",
 
       // Todo: Investigate, for each of these, whether we want them
       "@typescript-eslint/array-type": "off",
@@ -144,22 +152,16 @@ export default [
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-misused-promises": "off",
-      "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-call": "off",
       "@typescript-eslint/no-unsafe-declaration-merging": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/prefer-for-of": "off",
-      "@typescript-eslint/prefer-function-type": "off",
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/prefer-string-starts-ends-with": "off",
-      "@typescript-eslint/require-await": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/sort-type-constituents": "off",
-      "@typescript-eslint/triple-slash-reference": "off",
       "@typescript-eslint/unbound-method": "off",
       "prefer-rest-params": "off",
 
@@ -170,6 +172,7 @@ export default [
 
       // v8
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unsafe-function-type": "off",
     },
   }),
   {
@@ -226,6 +229,7 @@ export default [
               "itESM",
               "nodeGte8",
               "nodeGte12",
+              "nodeGte20",
               "nodeGte12NoESM",
               "testFn",
             ],

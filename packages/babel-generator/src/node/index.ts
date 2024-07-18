@@ -3,9 +3,11 @@ import * as parens from "./parentheses.ts";
 import {
   FLIPPED_ALIAS_KEYS,
   isCallExpression,
+  isDecorator,
   isExpressionStatement,
   isMemberExpression,
   isNewExpression,
+  isParenthesizedExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -19,6 +21,7 @@ type NodeHandler<R> = (
   //   : t.Node,
   parent: t.Node,
   stack?: t.Node[],
+  inForStatementInit?: boolean,
 ) => R;
 
 export type NodeHandlers<R> = {
@@ -33,8 +36,11 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     map.set(
       type,
       fn
-        ? function (node, parent, stack) {
-            return fn(node, parent, stack) ?? func(node, parent, stack);
+        ? function (node, parent, stack, inForInit) {
+            return (
+              fn(node, parent, stack, inForInit) ??
+              func(node, parent, stack, inForInit)
+            );
           }
         : func,
     );
@@ -99,6 +105,7 @@ export function needsParens(
   node: t.Node,
   parent: t.Node,
   printStack?: t.Node[],
+  inForInit?: boolean,
 ) {
   if (!parent) return false;
 
@@ -106,5 +113,28 @@ export function needsParens(
     if (isOrHasCallExpression(node)) return true;
   }
 
-  return expandedParens.get(node.type)?.(node, parent, printStack);
+  if (isDecorator(parent)) {
+    return (
+      !isDecoratorMemberExpression(node) &&
+      !(isCallExpression(node) && isDecoratorMemberExpression(node.callee)) &&
+      !isParenthesizedExpression(node)
+    );
+  }
+
+  return expandedParens.get(node.type)?.(node, parent, printStack, inForInit);
+}
+
+function isDecoratorMemberExpression(node: t.Node): boolean {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return (
+        !node.computed &&
+        node.property.type === "Identifier" &&
+        isDecoratorMemberExpression(node.object)
+      );
+    default:
+      return false;
+  }
 }

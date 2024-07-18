@@ -3,6 +3,7 @@
   "Array.fromAsync",
   "ArrayBuffer",
   "Atomics",
+  "Atomics.pause",
   "Atomics.waitAsync",
   "BigInt",
   "DataView",
@@ -18,6 +19,7 @@
   "Intl-enumeration",
   "IsHTMLDDA",
   "Map",
+  "Math.sumPrecise",
   "Object.fromEntries",
   "Object.hasOwn",
   "Object.is",
@@ -134,5 +136,6 @@
   "template",
   "top-level-await",
   "u180e",
+  "uint8array-base64",
   "well-formed-json-stringify"
 ]
