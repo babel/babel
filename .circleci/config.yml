@@ -24,7 +24,7 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: cimg/node:current
+      - image: cimg/node:22.4.1
     working_directory: ~/babel
 
 jobs:
