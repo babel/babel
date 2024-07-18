@@ -1,8 +1,10 @@
-import eslint from "eslint";
+import { Linter, ESLint } from "eslint";
 import unpad from "dedent";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as parser from "../../../babel-eslint-parser/lib/index.cjs";
+import babelEslintParser from "@babel/eslint-parser";
+import globals from "globals";
 
 export default function verifyAndAssertMessages(
   code,
@@ -11,17 +13,14 @@ export default function verifyAndAssertMessages(
   sourceType,
   overrideConfig,
 ) {
-  const linter = new eslint.Linter();
-  linter.defineParser("@babel/eslint-parser", parser);
+  const linter = new Linter();
+  if (parseInt(ESLint.version, 10) < 9) {
+    linter.defineParser("@babel/eslint-parser", parser);
+  }
 
-  const messages = linter.verify(unpad(`${code}`), {
-    parser: "@babel/eslint-parser",
-    rules,
-    env: {
-      node: true,
-      es6: true,
-    },
-    ...overrideConfig,
+  const languageOptions = {
+    globals: (overrideConfig && overrideConfig.globals) ?? globals.node,
+    parser: babelEslintParser.default || babelEslintParser,
     parserOptions: {
       sourceType,
       requireConfigFile: false,
@@ -36,6 +35,11 @@ export default function verifyAndAssertMessages(
           overrideConfig.parserOptions.babelOptions),
       },
     },
+  };
+
+  const messages = linter.verify(unpad(`${code}`), {
+    languageOptions,
+    rules,
   });
 
   if (messages.length !== expectedMessages.length) {

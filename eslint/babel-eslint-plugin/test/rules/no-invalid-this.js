@@ -1,6 +1,7 @@
 import cloneDeep from "clone-deep";
 import rule from "../../lib/rules/no-invalid-this.cjs";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+import { ESLint } from "eslint";
 
 /**
  * A constant value for non strict mode environment.
@@ -164,8 +165,12 @@ const patterns = [
   },
 ];
 
-const ruleTester = new RuleTester();
-ruleTester.run("@babel/no-invalid-this", rule, {
-  valid: extractPatterns(patterns, "valid"),
-  invalid: extractPatterns(patterns, "invalid"),
-});
+if (parseInt(ESLint.version, 10) < 9) {
+  const ruleTester = new RuleTester();
+  ruleTester.run("@babel/no-invalid-this", rule, {
+    valid: extractPatterns(patterns, "valid"),
+    invalid: extractPatterns(patterns, "invalid"),
+  });
+} else {
+  test("@babel/no-invalid-this fallbacks to noop for ESLint 9", () => {});
+}

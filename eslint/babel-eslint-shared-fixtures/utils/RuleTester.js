@@ -1,7 +1,7 @@
-const { RuleTester } = require("eslint");
+const { RuleTester, ESLint } = require("eslint");
 
-RuleTester.setDefaultConfig({
-  parser: require.resolve("@babel/eslint-parser"),
+const languageOptions = {
+  parser: require("@babel/eslint-parser"),
   parserOptions: {
     sourceType: "module",
     ecmaVersion: "latest",
@@ -9,6 +9,10 @@ RuleTester.setDefaultConfig({
       configFile: require.resolve("../config/babel.config.js"),
     },
   },
-});
+};
+
+RuleTester.setDefaultConfig(
+  parseInt(ESLint.version) >= 9 ? { languageOptions } : languageOptions
+);
 
 module.exports = RuleTester;

@@ -1,11 +1,13 @@
-import { Linter } from "eslint";
+import { Linter, ESLint } from "eslint";
 import fs from "fs";
 import path from "path";
 import * as parser from "../../../../../babel-eslint-parser/lib/index.cjs";
 import { fileURLToPath } from "url";
 
 const linter = new Linter();
-linter.defineParser("@babel/eslint-parser", parser);
+if (parseInt(ESLint.version, 10) < 9) {
+  linter.defineParser("@babel/eslint-parser", parser);
+}
 
 const paths = {
   fixtures: path.join(
@@ -19,8 +21,8 @@ const paths = {
 const encoding = "utf8";
 const errorLevel = 2;
 
-const baseEslintOpts = {
-  parser: "@babel/eslint-parser",
+const languageOptions = {
+  parser: parser,
   parserOptions: {
     sourceType: "script",
     requireConfigFile: false,
@@ -64,9 +66,10 @@ function strictSuite() {
   const ruleId = "strict";
 
   describe("when set to 'never'", () => {
-    const eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = {
+      languageOptions,
       rules: {},
-    });
+    };
     eslintOpts.rules[ruleId] = [errorLevel, "never"];
 
     ["global-with", "function-with"].forEach(fixture => {
@@ -83,9 +86,10 @@ function strictSuite() {
   });
 
   describe("when set to 'global'", () => {
-    const eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = {
+      languageOptions,
       rules: {},
-    });
+    };
     eslintOpts.rules[ruleId] = [errorLevel, "global"];
 
     it("shouldn't error on single global directive", async () => {
@@ -127,9 +131,10 @@ function strictSuite() {
   });
 
   describe("when set to 'function'", () => {
-    const eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = {
+      languageOptions,
       rules: {},
-    });
+    };
     eslintOpts.rules[ruleId] = [errorLevel, "function"];
 
     it("shouldn't error on single function directive", async () => {
