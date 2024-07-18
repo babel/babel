@@ -2,6 +2,10 @@ import { Linter, ESLint } from "eslint";
 import unpad from "dedent";
 import path from "path";
 import { fileURLToPath } from "url";
+import {
+  eslintConfigCompat,
+  babelESLintParserPath,
+} from "./eslintConfigCompat.cjs";
 import * as parser from "../../../babel-eslint-parser/lib/index.cjs";
 import babelEslintParser from "@babel/eslint-parser";
 import globals from "globals";
@@ -15,11 +19,14 @@ export default function verifyAndAssertMessages(
 ) {
   const linter = new Linter();
   if (parseInt(ESLint.version, 10) < 9) {
-    linter.defineParser("@babel/eslint-parser", parser);
+    linter.defineParser(babelESLintParserPath, parser);
   }
 
   const languageOptions = {
-    globals: (overrideConfig && overrideConfig.globals) ?? globals.node,
+    globals: (overrideConfig && overrideConfig.globals) ?? {
+      ...globals.node,
+      ...globals.es2024,
+    },
     parser: babelEslintParser.default || babelEslintParser,
     parserOptions: {
       sourceType,
@@ -37,10 +44,13 @@ export default function verifyAndAssertMessages(
     },
   };
 
-  const messages = linter.verify(unpad(`${code}`), {
-    languageOptions,
-    rules,
-  });
+  const messages = linter.verify(
+    unpad(`${code}`),
+    eslintConfigCompat({
+      languageOptions,
+      rules,
+    }),
+  );
 
   if (messages.length !== expectedMessages.length) {
     throw new Error(

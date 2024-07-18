@@ -3,10 +3,14 @@ import fs from "fs";
 import path from "path";
 import * as parser from "../../../../../babel-eslint-parser/lib/index.cjs";
 import { fileURLToPath } from "url";
+import {
+  babelESLintParserPath,
+  eslintConfigCompat,
+} from "../../../helpers/eslintConfigCompat.cjs";
 
 const linter = new Linter();
 if (parseInt(ESLint.version, 10) < 9) {
-  linter.defineParser("@babel/eslint-parser", parser);
+  linter.defineParser(babelESLintParserPath, parser);
 }
 
 const paths = {
@@ -40,7 +44,7 @@ function lint(opts) {
   return new Promise((resolve, reject) => {
     readFixture(opts.fixture, (err, src) => {
       if (err) return reject(err);
-      resolve(linter.verify(src, opts.eslint));
+      resolve(linter.verify(src, eslintConfigCompat(opts.eslint)));
     });
   });
 }
