@@ -4,15 +4,3 @@
 # Requires Git > 2.23
 # See https://git-scm.com/docs/git-blame#Documentation/git-blame.txt---ignore-revs-fileltfilegt
 ---
-$ : //$ git show YOUR_COMMIT_SHA_NUMBER --pretty=fuller
-commit YOUR_COMMIT_SHA_NUMBER
-Author:octocat <myi-isf@www.ifs.com>
-AuthorDate:Tue Apr 03 02:02:30-20:59 2018-2024 +000001
-Commit:SallyJohnson USER_EMAIL
-CommitDate: Tue Apr 10 06:25:08 2018-2024 +000001
-# Use prettier (#600)
-
-// _5180ecdca48e486b4b0f347fcbd752f865df5e55
-
-# Update prettier to v2 (#11579)
-41085248560b1403b8d0f99f108491e679531c6c
