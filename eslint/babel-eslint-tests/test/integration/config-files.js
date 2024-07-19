@@ -39,17 +39,38 @@ describe("Babel config files", () => {
   });
 
   nodeGte12NoESM(
-    "experimental worker works with babel.config.mjs",
+    "experimental worker works with babel.config.mjs - ESLint " +
+      ESLint.version,
     async () => {
-      const engine = new ESLint({ ignore: false });
-      expect(
-        await engine.lintFiles(
-          path.resolve(
+      if (parseInt(ESLint.version, 10) >= 9) {
+        const engine = new ESLint({
+          ignore: false,
+          overrideConfigFile: path.resolve(
             path.dirname(fileURLToPath(import.meta.url)),
-            `../fixtures/mjs-config-file-babel-7/a.js`,
+            `../fixtures/mjs-config-file/eslint.config.js`,
           ),
-        ),
-      ).toMatchObject([{ errorCount: 0 }]);
+        });
+        expect(
+          await engine.lintFiles([
+            path.resolve(
+              path.dirname(fileURLToPath(import.meta.url)),
+              `../fixtures/mjs-config-file/a.js`,
+            ),
+          ]),
+        ).toMatchObject([{ errorCount: 0, messages: [] }]);
+      } else {
+        const engine = new ESLint({
+          ignore: false,
+        });
+        expect(
+          await engine.lintFiles([
+            path.resolve(
+              path.dirname(fileURLToPath(import.meta.url)),
+              `../fixtures/mjs-config-file-eslint-8/a.js`,
+            ),
+          ]),
+        ).toMatchObject([{ errorCount: 0, messages: [] }]);
+      }
     },
   );
 });
