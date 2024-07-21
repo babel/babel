@@ -45,7 +45,7 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
           [
             "@babel/preset-env",
             {
-              targets: { node: "6.9" },
+              targets: "maintained node versions",
               useBuiltIns: "usage",
               corejs: require("core-js/package.json").version,
             },

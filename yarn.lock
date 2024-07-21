@@ -5388,6 +5388,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sec-ant/readable-stream@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@sec-ant/readable-stream@npm:0.4.1"
+  checksum: 10/aac89581652ac85debe7c5303451c2ebf8bf25ca25db680e4b9b73168f6940616d9a4bbe3348981827b1159b14e2f2e6af4b7bd5735cac898c12d5c51909c102
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -10536,13 +10543,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-stream@npm:8.0.1, get-stream@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "get-stream@npm:8.0.1"
-  checksum: 10/dde5511e2e65a48e9af80fea64aff11b4921b14b6e874c6f8294c50975095af08f41bfb0b680c887f28b566dd6ec2cb2f960f9d36a323359be324ce98b766e9e
-  languageName: node
-  linkType: hard
-
 "get-stream@npm:^3.0.0":
   version: 3.0.0
   resolution: "get-stream@npm:3.0.0"
@@ -10554,6 +10554,23 @@ __metadata:
   version: 6.0.1
   resolution: "get-stream@npm:6.0.1"
   checksum: 10/781266d29725f35c59f1d214aedc92b0ae855800a980800e2923b3fbc4e56b3cb6e462c42e09a1cf1a00c64e056a78fa407cbe06c7c92b7e5cd49b4b85c2a497
+  languageName: node
+  linkType: hard
+
+"get-stream@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "get-stream@npm:8.0.1"
+  checksum: 10/dde5511e2e65a48e9af80fea64aff11b4921b14b6e874c6f8294c50975095af08f41bfb0b680c887f28b566dd6ec2cb2f960f9d36a323359be324ce98b766e9e
+  languageName: node
+  linkType: hard
+
+"get-stream@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "get-stream@npm:9.0.1"
+  dependencies:
+    "@sec-ant/readable-stream": "npm:^0.4.1"
+    is-stream: "npm:^4.0.1"
+  checksum: 10/ce56e6db6bcd29ca9027b0546af035c3e93dcd154ca456b54c298901eb0e5b2ce799c5d727341a100c99e14c523f267f1205f46f153f7b75b1f4da6d98a21c5e
   languageName: node
   linkType: hard
 

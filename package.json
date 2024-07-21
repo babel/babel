@@ -97,7 +97,6 @@
     "caniuse-lite": "npm:1.0.30001640",
     "core-js-compat": "npm:3.37.1",
     "electron-to-chromium": "npm:1.4.816",
-    "get-stream@^9.0.0": "npm:8.0.1",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
