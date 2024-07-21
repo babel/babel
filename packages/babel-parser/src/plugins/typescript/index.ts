@@ -74,15 +74,14 @@ const TSErrors = ParseErrorEnum`typescript`({
     propertyName: string;
   }) =>
     `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
-  // TODO: Accesor -> Accessor
-  AccesorCannotDeclareThisParameter:
-    "'get' and 'set' accessors cannot declare 'this' parameters.",
-  AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
   AccessorCannotBeOptional:
     "An 'accessor' property cannot be declared optional.",
+  AccessorCannotDeclareThisParameter:
+    "'get' and 'set' accessors cannot declare 'this' parameters.",
+  AccessorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
-  ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+  ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference:
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
@@ -179,12 +178,11 @@ const TSErrors = ParseErrorEnum`typescript`({
     "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
   ReservedTypeAssertion:
     "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
-  // TODO: Accesor -> Accessor
-  SetAccesorCannotHaveOptionalParameter:
+  SetAccessorCannotHaveOptionalParameter:
     "A 'set' accessor cannot have an optional parameter.",
-  SetAccesorCannotHaveRestParameter:
+  SetAccessorCannotHaveRestParameter:
     "A 'set' accessor cannot have rest parameter.",
-  SetAccesorCannotHaveReturnType:
+  SetAccessorCannotHaveReturnType:
     "A 'set' accessor cannot have a return type annotation.",
   SingleTypeParameterWithoutTrailingComma: ({
     typeParameterName,
@@ -845,7 +843,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const method: N.TsMethodSignature = nodeAny;
         if (method.kind && this.match(tt.lt)) {
           this.raise(
-            TSErrors.AccesorCannotHaveTypeParameters,
+            TSErrors.AccessorCannotHaveTypeParameters,
             this.state.curPosition(),
           );
         }
@@ -862,7 +860,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.raise(Errors.BadGetterArity, this.state.curPosition());
             if (this.isThisParam(method[paramsKey][0])) {
               this.raise(
-                TSErrors.AccesorCannotDeclareThisParameter,
+                TSErrors.AccessorCannotDeclareThisParameter,
                 this.state.curPosition(),
               );
             }
@@ -874,7 +872,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             const firstParameter = method[paramsKey][0];
             if (this.isThisParam(firstParameter)) {
               this.raise(
-                TSErrors.AccesorCannotDeclareThisParameter,
+                TSErrors.AccessorCannotDeclareThisParameter,
                 this.state.curPosition(),
               );
             }
@@ -883,20 +881,20 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               firstParameter.optional
             ) {
               this.raise(
-                TSErrors.SetAccesorCannotHaveOptionalParameter,
+                TSErrors.SetAccessorCannotHaveOptionalParameter,
                 this.state.curPosition(),
               );
             }
             if (firstParameter.type === "RestElement") {
               this.raise(
-                TSErrors.SetAccesorCannotHaveRestParameter,
+                TSErrors.SetAccessorCannotHaveRestParameter,
                 this.state.curPosition(),
               );
             }
           }
           if (method[returnTypeKey]) {
             this.raise(
-              TSErrors.SetAccesorCannotHaveReturnType,
+              TSErrors.SetAccessorCannotHaveReturnType,
               method[returnTypeKey],
             );
           }
@@ -2865,7 +2863,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
         ) {
           this.raise(
-            TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+            TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
             init,
           );
         }
