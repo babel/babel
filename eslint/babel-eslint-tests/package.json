@@ -7,6 +7,7 @@
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
     "@babel/preset-react": "workspace:^",
+    "@eslint/compat": "^1.1.1",
     "dedent": "^1.5.3",
     "eslint": "^9.6.0",
     "eslint-plugin-import": "^2.25.4",

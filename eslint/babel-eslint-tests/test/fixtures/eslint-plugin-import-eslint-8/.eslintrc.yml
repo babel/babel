@@ -1,5 +1,11 @@
 root: true
 parser: "@babel/eslint-parser"
+parserOptions:
+  requireConfigFile: false
+  babelOptions:
+    configFile: false
+    presets:
+    - "@babel/preset-flow"
 plugins:
   - import
 rules:
