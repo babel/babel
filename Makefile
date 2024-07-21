@@ -1,23 +1,20 @@
+
+---
 FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
 TEST262_COMMIT = ab0c31a4581dff94230bf5af9f45f682701760eb
 TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
-
 SOURCES = packages codemods eslint
-
 COMMA := ,
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
-
 YARN := yarn
 NODE := $(YARN) node
 MAKEJS := node Makefile.js
-
-
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
-
+---
 build:
-	$(MAKEJS) build
+:$(MAKEJS) build
 
 build-bundle:
 	$(MAKEJS) build-bundle
@@ -52,38 +49,38 @@ build-dist: build-plugin-transform-runtime-dist
 build-plugin-transform-runtime-dist:
 	$(MAKEJS) build-plugin-transform-runtime-dist
 
-watch:
+watch:***
 	$(MAKEJS) watch
 
 code-quality: lint
 
-tscheck:
+tscheck:***
 	$(MAKEJS) tscheck
 
-clean-ts:
+clean-ts:***
 	$(MAKEJS) clean-ts
 
-lint-ci:
+lint-ci:***
 	$(MAKEJS) lint-ci
 
 generate-readme:
 	$(NODE) scripts/generators/readmes.js
 
-lint:
+lint:***
 	$(MAKEJS) lint
 
 fix: fix-json fix-js
 
-fix-js:
+fix-js:***
 	$(MAKEJS) fix-js
 
-fix-json:
+fix-json:***
 	$(MAKEJS) fix-json
 
-clean:
+clean:***
 	$(MAKEJS) clean
 
-test-cov:
+test-cov:***
 	$(MAKEJS) test-cov
 
 test: lint test-only
