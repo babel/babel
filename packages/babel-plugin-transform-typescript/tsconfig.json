@@ -20,6 +20,9 @@
       "path": "../../packages/babel-helper-create-class-features-plugin"
     },
     {
+      "path": "../../packages/babel-helper-skip-transparent-expression-wrappers"
+    },
+    {
       "path": "../../packages/babel-plugin-syntax-typescript"
     }
   ]

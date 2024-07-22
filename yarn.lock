@@ -3844,6 +3844,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/plugin-syntax-typescript": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
