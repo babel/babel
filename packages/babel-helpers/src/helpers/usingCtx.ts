@@ -22,6 +22,12 @@ interface UsingCtxReturn {
   d: DisposeLike;
 }
 
+const enum StateFlag {
+  NONE = 0,
+  NEEDS_AWAIT = 1,
+  HAS_AWAITED = 2,
+}
+
 export default function _usingCtx(): UsingCtxReturn {
   var _disposeSuppressedError =
       typeof SuppressedError === "function"
@@ -61,13 +67,26 @@ export default function _usingCtx(): UsingCtxReturn {
           value as AsyncDisposable
         )[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
       }
-      if (dispose == null) {
+      if (dispose === undefined) {
         dispose = (value as Disposable)[
           Symbol.dispose || Symbol.for("Symbol.dispose")
         ];
+        if (isAwait) {
+          var inner = dispose;
+        }
       }
       if (typeof dispose !== "function") {
-        throw new TypeError(`Property [Symbol.dispose] is not a function.`);
+        throw new TypeError("Object is not disposable.");
+      }
+      if (inner) {
+        dispose = function () {
+          try {
+            inner.call(value);
+          } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+            return Promise.reject(e);
+          }
+        };
       }
       stack.push({ v: value, d: dispose, a: isAwait });
     } else if (isAwait) {
@@ -91,21 +110,40 @@ export default function _usingCtx(): UsingCtxReturn {
     >(null, true),
     // dispose
     d: function () {
-      var error = this.e;
+      var error = this.e,
+        state: StateFlag = StateFlag.NONE,
+        resource;
 
       function next(): Promise<void> | void {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         while ((resource = stack.pop())) {
           try {
-            var resource,
-              disposalResult = resource.d && resource.d.call(resource.v);
-            if (resource.a) {
-              return Promise.resolve(disposalResult).then(next, err);
+            if (!resource.a && state === StateFlag.NEEDS_AWAIT) {
+              state = StateFlag.NONE;
+              stack.push(resource);
+              return Promise.resolve().then(next);
+            }
+            if (resource.d) {
+              var disposalResult = resource.d.call(resource.v);
+              if (resource.a) {
+                state |= StateFlag.HAS_AWAITED;
+                return Promise.resolve(disposalResult).then(next, err);
+              }
+            } else {
+              state |= StateFlag.NEEDS_AWAIT;
             }
           } catch (e) {
             return err(e as Error);
           }
         }
+        if (state === StateFlag.NEEDS_AWAIT) {
+          if (error !== empty) {
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+            return Promise.reject(error);
+          } else {
+            return Promise.resolve();
+          }
+        }
+
         if (error !== empty) throw error;
       }
 
