@@ -462,6 +462,8 @@ export default function transformClass(
       }
     }
 
+    const guaranteedCalls = new Set<NodePath>();
+
     for (const thisPath of classState.superThises) {
       const { node, parentPath } = thisPath;
       if (parentPath.isMemberExpression({ object: node })) {
@@ -477,12 +479,29 @@ export default function transformClass(
         }
       });
 
+      let exprPath: NodePath = thisPath.parentPath.isSequenceExpression()
+        ? thisPath.parentPath
+        : thisPath;
       if (
-        maxGuaranteedSuperBeforeIndex !== -1 &&
-        thisIndex > maxGuaranteedSuperBeforeIndex
+        exprPath.listKey === "arguments" &&
+        (exprPath.parentPath.isCallExpression() ||
+          exprPath.parentPath.isOptionalCallExpression())
+      ) {
+        exprPath = exprPath.parentPath;
+      } else {
+        exprPath = null;
+      }
+
+      if (
+        (maxGuaranteedSuperBeforeIndex !== -1 &&
+          thisIndex > maxGuaranteedSuperBeforeIndex) ||
+        guaranteedCalls.has(exprPath)
       ) {
         thisPath.replaceWith(thisRef());
       } else {
+        if (exprPath) {
+          guaranteedCalls.add(exprPath);
+        }
         thisPath.replaceWith(buildAssertThisInitialized());
       }
     }
