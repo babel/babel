@@ -9,5 +9,5 @@ class A extends B {
 _A = A;
 function _foo() {
   let _A2;
-  babelHelpers.get(babelHelpers.getPrototypeOf(_A.prototype), "x", this);
+  babelHelpers.superPropGet(_A.prototype, "x", this);
 }

@@ -19,9 +19,9 @@ var ColorPoint = /*#__PURE__*/function (_Point) {
     babelHelpers.classCallCheck(this, ColorPoint);
     _this = babelHelpers.callSuper(this, ColorPoint);
     _this.x = 2;
-    babelHelpers.set((_this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", 3, _this, true);
+    babelHelpers.superPropSet((_this, ColorPoint), "x", 3, _this, 1, 1);
     expect(_this.x).toBe(3); // A
-    expect(babelHelpers.get((_this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", _this)).toBeUndefined(); // B
+    expect(babelHelpers.superPropGet((_this, ColorPoint), "x", _this, 1)).toBeUndefined(); // B
     return _this;
   }
   babelHelpers.inherits(ColorPoint, _Point);

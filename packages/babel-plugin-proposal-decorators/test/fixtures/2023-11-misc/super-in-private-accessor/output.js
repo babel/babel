@@ -4,7 +4,7 @@ const dec = () => {};
 class Foo extends (_Bar = Bar) {
   static {
     [_call_x, _initProto] = babelHelpers.applyDecs2311(this, [], [[dec, 3, "x", function () {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Foo), "foo", this).call(this);
+      return babelHelpers.superPropGet(Foo, "foo", this, 2)([]);
     }]], 0, _ => #x in _, _Bar).e;
   }
   constructor(...args) {

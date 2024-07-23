@@ -15,7 +15,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
       }]);
     }((() => {
       var _Foo;
-      babelHelpers.get((_this, babelHelpers.getPrototypeOf(Foo.prototype)), "method", _this).call(_this);
+      babelHelpers.superPropGet((_this, Foo), "method", _this, 3)([]);
     })());
     return _this;
   }

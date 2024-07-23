@@ -5,7 +5,7 @@ var _loop = function () {
     objects.push(_obj = {
       __proto__: proto,
       foo: function () {
-        return babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "x", this);
+        return babelHelpers.superPropGet(_obj, "x", this);
       }
     });
   }

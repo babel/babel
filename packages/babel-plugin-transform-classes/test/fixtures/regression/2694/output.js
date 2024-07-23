@@ -14,7 +14,7 @@ var SubFoo = exports["default"] = /*#__PURE__*/function (_BaseFoo) {
   return babelHelpers.createClass(SubFoo, null, [{
     key: "talk",
     value: function talk() {
-      babelHelpers.get(babelHelpers.getPrototypeOf(SubFoo), "talk", this).call(this);
+      babelHelpers.superPropGet(SubFoo, "talk", this, 2)([]);
       console.log('SubFoo.talk');
     }
   }]);

@@ -20,7 +20,6 @@ export default function _callSuper(
         Reflect.construct(
           derived,
           args || [],
-          // @ts-expect-error -- getPrototypeOf needs better typing
           getPrototypeOf(_this).constructor,
         )
       : derived.apply(_this, args),

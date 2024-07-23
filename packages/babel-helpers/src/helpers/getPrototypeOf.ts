@@ -1,6 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _getPrototypeOf(o: object) {
+export default function _getPrototypeOf(o: object): any {
   // @ts-expect-error explicitly assign to function
   _getPrototypeOf = Object.setPrototypeOf
     ? // @ts-expect-error -- intentionally omitting the argument

@@ -647,6 +647,24 @@
       "./helpers/superPropBase.js"
     ],
     "./helpers/esm/superPropBase": "./helpers/esm/superPropBase.js",
+    "./helpers/superPropGet": [
+      {
+        "node": "./helpers/superPropGet.js",
+        "import": "./helpers/esm/superPropGet.js",
+        "default": "./helpers/superPropGet.js"
+      },
+      "./helpers/superPropGet.js"
+    ],
+    "./helpers/esm/superPropGet": "./helpers/esm/superPropGet.js",
+    "./helpers/superPropSet": [
+      {
+        "node": "./helpers/superPropSet.js",
+        "import": "./helpers/esm/superPropSet.js",
+        "default": "./helpers/superPropSet.js"
+      },
+      "./helpers/superPropSet.js"
+    ],
+    "./helpers/esm/superPropSet": "./helpers/esm/superPropSet.js",
     "./helpers/taggedTemplateLiteral": [
       {
         "node": "./helpers/taggedTemplateLiteral.js",

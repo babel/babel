@@ -1134,6 +1134,38 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
+  // size: 131, gzip size: 126
+  superPropGet: helper(
+    "7.24.4",
+    "function _superPropertyGet(t,e,r,o){var p=get(getPrototypeOf(1&o?t.prototype:t),e,r);return 2&o?function(t){return p.apply(r,t)}:p}",
+    {
+      globals: [],
+      locals: { _superPropertyGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_superPropertyGet",
+      dependencies: {
+        get: ["body.0.body.body.0.declarations.0.init.callee"],
+        getPrototypeOf: [
+          "body.0.body.body.0.declarations.0.init.arguments.0.callee",
+        ],
+      },
+    },
+  ),
+  // size: 92, gzip size: 98
+  superPropSet: helper(
+    "7.24.4",
+    "function _superPropertySet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
+    {
+      globals: [],
+      locals: { _superPropertySet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_superPropertySet",
+      dependencies: {
+        set: ["body.0.body.body.0.argument.callee"],
+        getPrototypeOf: ["body.0.body.body.0.argument.arguments.0.callee"],
+      },
+    },
+  ),
   // size: 135, gzip size: 128
   taggedTemplateLiteral: helper(
     "7.0.0-beta.0",

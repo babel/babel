@@ -16,17 +16,17 @@ var Outer = /*#__PURE__*/function (_Hello) {
     var _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
-    var Inner = /*#__PURE__*/function (_babelHelpers$get$cal) {
+    var Inner = /*#__PURE__*/function (_babelHelpers$superPr) {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
       }
       return babelHelpers.createClass(Inner, [{
-        key: _babelHelpers$get$cal,
+        key: _babelHelpers$superPr,
         value: function value() {
           return 'hello';
         }
       }]);
-    }(babelHelpers.get((_this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _this).call(_this));
+    }(babelHelpers.superPropGet((_this, Outer), "toString", _this, 3)([]));
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   babelHelpers.inherits(Outer, _Hello);

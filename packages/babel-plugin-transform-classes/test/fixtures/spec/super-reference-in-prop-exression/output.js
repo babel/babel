@@ -4,7 +4,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
   function Foo() {
     var _this;
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.get((babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Foo.prototype)), (_this = babelHelpers.callSuper(this, Foo)).method, babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    babelHelpers.superPropGet((babelHelpers.assertThisInitialized(_this), Foo), (_this = babelHelpers.callSuper(this, Foo)).method, babelHelpers.assertThisInitialized(_this), 3)([]);
     return _this;
   }
   babelHelpers.inherits(Foo, _Bar);
