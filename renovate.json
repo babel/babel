@@ -46,7 +46,7 @@
         "@babel/helper-validator-identifier-baseline"
       ],
       "postUpgradeTasks": {
-        "commands": ["node ./scripts/pack-script.js"]
+        "commands": ["make"]
       }
     },
     {
