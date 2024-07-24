@@ -1329,7 +1329,7 @@ describe("programmatic generation", function () {
         t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
       );
       const output = generate(arrowFunctionExpression).code;
-      expect(output).toBe("() => (({}), 1)");
+      expect(output).toBe("() => ({}, 1)");
     });
   });
 

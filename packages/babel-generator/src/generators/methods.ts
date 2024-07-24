@@ -1,6 +1,7 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
 import { isIdentifier, type ParentMaps } from "@babel/types";
+import { TokenContext } from "../node/index.ts";
 
 type ParentsOf<T extends t.Node> = ParentMaps[T["type"]];
 
@@ -223,6 +224,7 @@ export function ArrowFunctionExpression(
 
   this.space();
 
+  this.tokenContext |= TokenContext.arrowBody;
   this.print(node.body, node);
 }
 

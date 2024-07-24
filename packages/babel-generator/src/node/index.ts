@@ -13,6 +13,16 @@ import type * as t from "@babel/types";
 
 import type { WhitespaceFlag } from "./whitespace.ts";
 
+export const enum TokenContext {
+  expressionStatement = 1 << 0,
+  arrowBody = 1 << 1,
+  exportDefault = 1 << 2,
+  forHead = 1 << 3,
+  forInHead = 1 << 4,
+  forOfHead = 1 << 5,
+  arrowFlowReturnType = 1 << 6,
+}
+
 type NodeHandler<R> = (
   node: t.Node,
   // todo:
@@ -20,7 +30,7 @@ type NodeHandler<R> = (
   //   ? Extract<typeof t[K], { type: "string" }>
   //   : t.Node,
   parent: t.Node,
-  stack?: t.Node[],
+  tokenContext?: number,
   inForStatementInit?: boolean,
 ) => R;
 
@@ -104,7 +114,7 @@ export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
 export function needsParens(
   node: t.Node,
   parent: t.Node,
-  printStack?: t.Node[],
+  tokenContext?: number,
   inForInit?: boolean,
 ) {
   if (!parent) return false;
@@ -121,7 +131,7 @@ export function needsParens(
     );
   }
 
-  return expandedParens.get(node.type)?.(node, parent, printStack, inForInit);
+  return expandedParens.get(node.type)?.(node, parent, tokenContext, inForInit);
 }
 
 function isDecoratorMemberExpression(node: t.Node): boolean {

@@ -8,6 +8,7 @@ import {
   isStatement,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import { TokenContext } from "../node/index.ts";
 
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -230,6 +231,7 @@ export function ExportDefaultDeclaration(
   this.space();
   this.word("default");
   this.space();
+  this.tokenContext |= TokenContext.exportDefault;
   const declar = node.declaration;
   this.print(declar, node);
   if (!isStatement(declar)) this.semicolon();

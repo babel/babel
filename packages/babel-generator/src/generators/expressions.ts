@@ -6,6 +6,7 @@ import {
   isNewExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import { TokenContext } from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;
@@ -237,6 +238,7 @@ export function ExpressionStatement(
   this: Printer,
   node: t.ExpressionStatement,
 ) {
+  this.tokenContext |= TokenContext.expressionStatement;
   this.print(node.expression, node);
   this.semicolon();
 }

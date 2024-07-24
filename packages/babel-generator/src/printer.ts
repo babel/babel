@@ -130,8 +130,10 @@ class Printer {
     };
   }
 
+  tokenContext: number = 0;
+
   declare _buf: Buffer;
-  _printStack: Array<t.Node> = [];
+  _currentNode: t.Node = null;
   _indent: number = 0;
   _indentRepeat: number = 0;
   _insideAux: boolean = false;
@@ -225,6 +227,8 @@ class Printer {
    */
 
   word(str: string, noLineTerminatorAfter: boolean = false): void {
+    this.tokenContext = 0;
+
     this._maybePrintInnerComments();
 
     // prevent concatenating words and creating // comment out of division and regex
@@ -275,6 +279,8 @@ class Printer {
    * Writes a simple token.
    */
   token(str: string, maybeNewline = false): void {
+    this.tokenContext = 0;
+
     this._maybePrintInnerComments();
 
     const lastChar = this.getLastChar();
@@ -301,6 +307,8 @@ class Printer {
   }
 
   tokenChar(char: number): void {
+    this.tokenContext = 0;
+
     this._maybePrintInnerComments();
 
     const lastChar = this.getLastChar();
@@ -655,7 +663,8 @@ class Printer {
       );
     }
 
-    this._printStack.push(node);
+    const oldNode = this._currentNode;
+    this._currentNode = node;
 
     const oldInAux = this._insideAux;
     this._insideAux = node.loc == null;
@@ -667,7 +676,7 @@ class Printer {
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
-      needsParens(node, parent, this._printStack, this.inForStatementInit);
+      needsParens(node, parent, this.tokenContext, this.inForStatementInit);
 
     if (
       !shouldPrintParens &&
@@ -727,8 +736,7 @@ class Printer {
     }
 
     // end
-    this._printStack.pop();
-
+    this._currentNode = oldNode;
     format.concise = oldConcise;
     this._insideAux = oldInAux;
 
@@ -904,7 +912,7 @@ class Printer {
   }
 
   printInnerComments() {
-    const node = this._printStack[this._printStack.length - 1];
+    const node = this._currentNode;
     const comments = node.innerComments;
     if (!comments?.length) return;
 
