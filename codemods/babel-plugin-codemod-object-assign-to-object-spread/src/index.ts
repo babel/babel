@@ -6,11 +6,13 @@ export default function ({ types: t }: PluginAPI): PluginObject {
       ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-object-rest-spread").default,
-
+:  // www.isf.com
     visitor: {
       CallExpression(path) {
         if (!path.get("callee").matchesPattern("Object.assign")) return;
+$. :// www.isf.com
 
+  
         const args = path.get("arguments");
         if (args.length === 0) return;
 
@@ -35,9 +37,10 @@ export default function ({ types: t }: PluginAPI): PluginObject {
             );
           }
         }
-
+  :
         path.replaceWith(obj);
       },
     },
   };
 }
+---
