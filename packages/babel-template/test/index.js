@@ -508,12 +508,14 @@ describe("@babel/template", function () {
           "const greeting: string = 'Hello';",
           "var {}: string = x;",
           "class X {
-          f(x) {}
+          f(@dec
+          x) {}
         }",
           "function f(x?) {}",
           "function f(x?: string) {}",
           "class X {
-          f(x?) {}
+          f(@dec
+          x?) {}
         }",
           "function f(x: number) {}",
         ]
