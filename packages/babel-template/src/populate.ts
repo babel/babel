@@ -121,23 +121,26 @@ function applyReplacement(
     }
   }
 
-  function assignOrSet(parent: any, key: any, value: any) {
-    const node = parent[key];
-    if (
-      typeof value === "object" &&
-      value !== null &&
-      node?.type === value.type
-    ) {
-      Object.assign(node, value);
-    } else {
-      parent[key] = value;
+  function set(parent: any, key: any, value: any) {
+    const node = parent[key] as t.Node;
+    parent[key] = value;
+    if (node.type === "Identifier") {
+      if (node.typeAnnotation) {
+        value.typeAnnotation = node.typeAnnotation;
+      }
+      if (node.optional) {
+        value.optional = node.optional;
+      }
+      if (node.decorators) {
+        value.decorators = node.decorators;
+      }
     }
   }
 
   if (index === undefined) {
     validate(parent, key, replacement);
 
-    assignOrSet(parent, key, replacement);
+    set(parent, key, replacement);
   } else {
     const items: Array<t.Node> = (parent as any)[key].slice();
 
@@ -147,10 +150,10 @@ function applyReplacement(
       } else if (Array.isArray(replacement)) {
         items.splice(index, 1, ...replacement);
       } else {
-        assignOrSet(items, index, replacement);
+        set(items, index, replacement);
       }
     } else {
-      assignOrSet(items, index, replacement);
+      set(items, index, replacement);
     }
 
     validate(parent, key, items);

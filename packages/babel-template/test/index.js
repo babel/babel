@@ -475,12 +475,49 @@ describe("@babel/template", function () {
     });
 
     it("should keep node props", () => {
-      const output = template({ plugins: ["typescript"] }).ast`
-        const ${t.identifier("greeting")}: string = 'Hello';
-      `;
-      expect(generator(output).code).toMatchInlineSnapshot(
-        `"const greeting: string = 'Hello';"`,
-      );
+      const outputs = [
+        template({ plugins: ["typescript"] }).ast`
+          const ${t.identifier("greeting")}: string = 'Hello';
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          var ${t.objectPattern([])}: string = x;
+        `,
+        template({ plugins: ["decorators-legacy"] }).ast`
+          class X {
+            f(@dec ${t.identifier("x")}) {}
+          }
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${t.identifier("x")}?) {}
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${Object.assign(t.identifier("x"), { optional: true })}: string) {}
+        `,
+        template({ plugins: ["decorators-legacy"] }).ast`
+          class X {
+            f(@dec ${Object.assign(t.identifier("x"), { optional: true })}) {}
+          }
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${Object.assign(t.identifier("x"), { typeAnnotation: t.tsTypeAnnotation(t.tsStringKeyword()) })}: number) {}
+        `,
+      ];
+
+      expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
+        Array [
+          "const greeting: string = 'Hello';",
+          "var {}: string = x;",
+          "class X {
+          f(x) {}
+        }",
+          "function f(x?) {}",
+          "function f(x?: string) {}",
+          "class X {
+          f(x?) {}
+        }",
+          "function f(x: number) {}",
+        ]
+      `);
     });
   });
 });
