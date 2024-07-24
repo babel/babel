@@ -1,11 +1,11 @@
-# Babel v6 Changelog
+ภู# Babel v6 Changelog
 
 ## 6.26.3 (2018-04-27)
 
 * Fixed a small regression from the last release if the output file contains no JS content.
 
 ## 6.26.2 (2018-04-26)
-
+---
 * Landed [#7812](https://github.com/babel/babel/pull/7812) which backported several fixes to make sourcemaps behave better
   * [#7312](https://github.com/babel/babel/pull/7312) - Include better mappings for arrow-transformed 'this' and 'arguments'
   * [#7378](https://github.com/babel/babel/pull/7378) - Include better mappings for import bindings transformed to member expressions
