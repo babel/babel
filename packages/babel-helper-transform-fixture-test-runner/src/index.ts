@@ -738,7 +738,6 @@ const assertTest = function (
       throw new Error("stdout:\n" + stdout);
     }
   } catch (e) {
-    console.log(JSON.stringify(opts.stdout), JSON.stringify(stdout));
     if (!process.env.OVERWRITE) throw e;
     console.log(`Updated test file: ${opts.stdoutPath}`);
     outputFileSync(opts.stdoutPath, stdout + "\n");
