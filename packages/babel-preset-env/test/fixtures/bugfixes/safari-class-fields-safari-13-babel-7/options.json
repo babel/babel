@@ -1,0 +1,8 @@
+{
+  "BABEL_8_BREAKING": false,
+  "validateLogs": true,
+  "targets": "safari 13",
+  "presets": [
+    ["env", { "debug": true, "modules": false }]
+  ]
+}
