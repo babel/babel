@@ -1,2 +1,1 @@
-Config was loaded, so --config-file was used.
-[ 1, 4, 9 ]
+[ 2, 4, 6 ]
