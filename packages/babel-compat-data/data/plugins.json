@@ -43,6 +43,19 @@
     "opera_mobile": "53",
     "electron": "6.0"
   },
+  "bugfix/transform-safari-class-field-initializer-scope": {
+    "chrome": "74",
+    "opera": "62",
+    "edge": "79",
+    "firefox": "69",
+    "safari": "16",
+    "node": "12",
+    "deno": "1",
+    "ios": "16",
+    "samsung": "11",
+    "opera_mobile": "53",
+    "electron": "6.0"
+  },
   "transform-class-static-block": {
     "chrome": "94",
     "opera": "80",
@@ -100,10 +113,10 @@
     "opera": "62",
     "edge": "79",
     "firefox": "90",
-    "safari": "16",
+    "safari": "14.1",
     "node": "12",
     "deno": "1",
-    "ios": "16",
+    "ios": "14.5",
     "samsung": "11",
     "opera_mobile": "53",
     "electron": "6.0"
@@ -113,10 +126,10 @@
     "opera": "62",
     "edge": "79",
     "firefox": "90",
-    "safari": "16",
+    "safari": "14.1",
     "node": "12",
     "deno": "1",
-    "ios": "16",
+    "ios": "14.5",
     "samsung": "11",
     "opera_mobile": "53",
     "electron": "6.0"

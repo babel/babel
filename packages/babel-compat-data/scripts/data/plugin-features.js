@@ -169,6 +169,10 @@ const es2022 = {
       firefox: undefined,
     },
   },
+  "bugfix/transform-safari-class-field-initializer-scope": {
+    features: ["instance class fields / resolving identifier in parent scope"],
+    replaces: "transform-class-properties",
+  },
   "transform-class-static-block": "Class static initialization blocks",
   "transform-private-property-in-object":
     "Ergonomic brand checks for private fields",
