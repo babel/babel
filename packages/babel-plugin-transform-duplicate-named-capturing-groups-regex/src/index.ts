@@ -15,7 +15,7 @@ export default declare((api, options: Options) => {
   }
 
   return createRegExpFeaturePlugin({
-    name: "proposal-duplicate-named-capturing-groups-regex",
+    name: "transform-duplicate-named-capturing-groups-regex",
     feature: "duplicateNamedCaptureGroups",
     options: { runtime },
   });

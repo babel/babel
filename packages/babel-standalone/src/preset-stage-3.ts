@@ -10,8 +10,6 @@ export default (_: any, opts: any = {}) => {
 
   const plugins = [
     [babelPlugins.syntaxImportAttributes, { deprecatedAssertSyntax: true }],
-    babelPlugins.transformUnicodeSetsRegex,
-    babelPlugins.proposalDuplicateNamedCapturingGroupsRegex,
     [
       babelPlugins.proposalDecorators,
       {
@@ -36,6 +34,8 @@ export default (_: any, opts: any = {}) => {
           [babelPlugins.transformPrivateMethods, { loose }],
           babelPlugins.transformPrivatePropertyInObject,
           babelPlugins.transformClassStaticBlock,
+          babelPlugins.transformUnicodeSetsRegex,
+          babelPlugins.transformDuplicateNamedCapturingGroupsRegex,
         ]),
   ];
 
