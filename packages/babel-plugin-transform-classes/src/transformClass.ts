@@ -218,20 +218,6 @@ export default function transformClass(
       if (t.isClassMethod(node)) {
         const isConstructor = node.kind === "constructor";
 
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.ensureFunctionName ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-        }
-        path.ensureFunctionName(supportUnicodeId);
-        let wrapped;
-        if (node !== path.node) {
-          wrapped = path.node;
-          // The node has been wrapped. Reset it to the original once, but store the wrapper.
-          path.replaceWith(node);
-        }
-
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
           objectRef: classState.classRef,
@@ -257,6 +243,20 @@ export default function transformClass(
         if (isConstructor) {
           pushConstructor(superReturns, node as ClassConstructor, path);
         } else {
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.ensureFunctionName ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+          }
+          path.ensureFunctionName(supportUnicodeId);
+          let wrapped;
+          if (node !== path.node) {
+            wrapped = path.node;
+            // The node has been wrapped. Reset it to the original once, but store the wrapper.
+            path.replaceWith(node);
+          }
+
           pushMethod(node, wrapped);
         }
       }
