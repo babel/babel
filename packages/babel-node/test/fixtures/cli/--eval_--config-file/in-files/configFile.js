@@ -6,6 +6,7 @@ module.exports = function (api) {
       () => ({
         visitor: {
           BinaryExpression(path) {
+            console.log("Plugin applied");
             path.node.operator = "+";
           },
         },
