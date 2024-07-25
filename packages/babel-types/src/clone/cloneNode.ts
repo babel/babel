@@ -76,6 +76,12 @@ function cloneNodeInternal<T extends t.Node>(
           )
         : node.typeAnnotation;
     }
+
+    if (hasOwn(node, "decorators")) {
+      newNode.decorators = deep
+        ? cloneIfNodeOrArray(node.decorators, true, withoutLoc, commentsCache)
+        : node.decorators;
+    }
   } else if (!hasOwn(NODE_FIELDS, type)) {
     throw new Error(`Unknown node type: "${type}"`);
   } else {
