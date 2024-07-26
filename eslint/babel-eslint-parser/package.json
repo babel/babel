@@ -41,7 +41,7 @@
     "@types/eslint": "^8.56.2",
     "@types/estree": "^1.0.5",
     "@typescript-eslint/scope-manager": "^6.19.0",
-    "dedent": "^1.0.0",
+    "dedent": "^1.5.3",
     "eslint": "^9.0.0"
   },
   "conditions": {

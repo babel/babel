@@ -7,7 +7,7 @@
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
     "@babel/preset-react": "workspace:^",
-    "dedent": "^1.0.0",
+    "dedent": "^1.5.3",
     "eslint": "^8.22.0",
     "eslint-plugin-import": "^2.25.4",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
