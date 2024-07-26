@@ -188,7 +188,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);
   const ignorePatterns = content
     .split("\n")
-    .map<string>(line => line.replace(/#(.*?)$/, "").trim())
+    .map<string>(line => line.replace(/#(.*)$/, "").trim())
     .filter(line => !!line);
 
   for (const pattern of ignorePatterns) {

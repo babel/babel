@@ -30,12 +30,12 @@ export default function cleanJSXElementLiteralChild(
 
     // trim whitespace touching a newline
     if (!isFirstLine) {
-      trimmedLine = trimmedLine.replace(/^[ ]+/, "");
+      trimmedLine = trimmedLine.replace(/^ +/, "");
     }
 
     // trim whitespace touching an endline
     if (!isLastLine) {
-      trimmedLine = trimmedLine.replace(/[ ]+$/, "");
+      trimmedLine = trimmedLine.replace(/ +$/, "");
     }
 
     if (trimmedLine) {

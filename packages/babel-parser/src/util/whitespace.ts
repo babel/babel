@@ -28,7 +28,7 @@ export function hasNewLine(input: string, start: number, end: number): boolean {
   return false;
 }
 
-export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
+export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[\s\S]*?\*\/)*/g;
 
 export const skipWhiteSpaceInLine =
   /(?:[^\S\n\r\u2028\u2029]|\/\/.*|\/\*.*?\*\/)*/g;

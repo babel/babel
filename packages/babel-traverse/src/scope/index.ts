@@ -502,9 +502,7 @@ class Scope {
    */
 
   generateUid(name: string = "temp"): string {
-    name = toIdentifier(name)
-      .replace(/^_+/, "")
-      .replace(/[0-9]+$/g, "");
+    name = toIdentifier(name).replace(/^_+/, "").replace(/\d+$/g, "");
 
     let uid;
     let i = 1;

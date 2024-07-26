@@ -52,7 +52,7 @@ describe("converters", function () {
       expect(t.valueToNode(undefined)).toEqual(t.identifier("undefined"));
     });
     it("RegExp", function () {
-      expect(t.valueToNode(/abc.+/gm)).toEqual(t.regExpLiteral("abc.+", "gm"));
+      expect(t.valueToNode(/abc.+/g)).toEqual(t.regExpLiteral("abc.+", "gm"));
     });
     it("array", function () {
       expect(t.valueToNode([1, "a"])).toEqual(

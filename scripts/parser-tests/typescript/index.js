@@ -101,7 +101,7 @@ function toFiles(strictMode, contents, name) {
 }
 
 const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(\n|$)/;
-const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*([^\s]*)\s*(?:\n|$)/i;
+const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*(\S*)\s*(?:\n|$)/i;
 
 // Modified from: https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ts-twoslasher/src/index.ts
 function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {

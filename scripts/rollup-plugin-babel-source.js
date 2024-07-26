@@ -73,7 +73,7 @@ export default function () {
       }
 
       const matches = importee.match(
-        /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*?))?$/
+        /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*))?$/
       );
       if (!matches) return null;
       const { pkg, internal } = matches.groups;

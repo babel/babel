@@ -18,7 +18,7 @@ export default declare(api => {
       StringLiteral({ node }) {
         // unicode escape
         // @ts-expect-error Add node.extra typings
-        if (node.extra && /\\[u]/gi.test(node.extra.raw)) {
+        if (node.extra && /\\u/i.test(node.extra.raw)) {
           node.extra = undefined;
         }
       },

@@ -103,7 +103,7 @@ export default declare((api, opts: Options) => {
 
   api.assertVersion(REQUIRED_VERSION(7));
 
-  const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
+  const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+(\S+)/;
 
   const {
     allowNamespaces = true,

@@ -89,7 +89,7 @@ describe("option-manager", () => {
           ],
         });
       }).toThrow(
-        /Duplicate plugin\/preset detected.*Duplicates detected are.*my-plugin.*my-plugin/ms,
+        /Duplicate plugin\/preset detected.*Duplicates detected are.*my-plugin.*my-plugin/s,
       );
       expect(calls).toEqual([]);
     });
