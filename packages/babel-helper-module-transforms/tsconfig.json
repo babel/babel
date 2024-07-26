@@ -5,16 +5,22 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../packages/babel-plugin-transform-modules-umd/src/**/*.ts",
+    "../../packages/babel-helper-module-transforms/src/**/*.ts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-module-transforms"
+      "path": "../../packages/babel-helper-module-imports"
     },
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-helper-simple-access"
+    },
+    {
+      "path": "../../packages/babel-helper-validator-identifier"
+    },
+    {
+      "path": "../../packages/babel-traverse"
     },
     {
       "path": "../../packages/babel-core"

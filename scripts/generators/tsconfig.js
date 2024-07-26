@@ -48,7 +48,7 @@ function getTsPkgs(subRoot) {
         name === "@babel/compat-data" ||
         fs.existsSync(new URL(relative + "/src/index.ts", rootURL));
       if (!ret) {
-        console.log(`Skipping ${name} for tsconfig.json`);
+        // console.log(`Skipping ${name} for tsconfig.json`);
       }
       return ret;
     })
@@ -107,6 +107,11 @@ function getTsPkgs(subRoot) {
       if (name === "@babel/parser") {
         // TODO: This should be listed in dependencies
         dependencies.add("@babel/types");
+      }
+      if (name === "@babel/core") {
+        // This dependency is only used in Babel 7, and does not affect
+        // types. Remove it to avoid a cycle.
+        dependencies.delete("@babel/helper-module-transforms");
       }
       dependencyAliases.forEach((alias, dep) => {
         if (dependencies.has(dep)) dependencies.add(alias);
@@ -186,6 +191,9 @@ for (const [name, node] of tsPkgs) {
 sccs.forEach(scc => {
   console.log("SCC:", scc.join(" <> "));
 });
+if (sccs.size > 0) {
+  throw new Error("Cycles detected");
+}
 
 const topoSorted = Array.from(tsPkgs.values()).sort((a, b) => {
   return a.dfsOutIndex - b.dfsOutIndex;

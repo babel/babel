@@ -11,7 +11,7 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-core"
+      "path": "../../packages/babel-helper-module-transforms"
     },
     {
       "path": "../../packages/babel-helper-plugin-utils"
@@ -21,6 +21,9 @@
     },
     {
       "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

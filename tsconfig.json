@@ -71,6 +71,9 @@
       "path": "./packages/babel-helper-module-imports"
     },
     {
+      "path": "./packages/babel-helper-module-transforms"
+    },
+    {
       "path": "./packages/babel-helper-optimise-call-expression"
     },
     {

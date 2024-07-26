@@ -6,7 +6,6 @@
   ],
   "include": [
     "../../packages/babel-core/src/**/*.ts",
-    "../../packages/babel-helper-module-transforms/src/**/*.ts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],
@@ -34,15 +33,6 @@
     },
     {
       "path": "../../packages/babel-types"
-    },
-    {
-      "path": "../../packages/babel-helper-module-imports"
-    },
-    {
-      "path": "../../packages/babel-helper-simple-access"
-    },
-    {
-      "path": "../../packages/babel-helper-validator-identifier"
     }
   ]
 }
