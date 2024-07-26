@@ -36,7 +36,7 @@ function print(...msgs) {
   console.log.apply(console, msgs);
 }
 
-function exec(executable, args, cwd, inheritStdio = true) {
+function exec(executable, args, cwd, inheritStdio = true, noExit = false) {
   print(
     `${executable
       .replaceAll(YARN_PATH, "yarn")
@@ -56,15 +56,17 @@ function exec(executable, args, cwd, inheritStdio = true) {
           `\ncommand: ${executable} ${args.join(" ")}\ncode: ${error.exitCode}`
         )
       );
-      // eslint-disable-next-line no-process-exit
-      process.exit(error.exitCode);
+      if (!noExit) {
+        // eslint-disable-next-line no-process-exit
+        process.exit(error.exitCode);
+      }
     }
     throw error;
   }
 }
 
-function yarn(args, cwd, inheritStdio) {
-  return exec(YARN_PATH, args, cwd, inheritStdio);
+function yarn(args, cwd, inheritStdio, noExit) {
+  return exec(YARN_PATH, args, cwd, inheritStdio, noExit);
 }
 
 function node(args, cwd, inheritStdio) {
@@ -382,11 +384,25 @@ function eslint(...extraArgs) {
       NODE_OPTIONS: "--max-old-space-size=16384",
     });
   } else {
+    let err = null;
     for (const chunk of chunks) {
-      env(() => yarn(["eslint", ...chunk, ...eslintArgs]), {
-        BABEL_ENV: "test",
-      });
+      try {
+        env(
+          () =>
+            yarn(
+              ["eslint", ...chunk, ...eslintArgs],
+              undefined,
+              undefined,
+              true
+            ),
+          { BABEL_ENV: "test" }
+        );
+      } catch (e) {
+        err = e;
+      }
     }
+    // eslint-disable-next-line no-process-exit
+    if (err) process.exit(err.exitCode);
   }
 }
 
