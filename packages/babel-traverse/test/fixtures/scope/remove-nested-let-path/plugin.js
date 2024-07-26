@@ -11,7 +11,6 @@ module.exports = function ({ types }) {
           "trailing",
           `// a is defined when visiting a=${value}? ${path.scope.hasBinding("a")}`
         );
-        ``;
       },
     },
   };
