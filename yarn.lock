@@ -422,7 +422,7 @@ __metadata:
     "@types/eslint": "npm:^8.56.2"
     "@types/estree": "npm:^1.0.5"
     "@typescript-eslint/scope-manager": "npm:^6.19.0"
-    dedent: "npm:^0.7.0"
+    dedent: "npm:^1.5.3"
     eslint: "npm:^9.0.0"
     eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : "
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
@@ -492,7 +492,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
     "@babel/preset-react": "workspace:^"
-    dedent: "npm:^0.7.0"
+    dedent: "npm:^1.5.3"
     eslint: "npm:^8.22.0"
     eslint-plugin-import: "npm:^2.25.4"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
@@ -8571,22 +8571,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dedent@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "dedent@npm:0.7.0"
-  checksum: 10/87de191050d9a40dd70cad01159a0bcf05ecb59750951242070b6abf9569088684880d00ba92a955b4058804f16eeaf91d604f283929b4f614d181cd7ae633d2
-  languageName: node
-  linkType: hard
-
-"dedent@npm:^1.0.0":
-  version: 1.5.1
-  resolution: "dedent@npm:1.5.1"
+"dedent@npm:^1.0.0, dedent@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "dedent@npm:1.5.3"
   peerDependencies:
     babel-plugin-macros: ^3.1.0
   peerDependenciesMeta:
     babel-plugin-macros:
       optional: true
-  checksum: 10/fc00a8bc3dfb7c413a778dc40ee8151b6c6ff35159d641f36ecd839c1df5c6e0ec5f4992e658c82624a1a62aaecaffc23b9c965ceb0bbf4d698bfc16469ac27d
+  checksum: 10/e5277f6268f288649503125b781a7b7a2c9b22d011139688c0b3619fe40121e600eb1f077c891938d4b2428bdb6326cc3c77a763e4b1cc681bd9666ab1bad2a1
   languageName: node
   linkType: hard
 
