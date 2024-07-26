@@ -24,3 +24,7 @@ a as b || c;
 a as b[0];
 a as (b[0]);
 (a as b)[0];
+
+(a as b) = c;
+[a as b] = c;
+[(a as b) = c] = d;
