@@ -52,7 +52,7 @@
     "c8": "^10.0.0",
     "charcodes": "^0.2.0",
     "core-js": "^3.36.1",
-    "eslint": "^9.6.0",
+    "eslint": "^9.7.0",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.29.1",

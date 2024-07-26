@@ -1538,7 +1538,7 @@ describe("verify", () => {
       ],
       "script",
       {
-        env: {},
+        globals: {},
         parserOptions: {
           ecmaVersion: 6,
           sourceType: "script",
@@ -1555,7 +1555,7 @@ describe("verify", () => {
       [],
       "script",
       {
-        env: {},
+        globals: {},
         parserOptions: {
           ecmaVersion: 6,
           sourceType: "script",
@@ -1689,7 +1689,7 @@ describe("verify", () => {
         return hasGlobal;
         }
       `,
-      { "newline-before-return": 1 },
+      { "newline-before-return": 1, "no-console": 1 },
     );
   });
 
