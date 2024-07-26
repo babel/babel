@@ -94,7 +94,10 @@
         "start":117,"end":118,"loc":{"start":{"line":7,"column":1,"index":117},"end":{"line":7,"column":2,"index":118}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   },
   "comments": [
     {

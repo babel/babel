@@ -27,6 +27,9 @@
         "kind": "CommonJS"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

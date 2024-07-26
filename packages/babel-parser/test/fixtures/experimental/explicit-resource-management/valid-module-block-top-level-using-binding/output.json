@@ -46,7 +46,10 @@
                 "kind": "using"
               }
             ],
-            "directives": []
+            "directives": [],
+            "extra": {
+              "topLevelAwait": false
+            }
           }
         }
       }

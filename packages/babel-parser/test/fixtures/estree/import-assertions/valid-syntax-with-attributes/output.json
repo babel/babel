@@ -10,6 +10,7 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":51}},
+        "importKind": "value",
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -21,7 +22,6 @@
             }
           }
         ],
-        "importKind": "value",
         "source": {
           "type": "Literal",
           "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
@@ -46,6 +46,9 @@
           }
         ]
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

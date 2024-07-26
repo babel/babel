@@ -22,6 +22,9 @@
           "name": "A"
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

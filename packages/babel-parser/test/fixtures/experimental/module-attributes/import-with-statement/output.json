@@ -34,6 +34,9 @@
           "start":20,"end":21,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10}}
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

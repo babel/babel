@@ -300,6 +300,9 @@
         "start":165,"end":166,"loc":{"start":{"line":10,"column":1,"index":165},"end":{"line":10,"column":2,"index":166}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

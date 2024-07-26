@@ -73,7 +73,10 @@
           }
         ]
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   },
   "comments": [
     {
