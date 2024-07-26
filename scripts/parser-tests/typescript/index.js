@@ -50,7 +50,7 @@ function baselineContainsParserErrorCodes(testName) {
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
-const AlwaysStrictRegExp = /(^|\n)\/\/\s*@alwaysStrict:\s*true/;
+const AlwaysStrictRegExp = /^\/\/\s*@alwaysStrict:\s*true/m;
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
@@ -83,8 +83,8 @@ function toFiles(strictMode, contents, name) {
     ])
     .filter(
       ([sourceFilename, contents]) =>
-        !/\.(css|js|json|md)$/.test(sourceFilename) &&
-        contents.split("\n").some(line => !/(^\s*$)|(^\/\/[^\n]*$)/.test(line))
+        !/\.(?:css|js|json|md)$/.test(sourceFilename) &&
+        contents.split("\n").some(line => !/^\s*$|^\/\/[^\n]*$/.test(line))
     )
     .map(([sourceFilename, contents]) => ({
       contents,
@@ -95,7 +95,7 @@ function toFiles(strictMode, contents, name) {
         ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
         "decorators-legacy",
         "importAssertions",
-        /\.(t|j)sx$/.test(sourceFilename) && "jsx",
+        /\.[tj]sx$/.test(sourceFilename) && "jsx",
       ].filter(plugin => !!plugin),
     }));
 }

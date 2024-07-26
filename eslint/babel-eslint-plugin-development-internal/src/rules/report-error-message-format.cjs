@@ -1,6 +1,6 @@
 const messageId = "mustMatchPattern";
 
-const pattern = /(('.*')|(`.*`)|[A-Z]).*(\.|\?)$/s;
+const pattern = /(?:'.*'|`.*`|[A-Z]).*(?:\.|\?)$/s;
 
 module.exports = {
   meta: {

@@ -21,9 +21,9 @@ module.exports = {
           // This will not become an ESM file.
           src.endsWith(".cjs") ||
           // @babel/core automatically unwraps .default from plugins/presets.
-          /^@babel\/(plugin|preset)-/.test(src) ||
+          /^@babel\/(?:plugin|preset)-/.test(src) ||
           (src.endsWith("./lib/index.js") &&
-            /babel-(plugin|preset)-/.test(filename))
+            /babel-(?:plugin|preset)-/.test(filename))
         ) {
           return;
         }

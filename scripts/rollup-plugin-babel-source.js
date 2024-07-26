@@ -40,7 +40,7 @@ export default function () {
               : browserFileAsJs;
 
             const nodeFileSrcAsJs = path.normalize(
-              nodeFile.replace(/^(\.\/)?lib\//, "src/")
+              nodeFile.replace(/^[./]?lib\//, "src/")
             );
             const nodeFileSrcAsTs = nodeFileSrcAsJs.replace(/.js$/, ".ts");
             const nodeFileSrc = fs.existsSync(nodeFileSrcAsTs)
