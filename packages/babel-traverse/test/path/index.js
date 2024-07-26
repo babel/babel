@@ -1127,6 +1127,7 @@ describe("NodePath", () => {
           "getAllNextSiblings",
           "getAllPrevSiblings",
           "getAncestry",
+          "getAssignmentIdentifiers",
           "getBindingIdentifierPaths",
           "getBindingIdentifiers",
           "getCompletionRecords",
