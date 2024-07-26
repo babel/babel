@@ -217,6 +217,13 @@ export function TSAsExpression(
   parent: t.Node,
 ): boolean {
   if (
+    (parent.type === "AssignmentExpression" ||
+      parent.type === "AssignmentPattern") &&
+    parent.left === node
+  ) {
+    return true;
+  }
+  if (
     parent.type === "BinaryExpression" &&
     (parent.operator === "|" || parent.operator === "&") &&
     node === parent.left
