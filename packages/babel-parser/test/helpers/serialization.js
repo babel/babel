@@ -76,7 +76,7 @@ const LocRegExp = /"loc":(\s*\{(?:[^}{]|\{(?:[^}{(]|\([^}{]*\})*\})*\})/g;
 const StartEndRegExp = /("(start|end)":\s*(\d+),\s*){2}/g;
 const CompactRegExp = new RegExp(
   `${StartEndRegExp.source}${LocRegExp.source}`,
-  "gm",
+  "g",
 );
 
 export function serialize(value) {
