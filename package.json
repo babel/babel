@@ -1,7 +1,7 @@
 {
   "name": "babel",
   "version": "7.25.0",
-  "version_babel8": "8.0.0-alpha.11",
+  "version_babel8": "8.0.0-alpha.12",
   "private": true,
   "type": "commonjs",
   "scripts": {
