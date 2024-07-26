@@ -5,7 +5,7 @@ Using targets:
   "safari": "15"
 }
 
-Using modules transform: auto
+Using modules transform: false
 
 Using plugins:
   transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
@@ -20,12 +20,11 @@ Using plugins:
   syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
+  transform-parameters { safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
-  transform-export-namespace-from { }
-  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
-  transform-modules-commonjs
-  transform-dynamic-import
+  syntax-export-namespace-from
+  syntax-dynamic-import
   syntax-top-level-await
   syntax-import-meta
 

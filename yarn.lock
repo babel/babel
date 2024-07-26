@@ -1368,6 +1368,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-bugfix-safari-class-field-initializer-scope@workspace:^, @babel/plugin-bugfix-safari-class-field-initializer-scope@workspace:packages/babel-plugin-bugfix-safari-class-field-initializer-scope":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-bugfix-safari-class-field-initializer-scope@workspace:packages/babel-plugin-bugfix-safari-class-field-initializer-scope"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-function-name": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@npm:^8.0.0-alpha.8":
   version: 8.0.0-alpha.8
   resolution: "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@npm:8.0.0-alpha.8"
@@ -4035,6 +4049,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-firefox-class-in-computed-class-key": "workspace:^"
+    "@babel/plugin-bugfix-safari-class-field-initializer-scope": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"

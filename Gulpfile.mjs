@@ -734,6 +734,7 @@ if (bool(process.env.BABEL_8_BREAKING)) {
     "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
     "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
     "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+    "packages/babel-plugin-bugfix-safari-class-field-initializer-scope",
   ].map(src => ({
     src,
     format: USE_ESM ? "esm" : "cjs",
