@@ -4556,14 +4556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint-community/regexpp@npm:^4.10.0, @eslint-community/regexpp@npm:^4.6.0":
-  version: 4.10.0
-  resolution: "@eslint-community/regexpp@npm:4.10.0"
-  checksum: 10/8c36169c815fc5d726078e8c71a5b592957ee60d08c6470f9ce0187c8046af1a00afbda0a065cc40ff18d5d83f82aed9793c6818f7304a74a7488dc9f3ecbd42
-  languageName: node
-  linkType: hard
-
-"@eslint-community/regexpp@npm:^4.11.0":
+"@eslint-community/regexpp@npm:^4.10.0, @eslint-community/regexpp@npm:^4.11.0, @eslint-community/regexpp@npm:^4.6.0":
   version: 4.11.0
   resolution: "@eslint-community/regexpp@npm:4.11.0"
   checksum: 10/f053f371c281ba173fe6ee16dbc4fe544c84870d58035ccca08dba7f6ce1830d895ce3237a0db89ba37616524775dca82f1c502066b58e2d5712d7f87f5ba17c
@@ -9872,21 +9865,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastq@npm:^1.13.0":
+"fastq@npm:^1.13.0, fastq@npm:^1.6.0":
   version: 1.17.1
   resolution: "fastq@npm:1.17.1"
   dependencies:
     reusify: "npm:^1.0.4"
   checksum: 10/a443180068b527dd7b3a63dc7f2a47ceca2f3e97b9c00a1efe5538757e6cc4056a3526df94308075d7727561baf09ebaa5b67da8dcbddb913a021c5ae69d1f69
-  languageName: node
-  linkType: hard
-
-"fastq@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "fastq@npm:1.6.0"
-  dependencies:
-    reusify: "npm:^1.0.0"
-  checksum: 10/c4dd8630dcce4e4d37c066fb8fe5da4bb239b1c964808d3c054319f67ea7ce2087db5f20fab3914271ab1ca4d34207ab7e72101664d19a4ce87f6b6f918d5fdb
   languageName: node
   linkType: hard
 
@@ -14901,7 +14885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reusify@npm:^1.0.0, reusify@npm:^1.0.4":
+"reusify@npm:^1.0.4":
   version: 1.0.4
   resolution: "reusify@npm:1.0.4"
   checksum: 10/14222c9e1d3f9ae01480c50d96057228a8524706db79cdeb5a2ce5bb7070dd9f409a6f84a02cbef8cdc80d39aef86f2dd03d155188a1300c599b05437dcd2ffb
