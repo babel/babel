@@ -111,14 +111,6 @@ register(babelOptions);
 
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
-    VariableDeclaration(path) {
-      if (path.node.kind !== "var") {
-        throw path.buildCodeFrameError(
-          "Only `var` variables are supported in the REPL",
-        );
-      }
-    },
-
     Program(path) {
       let hasExpressionStatement: boolean;
       for (const bodyPath of path.get("body")) {
@@ -151,7 +143,7 @@ const _eval = function (code: string, filename: string) {
 
   code = babel.transformSync(code, {
     filename: filename,
-    presets: opts.presets,
+    ...babelOptions,
     plugins: (opts.plugins || []).concat([replPlugin]),
   }).code;
 
