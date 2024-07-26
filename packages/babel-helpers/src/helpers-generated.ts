@@ -1136,7 +1136,7 @@ const helpers: Record<string, Helper> = {
   ),
   // size: 131, gzip size: 126
   superPropGet: helper(
-    "7.24.4",
+    "7.25.0",
     "function _superPropertyGet(t,e,r,o){var p=get(getPrototypeOf(1&o?t.prototype:t),e,r);return 2&o?function(t){return p.apply(r,t)}:p}",
     {
       globals: [],
@@ -1153,7 +1153,7 @@ const helpers: Record<string, Helper> = {
   ),
   // size: 92, gzip size: 98
   superPropSet: helper(
-    "7.24.4",
+    "7.25.0",
     "function _superPropertySet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
     {
       globals: [],

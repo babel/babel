@@ -1,4 +1,4 @@
-/* @minVersion 7.24.4 */
+/* @minVersion 7.25.0 */
 
 import get from "./get.ts";
 import getPrototypeOf from "./getPrototypeOf.ts";
