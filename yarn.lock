@@ -423,7 +423,7 @@ __metadata:
     "@types/estree": "npm:^1.0.5"
     "@typescript-eslint/scope-manager": "npm:^6.19.0"
     dedent: "npm:^1.5.3"
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
     eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : "
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
@@ -437,7 +437,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
   peerDependencies:
     "@babel/eslint-parser": ">=7.11.0"
     eslint: ">=7.5.0"
@@ -448,7 +448,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development"
   dependencies:
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
   languageName: unknown
   linkType: soft
 
@@ -457,7 +457,7 @@ __metadata:
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
     clone-deep: "npm:^4.0.1"
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
     eslint-rule-composer: "npm:^0.3.0"
   peerDependencies:
     "@babel/eslint-parser": ^7.11.0
@@ -481,7 +481,7 @@ __metadata:
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
   languageName: unknown
   linkType: soft
 
@@ -494,7 +494,7 @@ __metadata:
     "@babel/preset-react": "workspace:^"
     "@eslint/compat": "npm:^1.1.1"
     dedent: "npm:^1.5.3"
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
     eslint-plugin-import: "npm:^2.25.4"
     globals: "npm:^15.6.0"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
@@ -7174,7 +7174,7 @@ __metadata:
     c8: "npm:^10.0.0"
     charcodes: "npm:^0.2.0"
     core-js: "npm:^3.36.1"
-    eslint: "npm:^9.6.0"
+    eslint: "npm:^9.7.0"
     eslint-formatter-codeframe: "npm:^7.32.1"
     eslint-import-resolver-node: "npm:^0.3.9"
     eslint-plugin-import: "npm:^2.29.1"
@@ -9417,7 +9417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.6.0":
+"eslint@npm:^9.7.0":
   version: 9.7.0
   resolution: "eslint@npm:9.7.0"
   dependencies:
