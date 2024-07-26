@@ -245,10 +245,10 @@ export function ExpressionStatement(
 
 export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
   this.print(node.left, node);
-  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
-  if (node.left.optional) this.token("?");
-  // @ts-expect-error todo(flow->ts) property present on some of the types in union but not all
-  this.print(node.left.typeAnnotation, node);
+  if (node.left.type === "Identifier") {
+    if (node.left.optional) this.token("?");
+    this.print(node.left.typeAnnotation, node);
+  }
   this.space();
   this.token("=");
   this.space();
