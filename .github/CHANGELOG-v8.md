@@ -16,6 +16,11 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.12 (2024-07-26)
+
+#### :boom: Breaking Change
+* `babel-traverse`
+  * [#16504](https://github.com/babel/babel/pull/16504) [babel 8] Remove methods starting with `_` in `@babel/traverse` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-alpha.11 (2024-06-07)
 
 #### :boom: Breaking Change
