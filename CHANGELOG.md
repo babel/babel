@@ -24,6 +24,61 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.0 (2024-07-26)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`, `babel-runtime-corejs3`
+  * [#16537](https://github.com/babel/babel/pull/16537) `await using` normative updates ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#16602](https://github.com/babel/babel/pull/16602) Ensure enum members syntactically determinable to be strings do not get reverse mappings ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :rocket: New Feature
+* `babel-helper-create-class-features-plugin`, `babel-helper-function-name`, `babel-helper-plugin-utils`, `babel-helper-wrap-function`, `babel-plugin-bugfix-safari-class-field-initializer-scope`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-preset-env`, `babel-traverse`, `babel-types`
+  * [#16658](https://github.com/babel/babel/pull/16658) Move `ensureFunctionName` to `NodePath.prototype` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-hoist-variables`, `babel-helper-plugin-utils`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-transform-modules-systemjs`, `babel-traverse`
+  * [#16644](https://github.com/babel/babel/pull/16644) Move `hoistVariables` to `Scope.prototype` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helper-module-transforms`, `babel-helper-plugin-utils`, `babel-helper-split-export-declaration`, `babel-plugin-transform-classes`, `babel-traverse`, `babel-types`
+  * [#16645](https://github.com/babel/babel/pull/16645) Move `splitExportDeclaration` to `NodePath.prototype` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helper-environment-visitor`, `babel-helper-module-transforms`, `babel-helper-plugin-utils`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-plugin-bugfix-v8-static-class-fields-redefine-readonly`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-classes`, `babel-traverse`
+  * [#16649](https://github.com/babel/babel/pull/16649) Move `environment-visitor` helper into `@babel/traverse` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-parser`
+  * [#16480](https://github.com/babel/babel/pull/16480) Expose wether a module has TLA or not as `.extra.async` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-plugin-bugfix-safari-class-field-initializer-scope`, `babel-preset-env`
+  * [#16569](https://github.com/babel/babel/pull/16569) Introduce `bugfix-safari-class-field-initializer-scope` ([@davidtaylorhq](https://github.com/davidtaylorhq))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`, `babel-types`
+  * [#16551](https://github.com/babel/babel/pull/16551) Add `NodePath#getAssignmentIdentifiers` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-json-modules`
+  * [#16579](https://github.com/babel/babel/pull/16579) Add `uncheckedRequire` option for JSON imports to CJS ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`, `babel-node`
+  * [#16642](https://github.com/babel/babel/pull/16642) Allow using custom config in `babel-node --eval` ([@slatereax](https://github.com/slatereax))
+* `babel-compat-data`, `babel-helper-create-regexp-features-plugin`, `babel-plugin-proposal-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-duplicate-named-capturing-groups-regex`, `babel-preset-env`, `babel-standalone`
+  * [#16445](https://github.com/babel/babel/pull/16445) Add `duplicate-named-capturing-groups-regex` to `preset-env` ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16678](https://github.com/babel/babel/pull/16678) Print parens around as expressions on the LHS ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-template`, `babel-types`
+  * [#15286](https://github.com/babel/babel/pull/15286) fix: Props are lost when the template replaces the node ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* Other
+  * [#16674](https://github.com/babel/babel/pull/16674) bump gulp to 5 ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#16651](https://github.com/babel/babel/pull/16651) Simplify the printing logic for `(` before ambiguous tokens ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-function-name`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-function-name`, `babel-preset-env`, `babel-traverse`
+  * [#16652](https://github.com/babel/babel/pull/16652) Simplify `helper-function-name` logic ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`
+  * [#16461](https://github.com/babel/babel/pull/16461) Some minor parser performance improvements for ts ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-classes`
+  * [#16670](https://github.com/babel/babel/pull/16670) Reduce redundant `assertThisInitialized` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-object-super`, `babel-plugin-transform-private-methods`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16374](https://github.com/babel/babel/pull/16374) Improve `super.x` output ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`
+  * [#16656](https://github.com/babel/babel/pull/16656) Simplify output for anonymous classes with no methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.24.10 (2024-07-16)
 
 #### :bug: Bug Fix
