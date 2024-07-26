@@ -18,8 +18,8 @@
   ],
   "dependencies": {
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

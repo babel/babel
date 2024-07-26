@@ -227,6 +227,7 @@ const methods = {
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
   arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,
   splitExportDeclaration: NodePath_conversion.splitExportDeclaration,
+  ensureFunctionName: NodePath_conversion.ensureFunctionName,
 
   // NodePath_introspection
   matchesPattern: NodePath_introspection.matchesPattern,

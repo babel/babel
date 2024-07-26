@@ -3,7 +3,6 @@
 import { types as t, template } from "@babel/core";
 import type { File, NodePath } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import nameFunction from "@babel/helper-function-name";
 
 type Decoratable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
 
@@ -91,6 +90,20 @@ function extractElementDescriptor(
     );
   }
 
+  if (path.isFunction()) {
+    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+      // polyfill when being run by an older Babel version
+      path.ensureFunctionName ??=
+        // eslint-disable-next-line no-restricted-globals
+        require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+    }
+    // @ts-expect-error path is a ClassMethod, that technically
+    // is not supported as it does not have an .id property
+    // This plugin will however then transform the ClassMethod
+    // to a function expression, so it's fine.
+    path.ensureFunctionName(false);
+  }
+
   const { node, scope } = path as NodePath<SupportedElement>;
 
   if (!path.isTSDeclareMethod()) {
@@ -113,20 +126,7 @@ function extractElementDescriptor(
   ].filter(Boolean);
 
   if (t.isClassMethod(node)) {
-    const id = node.computed
-      ? null
-      : (node.key as
-          | t.Identifier
-          | t.StringLiteral
-          | t.NumericLiteral
-          | t.BigIntLiteral);
-    const transformed = t.toExpression(node);
-    properties.push(
-      prop(
-        "value",
-        nameFunction({ node: transformed, id, scope }) || transformed,
-      ),
-    );
+    properties.push(prop("value", t.toExpression(node)));
   } else if (t.isClassProperty(node) && node.value) {
     properties.push(
       method("value", template.statements.ast`return ${node.value}`),
