@@ -31,7 +31,7 @@ export default declare(api => {
         if (value.isFunction()) {
           if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
             // polyfill when being run by an older Babel version
-            path.ensureFunctionName ??=
+            value.ensureFunctionName ??=
               // eslint-disable-next-line no-restricted-globals
               require("@babel/traverse").NodePath.prototype.ensureFunctionName;
           }
