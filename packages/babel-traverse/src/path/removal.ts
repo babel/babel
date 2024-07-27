@@ -11,13 +11,14 @@ export function remove(this: NodePath) {
   _assertUnremoved.call(this);
 
   this.resync();
-  if (!this.opts?.noScope) {
-    _removeFromScope.call(this);
-  }
 
   if (_callRemovalHooks.call(this)) {
     _markRemoved.call(this);
     return;
+  }
+
+  if (!this.opts?.noScope) {
+    _removeFromScope.call(this);
   }
 
   this.shareCommentsWithSiblings();
