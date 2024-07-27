@@ -7,26 +7,23 @@ import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
 import { getBindingIdentifiers } from "@babel/types";
 
-export function removeInternal(this: NodePath, noScope?: boolean) {
+export function remove(this: NodePath) {
   _assertUnremoved.call(this);
 
   this.resync();
-  if (!noScope && !this.opts?.noScope) {
-    _removeFromScope.call(this);
-  }
 
   if (_callRemovalHooks.call(this)) {
     _markRemoved.call(this);
     return;
   }
 
+  if (!this.opts?.noScope) {
+    _removeFromScope.call(this);
+  }
+
   this.shareCommentsWithSiblings();
   _remove.call(this);
   _markRemoved.call(this);
-}
-
-export function remove(this: NodePath) {
-  removeInternal.call(this);
 }
 
 export function _removeFromScope(this: NodePath) {

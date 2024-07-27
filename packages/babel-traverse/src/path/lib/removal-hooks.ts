@@ -2,7 +2,6 @@
 
 import type NodePath from "../index.ts";
 import type * as t from "@babel/types";
-import { removeInternal } from "../removal.ts";
 
 /**
  * Pre hooks should be used for either rejecting removal or delegating removal
@@ -32,7 +31,7 @@ export const hooks = [
       (self.key === "expression" && parent.isExpressionStatement());
 
     if (removeParent) {
-      removeInternal.call(parent, parent.isVariableDeclaration());
+      parent.remove();
       return true;
     }
   },
