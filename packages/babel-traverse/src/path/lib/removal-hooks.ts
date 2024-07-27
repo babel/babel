@@ -2,7 +2,6 @@
 
 import type NodePath from "../index.ts";
 import type * as t from "@babel/types";
-
 /**
  * Pre hooks should be used for either rejecting removal or delegating removal
  */
