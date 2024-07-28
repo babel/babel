@@ -24,6 +24,18 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.1 (2024-07-28)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-function-name`
+  * [#16683](https://github.com/babel/babel/pull/16683) fix: `ensureFunctionName` may be undefined ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-react-constant-elements`
+  * [#16582](https://github.com/babel/babel/pull/16582) fix plugin-transform-react-constant-elements transform JSXFrament but not add JSXExpressionContainer ([@keiseiTi](https://github.com/keiseiTi))
+* `babel-traverse`
+  * [#16587](https://github.com/babel/babel/pull/16587) fix: fixed issue16583 + test ([@nerodesu017](https://github.com/nerodesu017))
+
+#### :house: Internal
+* [#16663](https://github.com/babel/babel/pull/16663) Test eslint plugin against eslint 9 ([@JLHwung](https://github.com/JLHwung))
 ## v7.25.0 (2024-07-26)
 
 #### :eyeglasses: Spec Compliance
