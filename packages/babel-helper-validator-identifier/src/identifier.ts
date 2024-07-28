@@ -52,7 +52,7 @@ function isInAstralSet(code: number, set: readonly number[]): boolean {
 // Test whether a given character code starts an identifier.
 
 export function isIdentifierStart(code: number): boolean {
-  if (code < charCodes.uppercaseA) return code === charCodes.dollarSign;
+  if (code === charCodes.dollarSign) return true;
   if (code <= charCodes.uppercaseZ) return true;
   if (code < charCodes.lowercaseA) return code === charCodes.underscore;
   if (code <= charCodes.lowercaseZ) return true;
@@ -67,7 +67,7 @@ export function isIdentifierStart(code: number): boolean {
 // Test whether a given character is part of an identifier.
 
 export function isIdentifierChar(code: number): boolean {
-  if (code < charCodes.digit0) return code === charCodes.dollarSign;
+  if (code === charCodes.dollarSign) return true;
   if (code < charCodes.colon) return true;
   if (code < charCodes.uppercaseA) return false;
   if (code <= charCodes.uppercaseZ) return true;
