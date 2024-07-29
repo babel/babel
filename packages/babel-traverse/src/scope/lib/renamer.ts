@@ -4,6 +4,7 @@ import type { NodePath, Visitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import type { Identifier } from "@babel/types";
+import { requeueComputedKeyAndDecorators } from "../../path/context.ts";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -21,7 +22,15 @@ const renameVisitor: Visitor<Renamer> = {
     ) {
       path.skip();
       if (path.isMethod()) {
-        path.requeueComputedKeyAndDecorators();
+        if (
+          !process.env.BABEL_8_BREAKING &&
+          !path.requeueComputedKeyAndDecorators
+        ) {
+          // See https://github.com/babel/babel/issues/16694
+          requeueComputedKeyAndDecorators.call(path);
+        } else {
+          path.requeueComputedKeyAndDecorators();
+        }
       }
     }
   },

@@ -90,8 +90,7 @@ function* readConfigCode(
 
   // @ts-expect-error todo(flow->ts)
   if (typeof options.then === "function") {
-    // @ts-expect-error We use ?. in case options is a thenable
-    // but not a promise
+    // @ts-expect-error We use ?. in case options is a thenable but not a promise
     options.catch?.(() => {});
 
     throw new ConfigError(

@@ -10,6 +10,7 @@ import {
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
 import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
+import { requeueComputedKeyAndDecorators } from "./path/context.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
@@ -406,13 +407,29 @@ const _environmentVisitor: Visitor = {
 
     path.skip();
     if (path.isMethod()) {
-      path.requeueComputedKeyAndDecorators();
+      if (
+        !process.env.BABEL_8_BREAKING &&
+        !path.requeueComputedKeyAndDecorators
+      ) {
+        // See https://github.com/babel/babel/issues/16694
+        requeueComputedKeyAndDecorators.call(path);
+      } else {
+        path.requeueComputedKeyAndDecorators();
+      }
     }
   },
   Property(path) {
     if (path.isObjectProperty()) return;
     path.skip();
-    path.requeueComputedKeyAndDecorators();
+    if (
+      !process.env.BABEL_8_BREAKING &&
+      !path.requeueComputedKeyAndDecorators
+    ) {
+      // See https://github.com/babel/babel/issues/16694
+      requeueComputedKeyAndDecorators.call(path);
+    } else {
+      path.requeueComputedKeyAndDecorators();
+    }
   },
 };
 
