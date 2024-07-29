@@ -129,9 +129,11 @@ class Pool {
       this.#running.delete(taskProcess);
       await this.#onTaskDone(tasks, code, duration);
 
-      await null;
+      // Spin  the event loop so that #run can pick up the next task
+      await setTimeout(() => {}, 0);
 
       this.#runTasks();
+
       if (this.#running.size === 0 && this.#pending.length === 0) {
         this.#emptyListeners.forEach(f => f());
       }
@@ -160,7 +162,7 @@ let done = 0;
 const pool = new Pool({
   filename: tscPath,
   concurrency: os.cpus().length,
-  maxWeight: 10,
+  maxWeight: 20,
   taskWeight(project) {
     return 1 + (projectToDependents.get(project)?.size ?? 0);
   },
