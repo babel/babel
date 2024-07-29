@@ -7,6 +7,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import * as cache from "./cache.ts";
+import "./path/context.ts"; // We have some cycles, this ensures correct order to avoid TDZ
 import type NodePath from "./path/index.ts";
 import type { default as Scope, Binding } from "./scope/index.ts";
 import type { ExplodedVisitor, Visitor, VisitorBase } from "./types.ts";
