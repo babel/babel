@@ -42,6 +42,7 @@ import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import transformPropertyLiterals from "@babel/plugin-transform-property-literals";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
+import transformRegExpModifiers from "@babel/plugin-proposal-regexp-modifiers";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformShorthandProperties from "@babel/plugin-transform-shorthand-properties";
 import transformSpread from "@babel/plugin-transform-spread";
@@ -83,6 +84,7 @@ const availablePlugins = {
     bugfixV8SpreadParametersInOptionalChaining,
   "bugfix/transform-v8-static-class-fields-redefine-readonly": () =>
     bugfixV8StaticClassFieldsRedefineReadonly,
+  "proposal-regexp-modifiers": () => transformRegExpModifiers,
   "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
