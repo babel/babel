@@ -3989,6 +3989,7 @@ __metadata:
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
+    "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
     "@babel/plugin-syntax-class-properties": "condition:BABEL_8_BREAKING ? : ^7.12.13"
     "@babel/plugin-syntax-class-static-block": "condition:BABEL_8_BREAKING ? : ^7.14.5"
