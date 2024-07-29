@@ -155,6 +155,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
       "7.16.0",
     "bugfix/transform-v8-static-class-fields-redefine-readonly": "7.12.0",
+    "proposal-regexp-modifiers": "7.19.0",
     "syntax-import-attributes": "7.22.0",
     "transform-class-static-block": "7.12.0",
     "transform-duplicate-named-capturing-groups-regex": "7.19.0",
