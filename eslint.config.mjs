@@ -78,6 +78,7 @@ export default [
     rules: {
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
+      "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
     },
   },
   ...typescriptEslint.config({

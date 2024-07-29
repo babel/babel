@@ -440,7 +440,7 @@ describe("traverse", function () {
           traverse.explode(visitor);
           expect(console.warn).toHaveBeenCalledWith(
             expect.stringMatching(
-              /Visitor `NumberLiteral` has been deprecated, please migrate to `NumericLiteral`[\s\S]+at.+testFn1/,
+              /Visitor `NumberLiteral` has been deprecated, please migrate to `NumericLiteral`[^]+at.+testFn1/,
             ),
           );
           expect(visitor).toHaveProperty("NumericLiteral.enter", [
@@ -456,7 +456,7 @@ describe("traverse", function () {
           traverse.explode(visitor);
           expect(console.warn).toHaveBeenCalledWith(
             expect.stringMatching(
-              /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[\s\S]+at.+testFn2/,
+              /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[^]+at.+testFn2/,
             ),
           );
           expect(visitor).toHaveProperty("ImportDeclaration.enter", [
