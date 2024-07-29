@@ -3,35 +3,27 @@
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 
-import proposalAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
-import proposalClassProperties from "@babel/plugin-transform-class-properties";
-import proposalClassStaticBlock from "@babel/plugin-transform-class-static-block";
-import proposalDynamicImport from "@babel/plugin-transform-dynamic-import";
-import proposalExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
-import proposalJsonStrings from "@babel/plugin-transform-json-strings";
-import proposalLogicalAssignmentOperators from "@babel/plugin-transform-logical-assignment-operators";
-import proposalNullishCoalescingOperator from "@babel/plugin-transform-nullish-coalescing-operator";
-import proposalNumericSeparator from "@babel/plugin-transform-numeric-separator";
-import proposalObjectRestSpread from "@babel/plugin-transform-object-rest-spread";
-import proposalOptionalCatchBinding from "@babel/plugin-transform-optional-catch-binding";
-import proposalOptionalChaining from "@babel/plugin-transform-optional-chaining";
-import proposalPrivateMethods from "@babel/plugin-transform-private-methods";
-import proposalPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
-import proposalUnicodePropertyRegex from "@babel/plugin-transform-unicode-property-regex";
+import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import transformBlockScopedFunctions from "@babel/plugin-transform-block-scoped-functions";
 import transformBlockScoping from "@babel/plugin-transform-block-scoping";
 import transformClasses from "@babel/plugin-transform-classes";
+import transformClassProperties from "@babel/plugin-transform-class-properties";
+import transformClassStaticBlock from "@babel/plugin-transform-class-static-block";
 import transformComputedProperties from "@babel/plugin-transform-computed-properties";
 import transformDestructuring from "@babel/plugin-transform-destructuring";
 import transformDotallRegex from "@babel/plugin-transform-dotall-regex";
 import transformDuplicateKeys from "@babel/plugin-transform-duplicate-keys";
 import transformDuplicateNamedCapturingGroupsRegex from "@babel/plugin-transform-duplicate-named-capturing-groups-regex";
+import transformDynamicImport from "@babel/plugin-transform-dynamic-import";
 import transformExponentialOperator from "@babel/plugin-transform-exponentiation-operator";
+import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 import transformForOf from "@babel/plugin-transform-for-of";
 import transformFunctionName from "@babel/plugin-transform-function-name";
+import transformJsonStrings from "@babel/plugin-transform-json-strings";
 import transformLiterals from "@babel/plugin-transform-literals";
+import transformLogicalAssignmentOperators from "@babel/plugin-transform-logical-assignment-operators";
 import transformMemberExpressionLiterals from "@babel/plugin-transform-member-expression-literals";
 import transformModulesAmd from "@babel/plugin-transform-modules-amd";
 import transformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
@@ -39,8 +31,15 @@ import transformModulesSystemjs from "@babel/plugin-transform-modules-systemjs";
 import transformModulesUmd from "@babel/plugin-transform-modules-umd";
 import transformNamedCapturingGroupsRegex from "@babel/plugin-transform-named-capturing-groups-regex";
 import transformNewTarget from "@babel/plugin-transform-new-target";
+import transformNullishCoalescingOperator from "@babel/plugin-transform-nullish-coalescing-operator";
+import transformNumericSeparator from "@babel/plugin-transform-numeric-separator";
+import transformObjectRestSpread from "@babel/plugin-transform-object-rest-spread";
 import transformObjectSuper from "@babel/plugin-transform-object-super";
+import transformOptionalCatchBinding from "@babel/plugin-transform-optional-catch-binding";
+import transformOptionalChaining from "@babel/plugin-transform-optional-chaining";
 import transformParameters from "@babel/plugin-transform-parameters";
+import transformPrivateMethods from "@babel/plugin-transform-private-methods";
+import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import transformPropertyLiterals from "@babel/plugin-transform-property-literals";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
@@ -50,6 +49,7 @@ import transformStickyRegex from "@babel/plugin-transform-sticky-regex";
 import transformTemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
+import transformUnicodePropertyRegex from "@babel/plugin-transform-unicode-property-regex";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
 
@@ -86,12 +86,12 @@ const availablePlugins = {
   "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
-  "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
+  "transform-async-generator-functions": () => transformAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
   "transform-block-scoped-functions": () => transformBlockScopedFunctions,
   "transform-block-scoping": () => transformBlockScoping,
-  "transform-class-properties": () => proposalClassProperties,
-  "transform-class-static-block": () => proposalClassStaticBlock,
+  "transform-class-properties": () => transformClassProperties,
+  "transform-class-static-block": () => transformClassStaticBlock,
   "transform-classes": () => transformClasses,
   "transform-computed-properties": () => transformComputedProperties,
   "transform-destructuring": () => transformDestructuring,
@@ -99,15 +99,15 @@ const availablePlugins = {
   "transform-duplicate-keys": () => transformDuplicateKeys,
   "transform-duplicate-named-capturing-groups-regex": () =>
     transformDuplicateNamedCapturingGroupsRegex,
-  "transform-dynamic-import": () => proposalDynamicImport,
+  "transform-dynamic-import": () => transformDynamicImport,
   "transform-exponentiation-operator": () => transformExponentialOperator,
-  "transform-export-namespace-from": () => proposalExportNamespaceFrom,
+  "transform-export-namespace-from": () => transformExportNamespaceFrom,
   "transform-for-of": () => transformForOf,
   "transform-function-name": () => transformFunctionName,
-  "transform-json-strings": () => proposalJsonStrings,
+  "transform-json-strings": () => transformJsonStrings,
   "transform-literals": () => transformLiterals,
   "transform-logical-assignment-operators": () =>
-    proposalLogicalAssignmentOperators,
+    transformLogicalAssignmentOperators,
   "transform-member-expression-literals": () =>
     transformMemberExpressionLiterals,
   "transform-modules-amd": () => transformModulesAmd,
@@ -118,15 +118,16 @@ const availablePlugins = {
     transformNamedCapturingGroupsRegex,
   "transform-new-target": () => transformNewTarget,
   "transform-nullish-coalescing-operator": () =>
-    proposalNullishCoalescingOperator,
-  "transform-numeric-separator": () => proposalNumericSeparator,
-  "transform-object-rest-spread": () => proposalObjectRestSpread,
+    transformNullishCoalescingOperator,
+  "transform-numeric-separator": () => transformNumericSeparator,
+  "transform-object-rest-spread": () => transformObjectRestSpread,
   "transform-object-super": () => transformObjectSuper,
-  "transform-optional-catch-binding": () => proposalOptionalCatchBinding,
-  "transform-optional-chaining": () => proposalOptionalChaining,
+  "transform-optional-catch-binding": () => transformOptionalCatchBinding,
+  "transform-optional-chaining": () => transformOptionalChaining,
   "transform-parameters": () => transformParameters,
-  "transform-private-methods": () => proposalPrivateMethods,
-  "transform-private-property-in-object": () => proposalPrivatePropertyInObject,
+  "transform-private-methods": () => transformPrivateMethods,
+  "transform-private-property-in-object": () =>
+    transformPrivatePropertyInObject,
   "transform-property-literals": () => transformPropertyLiterals,
   "transform-regenerator": () => transformRegenerator,
   "transform-reserved-words": () => transformReservedWords,
@@ -136,7 +137,7 @@ const availablePlugins = {
   "transform-template-literals": () => transformTemplateLiterals,
   "transform-typeof-symbol": () => transformTypeofSymbol,
   "transform-unicode-escapes": () => transformUnicodeEscapes,
-  "transform-unicode-property-regex": () => proposalUnicodePropertyRegex,
+  "transform-unicode-property-regex": () => transformUnicodePropertyRegex,
   "transform-unicode-regex": () => transformUnicodeRegex,
   "transform-unicode-sets-regex": () => transformUnicodeSetsRegex,
 };
