@@ -33,6 +33,56 @@ export const supportsESM = semver.satisfies(
   "^12.17 || >=13.2",
 );
 
+const LOADING_CJS_FILES = new Set();
+
+function loadCjsDefault(filepath: string) {
+  // The `require()` call below can make this code reentrant if a require hook
+  // like @babel/register has been loaded into the system. That would cause
+  // Babel to attempt to compile the `.babelrc.js` file as it loads below. To
+  // cover this case, we auto-ignore re-entrant config processing. ESM loaders
+  // do not have this problem, because loaders do not apply to themselves.
+  if (LOADING_CJS_FILES.has(filepath)) {
+    debug("Auto-ignoring usage of config %o.", filepath);
+    return {};
+  }
+
+  let module;
+  try {
+    LOADING_CJS_FILES.add(filepath);
+    module = endHiddenCallStack(require)(filepath);
+  } finally {
+    LOADING_CJS_FILES.delete(filepath);
+  }
+
+  if (process.env.BABEL_8_BREAKING) {
+    return module?.__esModule ? module.default : module;
+  } else {
+    return module?.__esModule
+      ? module.default ||
+          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
+      : module;
+  }
+}
+
+const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
+  filepath: string,
+) {
+  const url = pathToFileURL(filepath).toString();
+
+  if (process.env.BABEL_8_BREAKING) {
+    return (await import(url)).default;
+  } else {
+    if (!import_) {
+      throw new ConfigError(
+        "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
+        filepath,
+      );
+    }
+
+    return (await import_(url)).default;
+  }
+});
+
 export default function* loadCodeDefault(
   filepath: string,
   asyncError: string,
@@ -68,7 +118,6 @@ export default function* loadCodeDefault(
       }
   }
   if (yield* isAsync()) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return yield* waitFor(loadMjsDefault(filepath));
   }
   throw new ConfigError(asyncError, filepath);
@@ -144,56 +193,6 @@ function loadCtsDefault(filepath: string) {
     }
   }
 }
-
-const LOADING_CJS_FILES = new Set();
-
-function loadCjsDefault(filepath: string) {
-  // The `require()` call below can make this code reentrant if a require hook
-  // like @babel/register has been loaded into the system. That would cause
-  // Babel to attempt to compile the `.babelrc.js` file as it loads below. To
-  // cover this case, we auto-ignore re-entrant config processing. ESM loaders
-  // do not have this problem, because loaders do not apply to themselves.
-  if (LOADING_CJS_FILES.has(filepath)) {
-    debug("Auto-ignoring usage of config %o.", filepath);
-    return {};
-  }
-
-  let module;
-  try {
-    LOADING_CJS_FILES.add(filepath);
-    module = endHiddenCallStack(require)(filepath);
-  } finally {
-    LOADING_CJS_FILES.delete(filepath);
-  }
-
-  if (process.env.BABEL_8_BREAKING) {
-    return module?.__esModule ? module.default : module;
-  } else {
-    return module?.__esModule
-      ? module.default ||
-          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
-      : module;
-  }
-}
-
-const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
-  filepath: string,
-) {
-  const url = pathToFileURL(filepath).toString();
-
-  if (process.env.BABEL_8_BREAKING) {
-    return (await import(url)).default;
-  } else {
-    if (!import_) {
-      throw new ConfigError(
-        "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
-        filepath,
-      );
-    }
-
-    return (await import_(url)).default;
-  }
-});
 
 function getTSPreset(filepath: string) {
   try {
