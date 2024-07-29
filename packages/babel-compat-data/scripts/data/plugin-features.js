@@ -204,7 +204,9 @@ const es2025 = {
     "Duplicate named capturing groups",
 };
 
-const shippedProposal = {};
+const shippedProposal = {
+  "proposal-regexp-modifiers": "RegExp Pattern Modifiers",
+};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
