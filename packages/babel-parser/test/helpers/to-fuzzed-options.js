@@ -26,7 +26,7 @@ const toAdjustFunction = adjustments =>
         adjustments,
       );
 
-const SyntaxErrorMessageRegExp = /\((\d+):(\d+)\)$/;
+const SyntaxErrorMessageRegExp = /\(\d+:\d+\)$/;
 const toAdjustedSyntaxError = (adjust, error) =>
   error && SyntaxErrorMessageRegExp.test(error.message)
     ? SyntaxError(

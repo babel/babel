@@ -10,7 +10,7 @@ export interface Options {
 export default declare((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  const FLOW_DIRECTIVE = /(@flow(\s+(strict(-local)?|weak))?|@noflow)/;
+  const FLOW_DIRECTIVE = /@flow(?:\s+(?:strict(?:-local)?|weak))?|@noflow/;
 
   let skipStrip = false;
 

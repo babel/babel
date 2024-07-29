@@ -64,7 +64,7 @@ export default function getModuleName(
       // remove sourceRoot from filename
       .replace(sourceRootReplacer, "")
       // remove extension
-      .replace(/\.(\w*?)$/, "");
+      .replace(/\.\w*$/, "");
   }
 
   // normalize path separators

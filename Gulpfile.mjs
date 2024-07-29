@@ -837,7 +837,7 @@ gulp.task("build-vendor", async () => {
       {
         // Remove the node: prefix from imports, so that it works in old Node.js version
         // TODO(Babel 8): This can be removed.
-        transform: code => code.replace(/(?<=from ["'"])node:/g, ""),
+        transform: code => code.replace(/(?<=from ["'])node:/g, ""),
       },
     ],
   });

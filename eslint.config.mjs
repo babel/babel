@@ -5,6 +5,7 @@ import configInternal from "@babel/eslint-config-internal";
 import pluginImport from "eslint-plugin-import";
 import pluginN from "eslint-plugin-n";
 import pluginPrettier from "eslint-plugin-prettier";
+import pluginRegexp from "eslint-plugin-regexp";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
@@ -33,6 +34,7 @@ const sourceFiles = exts => [
 
 export default [
   ...configInternal,
+  pluginRegexp.configs["flat/recommended"],
   {
     ignores: [
       "/lib",
@@ -76,6 +78,7 @@ export default [
     rules: {
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
+      "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
     },
   },
   ...typescriptEslint.config({

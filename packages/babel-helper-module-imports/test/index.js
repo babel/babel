@@ -1189,9 +1189,7 @@ describe("@babel/helper-module-imports", () => {
             operation,
             input,
           );
-          expect(out.replace(/[\s\n]+/g, " ")).toBe(
-            expected.replace(/[\s\n]+/g, " "),
-          );
+          expect(out.replace(/\s+/g, " ")).toBe(expected.replace(/\s+/g, " "));
         },
       );
 

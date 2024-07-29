@@ -54,7 +54,7 @@ function flatMap<T, U>(array: Array<T>, fn: (item: T) => Array<U>): Array<U> {
 }
 
 export const normalizePluginName = (plugin: string) =>
-  plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
+  plugin.replace(/^(?:@babel\/|babel-)(?:plugin-)?/, "");
 
 const expandIncludesAndExcludes = (
   filterList: PluginListOption = [],

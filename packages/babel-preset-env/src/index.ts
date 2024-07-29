@@ -101,7 +101,7 @@ const getPlugin = (pluginName: string) => {
 export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   return opts.reduce(
     (result, opt) => {
-      const target = /^(es|es6|es7|esnext|web)\./.exec(opt)
+      const target = /^(?:es|es6|es7|esnext|web)\./.test(opt)
         ? "builtIns"
         : "plugins";
       result[target].add(opt);

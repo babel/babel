@@ -56,7 +56,7 @@ export function canSkipRegexpu(
     if (options.unicodeFlag === "transform") return false;
     if (
       options.unicodePropertyEscapes === "transform" &&
-      /\\[pP]{/.test(pattern)
+      /\\p\{/i.test(pattern)
     ) {
       return false;
     }
