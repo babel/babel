@@ -3,7 +3,7 @@
 // These mappings represent the transform plugins that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const proposalPlugins = new Set<string>();
+const proposalPlugins = new Set<string>(["proposal-regexp-modifiers"]);
 
 // proposal syntax plugins enabled by the `shippedProposals` option.
 // Unlike proposalPlugins above, they are independent of compiler targets.
