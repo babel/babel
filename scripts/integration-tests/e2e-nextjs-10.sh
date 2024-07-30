@@ -15,8 +15,8 @@ set -x
 
 # Create example app
 npx create-next-app@^10 --example with-custom-babel-config /tmp/nextjs-10
+cp -r fixtures/nextjs-10/ /tmp/nextjs-10
 cd /tmp/nextjs-10
-cp -r fixtures/nextjs-10/ .
 
 #==============================================================================#
 #                                   TEST                                       #
