@@ -51,6 +51,7 @@ const MyLuckNo = () => {
       [foo](x = new.target, [...y]) {
         for ({x} of y) {
           const \u{1d49c} = /foo(.)bar/uy.exec(`foo💩bar`) instanceof a;
+          results.push(\u{1d49c});
         }
       }; 
     }
@@ -68,6 +69,7 @@ const MyLuckNo = () => {
 
   useEffect(() => {
     recalculate();
+    console.log(results);
   }, []);
 
   // do expressions
