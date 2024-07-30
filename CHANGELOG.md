@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.2 (2024-07-30)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-traverse`
+  * [#16695](https://github.com/babel/babel/pull/16695) Ensure that `requeueComputedKeyAndDecorators` is available ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.1 (2024-07-28)
 
 #### :bug: Bug Fix
