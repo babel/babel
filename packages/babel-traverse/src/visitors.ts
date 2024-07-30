@@ -190,7 +190,7 @@ function verify$1(visitor: Visitor) {
 
     if (!TYPES.includes(nodeType)) {
       throw new Error(
-        `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
+        `You gave us a visitor for the node type ${nodeType} but it's not a valid type in @babel/traverse ${PACKAGE_JSON.version}`,
       );
     }
 
