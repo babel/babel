@@ -1,7 +1,6 @@
 import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
 import traverse from "../index.ts";
-import type { TraverseOptions } from "../index.ts";
 import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globals from "globals";
@@ -458,27 +457,6 @@ class Scope {
     return this.path.hub;
   }
 
-  traverse<S>(
-    node: t.Node | t.Node[],
-    opts: TraverseOptions<S>,
-    state: S,
-  ): void;
-  traverse(node: t.Node | t.Node[], opts?: TraverseOptions, state?: any): void;
-  /**
-   * Traverse node with current scope and path.
-   *
-   * !!! WARNING !!!
-   * This method assumes that `this.path` is the NodePath representing `node`.
-   * After running the traversal, the `.parentPath` of the NodePaths
-   * corresponding to `node`'s children will be set to `this.path`.
-   *
-   * There is no good reason to use this method, since the only safe way to use
-   * it is equivalent to `scope.path.traverse(opts, state)`.
-   */
-  traverse<S>(node: any, opts: any, state?: S) {
-    traverse(node, opts, this, state, this.path);
-  }
-
   /**
    * Generate a unique identifier and add it to the current scope.
    */
@@ -642,19 +620,6 @@ class Scope {
         // @ts-ignore(Babel 7 vs Babel 8) TODO: Delete this
         renamer.rename(arguments[2]);
       }
-    }
-  }
-
-  /** @deprecated Not used in our codebase */
-  _renameFromMap(
-    map: Record<string | symbol, unknown>,
-    oldName: string | symbol,
-    newName: string | symbol,
-    value: unknown,
-  ) {
-    if (map[oldName]) {
-      map[newName] = value;
-      map[oldName] = null;
     }
   }
 
@@ -1433,6 +1398,43 @@ class Scope {
       }
     }
   }
+}
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /** @deprecated Not used in our codebase */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype._renameFromMap = function _renameFromMap(
+    map: Record<string | symbol, unknown>,
+    oldName: string | symbol,
+    newName: string | symbol,
+    value: unknown,
+  ) {
+    if (map[oldName]) {
+      map[newName] = value;
+      map[oldName] = null;
+    }
+  };
+
+  /**
+   * Traverse node with current scope and path.
+   *
+   * !!! WARNING !!!
+   * This method assumes that `this.path` is the NodePath representing `node`.
+   * After running the traversal, the `.parentPath` of the NodePaths
+   * corresponding to `node`'s children will be set to `this.path`.
+   *
+   * There is no good reason to use this method, since the only safe way to use
+   * it is equivalent to `scope.path.traverse(opts, state)`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.traverse = function <S>(
+    this: Scope,
+    node: any,
+    opts: any,
+    state?: S,
+  ) {
+    traverse(node, opts, this, state, this.path);
+  };
 }
 
 type _Binding = Binding;
