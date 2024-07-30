@@ -305,7 +305,9 @@ fs.writeFileSync(
           "./lib/libdom-minimal.d.ts",
           "packages/babel-parser/typings/*.d.ts",
           "dts/**/*.d.ts",
+          "packages/*/test/*.tst.ts",
         ],
+        exclude: ["dts/**/test/*.tst.d.ts"],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),

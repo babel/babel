@@ -65,6 +65,8 @@ export default [
       "test/runtime-integration/*/output-absolute.js",
       "Makefile.js",
       ...(process.env.IS_PUBLISH ? testFiles : []),
+      "packages/*/test/*.tst.ts",
+      "eslint/*/test/*.tst.ts",
     ],
   },
   {
