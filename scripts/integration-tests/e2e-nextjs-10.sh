@@ -6,6 +6,7 @@
 
 # Start in scripts/integration-tests/ even if run from root directory
 cd "$(dirname "$0")" || exit
+root="$PWD"
 
 source utils/local-registry.sh
 source utils/cleanup.sh
@@ -22,7 +23,7 @@ cd /tmp/nextjs-10
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$PWD"/../../verdaccio-config.yml
+startLocalRegistry "$root"/verdaccio-config.yml
 
 npm install --ignore-scripts
 
