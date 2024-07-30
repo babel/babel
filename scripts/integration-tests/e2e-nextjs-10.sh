@@ -26,6 +26,9 @@ startLocalRegistry "$PWD"/../../verdaccio-config.yml
 
 npm install --ignore-scripts
 
+# Let Next.js print full build errors
+sed -i "s/result=nextBuildSpan.traceChild('format-webpack-messages')/if(result.errors.length>0){console.error(result.errors[0].message)};result=nextBuildSpan.traceChild('format-webpack-messages')/g" ./node_modules/next/dist/build/index.js
+
 # Test
 
 # Next.js 10 uses webpack 4.44, which is affected by https://github.com/webpack/webpack/issues/14532
