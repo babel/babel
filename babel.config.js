@@ -186,7 +186,9 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
-      env !== "standalone" ? "@babel/plugin-proposal-json-modules" : null,
+      env !== "standalone"
+        ? ["@babel/plugin-proposal-json-modules", { uncheckedRequire: true }]
+        : null,
 
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
     ].filter(Boolean),
