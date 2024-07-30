@@ -428,8 +428,10 @@ class Scope {
 
   labels: Map<string, NodePath<t.LabeledStatement>>;
   bindings: { [name: string]: Binding };
+  /** Only defined in the program scope */
   referencesSet?: Set<string>;
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
+  /** Only defined in the program scope */
   uidsSet?: Set<string>;
   data: { [key: string | symbol]: unknown };
   crawling: boolean;
