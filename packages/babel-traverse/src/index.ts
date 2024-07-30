@@ -1,3 +1,4 @@
+import "./path/context.ts"; // We have some cycles, this ensures correct order to avoid TDZ
 import * as visitors from "./visitors.ts";
 import {
   VISITOR_KEYS,
