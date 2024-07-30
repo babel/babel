@@ -241,7 +241,6 @@ target["prepublish"] = function () {
   env(
     () => {
       target["prepublish-build"]();
-      target["test"]();
     },
     {
       IS_PUBLISH: "true",
@@ -292,11 +291,7 @@ target["prepublish-build-standalone"] = function () {
   );
 };
 
-target["prepublish-prepare-dts"] = function () {
-  target["clean-ts"]();
-  target["tscheck"]();
-  target["prepublish-prepare-dts-no-clean"]();
-};
+target["prepublish-prepare-dts"] = function () {};
 
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);

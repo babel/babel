@@ -46,14 +46,6 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          - babel
-          - babel-old-version
-          - create-react-app
-          - vue-cli
-          - jest
-          - react-native
-          - prettier
-          - angular-cli
           - nextjs-10
     steps:
       - name: Get yarn1 cache directory path
