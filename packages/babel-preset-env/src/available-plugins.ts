@@ -234,9 +234,10 @@ if (!process.env.BABEL_8_BREAKING) {
   // syntax enabled by default, we can safely skip enabling it.
   if (!USE_ESM) {
     // @ts-expect-error unknown key
-    legacyBabel7SyntaxPluginsLoaders["unicode-sets-regex"] = IS_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-unicode-sets-regex");
+    legacyBabel7SyntaxPluginsLoaders["syntax-unicode-sets-regex"] =
+      IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-unicode-sets-regex");
   }
 
   Object.assign(availablePlugins, legacyBabel7SyntaxPluginsLoaders);
