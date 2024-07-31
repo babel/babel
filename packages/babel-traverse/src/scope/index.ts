@@ -449,14 +449,6 @@ class Scope {
     return parent?.scope;
   }
 
-  get parentBlock() {
-    return this.path.parent;
-  }
-
-  get hub() {
-    return this.path.hub;
-  }
-
   /**
    * Generate a unique identifier and add it to the current scope.
    */
@@ -485,7 +477,8 @@ class Scope {
     let uid;
     let i = 1;
     do {
-      uid = this._generateUid(name, i);
+      uid = `_${name}`;
+      if (i > 1) uid += i;
       i++;
     } while (
       this.hasLabel(uid) ||
@@ -499,16 +492,6 @@ class Scope {
     program.uids[uid] = true;
 
     return uid;
-  }
-
-  /**
-   * Generate an `_id1`.
-   */
-
-  _generateUid(name: string, i: number) {
-    let id = name;
-    if (i > 1) id += i;
-    return `_${id}`;
   }
 
   generateUidBasedOnNode(node: t.Node, defaultName?: string) {
@@ -596,7 +579,7 @@ class Scope {
       (local.kind === "param" && kind === "const");
 
     if (duplicate) {
-      throw this.hub.buildError(
+      throw this.path.hub.buildError(
         id,
         `Duplicate declaration "${name}"`,
         TypeError,
@@ -689,12 +672,12 @@ class Scope {
     }
 
     if (arrayLikeIsIterable) {
-      args.unshift(this.hub.addHelper(helperName));
+      args.unshift(this.path.hub.addHelper(helperName));
       helperName = "maybeArrayLike";
     }
 
     // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
-    return callExpression(this.hub.addHelper(helperName), args);
+    return callExpression(this.path.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
@@ -1435,6 +1418,36 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   ) {
     traverse(node, opts, this, state, this.path);
   };
+
+  /**
+   * Generate an `_id1`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype._generateUid = function _generateUid(
+    name: string,
+    i: number,
+  ) {
+    let id = name;
+    if (i > 1) id += i;
+    return `_${id}`;
+  };
+
+  Object.defineProperties(Scope.prototype, {
+    parentBlock: {
+      configurable: true,
+      enumerable: true,
+      get(this: Scope) {
+        return this.path.parent;
+      },
+    },
+    hub: {
+      configurable: true,
+      enumerable: true,
+      get(this: Scope) {
+        return this.path.hub;
+      },
+    },
+  });
 }
 
 type _Binding = Binding;
