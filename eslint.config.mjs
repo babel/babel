@@ -61,6 +61,7 @@ export default [
       "eslint/*/lib",
       "eslint/*/node_modules",
       "eslint/*/test/fixtures",
+      "scripts/integration-tests/fixtures",
       "test/runtime-integration/*/output.js",
       "test/runtime-integration/*/output-absolute.js",
       "Makefile.js",
