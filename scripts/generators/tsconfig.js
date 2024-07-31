@@ -111,10 +111,6 @@ function getTsPkgs(subRoot) {
           : []),
         ...Object.keys(packageJSON.peerDependencies ?? {}),
       ]);
-      if (name === "@babel/parser") {
-        // TODO: This should be listed in dependencies
-        dependencies.add("@babel/types");
-      }
       if (name === "@babel/core") {
         // This dependency is only used in Babel 7, and does not affect
         // types. Remove it to avoid a cycle.
