@@ -419,9 +419,7 @@ class Scope {
     this.block = node;
     this.path = path;
 
-    if (!process.env.BABEL_8_BREAKING) {
-      this.labels = new Map();
-    }
+    this.labels = new Map();
     this.inited = false;
   }
 
@@ -632,11 +630,10 @@ class Scope {
   }
 
   getLabel(name: string) {
-    return this.labels?.get(name);
+    return this.labels.get(name);
   }
 
   registerLabel(path: NodePath<t.LabeledStatement>) {
-    this.labels ??= new Map();
     this.labels.set(path.node.label.name, path);
   }
 
