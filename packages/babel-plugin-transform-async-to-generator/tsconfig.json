@@ -11,10 +11,16 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-helper-module-imports"
+    },
+    {
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
       "path": "../../packages/babel-helper-remap-async-to-generator"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

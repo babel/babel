@@ -11,7 +11,16 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-helper-module-transforms"
+    },
+    {
       "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "../../packages/babel-helper-simple-access"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

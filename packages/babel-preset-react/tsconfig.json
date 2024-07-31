@@ -14,6 +14,9 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
+      "path": "../../packages/babel-helper-validator-option"
+    },
+    {
       "path": "../../packages/babel-plugin-transform-react-display-name"
     },
     {
@@ -24,6 +27,9 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-react-pure-annotations"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

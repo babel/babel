@@ -11,13 +11,16 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
       "path": "../../packages/babel-helper-import-to-platform-api"
     },
     {
+      "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
       "path": "../../packages/babel-plugin-syntax-import-attributes"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

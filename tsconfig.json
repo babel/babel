@@ -26,6 +26,18 @@
       "path": "./packages/babel-cli"
     },
     {
+      "path": "./packages/babel-code-frame"
+    },
+    {
+      "path": "./packages/babel-compat-data"
+    },
+    {
+      "path": "./packages/babel-core"
+    },
+    {
+      "path": "./packages/babel-generator"
+    },
+    {
       "path": "./packages/babel-helper-annotate-as-pure"
     },
     {
@@ -35,10 +47,19 @@
       "path": "./packages/babel-helper-builder-react-jsx"
     },
     {
+      "path": "./packages/babel-helper-check-duplicate-nodes"
+    },
+    {
+      "path": "./packages/babel-helper-compilation-targets"
+    },
+    {
       "path": "./packages/babel-helper-create-class-features-plugin"
     },
     {
       "path": "./packages/babel-helper-create-regexp-features-plugin"
+    },
+    {
+      "path": "./packages/babel-helper-fixtures"
     },
     {
       "path": "./packages/babel-helper-import-to-platform-api"
@@ -47,7 +68,16 @@
       "path": "./packages/babel-helper-member-expression-to-functions"
     },
     {
+      "path": "./packages/babel-helper-module-imports"
+    },
+    {
+      "path": "./packages/babel-helper-module-transforms"
+    },
+    {
       "path": "./packages/babel-helper-optimise-call-expression"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-test-runner"
     },
     {
       "path": "./packages/babel-helper-plugin-utils"
@@ -59,13 +89,37 @@
       "path": "./packages/babel-helper-replace-supers"
     },
     {
+      "path": "./packages/babel-helper-simple-access"
+    },
+    {
       "path": "./packages/babel-helper-skip-transparent-expression-wrappers"
+    },
+    {
+      "path": "./packages/babel-helper-string-parser"
+    },
+    {
+      "path": "./packages/babel-helper-transform-fixture-test-runner"
+    },
+    {
+      "path": "./packages/babel-helper-validator-identifier"
+    },
+    {
+      "path": "./packages/babel-helper-validator-option"
     },
     {
       "path": "./packages/babel-helper-wrap-function"
     },
     {
+      "path": "./packages/babel-helpers"
+    },
+    {
+      "path": "./packages/babel-highlight"
+    },
+    {
       "path": "./packages/babel-node"
+    },
+    {
+      "path": "./packages/babel-parser"
     },
     {
       "path": "./packages/babel-plugin-bugfix-firefox-class-in-computed-class-key"
@@ -432,6 +486,15 @@
     },
     {
       "path": "./packages/babel-standalone"
+    },
+    {
+      "path": "./packages/babel-template"
+    },
+    {
+      "path": "./packages/babel-traverse"
+    },
+    {
+      "path": "./packages/babel-types"
     }
   ]
 }

@@ -11,7 +11,13 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-template"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-types"
     }
   ]
 }

@@ -21,6 +21,9 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-optional-chaining"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

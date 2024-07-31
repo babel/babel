@@ -11,10 +11,10 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-register"
     },
     {
-      "path": "../../packages/babel-register"
+      "path": "../../packages/babel-core"
     }
   ]
 }

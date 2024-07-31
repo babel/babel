@@ -15,6 +15,12 @@
     },
     {
       "path": "../../packages/babel-helper-remap-async-to-generator"
+    },
+    {
+      "path": "../../packages/babel-traverse"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

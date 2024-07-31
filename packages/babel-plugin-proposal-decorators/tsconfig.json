@@ -11,13 +11,16 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
       "path": "../../packages/babel-helper-create-class-features-plugin"
     },
     {
+      "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
       "path": "../../packages/babel-plugin-syntax-decorators"
+    },
+    {
+      "path": "../../packages/babel-core"
     }
   ]
 }

@@ -11,10 +11,10 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-plugin-transform-react-jsx"
     },
     {
-      "path": "../../packages/babel-plugin-transform-react-jsx"
+      "path": "../../packages/babel-core"
     }
   ]
 }
