@@ -251,6 +251,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Ensure that @babel/node's list of node flags is up to date
+        run: |
+          node ./packages/babel-node/scripts/list-node-flags.js
       - name: Test on node.js ${{ matrix.node-version }}
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
