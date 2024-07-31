@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const MyLuckNo = () => {
-  const [results = [], randomNumber, setRandomNumber] = useState(null);
+  const results = [], [randomNumber, setRandomNumber] = useState(null);
 
   // Next.js 10 uses Babel 7.12, which supports up to ES2022
   // log results to create side effects
@@ -61,6 +61,7 @@ const MyLuckNo = () => {
   results.push({ get bar() { return }, set bar(v) {} })
 
   // ES3
+  var abstract = 1;
   results.push(({ const: abstract }).const = true);
 
   const recalculate = () => {
