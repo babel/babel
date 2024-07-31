@@ -2,13 +2,12 @@
   "presets": [
     [
       "@babel/preset-env",
-      {
-        "forceAllTransforms": true
-      }
+      { "forceAllTransforms": true }
     ],
-    "@babel/preset-react"
+    ["@babel/preset-react", { "runtime": "automatic" }]
   ],
   "plugins": [
-    "@babel/plugin-proposal-do-expressions"
+    "@babel/plugin-proposal-do-expressions",
+    "@babel/plugin-transform-runtime"
   ]
 }
