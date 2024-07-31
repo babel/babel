@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.3 (2024-07-31)
+
+#### :bug: Bug Fix
+* `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-traverse`
+  * [#16699](https://github.com/babel/babel/pull/16699) Avoid validating visitors produced by `traverse.visitors.merge` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#16688](https://github.com/babel/babel/pull/16688) Add `@babel/types` as a dependency of `@babel/parser` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.2 (2024-07-30)
 
 #### :bug: Bug Fix
