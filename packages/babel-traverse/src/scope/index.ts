@@ -390,9 +390,9 @@ class Scope {
   path: NodePath;
   block: t.Pattern | t.Scopable;
 
-  labels;
   inited;
 
+  labels: Map<string, NodePath<t.LabeledStatement>>;
   bindings: { [name: string]: Binding };
   references: { [name: string]: true };
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
@@ -419,7 +419,9 @@ class Scope {
     this.block = node;
     this.path = path;
 
-    this.labels = new Map();
+    if (!process.env.BABEL_8_BREAKING) {
+      this.labels = new Map();
+    }
     this.inited = false;
   }
 
@@ -625,70 +627,16 @@ class Scope {
     console.log(sep);
   }
 
-  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  toArray(
-    node: t.Node,
-    i?: number | boolean,
-    arrayLikeIsIterable?: boolean | void,
-  ) {
-    if (isIdentifier(node)) {
-      const binding = this.getBinding(node.name);
-      if (binding?.constant && binding.path.isGenericType("Array")) {
-        return node;
-      }
-    }
-
-    if (isArrayExpression(node)) {
-      return node;
-    }
-
-    if (isIdentifier(node, { name: "arguments" })) {
-      return callExpression(
-        memberExpression(
-          memberExpression(
-            memberExpression(identifier("Array"), identifier("prototype")),
-            identifier("slice"),
-          ),
-          identifier("call"),
-        ),
-        [node],
-      );
-    }
-
-    let helperName;
-    const args = [node];
-    if (i === true) {
-      // Used in array-spread to create an array.
-      helperName = "toConsumableArray";
-    } else if (typeof i === "number") {
-      args.push(numericLiteral(i));
-
-      // Used in array-rest to create an array from a subset of an iterable.
-      helperName = "slicedToArray";
-      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
-    } else {
-      // Used in array-rest to create an array
-      helperName = "toArray";
-    }
-
-    if (arrayLikeIsIterable) {
-      args.unshift(this.path.hub.addHelper(helperName));
-      helperName = "maybeArrayLike";
-    }
-
-    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
-    return callExpression(this.path.hub.addHelper(helperName), args);
-  }
-
   hasLabel(name: string) {
     return !!this.getLabel(name);
   }
 
   getLabel(name: string) {
-    return this.labels.get(name);
+    return this.labels?.get(name);
   }
 
   registerLabel(path: NodePath<t.LabeledStatement>) {
+    this.labels ??= new Map();
     this.labels.set(path.node.label.name, path);
   }
 
@@ -1173,27 +1121,6 @@ class Scope {
     return ids;
   }
 
-  /**
-   * Walks the scope tree and gathers all declarations of `kind`.
-   */
-
-  getAllBindingsOfKind(...kinds: string[]): Record<string, Binding> {
-    const ids = Object.create(null);
-
-    for (const kind of kinds) {
-      let scope: Scope = this;
-      do {
-        for (const name of Object.keys(scope.bindings)) {
-          const binding = scope.bindings[name];
-          if (binding.kind === kind) ids[name] = binding;
-        }
-        scope = scope.parent;
-      } while (scope);
-    }
-
-    return ids;
-  }
-
   bindingIdentifierEquals(name: string, node: t.Node): boolean {
     return this.getBindingIdentifier(name) === node;
   }
@@ -1430,6 +1357,86 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
     let id = name;
     if (i > 1) id += i;
     return `_${id}`;
+  };
+
+  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.toArray = function toArray(
+    this: Scope,
+    node: t.Node,
+    i?: number | boolean,
+    arrayLikeIsIterable?: boolean | void,
+  ) {
+    if (isIdentifier(node)) {
+      const binding = this.getBinding(node.name);
+      if (binding?.constant && binding.path.isGenericType("Array")) {
+        return node;
+      }
+    }
+
+    if (isArrayExpression(node)) {
+      return node;
+    }
+
+    if (isIdentifier(node, { name: "arguments" })) {
+      return callExpression(
+        memberExpression(
+          memberExpression(
+            memberExpression(identifier("Array"), identifier("prototype")),
+            identifier("slice"),
+          ),
+          identifier("call"),
+        ),
+        [node],
+      );
+    }
+
+    let helperName;
+    const args = [node];
+    if (i === true) {
+      // Used in array-spread to create an array.
+      helperName = "toConsumableArray";
+    } else if (typeof i === "number") {
+      args.push(numericLiteral(i));
+
+      // Used in array-rest to create an array from a subset of an iterable.
+      helperName = "slicedToArray";
+      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+    } else {
+      // Used in array-rest to create an array
+      helperName = "toArray";
+    }
+
+    if (arrayLikeIsIterable) {
+      args.unshift(this.path.hub.addHelper(helperName));
+      helperName = "maybeArrayLike";
+    }
+
+    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
+    return callExpression(this.path.hub.addHelper(helperName), args);
+  };
+
+  /**
+   * Walks the scope tree and gathers all declarations of `kind`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.getAllBindingsOfKind = function getAllBindingsOfKind(
+    ...kinds: string[]
+  ): Record<string, Binding> {
+    const ids = Object.create(null);
+
+    for (const kind of kinds) {
+      let scope: Scope = this;
+      do {
+        for (const name of Object.keys(scope.bindings)) {
+          const binding = scope.bindings[name];
+          if (binding.kind === kind) ids[name] = binding;
+        }
+        scope = scope.parent;
+      } while (scope);
+    }
+
+    return ids;
   };
 
   Object.defineProperties(Scope.prototype, {
