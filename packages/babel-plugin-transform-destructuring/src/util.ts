@@ -1,6 +1,61 @@
 import { types as t } from "@babel/core";
 import type { File, Scope, NodePath } from "@babel/core";
 
+function toArray(
+  scope: Scope,
+  node: t.Node,
+  i?: number | boolean,
+  arrayLikeIsIterable?: boolean | void,
+) {
+  if (t.isIdentifier(node)) {
+    const binding = scope.getBinding(node.name);
+    if (binding?.constant && binding.path.isGenericType("Array")) {
+      return node;
+    }
+  }
+
+  if (t.isArrayExpression(node)) {
+    return node;
+  }
+
+  if (t.isIdentifier(node, { name: "arguments" })) {
+    return t.callExpression(
+      t.memberExpression(
+        t.memberExpression(
+          t.memberExpression(t.identifier("Array"), t.identifier("prototype")),
+          t.identifier("slice"),
+        ),
+        t.identifier("call"),
+      ),
+      [node],
+    );
+  }
+
+  let helperName;
+  const args = [node];
+  if (i === true) {
+    // Used in array-spread to create an array.
+    helperName = "toConsumableArray";
+  } else if (typeof i === "number") {
+    args.push(t.numericLiteral(i));
+
+    // Used in array-rest to create an array from a subset of an iterable.
+    helperName = "slicedToArray";
+    // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+  } else {
+    // Used in array-rest to create an array
+    helperName = "toArray";
+  }
+
+  if (arrayLikeIsIterable) {
+    args.unshift(scope.path.hub.addHelper(helperName));
+    helperName = "maybeArrayLike";
+  }
+
+  // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
+  return t.callExpression(scope.path.hub.addHelper(helperName), args);
+}
+
 function isPureVoid(node: t.Node) {
   return (
     t.isUnaryExpression(node) &&
@@ -193,7 +248,7 @@ export class DestructuringTransformer {
     ) {
       return node;
     } else {
-      return this.scope.toArray(node, count, this.arrayLikeIsIterable);
+      return toArray(this.scope, node, count, this.arrayLikeIsIterable);
     }
   }
 
