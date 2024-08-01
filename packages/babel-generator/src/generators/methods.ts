@@ -186,18 +186,10 @@ export function ArrowFunctionExpression(
     this.space();
   }
 
-  // Try to avoid printing parens in simple cases, but only if we're pretty
-  // sure that they aren't needed by type annotations or potential newlines.
-  let firstParam;
-  if (
-    !this.format.retainLines &&
-    node.params.length === 1 &&
-    isIdentifier((firstParam = node.params[0])) &&
-    !hasTypesOrComments(node, firstParam)
-  ) {
-    this.print(firstParam, true);
-  } else {
+  if (this._shouldPrintArrowParamsParens(node)) {
     this._params(node, undefined, parent);
+  } else {
+    this.print(node.params[0], true);
   }
 
   this._predicate(node, true);
@@ -214,20 +206,41 @@ export function ArrowFunctionExpression(
   this.print(node.body);
 }
 
-function hasTypesOrComments(
+// Try to avoid printing parens in simple cases, but only if we're pretty
+// sure that they aren't needed by type annotations or potential newlines.
+export function _shouldPrintArrowParamsParens(
+  this: Printer,
   node: t.ArrowFunctionExpression,
-  param: t.Identifier,
 ): boolean {
-  return !!(
-    node.typeParameters ||
-    node.returnType ||
-    node.predicate ||
-    param.typeAnnotation ||
-    param.optional ||
+  if (node.params.length !== 1) return true;
+
+  if (node.typeParameters || node.returnType || node.predicate) {
+    return true;
+  }
+
+  const firstParam = node.params[0];
+  if (
+    !isIdentifier(firstParam) ||
+    firstParam.typeAnnotation ||
+    firstParam.optional ||
     // Flow does not support `foo /*: string*/ => {};`
-    param.leadingComments?.length ||
-    param.trailingComments?.length
-  );
+    firstParam.leadingComments?.length ||
+    firstParam.trailingComments?.length
+  ) {
+    return true;
+  }
+
+  if (this.format.preserveFormat) {
+    if (node.loc == null) return true;
+    if (this._getOriginalToken("(") !== null) return true;
+    const arrowToken = this._getOriginalToken("=>");
+    if (arrowToken?.loc == null) return true;
+    return arrowToken.loc.start.line !== node.loc.start.line;
+  }
+
+  if (this.format.retainLines) return true;
+
+  return false;
 }
 
 function _getFuncIdName(
