@@ -215,9 +215,21 @@ class Printer {
     this._maybeAddAuxComment();
     if (force) {
       this._appendChar(charCodes.semicolon);
-    } else {
-      this._queue(charCodes.semicolon);
+      this._noLineTerminator = false;
+      return;
     }
+    if (this.format.preserveFormat && this._tokens) {
+      const node = this._currentNode;
+      if (node.start != null && node.end != null) {
+        const { last } = this._findTokensOfNode(node);
+        const lastToken = this._tokens[last];
+        if (lastToken.raw !== ";") {
+          // no semicolon
+          return;
+        }
+      }
+    }
+    this._queue(charCodes.semicolon);
     this._noLineTerminator = false;
   }
 
