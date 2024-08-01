@@ -8,7 +8,11 @@ export function TSTypeAnnotation(
 ) {
   // TODO(@nicolo-ribaudo): investigate not including => in the range
   // of the return type of an arrow function type
-  this.token(parent.type === "TSFunctionType" ? "=>" : ":");
+  this.token(
+    parent.type === "TSFunctionType" || parent.type === "TSConstructorType"
+      ? "=>"
+      : ":",
+  );
   this.space();
   // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
   if (node.optional) this.token("?");
