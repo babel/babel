@@ -138,7 +138,6 @@ const FAILURES = [
   "sourcemaps/ts-class-properties-with-retainlines/input.ts",
   "types/ClassBody-ClassProperty/input.js",
   "types/Decorator/input.js",
-  "types/DoWhileStatement/input.js",
   "types/ExportDefaultDeclaration11/input.js",
   "types/ImportAssertion/input.js",
   "types/JSXAttribute/input.js",
