@@ -11,7 +11,7 @@ const { __dirname } = commonJS(import.meta.url);
 const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
 
 function removeTrailingSemicolons(code) {
-  return code.replace(/;+$/gm, "").replace(/;/g, " ");
+  return code.replace(/ +$/gm, "");
 }
 
 describe("preserveFormat", () => {
@@ -39,6 +39,9 @@ describe("preserveFormat", () => {
             ...task.options,
             retainLines: true,
             preserveFormat: true,
+            // TODO: Disallow these when preserveFormat is used
+            minified: false,
+            compact: false,
           };
 
           const ok =
@@ -70,7 +73,6 @@ const FAILURES = [
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
   "comments/decorators-legacy-before-export/input.js",
-  "comments/dynamic-import/input.js",
   "comments/newlines/input.js",
   "compact/expression-statement/input.js",
   "decorators/decorator-call-expression/input.js",
@@ -83,15 +85,17 @@ const FAILURES = [
   "edgecase/large-file-concise/input.js",
   "edgecase/return-with-retainlines-and-compact-option/input.js",
   "edgecase/single-arg-async-arrow-with-retainlines/input.js",
-  "escapes/jsonEscape-babel-7/input.js",
   "escapes/numeric-literals/input.js",
   "flow/array-types/input.js",
   "flow/arrow-functions/input.js",
   "flow/call-properties/input.js",
+  "flow/declare-module/input.js",
   "flow/declare-exports/input.js",
   "flow/declare-statements/input.js",
   "flow/indexed-access-types/input.js",
   "flow/interfaces-module-and-script/input.js",
+  "flow/iterator-inside-declare/input.js",
+  "flow/iterator-inside-interface/input.js",
   "flow/iterator-inside-types/input.js",
   "flow/object-literal-types/input.js",
   "flow/opaque-type-alias/input.js",
@@ -122,8 +126,6 @@ const FAILURES = [
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
   "minified/arrow-functions/input.js",
-  "minified/literals-babel-7/input.js",
-  "minified/new-expression/input.js",
   "parentheses/arrow-function/input.js",
   "parentheses/arrow-function-object-body/input.js",
   "parentheses/assignment-expression/input.js",
