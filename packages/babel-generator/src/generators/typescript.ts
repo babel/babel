@@ -83,12 +83,12 @@ export function TSDeclareFunction(
     this.space();
   }
   this._functionHead(node, parent);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSDeclareMethod(this: Printer, node: t.TSDeclareMethod) {
   this._classMethodHead(node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSQualifiedName(this: Printer, node: t.TSQualifiedName) {
@@ -102,7 +102,7 @@ export function TSCallSignatureDeclaration(
   node: t.TSCallSignatureDeclaration,
 ) {
   this.tsPrintSignatureDeclarationBase(node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSConstructSignatureDeclaration(
@@ -112,7 +112,7 @@ export function TSConstructSignatureDeclaration(
   this.word("new");
   this.space();
   this.tsPrintSignatureDeclarationBase(node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSPropertySignature(
@@ -126,7 +126,7 @@ export function TSPropertySignature(
   }
   this.tsPrintPropertyOrMethodName(node);
   this.print(node.typeAnnotation, node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function tsPrintPropertyOrMethodName(
@@ -153,7 +153,7 @@ export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
   }
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
@@ -170,7 +170,7 @@ export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
   this._parameters(node.parameters, node);
   this.token("]");
   this.print(node.typeAnnotation, node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSAnyKeyword(this: Printer) {
@@ -518,7 +518,7 @@ export function TSTypeAliasDeclaration(
   this.token("=");
   this.space();
   this.print(typeAnnotation, node);
-  this.token(";");
+  this.semicolon();
 }
 
 function TSTypeExpression(
@@ -603,7 +603,7 @@ export function TSModuleDeclaration(
   this.print(id, node);
 
   if (!node.body) {
-    this.token(";");
+    this.semicolon();
     return;
   }
 
@@ -653,7 +653,7 @@ export function TSImportEqualsDeclaration(
   this.token("=");
   this.space();
   this.print(moduleReference, node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSExternalModuleReference(
@@ -679,7 +679,7 @@ export function TSExportAssignment(this: Printer, node: t.TSExportAssignment) {
   this.token("=");
   this.space();
   this.print(node.expression, node);
-  this.token(";");
+  this.semicolon();
 }
 
 export function TSNamespaceExportDeclaration(
@@ -693,6 +693,7 @@ export function TSNamespaceExportDeclaration(
   this.word("namespace");
   this.space();
   this.print(node.id, node);
+  this.semicolon();
 }
 
 export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
