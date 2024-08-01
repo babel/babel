@@ -255,7 +255,8 @@ defineType("DebuggerStatement", {
 });
 
 defineType("DoWhileStatement", {
-  visitor: ["test", "body"],
+  builder: ["test", "body"],
+  visitor: ["body", "test"],
   fields: {
     test: {
       validate: assertNodeType("Expression"),
