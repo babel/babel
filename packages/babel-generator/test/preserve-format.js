@@ -39,6 +39,7 @@ describe("preserveFormat", () => {
             ...task.options,
             retainLines: true,
             preserveFormat: true,
+            comments: true,
             // TODO: Disallow these when preserveFormat is used
             minified: false,
             compact: false,
@@ -82,7 +83,6 @@ const FAILURES = [
   "decoratorsBeforeExport/true-to-false/input.js",
   "decoratorsBeforeExport/true-to-true/input.js",
   "edgecase/large-file-concise/input.js",
-  "edgecase/return-with-retainlines-and-compact-option/input.js",
   "escapes/numeric-literals/input.js",
   "flow/array-types/input.js",
   "flow/arrow-functions/input.js",
@@ -124,7 +124,6 @@ const FAILURES = [
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
   "parentheses/class-extends/input.js",
   "parentheses/update-expression/input.js",
-  "regression/15161/input.js",
   "regression/comment-before-parentheses-return-arg/input.js",
   "regression/comment-before-parentheses-return-arg-createParenthesizedExpressions/input.js",
   "sourcemaps/comment-before-parentheses-return-arg/input.js",
