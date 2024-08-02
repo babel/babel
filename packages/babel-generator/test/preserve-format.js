@@ -161,7 +161,6 @@ const FAILURES = [
   "typescript/type-arguments-new/input.js",
   "typescript/type-arguments-new-false-positive/input.js",
   "typescript/type-with-comment/input.js",
-  "typescript/types-mapped-as/input.js",
   "typescript/types-union-intersection/input.js",
   "typescript/types-with-comments-retainLines/input.js",
 ];
