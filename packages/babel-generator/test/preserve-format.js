@@ -103,7 +103,6 @@ const FAILURES = [
   "flow/type-alias/input.js",
   "flow/type-annotations/input.js",
   "flow/type-union-intersection/input.js",
-  "flow/type-with-comment/input.js",
   "flow/typecasts/input.js",
   "flowUsesCommas/ObjectExpression/input.js",
   "harmony-edgecase/templates/input.js",
@@ -132,7 +131,6 @@ const FAILURES = [
   "sourcemaps/real-world-babel-file2/input.ts",
   "types/ClassBody-ClassProperty/input.js",
   "types/Decorator/input.js",
-  "types/ExportDefaultDeclaration11/input.js",
   "types/ImportAssertion/input.js",
   "types/JSXAttribute/input.js",
   "types/JSXElement-JSXOpeningElement-JSXClosingElement-JSXIdentifier/input.js",
@@ -154,7 +152,6 @@ const FAILURES = [
   "typescript/module-namespace-head-declare/input.js",
   "typescript/module-namespace-head-export/input.js",
   "typescript/satisfies/input.js",
-  "typescript/type-with-comment/input.js",
   "typescript/types-union-intersection/input.js",
   "typescript/types-with-comments-retainLines/input.js",
 ];
