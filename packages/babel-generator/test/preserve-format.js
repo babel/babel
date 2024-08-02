@@ -69,7 +69,6 @@ describe("preserveFormat", () => {
 
 const FAILURES = [
   "auto-indentation/hard-tab/input.js",
-  "auto-string/jsx/input.js",
   "comments/decorators-after-export-to-before/input.js",
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
@@ -130,10 +129,6 @@ const FAILURES = [
   "types/ClassBody-ClassProperty/input.js",
   "types/Decorator/input.js",
   "types/ImportAssertion/input.js",
-  "types/JSXAttribute/input.js",
-  "types/JSXElement-JSXOpeningElement-JSXClosingElement-JSXIdentifier/input.js",
-  "types/JSXMemberExpression/input.js",
-  "types/JSXNamespacedName/input.js",
   "typescript/arrow-function-async-generic/input.js",
   "typescript/arrow-function-generic/input.js",
   "typescript/cast-need-parentheses/input.js",
