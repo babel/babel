@@ -1,4 +1,4 @@
-export default (param => {
+export default param => {
   var _App, _props;
   return _props = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("props"), (_App = class App {
     getParam() {
@@ -11,4 +11,4 @@ export default (param => {
       prop2: 'prop2'
     }
   }), _App);
-});
+};

@@ -1,4 +1,4 @@
-export default (param => {
+export default param => {
   var _App;
   return _App = class App {
     getParam() {
@@ -8,4 +8,4 @@ export default (param => {
     prop1: 'prop1',
     prop2: 'prop2'
   }, _App;
-});
+};
