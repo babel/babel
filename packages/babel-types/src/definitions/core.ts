@@ -1359,14 +1359,14 @@ defineType("ClassBody", {
 defineType("ClassExpression", {
   builder: ["id", "superClass", "body", "decorators"],
   visitor: [
-    "id",
-    "body",
-    "superClass",
-    "mixins",
-    "typeParameters",
-    "superTypeParameters",
-    "implements",
     "decorators",
+    "id",
+    "typeParameters",
+    "superClass",
+    "superTypeParameters",
+    "mixins",
+    "implements",
+    "body",
   ],
   aliases: ["Scopable", "Class", "Expression"],
   fields: {
@@ -1958,12 +1958,12 @@ defineType("ClassMethod", {
     "async",
   ],
   visitor: [
-    "key",
-    "params",
-    "body",
     "decorators",
-    "returnType",
+    "key",
     "typeParameters",
+    "params",
+    "returnType",
+    "body",
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon(),
@@ -2260,7 +2260,7 @@ defineType("OptionalCallExpression", {
 
 // --- ES2022 ---
 defineType("ClassProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: [
     "key",
     "value",
@@ -2314,7 +2314,7 @@ defineType("ClassProperty", {
 });
 
 defineType("ClassAccessorProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: [
     "key",
     "value",
@@ -2395,7 +2395,7 @@ defineType("ClassAccessorProperty", {
 });
 
 defineType("ClassPrivateProperty", {
-  visitor: ["key", "value", "decorators", "typeAnnotation"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: ["key", "value", "decorators", "static"],
   aliases: ["Property", "Private"],
   fields: {
@@ -2446,12 +2446,12 @@ defineType("ClassPrivateProperty", {
 defineType("ClassPrivateMethod", {
   builder: ["kind", "key", "params", "body", "static"],
   visitor: [
-    "key",
-    "params",
-    "body",
     "decorators",
-    "returnType",
+    "key",
     "typeParameters",
+    "params",
+    "returnType",
+    "body",
   ],
   aliases: [
     "Function",
