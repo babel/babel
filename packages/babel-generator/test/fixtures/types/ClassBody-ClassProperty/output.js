@@ -35,10 +35,6 @@ class A1 {
   static a;
   static;
 }
-class A2 {
-  get;
-  *a() {}
-}
 class A3 {
   static *a() {}
 }
