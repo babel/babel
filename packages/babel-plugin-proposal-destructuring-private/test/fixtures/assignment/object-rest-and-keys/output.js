@@ -7,10 +7,10 @@ class C {
   static c = "c";
   static {
     let x, y, z;
-    x = C.#x, ({
+    x = C.#x, {
       y,
       ...z
-    } = C);
+    } = C;
     result = {
       x,
       y,

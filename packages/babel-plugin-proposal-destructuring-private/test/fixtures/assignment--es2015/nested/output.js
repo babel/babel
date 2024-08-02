@@ -18,9 +18,9 @@ var _self = {
 (() => {
   var _m, _m2, _m3, _m4, _m5;
   let cloned, b, y, yy, yy2;
-  _m = _x._, _m2 = _m === void 0 ? _self._ : _m, _m3 = _m2[_z._], ({
+  _m = _x._, _m2 = _m === void 0 ? _self._ : _m, _m3 = _m2[_z._], {
     b
-  } = _m3), _m4 = babelHelpers.assertClassBrand(_C, _m3, _x)._, y = _m4 === void 0 ? (_C.b = "bb", babelHelpers.assertClassBrand(_C, _self._, _y)._) : _m4, _m5 = babelHelpers.assertClassBrand(_C, _m2, _x)._, yy = _m5 === void 0 ? (delete _C.self, ({
+  } = _m3, _m4 = babelHelpers.assertClassBrand(_C, _m3, _x)._, y = _m4 === void 0 ? (_C.b = "bb", babelHelpers.assertClassBrand(_C, _self._, _y)._) : _m4, _m5 = babelHelpers.assertClassBrand(_C, _m2, _x)._, yy = _m5 === void 0 ? (delete _C.self, {
     ...cloned
-  } = _C), _y._ = "yy") : _m5, yy2 = _y._;
+  } = _C, _y._ = "yy") : _m5, yy2 = _y._;
 })();

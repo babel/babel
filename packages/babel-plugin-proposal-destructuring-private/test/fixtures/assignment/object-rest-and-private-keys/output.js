@@ -7,9 +7,9 @@ class C {
   static c = "c";
   static {
     let x, y, z;
-    x = C.#x, y = C.#y, ({
+    x = C.#x, y = C.#y, {
       ...z
-    } = C);
+    } = C;
     result = {
       x,
       y,

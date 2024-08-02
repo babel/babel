@@ -55,10 +55,10 @@
   {
     let _K;
     class K {
-      static #_ = ({
+      static #_ = {
         e: [_init_computedKey2, _init_extra_computedKey2],
         c: [_K, _initClass]
-      } = babelHelpers.applyDecs2311(this, _classDecs, [[_computedKeyDecs2, 0, _computedKey2]]));
+      } = babelHelpers.applyDecs2311(this, _classDecs, [[_computedKeyDecs2, 0, _computedKey2]]);
       constructor() {
         _init_extra_computedKey2(this);
       }

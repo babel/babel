@@ -26,8 +26,8 @@ var _self = {
     _m4 = babelHelpers.assertClassBrand(_C, _m3, _x)._,
     y = _m4 === void 0 ? (_C.b = "bb", babelHelpers.assertClassBrand(_C, _self._, _y)._) : _m4,
     _m5 = babelHelpers.assertClassBrand(_C, _m2, _x)._,
-    yy = _m5 === void 0 ? (delete _C.self, ({
+    yy = _m5 === void 0 ? (delete _C.self, {
       ...cloned
-    } = _C), _y._ = "yy") : _m5,
+    } = _C, _y._ = "yy") : _m5,
     yy2 = _y._;
 })();
