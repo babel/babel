@@ -325,7 +325,8 @@ defineType("ObjectTypeCallProperty", {
 });
 
 defineType("ObjectTypeIndexer", {
-  visitor: ["id", "key", "value", "variance"],
+  visitor: ["variance", "id", "key", "value"],
+  builder: ["id", "key", "value", "variance"],
   aliases: ["UserWhitespacable"],
   fields: {
     id: validateOptionalType("Identifier"),
@@ -371,7 +372,8 @@ defineType("OpaqueType", {
 });
 
 defineType("QualifiedTypeIdentifier", {
-  visitor: ["id", "qualification"],
+  visitor: ["qualification", "id"],
+  builder: ["id", "qualification"],
   fields: {
     id: validateType("Identifier"),
     qualification: validateType(["Identifier", "QualifiedTypeIdentifier"]),

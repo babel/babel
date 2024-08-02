@@ -416,7 +416,7 @@ export const functionDeclarationCommon = () => ({
 
 defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
-  visitor: ["id", "params", "body", "returnType", "typeParameters"],
+  visitor: ["id", "typeParameters", "params", "returnType", "body"],
   fields: {
     ...functionDeclarationCommon(),
     ...functionTypeAnnotationCommon(),
@@ -795,6 +795,14 @@ defineType("ObjectExpression", {
 
 defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed", "generator", "async"],
+  visitor: [
+    "decorators",
+    "key",
+    "typeParameters",
+    "params",
+    "returnType",
+    "body",
+  ],
   fields: {
     ...functionCommon(),
     ...functionTypeAnnotationCommon(),
@@ -841,14 +849,6 @@ defineType("ObjectMethod", {
       validate: assertNodeType("BlockStatement"),
     },
   },
-  visitor: [
-    "key",
-    "params",
-    "body",
-    "decorators",
-    "returnType",
-    "typeParameters",
-  ],
   aliases: [
     "UserWhitespacable",
     "Function",
@@ -1307,7 +1307,7 @@ defineType("ArrayPattern", {
 
 defineType("ArrowFunctionExpression", {
   builder: ["params", "body", "async"],
-  visitor: ["params", "body", "returnType", "typeParameters"],
+  visitor: ["typeParameters", "params", "returnType", "body"],
   aliases: [
     "Scopable",
     "Function",
@@ -1787,7 +1787,8 @@ defineType("ImportNamespaceSpecifier", {
 });
 
 defineType("ImportSpecifier", {
-  visitor: ["local", "imported"],
+  visitor: ["imported", "local"],
+  builder: ["local", "imported"],
   aliases: ["ModuleSpecifier"],
   fields: {
     local: {
@@ -2014,7 +2015,7 @@ defineType(
 );
 
 defineType("TaggedTemplateExpression", {
-  visitor: ["tag", "quasi", "typeParameters"],
+  visitor: ["tag", "typeParameters", "quasi"],
   builder: ["tag", "quasi"],
   aliases: ["Expression"],
   fields: {
