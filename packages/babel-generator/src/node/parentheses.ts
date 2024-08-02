@@ -301,7 +301,8 @@ export function SequenceExpression(
     (parentType === "WhileStatement" && parent.test === node) ||
     (parentType === "ForInStatement" && parent.right === node) ||
     (parentType === "SwitchStatement" && parent.discriminant === node) ||
-    (parentType === "ExpressionStatement" && parent.expression === node)
+    (parentType === "ExpressionStatement" && parent.expression === node) ||
+    parentType === "ParenthesizedExpression"
   ) {
     return false;
   }
