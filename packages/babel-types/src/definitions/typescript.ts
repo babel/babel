@@ -357,7 +357,8 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: ["typeParameter", "typeAnnotation", "nameType"],
+  visitor: ["typeParameter", "nameType", "typeAnnotation"],
+  builder: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
     readonly: validateOptional(assertOneOf(true, false, "+", "-")),
     typeParameter: validateType("TSTypeParameter"),
