@@ -44,10 +44,11 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   if (props.length) {
     const exit = this.enterDelimited();
     this.space();
-    this.printList(props, { indent: true, statement: true });
-    if (this.format.preserveFormat && node.extra?.trailingComma) {
-      this.token(",", false, props.length - 1);
-    }
+    this.printList(props, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+    });
     this.space();
     exit();
   }
@@ -116,10 +117,7 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (
-        i < len - 1 ||
-        (this.format.preserveFormat && node.extra?.trailingComma)
-      ) {
+      if (i < len - 1 || this.shouldPrintTrailingComma("]")) {
         this.token(",", false, i);
       }
     } else {
@@ -170,7 +168,11 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   if (props.length) {
     this.space();
-    this.printList(props, { indent: true, statement: true });
+    this.printList(props, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma(endToken),
+    });
     this.space();
   }
   this.token(endToken);

@@ -25,10 +25,11 @@ export function TSTypeParameterInstantiation(
   parent: t.Node,
 ): void {
   this.token("<");
-  this.printList(node.params, {});
-  if (parent.type === "ArrowFunctionExpression" && node.params.length === 1) {
-    this.token(",");
-  }
+  this.printList(node.params, {
+    printTrailingSeparator:
+      (parent.type === "ArrowFunctionExpression" && node.params.length === 1) ||
+      this.shouldPrintTrailingComma(">"),
+  });
   this.token(">");
 }
 
@@ -330,7 +331,9 @@ export function TSArrayType(this: Printer, node: t.TSArrayType) {
 
 export function TSTupleType(this: Printer, node: t.TSTupleType) {
   this.token("[");
-  this.printList(node.elementTypes);
+  this.printList(node.elementTypes, {
+    printTrailingSeparator: this.shouldPrintTrailingComma("]"),
+  });
   this.token("]");
 }
 

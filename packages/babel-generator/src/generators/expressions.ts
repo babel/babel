@@ -101,7 +101,9 @@ export function NewExpression(
   }
   this.token("(");
   const exit = this.enterDelimited();
-  this.printList(node.arguments);
+  this.printList(node.arguments, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
