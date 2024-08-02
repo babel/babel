@@ -102,10 +102,11 @@ interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
 }
 
 interface PrintListOptions {
-  separator?: (this: Printer, occurrenceCount: number) => void;
+  separator?: (this: Printer, occurrenceCount: number, last: boolean) => void;
   iterator?: (node: t.Node, index: number) => void;
   statement?: boolean;
   indent?: boolean;
+  printTrailingSeparator?: boolean;
 }
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
@@ -486,7 +487,9 @@ class Printer {
     return { first, last };
   }
 
-  _findToken(condition: (token: Token) => boolean): Token | null {
+  _findToken(
+    condition: (token: Token, index: number) => boolean,
+  ): Token | null {
     if (!this._tokens) return null;
 
     const node = this._currentNode;
@@ -509,7 +512,7 @@ class Printer {
         const high = childTok.first;
 
         for (let k = low; k < high; k++) {
-          if (condition(this._tokens[k])) return this._tokens[k];
+          if (condition(this._tokens[k], k)) return this._tokens[k];
         }
 
         low = childTok.last + 1;
@@ -517,7 +520,7 @@ class Printer {
     }
 
     for (let k = low; k <= last; k++) {
-      if (condition(this._tokens[k])) return this._tokens[k];
+      if (condition(this._tokens[k], k)) return this._tokens[k];
     }
 
     return null;
@@ -984,7 +987,10 @@ class Printer {
 
       opts.iterator?.(node, i);
 
-      if (i < len - 1) separator?.(i);
+      if (separator != null) {
+        if (i < len - 1) separator(i, false);
+        else if (opts.printTrailingSeparator) separator(i, true);
+      }
 
       if (opts.statement) {
         if (!node.trailingComments?.length) {
@@ -1111,6 +1117,21 @@ class Printer {
     }
 
     this.printJoin(items, parent, opts);
+  }
+
+  shouldPrintTrailingComma(listEnd: string) {
+    if (!this.format.preserveFormat || !this._tokens) return false;
+
+    let listEndIndex: number;
+    this._findToken((token, index) => {
+      if ((token.raw ?? token.value) === listEnd) {
+        listEndIndex = index;
+        return true;
+      }
+    });
+    if (listEndIndex == null) return;
+    const lastToken = this._tokens[listEndIndex - 1];
+    return (lastToken.value ?? lastToken.raw) === ",";
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -1433,7 +1454,7 @@ type GeneratorFunctions = typeof generatorFunctions;
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 
-function commaSeparator(this: Printer, occurrenceCount: number) {
+function commaSeparator(this: Printer, occurrenceCount: number, last: boolean) {
   this.token(",", false, occurrenceCount);
-  this.space();
+  if (!last) this.space();
 }

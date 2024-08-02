@@ -100,7 +100,9 @@ export function NewExpression(
   }
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
@@ -184,7 +186,9 @@ export function OptionalCallExpression(
 
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
@@ -196,7 +200,9 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeParameters, node); // TS
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
