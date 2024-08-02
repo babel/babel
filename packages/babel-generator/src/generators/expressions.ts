@@ -99,6 +99,16 @@ export function NewExpression(
     // TODO: This can never happen
     this.token("?.");
   }
+
+  if (
+    this.format.preserveFormat &&
+    this._tokens &&
+    node.arguments.length === 0 &&
+    !this._getOriginalToken(")", 0)
+  ) {
+    return;
+  }
+
   this.token("(");
   const exit = this.enterDelimited();
   this.printList(node.arguments, {
