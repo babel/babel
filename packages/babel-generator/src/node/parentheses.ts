@@ -2,7 +2,6 @@ import {
   isArrayTypeAnnotation,
   isBinaryExpression,
   isCallExpression,
-  isExportDeclaration,
   isForOfStatement,
   isIndexedAccessType,
   isMemberExpression,
@@ -371,13 +370,6 @@ export function FunctionExpression(
   );
 }
 
-export function ArrowFunctionExpression(
-  node: t.ArrowFunctionExpression,
-  parent: t.Node,
-): boolean {
-  return isExportDeclaration(parent) || ConditionalExpression(node, parent);
-}
-
 export function ConditionalExpression(
   node:
     | t.ConditionalExpression
@@ -400,6 +392,8 @@ export function ConditionalExpression(
 
   return UnaryLike(node, parent);
 }
+
+export { ConditionalExpression as ArrowFunctionExpression };
 
 export function OptionalMemberExpression(
   node: t.OptionalMemberExpression,

@@ -1,4 +1,4 @@
-export default (param => {
+export default param => {
   var _App;
   return _App = /*#__PURE__*/function () {
     function App() {
@@ -14,4 +14,4 @@ export default (param => {
     prop1: 'prop1',
     prop2: 'prop2'
   }, _App;
-});
+};
