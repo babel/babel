@@ -10,6 +10,6 @@ var _ref2 = {};
 } = _ref2);
 rest = babelHelpers.objectWithoutProperties(_ref2, [Symbol.for("foo")]);
 _ref2;
-if (_ref3 = {}, ({
+if (_ref3 = {}, {
   [Symbol.for("foo")]: foo
-} = _ref3), rest = babelHelpers.objectWithoutProperties(_ref3, [Symbol.for("foo")]), _ref3) {}
+} = _ref3, rest = babelHelpers.objectWithoutProperties(_ref3, [Symbol.for("foo")]), _ref3) {}

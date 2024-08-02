@@ -16,9 +16,9 @@ babelHelpers.defineProperty(C, "c", "c");
   var a, b, x, y, z;
   ({
     [_m = _C.a]: a
-  } = _C), x = _x._, ({
+  } = _C), x = _x._, {
     [_m2 = _C.b]: b
-  } = _C), y = _y._, z = babelHelpers.objectWithoutProperties(_C, [_m, _m2].map(babelHelpers.toPropertyKey));
+  } = _C, y = _y._, z = babelHelpers.objectWithoutProperties(_C, [_m, _m2].map(babelHelpers.toPropertyKey));
   result = {
     a,
     b,

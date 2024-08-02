@@ -8,10 +8,10 @@ class C {
     var x, y, z;
     ({
       x
-    } = C), ({
+    } = C), {
       y,
       ...z
-    } = C.#x);
+    } = C.#x;
     result = {
       x,
       y,
