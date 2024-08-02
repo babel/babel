@@ -40,6 +40,7 @@ describe("preserveFormat", () => {
             retainLines: true,
             preserveFormat: true,
             comments: true,
+            jsescOption: null,
             // TODO: Disallow these when preserveFormat is used
             minified: false,
             compact: false,
@@ -81,7 +82,6 @@ const FAILURES = [
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
   "decoratorsBeforeExport/true-to-true/input.js",
-  "escapes/numeric-literals/input.js",
   "flow/array-types/input.js",
   "flow/arrow-functions/input.js",
   "flow/call-properties/input.js",
