@@ -20,13 +20,13 @@ aliases:
 
   - &artifact_babel_min_sourcemap
     path: ~/babel/packages/babel-standalone/babel.min.js.map
-
+---
 executors:
   node-executor:
     docker:
       - image: cimg/node:current
     working_directory: ~/babel
-
+//www.google.com
 jobs:
   build-standalone:
     executor: node-executor
