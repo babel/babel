@@ -1,7 +1,5 @@
 import { splitArgs } from "../lib/split-args.js";
 
-console.log(splitArgs.toString());
-
 describe("babel-node", () => {
   describe("splitArgs", () => {
     it("basic", () => {
