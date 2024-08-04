@@ -363,7 +363,9 @@ function importInteropSrc(source, filename) {
     source.startsWith("@babel/compat-data/") ||
     source.includes("babel-eslint-shared-fixtures/utils") ||
     (source.includes("../data/") &&
-      /babel-preset-env[\\/]src[\\/]/.test(filename))
+      /babel-preset-env[\\/]src[\\/]/.test(filename)) ||
+    // For JSON modules, the default export is the whole module
+    source.endsWith(".json")
   ) {
     return "node";
   }
