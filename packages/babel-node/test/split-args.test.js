@@ -1,10 +1,6 @@
-import { readFileSync } from "fs";
 import { splitArgs } from "../lib/split-args.js";
 
 console.log(splitArgs.toString());
-console.log(
-  readFileSync(new URL("../lib/split-args.js", import.meta.url), "utf8"),
-);
 
 describe("babel-node", () => {
   describe("splitArgs", () => {
