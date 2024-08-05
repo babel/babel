@@ -1,4 +1,5 @@
 import "core-js/modules/es.array.iterator.js";
+import "core-js/modules/es.array-buffer.constructor.js";
 import "core-js/modules/es.object.to-string.js";
 import "core-js/modules/es.typed-array.int8-array.js";
 import "core-js/modules/es.typed-array.fill.js";
