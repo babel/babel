@@ -16,6 +16,6 @@ if (execSync("git status --porcelain=v1", { encoding: "utf8" })) {
     console.log("::endgroup::");
   }
 
-  // eslint-disable-next-line no-process-exit
+  // eslint-disable-next-line n/no-process-exit
   process.exit(1);
 }

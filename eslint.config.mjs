@@ -94,7 +94,6 @@ export default [
       "no-case-declarations": "error",
       "no-confusing-arrow": "error",
       "no-empty": ["error", { allowEmptyCatch: true }],
-      "no-process-exit": "error",
       "no-unused-vars": ["error", { caughtErrors: "none" }],
       "no-var": "error",
       "prefer-const": "error",
@@ -109,6 +108,7 @@ export default [
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
     rules: {
+      "n/no-process-exit": "error",
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
