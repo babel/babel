@@ -30,7 +30,7 @@ describe("@babel/standalone", () => {
     const requireCount =
       babelStandaloneSource.split(/(?<![."])require\(/g).length - 1;
 
-    // 8 vs 13 depends on the build configuration
-    expect([8, 13]).toContain(requireCount);
+    // 6 vs 13 depends on the build configuration
+    expect([6, 13]).toContain(requireCount);
   });
 });
