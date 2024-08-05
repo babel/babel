@@ -10,7 +10,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@eslint/js": "^8.44.0",
+    "@eslint/js": "^9.7.0",
     "globals": "^15.6.0"
   },
   "peerDependencies": {
