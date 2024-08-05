@@ -37,7 +37,6 @@
     "@babel/preset-typescript": "8.0.0-alpha.12",
     "@babel/runtime": "8.0.0-alpha.12",
     "@cspotcode/source-map-support": "^0.8.1",
-    "@eslint/eslintrc": "^2.1.4",
     "@eslint/js": "^9.7.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",

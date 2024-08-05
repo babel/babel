@@ -5,6 +5,7 @@ import globals from "globals";
 import js from "@eslint/js";
 // @ts-expect-error no types
 import pluginImport from "eslint-plugin-import";
+import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
@@ -13,13 +14,7 @@ import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-int
 import typescriptEslint from "typescript-eslint";
 import { commonJS } from "$repo-utils";
 
-const { __dirname, require } = commonJS(import.meta.url);
-
-import { FlatCompat } from "@eslint/eslintrc";
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+const { require } = commonJS(import.meta.url);
 
 const recommendedConfig = js.configs.recommended;
 
@@ -243,48 +238,44 @@ export default [
       ],
     },
   },
-  ...compat.extends("plugin:jest/recommended").map(config => {
-    if (config.files == null) {
-      config.files = [
-        ...testFiles,
-        "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
-        "test/**/*.js",
-      ];
-    }
-    if (config.rules != null) {
-      config.rules = {
-        ...config.rules,
-        "jest/expect-expect": "off",
-        "jest/no-standalone-expect": [
-          "error",
-          {
-            additionalTestBlockFunctions: [
-              "itBabel7",
-              "itBabel7NoESM",
-              "itBabel7NodeGte14NoESM",
-              "itBabel8",
-              "itESLint7",
-              "itESLint8",
-              "itNoESM",
-              "itNoWin32",
-              "itESM",
-              "nodeGte8",
-              "nodeGte12",
-              "nodeGte20",
-              "nodeGte12NoESM",
-              "testFn",
-            ],
-          },
-        ],
-        "jest/no-test-callback": "off",
-        "jest/valid-describe": "off",
-        "import/extensions": ["error", "always"],
-        "import/no-extraneous-dependencies": "off",
-        "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
-      };
-    }
-    return config;
-  }),
+  {
+    files: [
+      ...testFiles,
+      "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
+      "test/**/*.js",
+    ],
+    ...pluginJest.configs["flat/recommended"],
+    rules: {
+      ...pluginJest.configs["flat/recommended"].rules,
+      "jest/expect-expect": "off",
+      "jest/no-standalone-expect": [
+        "error",
+        {
+          additionalTestBlockFunctions: [
+            "itBabel7",
+            "itBabel7NoESM",
+            "itBabel7NodeGte14NoESM",
+            "itBabel8",
+            "itESLint7",
+            "itESLint8",
+            "itNoESM",
+            "itNoWin32",
+            "itESM",
+            "nodeGte8",
+            "nodeGte12",
+            "nodeGte20",
+            "nodeGte12NoESM",
+            "testFn",
+          ],
+        },
+      ],
+      "jest/no-test-callback": "off",
+      "jest/valid-describe": "off",
+      "import/extensions": ["error", "always"],
+      "import/no-extraneous-dependencies": "off",
+      "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
+    },
+  },
   {
     files: testFiles,
     rules: {
