@@ -1,6 +1,8 @@
 // @ts-check
 
-import configInternal from "@babel/eslint-config-internal";
+import babelParser from "@babel/eslint-parser/experimental-worker";
+import globals from "globals";
+import js from "@eslint/js";
 // @ts-expect-error no types
 import pluginImport from "eslint-plugin-import";
 import pluginN from "eslint-plugin-n";
@@ -19,6 +21,8 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+const recommendedConfig = js.configs.recommended;
+
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
 
 const testFiles = [
@@ -33,8 +37,6 @@ const sourceFiles = exts => [
 ];
 
 export default [
-  ...configInternal,
-  pluginRegexp.configs["flat/recommended"],
   {
     ignores: [
       "/lib",
@@ -67,6 +69,41 @@ export default [
       "Makefile.js",
       ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
+  },
+  recommendedConfig,
+  pluginRegexp.configs["flat/recommended"],
+  {
+    languageOptions: {
+      parser: babelParser,
+      parserOptions: {
+        sourceType: "module",
+        requireConfigFile: false,
+        babelOptions: {
+          babelrc: false,
+          configFile: false,
+          // Todo: Remove the parserOpts here after the proposal gets stage 4.
+          parserOpts: {
+            plugins: ["importAssertions"],
+          },
+        },
+      },
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+    rules: {
+      curly: ["error", "multi-line"],
+      eqeqeq: ["error", "smart"],
+      "linebreak-style": ["error", "unix"],
+      "no-case-declarations": "error",
+      "no-confusing-arrow": "error",
+      "no-empty": ["error", { allowEmptyCatch: true }],
+      "no-process-exit": "error",
+      "no-unused-vars": ["error", { caughtErrors: "none" }],
+      "no-var": "error",
+      "prefer-const": "error",
+    },
   },
   {
     plugins: {

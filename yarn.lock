@@ -401,17 +401,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-config-internal@workspace:^, @babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal":
-  version: 0.0.0-use.local
-  resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
-  dependencies:
-    "@eslint/js": "npm:^9.7.0"
-    globals: "npm:^15.6.0"
-  peerDependencies:
-    "@babel/eslint-parser": ^7.16.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/eslint-parser@workspace:^, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
@@ -7112,7 +7101,6 @@ __metadata:
     $repo-utils: "link:./scripts/repo-utils"
     "@babel/cli": "npm:8.0.0-alpha.12"
     "@babel/core": "npm:8.0.0-alpha.12"
-    "@babel/eslint-config-internal": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
     "@babel/eslint-plugin-development": "workspace:^"
     "@babel/eslint-plugin-development-internal": "workspace:^"
@@ -7127,6 +7115,7 @@ __metadata:
     "@babel/runtime": "npm:8.0.0-alpha.12"
     "@cspotcode/source-map-support": "npm:^0.8.1"
     "@eslint/eslintrc": "npm:^2.1.4"
+    "@eslint/js": "npm:^9.7.0"
     "@rollup/plugin-babel": "npm:^6.0.4"
     "@rollup/plugin-commonjs": "npm:^25.0.7"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -7150,6 +7139,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^2.6.0"
     execa: "npm:^9.0.0"
     glob: "npm:^10.3.10"
+    globals: "npm:^15.9.0"
     gulp: "npm:^5.0.0"
     gulp-plumber: "npm:^1.2.1"
     husky: "npm:^9.0.11"
@@ -10571,6 +10561,13 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10/03939c8af95c6df5014b137cac83aa909090c3a3985caef06ee9a5a669790877af8698ab38007e4c0186873adc14c0b13764acc754b16a754c216cc56aa5f021
+  languageName: node
+  linkType: hard
+
+"globals@npm:^15.9.0":
+  version: 15.9.0
+  resolution: "globals@npm:15.9.0"
+  checksum: 10/19bca70131c5d3e0d4171deed0f8ae16adda19f18d39b67421056f1eaa160b4433c3ffc8eb69b8b19adebbbdad4834d8a0494c5fe1ae295f0f769a5c0331d794
   languageName: node
   linkType: hard
 
