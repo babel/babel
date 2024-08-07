@@ -8,6 +8,7 @@ import {
   isObjectPattern,
   isOptionalMemberExpression,
   isYieldExpression,
+  isStatement,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -289,25 +290,18 @@ export function SequenceExpression(
 ): boolean {
   const parentType = parent.type;
   if (
-    // Although parentheses wouldn't hurt around sequence
-    // expressions in the head of for loops, traditional style
-    // dictates that e.g. i++, j++ should not be wrapped with
-    // parentheses.
-    parentType === "ForStatement" ||
-    parentType === "ThrowStatement" ||
-    parentType === "ReturnStatement" ||
-    (parentType === "IfStatement" && parent.test === node) ||
-    (parentType === "WhileStatement" && parent.test === node) ||
-    (parentType === "ForInStatement" && parent.right === node) ||
-    (parentType === "SwitchStatement" && parent.discriminant === node) ||
-    (parentType === "ExpressionStatement" && parent.expression === node)
+    parentType === "SequenceExpression" ||
+    parentType === "ParenthesizedExpression" ||
+    (parentType === "MemberExpression" && parent.property === node) ||
+    (parentType === "OptionalMemberExpression" && parent.property === node) ||
+    parentType === "TemplateLiteral"
   ) {
     return false;
   }
-
-  // Otherwise err on the side of overparenthesization, adding
-  // explicit exceptions above if this proves overzealous.
-  return true;
+  if (parentType === "ClassDeclaration" || parentType === "ClassExpression") {
+    return parent.superClass === node;
+  }
+  return !isStatement(parent);
 }
 
 export function YieldExpression(

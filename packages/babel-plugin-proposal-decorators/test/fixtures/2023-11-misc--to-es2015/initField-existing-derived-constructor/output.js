@@ -16,7 +16,7 @@
   class A extends B {
     constructor() {
       let a = 2;
-      self = ((super(a), babelHelpers.classPrivateFieldInitSpec(this, _A, _init_foo(this, 42)), this), _init_extra_foo(this));
+      self = (super(a), babelHelpers.classPrivateFieldInitSpec(this, _A, _init_foo(this, 42)), this, _init_extra_foo(this));
     }
     get foo() {
       return babelHelpers.classPrivateFieldGet2(_A, this);
@@ -62,7 +62,7 @@
     var _A3 = /*#__PURE__*/new WeakMap();
     class A extends B {
       constructor() {
-        log.push(((super(3), babelHelpers.classPrivateFieldInitSpec(this, _A3, _init_foo2(this, 42)), this), _init_extra_foo2(this)).method());
+        log.push((super(3), babelHelpers.classPrivateFieldInitSpec(this, _A3, _init_foo2(this, 42)), this, _init_extra_foo2(this)).method());
         new class Dummy extends B {
           constructor() {
             log.push(super(4).method());
@@ -123,7 +123,7 @@
         _ref = (_noopDecs = noop(log.push(super(7).method())), "foo");
         class A extends B {
           constructor() {
-            log.push(((super(8), babelHelpers.classPrivateFieldInitSpec(this, _A7, (_initProto(this), _init_foo4(this, 42))), this), _init_extra_foo4(this)).method());
+            log.push((super(8), babelHelpers.classPrivateFieldInitSpec(this, _A7, (_initProto(this), _init_foo4(this, 42))), this, _init_extra_foo4(this)).method());
           }
           get [_ref]() {
             return babelHelpers.classPrivateFieldGet2(_A7, this);
@@ -151,7 +151,7 @@
       constructor() {
         let _ref2;
         let key;
-        new (_ref2 = (key = ((super(9), babelHelpers.classPrivateFieldInitSpec(this, _A9, _init_foo5(this, 42)), this), _init_extra_foo5(this)).method(), log.push(key), key), class Dummy extends B {
+        new (_ref2 = (key = (super(9), babelHelpers.classPrivateFieldInitSpec(this, _A9, _init_foo5(this, 42)), this, _init_extra_foo5(this)).method(), log.push(key), key), class Dummy extends B {
           constructor() {
             log.push((super(10), babelHelpers.defineProperty(this, _ref2, void 0)).method());
           }
@@ -181,12 +181,12 @@
       constructor() {
         var _Dummy2;
         let _initProto2, _noopDecs2, _ref3;
-        new (_ref3 = (_noopDecs2 = noop(log.push(((super(11), babelHelpers.classPrivateFieldInitSpec(this, _A11, _init_foo6(this, 42)), this), _init_extra_foo6(this)).method())), "noop"), (_Dummy2 = class Dummy extends B {
+        new (_ref3 = (_noopDecs2 = noop(log.push((super(11), babelHelpers.classPrivateFieldInitSpec(this, _A11, _init_foo6(this, 42)), this, _init_extra_foo6(this)).method())), "noop"), _Dummy2 = class Dummy extends B {
           constructor() {
             log.push(_initProto2(super(12)).method());
           }
           [_ref3]() {}
-        }, [_initProto2] = babelHelpers.applyDecs2311(_Dummy2, [], [[_noopDecs2, 2, "noop"]], 0, void 0, B).e, _Dummy2))();
+        }, [_initProto2] = babelHelpers.applyDecs2311(_Dummy2, [], [[_noopDecs2, 2, "noop"]], 0, void 0, B).e, _Dummy2)();
       }
       get foo() {
         return babelHelpers.classPrivateFieldGet2(_A11, this);

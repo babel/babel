@@ -343,7 +343,7 @@ describe("modification", function () {
         path.insertAfter(t.identifier("x"));
 
         expect(generateCode({ parentPath: bodyPath })).toBe(
-          "var _temp;\nexport default (_temp = fn(), x, _temp);",
+          "var _temp;\nexport default _temp = fn(), x, _temp;",
         );
       });
     });
