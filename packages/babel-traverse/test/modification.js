@@ -228,7 +228,7 @@ describe("modification", function () {
         const path = declPath.get("declaration");
         path.insertBefore(t.identifier("x"));
 
-        expect(generateCode(declPath)).toBe("export default (x, fn());");
+        expect(generateCode(declPath)).toBe("export default x, fn();");
       });
     });
   });
