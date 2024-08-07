@@ -405,7 +405,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   dependencies:
-    "@eslint/js": "npm:^8.44.0"
+    "@eslint/js": "npm:^9.7.0"
     globals: "npm:^15.6.0"
   peerDependencies:
     "@babel/eslint-parser": ^7.16.0
@@ -4588,10 +4588,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:^8.44.0":
-  version: 8.57.0
-  resolution: "@eslint/js@npm:8.57.0"
-  checksum: 10/3c501ce8a997cf6cbbaf4ed358af5492875e3550c19b9621413b82caa9ae5382c584b0efa79835639e6e0ddaa568caf3499318e5bdab68643ef4199dce5eb0a0
+"@eslint/js@npm:^9.7.0":
+  version: 9.8.0
+  resolution: "@eslint/js@npm:9.8.0"
+  checksum: 10/1c6ddbcc9f45f0165d9e218c085543536c03b4b650449a6f38f4e2b65b1d6bcd5f24f7feae72fca14d3697073cbdb413f270baef0f744cb0fb9e11ce9c84dbcc
   languageName: node
   linkType: hard
 
