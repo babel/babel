@@ -145,7 +145,7 @@ const staticAccessorDec2 = (target, ctxStaticAccessor) => {
 };
 log.push("start");
 let _Foo;
-new (_B = /*#__PURE__*/new WeakMap(), _Foo2 = (_A = /*#__PURE__*/new WeakMap(), (_Foo3 = class Foo extends (_ref = (log.push("extends"), Object)) {
+new (_B = /*#__PURE__*/new WeakMap(), _Foo2 = (_A = /*#__PURE__*/new WeakMap(), _Foo3 = class Foo extends (_ref = (log.push("extends"), Object)) {
   constructor() {
     log.push("ctor:start");
     super();
@@ -181,15 +181,15 @@ new (_B = /*#__PURE__*/new WeakMap(), _Foo2 = (_A = /*#__PURE__*/new WeakMap(), 
     c: [_Foo, _initClass]
   } = babelHelpers.applyDecs2305(_Foo3, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
   _initStatic(_Foo3);
-})(), _Foo3)), (_Class = class extends babelHelpers.identity {
+})(), _Foo3), _Class = class extends babelHelpers.identity {
   constructor() {
-    (super(_Foo), babelHelpers.defineProperty(this, "field", ((() => {
+    super(_Foo), babelHelpers.defineProperty(this, "field", ((() => {
       log.push("static:start");
-    })(), _init_field2(this))), babelHelpers.classPrivateFieldInitSpec(this, _B, _init_accessor2(this)), this), (() => {
+    })(), _init_field2(this))), babelHelpers.classPrivateFieldInitSpec(this, _B, _init_accessor2(this)), this, (() => {
       log.push("static:end");
     })(), _initClass();
   }
-}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class))();
+}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class)();
 log.push("after");
 new _Foo();
 log.push("end");

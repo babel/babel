@@ -25,7 +25,7 @@ class Obj {
 // ensure superClass is still transformed
 class SuperClass extends Obj {
   constructor() {
-    class B extends ((super(), babelHelpers.defineProperty(this, "field", 1)), Obj) {
+    class B extends (super(), babelHelpers.defineProperty(this, "field", 1), Obj) {
       constructor() {
         super();
         expect(this.field).toBeUndefined();

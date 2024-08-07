@@ -1,6 +1,6 @@
 function classFactory() {
   var _Foo, _foo, _bar;
-  return _foo = /*#__PURE__*/new WeakMap(), (_Foo = class Foo {
+  return _foo = /*#__PURE__*/new WeakMap(), _Foo = class Foo {
     constructor() {
       babelHelpers.classPrivateFieldInitSpec(this, _foo, "foo");
     }
@@ -18,5 +18,5 @@ function classFactory() {
     }
   }, _bar = {
     _: "bar"
-  }, _Foo);
+  }, _Foo;
 }

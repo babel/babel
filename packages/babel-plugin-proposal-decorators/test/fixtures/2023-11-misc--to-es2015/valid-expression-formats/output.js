@@ -11,12 +11,12 @@ class Foo {
   makeClass() {
     var _Nested;
     let _barDecs, _init_bar, _init_extra_bar, _ref;
-    return _ref = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), (_Nested = class Nested {
+    return _ref = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), _Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, _ref, _init_bar(this));
         _init_extra_bar(this);
       }
-    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [], [[_barDecs, 0, "bar"]]).e, _Nested);
+    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [], [[_barDecs, 0, "bar"]]).e, _Nested;
   }
 }
 _Foo2 = Foo;

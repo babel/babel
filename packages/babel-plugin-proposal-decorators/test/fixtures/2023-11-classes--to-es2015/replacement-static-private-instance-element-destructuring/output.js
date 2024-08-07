@@ -3,7 +3,7 @@ let _initClass, _staticBlock, _Foo2;
 const dec = () => {};
 let getX, getA, callM;
 let _Foo;
-new (_Foo2 = (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Foo3_brand = /*#__PURE__*/new WeakSet(), (_Foo3 = class Foo {
+new (_Foo2 = (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Foo3_brand = /*#__PURE__*/new WeakSet(), _Foo3 = class Foo {
   constructor() {
     babelHelpers.classPrivateMethodInitSpec(this, _Foo3_brand);
     babelHelpers.classPrivateFieldInitSpec(this, _x, "#x");
@@ -26,11 +26,11 @@ new (_Foo2 = (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), 
       return m();
     };
   };
-})(), _Foo3)), (_Class = class extends babelHelpers.identity {
+})(), _Foo3), _Class = class extends babelHelpers.identity {
   constructor() {
     super(_Foo), _staticBlock.call(this), _initClass();
   }
-}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class))();
+}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class)();
 function _get_a(_this) {
   return babelHelpers.classPrivateFieldGet2(_A, _this);
 }
