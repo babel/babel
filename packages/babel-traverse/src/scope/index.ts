@@ -395,9 +395,11 @@ class Scope {
   inited;
 
   bindings: { [name: string]: Binding };
-  references: { [name: string]: true };
+  /** Only defined in the program scope */
+  references?: Set<string>;
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
-  uids: { [name: string]: boolean };
+  /** Only defined in the program scope */
+  uids?: Set<string>;
   data: { [key: string | symbol]: unknown };
   crawling: boolean;
 
@@ -517,8 +519,15 @@ class Scope {
     );
 
     const program = this.getProgramParent();
-    program.references[uid] = true;
-    program.uids[uid] = true;
+    if (process.env.BABEL_8_BREAKING) {
+      program.references.add(uid);
+      program.uids.add(uid);
+    } else {
+      // @ts-expect-error Babel 7
+      program.references[uid] = true;
+      // @ts-expect-error Babel 7
+      program.uids[uid] = true;
+    }
 
     return uid;
   }
@@ -819,7 +828,12 @@ class Scope {
     const ids = path.getOuterBindingIdentifiers(true);
 
     for (const name of Object.keys(ids)) {
-      parent.references[name] = true;
+      if (process.env.BABEL_8_BREAKING) {
+        parent.references.add(name);
+      } else {
+        // @ts-expect-error Babel 7
+        parent.references[name] = true;
+      }
 
       for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
@@ -852,13 +866,18 @@ class Scope {
   }
 
   hasUid(name: string): boolean {
-    let scope: Scope = this;
+    if (process.env.BABEL_8_BREAKING) {
+      return this.getProgramParent().uids.has(name);
+    } else {
+      let scope: Scope = this;
 
-    do {
-      if (scope.uids[name]) return true;
-    } while ((scope = scope.parent));
+      do {
+        // @ts-expect-error Babel 7
+        if (scope.uids[name]) return true;
+      } while ((scope = scope.parent));
 
-    return false;
+      return false;
+    }
   }
 
   hasGlobal(name: string): boolean {
@@ -872,7 +891,12 @@ class Scope {
   }
 
   hasReference(name: string): boolean {
-    return !!this.getProgramParent().references[name];
+    if (process.env.BABEL_8_BREAKING) {
+      return this.getProgramParent().references.has(name);
+    } else {
+      // @ts-expect-error Babel 7
+      return !!this.getProgramParent().references[name];
+    }
   }
 
   isPure(node: t.Node, constantsOnly?: boolean): boolean {
@@ -1011,14 +1035,21 @@ class Scope {
   crawl() {
     const path = this.path;
 
-    this.references = Object.create(null);
+    if (!process.env.BABEL_8_BREAKING) {
+      this.references = Object.create(null);
+      this.uids = Object.create(null);
+    }
+
     this.bindings = Object.create(null);
     this.globals = Object.create(null);
-    this.uids = Object.create(null);
     this.data = Object.create(null);
 
     const programParent = this.getProgramParent();
     if (programParent.crawling) return;
+    if (process.env.BABEL_8_BREAKING && programParent === this) {
+      programParent.references = new Set();
+      programParent.uids = new Set();
+    }
 
     const state: CollectVisitorState = {
       references: [],
@@ -1369,12 +1400,18 @@ class Scope {
     this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
-    let scope: Scope = this;
-    do {
-      if (scope.uids[name]) {
-        scope.uids[name] = false;
-      }
-    } while ((scope = scope.parent));
+    if (process.env.BABEL_8_BREAKING) {
+      this.getProgramParent().uids.delete(name);
+    } else {
+      let scope: Scope = this;
+      do {
+        // @ts-expect-error Babel 7
+        if (scope.uids[name]) {
+          // @ts-expect-error Babel 7
+          scope.uids[name] = false;
+        }
+      } while ((scope = scope.parent));
+    }
   }
 
   /**
