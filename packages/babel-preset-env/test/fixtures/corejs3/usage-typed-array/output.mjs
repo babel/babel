@@ -1,4 +1,5 @@
 import "core-js/modules/es.array.iterator.js";
+import "core-js/modules/es.array-buffer.constructor.js";
 import "core-js/modules/es.array-buffer.slice.js";
 import "core-js/modules/es.data-view.js";
 import "core-js/modules/es.object.to-string.js";
