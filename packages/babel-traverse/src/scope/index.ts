@@ -1,7 +1,6 @@
 import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
 import traverse from "../index.ts";
-import type { TraverseOptions } from "../index.ts";
 import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globals from "globals";
@@ -391,9 +390,9 @@ class Scope {
   path: NodePath;
   block: t.Pattern | t.Scopable;
 
-  labels;
   inited;
 
+  labels: Map<string, NodePath<t.LabeledStatement>>;
   bindings: { [name: string]: Binding };
   references: { [name: string]: true };
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
@@ -450,35 +449,6 @@ class Scope {
     return parent?.scope;
   }
 
-  get parentBlock() {
-    return this.path.parent;
-  }
-
-  get hub() {
-    return this.path.hub;
-  }
-
-  traverse<S>(
-    node: t.Node | t.Node[],
-    opts: TraverseOptions<S>,
-    state: S,
-  ): void;
-  traverse(node: t.Node | t.Node[], opts?: TraverseOptions, state?: any): void;
-  /**
-   * Traverse node with current scope and path.
-   *
-   * !!! WARNING !!!
-   * This method assumes that `this.path` is the NodePath representing `node`.
-   * After running the traversal, the `.parentPath` of the NodePaths
-   * corresponding to `node`'s children will be set to `this.path`.
-   *
-   * There is no good reason to use this method, since the only safe way to use
-   * it is equivalent to `scope.path.traverse(opts, state)`.
-   */
-  traverse<S>(node: any, opts: any, state?: S) {
-    traverse(node, opts, this, state, this.path);
-  }
-
   /**
    * Generate a unique identifier and add it to the current scope.
    */
@@ -507,7 +477,8 @@ class Scope {
     let uid;
     let i = 1;
     do {
-      uid = this._generateUid(name, i);
+      uid = `_${name}`;
+      if (i > 1) uid += i;
       i++;
     } while (
       this.hasLabel(uid) ||
@@ -521,16 +492,6 @@ class Scope {
     program.uids[uid] = true;
 
     return uid;
-  }
-
-  /**
-   * Generate an `_id1`.
-   */
-
-  _generateUid(name: string, i: number) {
-    let id = name;
-    if (i > 1) id += i;
-    return `_${id}`;
   }
 
   generateUidBasedOnNode(node: t.Node, defaultName?: string) {
@@ -618,7 +579,7 @@ class Scope {
       (local.kind === "param" && kind === "const");
 
     if (duplicate) {
-      throw this.hub.buildError(
+      throw this.path.hub.buildError(
         id,
         `Duplicate declaration "${name}"`,
         TypeError,
@@ -645,19 +606,6 @@ class Scope {
     }
   }
 
-  /** @deprecated Not used in our codebase */
-  _renameFromMap(
-    map: Record<string | symbol, unknown>,
-    oldName: string | symbol,
-    newName: string | symbol,
-    value: unknown,
-  ) {
-    if (map[oldName]) {
-      map[newName] = value;
-      map[oldName] = null;
-    }
-  }
-
   dump() {
     const sep = "-".repeat(60);
     console.log(sep);
@@ -675,61 +623,6 @@ class Scope {
       }
     } while ((scope = scope.parent));
     console.log(sep);
-  }
-
-  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  toArray(
-    node: t.Node,
-    i?: number | boolean,
-    arrayLikeIsIterable?: boolean | void,
-  ) {
-    if (isIdentifier(node)) {
-      const binding = this.getBinding(node.name);
-      if (binding?.constant && binding.path.isGenericType("Array")) {
-        return node;
-      }
-    }
-
-    if (isArrayExpression(node)) {
-      return node;
-    }
-
-    if (isIdentifier(node, { name: "arguments" })) {
-      return callExpression(
-        memberExpression(
-          memberExpression(
-            memberExpression(identifier("Array"), identifier("prototype")),
-            identifier("slice"),
-          ),
-          identifier("call"),
-        ),
-        [node],
-      );
-    }
-
-    let helperName;
-    const args = [node];
-    if (i === true) {
-      // Used in array-spread to create an array.
-      helperName = "toConsumableArray";
-    } else if (typeof i === "number") {
-      args.push(numericLiteral(i));
-
-      // Used in array-rest to create an array from a subset of an iterable.
-      helperName = "slicedToArray";
-      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
-    } else {
-      // Used in array-rest to create an array
-      helperName = "toArray";
-    }
-
-    if (arrayLikeIsIterable) {
-      args.unshift(this.hub.addHelper(helperName));
-      helperName = "maybeArrayLike";
-    }
-
-    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
-    return callExpression(this.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
@@ -1225,27 +1118,6 @@ class Scope {
     return ids;
   }
 
-  /**
-   * Walks the scope tree and gathers all declarations of `kind`.
-   */
-
-  getAllBindingsOfKind(...kinds: string[]): Record<string, Binding> {
-    const ids = Object.create(null);
-
-    for (const kind of kinds) {
-      let scope: Scope = this;
-      do {
-        for (const name of Object.keys(scope.bindings)) {
-          const binding = scope.bindings[name];
-          if (binding.kind === kind) ids[name] = binding;
-        }
-        scope = scope.parent;
-      } while (scope);
-    }
-
-    return ids;
-  }
-
   bindingIdentifierEquals(name: string, node: t.Node): boolean {
     return this.getBindingIdentifier(name) === node;
   }
@@ -1433,6 +1305,153 @@ class Scope {
       }
     }
   }
+}
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /** @deprecated Not used in our codebase */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype._renameFromMap = function _renameFromMap(
+    map: Record<string | symbol, unknown>,
+    oldName: string | symbol,
+    newName: string | symbol,
+    value: unknown,
+  ) {
+    if (map[oldName]) {
+      map[newName] = value;
+      map[oldName] = null;
+    }
+  };
+
+  /**
+   * Traverse node with current scope and path.
+   *
+   * !!! WARNING !!!
+   * This method assumes that `this.path` is the NodePath representing `node`.
+   * After running the traversal, the `.parentPath` of the NodePaths
+   * corresponding to `node`'s children will be set to `this.path`.
+   *
+   * There is no good reason to use this method, since the only safe way to use
+   * it is equivalent to `scope.path.traverse(opts, state)`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.traverse = function <S>(
+    this: Scope,
+    node: any,
+    opts: any,
+    state?: S,
+  ) {
+    traverse(node, opts, this, state, this.path);
+  };
+
+  /**
+   * Generate an `_id1`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype._generateUid = function _generateUid(
+    name: string,
+    i: number,
+  ) {
+    let id = name;
+    if (i > 1) id += i;
+    return `_${id}`;
+  };
+
+  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.toArray = function toArray(
+    this: Scope,
+    node: t.Node,
+    i?: number | boolean,
+    arrayLikeIsIterable?: boolean | void,
+  ) {
+    if (isIdentifier(node)) {
+      const binding = this.getBinding(node.name);
+      if (binding?.constant && binding.path.isGenericType("Array")) {
+        return node;
+      }
+    }
+
+    if (isArrayExpression(node)) {
+      return node;
+    }
+
+    if (isIdentifier(node, { name: "arguments" })) {
+      return callExpression(
+        memberExpression(
+          memberExpression(
+            memberExpression(identifier("Array"), identifier("prototype")),
+            identifier("slice"),
+          ),
+          identifier("call"),
+        ),
+        [node],
+      );
+    }
+
+    let helperName;
+    const args = [node];
+    if (i === true) {
+      // Used in array-spread to create an array.
+      helperName = "toConsumableArray";
+    } else if (typeof i === "number") {
+      args.push(numericLiteral(i));
+
+      // Used in array-rest to create an array from a subset of an iterable.
+      helperName = "slicedToArray";
+      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+    } else {
+      // Used in array-rest to create an array
+      helperName = "toArray";
+    }
+
+    if (arrayLikeIsIterable) {
+      args.unshift(this.path.hub.addHelper(helperName));
+      helperName = "maybeArrayLike";
+    }
+
+    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
+    return callExpression(this.path.hub.addHelper(helperName), args);
+  };
+
+  /**
+   * Walks the scope tree and gathers all declarations of `kind`.
+   */
+  // @ts-expect-error Babel 7 compatibility
+  Scope.prototype.getAllBindingsOfKind = function getAllBindingsOfKind(
+    ...kinds: string[]
+  ): Record<string, Binding> {
+    const ids = Object.create(null);
+
+    for (const kind of kinds) {
+      let scope: Scope = this;
+      do {
+        for (const name of Object.keys(scope.bindings)) {
+          const binding = scope.bindings[name];
+          if (binding.kind === kind) ids[name] = binding;
+        }
+        scope = scope.parent;
+      } while (scope);
+    }
+
+    return ids;
+  };
+
+  Object.defineProperties(Scope.prototype, {
+    parentBlock: {
+      configurable: true,
+      enumerable: true,
+      get(this: Scope) {
+        return this.path.parent;
+      },
+    },
+    hub: {
+      configurable: true,
+      enumerable: true,
+      get(this: Scope) {
+        return this.path.hub;
+      },
+    },
+  });
 }
 
 type _Binding = Binding;
