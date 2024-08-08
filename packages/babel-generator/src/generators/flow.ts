@@ -428,9 +428,9 @@ export function InterfaceDeclaration(
   this._interfaceish(node);
 }
 
-function andSeparator(this: Printer) {
+function andSeparator(this: Printer, occurrenceCount: number) {
   this.space();
-  this.token("&");
+  this.token("&", false, occurrenceCount);
   this.space();
 }
 
@@ -744,9 +744,9 @@ export function SymbolTypeAnnotation(this: Printer) {
   this.word("symbol");
 }
 
-function orSeparator(this: Printer) {
+function orSeparator(this: Printer, occurrenceCount: number) {
   this.space();
-  this.token("|");
+  this.token("|", false, occurrenceCount);
   this.space();
 }
 

@@ -3,9 +3,26 @@ import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
+let lastRawIdentNode: t.Identifier | null = null;
+let lastRawIdentResult: string = "";
+export function _getRawIdentifier(this: Printer, node: t.Identifier) {
+  if (node === lastRawIdentNode) return lastRawIdentResult;
+  lastRawIdentNode = node;
+
+  const identifierName = node.loc?.identifierName;
+  if (identifierName) {
+    const token = this._findToken(tok => tok.value === identifierName);
+    if (token?.raw) return (lastRawIdentResult = token.raw);
+  }
+  return (lastRawIdentResult = node.name);
+}
+
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
-  this.word(node.name);
+
+  this.word(
+    this.format.preserveFormat ? this._getRawIdentifier(node) : node.name,
+  );
 }
 
 export function ArgumentPlaceholder(this: Printer) {
@@ -27,7 +44,11 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   if (props.length) {
     const exit = this.enterForStatementInit(false);
     this.space();
-    this.printList(props, node, { indent: true, statement: true });
+    this.printList(props, node, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+    });
     this.space();
     exit();
   }
@@ -96,14 +117,16 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem, node);
-      if (i < len - 1) this.token(",");
+      if (i < len - 1 || this.shouldPrintTrailingComma("]")) {
+        this.token(",", false, i);
+      }
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      this.token(",");
+      this.token(",", false, i);
     }
   }
 
@@ -145,7 +168,11 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   if (props.length) {
     this.space();
-    this.printList(props, node, { indent: true, statement: true });
+    this.printList(props, node, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma(endToken),
+    });
     this.space();
   }
   this.token(endToken);

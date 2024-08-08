@@ -41,7 +41,9 @@ export function ParenthesizedExpression(
   node: t.ParenthesizedExpression,
 ) {
   this.token("(");
+  const exit = this.enterForStatementInit(false);
   this.print(node.expression, node);
+  exit();
   this.rightParens(node);
 }
 
@@ -96,9 +98,21 @@ export function NewExpression(
     // TODO: This can never happen
     this.token("?.");
   }
+
+  if (
+    this.format.preserveFormat &&
+    this._tokens &&
+    node.arguments.length === 0 &&
+    !this._getOriginalToken(")", 0)
+  ) {
+    return;
+  }
+
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
@@ -182,7 +196,9 @@ export function OptionalCallExpression(
 
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
@@ -194,7 +210,9 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeParameters, node); // TS
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments, node, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }

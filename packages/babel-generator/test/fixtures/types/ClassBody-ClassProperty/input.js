@@ -39,11 +39,6 @@ class A1 {
   static
 }
 
-class A2 {
-  get
-  *a(){}
-}
-
 class A3 {
   static
   *a(){}

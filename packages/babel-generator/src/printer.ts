@@ -8,6 +8,7 @@ import {
   isClassBody,
   isTSInterfaceBody,
   isTSEnumDeclaration,
+  VISITOR_KEYS,
 } from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
 
@@ -15,6 +16,7 @@ import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
 import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
+import type { Token } from "@babel/parser";
 
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -48,6 +50,7 @@ const enum PRINT_COMMENT_HINT {
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
+  preserveFormat: boolean;
   retainLines: boolean;
   retainFunctionParens: boolean;
   comments: boolean;
@@ -99,16 +102,19 @@ interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
 }
 
 interface PrintListOptions {
-  separator?: (this: Printer) => void;
+  separator?: (this: Printer, occurrenceCount: number, last: boolean) => void;
   iterator?: (node: t.Node, index: number) => void;
   statement?: boolean;
   indent?: boolean;
+  printTrailingSeparator?: boolean;
 }
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
-  constructor(format: Format, map: SourceMap) {
+  constructor(format: Format, map: SourceMap, tokens?: Token[]) {
     this.format = format;
+
+    this._tokens = tokens;
 
     this._indentRepeat = format.indent.style.length;
 
@@ -131,6 +137,8 @@ class Printer {
   }
 
   tokenContext: number = 0;
+
+  _tokens: Token[] = null;
 
   declare _buf: Buffer;
   _currentNode: t.Node = null;
@@ -159,6 +167,8 @@ class Printer {
    */
 
   indent(): void {
+    if (this.format.preserveFormat) return;
+
     if (this.format.compact || this.format.concise) return;
 
     this._indent++;
@@ -169,6 +179,8 @@ class Printer {
    */
 
   dedent(): void {
+    if (this.format.preserveFormat) return;
+
     if (this.format.compact || this.format.concise) return;
 
     this._indent--;
@@ -182,9 +194,21 @@ class Printer {
     this._maybeAddAuxComment();
     if (force) {
       this._appendChar(charCodes.semicolon);
-    } else {
-      this._queue(charCodes.semicolon);
+      this._noLineTerminator = false;
+      return;
     }
+    if (this.format.preserveFormat && this._tokens) {
+      const node = this._currentNode;
+      if (node.start != null && node.end != null) {
+        const { last } = this._findTokensOfNode(node);
+        const lastToken = this._tokens[last];
+        if (lastToken.raw !== ";") {
+          // no semicolon
+          return;
+        }
+      }
+    }
+    this._queue(charCodes.semicolon);
     this._noLineTerminator = false;
   }
 
@@ -210,7 +234,7 @@ class Printer {
    */
 
   space(force: boolean = false): void {
-    if (this.format.compact) return;
+    if (this.format.compact || this.format.preserveFormat) return;
 
     if (force) {
       this._space();
@@ -229,7 +253,7 @@ class Printer {
   word(str: string, noLineTerminatorAfter: boolean = false): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(str);
 
     // prevent concatenating words and creating // comment out of division and regex
     if (
@@ -278,10 +302,10 @@ class Printer {
   /**
    * Writes a simple token.
    */
-  token(str: string, maybeNewline = false): void {
+  token(str: string, maybeNewline = false, occurrenceCount = 0): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(str, occurrenceCount);
 
     const lastChar = this.getLastChar();
     const strFirst = str.charCodeAt(0);
@@ -302,14 +326,14 @@ class Printer {
     }
 
     this._maybeAddAuxComment();
-    this._append(str, maybeNewline);
+    this._append(str, maybeNewline, occurrenceCount);
     this._noLineTerminator = false;
   }
 
   tokenChar(char: number): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments();
+    this._maybePrintInnerComments(String.fromCharCode(char));
 
     const lastChar = this.getLastChar();
     if (
@@ -396,7 +420,7 @@ class Printer {
     loc: Loc | undefined,
     columnOffset: number,
   ): void {
-    if (!loc) return;
+    if (!loc || this.format.preserveFormat) return;
 
     this._catchUp(prop, loc);
 
@@ -419,7 +443,109 @@ class Printer {
     this._queue(charCodes.lineFeed);
   }
 
-  _append(str: string, maybeNewline: boolean): void {
+  _findFirstTokenOfNode(start: number, low: number, high: number): number {
+    while (low <= high) {
+      const mid = (high + low) >> 1;
+      if (start < this._tokens[mid].start) {
+        high = mid - 1;
+      } else if (start > this._tokens[mid].start) {
+        low = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+    return low;
+  }
+
+  _findLastTokenOfNode(end: number, low: number, high: number): number {
+    while (low <= high) {
+      const mid = (high + low) >> 1;
+      if (end < this._tokens[mid].end) {
+        high = mid - 1;
+      } else if (end > this._tokens[mid].end) {
+        low = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+    return high;
+  }
+
+  _tokensCache = new WeakMap<t.Node, { first: number; last: number }>();
+  _findTokensOfNode(
+    node: t.Node,
+    low: number = 0,
+    high: number = this._tokens.length - 1,
+  ) {
+    //const cached = this._tokensCache.get(node);
+    //if (cached) return cached;
+
+    const first = this._findFirstTokenOfNode(node.start, low, high);
+    const last = this._findLastTokenOfNode(node.end, first, high);
+
+    this._tokensCache.set(node, { first, last });
+    return { first, last };
+  }
+
+  _findToken(
+    condition: (token: Token, index: number) => boolean,
+  ): Token | null {
+    if (!this._tokens) return null;
+
+    const node = this._currentNode;
+    if (node.start == null || node.end == null) return null;
+
+    const { first, last } = this._findTokensOfNode(node);
+
+    let low = first;
+
+    const keys = VISITOR_KEYS[node.type];
+    for (const key of keys) {
+      let children = (node as any)[key] as t.Node | t.Node[];
+      if (!children) continue;
+      if (!Array.isArray(children)) children = [children];
+      for (const child of children) {
+        if (!child) continue;
+
+        const childTok = this._findTokensOfNode(child, low, last);
+
+        const high = childTok.first;
+
+        for (let k = low; k < high; k++) {
+          if (condition(this._tokens[k], k)) return this._tokens[k];
+        }
+
+        low = childTok.last + 1;
+      }
+    }
+
+    for (let k = low; k <= last; k++) {
+      if (condition(this._tokens[k], k)) return this._tokens[k];
+    }
+
+    return null;
+  }
+
+  _getOriginalToken(str: string, occurrenceCount: number = 0) {
+    if (!this._tokens) return null;
+    return this._findToken(token => {
+      if ((token.value ?? token.raw) !== str) return false;
+      if (occurrenceCount === 0) return true;
+      occurrenceCount--;
+      return false;
+    });
+  }
+
+  _append(
+    str: string,
+    maybeNewline: boolean,
+    occurrenceCount: number = 0,
+  ): void {
+    if (this.format.preserveFormat) {
+      const token = this._getOriginalToken(str, occurrenceCount);
+      if (token) this._catchUpTo(token.loc.start);
+    }
+
     this._maybeAddParen(str);
     this._maybeIndent(str.charCodeAt(0));
 
@@ -430,6 +556,11 @@ class Printer {
   }
 
   _appendChar(char: number): void {
+    if (this.format.preserveFormat) {
+      const token = this._getOriginalToken(String.fromCharCode(char));
+      if (token) this._catchUpTo(token.loc.start);
+    }
+
     this._maybeAddParenChar(char);
     this._maybeIndent(char);
 
@@ -564,16 +695,29 @@ class Printer {
   }
 
   _catchUp(prop: "start" | "end", loc?: Loc) {
-    if (!this.format.retainLines) return;
+    if (this.format.retainLines && !this.format.preserveFormat && loc?.[prop]) {
+      this.catchUp(loc[prop].line);
+      return;
+    }
+    if (!this.format.preserveFormat) return;
 
     // catch up to this nodes newline if we're behind
-    const line = loc?.[prop]?.line;
-    if (line != null) {
-      const count = line - this._buf.getCurrentLine();
+    const pos = loc?.[prop];
+    if (pos != null) this._catchUpTo(pos);
+  }
 
-      for (let i = 0; i < count; i++) {
-        this._newline();
-      }
+  _catchUpTo({ line, column }: Pos) {
+    const count = line - this._buf.getCurrentLine();
+
+    for (let i = 0; i < count; i++) {
+      this._newline();
+    }
+
+    if (count > 0) {
+      if (column > 0) this._append(" ".repeat(column), false);
+    } else {
+      const col = this._buf.getCurrentColumn();
+      if (column > col) this._append(" ".repeat(column - col), false);
     }
   }
 
@@ -673,10 +817,17 @@ class Printer {
     const parenthesized = node.extra?.parenthesized as boolean | undefined;
     let shouldPrintParens =
       forceParens ||
+      (parenthesized && format.preserveFormat) ||
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
-      needsParens(node, parent, this.tokenContext, this.inForStatementInit);
+      needsParens(
+        node,
+        parent,
+        this.tokenContext,
+        this.inForStatementInit,
+        (node: t.Identifier) => this._getRawIdentifier(node),
+      );
 
     if (
       !shouldPrintParens &&
@@ -836,7 +987,10 @@ class Printer {
 
       opts.iterator?.(node, i);
 
-      if (i < len - 1) separator?.();
+      if (separator != null) {
+        if (i < len - 1) separator(i, false);
+        else if (opts.printTrailingSeparator) separator(i, true);
+      }
 
       if (opts.statement) {
         if (!node.trailingComments?.length) {
@@ -905,13 +1059,22 @@ class Printer {
     this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
   }
 
-  _maybePrintInnerComments() {
-    if (this._endsWithInnerRaw) this.printInnerComments();
+  _maybePrintInnerComments(
+    nextTokenStr: string,
+    nextTokenOccurrenceCount?: number,
+  ) {
+    if (this._endsWithInnerRaw) {
+      this.printInnerComments(
+        this.format.preserveFormat
+          ? this._getOriginalToken(nextTokenStr, nextTokenOccurrenceCount)
+          : null,
+      );
+    }
     this._endsWithInnerRaw = true;
     this._indentInnerComments = true;
   }
 
-  printInnerComments() {
+  printInnerComments(nextToken?: Token) {
     const node = this._currentNode;
     const comments = node.innerComments;
     if (!comments?.length) return;
@@ -920,7 +1083,14 @@ class Printer {
     const indent = this._indentInnerComments;
     const printedCommentsCount = this._printedComments.size;
     if (indent) this.indent();
-    this._printComments(COMMENT_TYPE.INNER, comments, node);
+    this._printComments(
+      COMMENT_TYPE.INNER,
+      comments,
+      node,
+      undefined,
+      undefined,
+      nextToken,
+    );
     if (hasSpace && printedCommentsCount !== this._printedComments.size) {
       this.space();
     }
@@ -947,6 +1117,21 @@ class Printer {
     }
 
     this.printJoin(items, parent, opts);
+  }
+
+  shouldPrintTrailingComma(listEnd: string) {
+    if (!this.format.preserveFormat || !this._tokens) return false;
+
+    let listEndIndex: number;
+    this._findToken((token, index) => {
+      if ((token.raw ?? token.value) === listEnd) {
+        listEndIndex = index;
+        return true;
+      }
+    });
+    if (listEndIndex == null) return;
+    const lastToken = this._tokens[listEndIndex - 1];
+    return (lastToken.value ?? lastToken.raw) === ",";
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -999,7 +1184,10 @@ class Printer {
   // resume printing comments at the next possible position. This happens when
   // printing inner comments, since if we have an inner comment with a multiline
   // there is at least one inner position where line terminators are allowed.
-  _shouldPrintComment(comment: t.Comment): PRINT_COMMENT_HINT {
+  _shouldPrintComment(
+    comment: t.Comment,
+    nextToken?: Token,
+  ): PRINT_COMMENT_HINT {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return PRINT_COMMENT_HINT.SKIP;
@@ -1011,6 +1199,15 @@ class Printer {
       HAS_NEWLINE_OR_BlOCK_COMMENT_END.test(comment.value)
     ) {
       return PRINT_COMMENT_HINT.DEFER;
+    }
+
+    if (nextToken && this.format.preserveFormat) {
+      const commentTok = this._findToken(
+        token => token.value === comment.value,
+      );
+      if (commentTok && commentTok.start > nextToken.start) {
+        return PRINT_COMMENT_HINT.DEFER;
+      }
     }
 
     this._printedComments.add(comment);
@@ -1111,6 +1308,7 @@ class Printer {
     node: t.Node,
     parent?: t.Node,
     lineOffset: number = 0,
+    nextToken?: Token,
   ) {
     const nodeLoc = node.loc;
     const len = comments.length;
@@ -1127,7 +1325,7 @@ class Printer {
     for (let i = 0; i < len; i++) {
       const comment = comments[i];
 
-      const shouldPrint = this._shouldPrintComment(comment);
+      const shouldPrint = this._shouldPrintComment(comment, nextToken);
       if (shouldPrint === PRINT_COMMENT_HINT.DEFER) {
         hasLoc = false;
         break;
@@ -1256,7 +1454,7 @@ type GeneratorFunctions = typeof generatorFunctions;
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 
-function commaSeparator(this: Printer) {
-  this.token(",");
-  this.space();
+function commaSeparator(this: Printer, occurrenceCount: number, last: boolean) {
+  this.token(",", false, occurrenceCount);
+  if (!last) this.space();
 }
