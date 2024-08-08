@@ -43,6 +43,7 @@ import template from "@babel/template";
 import { environmentVisitor } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
+import { setup } from "./context.ts";
 
 export function toComputedKey(this: NodePath) {
   let key;
@@ -108,7 +109,8 @@ export function ensureBlock(
 
   this.node.body = blockStatement(statements);
   const parentPath = this.get(stringPath) as NodePath;
-  body.setup(
+  setup.call(
+    body,
     parentPath,
     listKey
       ? // @ts-expect-error listKey must present in parent path

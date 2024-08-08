@@ -3,7 +3,7 @@
 import { getCachedPaths } from "../cache.ts";
 import PathHoister from "./lib/hoister.ts";
 import NodePath from "./index.ts";
-import { _getQueueContexts } from "./context.ts";
+import { _getQueueContexts, pushContext, setScope } from "./context.ts";
 import { _assertUnremoved } from "./removal.ts";
 import {
   arrowFunctionExpression,
@@ -88,7 +88,7 @@ export function _containerInsert<N extends t.Node>(
   from: number,
   nodes: N[],
 ): NodePath<N>[] {
-  this.updateSiblingKeys(from, nodes.length);
+  updateSiblingKeys.call(this, from, nodes.length);
 
   const paths: NodePath<N>[] = [];
 
@@ -100,14 +100,14 @@ export function _containerInsert<N extends t.Node>(
     paths.push(path);
 
     if (this.context?.queue) {
-      path.pushContext(this.context);
+      pushContext.call(path, this.context);
     }
   }
 
   const contexts = _getQueueContexts.call(this);
 
   for (const path of paths) {
-    path.setScope();
+    setScope.call(path);
     path.debug("Inserted.");
 
     for (const context of contexts) {
@@ -399,14 +399,17 @@ export function pushContainer<
   return path.replaceWithMultiple(verifiedNodes);
 }
 
-/**
- * Hoist the current node to the highest scope possible and return a UID
- * referencing it.
- */
-export function hoist<T extends t.Node>(
-  this: NodePath<T>,
-  scope: Scope = this.scope,
-) {
-  const hoister = new PathHoister<T>(this, scope);
-  return hoister.run();
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /**
+   * Hoist the current node to the highest scope possible and return a UID
+   * referencing it.
+   */
+  // eslint-disable-next-line no-restricted-globals
+  exports.hoist = function hoist<T extends t.Node>(
+    this: NodePath<T>,
+    scope: Scope = this.scope,
+  ) {
+    const hoister = new PathHoister<T>(this, scope);
+    return hoister.run();
+  };
 }

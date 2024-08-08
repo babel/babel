@@ -1,3 +1,5 @@
+// Remove this file in Babel 8
+
 import { react } from "@babel/types";
 import {
   cloneNode,

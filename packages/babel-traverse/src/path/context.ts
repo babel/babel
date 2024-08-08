@@ -62,8 +62,10 @@ export function isDenylisted(this: NodePath): boolean {
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
 
-// TODO: Remove in Babel 8
-export { isDenylisted as isBlacklisted };
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.isBlacklisted = isDenylisted;
+}
 
 function restoreContext(path: NodePath, context: TraversalContext) {
   if (path.context !== context) {
@@ -92,7 +94,7 @@ export function visit(this: NodePath): boolean {
   // before calling the enter visitor, but it can be true in case of
   // a requeued node (e.g. by .replaceWith()) that is then marked
   // with .skip().
-  if (this.shouldSkip || this.call("enter")) {
+  if (this.shouldSkip || call.call(this, "enter")) {
     this.debug("Skip...");
     return this.shouldStop;
   }
@@ -110,7 +112,7 @@ export function visit(this: NodePath): boolean {
 
   restoreContext(this, currentContext);
 
-  this.call("exit");
+  call.call(this, "exit");
 
   return this.shouldStop;
 }
@@ -175,7 +177,7 @@ export function setContext<S = unknown>(
     this.opts = context.opts as typeof this.opts;
   }
 
-  this.setScope();
+  setScope.call(this);
 
   return this;
 }
@@ -218,7 +220,7 @@ export function _resyncKey(this: NodePath) {
   if (Array.isArray(this.container)) {
     for (let i = 0; i < this.container.length; i++) {
       if (this.container[i] === this.node) {
-        this.setKey(i);
+        setKey.call(this, i);
         return;
       }
     }
@@ -226,7 +228,7 @@ export function _resyncKey(this: NodePath) {
     for (const key of Object.keys(this.container)) {
       // @ts-expect-error this.key should present in this.container
       if (this.container[key] === this.node) {
-        this.setKey(key);
+        setKey.call(this, key);
         return;
       }
     }
@@ -284,7 +286,7 @@ export function setup(
   this.container = container;
 
   this.parentPath = parentPath || this.parentPath;
-  this.setKey(key);
+  setKey.call(this, key);
 }
 
 export function setKey(this: NodePath, key: string | number) {

@@ -358,9 +358,9 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     // referenced: here we registered it as a constantViolation
     if (
       path.isFunctionExpression() &&
-      path.has("id") &&
+      path.node.id &&
       // @ts-expect-error Fixme: document symbol ast properties
-      !path.get("id").node[NOT_LOCAL_BINDING]
+      !path.node.id[NOT_LOCAL_BINDING]
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
     }
@@ -368,9 +368,9 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
 
   ClassExpression(path) {
     if (
-      path.has("id") &&
+      path.node.id &&
       // @ts-expect-error Fixme: document symbol ast properties
-      !path.get("id").node[NOT_LOCAL_BINDING]
+      !path.node.id[NOT_LOCAL_BINDING]
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
     }

@@ -26,6 +26,7 @@ import * as NodePath_comments from "./comments.ts";
 import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator.ts";
 import type { NodePathAssertions } from "./generated/asserts.ts";
 import type { NodePathValidators } from "./generated/validators.ts";
+import { setup } from "./context.ts";
 
 const debug = buildDebug("babel");
 
@@ -104,7 +105,7 @@ const NodePath_Final = class NodePath {
       if (targetNode) paths.set(targetNode, path);
     }
 
-    path.setup(parentPath, container, listKey, key);
+    setup.call(path, parentPath, container, listKey, key);
 
     return path;
   }
@@ -231,11 +232,7 @@ const methods = {
 
   // NodePath_introspection
   matchesPattern: NodePath_introspection.matchesPattern,
-  has: NodePath_introspection.has,
   isStatic: NodePath_introspection.isStatic,
-  is: NodePath_introspection.is,
-  isnt: NodePath_introspection.isnt,
-  equals: NodePath_introspection.equals,
   isNodeType: NodePath_introspection.isNodeType,
   canHaveVariableDeclarationOrExpression:
     NodePath_introspection.canHaveVariableDeclarationOrExpression,
@@ -253,20 +250,12 @@ const methods = {
   isInStrictMode: NodePath_introspection.isInStrictMode,
 
   // NodePath_context
-  call: NodePath_context.call,
   isDenylisted: NodePath_context.isDenylisted,
-  isBlacklisted: NodePath_context.isBlacklisted,
   visit: NodePath_context.visit,
   skip: NodePath_context.skip,
   skipKey: NodePath_context.skipKey,
   stop: NodePath_context.stop,
-  setScope: NodePath_context.setScope,
   setContext: NodePath_context.setContext,
-  resync: NodePath_context.resync,
-  popContext: NodePath_context.popContext,
-  pushContext: NodePath_context.pushContext,
-  setup: NodePath_context.setup,
-  setKey: NodePath_context.setKey,
   requeue: NodePath_context.requeue,
   requeueComputedKeyAndDecorators:
     NodePath_context.requeueComputedKeyAndDecorators,
@@ -277,10 +266,8 @@ const methods = {
   // NodePath_modification
   insertBefore: NodePath_modification.insertBefore,
   insertAfter: NodePath_modification.insertAfter,
-  updateSiblingKeys: NodePath_modification.updateSiblingKeys,
   unshiftContainer: NodePath_modification.unshiftContainer,
   pushContainer: NodePath_modification.pushContainer,
-  hoist: NodePath_modification.hoist,
 
   // NodePath_family
   getOpposite: NodePath_family.getOpposite,
@@ -307,11 +294,35 @@ const methods = {
 Object.assign(NodePath_Final.prototype, methods);
 
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // String(x) is workaround for rollup
+
   // @ts-expect-error babel 7 only
   NodePath_Final.prototype.arrowFunctionToShadowed =
-    // workaround for rollup
     // @ts-expect-error babel 7 only
     NodePath_conversion[String("arrowFunctionToShadowed")];
+
+  Object.assign(NodePath_Final.prototype, {
+    // @ts-expect-error Babel 7 only
+    has: NodePath_introspection[String("has")],
+    // @ts-expect-error Babel 7 only
+    is: NodePath_introspection[String("is")],
+    // @ts-expect-error Babel 7 only
+    isnt: NodePath_introspection[String("isnt")],
+    // @ts-expect-error Babel 7 only
+    equals: NodePath_introspection[String("equals")],
+    // @ts-expect-error Babel 7 only
+    hoist: NodePath_modification[String("hoist")],
+    updateSiblingKeys: NodePath_modification.updateSiblingKeys,
+    call: NodePath_context.call,
+    // @ts-expect-error Babel 7 only
+    isBlacklisted: NodePath_context[String("isBlacklisted")],
+    setScope: NodePath_context.setScope,
+    resync: NodePath_context.resync,
+    popContext: NodePath_context.popContext,
+    pushContext: NodePath_context.pushContext,
+    setup: NodePath_context.setup,
+    setKey: NodePath_context.setKey,
+  });
 }
 
 if (!process.env.BABEL_8_BREAKING) {
@@ -319,9 +330,7 @@ if (!process.env.BABEL_8_BREAKING) {
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
   NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
     NodePath_introspection._guessExecutionStatusRelativeTo;
-}
 
-if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
   NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =

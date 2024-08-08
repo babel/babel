@@ -6,11 +6,13 @@ import { _replaceWith } from "./replacement.ts";
 import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
 import { getBindingIdentifiers } from "@babel/types";
+import { updateSiblingKeys } from "./modification.ts";
+import { resync } from "./context.ts";
 
 export function remove(this: NodePath) {
   _assertUnremoved.call(this);
 
-  this.resync();
+  resync.call(this);
 
   if (_callRemovalHooks.call(this)) {
     _markRemoved.call(this);
@@ -42,7 +44,7 @@ export function _callRemovalHooks(this: NodePath) {
 export function _remove(this: NodePath) {
   if (Array.isArray(this.container)) {
     this.container.splice(this.key as number, 1);
-    this.updateSiblingKeys(this.key as number, -1);
+    updateSiblingKeys.call(this, this.key as number, -1);
   } else {
     _replaceWith.call(this, null);
   }

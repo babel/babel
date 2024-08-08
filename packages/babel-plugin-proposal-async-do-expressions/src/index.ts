@@ -10,7 +10,7 @@ export default declare(({ types: t, assertVersion }) => {
     visitor: {
       DoExpression: {
         exit(path) {
-          if (!path.is("async")) {
+          if (!path.node.async) {
             // non-async do expressions are handled by proposal-do-expressions
             return;
           }
