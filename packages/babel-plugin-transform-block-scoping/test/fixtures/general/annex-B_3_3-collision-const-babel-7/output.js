@@ -2,9 +2,9 @@ var run = function () {
   return false;
 };
 if (true) {
-  function _run() {
+  var _run = function () {
     return true;
-  }
+  };
 }
 function test() {
   return run();
