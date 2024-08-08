@@ -7,12 +7,7 @@ import TestRunner from "../utils/parser-test-runner.js";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const flowOptionsMapping = {
-  esproposal_class_instance_fields: "classProperties",
-  esproposal_class_static_fields: "classProperties",
-  esproposal_export_star_as: "exportNamespaceFrom",
   esproposal_decorators: "decorators-legacy",
-  esproposal_nullish_coalescing: "nullishCoalescingOperator",
-  esproposal_optional_chaining: "optionalChaining",
   types: "flowComments",
   intern_comments: false,
 };
@@ -20,17 +15,7 @@ const flowOptionsMapping = {
 function getPlugins(test) {
   const flowOptions = { all: true };
 
-  const plugins = [
-    "dynamicImport",
-    ["flow", flowOptions],
-    "flowComments",
-    "jsx",
-    "classProperties",
-    "classPrivateProperties",
-    "classPrivateMethods",
-    "bigInt",
-    "numericSeparator",
-  ];
+  const plugins = [["flow", flowOptions], "flowComments", "jsx"];
 
   if (!test.options) return plugins;
 
