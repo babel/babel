@@ -15,7 +15,11 @@ export const runParallel = buildParallelProcessTests(
   "babel-node",
   buildProcessTests(fixtureLoc, function (test, tmpDir) {
     test.binLoc = binLoc;
-    test.opts.env = { ...test.opts.env, BABEL_DISABLE_CACHE: true };
+    test.opts.env = {
+      ...test.opts.env,
+      BABEL_DISABLE_CACHE: true,
+      NODE_OPTIONS: "--trace-warnings",
+    };
     if (test.testName === "require") {
       writeFileSync(
         path.join(tmpDir, ".babelrc"),
