@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
-import type { Identifier } from "@babel/types";
+import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
 import { requeueComputedKeyAndDecorators } from "../../path/context.ts";
 
 const renameVisitor: Visitor<Renamer> = {
@@ -62,7 +62,8 @@ const renameVisitor: Visitor<Renamer> = {
   ) {
     if (path.isVariableDeclaration()) return;
     const ids = path.isAssignmentExpression()
-      ? path.getAssignmentIdentifiers()
+      ? // See https://github.com/babel/babel/issues/16694
+        getAssignmentIdentifiers(path.node)
       : path.getOuterBindingIdentifiers();
 
     for (const name in ids) {
