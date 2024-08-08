@@ -38,6 +38,9 @@
       "path": "../../packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
     },
     {
+      "path": "../../packages/babel-plugin-proposal-regexp-modifiers"
+    },
+    {
       "path": "../../packages/babel-plugin-syntax-import-assertions"
     },
     {

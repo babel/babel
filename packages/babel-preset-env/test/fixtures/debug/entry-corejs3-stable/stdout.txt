@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-regexp-modifiers { ie }
   transform-duplicate-named-capturing-groups-regex { ie }
   transform-unicode-sets-regex { ie }
   transform-class-static-block { ie }
