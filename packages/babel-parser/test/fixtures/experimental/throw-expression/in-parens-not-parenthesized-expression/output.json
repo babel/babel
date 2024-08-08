@@ -1,0 +1,136 @@
+{
+  "type": "File",
+  "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":16,"index":81}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":16,"index":81}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "test": {
+          "type": "UnaryExpression",
+          "start":4,"end":11,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":11,"index":11}},
+          "operator": "throw",
+          "prefix": true,
+          "argument": {
+            "type": "NumericLiteral",
+            "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        },
+        "consequent": {
+          "type": "EmptyStatement",
+          "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}}
+        },
+        "alternate": null
+      },
+      {
+        "type": "WhileStatement",
+        "start":14,"end":30,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":16,"index":30}},
+        "test": {
+          "type": "UnaryExpression",
+          "start":21,"end":28,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":14,"index":28}},
+          "operator": "throw",
+          "prefix": true,
+          "argument": {
+            "type": "NumericLiteral",
+            "start":27,"end":28,"loc":{"start":{"line":2,"column":13,"index":27},"end":{"line":2,"column":14,"index":28}},
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
+          }
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":29,"end":30,"loc":{"start":{"line":2,"column":15,"index":29},"end":{"line":2,"column":16,"index":30}}
+        }
+      },
+      {
+        "type": "DoWhileStatement",
+        "start":31,"end":51,"loc":{"start":{"line":3,"column":0,"index":31},"end":{"line":3,"column":20,"index":51}},
+        "body": {
+          "type": "EmptyStatement",
+          "start":33,"end":34,"loc":{"start":{"line":3,"column":2,"index":33},"end":{"line":3,"column":3,"index":34}}
+        },
+        "test": {
+          "type": "UnaryExpression",
+          "start":42,"end":49,"loc":{"start":{"line":3,"column":11,"index":42},"end":{"line":3,"column":18,"index":49}},
+          "operator": "throw",
+          "prefix": true,
+          "argument": {
+            "type": "NumericLiteral",
+            "start":48,"end":49,"loc":{"start":{"line":3,"column":17,"index":48},"end":{"line":3,"column":18,"index":49}},
+            "extra": {
+              "rawValue": 3,
+              "raw": "3"
+            },
+            "value": 3
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":52,"end":64,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":12,"index":64}},
+        "expression": {
+          "type": "CallExpression",
+          "start":52,"end":63,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":11,"index":63}},
+          "callee": {
+            "type": "Identifier",
+            "start":52,"end":54,"loc":{"start":{"line":4,"column":0,"index":52},"end":{"line":4,"column":2,"index":54},"identifierName":"fn"},
+            "name": "fn"
+          },
+          "arguments": [
+            {
+              "type": "UnaryExpression",
+              "start":55,"end":62,"loc":{"start":{"line":4,"column":3,"index":55},"end":{"line":4,"column":10,"index":62}},
+              "operator": "throw",
+              "prefix": true,
+              "argument": {
+                "type": "NumericLiteral",
+                "start":61,"end":62,"loc":{"start":{"line":4,"column":9,"index":61},"end":{"line":4,"column":10,"index":62}},
+                "extra": {
+                  "rawValue": 4,
+                  "raw": "4"
+                },
+                "value": 4
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":65,"end":81,"loc":{"start":{"line":5,"column":0,"index":65},"end":{"line":5,"column":16,"index":81}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":65,"end":80,"loc":{"start":{"line":5,"column":0,"index":65},"end":{"line":5,"column":15,"index":80}},
+          "source": {
+            "type": "UnaryExpression",
+            "start":72,"end":79,"loc":{"start":{"line":5,"column":7,"index":72},"end":{"line":5,"column":14,"index":79}},
+            "operator": "throw",
+            "prefix": true,
+            "argument": {
+              "type": "NumericLiteral",
+              "start":78,"end":79,"loc":{"start":{"line":5,"column":13,"index":78},"end":{"line":5,"column":14,"index":79}},
+              "extra": {
+                "rawValue": 5,
+                "raw": "5"
+              },
+              "value": 5
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
