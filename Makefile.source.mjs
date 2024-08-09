@@ -57,7 +57,7 @@ function exec(executable, args, cwd, inheritStdio = true, noExit = false) {
         )
       );
       if (!noExit) {
-        // eslint-disable-next-line no-process-exit
+        // eslint-disable-next-line n/no-process-exit
         process.exit(error.exitCode);
       }
     }
@@ -401,7 +401,7 @@ function eslint(...extraArgs) {
         err = e;
       }
     }
-    // eslint-disable-next-line no-process-exit
+    // eslint-disable-next-line n/no-process-exit
     if (err) process.exit(err.exitCode);
   }
 }
@@ -543,7 +543,7 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     `.trim()
     );
-    // eslint-disable-next-line no-process-exit
+    // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   }
 };

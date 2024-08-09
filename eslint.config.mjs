@@ -1,8 +1,11 @@
 // @ts-check
 
-import configInternal from "@babel/eslint-config-internal";
+import babelParser from "@babel/eslint-parser/experimental-worker";
+import globals from "globals";
+import js from "@eslint/js";
 // @ts-expect-error no types
 import pluginImport from "eslint-plugin-import";
+import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
@@ -11,13 +14,9 @@ import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-int
 import typescriptEslint from "typescript-eslint";
 import { commonJS } from "$repo-utils";
 
-const { __dirname, require } = commonJS(import.meta.url);
+const { require } = commonJS(import.meta.url);
 
-import { FlatCompat } from "@eslint/eslintrc";
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+const recommendedConfig = js.configs.recommended;
 
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
 
@@ -33,8 +32,6 @@ const sourceFiles = exts => [
 ];
 
 export default [
-  ...configInternal,
-  pluginRegexp.configs["flat/recommended"],
   {
     ignores: [
       "/lib",
@@ -68,6 +65,40 @@ export default [
       ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
   },
+  recommendedConfig,
+  pluginRegexp.configs["flat/recommended"],
+  {
+    languageOptions: {
+      parser: babelParser,
+      parserOptions: {
+        sourceType: "module",
+        requireConfigFile: false,
+        babelOptions: {
+          babelrc: false,
+          configFile: false,
+          // Todo: Remove the parserOpts here after the proposal gets stage 4.
+          parserOpts: {
+            plugins: ["importAssertions"],
+          },
+        },
+      },
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+    rules: {
+      curly: ["error", "multi-line"],
+      eqeqeq: ["error", "smart"],
+      "linebreak-style": ["error", "unix"],
+      "no-case-declarations": "error",
+      "no-confusing-arrow": "error",
+      "no-empty": ["error", { allowEmptyCatch: true }],
+      "no-unused-vars": ["error", { caughtErrors: "none" }],
+      "no-var": "error",
+      "prefer-const": "error",
+    },
+  },
   {
     plugins: {
       import: pluginImport,
@@ -77,6 +108,7 @@ export default [
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
     rules: {
+      "n/no-process-exit": "error",
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
@@ -206,48 +238,44 @@ export default [
       ],
     },
   },
-  ...compat.extends("plugin:jest/recommended").map(config => {
-    if (config.files == null) {
-      config.files = [
-        ...testFiles,
-        "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
-        "test/**/*.js",
-      ];
-    }
-    if (config.rules != null) {
-      config.rules = {
-        ...config.rules,
-        "jest/expect-expect": "off",
-        "jest/no-standalone-expect": [
-          "error",
-          {
-            additionalTestBlockFunctions: [
-              "itBabel7",
-              "itBabel7NoESM",
-              "itBabel7NodeGte14NoESM",
-              "itBabel8",
-              "itESLint7",
-              "itESLint8",
-              "itNoESM",
-              "itNoWin32",
-              "itESM",
-              "nodeGte8",
-              "nodeGte12",
-              "nodeGte20",
-              "nodeGte12NoESM",
-              "testFn",
-            ],
-          },
-        ],
-        "jest/no-test-callback": "off",
-        "jest/valid-describe": "off",
-        "import/extensions": ["error", "always"],
-        "import/no-extraneous-dependencies": "off",
-        "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
-      };
-    }
-    return config;
-  }),
+  {
+    files: [
+      ...testFiles,
+      "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
+      "test/**/*.js",
+    ],
+    ...pluginJest.configs["flat/recommended"],
+    rules: {
+      ...pluginJest.configs["flat/recommended"].rules,
+      "jest/expect-expect": "off",
+      "jest/no-standalone-expect": [
+        "error",
+        {
+          additionalTestBlockFunctions: [
+            "itBabel7",
+            "itBabel7NoESM",
+            "itBabel7NodeGte14NoESM",
+            "itBabel8",
+            "itESLint7",
+            "itESLint8",
+            "itNoESM",
+            "itNoWin32",
+            "itESM",
+            "nodeGte8",
+            "nodeGte12",
+            "nodeGte20",
+            "nodeGte12NoESM",
+            "testFn",
+          ],
+        },
+      ],
+      "jest/no-test-callback": "off",
+      "jest/valid-describe": "off",
+      "import/extensions": ["error", "always"],
+      "import/no-extraneous-dependencies": "off",
+      "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
+    },
+  },
   {
     files: testFiles,
     rules: {

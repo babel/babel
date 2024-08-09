@@ -401,17 +401,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-config-internal@workspace:^, @babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal":
-  version: 0.0.0-use.local
-  resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
-  dependencies:
-    "@eslint/js": "npm:^9.7.0"
-    globals: "npm:^15.6.0"
-  peerDependencies:
-    "@babel/eslint-parser": ^7.16.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/eslint-parser@workspace:^, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
@@ -495,7 +484,7 @@ __metadata:
     dedent: "npm:^1.5.3"
     eslint: "npm:^9.7.0"
     eslint-plugin-import: "npm:^2.25.4"
-    globals: "npm:^15.6.0"
+    globals: "npm:^15.9.0"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
   languageName: unknown
   linkType: soft
@@ -2572,7 +2561,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/traverse": "workspace:^"
-    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
+    globals: "condition:BABEL_8_BREAKING ? ^15.9.0 : ^11.1.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -4398,7 +4387,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
     debug: "npm:^4.3.1"
-    globals: "condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0"
+    globals: "condition:BABEL_8_BREAKING ? ^15.9.0 : ^11.1.0"
   languageName: unknown
   linkType: soft
 
@@ -4544,23 +4533,6 @@ __metadata:
     debug: "npm:^4.3.1"
     minimatch: "npm:^3.1.2"
   checksum: 10/4609b94519cd63ed1aba1429a53c0eb3cb5585056ffaa10184f0b7b91ceaed7ed5e625da3b5b4ffcc9b9093be8d6be7fc46111885936d6543890efb016aa303f
-  languageName: node
-  linkType: hard
-
-"@eslint/eslintrc@npm:^2.1.4":
-  version: 2.1.4
-  resolution: "@eslint/eslintrc@npm:2.1.4"
-  dependencies:
-    ajv: "npm:^6.12.4"
-    debug: "npm:^4.3.2"
-    espree: "npm:^9.6.0"
-    globals: "npm:^13.19.0"
-    ignore: "npm:^5.2.0"
-    import-fresh: "npm:^3.2.1"
-    js-yaml: "npm:^4.1.0"
-    minimatch: "npm:^3.1.2"
-    strip-json-comments: "npm:^3.1.1"
-  checksum: 10/7a3b14f4b40fc1a22624c3f84d9f467a3d9ea1ca6e9a372116cb92507e485260359465b58e25bcb6c9981b155416b98c9973ad9b796053fd7b3f776a6946bce8
   languageName: node
   linkType: hard
 
@@ -6364,7 +6336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.11.3, acorn@npm:^8.12.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
+"acorn@npm:^8.11.3, acorn@npm:^8.12.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.2":
   version: 8.12.1
   resolution: "acorn@npm:8.12.1"
   bin:
@@ -7112,7 +7084,6 @@ __metadata:
     $repo-utils: "link:./scripts/repo-utils"
     "@babel/cli": "npm:8.0.0-alpha.12"
     "@babel/core": "npm:8.0.0-alpha.12"
-    "@babel/eslint-config-internal": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
     "@babel/eslint-plugin-development": "workspace:^"
     "@babel/eslint-plugin-development-internal": "workspace:^"
@@ -7126,7 +7097,7 @@ __metadata:
     "@babel/preset-typescript": "npm:8.0.0-alpha.12"
     "@babel/runtime": "npm:8.0.0-alpha.12"
     "@cspotcode/source-map-support": "npm:^0.8.1"
-    "@eslint/eslintrc": "npm:^2.1.4"
+    "@eslint/js": "npm:^9.7.0"
     "@rollup/plugin-babel": "npm:^6.0.4"
     "@rollup/plugin-commonjs": "npm:^25.0.7"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -7150,6 +7121,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^2.6.0"
     execa: "npm:^9.0.0"
     glob: "npm:^10.3.10"
+    globals: "npm:^15.9.0"
     gulp: "npm:^5.0.0"
     gulp-plumber: "npm:^1.2.1"
     husky: "npm:^9.0.11"
@@ -9456,17 +9428,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"espree@npm:^9.6.0":
-  version: 9.6.1
-  resolution: "espree@npm:9.6.1"
-  dependencies:
-    acorn: "npm:^8.9.0"
-    acorn-jsx: "npm:^5.3.2"
-    eslint-visitor-keys: "npm:^3.4.1"
-  checksum: 10/255ab260f0d711a54096bdeda93adff0eadf02a6f9b92f02b323e83a2b7fc258797919437ad331efec3930475feb0142c5ecaaf3cdab4befebd336d47d3f3134
-  languageName: node
-  linkType: hard
-
 "esprima@npm:^4.0.0":
   version: 4.0.1
   resolution: "esprima@npm:4.0.1"
@@ -10541,29 +10502,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals-BABEL_8_BREAKING-true@npm:globals@^15.6.0, globals@npm:^15.0.0, globals@npm:^15.6.0":
-  version: 15.6.0
-  resolution: "globals@npm:15.6.0"
-  checksum: 10/9b522b1eff444acaf331b0da7f072d5ef75b1cde02d89b3656039252f01b6bcda7a9ea42128e8644117c0ede9116249b1bcf830458b7dbe19fafd4de916a3dc0
+"globals-BABEL_8_BREAKING-true@npm:globals@^15.9.0, globals@npm:^15.0.0, globals@npm:^15.6.0, globals@npm:^15.9.0":
+  version: 15.9.0
+  resolution: "globals@npm:15.9.0"
+  checksum: 10/19bca70131c5d3e0d4171deed0f8ae16adda19f18d39b67421056f1eaa160b4433c3ffc8eb69b8b19adebbbdad4834d8a0494c5fe1ae295f0f769a5c0331d794
   languageName: node
   linkType: hard
 
-"globals@condition:BABEL_8_BREAKING ? ^15.6.0 : ^11.1.0":
-  version: 0.0.0-condition-14f002
-  resolution: "globals@condition:BABEL_8_BREAKING?^15.6.0:^11.1.0#14f002"
+"globals@condition:BABEL_8_BREAKING ? ^15.9.0 : ^11.1.0":
+  version: 0.0.0-condition-77b062
+  resolution: "globals@condition:BABEL_8_BREAKING?^15.9.0:^11.1.0#77b062"
   dependencies:
     globals-BABEL_8_BREAKING-false: "npm:globals@^11.1.0"
-    globals-BABEL_8_BREAKING-true: "npm:globals@^15.6.0"
-  checksum: 10/fff1013d11c1ad3ef9ee549840751654ed316de5b7a98b314e2d6555c9d0b697fb834dda75ab6690dcb180aa429193b76db8f028a85412bc7b65623e6b19d0dd
-  languageName: node
-  linkType: hard
-
-"globals@npm:^13.19.0":
-  version: 13.24.0
-  resolution: "globals@npm:13.24.0"
-  dependencies:
-    type-fest: "npm:^0.20.2"
-  checksum: 10/62c5b1997d06674fc7191d3e01e324d3eda4d65ac9cc4e78329fa3b5c4fd42a0e1c8722822497a6964eee075255ce21ccf1eec2d83f92ef3f06653af4d0ee28e
+    globals-BABEL_8_BREAKING-true: "npm:globals@^15.9.0"
+  checksum: 10/259623872ad29a07632303ec7e1ac2bfe12dc3903c085d2d51800845b562aed93d483fb27045564faa16832fd2122f35c90af51b665293b81a647b5b219f3164
   languageName: node
   linkType: hard
 
@@ -16601,13 +16553,6 @@ __metadata:
   version: 4.0.8
   resolution: "type-detect@npm:4.0.8"
   checksum: 10/5179e3b8ebc51fce1b13efb75fdea4595484433f9683bbc2dca6d99789dba4e602ab7922d2656f2ce8383987467f7770131d4a7f06a26287db0615d2f4c4ce7d
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "type-fest@npm:0.20.2"
-  checksum: 10/8907e16284b2d6cfa4f4817e93520121941baba36b39219ea36acfe64c86b9dbc10c9941af450bd60832c8f43464974d51c0957f9858bc66b952b66b6914cbb9
   languageName: node
   linkType: hard
 
