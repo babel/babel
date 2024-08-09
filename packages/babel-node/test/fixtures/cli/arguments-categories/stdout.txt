@@ -1,0 +1,4 @@
+Transformed: original => original instanceof 2
+argv: [ '--expose-gc-as=gc2', '--config-file', './config.json', 'bar' ]
+gc: function
+gc2: undefined
