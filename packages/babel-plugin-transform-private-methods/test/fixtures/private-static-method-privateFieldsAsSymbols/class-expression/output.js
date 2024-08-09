@@ -1,9 +1,9 @@
 var _A, _foo;
-console.log((_foo = Symbol("foo"), (_A = class A {
+console.log((_foo = Symbol("foo"), _A = class A {
   method() {
     babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
   }
 }, Object.defineProperty(_A, _foo, {
   value: _foo2
-}), _A)));
+}), _A));
 function _foo2() {}

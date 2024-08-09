@@ -11,9 +11,9 @@ let A = (_class = /*#__PURE__*/function () {
     key: Symbol.search,
     value: function () {}
   }]);
-}(), (_descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
+}(), _descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "a", [dec], {
   configurable: true,
   enumerable: true,
   writable: true,
   initializer: null
-})), _class);
+}), _class);

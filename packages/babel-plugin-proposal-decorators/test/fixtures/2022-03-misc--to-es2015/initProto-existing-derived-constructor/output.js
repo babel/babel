@@ -146,12 +146,12 @@
       constructor() {
         var _Dummy2;
         let _initProto7, _noopDecs2, _ref3;
-        new (_ref3 = (_noopDecs2 = noop(log.push(_initProto6(super(11)).method())), "noop"), (_Dummy2 = class Dummy extends B {
+        new (_ref3 = (_noopDecs2 = noop(log.push(_initProto6(super(11)).method())), "noop"), _Dummy2 = class Dummy extends B {
           constructor() {
             log.push(_initProto7(super(12)).method());
           }
           [_ref3]() {}
-        }, [_initProto7] = babelHelpers.applyDecs2203R(_Dummy2, [[_noopDecs2, 2, "noop"]], []).e, _Dummy2))();
+        }, [_initProto7] = babelHelpers.applyDecs2203R(_Dummy2, [[_noopDecs2, 2, "noop"]], []).e, _Dummy2)();
       }
       method() {
         return this.a;

@@ -26,7 +26,7 @@ function noopFactory() {
     constructor() {
       _init_extra_p2(this);
     }
-    [(_computedKey3 = ("a1", ("b1", "b2")), _pDecs2 = noopFactory(1), _computedKey3)]() {}
+    [(_computedKey3 = ("a1", "b1", "b2"), _pDecs2 = noopFactory(1), _computedKey3)]() {}
     #p = _init_p2(this);
   }
   expect(new C()).toHaveProperty("b2");
