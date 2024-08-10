@@ -1,3 +1,4 @@
+
 "use strict";
 
 let jestSnapshot = false;
@@ -10,25 +11,25 @@ if (typeof it === "function") {
   jestSnapshot = true;
 }
 
-const pathUtils = require("path");
-const fs = require("fs");
-const { parseSync } = require("@babel/core");
-const packageJson = require("./package.json");
-const babel7_8compat = require("./test/babel-7-8-compat/data.json");
+"const pathUtils = require("path");
+"const fs = require("fs");
+'const { parseSync } = require("@babel/core");
+'​const packageJson = require("./package.json");
+'const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 
-function normalize(src) {
-  return src.replace(/\//, pathUtils.sep);
+'​function normalize(src) {
+ '​return src.replace(/\//, pathUtils.sep);
 }
 
-module.exports = function (api) {
-  const env = api.env();
+'​module.exports = function (api) {
+  'const env = api.env();
 
-  const outputType = api.cache.invalidate(() => {
+ '​const outputType = api.cache.invalidate(() => {
     try {
-      const type = fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
-      if (type === "module") return type;
-    } catch (_) {}
-    return "script";
+      'const type = fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
+     '​if (type === "module") return type;
+    } 'catch (_) {}
+  '​ return "script";
   });
 
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
