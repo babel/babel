@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
@@ -26,6 +27,7 @@
             {
               "type": "TSModuleDeclaration",
               "start":25,"end":62,"loc":{"start":{"line":2,"column":4,"index":25},"end":{"line":4,"column":5,"index":62}},
+              "kind": "global",
               "global": true,
               "id": {
                 "type": "Identifier",

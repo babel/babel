@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":0,"end":72,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":72}},
+        "kind": "namespace",
         "id": {
           "type": "Identifier",
           "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"A"},
@@ -22,6 +23,7 @@
             {
               "type": "TSModuleDeclaration",
               "start":26,"end":70,"loc":{"start":{"line":2,"column":4,"index":26},"end":{"line":4,"column":5,"index":70}},
+              "kind": "namespace",
               "id": {
                 "type": "Identifier",
                 "start":36,"end":37,"loc":{"start":{"line":2,"column":14,"index":36},"end":{"line":2,"column":15,"index":37},"identifierName":"B"},

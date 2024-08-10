@@ -2015,6 +2015,7 @@ export interface TSModuleDeclaration extends BaseNode {
   body: TSModuleBlock | TSModuleDeclaration;
   declare?: boolean | null;
   global?: boolean | null;
+  kind: "global" | "module" | "namespace";
 }
 
 export interface TSModuleBlock extends BaseNode {

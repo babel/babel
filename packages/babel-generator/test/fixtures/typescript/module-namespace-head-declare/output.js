@@ -1,4 +1,4 @@
 declare namespace N.M {}
-declare namespace M {}
+declare module M {}
 declare module "m" {}
 declare global {}
