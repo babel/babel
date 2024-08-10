@@ -423,15 +423,22 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   }
 
   this.token("[");
-  this.word(
-    !process.env.BABEL_8_BREAKING
-      ? (typeParameter.name as unknown as string)
-      : (typeParameter.name as unknown as t.Identifier).name,
-  );
+  if (process.env.BABEL_8_BREAKING) {
+    // @ts-expect-error Babel 8 AST shape
+    this.word(node.key.name);
+  } else {
+    this.word(typeParameter.name);
+  }
+
   this.space();
   this.word("in");
   this.space();
-  this.print(typeParameter.constraint, typeParameter);
+  if (process.env.BABEL_8_BREAKING) {
+    // @ts-expect-error Babel 8 AST shape
+    this.print(node.constraint, node);
+  } else {
+    this.print(typeParameter.constraint, typeParameter);
+  }
 
   if (nameType) {
     this.space();

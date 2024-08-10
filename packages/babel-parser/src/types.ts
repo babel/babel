@@ -1705,8 +1705,9 @@ export interface TsIndexedAccessType extends TsTypeBase {
 
 export interface TsMappedType extends TsTypeBase {
   type: "TSMappedType";
+  key: Identifier;
+  constraint: TsType;
   readonly?: true | "+" | "-";
-  typeParameter: TsTypeParameter;
   optional?: true | "+" | "-";
   typeAnnotation: TsType | undefined | null;
   nameType: TsType | undefined | null;
