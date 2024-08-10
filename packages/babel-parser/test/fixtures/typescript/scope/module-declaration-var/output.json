@@ -26,6 +26,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":22,"end":69,"loc":{"start":{"line":3,"column":0,"index":22},"end":{"line":5,"column":1,"index":69}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":37,"end":42,"loc":{"start":{"line":3,"column":15,"index":37},"end":{"line":3,"column":20,"index":42}},

@@ -3241,6 +3241,7 @@ export function tsModuleDeclaration(
     type: "TSModuleDeclaration",
     id,
     body,
+    kind: null,
   };
   const defs = NODE_FIELDS.TSModuleDeclaration;
   validate(defs.id, node, "id", id, 1);

@@ -1774,6 +1774,7 @@ export interface TsEnumMember extends NodeBase {
 
 export interface TsModuleDeclaration extends DeclarationBase {
   type: "TSModuleDeclaration";
+  kind: "global" | "module" | "namespace";
   global?: true; // In TypeScript, this is only available through `node.flags`.,
   id: TsModuleName;
   body: TsNamespaceBody;

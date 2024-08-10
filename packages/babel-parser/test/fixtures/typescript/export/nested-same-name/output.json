@@ -48,6 +48,7 @@
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":27,"end":66,"loc":{"start":{"line":2,"column":7,"index":27},"end":{"line":4,"column":1,"index":66}},
+          "kind": "namespace",
           "id": {
             "type": "Identifier",
             "start":37,"end":38,"loc":{"start":{"line":2,"column":17,"index":37},"end":{"line":2,"column":18,"index":38},"identifierName":"N"},

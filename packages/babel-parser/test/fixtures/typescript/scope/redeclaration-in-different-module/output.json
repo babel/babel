@@ -30,6 +30,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":121,"end":335,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":11,"column":1,"index":335}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":136,"end":142,"loc":{"start":{"line":4,"column":15,"index":136},"end":{"line":4,"column":21,"index":142}},
@@ -218,6 +219,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":337,"end":507,"loc":{"start":{"line":13,"column":0,"index":337},"end":{"line":18,"column":1,"index":507}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":352,"end":368,"loc":{"start":{"line":13,"column":15,"index":352},"end":{"line":13,"column":31,"index":368}},
