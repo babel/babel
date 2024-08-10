@@ -1700,19 +1700,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseHeritageClause(
       token: "extends" | "implements",
-    ): Array<N.TsExpressionWithTypeArguments> {
+    ): Array<N.TSClassImplements> {
       const originalStartLoc = this.state.startLoc;
 
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const node = this.startNode<N.TsExpressionWithTypeArguments>();
+          const node = this.startNode<N.TSClassImplements>();
           node.expression = this.tsParseEntityName();
           if (this.match(tt.lt)) {
             node.typeParameters = this.tsParseTypeArguments();
           }
 
-          return this.finishNode(node, "TSExpressionWithTypeArguments");
+          return this.finishNode(
+            node,
+            // @ts-expect-error Babel 7 vs Babel 8
+            process.env.BABEL_8_BREAKING
+              ? "TSClassImplements"
+              : "TSExpressionWithTypeArguments",
+          );
         },
       );
 

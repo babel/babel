@@ -2297,6 +2297,16 @@ export function isTSLiteralType(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isTSClassImplements(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.TSClassImplements> | null,
+): node is t.TSClassImplements {
+  if (!node) return false;
+
+  if (node.type !== "TSClassImplements") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isTSExpressionWithTypeArguments(
   node: t.Node | null | undefined,
   opts?: Opts<t.TSExpressionWithTypeArguments> | null,
@@ -3797,6 +3807,7 @@ export function isTypeScript(
     case "TSIndexedAccessType":
     case "TSMappedType":
     case "TSLiteralType":
+    case "TSClassImplements":
     case "TSExpressionWithTypeArguments":
     case "TSInterfaceDeclaration":
     case "TSInterfaceBody":
@@ -3885,6 +3896,7 @@ export function isTSType(
     case "TSIndexedAccessType":
     case "TSMappedType":
     case "TSLiteralType":
+    case "TSClassImplements":
     case "TSExpressionWithTypeArguments":
     case "TSImportType":
       break;

@@ -867,11 +867,7 @@ export interface ClassBase extends HasDecorators {
   typeParameters?: TypeParameterDeclarationBase | null;
   superTypeParameters?: TypeParameterInstantiationBase | null;
   abstract?: boolean;
-  implements?:
-    | TsExpressionWithTypeArguments[]
-    | undefined
-    | null
-    | FlowClassImplements[];
+  implements?: TSClassImplements[] | undefined | null | FlowClassImplements[];
 }
 
 export interface ClassBody extends NodeBase {
@@ -1735,7 +1731,7 @@ export interface TsInterfaceDeclaration extends DeclarationBase {
   id: Identifier | undefined | null;
   typeParameters: TsTypeParameterDeclaration | undefined | null;
   // TS uses "heritageClauses", but want this to resemble ClassBase.
-  extends?: TsExpressionWithTypeArguments[];
+  extends?: TSClassImplements[];
   body: TSInterfaceBody;
 }
 
@@ -1744,8 +1740,8 @@ export interface TSInterfaceBody extends NodeBase {
   body: TsTypeElement[];
 }
 
-export interface TsExpressionWithTypeArguments extends TsTypeBase {
-  type: "TSExpressionWithTypeArguments";
+export interface TSClassImplements extends TsTypeBase {
+  type: "TSClassImplements";
   expression: TsEntityName;
   typeParameters?: TsTypeParameterInstantiation;
 }
@@ -2055,7 +2051,7 @@ export type Node =
   | TsEnumDeclaration
   | TsEnumMember
   | TsExportAssignment
-  | TsExpressionWithTypeArguments
+  | TSClassImplements
   | TsExternalModuleReference
   | TsFunctionType
   | TsImportEqualsDeclaration

@@ -237,6 +237,7 @@ export {
   tsIndexedAccessType as TSIndexedAccessType,
   tsMappedType as TSMappedType,
   tsLiteralType as TSLiteralType,
+  tsClassImplements as TSClassImplements,
   tsExpressionWithTypeArguments as TSExpressionWithTypeArguments,
   tsInterfaceDeclaration as TSInterfaceDeclaration,
   tsInterfaceBody as TSInterfaceBody,

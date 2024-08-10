@@ -2294,6 +2294,17 @@ export function tsLiteralType(
   });
 }
 export { tsLiteralType as tSLiteralType };
+export function tsClassImplements(
+  expression: t.TSEntityName,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
+): t.TSClassImplements {
+  return validateNode<t.TSClassImplements>({
+    type: "TSClassImplements",
+    expression,
+    typeParameters,
+  });
+}
+export { tsClassImplements as tSClassImplements };
 export function tsExpressionWithTypeArguments(
   expression: t.TSEntityName,
   typeParameters: t.TSTypeParameterInstantiation | null = null,

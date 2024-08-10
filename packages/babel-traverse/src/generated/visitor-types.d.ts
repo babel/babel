@@ -180,6 +180,7 @@ export interface ExplVisitorBase<S> {
   TSBigIntKeyword?: ExplVisitNode<S, t.TSBigIntKeyword>;
   TSBooleanKeyword?: ExplVisitNode<S, t.TSBooleanKeyword>;
   TSCallSignatureDeclaration?: ExplVisitNode<S, t.TSCallSignatureDeclaration>;
+  TSClassImplements?: ExplVisitNode<S, t.TSClassImplements>;
   TSConditionalType?: ExplVisitNode<S, t.TSConditionalType>;
   TSConstructSignatureDeclaration?: ExplVisitNode<
     S,
@@ -449,6 +450,7 @@ export interface VisitorBaseNodes<S> {
   TSBigIntKeyword?: VisitNode<S, t.TSBigIntKeyword>;
   TSBooleanKeyword?: VisitNode<S, t.TSBooleanKeyword>;
   TSCallSignatureDeclaration?: VisitNode<S, t.TSCallSignatureDeclaration>;
+  TSClassImplements?: VisitNode<S, t.TSClassImplements>;
   TSConditionalType?: VisitNode<S, t.TSConditionalType>;
   TSConstructSignatureDeclaration?: VisitNode<
     S,

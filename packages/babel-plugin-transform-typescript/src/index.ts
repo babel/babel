@@ -17,7 +17,9 @@ import transpileNamespace from "./namespace.ts";
 function isInType(path: NodePath) {
   switch (path.parent.type) {
     case "TSTypeReference":
-    case "TSExpressionWithTypeArguments":
+    case process.env.BABEL_8_BREAKING
+      ? "TSClassImplements"
+      : "TSExpressionWithTypeArguments":
     case "TSTypeQuery":
       return true;
     case "TSQualifiedName":
@@ -677,7 +679,7 @@ export default declare((api, opts: Options) => {
           api.types.tsInstantiationExpression
           ? "TSNonNullExpression|TSInstantiationExpression"
           : "TSNonNullExpression"](
-        path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
+        path: NodePath<t.TSNonNullExpression | t.TSInstantiationExpression>,
       ) {
         path.replaceWith(path.node.expression);
       },

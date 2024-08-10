@@ -591,6 +591,9 @@ export interface NodePathAssertions {
   assertTSCallSignatureDeclaration(
     opts?: Opts<t.TSCallSignatureDeclaration>,
   ): asserts this is NodePath<t.TSCallSignatureDeclaration>;
+  assertTSClassImplements(
+    opts?: Opts<t.TSClassImplements>,
+  ): asserts this is NodePath<t.TSClassImplements>;
   assertTSConditionalType(
     opts?: Opts<t.TSConditionalType>,
   ): asserts this is NodePath<t.TSConditionalType>;

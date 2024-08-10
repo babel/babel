@@ -2868,7 +2868,7 @@
         },
         "extends": [
           {
-            "type": "TSExpressionWithTypeArguments",
+            "type": "TSClassImplements",
             "start":2348,"end":2357,"loc":{"start":{"line":129,"column":40,"index":2348},"end":{"line":129,"column":49,"index":2357}},
             "expression": {
               "type": "Identifier",
