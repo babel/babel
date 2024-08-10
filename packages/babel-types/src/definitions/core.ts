@@ -1461,6 +1461,7 @@ defineType("ClassExpression", {
         assertValueType("array"),
         assertEach(
           assertNodeType(
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             process.env.BABEL_8_BREAKING
               ? "TSClassImplements"
               : "TSExpressionWithTypeArguments",
@@ -1527,6 +1528,7 @@ defineType("ClassDeclaration", {
         assertValueType("array"),
         assertEach(
           assertNodeType(
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             process.env.BABEL_8_BREAKING
               ? "TSClassImplements"
               : "TSExpressionWithTypeArguments",

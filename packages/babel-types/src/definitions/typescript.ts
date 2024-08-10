@@ -455,6 +455,7 @@ defineType("TSInterfaceDeclaration", {
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
     extends: validateOptional(
       arrayOfType(
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         process.env.BABEL_8_BREAKING
           ? "TSClassImplements"
           : "TSExpressionWithTypeArguments",
