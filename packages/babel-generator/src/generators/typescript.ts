@@ -413,7 +413,7 @@ export function TSIndexedAccessType(
 }
 
 export function TSMappedType(this: Printer, node: t.TSMappedType) {
-  const { nameType, optional, readonly, typeParameter, typeAnnotation } = node;
+  const { nameType, optional, readonly, typeAnnotation } = node;
   this.token("{");
   this.space();
   if (readonly) {
@@ -424,20 +424,22 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
 
   this.token("[");
   if (process.env.BABEL_8_BREAKING) {
-    // @ts-expect-error Babel 8 AST shape
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
     this.word(node.key.name);
   } else {
-    this.word(typeParameter.name);
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
+    this.word(node.typeParameter.name);
   }
 
   this.space();
   this.word("in");
   this.space();
   if (process.env.BABEL_8_BREAKING) {
-    // @ts-expect-error Babel 8 AST shape
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
     this.print(node.constraint, node);
   } else {
-    this.print(typeParameter.constraint, typeParameter);
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
+    this.print(node.typeParameter.constraint, node.typeParameter);
   }
 
   if (nameType) {
