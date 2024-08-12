@@ -303,6 +303,25 @@ target["prepublish-prepare-dts-no-clean"] = function () {
   target["build-typescript-legacy-typings"]();
   yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
   console.log("HERE!", process.exitCode);
+
+  let exitCode;
+  Object.defineProperty(process, "exitCode", {
+    set(v) {
+      console.trace("set exitCode", v);
+      exitCode = v;
+    },
+    get() {
+      return exitCode;
+    },
+  });
+  const exit = process.exit;
+  process.exit = function (code) {
+    console.trace("exit", code);
+    exit.call(this, code);
+  };
+  process.on("exit", code => {
+    console.trace(`About to exit with code: ${code}`);
+  });
 };
 
 target["tscheck"] = function () {
