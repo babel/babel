@@ -228,6 +228,7 @@ class Printer {
           // no semicolon
           return;
         }
+        this._catchUpTo(lastToken.loc.start);
       }
     }
     this._queue(charCodes.semicolon);
