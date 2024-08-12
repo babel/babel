@@ -862,9 +862,9 @@ describe("scope", () => {
         expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
       });
       it("in static block", () => {
-        const staticBlock = getPath("(class { static { var foo; } })", {
-          plugins: ["classStaticBlock"],
-        }).get("body.0.expression.body.body.0");
+        const staticBlock = getPath("(class { static { var foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
         expect(staticBlock.scope.hasOwnBinding("foo")).toBe(true);
       });
     });
@@ -950,9 +950,9 @@ describe("scope", () => {
         expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
       });
       it("in static block", () => {
-        const staticBlock = getPath("(class { static { let foo; } })", {
-          plugins: ["classStaticBlock"],
-        }).get("body.0.expression.body.body.0");
+        const staticBlock = getPath("(class { static { let foo; } })").get(
+          "body.0.expression.body.body.0",
+        );
         expect(staticBlock.scope.hasOwnBinding("foo")).toBe(true);
       });
       it("in block statement", () => {
