@@ -21,8 +21,10 @@ export default declare((api, options: Options) => {
     loose: options.loose,
 
     manipulateOptions(opts, parserOpts) {
-      // @ts-expect-error for old Babel
-      parserOpts.plugins.push("classProperties", "classPrivateProperties");
+      if (!process.env.BABEL_8_BREAKING) {
+        // @ts-ignore(Babel 7 vs Babel 8) These plugins have been removed
+        parserOpts.plugins.push("classProperties", "classPrivateProperties");
+      }
     },
   });
 });

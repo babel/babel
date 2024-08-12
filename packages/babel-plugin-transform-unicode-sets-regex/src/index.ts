@@ -9,8 +9,10 @@ export default declare(api => {
     name: "transform-unicode-sets-regex",
     feature: "unicodeSetsFlag",
     manipulateOptions(opts, parserOpts) {
-      // @ts-expect-error for old Babel
-      parserOpts.plugins.push("regexpUnicodeSets");
+      if (!process.env.BABEL_8_BREAKING) {
+        // @ts-ignore(Babel 7 vs Babel 8) This plugin has been removed
+        parserOpts.plugins.push("regexpUnicodeSets");
+      }
     },
   });
 });
