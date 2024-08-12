@@ -648,7 +648,9 @@ function buildRollupDts(packages) {
     build(
       "packages/babel-parser/typings/babel-parser.source.d.ts",
       "packages/babel-parser/typings/babel-parser.d.ts",
-      "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable @typescript-eslint/consistent-type-imports, prettier/prettier */",
+      "// This file is auto-generated! Do not modify it directly.\n" +
+        // @typescript-eslint/no-redundant-type-constituents can be removed once we drop the IF_BABEL_7 type
+        "/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents, prettier/prettier */",
       "packages/babel-parser"
     )
   );
