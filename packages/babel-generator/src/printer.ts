@@ -603,13 +603,13 @@ class Printer {
      */
     if (isLabel) {
       this._noLineTerminator = true;
-      this.print(node, parent);
+      this.print(node);
     } else {
       const terminatorState = {
         printed: false,
       };
       this._parenPushNewlineState = terminatorState;
-      this.print(node, parent);
+      this.print(node);
       /**
        * Print an ending parentheses if a starting one has been printed.
        */
@@ -623,7 +623,6 @@ class Printer {
 
   print(
     node: t.Node | null,
-    parent?: t.Node,
     noLineTerminatorAfter?: boolean,
     // trailingCommentsLineOffset also used to check if called from printJoin
     // it will be ignored if `noLineTerminatorAfter||this._noLineTerminator`
@@ -663,7 +662,7 @@ class Printer {
       );
     }
 
-    const oldNode = this._currentNode;
+    const parent = this._currentNode;
     this._currentNode = node;
 
     const oldInAux = this._insideAux;
@@ -736,7 +735,7 @@ class Printer {
     }
 
     // end
-    this._currentNode = oldNode;
+    this._currentNode = parent;
     format.concise = oldConcise;
     this._insideAux = oldInAux;
 
@@ -832,7 +831,7 @@ class Printer {
 
       if (opts.statement) this._printNewline(i === 0, newlineOpts);
 
-      this.print(node, parent, undefined, opts.trailingCommentsLineOffset || 0);
+      this.print(node, undefined, opts.trailingCommentsLineOffset || 0);
 
       opts.iterator?.(node, i);
 
@@ -857,10 +856,10 @@ class Printer {
     if (indent) this.dedent();
   }
 
-  printAndIndentOnComments(node: t.Node, parent: t.Node) {
+  printAndIndentOnComments(node: t.Node) {
     const indent = node.leadingComments && node.leadingComments.length > 0;
     if (indent) this.indent();
-    this.print(node, parent);
+    this.print(node);
     if (indent) this.dedent();
   }
 
@@ -871,7 +870,7 @@ class Printer {
       this.space();
     }
 
-    this.print(node, parent);
+    this.print(node);
   }
 
   _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
