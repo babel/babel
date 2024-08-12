@@ -26,7 +26,9 @@
     "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
+    "@babel/plugin-transform-typescript": "workspace:^",
     "@jridgewell/sourcemap-codec": "^1.4.15",
     "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"

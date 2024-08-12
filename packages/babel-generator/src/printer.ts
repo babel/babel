@@ -651,6 +651,11 @@ class Printer {
 
   _catchUpTo({ line, column }: Pos) {
     const count = line - this._buf.getCurrentLine();
+    if (count > 0 && this._noLineTerminator) {
+      // We cannot inject new lines when _noLineTemrinator is set
+      // to `true`, or we would generate invalid code.
+      return;
+    }
 
     for (let i = 0; i < count; i++) {
       this._newline();

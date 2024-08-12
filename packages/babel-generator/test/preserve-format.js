@@ -1,6 +1,8 @@
 import { parse } from "@babel/parser";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
+import * as babel from "@babel/core";
+import pluginTransformTypeScript from "@babel/plugin-transform-typescript";
 import { commonJS } from "$repo-utils";
 
 import _generate from "../lib/index.js";
@@ -15,55 +17,85 @@ function removeTrailingSemicolons(code) {
 }
 
 describe("preserveFormat", () => {
-  suites.forEach(testSuite => {
-    describe(`generation/${testSuite.title}`, () => {
-      testSuite.tests.forEach(function (task) {
-        if (task.options.throws) return;
+  describe("generation", () => {
+    suites.forEach(testSuite => {
+      describe(`${testSuite.title}`, () => {
+        testSuite.tests.forEach(function (task) {
+          if (task.options.throws) return;
 
-        const testFn = task.disabled ? it.skip : it;
+          const testFn = task.disabled ? it.skip : it;
 
-        testFn(task.title, () => {
-          const input = task.actual.code;
-          const parserOpts = {
-            filename: task.actual.loc,
-            plugins: task.options.plugins || [],
-            strictMode: task.options.strictMode === false ? false : true,
-            sourceType: "module",
-            ...task.options.parserOpts,
-            createParenthesizedExpressions: true,
-            tokens: true,
-          };
-          const ast = parse(input, parserOpts);
-          const options = {
-            sourceFileName: path.relative(__dirname, task.actual.loc),
-            ...task.options,
-            retainLines: true,
-            preserveFormat: true,
-            comments: true,
-            jsescOption: null,
-            // TODO: Disallow these when preserveFormat is used
-            minified: false,
-            compact: false,
-          };
+          testFn(task.title, () => {
+            const input = task.actual.code;
+            const parserOpts = {
+              filename: task.actual.loc,
+              plugins: task.options.plugins || [],
+              strictMode: task.options.strictMode === false ? false : true,
+              sourceType: "module",
+              ...task.options.parserOpts,
+              createParenthesizedExpressions: true,
+              tokens: true,
+            };
+            const ast = parse(input, parserOpts);
+            const options = {
+              sourceFileName: path.relative(__dirname, task.actual.loc),
+              ...task.options,
+              retainLines: true,
+              preserveFormat: true,
+              comments: true,
+              jsescOption: null,
+              // TODO: Disallow these when preserveFormat is used
+              minified: false,
+              compact: false,
+            };
 
-          const ok =
-            removeTrailingSemicolons(generate(ast, options).code) ===
-            removeTrailingSemicolons(input);
-          const shouldFail = FAILURES.some(f => task.actual.loc.endsWith(f));
+            const ok =
+              removeTrailingSemicolons(generate(ast, options).code) ===
+              removeTrailingSemicolons(input);
+            const shouldFail = FAILURES.some(f => task.actual.loc.endsWith(f));
 
-          if (!ok && shouldFail) {
-            expect(1).toBe(1);
-            return;
-          }
-          if (ok) {
-            expect(shouldFail).toBe(false);
-          }
+            if (!ok && shouldFail) {
+              expect(1).toBe(1);
+              return;
+            }
+            if (ok) {
+              expect(shouldFail).toBe(false);
+            }
 
-          expect(removeTrailingSemicolons(generate(ast, options).code)).toBe(
-            removeTrailingSemicolons(input),
-          );
+            expect(removeTrailingSemicolons(generate(ast, options).code)).toBe(
+              removeTrailingSemicolons(input),
+            );
+          });
         });
       });
+    });
+  });
+
+  describe("code transforms", () => {
+    it("type stripping with arrow functions", () => {
+      const input = `
+        const a = (x: string):
+                        number => 2 as const;
+      `;
+      const expected = `
+        const a = (x        )=>
+                                  2         ;
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [pluginTransformTypeScript],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
     });
   });
 });
