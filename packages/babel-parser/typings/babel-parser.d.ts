@@ -13,7 +13,7 @@ type Plugin =
   | IF_BABEL_7<"classPrivateProperties">
   | IF_BABEL_7<"classProperties">
   | IF_BABEL_7<"classStaticBlock">
-  | "decimal"
+  | IF_BABEL_7<"decimal">
   | "decorators-legacy"
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"

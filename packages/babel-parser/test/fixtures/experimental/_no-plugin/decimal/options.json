@@ -1,3 +1,4 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: \"decimal\". (1:2)"
+  "BABEL_8_BREAKING": true,
+  "throws": "Identifier directly after number. (1:2)"
 }

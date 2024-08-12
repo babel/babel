@@ -1,0 +1,4 @@
+{
+  "BABEL_8_BREAKING": false,
+  "throws": "This experimental syntax requires enabling the parser plugin: \"decimal\". (1:2)"
+}

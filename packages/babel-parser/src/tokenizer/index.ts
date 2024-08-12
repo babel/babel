@@ -1218,7 +1218,6 @@ export default abstract class Tokenizer extends CommentsParser {
     const startLoc = this.state.curPosition();
     let isFloat = false;
     let isBigInt = false;
-    let isDecimal = false;
     let hasExponent = false;
     let isOctal = false;
 
@@ -1280,13 +1279,14 @@ export default abstract class Tokenizer extends CommentsParser {
       isBigInt = true;
     }
 
-    if (next === charCodes.lowercaseM) {
+    if (!process.env.BABEL_8_BREAKING && next === charCodes.lowercaseM) {
       this.expectPlugin("decimal", this.state.curPosition());
       if (hasExponent || hasLeadingZero) {
         this.raise(Errors.InvalidDecimal, startLoc);
       }
       ++this.state.pos;
-      isDecimal = true;
+      // eslint-disable-next-line no-var
+      var isDecimal = true;
     }
 
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
@@ -1301,7 +1301,7 @@ export default abstract class Tokenizer extends CommentsParser {
       return;
     }
 
-    if (isDecimal) {
+    if (!process.env.BABEL_8_BREAKING && isDecimal) {
       this.finishToken(tt.decimal, str);
       return;
     }
