@@ -10,7 +10,6 @@ Using modules transform: auto
 Using plugins:
   transform-duplicate-named-capturing-groups-regex { firefox < 129 }
   transform-unicode-sets-regex { firefox < 116 }
-  bugfix/transform-v8-static-class-fields-redefine-readonly { firefox < 95 }
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   transform-class-static-block { firefox < 93 }
   syntax-private-property-in-object
