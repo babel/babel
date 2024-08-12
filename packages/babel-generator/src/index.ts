@@ -261,7 +261,12 @@ export default function generate(
   const format = normalizeOptions(code, opts);
   const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
 
-  const printer = new Printer(format, map, (ast as any).tokens);
+  const printer = new Printer(
+    format,
+    map,
+    (ast as any).tokens,
+    typeof code === "string" ? code : null,
+  );
 
   return printer.generate(ast);
 }

@@ -116,10 +116,16 @@ interface PrintListOptions {
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
-  constructor(format: Format, map: SourceMap, tokens?: Token[]) {
+  constructor(
+    format: Format,
+    map: SourceMap,
+    tokens?: Token[],
+    originalCode?: string,
+  ) {
     this.format = format;
 
     this._tokens = tokens;
+    this._originalCode = originalCode;
 
     this._indentRepeat = format.indent.style.length;
 
@@ -160,6 +166,7 @@ class Printer {
   tokenContext: number = 0;
 
   _tokens: Token[] = null;
+  _originalCode: string | null = null;
 
   declare _buf: Buffer;
   _currentNode: t.Node = null;
@@ -649,7 +656,7 @@ class Printer {
     if (pos != null) this._catchUpTo(pos);
   }
 
-  _catchUpTo({ line, column }: Pos) {
+  _catchUpTo({ line, column, index }: Pos) {
     const count = line - this._buf.getCurrentLine();
     if (count > 0 && this._noLineTerminator) {
       // We cannot inject new lines when _noLineTemrinator is set
@@ -661,11 +668,16 @@ class Printer {
       this._newline();
     }
 
-    if (count > 0) {
-      if (column > 0) this._append(" ".repeat(column), false);
-    } else {
-      const col = this._buf.getCurrentColumn();
-      if (column > col) this._append(" ".repeat(column - col), false);
+    const spacesCount =
+      count > 0 ? column : column - this._buf.getCurrentColumn();
+    if (spacesCount > 0) {
+      const spaces = this._originalCode
+        ? this._originalCode
+            .slice(index - spacesCount, index)
+            // https://tc39.es/ecma262/#sec-white-space
+            .replace(/[^\t\v\f\uFEFF\p{Space_Separator}]/gu, " ")
+        : " ".repeat(spacesCount);
+      this._append(spaces, false);
     }
   }
 

@@ -12,10 +12,6 @@ const { __dirname } = commonJS(import.meta.url);
 
 const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
 
-function removeTrailingSemicolons(code) {
-  return code.replace(/ +$/gm, "");
-}
-
 describe("preserveFormat", () => {
   describe("generation", () => {
     suites.forEach(testSuite => {
@@ -49,9 +45,7 @@ describe("preserveFormat", () => {
               compact: false,
             };
 
-            const ok =
-              removeTrailingSemicolons(generate(ast, options).code) ===
-              removeTrailingSemicolons(input);
+            const ok = generate(ast, options, input).code === input;
             const shouldFail = FAILURES.some(f => task.actual.loc.endsWith(f));
 
             if (!ok && shouldFail) {
@@ -62,9 +56,7 @@ describe("preserveFormat", () => {
               expect(shouldFail).toBe(false);
             }
 
-            expect(removeTrailingSemicolons(generate(ast, options).code)).toBe(
-              removeTrailingSemicolons(input),
-            );
+            expect(generate(ast, options, input).code).toBe(input);
           });
         });
       });
@@ -101,7 +93,6 @@ describe("preserveFormat", () => {
 });
 
 const FAILURES = [
-  "auto-indentation/hard-tab/input.js",
   "comments/decorators-after-export-to-before/input.js",
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
@@ -148,10 +139,6 @@ const FAILURES = [
   "importAttributesKeyword/attributes-with-to-with-legacy/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
-  "regression/comment-before-parentheses-return-arg/input.js",
-  "regression/comment-before-parentheses-return-arg-createParenthesizedExpressions/input.js",
-  "sourcemaps/comment-before-parentheses-return-arg/input.js",
-  "sourcemaps/comment-before-parentheses-return-arg-createParenthesizedExpressions/input.js",
   "sourcemaps/function-identifier-name/input.js",
   "sourcemaps/real-world-babel-file1/input.ts",
   "sourcemaps/real-world-babel-file2/input.ts",
@@ -167,7 +154,6 @@ const FAILURES = [
   "typescript/enum-members-reserved-words/input.js",
   "typescript/enum-members-strings/input.js",
   "typescript/export-declare/input.js",
-  "typescript/interface-property-named-public/input.js",
   "typescript/interface-separators/input.js",
   "typescript/module-namespace-head/input.js",
   "typescript/module-namespace-head-declare/input.js",
