@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, opera, opera_mobile, samsung }
+  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, opera < 112, opera_mobile, samsung }
   transform-unicode-sets-regex { samsung }
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   syntax-class-static-block

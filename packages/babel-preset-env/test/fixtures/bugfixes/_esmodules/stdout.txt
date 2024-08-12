@@ -17,7 +17,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, node, opera, opera_mobile, safari < 17.4, samsung }
+  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, node, opera < 112, opera_mobile, safari < 17.4, samsung }
   transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox < 116, ios < 17, node < 20, opera < 98, safari < 17, samsung }
   transform-class-static-block { android, chrome < 94, edge < 94, firefox < 93, ios < 16.4, node < 16.11, opera < 80, safari < 16.4, samsung < 17 }
   transform-private-property-in-object { android, chrome < 91, edge < 91, firefox < 90, ios < 15, node < 16.9, opera < 77, safari < 15, samsung < 16 }
