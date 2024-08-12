@@ -143,6 +143,7 @@ class Printer {
   _printedComments = new Set<t.Comment>();
   _endsWithInteger = false;
   _endsWithWord = false;
+  _endsWithDiv = false;
   _lastCommentLine = 0;
   _endsWithInnerRaw: boolean = false;
   _indentInnerComments: boolean = true;
@@ -234,7 +235,7 @@ class Printer {
     // prevent concatenating words and creating // comment out of division and regex
     if (
       this._endsWithWord ||
-      (str.charCodeAt(0) === charCodes.slash && this.endsWith(charCodes.slash))
+      (this._endsWithDiv && str.charCodeAt(0) === charCodes.slash)
     ) {
       this._space();
     }
@@ -427,6 +428,7 @@ class Printer {
 
     this._endsWithWord = false;
     this._endsWithInteger = false;
+    this._endsWithDiv = str === "/";
   }
 
   _appendChar(char: number): void {
@@ -437,6 +439,7 @@ class Printer {
 
     this._endsWithWord = false;
     this._endsWithInteger = false;
+    this._endsWithDiv = char === charCodes.slash;
   }
 
   _queue(char: number) {
@@ -1090,8 +1093,8 @@ class Printer {
       val = `/*${comment.value}*/`;
     }
 
-    // Avoid creating //* comments
-    if (this.endsWith(charCodes.slash)) this._space();
+    // Avoid converting a / operator into a line comment by appending /* to it
+    if (this._endsWithDiv) this._space();
 
     this.source("start", comment.loc);
     this._append(val, isBlockComment);
