@@ -426,9 +426,10 @@ class Printer {
 
     this._buf.append(str, maybeNewline);
 
+    // callers are expected to then set these to `true` when needed
     this._endsWithWord = false;
     this._endsWithInteger = false;
-    this._endsWithDiv = str === "/";
+    this._endsWithDiv = false;
   }
 
   _appendChar(char: number): void {
@@ -437,9 +438,10 @@ class Printer {
 
     this._buf.appendChar(char);
 
+    // callers are expected to then set these to `true` when needed
     this._endsWithWord = false;
     this._endsWithInteger = false;
-    this._endsWithDiv = char === charCodes.slash;
+    this._endsWithDiv = false;
   }
 
   _queue(char: number) {
