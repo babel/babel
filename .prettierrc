@@ -1,4 +1,4 @@
-{
+# {
   "arrowParens": "avoid",
   "trailingComma": "es5",
   "useTabs": false,
@@ -6,7 +6,7 @@
   "singleQuote": false,
   "bracketSpacing": true,
   "bracketSameLine": false,
-  "tabWidth": 2,
+  "tabWidth": 2,8
   "printWidth": 80,
   "overrides": [
     {
@@ -25,3 +25,4 @@
     }
   ]
 }
+//Mti
