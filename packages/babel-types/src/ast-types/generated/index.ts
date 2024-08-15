@@ -236,6 +236,7 @@ export type Node =
   | TSInstantiationExpression
   | TSInterfaceBody
   | TSInterfaceDeclaration
+  | TSInterfaceHeritage
   | TSIntersectionType
   | TSIntrinsicKeyword
   | TSLiteralType
@@ -1949,6 +1950,12 @@ export interface TSClassImplements extends BaseNode {
   typeParameters?: TSTypeParameterInstantiation | null;
 }
 
+export interface TSInterfaceHeritage extends BaseNode {
+  type: "TSInterfaceHeritage";
+  expression: TSEntityName;
+  typeParameters?: TSTypeParameterInstantiation | null;
+}
+
 export interface TSExpressionWithTypeArguments extends BaseNode {
   type: "TSExpressionWithTypeArguments";
   expression: TSEntityName;
@@ -2676,6 +2683,7 @@ export type TypeScript =
   | TSMappedType
   | TSLiteralType
   | TSClassImplements
+  | TSInterfaceHeritage
   | TSExpressionWithTypeArguments
   | TSInterfaceDeclaration
   | TSInterfaceBody
@@ -2739,6 +2747,7 @@ export type TSType =
   | TSMappedType
   | TSLiteralType
   | TSClassImplements
+  | TSInterfaceHeritage
   | TSExpressionWithTypeArguments
   | TSImportType;
 export type TSBaseType =
@@ -4588,6 +4597,7 @@ export interface ParentMaps {
     | TSIndexSignature
     | TSInstantiationExpression
     | TSInterfaceDeclaration
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSModuleDeclaration
     | TSNamedTupleMember
@@ -7221,6 +7231,27 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
+  TSInterfaceHeritage:
+    | TSArrayType
+    | TSAsExpression
+    | TSConditionalType
+    | TSIndexedAccessType
+    | TSIntersectionType
+    | TSMappedType
+    | TSNamedTupleMember
+    | TSOptionalType
+    | TSParenthesizedType
+    | TSRestType
+    | TSSatisfiesExpression
+    | TSTupleType
+    | TSTypeAliasDeclaration
+    | TSTypeAnnotation
+    | TSTypeAssertion
+    | TSTypeOperator
+    | TSTypeParameter
+    | TSTypeParameterInstantiation
+    | TSUnionType
+    | TemplateLiteral;
   TSIntersectionType:
     | TSArrayType
     | TSAsExpression
@@ -7548,6 +7579,7 @@ export interface ParentMaps {
     | TSExpressionWithTypeArguments
     | TSImportEqualsDeclaration
     | TSImportType
+    | TSInterfaceHeritage
     | TSQualifiedName
     | TSTypeQuery
     | TSTypeReference;
@@ -7905,6 +7937,7 @@ export interface ParentMaps {
     | TSExpressionWithTypeArguments
     | TSImportType
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSTypeQuery
     | TSTypeReference
     | TaggedTemplateExpression;

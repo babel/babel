@@ -206,6 +206,7 @@ export interface ExplVisitorBase<S> {
   TSInstantiationExpression?: ExplVisitNode<S, t.TSInstantiationExpression>;
   TSInterfaceBody?: ExplVisitNode<S, t.TSInterfaceBody>;
   TSInterfaceDeclaration?: ExplVisitNode<S, t.TSInterfaceDeclaration>;
+  TSInterfaceHeritage?: ExplVisitNode<S, t.TSInterfaceHeritage>;
   TSIntersectionType?: ExplVisitNode<S, t.TSIntersectionType>;
   TSIntrinsicKeyword?: ExplVisitNode<S, t.TSIntrinsicKeyword>;
   TSLiteralType?: ExplVisitNode<S, t.TSLiteralType>;
@@ -473,6 +474,7 @@ export interface VisitorBaseNodes<S> {
   TSInstantiationExpression?: VisitNode<S, t.TSInstantiationExpression>;
   TSInterfaceBody?: VisitNode<S, t.TSInterfaceBody>;
   TSInterfaceDeclaration?: VisitNode<S, t.TSInterfaceDeclaration>;
+  TSInterfaceHeritage?: VisitNode<S, t.TSInterfaceHeritage>;
   TSIntersectionType?: VisitNode<S, t.TSIntersectionType>;
   TSIntrinsicKeyword?: VisitNode<S, t.TSIntrinsicKeyword>;
   TSLiteralType?: VisitNode<S, t.TSLiteralType>;

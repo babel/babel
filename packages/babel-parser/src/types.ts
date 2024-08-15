@@ -1740,10 +1740,17 @@ export interface TSInterfaceBody extends NodeBase {
   body: TsTypeElement[];
 }
 
-export interface TSClassImplements extends TsTypeBase {
-  type: "TSClassImplements";
+export interface TSHeritageBase extends NodeBase {
   expression: TsEntityName;
   typeParameters?: TsTypeParameterInstantiation;
+}
+
+export interface TSClassImplements extends TSHeritageBase {
+  type: "TSClassImplements";
+}
+
+export interface TSInterfaceHeritage extends TSHeritageBase {
+  type: "TSInterfaceHeritage";
 }
 
 export interface TsTypeAliasDeclaration extends DeclarationBase {
@@ -2052,6 +2059,7 @@ export type Node =
   | TsEnumMember
   | TsExportAssignment
   | TSClassImplements
+  | TSInterfaceHeritage
   | TsExternalModuleReference
   | TsFunctionType
   | TsImportEqualsDeclaration

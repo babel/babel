@@ -480,8 +480,11 @@ export function TSClassImplements(this: Printer, node: t.TSClassImplements) {
   this.print(node.typeParameters);
 }
 
-// TODO: Remove this in Babel 8
-export { TSClassImplements as TSExpressionWithTypeArguments };
+export {
+  // TODO: Remove this in Babel 8
+  TSClassImplements as TSExpressionWithTypeArguments,
+  TSClassImplements as TSInterfaceHeritage,
+};
 
 export function TSInterfaceDeclaration(
   this: Printer,

@@ -654,6 +654,9 @@ export interface NodePathAssertions {
   assertTSInterfaceDeclaration(
     opts?: Opts<t.TSInterfaceDeclaration>,
   ): asserts this is NodePath<t.TSInterfaceDeclaration>;
+  assertTSInterfaceHeritage(
+    opts?: Opts<t.TSInterfaceHeritage>,
+  ): asserts this is NodePath<t.TSInterfaceHeritage>;
   assertTSIntersectionType(
     opts?: Opts<t.TSIntersectionType>,
   ): asserts this is NodePath<t.TSIntersectionType>;

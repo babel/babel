@@ -1700,13 +1700,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseHeritageClause(
       token: "extends" | "implements",
-    ): Array<N.TSClassImplements> {
+    ): Array<N.TSClassImplements> | Array<N.TSInterfaceHeritage> {
       const originalStartLoc = this.state.startLoc;
 
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const node = this.startNode<N.TSClassImplements>();
+          const node = this.startNode<
+            N.TSClassImplements | N.TSInterfaceHeritage
+          >();
           node.expression = this.tsParseEntityName();
           if (this.match(tt.lt)) {
             node.typeParameters = this.tsParseTypeArguments();
@@ -1716,7 +1718,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             node,
             // @ts-expect-error Babel 7 vs Babel 8
             process.env.BABEL_8_BREAKING
-              ? "TSClassImplements"
+              ? token === "extends"
+                ? "TSInterfaceHeritage"
+                : "TSClassImplements"
               : "TSExpressionWithTypeArguments",
           );
         },
@@ -1728,7 +1732,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
       }
 
-      return delimitedList;
+      return delimitedList as
+        | Array<N.TSClassImplements>
+        | Array<N.TSInterfaceHeritage>;
     }
 
     tsParseInterfaceDeclaration(

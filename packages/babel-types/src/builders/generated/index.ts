@@ -2305,6 +2305,17 @@ export function tsClassImplements(
   });
 }
 export { tsClassImplements as tSClassImplements };
+export function tsInterfaceHeritage(
+  expression: t.TSEntityName,
+  typeParameters: t.TSTypeParameterInstantiation | null = null,
+): t.TSInterfaceHeritage {
+  return validateNode<t.TSInterfaceHeritage>({
+    type: "TSInterfaceHeritage",
+    expression,
+    typeParameters,
+  });
+}
+export { tsInterfaceHeritage as tSInterfaceHeritage };
 export function tsExpressionWithTypeArguments(
   expression: t.TSEntityName,
   typeParameters: t.TSTypeParameterInstantiation | null = null,

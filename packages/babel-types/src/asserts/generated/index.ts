@@ -1389,6 +1389,12 @@ export function assertTSClassImplements(
 ): asserts node is t.TSClassImplements {
   assert("TSClassImplements", node, opts);
 }
+export function assertTSInterfaceHeritage(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TSInterfaceHeritage {
+  assert("TSInterfaceHeritage", node, opts);
+}
 export function assertTSExpressionWithTypeArguments(
   node: object | null | undefined,
   opts?: object | null,

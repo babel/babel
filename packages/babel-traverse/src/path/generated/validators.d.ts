@@ -896,6 +896,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.TSInterfaceDeclaration>,
   ): this is NodePath<t.TSInterfaceDeclaration>;
+  isTSInterfaceHeritage(
+    this: NodePath,
+    opts?: Opts<t.TSInterfaceHeritage>,
+  ): this is NodePath<t.TSInterfaceHeritage>;
   isTSIntersectionType(
     this: NodePath,
     opts?: Opts<t.TSIntersectionType>,

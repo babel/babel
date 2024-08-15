@@ -434,6 +434,15 @@ defineType("TSClassImplements", {
   },
 });
 
+defineType("TSInterfaceHeritage", {
+  aliases: ["TSType"],
+  visitor: ["expression", "typeParameters"],
+  fields: {
+    expression: validateType("TSEntityName"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+  },
+});
+
 if (!process.env.BABEL_8_BREAKING) {
   defineType("TSExpressionWithTypeArguments", {
     aliases: ["TSType"],

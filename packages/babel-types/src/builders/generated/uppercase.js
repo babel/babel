@@ -238,6 +238,7 @@ export {
   tsMappedType as TSMappedType,
   tsLiteralType as TSLiteralType,
   tsClassImplements as TSClassImplements,
+  tsInterfaceHeritage as TSInterfaceHeritage,
   tsExpressionWithTypeArguments as TSExpressionWithTypeArguments,
   tsInterfaceDeclaration as TSInterfaceDeclaration,
   tsInterfaceBody as TSInterfaceBody,
