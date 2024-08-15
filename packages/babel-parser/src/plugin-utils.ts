@@ -179,6 +179,11 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         " only supported value is '2023-07'.",
     );
   }
+  if (process.env.BABEL_8_BREAKING && pluginsMap.has("decimal")) {
+    throw new Error(
+      "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
