@@ -23,7 +23,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/register": "workspace:^",
+    "@babel/register": "7.0.0",
     "commander": "^4.0.1",
     "core-js": "^3.30.2",
     "node-environment-flags": "condition:BABEL_8_BREAKING ? : ^1.0.5",
