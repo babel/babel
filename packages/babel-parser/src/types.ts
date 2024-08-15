@@ -1730,8 +1730,7 @@ export interface TsInterfaceDeclaration extends DeclarationBase {
   type: "TSInterfaceDeclaration";
   id: Identifier | undefined | null;
   typeParameters: TsTypeParameterDeclaration | undefined | null;
-  // TS uses "heritageClauses", but want this to resemble ClassBase.
-  extends?: TSClassImplements[];
+  extends?: TSInterfaceHeritage[];
   body: TSInterfaceBody;
 }
 
