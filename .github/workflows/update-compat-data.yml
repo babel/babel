@@ -1,6 +1,7 @@
 name: Update compat data
 env:
-  YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+  YARN_ENABLE_SCRIPTS: false 
+  # disable post-install scripts
 on:
   workflow_dispatch:
     inputs: {}
@@ -12,7 +13,8 @@ jobs:
     name: Update compat-table
     runs-on: ubuntu-latest
     permissions:
-      contents: write # for Git to git push
+      contents: write
+      # for Git to git push
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
