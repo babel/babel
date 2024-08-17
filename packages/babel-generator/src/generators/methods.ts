@@ -11,7 +11,7 @@ export function _params(
   idNode: t.Expression | t.PrivateName,
   parentNode: ParentsOf<typeof node>,
 ) {
-  this.print(node.typeParameters, node);
+  this.print(node.typeParameters);
 
   const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
   if (nameInfo) {
@@ -19,31 +19,21 @@ export function _params(
   }
 
   this.token("(");
-  this._parameters(node.params, node);
+  this._parameters(node.params);
   this.token(")");
 
   const noLineTerminator = node.type === "ArrowFunctionExpression";
-  this.print(node.returnType, node, noLineTerminator);
+  this.print(node.returnType, noLineTerminator);
 
   this._noLineTerminator = noLineTerminator;
 }
 
-export function _parameters(
-  this: Printer,
-  parameters: t.Function["params"],
-  parent:
-    | t.Function
-    | t.TSIndexSignature
-    | t.TSDeclareMethod
-    | t.TSDeclareFunction
-    | t.TSFunctionType
-    | t.TSConstructorType,
-) {
+export function _parameters(this: Printer, parameters: t.Function["params"]) {
   const exit = this.enterForStatementInit(false);
 
   const paramLength = parameters.length;
   for (let i = 0; i < paramLength; i++) {
-    this._param(parameters[i], parent);
+    this._param(parameters[i]);
 
     if (i < parameters.length - 1) {
       this.token(",");
@@ -57,16 +47,9 @@ export function _parameters(
 export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
-  parent?:
-    | t.Function
-    | t.TSIndexSignature
-    | t.TSDeclareMethod
-    | t.TSDeclareFunction
-    | t.TSFunctionType
-    | t.TSConstructorType,
 ) {
   this.printJoin(parameter.decorators, parameter);
-  this.print(parameter, parent);
+  this.print(parameter);
   if (
     // @ts-expect-error optional is not in TSParameterProperty
     parameter.optional
@@ -77,7 +60,6 @@ export function _param(
   this.print(
     // @ts-expect-error typeAnnotation is not in TSParameterProperty
     parameter.typeAnnotation,
-    parameter,
   ); // TS / flow
 }
 
@@ -107,10 +89,10 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
 
   if (node.computed) {
     this.token("[");
-    this.print(key, node);
+    this.print(key);
     this.token("]");
   } else {
-    this.print(key, node);
+    this.print(key);
   }
 
   if (
@@ -141,7 +123,7 @@ export function _predicate(
       this.token(":");
     }
     this.space();
-    this.print(node.predicate, node, noLineTerminatorAfter);
+    this.print(node.predicate, noLineTerminatorAfter);
   }
 }
 
@@ -169,7 +151,7 @@ export function _functionHead(
 
   this.space();
   if (node.id) {
-    this.print(node.id, node);
+    this.print(node.id);
   }
 
   this._params(node, node.id, parent);
@@ -185,7 +167,7 @@ export function FunctionExpression(
 ) {
   this._functionHead(node, parent);
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export { FunctionExpression as FunctionDeclaration };
@@ -209,7 +191,7 @@ export function ArrowFunctionExpression(
     isIdentifier((firstParam = node.params[0])) &&
     !hasTypesOrComments(node, firstParam)
   ) {
-    this.print(firstParam, node, true);
+    this.print(firstParam, true);
   } else {
     this._params(node, undefined, parent);
   }
@@ -225,7 +207,7 @@ export function ArrowFunctionExpression(
   this.space();
 
   this.tokenContext |= TokenContext.arrowBody;
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 function hasTypesOrComments(
