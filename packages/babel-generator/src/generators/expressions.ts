@@ -266,6 +266,7 @@ export function AssignmentExpression(
     this.word(node.operator);
   } else {
     this.token(node.operator);
+    this._endsWithDiv = node.operator === "/";
   }
   this.space();
 
