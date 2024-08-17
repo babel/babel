@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typeof-symbol",
-  "version": "7.23.3",
+  "version": "7.24.8",
   "description": "This transformer wraps all typeof expressions with a method that replicates native behaviour. (ie. returning “symbol” for symbols)",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/runtime": "workspace:^",
-    "@babel/runtime-corejs2": "workspace:^",
+    "@babel/runtime-corejs2": "^7.24.0",
     "@babel/runtime-corejs3": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typeof-symbol",
@@ -37,7 +37,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -45,15 +45,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

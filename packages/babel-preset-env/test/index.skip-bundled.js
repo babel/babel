@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/extensions
 import compatData from "@babel/compat-data/plugins";
+// eslint-disable-next-line import/extensions
+import bugfixesData from "@babel/compat-data/plugin-bugfixes";
 import * as babel from "@babel/core";
 
 import { USE_ESM, itBabel7, itBabel8, describeBabel7NoESM } from "$repo-utils";
@@ -312,13 +314,27 @@ describe("babel-preset-env", () => {
   });
 
   it("available-plugins is in sync with @babel/compat-data", () => {
-    const arrAvailablePlugins = Object.keys(availablePlugins).sort();
-    const arrCompatData = Object.keys(compatData)
-      // TODO(Babel 8): Remove this .map
-      .map(name => name.replace("proposal-", "transform-"))
+    const arrAvailablePlugins = Object.keys(availablePlugins)
+      .filter(
+        name =>
+          // 1. The syntax plugins are always enabled, they don't have compat-data entries
+          // 2. The modules transforms are for non-ES module systems, they don't have compat-data entries
+          // 3. The dynamic import transform is controlled by the modules option and the API caller support
+          !(
+            name.startsWith("syntax-") ||
+            name.startsWith("transform-modules-") ||
+            name === "transform-dynamic-import"
+          ),
+      )
       .sort();
+    const arrCompatData = [
+      ...Object.keys(compatData),
+      ...Object.keys(bugfixesData),
+    ].sort();
 
-    expect(arrAvailablePlugins).toEqual(expect.arrayContaining(arrCompatData));
+    for (const plugin of arrAvailablePlugins) {
+      expect(arrCompatData).toContain(plugin);
+    }
   });
 
   describe("debug", () => {

@@ -21,7 +21,7 @@ export function traverseNode<S = unknown>(
   node: t.Node,
   opts: ExplodedTraverseOptions<S>,
   scope?: Scope,
-  state?: any,
+  state?: S,
   path?: NodePath,
   skipKeys?: Record<string, boolean>,
   visitSelf?: boolean,
@@ -29,7 +29,7 @@ export function traverseNode<S = unknown>(
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return false;
 
-  const context = new TraversalContext(scope, opts, state, path);
+  const context = new TraversalContext<S>(scope, opts, state, path);
   if (visitSelf) {
     if (skipKeys?.[path.parentKey]) return false;
     return context.visitQueue([path]);

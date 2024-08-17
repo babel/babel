@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "targets": { "node": "16" },
+  "plugins": [
+    ["proposal-json-modules", { "uncheckedRequire": true }],
+    "transform-modules-commonjs"
+  ]
+}

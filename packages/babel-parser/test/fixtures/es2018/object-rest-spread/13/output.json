@@ -88,9 +88,6 @@
                             "type": "Identifier",
                             "start":44,"end":47,"loc":{"start":{"line":2,"column":22,"index":44},"end":{"line":2,"column":25,"index":47},"identifierName":"baz"},
                             "name": "baz"
-                          },
-                          "extra": {
-                            "shorthand": true
                           }
                         },
                         {
@@ -118,6 +115,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

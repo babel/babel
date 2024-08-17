@@ -1,8 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
-import type { File } from "@babel/core";
 import { types as t } from "@babel/core";
-import type { NodePath, Scope } from "@babel/traverse";
+import type { File, NodePath, Scope } from "@babel/core";
 
 type ListElement = t.SpreadElement | t.Expression;
 
@@ -12,11 +11,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
   const arrayLikeIsIterable =

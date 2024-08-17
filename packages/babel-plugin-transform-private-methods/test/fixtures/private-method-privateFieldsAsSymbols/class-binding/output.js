@@ -1,5 +1,5 @@
 var _A;
-var _getA = /*#__PURE__*/Symbol("getA");
+var _getA = Symbol("getA");
 class A {
   constructor() {
     Object.defineProperty(this, _getA, {

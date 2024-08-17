@@ -21,7 +21,7 @@ interface BaseNodePathValidators {
 `;
 
   for (const type of [...t.TYPES].sort()) {
-    output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: Opts<t.${type}>): this is NodePath<T & t.${type}>;`;
+    output += `is${type}(this: NodePath, opts?: Opts<t.${type}>): this is NodePath<t.${type}>;`;
   }
 
   output += `

@@ -42,9 +42,6 @@
                       "type": "Identifier",
                       "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"foo"},
                       "name": "foo"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]
@@ -88,6 +85,9 @@
         "start":52,"end":53,"loc":{"start":{"line":2,"column":24,"index":52},"end":{"line":2,"column":25,"index":53}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

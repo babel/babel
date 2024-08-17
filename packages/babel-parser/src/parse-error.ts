@@ -33,7 +33,7 @@ interface ParseErrorSpecification<ErrorDetails> {
 
   // We should consider removing this as it now just contains the same
   // information as `loc.index`.
-  // pos: number;
+  pos: number;
 }
 
 export type ParseError<ErrorDetails> = SyntaxError &
@@ -68,13 +68,23 @@ function defineHidden(obj: object, key: string, value: unknown) {
 
 function toParseErrorConstructor<ErrorDetails extends object>({
   toMessage,
-  ...properties
+  code,
+  reasonCode,
+  syntaxPlugin,
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
+  const hasMissingPlugin =
+    reasonCode === "MissingPlugin" || reasonCode === "MissingOneOfPlugins";
   return function constructor(loc: Position, details: ErrorDetails) {
-    const error = new SyntaxError();
-    Object.assign(error, properties, { loc, pos: loc.index });
-    if ("missingPlugin" in details) {
-      Object.assign(error, { missingPlugin: details.missingPlugin });
+    const error: ParseError<ErrorDetails> = new SyntaxError() as any;
+
+    error.code = code as ParseErrorCode;
+    error.reasonCode = reasonCode;
+    error.loc = loc;
+    error.pos = loc.index;
+
+    error.syntaxPlugin = syntaxPlugin;
+    if (hasMissingPlugin) {
+      error.missingPlugin = (details as any).missingPlugin;
     }
 
     type Overrides = {
@@ -103,7 +113,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
       },
     });
 
-    return error as ParseError<ErrorDetails>;
+    return error;
   };
 }
 
@@ -130,10 +140,10 @@ export function ParseErrorEnum(a: TemplateStringsArray): <
     T[K] extends { message: string | ToMessage<any> }
       ? T[K]["message"] extends ToMessage<any>
         ? Parameters<T[K]["message"]>[0]
-        : {}
+        : object
       : T[K] extends ToMessage<any>
         ? Parameters<T[K]>[0]
-        : {}
+        : object
   >;
 };
 
@@ -145,10 +155,10 @@ export function ParseErrorEnum<T extends ParseErrorTemplates>(
     T[K] extends { message: string | ToMessage<any> }
       ? T[K]["message"] extends ToMessage<any>
         ? Parameters<T[K]["message"]>[0]
-        : {}
+        : object
       : T[K] extends ToMessage<any>
         ? Parameters<T[K]>[0]
-        : {}
+        : object
   >;
 };
 

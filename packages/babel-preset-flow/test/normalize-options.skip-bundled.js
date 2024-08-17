@@ -30,6 +30,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "all": undefined,
+          "experimental_useHermesParser": undefined,
           "ignoreExtensions": undefined,
         }
       `);
@@ -50,6 +51,7 @@ describe("normalize options", () => {
         Object {
           "all": undefined,
           "allowDeclareFields": undefined,
+          "experimental_useHermesParser": undefined,
           "ignoreExtensions": undefined,
         }
       `);

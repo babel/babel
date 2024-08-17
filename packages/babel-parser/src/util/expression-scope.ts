@@ -82,7 +82,7 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<number, [ParseErrorConstructor<{}>, Position]> =
+  declarationErrors: Map<number, [ParseErrorConstructor<object>, Position]> =
     new Map();
   constructor(
     type:
@@ -92,7 +92,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
     super(type);
   }
   recordDeclarationError(
-    ParsingErrorClass: ParseErrorConstructor<{}>,
+    ParsingErrorClass: ParseErrorConstructor<object>,
     at: Position,
   ) {
     const index = at.index;
@@ -172,7 +172,7 @@ export default class ExpressionScopeHandler {
    * expression and can not be cast to pattern
    */
   recordArrowParameterBindingError(
-    error: ParseErrorConstructor<{}>,
+    error: ParseErrorConstructor<object>,
     node: Node,
   ): void {
     const { stack } = this;

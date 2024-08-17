@@ -1,15 +1,11 @@
 class Foo {
   static test() {
-    var receiver = babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _tag).bind(this)``;
+    var receiver = babelHelpers.classPrivateGetter(Foo, this, _get_tag).bind(this)``;
     expect(receiver).toBe(this);
   }
 }
-function _get_tag() {
+function _get_tag(_this) {
   return function () {
     return this;
   };
 }
-var _tag = {
-  get: _get_tag,
-  set: void 0
-};

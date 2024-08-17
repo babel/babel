@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin-development",
-  "version": "7.22.10",
+  "version": "7.25.1",
   "description": "ESLint rules that enforce best practices in the development of Babel plugins.",
   "keywords": [
     "eslint",
@@ -9,7 +9,7 @@
   ],
   "author": "The Babel Team (https://babel.dev/team)",
   "main": "./lib/index.cjs",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./lib/index.cjs",
     "./package.json": "./package.json"
@@ -31,13 +31,13 @@
   },
   "homepage": "https://babel.dev/",
   "devDependencies": {
-    "eslint": "^8.22.0"
+    "eslint": "^9.7.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {}

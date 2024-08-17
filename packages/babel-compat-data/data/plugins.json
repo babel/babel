@@ -1,12 +1,21 @@
 {
+  "transform-duplicate-named-capturing-groups-regex": {
+    "chrome": "126",
+    "opera": "112",
+    "edge": "126",
+    "firefox": "129",
+    "safari": "17.4",
+    "electron": "31.0"
+  },
   "transform-unicode-sets-regex": {
     "chrome": "112",
     "opera": "98",
     "edge": "112",
     "firefox": "116",
-    "safari": "tp",
+    "safari": "17",
     "node": "20",
     "deno": "1.32",
+    "ios": "17",
     "opera_mobile": "75",
     "electron": "24.0"
   },
@@ -14,7 +23,7 @@
     "chrome": "98",
     "opera": "84",
     "edge": "98",
-    "firefox": "95",
+    "firefox": "75",
     "safari": "15",
     "node": "12",
     "deno": "1.18",
@@ -22,6 +31,31 @@
     "samsung": "11",
     "opera_mobile": "52",
     "electron": "17.0"
+  },
+  "bugfix/transform-firefox-class-in-computed-class-key": {
+    "chrome": "74",
+    "opera": "62",
+    "edge": "79",
+    "safari": "16",
+    "node": "12",
+    "deno": "1",
+    "ios": "16",
+    "samsung": "11",
+    "opera_mobile": "53",
+    "electron": "6.0"
+  },
+  "bugfix/transform-safari-class-field-initializer-scope": {
+    "chrome": "74",
+    "opera": "62",
+    "edge": "79",
+    "firefox": "69",
+    "safari": "16",
+    "node": "12",
+    "deno": "1",
+    "ios": "16",
+    "samsung": "11",
+    "opera_mobile": "53",
+    "electron": "6.0"
   },
   "transform-class-static-block": {
     "chrome": "94",
@@ -362,6 +396,7 @@
     "deno": "1",
     "ios": "11.3",
     "samsung": "8",
+    "rhino": "1.7.15",
     "opera_mobile": "46",
     "electron": "3.0"
   },
@@ -454,6 +489,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "4",
+    "rhino": "1.7.15",
     "opera_mobile": "32",
     "electron": "0.30"
   },
@@ -587,6 +623,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.7.15",
     "opera_mobile": "36",
     "electron": "0.37"
   },
@@ -600,6 +637,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "4",
+    "rhino": "1.7.15",
     "opera_mobile": "32",
     "electron": "0.30"
   },

@@ -42,6 +42,7 @@ describe("generation", function () {
     expect(generated.map).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
+        "ignoreList": Array [],
         "mappings": "AAAA,SAASA,EAAEA,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;ACAtCD,EAAE,CAAC,OAAO,CAAC",
         "names": Array [
           "hi",
@@ -330,6 +331,7 @@ describe("generation", function () {
       Object {
         "__mergedMap": Object {
           "file": undefined,
+          "ignoreList": Array [],
           "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
           "names": Array [
             "foo",
@@ -350,6 +352,7 @@ describe("generation", function () {
       }",
         "decodedMap": Object {
           "file": undefined,
+          "ignoreList": Array [],
           "mappings": Array [
             Array [
               Array [
@@ -425,6 +428,7 @@ describe("generation", function () {
         },
         "map": Object {
           "file": undefined,
+          "ignoreList": Array [],
           "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
           "names": Array [
             "foo",
@@ -901,6 +905,7 @@ describe("generation", function () {
     ).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
+        "ignoreList": Array [],
         "mappings": "AAAA,IAAIA,CAAC,GAAGC,CAAA,IAAAA,CAAA,GAAJA,CAAC",
         "names": Array [
           "t",
@@ -1324,7 +1329,7 @@ describe("programmatic generation", function () {
         t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
       );
       const output = generate(arrowFunctionExpression).code;
-      expect(output).toBe("() => (({}), 1)");
+      expect(output).toBe("() => ({}, 1)");
     });
   });
 

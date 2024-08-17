@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "7.23.9",
+  "version": "7.25.3",
   "description": "A JavaScript parser",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",
@@ -33,6 +33,10 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "# dependencies": "This package doesn't actually have runtime dependencies. @babel/types is only needed for type definitions.",
+  "dependencies": {
+    "@babel/types": "workspace:^"
+  },
   "devDependencies": {
     "@babel/code-frame": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
@@ -46,7 +50,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -55,26 +59,25 @@
     ],
     "USE_ESM": [
       {
-        "type": "module",
         "exports": {
           ".": {
-            "types": "./typings/babel-parser.d.ts",
             "require": "./lib/index.cjs",
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
         }
       },
-      null
+      {
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
     ".": {
-      "types": "./typings/babel-parser.d.ts",
       "require": "./index.cjs",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

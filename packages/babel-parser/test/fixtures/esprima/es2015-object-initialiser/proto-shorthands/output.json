@@ -29,9 +29,6 @@
                 "type": "Identifier",
                 "start":3,"end":12,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":12,"index":12},"identifierName":"__proto__"},
                 "name": "__proto__"
-              },
-              "extra": {
-                "shorthand": true
               }
             },
             {
@@ -49,9 +46,6 @@
                 "type": "Identifier",
                 "start":14,"end":23,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":23,"index":23},"identifierName":"__proto__"},
                 "name": "__proto__"
-              },
-              "extra": {
-                "shorthand": true
               }
             }
           ],

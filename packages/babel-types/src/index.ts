@@ -62,8 +62,10 @@ export { default as removePropertiesDeep } from "./modifications/removePropertie
 export { default as removeTypeDuplicates } from "./modifications/flow/removeTypeDuplicates.ts";
 
 // retrievers
+export { default as getAssignmentIdentifiers } from "./retrievers/getAssignmentIdentifiers.ts";
 export { default as getBindingIdentifiers } from "./retrievers/getBindingIdentifiers.ts";
 export { default as getOuterBindingIdentifiers } from "./retrievers/getOuterBindingIdentifiers.ts";
+export { default as getFunctionName } from "./retrievers/getFunctionName.ts";
 
 // traverse
 export { default as traverse } from "./traverse/traverse.ts";

@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "jsx",
+    "flow",
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ]
+}

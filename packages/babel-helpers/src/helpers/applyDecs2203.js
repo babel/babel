@@ -1,4 +1,5 @@
 /* @minVersion 7.19.0 */
+/* @onlyBabel7 */
 
 /**
  * NOTE: This is an old version of the helper, used for 2022-03 decorators.

@@ -44,7 +44,10 @@
       "ignoreDeps": [
         "@babel/core-7.12",
         "@babel/helper-validator-identifier-baseline"
-      ]
+      ],
+      "postUpgradeTasks": {
+        "commands": ["make"]
+      }
     },
     {
       "matchPackagePatterns": ["^eslint"],

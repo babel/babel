@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 import {
   DestructuringTransformer,
   convertVariableDeclaration,
@@ -8,7 +8,6 @@ import {
   type DestructuringTransformerNode,
 } from "./util.ts";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
-import type { NodePath } from "@babel/traverse";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -30,11 +29,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const { useBuiltIns = false } = options;
 
@@ -84,7 +79,7 @@ export default declare((api, options: Options) => {
           ]);
 
           path.ensureBlock();
-          const statementBody = path.node.body.body;
+          const statementBody = (path.node.body as t.BlockStatement).body;
           const nodes = [];
           // todo: the completion of a for statement can only be observed from
           // a do block (or eval that we don't support),

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #==============================================================================#
 #                                  SETUP                                       #
@@ -48,6 +48,7 @@ fi
 node "$root"/utils/bump-babel-dependencies.js resolutions
 
 # Build the project
+npm install
 npx react-native bundle --entry-file index.js --bundle-output output.js
 
 cleanup

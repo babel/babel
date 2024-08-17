@@ -5,13 +5,12 @@ let Foo = /*#__PURE__*/function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);
     }
   }]);
-  return Foo;
 }();
 function _foo2() {}
 Object.defineProperty(Foo, _foo, {

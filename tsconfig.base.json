@@ -1,20 +1,27 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
     "target": "ESNext",
-    "module": "preserve",
+    "module": "Preserve",
     "lib": ["ESNext"],
     "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": true,
     "declarationDir": "./dts",
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
     "allowImportingTsExtensions": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "incremental": true
-  }
+  },
+  "exclude": ["./packages/babel-helpers/src/helpers/**/*"],
+  "references": [{
+    "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
+  }]
 }

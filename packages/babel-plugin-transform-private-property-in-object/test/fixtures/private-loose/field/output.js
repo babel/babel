@@ -9,11 +9,10 @@ let Foo = /*#__PURE__*/function () {
       value: 1
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);
     }
   }]);
-  return Foo;
 }();

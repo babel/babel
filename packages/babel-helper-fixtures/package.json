@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-fixtures",
-  "version": "7.23.4",
+  "version": "7.24.8",
   "description": "Helper function to support fixtures",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -15,11 +15,15 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "./lib/index.js",
   "dependencies": {
+    "@jridgewell/gen-mapping": "^0.3.5",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "devDependencies": {
-    "@jridgewell/gen-mapping": "^0.3.3",
+    "@babel/core": "workspace:^",
     "@types/semver": "^7.3.4"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -28,23 +32,27 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
-        "exports": null
+        "exports": null,
+        "peerDependencies": null
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

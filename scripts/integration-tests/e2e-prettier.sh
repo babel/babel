@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #==============================================================================#
 #                                  SETUP                                       #
@@ -25,8 +25,9 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Based on https://github.com/prettier/prettier/pull/15157
   sed -i 's/const getChalk = () => chalk/default (code) => code/' scripts/build/shims/babel-highlight.js
   sed -i 's/const generate = babelGenerator.default/const generate = babelGenerator/' scripts/build/transform/index.js
-  sed -i 's/,"updateContext":null//g' tests/integration/__tests__/__snapshots__/debug-print-ast.js.snap
   rm tests/unit/__snapshots__/visitor-keys.js.snap
+  # Update recordAndTuple usage
+  sed -i 's/\["recordAndTuple", { syntaxType: "hash" }\]/"recordAndTuple"/' src/language-js/parse/babel.js
 fi
 
 #==============================================================================#

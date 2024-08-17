@@ -1,8 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { PluginPass, types as t } from "@babel/core";
+import type { PluginPass, types as t, Scope, NodePath } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { Binding, NodePath } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum.ts";
@@ -102,13 +101,9 @@ export default declare((api, opts: Options) => {
   // Ref: https://github.com/babel/babel/issues/15089
   const { types: t, template } = api;
 
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
-  const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
+  const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+(\S+)/;
 
   const {
     allowNamespaces = true,
@@ -286,7 +281,9 @@ export default declare((api, opts: Options) => {
           }
 
           // remove type imports
-          for (let stmt of path.get("body")) {
+          for (let stmt of path.get("body") as Iterable<
+            NodePath<t.Statement | t.Expression>
+          >) {
             if (stmt.isImportDeclaration()) {
               if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
                 NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);
@@ -607,7 +604,7 @@ export default declare((api, opts: Options) => {
         path: NodePath<t.TSImportEqualsDeclaration>,
         pass,
       ) {
-        const { id, moduleReference } = path.node;
+        const { id, moduleReference, isExport } = path.node;
 
         let init: t.Expression;
         let varKind: "var" | "const";
@@ -629,9 +626,12 @@ export default declare((api, opts: Options) => {
           init = entityNameToExpr(moduleReference);
           varKind = "var";
         }
+        const newNode = t.variableDeclaration(varKind, [
+          t.variableDeclarator(id, init),
+        ]);
 
         path.replaceWith(
-          t.variableDeclaration(varKind, [t.variableDeclarator(id, init)]),
+          isExport ? t.exportNamedDeclaration(newNode) : newNode,
         );
         path.scope.registerDeclaration(path);
       },
@@ -726,7 +726,7 @@ export default declare((api, opts: Options) => {
     pragmaImportName,
     pragmaFragImportName,
   }: {
-    binding: Binding;
+    binding: Scope.Binding;
     programPath: NodePath<t.Program>;
     pragmaImportName: string;
     pragmaFragImportName: string;

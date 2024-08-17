@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-duplicate-named-capturing-groups-regex { chrome < 126 }
   transform-unicode-sets-regex { chrome < 112 }
   transform-class-static-block { chrome < 94 }
   transform-private-property-in-object { chrome < 91 }
@@ -17,14 +18,9 @@ Using plugins:
   transform-logical-assignment-operators { chrome < 85 }
   transform-nullish-coalescing-operator { chrome < 80 }
   transform-optional-chaining { chrome < 80 }
-  syntax-json-strings
-  syntax-optional-catch-binding
-  syntax-async-generators
-  syntax-object-rest-spread
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

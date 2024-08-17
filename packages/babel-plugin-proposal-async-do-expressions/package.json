@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-async-do-expressions",
-  "version": "7.23.3",
+  "version": "7.25.0",
   "description": "Transform async do expressions to ES2021",
   "repository": {
     "type": "git",
@@ -13,43 +13,44 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-hoist-variables": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-async-do-expressions": "workspace:^"
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.13.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions",
   "engines": {
     "node": ">=6.9.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "commonjs",
+  "type": "module",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {}

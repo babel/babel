@@ -1,5 +1,4 @@
-import type { FunctionExpression } from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, types as t } from "@babel/core";
 
 /**
  * Check whether a function expression can be affected by
@@ -8,7 +7,7 @@ import type { NodePath } from "@babel/traverse";
  * @returns the name of function id if it should be transformed, otherwise returns false
  */
 export function shouldTransform(
-  path: NodePath<FunctionExpression>,
+  path: NodePath<t.FunctionExpression>,
 ): string | false {
   const { node } = path;
   const functionId = node.id;

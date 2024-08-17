@@ -38,9 +38,6 @@
                       "type": "Identifier",
                       "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"foo"},
                       "name": "foo"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]
@@ -146,9 +143,6 @@
                             "type": "Identifier",
                             "start":84,"end":87,"loc":{"start":{"line":3,"column":22,"index":84},"end":{"line":3,"column":25,"index":87},"identifierName":"baz"},
                             "name": "baz"
-                          },
-                          "extra": {
-                            "shorthand": true
                           }
                         }
                       ]
@@ -227,9 +221,6 @@
                                   "type": "Identifier",
                                   "start":129,"end":132,"loc":{"start":{"line":4,"column":30,"index":129},"end":{"line":4,"column":33,"index":132},"identifierName":"qux"},
                                   "name": "qux"
-                                },
-                                "extra": {
-                                  "shorthand": true
                                 }
                               }
                             ]
@@ -311,9 +302,6 @@
                                   "type": "Identifier",
                                   "start":176,"end":180,"loc":{"start":{"line":5,"column":30,"index":176},"end":{"line":5,"column":34,"index":180},"identifierName":"qux2"},
                                   "name": "qux2"
-                                },
-                                "extra": {
-                                  "shorthand": true
                                 }
                               }
                             ]
@@ -337,9 +325,6 @@
                       "type": "Identifier",
                       "start":186,"end":190,"loc":{"start":{"line":5,"column":40,"index":186},"end":{"line":5,"column":44,"index":190},"identifierName":"foo3"},
                       "name": "foo3"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]
@@ -573,9 +558,6 @@
                                   "type": "Identifier",
                                   "start":341,"end":345,"loc":{"start":{"line":9,"column":29,"index":341},"end":{"line":9,"column":33,"index":345},"identifierName":"qux3"},
                                   "name": "qux3"
-                                },
-                                "extra": {
-                                  "shorthand": true
                                 }
                               }
                             ]
@@ -698,9 +680,6 @@
                                   "type": "Identifier",
                                   "start":411,"end":415,"loc":{"start":{"line":10,"column":29,"index":411},"end":{"line":10,"column":33,"index":415},"identifierName":"qux5"},
                                   "name": "qux5"
-                                },
-                                "extra": {
-                                  "shorthand": true
                                 }
                               }
                             ]
@@ -758,9 +737,6 @@
                                       "type": "Identifier",
                                       "start":437,"end":441,"loc":{"start":{"line":10,"column":55,"index":437},"end":{"line":10,"column":59,"index":441},"identifierName":"qux6"},
                                       "name": "qux6"
-                                    },
-                                    "extra": {
-                                      "shorthand": true
                                     }
                                   }
                                 ]
@@ -814,9 +790,6 @@
                       "type": "Identifier",
                       "start":469,"end":472,"loc":{"start":{"line":11,"column":15,"index":469},"end":{"line":11,"column":18,"index":472},"identifierName":"Foo"},
                       "name": "Foo"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   }
                 ]
@@ -885,6 +858,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

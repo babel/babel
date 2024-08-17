@@ -18,10 +18,10 @@ const proper = {
   }
 };
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inheritsLoose(Obj, _Base);
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
   _proto.update = function update() {
     var _proper$prop, _super$proper$prop, _super$proper$prop2;

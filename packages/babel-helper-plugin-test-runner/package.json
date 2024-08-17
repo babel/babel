@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.22.5",
+  "version": "7.24.7",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",
@@ -16,6 +16,7 @@
   "exports": {
     ".": [
       {
+        "types": "./lib/index.d.ts",
         "import": "./esm.mjs",
         "default": "./lib/index.js"
       },
@@ -39,19 +40,26 @@
       {
         "exports": {
           ".": {
+            "types": "./lib/index.d.ts",
             "import": "./esm.mjs",
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
         },
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
         "exports": null
       }
+    ],
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
+      }
     ]
   },
-  "type": "commonjs"
+  "type": "module"
 }

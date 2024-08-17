@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.23.9",
+  "version": "7.24.7",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -22,9 +22,9 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "babel-plugin-polyfill-corejs2": "^0.4.8",
-    "babel-plugin-polyfill-corejs3": "^0.9.0",
-    "babel-plugin-polyfill-regenerator": "^0.5.5",
+    "babel-plugin-polyfill-corejs2": "condition:BABEL_8_BREAKING ? : ^0.4.10 (peer:@babel/core)",
+    "babel-plugin-polyfill-corejs3": "condition:BABEL_8_BREAKING ? : ^0.10.6 (peer:@babel/core)",
+    "babel-plugin-polyfill-regenerator": "condition:BABEL_8_BREAKING ? : ^0.6.1 (peer:@babel/core)",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
@@ -37,6 +37,7 @@
     "@babel/preset-env": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "^0.10.6",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
@@ -48,7 +49,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -56,15 +57,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

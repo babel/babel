@@ -100,7 +100,7 @@ export default async function ({
       let outputMap: "both" | "external" | false = false;
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         outputMap = "external";
-      } else if (babelOptions.sourceMaps == undefined && result.hasRawMap) {
+      } else if (babelOptions.sourceMaps == null && result.hasRawMap) {
         outputMap = util.hasDataSourcemap(result.code) ? "external" : "both";
       }
 
@@ -158,17 +158,13 @@ export default async function ({
 
       const stat = fs.statSync(filename);
       if (stat.isDirectory()) {
-        const dirname = filename;
-
-        util
-          .readdirForCompilable(
+        _filenames.push(
+          ...util.readdirForCompilable(
             filename,
             cliOptions.includeDotfiles,
             cliOptions.extensions,
-          )
-          .forEach(function (filename) {
-            _filenames.push(path.join(dirname, filename));
-          });
+          ),
+        );
       } else {
         _filenames.push(filename);
       }

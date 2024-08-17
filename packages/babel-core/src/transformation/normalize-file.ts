@@ -17,7 +17,7 @@ const debug = buildDebug("babel:transform:file");
 // but without // or /* at the beginning of the comment.
 
 const INLINE_SOURCEMAP_REGEX =
-  /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
+  /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,.*$/;
 const EXTERNAL_SOURCEMAP_REGEX =
   /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
 

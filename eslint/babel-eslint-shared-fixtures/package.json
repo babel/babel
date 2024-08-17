@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-shared-fixtures",
-  "version": "7.23.5",
+  "version": "7.25.1",
   "description": "Shared fixtures for testing @babel/eslint-* packages",
   "private": true,
   "dependencies": {
@@ -16,7 +16,7 @@
     "@babel/preset-env": "workspace:^",
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
-    "eslint": "^8.22.0"
+    "eslint": "^9.7.0"
   },
   "type": "commonjs"
 }

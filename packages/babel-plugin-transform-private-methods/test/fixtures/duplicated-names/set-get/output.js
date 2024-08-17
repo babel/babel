@@ -1,20 +1,14 @@
 var _privateField = /*#__PURE__*/new WeakMap();
-var _getSet = /*#__PURE__*/new WeakMap();
+var _Cl_brand = /*#__PURE__*/new WeakSet();
 class Cl {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _getSet, {
-      get: _get_getSet,
-      set: _set_getSet
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
-      writable: true,
-      value: 0
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Cl_brand);
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, 0);
   }
 }
-function _set_getSet(newValue) {
-  babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
+function _set_getSet(_this, newValue) {
+  babelHelpers.classPrivateFieldSet2(_privateField, _this, newValue);
 }
-function _get_getSet() {
-  return babelHelpers.classPrivateFieldGet(this, _privateField);
+function _get_getSet(_this2) {
+  return babelHelpers.classPrivateFieldGet2(_privateField, _this2);
 }

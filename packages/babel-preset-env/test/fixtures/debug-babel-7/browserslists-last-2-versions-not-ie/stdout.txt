@@ -2,21 +2,23 @@
 
 Using targets:
 {
-  "android": "118",
-  "chrome": "118",
-  "edge": "118",
-  "firefox": "119",
-  "ios": "17",
-  "opera": "103",
-  "opera_mobile": "73",
-  "safari": "17",
-  "samsung": "22"
+  "android": "125",
+  "chrome": "125",
+  "edge": "125",
+  "firefox": "126",
+  "ios": "17.4",
+  "opera": "110",
+  "opera_mobile": "80",
+  "safari": "17.4",
+  "samsung": "24"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { ios, opera_mobile < 75, safari < tp, samsung }
+  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, opera < 112, opera_mobile, samsung }
+  transform-unicode-sets-regex { samsung }
+  bugfix/transform-firefox-class-in-computed-class-key { firefox }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties

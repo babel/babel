@@ -85,7 +85,10 @@
                     "declaration": null
                   }
                 ],
-                "directives": []
+                "directives": [],
+                "extra": {
+                  "topLevelAwait": false
+                }
               }
             }
           }
@@ -93,6 +96,9 @@
         "kind": "const"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

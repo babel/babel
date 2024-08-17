@@ -5,10 +5,12 @@ import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import { cloneNode, interpreterDirective } from "@babel/types";
 import type * as t from "@babel/types";
-import { getModuleName } from "@babel/helper-module-transforms";
 import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file.ts";
+
+// @ts-expect-error This file is `any`
+import * as babel7 from "./babel-7-helpers.cjs";
 
 const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
   enter(path, state) {
@@ -40,7 +42,7 @@ export default class File {
     buildError: this.buildCodeFrameError.bind(this),
   };
 
-  constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
+  constructor(options: any, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
@@ -95,10 +97,6 @@ export default class File {
 
   has(key: unknown): boolean {
     return this._map.has(key);
-  }
-
-  getModuleName(): string | undefined | null {
-    return getModuleName(this.opts, this.opts);
   }
 
   /**
@@ -163,7 +161,7 @@ export default class File {
     }
 
     // make sure that the helper exists
-    helpers.ensure(name, File);
+    helpers.minVersion(name);
 
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
@@ -176,7 +174,7 @@ export default class File {
     const { nodes, globals } = helpers.get(
       name,
       dep => dependencies[dep],
-      uid,
+      uid.name,
       Object.keys(this.scope.getAllBindings()),
     );
 
@@ -266,4 +264,11 @@ if (!process.env.BABEL_8_BREAKING) {
       "This function has been moved into the template literal transform itself.",
     );
   };
+
+  if (!USE_ESM || IS_STANDALONE) {
+    // @ts-expect-error Babel 7
+    File.prototype.getModuleName = function getModuleName() {
+      return babel7.getModuleName()(this.opts, this.opts);
+    };
+  }
 }

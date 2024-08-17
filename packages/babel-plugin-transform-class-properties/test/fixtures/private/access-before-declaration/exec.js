@@ -6,7 +6,7 @@ expect(() => {
       C.#p;
     }
   }
-}).toThrow(/attempted to get private static field before its declaration/);
+}).toThrow(TypeError);
 
 expect(() => {
   class C {
@@ -16,7 +16,7 @@ expect(() => {
       C.#p = 0;
     }
   }
-}).toThrow(/attempted to set private static field before its declaration/);
+}).toThrow(TypeError);
 
 expect(() => {
   class C {
@@ -26,4 +26,4 @@ expect(() => {
       for (C.#p of [0]);
     }
   }
-}).toThrow(/attempted to set private static field before its declaration/);
+}).toThrow(TypeError);

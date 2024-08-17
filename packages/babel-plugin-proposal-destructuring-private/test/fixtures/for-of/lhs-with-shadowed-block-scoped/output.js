@@ -5,9 +5,9 @@ class C {
     var x,
       a = "a";
     for (const _ref of [C]) {
-      x = _ref.#x, ({
+      x = _ref.#x, {
         [a]: a
-      } = _ref);
+      } = _ref;
       {
         const a = "A";
       }

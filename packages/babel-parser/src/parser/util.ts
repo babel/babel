@@ -9,9 +9,11 @@ import type State from "../tokenizer/state.ts";
 import type {
   EstreePropertyDefinition,
   Node,
+  ObjectMethod,
   ObjectProperty,
-} from "../types.ts";
-import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace.ts";
+  PrivateName,
+} from "../types.d.ts";
+import { hasNewLine } from "../util/whitespace.ts";
 import { isIdentifierChar } from "../util/identifier.ts";
 import ClassScopeHandler from "../util/class-scope.ts";
 import ExpressionScopeHandler from "../util/expression-scope.ts";
@@ -40,7 +42,7 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
 
 export default abstract class UtilParser extends Tokenizer {
   // Forward-declaration: defined in parser/index.js
-  abstract getScopeHandler(): { new (...args: any): ScopeHandler };
+  abstract getScopeHandler(): new (...args: any) => ScopeHandler;
 
   addExtra(
     node: Partial<Node>,
@@ -50,7 +52,12 @@ export default abstract class UtilParser extends Tokenizer {
   ): void {
     if (!node) return;
 
-    const extra = (node.extra = node.extra || {});
+    let { extra } = node;
+    if (extra == null) {
+      extra = {};
+      node.extra = extra;
+    }
+
     if (enumerable) {
       extra[key] = value;
     } else {
@@ -119,14 +126,15 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   hasPrecedingLineBreak(): boolean {
-    return lineBreak.test(
-      this.input.slice(this.state.lastTokEndLoc.index, this.state.start),
+    return hasNewLine(
+      this.input,
+      this.state.lastTokEndLoc.index,
+      this.state.start,
     );
   }
 
   hasFollowingLineBreak(): boolean {
-    skipWhiteSpaceToLineBreak.lastIndex = this.state.end;
-    return skipWhiteSpaceToLineBreak.test(this.input);
+    return hasNewLine(this.input, this.state.end, this.nextTokenStart());
   }
 
   isLineTerminator(): boolean {
@@ -145,7 +153,9 @@ export default abstract class UtilParser extends Tokenizer {
   // raise an unexpected token error at given pos.
 
   expect(type: TokenType, loc?: Position | null): void {
-    this.eat(type) || this.unexpected(loc, type);
+    if (!this.eat(type)) {
+      this.unexpected(loc, type);
+    }
   }
 
   // tryParse will clone parser state.
@@ -163,6 +173,7 @@ export default abstract class UtilParser extends Tokenizer {
     try {
       const node = fn((node = null) => {
         abortSignal.node = node;
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw abortSignal;
       });
       if (this.state.errors.length > oldState.errors.length) {
@@ -265,7 +276,7 @@ export default abstract class UtilParser extends Tokenizer {
    * Test if given node is a PrivateName
    * will be overridden in ESTree plugin
    */
-  isPrivateName(node: Node): boolean {
+  isPrivateName(node: Node): node is PrivateName {
     return node.type === "PrivateName";
   }
 
@@ -274,7 +285,7 @@ export default abstract class UtilParser extends Tokenizer {
    * WITHOUT `#`
    * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
    */
-  getPrivateNameSV(node: Node): string {
+  getPrivateNameSV(node: PrivateName): string {
     return node.id.name;
   }
 
@@ -297,7 +308,7 @@ export default abstract class UtilParser extends Tokenizer {
     return node.type === "ObjectProperty";
   }
 
-  isObjectMethod(node: Node): boolean {
+  isObjectMethod(node: Node): node is ObjectMethod {
     return node.type === "ObjectMethod";
   }
 

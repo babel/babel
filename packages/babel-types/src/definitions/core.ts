@@ -186,12 +186,7 @@ defineType("CallExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "Expression",
-            "SpreadElement",
-            "JSXNamespacedName",
-            "ArgumentPlaceholder",
-          ),
+          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
         ),
       ),
     },
@@ -260,7 +255,8 @@ defineType("DebuggerStatement", {
 });
 
 defineType("DoWhileStatement", {
-  visitor: ["test", "body"],
+  builder: ["test", "body"],
+  visitor: ["body", "test"],
   fields: {
     test: {
       validate: assertNodeType("Expression"),
@@ -420,7 +416,7 @@ export const functionDeclarationCommon = () => ({
 
 defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
-  visitor: ["id", "params", "body", "returnType", "typeParameters"],
+  visitor: ["id", "typeParameters", "params", "returnType", "body"],
   fields: {
     ...functionDeclarationCommon(),
     ...functionTypeAnnotationCommon(),
@@ -799,6 +795,14 @@ defineType("ObjectExpression", {
 
 defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed", "generator", "async"],
+  visitor: [
+    "decorators",
+    "key",
+    "typeParameters",
+    "params",
+    "returnType",
+    "body",
+  ],
   fields: {
     ...functionCommon(),
     ...functionTypeAnnotationCommon(),
@@ -845,14 +849,6 @@ defineType("ObjectMethod", {
       validate: assertNodeType("BlockStatement"),
     },
   },
-  visitor: [
-    "key",
-    "params",
-    "body",
-    "decorators",
-    "returnType",
-    "typeParameters",
-  ],
   aliases: [
     "UserWhitespacable",
     "Function",
@@ -1311,7 +1307,7 @@ defineType("ArrayPattern", {
 
 defineType("ArrowFunctionExpression", {
   builder: ["params", "body", "async"],
-  visitor: ["params", "body", "returnType", "typeParameters"],
+  visitor: ["typeParameters", "params", "returnType", "body"],
   aliases: [
     "Scopable",
     "Function",
@@ -1363,14 +1359,14 @@ defineType("ClassBody", {
 defineType("ClassExpression", {
   builder: ["id", "superClass", "body", "decorators"],
   visitor: [
-    "id",
-    "body",
-    "superClass",
-    "mixins",
-    "typeParameters",
-    "superTypeParameters",
-    "implements",
     "decorators",
+    "id",
+    "typeParameters",
+    "superClass",
+    "superTypeParameters",
+    "mixins",
+    "implements",
+    "body",
   ],
   aliases: ["Scopable", "Class", "Expression"],
   fields: {
@@ -1791,7 +1787,8 @@ defineType("ImportNamespaceSpecifier", {
 });
 
 defineType("ImportSpecifier", {
-  visitor: ["local", "imported"],
+  visitor: ["imported", "local"],
+  builder: ["local", "imported"],
   aliases: ["ModuleSpecifier"],
   fields: {
     local: {
@@ -1962,12 +1959,12 @@ defineType("ClassMethod", {
     "async",
   ],
   visitor: [
-    "key",
-    "params",
-    "body",
     "decorators",
-    "returnType",
+    "key",
     "typeParameters",
+    "params",
+    "returnType",
+    "body",
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon(),
@@ -2018,7 +2015,7 @@ defineType(
 );
 
 defineType("TaggedTemplateExpression", {
-  visitor: ["tag", "quasi", "typeParameters"],
+  visitor: ["tag", "typeParameters", "quasi"],
   builder: ["tag", "quasi"],
   aliases: ["Expression"],
   fields: {
@@ -2242,12 +2239,7 @@ defineType("OptionalCallExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "Expression",
-            "SpreadElement",
-            "JSXNamespacedName",
-            "ArgumentPlaceholder",
-          ),
+          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
         ),
       ),
     },
@@ -2269,7 +2261,7 @@ defineType("OptionalCallExpression", {
 
 // --- ES2022 ---
 defineType("ClassProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: [
     "key",
     "value",
@@ -2323,7 +2315,7 @@ defineType("ClassProperty", {
 });
 
 defineType("ClassAccessorProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: [
     "key",
     "value",
@@ -2404,7 +2396,7 @@ defineType("ClassAccessorProperty", {
 });
 
 defineType("ClassPrivateProperty", {
-  visitor: ["key", "value", "decorators", "typeAnnotation"],
+  visitor: ["decorators", "key", "typeAnnotation", "value"],
   builder: ["key", "value", "decorators", "static"],
   aliases: ["Property", "Private"],
   fields: {
@@ -2455,12 +2447,12 @@ defineType("ClassPrivateProperty", {
 defineType("ClassPrivateMethod", {
   builder: ["kind", "key", "params", "body", "static"],
   visitor: [
-    "key",
-    "params",
-    "body",
     "decorators",
-    "returnType",
+    "key",
     "typeParameters",
+    "params",
+    "returnType",
+    "body",
   ],
   aliases: [
     "Function",

@@ -325,7 +325,6 @@ export default abstract class Tokenizer extends CommentsParser {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
-    /*:: invariant(startLoc) */
 
     const end = this.state.pos;
     const value = this.input.slice(start + startSkip, end);
@@ -515,7 +514,10 @@ export default abstract class Tokenizer extends CommentsParser {
       // which is not allowed in the spec. Throwing expecting recordAndTuple is
       // misleading
       this.expectPlugin("recordAndTuple");
-      if (this.getPluginOption("recordAndTuple", "syntaxType") === "bar") {
+      if (
+        !process.env.BABEL_8_BREAKING &&
+        this.getPluginOption("recordAndTuple", "syntaxType") === "bar"
+      ) {
         throw this.raise(
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
@@ -640,6 +642,7 @@ export default abstract class Tokenizer extends CommentsParser {
       }
       // '|}'
       if (
+        !process.env.BABEL_8_BREAKING &&
         this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightCurlyBrace
       ) {
@@ -656,6 +659,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
       // '|]'
       if (
+        !process.env.BABEL_8_BREAKING &&
         this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightSquareBracket
       ) {
@@ -872,6 +876,7 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       case charCodes.leftSquareBracket:
         if (
+          !process.env.BABEL_8_BREAKING &&
           this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
@@ -896,6 +901,7 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       case charCodes.leftCurlyBrace:
         if (
+          !process.env.BABEL_8_BREAKING &&
           this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
@@ -1477,8 +1483,11 @@ export default abstract class Tokenizer extends CommentsParser {
    *
    * If `errorRecovery` is `true`, the error is pushed to the errors array and
    * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   *
+   * The return type is marked as `never` for simplicity, as error recovery
+   * will create types in an invalid AST shape.
    */
-  raise<ErrorDetails>(
+  raise<ErrorDetails = object>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
@@ -1555,7 +1564,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
   }
 
-  errorBuilder(error: ParseErrorConstructor<{}>) {
+  errorBuilder(error: ParseErrorConstructor<object>) {
     return (pos: number, lineStart: number, curLine: number) => {
       this.raise(error, buildPosition(pos, lineStart, curLine));
     };

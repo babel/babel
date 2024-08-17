@@ -1,15 +1,10 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 import generateCode from "@babel/generator";
-import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   function commentFromString(comment: string | t.Comment): t.Comment {
     return typeof comment === "string"

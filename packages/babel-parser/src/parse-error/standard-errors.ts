@@ -52,7 +52,7 @@ export default {
   DeclarationMissingInitializer: ({
     kind,
   }: {
-    kind: "const" | "destructuring";
+    kind: "await using" | "const" | "destructuring" | "using";
   }) => `Missing initializer in ${kind} declaration.`,
   DecoratorArgumentsOutsideParentheses:
     "Decorator arguments must be moved inside parentheses: use '@(decorator(args))' instead of '@(decorator)(args)'.",
@@ -313,6 +313,7 @@ export default {
   UnterminatedRegExp: "Unterminated regular expression.",
   UnterminatedString: "Unterminated string constant.",
   UnterminatedTemplate: "Unterminated template.",
+  UsingDeclarationExport: "Using declaration cannot be exported.",
   UsingDeclarationHasBindingPattern:
     "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>

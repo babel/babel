@@ -7,5 +7,5 @@
       }
     ]
   ],
-  "throws": "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'. (1:0)"
+  "throws": "The syntaxType option is no longer required in Babel 8. Please remove { syntaxType: \"bar\" } from the recordAndTuple config and migrate to the hash syntax #{} and #[]."
 }

@@ -1,17 +1,17 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
-import { isIdentifier } from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import { isIdentifier, type ParentMaps } from "@babel/types";
+import { TokenContext } from "../node/index.ts";
+
+type ParentsOf<T extends t.Node> = ParentMaps[T["type"]];
 
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
   idNode: t.Expression | t.PrivateName,
-  parentNode: NodePath<
-    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
-  >["parent"],
+  parentNode: ParentsOf<typeof node>,
 ) {
-  this.print(node.typeParameters, node);
+  this.print(node.typeParameters);
 
   const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
   if (nameInfo) {
@@ -19,50 +19,37 @@ export function _params(
   }
 
   this.token("(");
-  this._parameters(node.params, node);
+  this._parameters(node.params);
   this.token(")");
 
   const noLineTerminator = node.type === "ArrowFunctionExpression";
-  this.print(node.returnType, node, noLineTerminator);
+  this.print(node.returnType, noLineTerminator);
 
   this._noLineTerminator = noLineTerminator;
 }
 
-export function _parameters(
-  this: Printer,
-  parameters: t.Function["params"],
-  parent:
-    | t.Function
-    | t.TSIndexSignature
-    | t.TSDeclareMethod
-    | t.TSDeclareFunction
-    | t.TSFunctionType
-    | t.TSConstructorType,
-) {
+export function _parameters(this: Printer, parameters: t.Function["params"]) {
+  const exit = this.enterForStatementInit(false);
+
   const paramLength = parameters.length;
   for (let i = 0; i < paramLength; i++) {
-    this._param(parameters[i], parent);
+    this._param(parameters[i]);
 
     if (i < parameters.length - 1) {
       this.token(",");
       this.space();
     }
   }
+
+  exit();
 }
 
 export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
-  parent?:
-    | t.Function
-    | t.TSIndexSignature
-    | t.TSDeclareMethod
-    | t.TSDeclareFunction
-    | t.TSFunctionType
-    | t.TSConstructorType,
 ) {
   this.printJoin(parameter.decorators, parameter);
-  this.print(parameter, parent);
+  this.print(parameter);
   if (
     // @ts-expect-error optional is not in TSParameterProperty
     parameter.optional
@@ -73,7 +60,6 @@ export function _param(
   this.print(
     // @ts-expect-error typeAnnotation is not in TSParameterProperty
     parameter.typeAnnotation,
-    parameter,
   ); // TS / flow
 }
 
@@ -103,10 +89,10 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
 
   if (node.computed) {
     this.token("[");
-    this.print(key, node);
+    this.print(key);
     this.token("]");
   } else {
-    this.print(key, node);
+    this.print(key);
   }
 
   if (
@@ -137,16 +123,14 @@ export function _predicate(
       this.token(":");
     }
     this.space();
-    this.print(node.predicate, node, noLineTerminatorAfter);
+    this.print(node.predicate, noLineTerminatorAfter);
   }
 }
 
 export function _functionHead(
   this: Printer,
   node: t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction,
-  parent: NodePath<
-    t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction
-  >["parent"],
+  parent: ParentsOf<typeof node>,
 ) {
   if (node.async) {
     this.word("async");
@@ -167,7 +151,7 @@ export function _functionHead(
 
   this.space();
   if (node.id) {
-    this.print(node.id, node);
+    this.print(node.id);
   }
 
   this._params(node, node.id, parent);
@@ -179,11 +163,11 @@ export function _functionHead(
 export function FunctionExpression(
   this: Printer,
   node: t.FunctionExpression,
-  parent: NodePath<t.FunctionExpression>["parent"],
+  parent: ParentsOf<typeof node>,
 ) {
   this._functionHead(node, parent);
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export { FunctionExpression as FunctionDeclaration };
@@ -191,7 +175,7 @@ export { FunctionExpression as FunctionDeclaration };
 export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
-  parent: NodePath<t.ArrowFunctionExpression>["parent"],
+  parent: ParentsOf<typeof node>,
 ) {
   if (node.async) {
     this.word("async", true);
@@ -207,7 +191,7 @@ export function ArrowFunctionExpression(
     isIdentifier((firstParam = node.params[0])) &&
     !hasTypesOrComments(node, firstParam)
   ) {
-    this.print(firstParam, node, true);
+    this.print(firstParam, true);
   } else {
     this._params(node, undefined, parent);
   }
@@ -222,7 +206,8 @@ export function ArrowFunctionExpression(
 
   this.space();
 
-  this.print(node.body, node);
+  this.tokenContext |= TokenContext.arrowBody;
+  this.print(node.body);
 }
 
 function hasTypesOrComments(
@@ -244,9 +229,7 @@ function hasTypesOrComments(
 function _getFuncIdName(
   this: Printer,
   idNode: t.Expression | t.PrivateName,
-  parent: NodePath<
-    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
-  >["parent"],
+  parent: ParentsOf<t.Function | t.TSDeclareMethod | t.TSDeclareFunction>,
 ) {
   let id: t.Expression | t.PrivateName | t.LVal = idNode;
 

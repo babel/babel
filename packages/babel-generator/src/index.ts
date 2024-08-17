@@ -4,10 +4,6 @@ import type * as t from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
 import type { Format } from "./printer.ts";
 import type {
-  RecordAndTuplePluginOptions,
-  PipelineOperatorPluginOptions,
-} from "@babel/parser";
-import type {
   EncodedSourceMap,
   DecodedSourceMap,
   Mapping,
@@ -44,7 +40,6 @@ function normalizeOptions(
       minimal: process.env.BABEL_8_BREAKING ? true : false,
       ...opts.jsescOption,
     },
-    recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType ?? "hash",
     topicToken: opts.topicToken,
     importAttributesKeyword: opts.importAttributesKeyword,
   };
@@ -52,6 +47,7 @@ function normalizeOptions(
   if (!process.env.BABEL_8_BREAKING) {
     format.decoratorsBeforeExport = opts.decoratorsBeforeExport;
     format.jsescOption.json = opts.jsonCompatibleStrings;
+    format.recordAndTupleSyntaxType = opts.recordAndTupleSyntaxType ?? "hash";
   }
 
   if (format.minified) {
@@ -190,14 +186,15 @@ export interface GeneratorOptions {
 
   /**
    * For use with the recordAndTuple token.
+   * @deprecated It will be removed in Babel 8.
    */
-  recordAndTupleSyntaxType?: RecordAndTuplePluginOptions["syntaxType"];
+  recordAndTupleSyntaxType?: "bar" | "hash";
 
   /**
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
-  topicToken?: PipelineOperatorPluginOptions["topicToken"];
+  topicToken?: "%" | "#" | "@@" | "^^" | "^";
 
   /**
    * The import attributes syntax style:

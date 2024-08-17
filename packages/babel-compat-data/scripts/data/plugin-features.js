@@ -162,6 +162,17 @@ const es2022 = {
     features: ["static class fields / static class fields use [[Define]]"],
     replaces: "transform-class-properties",
   },
+  "bugfix/transform-firefox-class-in-computed-class-key": {
+    replaces: "transform-class-properties",
+    overwrite: {
+      // TODO: Once Firefox releases the fix, write the correct version here.
+      firefox: undefined,
+    },
+  },
+  "bugfix/transform-safari-class-field-initializer-scope": {
+    features: ["instance class fields / resolving identifier in parent scope"],
+    replaces: "transform-class-properties",
+  },
   "transform-class-static-block": "Class static initialization blocks",
   "transform-private-property-in-object":
     "Ergonomic brand checks for private fields",
@@ -171,6 +182,7 @@ const es2022 = {
       "instance class fields / public instance class fields",
       "instance class fields / private instance class fields basic support",
       "instance class fields / computed instance class fields",
+      "instance class fields / resolving identifier in parent scope",
     ],
   },
   "transform-private-methods": "private class methods",
@@ -187,12 +199,18 @@ const es2024 = {
   },
 };
 
+const es2025 = {
+  "transform-duplicate-named-capturing-groups-regex":
+    "Duplicate named capturing groups",
+};
+
 const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2025,
   es2024,
   es2022,
   es2021,

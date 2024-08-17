@@ -1,5 +1,6 @@
 /* @minVersion 7.21.0 */
 /* @mangleFns */
+/* @onlyBabel7 */
 
 import checkInRHS from "./checkInRHS.ts";
 import setFunctionName from "./setFunctionName.ts";

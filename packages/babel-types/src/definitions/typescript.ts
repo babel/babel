@@ -357,7 +357,8 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: ["typeParameter", "typeAnnotation", "nameType"],
+  visitor: ["typeParameter", "nameType", "typeAnnotation"],
+  builder: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
     readonly: validateOptional(assertOneOf(true, false, "+", "-")),
     typeParameter: validateType("TSTypeParameter"),
@@ -530,6 +531,10 @@ defineType("TSImportType", {
     argument: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
     typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    options: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
   },
 });
 

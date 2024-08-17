@@ -1,16 +1,18 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.19.1",
+  "version": "7.25.1",
   "description": "Tests for babel/eslint-* packages",
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
     "@babel/preset-react": "workspace:^",
-    "dedent": "^0.7.0",
-    "eslint": "^8.22.0",
+    "@eslint/compat": "^1.1.1",
+    "dedent": "^1.5.3",
+    "eslint": "^9.7.0",
     "eslint-plugin-import": "^2.25.4",
+    "globals": "^15.9.0",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
   },
-  "type": "commonjs"
+  "type": "module"
 }

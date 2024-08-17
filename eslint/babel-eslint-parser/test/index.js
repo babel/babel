@@ -3,7 +3,7 @@ import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
-import { itDummy, commonJS } from "$repo-utils";
+import { itDummy, commonJS, IS_BABEL_8, itBabel7 } from "$repo-utils";
 
 function parseForESLint(code, options) {
   return parseForESLintOriginal(code, {
@@ -382,7 +382,11 @@ describe("Babel and Espree", () => {
       babelOptions: {
         filename: "test.js",
         parserOpts: {
-          plugins: [["recordAndTuple", { syntaxType: "hash" }]],
+          plugins: [
+            IS_BABEL_8()
+              ? "recordAndTuple"
+              : ["recordAndTuple", { syntaxType: "hash" }],
+          ],
           tokens: true,
         },
       },
@@ -395,7 +399,7 @@ describe("Babel and Espree", () => {
     );
   });
 
-  it("brace and bracket bar operator (token)", () => {
+  itBabel7("brace and bracket bar operator (token)", () => {
     const code = "{||}; [||]";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
@@ -478,11 +482,7 @@ describe("Babel and Espree", () => {
       babelOptions: {
         filename: "test.js",
         parserOpts: {
-          plugins: [
-            ["estree", { classFeatures: true }],
-            "classPrivateProperties",
-            "classProperties",
-          ],
+          plugins: [["estree", { classFeatures: true }]],
         },
       },
     }).ast;

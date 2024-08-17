@@ -1,5 +1,5 @@
 import semver from "semver";
-import { minVersions } from "./available-plugins.ts";
+import { minVersions, legacyBabel7SyntaxPlugins } from "./available-plugins.ts";
 
 export function addProposalSyntaxPlugins(
   items: Set<string>,
@@ -29,6 +29,12 @@ export function removeUnsupportedItems(
         // @ts-expect-error we have checked minVersions[item] in has call
         minVersions[item],
       )
+    ) {
+      items.delete(item);
+    } else if (
+      !process.env.BABEL_8_BREAKING &&
+      babelVersion[0] === "8" &&
+      legacyBabel7SyntaxPlugins.has(item)
     ) {
       items.delete(item);
     }

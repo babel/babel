@@ -1,20 +1,16 @@
-var _foo = /*#__PURE__*/new WeakMap();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
-      get: _get_foo,
-      set: void 0
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      return _foo.has(babelHelpers.checkInRHS(other));
+      return _Foo_brand.has(babelHelpers.checkInRHS(other));
     }
   }]);
-  return Foo;
 }();
-function _get_foo() {}
+function _get_foo(_this) {}

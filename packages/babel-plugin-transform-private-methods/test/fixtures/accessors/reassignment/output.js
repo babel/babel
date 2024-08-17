@@ -1,11 +1,8 @@
 var results = [];
-var _privateFieldValue = /*#__PURE__*/new WeakMap();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
-      get: _get_privateFieldValue,
-      set: void 0
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
     this.self, results.push(2), babelHelpers.readOnlyError("#privateFieldValue");
   }
   get self() {
@@ -13,6 +10,6 @@ class Foo {
     return this;
   }
 }
-function _get_privateFieldValue() {
+function _get_privateFieldValue(_this) {
   return 42;
 }

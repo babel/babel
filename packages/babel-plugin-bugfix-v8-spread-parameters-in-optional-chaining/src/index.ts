@@ -1,15 +1,10 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { transform } from "@babel/plugin-transform-optional-chaining";
 import { shouldTransform } from "./util.ts";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { NodePath, types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const noDocumentAll = api.assumption("noDocumentAll") ?? false;
   const pureGetters = api.assumption("pureGetters") ?? false;

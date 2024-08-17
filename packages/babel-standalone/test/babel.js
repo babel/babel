@@ -8,6 +8,26 @@ describe("@babel/standalone", () => {
     Babel = require("../babel.js");
   });
 
+  describe("export packages", () => {
+    it("list", () => {
+      expect(Object.keys(Babel.packages)).toMatchInlineSnapshot(`
+        Array [
+          "generator",
+          "parser",
+          "template",
+          "traverse",
+          "types",
+        ]
+      `);
+    });
+
+    it("they work", () => {
+      const generate = Babel.packages.generator.default;
+      const parser = Babel.packages.parser;
+      expect(generate(parser.parse("foo")).code).toBe("foo;");
+    });
+  });
+
   it("handles the es2015-no-commonjs preset", () => {
     const output = Babel.transform('const getMessage = () => "Hello World"', {
       presets: ["es2015-no-commonjs"],

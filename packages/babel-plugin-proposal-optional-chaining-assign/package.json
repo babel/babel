@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-optional-chaining-assign",
-  "version": "7.23.7",
+  "version": "7.24.7",
   "description": "Transform optional chaining on the left-hand side of assignment expressions",
   "repository": {
     "type": "git",
@@ -37,21 +37,24 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {}
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

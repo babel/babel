@@ -9,6 +9,5 @@ class Test {
   }
 }
 var _x = {
-  writable: true,
-  value: 1
+  _: 1
 };

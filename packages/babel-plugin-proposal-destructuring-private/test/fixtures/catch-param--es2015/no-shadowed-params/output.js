@@ -3,10 +3,7 @@ var x;
 var _x = /*#__PURE__*/new WeakMap();
 class C {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _x, {
-      writable: true,
-      value: void 0
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _x, void 0);
   }
 }
 _C = C;
@@ -15,6 +12,6 @@ _C = C;
   try {
     throw new _C();
   } catch (_e) {
-    let x = babelHelpers.classPrivateFieldGet(_e, _x);
+    let x = babelHelpers.classPrivateFieldGet2(_x, _e);
   }
 })();

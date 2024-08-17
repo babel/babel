@@ -1,11 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   return {
     name: "transform-literals",
@@ -22,7 +18,7 @@ export default declare(api => {
       StringLiteral({ node }) {
         // unicode escape
         // @ts-expect-error Add node.extra typings
-        if (node.extra && /\\[u]/gi.test(node.extra.raw)) {
+        if (node.extra && /\\u/i.test(node.extra.raw)) {
           node.extra = undefined;
         }
       },

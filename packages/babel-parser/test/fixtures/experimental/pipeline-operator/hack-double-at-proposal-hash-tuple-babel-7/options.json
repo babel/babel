@@ -1,0 +1,18 @@
+{
+  "BABEL_8_BREAKING": false,
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "hack",
+        "topicToken": "@@"
+      }
+    ],
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ]
+}

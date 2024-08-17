@@ -1,5 +1,4 @@
-import { template, types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { template, types as t, type NodePath } from "@babel/core";
 
 import {
   iifeVisitor,
@@ -153,16 +152,17 @@ export default function convertFunctionParams(
 
   // ensure it's a block, useful for arrow functions
   path.ensureBlock();
+  const path2 = path as NodePath<typeof path.node & { body: t.BlockStatement }>;
 
   const { async, generator } = node;
   if (generator || state.needsOuterBinding || shadowedParams.size > 0) {
-    body.push(buildScopeIIFE(shadowedParams, path.node.body));
+    body.push(buildScopeIIFE(shadowedParams, path2.node.body));
 
     path.set("body", t.blockStatement(body as t.Statement[]));
 
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.
-    const bodyPath = path.get("body.body");
+    const bodyPath = path2.get("body.body");
     const arrowPath = bodyPath[bodyPath.length - 1].get(
       "argument.callee",
     ) as NodePath<t.ArrowFunctionExpression>;
@@ -177,16 +177,16 @@ export default function convertFunctionParams(
     node.async = false;
     if (async) {
       // If the default value of a parameter throws, it must reject asynchronously.
-      path.node.body = template.statement.ast`{
+      path2.node.body = template.statement.ast`{
         try {
-          ${path.node.body.body}
+          ${path2.node.body.body}
         } catch (e) {
           return Promise.reject(e);
         }
       }` as t.BlockStatement;
     }
   } else {
-    path.get("body").unshiftContainer("body", body);
+    path2.get("body").unshiftContainer("body", body);
   }
 
   return true;

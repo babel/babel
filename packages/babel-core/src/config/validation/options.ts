@@ -233,7 +233,7 @@ export type BabelrcSearch = boolean | IgnoreItem | IgnoreList;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
-export type RootInputSourceMapOption = {} | boolean;
+export type RootInputSourceMapOption = object | boolean;
 export type RootMode = "root" | "upward" | "upward-optional";
 
 export type TargetsListOrObject =
@@ -281,6 +281,7 @@ const knownAssumptions = [
   "noDocumentAll",
   "noIncompleteNsImportDetection",
   "noNewArrows",
+  "noUninitializedPrivateFieldAccess",
   "objectRestNoSymbols",
   "privateFieldsAsSymbols",
   "privateFieldsAsProperties",
@@ -301,7 +302,7 @@ function getSource(loc: NestingPath): OptionsSource {
 
 export function validate(
   type: OptionsSource,
-  opts: {},
+  opts: any,
   filename?: string,
 ): ValidatedOptions {
   try {
@@ -396,7 +397,7 @@ function throwUnknownError(loc: OptionPath) {
   }
 }
 
-function assertNoDuplicateSourcemap(opts: {}): void {
+function assertNoDuplicateSourcemap(opts: any): void {
   if (Object.hasOwn(opts, "sourceMap") && Object.hasOwn(opts, "sourceMaps")) {
     throw new Error(".sourceMap is an alias for .sourceMaps, cannot use both");
   }

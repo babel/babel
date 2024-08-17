@@ -3,13 +3,13 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@babel-baseline/core": "npm:@babel/core@7.23.2",
-    "@babel-baseline/generator": "npm:@babel/generator@7.23.0",
-    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.22.15",
+    "@babel-baseline/core": "npm:@babel/core@7.24.4",
+    "@babel-baseline/generator": "npm:@babel/generator@7.24.4",
+    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.23.6",
     "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
-    "@babel-baseline/parser": "npm:@babel/parser@7.23.0",
-    "@babel-baseline/traverse": "npm:@babel/traverse@7.23.2",
-    "@babel-baseline/types": "npm:@babel/types@7.23.0",
+    "@babel-baseline/parser": "npm:@babel/parser@7.24.4",
+    "@babel-baseline/traverse": "npm:@babel/traverse@7.24.1",
+    "@babel-baseline/types": "npm:@babel/types@7.24.0",
     "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
@@ -23,5 +23,5 @@
     "@babel/types": "workspace:^",
     "benchmark": "^2.1.4"
   },
-  "version": "7.23.9"
+  "version": "7.25.0"
 }

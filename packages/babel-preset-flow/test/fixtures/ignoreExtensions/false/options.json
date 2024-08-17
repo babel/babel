@@ -1,0 +1,4 @@
+{
+  "presets": [["flow", { "ignoreExtensions": false }]],
+  "throws": "Missing semicolon. (3:4)"
+}

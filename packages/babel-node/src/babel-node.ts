@@ -30,7 +30,7 @@ if (argSeparator > -1) {
 function getNormalizedV8Flag(arg: string) {
   // v8 uses the "no" prefix to negate boolean flags (e.g. --nolazy),
   // but they are not listed by v8flags
-  const matches = arg.match(/--(?:no)?(.+)/);
+  const matches = /--(?:no)?(.+)/.exec(arg);
 
   if (matches) {
     return `--${matches[1].replace(/_/g, "-")}`;
@@ -39,6 +39,7 @@ function getNormalizedV8Flag(arg: string) {
   return arg;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 getV8Flags(async function (err, v8Flags) {
   if (!process.env.BABEL_8_BREAKING) {
     // The version of v8flags used by Babel 7 uses _, while the one used

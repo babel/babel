@@ -1,6 +1,5 @@
 import rewritePattern from "regexpu-core";
-import type { NodePath } from "@babel/traverse";
-import { types as t, type PluginObject } from "@babel/core";
+import { types as t, type PluginObject, type NodePath } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import semver from "semver";
@@ -67,7 +66,7 @@ export function createRegExpFeaturePlugin({
           throw new Error(
             `The 'runtime' option must be the same for ` +
               `'@babel/plugin-transform-named-capturing-groups-regex' and ` +
-              `'@babel/plugin-proposal-duplicate-named-capturing-groups-regex'.`,
+              `'@babel/plugin-transform-duplicate-named-capturing-groups-regex'.`,
           );
         }
 

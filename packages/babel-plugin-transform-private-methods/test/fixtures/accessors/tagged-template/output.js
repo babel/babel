@@ -1,14 +1,11 @@
-var _tag = /*#__PURE__*/new WeakMap();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _tag, {
-      get: _get_tag,
-      set: void 0
-    });
-    babelHelpers.classPrivateFieldGet(this, _tag).bind(this)``;
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
+    babelHelpers.classPrivateGetter(_Foo_brand, this, _get_tag).bind(this)``;
   }
 }
-function _get_tag() {
-  return () => this;
+function _get_tag(_this) {
+  return () => _this;
 }
 new Foo();

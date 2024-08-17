@@ -14,7 +14,7 @@ var Foo = /*#__PURE__*/function () {
       value: 1
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       var _bar2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
@@ -26,18 +26,16 @@ var Foo = /*#__PURE__*/function () {
             value: 2
           });
         }
-        babelHelpers.createClass(Nested, [{
+        return babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
             babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
             babelHelpers.classPrivateFieldLooseBase(this, _bar2)[_bar2];
           }
         }]);
-        return Nested;
       }();
       babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
       babelHelpers.classPrivateFieldLooseBase(this, _bar)[_bar];
     }
   }]);
-  return Foo;
 }();

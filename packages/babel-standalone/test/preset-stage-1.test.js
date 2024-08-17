@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+import { itBabel7 } from "$repo-utils";
 const require = createRequire(import.meta.url);
 
 describe("stage-1 preset", () => {
@@ -29,7 +30,7 @@ describe("stage-1 preset", () => {
     expect(output).toMatchInlineSnapshot(`"x;"`);
   });
 
-  it("should support hack pipeline with `#` topic token", () => {
+  itBabel7("should support hack pipeline with `#` topic token", () => {
     const output = Babel.transform("x |> #", {
       presets: [
         [
@@ -45,10 +46,10 @@ describe("stage-1 preset", () => {
     }).code;
     expect(output).toMatchInlineSnapshot(`"x;"`);
   });
-  it("should support decorators versioned 2021-12", () => {
+  it("should support decorators versioned 2023-11", () => {
     const output = Babel.transform("@dec class C {}", {
       plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
-      presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
+      presets: [["stage-3", { decoratorsVersion: "2023-11" }]],
     }).code;
     expect(output).toMatch("babelHelpers.applyDecs");
   });
@@ -66,7 +67,7 @@ describe("stage-1 preset", () => {
     }).code;
     expect(output).not.toContain("#x:");
   });
-  it("should support regexp v flag", () => {
+  itBabel7("should support regexp v flag", () => {
     const output = Babel.transform("/[[a-p]&&[d-z]]/v", {
       presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
     }).code;

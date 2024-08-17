@@ -1,5 +1,4 @@
-import { types as t, template } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, template, type NodePath } from "@babel/core";
 import {
   skipTransparentExprWrapperNodes,
   skipTransparentExprWrappers,
@@ -41,7 +40,6 @@ function needsMemoize(
   ) {
     const { node } = optionalPath;
     const childPath = skipTransparentExprWrappers(
-      // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
       optionalPath.isOptionalMemberExpression()
         ? optionalPath.get("object")
         : optionalPath.get("callee"),
@@ -98,7 +96,6 @@ export function transformOptionalChain(
     if (node.optional) {
       optionals.push(node);
     }
-    // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
     if (optionalPath.isOptionalMemberExpression()) {
       // @ts-expect-error todo(flow->ts) avoid changing more type
       optionalPath.node.type = "MemberExpression";
@@ -166,7 +163,11 @@ export function transformOptionalChain(
         chainWithTypes as t.Expression,
       );
 
-      isCall ? (node.callee = ref) : (node.object = ref);
+      if (isCall) {
+        node.callee = ref;
+      } else {
+        node.object = ref;
+      }
     }
 
     // Ensure call expressions have the proper `this`

@@ -2,24 +2,27 @@
 
 Using targets:
 {
-  "android": "118",
+  "android": "125",
   "chrome": "109",
-  "edge": "118",
+  "edge": "124",
   "firefox": "115",
   "ios": "15.6",
-  "opera": "102",
-  "opera_mobile": "73",
-  "safari": "15.6",
-  "samsung": "22"
+  "opera": "109",
+  "opera_mobile": "80",
+  "safari": "17.4",
+  "samsung": "24"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
-  transform-class-static-block { ios < 16.4, safari < 16.4 }
+  transform-duplicate-named-capturing-groups-regex { android, chrome < 126, edge < 126, firefox < 129, ios, opera < 112, opera_mobile, samsung }
+  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios < 17, samsung }
+  bugfix/transform-firefox-class-in-computed-class-key { firefox, ios < 16 }
+  bugfix/transform-safari-class-field-initializer-scope { ios < 16 }
+  transform-class-static-block { ios < 16.4 }
   transform-export-namespace-from { }
-  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3, safari < 16.3 }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
 

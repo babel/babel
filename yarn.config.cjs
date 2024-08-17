@@ -1,8 +1,13 @@
 // @ts-check
+/// <reference lib="es2015" />
 
 /**
  * @typedef {import('@yarnpkg/types').Yarn.Constraints.Context} Context
  * */
+
+const babel7plugins_babel8core = new Set(
+  require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"]
+);
 
 /**
  * Enforces that all workspaces depend on other workspaces using `workspace:^`
@@ -21,7 +26,7 @@ function enforceWorkspaceDependencies({ Yarn }) {
       dependency.type === "dependencies" ||
       dependency.type === "devDependencies"
     ) {
-      if (dependency.range.startsWith("workspace:")) {
+      if (/^workspace:(?!\^$)/.test(dependency.range)) {
         dependency.update("workspace:^");
       }
     }
@@ -89,10 +94,13 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     if (workspace.manifest.private) {
       workspace.unset("engines.node");
     } else {
-      workspace.set(
-        "conditions.BABEL_8_BREAKING.0.engines.node",
-        "^16.20.0 || ^18.16.0 || >=20.0.0"
-      );
+      if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
+        workspace.set(
+          "conditions.BABEL_8_BREAKING.0.engines.node",
+          "^18.20.0 || ^20.10.0 || >=21.0.0"
+        );
+      }
+
       if (workspace.ident === "@babel/parser") continue;
       if (workspace.ident?.startsWith("@babel/eslint")) {
         workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
@@ -156,9 +164,8 @@ gen_enforced_field(WorkspaceCwd, 'type', 'commonjs') :-
  */
 function enforceType({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    const { type } = workspace.manifest;
-    if (type !== "module") {
-      workspace.set("type", "commonjs");
+    if (!workspace.manifest.private && workspace.manifest.type !== "commonjs") {
+      workspace.set("type", "module");
     }
   }
 }
@@ -196,7 +203,10 @@ function enforceNoDualTypeDependencies({ Yarn }) {
       ident: dependency.ident,
       type: "dependencies",
     });
-    if (otherDependency !== null) {
+    if (
+      otherDependency !== null &&
+      !otherDependency.range.includes("condition:")
+    ) {
       dependency.delete();
     }
   }
@@ -218,8 +228,14 @@ function enforceConditions({ Yarn }) {
     if (workspace.manifest.private) continue;
     if (workspace.manifest.main === "./lib/index.cjs") continue;
     if (workspace.ident === "@babel/compat-data") continue;
-    if (!workspace.manifest.conditions) {
-      workspace.set("conditions", { USE_ESM: [{ type: "module" }, null] });
+    if (workspace.manifest.type !== "commonjs") {
+      if (!workspace.manifest.conditions) {
+        workspace.set("conditions", { USE_ESM: [null, { type: "commonjs" }] });
+      } else if (!workspace.manifest.conditions.USE_ESM) {
+        workspace.set("conditions.USE_ESM", [null, { type: "commonjs" }]);
+      } else {
+        workspace.set("conditions.USE_ESM.1", { type: "commonjs" });
+      }
     }
   }
 }
@@ -237,11 +253,16 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
 function enforceBabelHelperBabelDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.ident?.startsWith("@babel/helper-")) {
-      workspace.unset("dependencies['@babel/traverse']");
-
-      if (workspace.pkg.peerDependencies.has("@babel/core")) {
+      if (
+        workspace.pkg.peerDependencies.has("@babel/core") &&
+        // In some cases, we remove peerDependencies for Babel 7
+        workspace.manifest.conditions?.BABEL_8_BREAKING?.[1]
+          ?.peerDependencies !== null
+      ) {
         workspace.unset("dependencies['@babel/template']");
         workspace.unset("dependencies['@babel/types']");
+        // TODO: Consider re-enforcing this in Babel 8
+        // workspace.unset("dependencies['@babel/traverse']");
       }
     }
   }
@@ -324,9 +345,29 @@ function enforceExports({ Yarn }) {
     }
 
     workspace.set("exports", {
-      ".": "./lib/index.js",
+      ".": {
+        types: "./lib/index.d.ts",
+        default: "./lib/index.js",
+      },
       "./package.json": "./package.json",
     });
+  }
+}
+
+function enforceBabelCodeVersionFor78Compat({ Yarn }, version) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.cwd === ".") {
+      workspace.set("devDependencies['@babel/core']", version);
+    } else if (
+      workspace.ident === "@babel/helper-transform-fixture-test-runner"
+    ) {
+      workspace.set("dependencies['@babel/core']", version);
+    } else if (
+      workspace.ident &&
+      babel7plugins_babel8core.has(workspace.ident.replace("@babel/", "babel-"))
+    ) {
+      workspace.set("devDependencies['@babel/core']", version);
+    }
   }
 }
 
@@ -346,6 +387,13 @@ module.exports = {
     enforceNoDualTypeDependencies(ctx);
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);
-    enforceBabelCoreNotInDeps(ctx);
+    if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
+      enforceBabelCodeVersionFor78Compat(
+        ctx,
+        process.env.BABEL_CORE_DEV_DEP_VERSION
+      );
+    } else {
+      enforceBabelCoreNotInDeps(ctx);
+    }
   },
 };

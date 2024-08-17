@@ -3,22 +3,19 @@ class Base {
     return obj;
   }
 }
-var _foo = /*#__PURE__*/new WeakMap();
+var _Derived_brand = /*#__PURE__*/new WeakSet();
 class Derived extends Base {
   constructor(...args) {
     super(...args);
-    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
-      get: _get_foo,
-      set: _set_foo
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Derived_brand);
   }
   static get(obj) {
-    return babelHelpers.classPrivateFieldGet(obj, _foo).call(obj);
+    return babelHelpers.classPrivateGetter(_Derived_brand, obj, _get_foo).call(obj);
   }
 }
-function _get_foo() {
+function _get_foo(_this) {
   return 'bar';
 }
-function _set_foo(value) {
-  babelHelpers.classPrivateFieldSet(this, _foo, value);
+function _set_foo(_this2, value) {
+  babelHelpers.classPrivateSetter(_Derived_brand, _set_foo, _this2, value);
 }

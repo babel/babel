@@ -1,4 +1,5 @@
-var _initStatic, _call_a, _computedKey, _Foo;
+var _Foo;
+let _initStatic, _call_a, _computedKey;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -21,13 +22,6 @@ class Foo {
   static get [_computedKey]() {}
 }
 _Foo = Foo;
-function _get_a() {
-  return _call_a(this);
-}
-var _a = {
-  get: _get_a,
-  set: void 0
-};
 (() => {
   [_call_a, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 8, "a"], [dec, 8, "a", function () {}], [dec, 8, "b"], [dec, 8, "c"], [dec, 8, 0], [dec, 8, 1], [dec, 8, 2n], [dec, 8, 3n], [dec, 8, _computedKey]], []);
   _initStatic(_Foo);

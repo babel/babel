@@ -2,10 +2,11 @@
 
 import { traverseNode } from "../traverse-node.ts";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
+import { _markRemoved } from "./removal.ts";
 import type TraversalContext from "../context.ts";
 import type { VisitPhase } from "../types.ts";
 import type NodePath from "./index.ts";
-import type * as t from "@babel/types";
+import * as t from "@babel/types";
 
 export function call(this: NodePath, key: VisitPhase): boolean {
   const opts = this.opts;
@@ -13,11 +14,11 @@ export function call(this: NodePath, key: VisitPhase): boolean {
   this.debug(key);
 
   if (this.node) {
-    if (this._call(opts[key])) return true;
+    if (_call.call(this, opts[key])) return true;
   }
 
   if (this.node) {
-    return this._call(opts[this.node.type]?.[key]);
+    return _call.call(this, opts[this.node.type]?.[key]);
   }
 
   return false;
@@ -188,9 +189,9 @@ export function setContext<S = unknown>(
 export function resync(this: NodePath) {
   if (this.removed) return;
 
-  this._resyncParent();
-  this._resyncList();
-  this._resyncKey();
+  _resyncParent.call(this);
+  _resyncList.call(this);
+  _resyncKey.call(this);
   //this._resyncRemoved();
 }
 
@@ -254,7 +255,7 @@ export function _resyncRemoved(this: NodePath) {
     // @ts-expect-error this.key should present in this.container
     this.container[this.key] !== this.node
   ) {
-    this._markRemoved();
+    _markRemoved.call(this);
   }
 }
 
@@ -310,6 +311,20 @@ export function requeue(this: NodePath, pathToQueue = this) {
 
   for (const context of contexts) {
     context.maybeQueue(pathToQueue);
+  }
+}
+
+export function requeueComputedKeyAndDecorators(
+  this: NodePath<t.Method | t.Property>,
+) {
+  const { context, node } = this;
+  if (!t.isPrivate(node) && node.computed) {
+    context.maybeQueue(this.get("key"));
+  }
+  if (node.decorators) {
+    for (const decorator of this.get("decorators")) {
+      context.maybeQueue(decorator);
+    }
   }
 }
 

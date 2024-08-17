@@ -40,9 +40,6 @@
                     "type": "Identifier",
                     "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"a"},
                     "name": "a"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 },
                 {
@@ -60,9 +57,6 @@
                     "type": "Identifier",
                     "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"b"},
                     "name": "b"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]

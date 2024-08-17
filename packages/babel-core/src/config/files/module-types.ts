@@ -16,11 +16,15 @@ const debug = buildDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
-let import_: ((specifier: string | URL) => any) | undefined;
-try {
-  // Old Node.js versions don't support import() syntax.
-  import_ = require("./import.cjs");
-} catch {}
+if (!process.env.BABEL_8_BREAKING) {
+  try {
+    // Old Node.js versions don't support import() syntax.
+    // eslint-disable-next-line no-var
+    var import_:
+      | ((specifier: string | URL) => any)
+      | undefined = require("./import.cjs");
+  } catch {}
+}
 
 export const supportsESM = semver.satisfies(
   process.versions.node,
@@ -28,6 +32,56 @@ export const supportsESM = semver.satisfies(
   // import syntax but always return a rejected promise.
   "^12.17 || >=13.2",
 );
+
+const LOADING_CJS_FILES = new Set();
+
+function loadCjsDefault(filepath: string) {
+  // The `require()` call below can make this code reentrant if a require hook
+  // like @babel/register has been loaded into the system. That would cause
+  // Babel to attempt to compile the `.babelrc.js` file as it loads below. To
+  // cover this case, we auto-ignore re-entrant config processing. ESM loaders
+  // do not have this problem, because loaders do not apply to themselves.
+  if (LOADING_CJS_FILES.has(filepath)) {
+    debug("Auto-ignoring usage of config %o.", filepath);
+    return {};
+  }
+
+  let module;
+  try {
+    LOADING_CJS_FILES.add(filepath);
+    module = endHiddenCallStack(require)(filepath);
+  } finally {
+    LOADING_CJS_FILES.delete(filepath);
+  }
+
+  if (process.env.BABEL_8_BREAKING) {
+    return module?.__esModule ? module.default : module;
+  } else {
+    return module?.__esModule
+      ? module.default ||
+          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
+      : module;
+  }
+}
+
+const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
+  filepath: string,
+) {
+  const url = pathToFileURL(filepath).toString();
+
+  if (process.env.BABEL_8_BREAKING) {
+    return (await import(url)).default;
+  } else {
+    if (!import_) {
+      throw new ConfigError(
+        "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
+        filepath,
+      );
+    }
+
+    return (await import_(url)).default;
+  }
+});
 
 export default function* loadCodeDefault(
   filepath: string,
@@ -114,6 +168,8 @@ function loadCtsDefault(filepath: string) {
           );
         } catch (error) {
           if (!hasTsSupport) {
+            // TODO(Babel 8): Add this as an optional peer dependency
+            // eslint-disable-next-line import/no-extraneous-dependencies
             const packageJson = require("@babel/preset-typescript/package.json");
             if (semver.lt(packageJson.version, "7.21.4")) {
               console.error(
@@ -136,51 +192,6 @@ function loadCtsDefault(filepath: string) {
       handler = undefined;
     }
   }
-}
-
-const LOADING_CJS_FILES = new Set();
-
-function loadCjsDefault(filepath: string) {
-  // The `require()` call below can make this code reentrant if a require hook
-  // like @babel/register has been loaded into the system. That would cause
-  // Babel to attempt to compile the `.babelrc.js` file as it loads below. To
-  // cover this case, we auto-ignore re-entrant config processing. ESM loaders
-  // do not have this problem, because loaders do not apply to themselves.
-  if (LOADING_CJS_FILES.has(filepath)) {
-    debug("Auto-ignoring usage of config %o.", filepath);
-    return {};
-  }
-
-  let module;
-  try {
-    LOADING_CJS_FILES.add(filepath);
-    module = endHiddenCallStack(require)(filepath);
-  } finally {
-    LOADING_CJS_FILES.delete(filepath);
-  }
-
-  if (process.env.BABEL_8_BREAKING) {
-    return module?.__esModule ? module.default : module;
-  } else {
-    return module?.__esModule
-      ? module.default ||
-          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
-      : module;
-  }
-}
-
-async function loadMjsDefault(filepath: string) {
-  if (!import_) {
-    throw new ConfigError(
-      "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
-      filepath,
-    );
-  }
-
-  // import() expects URLs, not file paths.
-  // https://github.com/nodejs/node/issues/31710
-  const module = await endHiddenCallStack(import_)(pathToFileURL(filepath));
-  return module.default;
 }
 
 function getTSPreset(filepath: string) {

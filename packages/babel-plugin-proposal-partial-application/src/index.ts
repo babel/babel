@@ -1,14 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
-import { types as t } from "@babel/core";
-import type { Scope } from "@babel/traverse";
+import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   /**
    * a function to figure out if a call expression has
@@ -40,14 +35,7 @@ export default declare(api => {
           );
           node.argument = t.cloneNode(id);
         } else {
-          init.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(id),
-              // @ts-expect-error Fixme: may need to handle JSXNamespacedName here
-              node,
-            ),
-          );
+          init.push(t.assignmentExpression("=", t.cloneNode(id), node));
           args[i] = t.cloneNode(id);
         }
       }

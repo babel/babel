@@ -13,13 +13,12 @@ expect( /*#__PURE__*/function () {
   function _class() {
     babelHelpers.classCallCheck(this, _class);
   }
-  babelHelpers.createClass(_class, null, [{
+  return babelHelpers.createClass(_class, null, [{
     key: foo,
     value: function () {
       return 0;
     }
   }]);
-  return _class;
 }().foo()).toBe(0);
 expect( /*#__PURE__*/function () {
   "use strict";
@@ -27,13 +26,12 @@ expect( /*#__PURE__*/function () {
   function _class2() {
     babelHelpers.classCallCheck(this, _class2);
   }
-  babelHelpers.createClass(_class2, null, [{
+  return babelHelpers.createClass(_class2, null, [{
     key: foo,
     get: function () {
       return 0;
     }
   }]);
-  return _class2;
 }().foo).toBe(0);
 expect( /*#__PURE__*/function () {
   "use strict";
@@ -41,23 +39,19 @@ expect( /*#__PURE__*/function () {
   function _class3() {
     babelHelpers.classCallCheck(this, _class3);
   }
-  babelHelpers.createClass(_class3, null, [{
+  return babelHelpers.createClass(_class3, null, [{
     key: foo,
     set: function (v) {
       return v;
     }
   }]);
-  return _class3;
 }().foo = 0).toBe(0);
-expect(new ( /*#__PURE__*/function () {
+expect(new ( /*#__PURE__*/babelHelpers.createClass(function _class4() {
   "use strict";
 
-  function _class4() {
-    babelHelpers.classCallCheck(this, _class4);
-    babelHelpers.defineProperty(this, foo, 0);
-  }
-  return babelHelpers.createClass(_class4);
-}())().foo).toBe(0);
+  babelHelpers.classCallCheck(this, _class4);
+  babelHelpers.defineProperty(this, foo, 0);
+}))().foo).toBe(0);
 var arrayLike = {
   [Symbol.toPrimitive]: () => []
 };
@@ -75,13 +69,12 @@ expect(() => /*#__PURE__*/function () {
   function _class5() {
     babelHelpers.classCallCheck(this, _class5);
   }
-  babelHelpers.createClass(_class5, null, [{
+  return babelHelpers.createClass(_class5, null, [{
     key: arrayLike,
     value: function () {
       return 0;
     }
   }]);
-  return _class5;
 }()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => /*#__PURE__*/function () {
   "use strict";
@@ -89,13 +82,12 @@ expect(() => /*#__PURE__*/function () {
   function _class6() {
     babelHelpers.classCallCheck(this, _class6);
   }
-  babelHelpers.createClass(_class6, null, [{
+  return babelHelpers.createClass(_class6, null, [{
     key: arrayLike,
     get: function () {
       return 0;
     }
   }]);
-  return _class6;
 }()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => /*#__PURE__*/function () {
   "use strict";
@@ -103,20 +95,16 @@ expect(() => /*#__PURE__*/function () {
   function _class7() {
     babelHelpers.classCallCheck(this, _class7);
   }
-  babelHelpers.createClass(_class7, null, [{
+  return babelHelpers.createClass(_class7, null, [{
     key: arrayLike,
     set: function (v) {
       return v;
     }
   }]);
-  return _class7;
 }()).toThrow("@@toPrimitive must return a primitive value.");
-expect(() => new ( /*#__PURE__*/function () {
+expect(() => new ( /*#__PURE__*/babelHelpers.createClass(function _class8() {
   "use strict";
 
-  function _class8() {
-    babelHelpers.classCallCheck(this, _class8);
-    babelHelpers.defineProperty(this, arrayLike, 0);
-  }
-  return babelHelpers.createClass(_class8);
-}())()).toThrow("@@toPrimitive must return a primitive value.");
+  babelHelpers.classCallCheck(this, _class8);
+  babelHelpers.defineProperty(this, arrayLike, 0);
+}))()).toThrow("@@toPrimitive must return a primitive value.");

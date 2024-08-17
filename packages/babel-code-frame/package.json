@@ -1,6 +1,6 @@
 {
   "name": "@babel/code-frame",
-  "version": "7.23.5",
+  "version": "7.24.7",
   "description": "Generate errors that contain a code frame that point to source locations.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-code-frame",
@@ -17,10 +17,10 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/highlight": "workspace:^",
-    "chalk": "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)"
+    "picocolors": "^1.0.0"
   },
   "devDependencies": {
-    "import-meta-resolve": "^4.0.0",
+    "import-meta-resolve": "^4.1.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
@@ -30,7 +30,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -38,15 +38,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

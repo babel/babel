@@ -29,6 +29,7 @@ function captureShortStackTrace(skip: number, length: number) {
   Error.prepareStackTrace = function (err, stack) {
     stackTrace = stack;
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   new Error().stack;
   Error.stackTraceLimit = stackTraceLimit;
   Error.prepareStackTrace = prepareStackTrace;

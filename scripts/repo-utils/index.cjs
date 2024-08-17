@@ -15,7 +15,11 @@ try {
   USE_ESM = type === "module";
 } catch (_) {}
 
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
 exports.USE_ESM = USE_ESM;
+exports.IS_BABEL_8 = () => bool(process.env.BABEL_8_BREAKING);
 
 if (typeof jest !== "undefined") {
   const dummy = () => {};

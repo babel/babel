@@ -1,7 +1,0 @@
-root: true
-parser: "@babel/eslint-parser"
-plugins:
-  - import
-rules:
-  import/no-named-as-default: error
-  no-unused-vars: error

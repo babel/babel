@@ -1,19 +1,17 @@
-import { template, traverse, types as t } from "@babel/core";
-import type { File } from "@babel/core";
-import type { NodePath, Scope, Visitor, Binding } from "@babel/traverse";
-import environmentVisitor from "@babel/helper-environment-visitor";
+import { template, types as t } from "@babel/core";
+import type { File, NodePath, Scope, Visitor } from "@babel/core";
+import { visitors } from "@babel/traverse";
 
-const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
-  {
-    Super(path) {
-      const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        this.push(parentPath);
-      }
-    },
+const findBareSupers = visitors.environmentVisitor<
+  NodePath<t.CallExpression>[]
+>({
+  Super(path) {
+    const { node, parentPath } = path;
+    if (parentPath.isCallExpression({ callee: node })) {
+      this.push(parentPath);
+    }
   },
-  environmentVisitor,
-]);
+});
 
 const referenceVisitor: Visitor<{ scope: Scope }> = {
   "TSTypeAnnotation|TypeAnnotation"(
@@ -31,7 +29,7 @@ const referenceVisitor: Visitor<{ scope: Scope }> = {
 };
 
 type HandleClassTDZState = {
-  classBinding: Binding;
+  classBinding: Scope.Binding;
   file: File;
 };
 
@@ -120,14 +118,60 @@ export function injectInitialization(
   }
 }
 
+type ComputedKeyAssignmentExpression = t.AssignmentExpression & {
+  left: t.Identifier;
+};
+
+/**
+ * Try to memoise a computed key.
+ * It returns undefined when the computed key is an uid reference, otherwise
+ * an assignment expression `memoiserId = computed key`
+ * @export
+ * @param {t.Expression} keyNode Computed key
+ * @param {Scope} scope The scope where memoiser id should be registered
+ * @param {string} hint The memoiser id hint
+ * @returns {(ComputedKeyAssignmentExpression | undefined)}
+ */
+export function memoiseComputedKey(
+  keyNode: t.Expression,
+  scope: Scope,
+  hint: string,
+): ComputedKeyAssignmentExpression | undefined {
+  const isUidReference = t.isIdentifier(keyNode) && scope.hasUid(keyNode.name);
+  if (isUidReference) {
+    return;
+  }
+  const isMemoiseAssignment =
+    t.isAssignmentExpression(keyNode, { operator: "=" }) &&
+    t.isIdentifier(keyNode.left) &&
+    scope.hasUid(keyNode.left.name);
+  if (isMemoiseAssignment) {
+    return t.cloneNode(keyNode as ComputedKeyAssignmentExpression);
+  } else {
+    const ident = t.identifier(hint);
+    // Declaring in the same block scope
+    // Ref: https://github.com/babel/babel/pull/10029/files#diff-fbbdd83e7a9c998721c1484529c2ce92
+    scope.push({
+      id: ident,
+      kind: "let",
+    });
+    return t.assignmentExpression(
+      "=",
+      t.cloneNode(ident),
+      keyNode,
+    ) as ComputedKeyAssignmentExpression;
+  }
+}
+
 export function extractComputedKeys(
   path: NodePath<t.Class>,
   computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[],
   file: File,
 ) {
+  const { scope } = path;
   const declarations: t.ExpressionStatement[] = [];
   const state = {
-    classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
+    classBinding: path.node.id && scope.getBinding(path.node.id.name),
     file,
   };
   for (const computedPath of computedPaths) {
@@ -142,36 +186,14 @@ export function extractComputedKeys(
     // Make sure computed property names are only evaluated once (upon class definition)
     // and in the right order in combination with static properties
     if (!computedKey.isConstantExpression()) {
-      const scope = path.scope;
-      const isUidReference =
-        t.isIdentifier(computedKey.node) && scope.hasUid(computedKey.node.name);
-      const isMemoiseAssignment =
-        computedKey.isAssignmentExpression({ operator: "=" }) &&
-        t.isIdentifier(computedKey.node.left) &&
-        scope.hasUid(computedKey.node.left.name);
-      if (isUidReference) {
-        continue;
-      } else if (isMemoiseAssignment) {
-        declarations.push(t.expressionStatement(t.cloneNode(computedNode.key)));
-        computedNode.key = t.cloneNode(
-          (computedNode.key as t.AssignmentExpression).left as t.Identifier,
-        );
-      } else {
-        const ident = path.scope.generateUidIdentifierBasedOnNode(
-          computedNode.key,
-        );
-        // Declaring in the same block scope
-        // Ref: https://github.com/babel/babel/pull/10029/files#diff-fbbdd83e7a9c998721c1484529c2ce92
-        scope.push({
-          id: ident,
-          kind: "let",
-        });
-        declarations.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", t.cloneNode(ident), computedNode.key),
-          ),
-        );
-        computedNode.key = t.cloneNode(ident);
+      const assignment = memoiseComputedKey(
+        computedKey.node,
+        scope,
+        scope.generateUidBasedOnNode(computedKey.node),
+      );
+      if (assignment) {
+        declarations.push(t.expressionStatement(assignment));
+        computedNode.key = t.cloneNode(assignment.left);
       }
     }
   }

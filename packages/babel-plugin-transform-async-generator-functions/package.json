@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-async-generator-functions",
-  "version": "7.23.9",
+  "version": "7.25.0",
   "description": "Turn async generator functions into ES2015 generators",
   "repository": {
     "type": "git",
@@ -17,10 +17,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-remap-async-to-generator": "workspace:^",
-    "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
+    "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4",
+    "@babel/traverse": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "babel-plugin-polyfill-corejs3": "^0.9.0",
+    "babel-plugin-polyfill-corejs3": "^0.10.6",
     "core-js-pure": "^3.30.2"
   },
   "engines": {
@@ -39,7 +39,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -47,15 +47,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

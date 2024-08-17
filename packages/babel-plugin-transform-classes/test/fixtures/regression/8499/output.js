@@ -12,11 +12,11 @@ try {
   var CustomElement = /*#__PURE__*/function (_HTMLElement) {
     "use strict";
 
-    babelHelpers.inherits(CustomElement, _HTMLElement);
     function CustomElement() {
       babelHelpers.classCallCheck(this, CustomElement);
       return babelHelpers.callSuper(this, CustomElement, arguments);
     }
+    babelHelpers.inherits(CustomElement, _HTMLElement);
     return babelHelpers.createClass(CustomElement);
   }( /*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));
   ;

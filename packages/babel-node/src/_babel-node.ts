@@ -1,4 +1,4 @@
-import commander from "commander";
+import * as commander from "commander";
 import Module from "module";
 import { inspect } from "util";
 import path from "path";
@@ -16,7 +16,9 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
-const program = new commander.Command("babel-node");
+const program = process.env.BABEL_8_BREAKING
+  ? commander.program
+  : commander.default.program;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
@@ -31,6 +33,7 @@ function collect(value: unknown, previousValue: string[]): Array<string> {
   return values;
 }
 
+program.name("babel-node");
 program.option("-e, --eval [script]", "Evaluate script");
 program.option(
   "--no-babelrc",
@@ -70,27 +73,30 @@ program.option(
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
+program.allowUnknownOption(true);
+
 program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
+const opts = program.opts();
 
 const babelOptions = {
   caller: {
     name: "@babel/node",
   },
-  extensions: program.extensions,
-  ignore: program.ignore,
-  only: program.only,
-  plugins: program.plugins,
-  presets: program.presets,
-  configFile: program.configFile,
-  envName: program.envName,
-  rootMode: program.rootMode,
+  extensions: opts.extensions,
+  ignore: opts.ignore,
+  only: opts.only,
+  plugins: opts.plugins,
+  presets: opts.presets,
+  configFile: opts.configFile,
+  envName: opts.envName,
+  rootMode: opts.rootMode,
 
   // Commander will default the "--no-" arguments to true, but we want to
   // leave them undefined so that @babel/core can handle the
   // default-assignment logic on its own.
-  babelrc: program.babelrc === true ? undefined : program.babelrc,
+  babelrc: opts.babelrc === true ? undefined : opts.babelrc,
 };
 
 for (const key of Object.keys(babelOptions) as Array<
@@ -105,14 +111,6 @@ register(babelOptions);
 
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
-    VariableDeclaration(path) {
-      if (path.node.kind !== "var") {
-        throw path.buildCodeFrameError(
-          "Only `var` variables are supported in the REPL",
-        );
-      }
-    },
-
     Program(path) {
       let hasExpressionStatement: boolean;
       for (const bodyPath of path.get("body")) {
@@ -145,8 +143,8 @@ const _eval = function (code: string, filename: string) {
 
   code = babel.transformSync(code, {
     filename: filename,
-    presets: program.presets,
-    plugins: (program.plugins || []).concat([replPlugin]),
+    ...babelOptions,
+    plugins: (opts.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
@@ -154,9 +152,9 @@ const _eval = function (code: string, filename: string) {
   });
 };
 
-if (program.eval || program.print) {
-  let code = program.eval;
-  if (!code || code === true) code = program.print;
+if (opts.eval || opts.print) {
+  let code = opts.eval;
+  if (!code || code === true) code = opts.print;
 
   global.__filename = "[eval]";
   global.__dirname = process.cwd();
@@ -171,7 +169,7 @@ if (program.eval || program.print) {
   global.require = module.require.bind(module);
 
   const result = _eval(code, global.__filename);
-  if (program.print) {
+  if (opts.print) {
     const output = typeof result === "string" ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
@@ -196,7 +194,7 @@ if (program.eval || program.print) {
           return;
         }
         const optionName = parsedOption.attributeName();
-        const parsedArg = program[optionName];
+        const parsedArg = opts[optionName];
         if (optionName === "require" || (parsedArg && parsedArg !== true)) {
           ignoreNext = true;
         }
@@ -228,9 +226,9 @@ if (program.eval || program.print) {
 
 // We have to handle require ourselves, as we want to require it in the context of babel-register
 function requireArgs() {
-  if (program.require) {
+  if (opts.require) {
     require(
-      require.resolve(program.require, {
+      require.resolve(opts.require, {
         paths: [process.cwd()],
       }),
     );

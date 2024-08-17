@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
-import { types as t, template, traverse, type PluginPass } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import { types as t, template, traverse } from "@babel/core";
+import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,
@@ -9,11 +9,7 @@ const enum USING_KIND {
 }
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.22.0",
-  );
+  api.assertVersion(REQUIRED_VERSION("^7.22.0"));
 
   const TOP_LEVEL_USING = new Map<t.Node, USING_KIND>();
 
@@ -47,7 +43,7 @@ export default declare(api => {
       path: NodePath<t.BlockStatement | t.StaticBlock>,
       state,
     ) {
-      if (state.availableHelper("usingCtx")) {
+      if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
         let ctx: t.Identifier | null = null;
         let needsAwait = false;
 
@@ -164,6 +160,69 @@ export default declare(api => {
         }
       }
     },
+    SwitchStatement(path, state) {
+      let ctx: t.Identifier | null = null;
+      let needsAwait = false;
+
+      const { cases } = path.node;
+      for (const c of cases) {
+        for (const stmt of c.consequent) {
+          if (isUsingDeclaration(stmt)) {
+            if (
+              !process.env.BABEL_8_BREAKING &&
+              !state.availableHelper("usingCtx")
+            ) {
+              path.traverse({
+                VariableDeclaration(path) {
+                  const { node } = path;
+                  if (!isUsingDeclaration(node)) return;
+                  throw path.buildCodeFrameError(
+                    "`using` declarations inside `switch` statements are not supported by your current `@babel/core` version, please update to a more recent one",
+                  );
+                },
+              });
+            }
+
+            ctx ??= path.scope.generateUidIdentifier("usingCtx");
+
+            const isAwaitUsing = stmt.kind === "await using";
+            needsAwait ||= isAwaitUsing;
+
+            stmt.kind = "const";
+            for (const decl of stmt.declarations) {
+              decl.init = t.callExpression(
+                t.memberExpression(
+                  t.cloneNode(ctx),
+                  isAwaitUsing ? t.identifier("a") : t.identifier("u"),
+                ),
+                [decl.init],
+              );
+            }
+          }
+        }
+      }
+      if (!ctx) return;
+
+      const disposeCall = t.callExpression(
+        t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
+        [],
+      );
+
+      const replacement = template.statement.ast`
+        try {
+          var ${t.cloneNode(ctx)} = ${state.addHelper("usingCtx")}();
+          ${path.node}
+        } catch (_) {
+          ${t.cloneNode(ctx)}.e = _;
+        } finally {
+          ${needsAwait ? t.awaitExpression(disposeCall) : disposeCall}
+        }
+      ` as t.TryStatement;
+
+      t.inherits(replacement, path.node);
+
+      path.replaceWith(replacement);
+    },
   };
 
   const transformUsingDeclarationsVisitorSkipFn: Visitor<PluginPass> =
@@ -198,7 +257,7 @@ export default declare(api => {
               continue;
             }
 
-            let { node } = stmt;
+            let node: t.Statement | t.Declaration = stmt.node;
             let shouldRemove = true;
 
             if (stmt.isExportDefaultDeclaration()) {

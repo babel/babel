@@ -840,24 +840,6 @@ describe("api", function () {
   });
 
   describe("buildExternalHelpers", function () {
-    describe("smoke tests", function () {
-      it("builds external helpers in global output type", function () {
-        babel.buildExternalHelpers(null, "global");
-      });
-
-      it("builds external helpers in module output type", function () {
-        babel.buildExternalHelpers(null, "module");
-      });
-
-      it("builds external helpers in umd output type", function () {
-        babel.buildExternalHelpers(null, "umd");
-      });
-
-      it("builds external helpers in var output type", function () {
-        babel.buildExternalHelpers(null, "var");
-      });
-    });
-
     it("all", function () {
       const script = babel.buildExternalHelpers();
       expect(script).toEqual(expect.stringContaining("classCallCheck"));
@@ -879,6 +861,88 @@ describe("api", function () {
     it("underscored", function () {
       const script = babel.buildExternalHelpers(["typeof"]);
       expect(script).toEqual(expect.stringContaining("typeof"));
+    });
+
+    describe("output types", function () {
+      it("global", function () {
+        const script = babel.buildExternalHelpers(["get"], "global");
+        expect(script).toMatchInlineSnapshot(`
+          "(function (global) {
+            var babelHelpers = global.babelHelpers = {};
+            function _get() {
+              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+                var p = babelHelpers.superPropBase(e, t);
+                if (p) {
+                  var n = Object.getOwnPropertyDescriptor(p, t);
+                  return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+                }
+              }, _get.apply(null, arguments);
+            }
+            babelHelpers.get = _get;
+          })(typeof global === \\"undefined\\" ? self : global);"
+        `);
+      });
+
+      it("umd", function () {
+        const script = babel.buildExternalHelpers(["get"], "umd");
+        expect(script).toMatchInlineSnapshot(`
+          "(function (root, factory) {
+            if (typeof define === \\"function\\" && define.amd) {
+              define([\\"exports\\"], factory);
+            } else if (typeof exports === \\"object\\") {
+              factory(exports);
+            } else {
+              factory(root.babelHelpers = {});
+            }
+          })(this, function (global) {
+            var babelHelpers = global;
+            function _get() {
+              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+                var p = babelHelpers.superPropBase(e, t);
+                if (p) {
+                  var n = Object.getOwnPropertyDescriptor(p, t);
+                  return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+                }
+              }, _get.apply(null, arguments);
+            }
+            babelHelpers.get = _get;
+          });"
+        `);
+      });
+
+      it("var", function () {
+        const script = babel.buildExternalHelpers(["get"], "var");
+        expect(script).toMatchInlineSnapshot(`
+          "var babelHelpers = {};
+          function _get() {
+            return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              var p = babelHelpers.superPropBase(e, t);
+              if (p) {
+                var n = Object.getOwnPropertyDescriptor(p, t);
+                return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+              }
+            }, _get.apply(null, arguments);
+          }
+          babelHelpers.get = _get;
+          babelHelpers;"
+        `);
+      });
+
+      it("module", function () {
+        const script = babel.buildExternalHelpers(["get"], "module");
+        expect(script).toMatchInlineSnapshot(`
+          "export { _get as get };
+          function _get() {
+            return _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              var p = _superPropBase(e, t);
+              if (p) {
+                var n = Object.getOwnPropertyDescriptor(p, t);
+                return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+              }
+            }, _get.apply(null, arguments);
+          }"
+        `);
+      });
     });
   });
 
@@ -906,23 +970,29 @@ describe("api", function () {
       });
     });
 
-    it("both syntax and transform plugin available", function () {
-      return new Promise(resolve => {
+    it("both syntax and transform plugin available", async function () {
+      const promise = new Promise((resolve, reject) => {
         transformFile(
           cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
           options,
-          function (err) {
-            expect(err.message).toMatch(
-              "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
-            );
-            expect(err.message).toMatch(
-              "Add @babel/plugin-proposal-do-expressions (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions) to the " +
-                "'plugins' section of your Babel config to enable transformation.",
-            );
-            resolve();
-          },
+          (err, result) => (err ? reject(err) : resolve(result)),
         );
       });
+
+      await expect(promise).rejects.toThrow();
+
+      const err = await promise.catch(e => e);
+
+      expect(err.message).toMatch(
+        "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
+      );
+      expect(err.message).toMatch(
+        "Add @babel/plugin-proposal-do-expressions (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions) to the " +
+          "'plugins' section of your Babel config to enable transformation.",
+      );
+      expect(err.message).toMatch(
+        /npx cross-env BABEL_SHOW_CONFIG_FOR=(.*?)[\\/]parsing-errors[\\/]syntax-and-transform[\\/]file.js/,
+      );
     });
   });
 

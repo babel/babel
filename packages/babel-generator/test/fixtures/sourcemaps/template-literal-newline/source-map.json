@@ -7,5 +7,6 @@
   "sourcesContent": [
     "// Newline\n`before\nafter`;\n\n// Newline newline\n`before\n\nafter`;\n\n// Newline LineContinuation\n`before\n\\\nafter`;\n\n// LineContinuation\n`before\\\nafter`;\n\n// LineContinuation newline\n`before\\\n\nafter`;\n\n// LineContinuation LineContinuation\n`before\\\n\\\nafter`;"
   ],
-  "mappings": "AAAA;AACC;AACD,MAAM;;AAEN;AACC;AACD;AACA,MAAM;;AAEN;AACC;AACD;AACA,MAAM;;AAEN;AACC;AACD,MAAM;;AAEN;AACC;AACD;AACA,MAAM;;AAEN;AACC;AACD;AACA,MAAM"
+  "mappings": "AAAA;AACA;AACA,MAAM;;AAEN;AACA;AACA;AACA,MAAM;;AAEN;AACA;AACA;AACA,MAAM;;AAEN;AACA;AACA,MAAM;;AAEN;AACA;AACA;AACA,MAAM;;AAEN;AACA;AACA;AACA,MAAM",
+  "ignoreList": []
 }

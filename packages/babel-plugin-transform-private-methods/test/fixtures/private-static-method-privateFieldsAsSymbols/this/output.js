@@ -4,8 +4,8 @@ class A {
     return 1;
   }
 }
-var _getA = /*#__PURE__*/Symbol("getA");
-var _getB = /*#__PURE__*/Symbol("getB");
+var _getA = Symbol("getA");
+var _getB = Symbol("getB");
 class B extends A {
   static get b() {
     return 2;
@@ -16,7 +16,7 @@ class B extends A {
 }
 _B = B;
 function _getA2() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(_B), "a", this);
+  return babelHelpers.superPropGet(_B, "a", this);
 }
 function _getB2() {
   return this.b;

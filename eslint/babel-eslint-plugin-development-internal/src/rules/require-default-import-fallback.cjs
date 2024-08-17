@@ -21,9 +21,9 @@ module.exports = {
           // This will not become an ESM file.
           src.endsWith(".cjs") ||
           // @babel/core automatically unwraps .default from plugins/presets.
-          /^@babel\/(plugin|preset)-/.test(src) ||
+          /^@babel\/(?:plugin|preset)-/.test(src) ||
           (src.endsWith("./lib/index.js") &&
-            /babel-(plugin|preset)-/.test(filename))
+            /babel-(?:plugin|preset)-/.test(filename))
         ) {
           return;
         }
@@ -33,7 +33,9 @@ module.exports = {
         );
         if (!defaultSpecifier) return;
 
-        const scope = ctx.getScope();
+        const scope = ctx.sourceCode
+          ? ctx.sourceCode.getScope(node)
+          : ctx.getScope();
 
         const { name: local } = defaultSpecifier.local;
         const { references } = scope.variables.find(v => v.name === local);

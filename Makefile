@@ -1,5 +1,5 @@
 FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
-TEST262_COMMIT = 584048ed081d85f5eed6e884a7b40b6f4bcd67d7
+TEST262_COMMIT = 224c5c3cb99bccf55ef36fca0b173bbb50ad6cc5
 TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
 
 SOURCES = packages codemods eslint
@@ -15,6 +15,9 @@ MAKEJS := node Makefile.js
 
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
+
+Makefile.js: Makefile.source.mjs yarn.lock
+	$(NODE) ./scripts/pack-script.js
 
 build:
 	$(MAKEJS) build
@@ -55,12 +58,16 @@ build-plugin-transform-runtime-dist:
 watch:
 	$(MAKEJS) watch
 
-code-quality: tscheck lint
+code-quality: lint
 
 tscheck:
 	$(MAKEJS) tscheck
 
-lint-ci: lint check-compat-data
+clean-ts:
+	$(MAKEJS) clean-ts
+
+lint-ci:
+	$(MAKEJS) lint-ci
 
 generate-readme:
 	$(NODE) scripts/generators/readmes.js
@@ -110,6 +117,9 @@ use-esm:
 
 clean-lib:
 	$(MAKEJS) clean-lib
+
+clean-node-modules:
+	$(MAKEJS) clean-node-modules
 
 clean-runtime-helpers:
 	$(MAKEJS) clean-runtime-helpers

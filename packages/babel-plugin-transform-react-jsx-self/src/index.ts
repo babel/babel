@@ -14,7 +14,7 @@
  */
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
-import type { Visitor, NodePath } from "@babel/traverse";
+import type { Visitor, NodePath } from "@babel/core";
 
 const TRACE_ID = "__self";
 
@@ -31,7 +31,6 @@ function getThisFunctionParent(
   do {
     const { path } = scope;
     if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
-      // @ts-expect-error TS does not exclude ArrowFunctionExpression from FunctionParent
       return path;
     }
   } while ((scope = scope.parent));
@@ -71,11 +70,7 @@ function isThisAllowed(path: NodePath<t.JSXOpeningElement>) {
 }
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const visitor: Visitor = {
     JSXOpeningElement(path) {

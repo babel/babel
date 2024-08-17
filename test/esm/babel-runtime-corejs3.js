@@ -1,5 +1,10 @@
 import assert from "assert";
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return Boolean(value) && value !== "false" && value !== "0";
+}
+
 export default {
   title: "@babel/runtime-corejs3",
   testcases: [
@@ -32,7 +37,7 @@ export default {
           Error
         ),
     ],*/
-    [
+    !bool(process.env.BABEL_8_BREAKING) && [
       "it should not throw on importing core-js helpers",
       () =>
         assert.doesNotReject(
@@ -65,5 +70,5 @@ export default {
           Error
         ),
     ],
-  ],
+  ].filter(Boolean),
 };

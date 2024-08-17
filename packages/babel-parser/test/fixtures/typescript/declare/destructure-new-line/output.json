@@ -45,9 +45,6 @@
                     "type": "Identifier",
                     "start":16,"end":17,"loc":{"start":{"line":2,"column":8,"index":16},"end":{"line":2,"column":9,"index":17},"identifierName":"x"},
                     "name": "x"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 },
                 {
@@ -65,9 +62,6 @@
                     "type": "Identifier",
                     "start":19,"end":20,"loc":{"start":{"line":2,"column":11,"index":19},"end":{"line":2,"column":12,"index":20},"identifierName":"y"},
                     "name": "y"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ],
@@ -124,6 +118,9 @@
         "kind": "const"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

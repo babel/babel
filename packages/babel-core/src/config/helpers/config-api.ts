@@ -72,9 +72,9 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
       });
     })) as any;
 
-  const caller = (cb: {
-    (CallerMetadata: CallerMetadata | undefined): SimpleType;
-  }) => cache.using(data => assertSimpleType(cb(data.caller)));
+  const caller = (
+    cb: (CallerMetadata: CallerMetadata | undefined) => SimpleType,
+  ) => cache.using(data => assertSimpleType(cb(data.caller)));
 
   return {
     version: coreVersion,
@@ -126,7 +126,10 @@ function assertVersion(range: string | number): void {
     throw new Error("Expected string or integer value.");
   }
 
-  if (semver.satisfies(coreVersion, range)) return;
+  // We want "*" to also allow any pre-release, but we do not pass
+  // the includePrerelease option to semver.satisfies because we
+  // do not want ^7.0.0 to match 8.0.0-alpha.1.
+  if (range === "*" || semver.satisfies(coreVersion, range)) return;
 
   const limit = Error.stackTraceLimit;
 

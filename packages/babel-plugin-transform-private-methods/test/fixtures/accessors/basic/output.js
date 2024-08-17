@@ -1,27 +1,21 @@
 var _privateField = /*#__PURE__*/new WeakMap();
-var _privateFieldValue = /*#__PURE__*/new WeakMap();
+var _Cl_brand = /*#__PURE__*/new WeakSet();
 class Cl {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
-      get: _get_privateFieldValue,
-      set: _set_privateFieldValue
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
-      writable: true,
-      value: "top secret string"
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Cl_brand);
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, "top secret string");
     this.publicField = "not secret string";
   }
   publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
+    return babelHelpers.classPrivateGetter(_Cl_brand, this, _get_privateFieldValue);
   }
   publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, newValue);
+    babelHelpers.classPrivateSetter(_Cl_brand, _set_privateFieldValue, this, newValue);
   }
 }
-function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGet(this, _privateField);
+function _get_privateFieldValue(_this) {
+  return babelHelpers.classPrivateFieldGet2(_privateField, _this);
 }
-function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
+function _set_privateFieldValue(_this2, newValue) {
+  babelHelpers.classPrivateFieldSet2(_privateField, _this2, newValue);
 }

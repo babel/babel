@@ -73,9 +73,6 @@
                       "type": "Identifier",
                       "start":37,"end":40,"loc":{"start":{"line":2,"column":15,"index":37},"end":{"line":2,"column":18,"index":40},"identifierName":"bar"},
                       "name": "bar"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   },
                   {
@@ -100,6 +97,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

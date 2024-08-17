@@ -2,6 +2,7 @@ import type Printer from "../printer.ts";
 import { isDeclareExportDeclaration, isStatement } from "@babel/types";
 import type * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules.ts";
+import { TokenContext } from "../node/index.ts";
 
 export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
@@ -11,7 +12,7 @@ export function ArrayTypeAnnotation(
   this: Printer,
   node: t.ArrayTypeAnnotation,
 ) {
-  this.print(node.elementType, node, true);
+  this.print(node.elementType, true);
   this.token("[");
   this.token("]");
 }
@@ -56,13 +57,13 @@ export function DeclareFunction(
   }
   this.word("function");
   this.space();
-  this.print(node.id, node);
+  this.print(node.id);
   // @ts-ignore(Babel 7 vs Babel 8) TODO(Babel 8) Remove this comment, since we'll remove the Noop node
-  this.print(node.id.typeAnnotation.typeAnnotation, node);
+  this.print(node.id.typeAnnotation.typeAnnotation);
 
   if (node.predicate) {
     this.space();
-    this.print(node.predicate, node);
+    this.print(node.predicate);
   }
 
   this.semicolon();
@@ -77,7 +78,7 @@ export function DeclaredPredicate(this: Printer, node: t.DeclaredPredicate) {
   this.token("%");
   this.word("checks");
   this.token("(");
-  this.print(node.value, node);
+  this.print(node.value);
   this.token(")");
 }
 
@@ -92,9 +93,9 @@ export function DeclareModule(this: Printer, node: t.DeclareModule) {
   this.space();
   this.word("module");
   this.space();
-  this.print(node.id, node);
+  this.print(node.id);
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export function DeclareModuleExports(
@@ -106,7 +107,7 @@ export function DeclareModuleExports(
   this.word("module");
   this.token(".");
   this.word("exports");
-  this.print(node.typeAnnotation, node);
+  this.print(node.typeAnnotation);
 }
 
 export function DeclareTypeAlias(this: Printer, node: t.DeclareTypeAlias) {
@@ -138,8 +139,8 @@ export function DeclareVariable(
   }
   this.word("var");
   this.space();
-  this.print(node.id, node);
-  this.print(node.id.typeAnnotation, node);
+  this.print(node.id);
+  this.print(node.id.typeAnnotation);
   this.semicolon();
 }
 
@@ -172,8 +173,8 @@ export function EnumDeclaration(this: Printer, node: t.EnumDeclaration) {
   const { id, body } = node;
   this.word("enum");
   this.space();
-  this.print(id, node);
-  this.print(body, node);
+  this.print(id);
+  this.print(body);
 }
 
 function enumExplicitType(
@@ -196,7 +197,7 @@ function enumBody(context: Printer, node: t.EnumBody) {
   context.indent();
   context.newline();
   for (const member of members) {
-    context.print(member, node);
+    context.print(member);
     context.newline();
   }
   if (node.hasUnknownMembers) {
@@ -235,7 +236,7 @@ export function EnumDefaultedMember(
   node: t.EnumDefaultedMember,
 ) {
   const { id } = node;
-  this.print(id, node);
+  this.print(id);
   this.token(",");
 }
 
@@ -243,12 +244,11 @@ function enumInitializedMember(
   context: Printer,
   node: t.EnumBooleanMember | t.EnumNumberMember | t.EnumStringMember,
 ) {
-  const { id, init } = node;
-  context.print(id, node);
+  context.print(node.id);
   context.space();
   context.token("=");
   context.space();
-  context.print(init, node);
+  context.print(node.init);
   context.token(",");
 }
 
@@ -270,7 +270,7 @@ function FlowExportDeclaration(
 ) {
   if (node.declaration) {
     const declar = node.declaration;
-    this.print(declar, node);
+    this.print(declar);
     if (!isStatement(declar)) this.semicolon();
   } else {
     this.token("{");
@@ -285,7 +285,7 @@ function FlowExportDeclaration(
       this.space();
       this.word("from");
       this.space();
-      this.print(node.source, node);
+      this.print(node.source);
     }
 
     this.semicolon();
@@ -301,14 +301,14 @@ export function FunctionTypeAnnotation(
   node: t.FunctionTypeAnnotation,
   parent?: t.Node,
 ) {
-  this.print(node.typeParameters, node);
+  this.print(node.typeParameters);
   this.token("(");
 
   if (node.this) {
     this.word("this");
     this.token(":");
     this.space();
-    this.print(node.this.typeAnnotation, node);
+    this.print(node.this.typeAnnotation);
     if (node.params.length || node.rest) {
       this.token(",");
       this.space();
@@ -323,7 +323,7 @@ export function FunctionTypeAnnotation(
       this.space();
     }
     this.token("...");
-    this.print(node.rest, node);
+    this.print(node.rest);
   }
 
   this.token(")");
@@ -345,22 +345,22 @@ export function FunctionTypeAnnotation(
   }
 
   this.space();
-  this.print(node.returnType, node);
+  this.print(node.returnType);
 }
 
 export function FunctionTypeParam(this: Printer, node: t.FunctionTypeParam) {
-  this.print(node.name, node);
+  this.print(node.name);
   if (node.optional) this.token("?");
   if (node.name) {
     this.token(":");
     this.space();
   }
-  this.print(node.typeAnnotation, node);
+  this.print(node.typeAnnotation);
 }
 
 export function InterfaceExtends(this: Printer, node: t.InterfaceExtends) {
-  this.print(node.id, node);
-  this.print(node.typeParameters, node, true);
+  this.print(node.id);
+  this.print(node.typeParameters, true);
 }
 
 export {
@@ -372,8 +372,8 @@ export function _interfaceish(
   this: Printer,
   node: t.InterfaceDeclaration | t.DeclareInterface | t.DeclareClass,
 ) {
-  this.print(node.id, node);
-  this.print(node.typeParameters, node);
+  this.print(node.id);
+  this.print(node.typeParameters);
   if (node.extends?.length) {
     this.space();
     this.word("extends");
@@ -395,7 +395,7 @@ export function _interfaceish(
     }
   }
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export function _variance(
@@ -445,7 +445,7 @@ export function InterfaceTypeAnnotation(
     this.printList(node.extends, node);
   }
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export function IntersectionTypeAnnotation(
@@ -468,7 +468,7 @@ export function NullableTypeAnnotation(
   node: t.NullableTypeAnnotation,
 ) {
   this.token("?");
-  this.print(node.typeAnnotation, node);
+  this.print(node.typeAnnotation);
 }
 
 export {
@@ -503,7 +503,7 @@ export function TypeofTypeAnnotation(
 ) {
   this.word("typeof");
   this.space();
-  this.print(node.argument, node);
+  this.print(node.argument);
 }
 
 export function TypeAlias(
@@ -512,21 +512,31 @@ export function TypeAlias(
 ) {
   this.word("type");
   this.space();
-  this.print(node.id, node);
-  this.print(node.typeParameters, node);
+  this.print(node.id);
+  this.print(node.typeParameters);
   this.space();
   this.token("=");
   this.space();
-  this.print(node.right, node);
+  this.print(node.right);
   this.semicolon();
 }
 
-export function TypeAnnotation(this: Printer, node: t.TypeAnnotation) {
+export function TypeAnnotation(
+  this: Printer,
+  node: t.TypeAnnotation,
+  parent: t.Node,
+) {
   this.token(":");
   this.space();
-  // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
-  if (node.optional) this.token("?");
-  this.print(node.typeAnnotation, node);
+  if (parent.type === "ArrowFunctionExpression") {
+    this.tokenContext |= TokenContext.arrowFlowReturnType;
+  } else if (
+    // @ts-expect-error todo(flow->ts) can this be removed? `.optional` looks to be not existing property
+    node.optional
+  ) {
+    this.token("?");
+  }
+  this.print(node.typeAnnotation);
 }
 
 export function TypeParameterInstantiation(
@@ -546,14 +556,14 @@ export function TypeParameter(this: Printer, node: t.TypeParameter) {
   this.word(node.name);
 
   if (node.bound) {
-    this.print(node.bound, node);
+    this.print(node.bound);
   }
 
   if (node.default) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.default, node);
+    this.print(node.default);
   }
 }
 
@@ -565,19 +575,19 @@ export function OpaqueType(
   this.space();
   this.word("type");
   this.space();
-  this.print(node.id, node);
-  this.print(node.typeParameters, node);
+  this.print(node.id);
+  this.print(node.typeParameters);
   if (node.supertype) {
     this.token(":");
     this.space();
-    this.print(node.supertype, node);
+    this.print(node.supertype);
   }
 
   if (node.impltype) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.impltype, node);
+    this.print(node.impltype);
   }
   this.semicolon();
 }
@@ -648,7 +658,7 @@ export function ObjectTypeInternalSlot(
   }
   this.token("[");
   this.token("[");
-  this.print(node.id, node);
+  this.print(node.id);
   this.token("]");
   this.token("]");
   if (node.optional) this.token("?");
@@ -656,7 +666,7 @@ export function ObjectTypeInternalSlot(
     this.token(":");
     this.space();
   }
-  this.print(node.value, node);
+  this.print(node.value);
 }
 
 export function ObjectTypeCallProperty(
@@ -667,7 +677,7 @@ export function ObjectTypeCallProperty(
     this.word("static");
     this.space();
   }
-  this.print(node.value, node);
+  this.print(node.value);
 }
 
 export function ObjectTypeIndexer(this: Printer, node: t.ObjectTypeIndexer) {
@@ -678,15 +688,15 @@ export function ObjectTypeIndexer(this: Printer, node: t.ObjectTypeIndexer) {
   this._variance(node);
   this.token("[");
   if (node.id) {
-    this.print(node.id, node);
+    this.print(node.id);
     this.token(":");
     this.space();
   }
-  this.print(node.key, node);
+  this.print(node.key);
   this.token("]");
   this.token(":");
   this.space();
-  this.print(node.value, node);
+  this.print(node.value);
 }
 
 export function ObjectTypeProperty(this: Printer, node: t.ObjectTypeProperty) {
@@ -703,13 +713,13 @@ export function ObjectTypeProperty(this: Printer, node: t.ObjectTypeProperty) {
     this.space();
   }
   this._variance(node);
-  this.print(node.key, node);
+  this.print(node.key);
   if (node.optional) this.token("?");
   if (!node.method) {
     this.token(":");
     this.space();
   }
-  this.print(node.value, node);
+  this.print(node.value);
 }
 
 export function ObjectTypeSpreadProperty(
@@ -717,16 +727,16 @@ export function ObjectTypeSpreadProperty(
   node: t.ObjectTypeSpreadProperty,
 ) {
   this.token("...");
-  this.print(node.argument, node);
+  this.print(node.argument);
 }
 
 export function QualifiedTypeIdentifier(
   this: Printer,
   node: t.QualifiedTypeIdentifier,
 ) {
-  this.print(node.qualification, node);
+  this.print(node.qualification);
   this.token(".");
-  this.print(node.id, node);
+  this.print(node.id);
 }
 
 export function SymbolTypeAnnotation(this: Printer) {
@@ -748,8 +758,8 @@ export function UnionTypeAnnotation(
 
 export function TypeCastExpression(this: Printer, node: t.TypeCastExpression) {
   this.token("(");
-  this.print(node.expression, node);
-  this.print(node.typeAnnotation, node);
+  this.print(node.expression);
+  this.print(node.typeAnnotation);
   this.token(")");
 }
 
@@ -766,9 +776,9 @@ export function VoidTypeAnnotation(this: Printer) {
 }
 
 export function IndexedAccessType(this: Printer, node: t.IndexedAccessType) {
-  this.print(node.objectType, node, true);
+  this.print(node.objectType, true);
   this.token("[");
-  this.print(node.indexType, node);
+  this.print(node.indexType);
   this.token("]");
 }
 
@@ -776,11 +786,11 @@ export function OptionalIndexedAccessType(
   this: Printer,
   node: t.OptionalIndexedAccessType,
 ) {
-  this.print(node.objectType, node);
+  this.print(node.objectType);
   if (node.optional) {
     this.token("?.");
   }
   this.token("[");
-  this.print(node.indexType, node);
+  this.print(node.indexType);
   this.token("]");
 }

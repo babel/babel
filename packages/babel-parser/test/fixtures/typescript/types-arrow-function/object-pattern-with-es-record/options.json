@@ -2,11 +2,6 @@
   "sourceType": "module",
   "plugins": [
     "typescript",
-    [
-      "recordAndTuple",
-      {
-        "syntaxType": "hash"
-      }
-    ]
+    "recordAndTuple"
   ]
 }

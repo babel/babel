@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
-import hoistVariables from "@babel/helper-hoist-variables";
-import { template, types as t, type PluginPass } from "@babel/core";
+import { template, types as t } from "@babel/core";
+import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
 import {
   buildDynamicImport,
   getModuleName,
@@ -8,7 +8,6 @@ import {
 } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
 const buildTemplate = template.statement(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -176,11 +175,7 @@ type ReassignmentVisitorState = {
 };
 
 export default declare<PluginState>((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const reassignmentVisited = new WeakSet();
@@ -633,12 +628,19 @@ export default declare<PluginState>((api, options: Options) => {
           // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          hoistVariables(path, (id, name, hasInit) => {
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.scope.hoistVariables ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").Scope.prototype.hoistVariables;
+          }
+
+          path.scope.hoistVariables((id, hasInit) => {
             variableIds.push(id);
-            if (!hasInit && name in exportMap) {
-              for (const exported of exportMap[name]) {
+            if (!hasInit && id.name in exportMap) {
+              for (const exported of exportMap[id.name]) {
                 exportNames.push(exported);
-                exportValues.push(scope.buildUndefinedNode());
+                exportValues.push(t.buildUndefinedNode());
               }
             }
           });

@@ -7,12 +7,14 @@ import type { BindingKind } from "./binding.ts";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
+  assignmentExpression,
   callExpression,
   cloneNode,
   getBindingIdentifiers,
   identifier,
   isArrayExpression,
   isBinary,
+  isCallExpression,
   isClass,
   isClassBody,
   isClassDeclaration,
@@ -23,6 +25,7 @@ import {
   isIdentifier,
   isImportDeclaration,
   isLiteral,
+  isMemberExpression,
   isMethod,
   isModuleSpecifier,
   isNullLiteral,
@@ -36,6 +39,7 @@ import {
   isThisExpression,
   isUnaryExpression,
   isVariableDeclaration,
+  expressionStatement,
   matchesPattern,
   memberExpression,
   numericLiteral,
@@ -50,6 +54,7 @@ import {
   isPrivateName,
   isExportDeclaration,
   buildUndefinedNode,
+  sequenceExpression,
 } from "@babel/types";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
@@ -367,8 +372,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       // @ts-expect-error Fixme: document symbol ast properties
       !path.get("id").node[NOT_LOCAL_BINDING]
     ) {
-      path.scope.registerBinding("local", path);
+      path.scope.registerBinding("local", path.get("id"), path);
     }
+  },
+  TSTypeAnnotation(path) {
+    path.skip();
   },
 };
 
@@ -376,7 +384,8 @@ let uid = 0;
 
 export type { Binding };
 
-export default class Scope {
+export { Scope as default };
+class Scope {
   uid;
 
   path: NodePath;
@@ -435,7 +444,7 @@ export default class Scope {
       const shouldSkip = path.key === "key" || path.listKey === "decorators";
       path = path.parentPath;
       if (shouldSkip && path.isMethod()) path = path.parentPath;
-      if (path && path.isScope()) parent = path;
+      if (path?.isScope()) parent = path;
     } while (path && !parent);
 
     return parent?.scope;
@@ -493,9 +502,7 @@ export default class Scope {
    */
 
   generateUid(name: string = "temp"): string {
-    name = toIdentifier(name)
-      .replace(/^_+/, "")
-      .replace(/[0-9]+$/g, "");
+    name = toIdentifier(name).replace(/^_+/, "").replace(/\d+$/g, "");
 
     let uid;
     let i = 1;
@@ -787,7 +794,7 @@ export default class Scope {
   }
 
   registerConstantViolation(path: NodePath) {
-    const ids = path.getBindingIdentifiers();
+    const ids = path.getAssignmentIdentifiers();
     for (const name of Object.keys(ids)) {
       this.getBinding(name)?.reassign(path);
     }
@@ -827,7 +834,7 @@ export default class Scope {
 
         // A redeclaration of an existing variable is a modification
         if (local) {
-          this.registerConstantViolation(bindingPath);
+          local.reassign(bindingPath);
         } else {
           this.bindings[name] = new Binding({
             identifier: id,
@@ -929,17 +936,33 @@ export default class Scope {
       return true;
     } else if (isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
-    } else if (isTaggedTemplateExpression(node)) {
-      return (
-        matchesPattern(node.tag, "String.raw") &&
-        !this.hasBinding("String", true) &&
-        this.isPure(node.quasi, constantsOnly)
-      );
     } else if (isTemplateLiteral(node)) {
       for (const expression of node.expressions) {
         if (!this.isPure(expression, constantsOnly)) return false;
       }
       return true;
+    } else if (isTaggedTemplateExpression(node)) {
+      return (
+        matchesPattern(node.tag, "String.raw") &&
+        !this.hasBinding("String", { noGlobals: true }) &&
+        this.isPure(node.quasi, constantsOnly)
+      );
+    } else if (isMemberExpression(node)) {
+      return (
+        !node.computed &&
+        isIdentifier(node.object) &&
+        node.object.name === "Symbol" &&
+        isIdentifier(node.property) &&
+        node.property.name !== "for" &&
+        !this.hasBinding("Symbol", { noGlobals: true })
+      );
+    } else if (isCallExpression(node)) {
+      return (
+        matchesPattern(node.callee, "Symbol.for") &&
+        !this.hasBinding("Symbol", { noGlobals: true }) &&
+        node.arguments.length === 1 &&
+        t.isStringLiteral(node.arguments[0])
+      );
     } else {
       return isPureish(node);
     }
@@ -1023,7 +1046,7 @@ export default class Scope {
     // register assignments
     for (const path of state.assignments) {
       // register undeclared bindings as globals
-      const ids = path.getBindingIdentifiers();
+      const ids = path.getAssignmentIdentifiers();
       for (const name of Object.keys(ids)) {
         if (path.scope.getBinding(name)) continue;
         programParent.addGlobal(ids[name]);
@@ -1081,9 +1104,9 @@ export default class Scope {
       path.isFunction() &&
       // @ts-expect-error ArrowFunctionExpression never has a name
       !path.node.name &&
-      t.isCallExpression(path.parent, { callee: path.node }) &&
+      isCallExpression(path.parent, { callee: path.node }) &&
       path.parent.arguments.length <= path.node.params.length &&
-      t.isIdentifier(id)
+      isIdentifier(id)
     ) {
       path.pushContainer("params", id);
       path.scope.registerBinding(
@@ -1094,9 +1117,7 @@ export default class Scope {
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
-      // @ts-expect-error TS can not infer NodePath<Loop> | NodePath<CatchClause> as NodePath<Loop | CatchClause>
       path.ensureBlock();
-      // @ts-expect-error todo(flow->ts): improve types
       path = path.get("body");
     }
 
@@ -1296,15 +1317,26 @@ export default class Scope {
     opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
   ) {
     if (!name) return false;
-    if (this.hasOwnBinding(name)) return true;
-    {
-      // TODO: Only accept the object form.
-      if (typeof opts === "boolean") opts = { noGlobals: opts };
+    let scope: Scope = this;
+    do {
+      if (scope.hasOwnBinding(name)) {
+        return true;
+      }
+    } while ((scope = scope.parent));
+
+    // TODO: Only accept the object form.
+    let noGlobals;
+    let noUids;
+    if (typeof opts === "object") {
+      noGlobals = opts.noGlobals;
+      noUids = opts.noUids;
+    } else if (typeof opts === "boolean") {
+      noGlobals = opts;
     }
-    if (this.parentHasBinding(name, opts)) return true;
-    if (!opts?.noUids && this.hasUid(name)) return true;
-    if (!opts?.noGlobals && Scope.globals.includes(name)) return true;
-    if (!opts?.noGlobals && Scope.contextVariables.includes(name)) return true;
+
+    if (!noUids && this.hasUid(name)) return true;
+    if (!noGlobals && Scope.globals.includes(name)) return true;
+    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
@@ -1344,4 +1376,67 @@ export default class Scope {
       }
     } while ((scope = scope.parent));
   }
+
+  /**
+   * Hoist all the `var` variable to the beginning of the function/program
+   * scope where their binding will be actually defined. For exmaple,
+   *     { var x = 2 }
+   * will be transformed to
+   *     var x; { x = 2 }
+   *
+   * @param emit A custom function to emit `var` declarations, for example to
+   *   emit them in a different scope.
+   */
+  hoistVariables(
+    emit: (id: t.Identifier, hasInit: boolean) => void = id =>
+      this.push({ id }),
+  ) {
+    this.crawl();
+
+    const seen = new Set();
+    for (const name of Object.keys(this.bindings)) {
+      const binding = this.bindings[name];
+      if (!binding) continue;
+      const { path } = binding;
+      if (!path.isVariableDeclarator()) continue;
+      const { parent, parentPath } = path;
+
+      if (parent.kind !== "var" || seen.has(parent)) continue;
+      seen.add(path.parent);
+
+      let firstId;
+      const init = [];
+      for (const decl of parent.declarations) {
+        firstId ??= decl.id;
+        if (decl.init) {
+          init.push(assignmentExpression("=", decl.id, decl.init));
+        }
+
+        const ids = Object.keys(getBindingIdentifiers(decl, false, true, true));
+        for (const name of ids) {
+          emit(identifier(name), decl.init != null);
+        }
+      }
+
+      // for (var i in test)
+      if (parentPath.parentPath.isFor({ left: parent })) {
+        parentPath.replaceWith(firstId);
+      } else if (init.length === 0) {
+        parentPath.remove();
+      } else {
+        const expr = init.length === 1 ? init[0] : sequenceExpression(init);
+        if (parentPath.parentPath.isForStatement({ init: parent })) {
+          parentPath.replaceWith(expr);
+        } else {
+          parentPath.replaceWith(expressionStatement(expr));
+        }
+      }
+    }
+  }
+}
+
+type _Binding = Binding;
+// eslint-disable-next-line @typescript-eslint/no-namespace
+namespace Scope {
+  export type Binding = _Binding;
 }

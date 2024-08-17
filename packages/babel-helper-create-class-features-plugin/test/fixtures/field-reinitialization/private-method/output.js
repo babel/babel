@@ -3,16 +3,16 @@ class Base {
     return obj;
   }
 }
-var _foo = /*#__PURE__*/new WeakSet();
+var _Derived_brand = /*#__PURE__*/new WeakSet();
 class Derived extends Base {
   constructor(...args) {
     super(...args);
-    babelHelpers.classPrivateMethodInitSpec(this, _foo);
+    babelHelpers.classPrivateMethodInitSpec(this, _Derived_brand);
   }
   static get(obj) {
-    return babelHelpers.classPrivateMethodGet(obj, _foo, _foo2).call(obj);
+    return babelHelpers.assertClassBrand(_Derived_brand, obj, _foo).call(obj);
   }
 }
-function _foo2() {
+function _foo() {
   return 'bar';
 }

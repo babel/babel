@@ -1,0 +1,44 @@
+{
+  "babel7plugins-babel8core": [
+    "babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
+    [
+      "babel-plugin-proposal-decorators",
+      {
+        "excludeFixtures": ["2021-12-*", "2022-03-*", "2023-01-*", "2023-05-*"]
+      }
+    ],
+    "babel-plugin-proposal-explicit-resource-management",
+    "babel-plugin-proposal-import-attributes-to-assertions",
+    "babel-plugin-proposal-import-wasm-source",
+    "babel-plugin-proposal-json-modules",
+    "babel-plugin-proposal-regexp-modifiers",
+    "babel-plugin-syntax-decorators",
+    "babel-plugin-syntax-explicit-resource-management",
+    "babel-plugin-syntax-import-source",
+    "babel-plugin-syntax-import-attributes",
+    "babel-plugin-transform-async-generator-functions",
+    "babel-plugin-transform-async-to-generator",
+    [
+      "babel-plugin-transform-class-properties",
+      {
+        "excludeFixtures": ["regression/old-helpers"]
+      }
+    ],
+    "babel-plugin-transform-class-static-block",
+    "babel-plugin-transform-dotall-regex",
+    "babel-plugin-transform-duplicate-named-capturing-groups-regex",
+    "babel-plugin-transform-exponentiation-operator",
+    "babel-plugin-transform-json-strings",
+    "babel-plugin-transform-logical-assignment-operators",
+    "babel-plugin-transform-named-capturing-groups-regex",
+    "babel-plugin-transform-nullish-coalescing-operator",
+    "babel-plugin-transform-numeric-separator",
+    "babel-plugin-transform-object-rest-spread",
+    "babel-plugin-transform-optional-catch-binding",
+    "babel-plugin-transform-optional-chaining",
+    "babel-plugin-transform-unicode-property-regex",
+    "babel-plugin-transform-private-methods",
+    "babel-plugin-transform-private-property-in-object",
+    "babel-plugin-transform-unicode-sets-regex"
+  ]
+}

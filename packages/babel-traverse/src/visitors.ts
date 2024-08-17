@@ -10,6 +10,7 @@ import {
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
 import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
+import { requeueComputedKeyAndDecorators } from "./path/context.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
@@ -28,6 +29,12 @@ export function isExplodedVisitor(
   return visitor?._exploded;
 }
 
+// We need to name this function `explode$1` because otherwise rollup-plugin-dts
+// will generate a `namespace traverse { var explode: typeof explode; }` when
+// bundling @babel/traverse's index.d.ts.
+// TODO: Just call it `explode` once https://github.com/Swatinem/rollup-plugin-dts/issues/307
+// is fixed.
+export { explode$1 as explode };
 /**
  * explode() will take a visitor object with all of the various shorthands
  * that we support, and validates & normalizes it into a common format, ready
@@ -43,7 +50,7 @@ export function isExplodedVisitor(
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
-export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
+function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   if (isExplodedVisitor(visitor)) return visitor;
   // @ts-expect-error `visitor` will be cast to ExplodedVisitor by this function
   visitor._exploded = true;
@@ -65,7 +72,7 @@ export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   }
 
   // verify data structure
-  verify(visitor);
+  verify$1(visitor);
 
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
@@ -138,7 +145,6 @@ export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        // @ts-expect-error Expression produces a union type that is too complex to represent.
         visitor[alias] = { ...fns };
       }
     }
@@ -157,7 +163,13 @@ export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   return visitor as ExplodedVisitor;
 }
 
-export function verify(visitor: Visitor) {
+// We need to name this function `verify$1` because otherwise rollup-plugin-dts
+// will generate a `namespace traverse { var verify: typeof verify; }` when
+// bundling @babel/traverse's index.d.ts.
+// TODO: Just call it `verify` once https://github.com/Swatinem/rollup-plugin-dts/issues/307
+// is fixed.
+export { verify$1 as verify };
+function verify$1(visitor: Visitor) {
   // @ts-expect-error _verified is not defined on non-verified Visitor.
   // TODO: unify _verified and _exploded.
   if (visitor._verified) return;
@@ -176,9 +188,9 @@ export function verify(visitor: Visitor) {
 
     if (shouldIgnoreKey(nodeType)) continue;
 
-    if (TYPES.indexOf(nodeType) < 0) {
+    if (!TYPES.includes(nodeType)) {
       throw new Error(
-        `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
+        `You gave us a visitor for the node type ${nodeType} but it's not a valid type in @babel/traverse ${PACKAGE_JSON.version}`,
       );
     }
 
@@ -233,11 +245,17 @@ export function merge(
   states: any[] = [],
   wrapper?: VisitWrapper | null,
 ): ExplodedVisitor {
-  // @ts-expect-error don't bother with internal flags so it can work with earlier @babel/core validations
-  const mergedVisitor: ExplodedVisitor = {};
+  const mergedVisitor: ExplodedVisitor = { _verified: true, _exploded: true };
+  if (!process.env.BABEL_8_BREAKING) {
+    // For compatibility with old Babel versions, we must hide _verified and _exploded.
+    // Otherwise, old versions of the validator will throw sayng that `true` is not
+    // a function, because it tries to validate it as a visitor.
+    Object.defineProperty(mergedVisitor, "_exploded", { enumerable: false });
+    Object.defineProperty(mergedVisitor, "_verified", { enumerable: false });
+  }
 
   for (let i = 0; i < visitors.length; i++) {
-    const visitor = explode(visitors[i]);
+    const visitor = explode$1(visitors[i]);
     const state = states[i];
 
     let topVisitor: ExplVisitNode<unknown, Node> = visitor;
@@ -259,14 +277,6 @@ export function merge(
       const nodeVisitor = (mergedVisitor[key] ||= {});
       mergePair(nodeVisitor, typeVisitor);
     }
-  }
-
-  if (process.env.BABEL_8_BREAKING) {
-    return {
-      ...mergedVisitor,
-      _exploded: true,
-      _verified: true,
-    };
   }
 
   return mergedVisitor;
@@ -343,10 +353,8 @@ function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   return newFn;
 }
 
-function shouldIgnoreKey(
-  key: string,
-): key is
-  | `_${string}`
+function shouldIgnoreKey(key: string): key is
+  | `_${string}` // ` // Comment to fix syntax highlighting in vscode
   | "enter"
   | "exit"
   | "shouldSkip"
@@ -385,4 +393,44 @@ function mergePair(dest: any, src: any) {
     if (!src[phase]) continue;
     dest[phase] = [].concat(dest[phase] || [], src[phase]);
   }
+}
+
+// environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
+// For perf reasons, the environmentVisitor might be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
+// Avoid using `path.scope` here
+const _environmentVisitor: Visitor = {
+  FunctionParent(path) {
+    // arrows are not skipped because they inherit the context.
+    if (path.isArrowFunctionExpression()) return;
+
+    path.skip();
+    if (path.isMethod()) {
+      if (
+        !process.env.BABEL_8_BREAKING &&
+        !path.requeueComputedKeyAndDecorators
+      ) {
+        // See https://github.com/babel/babel/issues/16694
+        requeueComputedKeyAndDecorators.call(path);
+      } else {
+        path.requeueComputedKeyAndDecorators();
+      }
+    }
+  },
+  Property(path) {
+    if (path.isObjectProperty()) return;
+    path.skip();
+    if (
+      !process.env.BABEL_8_BREAKING &&
+      !path.requeueComputedKeyAndDecorators
+    ) {
+      // See https://github.com/babel/babel/issues/16694
+      requeueComputedKeyAndDecorators.call(path);
+    } else {
+      path.requeueComputedKeyAndDecorators();
+    }
+  },
+};
+
+export function environmentVisitor<S>(visitor: Visitor<S>): Visitor<S> {
+  return merge([_environmentVisitor, visitor]);
 }

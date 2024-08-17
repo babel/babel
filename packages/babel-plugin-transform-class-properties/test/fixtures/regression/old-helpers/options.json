@@ -1,0 +1,6 @@
+{
+  "BABEL_8_BREAKING": false,
+  "SKIP_ON_PUBLISH": true,
+  "plugins": ["transform-class-properties", "transform-private-methods"],
+  "minNodeVersion": "16.0.0"
+}

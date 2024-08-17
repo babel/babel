@@ -1,4 +1,4 @@
-var _initStatic, _init_a, _get_a, _set_a, _init_b, _get_b, _set_b;
+let _initStatic, _init_a, _get_a, _set_a, _init_b, _get_b, _set_b;
 const dec = () => {};
 class Foo {
   static {
@@ -6,17 +6,17 @@ class Foo {
     _initStatic(this);
   }
   static #A = _init_a(this);
-  set #a(v) {
+  static set #a(v) {
     _set_a(this, v);
   }
-  get #a() {
+  static get #a() {
     return _get_a(this);
   }
   static #B = _init_b(this, 123);
-  set #b(v) {
+  static set #b(v) {
     _set_b(this, v);
   }
-  get #b() {
+  static get #b() {
     return _get_b(this);
   }
 }

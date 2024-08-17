@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "names": [
+    "a",
+    "b"
+  ],
+  "sources": [
+    "source-maps/template-literal/input.js"
+  ],
+  "sourcesContent": [
+    "let a = `a${b}c`;"
+  ],
+  "mappings": "AAAA,IAAIA,CAAC,GAAG,IAAIC,CAAC,GAAG",
+  "ignoreList": []
+}

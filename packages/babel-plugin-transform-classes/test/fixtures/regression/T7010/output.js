@@ -5,7 +5,7 @@ var Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     this._val = val;
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "foo2",
     value: function (_foo) {
       function foo2() {
@@ -19,5 +19,4 @@ var Foo = /*#__PURE__*/function () {
       return foo2(this._val);
     })
   }]);
-  return Foo;
 }();

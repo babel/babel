@@ -14,7 +14,6 @@
       "transform-runtime",
       {
         "corejs": false,
-        "helpers": true,
         "absoluteRuntime": true,
         "version": "7.100.0"
       }

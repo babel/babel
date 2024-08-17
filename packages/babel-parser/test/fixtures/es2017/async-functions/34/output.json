@@ -54,9 +54,6 @@
                           "start":37,"end":40,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":40,"index":40},"identifierName":"bar"},
                           "name": "bar"
                         }
-                      },
-                      "extra": {
-                        "shorthand": true
                       }
                     }
                   ]

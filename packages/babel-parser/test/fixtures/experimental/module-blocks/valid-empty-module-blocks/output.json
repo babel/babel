@@ -19,11 +19,17 @@
             "sourceType": "module",
             "interpreter": null,
             "body": [],
-            "directives": []
+            "directives": [],
+            "extra": {
+              "topLevelAwait": false
+            }
           }
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

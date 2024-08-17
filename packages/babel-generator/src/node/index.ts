@@ -3,13 +3,25 @@ import * as parens from "./parentheses.ts";
 import {
   FLIPPED_ALIAS_KEYS,
   isCallExpression,
+  isDecorator,
   isExpressionStatement,
   isMemberExpression,
   isNewExpression,
+  isParenthesizedExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
 import type { WhitespaceFlag } from "./whitespace.ts";
+
+export const enum TokenContext {
+  expressionStatement = 1 << 0,
+  arrowBody = 1 << 1,
+  exportDefault = 1 << 2,
+  forHead = 1 << 3,
+  forInHead = 1 << 4,
+  forOfHead = 1 << 5,
+  arrowFlowReturnType = 1 << 6,
+}
 
 type NodeHandler<R> = (
   node: t.Node,
@@ -18,7 +30,8 @@ type NodeHandler<R> = (
   //   ? Extract<typeof t[K], { type: "string" }>
   //   : t.Node,
   parent: t.Node,
-  stack?: t.Node[],
+  tokenContext?: number,
+  inForStatementInit?: boolean,
 ) => R;
 
 export type NodeHandlers<R> = {
@@ -33,8 +46,11 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     map.set(
       type,
       fn
-        ? function (node, parent, stack) {
-            return fn(node, parent, stack) ?? func(node, parent, stack);
+        ? function (node, parent, stack, inForInit) {
+            return (
+              fn(node, parent, stack, inForInit) ??
+              func(node, parent, stack, inForInit)
+            );
           }
         : func,
     );
@@ -98,7 +114,8 @@ export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
 export function needsParens(
   node: t.Node,
   parent: t.Node,
-  printStack?: t.Node[],
+  tokenContext?: number,
+  inForInit?: boolean,
 ) {
   if (!parent) return false;
 
@@ -106,5 +123,28 @@ export function needsParens(
     if (isOrHasCallExpression(node)) return true;
   }
 
-  return expandedParens.get(node.type)?.(node, parent, printStack);
+  if (isDecorator(parent)) {
+    return (
+      !isDecoratorMemberExpression(node) &&
+      !(isCallExpression(node) && isDecoratorMemberExpression(node.callee)) &&
+      !isParenthesizedExpression(node)
+    );
+  }
+
+  return expandedParens.get(node.type)?.(node, parent, tokenContext, inForInit);
+}
+
+function isDecoratorMemberExpression(node: t.Node): boolean {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return (
+        !node.computed &&
+        node.property.type === "Identifier" &&
+        isDecoratorMemberExpression(node.object)
+      );
+    default:
+      return false;
+  }
 }

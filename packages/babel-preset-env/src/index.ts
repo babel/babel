@@ -37,6 +37,7 @@ import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
 import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
+export type { Options };
 
 // TODO: Remove in Babel 8
 export function isPluginRequired(targets: Targets, support: Targets) {
@@ -100,7 +101,7 @@ const getPlugin = (pluginName: string) => {
 export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   return opts.reduce(
     (result, opt) => {
-      const target = opt.match(/^(es|es6|es7|esnext|web)\./)
+      const target = /^(?:es|es6|es7|esnext|web)\./.test(opt)
         ? "builtIns"
         : "plugins";
       result[target].add(opt);
@@ -117,6 +118,7 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
 function getSpecialModulesPluginNames(
   modules: Exclude<ModuleOption, "auto">,
   shouldTransformDynamicImport: boolean,
+  babelVersion: string,
 ) {
   const modulesPluginNames = [];
   if (modules) {
@@ -134,7 +136,7 @@ function getSpecialModulesPluginNames(
     }
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
+  if (!process.env.BABEL_8_BREAKING && babelVersion[0] !== "8") {
     // Enable module-related syntax plugins for older Babel versions
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
@@ -309,11 +311,7 @@ function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
 }
 
 export default declarePreset((api, opts: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const babelTargets = api.targets();
 
@@ -423,7 +421,11 @@ option \`forceAllTransforms: true\` instead.
     include.plugins,
     exclude.plugins,
     transformTargets,
-    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
+    getSpecialModulesPluginNames(
+      modules,
+      shouldTransformDynamicImport,
+      api.version,
+    ),
     process.env.BABEL_8_BREAKING || !loose
       ? undefined
       : ["transform-typeof-symbol"],

@@ -53,7 +53,7 @@ export default async function ({
         let outputMap: "both" | "external" | false = false;
         if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
           outputMap = "external";
-        } else if (babelOptions.sourceMaps == undefined) {
+        } else if (babelOptions.sourceMaps == null) {
           outputMap = util.hasDataSourcemap(res.code) ? "external" : "both";
         }
 
@@ -119,9 +119,7 @@ export default async function ({
 
       const files = util.readdir(dirname, cliOptions.includeDotfiles);
       for (const filename of files) {
-        const src = path.join(dirname, filename);
-
-        const written = await handleFile(src, dirname);
+        const written = await handleFile(filename, dirname);
         if (written) count += 1;
       }
 
@@ -169,7 +167,6 @@ export default async function ({
     for (const filename of cliOptions.filenames) {
       // compiledFiles is just incremented without reading its value, so we
       // don't risk race conditions.
-      // eslint-disable-next-line require-atomic-updates
       compiledFiles += await handle(filename);
     }
 
@@ -233,6 +230,7 @@ export default async function ({
 
     watcher.startWatcher();
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     watcher.onFilesChange(async filenames => {
       processing++;
       if (startTime === null) startTime = process.hrtime();

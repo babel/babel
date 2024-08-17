@@ -1,81 +1,71 @@
 import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
-import type { NodePath, Visitor } from "@babel/traverse";
-import { traverse, types as t, type PluginPass } from "@babel/core";
+import type { NodePath, Visitor, PluginPass } from "@babel/core";
+import { types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 import rewriteForAwait from "./for-await.ts";
-import environmentVisitor from "@babel/helper-environment-visitor";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
-  const yieldStarVisitor = traverse.visitors.merge<PluginPass>([
-    {
-      ArrowFunctionExpression(path) {
-        path.skip();
-      },
-
-      YieldExpression({ node }, state) {
-        if (!node.delegate) return;
-        const asyncIter = t.callExpression(state.addHelper("asyncIterator"), [
-          node.argument,
-        ]);
-        node.argument = t.callExpression(
-          state.addHelper("asyncGeneratorDelegate"),
-          process.env.BABEL_8_BREAKING
-            ? [asyncIter]
-            : [asyncIter, state.addHelper("awaitAsyncGenerator")],
-        );
-      },
+  const yieldStarVisitor = visitors.environmentVisitor<PluginPass>({
+    ArrowFunctionExpression(path) {
+      path.skip();
     },
-    environmentVisitor,
-  ]);
 
-  const forAwaitVisitor = traverse.visitors.merge<PluginPass>([
-    {
-      ArrowFunctionExpression(path) {
-        path.skip();
-      },
+    YieldExpression({ node }, state) {
+      if (!node.delegate) return;
+      const asyncIter = t.callExpression(state.addHelper("asyncIterator"), [
+        node.argument,
+      ]);
+      node.argument = t.callExpression(
+        state.addHelper("asyncGeneratorDelegate"),
+        process.env.BABEL_8_BREAKING
+          ? [asyncIter]
+          : [asyncIter, state.addHelper("awaitAsyncGenerator")],
+      );
+    },
+  });
 
-      ForOfStatement(path: NodePath<t.ForOfStatement>, { file }) {
-        const { node } = path;
-        if (!node.await) return;
+  const forAwaitVisitor = visitors.environmentVisitor<PluginPass>({
+    ArrowFunctionExpression(path) {
+      path.skip();
+    },
 
-        const build = rewriteForAwait(path, {
-          getAsyncIterator: file.addHelper("asyncIterator"),
-        });
+    ForOfStatement(path: NodePath<t.ForOfStatement>, { file }) {
+      const { node } = path;
+      if (!node.await) return;
 
-        const { declar, loop } = build;
-        const block = loop.body as t.BlockStatement;
+      const build = rewriteForAwait(path, {
+        getAsyncIterator: file.addHelper("asyncIterator"),
+      });
 
-        // ensure that it's a block so we can take all its statements
-        path.ensureBlock();
+      const { declar, loop } = build;
+      const block = loop.body as t.BlockStatement;
 
-        // add the value declaration to the new loop body
-        if (declar) {
-          block.body.push(declar);
-          if (path.node.body.body.length) {
-            block.body.push(t.blockStatement(path.node.body.body));
-          }
-        } else {
-          block.body.push(...path.node.body.body);
+      // ensure that it's a block so we can take all its statements
+      path.ensureBlock();
+
+      // add the value declaration to the new loop body
+      if (declar) {
+        block.body.push(declar);
+        if (path.node.body.body.length) {
+          block.body.push(t.blockStatement(path.node.body.body));
         }
+      } else {
+        block.body.push(...path.node.body.body);
+      }
 
-        t.inherits(loop, node);
-        t.inherits(loop.body, node.body);
+      t.inherits(loop, node);
+      t.inherits(loop.body, node.body);
 
-        const p = build.replaceParent ? path.parentPath : path;
-        p.replaceWithMultiple(build.node);
+      const p = build.replaceParent ? path.parentPath : path;
+      p.replaceWithMultiple(build.node);
 
-        // TODO: Avoid crawl
-        p.scope.parent.crawl();
-      },
+      // TODO: Avoid crawl
+      p.scope.parent.crawl();
     },
-    environmentVisitor,
-  ]);
+  });
 
   const visitor: Visitor<PluginPass> = {
     Function(path, state) {
@@ -98,9 +88,8 @@ export default declare(api => {
 
   return {
     name: "transform-async-generator-functions",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || api.version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-async-generators").default,

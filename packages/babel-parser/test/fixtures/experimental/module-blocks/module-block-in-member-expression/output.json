@@ -22,7 +22,10 @@
               "sourceType": "module",
               "interpreter": null,
               "body": [],
-              "directives": []
+              "directives": [],
+              "extra": {
+                "topLevelAwait": false
+              }
             }
           },
           "computed": false,
@@ -34,6 +37,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

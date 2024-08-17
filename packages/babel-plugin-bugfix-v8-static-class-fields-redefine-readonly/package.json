@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
-  "version": "7.23.7",
+  "version": "7.25.0",
   "description": "Transform static class fields assignments that are affected by https://crbug.com/v8/12421",
   "repository": {
     "type": "git",
@@ -14,7 +14,10 @@
   },
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "keywords": [
@@ -22,8 +25,8 @@
     "bugfix"
   ],
   "dependencies": {
-    "@babel/helper-environment-visitor": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
@@ -39,19 +42,19 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ],
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {}
     ]
   },
-  "type": "commonjs"
+  "type": "module"
 }

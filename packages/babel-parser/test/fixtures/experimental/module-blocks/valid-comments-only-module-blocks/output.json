@@ -20,6 +20,9 @@
             "interpreter": null,
             "body": [],
             "directives": [],
+            "extra": {
+              "topLevelAwait": false
+            },
             "innerComments": [
               {
                 "type": "CommentBlock",
@@ -31,7 +34,10 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   },
   "comments": [
     {

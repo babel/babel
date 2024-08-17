@@ -17,10 +17,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-record-and-tuple";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 import { addNamed, isModule } from "@babel/helper-module-imports";
 import { OptionValidator } from "@babel/helper-validator-option";
-import type { NodePath } from "@babel/traverse";
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
@@ -38,11 +37,7 @@ type Cache = Map<string, string>;
 type ImportCache = WeakMap<t.Program, Cache>;
 
 export default declare<State>((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const polyfillModuleName = v.validateStringOption(
     "polyfillModuleName",

@@ -26,7 +26,6 @@ package-lock.json
 /packages/babel-compat-data/build
 
 /packages/babel-core/src/vendor/*.js
-/packages/babel-core/src/vendor/*.ts
 
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/dispose.js
@@ -56,10 +55,6 @@ package-lock.json
 !/packages/babel-runtime-corejs2/core-js/map.js
 
 /packages/babel-runtime-corejs3/helpers/*.js
-!/packages/babel-runtime-corejs3/helpers/dispose.js
-!/packages/babel-runtime-corejs3/helpers/possibleConstructorReturn.js
-/packages/babel-runtime-corejs3/helpers/esm/*.js
-!/packages/babel-runtime-corejs3/helpers/esm/possibleConstructorReturn.js
 /packages/babel-runtime-corejs3/core-js/**/*.js
 /packages/babel-runtime-corejs3/core-js-stable/**/*.js
 
@@ -81,9 +76,9 @@ packages/babel-standalone/babel.min.js.map
 
 /eslint/*/lib
 /eslint/*/LICENSE
-!/packages/babel-eslint-plugin/LICENSE
+!/eslint/babel-eslint-plugin/LICENSE
 
-/.vscode
+/.vscode/**
 !/.vscode/settings.example.json
 # local directory for VSCode Extension - https://marketplace.visualstudio.com/items?itemName=xyz.local-history
 /.history

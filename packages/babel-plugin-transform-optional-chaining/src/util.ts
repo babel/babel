@@ -1,4 +1,4 @@
-import type { NodePath } from "@babel/traverse";
+import type { NodePath } from "@babel/core";
 import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
 /**
  * Test if a NodePath will be cast to boolean when evaluated.

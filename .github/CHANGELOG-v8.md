@@ -16,6 +16,78 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.12 (2024-07-26)
+
+#### :boom: Breaking Change
+* `babel-traverse`
+  * [#16504](https://github.com/babel/babel/pull/16504) [babel 8] Remove methods starting with `_` in `@babel/traverse` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+## v8.0.0-alpha.11 (2024-06-07)
+
+#### :boom: Breaking Change
+* `babel-core`
+  * [#16561](https://github.com/babel/babel/pull/16561) [babel 8] Remove `File.prototype.getModuleName` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v8.0.0-alpha.10 (2024-06-04)
+
+#### :bug: Bug Fix
+* `babel-traverse`, `babel-types`
+  * [#16544](https://github.com/babel/babel/pull/16544) Improve `getBindingIdentifiers` ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-node`
+  * [#16548](https://github.com/babel/babel/pull/16548) fix Babel 8 commander import ([@JLHwung](https://github.com/JLHwung))
+## v8.0.0-alpha.9 (2024-06-03)
+
+#### :boom: Breaking Change
+* `babel-parser`, `babel-traverse`
+  * [#16521](https://github.com/babel/babel/pull/16521) [Babel 8] Remove `extra.shorthand` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-syntax-record-and-tuple`, `babel-standalone`, `babel-traverse`
+  * [#16458](https://github.com/babel/babel/pull/16458) Remove `syntaxType` option for record-and-tuple (parser&plugin) ([@JLHwung](https://github.com/JLHwung))
+* _Every package_
+  * [#16457](https://github.com/babel/babel/pull/16457) [babel 8] Require Node.js `^18.20.0 || ^20.10.0 || >=21.0.0` ([@JLHwung](https://github.com/JLHwung))
+
+#### :rocket: New Feature
+* _Every package_
+  * [#16416](https://github.com/babel/babel/pull/16416) [babel 8] Publish `.d.ts` files for every package ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* _Every package_
+  * [#16494](https://github.com/babel/babel/pull/16494) Only import types from declared dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-node`
+  * [#16517](https://github.com/babel/babel/pull/16517) [Babel 8] Bump commander to 12.1.0 ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-helper-transform-fixture-test-runner`
+  * [#16459](https://github.com/babel/babel/pull/16459) [Babel 8] Use more native fs methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#16450](https://github.com/babel/babel/pull/16450) Bump glob to 10.3.12 ([@JLHwung](https://github.com/JLHwung))
+## v8.0.0-alpha.8 (2024-04-04)
+
+#### :boom: Breaking Change
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs3`
+  * [#16347](https://github.com/babel/babel/pull/16347) Remove core-js and regenerator entrypoints from `@babel/runtime-*` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`
+  * [#16346](https://github.com/babel/babel/pull/16346) Remove `./helpers/esm` exports from `@babel/runtime` and drop Node.js 13.0-13.1 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`, `babel-plugin-transform-typeof-symbol`, `babel-runtime-corejs2`
+  * [#16311](https://github.com/babel/babel/pull/16311) [babel 8] Cleanup `plugin-transform-runtime` options ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-typescript`
+  * [#16396](https://github.com/babel/babel/pull/16396) [babel 8] Turn `const enum`s into `const` variables ([@samualtnorman](https://github.com/samualtnorman))
+
+#### :house: Internal
+* `babel-core`
+  * [#16365](https://github.com/babel/babel/pull/16365) [babel 8] Remove `import_` fallback ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#16323](https://github.com/babel/babel/pull/16323) Allow separate helpers to be excluded in Babel 8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-plugin-test-runner`
+  * [#16330](https://github.com/babel/babel/pull/16330) Add missing `"type": "module"` to helper-plugin-test-runner ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-plugin-transform-object-rest-spread`, `babel-preset-env`
+  * [#16318](https://github.com/babel/babel/pull/16318) [babel 8] Fix `@babel/compat-data` package.json ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v8.0.0-alpha.7 (2024-02-28)
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16256](https://github.com/babel/babel/pull/16256) Remove logic for deprecated decorator versions from Babel 8 ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-fixtures`, `babel-helper-plugin-utils`, `babel-helper-transform-fixture-test-runner`, `babel-parser`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#16248](https://github.com/babel/babel/pull/16248) Use `Object.hasOwn` when available ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-plugin-transform-object-rest-spread`
+  * [#16209](https://github.com/babel/babel/pull/16209) chore: Helper changes for Babel 8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-alpha.6 (2024-01-26)
 
 #### :nail_care: Polish

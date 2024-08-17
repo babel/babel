@@ -1,7 +1,6 @@
 import * as react from "react";
-import { jsx as _jsx } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { createElement as _createElement } from "react";
-import { jsxs as _jsxs } from "react/jsx-runtime";
 var y = react.createElement("div", {
   foo: 1
 });

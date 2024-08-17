@@ -26,8 +26,7 @@ import { diff } from "jest-diff";
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
 import os from "os";
-import { sync as makeDir } from "make-dir";
-import readdir from "fs-readdir-recursive";
+import readdirRecursive from "fs-readdir-recursive";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -68,7 +67,6 @@ const cachedScripts = new LruCache<
   { code: string; cachedData?: Buffer }
 >({ max: 10 });
 const contextModuleCache = new WeakMap();
-const sharedTestContext = createTestContext();
 
 // We never want our tests to accidentally load the root
 // babel.config.js file, so we disable config loading by
@@ -201,6 +199,8 @@ function runModuleInTestContext(
   ).exports;
 }
 
+let sharedTestContext: vm.Context;
+
 /**
  * Run the given snippet of code inside a CommonJS module.
  *
@@ -211,7 +211,7 @@ export function runCodeInTestContext(
   opts: {
     filename: string;
   },
-  context = sharedTestContext,
+  context = (sharedTestContext ??= createTestContext()),
 ) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
@@ -301,6 +301,8 @@ async function run(task: Test) {
   let result: FileResult;
   let resultExec;
 
+  let execErr: Error;
+
   if (execCode) {
     const context = createTestContext();
     const execOpts = getOpts(exec);
@@ -318,9 +320,13 @@ async function run(task: Test) {
       resultExec = runCodeInTestContext(execCode, execOpts, context);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
-      err.message =
-        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {} as any);
-      throw err;
+      if (typeof err === "object" && err.message) {
+        err.message =
+          `${exec.loc}: ${err.message}\n` +
+          codeFrameColumns(execCode, {} as any);
+      }
+
+      execErr = err;
     }
   }
 
@@ -333,7 +339,9 @@ async function run(task: Test) {
       babel.transformAsync(inputCode, getOpts(actual)),
     ));
 
-    const outputCode = normalizeOutput(result.code);
+    const outputCode = normalizeOutput(result.code, {
+      normalizePathSeparator: true,
+    });
 
     checkDuplicateNodes(result.ast);
     if (!ignoreOutput) {
@@ -355,7 +363,7 @@ async function run(task: Test) {
         if (expected.loc !== expectedFile) {
           try {
             fs.unlinkSync(expected.loc);
-          } catch (e) {}
+          } catch (_) {}
         }
       } else {
         validateFile(outputCode, expected.loc, expectedCode);
@@ -395,6 +403,10 @@ async function run(task: Test) {
     }
   }
 
+  if (execErr) {
+    throw execErr;
+  }
+
   if (task.validateSourceMapVisual === true) {
     const visual = visualizeSourceMap(result.code, result.map);
     try {
@@ -415,6 +427,8 @@ async function run(task: Test) {
       expect(result.map).toEqual(task.sourceMap);
     } catch (e) {
       if (!process.env.OVERWRITE && task.sourceMap) throw e;
+
+      task.sourceMapFile.loc ??= task.taskDir + "/source-map.json";
 
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(
@@ -458,31 +472,29 @@ function normalizeOutput(
   code: string,
   { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
 ) {
-  const projectRoot = path.resolve(
+  const dir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
   );
-  const cwdSymbol = "<CWD>";
+  const symbol = "<CWD>";
   let result = code
     .trim()
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(projectRoot), "g"), cwdSymbol);
+    .replace(new RegExp(escapeRegExp(dir), "g"), symbol);
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "/")), "g"),
-        cwdSymbol,
-      )
+      .replace(new RegExp(escapeRegExp(dir.replace(/\\/g, "/")), "g"), symbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
       .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
-        cwdSymbol,
+        new RegExp(escapeRegExp(dir.replace(/\\/g, "\\\\")), "g"),
+        symbol,
       );
     if (normalizePathSeparator) {
-      result = result.replace(/<CWD>[\w\\/.-]+/g, path =>
-        path.replace(/\\\\?/g, "/"),
+      result = result.replace(
+        new RegExp(`${escapeRegExp(symbol)}[\\w\\\\/.-]+`, "g"),
+        path => path.replace(/\\\\?/g, "/"),
       );
     }
   }
@@ -492,7 +504,7 @@ function normalizeOutput(
     // the output logs so that we don't have to duplicate all the debug fixtures for
     // the two different Babel versions.
     if (normalizePresetEnvDebug) {
-      result = result.replace(/(\s+)proposal-/gm, "$1transform-");
+      result = result.replace(/(\s+)proposal-/g, "$1transform-");
     }
 
     // For some reasons, in older Node.js versions some symlinks are not properly
@@ -527,6 +539,17 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
+      if (
+        !process.env.IS_PUBLISH &&
+        process.env.TEST_babel7plugins_babel8core
+      ) {
+        // Make sure that the ESM version of @babel/core is always loaded
+        // for babel7-8 interop tests.
+        // In `eval` so that it doesn't cause a syntax error when running
+        // tests in old Node.js.
+        beforeAll(() => eval('import("@babel/core")').catch(console.error));
+      }
+
       for (const task of testSuite.tests) {
         if (
           suiteOpts.ignoreTasks?.includes(task.title) ||
@@ -536,9 +559,13 @@ export default function (
         }
 
         const testFn = task.disabled ? it.skip : it;
+        const testTitle =
+          typeof task.disabled === "string"
+            ? `(SKIP: ${task.disabled}) ${task.title}`
+            : task.title;
 
         testFn(
-          task.title,
+          testTitle,
 
           async function () {
             const runTask = () => run(task);
@@ -638,39 +665,36 @@ const nodeGte8 = parseInt(process.versions.node, 10) >= 8;
 // https://github.com/nodejs/node/issues/11422#issue-208189446
 const tmpDir = realpathSync(os.tmpdir());
 
-const readDir = function (loc: string, filter: Parameters<typeof readdir>[1]) {
+const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
   const files: Record<string, string> = {};
   if (fs.existsSync(loc)) {
-    readdir(loc, filter).forEach(function (filename) {
-      files[filename] = readFile(path.join(loc, filename));
-    });
+    if (process.env.BABEL_8_BREAKING) {
+      fs.readdirSync(loc, { withFileTypes: true, recursive: true })
+        .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
+        .forEach(dirent => {
+          const fullpath = path.join(dirent.path, dirent.name);
+          files[path.relative(loc, fullpath)] = readFile(fullpath);
+        });
+    } else {
+      readdirRecursive(loc, pathFilter).forEach(function (filename) {
+        files[filename] = readFile(path.join(loc, filename));
+      });
+    }
   }
   return files;
 };
 
 const outputFileSync = function (filePath: string, data: string) {
-  makeDir(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
 function deleteDir(path: string): void {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file) {
-      const curPath = path + "/" + file;
-      if (fs.lstatSync(curPath).isDirectory()) {
-        // recurse
-        deleteDir(curPath);
-      } else {
-        // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
+  fs.rmSync(path, { force: true, recursive: true });
 }
 
-const fileFilter = function (x: string) {
-  return x !== ".DS_Store";
+const pathFilter = function (x: string) {
+  return path.basename(x) !== ".DS_Store";
 };
 
 const assertTest = function (
@@ -714,7 +738,6 @@ const assertTest = function (
       throw new Error("stdout:\n" + stdout);
     }
   } catch (e) {
-    console.log(JSON.stringify(opts.stdout), JSON.stringify(stdout));
     if (!process.env.OVERWRITE) throw e;
     console.log(`Updated test file: ${opts.stdoutPath}`);
     outputFileSync(opts.stdoutPath, stdout + "\n");
@@ -725,7 +748,7 @@ const assertTest = function (
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(tmpDir, fileFilter);
+    const actualFiles = readDir(tmpDir, pathFilter);
 
     Object.keys(actualFiles).forEach(function (filename) {
       try {
@@ -839,8 +862,8 @@ export function buildProcessTests(
       }
 
       opts.testLoc = testLoc;
-      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
-      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
+      opts.outFiles = readDir(path.join(testLoc, "out-files"), pathFilter);
+      opts.inFiles = readDir(path.join(testLoc, "in-files"), pathFilter);
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
       const babelIgnoreLoc = path.join(testLoc, ".babelignore");
@@ -877,7 +900,7 @@ export function buildProcessTests(
             createHash("sha1").update(testLoc).digest("hex"),
           );
           deleteDir(tmpLoc);
-          makeDir(tmpLoc);
+          fs.mkdirSync(tmpLoc, { recursive: true });
 
           const { inFiles } = opts;
           for (const filename of Object.keys(inFiles)) {

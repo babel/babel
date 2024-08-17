@@ -4,13 +4,12 @@ var Foo = /*#__PURE__*/function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "method",
     value: function method(_Foo) {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Foo.prototype), "method", this).call(this, _Foo);
+      return babelHelpers.superPropGet(Foo, "method", this, 3)([_Foo]);
     }
   }]);
-  return Foo;
 }();
 var Bar = /*#__PURE__*/function () {
   "use strict";
@@ -18,16 +17,15 @@ var Bar = /*#__PURE__*/function () {
   function Bar() {
     babelHelpers.classCallCheck(this, Bar);
   }
-  babelHelpers.createClass(Bar, [{
+  return babelHelpers.createClass(Bar, [{
     key: "method",
     value: function method() {
       return () => {
         var _Bar;
-        return babelHelpers.get(babelHelpers.getPrototypeOf(Bar.prototype), "method", this).call(this, _Bar);
+        return babelHelpers.superPropGet(Bar, "method", this, 3)([_Bar]);
       };
     }
   }]);
-  return Bar;
 }();
 var Baz = /*#__PURE__*/function () {
   "use strict";
@@ -35,24 +33,22 @@ var Baz = /*#__PURE__*/function () {
   function Baz() {
     babelHelpers.classCallCheck(this, Baz);
   }
-  babelHelpers.createClass(Baz, [{
+  return babelHelpers.createClass(Baz, [{
     key: "method",
     value: function method() {
       var _Baz = /*#__PURE__*/function () {
         function _Baz() {
           babelHelpers.classCallCheck(this, _Baz);
         }
-        babelHelpers.createClass(_Baz, [{
+        return babelHelpers.createClass(_Baz, [{
           key: "f",
           value: function f() {
             var Baz = 1;
             return Baz;
           }
         }]);
-        return _Baz;
       }();
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Baz.prototype), "method", this).call(this, _Baz);
+      return babelHelpers.superPropGet(Baz, "method", this, 3)([_Baz]);
     }
   }]);
-  return Baz;
 }();

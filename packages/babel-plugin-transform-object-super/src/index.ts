@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import { types as t, type File } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t } from "@babel/core";
+import type { File, NodePath } from "@babel/core";
 
 function replacePropertySuper(
   path: NodePath<t.ObjectMethod>,
@@ -19,11 +19,7 @@ function replacePropertySuper(
 }
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
   const newLets = new Set<{
     scopePath: NodePath;
     id: t.Identifier;

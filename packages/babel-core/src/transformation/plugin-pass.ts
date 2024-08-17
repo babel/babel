@@ -1,7 +1,7 @@
 import type * as t from "@babel/types";
 import type File from "./file/file.ts";
 
-export default class PluginPass<Options = {}> {
+export default class PluginPass<Options = object> {
   _map: Map<unknown, unknown> = new Map();
   key: string | undefined | null;
   file: File;
@@ -51,6 +51,7 @@ if (!process.env.BABEL_8_BREAKING) {
   (PluginPass as any).prototype.getModuleName = function getModuleName(
     this: PluginPass,
   ): string | undefined {
+    // @ts-expect-error only exists in Babel 7
     return this.file.getModuleName();
   };
   (PluginPass as any).prototype.addImport = function addImport(

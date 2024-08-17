@@ -1,3 +1,4 @@
+import "./path/context.ts"; // We have some cycles, this ensures correct order to avoid TDZ
 import * as visitors from "./visitors.ts";
 import {
   VISITOR_KEYS,
@@ -9,10 +10,10 @@ import type * as t from "@babel/types";
 import * as cache from "./cache.ts";
 import type NodePath from "./path/index.ts";
 import type { default as Scope, Binding } from "./scope/index.ts";
-import type { ExplodedVisitor, Visitor } from "./types.ts";
+import type { ExplodedVisitor, Visitor, VisitorBase } from "./types.ts";
 import { traverseNode } from "./traverse-node.ts";
 
-export type { ExplodedVisitor, Visitor, Binding };
+export type { ExplodedVisitor, Visitor, VisitorBase, Binding };
 export { default as NodePath } from "./path/index.ts";
 export { default as Scope } from "./scope/index.ts";
 export { default as Hub } from "./hub.ts";

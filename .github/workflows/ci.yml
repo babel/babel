@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -40,7 +40,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -69,7 +69,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Generate coverage report
@@ -91,7 +91,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Use ESM and build
@@ -118,7 +118,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -158,7 +158,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -183,7 +183,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -194,10 +194,10 @@ jobs:
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Lint
-        run: make -j prepublish-prepare-dts lint-ci
+        run: make -j lint-ci check-compat-data
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          node ./scripts/assert-dir-git-clean.js "prepublish-prepare-dts lint-ci"
+          node ./scripts/assert-dir-git-clean.js "lint-ci check-compat-data"
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -213,7 +213,7 @@ jobs:
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -259,7 +259,7 @@ jobs:
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
 
   build-babel8:
     name: Build Babel 8 Artifacts
@@ -274,7 +274,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Use ESM
@@ -287,7 +287,7 @@ jobs:
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
-        run: make -j tscheck lint-ci
+        run: make -j lint-ci check-compat-data
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
@@ -309,19 +309,16 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    env:
-      YARN_IGNORE_NODE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 16.20
+      - name: Use Node.js 18.20.0
         uses: actions/setup-node@v4
         with:
-          node-version: "16.20" # Node.js 16.20 is the first LTS supported by Babel 8
+          node-version: "18.20.0" # Node.js 18.20.0 is the first LTS supported by Babel 8
           cache: "yarn"
       - name: Install
-        run: |
-          yarn install
+        run: yarn install
       - uses: actions/download-artifact@v3
         with:
           name: babel8-artifact
@@ -330,9 +327,14 @@ jobs:
       - name: Use ESM
         run: node scripts/set-module-type.js module
       - name: Test
-        run: |
-          yarn jest --ci
-          yarn test:esm
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+          BABEL_CLI_FLAKY_TESTS: true
+      - name: Test ESM
+        run: yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
@@ -353,7 +355,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -379,7 +381,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -408,7 +410,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -515,7 +517,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -530,6 +532,31 @@ jobs:
       - name: Run babel/eslint tests
         run: node ./node_modules/.bin/jest eslint
 
+  eslint8-test:
+    name: Test @babel/eslint-* with ESLint 8.0.0
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.5"
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Downgrade ESLint to 8.0.0
+        run: yarn up eslint@8.0.0
+      - name: Run babel/eslint tests
+        run: node ./node_modules/.bin/jest eslint
+
   test262-prepare:
     name: test262 - Prepare for running in parallel
     runs-on: ubuntu-latest
@@ -540,7 +567,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v4
@@ -577,7 +604,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "22.5"
           check-latest: true
       - name: Install
         run: yarn install

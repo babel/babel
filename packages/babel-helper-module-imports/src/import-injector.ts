@@ -1,8 +1,13 @@
 import assert from "assert";
-import { numericLiteral, sequenceExpression } from "@babel/types";
+import {
+  identifier,
+  importSpecifier,
+  numericLiteral,
+  sequenceExpression,
+  isImportDeclaration,
+} from "@babel/types";
 import type * as t from "@babel/types";
-import type { NodePath, Scope } from "@babel/traverse";
-import type { File } from "@babel/core";
+import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 
 import ImportBuilder from "./import-builder.ts";
 import isModule from "./is-module.ts";
@@ -115,7 +120,7 @@ export default class ImportInjector {
   /**
    * The file used to inject helpers and resolve paths.
    */
-  declare _hub: File["hub"];
+  declare _hub: HubInterface;
 
   /**
    * The default options to use with this instance when imports are added.
@@ -139,7 +144,7 @@ export default class ImportInjector {
 
     this._programPath = programPath;
     this._programScope = programPath.scope;
-    this._hub = programPath.hub as File["hub"];
+    this._hub = programPath.hub;
 
     this._defaultOpts = this._applyDefaults(importedSource, opts, true);
   }
@@ -431,33 +436,136 @@ export default class ImportInjector {
     importPosition = "before",
     blockHoist = 3,
   ) {
-    const body = this._programPath.get("body");
-
     if (importPosition === "after") {
-      for (let i = body.length - 1; i >= 0; i--) {
-        if (body[i].isImportDeclaration()) {
-          body[i].insertAfter(statements);
-          return;
-        }
-      }
+      if (this._insertStatementsAfter(statements)) return;
     } else {
-      statements.forEach(node => {
-        // @ts-expect-error handle _blockHoist
-        node._blockHoist = blockHoist;
-      });
-
-      const targetPath = body.find(p => {
-        // @ts-expect-error todo(flow->ts): avoid mutations
-        const val = p.node._blockHoist;
-        return Number.isFinite(val) && val < 4;
-      });
-
-      if (targetPath) {
-        targetPath.insertBefore(statements);
-        return;
-      }
+      if (this._insertStatementsBefore(statements, blockHoist)) return;
     }
 
     this._programPath.unshiftContainer("body", statements);
   }
+
+  _insertStatementsBefore(statements: t.Statement[], blockHoist: number) {
+    if (
+      statements.length === 1 &&
+      isImportDeclaration(statements[0]) &&
+      isValueImport(statements[0])
+    ) {
+      const firstImportDecl = this._programPath
+        .get("body")
+        .find((p): p is NodePath<t.ImportDeclaration> => {
+          return p.isImportDeclaration() && isValueImport(p.node);
+        });
+
+      if (
+        firstImportDecl?.node.source.value === statements[0].source.value &&
+        maybeAppendImportSpecifiers(firstImportDecl.node, statements[0])
+      ) {
+        return true;
+      }
+    }
+
+    statements.forEach(node => {
+      // @ts-expect-error handle _blockHoist
+      node._blockHoist = blockHoist;
+    });
+
+    const targetPath = this._programPath.get("body").find(p => {
+      // @ts-expect-error todo(flow->ts): avoid mutations
+      const val = p.node._blockHoist;
+      return Number.isFinite(val) && val < 4;
+    });
+
+    if (targetPath) {
+      targetPath.insertBefore(statements);
+      return true;
+    }
+
+    return false;
+  }
+
+  _insertStatementsAfter(statements: t.Statement[]): boolean {
+    const statementsSet = new Set(statements);
+    const importDeclarations: Map<string, t.ImportDeclaration[]> = new Map();
+
+    for (const statement of statements) {
+      if (isImportDeclaration(statement) && isValueImport(statement)) {
+        const source = statement.source.value;
+        if (!importDeclarations.has(source)) importDeclarations.set(source, []);
+        importDeclarations.get(source).push(statement);
+      }
+    }
+
+    let lastImportPath = null;
+    for (const bodyStmt of this._programPath.get("body")) {
+      if (bodyStmt.isImportDeclaration() && isValueImport(bodyStmt.node)) {
+        lastImportPath = bodyStmt;
+
+        const source = bodyStmt.node.source.value;
+        const newImports = importDeclarations.get(source);
+        if (!newImports) continue;
+
+        for (const decl of newImports) {
+          if (!statementsSet.has(decl)) continue;
+          if (maybeAppendImportSpecifiers(bodyStmt.node, decl)) {
+            statementsSet.delete(decl);
+          }
+        }
+      }
+    }
+
+    if (statementsSet.size === 0) return true;
+
+    if (lastImportPath) lastImportPath.insertAfter(Array.from(statementsSet));
+
+    return !!lastImportPath;
+  }
+}
+
+function isValueImport(node: t.ImportDeclaration) {
+  return node.importKind !== "type" && node.importKind !== "typeof";
+}
+
+function hasNamespaceImport(node: t.ImportDeclaration) {
+  return (
+    (node.specifiers.length === 1 &&
+      node.specifiers[0].type === "ImportNamespaceSpecifier") ||
+    (node.specifiers.length === 2 &&
+      node.specifiers[1].type === "ImportNamespaceSpecifier")
+  );
+}
+
+function hasDefaultImport(node: t.ImportDeclaration) {
+  return (
+    node.specifiers.length > 0 &&
+    node.specifiers[0].type === "ImportDefaultSpecifier"
+  );
+}
+
+function maybeAppendImportSpecifiers(
+  target: t.ImportDeclaration,
+  source: t.ImportDeclaration,
+): boolean {
+  if (!target.specifiers.length) {
+    target.specifiers = source.specifiers;
+    return true;
+  }
+  if (!source.specifiers.length) return true;
+
+  if (hasNamespaceImport(target) || hasNamespaceImport(source)) return false;
+
+  if (hasDefaultImport(source)) {
+    if (hasDefaultImport(target)) {
+      source.specifiers[0] = importSpecifier(
+        source.specifiers[0].local,
+        identifier("default"),
+      );
+    } else {
+      target.specifiers.unshift(source.specifiers.shift());
+    }
+  }
+
+  target.specifiers.push(...source.specifiers);
+
+  return true;
 }

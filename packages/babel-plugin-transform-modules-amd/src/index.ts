@@ -11,9 +11,9 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
-import { template, types as t, type PluginPass } from "@babel/core";
+import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, PluginPass } from "@babel/core";
 
 const buildWrapper = template.statement(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
@@ -61,11 +61,7 @@ type State = {
 };
 
 export default declare<State>((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const { allowTopLevelThis, strict, strictMode, importInterop, noInterop } =
     options;

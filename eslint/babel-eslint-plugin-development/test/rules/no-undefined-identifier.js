@@ -4,9 +4,7 @@ import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.j
 const error =
   "Use path.scope.buildUndefinedNode() to create an undefined identifier directly.";
 
-const ruleTester = new RuleTester({
-  parserOptions: { sourceType: "module" },
-});
+const ruleTester = new RuleTester();
 
 ruleTester.run("no-undefined-identifier", rule, {
   valid: [

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-transforms",
-  "version": "7.23.3",
+  "version": "7.25.2",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
@@ -15,15 +15,13 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-simple-access": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
@@ -35,7 +33,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         }
       },
       {
@@ -43,15 +41,18 @@
       }
     ],
     "USE_ESM": [
+      null,
       {
-        "type": "module"
-      },
-      null
+        "type": "commonjs"
+      }
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "module"
 }

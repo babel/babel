@@ -10,6 +10,7 @@
       {
         "type": "VariableDeclaration",
         "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "declare": true,
         "declarations": [
           {
             "type": "VariableDeclarator",
@@ -22,10 +23,12 @@
             "init": null
           }
         ],
-        "kind": "let",
-        "declare": true
+        "kind": "let"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

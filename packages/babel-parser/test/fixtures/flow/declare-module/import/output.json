@@ -26,6 +26,7 @@
             {
               "type": "ImportDeclaration",
               "start":23,"end":47,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":26,"index":47}},
+              "importKind": "type",
               "specifiers": [
                 {
                   "type": "ImportDefaultSpecifier",
@@ -37,7 +38,6 @@
                   }
                 }
               ],
-              "importKind": "type",
               "source": {
                 "type": "StringLiteral",
                 "start":42,"end":46,"loc":{"start":{"line":2,"column":21,"index":42},"end":{"line":2,"column":25,"index":46}},
@@ -51,6 +51,7 @@
             {
               "type": "ImportDeclaration",
               "start":50,"end":76,"loc":{"start":{"line":3,"column":2,"index":50},"end":{"line":3,"column":28,"index":76}},
+              "importKind": "typeof",
               "specifiers": [
                 {
                   "type": "ImportDefaultSpecifier",
@@ -62,7 +63,6 @@
                   }
                 }
               ],
-              "importKind": "typeof",
               "source": {
                 "type": "StringLiteral",
                 "start":71,"end":75,"loc":{"start":{"line":3,"column":23,"index":71},"end":{"line":3,"column":27,"index":75}},
@@ -78,6 +78,9 @@
         "kind": "CommonJS"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

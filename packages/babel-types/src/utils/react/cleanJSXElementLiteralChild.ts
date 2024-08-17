@@ -11,7 +11,7 @@ export default function cleanJSXElementLiteralChild(
   let lastNonEmptyLine = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].match(/[^ \t]/)) {
+    if (/[^ \t]/.exec(lines[i])) {
       lastNonEmptyLine = i;
     }
   }
@@ -30,12 +30,12 @@ export default function cleanJSXElementLiteralChild(
 
     // trim whitespace touching a newline
     if (!isFirstLine) {
-      trimmedLine = trimmedLine.replace(/^[ ]+/, "");
+      trimmedLine = trimmedLine.replace(/^ +/, "");
     }
 
     // trim whitespace touching an endline
     if (!isLastLine) {
-      trimmedLine = trimmedLine.replace(/[ ]+$/, "");
+      trimmedLine = trimmedLine.replace(/ +$/, "");
     }
 
     if (trimmedLine) {

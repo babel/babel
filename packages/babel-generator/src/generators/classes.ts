@@ -4,6 +4,9 @@ import {
   isExportNamedDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
+
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 export function ClassDeclaration(
@@ -39,17 +42,17 @@ export function ClassDeclaration(
 
   if (node.id) {
     this.space();
-    this.print(node.id, node);
+    this.print(node.id);
   }
 
-  this.print(node.typeParameters, node);
+  this.print(node.typeParameters);
 
   if (node.superClass) {
     this.space();
     this.word("extends");
     this.space();
-    this.print(node.superClass, node);
-    this.print(node.superTypeParameters, node);
+    this.print(node.superClass);
+    this.print(node.superTypeParameters);
   }
 
   if (node.implements) {
@@ -60,7 +63,7 @@ export function ClassDeclaration(
   }
 
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export { ClassDeclaration as ClassExpression };
@@ -72,7 +75,9 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
+    const exit = this.enterForStatementInit(false);
     this.printSequence(node.body, node, { indent: true });
+    exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
@@ -92,11 +97,11 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
 
   if (node.computed) {
     this.token("[");
-    this.print(node.key, node);
+    this.print(node.key);
     this.token("]");
   } else {
     this._variance(node);
-    this.print(node.key, node);
+    this.print(node.key);
   }
 
   // TS
@@ -107,12 +112,12 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
     this.token("!");
   }
 
-  this.print(node.typeAnnotation, node);
+  this.print(node.typeAnnotation);
   if (node.value) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.value, node);
+    this.print(node.value);
   }
   this.semicolon();
 }
@@ -136,12 +141,12 @@ export function ClassAccessorProperty(
 
   if (node.computed) {
     this.token("[");
-    this.print(node.key, node);
+    this.print(node.key);
     this.token("]");
   } else {
     // Todo: Flow does not support class accessor property yet.
     this._variance(node);
-    this.print(node.key, node);
+    this.print(node.key);
   }
 
   // TS
@@ -152,12 +157,12 @@ export function ClassAccessorProperty(
     this.token("!");
   }
 
-  this.print(node.typeAnnotation, node);
+  this.print(node.typeAnnotation);
   if (node.value) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.value, node);
+    this.print(node.value);
   }
   this.semicolon();
 }
@@ -171,13 +176,13 @@ export function ClassPrivateProperty(
     this.word("static");
     this.space();
   }
-  this.print(node.key, node);
-  this.print(node.typeAnnotation, node);
+  this.print(node.key);
+  this.print(node.typeAnnotation);
   if (node.value) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.value, node);
+    this.print(node.value);
   }
   this.semicolon();
 }
@@ -185,13 +190,13 @@ export function ClassPrivateProperty(
 export function ClassMethod(this: Printer, node: t.ClassMethod) {
   this._classMethodHead(node);
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
   this._classMethodHead(node);
   this.space();
-  this.print(node.body, node);
+  this.print(node.body);
 }
 
 export function _classMethodHead(

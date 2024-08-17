@@ -1,5 +1,5 @@
-import { type PluginPass, template, types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { template, types as t } from "@babel/core";
+import type { PluginPass, NodePath } from "@babel/core";
 
 // This is the legacy implementation, which inlines all the code.
 // It must be kept for compatibility reasons.

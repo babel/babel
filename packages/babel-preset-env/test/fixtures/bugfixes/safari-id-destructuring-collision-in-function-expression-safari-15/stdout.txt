@@ -8,7 +8,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { safari < tp }
+  transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
+  transform-unicode-sets-regex { safari < 17 }
+  bugfix/transform-firefox-class-in-computed-class-key { safari < 16 }
+  bugfix/transform-safari-class-field-initializer-scope { safari < 16 }
   transform-class-static-block { safari < 16.4 }
   syntax-private-property-in-object
   syntax-class-properties

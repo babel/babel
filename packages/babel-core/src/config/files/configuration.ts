@@ -57,7 +57,7 @@ const runConfig = makeWeakCache(function* runConfig(
   yield* [];
 
   return {
-    options: endHiddenCallStack(options as any as (api: ConfigAPI) => {})(
+    options: endHiddenCallStack(options as any as (api: ConfigAPI) => unknown)(
       makeConfigAPI(cache),
     ),
     cacheNeedsConfiguration: !cache.configured(),
@@ -90,8 +90,7 @@ function* readConfigCode(
 
   // @ts-expect-error todo(flow->ts)
   if (typeof options.then === "function") {
-    // @ts-expect-error We use ?. in case options is a thenable
-    // but not a promise
+    // @ts-expect-error We use ?. in case options is a thenable but not a promise
     options.catch?.(() => {});
 
     throw new ConfigError(
@@ -188,7 +187,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);
   const ignorePatterns = content
     .split("\n")
-    .map<string>(line => line.replace(/#(.*?)$/, "").trim())
+    .map<string>(line => line.replace(/#.*$/, "").trim())
     .filter(line => !!line);
 
   for (const pattern of ignorePatterns) {

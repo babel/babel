@@ -49,9 +49,6 @@
                       },
                       "value": 0
                     }
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]
@@ -69,6 +66,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

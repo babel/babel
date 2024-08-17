@@ -3,17 +3,16 @@ import { createRegExpFeaturePlugin } from "@babel/helper-create-regexp-features-
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   return createRegExpFeaturePlugin({
     name: "transform-unicode-sets-regex",
     feature: "unicodeSetsFlag",
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("regexpUnicodeSets");
+      if (!process.env.BABEL_8_BREAKING) {
+        // @ts-ignore(Babel 7 vs Babel 8) This plugin has been removed
+        parserOpts.plugins.push("regexpUnicodeSets");
+      }
     },
   });
 });

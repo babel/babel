@@ -4,7 +4,7 @@ import { traversePattern, privateKeyPathIterator } from "../lib/util.js";
 function wrapSourceInClassEnvironment(input) {
   const usedPrivateNames = new Set();
   let matched;
-  const re = /#[\w_]+/g;
+  const re = /#\w+/g;
   while ((matched = re.exec(input)) !== null) {
     usedPrivateNames.add(matched[0]);
   }

@@ -3,16 +3,16 @@
 import type TraversalContext from "../context.ts";
 import NodePath from "./index.ts";
 import {
+  getAssignmentIdentifiers as _getAssignmentIdentifiers,
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
-  isDeclaration,
   numericLiteral,
   unaryExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-const NORMAL_COMPLETION = 0 as const;
-const BREAK_COMPLETION = 1 as const;
+const NORMAL_COMPLETION = 0;
+const BREAK_COMPLETION = 1;
 
 type Completion = {
   path: NodePath;
@@ -31,11 +31,11 @@ type CompletionContext = {
   shouldPopulateBreak: boolean;
 };
 
-function NormalCompletion(path: NodePath) {
+function NormalCompletion(path: NodePath): Completion {
   return { type: NORMAL_COMPLETION, path };
 }
 
-function BreakCompletion(path: NodePath) {
+function BreakCompletion(path: NodePath): Completion {
   return { type: BREAK_COMPLETION, path };
 }
 
@@ -237,10 +237,8 @@ function _getCompletionRecords(
     path.isWhile() ||
     path.isLabeledStatement()
   ) {
-    // @ts-expect-error(flow->ts): todo
     return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    // @ts-expect-error(flow->ts): todo
     return getStatementListCompletion(path.get("body"), context);
   } else if (path.isFunction()) {
     return _getCompletionRecords(path.get("body"), context);
@@ -335,17 +333,10 @@ type MaybeToIndex<T extends string> = T extends `${bigint}` ? number : T;
 type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
 
 // split "body.body.1" to ["body", "body", 1]
-type Split<P extends string> = P extends Pattern<infer O, infer U>
-  ? [MaybeToIndex<O>, ...Split<U>]
-  : [MaybeToIndex<P>];
-
-// get all K with Node[K] is t.Node | t.Node[]
-type NodeKeyOf<Node extends t.Node | t.Node[]> = keyof Pick<
-  Node,
-  {
-    [Key in keyof Node]-?: Node[Key] extends t.Node | t.Node[] ? Key : never;
-  }[keyof Node]
->;
+type Split<P extends string> =
+  P extends Pattern<infer O, infer U>
+    ? [MaybeToIndex<O>, ...Split<U>]
+    : [MaybeToIndex<P>];
 
 // traverse the Node with tuple path ["body", "body", 1]
 // Path should be created with Split
@@ -353,44 +344,48 @@ type Trav<
   Node extends t.Node | t.Node[],
   Path extends unknown[],
 > = Path extends [infer K, ...infer R]
-  ? K extends NodeKeyOf<Node>
-    ? R extends []
-      ? Node[K]
-      : // @ts-expect-error ignore since TS is not smart enough
-        Trav<Node[K], R>
+  ? K extends keyof Node
+    ? Node[K] extends t.Node | t.Node[]
+      ? R extends []
+        ? Node[K]
+        : Trav<Node[K], R>
+      : never
     : never
   : never;
 
-type ToNodePath<T> = T extends Array<t.Node | null | undefined>
-  ? Array<NodePath<T[number]>>
-  : T extends t.Node | null | undefined
-    ? NodePath<T>
-    : never;
+type ToNodePath<T> =
+  T extends Array<t.Node | null | undefined>
+    ? Array<NodePath<T[number]>>
+    : T extends t.Node | null | undefined
+      ? NodePath<T>
+      : never;
 
-function get<T extends t.Node, K extends keyof T>(
-  this: NodePath<T>,
+function get<T extends NodePath, K extends keyof T["node"]>(
+  this: T,
   key: K,
   context?: boolean | TraversalContext,
-): T[K] extends Array<t.Node | null | undefined>
-  ? Array<NodePath<T[K][number]>>
-  : T[K] extends t.Node | null | undefined
-    ? NodePath<T[K]>
-    : never;
+): T extends any
+  ? T["node"][K] extends Array<t.Node | null | undefined>
+    ? Array<NodePath<T["node"][K][number]>>
+    : T["node"][K] extends t.Node | null | undefined
+      ? NodePath<T["node"][K]>
+      : never
+  : never;
 
-function get<T extends t.Node, K extends string>(
-  this: NodePath<T>,
+function get<T extends NodePath, K extends string>(
+  this: T,
   key: K,
   context?: boolean | TraversalContext,
-): ToNodePath<Trav<T, Split<K>>>;
+): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
 
-function get<T extends t.Node>(
-  this: NodePath<T>,
+function get(
+  this: NodePath,
   key: string,
   context?: true | TraversalContext,
 ): NodePath | NodePath[];
 
-function get<T extends t.Node>(
-  this: NodePath<T>,
+function get(
+  this: NodePath,
   key: string,
   context: true | TraversalContext = true,
 ): NodePath | NodePath[] {
@@ -399,10 +394,10 @@ function get<T extends t.Node>(
   if (parts.length === 1) {
     // "foo"
     // @ts-expect-error key may not index T
-    return this._getKey(key, context);
+    return _getKey.call(this, key, context);
   } else {
     // "foo.bar"
-    return this._getPattern(parts, context);
+    return _getPattern.call(this, parts, context);
   }
 }
 
@@ -413,7 +408,7 @@ export function _getKey<T extends t.Node>(
   key: keyof T & string,
   context?: TraversalContext,
 ): NodePath | NodePath[] {
-  const node = this.node;
+  const node = this.node as T;
   const container = node[key];
 
   if (Array.isArray(container)) {
@@ -457,6 +452,10 @@ export function _getPattern(
     }
   }
   return path;
+}
+
+export function getAssignmentIdentifiers(this: NodePath) {
+  return _getAssignmentIdentifiers(this.node);
 }
 
 function getBindingIdentifiers(
@@ -526,9 +525,7 @@ function getBindingIdentifierPaths(
     if (!id) continue;
     if (!id.node) continue;
 
-    const keys =
-      // @ts-expect-error _getBindingIdentifiers.keys do not cover all node types
-      _getBindingIdentifiers.keys[id.node.type];
+    const keys = _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {
       if (duplicates) {
@@ -542,7 +539,7 @@ function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (isDeclaration(declaration)) {
+      if (declaration.isDeclaration()) {
         search.push(declaration);
       }
       continue;

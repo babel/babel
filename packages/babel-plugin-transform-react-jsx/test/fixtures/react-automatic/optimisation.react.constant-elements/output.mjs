@@ -1,11 +1,11 @@
 var _div;
 let App = /*#__PURE__*/function (_React$Component) {
-  babelHelpers.inherits(App, _React$Component);
   function App() {
     babelHelpers.classCallCheck(this, App);
     return babelHelpers.callSuper(this, App, arguments);
   }
-  babelHelpers.createClass(App, [{
+  babelHelpers.inherits(App, _React$Component);
+  return babelHelpers.createClass(App, [{
     key: "render",
     value: function render() {
       const navbarHeader = _div || (_div = <div className="navbar-header">
@@ -22,5 +22,4 @@ let App = /*#__PURE__*/function (_React$Component) {
     </div>;
     }
   }]);
-  return App;
 }(React.Component);

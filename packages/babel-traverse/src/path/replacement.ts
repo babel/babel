@@ -4,6 +4,7 @@ import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index.ts";
 import NodePath from "./index.ts";
 import { getCachedPaths } from "../cache.ts";
+import { _verifyNodeList, _containerInsertAfter } from "./modification.ts";
 import { parse } from "@babel/parser";
 import {
   FUNCTION_TYPES,
@@ -36,7 +37,6 @@ import {
   yieldExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import hoistVariables from "@babel/helper-hoist-variables";
 
 /**
  * Replace a node with an array of multiple. This method performs the following steps:
@@ -52,7 +52,7 @@ export function replaceWithMultiple(
 ): NodePath[] {
   this.resync();
 
-  nodes = this._verifyNodeList(nodes);
+  nodes = _verifyNodeList.call(this, nodes);
   inheritLeadingComments(nodes[0], this.node);
   inheritTrailingComments(nodes[nodes.length - 1], this.node);
   getCachedPaths(this.hub, this.parent)?.delete(this.node);
@@ -110,11 +110,18 @@ export function replaceWithSourceString(this: NodePath, replacement: string) {
 /**
  * Replace the current node with another.
  */
-
 export function replaceWith<R extends t.Node>(
   this: NodePath,
-  replacementPath: R | NodePath<R>,
-): [NodePath<R>] {
+  replacementPath: R,
+): [NodePath<R>];
+export function replaceWith<R extends NodePath>(
+  this: NodePath,
+  replacementPath: R,
+): [R];
+export function replaceWith(
+  this: NodePath,
+  replacementPath: t.Node | NodePath,
+): [NodePath] {
   this.resync();
 
   if (this.removed) {
@@ -133,7 +140,7 @@ export function replaceWith<R extends t.Node>(
   }
 
   if (this.node === replacement) {
-    return [this as NodePath<R>];
+    return [this];
   }
 
   if (this.isProgram() && !isProgram(replacement)) {
@@ -174,9 +181,7 @@ export function replaceWith<R extends t.Node>(
       !this.canSwapBetweenExpressionAndStatement(replacement)
     ) {
       // replacing an expression with a statement so let's explode it
-      return this.replaceExpressionWithStatements([replacement]) as [
-        NodePath<R>,
-      ];
+      return this.replaceExpressionWithStatements([replacement]) as [NodePath];
     }
   }
 
@@ -187,7 +192,7 @@ export function replaceWith<R extends t.Node>(
   }
 
   // replace the node
-  this._replaceWith(replacement);
+  _replaceWith.call(this, replacement);
   this.type = replacement.type;
 
   // potentially create new scope
@@ -196,14 +201,8 @@ export function replaceWith<R extends t.Node>(
   // requeue for visiting
   this.requeue();
 
-  return [
-    nodePath ? (this.get(nodePath) as NodePath<R>) : (this as NodePath<R>),
-  ];
+  return [nodePath ? this.get(nodePath) : this];
 }
-
-/**
- * Description
- */
 
 export function _replaceWith(this: NodePath, node: t.Node) {
   if (!this.container) {
@@ -261,18 +260,10 @@ export function replaceExpressionWithStatements(
   // hoist variable declaration in do block
   // `(do { var x = 1; x;})` -> `var x; (() => { x = 1; return x; })()`
   const callee = (this as ThisType).get("callee");
-  hoistVariables(
-    callee.get("body"),
-    (id: t.Identifier) => {
-      this.scope.push({ id });
-    },
-    "var",
-  );
+  callee.get("body").scope.hoistVariables(id => this.scope.push({ id }));
 
   // add implicit returns to all ending expression statements
-  const completionRecords: Array<NodePath> = (this as ThisType)
-    .get("callee")
-    .getCompletionRecords();
+  const completionRecords: Array<NodePath> = callee.getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
 
@@ -410,8 +401,8 @@ export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
 
   if (Array.isArray(nodes)) {
     if (Array.isArray(this.container)) {
-      nodes = this._verifyNodeList(nodes);
-      const paths = this._containerInsertAfter(nodes);
+      nodes = _verifyNodeList.call(this, nodes);
+      const paths = _containerInsertAfter.call(this, nodes);
       this.remove();
       return paths;
     } else {

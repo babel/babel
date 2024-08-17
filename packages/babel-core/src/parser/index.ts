@@ -1,10 +1,10 @@
 import type { Handler } from "gensync";
-import { parse } from "@babel/parser";
+import { parse, type File as ParseResult } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";
 
-export type ParseResult = ReturnType<typeof parse>;
+export type { ParseResult };
 
 export default function* parser(
   pluginPasses: PluginPasses,
@@ -66,7 +66,12 @@ export default function* parser(
       if (missingPlugin) {
         err.message =
           `${filename}: ` +
-          generateMissingPluginMessage(missingPlugin[0], loc, codeFrame);
+          generateMissingPluginMessage(
+            missingPlugin[0],
+            loc,
+            codeFrame,
+            filename,
+          );
       } else {
         err.message = `${filename}: ${err.message}\n\n` + codeFrame;
       }

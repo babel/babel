@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 original_git_branch=`git rev-parse --abbrev-ref HEAD`
 tmp_branch_name="integration-tests-$(date +'%F-%H-%M-%N')"

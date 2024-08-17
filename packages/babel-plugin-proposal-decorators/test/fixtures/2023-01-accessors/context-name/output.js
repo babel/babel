@@ -1,4 +1,4 @@
-var _initStatic, _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7;
+let _initStatic, _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -9,7 +9,6 @@ const f = () => {
     [Symbol.toPrimitive]: () => (logs.push("calling toPrimitive"), "f()")
   };
 };
-_computedKey = babelHelpers.toPropertyKey(f());
 class Foo {
   static {
     [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2301(this, [[dec, 6, "a"], [dec, 6, "a", o => o.#B, (o, v) => o.#B = v], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []).e;
@@ -23,10 +22,10 @@ class Foo {
     this.#A = v;
   }
   static #B = _init_a2(this);
-  set #a(v) {
+  static set #a(v) {
     _set_a(this, v);
   }
-  get #a() {
+  static get #a() {
     return _get_a(this);
   }
   static #C = _init_computedKey(this);
@@ -72,7 +71,7 @@ class Foo {
     this.#H = v;
   }
   static #I = _init_computedKey7(this);
-  static get [_computedKey]() {
+  static get [_computedKey = babelHelpers.toPropertyKey(f())]() {
     return this.#I;
   }
   static set [_computedKey](v) {

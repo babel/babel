@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #==============================================================================#
 #                                  SETUP                                       #
@@ -61,10 +61,14 @@ rm packages/babel-standalone/test/built-into-es5.js
 # NOTE: When running this command on MacOS, use gsed from 'brew install gnu-sed'
 sed -i 's/describeGte("12.0.0")("worker"/describeGte("12.0.0").skip("worker"/g' packages/babel-register/test/index.js
 sed -i 's/nodeGte12(/nodeGte12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
-sed -i 's/nodeGte12NoESM(/nodeGte12NoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
+sed -i 's/describe(/describe.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
+
+# We only support transforming import attributes in new @babel/core versions
+sed -i 's#\["@babel/plugin-proposal-json-modules", { uncheckedRequire: true }\]#null#g' babel.config.js
+sed -i 's#with { type: "json" }##g' packages/babel-preset-env/src/normalize-options.ts
 
 # Update deps, build and test
 rm yarn.lock
-YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
+IS_BABEL_OLD_E2E=1 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 
 cleanup

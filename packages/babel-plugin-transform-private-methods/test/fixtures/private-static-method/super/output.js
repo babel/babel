@@ -9,10 +9,10 @@ class Sub extends Base {
     return 'bad';
   }
   static check() {
-    babelHelpers.classStaticPrivateMethodGet(Sub, Sub, _subStaticPrivateMethod).call(Sub);
+    _subStaticPrivateMethod.call(Sub);
   }
 }
 _Sub = Sub;
 function _subStaticPrivateMethod() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(_Sub), "basePublicStaticMethod", this).call(this);
+  return babelHelpers.superPropGet(_Sub, "basePublicStaticMethod", this, 2)([]);
 }

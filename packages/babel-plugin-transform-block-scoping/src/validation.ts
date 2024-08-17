@@ -1,5 +1,5 @@
-import { types as t, type PluginPass } from "@babel/core";
-import type { Binding, NodePath } from "@babel/traverse";
+import { types as t } from "@babel/core";
+import type { Scope, NodePath, PluginPass } from "@babel/core";
 
 export function validateUsage(
   path: NodePath<t.VariableDeclaration>,
@@ -25,7 +25,7 @@ export function validateUsage(
 
 function disallowConstantViolations(
   name: string,
-  binding: Binding,
+  binding: Scope.Binding,
   state: PluginPass,
 ) {
   for (const violation of binding.constantViolations) {
@@ -76,7 +76,9 @@ function disallowConstantViolations(
             t.variableDeclarator(violation.scope.generateUidIdentifier(name)),
           ]),
         );
-      violation.node.body.body.unshift(t.expressionStatement(throwNode));
+      (violation.node.body as t.BlockStatement).body.unshift(
+        t.expressionStatement(throwNode),
+      );
     }
   }
 }
@@ -149,7 +151,7 @@ function getTDZReplacement(
   return { status, node: buildTDZAssert(status, id, state) };
 }
 
-function injectTDZChecks(binding: Binding, state: PluginPass) {
+function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
   const allUsages = new Set(binding.referencePaths);
   binding.constantViolations.forEach(allUsages.add, allUsages);
 
@@ -175,7 +177,9 @@ function injectTDZChecks(binding: Binding, state: PluginPass) {
       }
     } else if (path.isAssignmentExpression()) {
       const nodes = [];
-      const ids = path.getBindingIdentifiers();
+      const ids = process.env.BABEL_8_BREAKING
+        ? path.getAssignmentIdentifiers()
+        : path.getBindingIdentifiers();
 
       for (const name of Object.keys(ids)) {
         const replacement = getTDZReplacement(path, state, ids[name]);

@@ -1,14 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxAsyncDoExpressions from "@babel/plugin-syntax-async-do-expressions";
-import hoistVariables from "@babel/helper-hoist-variables";
-import type * as t from "@babel/types";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.13.0",
-  );
+  assertVersion(REQUIRED_VERSION("^7.13.0"));
 
   return {
     name: "proposal-async-do-expressions",
@@ -20,18 +14,17 @@ export default declare(({ types: t, assertVersion }) => {
             // non-async do expressions are handled by proposal-do-expressions
             return;
           }
-          const { scope } = path;
           // Hoist variable declaration to containing function scope
           // `async do { var x = 1; x }` -> `var x; (async() => { x = 1; return x })()`
-          hoistVariables(
-            path,
-            (id: t.Identifier) => {
-              scope.push({ id: t.cloneNode(id) });
-            },
-            "var",
-          );
-          const bodyPath = path.get("body");
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.scope.hoistVariables ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").Scope.prototype.hoistVariables;
+          }
+          path.scope.hoistVariables();
 
+          const bodyPath = path.get("body");
           // add implicit returns to all ending expression statements
           const completionRecords = bodyPath.getCompletionRecords();
 

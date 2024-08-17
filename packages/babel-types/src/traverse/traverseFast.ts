@@ -5,7 +5,7 @@ import type * as t from "../index.ts";
  * A prefix AST traversal implementation meant for simple searching
  * and processing.
  */
-export default function traverseFast<Options = {}>(
+export default function traverseFast<Options = object>(
   node: t.Node | null | undefined,
   enter: (node: t.Node, opts?: Options) => void,
   opts?: Options,

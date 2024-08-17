@@ -111,9 +111,6 @@
                       "type": "Identifier",
                       "start":62,"end":63,"loc":{"start":{"line":2,"column":35,"index":62},"end":{"line":2,"column":36,"index":63},"identifierName":"b"},
                       "name": "b"
-                    },
-                    "extra": {
-                      "shorthand": true
                     }
                   },
                   {
@@ -188,6 +185,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

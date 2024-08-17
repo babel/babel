@@ -175,7 +175,7 @@ export function assertCallerMetadata(
 export function assertInputSourceMap(
   loc: OptionPath,
   value: unknown,
-): RootInputSourceMapOption | void {
+): RootInputSourceMapOption {
   if (
     value !== undefined &&
     typeof value !== "boolean" &&
@@ -183,7 +183,7 @@ export function assertInputSourceMap(
   ) {
     throw new Error(`${msg(loc)} must be a boolean, object, or undefined`);
   }
-  return value;
+  return value as RootInputSourceMapOption;
 }
 
 export function assertString(loc: GeneralPath, value: unknown): string | void {

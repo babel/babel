@@ -1,4 +1,4 @@
-export function assertNoOwnProperties(obj: {}) {
+export function assertNoOwnProperties(obj: object) {
   expect(Object.getOwnPropertyNames(obj)).toHaveLength(0);
 }
 

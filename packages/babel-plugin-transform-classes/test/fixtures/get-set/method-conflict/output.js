@@ -4,9 +4,8 @@ let A = /*#__PURE__*/function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
-  babelHelpers.createClass(A, [{
+  return babelHelpers.createClass(A, [{
     key: "x",
     set: function (_) {}
   }]);
-  return A;
 }();

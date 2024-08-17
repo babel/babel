@@ -38,7 +38,7 @@ export function has<N extends t.Node>(
   this: NodePath<N>,
   key: keyof N,
 ): boolean {
-  const val = this.node && this.node[key];
+  const val = (this.node as N)?.[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
@@ -80,7 +80,7 @@ export function equals<N extends t.Node>(
   key: keyof N,
   value: any,
 ): boolean {
-  return this.node[key] === value;
+  return (this.node as N)[key] === value;
 }
 
 /**
@@ -393,8 +393,8 @@ function _guessExecutionStatusRelativeToCached(
 
   // If this is an ancestor of the target path,
   // e.g. f(g); where this is f and target is g.
-  if (paths.target.indexOf(base) >= 0) return "after";
-  if (paths.this.indexOf(target) >= 0) return "before";
+  if (paths.target.includes(base)) return "after";
+  if (paths.this.includes(target)) return "before";
 
   // get ancestor where the branches intersect
   let commonPath;
@@ -539,7 +539,7 @@ export function resolve(
   dangerous?: boolean,
   resolved?: NodePath[],
 ) {
-  return this._resolve(dangerous, resolved) || this;
+  return _resolve.call(this, dangerous, resolved) || this;
 }
 
 export function _resolve(
@@ -549,7 +549,7 @@ export function _resolve(
 ): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
-  if (resolved && resolved.indexOf(this) >= 0) return;
+  if (resolved?.includes(this)) return;
 
   // we store all the paths we've "resolved" in this array to prevent infinite recursion
   resolved = resolved || [];
@@ -655,6 +655,23 @@ export function isConstantExpression(this: NodePath): boolean {
     );
   }
 
+  if (this.isMemberExpression()) {
+    return (
+      !this.node.computed &&
+      this.get("object").isIdentifier({ name: "Symbol" }) &&
+      !this.scope.hasBinding("Symbol", { noGlobals: true })
+    );
+  }
+
+  if (this.isCallExpression()) {
+    return (
+      this.node.arguments.length === 1 &&
+      this.get("callee").matchesPattern("Symbol.for") &&
+      !this.scope.hasBinding("Symbol", { noGlobals: true }) &&
+      this.get("arguments")[0].isStringLiteral()
+    );
+  }
+
   return false;
 }
 
@@ -677,6 +694,9 @@ export function isInStrictMode(this: NodePath) {
     if (path.isFunction()) {
       body = path.node.body as t.BlockStatement;
     } else if (path.isProgram()) {
+      // @ts-expect-error TODO: TS thinks that `path` here cannot be
+      // Program due to the `isProgram()` check at the beginning of
+      // the function
       body = path.node;
     } else {
       return false;

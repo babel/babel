@@ -1,13 +1,13 @@
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Bar);
   function Foo() {
-    var _thisSuper, _thisSuper2, _this;
+    var _this;
     babelHelpers.classCallCheck(this, Foo);
-    var t = () => babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Foo.prototype)), "test", _thisSuper).call(_thisSuper);
-    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Foo.prototype)), "foo", _thisSuper2).call(_thisSuper2);
+    var t = () => babelHelpers.superPropGet((babelHelpers.assertThisInitialized(_this), Foo), "test", _this, 3)([]);
+    babelHelpers.superPropGet((babelHelpers.assertThisInitialized(_this), Foo), "foo", _this, 3)([]);
     return _this = babelHelpers.callSuper(this, Foo);
   }
+  babelHelpers.inherits(Foo, _Bar);
   return babelHelpers.createClass(Foo);
 }(Bar);

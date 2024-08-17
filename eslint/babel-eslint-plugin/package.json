@@ -1,9 +1,9 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.23.5",
+  "version": "7.25.1",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.cjs",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./lib/index.cjs",
     "./package.json": "./package.json"
@@ -34,24 +34,24 @@
   "homepage": "https://babel.dev/",
   "peerDependencies": {
     "@babel/eslint-parser": "^7.11.0",
-    "eslint": "^7.5.0 || ^8.0.0"
+    "eslint": "^7.5.0 || ^8.0.0 || ^9.0.0"
   },
   "dependencies": {
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
     "clone-deep": "^4.0.1",
-    "eslint": "^8.22.0"
+    "eslint": "^9.7.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
         },
         "peerDependencies": {
           "@babel/eslint-parser": "^7.11.0",
-          "eslint": "^8.9.0"
+          "eslint": "^8.9.0 || ^9.0.0"
         }
       },
       {}

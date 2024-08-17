@@ -52,6 +52,7 @@ describe("converters", function () {
       expect(t.valueToNode(undefined)).toEqual(t.identifier("undefined"));
     });
     it("RegExp", function () {
+      // eslint-disable-next-line regexp/no-useless-flag
       expect(t.valueToNode(/abc.+/gm)).toEqual(t.regExpLiteral("abc.+", "gm"));
     });
     it("array", function () {

@@ -3,8 +3,5 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-  babelHelpers.classPrivateFieldInitSpec(this, _bar, {
-    writable: true,
-    value: "foo"
-  });
+  babelHelpers.classPrivateFieldInitSpec(this, _bar, "foo");
 });
