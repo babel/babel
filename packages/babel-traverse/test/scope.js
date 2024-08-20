@@ -1137,6 +1137,38 @@ describe("scope", () => {
         }"
       `);
     });
+
+    it(`computed key should not be renamed`, () => {
+      const program = getPath(`
+        let x = 1
+        const foo = {
+        get [x]() {
+          return x
+        },
+        }`);
+      program.traverse({
+        Function(path) {
+          const bodyPath = path.get("body");
+          // create a declaration that shadows parent variable
+          bodyPath.scope.push({
+            id: t.identifier("x"),
+            kind: "const",
+            init: t.nullLiteral(),
+          });
+          // rename the new "local" declaration
+          bodyPath.scope.rename("x", "y");
+        },
+      });
+      expect(program + "").toMatchInlineSnapshot(`
+        "let x = 1;
+        const foo = {
+          get [x]() {
+            const y = null;
+            return y;
+          }
+        };"
+      `);
+    });
   });
 
   describe("constantViolations", () => {
