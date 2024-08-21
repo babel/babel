@@ -11,15 +11,15 @@ new (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Class_br
     babelHelpers.classPrivateFieldSet2(_B, this, v);
   }
   static m() {}
-}, [_Foo, _initClass] = babelHelpers.applyDecs2301(_Foo3, [], [dec]).c, _Foo3), (_Class = class extends babelHelpers.identity {
+}, [_Foo, _initClass] = babelHelpers.applyDecs2301(_Foo3, [], [dec]).c, _Foo3), _Class = class extends babelHelpers.identity {
   constructor() {
-    (super(_Foo), babelHelpers.classPrivateMethodInitSpec(this, _Class_brand), babelHelpers.classPrivateFieldInitSpec(this, _x, void 0), babelHelpers.classPrivateFieldInitSpec(this, _A, void 0), babelHelpers.defineProperty(this, "x", void 0), babelHelpers.classPrivateFieldInitSpec(this, _B, void 0), this), (() => {
+    super(_Foo), babelHelpers.classPrivateMethodInitSpec(this, _Class_brand), babelHelpers.classPrivateFieldInitSpec(this, _x, void 0), babelHelpers.classPrivateFieldInitSpec(this, _A, void 0), babelHelpers.defineProperty(this, "x", void 0), babelHelpers.classPrivateFieldInitSpec(this, _B, void 0), this, (() => {
       hasX = o => _x.has(babelHelpers.checkInRHS(o));
       hasA = o => _Class_brand.has(babelHelpers.checkInRHS(o));
       hasM = o => _Class_brand.has(babelHelpers.checkInRHS(o));
     })(), _initClass();
   }
-}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class))();
+}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class)();
 function _get_a(_this) {
   return babelHelpers.classPrivateFieldGet2(_A, _this);
 }

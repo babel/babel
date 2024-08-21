@@ -24,14 +24,14 @@ const D = (class D {
     _initClass3();
   }
 }, _D);
-const E = ((class {
+const E = (class {
   static {
     [_decorated_class, _initClass4] = babelHelpers.applyDecs(this, [], [dec]);
   }
   static {
     _initClass4();
   }
-}, _decorated_class), 123);
+}, _decorated_class, 123);
 const F = [(class G {
   static {
     [_G, _initClass5] = babelHelpers.applyDecs(this, [], [dec]);

@@ -13,9 +13,9 @@ var _x = {
   var x, y, z;
   ({
     x
-  } = _C), (_x$_ = _x._, {
+  } = _C), _x$_ = _x._, {
     y
-  } = _x$_, z = babelHelpers.objectWithoutProperties(_x$_, _excluded), _x$_);
+  } = _x$_, z = babelHelpers.objectWithoutProperties(_x$_, _excluded), _x$_;
   result = {
     x,
     y,

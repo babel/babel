@@ -10,7 +10,7 @@ class F {
     _FBrandCheck.has(babelHelpers.checkInRHS(this));
   }
   get #w() {}
-  #x = (_FBrandCheck.add(this), (_xBrandCheck.add(this), 0));
+  #x = (_FBrandCheck.add(this), _xBrandCheck.add(this), 0);
   #y = (_temp = (() => {
     throw 'error';
   })(), _yBrandCheck.add(this), _temp);
