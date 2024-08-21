@@ -172,8 +172,13 @@ export default class Renamer {
     //   },
     // };
     const skipKeys: Record<string, true> = { discriminant: true };
-    if (t.isMethod(blockToTraverse) && blockToTraverse.computed) {
-      skipKeys.key = true;
+    if (t.isMethod(blockToTraverse)) {
+      if (blockToTraverse.computed) {
+        skipKeys.key = true;
+      }
+      if (!t.isObjectMethod(blockToTraverse)) {
+        skipKeys.decorators = true;
+      }
     }
 
     traverseNode(
