@@ -5,9 +5,9 @@ export function TaggedTemplateExpression(
   this: Printer,
   node: t.TaggedTemplateExpression,
 ) {
-  this.print(node.tag, node);
-  this.print(node.typeParameters, node); // TS
-  this.print(node.quasi, node);
+  this.print(node.tag);
+  this.print(node.typeParameters); // TS
+  this.print(node.quasi);
 }
 
 export function TemplateElement(this: Printer) {
@@ -24,7 +24,7 @@ export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
 
     if (i + 1 < quasis.length) {
       this.token(partRaw + "${", true);
-      this.print(node.expressions[i], node);
+      this.print(node.expressions[i]);
       partRaw = "}";
     }
   }

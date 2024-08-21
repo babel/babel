@@ -1,45 +1,48 @@
+type BABEL_8_BREAKING = boolean;
+type IF_BABEL_7<V> = false extends BABEL_8_BREAKING ? V : never;
+
 export type Plugin =
   | "asyncDoExpressions"
-  | "asyncGenerators"
-  | "bigInt"
-  | "classPrivateMethods"
-  | "classPrivateProperties"
-  | "classProperties"
-  | "classStaticBlock" // Enabled by default
+  | IF_BABEL_7<"asyncGenerators">
+  | IF_BABEL_7<"bigInt">
+  | IF_BABEL_7<"classPrivateMethods">
+  | IF_BABEL_7<"classPrivateProperties">
+  | IF_BABEL_7<"classProperties">
+  | IF_BABEL_7<"classStaticBlock">
   | "decimal"
   | "decorators-legacy"
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
-  | "dynamicImport"
+  | IF_BABEL_7<"dynamicImport">
   | "explicitResourceManagement"
   | "exportDefaultFrom"
-  | "exportNamespaceFrom" // deprecated
+  | IF_BABEL_7<"exportNamespaceFrom">
   | "flow"
   | "flowComments"
   | "functionBind"
   | "functionSent"
   | "importMeta"
   | "jsx"
-  | "logicalAssignment"
+  | IF_BABEL_7<"logicalAssignment">
   | "importAssertions" // deprecated
   | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
-  | "moduleStringNames"
-  | "nullishCoalescingOperator"
-  | "numericSeparator"
-  | "objectRestSpread"
-  | "optionalCatchBinding"
-  | "optionalChaining"
+  | IF_BABEL_7<"moduleStringNames">
+  | IF_BABEL_7<"nullishCoalescingOperator">
+  | IF_BABEL_7<"numericSeparator">
+  | IF_BABEL_7<"objectRestSpread">
+  | IF_BABEL_7<"optionalCatchBinding">
+  | IF_BABEL_7<"optionalChaining">
   | "partialApplication"
   | "placeholders"
-  | "privateIn" // Enabled by default
-  | "regexpUnicodeSets" // Enabled by default
+  | IF_BABEL_7<"privateIn">
+  | IF_BABEL_7<"regexpUnicodeSets">
   | "sourcePhaseImports"
   | "throwExpressions"
-  | "topLevelAwait"
+  | IF_BABEL_7<"topLevelAwait">
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
 
@@ -47,8 +50,7 @@ export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
   | ["importAttributes", { deprecatedAssertSyntax: boolean }]
-  // @deprecated
-  | ["moduleAttributes", { version: "may-2020" }]
+  | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
   | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
