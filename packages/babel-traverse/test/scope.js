@@ -1137,6 +1137,87 @@ describe("scope", () => {
         }"
       `);
     });
+
+    it(`computed key should not be renamed`, () => {
+      const program = getPath(`
+        let x = 1
+        const foo = {
+          get [x]() {
+            return x
+          },
+        }`);
+      program.traverse({
+        Function(path) {
+          const bodyPath = path.get("body");
+          // create a declaration that shadows parent variable
+          bodyPath.scope.push({
+            id: t.identifier("x"),
+            kind: "const",
+            init: t.nullLiteral(),
+          });
+          // rename the new "local" declaration
+          bodyPath.scope.rename("x", "y");
+        },
+      });
+      expect(program + "").toMatchInlineSnapshot(`
+        "let x = 1;
+        const foo = {
+          get [x]() {
+            const y = null;
+            return y;
+          }
+        };"
+      `);
+    });
+
+    it(`decorators should not be renamed`, () => {
+      const program = getPath(
+        `
+        let x;
+        class Foo {
+          @x
+          [x]() {
+            return x;
+          }
+          @x
+          #method() {
+            return x;
+          }
+        }`,
+        {
+          plugins: [["decorators"]],
+        },
+      );
+
+      program.traverse({
+        Function(path) {
+          const bodyPath = path.get("body");
+          // create a declaration that shadows parent variable
+          bodyPath.scope.push({
+            id: t.identifier("x"),
+            kind: "const",
+            init: t.nullLiteral(),
+          });
+          // rename the new "local" declaration
+          bodyPath.scope.rename("x", "y");
+        },
+      });
+      expect(program + "").toMatchInlineSnapshot(`
+        "let x;
+        class Foo {
+          @x
+          [x]() {
+            const y = null;
+            return y;
+          }
+          @x
+          #method() {
+            const y = null;
+            return y;
+          }
+        }"
+      `);
+    });
   });
 
   describe("constantViolations", () => {

@@ -162,15 +162,32 @@ export default class Renamer {
     const blockToTraverse = process.env.BABEL_8_BREAKING
       ? scope.block
       : (arguments[0] as t.Pattern | t.Scopable) || scope.block;
+
+    // When blockToTraverse is a SwitchStatement, the discriminant
+    // is not part of the current scope and thus should be skipped.
+
+    // const foo = {
+    //   get [x]() {
+    //     return x;
+    //   },
+    // };
+    const skipKeys: Record<string, true> = { discriminant: true };
+    if (t.isMethod(blockToTraverse)) {
+      if (blockToTraverse.computed) {
+        skipKeys.key = true;
+      }
+      if (!t.isObjectMethod(blockToTraverse)) {
+        skipKeys.decorators = true;
+      }
+    }
+
     traverseNode(
       blockToTraverse,
       explode(renameVisitor),
       scope,
       this,
       scope.path,
-      // When blockToTraverse is a SwitchStatement, the discriminant
-      // is not part of the current scope and thus should be skipped.
-      { discriminant: true },
+      skipKeys,
     );
 
     if (process.env.BABEL_8_BREAKING) {
