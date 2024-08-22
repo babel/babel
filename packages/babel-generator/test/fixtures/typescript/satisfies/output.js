@@ -5,5 +5,11 @@ x satisfies any satisfies T;
 (
 // a
 x
-/* b */) satisfies T;
-(x /* c */) satisfies T;
+/* b
+newline */) satisfies T;
+(
+// a
+x
+// b
+) satisfies T;
+x /* c */ satisfies T;
