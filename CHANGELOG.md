@@ -24,6 +24,29 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.4 (2024-08-22)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#16756](https://github.com/babel/babel/pull/16756) fix: Skip computed key when renaming ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16755](https://github.com/babel/babel/pull/16755) fix: Decorator 2018-09 may throw an exception ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#16710](https://github.com/babel/babel/pull/16710) Visit AST fields nodes according to their syntactical order ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#16709](https://github.com/babel/babel/pull/16709) Print semicolon after TS `export namespace as A` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-generator`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-typescript`, `babel-runtime-corejs2`, `babel-runtime`, `babel-traverse`
+  * [#16722](https://github.com/babel/babel/pull/16722) Avoid unnecessary parens around sequence expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-plugin-transform-class-properties`
+  * [#16714](https://github.com/babel/babel/pull/16714) Avoid unnecessary parens around exported arrow functions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-transform-object-rest-spread`
+  * [#16712](https://github.com/babel/babel/pull/16712) Avoid printing unnecessary parens around object destructuring ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-generator`
+  * [#16740](https://github.com/babel/babel/pull/16740) Avoid extra spaces between comments/regexps in compact mode ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.3 (2024-07-31)
 
 #### :bug: Bug Fix
