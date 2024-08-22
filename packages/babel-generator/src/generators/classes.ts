@@ -88,10 +88,12 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
 export function ClassProperty(this: Printer, node: t.ClassProperty) {
   this.printJoin(node.decorators);
 
-  // catch up to property key, avoid line break
-  // between member modifiers and the property key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!node.static || !this.format.preserveFormat) {
+    // catch up to property key, avoid line break
+    // between member TS modifiers and the property key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
   this.tsPrintClassMemberModifiers(node);
 

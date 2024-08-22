@@ -141,7 +141,6 @@ const FAILURES = [
   "sourcemaps/function-identifier-name/input.js",
   "sourcemaps/real-world-babel-file1/input.ts",
   "sourcemaps/real-world-babel-file2/input.ts",
-  "types/ClassBody-ClassProperty/input.js",
   "types/Decorator/input.js",
   "types/ImportAssertion/input.js",
   "typescript/arrow-function-async-generic/input.js",
