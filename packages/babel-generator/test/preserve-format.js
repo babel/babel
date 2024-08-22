@@ -12,7 +12,7 @@ const { __dirname } = commonJS(import.meta.url);
 
 const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
 
-describe("preserveFormat", () => {
+describe("experimental_preserveFormat", () => {
   describe("generation", () => {
     suites.forEach(testSuite => {
       describe(`${testSuite.title}`, () => {
@@ -37,10 +37,9 @@ describe("preserveFormat", () => {
               sourceFileName: path.relative(__dirname, task.actual.loc),
               ...task.options,
               retainLines: true,
-              preserveFormat: true,
+              experimental_preserveFormat: true,
               comments: true,
               jsescOption: null,
-              // TODO: Disallow these when preserveFormat is used
               minified: false,
               compact: false,
             };
@@ -83,7 +82,7 @@ describe("preserveFormat", () => {
         },
         generatorOpts: {
           retainLines: true,
-          preserveFormat: true,
+          experimental_preserveFormat: true,
         },
       });
 
