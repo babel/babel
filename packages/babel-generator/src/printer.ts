@@ -551,8 +551,8 @@ class Printer {
   }
 
   _matchesOriginalToken(token: Token, test: string) {
-    if (token.value != null) return token.value === test;
     if (token.end - token.start !== test.length) return false;
+    if (token.value != null) return token.value === test;
     return this._originalCode.startsWith(test, token.start);
   }
 
