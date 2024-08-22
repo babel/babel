@@ -183,8 +183,7 @@ export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
     this.space();
   }
   this.token("[");
-  this._parameters(node.parameters);
-  this.token("]");
+  this._parameters(node.parameters, "]");
   this.print(node.typeAnnotation);
   this.semicolon();
 }
@@ -259,8 +258,7 @@ export function tsPrintFunctionOrConstructorType(
       node.parameters;
   this.print(typeParameters);
   this.token("(");
-  this._parameters(parameters);
-  this.token(")");
+  this._parameters(parameters, ")");
   this.space();
   const returnType = process.env.BABEL_8_BREAKING
     ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
@@ -727,8 +725,7 @@ export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
     : node.parameters;
   this.print(typeParameters);
   this.token("(");
-  this._parameters(parameters);
-  this.token(")");
+  this._parameters(parameters, ")");
   const returnType = process.env.BABEL_8_BREAKING
     ? node.returnType
     : node.typeAnnotation;

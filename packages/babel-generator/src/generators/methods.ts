@@ -19,8 +19,7 @@ export function _params(
   }
 
   this.token("(");
-  this._parameters(node.params);
-  this.token(")");
+  this._parameters(node.params, ")");
 
   const noLineTerminator = node.type === "ArrowFunctionExpression";
   this.print(node.returnType, noLineTerminator);
@@ -28,19 +27,26 @@ export function _params(
   this._noLineTerminator = noLineTerminator;
 }
 
-export function _parameters(this: Printer, parameters: t.Function["params"]) {
+export function _parameters(
+  this: Printer,
+  parameters: t.Function["params"],
+  endToken: string,
+) {
   const exit = this.enterDelimited();
+
+  const trailingComma = this.shouldPrintTrailingComma(endToken);
 
   const paramLength = parameters.length;
   for (let i = 0; i < paramLength; i++) {
     this._param(parameters[i]);
 
-    if (i < parameters.length - 1) {
-      this.token(",");
+    if (trailingComma || i < paramLength - 1) {
+      this.token(",", null, i);
       this.space();
     }
   }
 
+  this.token(endToken);
   exit();
 }
 

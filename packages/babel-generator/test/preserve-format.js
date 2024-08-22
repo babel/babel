@@ -139,7 +139,6 @@ const FAILURES = [
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
   "sourcemaps/function-identifier-name/input.js",
-  "sourcemaps/real-world-babel-file1/input.ts",
   "sourcemaps/real-world-babel-file2/input.ts",
   "types/Decorator/input.js",
   "types/ImportAssertion/input.js",
