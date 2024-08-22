@@ -30,7 +30,7 @@ const D = (new class extends babelHelpers.identity {
     super(_D), (() => {})(), _initClass3();
   }
 }(), _D);
-const E = ((new class extends babelHelpers.identity {
+const E = (new class extends babelHelpers.identity {
   static [class {
     static {
       [_decorated_class, _initClass4] = babelHelpers.applyDecs2301(this, [], [dec]).c;
@@ -39,7 +39,7 @@ const E = ((new class extends babelHelpers.identity {
   constructor() {
     super(_decorated_class), (() => {})(), _initClass4();
   }
-}(), _decorated_class), 123);
+}(), _decorated_class, 123);
 const F = [(new class extends babelHelpers.identity {
   static [class G {
     static {
