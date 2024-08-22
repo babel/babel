@@ -282,23 +282,32 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsTokenCanFollowModifier() {
       return (
-        (this.match(tt.bracketL) ||
-          this.match(tt.braceL) ||
-          this.match(tt.star) ||
-          this.match(tt.ellipsis) ||
-          this.match(tt.privateName) ||
-          this.isLiteralPropertyName()) &&
-        !this.hasPrecedingLineBreak()
+        this.match(tt.bracketL) ||
+        this.match(tt.braceL) ||
+        this.match(tt.star) ||
+        this.match(tt.ellipsis) ||
+        this.match(tt.privateName) ||
+        this.isLiteralPropertyName()
       );
+    }
+
+    tsNextTokenOnSameLineAndCanFollowModifier() {
+      this.next();
+      if (this.hasPrecedingLineBreak()) {
+        return false;
+      }
+      return this.tsTokenCanFollowModifier();
     }
 
     tsNextTokenCanFollowModifier() {
       // Note: TypeScript's implementation is much more complicated because
       // more things are considered modifiers there.
       // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
-      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
-      this.next();
-      return this.tsTokenCanFollowModifier();
+      if (this.match(tt._static)) {
+        this.next();
+        return this.tsTokenCanFollowModifier();
+      }
+      return this.tsNextTokenOnSameLineAndCanFollowModifier();
     }
 
     /** Parses a modifier matching one the given modifier names. */
