@@ -157,7 +157,6 @@ const FAILURES = [
   "typescript/module-namespace-head/input.js",
   "typescript/module-namespace-head-declare/input.js",
   "typescript/module-namespace-head-export/input.js",
-  "typescript/satisfies/input.js",
   "typescript/types-union-intersection/input.js",
   "typescript/types-with-comments-retainLines/input.js",
 ];
