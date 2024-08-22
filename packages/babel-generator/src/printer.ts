@@ -231,7 +231,7 @@ class Printer {
       if (node.start != null && node.end != null) {
         const { last } = this._findTokensOfNode(node);
         const lastToken = this._tokens[last];
-        if (lastToken.raw !== ";") {
+        if (!this._matchesOriginalToken(lastToken, ";")) {
           // no semicolon
           return;
         }
@@ -556,10 +556,16 @@ class Printer {
     return null;
   }
 
+  _matchesOriginalToken(token: Token, test: string) {
+    if (token.value != null) return token.value === test;
+    if (token.end - token.start !== test.length) return false;
+    return this._originalCode.startsWith(test, token.start);
+  }
+
   _getOriginalToken(str: string, occurrenceCount: number = 0) {
     if (!this._tokens) return null;
     return this._findToken(token => {
-      if ((token.value ?? token.raw) !== str) return false;
+      if (!this._matchesOriginalToken(token, str)) return false;
       if (occurrenceCount === 0) return true;
       occurrenceCount--;
       return false;
@@ -1103,14 +1109,14 @@ class Printer {
 
     let listEndIndex: number;
     this._findToken((token, index) => {
-      if ((token.raw ?? token.value) === listEnd) {
+      if (this._matchesOriginalToken(token, listEnd)) {
         listEndIndex = index;
         return true;
       }
     });
     if (listEndIndex == null) return;
     const lastToken = this._tokens[listEndIndex - 1];
-    return (lastToken.value ?? lastToken.raw) === ",";
+    return this._matchesOriginalToken(lastToken, ",");
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {

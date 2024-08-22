@@ -12,7 +12,10 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
   const identifierName = node.loc?.identifierName;
   if (identifierName) {
     const token = this._findToken(tok => tok.value === identifierName);
-    if (token?.raw) return (lastRawIdentResult = token.raw);
+    if (token) {
+      lastRawIdentResult = this._originalCode.slice(token.start, token.end);
+      return lastRawIdentResult;
+    }
   }
   return (lastRawIdentResult = node.name);
 }
