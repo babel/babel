@@ -22,7 +22,7 @@ describe("preserveFormat", () => {
           const testFn = task.disabled ? it.skip : it;
 
           testFn(task.title, () => {
-            const input = task.actual.code;
+            const input = task.actual.code.replace(/\r\n?/g, "\n");
             const parserOpts = {
               filename: task.actual.loc,
               plugins: task.options.plugins || [],
