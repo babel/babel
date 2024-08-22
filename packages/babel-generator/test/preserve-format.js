@@ -97,7 +97,6 @@ const FAILURES = [
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
   "comments/decorators-legacy-before-export/input.js",
-  "comments/newlines/input.js",
   "decorators/decorator-call-expression/input.js",
   "decorators/decorator-parenthesized-expression/input.js",
   "decorators/decorator-parenthesized-expression-createParenthesizedExpression/input.js",
