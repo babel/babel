@@ -146,7 +146,6 @@ const FAILURES = [
   "types/ImportAssertion/input.js",
   "typescript/arrow-function-async-generic/input.js",
   "typescript/arrow-function-generic/input.js",
-  "typescript/cast-need-parentheses/input.js",
   "typescript/class-modifiers-properties/input.js",
   "typescript/declare-destructure/input.js",
   "typescript/enum-members/input.js",
