@@ -9,7 +9,8 @@ export function TSTypeAnnotation(
   // TODO(@nicolo-ribaudo): investigate not including => in the range
   // of the return type of an arrow function type
   this.token(
-    parent.type === "TSFunctionType" || parent.type === "TSConstructorType"
+    (parent.type === "TSFunctionType" || parent.type === "TSConstructorType") &&
+      parent.typeAnnotation === node
       ? "=>"
       : ":",
   );
