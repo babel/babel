@@ -10,7 +10,11 @@ export function TSTypeAnnotation(
   // of the return type of an arrow function type
   this.token(
     (parent.type === "TSFunctionType" || parent.type === "TSConstructorType") &&
-      parent.typeAnnotation === node
+      (process.env.BABEL_8_BREAKING
+        ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
+          parent.returnType
+        : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
+          parent.typeAnnotation) === node
       ? "=>"
       : ":",
   );
