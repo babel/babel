@@ -507,8 +507,8 @@ class Printer {
     low: number = 0,
     high: number = this._tokens.length - 1,
   ) {
-    //const cached = this._tokensCache.get(node);
-    //if (cached) return cached;
+    const cached = this._tokensCache.get(node);
+    if (cached) return cached;
 
     const first = this._findFirstTokenOfNode(node.start, low, high);
     const last = this._findLastTokenOfNode(node.end, first, high);
@@ -529,24 +529,18 @@ class Printer {
 
     let low = first;
 
-    const keys = VISITOR_KEYS[node.type];
-    for (const key of keys) {
-      let children = (node as any)[key] as t.Node | t.Node[];
-      if (!children) continue;
-      if (!Array.isArray(children)) children = [children];
-      for (const child of children) {
-        if (!child) continue;
+    for (const child of childrenIterator(node)) {
+      if (!child) continue;
 
-        const childTok = this._findTokensOfNode(child, low, last);
+      const childTok = this._findTokensOfNode(child, low, last);
 
-        const high = childTok.first;
+      const high = childTok.first;
 
-        for (let k = low; k < high; k++) {
-          if (condition(this._tokens[k], k)) return this._tokens[k];
-        }
-
-        low = childTok.last + 1;
+      for (let k = low; k < high; k++) {
+        if (condition(this._tokens[k], k)) return this._tokens[k];
       }
+
+      low = childTok.last + 1;
     }
 
     for (let k = low; k <= last; k++) {
@@ -1434,4 +1428,28 @@ export default Printer;
 function commaSeparator(this: Printer, occurrenceCount: number, last: boolean) {
   this.token(",", false, occurrenceCount);
   if (!last) this.space();
+}
+
+function* childrenIterator(node: t.Node) {
+  // We need special handling to iterate TemplateLiteral
+  // children in order, since the two lists are interleaved.
+  if (node.type === "TemplateLiteral") {
+    yield node.quasis[0];
+    for (let i = 1; i < node.quasis.length; i++) {
+      yield node.expressions[i - 1];
+      yield node.quasis[i];
+    }
+    return;
+  }
+
+  const keys = VISITOR_KEYS[node.type];
+  for (const key of keys) {
+    const child = (node as any)[key];
+    if (!child) continue;
+    if (Array.isArray(child)) {
+      yield* child;
+    } else {
+      yield child;
+    }
+  }
 }
