@@ -2471,7 +2471,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       node2.source = null;
       node2.declaration = null;
-      if (this.hasPlugin("importAssertions")) {
+      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node2.assertions = [];
       }
 
@@ -2487,7 +2487,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.shouldParseExportDeclaration()) {
       node.specifiers = [];
       node.source = null;
-      if (this.hasPlugin("importAssertions")) {
+      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node.assertions = [];
       }
       node.declaration = this.parseExportDeclaration(node);
@@ -3258,7 +3258,10 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ) {
     let attributes: N.ImportAttribute[];
-    let useWith = false;
+    if (!process.env.BABEL_8_BREAKING) {
+      // eslint-disable-next-line no-var
+      var useWith = false;
+    }
 
     // https://tc39.es/proposal-import-attributes/#prod-WithClause
     if (this.match(tt._with)) {
@@ -3273,18 +3276,20 @@ export default abstract class StatementParser extends ExpressionParser {
 
       this.next(); // eat `with`
 
-      if (!process.env.BABEL_8_BREAKING) {
-        if (this.hasPlugin("moduleAttributes")) {
-          attributes = this.parseModuleAttributes();
-        } else {
-          this.expectImportAttributesPlugin();
-          attributes = this.parseImportAttributes();
-        }
+      if (process.env.BABEL_8_BREAKING) {
+        this.expectPlugin("importAttributes");
+        attributes = this.parseImportAttributes();
+      } else if (this.hasPlugin("moduleAttributes")) {
+        attributes = this.parseModuleAttributes();
       } else {
-        this.expectImportAttributesPlugin();
+        if (!this.hasPlugin("importAssertions")) {
+          this.expectPlugin("importAttributes");
+        }
         attributes = this.parseImportAttributes();
       }
-      useWith = true;
+      if (!process.env.BABEL_8_BREAKING) {
+        useWith = true;
+      }
     } else if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
       if (this.hasPlugin("importAttributes")) {
         if (
@@ -3294,6 +3299,8 @@ export default abstract class StatementParser extends ExpressionParser {
           this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
         }
         this.addExtra(node, "deprecatedAssertSyntax", true);
+      } else if (process.env.BABEL_8_BREAKING) {
+        this.expectPlugin("importAttributes");
       } else {
         this.expectOnePlugin(["importAttributes", "importAssertions"]);
       }
@@ -3301,7 +3308,7 @@ export default abstract class StatementParser extends ExpressionParser {
       attributes = this.parseImportAttributes();
     } else if (
       this.hasPlugin("importAttributes") ||
-      this.hasPlugin("importAssertions")
+      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
     ) {
       attributes = [];
     } else if (!process.env.BABEL_8_BREAKING) {
@@ -3310,7 +3317,11 @@ export default abstract class StatementParser extends ExpressionParser {
       } else return;
     } else return;
 
-    if (!useWith && this.hasPlugin("importAssertions")) {
+    if (
+      !process.env.BABEL_8_BREAKING &&
+      !useWith &&
+      this.hasPlugin("importAssertions")
+    ) {
       node.assertions = attributes;
     } else {
       node.attributes = attributes;

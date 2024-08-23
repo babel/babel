@@ -1,4 +1,5 @@
 {
+  "BABEL_8_BREAKING": false,
   "createImportExpressions": false,
   "plugins": ["importAssertions"],
   "sourceType": "module"
