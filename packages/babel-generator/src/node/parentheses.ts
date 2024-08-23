@@ -301,6 +301,10 @@ export function SequenceExpression(
   if (parentType === "ClassDeclaration" || parentType === "ClassExpression") {
     return parent.superClass === node;
   }
+  if (parentType === "ForOfStatement") {
+    return parent.right === node;
+  }
+
   return !isStatement(parent);
 }
 
