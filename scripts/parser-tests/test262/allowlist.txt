@@ -1,7 +1,5 @@
-# 6 invalid programs did not produce a parsing error
+# 4 invalid programs did not produce a parsing error
 
-language/import/import-assertions/json-invalid.js(default)
-language/import/import-assertions/json-invalid.js(strict mode)
 language/import/import-attributes/json-invalid.js(default)
 language/import/import-attributes/json-invalid.js(strict mode)
 language/import/import-attributes/json-named-bindings.js(default)
