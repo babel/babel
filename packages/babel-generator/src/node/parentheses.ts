@@ -298,9 +298,16 @@ export function SequenceExpression(
   ) {
     return false;
   }
-  if (parentType === "ClassDeclaration" || parentType === "ClassExpression") {
-    return parent.superClass === node;
+  if (parentType === "ClassDeclaration") {
+    return true;
   }
+  if (parentType === "ForOfStatement") {
+    return parent.right === node;
+  }
+  if (parentType === "ExportDefaultDeclaration") {
+    return true;
+  }
+
   return !isStatement(parent);
 }
 
