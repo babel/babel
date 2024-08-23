@@ -1,5 +1,6 @@
 {
+  "BABEL_8_BREAKING": true,
   "sourceType": "module",
   "plugins": [],
-  "throws": "This experimental syntax requires enabling one of the following parser plugin(s): \"importAttributes\", \"importAssertions\". (1:27)"
+  "throws": "This experimental syntax requires enabling the parser plugin: \"importAttributes\". (1:27)"
 }
