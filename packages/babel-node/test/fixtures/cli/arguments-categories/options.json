@@ -8,6 +8,7 @@
     "--expose-gc-as=gc2",
     "--config-file",
     "./config.json",
+    "--extensions=.js,.ts",
     "bar"
   ]
 }

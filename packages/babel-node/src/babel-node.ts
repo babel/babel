@@ -30,7 +30,7 @@ if (process.env.BABEL_8_BREAKING) {
     }
   }
 
-  const { programArgs, fileName, userArgs } = splitArgs(
+  const { programArgs, fileName, userArgs, explicitSeparator } = splitArgs(
     process.argv.slice(2),
     babelOptionsWithValue,
   );
@@ -44,6 +44,44 @@ if (process.env.BABEL_8_BREAKING) {
     list.push(arg);
     if (i + 1 < programArgs.length && programArgs[i + 1][0] !== "-") {
       list.push(programArgs[++i]);
+    }
+  }
+
+  if (!explicitSeparator) {
+    const ambiguousArgsNames: string[] = [];
+    const ambiguousArgs: string[] = [];
+    let unambiguousArgs: string[] | null = null;
+    for (let i = 0; i < userArgs.length; i++) {
+      const [arg, value] = userArgs[i].split("=");
+      if (babelOptions.has(arg)) {
+        unambiguousArgs ??= userArgs.slice(0, i);
+        ambiguousArgsNames.push(arg);
+        ambiguousArgs.push(userArgs[i]);
+        if (
+          value === undefined &&
+          babelOptionsWithValue.has(arg) &&
+          i + 1 < userArgs.length
+        ) {
+          ambiguousArgs.push(userArgs[++i]);
+        }
+      } else {
+        unambiguousArgs?.push(userArgs[i]);
+      }
+    }
+    if (ambiguousArgsNames.length > 0) {
+      const them = ambiguousArgsNames.length === 1 ? "it" : "them";
+      const they = ambiguousArgsNames.length === 1 ? "it" : "they";
+      const are = ambiguousArgsNames.length === 1 ? "is" : "are";
+      console.warn(
+        `Warning: ${ambiguousArgsNames.join(", ")} ${are} a valid option for Babel, but ${they} ${are} defined ` +
+          `after the script name. Up to Babel 7 ${they} would have been passed ` +
+          `to Babel, while now ${they} ${are} passed to the script itself.\n` +
+          `  If this is intended, you can silence this warning by explicitly ` +
+          `passing the -- separator before the script name:\n` +
+          `    babel-node ${programArgs.join(" ")} -- ${fileName} ${userArgs.join(" ")}\n` +
+          `  If the intention is to pass ${them} to Babel, move ${them} before the filename:\n` +
+          `    babel-node ${programArgs.join(" ")} ${ambiguousArgs.join(" ")} ${fileName} ${unambiguousArgs.join(" ")}\n`,
+      );
     }
   }
 

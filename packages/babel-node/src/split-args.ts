@@ -6,6 +6,7 @@ const nodeFlagsWithNoFile = new Set(["-p", "--print", "-e", "--eval"]);
 export function splitArgs(argv: string[], extraOptionsWithValue?: Set<string>) {
   const programArgs: string[] = [];
 
+  let explicitSeparator = false;
   let ignoreFileName = null;
   let i = 0;
   for (; i < argv.length; i++) {
@@ -14,6 +15,7 @@ export function splitArgs(argv: string[], extraOptionsWithValue?: Set<string>) {
     if (arg === "-") break;
 
     if (arg === "--") {
+      explicitSeparator = true;
       i++;
       break;
     }
@@ -41,5 +43,5 @@ export function splitArgs(argv: string[], extraOptionsWithValue?: Set<string>) {
   const fileName = !ignoreFileName && i < argv.length ? argv[i++] : null;
   const userArgs = argv.slice(i);
 
-  return { programArgs, fileName, userArgs };
+  return { programArgs, fileName, userArgs, explicitSeparator };
 }
