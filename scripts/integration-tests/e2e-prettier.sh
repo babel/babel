@@ -28,6 +28,19 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/unit/__snapshots__/visitor-keys.js.snap
   # Update recordAndTuple usage
   sed -i 's/\["recordAndTuple", { syntaxType: "hash" }\]/"recordAndTuple"/' src/language-js/parse/babel.js
+  # https://github.com/babel/babel/pull/16733
+  rm -r tests/format/flow/mapped-types
+  rm tests/format/typescript/conditional-types/conditonal-types.ts
+  rm tests/format/typescript/conditional-types/new-ternary-spec.ts
+  rm -r tests/format/typescript/key-remapping-in-mapped-types
+  rm -r tests/format/typescript/conformance/types/mappedType
+  rm -r tests/format/typescript/mapped-type
+  rm tests/format/typescript/custom/typeParameters/variables.ts
+  rm -r tests/format/typescript/custom/modifiers
+  rm tests/format/typescript/compiler/mappedTypeWithCombinedTypeMappers.ts
+  rm tests/format/typescript/prettier-ignore/format.test.js
+  rm tests/format/typescript/keyword-types/conditional-types.ts
+  rm tests/format/typescript/comments/mapped_types.ts
 fi
 
 #==============================================================================#

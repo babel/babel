@@ -62,6 +62,7 @@ const ignoredFields = {
           parameters: true,
           typeAnnotation: true,
         },
+        TSMappedType: { typeParameter: true },
       }
     : {
         TSFunctionType: { params: true, returnType: true },
@@ -69,6 +70,7 @@ const ignoredFields = {
         TSConstructorType: { params: true, returnType: true },
         TSCallSignatureDeclaration: { params: true, returnType: true },
         TSConstructSignatureDeclaration: { params: true, returnType: true },
+        TSMappedType: { key: true, constraint: true },
       }),
 };
 
