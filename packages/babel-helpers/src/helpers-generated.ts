@@ -1134,10 +1134,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 131, gzip size: 126
+  // size: 153, gzip size: 136
   superPropGet: helper(
     "7.25.0",
-    "function _superPropertyGet(t,e,r,o){var p=get(getPrototypeOf(1&o?t.prototype:t),e,r);return 2&o?function(t){return p.apply(r,t)}:p}",
+    'function _superPropertyGet(t,e,o,r){var p=get(getPrototypeOf(1&r?t.prototype:t),e,o);return 2&r&&"function"==typeof p?function(t){return p.apply(o,t)}:p}',
     {
       globals: [],
       locals: { _superPropertyGet: ["body.0.id"] },

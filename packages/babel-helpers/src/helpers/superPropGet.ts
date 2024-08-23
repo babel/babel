@@ -23,7 +23,7 @@ export default function _superPropertyGet(
     receiver,
   );
   // @ts-expect-error flags may be undefined
-  return flags & Flags.Call
+  return flags & Flags.Call && typeof result === "function"
     ? function (args: any[]) {
         return result.apply(receiver, args);
       }
