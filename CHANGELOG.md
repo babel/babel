@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.5 (2024-08-23)
+
+#### :bug: Bug Fix
+* `babel-generator`, `babel-traverse`
+  * [#16764](https://github.com/babel/babel/pull/16764) fix: Generate parentheses correctly ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#16738](https://github.com/babel/babel/pull/16738) Only force-parenthesize `satisfies`'s LHS if it has newlines ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.4 (2024-08-22)
 
 #### :bug: Bug Fix
