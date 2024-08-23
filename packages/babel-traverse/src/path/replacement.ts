@@ -37,6 +37,7 @@ import {
   yieldExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import { resync, setScope } from "./context.ts";
 
 /**
  * Replace a node with an array of multiple. This method performs the following steps:
@@ -50,7 +51,7 @@ export function replaceWithMultiple(
   this: NodePath,
   nodes: t.Node | t.Node[],
 ): NodePath[] {
-  this.resync();
+  resync.call(this);
 
   nodes = _verifyNodeList.call(this, nodes);
   inheritLeadingComments(nodes[0], this.node);
@@ -78,7 +79,7 @@ export function replaceWithMultiple(
  */
 
 export function replaceWithSourceString(this: NodePath, replacement: string) {
-  this.resync();
+  resync.call(this);
   let ast: t.File;
 
   try {
@@ -122,7 +123,7 @@ export function replaceWith(
   this: NodePath,
   replacementPath: t.Node | NodePath,
 ): [NodePath] {
-  this.resync();
+  resync.call(this);
 
   if (this.removed) {
     throw new Error("You can't replace this node, we've already removed it");
@@ -196,7 +197,7 @@ export function replaceWith(
   this.type = replacement.type;
 
   // potentially create new scope
-  this.setScope();
+  setScope.call(this);
 
   // requeue for visiting
   this.requeue();
@@ -234,7 +235,7 @@ export function replaceExpressionWithStatements(
   this: NodePath,
   nodes: Array<t.Statement>,
 ) {
-  this.resync();
+  resync.call(this);
 
   const declars: t.Identifier[] = [];
   const nodesAsSingleExpression = gatherSequenceExpressions(nodes, declars);
@@ -244,8 +245,8 @@ export function replaceExpressionWithStatements(
   }
 
   const functionParent = this.getFunctionParent();
-  const isParentAsync = functionParent?.is("async");
-  const isParentGenerator = functionParent?.is("generator");
+  const isParentAsync = functionParent?.node.async;
+  const isParentGenerator = functionParent?.node.generator;
 
   const container = arrowFunctionExpression([], blockStatement(nodes));
 
@@ -397,7 +398,7 @@ function gatherSequenceExpressions(
 }
 
 export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
-  this.resync();
+  resync.call(this);
 
   if (Array.isArray(nodes)) {
     if (Array.isArray(this.container)) {
