@@ -32,7 +32,7 @@ export function JSXSpreadAttribute(this: Printer, node: t.JSXSpreadAttribute) {
   this.token("{");
   this.token("...");
   this.print(node.argument);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXExpressionContainer(
@@ -41,14 +41,14 @@ export function JSXExpressionContainer(
 ) {
   this.token("{");
   this.print(node.expression);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXSpreadChild(this: Printer, node: t.JSXSpreadChild) {
   this.token("{");
   this.token("...");
   this.print(node.expression);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXText(this: Printer, node: t.JSXText) {
