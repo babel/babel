@@ -634,6 +634,9 @@ jobs:
         run: |
           cd babel-test262-runner
           node lib/run-tests I_AM_SURE | tee ~/test262-${{ matrix.chunk }}.tap
+        # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash
         env:
           BABEL_PATH: ".."
           TEST262_PATH: ../build/test262

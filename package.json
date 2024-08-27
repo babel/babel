@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.25.3",
+  "version": "7.25.5",
   "version_babel8": "8.0.0-alpha.12",
   "private": true,
   "type": "commonjs",
@@ -98,14 +98,11 @@
     "caniuse-lite": "npm:1.0.30001640",
     "core-js-compat": "npm:3.37.1",
     "electron-to-chromium": "npm:1.4.816",
-    "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
-    "chokidar@^3.4.0": "patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch",
-    "chokidar@^3.4.1": "patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch",
     "psl@npm:^1.1.28": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch",
     "psl@npm:^1.1.33": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch"
   },

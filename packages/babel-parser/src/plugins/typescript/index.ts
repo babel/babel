@@ -282,23 +282,32 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsTokenCanFollowModifier() {
       return (
-        (this.match(tt.bracketL) ||
-          this.match(tt.braceL) ||
-          this.match(tt.star) ||
-          this.match(tt.ellipsis) ||
-          this.match(tt.privateName) ||
-          this.isLiteralPropertyName()) &&
-        !this.hasPrecedingLineBreak()
+        this.match(tt.bracketL) ||
+        this.match(tt.braceL) ||
+        this.match(tt.star) ||
+        this.match(tt.ellipsis) ||
+        this.match(tt.privateName) ||
+        this.isLiteralPropertyName()
       );
+    }
+
+    tsNextTokenOnSameLineAndCanFollowModifier() {
+      this.next();
+      if (this.hasPrecedingLineBreak()) {
+        return false;
+      }
+      return this.tsTokenCanFollowModifier();
     }
 
     tsNextTokenCanFollowModifier() {
       // Note: TypeScript's implementation is much more complicated because
       // more things are considered modifiers there.
       // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
-      // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
-      this.next();
-      return this.tsTokenCanFollowModifier();
+      if (this.match(tt._static)) {
+        this.next();
+        return this.tsTokenCanFollowModifier();
+      }
+      return this.tsNextTokenOnSameLineAndCanFollowModifier();
     }
 
     /** Parses a modifier matching one the given modifier names. */
@@ -995,13 +1004,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.match(tt._in);
     }
 
-    tsParseMappedTypeParameter(): N.TsTypeParameter {
-      const node = this.startNode<N.TsTypeParameter>();
-      node.name = this.tsParseTypeParameterName();
-      node.constraint = this.tsExpectThenParseType(tt._in);
-      return this.finishNode(node, "TSTypeParameter");
-    }
-
     tsParseMappedType(): N.TsMappedType {
       const node = this.startNode<N.TsMappedType>();
 
@@ -1016,7 +1018,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       this.expect(tt.bracketL);
-      node.typeParameter = this.tsParseMappedTypeParameter();
+      if (process.env.BABEL_8_BREAKING) {
+        node.key = this.tsParseTypeParameterName() as N.Identifier;
+        node.constraint = this.tsExpectThenParseType(tt._in);
+      } else {
+        const typeParameter = this.startNode<N.TsTypeParameter>();
+        typeParameter.name = this.tsParseTypeParameterName();
+        typeParameter.constraint = this.tsExpectThenParseType(tt._in);
+        // @ts-expect-error for Babel 7
+        node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
+      }
       node.nameType = this.eatContextual(tt._as) ? this.tsParseType() : null;
 
       this.expect(tt.bracketR);

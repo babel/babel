@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
-import type { Identifier } from "@babel/types";
+import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
 import { requeueComputedKeyAndDecorators } from "../../path/context.ts";
 
 const renameVisitor: Visitor<Renamer> = {
@@ -62,7 +62,8 @@ const renameVisitor: Visitor<Renamer> = {
   ) {
     if (path.isVariableDeclaration()) return;
     const ids = path.isAssignmentExpression()
-      ? path.getAssignmentIdentifiers()
+      ? // See https://github.com/babel/babel/issues/16694
+        getAssignmentIdentifiers(path.node)
       : path.getOuterBindingIdentifiers();
 
     for (const name in ids) {
@@ -162,15 +163,32 @@ export default class Renamer {
     const blockToTraverse = process.env.BABEL_8_BREAKING
       ? scope.block
       : (arguments[0] as t.Pattern | t.Scopable) || scope.block;
+
+    // When blockToTraverse is a SwitchStatement, the discriminant
+    // is not part of the current scope and thus should be skipped.
+
+    // const foo = {
+    //   get [x]() {
+    //     return x;
+    //   },
+    // };
+    const skipKeys: Record<string, true> = { discriminant: true };
+    if (t.isMethod(blockToTraverse)) {
+      if (blockToTraverse.computed) {
+        skipKeys.key = true;
+      }
+      if (!t.isObjectMethod(blockToTraverse)) {
+        skipKeys.decorators = true;
+      }
+    }
+
     traverseNode(
       blockToTraverse,
       explode(renameVisitor),
       scope,
       this,
       scope.path,
-      // When blockToTraverse is a SwitchStatement, the discriminant
-      // is not part of the current scope and thus should be skipped.
-      { discriminant: true },
+      skipKeys,
     );
 
     if (process.env.BABEL_8_BREAKING) {

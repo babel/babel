@@ -24,18 +24,14 @@
                 "typeAnnotation": {
                   "type": "TSMappedType",
                   "start":10,"end":36,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":36,"index":36}},
-                  "typeParameter": {
-                    "type": "TSTypeParameter",
-                    "start":13,"end":24,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":24,"index":24}},
-                    "name": {
-                      "type": "Identifier",
-                      "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"P"},
-                      "name": "P"
-                    },
-                    "constraint": {
-                      "type": "TSStringKeyword",
-                      "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}}
-                    }
+                  "key": {
+                    "type": "Identifier",
+                    "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"P"},
+                    "name": "P"
+                  },
+                  "constraint": {
+                    "type": "TSStringKeyword",
+                    "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}}
                   },
                   "nameType": null,
                   "typeAnnotation": {
@@ -68,18 +64,14 @@
                   "type": "TSMappedType",
                   "start":48,"end":84,"loc":{"start":{"line":2,"column":10,"index":48},"end":{"line":2,"column":46,"index":84}},
                   "readonly": true,
-                  "typeParameter": {
-                    "type": "TSTypeParameter",
-                    "start":60,"end":71,"loc":{"start":{"line":2,"column":22,"index":60},"end":{"line":2,"column":33,"index":71}},
-                    "name": {
-                      "type": "Identifier",
-                      "start":60,"end":61,"loc":{"start":{"line":2,"column":22,"index":60},"end":{"line":2,"column":23,"index":61},"identifierName":"P"},
-                      "name": "P"
-                    },
-                    "constraint": {
-                      "type": "TSStringKeyword",
-                      "start":65,"end":71,"loc":{"start":{"line":2,"column":27,"index":65},"end":{"line":2,"column":33,"index":71}}
-                    }
+                  "key": {
+                    "type": "Identifier",
+                    "start":60,"end":61,"loc":{"start":{"line":2,"column":22,"index":60},"end":{"line":2,"column":23,"index":61},"identifierName":"P"},
+                    "name": "P"
+                  },
+                  "constraint": {
+                    "type": "TSStringKeyword",
+                    "start":65,"end":71,"loc":{"start":{"line":2,"column":27,"index":65},"end":{"line":2,"column":33,"index":71}}
                   },
                   "nameType": null,
                   "optional": true,
@@ -113,18 +105,14 @@
                   "type": "TSMappedType",
                   "start":96,"end":134,"loc":{"start":{"line":3,"column":10,"index":96},"end":{"line":3,"column":48,"index":134}},
                   "readonly": "+",
-                  "typeParameter": {
-                    "type": "TSTypeParameter",
-                    "start":109,"end":120,"loc":{"start":{"line":3,"column":23,"index":109},"end":{"line":3,"column":34,"index":120}},
-                    "name": {
-                      "type": "Identifier",
-                      "start":109,"end":110,"loc":{"start":{"line":3,"column":23,"index":109},"end":{"line":3,"column":24,"index":110},"identifierName":"P"},
-                      "name": "P"
-                    },
-                    "constraint": {
-                      "type": "TSStringKeyword",
-                      "start":114,"end":120,"loc":{"start":{"line":3,"column":28,"index":114},"end":{"line":3,"column":34,"index":120}}
-                    }
+                  "key": {
+                    "type": "Identifier",
+                    "start":109,"end":110,"loc":{"start":{"line":3,"column":23,"index":109},"end":{"line":3,"column":24,"index":110},"identifierName":"P"},
+                    "name": "P"
+                  },
+                  "constraint": {
+                    "type": "TSStringKeyword",
+                    "start":114,"end":120,"loc":{"start":{"line":3,"column":28,"index":114},"end":{"line":3,"column":34,"index":120}}
                   },
                   "nameType": null,
                   "optional": "+",
@@ -158,18 +146,14 @@
                   "type": "TSMappedType",
                   "start":146,"end":183,"loc":{"start":{"line":4,"column":10,"index":146},"end":{"line":4,"column":47,"index":183}},
                   "readonly": "-",
-                  "typeParameter": {
-                    "type": "TSTypeParameter",
-                    "start":159,"end":170,"loc":{"start":{"line":4,"column":23,"index":159},"end":{"line":4,"column":34,"index":170}},
-                    "name": {
-                      "type": "Identifier",
-                      "start":159,"end":160,"loc":{"start":{"line":4,"column":23,"index":159},"end":{"line":4,"column":24,"index":160},"identifierName":"P"},
-                      "name": "P"
-                    },
-                    "constraint": {
-                      "type": "TSStringKeyword",
-                      "start":164,"end":170,"loc":{"start":{"line":4,"column":28,"index":164},"end":{"line":4,"column":34,"index":170}}
-                    }
+                  "key": {
+                    "type": "Identifier",
+                    "start":159,"end":160,"loc":{"start":{"line":4,"column":23,"index":159},"end":{"line":4,"column":24,"index":160},"identifierName":"P"},
+                    "name": "P"
+                  },
+                  "constraint": {
+                    "type": "TSStringKeyword",
+                    "start":164,"end":170,"loc":{"start":{"line":4,"column":28,"index":164},"end":{"line":4,"column":34,"index":170}}
                   },
                   "nameType": null,
                   "optional": "-",

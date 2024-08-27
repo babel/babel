@@ -50,7 +50,7 @@ const buildTypingsWatchGlob = [
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
-  return value && value !== "false" && value !== "0";
+  return Boolean(value) && value !== "false" && value !== "0";
 }
 
 /**
@@ -383,7 +383,7 @@ function buildRollup(packages, buildStandalone) {
             buildStandalone && rollupStandaloneInternals(),
             rollupBabelSource(),
             process.env.STRIP_BABEL_8_FLAG &&
-              rollupDependencyCondition(!!bool(process.env.BABEL_8_BREAKING)),
+              rollupDependencyCondition(bool(process.env.BABEL_8_BREAKING)),
             rollupReplace({
               preventAssignment: true,
               values: {
@@ -607,7 +607,7 @@ function buildRollupDts(packages) {
           transform: code =>
             code.replace(
               /type BABEL_8_BREAKING\s*=\s*boolean/g,
-              `type BABEL_8_BREAKING = ${bool(process.env.BABEL_8_BREAKING) ?? false}`
+              `type BABEL_8_BREAKING = ${bool(process.env.BABEL_8_BREAKING)}`
             ),
         },
         bool(process.env.BABEL_8_BREAKING) ? rollupDts() : rollupDts5(),

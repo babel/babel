@@ -357,11 +357,22 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: ["typeParameter", "nameType", "typeAnnotation"],
-  builder: ["typeParameter", "typeAnnotation", "nameType"],
+  visitor: process.env.BABEL_8_BREAKING
+    ? ["key", "constraint", "nameType", "typeAnnotation"]
+    : ["typeParameter", "nameType", "typeAnnotation"],
+  builder: process.env.BABEL_8_BREAKING
+    ? ["key", "constraint", "nameType", "typeAnnotation"]
+    : ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
+    ...(process.env.BABEL_8_BREAKING
+      ? {
+          key: validateType("Identifier"),
+          constraint: validateType("TSType"),
+        }
+      : {
+          typeParameter: validateType("TSTypeParameter"),
+        }),
     readonly: validateOptional(assertOneOf(true, false, "+", "-")),
-    typeParameter: validateType("TSTypeParameter"),
     optional: validateOptional(assertOneOf(true, false, "+", "-")),
     typeAnnotation: validateOptionalType("TSType"),
     nameType: validateOptionalType("TSType"),
