@@ -20,7 +20,7 @@ export function Program(this: Printer, node: t.Program) {
   const directivesLen = node.directives?.length;
   if (directivesLen) {
     const newline = node.body.length ? 2 : 1;
-    this.printSequence(node.directives, node, {
+    this.printSequence(node.directives, {
       trailingCommentsLineOffset: newline,
     });
     if (!node.directives[directivesLen - 1].trailingComments?.length) {
@@ -28,7 +28,7 @@ export function Program(this: Printer, node: t.Program) {
     }
   }
 
-  this.printSequence(node.body, node);
+  this.printSequence(node.body);
 }
 
 export function BlockStatement(this: Printer, node: t.BlockStatement) {
@@ -37,7 +37,7 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
   const directivesLen = node.directives?.length;
   if (directivesLen) {
     const newline = node.body.length ? 2 : 1;
-    this.printSequence(node.directives, node, {
+    this.printSequence(node.directives, {
       indent: true,
       trailingCommentsLineOffset: newline,
     });
@@ -47,7 +47,7 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
   }
 
   const exit = this.enterForStatementInit(false);
-  this.printSequence(node.body, node, { indent: true });
+  this.printSequence(node.body, { indent: true });
   exit();
 
   this.rightBrace(node);

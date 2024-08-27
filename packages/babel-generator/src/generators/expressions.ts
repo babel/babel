@@ -50,7 +50,7 @@ export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
     this.token(node.operator);
     this.print(node.argument);
   } else {
-    this.printTerminatorless(node.argument, node, true);
+    this.printTerminatorless(node.argument, true);
     this.token(node.operator);
   }
 }
@@ -98,13 +98,13 @@ export function NewExpression(
   }
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments);
   exit();
   this.rightParens(node);
 }
 
 export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
-  this.printList(node.expressions, node);
+  this.printList(node.expressions);
 }
 
 export function ThisExpression(this: Printer) {
@@ -182,7 +182,7 @@ export function OptionalCallExpression(
 
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments);
   exit();
   this.rightParens(node);
 }
@@ -194,7 +194,7 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeParameters); // TS
   this.token("(");
   const exit = this.enterForStatementInit(false);
-  this.printList(node.arguments, node);
+  this.printList(node.arguments);
   exit();
   this.rightParens(node);
 }
@@ -208,7 +208,7 @@ export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
 
   if (node.argument) {
     this.space();
-    this.printTerminatorless(node.argument, node, false);
+    this.printTerminatorless(node.argument, false);
   }
 }
 
@@ -225,7 +225,7 @@ export function YieldExpression(this: Printer, node: t.YieldExpression) {
   } else {
     if (node.argument) {
       this.space();
-      this.printTerminatorless(node.argument, node, false);
+      this.printTerminatorless(node.argument, false);
     }
   }
 }

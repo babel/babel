@@ -102,13 +102,13 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
 
   if (!useAssertKeyword && importAttributesKeyword !== "with") {
     // with-legacy
-    this.printList(attributes || assertions, node);
+    this.printList(attributes || assertions);
     return;
   }
 
   this.token("{");
   this.space();
-  this.printList(attributes || assertions, node);
+  this.printList(attributes || assertions);
   this.space();
   this.token("}");
 }
@@ -150,7 +150,7 @@ function maybePrintDecoratorsBeforeExport(
       node as t.ExportNamedDeclaration & { declaration: t.ClassDeclaration },
     )
   ) {
-    printer.printJoin(node.declaration.decorators, node);
+    printer.printJoin(node.declaration.decorators);
   }
 }
 
@@ -197,7 +197,7 @@ export function ExportNamedDeclaration(
       this.token("{");
       if (specifiers.length) {
         this.space();
-        this.printList(specifiers, node);
+        this.printList(specifiers);
         this.space();
       }
       this.token("}");
@@ -276,7 +276,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   if (specifiers.length) {
     this.token("{");
     this.space();
-    this.printList(specifiers, node);
+    this.printList(specifiers);
     this.space();
     this.token("}");
   } else if (isTypeKind && !hasSpecifiers) {
