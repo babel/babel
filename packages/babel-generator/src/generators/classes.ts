@@ -75,14 +75,74 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
+    const separator = classBodyEmptySemicolonsPrinter(this, node);
+    separator?.(-1); // print leading semicolons in preserveFormat mode
+
     const exit = this.enterDelimited();
-    this.printSequence(node.body, { indent: true });
+    this.printJoin(node.body, {
+      statement: true,
+      indent: true,
+      separator,
+      printTrailingSeparator: true,
+    });
     exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
     this.rightBrace(node);
   }
+}
+
+function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
+  if (
+    !printer.format.preserveFormat ||
+    node.start == null ||
+    node.end == null
+  ) {
+    return null;
+  }
+
+  // "empty statements" in class bodies are not represented in the AST.
+  // Print them by checking if there are any ; tokens between the current AST
+  // member and the next one.
+
+  const tokensIterator = printer._iterateCurrentTokensIndexes();
+  tokensIterator.next(); // skip {
+
+  let next = tokensIterator.next();
+  let occurrenceCount = 0;
+
+  let nextLocIndex = 0;
+  const advanceNextLocIndex = () => {
+    while (
+      nextLocIndex < node.body.length &&
+      node.body[nextLocIndex].start == null
+    ) {
+      nextLocIndex++;
+    }
+  };
+  advanceNextLocIndex();
+
+  return (i: number) => {
+    if (nextLocIndex <= i) {
+      nextLocIndex = i + 1;
+      advanceNextLocIndex();
+    }
+
+    const end =
+      nextLocIndex === node.body.length
+        ? node.end
+        : node.body[nextLocIndex].start;
+
+    while (
+      !next.done &&
+      printer._matchesOriginalToken(printer._tokens[next.value], ";") &&
+      printer._tokens[next.value].start < end
+    ) {
+      printer.token(";", undefined, occurrenceCount++);
+      next = tokensIterator.next();
+    }
+  };
 }
 
 export function ClassProperty(this: Printer, node: t.ClassProperty) {

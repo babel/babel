@@ -153,7 +153,4 @@ const FAILURES = [
   "typescript/module-namespace-head-declare/input.js",
   "typescript/module-namespace-head-export/input.js",
   "typescript/export-declare/input.js",
-
-  // TODO(TypeScript)
-  "sourcemaps/function-identifier-name/input.js",
 ];

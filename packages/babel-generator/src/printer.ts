@@ -517,13 +517,9 @@ class Printer {
     return { first, last };
   }
 
-  _findToken(
-    condition: (token: Token, index: number) => boolean,
-  ): Token | null {
-    if (!this._tokens) return null;
-
+  *_iterateCurrentTokensIndexes(): Generator<number> {
     const node = this._currentNode;
-    if (node.start == null || node.end == null) return null;
+    if (node.start == null || node.end == null) return;
 
     const { first, last } = this._findTokensOfNode(node);
 
@@ -535,16 +531,21 @@ class Printer {
       const childTok = this._findTokensOfNode(child, low, last);
 
       const high = childTok.first;
-
-      for (let k = low; k < high; k++) {
-        if (condition(this._tokens[k], k)) return this._tokens[k];
-      }
+      for (let k = low; k < high; k++) yield k;
 
       low = childTok.last + 1;
     }
 
-    for (let k = low; k <= last; k++) {
-      if (condition(this._tokens[k], k)) return this._tokens[k];
+    for (let k = low; k <= last; k++) yield k;
+  }
+
+  _findToken(
+    condition: (token: Token, index: number) => boolean,
+  ): Token | null {
+    if (this._tokens) {
+      for (const k of this._iterateCurrentTokensIndexes()) {
+        if (condition(this._tokens[k], k)) return this._tokens[k];
+      }
     }
 
     return null;
