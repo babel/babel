@@ -75,7 +75,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
-    const exit = this.enterForStatementInit(false);
+    const exit = this.enterDelimited();
     this.printSequence(node.body, { indent: true });
     exit();
 

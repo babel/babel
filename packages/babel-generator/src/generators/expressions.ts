@@ -50,7 +50,7 @@ export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
     this.token(node.operator);
     this.print(node.argument);
   } else {
-    this.printTerminatorless(node.argument, true);
+    this.print(node.argument, true);
     this.token(node.operator);
   }
 }
@@ -97,7 +97,7 @@ export function NewExpression(
     this.token("?.");
   }
   this.token("(");
-  const exit = this.enterForStatementInit(false);
+  const exit = this.enterDelimited();
   this.printList(node.arguments);
   exit();
   this.rightParens(node);
@@ -181,7 +181,7 @@ export function OptionalCallExpression(
   this.print(node.typeArguments); // Flow
 
   this.token("(");
-  const exit = this.enterForStatementInit(false);
+  const exit = this.enterDelimited();
   this.printList(node.arguments);
   exit();
   this.rightParens(node);
@@ -193,7 +193,7 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeArguments); // Flow
   this.print(node.typeParameters); // TS
   this.token("(");
-  const exit = this.enterForStatementInit(false);
+  const exit = this.enterDelimited();
   this.printList(node.arguments);
   exit();
   this.rightParens(node);
@@ -298,7 +298,7 @@ export function MemberExpression(this: Printer, node: t.MemberExpression) {
   }
 
   if (computed) {
-    const exit = this.enterForStatementInit(false);
+    const exit = this.enterDelimited();
     this.token("[");
     this.print(node.property);
     this.token("]");
