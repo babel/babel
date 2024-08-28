@@ -306,23 +306,18 @@ export function tsPrintTypeLiteralOrInterfaceBody(
   members: t.TSTypeElement[],
   node: t.TSType | t.TSInterfaceBody,
 ) {
-  tsPrintBraced(this, members, node);
-}
-
-function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
-  printer.token("{");
+  this.token("{");
   if (members.length) {
-    printer.indent();
-    printer.newline();
-    for (const member of members) {
-      printer.print(member);
-      //this.token(sep);
-      printer.newline();
+    this.indent();
+    this.newline();
+    for (let i = 0; i < members.length; i++) {
+      this.print(members[i]);
+      this.newline();
     }
-    printer.dedent();
+    this.dedent();
   }
 
-  printer.rightBrace(node);
+  this.rightBrace(node);
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
@@ -592,7 +587,16 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.space();
   this.print(id);
   this.space();
-  tsPrintBraced(this, members, node);
+
+  this.token("{");
+  this.printList(members, {
+    indent: true,
+    statement: true,
+    // TODO: Default to false for consistency with everything else
+    printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
+  });
+
+  this.rightBrace(node);
 }
 
 export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
@@ -604,7 +608,6 @@ export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
     this.space();
     this.print(initializer);
   }
-  this.token(",");
 }
 
 export function TSModuleDeclaration(
@@ -641,7 +644,9 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  tsPrintBraced(this, node.body, node);
+  this.token("{");
+  this.printSequence(node.body, { indent: true });
+  this.rightBrace(node);
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {

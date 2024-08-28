@@ -1098,8 +1098,8 @@ class Printer {
     this.printJoin(items, opts);
   }
 
-  shouldPrintTrailingComma(listEnd: string) {
-    if (!this.format.preserveFormat || !this._tokens) return false;
+  shouldPrintTrailingComma(listEnd: string): boolean | null {
+    if (!this.format.preserveFormat || !this._tokens) return null;
 
     let listEndIndex: number;
     this._findToken((token, index) => {
@@ -1108,7 +1108,7 @@ class Printer {
         return true;
       }
     });
-    if (listEndIndex == null) return;
+    if (listEndIndex == null) return null;
     const lastToken = this._tokens[listEndIndex - 1];
     return this._matchesOriginalToken(lastToken, ",");
   }
