@@ -85,7 +85,7 @@ export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   this.print(node.typeParameters); // TS
   if (node.attributes.length > 0) {
     this.space();
-    this.printJoin(node.attributes, node, { separator: spaceSeparator });
+    this.printJoin(node.attributes, { separator: spaceSeparator });
   }
   if (node.selfClosing) {
     this.space();
