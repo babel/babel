@@ -152,6 +152,7 @@ const FAILURES = [
   "typescript/module-namespace-head/input.js",
   "typescript/module-namespace-head-declare/input.js",
   "typescript/module-namespace-head-export/input.js",
+  "typescript/export-declare/input.js",
 
   // TODO(TypeScript)
   "sourcemaps/function-identifier-name/input.js",
@@ -160,6 +161,5 @@ const FAILURES = [
   "typescript/arrow-function-generic/input.js",
   "typescript/class-modifiers-properties/input.js",
   "typescript/declare-destructure/input.js",
-  "typescript/export-declare/input.js",
   "typescript/interface-separators/input.js",
 ];
