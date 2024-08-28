@@ -6,4 +6,4 @@ var List = /*#__PURE__*/function (_Array) {
   }
   babelHelpers.inheritsLoose(List, _Array);
   return List;
-}( /*#__PURE__*/babelHelpers.wrapNativeSuper(Array));
+}(/*#__PURE__*/babelHelpers.wrapNativeSuper(Array));

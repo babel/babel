@@ -8,7 +8,7 @@ class B extends A {
       lineNumber: 5,
       columnNumber: 5
     });
-    super( /*#__PURE__*/_reactJsxDevRuntime.jsxDEV("sometag2", {}, void 0, false, {
+    super(/*#__PURE__*/_reactJsxDevRuntime.jsxDEV("sometag2", {}, void 0, false, {
       fileName: _jsxFileName,
       lineNumber: 6,
       columnNumber: 11

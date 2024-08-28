@@ -2,7 +2,7 @@ function test() {
   return _test.apply(this, arguments);
 }
 function _test() {
-  _test = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     var obj, _loop, _i, _arr;
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {

@@ -1,6 +1,6 @@
 // https://github.com/babel/babel/issues/12522
 
-ReactDOM.render( /*#__PURE__*/_jsx("p", {
+ReactDOM.render(/*#__PURE__*/_jsx("p", {
   children: "Hello, World!"
 }), document.getElementById('root'));
 

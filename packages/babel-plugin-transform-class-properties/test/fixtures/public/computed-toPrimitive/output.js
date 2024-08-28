@@ -7,7 +7,7 @@ expect((_Class = /*#__PURE__*/babelHelpers.createClass(function _Class() {
 
   babelHelpers.classCallCheck(this, _Class);
 }), babelHelpers.defineProperty(_Class, foo, 0), _Class).foo).toBe(0);
-expect( /*#__PURE__*/function () {
+expect(/*#__PURE__*/function () {
   "use strict";
 
   function _class() {
@@ -20,7 +20,7 @@ expect( /*#__PURE__*/function () {
     }
   }]);
 }().foo()).toBe(0);
-expect( /*#__PURE__*/function () {
+expect(/*#__PURE__*/function () {
   "use strict";
 
   function _class2() {
@@ -33,7 +33,7 @@ expect( /*#__PURE__*/function () {
     }
   }]);
 }().foo).toBe(0);
-expect( /*#__PURE__*/function () {
+expect(/*#__PURE__*/function () {
   "use strict";
 
   function _class3() {
@@ -46,7 +46,7 @@ expect( /*#__PURE__*/function () {
     }
   }]);
 }().foo = 0).toBe(0);
-expect(new ( /*#__PURE__*/babelHelpers.createClass(function _class4() {
+expect(new (/*#__PURE__*/babelHelpers.createClass(function _class4() {
   "use strict";
 
   babelHelpers.classCallCheck(this, _class4);
@@ -102,7 +102,7 @@ expect(() => /*#__PURE__*/function () {
     }
   }]);
 }()).toThrow("@@toPrimitive must return a primitive value.");
-expect(() => new ( /*#__PURE__*/babelHelpers.createClass(function _class8() {
+expect(() => new (/*#__PURE__*/babelHelpers.createClass(function _class8() {
   "use strict";
 
   babelHelpers.classCallCheck(this, _class8);

@@ -1,4 +1,4 @@
-new ( /*#__PURE__*/babelHelpers.createClass(function _class() {
+new (/*#__PURE__*/babelHelpers.createClass(function _class() {
   "use strict";
 
   babelHelpers.classCallCheck(this, _class);
@@ -6,7 +6,7 @@ new ( /*#__PURE__*/babelHelpers.createClass(function _class() {
     throw new ReferenceError("'delete super.prop' is invalid");
   }());
 }))();
-new ( /*#__PURE__*/babelHelpers.createClass(function _class2() {
+new (/*#__PURE__*/babelHelpers.createClass(function _class2() {
   "use strict";
 
   babelHelpers.classCallCheck(this, _class2);

@@ -7,7 +7,7 @@ var HelloMessage = React.createClass({
     });
   }
 });
-React.render( /*#__PURE__*/_jsx(HelloMessage, {
+React.render(/*#__PURE__*/_jsx(HelloMessage, {
   name: /*#__PURE__*/_jsx("span", {
     children: "Sebastian"
   })

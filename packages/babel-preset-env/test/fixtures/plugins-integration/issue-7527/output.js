@@ -7,5 +7,5 @@ var MyDate = /*#__PURE__*/function (_Date) {
   }
   babelHelpers.inherits(MyDate, _Date);
   return babelHelpers.createClass(MyDate);
-}( /*#__PURE__*/babelHelpers.wrapNativeSuper(Date));
+}(/*#__PURE__*/babelHelpers.wrapNativeSuper(Date));
 var myDate = new MyDate();

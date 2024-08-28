@@ -1043,7 +1043,8 @@ class Printer {
     const lastCharCode = this.getLastChar();
     if (
       lastCharCode !== charCodes.leftSquareBracket &&
-      lastCharCode !== charCodes.leftCurlyBrace
+      lastCharCode !== charCodes.leftCurlyBrace &&
+      lastCharCode !== charCodes.leftParenthesis
     ) {
       this.space();
     }

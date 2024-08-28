@@ -8,7 +8,7 @@ x = /*#__PURE__*/function (_x) {
   };
   return x;
 }(function () {
-  var _ref = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(x) {
+  var _ref = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(x) {
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
