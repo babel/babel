@@ -160,6 +160,4 @@ const FAILURES = [
   "typescript/arrow-function-async-generic/input.js",
   "typescript/arrow-function-generic/input.js",
   "typescript/class-modifiers-properties/input.js",
-  "typescript/declare-destructure/input.js",
-  "typescript/interface-separators/input.js",
 ];

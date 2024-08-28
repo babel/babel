@@ -118,7 +118,23 @@ export function TSCallSignatureDeclaration(
   node: t.TSCallSignatureDeclaration,
 ) {
   this.tsPrintSignatureDeclarationBase(node);
-  this.semicolon();
+  maybePrintTrailingCommaOrSemicolon(this, node);
+}
+
+function maybePrintTrailingCommaOrSemicolon(printer: Printer, node: t.Node) {
+  if (!printer.format.preserveFormat || !node.start || !node.end) {
+    printer.semicolon();
+    return;
+  }
+
+  const { last } = printer._findTokensOfNode(node);
+  const lastToken = printer._tokens[last];
+
+  if (printer._matchesOriginalToken(lastToken, ",")) {
+    printer.token(",");
+  } else if (printer._matchesOriginalToken(lastToken, ";")) {
+    printer.semicolon();
+  }
 }
 
 export function TSConstructSignatureDeclaration(
@@ -128,7 +144,7 @@ export function TSConstructSignatureDeclaration(
   this.word("new");
   this.space();
   this.tsPrintSignatureDeclarationBase(node);
-  this.semicolon();
+  maybePrintTrailingCommaOrSemicolon(this, node);
 }
 
 export function TSPropertySignature(
@@ -142,7 +158,7 @@ export function TSPropertySignature(
   }
   this.tsPrintPropertyOrMethodName(node);
   this.print(node.typeAnnotation);
-  this.semicolon();
+  maybePrintTrailingCommaOrSemicolon(this, node);
 }
 
 export function tsPrintPropertyOrMethodName(
@@ -169,7 +185,7 @@ export function TSMethodSignature(this: Printer, node: t.TSMethodSignature) {
   }
   this.tsPrintPropertyOrMethodName(node);
   this.tsPrintSignatureDeclarationBase(node);
-  this.semicolon();
+  maybePrintTrailingCommaOrSemicolon(this, node);
 }
 
 export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
@@ -185,7 +201,7 @@ export function TSIndexSignature(this: Printer, node: t.TSIndexSignature) {
   this.token("[");
   this._parameters(node.parameters, "]");
   this.print(node.typeAnnotation);
-  this.semicolon();
+  maybePrintTrailingCommaOrSemicolon(this, node);
 }
 
 export function TSAnyKeyword(this: Printer) {
@@ -298,25 +314,8 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
-  this.tsPrintTypeLiteralOrInterfaceBody(node.members, node);
-}
-
-export function tsPrintTypeLiteralOrInterfaceBody(
-  this: Printer,
-  members: t.TSTypeElement[],
-  node: t.TSType | t.TSInterfaceBody,
-) {
   this.token("{");
-  if (members.length) {
-    this.indent();
-    this.newline();
-    for (let i = 0; i < members.length; i++) {
-      this.print(members[i]);
-      this.newline();
-    }
-    this.dedent();
-  }
-
+  this.printJoin(node.members, { indent: true, statement: true });
   this.rightBrace(node);
 }
 
@@ -516,7 +515,9 @@ export function TSInterfaceDeclaration(
 }
 
 export function TSInterfaceBody(this: Printer, node: t.TSInterfaceBody) {
-  this.tsPrintTypeLiteralOrInterfaceBody(node.body, node);
+  this.token("{");
+  this.printJoin(node.body, { indent: true, statement: true });
+  this.rightBrace(node);
 }
 
 export function TSTypeAliasDeclaration(
