@@ -162,6 +162,5 @@ const FAILURES = [
   "typescript/declare-destructure/input.js",
   "typescript/export-declare/input.js",
   "typescript/interface-separators/input.js",
-  "typescript/types-union-intersection/input.js",
   "typescript/types-with-comments-retainLines/input.js",
 ];
