@@ -316,7 +316,8 @@ function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
   this.print(node.elementType, true);
 
-  this.token("[]");
+  this.token("[");
+  this.token("]");
 }
 
 export function TSTupleType(this: Printer, node: t.TSTupleType) {
