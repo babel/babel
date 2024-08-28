@@ -324,9 +324,9 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
-  this.token("{");
-  this.printJoin(node.members, { indent: true, statement: true });
-  this.rightBrace(node);
+  printBraced(this, node, () =>
+    this.printJoin(node.members, { indent: true, statement: true }),
+  );
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
@@ -433,6 +433,7 @@ export function TSIndexedAccessType(
 export function TSMappedType(this: Printer, node: t.TSMappedType) {
   const { nameType, optional, readonly, typeAnnotation } = node;
   this.token("{");
+  const exit = this.enterDelimited();
   this.space();
   if (readonly) {
     tokenIfPlusMinus(this, readonly);
@@ -480,6 +481,7 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
     this.print(typeAnnotation);
   }
   this.space();
+  exit();
   this.token("}");
 }
 
@@ -525,9 +527,9 @@ export function TSInterfaceDeclaration(
 }
 
 export function TSInterfaceBody(this: Printer, node: t.TSInterfaceBody) {
-  this.token("{");
-  this.printJoin(node.body, { indent: true, statement: true });
-  this.rightBrace(node);
+  printBraced(this, node, () =>
+    this.printJoin(node.body, { indent: true, statement: true }),
+  );
 }
 
 export function TSTypeAliasDeclaration(
@@ -599,15 +601,14 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.print(id);
   this.space();
 
-  this.token("{");
-  this.printList(members, {
-    indent: true,
-    statement: true,
-    // TODO: Default to false for consistency with everything else
-    printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
-  });
-
-  this.rightBrace(node);
+  printBraced(this, node, () =>
+    this.printList(members, {
+      indent: true,
+      statement: true,
+      // TODO: Default to false for consistency with everything else
+      printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
+    }),
+  );
 }
 
 export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
@@ -655,9 +656,9 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  this.token("{");
-  this.printSequence(node.body, { indent: true });
-  this.rightBrace(node);
+  printBraced(this, node, () =>
+    this.printSequence(node.body, { indent: true }),
+  );
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
@@ -772,6 +773,14 @@ export function tsPrintClassMemberModifiers(
     node.abstract && "abstract",
     isField && node.readonly && "readonly",
   ]);
+}
+
+function printBraced(printer: Printer, node: t.Node, cb: () => void) {
+  printer.token("{");
+  const exit = printer.enterDelimited();
+  cb();
+  exit();
+  printer.rightBrace(node);
 }
 
 function printModifiersList(
