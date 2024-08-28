@@ -444,7 +444,7 @@ export function Identifier(
   parent: t.Node,
   tokenContext: number,
   _inForInit: boolean,
-  getRawIdentifier: (node: t.Node) => string,
+  getRawIdentifier: (node: t.Identifier) => string,
 ): boolean {
   const parentType = parent.type;
   // 13.15.2 AssignmentExpression RS: Evaluation

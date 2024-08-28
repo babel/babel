@@ -33,7 +33,7 @@ type NodeHandler<R> = (
   parent: t.Node,
   tokenContext?: number,
   inForStatementInit?: boolean,
-  getRawIdentifier?: (node: t.Node) => string,
+  getRawIdentifier?: (node: t.Identifier) => string,
 ) => R;
 
 export type NodeHandlers<R> = {
@@ -118,7 +118,7 @@ export function needsParens(
   parent: t.Node,
   tokenContext?: number,
   inForInit?: boolean,
-  getRawIdentifier?: (node: t.Node) => string,
+  getRawIdentifier?: (node: t.Identifier) => string,
 ) {
   if (!parent) return false;
 

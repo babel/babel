@@ -768,7 +768,9 @@ class Printer {
         parent,
         this.tokenContext,
         this.inForStatementInit,
-        (node: t.Identifier) => this._getRawIdentifier(node),
+        format.preserveFormat
+          ? node => this._getRawIdentifier(node)
+          : node => node.name,
       );
 
     if (
