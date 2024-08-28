@@ -4,9 +4,3 @@ interface Newline {
     x: number
     y: number
 }
-
-interface Mixed {
-    x: string,
-    y: number;
-    z: boolean
-}
