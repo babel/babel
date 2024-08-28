@@ -295,8 +295,8 @@ export function tsPrintFunctionOrConstructorType(
 }
 
 export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
-  this.print(node.typeName, true);
-  this.print(node.typeParameters, true);
+  this.print(node.typeName, !!node.typeParameters);
+  this.print(node.typeParameters);
 }
 
 export function TSTypePredicate(this: Printer, node: t.TSTypePredicate) {
@@ -375,10 +375,19 @@ function tsPrintUnionOrIntersectionType(
   node: t.TSUnionType | t.TSIntersectionType,
   sep: "|" | "&",
 ) {
+  let hasLeadingToken = 0;
+  if (printer.format.preserveFormat && node.start != null && node.end != null) {
+    const { first } = printer._findTokensOfNode(node);
+    if (printer._matchesOriginalToken(printer._tokens[first], sep)) {
+      hasLeadingToken = 1;
+      printer.token(sep);
+    }
+  }
+
   printer.printJoin(node.types, {
     separator(i) {
       this.space();
-      this.token(sep, null, i);
+      this.token(sep, null, i + hasLeadingToken);
       this.space();
     },
   });
