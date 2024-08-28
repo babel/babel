@@ -30,11 +30,21 @@ export function TSTypeParameterInstantiation(
   parent: t.Node,
 ): void {
   this.token("<");
-  this.printList(node.params, {
-    printTrailingSeparator:
-      (parent.type === "ArrowFunctionExpression" && node.params.length === 1) ||
-      this.shouldPrintTrailingComma(">"),
-  });
+
+  let printTrailingSeparator =
+    parent.type === "ArrowFunctionExpression" && node.params.length === 1;
+  if (this.format.preserveFormat && node.start != null && node.end != null) {
+    // Only force the trailing comma for pre-existing nodes if they
+    // already had a comma (either because they were multi-param, or
+    // because they had a trailing comma)
+    printTrailingSeparator &&= !!this._findToken(t =>
+      this._matchesOriginalToken(t, ","),
+    );
+    // Preseve the trailing comma if it was there before
+    printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
+  }
+
+  this.printList(node.params, { printTrailingSeparator });
   this.token(">");
 }
 
