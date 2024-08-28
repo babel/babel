@@ -759,28 +759,44 @@ export function tsPrintClassMemberModifiers(
 ) {
   const isField =
     node.type === "ClassAccessorProperty" || node.type === "ClassProperty";
-  if (isField && node.declare) {
-    this.word("declare");
-    this.space();
-  }
-  if (node.accessibility) {
-    this.word(node.accessibility);
-    this.space();
-  }
+  printModifiersList(this, node, [
+    isField && node.declare && "declare",
+    node.accessibility,
+  ]);
   if (node.static) {
     this.word("static");
     this.space();
   }
-  if (node.override) {
-    this.word("override");
-    this.space();
+  printModifiersList(this, node, [
+    node.override && "override",
+    node.abstract && "abstract",
+    isField && node.readonly && "readonly",
+  ]);
+}
+
+function printModifiersList(
+  printer: Printer,
+  node: t.Node,
+  modifiers: (string | false | null)[],
+) {
+  const modifiersSet = new Set<string>();
+  for (const modifier of modifiers) {
+    if (modifier) modifiersSet.add(modifier);
   }
-  if (node.abstract) {
-    this.word("abstract");
-    this.space();
+
+  if (printer.format.preserveFormat && node.start != null && node.end != null) {
+    printer._findToken(tok => {
+      if (modifiersSet.has(tok.value)) {
+        printer.token(tok.value);
+        printer.space();
+        modifiersSet.delete(tok.value);
+        return modifiersSet.size === 0;
+      }
+    });
   }
-  if (isField && node.readonly) {
-    this.word("readonly");
-    this.space();
+
+  for (const modifier of modifiersSet) {
+    printer.word(modifier);
+    printer.space();
   }
 }

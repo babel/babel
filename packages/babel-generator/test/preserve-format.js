@@ -157,5 +157,4 @@ const FAILURES = [
   // TODO(TypeScript)
   "sourcemaps/function-identifier-name/input.js",
   "sourcemaps/real-world-babel-file2/input.ts",
-  "typescript/class-modifiers-properties/input.js",
 ];
