@@ -26,6 +26,10 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
 const HAS_NEWLINE_OR_BlOCK_COMMENT_END = /[\n\r\u2028\u2029]|\*\//;
 
+function commentIsNewline(c: t.Comment) {
+  return c.type === "CommentLine" || HAS_NEWLINE.test(c.value);
+}
+
 const { needsParens } = n;
 
 const enum COMMENT_TYPE {
@@ -154,7 +158,6 @@ class Printer {
   _indent: number = 0;
   _indentRepeat: number = 0;
   _insideAux: boolean = false;
-  _parenPushNewlineState: { printed: boolean } | null = null;
   _noLineTerminator: boolean = false;
   _noLineTerminatorAfterNode: t.Node | null = null;
   _printAuxAfterOnNextUserNode: boolean = false;
@@ -439,7 +442,6 @@ class Printer {
   }
 
   _append(str: string, maybeNewline: boolean): void {
-    this._maybeAddParen(str);
     this._maybeIndent(str.charCodeAt(0));
 
     this._buf.append(str, maybeNewline);
@@ -451,7 +453,6 @@ class Printer {
   }
 
   _appendChar(char: number): void {
-    this._maybeAddParenChar(char);
     this._maybeIndent(char);
 
     this._buf.appendChar(char);
@@ -463,7 +464,6 @@ class Printer {
   }
 
   _queue(char: number) {
-    this._maybeAddParenChar(char);
     this._maybeIndent(char);
 
     this._buf.queue(char);
@@ -492,87 +492,6 @@ class Printer {
     ) {
       return true;
     }
-  }
-
-  _maybeAddParenChar(char: number): void {
-    // see startTerminatorless() instance method
-    const parenPushNewlineState = this._parenPushNewlineState;
-    if (!parenPushNewlineState) return;
-
-    // This function does two things:
-    // - If needed, prints a parenthesis
-    // - If the currently printed string removes the need for the paren,
-    //   it resets the _parenPushNewlineState field.
-    //   Almost everything removes the need for a paren, except for
-    //   comments and whitespaces.
-
-    if (char === charCodes.space) {
-      // Whitespaces only, the parentheses might still be needed.
-      return;
-    }
-
-    // Check for newline or comment.
-    if (char !== charCodes.lineFeed) {
-      this._parenPushNewlineState = null;
-      return;
-    }
-
-    this.token("(");
-    this.indent();
-    parenPushNewlineState.printed = true;
-  }
-
-  _maybeAddParen(str: string): void {
-    // see startTerminatorless() instance method
-    const parenPushNewlineState = this._parenPushNewlineState;
-    if (!parenPushNewlineState) return;
-
-    // This function does two things:
-    // - If needed, prints a parenthesis
-    // - If the currently printed string removes the need for the paren,
-    //   it resets the _parenPushNewlineState field.
-    //   Almost everything removes the need for a paren, except for
-    //   comments and whitespaces.
-
-    const len = str.length;
-
-    let i;
-    for (i = 0; i < len && str.charCodeAt(i) === charCodes.space; i++) continue;
-    if (i === len) {
-      // Whitespaces only, the parentheses might still be needed.
-      return;
-    }
-
-    // Check for newline or comment.
-    const cha = str.charCodeAt(i);
-    if (cha !== charCodes.lineFeed) {
-      if (
-        // This is not a comment (it doesn't start with /)
-        cha !== charCodes.slash ||
-        // This is not a comment (it's a / operator)
-        i + 1 === len
-      ) {
-        // After a normal token, the parentheses aren't needed anymore
-        this._parenPushNewlineState = null;
-        return;
-      }
-
-      const chaPost = str.charCodeAt(i + 1);
-
-      if (chaPost === charCodes.asterisk) {
-        // This is a block comment
-        return;
-      } else if (chaPost !== charCodes.slash) {
-        // This is neither a block comment, nor a line comment.
-        // After a normal token, the parentheses aren't needed anymore
-        this._parenPushNewlineState = null;
-        return;
-      }
-    }
-
-    this.token("(");
-    this.indent();
-    parenPushNewlineState.printed = true;
   }
 
   catchUp(line: number) {
@@ -608,7 +527,7 @@ class Printer {
     return this._indentRepeat * this._indent;
   }
 
-  printTerminatorless(node: t.Node, isLabel: boolean) {
+  printTerminatorless(node: t.Node) {
     /**
      * Set some state that will be modified if a newline has been inserted before any
      * non-space characters.
@@ -624,24 +543,8 @@ class Printer {
      *
      *  `undefined` will be returned and not `foo` due to the terminator.
      */
-    if (isLabel) {
-      this._noLineTerminator = true;
-      this.print(node);
-    } else {
-      const terminatorState = {
-        printed: false,
-      };
-      this._parenPushNewlineState = terminatorState;
-      this.print(node);
-      /**
-       * Print an ending parentheses if a starting one has been printed.
-       */
-      if (terminatorState.printed) {
-        this.dedent();
-        this.newline();
-        this.token(")");
-      }
-    }
+    this._noLineTerminator = true;
+    this.print(node);
   }
 
   print(
@@ -721,20 +624,28 @@ class Printer {
       }
     }
 
+    let indentParenthesized = false;
+    if (
+      !shouldPrintParens &&
+      this._noLineTerminator &&
+      (node.leadingComments?.some(commentIsNewline) ||
+        (this.format.retainLines &&
+          node.loc &&
+          node.loc.start.line > this._buf.getCurrentLine()))
+    ) {
+      shouldPrintParens = true;
+      indentParenthesized = true;
+    }
+
     let oldNoLineTerminatorAfterNode;
     let oldInForStatementInitWasTrue;
-
     if (!shouldPrintParens) {
       noLineTerminatorAfter ||=
         parent &&
         this._noLineTerminatorAfterNode === parent &&
         n.isLastChild(parent, node);
       if (noLineTerminatorAfter) {
-        if (
-          node.trailingComments?.some(
-            c => c.type === "CommentLine" || HAS_NEWLINE.test(c.value),
-          )
-        ) {
+        if (node.trailingComments?.some(commentIsNewline)) {
           if (isExpression(node)) shouldPrintParens = true;
         } else {
           oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
@@ -745,6 +656,7 @@ class Printer {
 
     if (shouldPrintParens) {
       this.token("(");
+      if (indentParenthesized) this.indent();
       this._endsWithInnerRaw = false;
       if (this.inForStatementInit) {
         oldInForStatementInitWasTrue = true;
@@ -771,6 +683,10 @@ class Printer {
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);
+      if (indentParenthesized) {
+        this.dedent();
+        this.newline();
+      }
       this.token(")");
       this._noLineTerminator = noLineTerminatorAfter;
       if (oldInForStatementInitWasTrue) this.inForStatementInit = true;
@@ -1097,15 +1013,6 @@ class Printer {
 
     let val;
     if (isBlockComment) {
-      const { _parenPushNewlineState } = this;
-      if (
-        _parenPushNewlineState?.printed === false &&
-        HAS_NEWLINE.test(comment.value)
-      ) {
-        this.token("(");
-        this.indent();
-        _parenPushNewlineState.printed = true;
-      }
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
         const offset = comment.loc?.start.column;
