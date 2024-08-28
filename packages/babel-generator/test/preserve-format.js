@@ -148,6 +148,11 @@ const FAILURES = [
   "types/Decorator/input.js",
   "types/ImportAssertion/input.js",
 
+  // We explicitly always print `module X {}` as `namespace X {}`
+  "typescript/module-namespace-head/input.js",
+  "typescript/module-namespace-head-declare/input.js",
+  "typescript/module-namespace-head-export/input.js",
+
   // TODO(TypeScript)
   "sourcemaps/function-identifier-name/input.js",
   "sourcemaps/real-world-babel-file2/input.ts",
@@ -157,9 +162,6 @@ const FAILURES = [
   "typescript/declare-destructure/input.js",
   "typescript/export-declare/input.js",
   "typescript/interface-separators/input.js",
-  "typescript/module-namespace-head/input.js",
-  "typescript/module-namespace-head-declare/input.js",
-  "typescript/module-namespace-head-export/input.js",
   "typescript/types-union-intersection/input.js",
   "typescript/types-with-comments-retainLines/input.js",
 ];
