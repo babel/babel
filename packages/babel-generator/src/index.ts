@@ -21,35 +21,35 @@ function normalizeOptions(
   opts: GeneratorOptions,
   ast: t.Node,
 ): Format {
-  if (opts.experimental_preserveFormat) {
+  if (opts.preserveFormat) {
     if (typeof code !== "string") {
       throw new Error(
-        "`experimental_preserveFormat` requires the original `code` to be passed to @babel/generator a string",
+        "`preserveFormat` requires the original `code` to be passed to @babel/generator a string",
       );
     }
     if (!opts.retainLines) {
       throw new Error(
-        "`experimental_preserveFormat` requires `retainLines` to be set to `true`",
+        "`preserveFormat` requires `retainLines` to be set to `true`",
       );
     }
     if (opts.compact && opts.compact !== "auto") {
       throw new Error(
-        "`experimental_preserveFormat` is not compatible with the `compact` option",
+        "`preserveFormat` is not compatible with the `compact` option",
       );
     }
     if (opts.minified) {
       throw new Error(
-        "`experimental_preserveFormat` is not compatible with the `minified` option",
+        "`preserveFormat` is not compatible with the `minified` option",
       );
     }
     if (opts.jsescOption) {
       throw new Error(
-        "`experimental_preserveFormat` is not compatible with the `jsescOption` option",
+        "`preserveFormat` is not compatible with the `jsescOption` option",
       );
     }
     if (!Array.isArray((ast as any).tokens)) {
       throw new Error(
-        "`experimental_preserveFormat` requires the AST to have attatched the token of the input code. Make sure to enable the `tokens: true` parser option.",
+        "`preserveFormat` requires the AST to have attatched the token of the input code. Make sure to enable the `tokens: true` parser option.",
       );
     }
   }
@@ -58,7 +58,7 @@ function normalizeOptions(
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     shouldPrintComment: opts.shouldPrintComment,
-    preserveFormat: opts.experimental_preserveFormat,
+    preserveFormat: opts.preserveFormat,
     retainLines: opts.retainLines,
     retainFunctionParens: opts.retainFunctionParens,
     comments: opts.comments == null || opts.comments,
@@ -151,7 +151,7 @@ export interface GeneratorOptions {
    * patch releases. It will be removed in a future minor release,
    * when it will graduate to stable.
    */
-  experimental_preserveFormat?: boolean;
+  preserveFormat?: boolean;
 
   /**
    * Attempt to use the same line numbers in the output code as in the source code (helps preserve stack traces).
