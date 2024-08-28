@@ -207,19 +207,9 @@ export class DestructuringTransformer {
       }
 
       if (t.isIdentifier(node, { name: "arguments" })) {
-        return t.callExpression(
-          t.memberExpression(
-            t.memberExpression(
-              t.memberExpression(
-                t.identifier("Array"),
-                t.identifier("prototype"),
-              ),
-              t.identifier("slice"),
-            ),
-            t.identifier("call"),
-          ),
-          [node],
-        );
+        return template.expression.ast`
+          Array.prototype.slice.call(${node})
+        `;
       }
 
       let helperName;
