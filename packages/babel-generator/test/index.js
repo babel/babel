@@ -1197,7 +1197,7 @@ describe("programmatic generation", function () {
         ]),
       );
       const output = generate(typeStatement).code;
-      expect(output).toBe("((number & boolean) | null)[]");
+      expect(output).toBe("(number & boolean | null)[]");
     });
     it("wraps around intersection for array", () => {
       const typeStatement = t.tsArrayType(
