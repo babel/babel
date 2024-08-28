@@ -92,6 +92,8 @@ describe("experimental_preserveFormat", () => {
 });
 
 const FAILURES = [
+  // These tests are either explicitly about re-formatting the decorators position,
+  // or about an old decorators version
   "comments/decorators-after-export-to-before/input.js",
   "comments/decorators-before-export-to-after/input.js",
   "comments/decorators-before-export-to-before/input.js",
@@ -103,6 +105,8 @@ const FAILURES = [
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
   "decoratorsBeforeExport/true-to-true/input.js",
+
+  // The 'preserveFormat' option does not fully support Flow
   "flow/array-types/input.js",
   "flow/arrow-functions/input.js",
   "flow/call-properties/input.js",
@@ -124,6 +128,8 @@ const FAILURES = [
   "flow/type-union-intersection/input.js",
   "flow/typecasts/input.js",
   "flowUsesCommas/ObjectExpression/input.js",
+
+  // These tests are explicitly about changing the output
   "importAttributesKeyword/assertions-assert-to-with/input.js",
   "importAttributesKeyword/assertions-assert-to-with-legacy/input.js",
   "importAttributesKeyword/assertions-with-to-assert/input.js",
@@ -137,10 +143,14 @@ const FAILURES = [
   "importAttributesKeyword/attributes-with-to-with-legacy/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
-  "sourcemaps/function-identifier-name/input.js",
-  "sourcemaps/real-world-babel-file2/input.ts",
+
+  // These tests are about old proposals
   "types/Decorator/input.js",
   "types/ImportAssertion/input.js",
+
+  // TODO(TypeScript)
+  "sourcemaps/function-identifier-name/input.js",
+  "sourcemaps/real-world-babel-file2/input.ts",
   "typescript/arrow-function-async-generic/input.js",
   "typescript/arrow-function-generic/input.js",
   "typescript/class-modifiers-properties/input.js",
