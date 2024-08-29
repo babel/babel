@@ -33,6 +33,7 @@ export function Program(this: Printer, node: t.Program) {
 
 export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
+  const exit = this.enterDelimited();
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {
@@ -46,10 +47,9 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
     }
   }
 
-  const exit = this.enterForStatementInit(false);
   this.printSequence(node.body, { indent: true });
-  exit();
 
+  exit();
   this.rightBrace(node);
 }
 

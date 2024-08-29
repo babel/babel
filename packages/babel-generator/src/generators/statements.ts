@@ -70,7 +70,7 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
   this.token("(");
 
   {
-    const exit = this.enterForStatementInit(true);
+    const exit = this.enterForStatementInit();
     this.tokenContext |= TokenContext.forHead;
     this.print(node.init);
     exit();
@@ -113,7 +113,7 @@ function ForXStatement(this: Printer, node: t.ForXStatement) {
   this.noIndentInnerCommentsHere();
   this.token("(");
   {
-    const exit = isForOf ? null : this.enterForStatementInit(true);
+    const exit = isForOf ? null : this.enterForStatementInit();
     this.tokenContext |= isForOf
       ? TokenContext.forOfHead
       : TokenContext.forInHead;

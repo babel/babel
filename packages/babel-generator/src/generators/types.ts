@@ -25,7 +25,7 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   this.token("{");
 
   if (props.length) {
-    const exit = this.enterForStatementInit(false);
+    const exit = this.enterDelimited();
     this.space();
     this.printList(props, { indent: true, statement: true });
     this.space();
@@ -89,7 +89,7 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
 
   this.token("[");
 
-  const exit = this.enterForStatementInit(false);
+  const exit = this.enterDelimited();
 
   for (let i = 0; i < elems.length; i++) {
     const elem = elems[i];
