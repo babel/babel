@@ -4,7 +4,7 @@ var Example = /*#__PURE__*/function () {
   function Example() {}
   var _proto = Example.prototype;
   _proto.test1 = /*#__PURE__*/function () {
-    var _test = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+    var _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
       return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:

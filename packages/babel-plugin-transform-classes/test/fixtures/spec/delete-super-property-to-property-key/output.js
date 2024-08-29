@@ -1,6 +1,6 @@
 // [Symbol.toPrimitive] must be called if exist
 var counter = 0;
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class() {
@@ -22,7 +22,7 @@ new ( /*#__PURE__*/function () {
 }())().f();
 
 // [Symbol.toPrimitive] must return a primitive value
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class2() {

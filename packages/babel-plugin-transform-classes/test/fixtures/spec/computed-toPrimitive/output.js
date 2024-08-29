@@ -1,7 +1,7 @@
 var foo = {
   [Symbol.toPrimitive]: () => "foo"
 };
-expect(new ( /*#__PURE__*/function () {
+expect(new (/*#__PURE__*/function () {
   "use strict";
 
   function _class() {
@@ -14,7 +14,7 @@ expect(new ( /*#__PURE__*/function () {
     }
   }]);
 }())().foo()).toBe(0);
-expect(new ( /*#__PURE__*/function () {
+expect(new (/*#__PURE__*/function () {
   "use strict";
 
   function _class2() {
@@ -27,7 +27,7 @@ expect(new ( /*#__PURE__*/function () {
     }
   }]);
 }())().foo).toBe(0);
-expect(new ( /*#__PURE__*/function () {
+expect(new (/*#__PURE__*/function () {
   "use strict";
 
   function _class3() {
@@ -43,7 +43,7 @@ expect(new ( /*#__PURE__*/function () {
 var arrayLike = {
   [Symbol.toPrimitive]: () => []
 };
-expect(() => new ( /*#__PURE__*/function () {
+expect(() => new (/*#__PURE__*/function () {
   "use strict";
 
   function _class4() {
@@ -56,7 +56,7 @@ expect(() => new ( /*#__PURE__*/function () {
     }
   }]);
 }())()).toThrow("@@toPrimitive must return a primitive value.");
-expect(() => new ( /*#__PURE__*/function () {
+expect(() => new (/*#__PURE__*/function () {
   "use strict";
 
   function _class5() {
@@ -69,7 +69,7 @@ expect(() => new ( /*#__PURE__*/function () {
     }
   }]);
 }())()).toThrow("@@toPrimitive must return a primitive value.");
-expect(() => new ( /*#__PURE__*/function () {
+expect(() => new (/*#__PURE__*/function () {
   "use strict";
 
   function _class6() {

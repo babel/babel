@@ -7,4 +7,4 @@ var List = /*#__PURE__*/function (_Array) {
   }
   babelHelpers.inherits(List, _Array);
   return babelHelpers.createClass(List);
-}( /*#__PURE__*/babelHelpers.wrapNativeSuper(Array));
+}(/*#__PURE__*/babelHelpers.wrapNativeSuper(Array));

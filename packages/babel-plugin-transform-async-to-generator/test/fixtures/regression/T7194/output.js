@@ -1,5 +1,5 @@
 function f() {
-  g( /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+  g(/*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
     var _this = this;
     c(function () {
       return _this;
