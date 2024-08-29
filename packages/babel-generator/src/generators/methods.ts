@@ -48,7 +48,7 @@ export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
 ) {
-  this.printJoin(parameter.decorators, parameter);
+  this.printJoin(parameter.decorators);
   this.print(parameter);
   if (
     // @ts-expect-error optional is not in TSParameterProperty

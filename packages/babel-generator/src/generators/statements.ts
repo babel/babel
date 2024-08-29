@@ -147,12 +147,11 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
 function printStatementAfterKeyword(
   printer: Printer,
   node: t.Node,
-  parent: t.Node,
   isLabel: boolean,
 ) {
   if (node) {
     printer.space();
-    printer.printTerminatorless(node, parent, isLabel);
+    printer.printTerminatorless(node, isLabel);
   }
 
   printer.semicolon();
@@ -160,22 +159,22 @@ function printStatementAfterKeyword(
 
 export function BreakStatement(this: Printer, node: t.ContinueStatement) {
   this.word("break");
-  printStatementAfterKeyword(this, node.label, node, true);
+  printStatementAfterKeyword(this, node.label, true);
 }
 
 export function ContinueStatement(this: Printer, node: t.ContinueStatement) {
   this.word("continue");
-  printStatementAfterKeyword(this, node.label, node, true);
+  printStatementAfterKeyword(this, node.label, true);
 }
 
 export function ReturnStatement(this: Printer, node: t.ReturnStatement) {
   this.word("return");
-  printStatementAfterKeyword(this, node.argument, node, false);
+  printStatementAfterKeyword(this, node.argument, false);
 }
 
 export function ThrowStatement(this: Printer, node: t.ThrowStatement) {
   this.word("throw");
-  printStatementAfterKeyword(this, node.argument, node, false);
+  printStatementAfterKeyword(this, node.argument, false);
 }
 
 export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
@@ -232,7 +231,7 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
   this.space();
   this.token("{");
 
-  this.printSequence(node.cases, node, {
+  this.printSequence(node.cases, {
     indent: true,
     addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
@@ -255,7 +254,7 @@ export function SwitchCase(this: Printer, node: t.SwitchCase) {
 
   if (node.consequent.length) {
     this.newline();
-    this.printSequence(node.consequent, node, { indent: true });
+    this.printSequence(node.consequent, { indent: true });
   }
 }
 
@@ -308,7 +307,7 @@ export function VariableDeclaration(
   //       bar = "foo";
   //
 
-  this.printList(node.declarations, node, {
+  this.printList(node.declarations, {
     separator: hasInits
       ? function (this: Printer) {
           this.token(",");

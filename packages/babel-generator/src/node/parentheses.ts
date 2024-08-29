@@ -247,7 +247,6 @@ export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
     parentType === "TSArrayType" ||
     parentType === "TSOptionalType" ||
     parentType === "TSIntersectionType" ||
-    parentType === "TSUnionType" ||
     parentType === "TSRestType"
   );
 }

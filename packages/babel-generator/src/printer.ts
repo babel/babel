@@ -590,7 +590,7 @@ class Printer {
     return this._indentRepeat * this._indent;
   }
 
-  printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
+  printTerminatorless(node: t.Node, isLabel: boolean) {
     /**
      * Set some state that will be modified if a newline has been inserted before any
      * non-space characters.
@@ -806,7 +806,6 @@ class Printer {
 
   printJoin(
     nodes: Array<t.Node> | undefined | null,
-    parent: t.Node,
     opts: PrintJoinOptions = {},
   ) {
     if (!nodes?.length) return;
@@ -935,22 +934,18 @@ class Printer {
     this._indentInnerComments = false;
   }
 
-  printSequence(
-    nodes: t.Node[],
-    parent: t.Node,
-    opts: PrintSequenceOptions = {},
-  ) {
+  printSequence(nodes: t.Node[], opts: PrintSequenceOptions = {}) {
     opts.statement = true;
     opts.indent ??= false;
-    this.printJoin(nodes, parent, opts);
+    this.printJoin(nodes, opts);
   }
 
-  printList(items: t.Node[], parent: t.Node, opts: PrintListOptions = {}) {
+  printList(items: t.Node[], opts: PrintListOptions = {}) {
     if (opts.separator == null) {
       opts.separator = commaSeparator;
     }
 
-    this.printJoin(items, parent, opts);
+    this.printJoin(items, opts);
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -1048,7 +1043,8 @@ class Printer {
     const lastCharCode = this.getLastChar();
     if (
       lastCharCode !== charCodes.leftSquareBracket &&
-      lastCharCode !== charCodes.leftCurlyBrace
+      lastCharCode !== charCodes.leftCurlyBrace &&
+      lastCharCode !== charCodes.leftParenthesis
     ) {
       this.space();
     }

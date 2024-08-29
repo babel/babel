@@ -1,4 +1,4 @@
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class() {
@@ -13,7 +13,7 @@ new ( /*#__PURE__*/function () {
     }
   }]);
 }())().f();
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class2() {
@@ -31,7 +31,7 @@ new ( /*#__PURE__*/function () {
 
 // [expr] should be evaluated
 var counter = 0;
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class3() {
@@ -48,7 +48,7 @@ new ( /*#__PURE__*/function () {
 }())().f();
 
 // TypeError before ReferenceError
-new ( /*#__PURE__*/function () {
+new (/*#__PURE__*/function () {
   "use strict";
 
   function _class4() {

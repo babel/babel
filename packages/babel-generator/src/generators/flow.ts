@@ -276,7 +276,7 @@ function FlowExportDeclaration(
     this.token("{");
     if (node.specifiers.length) {
       this.space();
-      this.printList(node.specifiers, node);
+      this.printList(node.specifiers);
       this.space();
     }
     this.token("}");
@@ -315,7 +315,7 @@ export function FunctionTypeAnnotation(
     }
   }
 
-  this.printList(node.params, node);
+  this.printList(node.params);
 
   if (node.rest) {
     if (node.params.length) {
@@ -378,20 +378,20 @@ export function _interfaceish(
     this.space();
     this.word("extends");
     this.space();
-    this.printList(node.extends, node);
+    this.printList(node.extends);
   }
   if (node.type === "DeclareClass") {
     if (node.mixins?.length) {
       this.space();
       this.word("mixins");
       this.space();
-      this.printList(node.mixins, node);
+      this.printList(node.mixins);
     }
     if (node.implements?.length) {
       this.space();
       this.word("implements");
       this.space();
-      this.printList(node.implements, node);
+      this.printList(node.implements);
     }
   }
   this.space();
@@ -442,7 +442,7 @@ export function InterfaceTypeAnnotation(
     this.space();
     this.word("extends");
     this.space();
-    this.printList(node.extends, node);
+    this.printList(node.extends);
   }
   this.space();
   this.print(node.body);
@@ -452,7 +452,7 @@ export function IntersectionTypeAnnotation(
   this: Printer,
   node: t.IntersectionTypeAnnotation,
 ) {
-  this.printJoin(node.types, node, { separator: andSeparator });
+  this.printJoin(node.types, { separator: andSeparator });
 }
 
 export function MixedTypeAnnotation(this: Printer) {
@@ -493,7 +493,7 @@ export function TupleTypeAnnotation(
   node: t.TupleTypeAnnotation,
 ) {
   this.token("[");
-  this.printList(node.types, node);
+  this.printList(node.types);
   this.token("]");
 }
 
@@ -544,7 +544,7 @@ export function TypeParameterInstantiation(
   node: t.TypeParameterInstantiation,
 ): void {
   this.token("<");
-  this.printList(node.params, node, {});
+  this.printList(node.params, {});
   this.token(">");
 }
 
@@ -615,7 +615,7 @@ export function ObjectTypeAnnotation(
 
     this.space();
 
-    this.printJoin(props, node, {
+    this.printJoin(props, {
       addNewlines(leading) {
         if (leading && !props[0]) return 1;
       },
@@ -753,7 +753,7 @@ export function UnionTypeAnnotation(
   this: Printer,
   node: t.UnionTypeAnnotation,
 ) {
-  this.printJoin(node.types, node, { separator: orSeparator });
+  this.printJoin(node.types, { separator: orSeparator });
 }
 
 export function TypeCastExpression(this: Printer, node: t.TypeCastExpression) {

@@ -15,7 +15,7 @@ export function TSTypeParameterInstantiation(
   parent: t.Node,
 ): void {
   this.token("<");
-  this.printList(node.params, node, {});
+  this.printList(node.params, {});
   if (parent.type === "ArrowFunctionExpression" && node.params.length === 1) {
     this.token(",");
   }
@@ -316,12 +316,13 @@ function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
   this.print(node.elementType, true);
 
-  this.token("[]");
+  this.token("[");
+  this.token("]");
 }
 
 export function TSTupleType(this: Printer, node: t.TSTupleType) {
   this.token("[");
-  this.printList(node.elementTypes, node);
+  this.printList(node.elementTypes);
   this.token("]");
 }
 
@@ -356,7 +357,7 @@ function tsPrintUnionOrIntersectionType(
   node: t.TSUnionType | t.TSIntersectionType,
   sep: "|" | "&",
 ) {
-  printer.printJoin(node.types, node, {
+  printer.printJoin(node.types, {
     separator() {
       this.space();
       this.token(sep);
@@ -500,7 +501,7 @@ export function TSInterfaceDeclaration(
     this.space();
     this.word("extends");
     this.space();
-    this.printList(extendz, node);
+    this.printList(extendz);
   }
   this.space();
   this.print(body);

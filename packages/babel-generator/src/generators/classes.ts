@@ -23,7 +23,7 @@ export function ClassDeclaration(
       parent as t.ExportDeclaration & { declaration: t.ClassDeclaration },
     )
   ) {
-    this.printJoin(node.decorators, node);
+    this.printJoin(node.decorators);
   }
 
   if (node.declare) {
@@ -59,7 +59,7 @@ export function ClassDeclaration(
     this.space();
     this.word("implements");
     this.space();
-    this.printList(node.implements, node);
+    this.printList(node.implements);
   }
 
   this.space();
@@ -76,7 +76,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
     this.newline();
 
     const exit = this.enterForStatementInit(false);
-    this.printSequence(node.body, node, { indent: true });
+    this.printSequence(node.body, { indent: true });
     exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
@@ -86,7 +86,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
 }
 
 export function ClassProperty(this: Printer, node: t.ClassProperty) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
 
   // catch up to property key, avoid line break
   // between member modifiers and the property key.
@@ -126,7 +126,7 @@ export function ClassAccessorProperty(
   this: Printer,
   node: t.ClassAccessorProperty,
 ) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
 
   // catch up to property key, avoid line break
   // between member modifiers and the property key.
@@ -171,7 +171,7 @@ export function ClassPrivateProperty(
   this: Printer,
   node: t.ClassPrivateProperty,
 ) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
   if (node.static) {
     this.word("static");
     this.space();
@@ -203,7 +203,7 @@ export function _classMethodHead(
   this: Printer,
   node: t.ClassMethod | t.ClassPrivateMethod | t.TSDeclareMethod,
 ) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
 
   // catch up to method key, avoid line break
   // between member modifiers/method heads and the method key.
@@ -222,9 +222,7 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.token("}");
   } else {
     this.newline();
-    this.printSequence(node.body, node, {
-      indent: true,
-    });
+    this.printSequence(node.body, { indent: true });
     this.rightBrace(node);
   }
 }

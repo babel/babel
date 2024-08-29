@@ -32,7 +32,7 @@ export function JSXSpreadAttribute(this: Printer, node: t.JSXSpreadAttribute) {
   this.token("{");
   this.token("...");
   this.print(node.argument);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXExpressionContainer(
@@ -41,14 +41,14 @@ export function JSXExpressionContainer(
 ) {
   this.token("{");
   this.print(node.expression);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXSpreadChild(this: Printer, node: t.JSXSpreadChild) {
   this.token("{");
   this.token("...");
   this.print(node.expression);
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function JSXText(this: Printer, node: t.JSXText) {
@@ -85,7 +85,7 @@ export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   this.print(node.typeParameters); // TS
   if (node.attributes.length > 0) {
     this.space();
-    this.printJoin(node.attributes, node, { separator: spaceSeparator });
+    this.printJoin(node.attributes, { separator: spaceSeparator });
   }
   if (node.selfClosing) {
     this.space();

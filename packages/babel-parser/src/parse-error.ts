@@ -74,6 +74,23 @@ function toParseErrorConstructor<ErrorDetails extends object>({
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
   const hasMissingPlugin =
     reasonCode === "MissingPlugin" || reasonCode === "MissingOneOfPlugins";
+
+  if (!process.env.BABEL_8_BREAKING) {
+    const oldReasonCodes: Record<string, string> = {
+      AccessorCannotDeclareThisParameter: "AccesorCannotDeclareThisParameter",
+      AccessorCannotHaveTypeParameters: "AccesorCannotHaveTypeParameters",
+      ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+        "ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference",
+      SetAccessorCannotHaveOptionalParameter:
+        "SetAccesorCannotHaveOptionalParameter",
+      SetAccessorCannotHaveRestParameter: "SetAccesorCannotHaveRestParameter",
+      SetAccessorCannotHaveReturnType: "SetAccesorCannotHaveReturnType",
+    };
+    if (oldReasonCodes[reasonCode]) {
+      reasonCode = oldReasonCodes[reasonCode];
+    }
+  }
+
   return function constructor(loc: Position, details: ErrorDetails) {
     const error: ParseError<ErrorDetails> = new SyntaxError() as any;
 

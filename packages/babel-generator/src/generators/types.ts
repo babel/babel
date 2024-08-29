@@ -27,7 +27,7 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   if (props.length) {
     const exit = this.enterForStatementInit(false);
     this.space();
-    this.printList(props, node, { indent: true, statement: true });
+    this.printList(props, { indent: true, statement: true });
     this.space();
     exit();
   }
@@ -40,14 +40,14 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
 export { ObjectExpression as ObjectPattern };
 
 export function ObjectMethod(this: Printer, node: t.ObjectMethod) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
   this._methodHead(node);
   this.space();
   this.print(node.body);
 }
 
 export function ObjectProperty(this: Printer, node: t.ObjectProperty) {
-  this.printJoin(node.decorators, node);
+  this.printJoin(node.decorators);
 
   if (node.computed) {
     this.token("[");
@@ -145,7 +145,7 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   if (props.length) {
     this.space();
-    this.printList(props, node, { indent: true, statement: true });
+    this.printList(props, { indent: true, statement: true });
     this.space();
   }
   this.token(endToken);

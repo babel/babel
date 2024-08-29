@@ -18,7 +18,7 @@ try {
     }
     babelHelpers.inherits(CustomElement, _HTMLElement);
     return babelHelpers.createClass(CustomElement);
-  }( /*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));
+  }(/*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));
   ;
   new CustomElement();
   expect(constructor).toBe(CustomElement);
