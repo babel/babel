@@ -2,6 +2,7 @@ import * as whitespace from "./whitespace.ts";
 import * as parens from "./parentheses.ts";
 import {
   FLIPPED_ALIAS_KEYS,
+  VISITOR_KEYS,
   isCallExpression,
   isDecorator,
   isExpressionStatement,
@@ -147,4 +148,21 @@ function isDecoratorMemberExpression(node: t.Node): boolean {
     default:
       return false;
   }
+}
+
+export function isLastChild(parent: t.Node, child: t.Node) {
+  const visitorKeys = VISITOR_KEYS[parent.type];
+  for (let i = visitorKeys.length - 1; i >= 0; i--) {
+    const val = (parent as any)[visitorKeys[i]] as t.Node | t.Node[] | null;
+    if (val === child) {
+      return true;
+    } else if (Array.isArray(val)) {
+      let j = val.length - 1;
+      while (j >= 0 && val[j] === null) j--;
+      return j >= 0 && val[j] === child;
+    } else if (val) {
+      return false;
+    }
+  }
+  return false;
 }

@@ -58,3 +58,4 @@ for (; a = {
 for (; a = (x = b in c) => {};);
 for (; a = class extends (b in c) {};);
 for (; a = function (x = b in c) {};);
+for (var a = (b = c) || (d in e);;);

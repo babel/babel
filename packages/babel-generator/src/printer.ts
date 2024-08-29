@@ -3,6 +3,7 @@ import type { Loc } from "./buffer.ts";
 import * as n from "./node/index.ts";
 import type * as t from "@babel/types";
 import {
+  isExpression,
   isFunction,
   isStatement,
   isClassBody,
@@ -121,12 +122,28 @@ class Printer {
   declare format: Format;
 
   inForStatementInit: boolean = false;
-  enterForStatementInit(val: boolean) {
-    const old = this.inForStatementInit;
-    if (old === val) return () => {};
-    this.inForStatementInit = val;
+  enterForStatementInit() {
+    if (this.inForStatementInit) return () => {};
+    this.inForStatementInit = true;
     return () => {
-      this.inForStatementInit = old;
+      this.inForStatementInit = false;
+    };
+  }
+
+  enterDelimited() {
+    const oldInForStatementInit = this.inForStatementInit;
+    const oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
+    if (
+      oldInForStatementInit === false &&
+      oldNoLineTerminatorAfterNode === null
+    ) {
+      return () => {};
+    }
+    this.inForStatementInit = false;
+    this._noLineTerminatorAfterNode = null;
+    return () => {
+      this.inForStatementInit = oldInForStatementInit;
+      this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
     };
   }
 
@@ -139,6 +156,7 @@ class Printer {
   _insideAux: boolean = false;
   _parenPushNewlineState: { printed: boolean } | null = null;
   _noLineTerminator: boolean = false;
+  _noLineTerminatorAfterNode: t.Node | null = null;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments = new Set<t.Comment>();
   _endsWithInteger = false;
@@ -632,7 +650,6 @@ class Printer {
     // trailingCommentsLineOffset also used to check if called from printJoin
     // it will be ignored if `noLineTerminatorAfter||this._noLineTerminator`
     trailingCommentsLineOffset?: number,
-    forceParens?: boolean,
   ) {
     if (!node) return;
 
@@ -676,7 +693,6 @@ class Printer {
 
     const parenthesized = node.extra?.parenthesized as boolean | undefined;
     let shouldPrintParens =
-      forceParens ||
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
@@ -705,11 +721,37 @@ class Printer {
       }
     }
 
-    let exitInForStatementInit;
+    let oldNoLineTerminatorAfterNode;
+    let oldInForStatementInitWasTrue;
+
+    if (!shouldPrintParens) {
+      noLineTerminatorAfter ||=
+        parent &&
+        this._noLineTerminatorAfterNode === parent &&
+        n.isLastChild(parent, node);
+      if (noLineTerminatorAfter) {
+        if (
+          node.trailingComments?.some(
+            c => c.type === "CommentLine" || HAS_NEWLINE.test(c.value),
+          )
+        ) {
+          if (isExpression(node)) shouldPrintParens = true;
+        } else {
+          oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
+          this._noLineTerminatorAfterNode = node;
+        }
+      }
+    }
+
     if (shouldPrintParens) {
       this.token("(");
       this._endsWithInnerRaw = false;
-      exitInForStatementInit = this.enterForStatementInit(false);
+      if (this.inForStatementInit) {
+        oldInForStatementInitWasTrue = true;
+        this.inForStatementInit = false;
+      }
+      oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
+      this._noLineTerminatorAfterNode = null;
     }
 
     this._lastCommentLine = 0;
@@ -731,7 +773,7 @@ class Printer {
       this._printTrailingComments(node, parent);
       this.token(")");
       this._noLineTerminator = noLineTerminatorAfter;
-      exitInForStatementInit();
+      if (oldInForStatementInitWasTrue) this.inForStatementInit = true;
     } else if (noLineTerminatorAfter && !this._noLineTerminator) {
       this._noLineTerminator = true;
       this._printTrailingComments(node, parent);
@@ -743,6 +785,10 @@ class Printer {
     this._currentNode = parent;
     format.concise = oldConcise;
     this._insideAux = oldInAux;
+
+    if (oldNoLineTerminatorAfterNode !== undefined) {
+      this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
+    }
 
     this._endsWithInnerRaw = false;
   }

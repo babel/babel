@@ -29,7 +29,7 @@ export function _params(
 }
 
 export function _parameters(this: Printer, parameters: t.Function["params"]) {
-  const exit = this.enterForStatementInit(false);
+  const exit = this.enterDelimited();
 
   const paramLength = parameters.length;
   for (let i = 0; i < paramLength; i++) {
