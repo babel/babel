@@ -4,6 +4,7 @@ import {
   isLiteral,
   isMemberExpression,
   isNewExpression,
+  isPattern,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { TokenContext } from "../node/index.ts";
@@ -245,7 +246,7 @@ export function ExpressionStatement(
 
 export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
   this.print(node.left);
-  if (node.left.type === "Identifier") {
+  if (node.left.type === "Identifier" || isPattern(node.left)) {
     if (node.left.optional) this.token("?");
     this.print(node.left.typeAnnotation);
   }
