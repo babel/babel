@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import type { File, Scope, NodePath } from "@babel/core";
 
 function isPureVoid(node: t.Node) {
