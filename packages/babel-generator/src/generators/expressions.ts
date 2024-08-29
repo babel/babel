@@ -41,7 +41,9 @@ export function ParenthesizedExpression(
   node: t.ParenthesizedExpression,
 ) {
   this.token("(");
+  const exit = this.enterDelimited();
   this.print(node.expression);
+  exit();
   this.rightParens(node);
 }
 
