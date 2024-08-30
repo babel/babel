@@ -1,0 +1,1 @@
+type T=A extendsinferB?C:D;
