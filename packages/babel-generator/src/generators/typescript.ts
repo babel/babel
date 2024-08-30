@@ -383,8 +383,7 @@ export function TSConditionalType(this: Printer, node: t.TSConditionalType) {
 }
 
 export function TSInferType(this: Printer, node: t.TSInferType) {
-  this.token("infer");
-  this.space();
+  this.word("infer");
   this.print(node.typeParameter);
 }
 
