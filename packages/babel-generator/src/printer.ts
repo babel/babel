@@ -525,7 +525,24 @@ class Printer {
 
     let low = first;
 
-    for (const child of childrenIterator(node)) {
+    const children = childrenIterator(node);
+
+    if (
+      (node.type === "ExportNamedDeclaration" ||
+        node.type === "ExportDefaultDeclaration") &&
+      node.declaration &&
+      node.declaration.type === "ClassDeclaration"
+    ) {
+      // Exported class declarations can be not properly nested inside
+      // the export declaration that contains them. For example, in
+      // `@dec export class Foo {}` the `export` is covered by the
+      // ClassDeclaration range. Skip the class declaration from the list
+      // of children to skip, so that when looking for `export` we also
+      // traverse its tokens.
+      children.next();
+    }
+
+    for (const child of children) {
       if (!child) continue;
 
       const childTok = this._findTokensOfNode(child, low, last);
