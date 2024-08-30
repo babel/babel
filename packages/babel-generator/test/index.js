@@ -1540,9 +1540,9 @@ describe("programmatic generation", function () {
         concise: true,
       }).code,
     ).toMatchInlineSnapshot(`
-        "return (/*new
-        line*/ val );"
-      `);
+      "return ( /*new
+      line*/ val );"
+    `);
   });
 
   it("correctly indenting when `retainLines`", () => {

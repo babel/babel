@@ -211,7 +211,7 @@ export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
 
   if (node.argument) {
     this.space();
-    this.printTerminatorless(node.argument, false);
+    this.printTerminatorless(node.argument);
   }
 }
 
@@ -228,7 +228,7 @@ export function YieldExpression(this: Printer, node: t.YieldExpression) {
   } else {
     if (node.argument) {
       this.space();
-      this.printTerminatorless(node.argument, false);
+      this.printTerminatorless(node.argument);
     }
   }
 }

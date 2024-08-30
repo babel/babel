@@ -144,14 +144,10 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.semicolon();
 }
 
-function printStatementAfterKeyword(
-  printer: Printer,
-  node: t.Node,
-  isLabel: boolean,
-) {
+function printStatementAfterKeyword(printer: Printer, node: t.Node) {
   if (node) {
     printer.space();
-    printer.printTerminatorless(node, isLabel);
+    printer.printTerminatorless(node);
   }
 
   printer.semicolon();
@@ -159,22 +155,22 @@ function printStatementAfterKeyword(
 
 export function BreakStatement(this: Printer, node: t.ContinueStatement) {
   this.word("break");
-  printStatementAfterKeyword(this, node.label, true);
+  printStatementAfterKeyword(this, node.label);
 }
 
 export function ContinueStatement(this: Printer, node: t.ContinueStatement) {
   this.word("continue");
-  printStatementAfterKeyword(this, node.label, true);
+  printStatementAfterKeyword(this, node.label);
 }
 
 export function ReturnStatement(this: Printer, node: t.ReturnStatement) {
   this.word("return");
-  printStatementAfterKeyword(this, node.argument, false);
+  printStatementAfterKeyword(this, node.argument);
 }
 
 export function ThrowStatement(this: Printer, node: t.ThrowStatement) {
   this.word("throw");
-  printStatementAfterKeyword(this, node.argument, false);
+  printStatementAfterKeyword(this, node.argument);
 }
 
 export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
