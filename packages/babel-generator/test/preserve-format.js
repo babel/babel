@@ -45,7 +45,9 @@ describe("preserveFormat", () => {
             };
 
             const ok = generate(ast, options, input).code === input;
-            const shouldFail = FAILURES.some(f => task.actual.loc.endsWith(f));
+            const shouldFail = FAILURES.some(f =>
+              task.actual.loc.replace(/\\/g, "/").endsWith(f),
+            );
 
             if (!ok && shouldFail) {
               expect(1).toBe(1);
