@@ -144,7 +144,6 @@ const FAILURES = [
 
   // These tests are about old proposals
   "types/Decorator/input.js",
-  "types/ImportAssertion/input.js",
 
   // We explicitly always print `module X {}` as `namespace X {}`
   "typescript/module-namespace-head/input.js",
