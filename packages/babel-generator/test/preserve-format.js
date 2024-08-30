@@ -101,7 +101,6 @@ const FAILURES = [
   "decorators/decorator-call-expression/input.js",
   "decorators/decorator-parenthesized-expression/input.js",
   "decorators/decorator-parenthesized-expression-createParenthesizedExpression/input.js",
-  "decorators-legacy/ts-class-modifier-with-retainlines/input.js",
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
 
