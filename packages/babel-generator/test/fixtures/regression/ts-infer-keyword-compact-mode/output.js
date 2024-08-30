@@ -1,1 +1,1 @@
-type T=A extendsinferB?C:D;
+type T=A extends infer B?C:D;
