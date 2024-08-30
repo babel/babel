@@ -226,7 +226,7 @@ class Printer {
       this._noLineTerminator = false;
       return;
     }
-    if (this.format.preserveFormat && this._tokens) {
+    if (this.format.preserveFormat) {
       const node = this._currentNode;
       if (node.start != null && node.end != null) {
         const { last } = this._findTokensOfNode(node);
@@ -501,7 +501,7 @@ class Printer {
     return high;
   }
 
-  _tokensCache = new WeakMap<t.Node, { first: number; last: number }>();
+  _tokensCache = new Map<t.Node, { first: number; last: number }>();
   _findTokensOfNode(
     node: t.Node,
     low: number = 0,
@@ -559,10 +559,8 @@ class Printer {
   _findToken(
     condition: (token: Token, index: number) => boolean,
   ): Token | null {
-    if (this._tokens) {
-      for (const k of this._iterateCurrentTokensIndexes()) {
-        if (condition(this._tokens[k], k)) return this._tokens[k];
-      }
+    for (const k of this._iterateCurrentTokensIndexes()) {
+      if (condition(this._tokens[k], k)) return this._tokens[k];
     }
 
     return null;
@@ -575,7 +573,6 @@ class Printer {
   }
 
   _getOriginalToken(str: string, occurrenceCount: number = 0) {
-    if (!this._tokens) return null;
     return this._findToken(token => {
       if (!this._matchesOriginalToken(token, str)) return false;
       if (occurrenceCount === 0) return true;
@@ -1119,7 +1116,7 @@ class Printer {
   }
 
   shouldPrintTrailingComma(listEnd: string): boolean | null {
-    if (!this.format.preserveFormat || !this._tokens) return null;
+    if (!this.format.preserveFormat) return null;
 
     let listEndIndex: number;
     this._findToken((token, index) => {

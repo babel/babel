@@ -102,7 +102,6 @@ export function NewExpression(
 
   if (
     this.format.preserveFormat &&
-    this._tokens &&
     node.arguments.length === 0 &&
     !this._getOriginalToken(")", 0)
   ) {
