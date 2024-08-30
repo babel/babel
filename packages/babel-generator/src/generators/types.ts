@@ -9,13 +9,11 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
   if (node === lastRawIdentNode) return lastRawIdentResult;
   lastRawIdentNode = node;
 
-  const identifierName = node.loc?.identifierName;
-  if (identifierName) {
-    const token = this._findToken(tok => tok.value === identifierName);
-    if (token) {
-      lastRawIdentResult = this._originalCode.slice(token.start, token.end);
-      return lastRawIdentResult;
-    }
+  const { name } = node;
+  const token = this._findToken(tok => tok.value === name);
+  if (token) {
+    lastRawIdentResult = this._originalCode.slice(token.start, token.end);
+    return lastRawIdentResult;
   }
   return (lastRawIdentResult = node.name);
 }

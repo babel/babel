@@ -90,6 +90,47 @@ describe("preserveFormat", () => {
 
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
     });
+
+    it("identifier renaming", () => {
+      const input = `
+        const foo = 3;
+        const bar = 3;
+
+        foo( x, y, z );
+        bar( x, y, z );
+      `;
+      const expected = `
+        const x   = 3;
+        const longer=3;
+
+        x  ( x, y, z );
+        longer(x,y,z );
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [
+          () => ({
+            visitor: {
+              Program(path) {
+                path.scope.rename("foo", "x");
+                path.scope.rename("bar", "longer");
+              },
+            },
+          }),
+        ],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
+    });
   });
 });
 
