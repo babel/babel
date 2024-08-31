@@ -247,17 +247,19 @@ export function referencesImport(
   return false;
 }
 
-/**
- * Get the source code associated with this node.
- */
-
-export function getSource(this: NodePath): string {
-  const node = this.node;
-  if (node.end) {
-    const code = this.hub.getCode();
-    if (code) return code.slice(node.start, node.end);
-  }
-  return "";
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /**
+   * Get the source code associated with this node.
+   */
+  // eslint-disable-next-line no-restricted-globals
+  exports.getSource = function getSource(this: NodePath): string {
+    const node = this.node;
+    if (node.end) {
+      const code = this.hub.getCode();
+      if (code) return code.slice(node.start, node.end);
+    }
+    return "";
+  };
 }
 
 export function willIMaybeExecuteBefore(

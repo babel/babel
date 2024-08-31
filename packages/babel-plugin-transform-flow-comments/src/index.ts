@@ -84,9 +84,17 @@ export default declare(api => {
     });
   }
 
+  function getSource(path: NodePath): string {
+    const node = path.node;
+    if (node.end) {
+      const code = path.hub.getCode();
+      if (code) return code.slice(node.start, node.end);
+    }
+    return "";
+  }
+
   function generateComment(path: NodePath, optional?: boolean | void) {
-    let comment = path
-      .getSource()
+    let comment = getSource(path)
       .replace(/\*-\//g, "*-ESCAPED/")
       .replace(/\*\//g, "*-/");
     if (optional) comment = "?" + comment;

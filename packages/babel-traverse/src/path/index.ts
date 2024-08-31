@@ -241,7 +241,6 @@ const methods = {
   isCompletionRecord: NodePath_introspection.isCompletionRecord,
   isStatementOrBlock: NodePath_introspection.isStatementOrBlock,
   referencesImport: NodePath_introspection.referencesImport,
-  getSource: NodePath_introspection.getSource,
   willIMaybeExecuteBefore: NodePath_introspection.willIMaybeExecuteBefore,
   _guessExecutionStatusRelativeTo:
     NodePath_introspection._guessExecutionStatusRelativeTo,
@@ -310,6 +309,8 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
     isnt: NodePath_introspection[String("isnt")],
     // @ts-expect-error Babel 7 only
     equals: NodePath_introspection[String("equals")],
+    // @ts-expect-error Babel 7 only
+    getSource: NodePath_introspection[String("getSource")],
     // @ts-expect-error Babel 7 only
     hoist: NodePath_modification[String("hoist")],
     updateSiblingKeys: NodePath_modification.updateSiblingKeys,
