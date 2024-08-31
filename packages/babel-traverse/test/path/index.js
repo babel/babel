@@ -1142,7 +1142,6 @@ describe("NodePath", () => {
           "getOuterBindingIdentifiers",
           "getPrevSibling",
           "getSibling",
-          "getSource",
           "getStatementParent",
           "getTypeAnnotation",
           "inType",
