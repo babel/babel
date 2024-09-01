@@ -1,5 +1,0 @@
-enum Example {
-  Value
-}
-
-foo;
