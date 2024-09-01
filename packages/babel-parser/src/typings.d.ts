@@ -75,15 +75,14 @@ export interface RecordAndTuplePluginOptions {
   syntaxType: "bar" | "hash";
 }
 
-export type FlowPluginOptions = IF_BABEL_7<
-  {
-    all?: boolean;
-    enums?: boolean;
-  },
-  {
-    all?: boolean;
-  }
->;
+export type FlowPluginOptions = BABEL_8_BREAKING extends true
+  ? {
+      all?: boolean;
+      enums?: boolean;
+    }
+  : {
+      all?: boolean;
+    };
 
 export interface TypeScriptPluginOptions {
   dts?: boolean;

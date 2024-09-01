@@ -17,9 +17,11 @@ export default declare((api, options: Options) => {
   }
 
   if (process.env.BABEL_8_BREAKING) {
-    throw new Error(
-      "The .enums option has been removed and it's now always enabled. Please remove it from your config.",
-    );
+    if (enums !== undefined) {
+      throw new Error(
+        "The .enums option has been removed and it's now always enabled. Please remove it from your config.",
+      );
+    }
   } else {
     if (typeof enums !== "boolean" && enums !== undefined) {
       throw new Error(".enums must be a boolean, or undefined");
@@ -45,6 +47,7 @@ export default declare((api, options: Options) => {
       if (process.env.BABEL_8_BREAKING) {
         parserOpts.plugins.push(["flow", { all }]);
       } else {
+        // @ts-expect-error Babel 7
         parserOpts.plugins.push(["flow", { all, enums }]);
       }
     },
