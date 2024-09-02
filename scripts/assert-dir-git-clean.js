@@ -2,7 +2,7 @@
 
 import { execSync } from "child_process";
 
-const fixCommand = `make ${process.argv[2]}`;
+const fixCommand = process.argv[2];
 
 if (execSync("git status --porcelain=v1", { encoding: "utf8" })) {
   console.log(
