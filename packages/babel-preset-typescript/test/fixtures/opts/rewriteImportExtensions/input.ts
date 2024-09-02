@@ -8,3 +8,5 @@ import "./react.ctsx";
 import "a-package/file.ts";
 // Bare import, it's either a node package or remapped by an import map
 import "soundcloud.ts";
+
+import("./a.ts");
