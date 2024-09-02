@@ -1,3 +1,0 @@
-{
-  "plugins": [["transform-named-capturing-groups-regex", { "runtime": false }]]
-}
