@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "functionBind"
-  ],
   "throws": "Binding should be performed on object property. (1:2)"
 }
