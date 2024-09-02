@@ -3,10 +3,27 @@ import { repoRoot } from "$repo-utils";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import path from "path";
 
-const fixtures = glob.sync("./@(codemods|packages|eslint)/*/test/fixtures/", {
-  cwd: repoRoot,
-  absolute: true,
-});
+const hasCategories = ["babel-parser"];
+
+const fixtures = glob
+  .sync("./@(codemods|packages|eslint)/*/test/fixtures/", {
+    cwd: repoRoot,
+    absolute: true,
+  })
+  .map(fixture => {
+    if (
+      hasCategories.some(name =>
+        fixture.replace(/\\/g, "/").includes(`packages/${name}/`)
+      )
+    ) {
+      return glob.sync("*/", {
+        cwd: fixture,
+        absolute: true,
+      });
+    }
+    return fixture;
+  })
+  .flat();
 
 for (const fixture of fixtures) {
   const optionsPath = path.join(fixture, "options.json");
