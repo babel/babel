@@ -9,3 +9,4 @@ import "a-package/file.js";
 // Bare import, it's either a node package or remapped by an import map
 import "soundcloud.ts";
 import("./a.js");
+import(babelHelpers.replaceTsImportExt(a));

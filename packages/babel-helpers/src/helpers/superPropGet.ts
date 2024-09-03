@@ -8,7 +8,7 @@ const enum Flags {
   Call = 0b10,
 }
 
-export default function _superPropertyGet(
+export default function _superPropGet(
   classArg: any,
   property: string,
   receiver: any,

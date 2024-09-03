@@ -10,3 +10,4 @@ import "a-package/file.ts";
 import "soundcloud.ts";
 
 import("./a.ts");
+import(a);
