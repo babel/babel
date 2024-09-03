@@ -1,0 +1,3 @@
+{
+  "throws": "Unexpected yield after pipeline body; any yield expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence. (2:14)"
+}

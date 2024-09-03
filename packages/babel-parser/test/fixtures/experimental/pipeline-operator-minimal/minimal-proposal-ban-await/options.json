@@ -1,0 +1,3 @@
+{
+  "throws": "Unexpected \"await\" after pipeline body; await must have parentheses in minimal proposal. (2:14)"
+}

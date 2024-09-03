@@ -134,9 +134,12 @@ jobs:
       - name: Generate readmes
         run: |
           make generate-readme
+      - name: Cleanup fixtures
+        run: |
+          node scripts/cleanup-fixtures.js
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          node ./scripts/assert-dir-git-clean.js build
+          node ./scripts/assert-dir-git-clean.js "\`make build\` and \`node scripts/cleanup-fixtures.js\`"
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-

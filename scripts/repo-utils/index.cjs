@@ -6,6 +6,8 @@ const { fileURLToPath } = require("url");
 const { createRequire } = require("module");
 const semver = require("semver");
 
+exports.repoRoot = path.resolve(__dirname, "../../");
+
 let USE_ESM = false;
 try {
   const type = readFileSync(

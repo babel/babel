@@ -5,6 +5,7 @@ export function commonJS(metaUrl: string): {
   __filename: string;
   require: NodeRequire;
 };
+export const repoRoot: string;
 export const itNoESM: jest.It;
 export const itESM: jest.It;
 export function itGteNoESM(version: string): jest.It;
