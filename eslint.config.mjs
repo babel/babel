@@ -78,7 +78,7 @@ export default [
           configFile: false,
           // Todo: Remove the parserOpts here after the proposal gets stage 4.
           parserOpts: {
-            plugins: ["importAssertions"],
+            plugins: ["importAttributes"],
           },
         },
       },
