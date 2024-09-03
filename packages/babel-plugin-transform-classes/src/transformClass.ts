@@ -452,11 +452,7 @@ export default function transformClass(
             return true;
           }
 
-          if (
-            parentPath.isLoop() ||
-            parentPath.isConditional() ||
-            parentPath.isArrowFunctionExpression()
-          ) {
+          if (parentPath.isConditional() || parentPath.isBlockParent()) {
             maxGuaranteedSuperBeforeIndex = -1;
             return true;
           }
