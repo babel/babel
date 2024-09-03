@@ -184,6 +184,8 @@ class Printer {
   _endsWithInnerRaw: boolean = false;
   _indentInnerComments: boolean = true;
 
+  _boundGetRawIdentifier = this._getRawIdentifier.bind(this);
+
   generate(ast: t.Node) {
     this.print(ast);
     this._maybeAddAuxComment();
@@ -782,9 +784,7 @@ class Printer {
         parent,
         this.tokenContext,
         this.inForStatementInit,
-        format.preserveFormat
-          ? node => this._getRawIdentifier(node)
-          : node => node.name,
+        format.preserveFormat ? this._boundGetRawIdentifier : undefined,
       );
 
     if (

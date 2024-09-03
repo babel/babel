@@ -463,7 +463,7 @@ export function Identifier(
     }
   }
 
-  if (getRawIdentifier(node) !== node.name) {
+  if (getRawIdentifier && getRawIdentifier(node) !== node.name) {
     return false;
   }
 
