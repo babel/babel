@@ -452,16 +452,42 @@ export default function transformClass(
             return true;
           }
 
-          if (
-            parentPath.isLoop() ||
-            parentPath.isConditional() ||
-            parentPath.isArrowFunctionExpression()
-          ) {
-            maxGuaranteedSuperBeforeIndex = -1;
-            return true;
+          const { type } = parentPath;
+          switch (type) {
+            case "ExpressionStatement":
+            case "SequenceExpression":
+            case "AssignmentExpression":
+            case "BinaryExpression":
+            case "MemberExpression":
+            case "CallExpression":
+            case "NewExpression":
+            case "VariableDeclarator":
+            case "VariableDeclaration":
+            case "BlockStatement":
+            case "ArrayExpression":
+            case "ObjectExpression":
+            case "ObjectProperty":
+            case "TemplateLiteral":
+              lastParentPath = parentPath;
+              return false;
+            default:
+              if (
+                (type === "LogicalExpression" &&
+                  parentPath.node.left === lastParentPath.node) ||
+                (parentPath.isConditional() &&
+                  parentPath.node.test === lastParentPath.node) ||
+                (type === "OptionalCallExpression" &&
+                  parentPath.node.callee === lastParentPath.node) ||
+                (type === "OptionalMemberExpression" &&
+                  parentPath.node.object === lastParentPath.node)
+              ) {
+                lastParentPath = parentPath;
+                return false;
+              }
           }
 
-          lastParentPath = parentPath;
+          maxGuaranteedSuperBeforeIndex = -1;
+          return true;
         });
       }
     }
