@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "decimal"
+  ],
+  "BABEL_8_BREAKING": true,
+  "throws": "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration."
+}

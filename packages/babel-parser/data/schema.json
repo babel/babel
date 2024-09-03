@@ -170,7 +170,6 @@
           {
             "enum": [
               "asyncDoExpressions",
-              "decimal",
               "decorators",
               "decorators-legacy",
               "decoratorAutoAccessors",

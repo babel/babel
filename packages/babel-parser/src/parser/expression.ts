@@ -1143,9 +1143,6 @@ export default abstract class ExpressionParser extends LValParser {
       case tt.bigint:
         return this.parseBigIntLiteral(this.state.value);
 
-      case tt.decimal:
-        return this.parseDecimalLiteral(this.state.value);
-
       case tt.string:
         return this.parseStringLiteral(this.state.value);
 
@@ -1285,6 +1282,10 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       default:
+        if (!process.env.BABEL_8_BREAKING && type === tt.decimal) {
+          return this.parseDecimalLiteral(this.state.value);
+        }
+
         if (tokenIsIdentifier(type)) {
           if (
             this.isContextual(tt._module) &&
@@ -1718,6 +1719,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
   }
 
+  // TODO: Remove this in Babel 8
   parseDecimalLiteral(value: any) {
     return this.parseLiteral<N.DecimalLiteral>(value, "DecimalLiteral");
   }
@@ -2402,9 +2404,6 @@ export default abstract class ExpressionParser extends LValParser {
           case tt.bigint:
             key = this.parseBigIntLiteral(value);
             break;
-          case tt.decimal:
-            key = this.parseDecimalLiteral(value);
-            break;
           case tt.privateName: {
             // the class private key has been handled in parseClassElementName
             const privateKeyLoc = this.state.startLoc;
@@ -2419,6 +2418,11 @@ export default abstract class ExpressionParser extends LValParser {
             break;
           }
           default:
+            if (!process.env.BABEL_8_BREAKING && type === tt.decimal) {
+              key = this.parseDecimalLiteral(value);
+              break;
+            }
+
             this.unexpected();
         }
       }

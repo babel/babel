@@ -333,6 +333,7 @@ export const tt = {
   string: createToken("string", { startsExpr }),
   num: createToken("num", { startsExpr }),
   bigint: createToken("bigint", { startsExpr }),
+  // TODO: Remove this in Babel 8
   decimal: createToken("decimal", { startsExpr }),
   // end: isLiteralPropertyName
   regexp: createToken("regexp", { startsExpr }),

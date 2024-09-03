@@ -40,7 +40,7 @@ export default (_: any, opts: any = {}) => {
       ],
     ],
     plugins: [
-      babelPlugins.syntaxDecimal,
+      ...(process.env.BABEL_8_BREAKING ? [] : [babelPlugins.syntaxDecimal]),
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalDoExpressions,
       [

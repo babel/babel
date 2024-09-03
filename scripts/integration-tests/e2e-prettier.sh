@@ -41,6 +41,9 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/prettier-ignore/format.test.js
   rm tests/format/typescript/keyword-types/conditional-types.ts
   rm tests/format/typescript/comments/mapped_types.ts
+  # https://github.com/babel/babel/pull/16741
+  sed -i 's/"decimal",//' src/language-js/parse/babel.js
+  rm tests/format/js/babel-plugins/decimal.js
 fi
 
 #==============================================================================#

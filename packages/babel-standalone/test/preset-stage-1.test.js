@@ -8,7 +8,7 @@ describe("stage-1 preset", () => {
     Babel = require("../babel.js");
   });
 
-  it("should parser decimal literal", () => {
+  itBabel7("should parse decimal literal", () => {
     const output = Babel.transform("0.3m", {
       presets: [["stage-1", { decoratorsLegacy: true }]],
     }).code;
