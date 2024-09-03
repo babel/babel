@@ -11,12 +11,10 @@ function push(flag) {
   if (knownFlagsSet.has(flag)) return;
 
   if (!process.argv.includes("--update")) {
-    console.log(
+    throw new Error(
       `Missing flag "${flag}" from Node.js ${process.version} in ./packages/babel-node/data/node-flags-with-value.json.\n` +
         `Run node ./packages/babel-node/scripts/list-node-flags.js --update to update it.`
     );
-    // eslint-disable-next-line no-process-exit
-    process.exit(1);
   }
 
   flags.push(flag);
