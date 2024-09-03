@@ -97,7 +97,7 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
       if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
         workspace.set(
           "conditions.BABEL_8_BREAKING.0.engines.node",
-          "^18.20.0 || ^20.10.0 || >=21.0.0"
+          "^18.20.0 || ^20.17.0 || >=22.8.0"
         );
       }
 
