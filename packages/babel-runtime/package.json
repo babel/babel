@@ -593,15 +593,6 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
-    "./helpers/replaceTsImportExt": [
-      {
-        "node": "./helpers/replaceTsImportExt.js",
-        "import": "./helpers/esm/replaceTsImportExt.js",
-        "default": "./helpers/replaceTsImportExt.js"
-      },
-      "./helpers/replaceTsImportExt.js"
-    ],
-    "./helpers/esm/replaceTsImportExt": "./helpers/esm/replaceTsImportExt.js",
     "./helpers/set": [
       {
         "node": "./helpers/set.js",

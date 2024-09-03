@@ -1030,18 +1030,6 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 112, gzip size: 112
-  replaceTsImportExt: helper(
-    "7.25.7",
-    'function replaceTsImportExt(e){return/[\\\\/]/.test(e)?e.replace(/(\\.[mc]?)ts$/,"$1js").replace(/\\.tsx$/,".js"):e}',
-    {
-      globals: [],
-      locals: { replaceTsImportExt: ["body.0.id"] },
-      exportBindingAssignments: [],
-      exportName: "replaceTsImportExt",
-      dependencies: {},
-    },
-  ),
   // size: 494, gzip size: 274
   set: helper(
     "7.0.0-beta.0",

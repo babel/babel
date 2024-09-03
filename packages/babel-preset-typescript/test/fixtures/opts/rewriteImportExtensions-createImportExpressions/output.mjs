@@ -1,2 +1,2 @@
 import("./a.js");
-import(babelHelpers.replaceTsImportExt(a));
+import((a + "").replace(/([\/].*.[mc]?)tsx?$/, "$1js"));

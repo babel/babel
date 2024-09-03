@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath } from "@babel/core";
 
-export default declare(function ({ types: t }) {
+export default declare(function ({ types: t, template }) {
   function maybeReplace(
     source: t.ArgumentPlaceholder | t.SpreadElement | t.Expression,
     path: NodePath,
@@ -16,13 +16,10 @@ export default declare(function ({ types: t }) {
       return;
     }
 
-    try {
-      path.replaceWith(
-        t.callExpression(path.hub.addHelper("replaceTsImportExt"), [source]),
-      );
-    } catch {
-      // replaceTsImportExt may not be available
-    }
+    path.replaceWith(
+      template.expression
+        .ast`(${source} + "").replace(/([\\/].*\.[mc]?)tsx?$/, "$1js")`,
+    );
   }
 
   return {
