@@ -24,7 +24,7 @@ const FAILURES = [
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
 
-  // The 'preserveFormat' option does not fully support Flow
+  // The 'experimental_preserveFormat' option does not fully support Flow
   "flow/array-types/input.js",
   "flow/arrow-functions/input.js",
   "flow/call-properties/input.js",
@@ -72,7 +72,7 @@ const FAILURES = [
   "typescript/export-declare/input.js",
 ];
 
-describe("preserveFormat", () => {
+describe("experimental_preserveFormat", () => {
   describe("generation", () => {
     suites.forEach(testSuite => {
       describe(`${testSuite.title}`, () => {
@@ -98,7 +98,7 @@ describe("preserveFormat", () => {
             sourceFileName: path.relative(__dirname, task.actual.loc),
             ...task.options,
             retainLines: true,
-            preserveFormat: true,
+            experimental_preserveFormat: true,
             comments: true,
             jsescOption: null,
             minified: false,
@@ -161,7 +161,7 @@ describe("preserveFormat", () => {
         },
         generatorOpts: {
           retainLines: true,
-          preserveFormat: true,
+          experimental_preserveFormat: true,
         },
       });
 
@@ -202,7 +202,7 @@ describe("preserveFormat", () => {
         },
         generatorOpts: {
           retainLines: true,
-          preserveFormat: true,
+          experimental_preserveFormat: true,
         },
       });
 
