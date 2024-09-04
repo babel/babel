@@ -364,7 +364,7 @@ describe("Babel and Espree", () => {
   });
 
   // Espree doesn't support the pipeline operator yet
-  it("pipeline operator (token)", () => {
+  itBabel7("pipeline operator (token)", () => {
     const code = "foo |> bar";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,

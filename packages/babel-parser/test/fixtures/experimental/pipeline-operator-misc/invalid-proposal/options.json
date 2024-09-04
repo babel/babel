@@ -8,5 +8,6 @@
     ],
     "estree"
   ],
-  "throws": "\"pipelineOperator\" requires \"proposal\" option whose value must be one of: \"minimal\", \"fsharp\", \"hack\", \"smart\"."
+  "BABEL_8_BREAKING": true,
+  "throws": "\"pipelineOperator\" requires \"proposal\" option whose value must be one of: \"fsharp\", \"hack\"."
 }

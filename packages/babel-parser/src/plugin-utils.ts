@@ -9,7 +9,9 @@ export type MixinPlugin = (
   superClass: new (...args: any) => Parser,
 ) => new (...args: any) => Parser;
 
-const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
+const PIPELINE_PROPOSALS = process.env.BABEL_8_BREAKING
+  ? ["fsharp", "hack"]
+  : ["minimal", "fsharp", "hack", "smart"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
 export function validatePlugins(pluginsMap: Map<string, any>) {
