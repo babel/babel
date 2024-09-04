@@ -2,7 +2,10 @@ import presetStage3 from "./preset-stage-3.ts";
 import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any = {}) => {
-  const { pipelineProposal = "minimal", pipelineTopicToken = "%" } = opts;
+  const {
+    pipelineProposal = process.env.BABEL_8_BREAKING ? "fsharp" : "minimal",
+    pipelineTopicToken = "%",
+  } = opts;
 
   return {
     presets: [[presetStage3, opts]],

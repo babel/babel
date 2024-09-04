@@ -69,7 +69,9 @@ interface DecoratorsPluginOptions {
 }
 
 interface PipelineOperatorPluginOptions {
-  proposal: "minimal" | "fsharp" | "hack" | "smart";
+  proposal: BABEL_8_BREAKING extends false
+    ? "minimal" | "fsharp" | "hack" | "smart"
+    : "fsharp" | "hack";
   topicToken?: "%" | "#" | "@@" | "^^" | "^";
 }
 
