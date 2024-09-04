@@ -1641,10 +1641,7 @@ suites.forEach(function (testSuite) {
 
               const result = run();
 
-              if (
-                options.warns &&
-                (!process.env.IS_PUBLISH || !options.noWarnInPublishBuild)
-              ) {
+              if (options.warns) {
                 expect(console.warn).toHaveBeenCalledWith(
                   expect.stringContaining(options.warns),
                 );

@@ -67,31 +67,12 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported);
 }
 
-let warningShown = false;
-
 export function _printAttributes(
   this: Printer,
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
 ) {
   const { importAttributesKeyword } = this.format;
   const { attributes, assertions } = node;
-
-  if (
-    attributes &&
-    !importAttributesKeyword &&
-    // In the production build only show the warning once.
-    // We want to show it per-usage locally for tests.
-    (!process.env.IS_PUBLISH || !warningShown)
-  ) {
-    warningShown = true;
-    console.warn(`\
-You are using import attributes, without specifying the desired output syntax.
-Please specify the "importAttributesKeyword" generator option, whose value can be one of:
- - "with"        : \`import { a } from "b" with { type: "json" };\`
- - "assert"      : \`import { a } from "b" assert { type: "json" };\`
- - "with-legacy" : \`import { a } from "b" with type: "json";\`
-`);
-  }
 
   const useAssertKeyword =
     importAttributesKeyword === "assert" ||

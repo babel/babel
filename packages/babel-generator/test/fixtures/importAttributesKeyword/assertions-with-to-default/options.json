@@ -1,5 +1,4 @@
 {
   "plugins": ["importAssertions"],
-  "warns": "You are using import attributes, without specifying the desired output syntax.",
   "expectedReParseError": true
 }
