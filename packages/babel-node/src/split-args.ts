@@ -1,5 +1,5 @@
 import _nodeFlagsWithValue from "../data/node-flags-with-value.json" with { type: "json" };
-const nodeFlagsWithValue = new Set(_nodeFlagsWithValue);
+export const nodeFlagsWithValue = new Set(_nodeFlagsWithValue);
 
 const nodeFlagsWithNoFile = new Set(["-p", "--print", "-e", "--eval"]);
 

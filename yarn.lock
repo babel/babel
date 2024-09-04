@@ -1212,7 +1212,7 @@ __metadata:
     core-js: "npm:^3.30.2"
     node-environment-flags: "condition:BABEL_8_BREAKING ? : ^1.0.5"
     regenerator-runtime: "npm:^0.14.0"
-    v8flags: "condition:BABEL_8_BREAKING ? : ^3.1.1"
+    v8flags: "condition:BABEL_8_BREAKING ? ^4.0.1 : ^3.1.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   bin:
@@ -16967,19 +16967,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"v8flags@condition:BABEL_8_BREAKING ? : ^3.1.1":
-  version: 0.0.0-condition-d06b96
-  resolution: "v8flags@condition:BABEL_8_BREAKING?:^3.1.1#d06b96"
-  dependencies:
-    v8flags-BABEL_8_BREAKING-false: "npm:v8flags@^3.1.1"
-  checksum: 10/a63f0860955bbe5b260d04ca59a2964d5d97aa51c8c0746a662623c1629845bb964e77f36fb0f830ddf8fd431c8651e0d64cb19046315321482a3e2d9ac69fbb
-  languageName: node
-  linkType: hard
-
-"v8flags@npm:^4.0.0":
+"v8flags-BABEL_8_BREAKING-true@npm:v8flags@^4.0.1, v8flags@npm:^4.0.0":
   version: 4.0.1
   resolution: "v8flags@npm:4.0.1"
   checksum: 10/69863ede75ff79579654951c78724c084bc337d0ebe1d9bffc6924f3f2bd0b40a9eb4c568fc795201d5eb72311b77e5d75a7e1544faa12355412360dc37d76e2
+  languageName: node
+  linkType: hard
+
+"v8flags@condition:BABEL_8_BREAKING ? ^4.0.1 : ^3.1.1":
+  version: 0.0.0-condition-c811ae
+  resolution: "v8flags@condition:BABEL_8_BREAKING?^4.0.1:^3.1.1#c811ae"
+  dependencies:
+    v8flags-BABEL_8_BREAKING-false: "npm:v8flags@^3.1.1"
+    v8flags-BABEL_8_BREAKING-true: "npm:v8flags@^4.0.1"
+  checksum: 10/7359c703b6d68c55bee33a253553b0b5c5f399d5650a6b052418eb0c5711630ca14cb9380a2b9f7e535dd2279560af9b93927cd59d4f3afdccfc6f401ad1b6b7
   languageName: node
   linkType: hard
 
