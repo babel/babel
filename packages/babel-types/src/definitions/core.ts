@@ -1543,14 +1543,17 @@ defineType("ExportAllDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
   },
 });
 
@@ -1623,14 +1626,17 @@ defineType("ExportNamedDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
     specifiers: {
       default: [],
       validate: chain(
@@ -1743,14 +1749,17 @@ defineType("ImportDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
     module: {
       optional: true,
       validate: assertValueType("boolean"),
