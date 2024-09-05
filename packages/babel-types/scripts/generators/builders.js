@@ -100,11 +100,40 @@ function generateLowercaseBuilders() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import validateNode from "../validateNode.ts";
+import * as _validate from "../../validators/validate.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
+import {
+  BUILDER_KEYS,
+  NODE_FIELDS,
+  type FieldOptions,
+} from "../../definitions/utils.ts";
+
+const { validateInternal: validate } = _validate;
+
+const _data: FieldOptions[][] = [];
+Object.keys(BUILDER_KEYS).forEach(type => {
+  const fields = NODE_FIELDS[type];
+
+  _data.push(
+    sortFieldNames(Object.keys(fields), type).map(field => fields[field]),
+  );
+});
+
+function sortFieldNames(fields: string[], type: string) {
+  return fields.sort((fieldA, fieldB) => {
+    const indexA = BUILDER_KEYS[type].indexOf(fieldA);
+    const indexB = BUILDER_KEYS[type].indexOf(fieldB);
+    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+}
+
 `;
 
+  let i = 0;
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
     const defArgs = generateBuilderArgs(type);
@@ -136,11 +165,29 @@ import deprecationWarning from "../../utils/deprecationWarning.ts";
       .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {
-      output += `\n  return validateNode<t.${type}>(${nodeObjectExpression});`;
+      output += `\n  const node:t.${type} = ${nodeObjectExpression};`;
+
+      fieldNames.forEach(fieldName => {
+        const field = NODE_FIELDS[type][fieldName];
+        if (field && builderNames.includes(fieldName)) {
+          const argName = toBindingIdentifierName(fieldName);
+          output += `\n  validate(_data[${i}][${fieldNames.indexOf(
+            fieldName
+          )}], node, "${fieldName}", ${argName}${
+            JSON.stringify(
+              stringifyValidator(field.validate, "#node#")
+            ).includes("#node#")
+              ? ", true"
+              : ""
+          });`;
+        }
+      });
+      output += `\n  return node;`;
     } else {
       output += `\n  return ${nodeObjectExpression};`;
     }
     output += `\n}\n`;
+    i++;
 
     if (formattedBuilderNameLocal !== formattedBuilderName) {
       output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
