@@ -106,15 +106,17 @@ defineType("TupleExpression", {
   aliases: ["Expression"],
 });
 
-defineType("DecimalLiteral", {
-  builder: ["value"],
-  fields: {
-    value: {
-      validate: assertValueType("string"),
+if (!process.env.BABEL_TYPES_8_BREAKING) {
+  defineType("DecimalLiteral", {
+    builder: ["value"],
+    fields: {
+      value: {
+        validate: assertValueType("string"),
+      },
     },
-  },
-  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
-});
+    aliases: ["Expression", "Pureish", "Literal", "Immutable"],
+  });
+}
 
 // https://github.com/tc39/proposal-js-module-blocks
 defineType("ModuleExpression", {
