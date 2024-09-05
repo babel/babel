@@ -1,4 +1,4 @@
-Warning: --expose-gc-as, --config-file, --extensions are a valid option for Babel, but they are defined after the script name. Up to Babel 7 they would have been passed to Babel, while now they are passed to the script itself.
+Warning: --expose-gc-as, --config-file, --extensions are a valid option for Babel or Node.js, but they are defined after the script name. Up to Babel 7 they would have been passed to Babel, while now they are passed to the script itself.
   If this is intended, you can silence this warning by explicitly passing the -- separator before the script name:
     babel-node --expose_gc -w ./plugin-binary.js -- ./foo.js --expose-gc-as=gc2 --config-file ./config.json --extensions=.js,.ts bar
   If the intention is to pass them to Babel, move them before the filename:
