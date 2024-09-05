@@ -237,6 +237,7 @@ export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
   this.word(node.value + "n");
 }
 
+// TODO: Remove in Babel 8
 export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw !== undefined) {
