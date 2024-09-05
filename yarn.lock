@@ -1454,6 +1454,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
@@ -1780,7 +1781,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-decimal@npm:^7.24.7":
+"@babel/plugin-syntax-decimal-BABEL_8_BREAKING-false@npm:@babel/plugin-syntax-decimal@^7.24.7, @babel/plugin-syntax-decimal@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/plugin-syntax-decimal@npm:7.24.7"
   dependencies:
@@ -1788,6 +1789,15 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10/4bb2892cd029ef64e3f2d9f08d8b14470627cf33bf5ecd7be3d903b3e641322482e51f111da502fa248b85e0cad5d4dde7077b786513aa5edee3d656d7969cb7
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-syntax-decimal@condition:BABEL_8_BREAKING ? : ^7.24.7":
+  version: 0.0.0-condition-d528fb
+  resolution: "@babel/plugin-syntax-decimal@condition:BABEL_8_BREAKING?:^7.24.7#d528fb"
+  dependencies:
+    "@babel/plugin-syntax-decimal-BABEL_8_BREAKING-false": "npm:@babel/plugin-syntax-decimal@^7.24.7"
+  checksum: 10/a63d65e04867d1d72dd3b30cb8622cd64cb6cb74b59ec038690bf50bcb9cc1448275af6dd50a9b7b1596c4b86e4ee283a3c28ce5e2fd3c5da43ad2f1df5ab308
   languageName: node
   linkType: hard
 
