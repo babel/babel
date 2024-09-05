@@ -571,7 +571,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginToggleBooleanFlag({ types: t }, { name, value }) {
   if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
@@ -827,7 +827,7 @@ function transformNamedBabelTypesImportToDestructuring({
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginImportMetaUrl({ types: t, template }) {
   const isImportMeta = node =>
@@ -937,7 +937,7 @@ function pluginImportMetaUrl({ types: t, template }) {
   };
 }
 
-/** @returns {import("@babel/core").PluginObj} */
+/** @returns {import("@babel/core").PluginObject} */
 function pluginReplaceTSImportExtension() {
   return {
     visitor: {
@@ -1068,7 +1068,7 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginGeneratorOptimization({ types: t }) {
   return {
