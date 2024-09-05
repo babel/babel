@@ -2940,7 +2940,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return (
       this.isContextual(tt._source) ||
       this.isContextual(tt._defer) ||
-      this.isContextual(tt._module)
+      (!process.env.BABEL_8_BREAKING && this.isContextual(tt._module))
     );
   }
 
@@ -2952,7 +2952,10 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
-        if (phase === "module" || phase === "source") {
+        if (
+          (!process.env.BABEL_8_BREAKING && phase === "module") ||
+          phase === "source"
+        ) {
           throw new Error(
             `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
@@ -2961,7 +2964,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return;
     }
 
-    if (phase === "module") {
+    if (!process.env.BABEL_8_BREAKING && phase === "module") {
       this.expectPlugin("importReflection", loc);
       (node as N.ImportDeclaration).module = true;
     } else if (this.hasPlugin("importReflection")) {
@@ -2980,18 +2983,15 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   /*
-   * Parse `module` in `import module x from "x"`, disambiguating
-   * `import module from "x"` and `import module from from "x"`.
+   * Parse `source` in `import source x from "x"`, disambiguating
+   * `import source from "x"` and `import source from from "x"`.
    *
-   * This function might return an identifier representing the `module`
-   * if it eats `module` and then discovers that it was the default import
+   * This function might return an identifier representing the `source`
+   * if it eats `source` and then discovers that it was the default import
    * binding and not the import reflection.
    *
    * This function is also used to parse `import type` and `import typeof`
-   * in the TS and Flow plugins.
-   *
-   * Note: the proposal has been updated to use `source` instead of `module`,
-   * but it has not been implemented yet.
+   * in the TS and Flow plugins, and for parsing `import defer`.
    */
   parseMaybeImportPhase(
     node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
