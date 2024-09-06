@@ -47,6 +47,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # https://github.com/babel/babel/pull/16808
   sed -i 's/"importReflection",//' src/language-js/parse/babel.js
   rm tests/format/js/babel-plugins/import-reflection.js
+  rm -r tests/format/js/import-reflection/
 fi
 
 #==============================================================================#
