@@ -890,10 +890,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.18.6, @babel/helper-plugin-utils@npm:^7.22.5, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
-  version: 7.22.5
-  resolution: "@babel/helper-plugin-utils@npm:7.22.5"
-  checksum: 10/ab220db218089a2aadd0582f5833fd17fa300245999f5f8784b10f5a75267c4e808592284a29438a0da365e702f05acb369f99e1c915c02f9f9210ec60eab8ea
+"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.18.6, @babel/helper-plugin-utils@npm:^7.22.5, @babel/helper-plugin-utils@npm:^7.24.7, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
+  version: 7.24.8
+  resolution: "@babel/helper-plugin-utils@npm:7.24.8"
+  checksum: 10/adbc9fc1142800a35a5eb0793296924ee8057fe35c61657774208670468a9fbfbb216f2d0bc46c680c5fefa785e5ff917cc1674b10bd75cdf9a6aa3444780630
   languageName: node
   linkType: hard
 
@@ -1454,6 +1454,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
@@ -1780,16 +1781,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-decimal@workspace:^, @babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal"
+"@babel/plugin-syntax-decimal-BABEL_8_BREAKING-false@npm:@babel/plugin-syntax-decimal@^7.24.7, @babel/plugin-syntax-decimal@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-syntax-decimal@npm:7.24.7"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/4bb2892cd029ef64e3f2d9f08d8b14470627cf33bf5ecd7be3d903b3e641322482e51f111da502fa248b85e0cad5d4dde7077b786513aa5edee3d656d7969cb7
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-syntax-decimal@condition:BABEL_8_BREAKING ? : ^7.24.7":
+  version: 0.0.0-condition-d528fb
+  resolution: "@babel/plugin-syntax-decimal@condition:BABEL_8_BREAKING?:^7.24.7#d528fb"
+  dependencies:
+    "@babel/plugin-syntax-decimal-BABEL_8_BREAKING-false": "npm:@babel/plugin-syntax-decimal@^7.24.7"
+  checksum: 10/a63d65e04867d1d72dd3b30cb8622cd64cb6cb74b59ec038690bf50bcb9cc1448275af6dd50a9b7b1596c4b86e4ee283a3c28ce5e2fd3c5da43ad2f1df5ab308
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-syntax-decorators@workspace:^, @babel/plugin-syntax-decorators@workspace:packages/babel-plugin-syntax-decorators":
   version: 0.0.0-use.local
@@ -1995,16 +2005,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-reflection@workspace:^, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection"
+"@babel/plugin-syntax-import-reflection@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-syntax-import-reflection@npm:7.24.7"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/fb6e610f0ffa79d6f3e700df252f280c453fc041744639bf1bdb8ee4199530f8236134439d32d4fc2c1808cf1960a0bf1137a73d16d87831bad9a1901f4f5b40
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-syntax-import-source@workspace:^, @babel/plugin-syntax-import-source@workspace:packages/babel-plugin-syntax-import-source":
   version: 0.0.0-use.local
@@ -4236,7 +4246,7 @@ __metadata:
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
     "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
-    "@babel/plugin-syntax-decimal": "workspace:^"
+    "@babel/plugin-syntax-decimal": "npm:^7.24.7"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
@@ -4247,7 +4257,7 @@ __metadata:
     "@babel/plugin-syntax-function-sent": "workspace:^"
     "@babel/plugin-syntax-import-assertions": "workspace:^"
     "@babel/plugin-syntax-import-attributes": "workspace:^"
-    "@babel/plugin-syntax-import-reflection": "workspace:^"
+    "@babel/plugin-syntax-import-reflection": "npm:^7.24.7"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-module-blocks": "workspace:^"
     "@babel/plugin-syntax-optional-chaining-assign": "workspace:^"

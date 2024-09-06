@@ -66,9 +66,6 @@
       "path": "../../packages/babel-plugin-proposal-throw-expressions"
     },
     {
-      "path": "../../packages/babel-plugin-syntax-decimal"
-    },
-    {
       "path": "../../packages/babel-plugin-syntax-decorators"
     },
     {
@@ -97,9 +94,6 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-import-attributes"
-    },
-    {
-      "path": "../../packages/babel-plugin-syntax-import-reflection"
     },
     {
       "path": "../../packages/babel-plugin-syntax-jsx"
