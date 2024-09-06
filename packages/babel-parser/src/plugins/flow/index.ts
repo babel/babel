@@ -2669,7 +2669,7 @@ export default (superClass: typeof Parser) =>
       return result;
     }
 
-    parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
+    parseFunctionParamType(param: N.Pattern): N.Pattern {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
           this.raise(FlowErrors.PatternIsOptional, param);

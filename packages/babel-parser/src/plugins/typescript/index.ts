@@ -2316,7 +2316,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const left = this.parseMaybeDefault();
-      this.parseAssignableListItemTypes(left, flags);
+      if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
+        this.parseFunctionParamType(left);
+      }
       const elt = this.parseMaybeDefault(left.loc.start, left);
       if (accessibility || readonly || override) {
         const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
@@ -3602,12 +3604,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Allow type annotations inside of a parameter list.
-    parseAssignableListItemTypes(
-      param: N.Pattern,
-      flags: ParseBindingListFlags,
-    ) {
-      if (!(flags & ParseBindingListFlags.IS_FUNCTION_PARAMS)) return param;
-
+    parseFunctionParamType(param: N.Pattern) {
       if (this.eat(tt.question)) {
         (param as any as N.Identifier).optional = true;
       }
