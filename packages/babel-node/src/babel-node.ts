@@ -115,11 +115,11 @@ const babelNodePath = path.join(
           `Warning: ${ambiguousArgsNames.join(", ")} ${are} a valid option for Babel or Node.js, ` +
             `but ${they} ${are} defined after the script name. Up to Babel 7 ${they} would have ` +
             `been passed to Babel, while now ${they} ${are} passed to the script itself.\n` +
-            `  If this is intended, you can silence this warning by explicitly ` +
-            `passing the -- separator before the script name:\n` +
-            `    babel-node ${programArgs.join(" ")} -- ${fileName} ${userArgs.join(" ")}\n` +
             `  If the intention is to pass ${them} to Babel, move ${them} before the filename:\n` +
-            `    babel-node ${programArgs.join(" ")} ${ambiguousArgs.join(" ")} ${fileName} ${unambiguousArgs.join(" ")}\n`,
+            `    babel-node ${programArgs.join(" ")} ${ambiguousArgs.join(" ")} ${fileName} ${unambiguousArgs.join(" ")}\n` +
+            `  If passing ${them} to the script is intended, you can silence this warning by explicitly ` +
+            `using the -- separator before the script name:\n` +
+            `    babel-node ${programArgs.join(" ")} -- ${fileName} ${userArgs.join(" ")}`,
         );
       }
     }
