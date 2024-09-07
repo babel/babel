@@ -363,7 +363,9 @@ function importInteropSrc(source, filename) {
     source.startsWith("@babel/compat-data/") ||
     source.includes("babel-eslint-shared-fixtures/utils") ||
     (source.includes("../data/") &&
-      /babel-preset-env[\\/]src[\\/]/.test(filename))
+      /babel-preset-env[\\/]src[\\/]/.test(filename)) ||
+    // For JSON modules, the default export is the whole module
+    source.endsWith(".json")
   ) {
     return "node";
   }
@@ -571,7 +573,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginToggleBooleanFlag({ types: t }, { name, value }) {
   if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
@@ -664,10 +666,10 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
         }
       },
       LogicalExpression(path) {
-        const res = evaluate(path.get("test"));
+        const res = evaluate(path);
         if (res.unrelated) return;
         if (res.replacement) {
-          path.get("test").replaceWith(res.replacement);
+          path.replaceWith(res.replacement);
         } else {
           path.replaceWith(t.booleanLiteral(res.value));
         }
@@ -827,7 +829,7 @@ function transformNamedBabelTypesImportToDestructuring({
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginImportMetaUrl({ types: t, template }) {
   const isImportMeta = node =>
@@ -937,7 +939,7 @@ function pluginImportMetaUrl({ types: t, template }) {
   };
 }
 
-/** @returns {import("@babel/core").PluginObj} */
+/** @returns {import("@babel/core").PluginObject} */
 function pluginReplaceTSImportExtension() {
   return {
     visitor: {
@@ -1068,7 +1070,7 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
 
 /**
  * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
+ * @returns {import("@babel/core").PluginObject}
  */
 function pluginGeneratorOptimization({ types: t }) {
   return {

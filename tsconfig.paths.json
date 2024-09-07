@@ -185,9 +185,6 @@
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
       ],
-      "@babel/plugin-syntax-decimal": [
-        "./packages/babel-plugin-syntax-decimal/src"
-      ],
       "@babel/plugin-syntax-decorators": [
         "./packages/babel-plugin-syntax-decorators/src"
       ],
@@ -220,9 +217,6 @@
       ],
       "@babel/plugin-syntax-import-defer": [
         "./packages/babel-plugin-syntax-import-defer/src"
-      ],
-      "@babel/plugin-syntax-import-reflection": [
-        "./packages/babel-plugin-syntax-import-reflection/src"
       ],
       "@babel/plugin-syntax-import-source": [
         "./packages/babel-plugin-syntax-import-source/src"
@@ -558,6 +552,12 @@
         "./lib/archived-libs.d.ts"
       ],
       "@babel/plugin-syntax-unicode-sets-regex": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-decimal": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-import-reflection": [
         "./lib/archived-libs.d.ts"
       ],
       "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class": [

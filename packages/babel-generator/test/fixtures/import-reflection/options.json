@@ -1,3 +1,4 @@
 {
-  "plugins": ["importReflection"]
+  "plugins": ["importReflection"],
+  "BABEL_8_BREAKING": false
 }

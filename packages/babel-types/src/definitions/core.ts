@@ -874,14 +874,22 @@ defineType("ObjectProperty", {
     },
     key: {
       validate: (function () {
-        const normal = assertNodeType(
-          "Identifier",
-          "StringLiteral",
-          "NumericLiteral",
-          "BigIntLiteral",
-          "DecimalLiteral",
-          "PrivateName",
-        );
+        const normal = process.env.BABEL_8_BREAKING
+          ? assertNodeType(
+              "Identifier",
+              "StringLiteral",
+              "NumericLiteral",
+              "BigIntLiteral",
+              "PrivateName",
+            )
+          : assertNodeType(
+              "Identifier",
+              "StringLiteral",
+              "NumericLiteral",
+              "BigIntLiteral",
+              "DecimalLiteral",
+              "PrivateName",
+            );
         const computed = assertNodeType("Expression");
 
         const validator: Validator = Object.assign(
@@ -891,15 +899,24 @@ defineType("ObjectProperty", {
           } as Validator,
           {
             // todo(ts): can be discriminated union by `computed` property
-            oneOfNodeTypes: [
-              "Expression",
-              "Identifier",
-              "StringLiteral",
-              "NumericLiteral",
-              "BigIntLiteral",
-              "DecimalLiteral",
-              "PrivateName",
-            ],
+            oneOfNodeTypes: process.env.BABEL_8_BREAKING
+              ? [
+                  "Expression",
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                  "PrivateName",
+                ]
+              : [
+                  "Expression",
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                  "DecimalLiteral",
+                  "PrivateName",
+                ],
           },
         );
         return validator;
@@ -1526,14 +1543,17 @@ defineType("ExportAllDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
   },
 });
 
@@ -1606,14 +1626,17 @@ defineType("ExportNamedDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
     specifiers: {
       default: [],
       validate: chain(
@@ -1726,14 +1749,17 @@ defineType("ImportDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    // TODO(Babel 8): Deprecated
-    assertions: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...(process.env.BABEL_TYPES_8_BREAKING
+      ? {}
+      : {
+          assertions: {
+            optional: true,
+            validate: chain(
+              assertValueType("array"),
+              assertEach(assertNodeType("ImportAttribute")),
+            ),
+          },
+        }),
     module: {
       optional: true,
       validate: assertValueType("boolean"),

@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import type { File, Scope, NodePath } from "@babel/core";
 
 function isPureVoid(node: t.Node) {
@@ -186,14 +186,51 @@ export class DestructuringTransformer {
     }
   }
 
-  toArray(node: t.Expression, count?: boolean | number) {
+  toArray(node: t.Expression, count?: false | number) {
     if (
       this.iterableIsArray ||
       (t.isIdentifier(node) && this.arrayRefSet.has(node.name))
     ) {
       return node;
     } else {
-      return this.scope.toArray(node, count, this.arrayLikeIsIterable);
+      const { scope, arrayLikeIsIterable } = this;
+
+      if (t.isIdentifier(node)) {
+        const binding = scope.getBinding(node.name);
+        if (binding?.constant && binding.path.isGenericType("Array")) {
+          return node;
+        }
+      }
+
+      if (t.isArrayExpression(node)) {
+        return node;
+      }
+
+      if (t.isIdentifier(node, { name: "arguments" })) {
+        return template.expression.ast`
+          Array.prototype.slice.call(${node})
+        `;
+      }
+
+      let helperName;
+      const args = [node];
+      if (typeof count === "number") {
+        args.push(t.numericLiteral(count));
+
+        // Used in array-rest to create an array from a subset of an iterable.
+        helperName = "slicedToArray";
+        // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+      } else {
+        // Used in array-rest to create an array
+        helperName = "toArray";
+      }
+
+      if (arrayLikeIsIterable) {
+        args.unshift(scope.path.hub.addHelper(helperName));
+        helperName = "maybeArrayLike";
+      }
+
+      return t.callExpression(scope.path.hub.addHelper(helperName), args);
     }
   }
 

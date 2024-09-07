@@ -28,7 +28,7 @@
     "core-js": "^3.30.2",
     "node-environment-flags": "condition:BABEL_8_BREAKING ? : ^1.0.5",
     "regenerator-runtime": "^0.14.0",
-    "v8flags": "condition:BABEL_8_BREAKING ? ^4.0.0 : ^3.1.1"
+    "v8flags": "condition:BABEL_8_BREAKING ? ^4.0.1 : ^3.1.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -50,7 +50,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
+          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
         }
       },
       {

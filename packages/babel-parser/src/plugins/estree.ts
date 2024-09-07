@@ -436,7 +436,7 @@ export default (superClass: typeof Parser) =>
           .arguments[0] as N.Expression;
         if (
           this.hasPlugin("importAttributes") ||
-          this.hasPlugin("importAssertions")
+          (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
         ) {
           (node as N.Node as N.EstreeImportExpression).options =
             (node.arguments[1] as N.Expression) ?? null;

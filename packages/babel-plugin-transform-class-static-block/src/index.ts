@@ -18,7 +18,8 @@ function generateUid(scope: Scope, denyList: Set<string>) {
   let uid;
   let i = 1;
   do {
-    uid = scope._generateUid(name, i);
+    uid = `_${name}`;
+    if (i > 1) uid += i;
     i++;
   } while (denyList.has(uid));
   return uid;

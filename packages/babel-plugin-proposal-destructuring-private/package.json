@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
   },
@@ -53,7 +54,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
+          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
         }
       },
       {}

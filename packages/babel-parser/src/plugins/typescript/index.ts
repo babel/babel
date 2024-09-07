@@ -568,12 +568,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.argument = super.parseExprAtom() as N.StringLiteral;
       if (
         this.hasPlugin("importAttributes") ||
-        this.hasPlugin("importAssertions")
+        (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
       ) {
         node.options = null;
       }
       if (this.eat(tt.comma)) {
-        this.expectImportAttributesPlugin();
+        if (
+          process.env.BABEL_8_BREAKING ||
+          !this.hasPlugin("importAssertions")
+        ) {
+          this.expectPlugin("importAttributes");
+        }
         if (!this.match(tt.parenR)) {
           node.options = super.parseMaybeAssignAllowIn();
           this.eat(tt.comma);

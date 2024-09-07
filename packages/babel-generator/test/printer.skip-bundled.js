@@ -10,6 +10,9 @@ describe("Printer", () => {
 
     Object.keys(Printer.prototype).forEach(function (type) {
       if (!/[A-Z]/.test(type[0])) return;
+
+      if (type === "DecimalLiteral") return;
+
       expect(t.VISITOR_KEYS[type]).toBeTruthy();
     });
   });
