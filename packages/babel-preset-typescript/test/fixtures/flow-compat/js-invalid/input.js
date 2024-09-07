@@ -1,0 +1,1 @@
+foo as number;
