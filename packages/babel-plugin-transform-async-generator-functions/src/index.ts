@@ -84,7 +84,7 @@ export default declare(api => {
       path.traverse(yieldStarVisitor, state);
 
       path.setData(
-        "babel-plugin-transform-async-generator-functions#async_generator_function",
+        "@babel/plugin-transform-async-generator-functions/async_generator_function",
         true,
       );
 
