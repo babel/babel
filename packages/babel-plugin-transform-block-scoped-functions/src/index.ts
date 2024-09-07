@@ -20,7 +20,7 @@ export default declare(api => {
           path.node.async ||
           path.node.generator ||
           path.getData(
-            "babel-plugin-transform-async-generator-functions#async_generator_function",
+            "@babel/plugin-transform-async-generator-functions/async_generator_function",
           )
         )
       ) {
