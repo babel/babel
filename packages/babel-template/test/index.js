@@ -215,46 +215,46 @@ describe("@babel/template", function () {
 
     it("should return assertions in ImportDeclaration when using .ast", () => {
       const result = template.ast(
-        `import json from "./foo.json" assert { type: "json" };`,
+        `import json from "./foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportNamedDeclaration when using .ast", () => {
       const result = template.ast(
-        `export { default as foo2 } from "foo.json" assert { type: "json" };`,
+        `export { default as foo2 } from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
       const result = template.ast(
-        `export foo2 from "foo.json" assert { type: "json" };`,
+        `export foo2 from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions", "exportDefaultFrom"],
+          plugins: ["importAttributes", "exportDefaultFrom"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportAllDeclaration when using .ast", () => {
       const result = template.ast(
-        `export * from "foo.json" assert { type: "json" };`,
+        `export * from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should replace JSX placeholder", () => {

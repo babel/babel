@@ -123,13 +123,17 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       }
     }
   }
-  if (
-    pluginsMap.has("importAttributes") &&
-    pluginsMap.has("importAssertions")
-  ) {
-    throw new Error(
-      "Cannot combine importAssertions and importAttributes plugins.",
-    );
+  if (pluginsMap.has("importAssertions")) {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "`importAssertions` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`." +
+          " To use the non-standard `assert` syntax you can enable the `deprecatedAssertSyntax: true` option of those plugins.",
+      );
+    } else if (pluginsMap.has("importAttributes")) {
+      throw new Error(
+        "Cannot combine importAssertions and importAttributes plugins.",
+      );
+    }
   }
 
   if (pluginsMap.has("recordAndTuple")) {

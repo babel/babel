@@ -953,32 +953,29 @@ export default abstract class ExpressionParser extends LValParser {
     );
   }
 
-  expectImportAttributesPlugin() {
-    if (!this.hasPlugin("importAssertions")) {
-      this.expectPlugin("importAttributes");
-    }
-  }
-
   finishCallExpression<T extends N.CallExpression | N.OptionalCallExpression>(
     node: Undone<T>,
     optional: boolean,
   ): T {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
-        if (process.env.BABEL_8_BREAKING) {
-          this.expectImportAttributesPlugin();
-        } else {
-          if (!this.hasPlugin("moduleAttributes")) {
-            this.expectImportAttributesPlugin();
-          }
+        if (
+          process.env.BABEL_8_BREAKING ||
+          !(
+            this.hasPlugin("moduleAttributes") ||
+            this.hasPlugin("importAssertions")
+          )
+        ) {
+          this.expectPlugin("importAttributes");
         }
       }
       if (node.arguments.length === 0 || node.arguments.length > 2) {
         this.raise(Errors.ImportCallArity, node, {
           maxArgumentCount:
             this.hasPlugin("importAttributes") ||
-            this.hasPlugin("importAssertions") ||
-            this.hasPlugin("moduleAttributes")
+            (!process.env.BABEL_8_BREAKING &&
+              (this.hasPlugin("importAssertions") ||
+                this.hasPlugin("moduleAttributes")))
               ? 2
               : 1,
         });
@@ -1018,8 +1015,9 @@ export default abstract class ExpressionParser extends LValParser {
           if (
             dynamicImport &&
             !this.hasPlugin("importAttributes") &&
-            !this.hasPlugin("importAssertions") &&
-            !this.hasPlugin("moduleAttributes")
+            (process.env.BABEL_8_BREAKING ||
+              (!this.hasPlugin("importAssertions") &&
+                !this.hasPlugin("moduleAttributes")))
           ) {
             this.raise(
               Errors.ImportCallArgumentTrailingComma,
@@ -2984,12 +2982,20 @@ export default abstract class ExpressionParser extends LValParser {
     node.source = this.parseMaybeAssignAllowIn();
     if (
       this.hasPlugin("importAttributes") ||
-      this.hasPlugin("importAssertions")
+      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
     ) {
       node.options = null;
     }
     if (this.eat(tt.comma)) {
-      this.expectImportAttributesPlugin();
+      if (
+        process.env.BABEL_8_BREAKING ||
+        !(
+          this.hasPlugin("moduleAttributes") ||
+          this.hasPlugin("importAssertions")
+        )
+      ) {
+        this.expectPlugin("importAttributes");
+      }
       if (!this.match(tt.parenR)) {
         node.options = this.parseMaybeAssignAllowIn();
         this.eat(tt.comma);
