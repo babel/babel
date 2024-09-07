@@ -32,7 +32,7 @@ type Plugin =
   | IF_BABEL_7<"logicalAssignment">
   | "importAssertions" // deprecated
   | "importAttributes"
-  | "importReflection"
+  | IF_BABEL_7<"importReflection">
   | "moduleBlocks"
   | IF_BABEL_7<"moduleStringNames">
   | IF_BABEL_7<"nullishCoalescingOperator">

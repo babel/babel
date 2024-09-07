@@ -666,10 +666,10 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
         }
       },
       LogicalExpression(path) {
-        const res = evaluate(path.get("test"));
+        const res = evaluate(path);
         if (res.unrelated) return;
         if (res.replacement) {
-          path.get("test").replaceWith(res.replacement);
+          path.replaceWith(res.replacement);
         } else {
           path.replaceWith(t.booleanLiteral(res.value));
         }

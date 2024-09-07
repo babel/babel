@@ -1,0 +1,4 @@
+{
+  "throws": "This experimental syntax requires enabling the parser plugin: \"importReflection\". (1:7)",
+  "BABEL_8_BREAKING": false
+}

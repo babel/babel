@@ -21,7 +21,9 @@ export default (_: any, opts: any = {}) => {
             { syntaxType: opts.recordAndTupleSyntax ?? "hash" },
           ],
       babelPlugins.syntaxModuleBlocks,
-      babelPlugins.syntaxImportReflection,
+      ...(process.env.BABEL_8_BREAKING
+        ? []
+        : [babelPlugins.syntaxImportReflection]),
     ],
   };
 };

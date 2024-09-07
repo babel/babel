@@ -179,10 +179,19 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         " only supported value is '2023-07'.",
     );
   }
-  if (process.env.BABEL_8_BREAKING && pluginsMap.has("decimal")) {
-    throw new Error(
-      "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
-    );
+
+  if (process.env.BABEL_8_BREAKING) {
+    if (pluginsMap.has("decimal")) {
+      throw new Error(
+        "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
+      );
+    }
+    if (pluginsMap.has("importReflection")) {
+      throw new Error(
+        "The 'importReflection' plugin has been removed in Babel 8. Use 'sourcePhaseImports' instead, and " +
+          "replace 'import module' with 'import source' in your code.",
+      );
+    }
   }
 }
 
