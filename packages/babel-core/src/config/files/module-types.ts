@@ -55,22 +55,26 @@ function loadCjsDefault(filepath: string) {
   }
 
   if (process.env.BABEL_8_BREAKING) {
-    return module?.__esModule ? module.default : module;
+    return module != null &&
+      (module.__esModule || module[Symbol.toStringTag] === "Module")
+      ? module.default
+      : module;
   } else {
-    return module?.__esModule
+    return module != null &&
+      (module.__esModule || module[Symbol.toStringTag] === "Module")
       ? module.default ||
           /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
       : module;
   }
 }
 
-const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
+const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
   filepath: string,
 ) {
   const url = pathToFileURL(filepath).toString();
 
   if (process.env.BABEL_8_BREAKING) {
-    return (await import(url)).default;
+    return await import(url);
   } else {
     if (!import_) {
       throw new ConfigError(
@@ -79,16 +83,29 @@ const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
       );
     }
 
-    return (await import_(url)).default;
+    return await import_(url);
   }
 });
 
+const SUPPORTED_EXTENSIONS = new Set([".js", ".mjs", ".cjs", ".cts"] as const);
+type SetValue<T extends Set<unknown>> = T extends Set<infer U> ? U : never;
+
 export default function* loadCodeDefault(
   filepath: string,
-  asyncError: string,
+  loader: "require" | "import" | "auto",
+  esmError: string,
+  tlaError: string,
 ): Handler<unknown> {
-  switch (path.extname(filepath)) {
-    case ".cjs":
+  let async;
+
+  let ext = path.extname(filepath);
+  if (!SUPPORTED_EXTENSIONS.has(ext as any)) ext = ".js";
+
+  const pattern =
+    `${loader} ${ext}` as `${typeof loader} ${SetValue<typeof SUPPORTED_EXTENSIONS>}`;
+  switch (pattern) {
+    case "require .cjs":
+    case "import .cjs":
       if (process.env.BABEL_8_BREAKING) {
         return loadCjsDefault(filepath);
       } else {
@@ -98,11 +115,11 @@ export default function* loadCodeDefault(
           /* fallbackToTranspiledModule */ arguments[2],
         );
       }
-    case ".mjs":
-      break;
-    case ".cts":
+    case "require .cts":
+    case "import .cts":
       return loadCtsDefault(filepath);
-    default:
+    case "require .js":
+    case "require .mjs": // Some versions of Node.js support require(esm):
       try {
         if (process.env.BABEL_8_BREAKING) {
           return loadCjsDefault(filepath);
@@ -114,13 +131,24 @@ export default function* loadCodeDefault(
           );
         }
       } catch (e) {
+        if (
+          e.code === "ERR_REQUIRE_ASYNC_MODULE" &&
+          !(async ??= yield* isAsync())
+        ) {
+          throw new ConfigError(tlaError, filepath);
+        }
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
+    // fall through: require() failed due to ESM or TLA, try import()
+    case "import .js":
+    case "import .mjs":
+      if ((async ??= yield* isAsync())) {
+        return (yield* waitFor(loadMjsFromPath(filepath))).default;
+      }
+      throw new ConfigError(esmError, filepath);
+    default:
+      throw new Error("Internal Babel error: unreachable code.");
   }
-  if (yield* isAsync()) {
-    return yield* waitFor(loadMjsDefault(filepath));
-  }
-  throw new ConfigError(asyncError, filepath);
 }
 
 function loadCtsDefault(filepath: string) {
