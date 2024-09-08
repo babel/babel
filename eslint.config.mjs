@@ -9,6 +9,7 @@ import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
+import pluginUnicorn from "eslint-plugin-unicorn";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
@@ -104,6 +105,7 @@ export default [
       import: pluginImport,
       n: pluginN,
       prettier: pluginPrettier,
+      unicorn: pluginUnicorn,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
@@ -112,6 +114,7 @@ export default [
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
+      "unicorn/prefer-set-has": "error",
     },
   },
   ...typescriptEslint.config({
