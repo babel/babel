@@ -13,6 +13,7 @@ import os from "node:os";
 
 import JSON5 from "json5";
 import { glob } from "glob";
+import { setTimeout } from "node:timers/promises";
 
 const tscPath = require.resolve("typescript/lib/tsc.js");
 
@@ -130,7 +131,7 @@ class Pool {
       this.#running.delete(taskProcess);
 
       // Spin the event loop so that #run can pick up the next task
-      await 0;
+      await setTimeout(0);
 
       this.#runTasks();
 
