@@ -285,7 +285,11 @@ export function updateSiblingKeys(
   const paths = getCachedPaths(this.hub, this.parent) || ([] as never[]);
 
   for (const [, path] of paths) {
-    if (typeof path.key === "number" && path.key >= fromIndex) {
+    if (
+      typeof path.key === "number" &&
+      path.container === this.container &&
+      path.key >= fromIndex
+    ) {
       path.key += incrementBy;
     }
   }
