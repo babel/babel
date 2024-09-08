@@ -111,7 +111,8 @@
   },
   "lint-staged": {
     "./Makefile.source.mjs": [
-      "node ./scripts/pack-script.js --auto"
+      "node ./scripts/pack-script.js --auto",
+      "git add Makefile.js"
     ],
     "*.{js,cjs,mjs,ts,cts,mts}": [
       "eslint --format=codeframe --cache --cache-strategy=content"

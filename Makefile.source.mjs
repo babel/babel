@@ -423,13 +423,13 @@ target["lint-prettier"] = function () {
 };
 
 target["fix"] = function () {
-  target["fix-eslint"]();
+  target["fix-js"]();
   target["fix-prettier"]();
 };
 
 target["fix-js"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
-  eslint("--eslint");
+  eslint("--fix");
 };
 
 target["fix-prettier"] = function () {
