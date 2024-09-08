@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of the React source tree.
  */
 
-const scriptTypes = ["text/jsx", "text/babel"];
+const scriptTypes = new Set(["text/jsx", "text/babel"]);
 
 import type { transform } from "./index.ts";
 import type { InputOptions } from "@babel/core";
@@ -241,7 +241,7 @@ export function runScripts(
     const script = scripts.item(i);
     // Support the old type="text/jsx;harmony=true"
     const type = script.type.split(";")[0];
-    if (scriptTypes.includes(type)) {
+    if (scriptTypes.has(type)) {
       jsxScripts.push(script);
     }
   }
