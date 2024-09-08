@@ -432,7 +432,7 @@ target["fix-json"] = function () {
     "prettier",
     `{${SOURCES.join(",")}}/*/test/fixtures/**/options.json`,
     "--write",
-    "--loglevel",
+    "--log-level",
     "warn",
   ]);
 };
