@@ -1,5 +1,4 @@
 {
-  "eslint.experimental.useFlatConfig": true,
   "json.schemas": [
     {
       "fileMatch": [

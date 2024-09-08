@@ -7,7 +7,7 @@ import js from "@eslint/js";
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
-import pluginPrettier from "eslint-plugin-prettier";
+import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
@@ -103,13 +103,11 @@ export default [
     plugins: {
       import: pluginImport,
       n: pluginN,
-      prettier: pluginPrettier,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
     rules: {
       "n/no-process-exit": "error",
-      "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
     },
@@ -211,6 +209,7 @@ export default [
       "@typescript-eslint/no-unsafe-function-type": "off",
     },
   }),
+  configPrettier,
   {
     files: sourceFiles("js,ts,cjs,mjs"),
     languageOptions: {
