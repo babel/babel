@@ -19,19 +19,21 @@ function getVisitorValues(nodeType: string, client: Client) {
 
   const { FLOW_FLIPPED_ALIAS_KEYS, VISITOR_KEYS } = client.getTypesInfo();
 
-  const flowFlippedAliasKeys = FLOW_FLIPPED_ALIAS_KEYS.concat([
-    "ArrayPattern",
-    "ClassDeclaration",
-    "ClassExpression",
-    "FunctionDeclaration",
-    "FunctionExpression",
-    "Identifier",
-    "ObjectPattern",
-    "RestElement",
-  ]);
+  const flowFlippedAliasKeys = new Set(
+    FLOW_FLIPPED_ALIAS_KEYS.concat([
+      "ArrayPattern",
+      "ClassDeclaration",
+      "ClassExpression",
+      "FunctionDeclaration",
+      "FunctionExpression",
+      "Identifier",
+      "ObjectPattern",
+      "RestElement",
+    ]),
+  );
 
   visitorKeysMap = Object.entries(VISITOR_KEYS).reduce((acc, [key, value]) => {
-    if (!flowFlippedAliasKeys.includes(value)) {
+    if (!flowFlippedAliasKeys.has(value)) {
       // @ts-expect-error FIXME: value is not assignable to type string[]
       acc[key] = value;
     }

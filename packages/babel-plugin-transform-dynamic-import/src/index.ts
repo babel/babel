@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-const SUPPORTED_MODULES = ["commonjs", "amd", "systemjs"];
+const SUPPORTED_MODULES = new Set(["commonjs", "amd", "systemjs"]);
 
 const MODULES_NOT_FOUND = `\
 @babel/plugin-transform-dynamic-import depends on a modules
@@ -39,7 +39,7 @@ export default declare(api => {
       Program() {
         const modules = this.file.get("@babel/plugin-transform-modules-*");
 
-        if (!SUPPORTED_MODULES.includes(modules)) {
+        if (!SUPPORTED_MODULES.has(modules)) {
           throw new Error(MODULES_NOT_FOUND);
         }
       },
