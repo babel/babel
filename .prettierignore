@@ -26,7 +26,5 @@ packages/babel-runtime/helpers/**
 **/tsconfig.*.json
 
 # Should enable?
-*.sublime-project
 **/*.yml
 **/*.md
-.c8rc
