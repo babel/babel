@@ -21,11 +21,9 @@ export default declare(api => {
 
   return {
     name: "transform-numeric-separator",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-numeric-separator").default,
+    manipulateOptions: process.env.BABEL_8_BREAKING
+      ? undefined
+      : (_, parser) => parser.plugins.push("numericSeparator"),
 
     visitor: {
       NumericLiteral: remover,

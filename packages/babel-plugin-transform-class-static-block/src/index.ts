@@ -25,16 +25,14 @@ function generateUid(scope: Scope, denyList: Set<string>) {
   return uid;
 }
 
-export default declare(({ types: t, template, assertVersion, version }) => {
+export default declare(({ types: t, template, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.12.0"));
 
   return {
     name: "transform-class-static-block",
-    inherits:
-      USE_ESM || IS_STANDALONE || version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-class-static-block").default,
+    manipulateOptions: process.env.BABEL_8_BREAKING
+      ? undefined
+      : (_, parser) => parser.plugins.push("classStaticBlock"),
 
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it

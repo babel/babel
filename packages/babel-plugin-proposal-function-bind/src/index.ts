@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
@@ -52,7 +51,7 @@ export default declare(api => {
 
   return {
     name: "proposal-function-bind",
-    inherits: syntaxFunctionBind,
+    manipulateOptions: (_, parser) => parser.plugins.push("functionBind"),
 
     visitor: {
       CallExpression({ node, scope }) {

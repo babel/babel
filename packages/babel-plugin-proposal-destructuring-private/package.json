@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-destructuring-private": "workspace:^",
     "@babel/plugin-transform-destructuring": "workspace:^",
     "@babel/plugin-transform-parameters": "workspace:^"
   },

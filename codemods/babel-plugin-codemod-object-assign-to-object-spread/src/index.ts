@@ -2,10 +2,9 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 export default function ({ types: t }: PluginAPI): PluginObject {
   return {
-    inherits: USE_ESM
+    manipulateOptions: process.env.BABEL_8_BREAKING
       ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-object-rest-spread").default,
+      : (_, parser) => parser.plugins.push("objectRestSpread"),
 
     visitor: {
       CallExpression(path) {

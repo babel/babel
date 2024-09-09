@@ -16,11 +16,9 @@ export default declare(api => {
 
   return {
     name: "transform-json-strings",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-json-strings").default,
+    manipulateOptions: process.env.BABEL_8_BREAKING
+      ? undefined
+      : (_, parser) => parser.plugins.push("jsonStrings"),
 
     visitor: {
       "DirectiveLiteral|StringLiteral"({

@@ -299,11 +299,9 @@ export default declare((api, opts: Options) => {
 
   return {
     name: "transform-object-rest-spread",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-object-rest-spread").default,
+    manipulateOptions: process.env.BABEL_8_BREAKING
+      ? undefined
+      : (_, parser) => parser.plugins.push("objectRestSpread"),
 
     visitor: {
       // function a({ b, ...c }) {}

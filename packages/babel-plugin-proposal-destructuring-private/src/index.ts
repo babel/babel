@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
 import {
   hasPrivateKeys,
   hasPrivateClassElement,
@@ -210,7 +209,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
 
   return {
     name: "proposal-destructuring-private",
-    inherits: syntaxDestructuringPrivate,
+    manipulateOptions: (_, p) => p.plugins.push("destructuringPrivate"),
     visitor: visitor,
   };
 });

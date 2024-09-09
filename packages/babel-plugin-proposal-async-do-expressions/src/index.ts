@@ -1,12 +1,14 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxAsyncDoExpressions from "@babel/plugin-syntax-async-do-expressions";
 
 export default declare(({ types: t, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.13.0"));
 
   return {
     name: "proposal-async-do-expressions",
-    inherits: syntaxAsyncDoExpressions,
+
+    manipulateOptions: (_, parser) =>
+      parser.plugins.push("asyncDoExpressions", "doExpressions"),
+
     visitor: {
       DoExpression: {
         exit(path) {

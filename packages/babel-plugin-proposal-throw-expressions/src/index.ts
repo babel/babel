@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxThrowExpressions from "@babel/plugin-syntax-throw-expressions";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -7,7 +6,7 @@ export default declare(api => {
 
   return {
     name: "proposal-throw-expressions",
-    inherits: syntaxThrowExpressions,
+    manipulateOptions: (_, parser) => parser.plugins.push("throwExpressions"),
 
     visitor: {
       UnaryExpression(path) {

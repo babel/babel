@@ -2,8 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, Scope } from "@babel/core";
 import { defineCommonJSHook } from "@babel/plugin-transform-modules-commonjs";
 
-import syntaxImportDefer from "@babel/plugin-syntax-import-defer";
-
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.23.0"));
   // We need the explicit type annotation otherwise when using t.assert* ts
@@ -25,7 +23,7 @@ export default declare(api => {
   return {
     name: "proposal-import-defer",
 
-    inherits: syntaxImportDefer,
+    manipulateOptions: (_, p) => p.plugins.push("deferredImportEvaluation"),
 
     pre() {
       const { file } = this;
