@@ -13,6 +13,7 @@ import os from "node:os";
 
 import JSON5 from "json5";
 import { glob } from "glob";
+import { setTimeout } from "node:timers/promises";
 
 const tscPath = require.resolve("typescript/lib/tsc.js");
 
@@ -31,7 +32,7 @@ const projectToDependencies = new Map();
     const tsconfig = JSON5.parse(
       readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
     );
-    const references = tsconfig.references?.map(({ path }) =>
+    const references = tsconfig.references.map(({ path }) =>
       resolvePath(project, path)
     );
 
@@ -126,11 +127,11 @@ class Pool {
     taskProcess.once("exit", async code => {
       const startTime = this.#running.get(taskProcess);
       const duration = performance.now() - startTime;
-      this.#running.delete(taskProcess);
       await this.#onTaskDone(tasks, code, duration);
+      this.#running.delete(taskProcess);
 
-      // Spin  the event loop so that #run can pick up the next task
-      await setTimeout(() => {}, 0);
+      // Spin the event loop so that #run can pick up the next task
+      await setTimeout(0);
 
       this.#runTasks();
 
@@ -201,7 +202,7 @@ const pool = new Pool({
     done += projects.length;
     if (!process.env.TSCHECK_SILENT) {
       console.log(
-        `[${done}/${total}] ${projects.map(project => "./" + relativePath(process.cwd(), project)).join(" ")} took ${Math.round(duration) / 1e3}s`
+        `[${done}/${total}] ${projects.map(project => relativePath(process.cwd(), project)).join(" ")} took ${Math.round(duration) / 1e3}s`
       );
     }
     for (const project of projects) {
