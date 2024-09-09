@@ -415,6 +415,7 @@ target["lint"] = function () {
 target["lint-ci"] = function () {
   target["tscheck"]();
   eslint();
+  target["lint-prettier"]();
   target["prepublish-prepare-dts-no-clean"]();
 };
 

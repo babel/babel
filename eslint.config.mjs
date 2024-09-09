@@ -365,4 +365,10 @@ export default [
       "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
     },
   },
+  {
+    files: ["packages/babel-parser/typings/babel-parser.d.ts"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "off",
+    },
+  },
 ];
