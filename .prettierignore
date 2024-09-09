@@ -2,13 +2,13 @@ package.json
 packages/babel-preset-env/data
 packages/babel-compat-data/data
 packages/babel-compat-data/scripts/data/overlapping-plugins.js
-packages/babel-core/src/vendor
-packages/*/test/fixtures/**
-eslint/*/test/fixtures/**
-codemodes/*/test/fixtures/**
+packages/babel-core/src/vendor/**
+**/test/fixtures/**
+packages/babel-standalone/examples/**
+packages/babel-parser/test/expressions/**
 
 CHANGELOG.md
 .github/*.md
-.yarnrc/release/*
+.yarn/releases/*
 
 Makefile.js
