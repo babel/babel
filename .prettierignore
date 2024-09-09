@@ -7,6 +7,8 @@ packages/babel-core/src/vendor/**
 packages/babel-standalone/examples/**
 packages/babel-parser/test/expressions/**
 scripts/integration-tests/fixtures/**
+packages/babel-parser/test/schema.json
+test/runtime-integration/node.cjs
 
 CHANGELOG.md
 .github/*.md
@@ -16,17 +18,15 @@ CHANGELOG.md
 lib/archived-libs.d.ts
 packages/babel-parser/typings/babel-parser.d.ts
 Makefile.js
-
-# Should enable?
 packages/babel-runtime-corejs2/helpers/**
 packages/babel-runtime-corejs2/core-js/**
 packages/babel-runtime-corejs3/helpers/**
 packages/babel-runtime/helpers/**
 **/tsconfig.json
 **/tsconfig.*.json
+
+# Should enable?
 *.sublime-project
 **/*.yml
 **/*.md
-packages/babel-parser/test/schema.json
 .c8rc
-test/runtime-integration/node.cjs
