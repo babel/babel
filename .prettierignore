@@ -14,6 +14,7 @@ CHANGELOG.md
 
 # Generated
 lib/archived-libs.d.ts
+packages/babel-parser/typings/babel-parser.d.ts
 Makefile.js
 
 # Should enable?
