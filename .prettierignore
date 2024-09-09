@@ -3,11 +3,12 @@ packages/babel-preset-env/data
 packages/babel-compat-data/data
 packages/babel-compat-data/scripts/data/overlapping-plugins.js
 packages/babel-core/src/vendor
-packages/*/test/fixtures/**/input.*
-packages/*/test/fixtures/**/exec.*
-packages/*/test/fixtures/**/output.*
+packages/*/test/fixtures/**
+eslint/*/test/fixtures/**
+codemodes/*/test/fixtures/**
 
 CHANGELOG.md
 .github/*.md
+.yarnrc/release/*
 
 Makefile.js
