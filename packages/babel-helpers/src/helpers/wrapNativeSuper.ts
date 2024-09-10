@@ -16,7 +16,7 @@ export default function _wrapNativeSuper(Class: Function | null) {
     if (typeof Class !== "function") {
       throw new TypeError("Super expression must either be null or a function");
     }
-    if (typeof _cache !== "undefined") {
+    if (_cache !== undefined) {
       if (_cache.has(Class)) return _cache.get(Class);
       _cache.set(Class, Wrapper);
     }

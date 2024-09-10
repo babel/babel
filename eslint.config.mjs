@@ -115,6 +115,11 @@ export default [
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
       "unicorn/prefer-set-has": "error",
+      "unicorn/no-typeof-undefined": "error",
+      "unicorn/prefer-array-find": "error",
+      "unicorn/prefer-array-index-of": "error",
+      "unicorn/prefer-includes": "error",
+      "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
   ...typescriptEslint.config({
@@ -334,6 +339,7 @@ export default [
       "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
       "@typescript-eslint/prefer-optional-chain": "off",
+      "unicorn/prefer-includes": "off",
     },
   },
   {

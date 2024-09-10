@@ -55,7 +55,7 @@ export default function is(
     return false;
   }
 
-  if (typeof opts === "undefined") {
+  if (opts === undefined) {
     return true;
   } else {
     return shallowEqual(node, opts);

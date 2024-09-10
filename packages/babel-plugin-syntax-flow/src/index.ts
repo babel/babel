@@ -12,11 +12,11 @@ export default declare((api, options: Options) => {
   // the @flow pragma was provided.
   const { all, enums } = options;
 
-  if (typeof all !== "boolean" && typeof all !== "undefined") {
+  if (typeof all !== "boolean" && all !== undefined) {
     throw new Error(".all must be a boolean, or undefined");
   }
 
-  if (typeof enums !== "boolean" && typeof enums !== "undefined") {
+  if (typeof enums !== "boolean" && enums !== undefined) {
     throw new Error(".enums must be a boolean, or undefined");
   }
 
