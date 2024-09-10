@@ -127,7 +127,12 @@ export default [
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        projectService: true,
+        projectService: {
+          allowDefaultProject: [
+            "packages/babel-helpers/src/helpers/applyDecs2305.ts",
+            "scripts/repo-utils/index.d.cts",
+          ],
+        },
       },
     },
     plugins: {
