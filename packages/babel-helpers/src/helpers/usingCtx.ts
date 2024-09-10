@@ -78,6 +78,7 @@ export default function _usingCtx(): UsingCtxReturn {
       if (typeof dispose !== "function") {
         throw new TypeError("Object is not disposable.");
       }
+      // @ts-expect-error use before assignment
       if (inner) {
         dispose = function () {
           try {
@@ -144,7 +145,7 @@ export default function _usingCtx(): UsingCtxReturn {
           }
         }
 
-        if (error !== empty) throw error;
+        if (error !== empty) throw error as Error;
       }
 
       function err(e: Error): Promise<void> | void {

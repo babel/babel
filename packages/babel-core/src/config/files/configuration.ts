@@ -53,7 +53,7 @@ const runConfig = makeWeakCache(function* runConfig(
   options: InputOptions | null;
   cacheNeedsConfiguration: boolean;
 }> {
-  // @ts-expect-error - if we want to make it possible to use async configs
+  // if we want to make it possible to use async configs
   yield* [];
 
   return {
