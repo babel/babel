@@ -98,7 +98,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
         // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
-        // @ts-expect-error - If we want to support async .pre
+        // If we want to support async .pre
         yield* [];
 
         if (isThenable(result)) {
@@ -130,7 +130,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
         // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
-        // @ts-expect-error - If we want to support async .post
+        // If we want to support async .post
         yield* [];
 
         if (isThenable(result)) {

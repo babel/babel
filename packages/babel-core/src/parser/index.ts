@@ -27,7 +27,7 @@ export default function* parser(
     if (results.length === 0) {
       return parse(code, parserOpts);
     } else if (results.length === 1) {
-      // @ts-expect-error - If we want to allow async parsers
+      // If we want to allow async parsers
       yield* [];
       if (typeof results[0].then === "function") {
         throw new Error(
