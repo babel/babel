@@ -81,13 +81,15 @@ class TestRunner {
   async updateAllowlist(summary) {
     const contents = await fs.readFile(this.allowlist, "utf-8");
 
-    const toRemove = summary.disallowed.success
-      .concat(summary.disallowed.failure)
-      .map(test => test.id)
-      .concat(summary.unrecognized);
+    const toRemove = new Set(
+      summary.disallowed.success
+        .concat(summary.disallowed.failure)
+        .map(test => test.id)
+        .concat(summary.unrecognized)
+    );
 
-    const allowedFalsePositiveIds = summary.allowed.falsePositive.map(
-      test => test.id
+    const allowedFalsePositiveIds = new Set(
+      summary.allowed.falsePositive.map(test => test.id)
     );
 
     let invalidWithoutError = [];
@@ -95,8 +97,8 @@ class TestRunner {
 
     for (const line of contents.split("\n")) {
       const testId = line.replace(/#.*$/, "").trim();
-      if (testId && !toRemove.includes(testId)) {
-        if (allowedFalsePositiveIds.includes(testId)) {
+      if (testId && !toRemove.has(testId)) {
+        if (allowedFalsePositiveIds.has(testId)) {
           invalidWithoutError.push(line);
         } else {
           validWithError.push(line);
