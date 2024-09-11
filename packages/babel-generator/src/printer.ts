@@ -1032,14 +1032,11 @@ class Printer {
   shouldPrintTrailingComma(listEnd: string): boolean | null {
     if (!this.format.preserveFormat) return null;
 
-    let listEndIndex: number;
-    this._tokenMap.find(this._currentNode, (token, index) => {
-      if (this._tokenMap.matchesOriginal(token, listEnd)) {
-        listEndIndex = index;
-        return true;
-      }
-    });
-    if (listEndIndex == null) return null;
+    const listEndIndex = this._tokenMap.findLastIndex(
+      this._currentNode,
+      token => this._tokenMap.matchesOriginal(token, listEnd),
+    );
+    if (listEndIndex <= 0) return null;
     return this._tokenMap.matchesOriginal(this._tokens[listEndIndex - 1], ",");
   }
 

@@ -8,6 +8,10 @@ export class TokenMap {
   _source: string;
 
   _nodesToTokenIndexes: Map<t.Node, number[]> = new Map();
+  _nodesOccurrencesCountCache: Map<
+    t.Node,
+    { test: string; count: number; i: number }
+  > = new Map();
 
   _tokensCache = new Map<t.Node, { first: number; last: number }>();
 
@@ -37,12 +41,28 @@ export class TokenMap {
   ): Token | null {
     const indexes = this._nodesToTokenIndexes.get(node);
     if (indexes) {
-      for (const k of indexes) {
-        const tok = this._tokens[k];
-        if (condition(tok, k)) return tok;
+      for (let k = 0; k < indexes.length; k++) {
+        const index = indexes[k];
+        const tok = this._tokens[index];
+        if (condition(tok, index)) return tok;
       }
     }
     return null;
+  }
+
+  findLastIndex(
+    node: t.Node,
+    condition: (token: Token, index: number) => boolean,
+  ): number {
+    const indexes = this._nodesToTokenIndexes.get(node);
+    if (indexes) {
+      for (let k = indexes.length - 1; k >= 0; k--) {
+        const index = indexes[k];
+        const tok = this._tokens[index];
+        if (condition(tok, index)) return index;
+      }
+    }
+    return -1;
   }
 
   findMatching(
@@ -52,10 +72,32 @@ export class TokenMap {
   ): Token | null {
     const indexes = this._nodesToTokenIndexes.get(node);
     if (indexes) {
-      for (const k of indexes) {
-        const tok = this._tokens[k];
+      let i = 0;
+      const count = occurrenceCount;
+
+      // To avoid O(n^2) search when printing lists (such as arrays), we
+      // cache the last index of a given token for a given occurrence count.
+      // If then we are asked to find the next occurrence of the same token,
+      // we start from the index of the previously found token.
+      // This cache only kicks in after 2 tokens of the same type, to avoid
+      // overhead in the simple case of having unique tokens per node.
+      if (count > 1) {
+        const cache = this._nodesOccurrencesCountCache.get(node);
+        if (cache && cache.test === test && cache.count < count) {
+          i = cache.i + 1;
+          occurrenceCount -= cache.count + 1;
+        }
+      }
+
+      for (; i < indexes.length; i++) {
+        const tok = this._tokens[indexes[i]];
         if (this.matchesOriginal(tok, test)) {
-          if (occurrenceCount === 0) return tok;
+          if (occurrenceCount === 0) {
+            if (count > 0) {
+              this._nodesOccurrencesCountCache.set(node, { test, count, i });
+            }
+            return tok;
+          }
           occurrenceCount--;
         }
       }
