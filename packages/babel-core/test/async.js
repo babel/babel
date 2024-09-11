@@ -221,7 +221,7 @@ describe("asynchronicity", () => {
 
         await expect(spawnTransformSync()).rejects.toThrow(
           `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
-            ` only supported when running Babel asynchronously.`,
+            ` only supported when running Babel asynchronously`,
         );
       });
 
@@ -285,7 +285,7 @@ describe("asynchronicity", () => {
 
         await expect(spawnTransformSync()).rejects.toThrow(
           `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
-            ` only supported when running Babel asynchronously.`,
+            ` only supported when running Babel asynchronously`,
         );
       });
 
