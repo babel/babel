@@ -39,6 +39,7 @@ const FAILURES = [
   "flow/object-literal-types/input.js",
   "flow/opaque-type-alias/input.js",
   "flow/parantheses/input.js",
+  "flow/predicates/input.js",
   "flow/this-param/input.js",
   "flow/tuples/input.js",
   "flow/type-alias/input.js",
@@ -53,7 +54,7 @@ const FAILURES = [
   "importAttributesKeyword/assertions-with-to-assert/input.js",
   "importAttributesKeyword/assertions-with-to-default/input.js",
   "importAttributesKeyword/assertions-with-to-with-legacy/input.js",
-  "importAttributesKeyword/attributes-assert-to-default/input.js",
+  "importAttributesKeyword/attributes-assert-to-default-babel-7/input.js",
   "importAttributesKeyword/attributes-assert-to-with/input.js",
   "importAttributesKeyword/attributes-assert-to-with-legacy/input.js",
   "importAttributesKeyword/attributes-with-to-assert/input.js",
@@ -131,7 +132,6 @@ describe("experimental_preserveFormat", () => {
               try {
                 parse(code, parserOpts);
               } catch (error) {
-                // eslint-disable-next-line jest/no-standalone-expect
                 expect([code, error]).toEqual([input, null]);
               }
             });
