@@ -9,6 +9,7 @@ import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
 import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
+import pluginUnicorn from "eslint-plugin-unicorn";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
@@ -103,6 +104,7 @@ export default [
     plugins: {
       import: pluginImport,
       n: pluginN,
+      unicorn: pluginUnicorn,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
@@ -110,6 +112,7 @@ export default [
       "n/no-process-exit": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
+      "unicorn/prefer-set-has": "error",
     },
   },
   ...typescriptEslint.config({
@@ -122,7 +125,12 @@ export default [
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        projectService: true,
+        projectService: {
+          allowDefaultProject: [
+            "packages/babel-helpers/src/helpers/applyDecs2305.ts",
+            "scripts/repo-utils/index.d.cts",
+          ],
+        },
       },
     },
     plugins: {

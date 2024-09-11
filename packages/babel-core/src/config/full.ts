@@ -282,7 +282,7 @@ const makeDescriptorLoader = <Context, API>(
     }
 
     if (isThenable(item)) {
-      // @ts-expect-error - if we want to support async plugins
+      // if we want to support async plugins
       yield* [];
 
       throw new Error(

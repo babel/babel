@@ -29,6 +29,7 @@ declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
   ): Promise<IteratorResult<T, TReturn>>;
   throw(e: any): Promise<IteratorResult<T, TReturn>>;
   [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
+  [Symbol.asyncDispose](): Promise<void>;
 }
 
 interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {

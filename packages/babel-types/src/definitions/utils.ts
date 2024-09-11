@@ -269,7 +269,7 @@ export function chain(...fns: Array<Validator>): Validator {
   return validate;
 }
 
-const validTypeOpts = [
+const validTypeOpts = new Set([
   "aliases",
   "builder",
   "deprecatedAlias",
@@ -277,8 +277,13 @@ const validTypeOpts = [
   "inherits",
   "visitor",
   "validate",
-];
-const validFieldKeys = ["default", "optional", "deprecated", "validate"];
+]);
+const validFieldKeys = new Set([
+  "default",
+  "optional",
+  "deprecated",
+  "validate",
+]);
 
 const store = {} as Record<string, DefineTypeOpts>;
 
@@ -331,7 +336,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     opts.builder || inherits.builder || opts.visitor || [];
 
   for (const k of Object.keys(opts)) {
-    if (!validTypeOpts.includes(k)) {
+    if (!validTypeOpts.has(k)) {
       throw new Error(`Unknown type option "${k}" on ${type}`);
     }
   }
@@ -358,7 +363,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     }
 
     for (const k of Object.keys(field)) {
-      if (!validFieldKeys.includes(k)) {
+      if (!validFieldKeys.has(k)) {
         throw new Error(`Unknown field key "${k}" on ${type}.${key}`);
       }
     }

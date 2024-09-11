@@ -29,6 +29,9 @@ describe("isIdentifierName", function () {
   it("supports astral symbols", function () {
     expect(isIdentifierName("x\uDB40\uDDD5")).toBe(true);
   });
+  it("supports Unicode 16.0", () => {
+    expect(isIdentifierName("\u{105c0}")).toBe(true);
+  });
   it("supports Unicode 15.1", () => {
     expect(isIdentifierName("\u{2ebf0}")).toBe(true);
   });

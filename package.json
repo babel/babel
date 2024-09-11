@@ -45,7 +45,7 @@
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^29.5.11",
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.5.4",
     "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "c8": "^10.0.0",
@@ -59,6 +59,7 @@
     "eslint-plugin-jest": "^27.9.0",
     "eslint-plugin-n": "^17.9.0",
     "eslint-plugin-regexp": "^2.6.0",
+    "eslint-plugin-unicorn": "^55.0.0",
     "execa": "^9.0.0",
     "glob": "^10.3.10",
     "globals": "^15.9.0",
@@ -82,8 +83,8 @@
     "semver": "^6.3.1",
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
-    "typescript": "5.5.3",
-    "typescript-eslint": "8.0.0-alpha.39"
+    "typescript": "5.6.2",
+    "typescript-eslint": "8.5.0"
   },
   "workspaces": [
     "codemods/*",
