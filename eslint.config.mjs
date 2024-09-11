@@ -7,7 +7,7 @@ import js from "@eslint/js";
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
-import pluginPrettier from "eslint-plugin-prettier";
+import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
 import pluginUnicorn from "eslint-plugin-unicorn";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
@@ -104,14 +104,12 @@ export default [
     plugins: {
       import: pluginImport,
       n: pluginN,
-      prettier: pluginPrettier,
       unicorn: pluginUnicorn,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
     rules: {
       "n/no-process-exit": "error",
-      "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
       "unicorn/prefer-set-has": "error",
@@ -219,6 +217,7 @@ export default [
       "@typescript-eslint/no-unsafe-function-type": "off",
     },
   }),
+  configPrettier,
   {
     files: sourceFiles("js,ts,cjs,mjs"),
     languageOptions: {
@@ -372,6 +371,12 @@ export default [
     files: ["scripts/**/*.{js,cjs,mjs}"],
     rules: {
       "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
+    },
+  },
+  {
+    files: ["packages/babel-parser/typings/babel-parser.d.ts"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "off",
     },
   },
 ];

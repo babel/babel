@@ -2,12 +2,29 @@ package.json
 packages/babel-preset-env/data
 packages/babel-compat-data/data
 packages/babel-compat-data/scripts/data/overlapping-plugins.js
-packages/babel-core/src/vendor
-packages/*/test/fixtures/**/input.*
-packages/*/test/fixtures/**/exec.*
-packages/*/test/fixtures/**/output.*
+packages/babel-core/src/vendor/**
+**/test/fixtures/**
+packages/babel-standalone/examples/**
+packages/babel-parser/test/expressions/**
+scripts/integration-tests/fixtures/**
+packages/babel-parser/test/schema.json
+test/runtime-integration/node.cjs
 
 CHANGELOG.md
 .github/*.md
+.yarn/releases/*
 
+# Generated
+lib/archived-libs.d.ts
+packages/babel-parser/typings/babel-parser.d.ts
 Makefile.js
+packages/babel-runtime-corejs2/helpers/**
+packages/babel-runtime-corejs2/core-js/**
+packages/babel-runtime-corejs3/helpers/**
+packages/babel-runtime/helpers/**
+**/tsconfig.json
+**/tsconfig.*.json
+
+# Should enable?
+**/*.yml
+**/*.md

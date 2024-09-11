@@ -1,5 +1,5 @@
 // This file is auto-generated! Do not modify it directly.
-/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents, prettier/prettier */
+/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */
 import * as _babel_types from '@babel/types';
 
 type BABEL_8_BREAKING = false;
