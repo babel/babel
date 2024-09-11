@@ -209,7 +209,9 @@ export function TupleExpression(this: Printer, node: t.TupleExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (i < len - 1) this.token(",");
+      if (i < len - 1 || this.shouldPrintTrailingComma(endToken)) {
+        this.token(",", false, i);
+      }
     }
   }
 
