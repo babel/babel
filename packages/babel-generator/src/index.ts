@@ -24,7 +24,7 @@ function normalizeOptions(
   if (opts.experimental_preserveFormat) {
     if (typeof code !== "string") {
       throw new Error(
-        "`experimental_preserveFormat` requires the original `code` to be passed to @babel/generator a string",
+        "`experimental_preserveFormat` requires the original `code` to be passed to @babel/generator as a string",
       );
     }
     if (!opts.retainLines) {
