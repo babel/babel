@@ -336,6 +336,14 @@ class Printer {
 
   /**
    * Writes a simple token.
+   *
+   * @param {string} str The string to append.
+   * @param {boolean} [maybeNewline=false] Wether `str` might potentially
+   *    contain a line terminator or not.
+   * @param {number} [occurrenceCount=0] The occurrence count of this token in
+   *    the current node. This is used when printing in `preserveFormat` mode,
+   *    to know which token we should map to (for example, to disambiguate the
+   *    commas in an array literal).
    */
   token(str: string, maybeNewline = false, occurrenceCount = 0): void {
     this.tokenContext = 0;
