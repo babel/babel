@@ -37,8 +37,8 @@ export function TSTypeParameterInstantiation(
     // Only force the trailing comma for pre-existing nodes if they
     // already had a comma (either because they were multi-param, or
     // because they had a trailing comma)
-    printTrailingSeparator &&= !!this._findToken(t =>
-      this._matchesOriginalToken(t, ","),
+    printTrailingSeparator &&= !!this._tokenMap.find(node, t =>
+      this._tokenMap.matchesOriginal(t, ","),
     );
     // Preseve the trailing comma if it was there before
     printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
@@ -137,12 +137,9 @@ function maybePrintTrailingCommaOrSemicolon(printer: Printer, node: t.Node) {
     return;
   }
 
-  const { last } = printer._findTokensOfNode(node);
-  const lastToken = printer._tokens[last];
-
-  if (printer._matchesOriginalToken(lastToken, ",")) {
+  if (printer._tokenMap.endMatches(node, ",")) {
     printer.token(",");
-  } else if (printer._matchesOriginalToken(lastToken, ";")) {
+  } else if (printer._tokenMap.endMatches(node, ";")) {
     printer.semicolon();
   }
 }
@@ -376,12 +373,12 @@ function tsPrintUnionOrIntersectionType(
   sep: "|" | "&",
 ) {
   let hasLeadingToken = 0;
-  if (printer.format.preserveFormat && node.start != null && node.end != null) {
-    const { first } = printer._findTokensOfNode(node);
-    if (printer._matchesOriginalToken(printer._tokens[first], sep)) {
-      hasLeadingToken = 1;
-      printer.token(sep);
-    }
+  if (
+    printer.format.preserveFormat &&
+    printer._tokenMap.startMatches(node, sep)
+  ) {
+    hasLeadingToken = 1;
+    printer.token(sep);
   }
 
   printer.printJoin(node.types, {
@@ -802,8 +799,8 @@ function printModifiersList(
     if (modifier) modifiersSet.add(modifier);
   }
 
-  if (printer.format.preserveFormat && node.start != null && node.end != null) {
-    printer._findToken(tok => {
+  if (printer.format.preserveFormat) {
+    printer._tokenMap.find(node, tok => {
       if (modifiersSet.has(tok.value)) {
         printer.token(tok.value);
         printer.space();

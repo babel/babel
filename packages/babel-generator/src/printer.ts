@@ -9,10 +9,10 @@ import {
   isClassBody,
   isTSInterfaceBody,
   isTSEnumDeclaration,
-  VISITOR_KEYS,
 } from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
 
+import { TokenMap } from "./token-map.ts";
 import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
 import type SourceMap from "./source-map.ts";
@@ -183,10 +183,14 @@ class Printer {
   _lastCommentLine = 0;
   _endsWithInnerRaw: boolean = false;
   _indentInnerComments: boolean = true;
+  _tokenMap: TokenMap = null;
 
   _boundGetRawIdentifier = this._getRawIdentifier.bind(this);
 
   generate(ast: t.Node) {
+    if (this.format.preserveFormat) {
+      this._tokenMap = new TokenMap(ast, this._tokens, this._originalCode);
+    }
     this.print(ast);
     this._maybeAddAuxComment();
 
@@ -231,13 +235,12 @@ class Printer {
     if (this.format.preserveFormat) {
       const node = this._currentNode;
       if (node.start != null && node.end != null) {
-        const { last } = this._findTokensOfNode(node);
-        const lastToken = this._tokens[last];
-        if (!this._matchesOriginalToken(lastToken, ";")) {
+        if (!this._tokenMap.endMatches(node, ";")) {
           // no semicolon
           return;
         }
-        this._catchUpTo(lastToken.loc.start);
+        const indexes = this._tokenMap.getIndexes(this._currentNode);
+        this._catchUpTo(this._tokens[indexes[indexes.length - 1]].loc.start);
       }
     }
     this._queue(charCodes.semicolon);
@@ -475,121 +478,17 @@ class Printer {
     this._queue(charCodes.lineFeed);
   }
 
-  _findFirstTokenOfNode(start: number, low: number, high: number): number {
-    while (low <= high) {
-      const mid = (high + low) >> 1;
-      if (start < this._tokens[mid].start) {
-        high = mid - 1;
-      } else if (start > this._tokens[mid].start) {
-        low = mid + 1;
-      } else {
-        return mid;
-      }
-    }
-    return low;
-  }
-
-  _findLastTokenOfNode(end: number, low: number, high: number): number {
-    while (low <= high) {
-      const mid = (high + low) >> 1;
-      if (end < this._tokens[mid].end) {
-        high = mid - 1;
-      } else if (end > this._tokens[mid].end) {
-        low = mid + 1;
-      } else {
-        return mid;
-      }
-    }
-    return high;
-  }
-
-  _tokensCache = new Map<t.Node, { first: number; last: number }>();
-  _findTokensOfNode(
-    node: t.Node,
-    low: number = 0,
-    high: number = this._tokens.length - 1,
-  ) {
-    const cached = this._tokensCache.get(node);
-    if (cached) return cached;
-
-    const first = this._findFirstTokenOfNode(node.start, low, high);
-    const last = this._findLastTokenOfNode(node.end, first, high);
-
-    this._tokensCache.set(node, { first, last });
-    return { first, last };
-  }
-
-  *_iterateCurrentTokensIndexes(): Generator<number> {
-    const node = this._currentNode;
-    if (node.start == null || node.end == null) return;
-
-    const { first, last } = this._findTokensOfNode(node);
-
-    let low = first;
-
-    const children = childrenIterator(node);
-
-    if (
-      (node.type === "ExportNamedDeclaration" ||
-        node.type === "ExportDefaultDeclaration") &&
-      node.declaration &&
-      node.declaration.type === "ClassDeclaration"
-    ) {
-      // Exported class declarations can be not properly nested inside
-      // the export declaration that contains them. For example, in
-      // `@dec export class Foo {}` the `export` is covered by the
-      // ClassDeclaration range. Skip the class declaration from the list
-      // of children to skip, so that when looking for `export` we also
-      // traverse its tokens.
-      children.next();
-    }
-
-    for (const child of children) {
-      if (!child) continue;
-
-      const childTok = this._findTokensOfNode(child, low, last);
-
-      const high = childTok.first;
-      for (let k = low; k < high; k++) yield k;
-
-      low = childTok.last + 1;
-    }
-
-    for (let k = low; k <= last; k++) yield k;
-  }
-
-  _findToken(
-    condition: (token: Token, index: number) => boolean,
-  ): Token | null {
-    for (const k of this._iterateCurrentTokensIndexes()) {
-      if (condition(this._tokens[k], k)) return this._tokens[k];
-    }
-
-    return null;
-  }
-
-  _matchesOriginalToken(token: Token, test: string) {
-    if (token.end - token.start !== test.length) return false;
-    if (token.value != null) return token.value === test;
-    return this._originalCode.startsWith(test, token.start);
-  }
-
-  _getOriginalToken(str: string, occurrenceCount: number = 0) {
-    return this._findToken(token => {
-      if (!this._matchesOriginalToken(token, str)) return false;
-      if (occurrenceCount === 0) return true;
-      occurrenceCount--;
-      return false;
-    });
-  }
-
   _append(
     str: string,
     maybeNewline: boolean,
     occurrenceCount: number = 0,
   ): void {
     if (this.format.preserveFormat) {
-      const token = this._getOriginalToken(str, occurrenceCount);
+      const token = this._tokenMap.findMatching(
+        this._currentNode,
+        str,
+        occurrenceCount,
+      );
       if (token) this._catchUpTo(token.loc.start);
     }
 
@@ -605,7 +504,10 @@ class Printer {
 
   _appendChar(char: number): void {
     if (this.format.preserveFormat) {
-      const token = this._getOriginalToken(String.fromCharCode(char));
+      const token = this._tokenMap.findMatching(
+        this._currentNode,
+        String.fromCharCode(char),
+      );
       if (token) this._catchUpTo(token.loc.start);
     }
 
@@ -1066,7 +968,11 @@ class Printer {
     if (this._endsWithInnerRaw) {
       this.printInnerComments(
         this.format.preserveFormat
-          ? this._getOriginalToken(nextTokenStr, nextTokenOccurrenceCount)
+          ? this._tokenMap.findMatching(
+              this._currentNode,
+              nextTokenStr,
+              nextTokenOccurrenceCount,
+            )
           : null,
       );
     }
@@ -1119,15 +1025,14 @@ class Printer {
     if (!this.format.preserveFormat) return null;
 
     let listEndIndex: number;
-    this._findToken((token, index) => {
-      if (this._matchesOriginalToken(token, listEnd)) {
+    this._tokenMap.find(this._currentNode, (token, index) => {
+      if (this._tokenMap.matchesOriginal(token, listEnd)) {
         listEndIndex = index;
         return true;
       }
     });
     if (listEndIndex == null) return null;
-    const lastToken = this._tokens[listEndIndex - 1];
-    return this._matchesOriginalToken(lastToken, ",");
+    return this._tokenMap.matchesOriginal(this._tokens[listEndIndex - 1], ",");
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -1198,7 +1103,8 @@ class Printer {
     }
 
     if (nextToken && this.format.preserveFormat) {
-      const commentTok = this._findToken(
+      const commentTok = this._tokenMap.find(
+        this._currentNode,
         token => token.value === comment.value,
       );
       if (commentTok && commentTok.start > nextToken.start) {
@@ -1445,28 +1351,4 @@ export default Printer;
 function commaSeparator(this: Printer, occurrenceCount: number, last: boolean) {
   this.token(",", false, occurrenceCount);
   if (!last) this.space();
-}
-
-function* childrenIterator(node: t.Node) {
-  // We need special handling to iterate TemplateLiteral
-  // children in order, since the two lists are interleaved.
-  if (node.type === "TemplateLiteral") {
-    yield node.quasis[0];
-    for (let i = 1; i < node.quasis.length; i++) {
-      yield node.expressions[i - 1];
-      yield node.quasis[i];
-    }
-    return;
-  }
-
-  const keys = VISITOR_KEYS[node.type];
-  for (const key of keys) {
-    const child = (node as any)[key];
-    if (!child) continue;
-    if (Array.isArray(child)) {
-      yield* child;
-    } else {
-      yield child;
-    }
-  }
 }

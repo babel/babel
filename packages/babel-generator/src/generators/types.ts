@@ -10,7 +10,7 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
   lastRawIdentNode = node;
 
   const { name } = node;
-  const token = this._findToken(tok => tok.value === name);
+  const token = this._tokenMap.find(node, tok => tok.value === name);
   if (token) {
     lastRawIdentResult = this._originalCode.slice(token.start, token.end);
     return lastRawIdentResult;

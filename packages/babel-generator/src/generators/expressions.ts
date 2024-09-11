@@ -103,7 +103,7 @@ export function NewExpression(
   if (
     this.format.preserveFormat &&
     node.arguments.length === 0 &&
-    !this._getOriginalToken(")", 0)
+    !this._tokenMap.findMatching(node, ")")
   ) {
     return;
   }

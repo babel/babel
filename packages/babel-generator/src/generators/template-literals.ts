@@ -30,7 +30,7 @@ export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
       // In Babel 7 we have indivirual tokens for ${ and }, so the automatic
       // catchup logic does not work. Manually look for those tokens.
       if (!process.env.BABEL_8_BREAKING && this.format.preserveFormat) {
-        const token = this._getOriginalToken("}", i);
+        const token = this._tokenMap.findMatching(node, "}", i);
         if (token) this._catchUpTo(token.loc.start);
       }
     }

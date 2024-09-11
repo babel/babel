@@ -238,8 +238,8 @@ export function _shouldPrintArrowParamsParens(
 
   if (this.format.preserveFormat) {
     if (node.loc == null) return true;
-    if (this._getOriginalToken("(") !== null) return true;
-    const arrowToken = this._getOriginalToken("=>");
+    if (this._tokenMap.findMatching(node, "(") !== null) return true;
+    const arrowToken = this._tokenMap.findMatching(node, "=>");
     if (arrowToken?.loc == null) return true;
     return arrowToken.loc.start.line !== node.loc.start.line;
   }

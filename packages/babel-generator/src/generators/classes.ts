@@ -106,10 +106,11 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
   // Print them by checking if there are any ; tokens between the current AST
   // member and the next one.
 
-  const tokensIterator = printer._iterateCurrentTokensIndexes();
-  tokensIterator.next(); // skip {
+  const indexes = printer._tokenMap.getIndexes(node);
+  if (!indexes) return null;
 
-  let next = tokensIterator.next();
+  let k = 1; // start from 1 to skip '{'
+
   let occurrenceCount = 0;
 
   let nextLocIndex = 0;
@@ -134,13 +135,17 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
         ? node.end
         : node.body[nextLocIndex].start;
 
+    let tok;
     while (
-      !next.done &&
-      printer._matchesOriginalToken(printer._tokens[next.value], ";") &&
-      printer._tokens[next.value].start < end
+      k < indexes.length &&
+      printer._tokenMap.matchesOriginal(
+        (tok = printer._tokens[indexes[k]]),
+        ";",
+      ) &&
+      tok.start < end
     ) {
       printer.token(";", undefined, occurrenceCount++);
-      next = tokensIterator.next();
+      k++;
     }
   };
 }
