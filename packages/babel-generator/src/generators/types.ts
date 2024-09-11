@@ -10,7 +10,7 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
   lastRawIdentNode = node;
 
   const { name } = node;
-  const token = this._tokenMap.find(node, tok => tok.value === name);
+  const token = this.tokenMap.find(node, tok => tok.value === name);
   if (token) {
     lastRawIdentResult = this._originalCode.slice(token.start, token.end);
     return lastRawIdentResult;
@@ -21,9 +21,7 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
 
-  this.word(
-    this.format.preserveFormat ? this._getRawIdentifier(node) : node.name,
-  );
+  this.word(this.tokenMap ? this._getRawIdentifier(node) : node.name);
 }
 
 export function ArgumentPlaceholder(this: Printer) {

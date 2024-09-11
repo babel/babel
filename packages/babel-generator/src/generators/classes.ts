@@ -94,11 +94,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
 }
 
 function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
-  if (
-    !printer.format.preserveFormat ||
-    node.start == null ||
-    node.end == null
-  ) {
+  if (!printer.tokenMap || node.start == null || node.end == null) {
     return null;
   }
 
@@ -106,7 +102,7 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
   // Print them by checking if there are any ; tokens between the current AST
   // member and the next one.
 
-  const indexes = printer._tokenMap.getIndexes(node);
+  const indexes = printer.tokenMap.getIndexes(node);
   if (!indexes) return null;
 
   let k = 1; // start from 1 to skip '{'
@@ -138,7 +134,7 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
     let tok;
     while (
       k < indexes.length &&
-      printer._tokenMap.matchesOriginal(
+      printer.tokenMap.matchesOriginal(
         (tok = printer._tokens[indexes[k]]),
         ";",
       ) &&

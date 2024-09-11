@@ -236,10 +236,10 @@ export function _shouldPrintArrowParamsParens(
     return true;
   }
 
-  if (this.format.preserveFormat) {
+  if (this.tokenMap) {
     if (node.loc == null) return true;
-    if (this._tokenMap.findMatching(node, "(") !== null) return true;
-    const arrowToken = this._tokenMap.findMatching(node, "=>");
+    if (this.tokenMap.findMatching(node, "(") !== null) return true;
+    const arrowToken = this.tokenMap.findMatching(node, "=>");
     if (arrowToken?.loc == null) return true;
     return arrowToken.loc.start.line !== node.loc.start.line;
   }

@@ -101,9 +101,9 @@ export function NewExpression(
   }
 
   if (
-    this.format.preserveFormat &&
     node.arguments.length === 0 &&
-    !this._tokenMap.endMatches(node, ")")
+    this.tokenMap &&
+    !this.tokenMap.endMatches(node, ")")
   ) {
     return;
   }

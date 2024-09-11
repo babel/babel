@@ -183,13 +183,13 @@ class Printer {
   _lastCommentLine = 0;
   _endsWithInnerRaw: boolean = false;
   _indentInnerComments: boolean = true;
-  _tokenMap: TokenMap = null;
+  tokenMap: TokenMap = null;
 
   _boundGetRawIdentifier = this._getRawIdentifier.bind(this);
 
   generate(ast: t.Node) {
     if (this.format.preserveFormat) {
-      this._tokenMap = new TokenMap(ast, this._tokens, this._originalCode);
+      this.tokenMap = new TokenMap(ast, this._tokens, this._originalCode);
     }
     this.print(ast);
     this._maybeAddAuxComment();
@@ -202,9 +202,10 @@ class Printer {
    */
 
   indent(): void {
-    if (this.format.preserveFormat) return;
-
-    if (this.format.compact || this.format.concise) return;
+    const { format } = this;
+    if (format.preserveFormat || format.compact || format.concise) {
+      return;
+    }
 
     this._indent++;
   }
@@ -214,9 +215,10 @@ class Printer {
    */
 
   dedent(): void {
-    if (this.format.preserveFormat) return;
-
-    if (this.format.compact || this.format.concise) return;
+    const { format } = this;
+    if (format.preserveFormat || format.compact || format.concise) {
+      return;
+    }
 
     this._indent--;
   }
@@ -232,14 +234,14 @@ class Printer {
       this._noLineTerminator = false;
       return;
     }
-    if (this.format.preserveFormat) {
+    if (this.tokenMap) {
       const node = this._currentNode;
       if (node.start != null && node.end != null) {
-        if (!this._tokenMap.endMatches(node, ";")) {
+        if (!this.tokenMap.endMatches(node, ";")) {
           // no semicolon
           return;
         }
-        const indexes = this._tokenMap.getIndexes(this._currentNode);
+        const indexes = this.tokenMap.getIndexes(this._currentNode);
         this._catchUpTo(this._tokens[indexes[indexes.length - 1]].loc.start);
       }
     }
@@ -269,7 +271,8 @@ class Printer {
    */
 
   space(force: boolean = false): void {
-    if (this.format.compact || this.format.preserveFormat) return;
+    const { format } = this;
+    if (format.compact || format.preserveFormat) return;
 
     if (force) {
       this._space();
@@ -491,8 +494,8 @@ class Printer {
     maybeNewline: boolean,
     occurrenceCount: number = 0,
   ): void {
-    if (this.format.preserveFormat) {
-      const token = this._tokenMap.findMatching(
+    if (this.tokenMap) {
+      const token = this.tokenMap.findMatching(
         this._currentNode,
         str,
         occurrenceCount,
@@ -511,8 +514,8 @@ class Printer {
   }
 
   _appendChar(char: number): void {
-    if (this.format.preserveFormat) {
-      const token = this._tokenMap.findMatching(
+    if (this.tokenMap) {
+      const token = this.tokenMap.findMatching(
         this._currentNode,
         String.fromCharCode(char),
       );
@@ -572,11 +575,13 @@ class Printer {
   }
 
   _catchUp(prop: "start" | "end", loc?: Loc) {
-    if (this.format.retainLines && !this.format.preserveFormat && loc?.[prop]) {
-      this.catchUp(loc[prop].line);
+    const { format } = this;
+    if (!format.preserveFormat) {
+      if (format.retainLines && loc?.[prop]) {
+        this.catchUp(loc[prop].line);
+      }
       return;
     }
-    if (!this.format.preserveFormat) return;
 
     // catch up to this nodes newline if we're behind
     const pos = loc?.[prop];
@@ -975,13 +980,11 @@ class Printer {
   ) {
     if (this._endsWithInnerRaw) {
       this.printInnerComments(
-        this.format.preserveFormat
-          ? this._tokenMap.findMatching(
-              this._currentNode,
-              nextTokenStr,
-              nextTokenOccurrenceCount,
-            )
-          : null,
+        this.tokenMap?.findMatching(
+          this._currentNode,
+          nextTokenStr,
+          nextTokenOccurrenceCount,
+        ),
       );
     }
     this._endsWithInnerRaw = true;
@@ -1030,14 +1033,13 @@ class Printer {
   }
 
   shouldPrintTrailingComma(listEnd: string): boolean | null {
-    if (!this.format.preserveFormat) return null;
+    if (!this.tokenMap) return null;
 
-    const listEndIndex = this._tokenMap.findLastIndex(
-      this._currentNode,
-      token => this._tokenMap.matchesOriginal(token, listEnd),
+    const listEndIndex = this.tokenMap.findLastIndex(this._currentNode, token =>
+      this.tokenMap.matchesOriginal(token, listEnd),
     );
     if (listEndIndex <= 0) return null;
-    return this._tokenMap.matchesOriginal(this._tokens[listEndIndex - 1], ",");
+    return this.tokenMap.matchesOriginal(this._tokens[listEndIndex - 1], ",");
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -1107,8 +1109,8 @@ class Printer {
       return PRINT_COMMENT_HINT.DEFER;
     }
 
-    if (nextToken && this.format.preserveFormat) {
-      const commentTok = this._tokenMap.find(
+    if (nextToken && this.tokenMap) {
+      const commentTok = this.tokenMap.find(
         this._currentNode,
         token => token.value === comment.value,
       );

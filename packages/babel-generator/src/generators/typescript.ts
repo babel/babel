@@ -33,12 +33,12 @@ export function TSTypeParameterInstantiation(
 
   let printTrailingSeparator =
     parent.type === "ArrowFunctionExpression" && node.params.length === 1;
-  if (this.format.preserveFormat && node.start != null && node.end != null) {
+  if (this.tokenMap && node.start != null && node.end != null) {
     // Only force the trailing comma for pre-existing nodes if they
     // already had a comma (either because they were multi-param, or
     // because they had a trailing comma)
-    printTrailingSeparator &&= !!this._tokenMap.find(node, t =>
-      this._tokenMap.matchesOriginal(t, ","),
+    printTrailingSeparator &&= !!this.tokenMap.find(node, t =>
+      this.tokenMap.matchesOriginal(t, ","),
     );
     // Preseve the trailing comma if it was there before
     printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
@@ -132,14 +132,14 @@ export function TSCallSignatureDeclaration(
 }
 
 function maybePrintTrailingCommaOrSemicolon(printer: Printer, node: t.Node) {
-  if (!printer.format.preserveFormat || !node.start || !node.end) {
+  if (!printer.tokenMap || !node.start || !node.end) {
     printer.semicolon();
     return;
   }
 
-  if (printer._tokenMap.endMatches(node, ",")) {
+  if (printer.tokenMap.endMatches(node, ",")) {
     printer.token(",");
-  } else if (printer._tokenMap.endMatches(node, ";")) {
+  } else if (printer.tokenMap.endMatches(node, ";")) {
     printer.semicolon();
   }
 }
@@ -373,10 +373,7 @@ function tsPrintUnionOrIntersectionType(
   sep: "|" | "&",
 ) {
   let hasLeadingToken = 0;
-  if (
-    printer.format.preserveFormat &&
-    printer._tokenMap.startMatches(node, sep)
-  ) {
+  if (printer.tokenMap?.startMatches(node, sep)) {
     hasLeadingToken = 1;
     printer.token(sep);
   }
@@ -799,16 +796,14 @@ function printModifiersList(
     if (modifier) modifiersSet.add(modifier);
   }
 
-  if (printer.format.preserveFormat) {
-    printer._tokenMap.find(node, tok => {
-      if (modifiersSet.has(tok.value)) {
-        printer.token(tok.value);
-        printer.space();
-        modifiersSet.delete(tok.value);
-        return modifiersSet.size === 0;
-      }
-    });
-  }
+  printer.tokenMap?.find(node, tok => {
+    if (modifiersSet.has(tok.value)) {
+      printer.token(tok.value);
+      printer.space();
+      modifiersSet.delete(tok.value);
+      return modifiersSet.size === 0;
+    }
+  });
 
   for (const modifier of modifiersSet) {
     printer.word(modifier);
