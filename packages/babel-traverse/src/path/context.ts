@@ -59,7 +59,7 @@ export function _call(this: NodePath, fns?: Array<Function>): boolean {
 export function isDenylisted(this: NodePath): boolean {
   // @ts-expect-error TODO(Babel 8): Remove blacklist
   const denylist = this.opts.denylist ?? this.opts.blacklist;
-  return denylist && denylist.indexOf(this.node.type) > -1;
+  return denylist?.includes(this.node.type);
 }
 
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {

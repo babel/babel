@@ -140,7 +140,7 @@ const packageToBabelConfig = makeWeakCacheSync(
   (file: ConfigFile): ConfigFile | null => {
     const babel: unknown = file.options["babel"];
 
-    if (typeof babel === "undefined") return null;
+    if (babel === undefined) return null;
 
     if (typeof babel !== "object" || Array.isArray(babel) || babel === null) {
       throw new ConfigError(`.babel property must be an object`, file.filepath);

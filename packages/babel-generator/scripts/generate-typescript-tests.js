@@ -38,7 +38,7 @@ for (const groupName of fs.readdirSync(testsFrom)) {
       if (
         options.throws ||
         !options.plugins ||
-        options.plugins.indexOf("estree") >= 0
+        options.plugins.includes("estree")
       ) {
         continue;
       }
