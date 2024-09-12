@@ -47,19 +47,17 @@ defineType("ArrayExpression", {
 defineType("AssignmentExpression", {
   fields: {
     operator: {
-      validate: (function () {
-        if (!process.env.BABEL_TYPES_8_BREAKING) {
-          return assertValueType("string");
-        }
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertValueType("string")
+        : (function () {
+            const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
+            const pattern = assertOneOf("=");
 
-        const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
-        const pattern = assertOneOf("=");
-
-        return function (node: t.AssignmentExpression, key, val) {
-          const validator = is("Pattern", node.left) ? pattern : identifier;
-          validator(node, key, val);
-        };
-      })(),
+            return function (node: t.AssignmentExpression, key, val) {
+              const validator = is("Pattern", node.left) ? pattern : identifier;
+              validator(node, key, val);
+            };
+          })(),
     },
     left: {
       validate: !process.env.BABEL_TYPES_8_BREAKING
@@ -437,17 +435,17 @@ defineType("FunctionDeclaration", {
     "Pureish",
     "Declaration",
   ],
-  validate: (function () {
-    if (!process.env.BABEL_TYPES_8_BREAKING) return () => {};
+  validate: !process.env.BABEL_TYPES_8_BREAKING
+    ? undefined
+    : (function () {
+        const identifier = assertNodeType("Identifier");
 
-    const identifier = assertNodeType("Identifier");
-
-    return function (parent, key, node) {
-      if (!is("ExportDefaultDeclaration", parent)) {
-        identifier(node, "id", node.id);
-      }
-    };
-  })(),
+        return function (parent, key, node) {
+          if (!is("ExportDefaultDeclaration", parent)) {
+            identifier(node, "id", node.id);
+          }
+        };
+      })(),
 });
 
 defineType("FunctionExpression", {
@@ -967,24 +965,24 @@ defineType("ObjectProperty", {
   },
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
-  validate: (function () {
-    const pattern = assertNodeType(
-      "Identifier",
-      "Pattern",
-      "TSAsExpression",
-      "TSSatisfiesExpression",
-      "TSNonNullExpression",
-      "TSTypeAssertion",
-    );
-    const expression = assertNodeType("Expression");
+  validate: !process.env.BABEL_TYPES_8_BREAKING
+    ? undefined
+    : (function () {
+        const pattern = assertNodeType(
+          "Identifier",
+          "Pattern",
+          "TSAsExpression",
+          "TSSatisfiesExpression",
+          "TSNonNullExpression",
+          "TSTypeAssertion",
+        );
+        const expression = assertNodeType("Expression");
 
-    return function (parent, key, node) {
-      if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
-      const validator = is("ObjectPattern", parent) ? pattern : expression;
-      validator(node, "value", node.value);
-    };
-  })(),
+        return function (parent, key, node) {
+          const validator = is("ObjectPattern", parent) ? pattern : expression;
+          validator(node, "value", node.value);
+        };
+      })(),
 });
 
 defineType("RestElement", {
@@ -1220,23 +1218,21 @@ defineType("VariableDeclarator", {
   visitor: ["id", "init"],
   fields: {
     id: {
-      validate: (function () {
-        if (!process.env.BABEL_TYPES_8_BREAKING) {
-          return assertNodeType("LVal");
-        }
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertNodeType("LVal")
+        : (function () {
+            const normal = assertNodeType(
+              "Identifier",
+              "ArrayPattern",
+              "ObjectPattern",
+            );
+            const without = assertNodeType("Identifier");
 
-        const normal = assertNodeType(
-          "Identifier",
-          "ArrayPattern",
-          "ObjectPattern",
-        );
-        const without = assertNodeType("Identifier");
-
-        return function (node: t.VariableDeclarator, key, val) {
-          const validator = node.init ? normal : without;
-          validator(node, key, val);
-        };
-      })(),
+            return function (node: t.VariableDeclarator, key, val) {
+              const validator = node.init ? normal : without;
+              validator(node, key, val);
+            };
+          })(),
     },
     definite: {
       optional: true,
@@ -1510,16 +1506,16 @@ defineType("ClassDeclaration", {
       optional: true,
     },
   },
-  validate: (function () {
-    if (!process.env.BABEL_TYPES_8_BREAKING) return () => {};
-
-    const identifier = assertNodeType("Identifier");
-    return function (parent, key, node) {
-      if (!is("ExportDefaultDeclaration", parent)) {
-        identifier(node, "id", node.id);
-      }
-    };
-  })(),
+  validate: !process.env.BABEL_TYPES_8_BREAKING
+    ? undefined
+    : (function () {
+        const identifier = assertNodeType("Identifier");
+        return function (parent, key, node) {
+          if (!is("ExportDefaultDeclaration", parent)) {
+            identifier(node, "id", node.id);
+          }
+        };
+      })(),
 });
 
 defineType("ExportAllDeclaration", {
