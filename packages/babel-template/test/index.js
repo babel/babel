@@ -466,6 +466,20 @@ describe("@babel/template", function () {
       expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
     });
 
+    it("works in const declaration inside for-of without init", () => {
+      const output = template("for (const %%LHS%% of %%RHS%%){}")({
+        LHS: t.ObjectPattern([
+          t.ObjectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+        RHS: t.identifier("y"),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`
+        "for (const {
+          x: x
+        } of y) {}"
+      `);
+    });
+
     it("works in let declaration", () => {
       const output = template("let %%LHS%% = %%RHS%%")({
         LHS: t.identifier("x"),
