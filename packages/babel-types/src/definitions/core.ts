@@ -198,7 +198,7 @@ defineType("CallExpression", {
     ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
       ? {
           optional: {
-            validate: assertOneOf(true, false),
+            validate: assertValueType("boolean"),
             optional: true,
           },
         }
@@ -753,7 +753,7 @@ defineType("MemberExpression", {
     ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
       ? {
           optional: {
-            validate: assertOneOf(true, false),
+            validate: assertValueType("boolean"),
             optional: true,
           },
         }
