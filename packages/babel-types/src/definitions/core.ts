@@ -37,7 +37,10 @@ defineType("ArrayExpression", {
           assertNodeOrValueType("null", "Expression", "SpreadElement"),
         ),
       ),
-      default: !process.env.BABEL_TYPES_8_BREAKING ? [] : undefined,
+      default:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? []
+          : undefined,
     },
   },
   visitor: ["elements"],
@@ -47,32 +50,36 @@ defineType("ArrayExpression", {
 defineType("AssignmentExpression", {
   fields: {
     operator: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertValueType("string")
-        : (function () {
-            const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
-            const pattern = assertOneOf("=");
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertValueType("string")
+          : (function () {
+              const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
+              const pattern = assertOneOf("=");
 
-            return function (node: t.AssignmentExpression, key, val) {
-              const validator = is("Pattern", node.left) ? pattern : identifier;
-              validator(node, key, val);
-            };
-          })(),
+              return function (node: t.AssignmentExpression, key, val) {
+                const validator = is("Pattern", node.left)
+                  ? pattern
+                  : identifier;
+                validator(node, key, val);
+              };
+            })(),
     },
     left: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("LVal", "OptionalMemberExpression")
-        : assertNodeType(
-            "Identifier",
-            "MemberExpression",
-            "OptionalMemberExpression",
-            "ArrayPattern",
-            "ObjectPattern",
-            "TSAsExpression",
-            "TSSatisfiesExpression",
-            "TSTypeAssertion",
-            "TSNonNullExpression",
-          ),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertNodeType("LVal", "OptionalMemberExpression")
+          : assertNodeType(
+              "Identifier",
+              "MemberExpression",
+              "OptionalMemberExpression",
+              "ArrayPattern",
+              "ObjectPattern",
+              "TSAsExpression",
+              "TSSatisfiesExpression",
+              "TSTypeAssertion",
+              "TSNonNullExpression",
+            ),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -188,7 +195,7 @@ defineType("CallExpression", {
         ),
       ),
     },
-    ...(!process.env.BABEL_TYPES_8_BREAKING
+    ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
       ? {
           optional: {
             validate: assertOneOf(true, false),
@@ -288,11 +295,12 @@ defineType("File", {
       validate: assertNodeType("Program"),
     },
     comments: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? Object.assign(() => {}, {
-            each: { oneOfNodeTypes: ["CommentBlock", "CommentLine"] },
-          })
-        : assertEach(assertNodeType("CommentBlock", "CommentLine")),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? Object.assign(() => {}, {
+              each: { oneOfNodeTypes: ["CommentBlock", "CommentLine"] },
+            })
+          : assertEach(assertNodeType("CommentBlock", "CommentLine")),
       optional: true,
     },
     tokens: {
@@ -315,19 +323,20 @@ defineType("ForInStatement", {
   ],
   fields: {
     left: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("VariableDeclaration", "LVal")
-        : assertNodeType(
-            "VariableDeclaration",
-            "Identifier",
-            "MemberExpression",
-            "ArrayPattern",
-            "ObjectPattern",
-            "TSAsExpression",
-            "TSSatisfiesExpression",
-            "TSTypeAssertion",
-            "TSNonNullExpression",
-          ),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertNodeType("VariableDeclaration", "LVal")
+          : assertNodeType(
+              "VariableDeclaration",
+              "Identifier",
+              "MemberExpression",
+              "ArrayPattern",
+              "ObjectPattern",
+              "TSAsExpression",
+              "TSSatisfiesExpression",
+              "TSTypeAssertion",
+              "TSNonNullExpression",
+            ),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -435,17 +444,18 @@ defineType("FunctionDeclaration", {
     "Pureish",
     "Declaration",
   ],
-  validate: !process.env.BABEL_TYPES_8_BREAKING
-    ? undefined
-    : (function () {
-        const identifier = assertNodeType("Identifier");
+  validate:
+    !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? undefined
+      : (function () {
+          const identifier = assertNodeType("Identifier");
 
-        return function (parent, key, node) {
-          if (!is("ExportDefaultDeclaration", parent)) {
-            identifier(node, "id", node.id);
-          }
-        };
-      })(),
+          return function (parent, key, node) {
+            if (!is("ExportDefaultDeclaration", parent)) {
+              identifier(node, "id", node.id);
+            }
+          };
+        })(),
 });
 
 defineType("FunctionExpression", {
@@ -507,60 +517,62 @@ defineType("Identifier", {
   fields: {
     ...patternLikeCommon(),
     name: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertValueType("string"),
-            Object.assign(
-              function (node, key, val) {
-                if (!isValidIdentifier(val, false)) {
-                  throw new TypeError(
-                    `"${val}" is not a valid identifier name`,
-                  );
-                }
-              } as Validator,
-              { type: "string" },
-            ),
-          )
-        : assertValueType("string"),
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertValueType("string"),
+              Object.assign(
+                function (node, key, val) {
+                  if (!isValidIdentifier(val, false)) {
+                    throw new TypeError(
+                      `"${val}" is not a valid identifier name`,
+                    );
+                  }
+                } as Validator,
+                { type: "string" },
+              ),
+            )
+          : assertValueType("string"),
     },
   },
-  validate: process.env.BABEL_TYPES_8_BREAKING
-    ? function (parent, key, node) {
-        const match = /\.(\w+)$/.exec(key);
-        if (!match) return;
+  validate:
+    process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+      ? function (parent, key, node) {
+          const match = /\.(\w+)$/.exec(key);
+          if (!match) return;
 
-        const [, parentKey] = match;
-        const nonComp = { computed: false };
+          const [, parentKey] = match;
+          const nonComp = { computed: false };
 
-        // We can't check if `parent.property === node`, because nodes are validated
-        // before replacing them in the AST.
-        if (parentKey === "property") {
-          if (is("MemberExpression", parent, nonComp)) return;
-          if (is("OptionalMemberExpression", parent, nonComp)) return;
-        } else if (parentKey === "key") {
-          if (is("Property", parent, nonComp)) return;
-          if (is("Method", parent, nonComp)) return;
-        } else if (parentKey === "exported") {
-          if (is("ExportSpecifier", parent)) return;
-        } else if (parentKey === "imported") {
-          if (is("ImportSpecifier", parent, { imported: node })) return;
-        } else if (parentKey === "meta") {
-          if (is("MetaProperty", parent, { meta: node })) return;
+          // We can't check if `parent.property === node`, because nodes are validated
+          // before replacing them in the AST.
+          if (parentKey === "property") {
+            if (is("MemberExpression", parent, nonComp)) return;
+            if (is("OptionalMemberExpression", parent, nonComp)) return;
+          } else if (parentKey === "key") {
+            if (is("Property", parent, nonComp)) return;
+            if (is("Method", parent, nonComp)) return;
+          } else if (parentKey === "exported") {
+            if (is("ExportSpecifier", parent)) return;
+          } else if (parentKey === "imported") {
+            if (is("ImportSpecifier", parent, { imported: node })) return;
+          } else if (parentKey === "meta") {
+            if (is("MetaProperty", parent, { meta: node })) return;
+          }
+
+          if (
+            // Ideally we should call isStrictReservedWord if this node is a descendant
+            // of a block in strict mode. Also, we should pass the inModule option so
+            // we can disable "await" in module.
+            (isKeyword(node.name) || isReservedWord(node.name, false)) &&
+            // Even if "this" is a keyword, we are using the Identifier
+            // node to represent it.
+            node.name !== "this"
+          ) {
+            throw new TypeError(`"${node.name}" is not a valid identifier`);
+          }
         }
-
-        if (
-          // Ideally we should call isStrictReservedWord if this node is a descendant
-          // of a block in strict mode. Also, we should pass the inModule option so
-          // we can disable "await" in module.
-          (isKeyword(node.name) || isReservedWord(node.name, false)) &&
-          // Even if "this" is a keyword, we are using the Identifier
-          // node to represent it.
-          node.name !== "this"
-        ) {
-          throw new TypeError(`"${node.name}" is not a valid identifier`);
-        }
-      }
-    : undefined,
+      : undefined,
 });
 
 defineType("IfStatement", {
@@ -663,22 +675,23 @@ defineType("RegExpLiteral", {
       validate: assertValueType("string"),
     },
     flags: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertValueType("string"),
-            Object.assign(
-              function (node, key, val) {
-                const invalid = /[^gimsuy]/.exec(val);
-                if (invalid) {
-                  throw new TypeError(
-                    `"${invalid[0]}" is not a valid RegExp flag`,
-                  );
-                }
-              } as Validator,
-              { type: "string" },
-            ),
-          )
-        : assertValueType("string"),
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertValueType("string"),
+              Object.assign(
+                function (node, key, val) {
+                  const invalid = /[^gimsuy]/.exec(val);
+                  if (invalid) {
+                    throw new TypeError(
+                      `"${invalid[0]}" is not a valid RegExp flag`,
+                    );
+                  }
+                } as Validator,
+                { type: "string" },
+              ),
+            )
+          : assertValueType("string"),
       default: "",
     },
   },
@@ -706,7 +719,9 @@ defineType("MemberExpression", {
     "object",
     "property",
     "computed",
-    ...(!process.env.BABEL_TYPES_8_BREAKING ? ["optional"] : []),
+    ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? ["optional"]
+      : []),
   ],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal"],
@@ -735,7 +750,7 @@ defineType("MemberExpression", {
     computed: {
       default: false,
     },
-    ...(!process.env.BABEL_TYPES_8_BREAKING
+    ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
       ? {
           optional: {
             validate: assertOneOf(true, false),
@@ -810,7 +825,9 @@ defineType("ObjectMethod", {
     ...functionTypeAnnotationCommon(),
     kind: {
       validate: assertOneOf("method", "get", "set"),
-      ...(!process.env.BABEL_TYPES_8_BREAKING ? { default: "method" } : {}),
+      ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+        ? { default: "method" }
+        : {}),
     },
     computed: {
       default: false,
@@ -868,7 +885,9 @@ defineType("ObjectProperty", {
     "value",
     "computed",
     "shorthand",
-    ...(!process.env.BABEL_TYPES_8_BREAKING ? ["decorators"] : []),
+    ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? ["decorators"]
+      : []),
   ],
   fields: {
     computed: {
@@ -930,29 +949,30 @@ defineType("ObjectProperty", {
       validate: assertNodeType("Expression", "PatternLike"),
     },
     shorthand: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertValueType("boolean"),
-            Object.assign(
-              function (node: t.ObjectProperty, key, shorthand) {
-                if (!shorthand) return;
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertValueType("boolean"),
+              Object.assign(
+                function (node: t.ObjectProperty, key, shorthand) {
+                  if (!shorthand) return;
 
-                if (node.computed) {
-                  throw new TypeError(
-                    "Property shorthand of ObjectProperty cannot be true if computed is true",
-                  );
-                }
+                  if (node.computed) {
+                    throw new TypeError(
+                      "Property shorthand of ObjectProperty cannot be true if computed is true",
+                    );
+                  }
 
-                if (!is("Identifier", node.key)) {
-                  throw new TypeError(
-                    "Property shorthand of ObjectProperty cannot be true if key is not an Identifier",
-                  );
-                }
-              } as Validator,
-              { type: "boolean" },
-            ),
-          )
-        : assertValueType("boolean"),
+                  if (!is("Identifier", node.key)) {
+                    throw new TypeError(
+                      "Property shorthand of ObjectProperty cannot be true if key is not an Identifier",
+                    );
+                  }
+                } as Validator,
+                { type: "boolean" },
+              ),
+            )
+          : assertValueType("boolean"),
       default: false,
     },
     decorators: {
@@ -965,24 +985,27 @@ defineType("ObjectProperty", {
   },
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
-  validate: !process.env.BABEL_TYPES_8_BREAKING
-    ? undefined
-    : (function () {
-        const pattern = assertNodeType(
-          "Identifier",
-          "Pattern",
-          "TSAsExpression",
-          "TSSatisfiesExpression",
-          "TSNonNullExpression",
-          "TSTypeAssertion",
-        );
-        const expression = assertNodeType("Expression");
+  validate:
+    !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? undefined
+      : (function () {
+          const pattern = assertNodeType(
+            "Identifier",
+            "Pattern",
+            "TSAsExpression",
+            "TSSatisfiesExpression",
+            "TSNonNullExpression",
+            "TSTypeAssertion",
+          );
+          const expression = assertNodeType("Expression");
 
-        return function (parent, key, node) {
-          const validator = is("ObjectPattern", parent) ? pattern : expression;
-          validator(node, "value", node.value);
-        };
-      })(),
+          return function (parent, key, node) {
+            const validator = is("ObjectPattern", parent)
+              ? pattern
+              : expression;
+            validator(node, "value", node.value);
+          };
+        })(),
 });
 
 defineType("RestElement", {
@@ -993,35 +1016,39 @@ defineType("RestElement", {
   fields: {
     ...patternLikeCommon(),
     argument: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("LVal")
-        : assertNodeType(
-            "Identifier",
-            "ArrayPattern",
-            "ObjectPattern",
-            "MemberExpression",
-            "TSAsExpression",
-            "TSSatisfiesExpression",
-            "TSTypeAssertion",
-            "TSNonNullExpression",
-          ),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertNodeType("LVal")
+          : assertNodeType(
+              "Identifier",
+              "ArrayPattern",
+              "ObjectPattern",
+              "MemberExpression",
+              "TSAsExpression",
+              "TSSatisfiesExpression",
+              "TSTypeAssertion",
+              "TSNonNullExpression",
+            ),
     },
   },
-  validate: process.env.BABEL_TYPES_8_BREAKING
-    ? function (parent: t.ArrayPattern | t.ObjectPattern, key) {
-        const match = /(\w+)\[(\d+)\]/.exec(key);
-        if (!match) throw new Error("Internal Babel error: malformed key.");
+  validate:
+    process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+      ? function (parent: t.ArrayPattern | t.ObjectPattern, key) {
+          const match = /(\w+)\[(\d+)\]/.exec(key);
+          if (!match) throw new Error("Internal Babel error: malformed key.");
 
-        const [, listKey, index] = match as unknown as [
-          string,
-          keyof typeof parent,
-          string,
-        ];
-        if ((parent[listKey] as t.Node[]).length > +index + 1) {
-          throw new TypeError(`RestElement must be last element of ${listKey}`);
+          const [, listKey, index] = match as unknown as [
+            string,
+            keyof typeof parent,
+            string,
+          ];
+          if ((parent[listKey] as t.Node[]).length > +index + 1) {
+            throw new TypeError(
+              `RestElement must be last element of ${listKey}`,
+            );
+          }
         }
-      }
-    : undefined,
+      : undefined,
 });
 
 defineType("ReturnStatement", {
@@ -1109,24 +1136,25 @@ defineType("TryStatement", {
   aliases: ["Statement"],
   fields: {
     block: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertNodeType("BlockStatement"),
-            Object.assign(
-              function (node: t.TryStatement) {
-                // This validator isn't put at the top level because we can run it
-                // even if this node doesn't have a parent.
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertNodeType("BlockStatement"),
+              Object.assign(
+                function (node: t.TryStatement) {
+                  // This validator isn't put at the top level because we can run it
+                  // even if this node doesn't have a parent.
 
-                if (!node.handler && !node.finalizer) {
-                  throw new TypeError(
-                    "TryStatement expects either a handler or finalizer, or both",
-                  );
-                }
-              } as Validator,
-              { oneOfNodeTypes: ["BlockStatement"] },
-            ),
-          )
-        : assertNodeType("BlockStatement"),
+                  if (!node.handler && !node.finalizer) {
+                    throw new TypeError(
+                      "TryStatement expects either a handler or finalizer, or both",
+                    );
+                  }
+                } as Validator,
+                { oneOfNodeTypes: ["BlockStatement"] },
+              ),
+            )
+          : assertNodeType("BlockStatement"),
     },
     handler: {
       optional: true,
@@ -1163,9 +1191,10 @@ defineType("UpdateExpression", {
       default: false,
     },
     argument: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("Expression")
-        : assertNodeType("Identifier", "MemberExpression"),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertNodeType("Expression")
+          : assertNodeType("Identifier", "MemberExpression"),
     },
     operator: {
       validate: assertOneOf(...UPDATE_OPERATORS),
@@ -1202,37 +1231,39 @@ defineType("VariableDeclaration", {
       ),
     },
   },
-  validate: process.env.BABEL_TYPES_8_BREAKING
-    ? function (parent, key, node) {
-        if (!is("ForXStatement", parent, { left: node })) return;
-        if (node.declarations.length !== 1) {
-          throw new TypeError(
-            `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
-          );
+  validate:
+    process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+      ? function (parent, key, node) {
+          if (!is("ForXStatement", parent, { left: node })) return;
+          if (node.declarations.length !== 1) {
+            throw new TypeError(
+              `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
+            );
+          }
         }
-      }
-    : undefined,
+      : undefined,
 });
 
 defineType("VariableDeclarator", {
   visitor: ["id", "init"],
   fields: {
     id: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("LVal")
-        : (function () {
-            const normal = assertNodeType(
-              "Identifier",
-              "ArrayPattern",
-              "ObjectPattern",
-            );
-            const without = assertNodeType("Identifier");
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertNodeType("LVal")
+          : (function () {
+              const normal = assertNodeType(
+                "Identifier",
+                "ArrayPattern",
+                "ObjectPattern",
+              );
+              const without = assertNodeType("Identifier");
 
-            return function (node: t.VariableDeclarator, key, val) {
-              const validator = node.init ? normal : without;
-              validator(node, key, val);
-            };
-          })(),
+              return function (node: t.VariableDeclarator, key, val) {
+                const validator = node.init ? normal : without;
+                validator(node, key, val);
+              };
+            })(),
     },
     definite: {
       optional: true,
@@ -1506,16 +1537,17 @@ defineType("ClassDeclaration", {
       optional: true,
     },
   },
-  validate: !process.env.BABEL_TYPES_8_BREAKING
-    ? undefined
-    : (function () {
-        const identifier = assertNodeType("Identifier");
-        return function (parent, key, node) {
-          if (!is("ExportDefaultDeclaration", parent)) {
-            identifier(node, "id", node.id);
-          }
-        };
-      })(),
+  validate:
+    !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? undefined
+      : (function () {
+          const identifier = assertNodeType("Identifier");
+          return function (parent, key, node) {
+            if (!is("ExportDefaultDeclaration", parent)) {
+              identifier(node, "id", node.id);
+            }
+          };
+        })(),
 });
 
 defineType("ExportAllDeclaration", {
@@ -1539,7 +1571,7 @@ defineType("ExportAllDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    ...(process.env.BABEL_TYPES_8_BREAKING
+    ...(process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? {}
       : {
           assertions: {
@@ -1586,33 +1618,34 @@ defineType("ExportNamedDeclaration", {
   fields: {
     declaration: {
       optional: true,
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertNodeType("Declaration"),
-            Object.assign(
-              function (node: t.ExportNamedDeclaration, key, val) {
-                // This validator isn't put at the top level because we can run it
-                // even if this node doesn't have a parent.
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertNodeType("Declaration"),
+              Object.assign(
+                function (node: t.ExportNamedDeclaration, key, val) {
+                  // This validator isn't put at the top level because we can run it
+                  // even if this node doesn't have a parent.
 
-                if (val && node.specifiers.length) {
-                  throw new TypeError(
-                    "Only declaration or specifiers is allowed on ExportNamedDeclaration",
-                  );
-                }
+                  if (val && node.specifiers.length) {
+                    throw new TypeError(
+                      "Only declaration or specifiers is allowed on ExportNamedDeclaration",
+                    );
+                  }
 
-                // This validator isn't put at the top level because we can run it
-                // even if this node doesn't have a parent.
+                  // This validator isn't put at the top level because we can run it
+                  // even if this node doesn't have a parent.
 
-                if (val && node.source) {
-                  throw new TypeError(
-                    "Cannot export a declaration from a source",
-                  );
-                }
-              } as Validator,
-              { oneOfNodeTypes: ["Declaration"] },
-            ),
-          )
-        : assertNodeType("Declaration"),
+                  if (val && node.source) {
+                    throw new TypeError(
+                      "Cannot export a declaration from a source",
+                    );
+                  }
+                } as Validator,
+                { oneOfNodeTypes: ["Declaration"] },
+              ),
+            )
+          : assertNodeType("Declaration"),
     },
     attributes: {
       optional: true,
@@ -1621,7 +1654,7 @@ defineType("ExportNamedDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    ...(process.env.BABEL_TYPES_8_BREAKING
+    ...(process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? {}
       : {
           assertions: {
@@ -1645,7 +1678,11 @@ defineType("ExportNamedDeclaration", {
             );
             const sourceless = assertNodeType("ExportSpecifier");
 
-            if (!process.env.BABEL_TYPES_8_BREAKING) return sourced;
+            if (
+              !process.env.BABEL_8_BREAKING &&
+              !process.env.BABEL_TYPES_8_BREAKING
+            )
+              return sourced;
 
             return function (node: t.ExportNamedDeclaration, key, val) {
               const validator = node.source ? sourced : sourceless;
@@ -1695,7 +1732,10 @@ defineType("ForOfStatement", {
   fields: {
     left: {
       validate: (function () {
-        if (!process.env.BABEL_TYPES_8_BREAKING) {
+        if (
+          !process.env.BABEL_8_BREAKING &&
+          !process.env.BABEL_TYPES_8_BREAKING
+        ) {
           return assertNodeType("VariableDeclaration", "LVal");
         }
 
@@ -1744,7 +1784,7 @@ defineType("ImportDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
-    ...(process.env.BABEL_TYPES_8_BREAKING
+    ...(process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? {}
       : {
           assertions: {
@@ -1850,31 +1890,32 @@ defineType("MetaProperty", {
   aliases: ["Expression"],
   fields: {
     meta: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertNodeType("Identifier"),
-            Object.assign(
-              function (node: t.MetaProperty, key, val) {
-                let property;
-                switch (val.name) {
-                  case "function":
-                    property = "sent";
-                    break;
-                  case "new":
-                    property = "target";
-                    break;
-                  case "import":
-                    property = "meta";
-                    break;
-                }
-                if (!is("Identifier", node.property, { name: property })) {
-                  throw new TypeError("Unrecognised MetaProperty");
-                }
-              } as Validator,
-              { oneOfNodeTypes: ["Identifier"] },
-            ),
-          )
-        : assertNodeType("Identifier"),
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertNodeType("Identifier"),
+              Object.assign(
+                function (node: t.MetaProperty, key, val) {
+                  let property;
+                  switch (val.name) {
+                    case "function":
+                      property = "sent";
+                      break;
+                    case "new":
+                      property = "target";
+                      break;
+                    case "import":
+                      property = "meta";
+                      break;
+                  }
+                  if (!is("Identifier", node.property, { name: property })) {
+                    throw new TypeError("Unrecognised MetaProperty");
+                  }
+                } as Validator,
+                { oneOfNodeTypes: ["Identifier"] },
+              ),
+            )
+          : assertNodeType("Identifier"),
     },
     property: {
       validate: assertNodeType("Identifier"),
@@ -2151,21 +2192,22 @@ defineType("YieldExpression", {
   aliases: ["Expression", "Terminatorless"],
   fields: {
     delegate: {
-      validate: process.env.BABEL_TYPES_8_BREAKING
-        ? chain(
-            assertValueType("boolean"),
-            Object.assign(
-              function (node: t.YieldExpression, key, val) {
-                if (val && !node.argument) {
-                  throw new TypeError(
-                    "Property delegate of YieldExpression cannot be true if there is no argument",
-                  );
-                }
-              } as Validator,
-              { type: "boolean" },
-            ),
-          )
-        : assertValueType("boolean"),
+      validate:
+        process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+          ? chain(
+              assertValueType("boolean"),
+              Object.assign(
+                function (node: t.YieldExpression, key, val) {
+                  if (val && !node.argument) {
+                    throw new TypeError(
+                      "Property delegate of YieldExpression cannot be true if there is no argument",
+                    );
+                  }
+                } as Validator,
+                { type: "boolean" },
+              ),
+            )
+          : assertValueType("boolean"),
       default: false,
     },
     argument: {
@@ -2241,9 +2283,10 @@ defineType("OptionalMemberExpression", {
       default: false,
     },
     optional: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertValueType("boolean")
-        : chain(assertValueType("boolean"), assertOptionalChainStart()),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertValueType("boolean")
+          : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
   },
 });
@@ -2265,9 +2308,10 @@ defineType("OptionalCallExpression", {
       ),
     },
     optional: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertValueType("boolean")
-        : chain(assertValueType("boolean"), assertOptionalChainStart()),
+      validate:
+        !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+          ? assertValueType("boolean")
+          : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
     typeArguments: {
       validate: assertNodeType("TypeParameterInstantiation"),
