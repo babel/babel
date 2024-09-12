@@ -114,3 +114,9 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
     // eslint-disable-next-line no-restricted-globals
     require("./converters/toSequenceExpression.js").default;
 }
+
+if (!process.env.BABEL_8_BREAKING && process.env.BABEL_TYPES_8_BREAKING) {
+  console.warn(
+    "BABEL_TYPES_8_BREAKING is not supported anymore. Use the latest Babel 8.0.0 pre-release instead!",
+  );
+}

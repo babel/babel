@@ -297,7 +297,6 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
@@ -337,14 +336,12 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
           BABEL_CLI_FLAKY_TESTS: true
       - name: Test ESM
         run: yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
           BABEL_CLI_FLAKY_TESTS: true
 
   test-windows-mac:

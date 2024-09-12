@@ -48,6 +48,8 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i 's/"importReflection",//' src/language-js/parse/babel.js
   rm tests/format/js/babel-plugins/import-reflection.js
   rm -r tests/format/js/import-reflection/
+  # https://github.com/babel/babel/pull/16817
+  sed -i 's/node.type !== "MemberExpression" ||/node.type !== "MemberExpression" || \/\/@ts-expect-error/g' src/language-js/utils/is-node-matches.js
 fi
 
 #==============================================================================#

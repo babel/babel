@@ -84,6 +84,7 @@ export function NewExpression(
   if (
     this.format.minified &&
     node.arguments.length === 0 &&
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     !node.optional &&
     !isCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
@@ -95,6 +96,7 @@ export function NewExpression(
   this.print(node.typeArguments); // Flow
   this.print(node.typeParameters); // TS
 
+  // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
   if (node.optional) {
     // TODO: This can never happen
     this.token("?.");
@@ -260,7 +262,7 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 
 export function AssignmentExpression(
   this: Printer,
-  node: t.AssignmentExpression,
+  node: t.AssignmentExpression | t.BinaryExpression | t.LogicalExpression,
 ) {
   this.print(node.left);
 

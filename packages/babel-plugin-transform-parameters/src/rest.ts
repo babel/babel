@@ -303,7 +303,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
 
   const restPath = path.get(
     `params.${node.params.length - 1}.argument`,
-  ) as NodePath<t.Pattern | t.Identifier>;
+  ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
 
   if (!restPath.isIdentifier()) {
     const shadowedParams = new Set<string>();

@@ -136,7 +136,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       const newDeclarations = [];
       for (const declarator of declarations) {
         for (const { left, right } of transformPrivateKeyDestructuring(
-          // @ts-expect-error The id of a variable declarator must not be a RestElement
+          // @ts-ignore(Babel 7 vs Babel 8) The id of a variable declarator must not be a RestElement
           declarator.id,
           declarator.init,
           scope,
@@ -146,7 +146,12 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
           objectRestNoSymbols,
           /* useBuiltIns */ true,
         )) {
-          newDeclarations.push(variableDeclarator(left, right));
+          newDeclarations.push(
+            variableDeclarator(
+              left as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+              right,
+            ),
+          );
         }
       }
       node.declarations = newDeclarations;
