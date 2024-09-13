@@ -29,6 +29,15 @@ const propertyNames = [
 
 for (const name of functionNames) {
   exports[name] = function (...args) {
+    if (
+      process.env.BABEL_8_BREAKING &&
+      typeof args[args.length - 1] !== "function"
+    ) {
+      throw new Error(
+        `Starting from Babel 8.0.0, the '${name}' function expects a callback. If you need to call it synchronously, please use '${name}Sync'.`
+      );
+    }
+
     babelP.then(babel => {
       babel[name](...args);
     });
