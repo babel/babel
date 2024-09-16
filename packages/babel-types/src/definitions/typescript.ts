@@ -425,33 +425,20 @@ defineType("TSLiteralType", {
   },
 });
 
-defineType("TSClassImplements", {
+const expressionWithTypeArguments = {
   aliases: ["TSType"],
   visitor: ["expression", "typeParameters"],
   fields: {
     expression: validateType("TSEntityName"),
     typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
-});
+};
 
-defineType("TSInterfaceHeritage", {
-  aliases: ["TSType"],
-  visitor: ["expression", "typeParameters"],
-  fields: {
-    expression: validateType("TSEntityName"),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
-  },
-});
-
-if (!process.env.BABEL_8_BREAKING) {
-  defineType("TSExpressionWithTypeArguments", {
-    aliases: ["TSType"],
-    visitor: ["expression", "typeParameters"],
-    fields: {
-      expression: validateType("TSEntityName"),
-      typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
-    },
-  });
+if (process.env.BABEL_8_BREAKING) {
+  defineType("TSClassImplements", expressionWithTypeArguments);
+  defineType("TSInterfaceHeritage", expressionWithTypeArguments);
+} else {
+  defineType("TSExpressionWithTypeArguments", expressionWithTypeArguments);
 }
 
 defineType("TSInterfaceDeclaration", {

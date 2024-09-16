@@ -2294,28 +2294,6 @@ export function tsLiteralType(
   });
 }
 export { tsLiteralType as tSLiteralType };
-export function tsClassImplements(
-  expression: t.TSEntityName,
-  typeParameters: t.TSTypeParameterInstantiation | null = null,
-): t.TSClassImplements {
-  return validateNode<t.TSClassImplements>({
-    type: "TSClassImplements",
-    expression,
-    typeParameters,
-  });
-}
-export { tsClassImplements as tSClassImplements };
-export function tsInterfaceHeritage(
-  expression: t.TSEntityName,
-  typeParameters: t.TSTypeParameterInstantiation | null = null,
-): t.TSInterfaceHeritage {
-  return validateNode<t.TSInterfaceHeritage>({
-    type: "TSInterfaceHeritage",
-    expression,
-    typeParameters,
-  });
-}
-export { tsInterfaceHeritage as tSInterfaceHeritage };
 export function tsExpressionWithTypeArguments(
   expression: t.TSEntityName,
   typeParameters: t.TSTypeParameterInstantiation | null = null,

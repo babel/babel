@@ -20,7 +20,9 @@ function isInType(path: NodePath) {
     case process.env.BABEL_8_BREAKING
       ? "TSClassImplements"
       : "TSExpressionWithTypeArguments":
-    case "TSInterfaceHeritage":
+    case process.env.BABEL_8_BREAKING
+      ? "TSInterfaceHeritage"
+      : "TSExpressionWithTypeArguments":
     case "TSTypeQuery":
       return true;
     case "TSQualifiedName":

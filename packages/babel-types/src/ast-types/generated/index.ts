@@ -216,7 +216,6 @@ export type Node =
   | TSBigIntKeyword
   | TSBooleanKeyword
   | TSCallSignatureDeclaration
-  | TSClassImplements
   | TSConditionalType
   | TSConstructSignatureDeclaration
   | TSConstructorType
@@ -236,7 +235,6 @@ export type Node =
   | TSInstantiationExpression
   | TSInterfaceBody
   | TSInterfaceDeclaration
-  | TSInterfaceHeritage
   | TSIntersectionType
   | TSIntrinsicKeyword
   | TSLiteralType
@@ -1944,18 +1942,6 @@ export interface TSLiteralType extends BaseNode {
     | UnaryExpression;
 }
 
-export interface TSClassImplements extends BaseNode {
-  type: "TSClassImplements";
-  expression: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
-}
-
-export interface TSInterfaceHeritage extends BaseNode {
-  type: "TSInterfaceHeritage";
-  expression: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
-}
-
 export interface TSExpressionWithTypeArguments extends BaseNode {
   type: "TSExpressionWithTypeArguments";
   expression: TSEntityName;
@@ -2682,8 +2668,6 @@ export type TypeScript =
   | TSIndexedAccessType
   | TSMappedType
   | TSLiteralType
-  | TSClassImplements
-  | TSInterfaceHeritage
   | TSExpressionWithTypeArguments
   | TSInterfaceDeclaration
   | TSInterfaceBody
@@ -2746,8 +2730,6 @@ export type TSType =
   | TSIndexedAccessType
   | TSMappedType
   | TSLiteralType
-  | TSClassImplements
-  | TSInterfaceHeritage
   | TSExpressionWithTypeArguments
   | TSImportType;
 export type TSBaseType =
@@ -4582,7 +4564,6 @@ export interface ParentMaps {
     | SwitchStatement
     | TSAsExpression
     | TSCallSignatureDeclaration
-    | TSClassImplements
     | TSConstructSignatureDeclaration
     | TSConstructorType
     | TSDeclareFunction
@@ -4597,7 +4578,6 @@ export interface ParentMaps {
     | TSIndexSignature
     | TSInstantiationExpression
     | TSInterfaceDeclaration
-    | TSInterfaceHeritage
     | TSMethodSignature
     | TSModuleDeclaration
     | TSNamedTupleMember
@@ -6913,27 +6893,6 @@ export interface ParentMaps {
     | TSUnionType
     | TemplateLiteral;
   TSCallSignatureDeclaration: TSInterfaceBody | TSTypeLiteral;
-  TSClassImplements:
-    | TSArrayType
-    | TSAsExpression
-    | TSConditionalType
-    | TSIndexedAccessType
-    | TSIntersectionType
-    | TSMappedType
-    | TSNamedTupleMember
-    | TSOptionalType
-    | TSParenthesizedType
-    | TSRestType
-    | TSSatisfiesExpression
-    | TSTupleType
-    | TSTypeAliasDeclaration
-    | TSTypeAnnotation
-    | TSTypeAssertion
-    | TSTypeOperator
-    | TSTypeParameter
-    | TSTypeParameterInstantiation
-    | TSUnionType
-    | TemplateLiteral;
   TSConditionalType:
     | TSArrayType
     | TSAsExpression
@@ -7231,27 +7190,6 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TSInterfaceHeritage:
-    | TSArrayType
-    | TSAsExpression
-    | TSConditionalType
-    | TSIndexedAccessType
-    | TSIntersectionType
-    | TSMappedType
-    | TSNamedTupleMember
-    | TSOptionalType
-    | TSParenthesizedType
-    | TSRestType
-    | TSSatisfiesExpression
-    | TSTupleType
-    | TSTypeAliasDeclaration
-    | TSTypeAnnotation
-    | TSTypeAssertion
-    | TSTypeOperator
-    | TSTypeParameter
-    | TSTypeParameterInstantiation
-    | TSUnionType
-    | TemplateLiteral;
   TSIntersectionType:
     | TSArrayType
     | TSAsExpression
@@ -7575,11 +7513,9 @@ export interface ParentMaps {
     | TemplateLiteral;
   TSPropertySignature: TSInterfaceBody | TSTypeLiteral;
   TSQualifiedName:
-    | TSClassImplements
     | TSExpressionWithTypeArguments
     | TSImportEqualsDeclaration
     | TSImportType
-    | TSInterfaceHeritage
     | TSQualifiedName
     | TSTypeQuery
     | TSTypeReference;
@@ -7933,11 +7869,9 @@ export interface ParentMaps {
     | JSXOpeningElement
     | NewExpression
     | OptionalCallExpression
-    | TSClassImplements
     | TSExpressionWithTypeArguments
     | TSImportType
     | TSInstantiationExpression
-    | TSInterfaceHeritage
     | TSTypeQuery
     | TSTypeReference
     | TaggedTemplateExpression;

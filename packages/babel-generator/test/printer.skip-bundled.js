@@ -13,13 +13,19 @@ describe("Printer", () => {
     Object.keys(Printer.prototype).forEach(function (type) {
       if (IS_BABEL_8()) {
         if (type === "TSExpressionWithTypeArguments") return;
+      } else {
+        if (
+          type === "TSClassImplements" ||
+          type === "TSInterfaceHeritage" ||
+          type === "DecimalLiteral"
+        ) {
+          return;
+        }
       }
 
       if (!/[A-Z]/.test(type[0])) return;
 
-      if (type === "DecimalLiteral") return;
-
-      expect(t.VISITOR_KEYS[type]).toBeTruthy();
+      expect(t.VISITOR_KEYS).toHaveProperty(type);
     });
   });
 });

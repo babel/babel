@@ -591,9 +591,6 @@ export interface NodePathAssertions {
   assertTSCallSignatureDeclaration(
     opts?: Opts<t.TSCallSignatureDeclaration>,
   ): asserts this is NodePath<t.TSCallSignatureDeclaration>;
-  assertTSClassImplements(
-    opts?: Opts<t.TSClassImplements>,
-  ): asserts this is NodePath<t.TSClassImplements>;
   assertTSConditionalType(
     opts?: Opts<t.TSConditionalType>,
   ): asserts this is NodePath<t.TSConditionalType>;
@@ -654,9 +651,6 @@ export interface NodePathAssertions {
   assertTSInterfaceDeclaration(
     opts?: Opts<t.TSInterfaceDeclaration>,
   ): asserts this is NodePath<t.TSInterfaceDeclaration>;
-  assertTSInterfaceHeritage(
-    opts?: Opts<t.TSInterfaceHeritage>,
-  ): asserts this is NodePath<t.TSInterfaceHeritage>;
   assertTSIntersectionType(
     opts?: Opts<t.TSIntersectionType>,
   ): asserts this is NodePath<t.TSIntersectionType>;

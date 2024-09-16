@@ -812,10 +812,6 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.TSCallSignatureDeclaration>,
   ): this is NodePath<t.TSCallSignatureDeclaration>;
-  isTSClassImplements(
-    this: NodePath,
-    opts?: Opts<t.TSClassImplements>,
-  ): this is NodePath<t.TSClassImplements>;
   isTSConditionalType(
     this: NodePath,
     opts?: Opts<t.TSConditionalType>,
@@ -896,10 +892,6 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.TSInterfaceDeclaration>,
   ): this is NodePath<t.TSInterfaceDeclaration>;
-  isTSInterfaceHeritage(
-    this: NodePath,
-    opts?: Opts<t.TSInterfaceHeritage>,
-  ): this is NodePath<t.TSInterfaceHeritage>;
   isTSIntersectionType(
     this: NodePath,
     opts?: Opts<t.TSIntersectionType>,
