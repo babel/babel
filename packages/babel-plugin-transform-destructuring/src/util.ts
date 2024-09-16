@@ -154,7 +154,10 @@ export class DestructuringTransformer {
       }
 
       node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id as t.LVal, nodeInit),
+        t.variableDeclarator(
+          id as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+          nodeInit,
+        ),
       ]);
     }
 
@@ -182,7 +185,12 @@ export class DestructuringTransformer {
     } else if (t.isAssignmentPattern(id)) {
       this.pushAssignmentPattern(id, init);
     } else {
-      this.nodes.push(this.buildVariableAssignment(id, init));
+      this.nodes.push(
+        this.buildVariableAssignment(
+          id as t.AssignmentExpression["left"],
+          init,
+        ),
+      );
     }
   }
 
@@ -309,7 +317,7 @@ export class DestructuringTransformer {
   pushObjectProperty(prop: t.ObjectProperty, propRef: t.Expression) {
     if (t.isLiteral(prop.key)) prop.computed = true;
 
-    const pattern = prop.value as t.LVal;
+    const pattern = prop.value as t.AssignmentExpression["left"];
     const objRef = t.memberExpression(
       t.cloneNode(propRef),
       prop.key,

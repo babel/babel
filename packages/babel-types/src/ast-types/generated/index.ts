@@ -376,7 +376,7 @@ export interface CallExpression extends BaseNode {
   type: "CallExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: Array<Expression | SpreadElement | ArgumentPlaceholder>;
-  optional?: true | false | null;
+  optional?: boolean | null;
   typeArguments?: TypeParameterInstantiation | null;
   typeParameters?: TSTypeParameterInstantiation | null;
 }
@@ -548,14 +548,14 @@ export interface MemberExpression extends BaseNode {
   object: Expression | Super;
   property: Expression | Identifier | PrivateName;
   computed: boolean;
-  optional?: true | false | null;
+  optional?: boolean | null;
 }
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: Array<Expression | SpreadElement | ArgumentPlaceholder>;
-  optional?: true | false | null;
+  optional?: boolean | null;
   typeArguments?: TypeParameterInstantiation | null;
   typeParameters?: TSTypeParameterInstantiation | null;
 }

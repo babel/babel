@@ -96,7 +96,12 @@ export function buildVariableDeclarationFromParams(
     params: elements,
     variableDeclaration: variableDeclaration(
       "var",
-      transformed.map(({ left, right }) => variableDeclarator(left, right)),
+      transformed.map(({ left, right }) =>
+        variableDeclarator(
+          left as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+          right,
+        ),
+      ),
     ),
   };
 }
@@ -149,7 +154,7 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.AssignmentExpression["left"] | t.ObjectProperty | null;
+  node: t.LVal | t.OptionalMemberExpression | t.ObjectProperty | null;
   index: number;
   depth: number;
 };
@@ -167,9 +172,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.AssignmentExpression["left"],
+  root: t.LVal | t.OptionalMemberExpression,
   visitor: (
-    node: t.AssignmentExpression["left"] | t.ObjectProperty,
+    node: t.LVal | t.OptionalMemberExpression | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -219,7 +224,7 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.AssignmentExpression["left"]) {
+export function hasPrivateKeys(pattern: t.LVal | t.OptionalMemberExpression) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {

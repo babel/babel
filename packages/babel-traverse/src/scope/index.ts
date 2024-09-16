@@ -966,7 +966,7 @@ class Scope {
   }
 
   push(opts: {
-    id: t.LVal;
+    id: t.ArrayPattern | t.Identifier | t.ObjectPattern;
     init?: t.Expression;
     unique?: boolean;
     _blockHoist?: number | undefined;

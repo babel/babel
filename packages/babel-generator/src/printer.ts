@@ -748,7 +748,6 @@ class Printer {
       | t.StringLiteral
       | t.NumericLiteral
       | t.BigIntLiteral
-      | t.DecimalLiteral
       | t.DirectiveLiteral
       | t.JSXText,
   ): string | undefined {
