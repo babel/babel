@@ -23,8 +23,10 @@ export default declare((api, options: Options) => {
       );
     }
   } else {
-    if (typeof enums !== "boolean" && enums !== undefined) {
-      throw new Error(".enums must be a boolean, or undefined");
+    if (enums === false) {
+      console.warn(
+        "The .enums option has been removed and it's now always enabled.",
+      );
     }
   }
 
