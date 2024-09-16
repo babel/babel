@@ -1,4 +1,4 @@
-# 21 invalid programs did not produce a parsing error
+# 25 invalid programs did not produce a parsing error
 
 JSX/invalid_unpaired_gt.js
 JSX/invalid_unpaired_rcurly.js
@@ -7,7 +7,10 @@ arrow_function_invalid/migrated_0002.js
 async_arrow_functions/with_type_parameters_types_disabled.js
 class_method_kinds/polymorphic_getter.js
 class_properties/migrated_0026.js
+class_properties/static_annotated_no_types.js
+class_properties/static_with_params_no_types.js
 comment_interning/declare_variable.js
+export_statements/invalid_export_enum_disabled.js
 for_await_loops/migrated_0000.js
 ts_syntax/invalid_alias_keyof.js
 ts_syntax/invalid_alias_never.js
@@ -21,9 +24,10 @@ types/declare_export/var/migrated_0010.js
 types/declare_statements/migrated_0000.js
 types/declare_statements/migrated_0001.js
 types/reserved/function.js
+types/typeof/with-targs-bad-newline.js
 
 
-# 49 valid programs produced a parsing error
+# 101 valid programs produced a parsing error
 
 ES6/modules/export_default_class_implements.js
 ES6/modules/migrated_0020.js
@@ -50,25 +54,77 @@ comment_interning/object_type.js
 comment_interning/remove_type_trailing_comments.js
 comment_interning/super.js
 comment_interning/type_alias.js
+components/component.js
+components/component_params.js
+components/component_params_as.js
+components/component_params_default.js
+components/component_params_rest.js
+components/component_type.js
+components/component_type_params.js
+components/declare_component.js
+components/declare_component_params_rest.js
 decorators/migrated_0003.js
 decorators/migrated_0005.js
 enums/declare-enum.js
+enums/enum-valid-bigint-explicit.js
+enums/enum-valid-bigint-implicit.js
+enums/enum-valid-number-negative-explicit.js
+enums/enum-valid-number-negative-implicit.js
 export_import_reserved_words/migrated_0003.js
 export_statements/export_specifier_await.js
 export_statements/export_specifier_reserved_alias.js
 export_statements/export_trailing_comma.js
+hook_syntax/declare_hook.js
+hook_syntax/hook_decl.js
+hook_syntax/hook_type.js
 ts_syntax/as.js
 ts_syntax/in_out_variance.js
 ts_syntax/readonly_type.js
 ts_syntax/readonly_variance.js
 ts_syntax/satisfies.js
 ts_syntax/type_param_extends.js
+type_guards/arrows.js
+type_guards/asserts_is.js
+type_guards/callback.js
+type_guards/class.js
+type_guards/comment_type.js
+type_guards/declare_functions.js
+type_guards/functions.js
+type_guards/implies_as_type_guard_type.js
+type_guards/interface.js
+type_guards/invalid/keyword_as_param_2.js
+type_guards/is_as_parameter.js
+type_guards/poly_guard.js
+type_guards/reserved_word_as_param.js
+type_guards/type_annotations.js
+types/conditional_types/passing.js
+types/declare_export/declare_export_type_alias.js
 types/declare_export/var/const.js
 types/declare_export/var/let.js
 types/declare_module/enum.js
+types/declare_module_exports/migrated_0002.js
+types/declare_module_exports_invalid/migrated_0001.js
+types/declare_module_invalid/migrated_0002.js
+types/declare_module_invalid/migrated_0003.js
+types/declare_module_invalid/migrated_0004.js
 types/declare_module_with_exports/enum.js
+types/declare_namespace/empty.js
+types/declare_namespace/enum.js
+types/declare_namespace/import_type_in_namespace.js
+types/declare_namespace/multiple.js
+types/declare_namespace/unsupported-children.js
 types/declare_statements/decalre_let.js
 types/declare_statements/declare_const.js
+types/mapped_types/minus_optional.js
+types/mapped_types/multiple_props.js
+types/mapped_types/optional.js
+types/mapped_types/optional_with_variance.js
+types/mapped_types/plain.js
+types/mapped_types/plus_optional.js
+types/mapped_types/variance.js
+types/render_types/renders_maybe.js
+types/render_types/renders_star.js
+types/tuples/inexact.js
 types/tuples/labeled.js
 types/tuples/optional.js
 types/tuples/spread.js
