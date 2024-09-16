@@ -78,10 +78,14 @@ interface RecordAndTuplePluginOptions {
   syntaxType: "bar" | "hash";
 }
 
-interface FlowPluginOptions {
-  all?: boolean;
-  enums?: boolean;
-}
+type FlowPluginOptions = BABEL_8_BREAKING extends true
+  ? {
+      all?: boolean;
+      enums?: boolean;
+    }
+  : {
+      all?: boolean;
+    };
 
 interface TypeScriptPluginOptions {
   dts?: boolean;

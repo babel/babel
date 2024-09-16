@@ -311,10 +311,6 @@ export default (superClass: typeof Parser) =>
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
-    shouldParseEnums(): boolean {
-      return !!this.getPluginOption("flow", "enums");
-    }
-
     finishToken(type: TokenType, val: any): void {
       if (
         type !== tt.string &&
@@ -1954,7 +1950,10 @@ export default (superClass: typeof Parser) =>
           this.next();
           return this.flowParseInterface(node);
         }
-      } else if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
+      } else if (
+        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
+        this.isContextual(tt._enum)
+      ) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -2007,7 +2006,8 @@ export default (superClass: typeof Parser) =>
       const { type } = this.state;
       if (
         tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
-        (this.shouldParseEnums() && type === tt._enum)
+        ((process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
+          type === tt._enum)
       ) {
         return !this.state.containsEsc;
       }
@@ -2018,7 +2018,8 @@ export default (superClass: typeof Parser) =>
       const { type } = this.state;
       if (
         tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
-        (this.shouldParseEnums() && type === tt._enum)
+        ((process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
+          type === tt._enum)
       ) {
         return this.state.containsEsc;
       }
@@ -2027,7 +2028,10 @@ export default (superClass: typeof Parser) =>
     }
 
     parseExportDefaultExpression() {
-      if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
+      if (
+        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
+        this.isContextual(tt._enum)
+      ) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -2276,7 +2280,10 @@ export default (superClass: typeof Parser) =>
         this.next();
         // @ts-expect-error: refine typings
         return this.flowParseInterface(declarationNode);
-      } else if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
+      } else if (
+        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
+        this.isContextual(tt._enum)
+      ) {
         node.exportKind = "value";
         const declarationNode = this.startNode();
         this.next();
