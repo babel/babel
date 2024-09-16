@@ -112,7 +112,7 @@ describeESM("usage from cjs", () => {
   });
 });
 
-describe("sync loading of ESM plugins", () => {
+describeESM("sync loading of ESM plugins", () => {
   it("without --experimental-require-module flag", async () => {
     await expect(run("transform-sync-esm-plugin.mjs")).rejects.toThrow(
       "You appear to be using a native ECMAScript module plugin, which is " +
