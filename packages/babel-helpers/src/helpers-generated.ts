@@ -1357,21 +1357,36 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 1172, gzip size: 526
+  // size: 1443, gzip size: 587
   wrapAsyncGenerator: helper(
     "7.0.0-beta.0",
-    'function _wrapAsyncGenerator(e){return function(){return new AsyncGenerator(e.apply(this,arguments))}}function AsyncGenerator(e){var r,t;function resume(r,t){try{var n=e[r](t),o=n.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then((function(t){if(u){var i="return"===r?"return":"next";if(!o.k||t.done)return resume(i,t);t=e[i](t).value}settle(n.done?"return":"normal",t)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":r.resolve({value:n,done:!0});break;case"throw":r.reject(n);break;default:r.resolve({value:n,done:!1})}(r=r.next)?resume(r.key,r.arg):t=null}this._invoke=function(e,n){return new Promise((function(o,u){var i={key:e,arg:n,resolve:o,reject:u,next:null};t?t=t.next=i:(r=t=i,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
+    'function _wrapAsyncGenerator(e){return function(){return new AsyncGenerator(e.apply(this,arguments))}}function AsyncGenerator(e){var t,r;function resume(t,r){try{var n=e[t](r),o=n.value,c=o instanceof OverloadYield;Promise.resolve(c?o.v:o).then((function(r){if(c){var a="return"===t?"return":"next";if(!o.k||r.done)return resume(a,r);r=e[a](r).value}settle(n.done?"return":"normal",r)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":t.resolve({value:n,done:!0});break;case"throw":t.reject(n);break;default:t.resolve({value:n,done:!1})}(t=t.next)?resume(t.key,t.arg):r=null}this._invoke=function(e,n){return new Promise((function(o,c){var a={key:e,arg:n,resolve:o,reject:c,next:null};r?r=r.next=a:(t=r=a,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}const AsyncIteratorPrototype={},AsyncGeneratorPrototype=Object.create(AsyncIteratorPrototype),AsyncGeneratorInstanceProrotype=Object.create(AsyncGeneratorPrototype);AsyncGenerator.prototype=AsyncGeneratorInstanceProrotype,AsyncGeneratorPrototype.constructor=AsyncGenerator,AsyncIteratorPrototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
     {
-      globals: ["Promise", "Symbol"],
+      globals: ["Promise", "Object", "Symbol"],
       locals: {
         _wrapAsyncGenerator: ["body.0.id"],
         AsyncGenerator: [
           "body.1.id",
           "body.0.body.body.0.argument.body.body.0.argument.callee",
-          "body.2.expression.expressions.0.left.object.object",
-          "body.2.expression.expressions.1.left.object.object",
-          "body.2.expression.expressions.2.left.object.object",
-          "body.2.expression.expressions.3.left.object.object",
+          "body.3.expression.expressions.0.left.object",
+          "body.3.expression.expressions.1.right",
+          "body.3.expression.expressions.3.left.object.object",
+          "body.3.expression.expressions.4.left.object.object",
+          "body.3.expression.expressions.5.left.object.object",
+        ],
+        AsyncIteratorPrototype: [
+          "body.2.declarations.0.id",
+          "body.2.declarations.1.init.arguments.0",
+          "body.3.expression.expressions.2.left.object",
+        ],
+        AsyncGeneratorPrototype: [
+          "body.2.declarations.1.id",
+          "body.2.declarations.2.init.arguments.0",
+          "body.3.expression.expressions.1.left.object",
+        ],
+        AsyncGeneratorInstanceProrotype: [
+          "body.2.declarations.2.id",
+          "body.3.expression.expressions.0.right",
         ],
       },
       exportBindingAssignments: [],
