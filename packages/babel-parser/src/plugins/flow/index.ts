@@ -1950,10 +1950,7 @@ export default (superClass: typeof Parser) =>
           this.next();
           return this.flowParseInterface(node);
         }
-      } else if (
-        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
-        this.isContextual(tt._enum)
-      ) {
+      } else if (this.isContextual(tt._enum)) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -2004,11 +2001,7 @@ export default (superClass: typeof Parser) =>
     // export type
     shouldParseExportDeclaration(): boolean {
       const { type } = this.state;
-      if (
-        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
-        ((process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
-          type === tt._enum)
-      ) {
+      if (type === tt._enum || tokenIsFlowInterfaceOrTypeOrOpaque(type)) {
         return !this.state.containsEsc;
       }
       return super.shouldParseExportDeclaration();
@@ -2016,11 +2009,7 @@ export default (superClass: typeof Parser) =>
 
     isExportDefaultSpecifier(): boolean {
       const { type } = this.state;
-      if (
-        tokenIsFlowInterfaceOrTypeOrOpaque(type) ||
-        ((process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
-          type === tt._enum)
-      ) {
+      if (type === tt._enum || tokenIsFlowInterfaceOrTypeOrOpaque(type)) {
         return this.state.containsEsc;
       }
 
@@ -2028,10 +2017,7 @@ export default (superClass: typeof Parser) =>
     }
 
     parseExportDefaultExpression() {
-      if (
-        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
-        this.isContextual(tt._enum)
-      ) {
+      if (this.isContextual(tt._enum)) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -2280,10 +2266,7 @@ export default (superClass: typeof Parser) =>
         this.next();
         // @ts-expect-error: refine typings
         return this.flowParseInterface(declarationNode);
-      } else if (
-        (process.env.BABEL_8_BREAKING || this.plugins.get("flow").enums) &&
-        this.isContextual(tt._enum)
-      ) {
+      } else if (this.isContextual(tt._enum)) {
         node.exportKind = "value";
         const declarationNode = this.startNode();
         this.next();
