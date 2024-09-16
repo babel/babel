@@ -14,14 +14,12 @@ describe("Printer", () => {
       if (IS_BABEL_8()) {
         if (type === "TSExpressionWithTypeArguments") return;
       } else {
-        if (
-          type === "TSClassImplements" ||
-          type === "TSInterfaceHeritage" ||
-          type === "DecimalLiteral"
-        ) {
+        if (type === "TSClassImplements" || type === "TSInterfaceHeritage") {
           return;
         }
       }
+
+      if (type === "DecimalLiteral") return;
 
       if (!/[A-Z]/.test(type[0])) return;
 

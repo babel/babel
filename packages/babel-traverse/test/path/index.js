@@ -66,7 +66,12 @@ describe("NodePath", () => {
     });
 
     function isAndAssertFilter(key) {
-      return !((key.startsWith("assert") || key.startsWith("is")) && t[key]);
+      return !(
+        (key.startsWith("assert") || key.startsWith("is")) &&
+        (t[key] ||
+          key.endsWith("TSClassImplements") ||
+          key.endsWith("TSInterfaceHeritage"))
+      );
     }
 
     itBabel7NoESM("methods babel 7", () => {
