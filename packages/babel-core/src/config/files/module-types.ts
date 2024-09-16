@@ -118,6 +118,7 @@ export default function* loadCodeDefault(
     case "require .cts":
     case "import .cts":
       return loadCtsDefault(filepath);
+    case "import .js":
     case "require .js":
     case "require .mjs": // Some versions of Node.js support require(esm):
       try {
@@ -137,10 +138,14 @@ export default function* loadCodeDefault(
         ) {
           throw new ConfigError(tlaError, filepath);
         }
-        if (e.code !== "ERR_REQUIRE_ESM") throw e;
+        if (
+          e.code !== "ERR_REQUIRE_ESM" &&
+          (process.env.BABEL_8_BREAKING || ext !== ".mjs")
+        ) {
+          throw e;
+        }
       }
     // fall through: require() failed due to ESM or TLA, try import()
-    case "import .js":
     case "import .mjs":
       if ((async ??= yield* isAsync())) {
         return (yield* waitFor(loadMjsFromPath(filepath))).default;
