@@ -9,19 +9,19 @@ function _wrapAsyncGenerator(e) {
   };
 }
 function AsyncGenerator(e) {
-  var t, r;
-  function resume(t, r) {
+  var r, t;
+  function resume(r, t) {
     try {
-      var n = e[t](r),
+      var n = e[r](t),
         o = n.value,
-        c = o instanceof OverloadYield;
-      _Promise.resolve(c ? o.v : o).then(function (r) {
-        if (c) {
-          var a = "return" === t ? "return" : "next";
-          if (!o.k || r.done) return resume(a, r);
-          r = e[a](r).value;
+        a = o instanceof OverloadYield;
+      _Promise.resolve(a ? o.v : o).then(function (t) {
+        if (a) {
+          var c = "return" === r ? "return" : "next";
+          if (!o.k || t.done) return resume(c, t);
+          t = e[c](t).value;
         }
-        settle(n.done ? "return" : "normal", r);
+        settle(n.done ? "return" : "normal", t);
       }, function (e) {
         resume("throw", e);
       });
@@ -32,32 +32,32 @@ function AsyncGenerator(e) {
   function settle(e, n) {
     switch (e) {
       case "return":
-        t.resolve({
+        r.resolve({
           value: n,
           done: !0
         });
         break;
       case "throw":
-        t.reject(n);
+        r.reject(n);
         break;
       default:
-        t.resolve({
+        r.resolve({
           value: n,
           done: !1
         });
     }
-    (t = t.next) ? resume(t.key, t.arg) : r = null;
+    (r = r.next) ? resume(r.key, r.arg) : t = null;
   }
   this._invoke = function (e, n) {
-    return new _Promise(function (o, c) {
-      var a = {
+    return new _Promise(function (o, a) {
+      var c = {
         key: e,
         arg: n,
         resolve: o,
-        reject: c,
+        reject: a,
         next: null
       };
-      r ? r = r.next = a : (t = r = a, resume(e, n));
+      t ? t = t.next = c : (r = t = c, resume(e, n));
     });
   }, "function" != typeof e["return"] && (this["return"] = void 0);
 }

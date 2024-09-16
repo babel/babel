@@ -158,9 +158,9 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
 // Without async generator function marking like what regenerator does, the
 // following behavior will still be out of spec: given `async function* foo() {}`,
 // `foo() instanceof foo` will return false instead of true.
-const AsyncIteratorPrototype: any = {};
-const AsyncGeneratorPrototype: any = Object.create(AsyncIteratorPrototype);
-const AsyncGeneratorInstanceProrotype: any = Object.create(
+var AsyncIteratorPrototype: any = {};
+var AsyncGeneratorPrototype: any = Object.create(AsyncIteratorPrototype);
+var AsyncGeneratorInstanceProrotype: any = Object.create(
   AsyncGeneratorPrototype,
 );
 AsyncGenerator.prototype = AsyncGeneratorInstanceProrotype;
