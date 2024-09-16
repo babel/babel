@@ -1,5 +1,4 @@
 {
-  "BABEL_8_BREAKING": false,
   "plugins": [
     ["proposal-pipeline-operator", { "proposal": "smart" }],
     ["proposal-record-and-tuple", { "syntaxType": "hash" }]
