@@ -406,9 +406,14 @@ export default abstract class LValParser extends NodeUtils {
       } else if (this.eat(close)) {
         break;
       } else if (this.match(tt.ellipsis)) {
-        elts.push(
-          this.parseAssignableListItemTypes(this.parseRestBinding(), flags),
-        );
+        let rest: Pattern = this.parseRestBinding();
+        if (
+          (!process.env.BABEL_8_BREAKING && this.hasPlugin("flow")) ||
+          flags & ParseBindingListFlags.IS_FUNCTION_PARAMS
+        ) {
+          rest = this.parseFunctionParamType(rest);
+        }
+        elts.push(rest);
         if (!this.checkCommaAfterRest(closeCharCode)) {
           this.expect(close);
           break;
@@ -472,7 +477,12 @@ export default abstract class LValParser extends NodeUtils {
     decorators: Decorator[],
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
-    this.parseAssignableListItemTypes(left, flags);
+    if (
+      (!process.env.BABEL_8_BREAKING && this.hasPlugin("flow")) ||
+      flags & ParseBindingListFlags.IS_FUNCTION_PARAMS
+    ) {
+      this.parseFunctionParamType(left);
+    }
     const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
@@ -481,11 +491,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   // Used by flow/typescript plugin to add type annotations to binding elements
-  parseAssignableListItemTypes(
-    param: Pattern,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    flags: ParseBindingListFlags,
-  ): Pattern {
+  parseFunctionParamType(param: Pattern): Pattern {
     return param;
   }
 
