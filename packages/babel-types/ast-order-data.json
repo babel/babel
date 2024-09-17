@@ -1,0 +1,580 @@
+[
+  ["ArrayExpression", ["elements"]],
+  ["AssignmentExpression", ["operator", "left", "right"]],
+  ["BinaryExpression", ["operator", "left", "right"]],
+  ["InterpreterDirective", ["value"]],
+  ["Directive", ["value"]],
+  ["DirectiveLiteral", ["value"]],
+  ["BlockStatement", ["directives", "body"]],
+  ["BreakStatement", ["label"]],
+  [
+    "CallExpression",
+    ["callee", "arguments", "optional", "typeArguments", "typeParameters"]
+  ],
+  ["CatchClause", ["param", "body"]],
+  ["ConditionalExpression", ["test", "consequent", "alternate"]],
+  ["ContinueStatement", ["label"]],
+  ["DebuggerStatement", []],
+  ["DoWhileStatement", ["test", "body"]],
+  ["EmptyStatement", []],
+  ["ExpressionStatement", ["expression"]],
+  ["File", ["program", "comments", "tokens"]],
+  ["ForInStatement", ["left", "right", "body"]],
+  ["ForStatement", ["init", "test", "update", "body"]],
+  [
+    "FunctionDeclaration",
+    [
+      "params",
+      "generator",
+      "async",
+      "declare",
+      "id",
+      "returnType",
+      "typeParameters",
+      "body",
+      "predicate"
+    ]
+  ],
+  [
+    "FunctionExpression",
+    [
+      "params",
+      "generator",
+      "async",
+      "returnType",
+      "typeParameters",
+      "id",
+      "body",
+      "predicate"
+    ]
+  ],
+  ["Identifier", ["typeAnnotation", "optional", "decorators", "name"]],
+  ["IfStatement", ["test", "consequent", "alternate"]],
+  ["LabeledStatement", ["label", "body"]],
+  ["StringLiteral", ["value"]],
+  ["NumericLiteral", ["value"]],
+  ["NullLiteral", []],
+  ["BooleanLiteral", ["value"]],
+  ["RegExpLiteral", ["pattern", "flags"]],
+  ["LogicalExpression", ["operator", "left", "right"]],
+  ["MemberExpression", ["object", "property", "computed", "optional"]],
+  [
+    "NewExpression",
+    ["callee", "arguments", "optional", "typeArguments", "typeParameters"]
+  ],
+  ["Program", ["sourceType", "interpreter", "directives", "body"]],
+  ["ObjectExpression", ["properties"]],
+  [
+    "ObjectMethod",
+    [
+      "params",
+      "generator",
+      "async",
+      "returnType",
+      "typeParameters",
+      "kind",
+      "computed",
+      "key",
+      "decorators",
+      "body"
+    ]
+  ],
+  ["ObjectProperty", ["computed", "key", "value", "shorthand", "decorators"]],
+  ["RestElement", ["typeAnnotation", "optional", "decorators", "argument"]],
+  ["ReturnStatement", ["argument"]],
+  ["SequenceExpression", ["expressions"]],
+  ["ParenthesizedExpression", ["expression"]],
+  ["SwitchCase", ["test", "consequent"]],
+  ["SwitchStatement", ["discriminant", "cases"]],
+  ["ThisExpression", []],
+  ["ThrowStatement", ["argument"]],
+  ["TryStatement", ["block", "handler", "finalizer"]],
+  ["UnaryExpression", ["prefix", "argument", "operator"]],
+  ["UpdateExpression", ["prefix", "argument", "operator"]],
+  ["VariableDeclaration", ["declare", "kind", "declarations"]],
+  ["VariableDeclarator", ["id", "definite", "init"]],
+  ["WhileStatement", ["test", "body"]],
+  ["WithStatement", ["object", "body"]],
+  [
+    "AssignmentPattern",
+    ["typeAnnotation", "optional", "decorators", "left", "right"]
+  ],
+  ["ArrayPattern", ["typeAnnotation", "optional", "decorators", "elements"]],
+  [
+    "ArrowFunctionExpression",
+    [
+      "params",
+      "generator",
+      "async",
+      "returnType",
+      "typeParameters",
+      "expression",
+      "body",
+      "predicate"
+    ]
+  ],
+  ["ClassBody", ["body"]],
+  [
+    "ClassExpression",
+    [
+      "id",
+      "typeParameters",
+      "body",
+      "superClass",
+      "superTypeParameters",
+      "implements",
+      "decorators",
+      "mixins"
+    ]
+  ],
+  [
+    "ClassDeclaration",
+    [
+      "id",
+      "typeParameters",
+      "body",
+      "superClass",
+      "superTypeParameters",
+      "implements",
+      "decorators",
+      "mixins",
+      "declare",
+      "abstract"
+    ]
+  ],
+  [
+    "ExportAllDeclaration",
+    ["source", "exportKind", "attributes", "assertions"]
+  ],
+  ["ExportDefaultDeclaration", ["declaration", "exportKind"]],
+  [
+    "ExportNamedDeclaration",
+    [
+      "declaration",
+      "attributes",
+      "assertions",
+      "specifiers",
+      "source",
+      "exportKind"
+    ]
+  ],
+  ["ExportSpecifier", ["local", "exported", "exportKind"]],
+  ["ForOfStatement", ["left", "right", "body", "await"]],
+  [
+    "ImportDeclaration",
+    [
+      "attributes",
+      "assertions",
+      "module",
+      "phase",
+      "specifiers",
+      "source",
+      "importKind"
+    ]
+  ],
+  ["ImportDefaultSpecifier", ["local"]],
+  ["ImportNamespaceSpecifier", ["local"]],
+  ["ImportSpecifier", ["local", "imported", "importKind"]],
+  ["ImportExpression", ["phase", "source", "options"]],
+  ["MetaProperty", ["meta", "property"]],
+  [
+    "ClassMethod",
+    [
+      "params",
+      "generator",
+      "async",
+      "abstract",
+      "accessibility",
+      "static",
+      "override",
+      "computed",
+      "optional",
+      "key",
+      "kind",
+      "access",
+      "decorators",
+      "returnType",
+      "typeParameters",
+      "body"
+    ]
+  ],
+  ["ObjectPattern", ["typeAnnotation", "optional", "decorators", "properties"]],
+  ["SpreadElement", ["argument"]],
+  ["Super", []],
+  ["TaggedTemplateExpression", ["tag", "quasi", "typeParameters"]],
+  ["TemplateElement", ["value", "tail"]],
+  ["TemplateLiteral", ["quasis", "expressions"]],
+  ["YieldExpression", ["delegate", "argument"]],
+  ["AwaitExpression", ["argument"]],
+  ["Import", []],
+  ["BigIntLiteral", ["value"]],
+  ["ExportNamespaceSpecifier", ["exported"]],
+  ["OptionalMemberExpression", ["object", "property", "computed", "optional"]],
+  [
+    "OptionalCallExpression",
+    ["callee", "arguments", "optional", "typeArguments", "typeParameters"]
+  ],
+  [
+    "ClassProperty",
+    [
+      "abstract",
+      "accessibility",
+      "static",
+      "override",
+      "computed",
+      "optional",
+      "key",
+      "value",
+      "definite",
+      "typeAnnotation",
+      "decorators",
+      "readonly",
+      "declare",
+      "variance"
+    ]
+  ],
+  [
+    "ClassAccessorProperty",
+    [
+      "abstract",
+      "accessibility",
+      "static",
+      "override",
+      "computed",
+      "optional",
+      "key",
+      "value",
+      "definite",
+      "typeAnnotation",
+      "decorators",
+      "readonly",
+      "declare",
+      "variance"
+    ]
+  ],
+  [
+    "ClassPrivateProperty",
+    [
+      "key",
+      "value",
+      "typeAnnotation",
+      "decorators",
+      "static",
+      "readonly",
+      "definite",
+      "variance"
+    ]
+  ],
+  [
+    "ClassPrivateMethod",
+    [
+      "params",
+      "generator",
+      "async",
+      "abstract",
+      "accessibility",
+      "static",
+      "override",
+      "computed",
+      "optional",
+      "key",
+      "kind",
+      "access",
+      "decorators",
+      "returnType",
+      "typeParameters",
+      "body"
+    ]
+  ],
+  ["PrivateName", ["id"]],
+  ["StaticBlock", ["body"]],
+  ["AnyTypeAnnotation", []],
+  ["ArrayTypeAnnotation", ["elementType"]],
+  ["BooleanTypeAnnotation", []],
+  ["BooleanLiteralTypeAnnotation", ["value"]],
+  ["NullLiteralTypeAnnotation", []],
+  ["ClassImplements", ["id", "typeParameters"]],
+  [
+    "DeclareClass",
+    ["id", "typeParameters", "extends", "mixins", "implements", "body"]
+  ],
+  ["DeclareFunction", ["id", "predicate"]],
+  ["DeclareInterface", ["id", "typeParameters", "extends", "body"]],
+  ["DeclareModule", ["id", "body", "kind"]],
+  ["DeclareModuleExports", ["typeAnnotation"]],
+  ["DeclareTypeAlias", ["id", "typeParameters", "right"]],
+  ["DeclareOpaqueType", ["id", "typeParameters", "supertype", "impltype"]],
+  ["DeclareVariable", ["id"]],
+  [
+    "DeclareExportDeclaration",
+    ["declaration", "specifiers", "source", "default"]
+  ],
+  ["DeclareExportAllDeclaration", ["source", "exportKind"]],
+  ["DeclaredPredicate", ["value"]],
+  ["ExistsTypeAnnotation", []],
+  [
+    "FunctionTypeAnnotation",
+    ["typeParameters", "params", "rest", "this", "returnType"]
+  ],
+  ["FunctionTypeParam", ["name", "typeAnnotation", "optional"]],
+  ["GenericTypeAnnotation", ["id", "typeParameters"]],
+  ["InferredPredicate", []],
+  ["InterfaceExtends", ["id", "typeParameters"]],
+  ["InterfaceDeclaration", ["id", "typeParameters", "extends", "body"]],
+  ["InterfaceTypeAnnotation", ["extends", "body"]],
+  ["IntersectionTypeAnnotation", ["types"]],
+  ["MixedTypeAnnotation", []],
+  ["EmptyTypeAnnotation", []],
+  ["NullableTypeAnnotation", ["typeAnnotation"]],
+  ["NumberLiteralTypeAnnotation", ["value"]],
+  ["NumberTypeAnnotation", []],
+  [
+    "ObjectTypeAnnotation",
+    [
+      "properties",
+      "indexers",
+      "callProperties",
+      "internalSlots",
+      "exact",
+      "inexact"
+    ]
+  ],
+  ["ObjectTypeInternalSlot", ["id", "value", "optional", "static", "method"]],
+  ["ObjectTypeCallProperty", ["value", "static"]],
+  ["ObjectTypeIndexer", ["id", "key", "value", "static", "variance"]],
+  [
+    "ObjectTypeProperty",
+    [
+      "key",
+      "value",
+      "kind",
+      "static",
+      "proto",
+      "optional",
+      "variance",
+      "method"
+    ]
+  ],
+  ["ObjectTypeSpreadProperty", ["argument"]],
+  ["OpaqueType", ["id", "typeParameters", "supertype", "impltype"]],
+  ["QualifiedTypeIdentifier", ["id", "qualification"]],
+  ["StringLiteralTypeAnnotation", ["value"]],
+  ["StringTypeAnnotation", []],
+  ["SymbolTypeAnnotation", []],
+  ["ThisTypeAnnotation", []],
+  ["TupleTypeAnnotation", ["types"]],
+  ["TypeofTypeAnnotation", ["argument"]],
+  ["TypeAlias", ["id", "typeParameters", "right"]],
+  ["TypeAnnotation", ["typeAnnotation"]],
+  ["TypeCastExpression", ["expression", "typeAnnotation"]],
+  ["TypeParameter", ["name", "bound", "default", "variance"]],
+  ["TypeParameterDeclaration", ["params"]],
+  ["TypeParameterInstantiation", ["params"]],
+  ["UnionTypeAnnotation", ["types"]],
+  ["Variance", ["kind"]],
+  ["VoidTypeAnnotation", []],
+  ["EnumDeclaration", ["id", "body"]],
+  ["EnumBooleanBody", ["explicitType", "members", "hasUnknownMembers"]],
+  ["EnumNumberBody", ["explicitType", "members", "hasUnknownMembers"]],
+  ["EnumStringBody", ["explicitType", "members", "hasUnknownMembers"]],
+  ["EnumSymbolBody", ["members", "hasUnknownMembers"]],
+  ["EnumBooleanMember", ["id", "init"]],
+  ["EnumNumberMember", ["id", "init"]],
+  ["EnumStringMember", ["id", "init"]],
+  ["EnumDefaultedMember", ["id"]],
+  ["IndexedAccessType", ["objectType", "indexType"]],
+  ["OptionalIndexedAccessType", ["objectType", "indexType", "optional"]],
+  ["JSXAttribute", ["name", "value"]],
+  ["JSXClosingElement", ["name"]],
+  [
+    "JSXElement",
+    ["openingElement", "closingElement", "children", "selfClosing"]
+  ],
+  ["JSXEmptyExpression", []],
+  ["JSXExpressionContainer", ["expression"]],
+  ["JSXSpreadChild", ["expression"]],
+  ["JSXIdentifier", ["name"]],
+  ["JSXMemberExpression", ["object", "property"]],
+  ["JSXNamespacedName", ["namespace", "name"]],
+  [
+    "JSXOpeningElement",
+    ["name", "selfClosing", "attributes", "typeParameters"]
+  ],
+  ["JSXSpreadAttribute", ["argument"]],
+  ["JSXText", ["value"]],
+  ["JSXFragment", ["openingFragment", "closingFragment", "children"]],
+  ["JSXOpeningFragment", []],
+  ["JSXClosingFragment", []],
+  ["Noop", []],
+  ["Placeholder", ["name", "expectedNode"]],
+  ["V8IntrinsicIdentifier", ["name"]],
+  ["ArgumentPlaceholder", []],
+  ["BindExpression", ["object", "callee"]],
+  ["ImportAttribute", ["key", "value"]],
+  ["Decorator", ["expression"]],
+  ["DoExpression", ["body", "async"]],
+  ["ExportDefaultSpecifier", ["exported"]],
+  ["RecordExpression", ["properties"]],
+  ["TupleExpression", ["elements"]],
+  ["DecimalLiteral", ["value"]],
+  ["ModuleExpression", ["body"]],
+  ["TopicReference", []],
+  ["PipelineTopicExpression", ["expression"]],
+  ["PipelineBareFunction", ["callee"]],
+  ["PipelinePrimaryTopicReference", []],
+  [
+    "TSParameterProperty",
+    ["accessibility", "readonly", "parameter", "override", "decorators"]
+  ],
+  [
+    "TSDeclareFunction",
+    [
+      "params",
+      "generator",
+      "async",
+      "declare",
+      "id",
+      "returnType",
+      "typeParameters"
+    ]
+  ],
+  [
+    "TSDeclareMethod",
+    [
+      "params",
+      "generator",
+      "async",
+      "abstract",
+      "accessibility",
+      "static",
+      "override",
+      "computed",
+      "optional",
+      "key",
+      "kind",
+      "access",
+      "decorators",
+      "returnType",
+      "typeParameters"
+    ]
+  ],
+  ["TSQualifiedName", ["left", "right"]],
+  [
+    "TSCallSignatureDeclaration",
+    ["typeParameters", "parameters", "typeAnnotation", "params", "returnType"]
+  ],
+  [
+    "TSConstructSignatureDeclaration",
+    ["typeParameters", "parameters", "typeAnnotation", "params", "returnType"]
+  ],
+  [
+    "TSPropertySignature",
+    ["key", "computed", "optional", "readonly", "typeAnnotation", "kind"]
+  ],
+  [
+    "TSMethodSignature",
+    [
+      "typeParameters",
+      "parameters",
+      "typeAnnotation",
+      "key",
+      "computed",
+      "optional",
+      "kind",
+      "params",
+      "returnType"
+    ]
+  ],
+  ["TSIndexSignature", ["readonly", "static", "parameters", "typeAnnotation"]],
+  ["TSAnyKeyword", []],
+  ["TSBooleanKeyword", []],
+  ["TSBigIntKeyword", []],
+  ["TSIntrinsicKeyword", []],
+  ["TSNeverKeyword", []],
+  ["TSNullKeyword", []],
+  ["TSNumberKeyword", []],
+  ["TSObjectKeyword", []],
+  ["TSStringKeyword", []],
+  ["TSSymbolKeyword", []],
+  ["TSUndefinedKeyword", []],
+  ["TSUnknownKeyword", []],
+  ["TSVoidKeyword", []],
+  ["TSThisType", []],
+  [
+    "TSFunctionType",
+    ["typeParameters", "parameters", "typeAnnotation", "params", "returnType"]
+  ],
+  [
+    "TSConstructorType",
+    [
+      "typeParameters",
+      "parameters",
+      "typeAnnotation",
+      "abstract",
+      "params",
+      "returnType"
+    ]
+  ],
+  ["TSTypeReference", ["typeName", "typeParameters"]],
+  ["TSTypePredicate", ["parameterName", "typeAnnotation", "asserts"]],
+  ["TSTypeQuery", ["exprName", "typeParameters"]],
+  ["TSTypeLiteral", ["members"]],
+  ["TSArrayType", ["elementType"]],
+  ["TSTupleType", ["elementTypes"]],
+  ["TSOptionalType", ["typeAnnotation"]],
+  ["TSRestType", ["typeAnnotation"]],
+  ["TSNamedTupleMember", ["label", "optional", "elementType"]],
+  ["TSUnionType", ["types"]],
+  ["TSIntersectionType", ["types"]],
+  ["TSConditionalType", ["checkType", "extendsType", "trueType", "falseType"]],
+  ["TSInferType", ["typeParameter"]],
+  ["TSParenthesizedType", ["typeAnnotation"]],
+  ["TSTypeOperator", ["operator", "typeAnnotation"]],
+  ["TSIndexedAccessType", ["objectType", "indexType"]],
+  [
+    "TSMappedType",
+    [
+      "typeParameter",
+      "readonly",
+      "optional",
+      "typeAnnotation",
+      "nameType",
+      "key",
+      "constraint"
+    ]
+  ],
+  ["TSLiteralType", ["literal"]],
+  ["TSExpressionWithTypeArguments", ["expression", "typeParameters"]],
+  [
+    "TSInterfaceDeclaration",
+    ["declare", "id", "typeParameters", "extends", "body"]
+  ],
+  ["TSInterfaceBody", ["body"]],
+  [
+    "TSTypeAliasDeclaration",
+    ["declare", "id", "typeParameters", "typeAnnotation"]
+  ],
+  ["TSInstantiationExpression", ["expression", "typeParameters"]],
+  ["TSAsExpression", ["expression", "typeAnnotation"]],
+  ["TSSatisfiesExpression", ["expression", "typeAnnotation"]],
+  ["TSTypeAssertion", ["typeAnnotation", "expression"]],
+  ["TSEnumDeclaration", ["declare", "const", "id", "members", "initializer"]],
+  ["TSEnumMember", ["id", "initializer"]],
+  ["TSModuleDeclaration", ["declare", "global", "id", "body"]],
+  ["TSModuleBlock", ["body"]],
+  ["TSImportType", ["argument", "qualifier", "typeParameters", "options"]],
+  [
+    "TSImportEqualsDeclaration",
+    ["isExport", "id", "moduleReference", "importKind"]
+  ],
+  ["TSExternalModuleReference", ["expression"]],
+  ["TSNonNullExpression", ["expression"]],
+  ["TSExportAssignment", ["expression"]],
+  ["TSNamespaceExportDeclaration", ["id"]],
+  ["TSTypeAnnotation", ["typeAnnotation"]],
+  ["TSTypeParameterInstantiation", ["params"]],
+  ["TSTypeParameterDeclaration", ["params"]],
+  ["TSTypeParameter", ["name", "in", "out", "const", "constraint", "default"]],
+  ["TSClassImplements", ["expression", "typeParameters"]],
+  ["TSInterfaceHeritage", ["expression", "typeParameters"]]
+]

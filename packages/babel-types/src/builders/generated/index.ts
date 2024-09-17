@@ -5,32 +5,15 @@
 import * as _validate from "../../validators/validate.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
-import {
-  BUILDER_KEYS,
-  NODE_FIELDS,
-  type FieldOptions,
-} from "../../definitions/utils.ts";
+import { NODE_FIELDS, type FieldOptions } from "../../definitions/utils.ts";
+import astOrderData from "../../../ast-order-data.json" with { type: "json" };
 
 const { validateInternal: validate } = _validate;
 
 const _data: FieldOptions[][] = [];
-Object.keys(BUILDER_KEYS).forEach(type => {
-  const fields = NODE_FIELDS[type];
-
-  _data.push(
-    sortFieldNames(Object.keys(fields), type).map(field => fields[field]),
-  );
-});
-
-function sortFieldNames(fields: string[], type: string) {
-  return fields.sort((fieldA, fieldB) => {
-    const indexA = BUILDER_KEYS[type].indexOf(fieldA);
-    const indexB = BUILDER_KEYS[type].indexOf(fieldB);
-    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
-  });
+for (const [type, fields] of astOrderData as [string, []][]) {
+  const fieldOptions = NODE_FIELDS[type];
+  _data.push(fieldOptions ? fields.map(field => fieldOptions[field]) : null);
 }
 
 export function arrayExpression(
@@ -131,8 +114,8 @@ export function blockStatement(
     body,
     directives,
   };
-  validate(_data[6][0], node, "body", body, true);
-  validate(_data[6][1], node, "directives", directives, true);
+  validate(_data[6][1], node, "body", body, true);
+  validate(_data[6][0], node, "directives", directives, true);
   return node;
 }
 export function breakStatement(
@@ -301,11 +284,11 @@ export function functionDeclaration(
     generator,
     async,
   };
-  validate(_data[19][0], node, "id", id, true);
-  validate(_data[19][1], node, "params", params, true);
-  validate(_data[19][2], node, "body", body, true);
-  validate(_data[19][3], node, "generator", generator);
-  validate(_data[19][4], node, "async", async);
+  validate(_data[19][4], node, "id", id, true);
+  validate(_data[19][0], node, "params", params, true);
+  validate(_data[19][7], node, "body", body, true);
+  validate(_data[19][1], node, "generator", generator);
+  validate(_data[19][2], node, "async", async);
   return node;
 }
 export function functionExpression(
@@ -323,11 +306,11 @@ export function functionExpression(
     generator,
     async,
   };
-  validate(_data[20][0], node, "id", id, true);
-  validate(_data[20][1], node, "params", params, true);
-  validate(_data[20][2], node, "body", body, true);
-  validate(_data[20][3], node, "generator", generator);
-  validate(_data[20][4], node, "async", async);
+  validate(_data[20][5], node, "id", id, true);
+  validate(_data[20][0], node, "params", params, true);
+  validate(_data[20][6], node, "body", body, true);
+  validate(_data[20][1], node, "generator", generator);
+  validate(_data[20][2], node, "async", async);
   return node;
 }
 export function identifier(name: string): t.Identifier {
@@ -335,7 +318,7 @@ export function identifier(name: string): t.Identifier {
     type: "Identifier",
     name,
   };
-  validate(_data[21][0], node, "name", name);
+  validate(_data[21][3], node, "name", name);
   return node;
 }
 export function ifStatement(
@@ -470,10 +453,10 @@ export function program(
     sourceType,
     interpreter,
   };
-  validate(_data[32][0], node, "body", body, true);
-  validate(_data[32][1], node, "directives", directives, true);
-  validate(_data[32][2], node, "sourceType", sourceType);
-  validate(_data[32][3], node, "interpreter", interpreter, true);
+  validate(_data[32][3], node, "body", body, true);
+  validate(_data[32][2], node, "directives", directives, true);
+  validate(_data[32][0], node, "sourceType", sourceType);
+  validate(_data[32][1], node, "interpreter", interpreter, true);
   return node;
 }
 export function objectExpression(
@@ -510,13 +493,13 @@ export function objectMethod(
     generator,
     async,
   };
-  validate(_data[34][0], node, "kind", kind);
-  validate(_data[34][1], node, "key", key, true);
-  validate(_data[34][2], node, "params", params, true);
-  validate(_data[34][3], node, "body", body, true);
-  validate(_data[34][4], node, "computed", computed);
-  validate(_data[34][5], node, "generator", generator);
-  validate(_data[34][6], node, "async", async);
+  validate(_data[34][5], node, "kind", kind);
+  validate(_data[34][7], node, "key", key, true);
+  validate(_data[34][0], node, "params", params, true);
+  validate(_data[34][9], node, "body", body, true);
+  validate(_data[34][6], node, "computed", computed);
+  validate(_data[34][1], node, "generator", generator);
+  validate(_data[34][2], node, "async", async);
   return node;
 }
 export function objectProperty(
@@ -541,9 +524,9 @@ export function objectProperty(
     shorthand,
     decorators,
   };
-  validate(_data[35][0], node, "key", key, true);
-  validate(_data[35][1], node, "value", value, true);
-  validate(_data[35][2], node, "computed", computed);
+  validate(_data[35][1], node, "key", key, true);
+  validate(_data[35][2], node, "value", value, true);
+  validate(_data[35][0], node, "computed", computed);
   validate(_data[35][3], node, "shorthand", shorthand);
   validate(_data[35][4], node, "decorators", decorators, true);
   return node;
@@ -553,7 +536,7 @@ export function restElement(argument: t.LVal): t.RestElement {
     type: "RestElement",
     argument,
   };
-  validate(_data[36][0], node, "argument", argument, true);
+  validate(_data[36][3], node, "argument", argument, true);
   return node;
 }
 export function returnStatement(
@@ -652,9 +635,9 @@ export function unaryExpression(
     argument,
     prefix,
   };
-  validate(_data[45][0], node, "operator", operator);
+  validate(_data[45][2], node, "operator", operator);
   validate(_data[45][1], node, "argument", argument, true);
-  validate(_data[45][2], node, "prefix", prefix);
+  validate(_data[45][0], node, "prefix", prefix);
   return node;
 }
 export function updateExpression(
@@ -668,9 +651,9 @@ export function updateExpression(
     argument,
     prefix,
   };
-  validate(_data[46][0], node, "operator", operator);
+  validate(_data[46][2], node, "operator", operator);
   validate(_data[46][1], node, "argument", argument, true);
-  validate(_data[46][2], node, "prefix", prefix);
+  validate(_data[46][0], node, "prefix", prefix);
   return node;
 }
 export function variableDeclaration(
@@ -682,8 +665,8 @@ export function variableDeclaration(
     kind,
     declarations,
   };
-  validate(_data[47][0], node, "kind", kind);
-  validate(_data[47][1], node, "declarations", declarations, true);
+  validate(_data[47][1], node, "kind", kind);
+  validate(_data[47][2], node, "declarations", declarations, true);
   return node;
 }
 export function variableDeclarator(
@@ -696,7 +679,7 @@ export function variableDeclarator(
     init,
   };
   validate(_data[48][0], node, "id", id, true);
-  validate(_data[48][1], node, "init", init, true);
+  validate(_data[48][2], node, "init", init, true);
   return node;
 }
 export function whileStatement(
@@ -742,8 +725,8 @@ export function assignmentPattern(
     left,
     right,
   };
-  validate(_data[51][0], node, "left", left, true);
-  validate(_data[51][1], node, "right", right, true);
+  validate(_data[51][3], node, "left", left, true);
+  validate(_data[51][4], node, "right", right, true);
   return node;
 }
 export function arrayPattern(
@@ -753,7 +736,7 @@ export function arrayPattern(
     type: "ArrayPattern",
     elements,
   };
-  validate(_data[52][0], node, "elements", elements, true);
+  validate(_data[52][3], node, "elements", elements, true);
   return node;
 }
 export function arrowFunctionExpression(
@@ -769,7 +752,7 @@ export function arrowFunctionExpression(
     expression: null,
   };
   validate(_data[53][0], node, "params", params, true);
-  validate(_data[53][1], node, "body", body, true);
+  validate(_data[53][6], node, "body", body, true);
   validate(_data[53][2], node, "async", async);
   return node;
 }
@@ -806,9 +789,9 @@ export function classExpression(
     decorators,
   };
   validate(_data[55][0], node, "id", id, true);
-  validate(_data[55][1], node, "superClass", superClass, true);
+  validate(_data[55][3], node, "superClass", superClass, true);
   validate(_data[55][2], node, "body", body, true);
-  validate(_data[55][3], node, "decorators", decorators, true);
+  validate(_data[55][6], node, "decorators", decorators, true);
   return node;
 }
 export function classDeclaration(
@@ -825,9 +808,9 @@ export function classDeclaration(
     decorators,
   };
   validate(_data[56][0], node, "id", id, true);
-  validate(_data[56][1], node, "superClass", superClass, true);
+  validate(_data[56][3], node, "superClass", superClass, true);
   validate(_data[56][2], node, "body", body, true);
-  validate(_data[56][3], node, "decorators", decorators, true);
+  validate(_data[56][6], node, "decorators", decorators, true);
   return node;
 }
 export function exportAllDeclaration(
@@ -868,8 +851,8 @@ export function exportNamedDeclaration(
     source,
   };
   validate(_data[59][0], node, "declaration", declaration, true);
-  validate(_data[59][1], node, "specifiers", specifiers, true);
-  validate(_data[59][2], node, "source", source, true);
+  validate(_data[59][3], node, "specifiers", specifiers, true);
+  validate(_data[59][4], node, "source", source, true);
   return node;
 }
 export function exportSpecifier(
@@ -915,8 +898,8 @@ export function importDeclaration(
     specifiers,
     source,
   };
-  validate(_data[62][0], node, "specifiers", specifiers, true);
-  validate(_data[62][1], node, "source", source, true);
+  validate(_data[62][4], node, "specifiers", specifiers, true);
+  validate(_data[62][5], node, "source", source, true);
   return node;
 }
 export function importDefaultSpecifier(
@@ -961,8 +944,8 @@ export function importExpression(
     source,
     options,
   };
-  validate(_data[66][0], node, "source", source, true);
-  validate(_data[66][1], node, "options", options, true);
+  validate(_data[66][1], node, "source", source, true);
+  validate(_data[66][2], node, "options", options, true);
   return node;
 }
 export function metaProperty(
@@ -1006,14 +989,14 @@ export function classMethod(
     generator,
     async,
   };
-  validate(_data[68][0], node, "kind", kind);
-  validate(_data[68][1], node, "key", key, true);
-  validate(_data[68][2], node, "params", params, true);
-  validate(_data[68][3], node, "body", body, true);
-  validate(_data[68][4], node, "computed", computed);
+  validate(_data[68][10], node, "kind", kind);
+  validate(_data[68][9], node, "key", key, true);
+  validate(_data[68][0], node, "params", params, true);
+  validate(_data[68][15], node, "body", body, true);
+  validate(_data[68][7], node, "computed", computed);
   validate(_data[68][5], node, "static", _static);
-  validate(_data[68][6], node, "generator", generator);
-  validate(_data[68][7], node, "async", async);
+  validate(_data[68][1], node, "generator", generator);
+  validate(_data[68][2], node, "async", async);
   return node;
 }
 export function objectPattern(
@@ -1023,7 +1006,7 @@ export function objectPattern(
     type: "ObjectPattern",
     properties,
   };
-  validate(_data[69][0], node, "properties", properties, true);
+  validate(_data[69][3], node, "properties", properties, true);
   return node;
 }
 export function spreadElement(argument: t.Expression): t.SpreadElement {
@@ -1088,8 +1071,8 @@ export function yieldExpression(
     argument,
     delegate,
   };
-  validate(_data[75][0], node, "argument", argument, true);
-  validate(_data[75][1], node, "delegate", delegate);
+  validate(_data[75][1], node, "argument", argument, true);
+  validate(_data[75][0], node, "delegate", delegate);
   return node;
 }
 export function awaitExpression(argument: t.Expression): t.AwaitExpression {
@@ -1181,12 +1164,12 @@ export function classProperty(
     computed,
     static: _static,
   };
-  validate(_data[82][0], node, "key", key, true);
-  validate(_data[82][1], node, "value", value, true);
-  validate(_data[82][2], node, "typeAnnotation", typeAnnotation, true);
-  validate(_data[82][3], node, "decorators", decorators, true);
+  validate(_data[82][6], node, "key", key, true);
+  validate(_data[82][7], node, "value", value, true);
+  validate(_data[82][9], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[82][10], node, "decorators", decorators, true);
   validate(_data[82][4], node, "computed", computed);
-  validate(_data[82][5], node, "static", _static);
+  validate(_data[82][2], node, "static", _static);
   return node;
 }
 export function classAccessorProperty(
@@ -1212,12 +1195,12 @@ export function classAccessorProperty(
     computed,
     static: _static,
   };
-  validate(_data[83][0], node, "key", key, true);
-  validate(_data[83][1], node, "value", value, true);
-  validate(_data[83][2], node, "typeAnnotation", typeAnnotation, true);
-  validate(_data[83][3], node, "decorators", decorators, true);
+  validate(_data[83][6], node, "key", key, true);
+  validate(_data[83][7], node, "value", value, true);
+  validate(_data[83][9], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[83][10], node, "decorators", decorators, true);
   validate(_data[83][4], node, "computed", computed);
-  validate(_data[83][5], node, "static", _static);
+  validate(_data[83][2], node, "static", _static);
   return node;
 }
 export function classPrivateProperty(
@@ -1235,8 +1218,8 @@ export function classPrivateProperty(
   };
   validate(_data[84][0], node, "key", key, true);
   validate(_data[84][1], node, "value", value, true);
-  validate(_data[84][2], node, "decorators", decorators, true);
-  validate(_data[84][3], node, "static", _static);
+  validate(_data[84][3], node, "decorators", decorators, true);
+  validate(_data[84][4], node, "static", _static);
   return node;
 }
 export function classPrivateMethod(
@@ -1256,11 +1239,11 @@ export function classPrivateMethod(
     body,
     static: _static,
   };
-  validate(_data[85][0], node, "kind", kind);
-  validate(_data[85][1], node, "key", key, true);
-  validate(_data[85][2], node, "params", params, true);
-  validate(_data[85][3], node, "body", body, true);
-  validate(_data[85][4], node, "static", _static);
+  validate(_data[85][10], node, "kind", kind);
+  validate(_data[85][9], node, "key", key, true);
+  validate(_data[85][0], node, "params", params, true);
+  validate(_data[85][15], node, "body", body, true);
+  validate(_data[85][5], node, "static", _static);
   return node;
 }
 export function privateName(id: t.Identifier): t.PrivateName {
@@ -1343,7 +1326,7 @@ export function declareClass(
   validate(_data[94][0], node, "id", id, true);
   validate(_data[94][1], node, "typeParameters", typeParameters, true);
   validate(_data[94][2], node, "extends", _extends, true);
-  validate(_data[94][3], node, "body", body, true);
+  validate(_data[94][5], node, "body", body, true);
   return node;
 }
 export function declareFunction(id: t.Identifier): t.DeclareFunction {
@@ -1496,7 +1479,7 @@ export function functionTypeAnnotation(
   validate(_data[106][0], node, "typeParameters", typeParameters, true);
   validate(_data[106][1], node, "params", params, true);
   validate(_data[106][2], node, "rest", rest, true);
-  validate(_data[106][3], node, "returnType", returnType, true);
+  validate(_data[106][4], node, "returnType", returnType, true);
   return node;
 }
 export function functionTypeParam(
@@ -1692,7 +1675,7 @@ export function objectTypeIndexer(
   validate(_data[122][0], node, "id", id, true);
   validate(_data[122][1], node, "key", key, true);
   validate(_data[122][2], node, "value", value, true);
-  validate(_data[122][3], node, "variance", variance, true);
+  validate(_data[122][4], node, "variance", variance, true);
   return node;
 }
 export function objectTypeProperty(
@@ -1713,7 +1696,7 @@ export function objectTypeProperty(
   };
   validate(_data[123][0], node, "key", key, true);
   validate(_data[123][1], node, "value", value, true);
-  validate(_data[123][2], node, "variance", variance, true);
+  validate(_data[123][6], node, "variance", variance, true);
   return node;
 }
 export function objectTypeSpreadProperty(
@@ -1852,9 +1835,9 @@ export function typeParameter(
     variance,
     name: null,
   };
-  validate(_data[136][0], node, "bound", bound, true);
-  validate(_data[136][1], node, "default", _default, true);
-  validate(_data[136][2], node, "variance", variance, true);
+  validate(_data[136][1], node, "bound", bound, true);
+  validate(_data[136][2], node, "default", _default, true);
+  validate(_data[136][3], node, "variance", variance, true);
   return node;
 }
 export function typeParameterDeclaration(
@@ -1926,7 +1909,7 @@ export function enumBooleanBody(
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validate(_data[143][0], node, "members", members, true);
+  validate(_data[143][1], node, "members", members, true);
   return node;
 }
 export function enumNumberBody(
@@ -1938,7 +1921,7 @@ export function enumNumberBody(
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validate(_data[144][0], node, "members", members, true);
+  validate(_data[144][1], node, "members", members, true);
   return node;
 }
 export function enumStringBody(
@@ -1950,7 +1933,7 @@ export function enumStringBody(
     explicitType: null,
     hasUnknownMembers: null,
   };
-  validate(_data[145][0], node, "members", members, true);
+  validate(_data[145][1], node, "members", members, true);
   return node;
 }
 export function enumSymbolBody(
@@ -2165,8 +2148,8 @@ export function jsxOpeningElement(
     selfClosing,
   };
   validate(_data[162][0], node, "name", name, true);
-  validate(_data[162][1], node, "attributes", attributes, true);
-  validate(_data[162][2], node, "selfClosing", selfClosing);
+  validate(_data[162][2], node, "attributes", attributes, true);
+  validate(_data[162][1], node, "selfClosing", selfClosing);
   return node;
 }
 export { jsxOpeningElement as jSXOpeningElement };
@@ -2247,8 +2230,8 @@ export function placeholder(
     expectedNode,
     name,
   };
-  validate(_data[169][0], node, "expectedNode", expectedNode);
-  validate(_data[169][1], node, "name", name, true);
+  validate(_data[169][1], node, "expectedNode", expectedNode);
+  validate(_data[169][0], node, "name", name, true);
   return node;
 }
 export function v8IntrinsicIdentifier(name: string): t.V8IntrinsicIdentifier {
@@ -2394,7 +2377,7 @@ export function tsParameterProperty(
     type: "TSParameterProperty",
     parameter,
   };
-  validate(_data[185][0], node, "parameter", parameter, true);
+  validate(_data[185][2], node, "parameter", parameter, true);
   return node;
 }
 export { tsParameterProperty as tSParameterProperty };
@@ -2415,10 +2398,10 @@ export function tsDeclareFunction(
     params,
     returnType,
   };
-  validate(_data[186][0], node, "id", id, true);
-  validate(_data[186][1], node, "typeParameters", typeParameters, true);
-  validate(_data[186][2], node, "params", params, true);
-  validate(_data[186][3], node, "returnType", returnType, true);
+  validate(_data[186][4], node, "id", id, true);
+  validate(_data[186][6], node, "typeParameters", typeParameters, true);
+  validate(_data[186][0], node, "params", params, true);
+  validate(_data[186][5], node, "returnType", returnType, true);
   return node;
 }
 export { tsDeclareFunction as tSDeclareFunction };
@@ -2448,11 +2431,11 @@ export function tsDeclareMethod(
     params,
     returnType,
   };
-  validate(_data[187][0], node, "decorators", decorators, true);
-  validate(_data[187][1], node, "key", key, true);
-  validate(_data[187][2], node, "typeParameters", typeParameters, true);
-  validate(_data[187][3], node, "params", params, true);
-  validate(_data[187][4], node, "returnType", returnType, true);
+  validate(_data[187][12], node, "decorators", decorators, true);
+  validate(_data[187][9], node, "key", key, true);
+  validate(_data[187][14], node, "typeParameters", typeParameters, true);
+  validate(_data[187][0], node, "params", params, true);
+  validate(_data[187][13], node, "returnType", returnType, true);
   return node;
 }
 export { tsDeclareMethod as tSDeclareMethod };
@@ -2519,7 +2502,7 @@ export function tsPropertySignature(
     kind: null,
   };
   validate(_data[191][0], node, "key", key, true);
-  validate(_data[191][1], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[191][4], node, "typeAnnotation", typeAnnotation, true);
   return node;
 }
 export { tsPropertySignature as tSPropertySignature };
@@ -2539,10 +2522,10 @@ export function tsMethodSignature(
     typeAnnotation,
     kind: null,
   };
-  validate(_data[192][0], node, "key", key, true);
-  validate(_data[192][1], node, "typeParameters", typeParameters, true);
-  validate(_data[192][2], node, "parameters", parameters, true);
-  validate(_data[192][3], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[192][3], node, "key", key, true);
+  validate(_data[192][0], node, "typeParameters", typeParameters, true);
+  validate(_data[192][1], node, "parameters", parameters, true);
+  validate(_data[192][2], node, "typeAnnotation", typeAnnotation, true);
   return node;
 }
 export { tsMethodSignature as tSMethodSignature };
@@ -2555,8 +2538,8 @@ export function tsIndexSignature(
     parameters,
     typeAnnotation,
   };
-  validate(_data[193][0], node, "parameters", parameters, true);
-  validate(_data[193][1], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[193][2], node, "parameters", parameters, true);
+  validate(_data[193][3], node, "typeAnnotation", typeAnnotation, true);
   return node;
 }
 export { tsIndexSignature as tSIndexSignature };
@@ -2788,8 +2771,8 @@ export function tsNamedTupleMember(
     optional,
   };
   validate(_data[218][0], node, "label", label, true);
-  validate(_data[218][1], node, "elementType", elementType, true);
-  validate(_data[218][2], node, "optional", optional);
+  validate(_data[218][2], node, "elementType", elementType, true);
+  validate(_data[218][1], node, "optional", optional);
   return node;
 }
 export { tsNamedTupleMember as tSNamedTupleMember };
@@ -2859,7 +2842,7 @@ export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
     typeAnnotation,
     operator: null,
   };
-  validate(_data[224][0], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[224][1], node, "typeAnnotation", typeAnnotation, true);
   return node;
 }
 export { tsTypeOperator as tSTypeOperator };
@@ -2889,8 +2872,8 @@ export function tsMappedType(
     nameType,
   };
   validate(_data[226][0], node, "typeParameter", typeParameter, true);
-  validate(_data[226][1], node, "typeAnnotation", typeAnnotation, true);
-  validate(_data[226][2], node, "nameType", nameType, true);
+  validate(_data[226][3], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[226][4], node, "nameType", nameType, true);
   return node;
 }
 export { tsMappedType as tSMappedType };
@@ -2938,10 +2921,10 @@ export function tsInterfaceDeclaration(
     extends: _extends,
     body,
   };
-  validate(_data[229][0], node, "id", id, true);
-  validate(_data[229][1], node, "typeParameters", typeParameters, true);
-  validate(_data[229][2], node, "extends", _extends, true);
-  validate(_data[229][3], node, "body", body, true);
+  validate(_data[229][1], node, "id", id, true);
+  validate(_data[229][2], node, "typeParameters", typeParameters, true);
+  validate(_data[229][3], node, "extends", _extends, true);
+  validate(_data[229][4], node, "body", body, true);
   return node;
 }
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
@@ -2967,9 +2950,9 @@ export function tsTypeAliasDeclaration(
     typeParameters,
     typeAnnotation,
   };
-  validate(_data[231][0], node, "id", id, true);
-  validate(_data[231][1], node, "typeParameters", typeParameters, true);
-  validate(_data[231][2], node, "typeAnnotation", typeAnnotation, true);
+  validate(_data[231][1], node, "id", id, true);
+  validate(_data[231][2], node, "typeParameters", typeParameters, true);
+  validate(_data[231][3], node, "typeAnnotation", typeAnnotation, true);
   return node;
 }
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
@@ -3038,8 +3021,8 @@ export function tsEnumDeclaration(
     id,
     members,
   };
-  validate(_data[236][0], node, "id", id, true);
-  validate(_data[236][1], node, "members", members, true);
+  validate(_data[236][2], node, "id", id, true);
+  validate(_data[236][3], node, "members", members, true);
   return node;
 }
 export { tsEnumDeclaration as tSEnumDeclaration };
@@ -3066,8 +3049,8 @@ export function tsModuleDeclaration(
     id,
     body,
   };
-  validate(_data[238][0], node, "id", id, true);
-  validate(_data[238][1], node, "body", body, true);
+  validate(_data[238][2], node, "id", id, true);
+  validate(_data[238][3], node, "body", body, true);
   return node;
 }
 export { tsModuleDeclaration as tSModuleDeclaration };
@@ -3107,8 +3090,8 @@ export function tsImportEqualsDeclaration(
     moduleReference,
     isExport: null,
   };
-  validate(_data[241][0], node, "id", id, true);
-  validate(_data[241][1], node, "moduleReference", moduleReference, true);
+  validate(_data[241][1], node, "id", id, true);
+  validate(_data[241][2], node, "moduleReference", moduleReference, true);
   return node;
 }
 export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
@@ -3198,9 +3181,9 @@ export function tsTypeParameter(
     default: _default,
     name,
   };
-  validate(_data[249][0], node, "constraint", constraint, true);
-  validate(_data[249][1], node, "default", _default, true);
-  validate(_data[249][2], node, "name", name);
+  validate(_data[249][4], node, "constraint", constraint, true);
+  validate(_data[249][5], node, "default", _default, true);
+  validate(_data[249][0], node, "name", name);
   return node;
 }
 export { tsTypeParameter as tSTypeParameter };

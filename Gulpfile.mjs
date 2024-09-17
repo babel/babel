@@ -790,10 +790,21 @@ const standaloneBundle = [
   },
 ];
 
-gulp.task("generate-type-helpers", () => {
+gulp.task("generate-type-helpers", async () => {
   log("Generating @babel/types and @babel/traverse dynamic functions");
 
-  return Promise.all([
+  if (!process.env.IS_PUBLISH) {
+    const { default: astOrderData } = await import(
+      "./packages/babel-types/scripts/ast-order-data.js"
+    );
+    const data = astOrderData();
+    fs.writeFileSync(
+      "./packages/babel-types/ast-order-data.json",
+      JSON.stringify(data, null, 2)
+    );
+  }
+
+  await Promise.all([
     generateTypeHelpers("asserts"),
     generateTypeHelpers("builders"),
     generateTypeHelpers("builders", "uppercase.js"),

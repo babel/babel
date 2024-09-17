@@ -6,13 +6,11 @@ import {
 } from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { IS_BABEL_8 } from "$repo-utils";
+import astOrderData from "../../ast-order-data.json" with { type: "json" };
 
-// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value) {
-  return value && value !== "false" && value !== "0";
-}
-
-if (!bool(process.env.BABEL_8_BREAKING)) {
+if (!IS_BABEL_8()) {
   // eslint-disable-next-line no-var
   var lowerFirst = function (string) {
     return string[0].toLowerCase() + string.slice(1);
@@ -103,37 +101,19 @@ function generateLowercaseBuilders() {
 import * as _validate from "../../validators/validate.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
-import {
-  BUILDER_KEYS,
-  NODE_FIELDS,
-  type FieldOptions,
-} from "../../definitions/utils.ts";
+import { NODE_FIELDS, type FieldOptions } from "../../definitions/utils.ts";
+import astOrderData from "../../../ast-order-data.json" with { type: "json" };
 
 const { validateInternal: validate } = _validate;
 
 const _data: FieldOptions[][] = [];
-Object.keys(BUILDER_KEYS).forEach(type => {
-  const fields = NODE_FIELDS[type];
-
-  _data.push(
-    sortFieldNames(Object.keys(fields), type).map(field => fields[field]),
-  );
-});
-
-function sortFieldNames(fields: string[], type: string) {
-  return fields.sort((fieldA, fieldB) => {
-    const indexA = BUILDER_KEYS[type].indexOf(fieldA);
-    const indexB = BUILDER_KEYS[type].indexOf(fieldB);
-    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
-  });
+for (const [type, fields] of astOrderData as [string, []][]) {
+  const fieldOptions = NODE_FIELDS[type];
+  _data.push(fieldOptions ? fields.map(field => fieldOptions[field]) : null);
 }
 
 `;
 
-  let i = 0;
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
     const defArgs = generateBuilderArgs(type);
@@ -167,13 +147,15 @@ function sortFieldNames(fields: string[], type: string) {
     if (builderNames.length > 0) {
       output += `\n  const node:t.${type} = ${nodeObjectExpression};`;
 
+      const nodeIndex = astOrderData.findIndex(([t]) => t === type);
+
       fieldNames.forEach(fieldName => {
         const field = NODE_FIELDS[type][fieldName];
         if (field && builderNames.includes(fieldName)) {
           const argName = toBindingIdentifierName(fieldName);
-          output += `\n  validate(_data[${i}][${fieldNames.indexOf(
-            fieldName
-          )}], node, "${fieldName}", ${argName}${
+          output += `\n  validate(_data[${nodeIndex}][${astOrderData[
+            nodeIndex
+          ][1].indexOf(fieldName)}], node, "${fieldName}", ${argName}${
             JSON.stringify(
               stringifyValidator(field.validate, "#node#")
             ).includes("#node#")
@@ -187,13 +169,12 @@ function sortFieldNames(fields: string[], type: string) {
       output += `\n  return ${nodeObjectExpression};`;
     }
     output += `\n}\n`;
-    i++;
 
     if (formattedBuilderNameLocal !== formattedBuilderName) {
       output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
     }
 
-    if (!bool(process.env.BABEL_8_BREAKING)) {
+    if (!IS_BABEL_8()) {
       // This is needed for backwards compatibility.
       // JSXIdentifier -> jSXIdentifier
       if (/^[A-Z]{2}/.test(type)) {
@@ -215,7 +196,7 @@ function ${type}(${generateBuilderArgs(newType).join(", ")}) {
 }
 export { ${type} as ${formattedBuilderName} };\n`;
 
-    if (!bool(process.env.BABEL_8_BREAKING)) {
+    if (!IS_BABEL_8()) {
       // This is needed for backwards compatibility.
       // JSXIdentifier -> jSXIdentifier
       if (/^[A-Z]{2}/.test(type)) {
@@ -238,7 +219,7 @@ function generateUppercaseBuilders() {
  * conflict with AST types. TypeScript reads the uppercase.d.ts file instead.
  */
 
- export {\n`;
+  export {\n`;
 
   Object.keys(BUILDER_KEYS).forEach(type => {
     const formattedBuilderName = formatBuilderName(type);
