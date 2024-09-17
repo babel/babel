@@ -4,9 +4,29 @@ import { types as t, type NodePath } from "@babel/core";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  function transformStatementList(paths: NodePath<t.Statement>[]) {
+  function transformStatementList(
+    parentPath: NodePath,
+    paths: NodePath<t.Statement>[],
+  ) {
+    const isInStrictMode = parentPath.isInStrictMode();
+
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
+
+      if (
+        process.env.BABEL_8_BREAKING &&
+        !isInStrictMode &&
+        !(
+          path.node.async ||
+          path.node.generator ||
+          path.getData(
+            "@babel/plugin-transform-async-generator-functions/async_generator_function",
+          )
+        )
+      ) {
+        continue;
+      }
+
       const func = path.node;
       const declar = t.variableDeclaration("let", [
         t.variableDeclarator(func.id, t.toExpression(func)),
@@ -36,11 +56,11 @@ export default declare(api => {
           return;
         }
 
-        transformStatementList(path.get("body"));
+        transformStatementList(path, path.get("body"));
       },
 
       SwitchCase(path) {
-        transformStatementList(path.get("consequent"));
+        transformStatementList(path, path.get("consequent"));
       },
     },
   };

@@ -1,24 +1,27 @@
-var a = true;
-var b = false;
+let a = true;
+let b = false;
 class e {}
 function f() {}
+
 switch (a) {
   case true:
-    var c = 2;
-    var foo = true;
+    let c = 2;
+    let foo = true;
     break;
   case false:
-    var d = 3;
+    let d = 3;
     foo = false;
     break;
 }
+
 switch (true) {
   case true:
-    var _a = false;
-    var _b = true;
-    var _c = 4;
-    var _d = 5;
+    let a = false;
+    let b = true;
+    let c = 4;
+    let d = 5;
+
   case false:
-    class _e {}
+    class e {}
     function f() {}
 }

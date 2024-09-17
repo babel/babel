@@ -1,7 +1,7 @@
 {
   switch (1) {
     case 1:
-      let f = function () {
+      var f = function () {
         return 1;
       };
       expect(f()).toBe(1);
