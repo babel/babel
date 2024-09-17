@@ -1237,14 +1237,23 @@ defineType("VariableDeclaration", {
   },
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
-      ? function (parent, key, node) {
-          if (!is("ForXStatement", parent, { left: node })) return;
-          if (node.declarations.length !== 1) {
-            throw new TypeError(
-              `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
-            );
-          }
-        }
+      ? (() => {
+          const withoutInit = assertNodeType("Identifier");
+
+          return function (parent, key, node: t.VariableDeclaration) {
+            if (is("ForXStatement", parent, { left: node })) {
+              if (node.declarations.length !== 1) {
+                throw new TypeError(
+                  `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
+                );
+              }
+            } else {
+              node.declarations.forEach(decl => {
+                if (!decl.init) withoutInit(decl, "id", decl.id);
+              });
+            }
+          };
+        })()
       : undefined,
 });
 
@@ -1255,24 +1264,7 @@ defineType("VariableDeclarator", {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
           ? assertNodeType("LVal")
-          : Object.assign(
-              (function () {
-                const normal = assertNodeType(
-                  "Identifier",
-                  "ArrayPattern",
-                  "ObjectPattern",
-                );
-                const without = assertNodeType("Identifier");
-
-                return function (node: t.VariableDeclarator, key, val) {
-                  const validator = node.init ? normal : without;
-                  validator(node, key, val);
-                } as Validator;
-              })(),
-              {
-                oneOfNodeTypes: ["Identifier", "ArrayPattern", "ObjectPattern"],
-              },
-            ),
+          : assertNodeType("Identifier", "ArrayPattern", "ObjectPattern"),
     },
     definite: {
       optional: true,

@@ -136,6 +136,14 @@ describe("@babel/template", function () {
       }).toThrow('Unknown substitution "ANOTHER_ID" given');
     });
 
+    it("should throw if VariableDeclaration without init", () => {
+      expect(() => {
+        template(`
+          const %%ID%%;
+        `)({ ID: t.identifier("someIdent") });
+      }).toThrow("Missing initializer in destructuring declaration. (3:22)");
+    });
+
     it("should throw if placeholders are not given explicit values", () => {
       expect(() => {
         template(`
@@ -464,6 +472,20 @@ describe("@babel/template", function () {
         RHS: t.numericLiteral(7),
       });
       expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
+    });
+
+    it("works in const declaration inside for-of without init", () => {
+      const output = template("for (const %%LHS%% of %%RHS%%){}")({
+        LHS: t.ObjectPattern([
+          t.ObjectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+        RHS: t.identifier("y"),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`
+        "for (const {
+          x: x
+        } of y) {}"
+      `);
     });
 
     it("works in let declaration", () => {
