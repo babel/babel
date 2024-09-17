@@ -525,7 +525,7 @@ __metadata:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/jsesc": "npm:^2.5.0"
     charcodes: "npm:^0.2.0"
-    jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
+    jsesc: "npm:^3.0.2"
   languageName: unknown
   linkType: soft
 
@@ -12398,7 +12398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsesc-BABEL_8_BREAKING-false@npm:jsesc@^2.5.1, jsesc@npm:^2.5.1":
+"jsesc@npm:^2.5.1":
   version: 2.5.2
   resolution: "jsesc@npm:2.5.2"
   bin:
@@ -12407,22 +12407,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsesc-BABEL_8_BREAKING-true@npm:jsesc@^3.0.2, jsesc@npm:^3.0.2":
+"jsesc@npm:^3.0.2":
   version: 3.0.2
   resolution: "jsesc@npm:3.0.2"
   bin:
     jsesc: bin/jsesc
   checksum: 10/8e5a7de6b70a8bd71f9cb0b5a7ade6a73ae6ab55e697c74cc997cede97417a3a65ed86c36f7dd6125fe49766e8386c845023d9e213916ca92c9dfdd56e2babf3
-  languageName: node
-  linkType: hard
-
-"jsesc@condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1":
-  version: 0.0.0-condition-5a84f3
-  resolution: "jsesc@condition:BABEL_8_BREAKING?^3.0.2:^2.5.1#5a84f3"
-  dependencies:
-    jsesc-BABEL_8_BREAKING-false: "npm:jsesc@^2.5.1"
-    jsesc-BABEL_8_BREAKING-true: "npm:jsesc@^3.0.2"
-  checksum: 10/9a5432dbbdfd24ceb705f945cc244bdea8d2bc7b227d689d26ac48124356dcf56332ad0030addd97dcac5c5f8ee144b60e8471c263cc2104403e96ec8394273f
   languageName: node
   linkType: hard
 
