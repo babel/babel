@@ -2802,7 +2802,7 @@
         },
         "extends": [
           {
-            "type": "TSExpressionWithTypeArguments",
+            "type": "TSInterfaceHeritage",
             "start":2313,"end":2322,"loc":{"start":{"line":126,"column":40,"index":2313},"end":{"line":126,"column":49,"index":2322}},
             "expression": {
               "type": "Identifier",

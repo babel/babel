@@ -1460,7 +1460,13 @@ defineType("ClassExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
+          assertNodeType(
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+            process.env.BABEL_8_BREAKING
+              ? "TSClassImplements"
+              : "TSExpressionWithTypeArguments",
+            "ClassImplements",
+          ),
         ),
       ),
       optional: true,
@@ -1521,7 +1527,13 @@ defineType("ClassDeclaration", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
+          assertNodeType(
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+            process.env.BABEL_8_BREAKING
+              ? "TSClassImplements"
+              : "TSExpressionWithTypeArguments",
+            "ClassImplements",
+          ),
         ),
       ),
       optional: true,

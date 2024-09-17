@@ -58,6 +58,11 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         case "CommentLine":
           return;
       }
+
+      if (process.env.BABEL_8_BREAKING) {
+        if (type === "TSExpressionWithTypeArguments") return;
+      }
+
       if (ignoredFields[type] === true) return;
       const fields = t.NODE_FIELDS[type];
       if (!fields) {

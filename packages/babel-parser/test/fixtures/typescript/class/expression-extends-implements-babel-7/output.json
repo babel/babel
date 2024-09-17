@@ -41,7 +41,7 @@
           },
           "implements": [
             {
-              "type": "TSClassImplements",
+              "type": "TSExpressionWithTypeArguments",
               "start":33,"end":39,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":39,"index":39}},
               "expression": {
                 "type": "TSQualifiedName",
@@ -123,7 +123,7 @@
           },
           "implements": [
             {
-              "type": "TSClassImplements",
+              "type": "TSExpressionWithTypeArguments",
               "start":80,"end":86,"loc":{"start":{"line":2,"column":35,"index":80},"end":{"line":2,"column":41,"index":86}},
               "expression": {
                 "type": "TSQualifiedName",

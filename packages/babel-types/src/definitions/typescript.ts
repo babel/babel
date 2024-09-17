@@ -425,14 +425,21 @@ defineType("TSLiteralType", {
   },
 });
 
-defineType("TSExpressionWithTypeArguments", {
+const expressionWithTypeArguments = {
   aliases: ["TSType"],
   visitor: ["expression", "typeParameters"],
   fields: {
     expression: validateType("TSEntityName"),
     typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
-});
+};
+
+if (process.env.BABEL_8_BREAKING) {
+  defineType("TSClassImplements", expressionWithTypeArguments);
+  defineType("TSInterfaceHeritage", expressionWithTypeArguments);
+} else {
+  defineType("TSExpressionWithTypeArguments", expressionWithTypeArguments);
+}
 
 defineType("TSInterfaceDeclaration", {
   // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
@@ -442,7 +449,14 @@ defineType("TSInterfaceDeclaration", {
     declare: validateOptional(bool),
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-    extends: validateOptional(arrayOfType("TSExpressionWithTypeArguments")),
+    extends: validateOptional(
+      arrayOfType(
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+        process.env.BABEL_8_BREAKING
+          ? "TSClassImplements"
+          : "TSExpressionWithTypeArguments",
+      ),
+    ),
     body: validateType("TSInterfaceBody"),
   },
 });

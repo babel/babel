@@ -17,7 +17,7 @@
         },
         "extends": [
           {
-            "type": "TSInterfaceHeritage",
+            "type": "TSExpressionWithTypeArguments",
             "start":142,"end":148,"loc":{"start":{"line":3,"column":20,"index":142},"end":{"line":3,"column":26,"index":148}},
             "expression": {
               "type": "TSQualifiedName",
