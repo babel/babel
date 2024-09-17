@@ -33,7 +33,7 @@ export function validateInternal(
   field.validate(node, key, val);
 
   if (maybeNode) {
-    const type = node?.type;
+    const type = (val as t.Node).type;
     if (type == null) return;
     NODE_PARENT_VALIDATIONS[type]?.(node, key, val);
   }
@@ -56,7 +56,7 @@ export function validateChild(
   key: string,
   val?: unknown,
 ) {
-  const type = node?.type;
+  const type = (val as t.Node)?.type;
   if (type == null) return;
   NODE_PARENT_VALIDATIONS[type]?.(node, key, val);
 }
