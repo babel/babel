@@ -793,7 +793,7 @@ const standaloneBundle = [
 gulp.task("generate-type-helpers", async () => {
   log("Generating @babel/types and @babel/traverse dynamic functions");
 
-  if (!process.env.IS_PUBLISH) {
+  if (!process.env.STRIP_BABEL_8_FLAG) {
     const { default: astOrderData } = await import(
       "./packages/babel-types/scripts/ast-order-data.js"
     );
