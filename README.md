@@ -86,7 +86,7 @@ Mostly a handful of volunteers, funded by you! Please check out our [team page](
 
 ### Is there a Babel song?
 
-I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c), [audio version](https://youtu.be/40abpedBKK8) by [@swyx](https://twitter.com/@swyx). Tweet us your recordings!
+I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c), [audio version](https://youtu.be/40abpedBKK8) by [@swyx](https://x.com/@swyx). Tweet us your recordings!
 
 ### Looking for support?
 
