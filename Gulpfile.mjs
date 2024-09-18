@@ -703,6 +703,8 @@ function* libBundlesIterator() {
       "babel-helper-builder-react-jsx",
       // exit-loader.cjs
       "babel-helper-transform-fixture-test-runner",
+      // imported "@babel/plugin-transform-react-jsx/lib/development", this will accidentally bundle everything
+      "babel-plugin-transform-react-jsx-development",
     ].map(n => `packages/${n}`)
   );
   for (const src of packagesIterator(noBundle)) {
