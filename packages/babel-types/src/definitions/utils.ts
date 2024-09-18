@@ -27,7 +27,7 @@ type NodeTypes = NodeTypesWithoutComment | t.Comment["type"];
 
 type PrimitiveTypes = ReturnType<typeof getType>;
 
-type FieldDefinitions = {
+export type FieldDefinitions = {
   [x: string]: FieldOptions;
 };
 
