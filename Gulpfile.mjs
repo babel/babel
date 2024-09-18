@@ -450,6 +450,14 @@ function buildRollup(packages, buildStandalone) {
               preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
+            !buildStandalone &&
+              rollupReplace({
+                preventAssignment: true,
+                delimiters: ["", ""],
+                values: {
+                  "../../../ast-order-data.json": "../ast-order-data.json",
+                },
+              }),
             src === "packages/babel-parser" &&
               getBabelOutputPlugin({
                 configFile: false,
@@ -800,7 +808,7 @@ gulp.task("generate-type-helpers", async () => {
     const data = astOrderData();
     fs.writeFileSync(
       "./packages/babel-types/ast-order-data.json",
-      JSON.stringify(data, null, 2)
+      await formatCode(JSON.stringify(data), "1.json")
     );
   }
 

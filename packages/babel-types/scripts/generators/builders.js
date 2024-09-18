@@ -114,6 +114,10 @@ for (const [type, fields] of astOrderData as [string, []][]) {
 
 `;
 
+  if (process.env.IS_BABEL_OLD_E2E) {
+    output = output.replace(`with { type: "json" }`, "");
+  }
+
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
     const defArgs = generateBuilderArgs(type);
