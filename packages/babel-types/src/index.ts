@@ -13,6 +13,7 @@ export { default as createUnionTypeAnnotation } from "./builders/flow/createFlow
 export { default as createFlowUnionType } from "./builders/flow/createFlowUnionType.ts";
 export { default as createTSUnionType } from "./builders/typescript/createTSUnionType.ts";
 export * from "./builders/generated/index.ts";
+// eslint-disable-next-line import/export
 export * from "./builders/generated/uppercase.js";
 export * from "./builders/productions.ts";
 
