@@ -3,7 +3,6 @@ import {
   NODE_PARENT_VALIDATIONS,
   type FieldOptions,
 } from "../definitions/index.ts";
-import type { FieldDefinitions } from "../definitions/utils.ts";
 import type * as t from "../index.ts";
 
 export default function validate(
@@ -22,14 +21,12 @@ export default function validate(
 }
 
 export function validateInternal(
-  defs: FieldDefinitions,
+  field: FieldOptions,
   node: t.Node | undefined | null,
   key: string,
   val: unknown,
   maybeNode?: 1,
 ): void {
-  const field = defs[key];
-
   if (!field?.validate) return;
   if (field.optional && val == null) return;
 

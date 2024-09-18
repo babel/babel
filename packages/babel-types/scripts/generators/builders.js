@@ -145,7 +145,7 @@ const { NODE_FIELDS } = utils;
         const field = NODE_FIELDS[type][fieldName];
         if (field && builderNames.includes(fieldName)) {
           const argName = toBindingIdentifierName(fieldName);
-          output += `\n  validate(defs, node, "${fieldName}", ${argName}${
+          output += `\n  validate(defs.${fieldName}, node, "${fieldName}", ${argName}${
             JSON.stringify(
               stringifyValidator(field.validate, "#node#")
             ).includes("#node#")
