@@ -105,7 +105,8 @@
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
     "psl@npm:^1.1.28": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch",
-    "psl@npm:^1.1.33": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch"
+    "psl@npm:^1.1.33": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch",
+    "regjsparser@npm:^0.10.0": "npm:0.11.0"
   },
   "engines": {
     "yarn": ">=1.4.0"
