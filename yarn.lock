@@ -674,7 +674,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: "npm:^6.0.0"
+    regexpu-core: "npm:^6.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -14699,7 +14699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^6.0.0":
+"regexpu-core@npm:^6.1.0":
   version: 6.1.0
   resolution: "regexpu-core@npm:6.1.0"
   dependencies:
