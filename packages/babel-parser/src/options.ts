@@ -8,6 +8,7 @@ export type SourceType = "script" | "module" | "unambiguous";
 export interface Options {
   sourceType?: SourceType;
   sourceFilename?: string;
+  startIndex?: number;
   startColumn?: number;
   startLine?: number;
   allowAwaitOutsideFunction?: boolean;
@@ -35,6 +36,9 @@ function createDefaultOptions(): OptionsWithDefaults {
     sourceType: "script",
     // Source filename.
     sourceFilename: undefined,
+    // Index (0-based) from which to start counting source. Useful for
+    // integration with other tools.
+    startIndex: 0,
     // Column (0-based) from which to start counting source. Useful for
     // integration with other tools.
     startColumn: 0,

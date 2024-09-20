@@ -47,26 +47,30 @@ const toAdjustedSyntaxError = (adjust, error) =>
 export default function toFuzzedOptions(options) {
   if (TEST_FUZZ !== "true") return [[false, options]];
 
-  const { startLine = 1, startColumn = 0 } = options;
+  const { startIndex = 0, startLine = 1, startColumn = 0 } = options;
 
   // If the test supplies its own position, then make sure we choose
   // a different position. Also, make sure we stay within the "reasonable"
   // bounds in case the test is testing negative startLine or startColumn
   // for example.
+  const randomIndex = Math.max(1, random(startIndex + 1, 100));
   const randomLine = Math.max(2, random(startLine + 1, 1000));
   const randomColumn = Math.max(1, random(startColumn + 1, 100));
 
   // Now assemble our deltas...
   const fuzzedOptions = [
-    [false, false],
-    [1, 0],
-    [1, randomColumn],
-    [randomLine, 0],
-    [randomLine, randomColumn],
-    [randomLine, false],
-    [false, randomColumn],
+    [false, false, false],
+    [0, 1, 0],
+    [0, 1, randomColumn],
+    [0, randomLine, 0],
+    [randomIndex, 1, 0],
+    [randomIndex, randomLine, randomColumn],
+    [false, randomLine, false],
+    [false, false, randomColumn],
+    [randomIndex, false, false],
   ]
-    .map(([line, column]) => [
+    .map(([index, line, column]) => [
+      ["startIndex", index !== false && { enumerable: true, value: index }],
       ["startLine", line !== false && { enumerable: true, value: line }],
       ["startColumn", column !== false && { enumerable: true, value: column }],
     ])
@@ -75,7 +79,7 @@ export default function toFuzzedOptions(options) {
   // Make sure to include the original options in our set as well if the user
   // is wanting to test a specific start position.
   const totalOptions =
-    startLine !== 1 || startColumn !== 0
+    startIndex !== 0 || startLine !== 1 || startColumn !== 0
       ? [options, ...fuzzedOptions]
       : fuzzedOptions;
 
@@ -83,9 +87,17 @@ export default function toFuzzedOptions(options) {
   // This allows us to efficiently try these different options without having to modify
   // the expected results.
   return totalOptions
-    .map(options => [options, options.startLine || 1, options.startColumn || 0])
-    .map(([options, fStartLine, fStartColumn]) => [
+    .map(options => [
+      options,
+      options.startIndex || 0,
+      options.startLine || 1,
+      options.startColumn || 0,
+    ])
+    .map(([options, fStartIndex, fStartLine, fStartColumn]) => [
       toAdjustFunction({
+        ...(startIndex !== fStartIndex && {
+          index: (_, index) => index - startIndex + fStartIndex,
+        }),
         ...(startLine !== fStartLine && {
           line: (_, line) => line - startLine + fStartLine,
         }),
