@@ -99,6 +99,7 @@
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":103,"end":114,"loc":{"start":{"line":5,"column":7,"index":103},"end":{"line":5,"column":18,"index":114}},
+          "kind": "module",
           "id": {
             "type": "Identifier",
             "start":110,"end":111,"loc":{"start":{"line":5,"column":14,"index":110},"end":{"line":5,"column":15,"index":111},"identifierName":"E"},
@@ -120,6 +121,7 @@
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":122,"end":136,"loc":{"start":{"line":6,"column":7,"index":122},"end":{"line":6,"column":21,"index":136}},
+          "kind": "namespace",
           "id": {
             "type": "Identifier",
             "start":132,"end":133,"loc":{"start":{"line":6,"column":17,"index":132},"end":{"line":6,"column":18,"index":133},"identifierName":"F"},

@@ -2416,6 +2416,7 @@ export function tsModuleDeclaration(
     type: "TSModuleDeclaration",
     id,
     body,
+    kind: null,
   });
 }
 export { tsModuleDeclaration as tSModuleDeclaration };

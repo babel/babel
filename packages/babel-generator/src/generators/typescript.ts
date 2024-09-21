@@ -607,7 +607,7 @@ export function TSModuleDeclaration(
   this: Printer,
   node: t.TSModuleDeclaration,
 ) {
-  const { declare, id } = node;
+  const { declare, id, kind } = node;
 
   if (declare) {
     this.word("declare");
@@ -615,7 +615,7 @@ export function TSModuleDeclaration(
   }
 
   if (!node.global) {
-    this.word(id.type === "Identifier" ? "namespace" : "module");
+    this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
     this.space();
   }
   this.print(id);

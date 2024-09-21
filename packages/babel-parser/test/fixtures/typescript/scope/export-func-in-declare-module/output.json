@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":0,"end":139,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":139}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19}},
@@ -32,6 +33,7 @@
               "declaration": {
                 "type": "TSModuleDeclaration",
                 "start":33,"end":73,"loc":{"start":{"line":2,"column":11,"index":33},"end":{"line":4,"column":5,"index":73}},
+                "kind": "module",
                 "id": {
                   "type": "Identifier",
                   "start":40,"end":41,"loc":{"start":{"line":2,"column":18,"index":40},"end":{"line":2,"column":19,"index":41},"identifierName":"X"},
@@ -136,6 +138,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":141,"end":188,"loc":{"start":{"line":10,"column":0,"index":141},"end":{"line":12,"column":1,"index":188}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":156,"end":160,"loc":{"start":{"line":10,"column":15,"index":156},"end":{"line":10,"column":19,"index":160}},

@@ -1948,9 +1948,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.TsModuleDeclaration,
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
+        node.kind = "global";
         node.global = true;
         node.id = this.parseIdentifier();
       } else if (this.match(tt.string)) {
+        node.kind = "module";
         node.id = super.parseStringLiteral(this.state.value);
       } else {
         this.unexpected();
@@ -2151,6 +2153,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.scope.enter(ScopeFlag.TS_MODULE);
             this.prodParam.enter(ParamKind.PARAM);
             const mod = node;
+            mod.kind = "global";
             mod.global = true;
             mod.id = expr;
             mod.body = this.tsParseModuleBlock();
@@ -2193,6 +2196,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (this.match(tt.string)) {
               return this.tsParseAmbientExternalModuleDeclaration(node);
             } else if (tokenIsIdentifier(this.state.type)) {
+              node.kind = "module";
               return this.tsParseModuleOrNamespaceDeclaration(node);
             }
           }
@@ -2203,6 +2207,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.tsCheckLineTerminator(next) &&
             tokenIsIdentifier(this.state.type)
           ) {
+            node.kind = "namespace";
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;

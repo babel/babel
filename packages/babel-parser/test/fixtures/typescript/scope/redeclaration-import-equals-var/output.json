@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "kind": "module",
         "id": {
           "type": "Identifier",
           "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"M"},
