@@ -29,7 +29,8 @@
             "raw": "\"async\""
           },
           "value": "async"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

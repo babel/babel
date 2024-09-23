@@ -40,7 +40,8 @@
           },
           "value": "foo"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

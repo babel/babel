@@ -32,7 +32,8 @@
                       "start":21,"end":26,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":26}},
                       "value": "./x",
                       "raw": "'./x'"
-                    }
+                    },
+                    "options": null
                   }
                 }
               }
@@ -65,6 +66,7 @@
                     "value": "./y",
                     "raw": "'./y'"
                   },
+                  "options": null,
                   "qualifier": {
                     "type": "Identifier",
                     "start":50,"end":51,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":22},"identifierName":"Y"},
@@ -101,6 +103,7 @@
                     "value": "/z",
                     "raw": "\"/z\""
                   },
+                  "options": null,
                   "qualifier": {
                     "type": "TSQualifiedName",
                     "start":73,"end":80,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":27}},

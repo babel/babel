@@ -52,6 +52,7 @@
                 "value": "bar"
               },
               "declaration": null,
+              "attributes": [],
               "default": false
             }
           ]

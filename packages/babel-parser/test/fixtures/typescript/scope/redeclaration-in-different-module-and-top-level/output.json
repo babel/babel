@@ -49,7 +49,8 @@
             "raw": "\"baz\""
           },
           "value": "baz"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
@@ -80,7 +81,8 @@
             "raw": "'json-schema'"
           },
           "value": "json-schema"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -160,7 +162,8 @@
           },
           "value": "baz"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -192,7 +195,8 @@
           },
           "value": "baz"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -224,7 +228,8 @@
           },
           "value": "baz"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -256,7 +261,8 @@
           },
           "value": "baz"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -288,7 +294,8 @@
           },
           "value": "baz"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "VariableDeclaration",
@@ -415,7 +422,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -447,7 +455,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -479,7 +488,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -511,7 +521,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -543,7 +554,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "VariableDeclaration",
@@ -625,7 +637,8 @@
                   "raw": "\"baz\""
                 },
                 "value": "baz"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ImportDeclaration",
@@ -656,7 +669,8 @@
                   "raw": "'json-schema'"
                 },
                 "value": "json-schema"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -736,7 +750,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -768,7 +783,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -800,7 +816,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -832,7 +849,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -864,7 +882,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "VariableDeclaration",

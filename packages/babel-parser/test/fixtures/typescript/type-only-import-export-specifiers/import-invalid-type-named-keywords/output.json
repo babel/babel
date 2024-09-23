@@ -39,7 +39,8 @@
             "raw": "\"./mod.js\""
           },
           "value": "./mod.js"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

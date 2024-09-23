@@ -80,7 +80,8 @@
             "type": "Identifier",
             "start":57,"end":63,"loc":{"start":{"line":4,"column":7,"index":57},"end":{"line":4,"column":13,"index":63},"identifierName":"module"},
             "name": "module"
-          }
+          },
+          "options": null
         }
       }
     ],

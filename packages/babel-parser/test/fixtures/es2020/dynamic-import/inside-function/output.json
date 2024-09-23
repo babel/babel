@@ -64,7 +64,8 @@
                       "tail": true
                     }
                   ]
-                }
+                },
+                "options": null
               }
             }
           ],

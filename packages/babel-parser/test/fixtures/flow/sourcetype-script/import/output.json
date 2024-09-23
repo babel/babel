@@ -10,6 +10,7 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "importKind": "type",
         "specifiers": [
           {
             "type": "ImportSpecifier",
@@ -27,7 +28,6 @@
             }
           }
         ],
-        "importKind": "type",
         "source": {
           "type": "StringLiteral",
           "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27}},
@@ -36,11 +36,13 @@
             "raw": "\"\""
           },
           "value": ""
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
         "start":29,"end":56,"loc":{"start":{"line":2,"column":0,"index":29},"end":{"line":2,"column":27,"index":56}},
+        "importKind": "typeof",
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -52,7 +54,6 @@
             }
           }
         ],
-        "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
           "start":53,"end":55,"loc":{"start":{"line":2,"column":24,"index":53},"end":{"line":2,"column":26,"index":55}},
@@ -61,7 +62,8 @@
             "raw": "\"\""
           },
           "value": ""
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []

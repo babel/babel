@@ -55,6 +55,7 @@
           "value": "foo"
         },
         "declaration": null,
+        "attributes": [],
         "innerComments": [
           {
             "type": "CommentBlock",

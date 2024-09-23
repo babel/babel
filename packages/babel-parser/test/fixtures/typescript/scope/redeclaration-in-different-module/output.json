@@ -73,7 +73,8 @@
                   "raw": "'json-schema'"
                 },
                 "value": "json-schema"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ImportDeclaration",
@@ -104,7 +105,8 @@
                   "raw": "\"baz\""
                 },
                 "value": "baz"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -136,7 +138,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "VariableDeclaration",
@@ -262,7 +265,8 @@
                   "raw": "'json-schema'"
                 },
                 "value": "json-schema"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ImportDeclaration",
@@ -293,7 +297,8 @@
                   "raw": "\"baz\""
                 },
                 "value": "baz"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
@@ -325,7 +330,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null
+              "declaration": null,
+              "attributes": []
             },
             {
               "type": "VariableDeclaration",
