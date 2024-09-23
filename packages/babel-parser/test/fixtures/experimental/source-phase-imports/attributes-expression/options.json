@@ -1,4 +1,4 @@
 {
-  "plugins": ["sourcePhaseImports", "importAttributes"],
+  "plugins": ["sourcePhaseImports"],
   "createImportExpressions": true
 }
