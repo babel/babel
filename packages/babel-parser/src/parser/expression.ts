@@ -960,27 +960,8 @@ export default abstract class ExpressionParser extends LValParser {
     optional: boolean,
   ): T {
     if (node.callee.type === "Import") {
-      if (node.arguments.length === 2) {
-        if (
-          process.env.BABEL_8_BREAKING ||
-          !(
-            this.hasPlugin("moduleAttributes") ||
-            this.hasPlugin("importAssertions")
-          )
-        ) {
-          this.expectPlugin("importAttributes");
-        }
-      }
       if (node.arguments.length === 0 || node.arguments.length > 2) {
-        this.raise(Errors.ImportCallArity, node, {
-          maxArgumentCount:
-            this.hasPlugin("importAttributes") ||
-            (!process.env.BABEL_8_BREAKING &&
-              (this.hasPlugin("importAssertions") ||
-                this.hasPlugin("moduleAttributes")))
-              ? 2
-              : 1,
-        });
+        this.raise(Errors.ImportCallArity, node);
       } else {
         for (const arg of node.arguments) {
           if (arg.type === "SpreadElement") {
@@ -1014,18 +995,6 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (
-            dynamicImport &&
-            !this.hasPlugin("importAttributes") &&
-            (process.env.BABEL_8_BREAKING ||
-              (!this.hasPlugin("importAssertions") &&
-                !this.hasPlugin("moduleAttributes")))
-          ) {
-            this.raise(
-              Errors.ImportCallArgumentTrailingComma,
-              this.state.lastTokStartLoc,
-            );
-          }
           if (nodeForExtra) {
             this.addTrailingCommaExtraToNode(nodeForExtra);
           }
@@ -2982,22 +2951,8 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.ImportExpression {
     this.next(); // eat tt.parenL
     node.source = this.parseMaybeAssignAllowIn();
-    if (
-      this.hasPlugin("importAttributes") ||
-      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
-    ) {
-      node.options = null;
-    }
+    node.options = null;
     if (this.eat(tt.comma)) {
-      if (
-        process.env.BABEL_8_BREAKING ||
-        !(
-          this.hasPlugin("moduleAttributes") ||
-          this.hasPlugin("importAssertions")
-        )
-      ) {
-        this.expectPlugin("importAttributes");
-      }
       if (!this.match(tt.parenR)) {
         node.options = this.parseMaybeAssignAllowIn();
         this.eat(tt.comma);

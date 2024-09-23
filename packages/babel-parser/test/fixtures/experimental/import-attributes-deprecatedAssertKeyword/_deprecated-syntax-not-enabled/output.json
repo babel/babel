@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
   "errors": [
-    "SyntaxError: The `assert` keyword in import attributes is deprecated and it has been replaced by the `with` keyword. You can enable the `deprecatedAssertSyntax: true` option in the import attributes plugin to suppress this error. (1:13)"
+    "SyntaxError: The `assert` keyword in import attributes is deprecated and it has been replaced by the `with` keyword. You can enable the `deprecatedImportAssert` parser plugin to suppress this error. (1:13)"
   ],
   "program": {
     "type": "Program",

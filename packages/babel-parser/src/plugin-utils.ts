@@ -103,15 +103,15 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
   if (pluginsMap.has("moduleAttributes")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "`moduleAttributes` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`.",
+        "`moduleAttributes` has been removed in Babel 8, please migrate to import attributes instead.",
       );
     } else {
       if (
-        pluginsMap.has("importAttributes") ||
+        pluginsMap.has("deprecatedImportAssert") ||
         pluginsMap.has("importAssertions")
       ) {
         throw new Error(
-          "Cannot combine importAssertions, importAttributes and moduleAttributes plugins.",
+          "Cannot combine importAssertions, deprecatedImportAssert and moduleAttributes plugins.",
         );
       }
       const moduleAttributesVersionPluginOption =
@@ -128,14 +128,26 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
   if (pluginsMap.has("importAssertions")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "`importAssertions` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`." +
-          " To use the non-standard `assert` syntax you can enable the `deprecatedAssertSyntax: true` option of those plugins.",
+        "`importAssertions` has been removed in Babel 8, please use import attributes instead." +
+          " To use the non-standard `assert` syntax you can enable the `deprecatedImportAssert` parser plugin.",
       );
-    } else if (pluginsMap.has("importAttributes")) {
+    } else if (pluginsMap.has("deprecatedImportAssert")) {
       throw new Error(
-        "Cannot combine importAssertions and importAttributes plugins.",
+        "Cannot combine importAssertions and deprecatedImportAssert plugins.",
       );
     }
+  }
+  if (
+    pluginsMap.has("importAttributes") &&
+    pluginsMap.get("importAttributes").deprecatedAssertSyntax
+  ) {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "The 'importAttributes' plugin has been removed in Babel 8. If you need to enable support " +
+          "for the deprecated `assert` syntax, you can enable the `deprecatedImportAssert` parser plugin.",
+      );
+    }
+    pluginsMap.set("deprecatedImportAssert", {});
   }
 
   if (pluginsMap.has("recordAndTuple")) {
