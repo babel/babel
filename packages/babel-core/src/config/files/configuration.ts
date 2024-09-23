@@ -73,7 +73,7 @@ function* readConfigCode(
 
   let options = yield* loadCodeDefault(
     filepath,
-    (yield* isAsync()) ? "import" : "require",
+    (yield* isAsync()) ? "auto" : "require",
     "You appear to be using a native ECMAScript module configuration " +
       "file, which is only supported when running Babel asynchronously " +
       "or when using the Node.js `--experimental-require-module` flag.",

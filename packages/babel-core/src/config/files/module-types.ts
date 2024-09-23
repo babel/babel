@@ -92,7 +92,7 @@ type SetValue<T extends Set<unknown>> = T extends Set<infer U> ? U : never;
 
 export default function* loadCodeDefault(
   filepath: string,
-  loader: "require" | "import" | "auto",
+  loader: "require" | "auto",
   esmError: string,
   tlaError: string,
 ): Handler<unknown> {
@@ -105,7 +105,7 @@ export default function* loadCodeDefault(
     `${loader} ${ext}` as `${typeof loader} ${SetValue<typeof SUPPORTED_EXTENSIONS>}`;
   switch (pattern) {
     case "require .cjs":
-    case "import .cjs":
+    case "auto .cjs":
       if (process.env.BABEL_8_BREAKING) {
         return loadCjsDefault(filepath);
       } else {
@@ -116,9 +116,9 @@ export default function* loadCodeDefault(
         );
       }
     case "require .cts":
-    case "import .cts":
+    case "auto .cts":
       return loadCtsDefault(filepath);
-    case "import .js":
+    case "auto .js":
     case "require .js":
     case "require .mjs": // Some versions of Node.js support require(esm):
       try {
@@ -146,7 +146,7 @@ export default function* loadCodeDefault(
         }
       }
     // fall through: require() failed due to ESM or TLA, try import()
-    case "import .mjs":
+    case "auto .mjs":
       if ((async ??= yield* isAsync())) {
         return (yield* waitFor(loadMjsFromPath(filepath))).default;
       }

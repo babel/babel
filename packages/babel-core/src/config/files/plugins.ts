@@ -183,7 +183,7 @@ function resolveStandardizedNameForImport(
   while (!res.done) {
     res = it.next(tryImportMetaResolve(res.value, parentUrl));
   }
-  return { loader: "import" as const, filepath: fileURLToPath(res.value) };
+  return { loader: "auto" as const, filepath: fileURLToPath(res.value) };
 }
 
 function resolveStandardizedName(
@@ -223,7 +223,7 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 function* requireModule(
   type: string,
-  loader: "require" | "import",
+  loader: "require" | "auto",
   name: string,
 ): Handler<unknown> {
   if (!process.env.BABEL_8_BREAKING) {
