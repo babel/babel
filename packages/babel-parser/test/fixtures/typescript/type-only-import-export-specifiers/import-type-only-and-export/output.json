@@ -36,7 +36,8 @@
             "raw": "\"mod\""
           },
           "value": "mod"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",

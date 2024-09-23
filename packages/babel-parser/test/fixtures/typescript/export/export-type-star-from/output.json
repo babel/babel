@@ -19,7 +19,8 @@
             "raw": "'./mod'"
           },
           "value": "./mod"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -45,6 +46,7 @@
           },
           "value": "./mod"
         },
+        "attributes": [],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -86,6 +88,7 @@
           },
           "value": "./mod"
         },
+        "attributes": [],
         "leadingComments": [
           {
             "type": "CommentLine",

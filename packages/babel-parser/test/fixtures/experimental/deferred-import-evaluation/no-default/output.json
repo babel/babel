@@ -33,7 +33,8 @@
             "raw": "\"x\""
           },
           "value": "x"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

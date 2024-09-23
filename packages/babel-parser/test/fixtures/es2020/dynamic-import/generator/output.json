@@ -40,7 +40,8 @@
                       "raw": "'http'"
                     },
                     "value": "http"
-                  }
+                  },
+                  "options": null
                 }
               }
             }
