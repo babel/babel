@@ -1482,6 +1482,24 @@ defineType("ClassDeclaration", {
         })(),
 });
 
+export const importAttributes = {
+  attributes: {
+    optional: true,
+    validate: chain(
+      assertValueType("array"),
+      arrayOfType("ImportAttribute"),
+    ),
+  },
+  assertions: {
+    deprecated: true,
+    optional: true,
+    validate: chain(
+      assertValueType("array"),
+      arrayOfType("ImportAttribute"),
+    ),
+  },
+};
+
 defineType("ExportAllDeclaration", {
   builder: ["source"],
   visitor: ["source", "attributes", "assertions"],
@@ -1496,15 +1514,7 @@ defineType("ExportAllDeclaration", {
       validate: assertNodeType("StringLiteral"),
     },
     exportKind: validateOptional(assertOneOf("type", "value")),
-    attributes: {
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
-    assertions: {
-      deprecated: true,
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
+    ...importAttributes,
   },
 });
 
@@ -1570,15 +1580,7 @@ defineType("ExportNamedDeclaration", {
             )
           : assertNodeType("Declaration"),
     },
-    attributes: {
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
-    assertions: {
-      deprecated: true,
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
+    ...importAttributes,
     specifiers: {
       default: [],
       validate: arrayOf(
@@ -1714,15 +1716,7 @@ defineType("ImportDeclaration", {
     : ["specifiers", "source", "attributes", "assertions"],
   aliases: ["Statement", "Declaration", "ImportOrExportDeclaration"],
   fields: {
-    attributes: {
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
-    assertions: {
-      deprecated: true,
-      optional: true,
-      validate: arrayOfType("ImportAttribute"),
-    },
+    ...importAttributes,
     module: {
       optional: true,
       validate: assertValueType("boolean"),
