@@ -8,6 +8,9 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
+  assertEach,
+  assertNodeType,
+  chain,
 } from "./utils.ts";
 
 const defineType = defineAliasedType("Flow");
@@ -140,7 +143,7 @@ defineType("DeclareVariable", {
 });
 
 defineType("DeclareExportDeclaration", {
-  visitor: ["declaration", "specifiers", "source"],
+  visitor: ["declaration", "specifiers", "source", "attributes"],
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     declaration: validateOptionalType("Flow"),
@@ -149,15 +152,29 @@ defineType("DeclareExportDeclaration", {
     ),
     source: validateOptionalType("StringLiteral"),
     default: validateOptional(assertValueType("boolean")),
+    attributes: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ImportAttribute")),
+      ),
+    },
   },
 });
 
 defineType("DeclareExportAllDeclaration", {
-  visitor: ["source"],
+  visitor: ["source", "attributes"],
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     source: validateType("StringLiteral"),
     exportKind: validateOptional(assertOneOf("type", "value")),
+    attributes: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ImportAttribute")),
+      ),
+    },
   },
 });
 
