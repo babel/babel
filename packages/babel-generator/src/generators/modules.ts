@@ -132,11 +132,9 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
   if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, true);
     this.space();
-    // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
     this._printAttributes(node, false);
   } else {
     this.print(node.source);

@@ -1,3 +1,4 @@
+import { importAttributes } from "./core.ts";
 import {
   defineAliasedType,
   arrayOfType,
@@ -8,9 +9,6 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-  assertEach,
-  assertNodeType,
-  chain,
 } from "./utils.ts";
 
 const defineType = defineAliasedType("Flow");
@@ -152,13 +150,7 @@ defineType("DeclareExportDeclaration", {
     ),
     source: validateOptionalType("StringLiteral"),
     default: validateOptional(assertValueType("boolean")),
-    attributes: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...importAttributes,
   },
 });
 
@@ -168,13 +160,7 @@ defineType("DeclareExportAllDeclaration", {
   fields: {
     source: validateType("StringLiteral"),
     exportKind: validateOptional(assertOneOf("type", "value")),
-    attributes: {
-      optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
-    },
+    ...importAttributes,
   },
 });
 
