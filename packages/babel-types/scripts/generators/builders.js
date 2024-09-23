@@ -6,13 +6,10 @@ import {
 } from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { IS_BABEL_8 } from "$repo-utils";
 
-// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value) {
-  return value && value !== "false" && value !== "0";
-}
-
-if (!bool(process.env.BABEL_8_BREAKING)) {
+if (!IS_BABEL_8()) {
   // eslint-disable-next-line no-var
   var lowerFirst = function (string) {
     return string[0].toLowerCase() + string.slice(1);
@@ -100,9 +97,14 @@ function generateLowercaseBuilders() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import validateNode from "../validateNode.ts";
+import * as _validate from "../../validators/validate.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
+import * as utils from "../../definitions/utils.ts";
+
+const { validateInternal: validate } = _validate;
+const { NODE_FIELDS } = utils;
+
 `;
 
   const reservedNames = new Set(["super", "import"]);
@@ -136,7 +138,23 @@ import deprecationWarning from "../../utils/deprecationWarning.ts";
       .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {
-      output += `\n  return validateNode<t.${type}>(${nodeObjectExpression});`;
+      output += `\n  const node:t.${type} = ${nodeObjectExpression};`;
+      output += `\n  const defs = NODE_FIELDS.${type};`;
+
+      fieldNames.forEach(fieldName => {
+        const field = NODE_FIELDS[type][fieldName];
+        if (field && builderNames.includes(fieldName)) {
+          const argName = toBindingIdentifierName(fieldName);
+          output += `\n  validate(defs.${fieldName}, node, "${fieldName}", ${argName}${
+            JSON.stringify(
+              stringifyValidator(field.validate, "#node#")
+            ).includes("#node#")
+              ? ", 1"
+              : ""
+          });`;
+        }
+      });
+      output += `\n  return node;`;
     } else {
       output += `\n  return ${nodeObjectExpression};`;
     }
@@ -146,7 +164,7 @@ import deprecationWarning from "../../utils/deprecationWarning.ts";
       output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
     }
 
-    if (!bool(process.env.BABEL_8_BREAKING)) {
+    if (!IS_BABEL_8()) {
       // This is needed for backwards compatibility.
       // JSXIdentifier -> jSXIdentifier
       if (/^[A-Z]{2}/.test(type)) {
@@ -168,7 +186,7 @@ function ${type}(${generateBuilderArgs(newType).join(", ")}) {
 }
 export { ${type} as ${formattedBuilderName} };\n`;
 
-    if (!bool(process.env.BABEL_8_BREAKING)) {
+    if (!IS_BABEL_8()) {
       // This is needed for backwards compatibility.
       // JSXIdentifier -> jSXIdentifier
       if (/^[A-Z]{2}/.test(type)) {
@@ -191,7 +209,7 @@ function generateUppercaseBuilders() {
  * conflict with AST types. TypeScript reads the uppercase.d.ts file instead.
  */
 
- export {\n`;
+  export {\n`;
 
   Object.keys(BUILDER_KEYS).forEach(type => {
     const formattedBuilderName = formatBuilderName(type);
