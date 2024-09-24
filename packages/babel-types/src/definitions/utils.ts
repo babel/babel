@@ -64,36 +64,28 @@ export function validate(validate: Validator): FieldOptions {
   return { validate };
 }
 
-export function typeIs(typeName: NodeTypes | NodeTypes[]) {
-  return typeof typeName === "string"
-    ? assertNodeType(typeName)
-    : assertNodeType(...typeName);
-}
-
-export function validateType(typeName: NodeTypes | NodeTypes[]) {
-  return validate(typeIs(typeName));
+export function validateType(...typeNames: NodeTypes[]) {
+  return validate(assertNodeType(...typeNames));
 }
 
 export function validateOptional(validate: Validator): FieldOptions {
   return { validate, optional: true };
 }
 
-export function validateOptionalType(
-  typeName: NodeTypes | NodeTypes[],
-): FieldOptions {
-  return { validate: typeIs(typeName), optional: true };
+export function validateOptionalType(...typeNames: NodeTypes[]): FieldOptions {
+  return { validate: assertNodeType(...typeNames), optional: true };
 }
 
 export function arrayOf(elementType: Validator): Validator {
   return chain(assertValueType("array"), assertEach(elementType));
 }
 
-export function arrayOfType(typeName: NodeTypes | NodeTypes[]) {
-  return arrayOf(typeIs(typeName));
+export function arrayOfType(...typeNames: NodeTypes[]) {
+  return arrayOf(assertNodeType(...typeNames));
 }
 
-export function validateArrayOfType(typeName: NodeTypes | NodeTypes[]) {
-  return validate(arrayOfType(typeName));
+export function validateArrayOfType(...typeNames: NodeTypes[]) {
+  return validate(arrayOfType(...typeNames));
 }
 
 export function assertEach(callback: Validator): Validator {

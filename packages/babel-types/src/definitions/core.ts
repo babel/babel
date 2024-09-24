@@ -24,6 +24,10 @@ import {
   assertOneOf,
   validateOptional,
   type Validator,
+  arrayOf,
+  arrayOfType,
+  validateArrayOfType,
+  validateType,
 } from "./utils.ts";
 
 const defineType = defineAliasedType("Standardized");
@@ -31,11 +35,8 @@ const defineType = defineAliasedType("Standardized");
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeOrValueType("null", "Expression", "SpreadElement"),
-        ),
+      validate: arrayOf(
+        assertNodeOrValueType("null", "Expression", "SpreadElement"),
       ),
       default:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
@@ -155,18 +156,10 @@ defineType("BlockStatement", {
   visitor: ["directives", "body"],
   fields: {
     directives: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Directive")),
-      ),
+      validate: arrayOfType("Directive"),
       default: [],
     },
-    body: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Statement")),
-      ),
-    },
+    body: validateArrayOfType("Statement"),
   },
   aliases: ["Scopable", "BlockParent", "Block", "Statement"],
 });
@@ -190,14 +183,11 @@ defineType("CallExpression", {
     callee: {
       validate: assertNodeType("Expression", "Super", "V8IntrinsicIdentifier"),
     },
-    arguments: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
-        ),
-      ),
-    },
+    arguments: validateArrayOfType(
+      "Expression",
+      "SpreadElement",
+      "ArgumentPlaceholder",
+    ),
     ...(!process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
       ? {
           optional: {
@@ -373,12 +363,7 @@ defineType("ForStatement", {
 });
 
 export const functionCommon = () => ({
-  params: {
-    validate: chain(
-      assertValueType("array"),
-      assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
-    ),
-  },
+  params: validateArrayOfType("Identifier", "Pattern", "RestElement"),
   generator: {
     default: false,
   },
@@ -505,10 +490,7 @@ export const patternLikeCommon = () => ({
     optional: true,
   },
   decorators: {
-    validate: chain(
-      assertValueType("array"),
-      assertEach(assertNodeType("Decorator")),
-    ),
+    validate: arrayOfType("Decorator"),
     optional: true,
   },
 });
@@ -782,18 +764,10 @@ defineType("Program", {
       optional: true,
     },
     directives: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Directive")),
-      ),
+      validate: arrayOfType("Directive"),
       default: [],
     },
-    body: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Statement")),
-      ),
-    },
+    body: validateArrayOfType("Statement"),
   },
   aliases: ["Scopable", "BlockParent", "Block"],
 });
@@ -802,14 +776,11 @@ defineType("ObjectExpression", {
   visitor: ["properties"],
   aliases: ["Expression"],
   fields: {
-    properties: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType("ObjectMethod", "ObjectProperty", "SpreadElement"),
-        ),
-      ),
-    },
+    properties: validateArrayOfType(
+      "ObjectMethod",
+      "ObjectProperty",
+      "SpreadElement",
+    ),
   },
 });
 
@@ -861,10 +832,7 @@ defineType("ObjectMethod", {
       })(),
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     body: {
@@ -980,10 +948,7 @@ defineType("ObjectProperty", {
       default: false,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
   },
@@ -1069,12 +1034,7 @@ defineType("ReturnStatement", {
 defineType("SequenceExpression", {
   visitor: ["expressions"],
   fields: {
-    expressions: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Expression")),
-      ),
-    },
+    expressions: validateArrayOfType("Expression"),
   },
   aliases: ["Expression"],
 });
@@ -1096,12 +1056,7 @@ defineType("SwitchCase", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
-    consequent: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Statement")),
-      ),
-    },
+    consequent: validateArrayOfType("Statement"),
   },
 });
 
@@ -1112,12 +1067,7 @@ defineType("SwitchStatement", {
     discriminant: {
       validate: assertNodeType("Expression"),
     },
-    cases: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("SwitchCase")),
-      ),
-    },
+    cases: validateArrayOfType("SwitchCase"),
   },
 });
 
@@ -1228,12 +1178,7 @@ defineType("VariableDeclaration", {
         "await using",
       ),
     },
-    declarations: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("VariableDeclarator")),
-      ),
-    },
+    declarations: validateArrayOfType("VariableDeclarator"),
   },
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
@@ -1327,10 +1272,7 @@ defineType("AssignmentPattern", {
     },
     // For TypeScript
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
   },
@@ -1382,23 +1324,16 @@ defineType("ArrowFunctionExpression", {
 defineType("ClassBody", {
   visitor: ["body"],
   fields: {
-    body: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            "ClassMethod",
-            "ClassPrivateMethod",
-            "ClassProperty",
-            "ClassPrivateProperty",
-            "ClassAccessorProperty",
-            "TSDeclareMethod",
-            "TSIndexSignature",
-            "StaticBlock",
-          ),
-        ),
-      ),
-    },
+    body: validateArrayOfType(
+      "ClassMethod",
+      "ClassPrivateMethod",
+      "ClassProperty",
+      "ClassPrivateProperty",
+      "ClassAccessorProperty",
+      "TSDeclareMethod",
+      "TSIndexSignature",
+      "StaticBlock",
+    ),
   },
 });
 
@@ -1449,25 +1384,17 @@ defineType("ClassExpression", {
       optional: true,
     },
     implements: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-            process.env.BABEL_8_BREAKING
-              ? "TSClassImplements"
-              : "TSExpressionWithTypeArguments",
-            "ClassImplements",
-          ),
-        ),
+      validate: arrayOfType(
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+        process.env.BABEL_8_BREAKING
+          ? "TSClassImplements"
+          : "TSExpressionWithTypeArguments",
+        "ClassImplements",
       ),
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     mixins: {
@@ -1516,25 +1443,17 @@ defineType("ClassDeclaration", {
       optional: true,
     },
     implements: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-            process.env.BABEL_8_BREAKING
-              ? "TSClassImplements"
-              : "TSExpressionWithTypeArguments",
-            "ClassImplements",
-          ),
-        ),
+      validate: arrayOfType(
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+        process.env.BABEL_8_BREAKING
+          ? "TSClassImplements"
+          : "TSExpressionWithTypeArguments",
+        "ClassImplements",
       ),
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     mixins: {
@@ -1579,18 +1498,12 @@ defineType("ExportAllDeclaration", {
     exportKind: validateOptional(assertOneOf("type", "value")),
     attributes: {
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
     assertions: {
       deprecated: true,
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
   },
 });
@@ -1604,14 +1517,12 @@ defineType("ExportDefaultDeclaration", {
     "ExportDeclaration",
   ],
   fields: {
-    declaration: {
-      validate: assertNodeType(
-        "TSDeclareFunction",
-        "FunctionDeclaration",
-        "ClassDeclaration",
-        "Expression",
-      ),
-    },
+    declaration: validateType(
+      "TSDeclareFunction",
+      "FunctionDeclaration",
+      "ClassDeclaration",
+      "Expression",
+    ),
     exportKind: validateOptional(assertOneOf("value")),
   },
 });
@@ -1661,53 +1572,44 @@ defineType("ExportNamedDeclaration", {
     },
     attributes: {
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
     assertions: {
       deprecated: true,
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
     specifiers: {
       default: [],
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          (function () {
-            const sourced = assertNodeType(
-              "ExportSpecifier",
-              "ExportDefaultSpecifier",
-              "ExportNamespaceSpecifier",
-            );
-            const sourceless = assertNodeType("ExportSpecifier");
+      validate: arrayOf(
+        (function () {
+          const sourced = assertNodeType(
+            "ExportSpecifier",
+            "ExportDefaultSpecifier",
+            "ExportNamespaceSpecifier",
+          );
+          const sourceless = assertNodeType("ExportSpecifier");
 
-            if (
-              !process.env.BABEL_8_BREAKING &&
-              !process.env.BABEL_TYPES_8_BREAKING
-            )
-              return sourced;
+          if (
+            !process.env.BABEL_8_BREAKING &&
+            !process.env.BABEL_TYPES_8_BREAKING
+          )
+            return sourced;
 
-            return Object.assign(
-              function (node: t.ExportNamedDeclaration, key, val) {
-                const validator = node.source ? sourced : sourceless;
-                validator(node, key, val);
-              } as Validator,
-              {
-                oneOfNodeTypes: [
-                  "ExportSpecifier",
-                  "ExportDefaultSpecifier",
-                  "ExportNamespaceSpecifier",
-                ],
-              },
-            );
-          })(),
-        ),
+          return Object.assign(
+            function (node: t.ExportNamedDeclaration, key, val) {
+              const validator = node.source ? sourced : sourceless;
+              validator(node, key, val);
+            } as Validator,
+            {
+              oneOfNodeTypes: [
+                "ExportSpecifier",
+                "ExportDefaultSpecifier",
+                "ExportNamespaceSpecifier",
+              ],
+            },
+          );
+        })(),
       ),
     },
     source: {
@@ -1814,18 +1716,12 @@ defineType("ImportDeclaration", {
   fields: {
     attributes: {
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
     assertions: {
       deprecated: true,
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ImportAttribute")),
-      ),
+      validate: arrayOfType("ImportAttribute"),
     },
     module: {
       optional: true,
@@ -1835,18 +1731,11 @@ defineType("ImportDeclaration", {
       default: null,
       validate: assertOneOf("source", "defer"),
     },
-    specifiers: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            "ImportSpecifier",
-            "ImportDefaultSpecifier",
-            "ImportNamespaceSpecifier",
-          ),
-        ),
-      ),
-    },
+    specifiers: validateArrayOfType(
+      "ImportSpecifier",
+      "ImportDefaultSpecifier",
+      "ImportNamespaceSpecifier",
+    ),
     source: {
       validate: assertNodeType("StringLiteral"),
     },
@@ -2007,19 +1896,12 @@ export const classMethodOrPropertyCommon = () => ({
 export const classMethodOrDeclareMethodCommon = () => ({
   ...functionCommon(),
   ...classMethodOrPropertyCommon(),
-  params: {
-    validate: chain(
-      assertValueType("array"),
-      assertEach(
-        assertNodeType(
-          "Identifier",
-          "Pattern",
-          "RestElement",
-          "TSParameterProperty",
-        ),
-      ),
-    ),
-  },
+  params: validateArrayOfType(
+    "Identifier",
+    "Pattern",
+    "RestElement",
+    "TSParameterProperty",
+  ),
   kind: {
     validate: assertOneOf("get", "set", "method", "constructor"),
     default: "method",
@@ -2032,10 +1914,7 @@ export const classMethodOrDeclareMethodCommon = () => ({
     optional: true,
   },
   decorators: {
-    validate: chain(
-      assertValueType("array"),
-      assertEach(assertNodeType("Decorator")),
-    ),
+    validate: arrayOfType("Decorator"),
     optional: true,
   },
 });
@@ -2079,12 +1958,7 @@ defineType("ObjectPattern", {
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
-    properties: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("RestElement", "ObjectProperty")),
-      ),
-    },
+    properties: validateArrayOfType("RestElement", "ObjectProperty"),
   },
 });
 
@@ -2186,12 +2060,7 @@ defineType("TemplateLiteral", {
   visitor: ["quasis", "expressions"],
   aliases: ["Expression", "Literal"],
   fields: {
-    quasis: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("TemplateElement")),
-      ),
-    },
+    quasis: validateArrayOfType("TemplateElement"),
     expressions: {
       validate: chain(
         assertValueType("array"),
@@ -2331,14 +2200,11 @@ defineType("OptionalCallExpression", {
     callee: {
       validate: assertNodeType("Expression"),
     },
-    arguments: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
-        ),
-      ),
-    },
+    arguments: validateArrayOfType(
+      "Expression",
+      "SpreadElement",
+      "ArgumentPlaceholder",
+    ),
     optional: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
@@ -2390,10 +2256,7 @@ defineType("ClassProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     readonly: {
@@ -2471,10 +2334,7 @@ defineType("ClassAccessorProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     readonly: {
@@ -2516,10 +2376,7 @@ defineType("ClassPrivateProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
     static: {
@@ -2588,12 +2445,7 @@ defineType("PrivateName", {
 defineType("StaticBlock", {
   visitor: ["body"],
   fields: {
-    body: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Statement")),
-      ),
-    },
+    body: validateArrayOfType("Statement"),
   },
   aliases: ["Scopable", "BlockParent", "FunctionParent"],
 });
