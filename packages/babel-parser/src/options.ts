@@ -109,12 +109,14 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     options[key] = opts[key] ?? defaultOptions[key];
   }
 
-  if (
-    options.startIndex > 0 &&
-    options.startLine === 1 &&
-    typeof opts.startColumn !== "number"
-  ) {
-    options.startColumn = options.startIndex;
+  if (options.startIndex > 0 && typeof opts.startColumn !== "number") {
+    if (options.startLine === 1) {
+      options.startColumn = options.startIndex;
+    } else {
+      throw new Error(
+        "When `startIndex` is used with a `startLine` > 1 you must also provide a `startColumn`.",
+      );
+    }
   }
 
   return options;
