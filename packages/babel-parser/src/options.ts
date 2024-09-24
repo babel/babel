@@ -108,5 +108,14 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
   for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
     options[key] = opts[key] ?? defaultOptions[key];
   }
+
+  if (
+    options.startIndex > 0 &&
+    options.startLine === 1 &&
+    typeof opts.startColumn !== "number"
+  ) {
+    options.startColumn = options.startIndex;
+  }
+
   return options;
 }
