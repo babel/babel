@@ -1,4 +1,6 @@
 {
+  "BABEL_8_BREAKING": true,
   "startLine": 3,
-  "startColumn": 3
+  "startColumn": 3,
+  "throws": "When `startColumn` is used with a `startLine > 1` you must also provide a `startIndex`."
 }
