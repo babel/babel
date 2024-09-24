@@ -115,5 +115,13 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     if (opts[key] != null) options[key] = opts[key];
   }
 
+  if (
+    options.startIndex > 0 &&
+    options.startLine === 1 &&
+    typeof opts.startColumn !== "number"
+  ) {
+    options.startColumn = options.startIndex;
+  }
+
   return options;
 }
