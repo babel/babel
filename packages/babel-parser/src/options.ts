@@ -115,12 +115,20 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     if (opts[key] != null) options[key] = opts[key];
   }
 
-  if (options.startIndex > 0 && typeof opts.startColumn !== "number") {
+  if (options.startColumn > 0 && opts.startIndex == null) {
+    if (options.startLine === 1) {
+      options.startIndex = options.startColumn;
+    } else if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "When `startColumn` is used with a `startLine > 1` you must also provide a `startIndex`.",
+      );
+    }
+  } else if (options.startIndex > 0 && opts.startColumn == null) {
     if (options.startLine === 1) {
       options.startColumn = options.startIndex;
     } else {
       throw new Error(
-        "When `startIndex` is used with a `startLine` > 1 you must also provide a `startColumn`.",
+        "When `startIndex` is used with a `startLine > 1` you must also provide a `startColumn`.",
       );
     }
   }
