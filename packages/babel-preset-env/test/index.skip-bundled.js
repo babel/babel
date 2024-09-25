@@ -372,4 +372,21 @@ describe("babel-preset-env", () => {
       },
     );
   });
+
+  it("should add .browserslistrc to external dependencies when configPath is specified", () => {
+    const browserslistConfigFile = require.resolve(
+      "./regressions/.browserslistrc",
+    );
+    const { externalDependencies } = babel.transformSync("", {
+      configFile: false,
+      presets: [
+        [babelPresetEnv.default, { configPath: browserslistConfigFile }],
+      ],
+    });
+    expect(externalDependencies).toContain(browserslistConfigFile);
+  });
+
+  it.todo(
+    "should add .browserslistrc to external dependencies when browserslistConfigFile is specified",
+  );
 });
