@@ -245,6 +245,20 @@ export default function wrapFunction(
 
       let built = node;
       if (!isCallExpression(node)) {
+        if (!isDeclaration) {
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.ensureFunctionName ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+          }
+
+          if (!path.isCallExpression()) {
+            // @ts-expect-error !isDeclaration check above
+            path.ensureFunctionName(false);
+          }
+        }
+
         functionId = node.id;
         built = callExpression(callAsync(), [
           functionExpression(null, node.params, node.body, node.generator),

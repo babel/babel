@@ -1,9 +1,15 @@
-var foo = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
-  var wat = yield bar();
-});
-var foo2 = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+var foo = function foo() {
+  return babelHelpers.callAsync(function* () {
     var wat = yield bar();
-  }),
-  bar = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
-    var wat = yield foo();
-  });
+  }, this, arguments);
+};
+var foo2 = function foo2() {
+    return babelHelpers.callAsync(function* () {
+      var wat = yield bar();
+    }, this, arguments);
+  },
+  bar = function bar() {
+    return babelHelpers.callAsync(function* () {
+      var wat = yield foo();
+    }, this, arguments);
+  };
