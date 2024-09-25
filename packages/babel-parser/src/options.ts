@@ -115,7 +115,7 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     if (opts[key] != null) options[key] = opts[key];
   }
 
-  if (options.startColumn > 0 && opts.startIndex == null) {
+  if (options.startColumn >= 0 && opts.startIndex == null) {
     if (options.startLine === 1) {
       options.startIndex = options.startColumn;
     } else if (process.env.BABEL_8_BREAKING) {
