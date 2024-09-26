@@ -134,6 +134,8 @@ export default [
           allowDefaultProject: [
             "packages/babel-helpers/src/helpers/applyDecs2305.ts",
             "scripts/repo-utils/index.d.cts",
+            "eslint/babel-eslint-plugin/types.d.cts",
+            "eslint/babel-eslint-parser/types.d.cts",
           ],
         },
       },
