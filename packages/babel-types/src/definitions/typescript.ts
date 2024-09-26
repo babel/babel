@@ -1,11 +1,9 @@
 import {
   defineAliasedType,
   arrayOfType,
-  assertEach,
   assertNodeType,
   assertOneOf,
   assertValueType,
-  chain,
   validate,
   validateArrayOfType,
   validateOptional,
@@ -59,10 +57,7 @@ defineType("TSParameterProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
   },
@@ -97,7 +92,10 @@ defineType("TSQualifiedName", {
 const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
-    ["ArrayPattern", "Identifier", "ObjectPattern", "RestElement"],
+    "ArrayPattern",
+    "Identifier",
+    "ObjectPattern",
+    "RestElement",
   ),
   [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
     validateOptionalType("TSTypeAnnotation"),
@@ -231,7 +229,7 @@ defineType("TSTypePredicate", {
   visitor: ["parameterName", "typeAnnotation"],
   builder: ["parameterName", "typeAnnotation", "asserts"],
   fields: {
-    parameterName: validateType(["Identifier", "TSThisType"]),
+    parameterName: validateType("Identifier", "TSThisType"),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     asserts: validateOptional(bool),
   },
@@ -241,7 +239,7 @@ defineType("TSTypeQuery", {
   aliases: ["TSType"],
   visitor: ["exprName", "typeParameters"],
   fields: {
-    exprName: validateType(["TSEntityName", "TSImportType"]),
+    exprName: validateType("TSEntityName", "TSImportType"),
     typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
@@ -266,7 +264,7 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType(["TSType", "TSNamedTupleMember"]),
+    elementTypes: validateArrayOfType("TSType", "TSNamedTupleMember"),
   },
 });
 
@@ -525,7 +523,7 @@ defineType("TSEnumDeclaration", {
 defineType("TSEnumMember", {
   visitor: ["id", "initializer"],
   fields: {
-    id: validateType(["Identifier", "StringLiteral"]),
+    id: validateType("Identifier", "StringLiteral"),
     initializer: validateOptionalType("Expression"),
   },
 });
@@ -536,8 +534,8 @@ defineType("TSModuleDeclaration", {
   fields: {
     declare: validateOptional(bool),
     global: validateOptional(bool),
-    id: validateType(["Identifier", "StringLiteral"]),
-    body: validateType(["TSModuleBlock", "TSModuleDeclaration"]),
+    id: validateType("Identifier", "StringLiteral"),
+    body: validateType("TSModuleBlock", "TSModuleDeclaration"),
   },
 });
 
@@ -569,10 +567,7 @@ defineType("TSImportEqualsDeclaration", {
   fields: {
     isExport: validate(bool),
     id: validateType("Identifier"),
-    moduleReference: validateType([
-      "TSEntityName",
-      "TSExternalModuleReference",
-    ]),
+    moduleReference: validateType("TSEntityName", "TSExternalModuleReference"),
     importKind: {
       validate: assertOneOf("type", "value"),
       optional: true,
@@ -623,24 +618,14 @@ defineType("TSTypeAnnotation", {
 defineType("TSTypeParameterInstantiation", {
   visitor: ["params"],
   fields: {
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("TSType")),
-      ),
-    },
+    params: validateArrayOfType("TSType"),
   },
 });
 
 defineType("TSTypeParameterDeclaration", {
   visitor: ["params"],
   fields: {
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("TSTypeParameter")),
-      ),
-    },
+    params: validateArrayOfType("TSTypeParameter"),
   },
 });
 

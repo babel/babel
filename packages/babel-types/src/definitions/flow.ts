@@ -96,7 +96,7 @@ defineType("DeclareModule", {
   visitor: ["id", "body"],
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
-    id: validateType(["Identifier", "StringLiteral"]),
+    id: validateType("Identifier", "StringLiteral"),
     body: validateType("BlockStatement"),
     kind: validateOptional(assertOneOf("CommonJS", "ES")),
   },
@@ -145,7 +145,7 @@ defineType("DeclareExportDeclaration", {
   fields: {
     declaration: validateOptionalType("Flow"),
     specifiers: validateOptional(
-      arrayOfType(["ExportSpecifier", "ExportNamespaceSpecifier"]),
+      arrayOfType("ExportSpecifier", "ExportNamespaceSpecifier"),
     ),
     source: validateOptionalType("StringLiteral"),
     default: validateOptional(assertValueType("boolean")),
@@ -178,7 +178,7 @@ defineType("FunctionTypeAnnotation", {
   aliases: ["FlowType"],
   fields: {
     typeParameters: validateOptionalType("TypeParameterDeclaration"),
-    params: validate(arrayOfType("FunctionTypeParam")),
+    params: validateArrayOfType("FunctionTypeParam"),
     rest: validateOptionalType("FunctionTypeParam"),
     this: validateOptionalType("FunctionTypeParam"),
     returnType: validateType("FlowType"),
@@ -198,7 +198,7 @@ defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["FlowType"],
   fields: {
-    id: validateType(["Identifier", "QualifiedTypeIdentifier"]),
+    id: validateType("Identifier", "QualifiedTypeIdentifier"),
     typeParameters: validateOptionalType("TypeParameterInstantiation"),
   },
 });
@@ -210,7 +210,7 @@ defineType("InferredPredicate", {
 defineType("InterfaceExtends", {
   visitor: ["id", "typeParameters"],
   fields: {
-    id: validateType(["Identifier", "QualifiedTypeIdentifier"]),
+    id: validateType("Identifier", "QualifiedTypeIdentifier"),
     typeParameters: validateOptionalType("TypeParameterInstantiation"),
   },
 });
@@ -274,7 +274,7 @@ defineType("ObjectTypeAnnotation", {
   ],
   fields: {
     properties: validate(
-      arrayOfType(["ObjectTypeProperty", "ObjectTypeSpreadProperty"]),
+      arrayOfType("ObjectTypeProperty", "ObjectTypeSpreadProperty"),
     ),
     indexers: {
       validate: arrayOfType("ObjectTypeIndexer"),
@@ -341,7 +341,7 @@ defineType("ObjectTypeProperty", {
   visitor: ["key", "value", "variance"],
   aliases: ["UserWhitespacable"],
   fields: {
-    key: validateType(["Identifier", "StringLiteral"]),
+    key: validateType("Identifier", "StringLiteral"),
     value: validateType("FlowType"),
     kind: validate(assertOneOf("init", "get", "set")),
     static: validate(assertValueType("boolean")),
@@ -376,7 +376,7 @@ defineType("QualifiedTypeIdentifier", {
   builder: ["id", "qualification"],
   fields: {
     id: validateType("Identifier"),
-    qualification: validateType(["Identifier", "QualifiedTypeIdentifier"]),
+    qualification: validateType("Identifier", "QualifiedTypeIdentifier"),
   },
 });
 
@@ -491,12 +491,12 @@ defineType("EnumDeclaration", {
   visitor: ["id", "body"],
   fields: {
     id: validateType("Identifier"),
-    body: validateType([
+    body: validateType(
       "EnumBooleanBody",
       "EnumNumberBody",
       "EnumStringBody",
       "EnumSymbolBody",
-    ]),
+    ),
   },
 });
 
@@ -525,7 +525,7 @@ defineType("EnumStringBody", {
   visitor: ["members"],
   fields: {
     explicitType: validate(assertValueType("boolean")),
-    members: validateArrayOfType(["EnumStringMember", "EnumDefaultedMember"]),
+    members: validateArrayOfType("EnumStringMember", "EnumDefaultedMember"),
     hasUnknownMembers: validate(assertValueType("boolean")),
   },
 });

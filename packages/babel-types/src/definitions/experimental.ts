@@ -1,8 +1,8 @@
 import defineType, {
-  assertEach,
+  arrayOfType,
   assertNodeType,
   assertValueType,
-  chain,
+  validateArrayOfType,
 } from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
@@ -84,22 +84,14 @@ defineType("RecordExpression", {
   visitor: ["properties"],
   aliases: ["Expression"],
   fields: {
-    properties: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ObjectProperty", "SpreadElement")),
-      ),
-    },
+    properties: validateArrayOfType("ObjectProperty", "SpreadElement"),
   },
 });
 
 defineType("TupleExpression", {
   fields: {
     elements: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
-      ),
+      validate: arrayOfType("Expression", "SpreadElement"),
       default: [],
     },
   },
