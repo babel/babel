@@ -32,6 +32,8 @@ if (!process.env.BABEL_8_BREAKING) {
     assumption: () => () => {
       return undefined;
     },
+    // This is supported starting from Babel 7.17
+    addExternalDependency: () => () => {},
   });
 }
 

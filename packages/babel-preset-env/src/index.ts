@@ -18,7 +18,7 @@ import {
   overlappingPlugins,
 } from "./plugins-compat-data.ts";
 
-import type { CallerMetadata } from "@babel/core";
+import type { CallerMetadata, PresetAPI } from "@babel/core";
 
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 // TODO(Babel 8): Just use the default import
@@ -277,6 +277,7 @@ function getLocalTargets(
   ignoreBrowserslistConfig: boolean,
   configPath: string,
   browserslistEnv: string,
+  api: PresetAPI,
 ) {
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
     console.warn(`
@@ -289,6 +290,9 @@ function getLocalTargets(
     ignoreBrowserslistConfig,
     configPath,
     browserslistEnv,
+    onBrowserslistConfigFound(config) {
+      api.addExternalDependency(config);
+    },
   });
 }
 
@@ -378,6 +382,7 @@ option \`forceAllTransforms: true\` instead.
       ignoreBrowserslistConfig,
       configPath,
       browserslistEnv,
+      api,
     );
   }
 
