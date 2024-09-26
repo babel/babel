@@ -55,7 +55,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.9",
-    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-import": "patch:eslint-plugin-import@npm%3A2.30.0#~/.yarn/patches/eslint-plugin-import-npm-2.30.0-4fd74d3ee6.patch",
     "eslint-plugin-jest": "^27.9.0",
     "eslint-plugin-n": "^17.9.0",
     "eslint-plugin-regexp": "^2.6.0",

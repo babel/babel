@@ -111,6 +111,7 @@ export default [
     rules: {
       "n/no-process-exit": "error",
       "import/no-extraneous-dependencies": "error",
+      "import/export": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
       "unicorn/prefer-set-has": "error",
       "unicorn/no-typeof-undefined": "error",
