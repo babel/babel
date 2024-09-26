@@ -19,6 +19,7 @@ import * as fs from "../../gensync-utils/fs.ts";
 
 import { createRequire } from "module";
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
+import { isAsync } from "../../gensync-utils/async.ts";
 const require = createRequire(import.meta.url);
 
 const debug = buildDebug("babel:config:loading:files:configuration");
@@ -72,8 +73,12 @@ function* readConfigCode(
 
   let options = yield* loadCodeDefault(
     filepath,
+    (yield* isAsync()) ? "auto" : "require",
     "You appear to be using a native ECMAScript module configuration " +
-      "file, which is only supported when running Babel asynchronously.",
+      "file, which is only supported when running Babel asynchronously " +
+      "or when using the Node.js `--experimental-require-module` flag.",
+    "You appear to be using a configuration file that contains top-level " +
+      "await, which is only supported when running Babel asynchronously.",
   );
 
   let cacheNeedsConfiguration = false;
@@ -92,7 +97,6 @@ function* readConfigCode(
   if (typeof options.then === "function") {
     // @ts-expect-error We use ?. in case options is a thenable but not a promise
     options.catch?.(() => {});
-
     throw new ConfigError(
       `You appear to be using an async configuration, ` +
         `which your current version of Babel does not support. ` +
