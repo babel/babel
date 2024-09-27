@@ -6,6 +6,9 @@ language/import/import-attributes/json-named-bindings.js(default)
 language/import/import-attributes/json-named-bindings.js(strict mode)
 
 
-# 0 valid programs produced a parsing error
+# 4 valid programs produced a parsing error
 
-
+built-ins/DisposableStack/prototype/Symbol.dispose.js(default)
+built-ins/DisposableStack/prototype/Symbol.dispose.js(strict mode)
+built-ins/DisposableStack/prototype/disposed/getter.js(default)
+built-ins/DisposableStack/prototype/disposed/getter.js(strict mode)
