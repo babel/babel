@@ -12,6 +12,7 @@ import type {
   ValidatedOptions,
   NormalizedOptions,
   RootMode,
+  InputOptions,
 } from "./validation/options.ts";
 
 import {
@@ -54,18 +55,19 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   }
 }
 
-type PrivPartialConfig = {
+export type PrivPartialConfig = {
+  showIgnoredFiles?: boolean;
   options: NormalizedOptions;
   context: ConfigContext;
-  fileHandling: FileHandling;
-  ignore: IgnoreFile | void;
   babelrc: ConfigFile | void;
   config: ConfigFile | void;
+  ignore: IgnoreFile | void;
+  fileHandling: FileHandling;
   files: Set<string>;
 };
 
 export default function* loadPrivatePartialConfig(
-  inputOpts: unknown,
+  inputOpts: InputOptions,
 ): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
@@ -154,12 +156,8 @@ export default function* loadPrivatePartialConfig(
   };
 }
 
-type LoadPartialConfigOpts = {
-  showIgnoredFiles?: boolean;
-};
-
 export function* loadPartialConfig(
-  opts?: LoadPartialConfigOpts,
+  opts?: InputOptions,
 ): Handler<PartialConfig | null> {
   let showIgnoredFiles = false;
   // We only extract showIgnoredFiles if opts is an object, so that

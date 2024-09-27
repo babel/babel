@@ -25,7 +25,7 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
-import type { PluginItem } from "./validation/options.ts";
+import type { InputOptions, PluginItem } from "./validation/options.ts";
 import { validatePluginObject } from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
@@ -57,7 +57,7 @@ export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
 export default gensync(function* loadFullConfig(
-  inputOpts: unknown,
+  inputOpts: InputOptions,
 ): Handler<ResolvedConfig | null> {
   const result = yield* loadPrivatePartialConfig(inputOpts);
   if (!result) {
@@ -69,7 +69,7 @@ export default gensync(function* loadFullConfig(
     return null;
   }
 
-  const optionDefaults = {};
+  const optionDefaults: ValidatedOptions = {};
 
   const { plugins, presets } = options;
 
@@ -168,7 +168,7 @@ export default gensync(function* loadFullConfig(
 
   if (ignored) return null;
 
-  const opts: any = optionDefaults;
+  const opts: ValidatedOptions = optionDefaults;
   mergeOptions(opts, options);
 
   const pluginContext: Context.FullPlugin = {

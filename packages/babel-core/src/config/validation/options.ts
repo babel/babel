@@ -157,6 +157,7 @@ export type ValidatedOptions = {
   ignore?: IgnoreList;
   only?: IgnoreList;
   overrides?: OverridesList;
+  showIgnoredFiles?: boolean;
   // Generally verify if a given config object should be applied to the given file.
   test?: ConfigApplicableTest;
   include?: ConfigApplicableTest;
