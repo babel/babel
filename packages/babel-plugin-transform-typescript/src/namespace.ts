@@ -23,7 +23,7 @@ export default function transpileNamespace(
   }
 
   const name = path.node.id.name;
-  const value = handleNested(path, t.cloneNode(path.node, true));
+  const value = handleNested(path, path.node);
   if (value === null) {
     // This means that `path` is a type-only namespace.
     // We call `registerGlobalType` here to allow it to be stripped.
