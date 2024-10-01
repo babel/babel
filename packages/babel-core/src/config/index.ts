@@ -7,7 +7,7 @@ export type {
   Plugin,
 } from "./full.ts";
 
-import type { PluginTarget } from "./validation/options.ts";
+import type { InputOptions, PluginTarget } from "./validation/options.ts";
 
 import type {
   PluginAPI as basePluginAPI,
@@ -71,7 +71,7 @@ export function loadPartialConfig(
   }
 }
 
-function* loadOptionsImpl(opts: unknown): Handler<ResolvedConfig | null> {
+function* loadOptionsImpl(opts: InputOptions): Handler<ResolvedConfig | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
