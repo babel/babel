@@ -1,8 +1,8 @@
 import defineType, {
-  assertEach,
+  arrayOfType,
   assertNodeType,
   assertValueType,
-  chain,
+  validateArrayOfType,
 } from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
@@ -10,27 +10,28 @@ defineType("ArgumentPlaceholder", {});
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  fields: !process.env.BABEL_TYPES_8_BREAKING
-    ? {
-        object: {
-          validate: Object.assign(() => {}, {
-            oneOfNodeTypes: ["Expression"],
-          }),
+  fields:
+    !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
+      ? {
+          object: {
+            validate: Object.assign(() => {}, {
+              oneOfNodeTypes: ["Expression"],
+            }),
+          },
+          callee: {
+            validate: Object.assign(() => {}, {
+              oneOfNodeTypes: ["Expression"],
+            }),
+          },
+        }
+      : {
+          object: {
+            validate: assertNodeType("Expression"),
+          },
+          callee: {
+            validate: assertNodeType("Expression"),
+          },
         },
-        callee: {
-          validate: Object.assign(() => {}, {
-            oneOfNodeTypes: ["Expression"],
-          }),
-        },
-      }
-    : {
-        object: {
-          validate: assertNodeType("Expression"),
-        },
-        callee: {
-          validate: assertNodeType("Expression"),
-        },
-      },
 });
 
 defineType("ImportAttribute", {
@@ -83,22 +84,14 @@ defineType("RecordExpression", {
   visitor: ["properties"],
   aliases: ["Expression"],
   fields: {
-    properties: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("ObjectProperty", "SpreadElement")),
-      ),
-    },
+    properties: validateArrayOfType("ObjectProperty", "SpreadElement"),
   },
 });
 
 defineType("TupleExpression", {
   fields: {
     elements: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
-      ),
+      validate: arrayOfType("Expression", "SpreadElement"),
       default: [],
     },
   },
@@ -106,7 +99,7 @@ defineType("TupleExpression", {
   aliases: ["Expression"],
 });
 
-if (!process.env.BABEL_TYPES_8_BREAKING) {
+if (!process.env.BABEL_8_BREAKING) {
   defineType("DecimalLiteral", {
     builder: ["value"],
     fields: {

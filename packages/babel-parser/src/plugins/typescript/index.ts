@@ -568,12 +568,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.argument = super.parseExprAtom() as N.StringLiteral;
       if (
         this.hasPlugin("importAttributes") ||
-        this.hasPlugin("importAssertions")
+        (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
       ) {
         node.options = null;
       }
       if (this.eat(tt.comma)) {
-        this.expectImportAttributesPlugin();
+        if (
+          process.env.BABEL_8_BREAKING ||
+          !this.hasPlugin("importAssertions")
+        ) {
+          this.expectPlugin("importAttributes");
+        }
         if (!this.match(tt.parenR)) {
           node.options = super.parseMaybeAssignAllowIn();
           this.eat(tt.comma);
@@ -1693,21 +1698,33 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
+    tsParseHeritageClause(token: "extends"): Array<N.TSInterfaceHeritage>;
+    tsParseHeritageClause(token: "implements"): Array<N.TSClassImplements>;
     tsParseHeritageClause(
       token: "extends" | "implements",
-    ): Array<N.TsExpressionWithTypeArguments> {
+    ): Array<N.TSClassImplements> | Array<N.TSInterfaceHeritage> {
       const originalStartLoc = this.state.startLoc;
 
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const node = this.startNode<N.TsExpressionWithTypeArguments>();
+          const node = this.startNode<
+            N.TSClassImplements | N.TSInterfaceHeritage
+          >();
           node.expression = this.tsParseEntityName();
           if (this.match(tt.lt)) {
             node.typeParameters = this.tsParseTypeArguments();
           }
 
-          return this.finishNode(node, "TSExpressionWithTypeArguments");
+          return this.finishNode(
+            node,
+            // @ts-expect-error Babel 7 vs Babel 8
+            process.env.BABEL_8_BREAKING
+              ? token === "extends"
+                ? "TSInterfaceHeritage"
+                : "TSClassImplements"
+              : "TSExpressionWithTypeArguments",
+          );
         },
       );
 
@@ -1717,7 +1734,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
       }
 
-      return delimitedList;
+      return delimitedList as
+        | Array<N.TSClassImplements>
+        | Array<N.TSInterfaceHeritage>;
     }
 
     tsParseInterfaceDeclaration(
@@ -2316,7 +2335,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const left = this.parseMaybeDefault();
-      this.parseAssignableListItemTypes(left, flags);
+      if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
+        this.parseFunctionParamType(left);
+      }
       const elt = this.parseMaybeDefault(left.loc.start, left);
       if (accessibility || readonly || override) {
         const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
@@ -3602,12 +3623,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Allow type annotations inside of a parameter list.
-    parseAssignableListItemTypes(
-      param: N.Pattern,
-      flags: ParseBindingListFlags,
-    ) {
-      if (!(flags & ParseBindingListFlags.IS_FUNCTION_PARAMS)) return param;
-
+    parseFunctionParamType(param: N.Pattern) {
       if (this.eat(tt.question)) {
         (param as any as N.Identifier).optional = true;
       }

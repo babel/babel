@@ -197,9 +197,6 @@
       "path": "./packages/babel-plugin-syntax-async-do-expressions"
     },
     {
-      "path": "./packages/babel-plugin-syntax-decimal"
-    },
-    {
       "path": "./packages/babel-plugin-syntax-decorators"
     },
     {
@@ -231,9 +228,6 @@
     },
     {
       "path": "./packages/babel-plugin-syntax-import-defer"
-    },
-    {
-      "path": "./packages/babel-plugin-syntax-import-reflection"
     },
     {
       "path": "./packages/babel-plugin-syntax-import-source"

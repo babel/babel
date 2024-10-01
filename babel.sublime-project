@@ -1,25 +1,20 @@
 {
-    "settings": {
-        "rulers": [
-            80
-        ],
+  "settings": {
+    "rulers": [80],
 
-        // Set to false to disable detection of tabs vs. spaces on load
-        "detect_indentation": false,
+    // Set to false to disable detection of tabs vs. spaces on load
+    "detect_indentation": false,
 
-        "translate_tabs_to_spaces": true,
+    "translate_tabs_to_spaces": true,
 
-        "tab_size": 2
+    "tab_size": 2,
+  },
+
+  "folders": [
+    {
+      "path": ".",
+      "folder_exclude_patterns": ["packages/*/lib", "node_modules"],
+      "file_exclude_patterns": [],
     },
-
-    "folders": [{
-        "path": ".",
-        "folder_exclude_patterns": [
-            "packages/*/lib",
-            "node_modules"
-        ],
-        "file_exclude_patterns": [
-
-        ]
-    }]
+  ],
 }

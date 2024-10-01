@@ -1,14 +1,14 @@
 import { execFile } from "child_process";
 import { createRequire } from "module";
-import { describeESM } from "$repo-utils";
+import { describeESM, describeGte } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
-async function run(name) {
+async function run(name, ...flags) {
   return new Promise((res, rej) => {
     execFile(
       process.execPath,
-      [require.resolve(`./fixtures/esm-cjs-integration/${name}`)],
+      [...flags, require.resolve(`./fixtures/esm-cjs-integration/${name}`)],
       { env: process.env },
       (error, stdout, stderr) => {
         if (error) rej(error);
@@ -109,5 +109,40 @@ describeESM("usage from cjs", () => {
         ",
         }
       `);
+  });
+});
+
+describeESM("sync loading of ESM plugins", () => {
+  it("without --experimental-require-module flag", async () => {
+    await expect(run("transform-sync-esm-plugin.mjs")).rejects.toThrow(
+      "You appear to be using a native ECMAScript module plugin, which is " +
+        "only supported when running Babel asynchronously or when using the " +
+        "Node.js `--experimental-require-module` flag.",
+    );
+  });
+
+  describeGte("20.0.0")("with --experimental-require-module flag", () => {
+    it("sync", async () => {
+      const { stdout } = await run(
+        "transform-sync-esm-plugin.mjs",
+        "--experimental-require-module",
+      );
+      expect(stdout).toMatchInlineSnapshot(`
+        "\\"Replaced!\\";
+        "
+      `);
+    });
+
+    it("top-level await", async () => {
+      await expect(
+        run(
+          "transform-sync-esm-plugin-tla.mjs",
+          "--experimental-require-module",
+        ),
+      ).rejects.toThrow(
+        "You appear to be using a plugin that contains top-level await, " +
+          "which is only supported when running Babel asynchronously.",
+      );
+    });
   });
 });

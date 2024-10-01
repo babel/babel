@@ -10,9 +10,9 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-import { itBabel8, commonJS } from "$repo-utils";
+import { itBabel8, commonJS, IS_BABEL_8, USE_ESM } from "$repo-utils";
 
-const { __dirname } = commonJS(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 const cwd = __dirname;
 
 function assertIgnored(result) {
@@ -222,6 +222,7 @@ describe("api", function () {
     // keep user options untouched
     expect(options).toEqual({ babelrc: false });
   });
+
   it("transformFile throws on undefined callback", () => {
     const options = {
       babelrc: false,
@@ -1022,3 +1023,18 @@ describe("api", function () {
     });
   });
 });
+
+if (IS_BABEL_8() && USE_ESM) {
+  describe("cjs-proxy", function () {
+    it("error should be caught", () => {
+      let err;
+      try {
+        const cjs = require("../cjs-proxy.cjs");
+        cjs.parse("foo");
+      } catch (error) {
+        err = error;
+      }
+      expect(err).toBeInstanceOf(Error);
+    });
+  });
+}

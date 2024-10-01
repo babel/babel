@@ -99,6 +99,9 @@ export type Node = ${t.TYPES.filter(k => !t.FLIPPED_ALIAS_KEYS[k])
     const struct = [];
 
     fieldNames.forEach(fieldName => {
+      /**
+       * @type {import("../../src/definitions/utils").FieldOptions}
+       */
       const field = fields[fieldName];
       // Future / annoying TODO:
       // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
@@ -116,6 +119,9 @@ export type Node = ${t.TYPES.filter(k => !t.FLIPPED_ALIAS_KEYS[k])
       const alphaNumeric = /^\w+$/;
       const optional = field.optional ? "?" : "";
 
+      if (field.deprecated) {
+        struct.push("/** @deprecated */");
+      }
       if (t.isValidIdentifier(fieldName) || alphaNumeric.test(fieldName)) {
         struct.push(`${fieldName}${optional}: ${typeAnnotation};`);
       } else {

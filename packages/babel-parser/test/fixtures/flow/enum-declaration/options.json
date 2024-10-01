@@ -1,3 +1,4 @@
 {
-  "plugins": [["flow", { "enums": true }]]
+  "plugins": ["flow"],
+  "BABEL_8_BREAKING": true
 }

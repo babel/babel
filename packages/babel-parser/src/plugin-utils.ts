@@ -9,7 +9,9 @@ export type MixinPlugin = (
   superClass: new (...args: any) => Parser,
 ) => new (...args: any) => Parser;
 
-const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
+const PIPELINE_PROPOSALS = process.env.BABEL_8_BREAKING
+  ? ["fsharp", "hack"]
+  : ["minimal", "fsharp", "hack", "smart"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
 export function validatePlugins(pluginsMap: Map<string, any>) {
@@ -123,13 +125,17 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       }
     }
   }
-  if (
-    pluginsMap.has("importAttributes") &&
-    pluginsMap.has("importAssertions")
-  ) {
-    throw new Error(
-      "Cannot combine importAssertions and importAttributes plugins.",
-    );
+  if (pluginsMap.has("importAssertions")) {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "`importAssertions` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`." +
+          " To use the non-standard `assert` syntax you can enable the `deprecatedAssertSyntax: true` option of those plugins.",
+      );
+    } else if (pluginsMap.has("importAttributes")) {
+      throw new Error(
+        "Cannot combine importAssertions and importAttributes plugins.",
+      );
+    }
   }
 
   if (pluginsMap.has("recordAndTuple")) {
@@ -179,10 +185,19 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         " only supported value is '2023-07'.",
     );
   }
-  if (process.env.BABEL_8_BREAKING && pluginsMap.has("decimal")) {
-    throw new Error(
-      "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
-    );
+
+  if (process.env.BABEL_8_BREAKING) {
+    if (pluginsMap.has("decimal")) {
+      throw new Error(
+        "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
+      );
+    }
+    if (pluginsMap.has("importReflection")) {
+      throw new Error(
+        "The 'importReflection' plugin has been removed in Babel 8. Use 'sourcePhaseImports' instead, and " +
+          "replace 'import module' with 'import source' in your code.",
+      );
+    }
   }
 }
 

@@ -13,6 +13,7 @@ export { default as createUnionTypeAnnotation } from "./builders/flow/createFlow
 export { default as createFlowUnionType } from "./builders/flow/createFlowUnionType.ts";
 export { default as createTSUnionType } from "./builders/typescript/createTSUnionType.ts";
 export * from "./builders/generated/index.ts";
+// eslint-disable-next-line import/export
 export * from "./builders/generated/uppercase.js";
 export * from "./builders/productions.ts";
 
@@ -113,4 +114,10 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   exports.toSequenceExpression =
     // eslint-disable-next-line no-restricted-globals
     require("./converters/toSequenceExpression.js").default;
+}
+
+if (!process.env.BABEL_8_BREAKING && process.env.BABEL_TYPES_8_BREAKING) {
+  console.warn(
+    "BABEL_TYPES_8_BREAKING is not supported anymore. Use the latest Babel 8.0.0 pre-release instead!",
+  );
 }

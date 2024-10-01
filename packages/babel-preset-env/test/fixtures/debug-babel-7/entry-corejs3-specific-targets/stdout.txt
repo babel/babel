@@ -13,7 +13,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-duplicate-named-capturing-groups-regex { chrome < 126, edge < 126, firefox < 129, ie, ios, safari < 17.4 }
+  transform-duplicate-named-capturing-groups-regex { chrome < 126, edge < 126, firefox < 129, ie, ios < 17.4, safari < 17.4 }
   transform-unicode-sets-regex { chrome < 112, edge < 112, firefox < 116, ie, ios < 17, safari < 17 }
   transform-class-static-block { chrome < 94, edge < 94, firefox < 93, ie, ios < 16.4, safari < 16.4 }
   transform-private-property-in-object { chrome < 91, edge < 91, firefox < 90, ie, ios < 15, safari < 15 }

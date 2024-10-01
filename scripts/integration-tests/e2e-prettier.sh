@@ -43,7 +43,14 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/comments/mapped_types.ts
   # https://github.com/babel/babel/pull/16741
   sed -i 's/"decimal",//' src/language-js/parse/babel.js
-  rm tests/format/js/babel-plugins/decimal.js
+  # https://github.com/babel/babel/pull/16801
+  sed -i 's/"minimal"/"fsharp"/' src/language-js/parse/babel.js
+  # https://github.com/babel/babel/pull/16808
+  sed -i 's/"importReflection",//' src/language-js/parse/babel.js
+  rm tests/format/js/babel-plugins/import-reflection.js
+  rm -r tests/format/js/import-reflection/
+  # https://github.com/babel/babel/pull/16817
+  sed -i 's/node.type !== "MemberExpression" ||/node.type !== "MemberExpression" || \/\/@ts-expect-error/g' src/language-js/utils/is-node-matches.js
 fi
 
 #==============================================================================#

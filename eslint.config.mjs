@@ -7,8 +7,9 @@ import js from "@eslint/js";
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
-import pluginPrettier from "eslint-plugin-prettier";
+import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
+import pluginUnicorn from "eslint-plugin-unicorn";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
@@ -78,7 +79,7 @@ export default [
           configFile: false,
           // Todo: Remove the parserOpts here after the proposal gets stage 4.
           parserOpts: {
-            plugins: ["importAssertions"],
+            plugins: ["importAttributes"],
           },
         },
       },
@@ -103,15 +104,21 @@ export default [
     plugins: {
       import: pluginImport,
       n: pluginN,
-      prettier: pluginPrettier,
+      unicorn: pluginUnicorn,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
     },
     rules: {
       "n/no-process-exit": "error",
-      "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
+      "import/export": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
+      "unicorn/prefer-set-has": "error",
+      "unicorn/no-typeof-undefined": "error",
+      "unicorn/prefer-array-find": "error",
+      "unicorn/prefer-array-index-of": "error",
+      "unicorn/prefer-includes": "error",
+      "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
   ...typescriptEslint.config({
@@ -124,7 +131,14 @@ export default [
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        projectService: true,
+        projectService: {
+          allowDefaultProject: [
+            "packages/babel-helpers/src/helpers/applyDecs2305.ts",
+            "scripts/repo-utils/index.d.cts",
+            "eslint/babel-eslint-plugin/types.d.cts",
+            "eslint/babel-eslint-parser/types.d.cts",
+          ],
+        },
       },
     },
     plugins: {
@@ -211,6 +225,7 @@ export default [
       "@typescript-eslint/no-unsafe-function-type": "off",
     },
   }),
+  configPrettier,
   {
     files: sourceFiles("js,ts,cjs,mjs"),
     languageOptions: {
@@ -331,6 +346,7 @@ export default [
       "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
       "@typescript-eslint/prefer-optional-chain": "off",
+      "unicorn/prefer-includes": "off",
     },
   },
   {
@@ -364,6 +380,12 @@ export default [
     files: ["scripts/**/*.{js,cjs,mjs}"],
     rules: {
       "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
+    },
+  },
+  {
+    files: ["packages/babel-parser/typings/babel-parser.d.ts"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "off",
     },
   },
 ];

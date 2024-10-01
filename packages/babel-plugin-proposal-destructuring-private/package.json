@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
   },

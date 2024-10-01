@@ -193,6 +193,8 @@ type GetTargetsOption = {
   browserslistEnv?: string;
   // true to disable config loading
   ignoreBrowserslistConfig?: boolean;
+  // custom hook when browserslist config is found
+  onBrowserslistConfigFound?: (configFile: string) => void;
 };
 
 export default function getTargets(
@@ -200,7 +202,7 @@ export default function getTargets(
   options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
-  const { configPath = "." } = options;
+  const { configPath = ".", onBrowserslistConfigFound } = options;
 
   validateBrowsers(browsers);
 
@@ -213,11 +215,16 @@ export default function getTargets(
     !options.ignoreBrowserslistConfig && !hasTargets;
 
   if (!browsers && shouldSearchForConfig) {
-    browsers = browserslist.loadConfig({
-      config: options.configFile,
-      path: configPath,
-      env: options.browserslistEnv,
-    });
+    const configFile =
+      options.configFile ?? browserslist.findConfigFile(configPath);
+    if (configFile != null) {
+      onBrowserslistConfigFound?.(configFile);
+      browsers = browserslist.loadConfig({
+        config: configFile,
+        env: options.browserslistEnv,
+      });
+    }
+
     if (browsers == null) {
       if (process.env.BABEL_8_BREAKING) {
         // In Babel 8, if no targets are passed, we use browserslist's defaults.

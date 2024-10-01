@@ -5,6 +5,7 @@
     "edge": "126",
     "firefox": "129",
     "safari": "17.4",
+    "ios": "17.4",
     "electron": "31.0"
   },
   "transform-unicode-sets-regex": {

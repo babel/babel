@@ -1,0 +1,8 @@
+{
+  "BABEL_8_BREAKING": true,
+  "plugins": [
+    "importAssertions"
+  ],
+  "sourceType": "module",
+  "throws": "`importAssertions` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`. To use the non-standard `assert` syntax you can enable the `deprecatedAssertSyntax: true` option of those plugins."
+}

@@ -20,5 +20,7 @@
   "@babel/plugin-syntax-private-property-in-object",
   "@babel/plugin-syntax-top-level-await",
   "@babel/plugin-syntax-trailing-function-commas",
-  "@babel/plugin-syntax-unicode-sets-regex"
+  "@babel/plugin-syntax-unicode-sets-regex",
+  "@babel/plugin-syntax-decimal",
+  "@babel/plugin-syntax-import-reflection"
 ]

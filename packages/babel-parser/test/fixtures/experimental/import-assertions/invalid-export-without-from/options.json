@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    [
-      "importAssertions"
-    ]
-  ],
+  "BABEL_8_BREAKING": false,
+  "plugins": ["importAssertions"],
   "sourceType": "module"
 }

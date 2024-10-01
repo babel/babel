@@ -60,7 +60,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     value: string | string[] | (<T>(babelEnv: string) => T),
   ) =>
     cache.using(data => {
-      if (typeof value === "undefined") return data.envName;
+      if (value === undefined) return data.envName;
       if (typeof value === "function") {
         return assertSimpleType(value(data.envName));
       }

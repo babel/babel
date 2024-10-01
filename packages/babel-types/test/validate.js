@@ -1,3 +1,4 @@
+import { itBabel8 } from "$repo-utils";
 import * as t from "../lib/index.js";
 
 describe("validate", () => {
@@ -25,6 +26,32 @@ describe("validate", () => {
           expect(() => t.validate(validNodes[name](lhs))).not.toThrow();
         });
       });
+    });
+  });
+
+  describe("VariableDeclarator", () => {
+    const ast = t.variableDeclaration("const", [
+      t.variableDeclarator(
+        t.objectPattern([
+          t.objectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+      ),
+    ]);
+
+    it("destructuring, no initializer, in for-of", () => {
+      expect(() => {
+        t.forOfStatement(
+          t.cloneNode(ast),
+          t.identifier("x"),
+          t.blockStatement([]),
+        );
+      }).not.toThrow();
+    });
+
+    itBabel8("destructuring, no initializer, in block", () => {
+      expect(() => {
+        t.blockStatement([t.cloneNode(ast)]);
+      }).toThrow();
     });
   });
 });

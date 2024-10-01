@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ],
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ],
+  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"smart\" }]` and `[\"recordAndTuple\",{\"syntaxType\":\"hash\"}]`."
+}

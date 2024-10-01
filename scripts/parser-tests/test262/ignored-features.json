@@ -126,6 +126,7 @@
   "regexp-match-indices",
   "regexp-named-groups",
   "regexp-unicode-property-escapes",
+  "regexp-v-flag",
   "resizable-arraybuffer",
   "rest-parameters",
   "set-methods",

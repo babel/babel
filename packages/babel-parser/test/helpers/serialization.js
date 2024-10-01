@@ -68,7 +68,7 @@ function withErrors(throws, ast) {
 // we can test that too.
 const ErrorPrefixRegExp = /^[A-Za-z]*Error:\s/;
 const toError = message =>
-  /^Error/.test(message.replace(ErrorPrefixRegExp, ""))
+  message.replace(ErrorPrefixRegExp, "").startsWith("Error")
     ? Error(message.replace(ErrorPrefixRegExp, ""))
     : SyntaxError(message.replace(ErrorPrefixRegExp, ""));
 

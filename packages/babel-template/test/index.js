@@ -136,6 +136,14 @@ describe("@babel/template", function () {
       }).toThrow('Unknown substitution "ANOTHER_ID" given');
     });
 
+    it("should throw if VariableDeclaration without init", () => {
+      expect(() => {
+        template(`
+          const %%ID%%;
+        `)({ ID: t.identifier("someIdent") });
+      }).toThrow("Missing initializer in destructuring declaration. (3:22)");
+    });
+
     it("should throw if placeholders are not given explicit values", () => {
       expect(() => {
         template(`
@@ -215,46 +223,46 @@ describe("@babel/template", function () {
 
     it("should return assertions in ImportDeclaration when using .ast", () => {
       const result = template.ast(
-        `import json from "./foo.json" assert { type: "json" };`,
+        `import json from "./foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportNamedDeclaration when using .ast", () => {
       const result = template.ast(
-        `export { default as foo2 } from "foo.json" assert { type: "json" };`,
+        `export { default as foo2 } from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
       const result = template.ast(
-        `export foo2 from "foo.json" assert { type: "json" };`,
+        `export foo2 from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions", "exportDefaultFrom"],
+          plugins: ["importAttributes", "exportDefaultFrom"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportAllDeclaration when using .ast", () => {
       const result = template.ast(
-        `export * from "foo.json" assert { type: "json" };`,
+        `export * from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should replace JSX placeholder", () => {
@@ -464,6 +472,20 @@ describe("@babel/template", function () {
         RHS: t.numericLiteral(7),
       });
       expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
+    });
+
+    it("works in const declaration inside for-of without init", () => {
+      const output = template("for (const %%LHS%% of %%RHS%%){}")({
+        LHS: t.ObjectPattern([
+          t.ObjectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+        RHS: t.identifier("y"),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`
+        "for (const {
+          x: x
+        } of y) {}"
+      `);
     });
 
     it("works in let declaration", () => {

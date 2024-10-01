@@ -1,0 +1,14 @@
+{
+  "BABEL_8_BREAKING": true,
+  "args": [
+    "--expose_gc",
+    "-w",
+    "./plugin-binary.js",
+    "./foo.js",
+    "--expose-gc-as=gc2",
+    "--config-file",
+    "./config.json",
+    "--extensions=.js,.ts",
+    "bar"
+  ]
+}

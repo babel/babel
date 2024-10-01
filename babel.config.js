@@ -363,7 +363,9 @@ function importInteropSrc(source, filename) {
     source.startsWith("@babel/compat-data/") ||
     source.includes("babel-eslint-shared-fixtures/utils") ||
     (source.includes("../data/") &&
-      /babel-preset-env[\\/]src[\\/]/.test(filename))
+      /babel-preset-env[\\/]src[\\/]/.test(filename)) ||
+    // For JSON modules, the default export is the whole module
+    source.endsWith(".json")
   ) {
     return "node";
   }
@@ -664,10 +666,10 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
         }
       },
       LogicalExpression(path) {
-        const res = evaluate(path.get("test"));
+        const res = evaluate(path);
         if (res.unrelated) return;
         if (res.replacement) {
-          path.get("test").replaceWith(res.replacement);
+          path.replaceWith(res.replacement);
         } else {
           path.replaceWith(t.booleanLiteral(res.value));
         }

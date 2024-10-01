@@ -1,0 +1,4 @@
+Transformed: renamed => renamed instanceof 2
+argv: [ '--config-file', './config.json', 'bar' ]
+gc: undefined
+gc2: function

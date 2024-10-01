@@ -882,7 +882,9 @@ export function buildProcessTests(
         (opts.minNodeVersion &&
           parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
         (opts.flaky && !process.env.BABEL_CLI_FLAKY_TESTS) ||
-        opts.BABEL_8_BREAKING === false;
+        (process.env.BABEL_8_BREAKING
+          ? opts.BABEL_8_BREAKING === false
+          : opts.BABEL_8_BREAKING === true);
 
       if (opts.flaky) {
         testName += " (flaky)";

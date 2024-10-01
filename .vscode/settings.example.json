@@ -1,5 +1,4 @@
 {
-  "eslint.experimental.useFlatConfig": true,
   "json.schemas": [
     {
       "fileMatch": [
@@ -19,5 +18,14 @@
       "!${workspaceFolder}/packages/*/test/**",
       "!**/node_modules/**"
     ]
-  }
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": ["source.fixAll.eslint"]
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "prettier.requireConfig": true
 }

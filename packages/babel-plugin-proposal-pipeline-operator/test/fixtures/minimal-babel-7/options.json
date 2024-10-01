@@ -1,0 +1,7 @@
+{
+  "plugins": [["proposal-pipeline-operator", { "proposal": "minimal" }]],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "BABEL_8_BREAKING": false
+}

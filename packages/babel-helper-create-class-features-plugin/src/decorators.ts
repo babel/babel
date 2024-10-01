@@ -2164,11 +2164,13 @@ function createLocalsAssignment(
       ]);
     } else {
       lhs = t.arrayPattern(elementLocals);
+      // @ts-ignore(Babel 7 vs Babel 8) optional removed in Babel 8
       rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
     }
   } else {
     // invariant: classLocals.length > 0
     lhs = t.arrayPattern(classLocals);
+    // @ts-ignore(Babel 7 vs Babel 8) optional removed in Babel 8
     rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
   }
 

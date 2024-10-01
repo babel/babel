@@ -24,7 +24,7 @@
           },
           "value": "foo"
         },
-        "assertions": []
+        "attributes": []
       },
       {
         "type": "ExpressionStatement",

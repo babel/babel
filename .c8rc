@@ -1,12 +1,12 @@
 {
   "all": true,
-  "reporter":["lcov", "text"],
+  "reporter": ["lcov", "text"],
   "include": [
     "packages/*/lib/**/*.{js,cjs,mjs,ts}",
     "codemods/*/lib/**/*.{js,cjs,mjs,ts}",
     "eslint/*/lib/**/*.{js,cjs,mjs,ts}"
   ],
-  "exclude":[
+  "exclude": [
     "packages/babel-standalone/**",
     "packages/babel-types/**/generated/*",
     "packages/babel-helpers/*/helpers/*",

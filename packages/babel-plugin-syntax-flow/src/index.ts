@@ -2,7 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 
 export interface Options {
   all?: boolean;
-  enums?: boolean;
 }
 
 export default declare((api, options: Options) => {
@@ -10,14 +9,23 @@ export default declare((api, options: Options) => {
 
   // When enabled and plugins includes flow, all files should be parsed as if
   // the @flow pragma was provided.
+  // @ts-expect-error Babel 7
   const { all, enums } = options;
 
-  if (typeof all !== "boolean" && typeof all !== "undefined") {
+  if (typeof all !== "boolean" && all !== undefined) {
     throw new Error(".all must be a boolean, or undefined");
   }
 
-  if (typeof enums !== "boolean" && typeof enums !== "undefined") {
-    throw new Error(".enums must be a boolean, or undefined");
+  if (process.env.BABEL_8_BREAKING) {
+    if (enums !== undefined) {
+      throw new Error(
+        "The .enums option has been removed and it's now always enabled. Please remove it from your config.",
+      );
+    }
+  } else {
+    if (typeof enums !== "boolean" && enums !== undefined) {
+      throw new Error(".enums must be a boolean, or undefined");
+    }
   }
 
   return {
@@ -36,7 +44,12 @@ export default declare((api, options: Options) => {
         }
       }
 
-      parserOpts.plugins.push(["flow", { all, enums }]);
+      if (process.env.BABEL_8_BREAKING) {
+        parserOpts.plugins.push(["flow", { all }]);
+      } else {
+        // @ts-expect-error Babel 7
+        parserOpts.plugins.push(["flow", { all, enums }]);
+      }
     },
   };
 });

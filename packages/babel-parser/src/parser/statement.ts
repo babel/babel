@@ -2471,7 +2471,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       node2.source = null;
       node2.declaration = null;
-      if (this.hasPlugin("importAssertions")) {
+      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node2.assertions = [];
       }
 
@@ -2487,7 +2487,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.shouldParseExportDeclaration()) {
       node.specifiers = [];
       node.source = null;
-      if (this.hasPlugin("importAssertions")) {
+      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node.assertions = [];
       }
       node.declaration = this.parseExportDeclaration(node);
@@ -2940,7 +2940,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return (
       this.isContextual(tt._source) ||
       this.isContextual(tt._defer) ||
-      this.isContextual(tt._module)
+      (!process.env.BABEL_8_BREAKING && this.isContextual(tt._module))
     );
   }
 
@@ -2952,7 +2952,10 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
-        if (phase === "module" || phase === "source") {
+        if (
+          (!process.env.BABEL_8_BREAKING && phase === "module") ||
+          phase === "source"
+        ) {
           throw new Error(
             `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
@@ -2961,7 +2964,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return;
     }
 
-    if (phase === "module") {
+    if (!process.env.BABEL_8_BREAKING && phase === "module") {
       this.expectPlugin("importReflection", loc);
       (node as N.ImportDeclaration).module = true;
     } else if (this.hasPlugin("importReflection")) {
@@ -2980,18 +2983,15 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   /*
-   * Parse `module` in `import module x from "x"`, disambiguating
-   * `import module from "x"` and `import module from from "x"`.
+   * Parse `source` in `import source x from "x"`, disambiguating
+   * `import source from "x"` and `import source from from "x"`.
    *
-   * This function might return an identifier representing the `module`
-   * if it eats `module` and then discovers that it was the default import
+   * This function might return an identifier representing the `source`
+   * if it eats `source` and then discovers that it was the default import
    * binding and not the import reflection.
    *
    * This function is also used to parse `import type` and `import typeof`
-   * in the TS and Flow plugins.
-   *
-   * Note: the proposal has been updated to use `source` instead of `module`,
-   * but it has not been implemented yet.
+   * in the TS and Flow plugins, and for parsing `import defer`.
    */
   parseMaybeImportPhase(
     node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
@@ -3258,7 +3258,10 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ) {
     let attributes: N.ImportAttribute[];
-    let useWith = false;
+    if (!process.env.BABEL_8_BREAKING) {
+      // eslint-disable-next-line no-var
+      var useWith = false;
+    }
 
     // https://tc39.es/proposal-import-attributes/#prod-WithClause
     if (this.match(tt._with)) {
@@ -3273,18 +3276,20 @@ export default abstract class StatementParser extends ExpressionParser {
 
       this.next(); // eat `with`
 
-      if (!process.env.BABEL_8_BREAKING) {
-        if (this.hasPlugin("moduleAttributes")) {
-          attributes = this.parseModuleAttributes();
-        } else {
-          this.expectImportAttributesPlugin();
-          attributes = this.parseImportAttributes();
-        }
+      if (process.env.BABEL_8_BREAKING) {
+        this.expectPlugin("importAttributes");
+        attributes = this.parseImportAttributes();
+      } else if (this.hasPlugin("moduleAttributes")) {
+        attributes = this.parseModuleAttributes();
       } else {
-        this.expectImportAttributesPlugin();
+        if (!this.hasPlugin("importAssertions")) {
+          this.expectPlugin("importAttributes");
+        }
         attributes = this.parseImportAttributes();
       }
-      useWith = true;
+      if (!process.env.BABEL_8_BREAKING) {
+        useWith = true;
+      }
     } else if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
       if (this.hasPlugin("importAttributes")) {
         if (
@@ -3294,6 +3299,8 @@ export default abstract class StatementParser extends ExpressionParser {
           this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
         }
         this.addExtra(node, "deprecatedAssertSyntax", true);
+      } else if (process.env.BABEL_8_BREAKING) {
+        this.expectPlugin("importAttributes");
       } else {
         this.expectOnePlugin(["importAttributes", "importAssertions"]);
       }
@@ -3301,7 +3308,7 @@ export default abstract class StatementParser extends ExpressionParser {
       attributes = this.parseImportAttributes();
     } else if (
       this.hasPlugin("importAttributes") ||
-      this.hasPlugin("importAssertions")
+      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
     ) {
       attributes = [];
     } else if (!process.env.BABEL_8_BREAKING) {
@@ -3310,7 +3317,11 @@ export default abstract class StatementParser extends ExpressionParser {
       } else return;
     } else return;
 
-    if (!useWith && this.hasPlugin("importAssertions")) {
+    if (
+      !process.env.BABEL_8_BREAKING &&
+      !useWith &&
+      this.hasPlugin("importAssertions")
+    ) {
       node.assertions = attributes;
     } else {
       node.attributes = attributes;

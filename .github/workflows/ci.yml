@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -40,7 +40,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -69,7 +69,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Generate coverage report
@@ -91,7 +91,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Use ESM and build
@@ -118,7 +118,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -161,7 +161,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -186,7 +186,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -216,7 +216,7 @@ jobs:
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -251,6 +251,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Ensure that @babel/node's list of node flags is up to date
+        run: |
+          node ./packages/babel-node/scripts/list-node-flags.js
       - name: Test on node.js ${{ matrix.node-version }}
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
@@ -262,7 +265,7 @@ jobs:
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
 
   build-babel8:
     name: Build Babel 8 Artifacts
@@ -277,7 +280,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Use ESM
@@ -294,7 +297,6 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
@@ -334,14 +336,12 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
           BABEL_CLI_FLAKY_TESTS: true
       - name: Test ESM
         run: yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_TYPES_8_BREAKING: true
           BABEL_CLI_FLAKY_TESTS: true
 
   test-windows-mac:
@@ -358,7 +358,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -384,7 +384,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -413,7 +413,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -520,7 +520,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -545,7 +545,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -570,7 +570,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v4
@@ -607,7 +607,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5"
+          node-version: latest
           check-latest: true
       - name: Install
         run: yarn install

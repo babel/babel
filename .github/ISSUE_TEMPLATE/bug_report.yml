@@ -40,7 +40,7 @@ body:
         is also ok.
       placeholder: |
         ```js
-        var your => (code) => here;
+        var your = (code) => here;
         ```
     validations:
       required: true

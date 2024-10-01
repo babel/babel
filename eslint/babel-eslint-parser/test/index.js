@@ -364,12 +364,18 @@ describe("Babel and Espree", () => {
   });
 
   // Espree doesn't support the pipeline operator yet
-  it("pipeline operator (token)", () => {
+  itBabel7("pipeline operator (token)", () => {
     const code = "foo |> bar";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
+      babelOptions: {
+        filename: "test.js",
+        parserOpts: {
+          plugins: [["pipelineOperator", { proposal: "minimal" }]],
+          tokens: true,
+        },
+      },
     }).ast;
     expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
