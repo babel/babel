@@ -43,7 +43,6 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/comments/mapped_types.ts
   # https://github.com/babel/babel/pull/16741
   sed -i 's/"decimal",//' src/language-js/parse/babel.js
-  rm tests/format/js/babel-plugins/decimal.js
   # https://github.com/babel/babel/pull/16801
   sed -i 's/"minimal"/"fsharp"/' src/language-js/parse/babel.js
   # https://github.com/babel/babel/pull/16808
