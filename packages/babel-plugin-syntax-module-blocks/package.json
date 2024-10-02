@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-module-blocks",
-  "version": "7.24.7",
+  "version": "7.25.7",
   "description": "Allow parsing of JS Module Blocks",
   "repository": {
     "type": "git",

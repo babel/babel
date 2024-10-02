@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-bind",
-  "version": "7.24.7",
+  "version": "7.25.7",
   "description": "Compile function bind operator to ES5",
   "repository": {
     "type": "git",

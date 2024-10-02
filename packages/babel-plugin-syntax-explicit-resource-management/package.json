@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-explicit-resource-management",
-  "version": "7.24.7",
+  "version": "7.25.7",
   "description": "Allow parsing of the using declarations",
   "repository": {
     "type": "git",

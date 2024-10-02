@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-umd",
-  "version": "7.24.7",
+  "version": "7.25.7",
   "description": "This plugin transforms ES2015 modules to UMD",
   "repository": {
     "type": "git",

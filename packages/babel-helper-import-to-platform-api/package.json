@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-import-to-platform-api",
-  "version": "7.25.0",
+  "version": "7.25.7",
   "description": "Helper function to transform import statements to platform-specific APIs",
   "repository": {
     "type": "git",
