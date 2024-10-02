@@ -32,9 +32,7 @@ for (const { types, set } of allExpandedTypes) {
   for (const type of types) {
     const aliases = FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
-      for (const alias of aliases) {
-        set.add(alias);
-      }
+      aliases.forEach(set.add, set);
     } else {
       set.add(type);
     }
