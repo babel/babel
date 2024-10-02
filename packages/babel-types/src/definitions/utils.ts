@@ -51,7 +51,7 @@ export type Validator = (
   | { shapeOf: { [x: string]: FieldOptions } }
   | object
 ) &
-  ((node: t.Node, key: string, val: any) => void);
+  ((node: t.Node, key: string | { toString(): string }, val: any) => void);
 
 export type FieldOptions = {
   default?: string | number | boolean | [];
@@ -98,7 +98,7 @@ export function assertEach(callback: Validator): Validator {
 
     let i = 0;
     // For performance
-    const subKey: any = {
+    const subKey = {
       toString() {
         return `${key}[${i}]`;
       },
