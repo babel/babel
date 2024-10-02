@@ -24,6 +24,40 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.7 (2024-10-02)
+
+#### :bug: Bug Fix
+* `babel-helper-validator-identifier`
+  * [#16825](https://github.com/babel/babel/pull/16825) fix: update identifier to unicode 16 ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#16814](https://github.com/babel/babel/pull/16814) fix: issue with node path keys updated on unrelated paths ([@DylanPiercey](https://github.com/DylanPiercey))
+* `babel-plugin-transform-classes`
+  * [#16797](https://github.com/babel/babel/pull/16797) Use an inclusion rather than exclusion list for `super()` check ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#16788](https://github.com/babel/babel/pull/16788) Fix printing of TS `infer` in compact mode ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16785](https://github.com/babel/babel/pull/16785) Print TS type annotations for destructuring in assignment pattern ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16778](https://github.com/babel/babel/pull/16778) Respect `[no LineTerminator here]` after nodes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-types`
+  * [#16852](https://github.com/babel/babel/pull/16852) Add deprecated JSDOC for fields ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-core`
+  * [#16820](https://github.com/babel/babel/pull/16820) Allow sync loading of ESM when `--experimental-require-module` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-compilation-targets`, `babel-helper-plugin-utils`, `babel-preset-env`
+  * [#16858](https://github.com/babel/babel/pull/16858) Add browserslist config to external dependency ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-syntax-decimal`, `babel-plugin-syntax-import-reflection`, `babel-standalone`
+  * [#16809](https://github.com/babel/babel/pull/16809) Archive syntax-import-reflection and syntax-decimal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#16779](https://github.com/babel/babel/pull/16779) Simplify logic for `[no LineTerminator here]` before nodes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-plugin-transform-typescript`
+  * [#16875](https://github.com/babel/babel/pull/16875) perf: Avoid extra cloning of namespaces ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#16842](https://github.com/babel/babel/pull/16842) perf: Improve @babel/types builders ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16828](https://github.com/babel/babel/pull/16828) Only access `BABEL_TYPES_8_BREAKING` at startup ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.6 (2024-08-29)
 
 #### :bug: Bug Fix
