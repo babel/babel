@@ -53,7 +53,9 @@ export default declare((api, options: Options) => {
       ClassDeclaration(path) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        const ref = node.id
+          ? t.cloneNode(node.id)
+          : path.scope.generateUidIdentifier("class");
 
         path.replaceWith(
           t.variableDeclaration("let", [
