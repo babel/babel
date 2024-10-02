@@ -1485,18 +1485,12 @@ defineType("ClassDeclaration", {
 export const importAttributes = {
   attributes: {
     optional: true,
-    validate: chain(
-      assertValueType("array"),
-      arrayOfType("ImportAttribute"),
-    ),
+    validate: arrayOfType("ImportAttribute"),
   },
   assertions: {
     deprecated: true,
     optional: true,
-    validate: chain(
-      assertValueType("array"),
-      arrayOfType("ImportAttribute"),
-    ),
+    validate: arrayOfType("ImportAttribute"),
   },
 };
 
