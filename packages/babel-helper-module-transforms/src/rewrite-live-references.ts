@@ -462,7 +462,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
           ) {
             newExpr = t.assignmentExpression(
               "=",
-              t.cloneNode(assignment.left),
+              assignment.left,
               t.logicalExpression(
                 operator.slice(0, -1) as t.LogicalExpression["operator"],
                 t.cloneNode(assignment.left) as t.Expression,
@@ -472,7 +472,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
           } else {
             newExpr = t.assignmentExpression(
               "=",
-              t.cloneNode(assignment.left),
+              assignment.left,
               t.binaryExpression(
                 operator.slice(0, -1) as t.BinaryExpression["operator"],
                 t.cloneNode(assignment.left) as t.Expression,
