@@ -27,13 +27,9 @@ function getParserPlugins(
 function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
-  let sourceType = options.sourceType;
-  if (sourceType === "commonjs") {
-    sourceType = "script";
-  }
-
   return {
-    sourceType: sourceType,
+    // https://github.com/eslint/js/issues/519
+    sourceType: options.sourceType as "module" | "script",
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
