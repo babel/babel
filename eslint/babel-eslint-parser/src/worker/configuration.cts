@@ -27,8 +27,13 @@ function getParserPlugins(
 function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
+  let sourceType = options.sourceType;
+  if (sourceType === "commonjs") {
+    sourceType = "script";
+  }
+
   return {
-    sourceType: options.sourceType,
+    sourceType: sourceType,
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
