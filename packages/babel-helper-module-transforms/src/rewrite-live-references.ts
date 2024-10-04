@@ -490,9 +490,9 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
             ),
           );
 
-          path.skip();
-
           requeueInParent(path);
+
+          path.skip();
         }
       } else {
         const ids = left.getOuterBindingIdentifiers();
