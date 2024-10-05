@@ -1,10 +1,10 @@
-import currentTypes from "@babel/types";
+import * as currentTypes from "@babel/types";
 import baselineTypes from "@babel-baseline/types";
-import currentParser from "@babel/parser";
+import * as currentParser from "@babel/parser";
 import baselineParser from "@babel-baseline/parser";
 import _currentGenerator from "@babel/generator";
 import baselineGenerator from "@babel-baseline/generator";
-import currentCore from "@babel/core";
+import * as currentCore from "@babel/core";
 import baselineCore from "@babel-baseline/core";
 import _currentTraverse from "@babel/traverse";
 import baselineTraverse from "@babel-baseline/traverse";

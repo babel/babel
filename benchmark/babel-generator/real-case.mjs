@@ -16,7 +16,7 @@ fixtures.forEach(({ name, content }) => {
   });
 
   addBenchCase(
-    `${generateCaseName(import.meta.url)} empty visitors ${name}`,
+    `${generateCaseName(import.meta.url)} ${name}`,
     baselineGenerator.default,
     currentGenerator,
     [ast]
