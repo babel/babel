@@ -29,9 +29,7 @@ describe("https://github.com/babel/babel-eslint/issues/558", () => {
           ),
         ).toMatchObject([
           { errorCount: 0, messages: [] },
-          // this should have been { errorCount: 0, messages: [] },
-          // pending https://github.com/import-js/eslint-plugin-import/pull/2996
-          { errorCount: 1 },
+          { errorCount: 0, messages: [] },
           { errorCount: 0, messages: [] },
         ]);
       } else {

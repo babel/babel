@@ -28,7 +28,8 @@ function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
   return {
-    sourceType: options.sourceType,
+    // https://github.com/eslint/js/issues/519
+    sourceType: options.sourceType as "module" | "script",
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
