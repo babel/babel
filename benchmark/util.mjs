@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import * as currentTypes from "@babel/types";
 import baselineTypes from "@babel-baseline/types";
 import * as currentParser from "@babel/parser";
@@ -15,10 +17,10 @@ import baselinePresetEnv from "@babel-baseline/preset-env";
 import baselinePresetTypescript from "@babel-baseline/preset-typescript";
 import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-commonjs";
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { USE_ESM } from "$repo-utils";
 import { Bench } from "tinybench";
-import { globSync, readFileSync } from "fs";
+import { globSync } from "glob";
+import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 import assert from "assert";
@@ -54,7 +56,7 @@ function formatNumber(x) {
 function loadFixtures(type = "*") {
   const fixtures = globSync(`fixtures/*.${type}.txt`, {
     cwd: __dirname,
-  });
+  }).sort();
 
   return fixtures.map(fixture => ({
     name: path.basename(fixture, ".txt"),
