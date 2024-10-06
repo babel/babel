@@ -1837,6 +1837,41 @@ describe("verify", () => {
       });
     });
 
+    describe("accessor declarations", () => {
+      it("should not be undefined", () => {
+        verifyAndAssertMessages(
+          `
+              class C {
+                accessor d = 1;
+              }
+          `,
+          { "no-undef": 1 },
+        );
+      });
+
+      it("should not be unused", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                accessor d = 1;
+              }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
+
+      it("no-use-before-define allows referencing the class in a accessor", () => {
+        verifyAndAssertMessages(
+          `
+            class C {
+              accessor d = C.name;
+            }
+          `,
+          { "no-use-before-define": 1 },
+        );
+      });
+    });
+
     describe("private methods", () => {
       it("should not be undefined", () => {
         verifyAndAssertMessages(
