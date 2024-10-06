@@ -1860,7 +1860,7 @@ describe("verify", () => {
         );
       });
 
-      it("no-use-before-define allows referencing the class in a accessor", () => {
+      it("no-use-before-define allows referencing the class in an accessor", () => {
         verifyAndAssertMessages(
           `
             class C {
