@@ -6,7 +6,7 @@ export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.19.0"));
 
   return createRegExpFeaturePlugin({
-    name: "proposal-regexp-modifiers",
+    name: "transform-regexp-modifiers",
     feature: "modifiers",
   });
 });
