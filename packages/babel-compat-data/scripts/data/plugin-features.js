@@ -202,11 +202,10 @@ const es2024 = {
 const es2025 = {
   "transform-duplicate-named-capturing-groups-regex":
     "Duplicate named capturing groups",
+  "transform-regexp-modifiers": "RegExp Pattern Modifiers",
 };
 
-const shippedProposal = {
-  "proposal-regexp-modifiers": "RegExp Pattern Modifiers",
-};
+const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
