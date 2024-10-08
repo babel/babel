@@ -11,7 +11,6 @@
     "babel-plugin-proposal-import-attributes-to-assertions",
     "babel-plugin-proposal-import-wasm-source",
     "babel-plugin-proposal-json-modules",
-    "babel-plugin-proposal-regexp-modifiers",
     "babel-plugin-syntax-decorators",
     "babel-plugin-syntax-explicit-resource-management",
     "babel-plugin-syntax-import-source",
@@ -36,9 +35,10 @@
     "babel-plugin-transform-object-rest-spread",
     "babel-plugin-transform-optional-catch-binding",
     "babel-plugin-transform-optional-chaining",
-    "babel-plugin-transform-unicode-property-regex",
     "babel-plugin-transform-private-methods",
     "babel-plugin-transform-private-property-in-object",
-    "babel-plugin-transform-unicode-sets-regex"
+    "babel-plugin-transform-regexp-modifiers",
+    "babel-plugin-transform-unicode-sets-regex",
+    "babel-plugin-transform-unicode-property-regex"
   ]
 }
