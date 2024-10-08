@@ -38,9 +38,6 @@
       "path": "../../packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
     },
     {
-      "path": "../../packages/babel-plugin-proposal-regexp-modifiers"
-    },
-    {
       "path": "../../packages/babel-plugin-syntax-import-assertions"
     },
     {
@@ -162,6 +159,9 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-regenerator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-regexp-modifiers"
     },
     {
       "path": "../../packages/babel-plugin-transform-reserved-words"
