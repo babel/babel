@@ -84,7 +84,6 @@ const availablePlugins = {
     bugfixV8SpreadParametersInOptionalChaining,
   "bugfix/transform-v8-static-class-fields-redefine-readonly": () =>
     bugfixV8StaticClassFieldsRedefineReadonly,
-  "proposal-regexp-modifiers": () => transformRegExpModifiers,
   "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
@@ -132,6 +131,7 @@ const availablePlugins = {
     transformPrivatePropertyInObject,
   "transform-property-literals": () => transformPropertyLiterals,
   "transform-regenerator": () => transformRegenerator,
+  "transform-regexp-modifiers": () => transformRegExpModifiers,
   "transform-reserved-words": () => transformReservedWords,
   "transform-shorthand-properties": () => transformShorthandProperties,
   "transform-spread": () => transformSpread,
