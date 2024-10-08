@@ -42,7 +42,7 @@ import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import transformPropertyLiterals from "@babel/plugin-transform-property-literals";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
-import transformRegExpModifiers from "@babel/plugin-proposal-regexp-modifiers";
+import transformRegExpModifiers from "@babel/plugin-transform-regexp-modifiers";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformShorthandProperties from "@babel/plugin-transform-shorthand-properties";
 import transformSpread from "@babel/plugin-transform-spread";

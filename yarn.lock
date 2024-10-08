@@ -1667,18 +1667,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-regexp-modifiers@workspace:^, @babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-proposal-throw-expressions@workspace:^, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions"
@@ -3379,6 +3367,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-transform-regexp-modifiers@workspace:^, @babel/plugin-transform-regexp-modifiers@workspace:packages/babel-plugin-transform-regexp-modifiers":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-regexp-modifiers@workspace:packages/babel-plugin-transform-regexp-modifiers"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-transform-reserved-words@npm:^8.0.0-alpha.12":
   version: 8.0.0-alpha.12
   resolution: "@babel/plugin-transform-reserved-words@npm:8.0.0-alpha.12"
@@ -3833,6 +3833,7 @@ __metadata:
     "@babel/plugin-transform-private-property-in-object": "workspace:^"
     "@babel/plugin-transform-property-literals": "workspace:^"
     "@babel/plugin-transform-regenerator": "workspace:^"
+    "@babel/plugin-transform-regexp-modifiers": "workspace:^"
     "@babel/plugin-transform-reserved-words": "workspace:^"
     "@babel/plugin-transform-shorthand-properties": "workspace:^"
     "@babel/plugin-transform-spread": "workspace:^"
@@ -4031,7 +4032,6 @@ __metadata:
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
-    "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-syntax-decimal": "npm:^7.24.7"
     "@babel/plugin-syntax-decorators": "workspace:^"
@@ -4106,6 +4106,7 @@ __metadata:
     "@babel/plugin-transform-react-jsx-self": "workspace:^"
     "@babel/plugin-transform-react-jsx-source": "workspace:^"
     "@babel/plugin-transform-regenerator": "workspace:^"
+    "@babel/plugin-transform-regexp-modifiers": "workspace:^"
     "@babel/plugin-transform-reserved-words": "workspace:^"
     "@babel/plugin-transform-runtime": "workspace:^"
     "@babel/plugin-transform-shorthand-properties": "workspace:^"

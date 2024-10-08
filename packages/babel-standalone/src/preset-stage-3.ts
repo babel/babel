@@ -17,7 +17,6 @@ export default (_: any, opts: any = {}) => {
         decoratorsBeforeExport,
       },
     ],
-    babelPlugins.proposalRegexpModifiers,
     babelPlugins.proposalExplicitResourceManagement,
     babelPlugins.proposalJsonModules,
     // These are Stage 4
@@ -36,6 +35,7 @@ export default (_: any, opts: any = {}) => {
           babelPlugins.transformClassStaticBlock,
           babelPlugins.transformUnicodeSetsRegex,
           babelPlugins.transformDuplicateNamedCapturingGroupsRegex,
+          babelPlugins.transformRegexpModifiers,
         ]),
   ];
 
