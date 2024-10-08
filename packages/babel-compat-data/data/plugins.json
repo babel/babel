@@ -1,9 +1,4 @@
 {
-  "proposal-regexp-modifiers": {
-    "chrome": "125",
-    "edge": "125",
-    "electron": "31.0"
-  },
   "transform-duplicate-named-capturing-groups-regex": {
     "chrome": "126",
     "opera": "112",
@@ -12,6 +7,12 @@
     "safari": "17.4",
     "node": "23",
     "ios": "17.4",
+    "electron": "31.0"
+  },
+  "transform-regexp-modifiers": {
+    "chrome": "125",
+    "opera": "111",
+    "edge": "125",
     "electron": "31.0"
   },
   "transform-unicode-sets-regex": {
