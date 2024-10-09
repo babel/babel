@@ -536,7 +536,7 @@ function buildRollup(packages, buildStandalone) {
               return "compat";
             }
 
-            return "auto";
+            return "default";
           },
         });
 
