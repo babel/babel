@@ -113,9 +113,6 @@
       "path": "./packages/babel-helpers"
     },
     {
-      "path": "./packages/babel-highlight"
-    },
-    {
       "path": "./packages/babel-node"
     },
     {
