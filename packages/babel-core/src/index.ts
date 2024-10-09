@@ -83,16 +83,14 @@ export { parse, parseAsync, parseSync } from "./parse.ts";
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as
  * as an easy source for tooling making use of @babel/core.
  */
-export const DEFAULT_EXTENSIONS = Object.freeze(
-  [
-    ".js",
-    ".jsx",
-    ".es6",
-    ".es",
-    ".mjs",
-    ".cjs",
-  ] as const,
-);
+export const DEFAULT_EXTENSIONS = Object.freeze([
+  ".js",
+  ".jsx",
+  ".es6",
+  ".es",
+  ".mjs",
+  ".cjs",
+] as const);
 
 import Module from "module";
 import * as thisFile from "./index.ts";
