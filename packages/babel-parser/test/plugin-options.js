@@ -71,7 +71,7 @@ describe("plugin options", function () {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAttributes\` parser plugin, or \`@babel/plugin-syntax-import-attributes\`."`,
+        `"\`moduleAttributes\` has been removed in Babel 8, please migrate to import attributes instead."`,
       );
     });
   });
