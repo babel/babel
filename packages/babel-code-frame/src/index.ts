@@ -1,26 +1,5 @@
-import highlight, { shouldHighlight } from "@babel/highlight";
-
-import _colors, { createColors } from "picocolors";
-import type { Colors, Formatter } from "picocolors/types";
-// See https://github.com/alexeyraspopov/picocolors/issues/62
-const colors =
-  typeof process === "object" &&
-  (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false")
-    ? createColors(false)
-    : _colors;
-
-const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
-  (f, g) => v =>
-    f(g(v));
-
-let pcWithForcedColor: Colors = undefined;
-function getColors(forceColor: boolean) {
-  if (forceColor) {
-    pcWithForcedColor ??= createColors(true);
-    return pcWithForcedColor;
-  }
-  return colors;
-}
+import { getDefs, isColorSupported } from "./defs.ts";
+import { highlight } from "./highlight.ts";
 
 let deprecationWarningShown = false;
 
@@ -54,17 +33,6 @@ export interface Options {
    * default: nothing
    */
   message?: string;
-}
-
-/**
- * Styles for code frame token types.
- */
-function getDefs(colors: Colors) {
-  return {
-    gutter: colors.gray,
-    marker: compose(colors.red, colors.bold),
-    message: compose(colors.red, colors.bold),
-  };
 }
 
 /**
@@ -155,20 +123,17 @@ export function codeFrameColumns(
   loc: NodeLocation,
   opts: Options = {},
 ): string {
-  const highlighted =
-    (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
-  const colors = getColors(opts.forceColor);
-  const defs = getDefs(colors);
-  const maybeHighlight = (fmt: Formatter, string: string) => {
-    return highlighted ? fmt(string) : string;
-  };
+  const shouldHighlight =
+    opts.forceColor || (isColorSupported && opts.highlightCode);
+  const defs = getDefs(shouldHighlight);
+
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
   const hasColumns = loc.start && typeof loc.start.column === "number";
 
   const numberMaxWidth = String(end).length;
 
-  const highlightedLines = highlighted ? highlight(rawLines, opts) : rawLines;
+  const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
 
   let frame = highlightedLines
     .split(NEWLINE, end)
@@ -189,26 +154,24 @@ export function codeFrameColumns(
 
           markerLine = [
             "\n ",
-            maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
+            defs.gutter(gutter.replace(/\d/g, " ")),
             " ",
             markerSpacing,
-            maybeHighlight(defs.marker, "^").repeat(numberOfMarkers),
+            defs.marker("^").repeat(numberOfMarkers),
           ].join("");
 
           if (lastMarkerLine && opts.message) {
-            markerLine += " " + maybeHighlight(defs.message, opts.message);
+            markerLine += " " + defs.message(opts.message);
           }
         }
         return [
-          maybeHighlight(defs.marker, ">"),
-          maybeHighlight(defs.gutter, gutter),
+          defs.marker(">"),
+          defs.gutter(gutter),
           line.length > 0 ? ` ${line}` : "",
           markerLine,
         ].join("");
       } else {
-        return ` ${maybeHighlight(defs.gutter, gutter)}${
-          line.length > 0 ? ` ${line}` : ""
-        }`;
+        return ` ${defs.gutter(gutter)}${line.length > 0 ? ` ${line}` : ""}`;
       }
     })
     .join("\n");
@@ -217,8 +180,8 @@ export function codeFrameColumns(
     frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
   }
 
-  if (highlighted) {
-    return colors.reset(frame);
+  if (shouldHighlight) {
+    return defs.reset(frame);
   } else {
     return frame;
   }
