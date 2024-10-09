@@ -1,8 +1,5 @@
 /* eslint sort-keys: "error" */
 
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
-import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
-
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -83,8 +80,6 @@ const availablePlugins = {
     bugfixV8SpreadParametersInOptionalChaining,
   "bugfix/transform-v8-static-class-fields-redefine-readonly": () =>
     bugfixV8StaticClassFieldsRedefineReadonly,
-  "syntax-import-assertions": () => syntaxImportAssertions,
-  "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => transformAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -161,11 +156,11 @@ if (!process.env.BABEL_8_BREAKING) {
 
   // This is a factory to create a plugin that enables a parser plugin
   const syntax =
-    (name: ParserPlugin) => (): typeof syntaxImportAttributes => () => ({
+    (name: ParserPlugin) => (): typeof transformJsonStrings => () => ({
       manipulateOptions: (_, p) => p.plugins.push(name),
     });
   type ParserPlugin = Parameters<
-    ReturnType<typeof syntaxImportAttributes>["manipulateOptions"]
+    ReturnType<typeof transformJsonStrings>["manipulateOptions"]
   >[1]["plugins"][number];
 
   const legacyBabel7SyntaxPluginsLoaders = {
@@ -190,11 +185,17 @@ if (!process.env.BABEL_8_BREAKING) {
   // breaks using ESM. Given that ESM builds are new enough to have this
   // syntax enabled by default, we can safely skip enabling it.
   if (!USE_ESM) {
-    // @ts-expect-error unknown key
-    legacyBabel7SyntaxPluginsLoaders["syntax-unicode-sets-regex"] =
-      IS_STANDALONE
+    Object.assign(legacyBabel7SyntaxPluginsLoaders, {
+      "syntax-import-assertions": IS_STANDALONE
         ? () => () => ({})
-        : () => require("@babel/plugin-syntax-unicode-sets-regex");
+        : () => require("@babel/plugin-syntax-import-assertions"),
+      "syntax-import-attributes": IS_STANDALONE
+        ? () => () => ({})
+        : () => require("@babel/plugin-syntax-import-attributes"),
+      "syntax-unicode-sets-regex": IS_STANDALONE
+        ? () => () => ({})
+        : () => require("@babel/plugin-syntax-unicode-sets-regex"),
+    });
   }
 
   Object.assign(availablePlugins, legacyBabel7SyntaxPluginsLoaders);
