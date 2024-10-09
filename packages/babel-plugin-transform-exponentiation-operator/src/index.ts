@@ -13,7 +13,10 @@ export default declare(api => {
     );
   }
 
-  function maybeMemoize(node: t.Expression | t.Super, scope: Scope) {
+  function maybeMemoize<T extends t.Expression | t.Super>(
+    node: T,
+    scope: Scope,
+  ) {
     if (scope.isPure(node) || t.isSuper(node)) {
       return { assign: node, ref: t.cloneNode(node) };
     }
