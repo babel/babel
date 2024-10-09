@@ -1831,6 +1831,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-import-assertions-BABEL_8_BREAKING-false@npm:@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-import-assertions@condition:BABEL_8_BREAKING ? : workspace:^":
+  version: 0.0.0-condition-4045c9
+  resolution: "@babel/plugin-syntax-import-assertions@condition:BABEL_8_BREAKING?:workspace:^#4045c9"
+  dependencies:
+    "@babel/plugin-syntax-import-assertions-BABEL_8_BREAKING-false": "npm:@babel/plugin-syntax-import-assertions@workspace:^"
+  checksum: 10/e631d0f47e9ccac2c895a756acaec4b3ac111a641e82504f98eeb622eec8b18ad2e3f6bc0828cc55d5cd4570fd9534fa433bc95776f94c60e12b2250ff9646d2
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-import-assertions@npm:^8.0.0-alpha.12":
   version: 8.0.0-alpha.12
   resolution: "@babel/plugin-syntax-import-assertions@npm:8.0.0-alpha.12"
@@ -1842,16 +1862,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
+"@babel/plugin-syntax-import-attributes-BABEL_8_BREAKING-false@npm:@babel/plugin-syntax-import-attributes@workspace:^, @babel/plugin-syntax-import-attributes@workspace:^, @babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes":
   version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
+  resolution: "@babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
+
+"@babel/plugin-syntax-import-attributes@condition:BABEL_8_BREAKING ? : workspace:^":
+  version: 0.0.0-condition-4045c9
+  resolution: "@babel/plugin-syntax-import-attributes@condition:BABEL_8_BREAKING?:workspace:^#4045c9"
+  dependencies:
+    "@babel/plugin-syntax-import-attributes-BABEL_8_BREAKING-false": "npm:@babel/plugin-syntax-import-attributes@workspace:^"
+  checksum: 10/e90f890355a67ea5aa70a022382be81113c217b954c0e521e18f6fa250f502e1c44943aec6ef193e86dcfb6c89b1044c5b13d122bc42085c15237f8ba9b3539e
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-syntax-import-attributes@npm:^8.0.0-alpha.12":
   version: 8.0.0-alpha.12
@@ -1863,18 +1893,6 @@ __metadata:
   checksum: 10/e249b451fbdafcefdc0343991ae87712e389acd8ea93dc12e76d792ed8f5117abeef3d60e1a13937418ebf8e44f968c51fea989847e0292fe1884fab8bf9150d
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-import-attributes@workspace:^, @babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer":
   version: 0.0.0-use.local
@@ -3791,8 +3809,8 @@ __metadata:
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
-    "@babel/plugin-syntax-import-assertions": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
+    "@babel/plugin-syntax-import-assertions": "condition:BABEL_8_BREAKING ? : workspace:^"
+    "@babel/plugin-syntax-import-attributes": "condition:BABEL_8_BREAKING ? : workspace:^"
     "@babel/plugin-syntax-unicode-sets-regex": "condition:BABEL_8_BREAKING ? : ^7.18.6"
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-async-generator-functions": "workspace:^"

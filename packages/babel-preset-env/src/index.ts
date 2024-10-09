@@ -490,7 +490,10 @@ option \`forceAllTransforms: true\` instead.
           },
         ];
       }
-      if (pluginName === "syntax-import-attributes") {
+      if (
+        !process.env.BABEL_8_BREAKING &&
+        pluginName === "syntax-import-attributes"
+      ) {
         // For backward compatibility with the import-assertions plugin, we
         // allow the deprecated `assert` keyword.
         // TODO(Babel 8): Revisit this.
