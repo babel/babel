@@ -20,6 +20,5 @@ Using plugins:
   bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-attributes
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
