@@ -29,9 +29,6 @@
       "@babel/helper-annotate-as-pure": [
         "./packages/babel-helper-annotate-as-pure/src"
       ],
-      "@babel/helper-builder-binary-assignment-operator-visitor": [
-        "./packages/babel-helper-builder-binary-assignment-operator-visitor/src"
-      ],
       "@babel/helper-builder-react-jsx": [
         "./packages/babel-helper-builder-react-jsx/src"
       ],
