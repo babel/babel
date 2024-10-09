@@ -506,4 +506,20 @@ describe("addon resolution", function () {
       ).code,
     ).toBe(`"ESM"`);
   });
+
+  it("resolvePreset", function () {
+    expect(
+      babel.resolvePreset("@babel/foo", path.join(base, "babel-org-paths")),
+    ).toMatch(
+      /babel-org-paths[\\/]node_modules[\\/]@babel[\\/]preset-foo[\\/]index.js/,
+    );
+  });
+
+  it("resolvePlugin", function () {
+    expect(
+      babel.resolvePlugin("@babel/foo", path.join(base, "babel-org-paths")),
+    ).toMatch(
+      /babel-org-paths[\\/]node_modules[\\/]@babel[\\/]plugin-foo[\\/]index.js/,
+    );
+  });
 });
