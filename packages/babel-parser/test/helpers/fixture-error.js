@@ -7,7 +7,7 @@ const { defineProperty, entries, fromEntries } = Object;
 
 const named = (name, object) => defineProperty(object, "name", { value: name });
 const mapEntries = (object, f) => fromEntries(entries(object).map(f));
-// eslint-disable-next-line no-confusing-arrow
+
 const toContextError = error =>
   isArray(error) ? error.map(toContextError) : error.context || error;
 
