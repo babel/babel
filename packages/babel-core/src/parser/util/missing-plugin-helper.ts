@@ -84,12 +84,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-preset-react",
     },
   },
-  importAttributes: {
-    syntax: {
-      name: "@babel/plugin-syntax-import-attributes",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-attributes",
-    },
-  },
   pipelineOperator: {
     syntax: {
       name: "@babel/plugin-syntax-pipeline-operator",
@@ -202,6 +196,12 @@ if (!process.env.BABEL_8_BREAKING) {
       syntax: {
         name: "@babel/plugin-syntax-import-assertions",
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-assertions",
+      },
+    },
+    importAttributes: {
+      syntax: {
+        name: "@babel/plugin-syntax-import-attributes",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-attributes",
       },
     },
     importMeta: {
