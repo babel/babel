@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -7,7 +6,7 @@ export default declare(api => {
 
   return {
     name: "proposal-export-default-from",
-    inherits: syntaxExportDefaultFrom,
+    manipulateOptions: (_, parser) => parser.plugins.push("exportDefaultFrom"),
 
     visitor: {
       ExportNamedDeclaration(path) {

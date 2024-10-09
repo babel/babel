@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
 import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
@@ -69,7 +68,7 @@ export default declare(api => {
 
   return {
     name: "proposal-partial-application",
-    inherits: syntaxPartialApplication,
+    manipulateOptions: (_, parser) => parser.plugins.push("partialApplication"),
 
     visitor: {
       CallExpression(path) {

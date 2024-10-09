@@ -16,8 +16,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-logical-assignment-operators": "condition:BABEL_8_BREAKING ? : ^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

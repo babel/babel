@@ -159,74 +159,31 @@ if (!process.env.BABEL_8_BREAKING) {
     "transform-private-property-in-object": "7.10.0",
   });
 
-  // We cannot use the require call in ESM and when bundling.
-  // Babel standalone uses a modern parser, so just include a noop plugin.
-  // Use `bind` so that it's not detected as a duplicate plugin when using it.
-
-  // This is a factory to create a function that returns a no-op plugn
-  const e = () => () => () => ({});
+  // This is a factory to create a plugin that enables a parser plugin
+  const syntax =
+    (name: ParserPlugin) => (): typeof syntaxImportAttributes => () => ({
+      manipulateOptions: (_, p) => p.plugins.push(name),
+    });
+  type ParserPlugin = Parameters<
+    ReturnType<typeof syntaxImportAttributes>["manipulateOptions"]
+  >[1]["plugins"][number];
 
   const legacyBabel7SyntaxPluginsLoaders = {
-    "syntax-async-generators":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-async-generators"),
-    "syntax-class-properties":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-class-properties"),
-    "syntax-class-static-block":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-class-static-block"),
-    "syntax-dynamic-import":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-dynamic-import"),
-    "syntax-export-namespace-from":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-export-namespace-from"),
-    "syntax-import-meta":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-import-meta"),
-    "syntax-json-strings":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-json-strings"),
-    "syntax-logical-assignment-operators":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-logical-assignment-operators"),
-    "syntax-nullish-coalescing-operator":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-nullish-coalescing-operator"),
-    "syntax-numeric-separator":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-numeric-separator"),
-    "syntax-object-rest-spread":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-object-rest-spread"),
-    "syntax-optional-catch-binding":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-optional-catch-binding"),
-    "syntax-optional-chaining":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-optional-chaining"),
-    "syntax-private-property-in-object":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-private-property-in-object"),
-    "syntax-top-level-await":
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-top-level-await"),
+    "syntax-async-generators": syntax("asyncGenerators"),
+    "syntax-class-properties": syntax("classProperties"),
+    "syntax-class-static-block": syntax("classStaticBlock"),
+    "syntax-dynamic-import": syntax("dynamicImport"),
+    "syntax-export-namespace-from": syntax("exportNamespaceFrom"),
+    "syntax-import-meta": syntax("importMeta"),
+    "syntax-json-strings": syntax("jsonStrings"),
+    "syntax-logical-assignment-operators": syntax("logicalAssignment"),
+    "syntax-nullish-coalescing-operator": syntax("nullishCoalescingOperator"),
+    "syntax-numeric-separator": syntax("numericSeparator"),
+    "syntax-object-rest-spread": syntax("objectRestSpread"),
+    "syntax-optional-catch-binding": syntax("optionalCatchBinding"),
+    "syntax-optional-chaining": syntax("optionalChaining"),
+    "syntax-private-property-in-object": syntax("privateIn"),
+    "syntax-top-level-await": syntax("topLevelAwait"),
   };
 
   // This is a CJS plugin that depends on a package from the monorepo, so it
@@ -236,7 +193,7 @@ if (!process.env.BABEL_8_BREAKING) {
     // @ts-expect-error unknown key
     legacyBabel7SyntaxPluginsLoaders["syntax-unicode-sets-regex"] =
       IS_STANDALONE
-        ? e()
+        ? () => () => ({})
         : () => require("@babel/plugin-syntax-unicode-sets-regex");
   }
 

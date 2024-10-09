@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-import-defer": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
   },
   "peerDependencies": {

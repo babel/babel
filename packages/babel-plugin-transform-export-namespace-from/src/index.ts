@@ -6,11 +6,9 @@ export default declare(api => {
 
   return {
     name: "transform-export-namespace-from",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-export-namespace-from").default,
+    manipulateOptions: process.env.BABEL_8_BREAKING
+      ? undefined
+      : (_, parser) => parser.plugins.push("exportNamespaceFrom"),
 
     visitor: {
       ExportNamedDeclaration(path) {

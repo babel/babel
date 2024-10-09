@@ -16,9 +16,6 @@
     "@babel/codemod",
     "@babel/plugin"
   ],
-  "dependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3"
-  },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },

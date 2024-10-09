@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
@@ -237,7 +236,7 @@ export default declare(api => {
 
   return {
     name: "proposal-explicit-resource-management",
-    inherits: syntaxExplicitResourceManagement,
+    manipulateOptions: (_, p) => p.plugins.push("explicitResourceManagement"),
 
     visitor: traverse.visitors.merge([
       transformUsingDeclarationsVisitor,

@@ -18,8 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-wrap-function": "workspace:^",
-    "@babel/plugin-syntax-function-sent": "workspace:^"
+    "@babel/helper-wrap-function": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

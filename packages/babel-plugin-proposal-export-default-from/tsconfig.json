@@ -14,9 +14,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-plugin-syntax-export-default-from"
-    },
-    {
       "path": "../../packages/babel-core"
     }
   ]

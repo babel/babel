@@ -1,12 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   return {
     name: "proposal-do-expressions",
-    inherits: syntaxDoExpressions,
+    manipulateOptions: (_, parser) => parser.plugins.push("doExpressions"),
 
     visitor: {
       DoExpression: {

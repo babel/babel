@@ -29,6 +29,7 @@ type Plugin =
   | "functionSent"
   | "importMeta"
   | "jsx"
+  | IF_BABEL_7<"jsonStrings">
   | IF_BABEL_7<"logicalAssignment">
   | IF_BABEL_7<"importAssertions">
   | IF_BABEL_7<"importReflection">
