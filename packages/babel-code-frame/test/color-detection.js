@@ -1,22 +1,20 @@
 import stripAnsi from "strip-ansi";
 import colors from "picocolors";
 
-import { __setColorSupportedForTestOnly } from "../lib/defs.js";
-
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
 const compose = (f, g) => v => f(g(v));
 
 function stubColorSupport(supported) {
-  let originalIsColorSupported;
+  const originalIsColorSupported = colors.isColorSupported;
 
   beforeEach(function () {
-    originalIsColorSupported = __setColorSupportedForTestOnly(supported);
+    colors.isColorSupported = supported;
   });
 
   afterEach(function () {
-    __setColorSupportedForTestOnly(originalIsColorSupported);
+    colors.isColorSupported = originalIsColorSupported;
   });
 }
 

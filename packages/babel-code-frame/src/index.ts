@@ -124,7 +124,7 @@ export function codeFrameColumns(
   opts: Options = {},
 ): string {
   const shouldHighlight =
-    opts.forceColor || (isColorSupported && opts.highlightCode);
+    opts.forceColor || (isColorSupported() && opts.highlightCode);
   const defs = getDefs(shouldHighlight);
 
   const lines = rawLines.split(NEWLINE);
