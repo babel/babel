@@ -1,4 +1,4 @@
-# 25 invalid programs did not produce a parsing error
+# 26 invalid programs did not produce a parsing error
 
 JSX/invalid_unpaired_gt.js
 JSX/invalid_unpaired_rcurly.js
@@ -10,6 +10,7 @@ class_properties/migrated_0026.js
 class_properties/static_annotated_no_types.js
 class_properties/static_with_params_no_types.js
 comment_interning/declare_variable.js
+dynamic_import/migrated_0005.js
 export_statements/invalid_export_enum_disabled.js
 for_await_loops/migrated_0000.js
 ts_syntax/invalid_alias_keyof.js
