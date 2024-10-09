@@ -14,7 +14,9 @@ export default declare(api => {
   }
 
   function maybeMemoize(node: t.Expression, scope: Scope) {
-    if (scope.isPure(node)) return { assign: node, ref: t.cloneNode(node) };
+    if (scope.isPure(node) || t.isSuper(node)) {
+      return { assign: node, ref: t.cloneNode(node) };
+    }
 
     const id = scope.generateUidIdentifierBasedOnNode(node);
     scope.push({ id });
