@@ -39,7 +39,8 @@
             "raw": "\"mod\""
           },
           "value": "mod"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

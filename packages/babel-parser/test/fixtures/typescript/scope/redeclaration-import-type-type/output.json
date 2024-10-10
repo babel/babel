@@ -36,7 +36,8 @@
             "raw": "'@jest/types'"
           },
           "value": "@jest/types"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "TSTypeAliasDeclaration",

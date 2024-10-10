@@ -1,5 +1,5 @@
 {
-  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
+  "plugins": ["deprecatedImportAssert"],
   "sourceType": "module",
   "throws": "Unexpected token, expected \"{\" (1:17)"
 }

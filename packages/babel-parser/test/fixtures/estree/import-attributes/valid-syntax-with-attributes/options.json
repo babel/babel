@@ -2,8 +2,7 @@
   "plugins": [
     "flow",
     "jsx",
-    "estree",
-    "importAttributes"
+    "estree"
   ],
   "sourceType": "module"
 }

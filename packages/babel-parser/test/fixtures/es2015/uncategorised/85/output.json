@@ -18,7 +18,8 @@
             "raw": "\"crypto\""
           },
           "value": "crypto"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

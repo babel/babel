@@ -1,5 +1,4 @@
 {
   "plugins": [],
-  "sourceType": "module",
-  "throws": "This experimental syntax requires enabling the parser plugin: \"importAttributes\". (1:32)"
+  "sourceType": "module"
 }

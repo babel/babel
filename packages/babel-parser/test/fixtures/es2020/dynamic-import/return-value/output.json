@@ -30,7 +30,8 @@
                   "raw": "'test.js'"
                 },
                 "value": "test.js"
-              }
+              },
+              "options": null
             }
           }
         ],
