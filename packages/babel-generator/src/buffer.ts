@@ -7,6 +7,7 @@ import * as charcodes from "charcodes";
 export type Pos = {
   line: number;
   column: number;
+  index: number;
 };
 export type Loc = {
   start?: Pos;
