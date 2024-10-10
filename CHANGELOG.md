@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.8 (2024-10-10)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#16888](https://github.com/babel/babel/pull/16888) Restore public API of `resolvePlugin`/`resolvePreset` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-import-defer`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-export-namespace-from`, `babel-plugin-transform-json-strings`, `babel-plugin-transform-logical-assignment-operators`, `babel-plugin-transform-nullish-coalescing-operator`, `babel-plugin-transform-numeric-separator`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-optional-catch-binding`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-private-property-in-object`, `babel-preset-env`
+  * [#16824](https://github.com/babel/babel/pull/16824) Inline one-line syntax plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.25.7 (2024-10-02)
 
 #### :bug: Bug Fix
