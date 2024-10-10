@@ -363,9 +363,9 @@ const instantiatePlugin = makeWeakCache(function* (
       return cache.invalidate(data => run(inheritsDescriptor, data));
     });
 
-    plugin.pre = chain(inherits.pre, plugin.pre);
-    plugin.post = chain(inherits.post, plugin.post);
-    plugin.manipulateOptions = chain(
+    plugin.pre = chainMaybeAsync(inherits.pre, plugin.pre);
+    plugin.post = chainMaybeAsync(inherits.post, plugin.post);
+    plugin.manipulateOptions = chainMaybeAsync(
       inherits.manipulateOptions,
       plugin.manipulateOptions,
     );
@@ -488,16 +488,18 @@ function* loadPresetDescriptor(
   };
 }
 
-function chain<Args extends any[]>(
-  a: undefined | ((...args: Args) => void),
-  b: undefined | ((...args: Args) => void),
-) {
-  const fns = [a, b].filter(Boolean);
-  if (fns.length <= 1) return fns[0];
+function chainMaybeAsync<Args extends any[], R extends void | Promise<void>>(
+  a: undefined | ((...args: Args) => R),
+  b: undefined | ((...args: Args) => R),
+): (...args: Args) => R {
+  if (!a) return b;
+  if (!b) return a;
 
-  return function (this: unknown, ...args: unknown[]) {
-    for (const fn of fns) {
-      fn.apply(this, args);
+  return function (this: unknown, ...args: Args) {
+    const res = a.apply(this, args);
+    if (res && typeof res.then === "function") {
+      return res.then(() => b.apply(this, args));
     }
-  };
+    return b.apply(this, args);
+  } as (...args: Args) => R;
 }
