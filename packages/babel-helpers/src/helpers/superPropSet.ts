@@ -3,7 +3,7 @@
 import set from "./set.ts";
 import getPrototypeOf from "./getPrototypeOf.ts";
 
-export default function _superPropertySet(
+export default function _superPropSet(
   classArg: any,
   property: string,
   value: any,
