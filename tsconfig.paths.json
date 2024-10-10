@@ -101,9 +101,6 @@
       "@babel/helpers": [
         "./packages/babel-helpers/src"
       ],
-      "@babel/highlight": [
-        "./packages/babel-highlight/src"
-      ],
       "@babel/node": [
         "./packages/babel-node/src"
       ],
