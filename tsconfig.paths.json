@@ -176,9 +176,6 @@
       "@babel/plugin-proposal-record-and-tuple": [
         "./packages/babel-plugin-proposal-record-and-tuple/src"
       ],
-      "@babel/plugin-proposal-regexp-modifiers": [
-        "./packages/babel-plugin-proposal-regexp-modifiers/src"
-      ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"
       ],
@@ -415,6 +412,9 @@
       ],
       "@babel/plugin-transform-regenerator": [
         "./packages/babel-plugin-transform-regenerator/src"
+      ],
+      "@babel/plugin-transform-regexp-modifiers": [
+        "./packages/babel-plugin-transform-regexp-modifiers/src"
       ],
       "@babel/plugin-transform-reserved-words": [
         "./packages/babel-plugin-transform-reserved-words/src"
