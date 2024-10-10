@@ -94,6 +94,13 @@ export interface ParserOptions {
   sourceFilename?: string;
 
   /**
+   * By default, all source indexes start from 0.
+   * You can provide a start index to alternatively start with.
+   * Useful for integration with other source tools.
+   */
+  startIndex?: number;
+
+  /**
    * By default, the first line of code parsed is treated as line 1.
    * You can provide a line number to alternatively start with.
    * Useful for integration with other source tools.
