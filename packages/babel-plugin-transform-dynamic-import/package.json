@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-dynamic-import",
-  "version": "7.25.7",
+  "version": "7.25.8",
   "description": "Transform import() expressions",
   "repository": {
     "type": "git",
