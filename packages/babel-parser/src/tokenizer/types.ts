@@ -351,7 +351,7 @@ export const tt = {
 } as const;
 
 export function tokenIsIdentifier(token: TokenType): boolean {
-  return token >= tt._as && token <= tt.name;
+  return (token >= tt._as && token <= tt.name) || token === tt.placeholder;
 }
 
 export function tokenKeywordOrIdentifierIsKeyword(token: TokenType): boolean {
