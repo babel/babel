@@ -85,6 +85,34 @@ function cloneNodeInternal<T extends t.Node>(
   } else if (!hasOwn(NODE_FIELDS, type)) {
     throw new Error(`Unknown node type: "${type}"`);
   } else {
+    if (type === "Placeholder") {
+      // @ts-expect-error undocumented
+      if (hasOwn(node, "optional") && typeof node.optional === "boolean") {
+        // @ts-expect-error undocumented
+        newNode.optional = node.optional;
+      }
+
+      if (hasOwn(node, "typeAnnotation")) {
+        newNode.typeAnnotation = deep
+          ? cloneIfNodeOrArray(
+              // @ts-expect-error undocumented
+              node.typeAnnotation,
+              true,
+              withoutLoc,
+              commentsCache,
+            )
+          : // @ts-expect-error undocumented
+            node.typeAnnotation;
+      }
+
+      if (hasOwn(node, "decorators")) {
+        newNode.decorators = deep
+          ? // @ts-expect-error undocumented
+            cloneIfNodeOrArray(node.decorators, true, withoutLoc, commentsCache)
+          : // @ts-expect-error undocumented
+            node.decorators;
+      }
+    }
     for (const field of Object.keys(NODE_FIELDS[type])) {
       if (hasOwn(node, field)) {
         if (deep) {
