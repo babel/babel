@@ -20,6 +20,7 @@ const ignoredFields = {
   ObjectProperty: { method: true },
   ObjectMethod: { method: true, id: true, predicate: true },
   TSDeclareMethod: { id: true },
+  Placeholder: { typeAnnotation: true },
   ...(process.env.BABEL_8_BREAKING
     ? {
         TSFunctionType: { parameters: true, typeAnnotation: true },
