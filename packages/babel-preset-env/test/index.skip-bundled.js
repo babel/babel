@@ -389,4 +389,25 @@ describe("babel-preset-env", () => {
   it.todo(
     "should add .browserslistrc to external dependencies when browserslistConfigFile is specified",
   );
+
+  describe("when process.env.BROWSERSLIST_CONFIG is specified", () => {
+    afterEach(() => {
+      delete process.env.BROWSERSLIST_CONFIG;
+    });
+    it("should add process.env.BROWSERSLIST_CONFIG to external dependencies using preset-env's resolveTarget", () => {
+      const browserslistConfigFile = require.resolve(
+        "./regressions/.browserslistrc",
+      );
+      process.env.BROWSERSLIST_CONFIG = browserslistConfigFile;
+      const { externalDependencies } = babel.transformSync("", {
+        configFile: false,
+        presets: [[babelPresetEnv.default, { browserslistEnv: "development" }]],
+      });
+      expect(externalDependencies).toContain(browserslistConfigFile);
+    });
+
+    it.todo(
+      "should add process.env.BROWSERSLIST_CONFIG to external dependencies using core's resolveTarget",
+    );
+  });
 });
