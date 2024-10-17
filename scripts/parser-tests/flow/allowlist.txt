@@ -1,4 +1,4 @@
-# 21 invalid programs did not produce a parsing error
+# 22 invalid programs did not produce a parsing error
 
 JSX/invalid_unpaired_gt.js
 JSX/invalid_unpaired_rcurly.js
@@ -8,6 +8,7 @@ async_arrow_functions/with_type_parameters_types_disabled.js
 class_method_kinds/polymorphic_getter.js
 class_properties/migrated_0026.js
 comment_interning/declare_variable.js
+dynamic_import/migrated_0005.js
 for_await_loops/migrated_0000.js
 ts_syntax/invalid_alias_keyof.js
 ts_syntax/invalid_alias_never.js

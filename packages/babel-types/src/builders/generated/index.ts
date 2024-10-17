@@ -1515,28 +1515,34 @@ export function declareExportDeclaration(
     t.ExportSpecifier | t.ExportNamespaceSpecifier
   > | null = null,
   source: t.StringLiteral | null = null,
+  attributes: Array<t.ImportAttribute> | null = null,
 ): t.DeclareExportDeclaration {
   const node: t.DeclareExportDeclaration = {
     type: "DeclareExportDeclaration",
     declaration,
     specifiers,
     source,
+    attributes,
   };
   const defs = NODE_FIELDS.DeclareExportDeclaration;
   validate(defs.declaration, node, "declaration", declaration, 1);
   validate(defs.specifiers, node, "specifiers", specifiers, 1);
   validate(defs.source, node, "source", source, 1);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function declareExportAllDeclaration(
   source: t.StringLiteral,
+  attributes: Array<t.ImportAttribute> | null = null,
 ): t.DeclareExportAllDeclaration {
   const node: t.DeclareExportAllDeclaration = {
     type: "DeclareExportAllDeclaration",
     source,
+    attributes,
   };
   const defs = NODE_FIELDS.DeclareExportAllDeclaration;
   validate(defs.source, node, "source", source, 1);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function declaredPredicate(value: t.Flow): t.DeclaredPredicate {

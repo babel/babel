@@ -9,7 +9,6 @@ export default (_: any, opts: any = {}) => {
   } = opts;
 
   const plugins = [
-    [babelPlugins.syntaxImportAttributes, { deprecatedAssertSyntax: true }],
     [
       babelPlugins.proposalDecorators,
       {
@@ -36,6 +35,10 @@ export default (_: any, opts: any = {}) => {
           babelPlugins.transformClassStaticBlock,
           babelPlugins.transformUnicodeSetsRegex,
           babelPlugins.transformDuplicateNamedCapturingGroupsRegex,
+          [
+            babelPlugins.syntaxImportAttributes,
+            { deprecatedAssertSyntax: true },
+          ],
         ]),
   ];
 
