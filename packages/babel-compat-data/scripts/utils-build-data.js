@@ -25,6 +25,7 @@ exports.environments = [
   "edge",
   "firefox",
   "safari",
+  "hermes",
   "node",
   "deno",
   "ie",
