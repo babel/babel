@@ -16,7 +16,8 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/highlight": "workspace:^",
+    "@babel/helper-validator-identifier": "workspace:^",
+    "js-tokens": "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0",
     "picocolors": "^1.0.0"
   },
   "devDependencies": {
