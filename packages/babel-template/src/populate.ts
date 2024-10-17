@@ -125,19 +125,13 @@ function applyReplacement(
     const node = parent[key] as t.Node;
     parent[key] = value;
     if (node.type === "Identifier" || node.type === "Placeholder") {
-      // @ts-expect-error Placeholder
       if (node.typeAnnotation) {
-        // @ts-expect-error Placeholder
         value.typeAnnotation = node.typeAnnotation;
       }
-      // @ts-expect-error Placeholder
       if (node.optional) {
-        // @ts-expect-error Placeholder
         value.optional = node.optional;
       }
-      // @ts-expect-error Placeholder
       if (node.decorators) {
-        // @ts-expect-error Placeholder
         value.decorators = node.decorators;
       }
     }
