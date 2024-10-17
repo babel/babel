@@ -45,33 +45,33 @@ _baz.Baz = (44, function () {
 } = ({}, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
 }()));
-_foo.default = (_foo.default + 2, function () {
+_foo.default = _foo.default + (2, function () {
   throw new Error('"' + "Foo" + '" is read-only.');
 }());
-Bar = (Bar + 2, function () {
+Bar = Bar + (2, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
 }());
-_baz.Baz = (_baz.Baz + 2, function () {
+_baz.Baz = _baz.Baz + (2, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
 }());
-_foo.default = (_foo.default >>> 3, function () {
+_foo.default = _foo.default >>> (3, function () {
   throw new Error('"' + "Foo" + '" is read-only.');
 }());
-Bar = (Bar >>> 3, function () {
+Bar = Bar >>> (3, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
 }());
-_baz.Baz = (_baz.Baz >>> 3, function () {
+_baz.Baz = _baz.Baz >>> (3, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
 }());
-_foo.default && (_foo.default = (4, function () {
+_foo.default = _foo.default && (4, function () {
   throw new Error('"' + "Foo" + '" is read-only.');
-}()));
-Bar && (Bar = (4, function () {
+}());
+Bar = Bar && (4, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
-}()));
-_baz.Baz && (_baz.Baz = (4, function () {
+}());
+_baz.Baz = _baz.Baz && (4, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
-}()));
+}());
 _foo.default -= function () {
   throw new Error('"' + "Foo" + '" is read-only.');
 }();
