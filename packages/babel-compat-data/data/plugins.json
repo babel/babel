@@ -8,6 +8,12 @@
     "ios": "17.4",
     "electron": "31.0"
   },
+  "transform-regexp-modifiers": {
+    "chrome": "125",
+    "opera": "111",
+    "edge": "125",
+    "electron": "31.0"
+  },
   "transform-unicode-sets-regex": {
     "chrome": "112",
     "opera": "98",

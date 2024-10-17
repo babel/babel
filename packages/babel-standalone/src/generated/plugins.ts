@@ -46,7 +46,7 @@ import proposalPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple";
-import proposalRegexpModifiers from "@babel/plugin-proposal-regexp-modifiers";
+import transformRegexpModifiers from "@babel/plugin-transform-regexp-modifiers";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import transformUnicodePropertyRegex from "@babel/plugin-transform-unicode-property-regex";
 import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
@@ -155,7 +155,7 @@ export {
   transformPrivateMethods,
   transformPrivatePropertyInObject,
   proposalRecordAndTuple,
-  proposalRegexpModifiers,
+  transformRegexpModifiers,
   proposalThrowExpressions,
   transformUnicodePropertyRegex,
   transformUnicodeSetsRegex,
@@ -266,7 +266,7 @@ export const all: { [k: string]: any } = {
   "transform-private-methods": transformPrivateMethods,
   "transform-private-property-in-object": transformPrivatePropertyInObject,
   "proposal-record-and-tuple": proposalRecordAndTuple,
-  "proposal-regexp-modifiers": proposalRegexpModifiers,
+  "transform-regexp-modifiers": transformRegexpModifiers,
   "proposal-throw-expressions": proposalThrowExpressions,
   "transform-unicode-property-regex": transformUnicodePropertyRegex,
   "transform-unicode-sets-regex": transformUnicodeSetsRegex,
