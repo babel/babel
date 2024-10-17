@@ -215,14 +215,20 @@ export default function getTargets(
     !options.ignoreBrowserslistConfig && !hasTargets;
 
   if (!browsers && shouldSearchForConfig) {
-    const configFile =
-      options.configFile ?? browserslist.findConfigFile(configPath);
-    if (configFile != null) {
-      onBrowserslistConfigFound?.(configFile);
-      browsers = browserslist.loadConfig({
-        config: configFile,
-        env: options.browserslistEnv,
-      });
+    // https://github.com/browserslist/browserslist/blob/8ae85caa905d130f4ca86f7a998a5b63abbbe582/node.js#L243
+    browsers = process.env.BROWSERSLIST;
+    if (!browsers) {
+      const configFile =
+        options.configFile ||
+        process.env.BROWSERSLIST_CONFIG ||
+        browserslist.findConfigFile(configPath);
+      if (configFile != null) {
+        onBrowserslistConfigFound?.(configFile);
+        browsers = browserslist.loadConfig({
+          config: configFile,
+          env: options.browserslistEnv,
+        });
+      }
     }
 
     if (browsers == null) {
