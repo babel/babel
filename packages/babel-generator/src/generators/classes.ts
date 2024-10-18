@@ -75,8 +75,16 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
+    const separator = classBodyEmptySemicolonsPrinter(this, node);
+    separator?.(-1); // print leading semicolons in preserveFormat mode
+
     const exit = this.enterDelimited();
-    this.printSequence(node.body, { indent: true });
+    this.printJoin(node.body, {
+      statement: true,
+      indent: true,
+      separator,
+      printTrailingSeparator: true,
+    });
     exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
@@ -85,13 +93,68 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   }
 }
 
+function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
+  if (!printer.tokenMap || node.start == null || node.end == null) {
+    return null;
+  }
+
+  // "empty statements" in class bodies are not represented in the AST.
+  // Print them by checking if there are any ; tokens between the current AST
+  // member and the next one.
+
+  const indexes = printer.tokenMap.getIndexes(node);
+  if (!indexes) return null;
+
+  let k = 1; // start from 1 to skip '{'
+
+  let occurrenceCount = 0;
+
+  let nextLocIndex = 0;
+  const advanceNextLocIndex = () => {
+    while (
+      nextLocIndex < node.body.length &&
+      node.body[nextLocIndex].start == null
+    ) {
+      nextLocIndex++;
+    }
+  };
+  advanceNextLocIndex();
+
+  return (i: number) => {
+    if (nextLocIndex <= i) {
+      nextLocIndex = i + 1;
+      advanceNextLocIndex();
+    }
+
+    const end =
+      nextLocIndex === node.body.length
+        ? node.end
+        : node.body[nextLocIndex].start;
+
+    let tok;
+    while (
+      k < indexes.length &&
+      printer.tokenMap.matchesOriginal(
+        (tok = printer._tokens[indexes[k]]),
+        ";",
+      ) &&
+      tok.start < end
+    ) {
+      printer.token(";", undefined, occurrenceCount++);
+      k++;
+    }
+  };
+}
+
 export function ClassProperty(this: Printer, node: t.ClassProperty) {
   this.printJoin(node.decorators);
 
-  // catch up to property key, avoid line break
-  // between member modifiers and the property key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!node.static && !this.format.preserveFormat) {
+    // catch up to property key, avoid line break
+    // between member TS modifiers and the property key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
   this.tsPrintClassMemberModifiers(node);
 
@@ -205,10 +268,12 @@ export function _classMethodHead(
 ) {
   this.printJoin(node.decorators);
 
-  // catch up to method key, avoid line break
-  // between member modifiers/method heads and the method key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!this.format.preserveFormat) {
+    // catch up to method key, avoid line break
+    // between member modifiers/method heads and the method key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
   this.tsPrintClassMemberModifiers(node);
   this._methodHead(node);

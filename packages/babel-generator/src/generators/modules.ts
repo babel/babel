@@ -72,6 +72,7 @@ let warningShown = false;
 export function _printAttributes(
   this: Printer,
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
+  hasPreviousBrace: boolean,
 ) {
   const { importAttributesKeyword } = this.format;
   const { attributes, assertions } = node;
@@ -106,11 +107,15 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
     return;
   }
 
-  this.token("{");
+  const occurrenceCount = hasPreviousBrace ? 1 : 0;
+
+  this.token("{", null, occurrenceCount);
   this.space();
-  this.printList(attributes || assertions);
+  this.printList(attributes || assertions, {
+    printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+  });
   this.space();
-  this.token("}");
+  this.token("}", null, occurrenceCount);
 }
 
 export function ExportAllDeclaration(
@@ -132,7 +137,7 @@ export function ExportAllDeclaration(
     this.print(node.source, true);
     this.space();
     // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
-    this._printAttributes(node);
+    this._printAttributes(node, false);
   } else {
     this.print(node.source);
   }
@@ -193,11 +198,15 @@ export function ExportNamedDeclaration(
       }
     }
 
+    let hasBrace = false;
     if (specifiers.length || (!specifiers.length && !hasSpecial)) {
+      hasBrace = true;
       this.token("{");
       if (specifiers.length) {
         this.space();
-        this.printList(specifiers);
+        this.printList(specifiers, {
+          printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+        });
         this.space();
       }
       this.token("}");
@@ -210,7 +219,7 @@ export function ExportNamedDeclaration(
       if (node.attributes?.length || node.assertions?.length) {
         this.print(node.source, true);
         this.space();
-        this._printAttributes(node);
+        this._printAttributes(node, hasBrace);
       } else {
         this.print(node.source);
       }
@@ -273,13 +282,18 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     }
   }
 
+  let hasBrace = false;
   if (specifiers.length) {
+    hasBrace = true;
     this.token("{");
     this.space();
-    this.printList(specifiers);
+    this.printList(specifiers, {
+      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+    });
     this.space();
     this.token("}");
   } else if (isTypeKind && !hasSpecifiers) {
+    hasBrace = true;
     this.token("{");
     this.token("}");
   }
@@ -293,7 +307,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, true);
     this.space();
-    this._printAttributes(node);
+    this._printAttributes(node, hasBrace);
   } else {
     this.print(node.source);
   }
