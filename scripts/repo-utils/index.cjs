@@ -38,6 +38,9 @@ if (typeof jest !== "undefined") {
   exports.itGte = function (version) {
     return semver.gte(process.version, version) ? it : dummy;
   };
+  exports.itLt = function (version) {
+    return semver.lt(process.version, version) ? it : dummy;
+  };
   exports.itNoWin32 = process.platform === "win32" ? dummy : it;
   exports.itBabel8 = process.env.BABEL_8_BREAKING ? it : dummy;
   exports.itBabel7 = process.env.BABEL_8_BREAKING ? dummy : it;
