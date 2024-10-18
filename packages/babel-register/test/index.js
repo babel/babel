@@ -295,7 +295,10 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `-r ${registerFile}` },
+          {
+            NODE_OPTIONS:
+              `-r ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -307,7 +310,10 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `--require ${registerFile}` },
+          {
+            NODE_OPTIONS:
+              `--require ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -402,7 +408,7 @@ describe("@babel/register", function () {
   }
 });
 
-function spawnNodeAsync(args, cwd = __dirname, env) {
+function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
   const spawn = child.spawn(process.execPath, args, {
     cwd,
     env: {
