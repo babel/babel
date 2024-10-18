@@ -1,8 +1,11 @@
 import { execFile } from "child_process";
 import { createRequire } from "module";
-import { describeESM, describeGte } from "$repo-utils";
+import { describeESM, describeGte, itLt } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
+
+// "minNodeVersion": "23.0.0" <-- For Ctrl+F when dropping node 22
+const nodeLt23 = itLt("23.0.0");
 
 async function run(name, ...flags) {
   return new Promise((res, rej) => {
@@ -113,7 +116,7 @@ describeESM("usage from cjs", () => {
 });
 
 describeESM("sync loading of ESM plugins", () => {
-  it("without --experimental-require-module flag", async () => {
+  nodeLt23("without --experimental-require-module flag", async () => {
     await expect(run("transform-sync-esm-plugin.mjs")).rejects.toThrow(
       "You appear to be using a native ECMAScript module plugin, which is " +
         "only supported when running Babel asynchronously or when using the " +
@@ -121,7 +124,7 @@ describeESM("sync loading of ESM plugins", () => {
     );
   });
 
-  describeGte("20.0.0")("with --experimental-require-module flag", () => {
+  describeGte("23.0.0")("without --experimental-require-module flag", () => {
     it("sync", async () => {
       const { stdout } = await run(
         "transform-sync-esm-plugin.mjs",
@@ -134,6 +137,31 @@ describeESM("sync loading of ESM plugins", () => {
     });
 
     it("top-level await", async () => {
+      await expect(
+        run(
+          "transform-sync-esm-plugin-tla.mjs",
+          "--experimental-require-module",
+        ),
+      ).rejects.toThrow(
+        "You appear to be using a plugin that contains top-level await, " +
+          "which is only supported when running Babel asynchronously.",
+      );
+    });
+  });
+
+  describeGte("20.0.0")("with --experimental-require-module flag", () => {
+    it("sync with --experimental-require-module flag", async () => {
+      const { stdout } = await run(
+        "transform-sync-esm-plugin.mjs",
+        "--experimental-require-module",
+      );
+      expect(stdout).toMatchInlineSnapshot(`
+        "\\"Replaced!\\";
+        "
+      `);
+    });
+
+    it("top-level await with --experimental-require-module flag", async () => {
       await expect(
         run(
           "transform-sync-esm-plugin-tla.mjs",
