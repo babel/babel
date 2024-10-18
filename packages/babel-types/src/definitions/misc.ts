@@ -5,6 +5,7 @@ import {
   assertValueType,
 } from "./utils.ts";
 import { PLACEHOLDERS } from "./placeholders.ts";
+import { patternLikeCommon } from "./core.ts";
 
 const defineType = defineAliasedType("Miscellaneous");
 
@@ -25,6 +26,7 @@ defineType("Placeholder", {
     expectedNode: {
       validate: assertOneOf(...PLACEHOLDERS),
     },
+    ...patternLikeCommon(),
   },
 });
 

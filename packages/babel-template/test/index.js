@@ -543,5 +543,25 @@ describe("@babel/template", function () {
         ]
       `);
     });
+
+    it("should keep node props with syntacticPlaceholders", () => {
+      const outputs = [
+        template({ plugins: ["typescript"] })(`const %%x%%: string = 'Hello'`)({
+          x: t.identifier("x"),
+        }),
+        template({ plugins: ["typescript"] })(`
+          var %%x%%: string = x;
+        `)({
+          x: t.objectPattern([]),
+        }),
+      ];
+
+      expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
+        Array [
+          "const x: string = 'Hello';",
+          "var {}: string = x;",
+        ]
+      `);
+    });
   });
 });
