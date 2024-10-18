@@ -5,7 +5,7 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../packages/babel-plugin-proposal-regexp-modifiers/src/**/*.ts",
+    "../../packages/babel-plugin-transform-regexp-modifiers/src/**/*.ts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],
