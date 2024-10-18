@@ -244,9 +244,6 @@ In case you're not able to reproduce an error on CI locally, it may be due to
 
 - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
 - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
-- Some `@babel/cli` tests are known to be flaky and thus we do not run them by
-  default locally. You can run them by setting the `BABEL_CLI_FLAKY_TESTS=true`
-  env variable.
 
 In case you're locally getting errors which are not on the CI, it may be due to
 
