@@ -103,9 +103,8 @@ jobs:
         env:
           USE_ESM: true
       - name: Test
-        run: yarn jest --ci
+        run: NODE_OPTIONS=--disable-warning=ExperimentalWarning yarn jest --ci
         env:
-          NODE_OPTIONS: "${{ (matrix.node-version == '23') && '--disable-warning=ExperimentalWarning' || ''}}"
           BABEL_ENV: test
           USE_ESM: true
           BABEL_CLI_FLAKY_TESTS: trues
