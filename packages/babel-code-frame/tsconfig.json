@@ -11,7 +11,7 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-highlight"
+      "path": "../../packages/babel-helper-validator-identifier"
     }
   ]
 }
