@@ -15,6 +15,7 @@ import generateCode from "./file/generate.ts";
 import type File from "./file/file.ts";
 
 import { flattenToSet } from "../config/helpers/deep-array.ts";
+import { maybeAsync } from "../gensync-utils/async.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -93,22 +94,14 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
     }
 
     for (const [plugin, pass] of passPairs) {
-      const fn = plugin.pre;
-      if (fn) {
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        const result = fn.call(pass, file);
+      if (plugin.pre) {
+        const fn = maybeAsync(
+          plugin.pre,
+          `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+        );
 
-        // If we want to support async .pre
-        yield* [];
-
-        if (isThenable(result)) {
-          throw new Error(
-            `You appear to be using an plugin with an async .pre, ` +
-              `which your current version of Babel does not support. ` +
-              `If you're using a published plugin, you may need to upgrade ` +
-              `your @babel/core version.`,
-          );
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        yield* fn.call(pass, file);
       }
     }
 
@@ -125,32 +118,15 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
     }
 
     for (const [plugin, pass] of passPairs) {
-      const fn = plugin.post;
-      if (fn) {
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        const result = fn.call(pass, file);
+      if (plugin.post) {
+        const fn = maybeAsync(
+          plugin.post,
+          `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+        );
 
-        // If we want to support async .post
-        yield* [];
-
-        if (isThenable(result)) {
-          throw new Error(
-            `You appear to be using an plugin with an async .post, ` +
-              `which your current version of Babel does not support. ` +
-              `If you're using a published plugin, you may need to upgrade ` +
-              `your @babel/core version.`,
-          );
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        yield* fn.call(pass, file);
       }
     }
   }
-}
-
-function isThenable<T extends PromiseLike<any>>(val: any): val is T {
-  return (
-    !!val &&
-    (typeof val === "object" || typeof val === "function") &&
-    !!val.then &&
-    typeof val.then === "function"
-  );
 }

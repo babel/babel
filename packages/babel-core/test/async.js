@@ -151,22 +151,24 @@ describe("asynchronicity", () => {
         expect(() =>
           babel.transformSync(""),
         ).toThrowErrorMatchingInlineSnapshot(
-          `"unknown file: You appear to be using an plugin with an async .pre, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
+          `"unknown file: You appear to be using an async plugin/preset, but Babel has been called synchronously"`,
         );
       });
 
       nodeGte8("called asynchronously", async () => {
         process.chdir("plugin-pre");
 
-        await expect(
-          babel.transformAsync(""),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"unknown file: You appear to be using an plugin with an async .pre, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
-        );
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"success"`,
+        });
+      });
+
+      nodeGte8("should await inherited .pre", async () => {
+        process.chdir("plugin-pre-chaining");
+
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"pluginC,pluginB,pluginA"`,
+        });
       });
     });
 
@@ -177,22 +179,24 @@ describe("asynchronicity", () => {
         expect(() =>
           babel.transformSync(""),
         ).toThrowErrorMatchingInlineSnapshot(
-          `"unknown file: You appear to be using an plugin with an async .post, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
+          `"unknown file: You appear to be using an async plugin/preset, but Babel has been called synchronously"`,
         );
       });
 
       nodeGte8("called asynchronously", async () => {
         process.chdir("plugin-post");
 
-        await expect(
-          babel.transformAsync(""),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"unknown file: You appear to be using an plugin with an async .post, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
-        );
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"success"`,
+        });
+      });
+
+      nodeGte8("should await inherited .post", async () => {
+        process.chdir("plugin-post-chaining");
+
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"pluginC,pluginB,pluginA"`,
+        });
       });
     });
 
