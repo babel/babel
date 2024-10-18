@@ -18,6 +18,7 @@ type Plugin =
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
+  | "deprecatedImportAssert"
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
   | "explicitResourceManagement"
@@ -53,7 +54,7 @@ type Plugin =
 type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
-  | ["importAttributes", { deprecatedAssertSyntax: boolean }]
+  | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
   | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]

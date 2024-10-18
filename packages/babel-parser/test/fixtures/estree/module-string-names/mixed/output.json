@@ -50,7 +50,8 @@
           "start":47,"end":57,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":57}},
           "value": "module-a",
           "raw": "\"module-a\""
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportAllDeclaration",
@@ -62,6 +63,7 @@
           "value": "module-b",
           "raw": "\"module-b\""
         },
+        "attributes": [],
         "exported": {
           "type": "Literal",
           "start":71,"end":76,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":17}},
@@ -96,7 +98,8 @@
           "value": "module-b",
           "raw": "\"module-b\""
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "extra": {

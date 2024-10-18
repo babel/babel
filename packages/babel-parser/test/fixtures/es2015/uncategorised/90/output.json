@@ -35,7 +35,8 @@
           },
           "value": "other"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

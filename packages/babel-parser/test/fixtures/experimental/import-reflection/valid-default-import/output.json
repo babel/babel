@@ -30,7 +30,8 @@
             "raw": "\"./module.wasm\""
           },
           "value": "./module.wasm"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
@@ -55,7 +56,8 @@
             "raw": "\"./module.wasm\""
           },
           "value": "./module.wasm"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

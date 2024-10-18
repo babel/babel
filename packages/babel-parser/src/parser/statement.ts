@@ -3276,46 +3276,29 @@ export default abstract class StatementParser extends ExpressionParser {
 
       this.next(); // eat `with`
 
-      if (process.env.BABEL_8_BREAKING) {
-        this.expectPlugin("importAttributes");
-        attributes = this.parseImportAttributes();
-      } else if (this.hasPlugin("moduleAttributes")) {
+      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("moduleAttributes")) {
         attributes = this.parseModuleAttributes();
       } else {
-        if (!this.hasPlugin("importAssertions")) {
-          this.expectPlugin("importAttributes");
-        }
         attributes = this.parseImportAttributes();
       }
       if (!process.env.BABEL_8_BREAKING) {
         useWith = true;
       }
     } else if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
-      if (this.hasPlugin("importAttributes")) {
-        if (
-          this.getPluginOption("importAttributes", "deprecatedAssertSyntax") !==
-          true
-        ) {
-          this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
-        }
+      if (
+        !this.hasPlugin("deprecatedImportAssert") &&
+        (process.env.BABEL_8_BREAKING || !this.hasPlugin("importAssertions"))
+      ) {
+        this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
+      }
+      if (process.env.BABEL_8_BREAKING || !this.hasPlugin("importAssertions")) {
         this.addExtra(node, "deprecatedAssertSyntax", true);
-      } else if (process.env.BABEL_8_BREAKING) {
-        this.expectPlugin("importAttributes");
-      } else {
-        this.expectOnePlugin(["importAttributes", "importAssertions"]);
       }
       this.next(); // eat `assert`
       attributes = this.parseImportAttributes();
-    } else if (
-      this.hasPlugin("importAttributes") ||
-      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
-    ) {
+    } else {
       attributes = [];
-    } else if (!process.env.BABEL_8_BREAKING) {
-      if (this.hasPlugin("moduleAttributes")) {
-        attributes = [];
-      } else return;
-    } else return;
+    }
 
     if (
       !process.env.BABEL_8_BREAKING &&

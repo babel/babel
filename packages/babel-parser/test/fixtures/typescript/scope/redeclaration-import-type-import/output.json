@@ -39,7 +39,8 @@
             "raw": "'react'"
           },
           "value": "react"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
@@ -70,7 +71,8 @@
             "raw": "'react'"
           },
           "value": "react"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],
