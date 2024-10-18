@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-duplicate-named-capturing-groups-regex { node }
+  transform-duplicate-named-capturing-groups-regex { node < 23 }
   transform-unicode-sets-regex { node < 20 }
   transform-class-static-block { node < 16.11 }
   transform-private-property-in-object { node < 16.9 }
