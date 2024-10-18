@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -40,7 +40,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -69,7 +69,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Generate coverage report
@@ -91,7 +91,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Use ESM and build
@@ -118,7 +118,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -161,7 +161,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -186,7 +186,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -216,7 +216,7 @@ jobs:
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -265,7 +265,7 @@ jobs:
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
 
   build-babel8:
     name: Build Babel 8 Artifacts
@@ -280,7 +280,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Use ESM
@@ -358,7 +358,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -384,7 +384,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -413,7 +413,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -458,7 +458,7 @@ jobs:
       - name: Use Node.js 12.0
         uses: actions/setup-node@v4
         with:
-          node-version: "12.0" # quoted, otherwise it's just 13
+          node-version: "12.0" # quoted, otherwise it's just 12
       - name: Test Node.js 12.0
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.17
@@ -520,7 +520,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -545,7 +545,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -570,7 +570,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v4
@@ -607,7 +607,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22
           check-latest: true
       - name: Install
         run: yarn install

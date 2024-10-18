@@ -25,7 +25,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "*"
+          node-version: 22
           cache: "yarn"
       - name: Get latest test262 version
         id: test262
