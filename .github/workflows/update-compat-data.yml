@@ -22,7 +22,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "*"
+          node-version: 22
       - name: Get latest kangax/compat-table commit
         id: lastCommit
         run: echo "sha1=$(./scripts/update-compat-table/get-last-commit.sh)" >> $GITHUB_OUTPUT
