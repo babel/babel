@@ -1452,6 +1452,8 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7"
+    "@babel/plugin-transform-class-properties": "workspace:^"
+    "@babel/plugin-transform-class-static-block": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
     "@babel/traverse": "workspace:^"

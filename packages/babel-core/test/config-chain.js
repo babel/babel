@@ -4,11 +4,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 import * as babel from "../lib/index.js";
 import rimraf from "rimraf";
+import { itGte, itLt } from "$repo-utils";
 
 import _getTargets from "@babel/helper-compilation-targets";
 const getTargets = _getTargets.default || _getTargets;
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// "minNodeVersion": "23.0.0" <-- For Ctrl+F when dropping node 22
+const nodeGte23 = itGte("23.0.0");
+const nodeLt23 = itLt("23.0.0");
 
 import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 
@@ -1164,7 +1169,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      test("should not load babel.config.mjs synchronously", async () => {
+      nodeLt23("should not load babel.config.mjs synchronously", async () => {
         const { cwd, tmp, config } = await getTemp(
           "babel-test-load-config-sync-babel.config.mjs",
         );
@@ -1175,6 +1180,23 @@ describe("buildConfigChain", function () {
         expect(() => loadOptionsSync({ filename, cwd })).toThrow(
           /is only supported when running Babel asynchronously/,
         );
+      });
+
+      nodeGte23("should load babel.config.mjs synchronously", async () => {
+        const { cwd, tmp, config } = await getTemp(
+          "babel-test-load-config-sync-babel.config.mjs",
+        );
+        const filename = tmp("src.js");
+
+        await config("babel.config.mjs");
+
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       test.each([
@@ -1260,7 +1282,7 @@ describe("buildConfigChain", function () {
         });
       });
 
-      test("should not load .babelrc.mjs synchronously", async () => {
+      nodeLt23("should not load .babelrc.mjs synchronously", async () => {
         const { cwd, tmp, config } = await getTemp(
           "babel-test-load-config-sync-.babelrc.mjs",
         );
@@ -1271,6 +1293,23 @@ describe("buildConfigChain", function () {
         expect(() => loadOptionsSync({ filename, cwd })).toThrow(
           /is only supported when running Babel asynchronously/,
         );
+      });
+
+      nodeGte23("should load .babelrc.mjs synchronously", async () => {
+        const { cwd, tmp, config } = await getTemp(
+          "babel-test-load-config-sync-.babelrc.mjs",
+        );
+        const filename = tmp("src.js");
+
+        await config(".babelrc.mjs");
+
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       test.each(
