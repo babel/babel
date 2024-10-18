@@ -8,6 +8,7 @@ export type SourceType = "script" | "module" | "unambiguous";
 export interface Options {
   sourceType?: SourceType;
   sourceFilename?: string;
+  startIndex?: number;
   startColumn?: number;
   startLine?: number;
   allowAwaitOutsideFunction?: boolean;
@@ -34,6 +35,9 @@ export const defaultOptions: OptionsWithDefaults = {
   sourceType: "script",
   // Source filename.
   sourceFilename: undefined,
+  // Index (0-based) from which to start counting source. Useful for
+  // integration with other tools.
+  startIndex: 0,
   // Column (0-based) from which to start counting source. Useful for
   // integration with other tools.
   startColumn: 0,
@@ -104,5 +108,20 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
   for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
     options[key] = opts[key] ?? defaultOptions[key];
   }
+
+  if (options.startLine === 1) {
+    if (opts.startIndex == null && options.startColumn > 0) {
+      options.startIndex = options.startColumn;
+    } else if (opts.startColumn == null && options.startIndex > 0) {
+      options.startColumn = options.startIndex;
+    }
+  } else if (opts.startColumn == null || opts.startIndex == null) {
+    if (opts.startIndex != null || process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "With a `startLine > 1` you must also specify `startIndex` and `startColumn`.",
+      );
+    }
+  }
+
   return options;
 }

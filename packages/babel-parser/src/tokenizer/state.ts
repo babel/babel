@@ -35,6 +35,7 @@ export default class State {
 
   @bit accessor strict = false;
 
+  startIndex: number;
   curLine: number;
   lineStart: number;
 
@@ -43,7 +44,13 @@ export default class State {
   startLoc: Position;
   endLoc: Position;
 
-  init({ strictMode, sourceType, startLine, startColumn }: Options): void {
+  init({
+    strictMode,
+    sourceType,
+    startIndex,
+    startLine,
+    startColumn,
+  }: Options): void {
     this.strict =
       strictMode === false
         ? false
@@ -51,9 +58,14 @@ export default class State {
           ? true
           : sourceType === "module";
 
+    this.startIndex = startIndex;
     this.curLine = startLine;
     this.lineStart = -startColumn;
-    this.startLoc = this.endLoc = new Position(startLine, startColumn, 0);
+    this.startLoc = this.endLoc = new Position(
+      startLine,
+      startColumn,
+      startIndex,
+    );
   }
 
   errors: ParseError<any>[] = [];
@@ -162,12 +174,14 @@ export default class State {
    */
 
   curPosition(): Position {
-    return new Position(this.curLine, this.pos - this.lineStart, this.pos);
+    const index = this.pos + this.startIndex;
+    return new Position(this.curLine, index - this.lineStart, index);
   }
 
   clone(): State {
     const state = new State();
     state.flags = this.flags;
+    state.startIndex = this.startIndex;
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;
