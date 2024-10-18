@@ -13,6 +13,8 @@
     "chrome": "125",
     "opera": "111",
     "edge": "125",
+    "firefox": "132",
+    "node": "23",
     "electron": "31.0"
   },
   "transform-unicode-sets-regex": {
