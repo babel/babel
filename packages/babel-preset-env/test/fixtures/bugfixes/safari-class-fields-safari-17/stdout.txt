@@ -9,6 +9,7 @@ Using modules transform: false
 
 Using plugins:
   transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
+  transform-regexp-modifiers { safari }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
