@@ -635,7 +635,6 @@ export type ProcessTestOpts = {
   inFiles?: Record<string, string>;
   noBabelrc?: boolean;
   minNodeVersion?: number;
-  flaky?: boolean;
   env?: Record<string, string>;
   BABEL_8_BREAKING?: boolean;
 };
@@ -881,14 +880,9 @@ export function buildProcessTests(
       const skip =
         (opts.minNodeVersion &&
           parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
-        (opts.flaky && !process.env.BABEL_CLI_FLAKY_TESTS) ||
         (process.env.BABEL_8_BREAKING
           ? opts.BABEL_8_BREAKING === false
           : opts.BABEL_8_BREAKING === true);
-
-      if (opts.flaky) {
-        testName += " (flaky)";
-      }
 
       const test: ProcessTest = {
         suiteName,
