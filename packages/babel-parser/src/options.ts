@@ -104,5 +104,9 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
   for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
     options[key] = opts[key] ?? defaultOptions[key];
   }
-  return options;
+
+  // Here we use a trick to make it a fast object.
+  // So that it can be accessed frequently later.
+  // `%ToFastProperties` can make it a fast object, but the performance is the same as the slow object.
+  return { ...options };
 }
