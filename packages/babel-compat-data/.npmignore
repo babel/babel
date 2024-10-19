@@ -1,6 +1,5 @@
-build
-scripts
 src
 test
 *.log
-yarn.lock
+build
+scripts

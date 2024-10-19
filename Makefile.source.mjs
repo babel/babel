@@ -255,6 +255,8 @@ target["prepublish-build"] = function () {
   target["clean-lib"]();
   target["clean-runtime-helpers"]();
 
+  node(["scripts/generators/npm-ignore.js"]);
+
   env(
     () => {
       target["build-bundle"]();
