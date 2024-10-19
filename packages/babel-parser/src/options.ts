@@ -100,13 +100,13 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     throw new Error("The `annexB` option can only be set to `false`.");
   }
 
-  const options: any = {};
+  // https://github.com/babel/babel/pull/16918
+  // `options` is accessed frequently, please make sure it is a fast object.
+  // `%ToFastProperties` can make it a fast object, but the performance is the same as the slow object.
+  const options: any = { ...defaultOptions };
   for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
-    options[key] = opts[key] ?? defaultOptions[key];
+    if (opts[key] != null) options[key] = opts[key];
   }
 
-  // Here we use a trick to make it a fast object.
-  // So that it can be accessed frequently later.
-  // `%ToFastProperties` can make it a fast object, but the performance is the same as the slow object.
-  return { ...options };
+  return options;
 }
