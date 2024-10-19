@@ -124,7 +124,7 @@ function applyReplacement(
   function set(parent: any, key: any, value: any) {
     const node = parent[key] as t.Node;
     parent[key] = value;
-    if (node.type === "Identifier") {
+    if (node.type === "Identifier" || node.type === "Placeholder") {
       if (node.typeAnnotation) {
         value.typeAnnotation = node.typeAnnotation;
       }

@@ -1598,6 +1598,9 @@ export interface Placeholder extends BaseNode {
     | "ClassBody"
     | "Pattern";
   name: Identifier;
+  decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
 export interface V8IntrinsicIdentifier extends BaseNode {
@@ -4041,6 +4044,7 @@ export interface ParentMaps {
     | ObjectMethod
     | ObjectPattern
     | ObjectProperty
+    | Placeholder
     | RestElement
     | TSDeclareMethod
     | TSParameterProperty;
@@ -5429,6 +5433,7 @@ export interface ParentMaps {
     | Identifier
     | ObjectMethod
     | ObjectPattern
+    | Placeholder
     | RestElement
     | TSDeclareFunction
     | TSDeclareMethod;
@@ -7725,6 +7730,7 @@ export interface ParentMaps {
     | Identifier
     | ObjectMethod
     | ObjectPattern
+    | Placeholder
     | RestElement
     | TSCallSignatureDeclaration
     | TSConstructSignatureDeclaration
@@ -8469,6 +8475,7 @@ export interface ParentMaps {
     | Identifier
     | ObjectMethod
     | ObjectPattern
+    | Placeholder
     | RestElement
     | TypeCastExpression
     | TypeParameter;
