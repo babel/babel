@@ -1,6 +1,6 @@
 import { glob } from "glob";
 import { repoRoot } from "$repo-utils";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import path from "path";
 
 const commonIgnore = ["src", "test", "tsconfig.json", "tsconfig.tsbuildinfo"];
@@ -26,6 +26,9 @@ for (const packageDir of packages) {
   );
 
   if (packageJson.private || packageJson.files) {
+    rmSync(path.join(packageDir, ".npmignore"), {
+      force: true,
+    });
     continue;
   }
 
