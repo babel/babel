@@ -1,6 +1,6 @@
 # @babel/plugin-codemod-object-assign-to-object-spread
 
-Transforms old code that uses `Object.assign` with an Object Literal as
+'' Transforms old code that uses `Object.assign` with an Object Literal as
 the first param to use Object Spread syntax.
 
 ## Examples
@@ -55,3 +55,5 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-codemod-object-assign-to-object-spread"]
 });
 ```
+```
+##https://github.com/immersive-web/administrivia.git
