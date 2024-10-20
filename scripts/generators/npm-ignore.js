@@ -3,7 +3,13 @@ import { repoRoot } from "$repo-utils";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import path from "path";
 
-const commonIgnore = ["src", "test", "tsconfig.json", "tsconfig.tsbuildinfo"];
+const commonIgnore = [
+  "src",
+  "test",
+  "*.log",
+  "tsconfig.json",
+  "tsconfig.tsbuildinfo",
+];
 
 const extraIgnore = {
   "babel-core": ["cjs-proxy-dev.cjs"],
