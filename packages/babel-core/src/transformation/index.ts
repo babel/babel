@@ -15,7 +15,7 @@ import generateCode from "./file/generate.ts";
 import type File from "./file/file.ts";
 
 import { flattenToSet } from "../config/helpers/deep-array.ts";
-import { maybeAsync } from "../gensync-utils/async.ts";
+import { isAsync, maybeAsync } from "../gensync-utils/async.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -80,13 +80,15 @@ export function* run(
 }
 
 function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
+  const async = yield* isAsync();
+
   for (const pluginPairs of pluginPasses) {
     const passPairs: [Plugin, PluginPass][] = [];
     const passes = [];
     const visitors = [];
 
     for (const plugin of pluginPairs.concat([loadBlockHoistPlugin()])) {
-      const pass = new PluginPass(file, plugin.key, plugin.options);
+      const pass = new PluginPass(file, plugin.key, plugin.options, async);
 
       passPairs.push([plugin, pass]);
       passes.push(pass);

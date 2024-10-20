@@ -200,6 +200,32 @@ describe("asynchronicity", () => {
       });
     });
 
+    describe("PluginPass.isAsync", () => {
+      nodeGte8("called synchronously", () => {
+        process.chdir("plugin-pass-is-async");
+
+        expect(babel.transformSync("")).toMatchObject({
+          code: `"sync"`,
+        });
+      });
+
+      nodeGte8("called asynchronously", async () => {
+        process.chdir("plugin-pass-is-async");
+
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"async"`,
+        });
+      });
+
+      nodeGte8("should await inherited .pre", async () => {
+        process.chdir("plugin-pre-chaining");
+
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"pluginC,pluginB,pluginA"`,
+        });
+      });
+    });
+
     describe("inherits", () => {
       nodeGte8("called synchronously", () => {
         process.chdir("plugin-inherits");
@@ -312,7 +338,7 @@ describe("asynchronicity", () => {
   });
 
   describe("misc", () => {
-    it("unknown preset in config file does not trigget unhandledRejection if caught", async () => {
+    it("unknown preset in config file does not trigger unhandledRejection if caught", async () => {
       process.chdir("unknown-preset");
       const handler = jest.fn();
 
