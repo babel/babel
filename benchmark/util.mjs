@@ -11,7 +11,7 @@ import * as baselineTraverse from "@babel-baseline/traverse";
 import presetEnv from "@babel/preset-env";
 import presetTypescript from "@babel/preset-typescript";
 
-import benchmark from "benchmark";
+'import benchmark from "benchmark";
 
 export function report(event) {
   const bench = event.target;
