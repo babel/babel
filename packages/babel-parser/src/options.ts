@@ -93,17 +93,18 @@ export const defaultOptions: OptionsWithDefaults = {
 // Interpret and default an options object
 
 export function getOptions(opts?: Options | null): OptionsWithDefaults {
+  // https://github.com/babel/babel/pull/16918
+  // `options` is accessed frequently, please make sure it is a fast object.
+  // `%ToFastProperties` can make it a fast object, but the performance is the same as the slow object.
+  const options: any = { ...defaultOptions };
+
   if (opts == null) {
-    return { ...defaultOptions };
+    return options;
   }
   if (opts.annexB != null && opts.annexB !== false) {
     throw new Error("The `annexB` option can only be set to `false`.");
   }
 
-  // https://github.com/babel/babel/pull/16918
-  // `options` is accessed frequently, please make sure it is a fast object.
-  // `%ToFastProperties` can make it a fast object, but the performance is the same as the slow object.
-  const options: any = { ...defaultOptions };
   for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
     if (opts[key] != null) options[key] = opts[key];
   }
