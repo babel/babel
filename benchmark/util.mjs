@@ -35,6 +35,10 @@ const __dirname = path.dirname(__filename);
 
 const onlyCurrent = process.argv.includes("--only-current");
 
+if (!globalThis.gc) {
+  console.warn("Recommend running with --expose-gc.");
+}
+
 export function report(event) {
   const bench = event.target;
   const timeMs = bench.stats.mean * 1000;
@@ -89,6 +93,8 @@ class Benchmark {
         Math.round(task.result.rme * 100) / 100
       }% ${task.result.samples.length} runs (${time})`;
       console.log(msg);
+
+      globalThis.gc?.();
     });
     this.bench.addEventListener("error", function (event) {
       console.error(event.task.result.error);
