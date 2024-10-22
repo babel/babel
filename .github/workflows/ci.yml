@@ -76,8 +76,6 @@ jobs:
         run: |
           make -j test-ci-coverage
           yarn test:esm
-        env:
-          BABEL_CLI_FLAKY_TESTS: true
       - name: Upload coverage report
         uses: codecov/codecov-action@v3
 
@@ -103,7 +101,6 @@ jobs:
         env:
           BABEL_ENV: test
           USE_ESM: true
-          BABEL_CLI_FLAKY_TESTS: trues
 
   build:
     name: Build Babel Artifacts
@@ -262,7 +259,6 @@ jobs:
         run: |
           BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci
         env:
-          BABEL_CLI_FLAKY_TESTS: true
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
@@ -339,13 +335,11 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_CLI_FLAKY_TESTS: true
       - name: Test ESM
         run: yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-          BABEL_CLI_FLAKY_TESTS: true
 
   test-windows-mac:
     name: Test on
@@ -375,7 +369,6 @@ jobs:
         run: yarn jest --ci
         env:
           BABEL_ENV: test
-          BABEL_CLI_FLAKY_TESTS: true
 
   external-parser-tests:
     name: Third-party Parser Tests
