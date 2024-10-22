@@ -4,10 +4,10 @@
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
-    "babel.js",
-    "babel.js.map",
-    "babel.min.js",
-    "babel.min.js.map"
+    "./babel.js",
+    "./babel.js.map",
+    "./babel.min.js",
+    "./babel.min.js.map"
   ],
   "devDependencies": {
     "@babel/core": "workspace:^",

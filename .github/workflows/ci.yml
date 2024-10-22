@@ -134,6 +134,9 @@ jobs:
       - name: Generate readmes
         run: |
           make generate-readme
+      - name: Generate .npmignore
+        run: |
+          node scripts/generators/npm-ignore.js
       - name: Cleanup fixtures
         run: |
           node scripts/cleanup-fixtures.js

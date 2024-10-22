@@ -1,3 +1,6 @@
 src
 test
-node_modules
+*.log
+tsconfig.json
+tsconfig.tsbuildinfo
+scripts
