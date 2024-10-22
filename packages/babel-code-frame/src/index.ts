@@ -1,6 +1,8 @@
 import { getDefs, isColorSupported } from "./defs.ts";
 import { highlight } from "./highlight.ts";
 
+export { highlight };
+
 let deprecationWarningShown = false;
 
 type Location = {

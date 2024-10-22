@@ -1,4 +1,5 @@
-import _codeFrame, { codeFrameColumns } from "../lib/index.js";
+import stripAnsi from "strip-ansi";
+import _codeFrame, { codeFrameColumns, highlight } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
 describe("@babel/code-frame", function () {
@@ -410,5 +411,13 @@ describe("@babel/code-frame", function () {
         "  5 | };",
       ].join("\n"),
     );
+  });
+
+  test("highlight works", function () {
+    const raw = "const a = 1";
+    const highlighted = highlight(raw);
+
+    expect(stripAnsi(highlighted)).toBe(raw);
+    expect(highlighted.length).toBeGreaterThan(raw.length);
   });
 });
