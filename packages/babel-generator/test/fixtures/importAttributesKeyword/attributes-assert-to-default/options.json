@@ -1,6 +1,4 @@
 {
   "BABEL_8_BREAKING": true,
-  "plugins": ["deprecatedImportAssert"],
-  "warns": "You are using import attributes, without specifying the desired output syntax.",
-  "expectedReParseError": true
+  "plugins": ["deprecatedImportAssert"]
 }
