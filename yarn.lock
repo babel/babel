@@ -817,7 +817,6 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-simple-access": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
