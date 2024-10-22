@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-set-prototype-of-to-assign",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": {
     "type": "git",

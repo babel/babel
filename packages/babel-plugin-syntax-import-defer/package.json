@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-defer",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Allow parsing of the `import defer` syntax in import statement",
   "repository": {
     "type": "git",

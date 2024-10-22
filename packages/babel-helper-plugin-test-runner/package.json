@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-unicode-property-regex",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-property-regex",
   "license": "MIT",

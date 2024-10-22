@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-binary-assignment-operator-visitor",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Helper function to build binary assignment operator visitors",
   "repository": {
     "type": "git",

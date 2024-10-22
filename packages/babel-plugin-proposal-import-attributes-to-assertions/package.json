@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-import-attributes-to-assertions",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Transform the Import Attributes proposal (`import ... from '...' with { ... }`) to the previous version known as Import Assertions (`import ... from '...' assert { ... }`).",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-super",
-  "version": "7.25.7",
+  "version": "7.25.9",
   "description": "Compile ES2015 object super to ES5",
   "repository": {
     "type": "git",
