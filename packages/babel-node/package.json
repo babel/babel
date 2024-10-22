@@ -37,6 +37,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/preset-env": "workspace:^",
+    "@babel/preset-react": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@types/v8flags": "^3.1.1"
   },

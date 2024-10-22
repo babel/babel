@@ -279,6 +279,8 @@ export default [
             "nodeGte8",
             "nodeGte12",
             "nodeGte20",
+            "nodeGte23",
+            "nodeLt23",
             "nodeGte12NoESM",
             "testFn",
           ],

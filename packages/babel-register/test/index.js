@@ -295,7 +295,11 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `-r ${registerFile}` },
+          {
+            ...process.env,
+            NODE_OPTIONS:
+              `-r ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -307,7 +311,11 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `--require ${registerFile}` },
+          {
+            ...process.env,
+            NODE_OPTIONS:
+              `--require ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -402,15 +410,10 @@ describe("@babel/register", function () {
   }
 });
 
-function spawnNodeAsync(args, cwd = __dirname, env) {
+function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
   const spawn = child.spawn(process.execPath, args, {
     cwd,
-    env: {
-      ...env,
-      ...(process.env.BABEL_8_BREAKING && {
-        BABEL_8_BREAKING: process.env.BABEL_8_BREAKING,
-      }),
-    },
+    env,
   });
 
   let output = "";

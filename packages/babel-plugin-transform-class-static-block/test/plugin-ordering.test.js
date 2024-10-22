@@ -1,6 +1,6 @@
 import * as babel from "@babel/core";
-import proposalClassStaticBlock from "../lib/index.js";
-import proposalClassProperties from "@babel/plugin-transform-class-properties";
+import transformClassStaticBlock from "../lib/index.js";
+import transformClassProperties from "@babel/plugin-transform-class-properties";
 import externalHelpers from "@babel/plugin-external-helpers";
 
 describe("plugin ordering", () => {
@@ -19,8 +19,8 @@ describe("plugin ordering", () => {
         configFile: false,
         babelrc: false,
         plugins: [
-          proposalClassProperties,
-          proposalClassStaticBlock,
+          transformClassProperties,
+          transformClassStaticBlock,
           externalHelpers,
         ],
       }).code,

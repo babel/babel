@@ -479,6 +479,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
+    "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
     dedent: "npm:^1.5.3"
     eslint: "npm:^9.7.0"
@@ -1205,6 +1206,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/preset-env": "workspace:^"
+    "@babel/preset-react": "workspace:^"
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
@@ -1452,6 +1454,8 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7"
+    "@babel/plugin-transform-class-properties": "workspace:^"
+    "@babel/plugin-transform-class-static-block": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
     "@babel/traverse": "workspace:^"
@@ -2345,6 +2349,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/plugin-transform-class-properties": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:

@@ -83,13 +83,17 @@ jobs:
     name: Test ESM version
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [23, 22]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{matrix.node-version}}
           check-latest: true
           cache: "yarn"
       - name: Use ESM and build
@@ -100,6 +104,7 @@ jobs:
         run: yarn jest --ci
         env:
           BABEL_ENV: test
+          NODE_OPTIONS: ${{matrix.node-version == '23' && '--disable-warning=ExperimentalWarning' || ''}}
           USE_ESM: true
 
   build:
@@ -209,7 +214,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20, 18, 16, 14, 12, 10, 8, 6]
+        node-version: [23, 20, 18, 16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -257,8 +262,9 @@ jobs:
       - name: Test on node.js ${{ matrix.node-version }}
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci
+          node ./node_modules/.bin/jest --ci
         env:
+          BABEL_ENV: test
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'

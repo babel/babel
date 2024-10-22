@@ -363,13 +363,23 @@ describe("api", function () {
   it("options merge backwards", async function () {
     const result = await transformAsync("", {
       cwd,
-      presets: ["@babel/preset-env"],
-      plugins: ["@babel/plugin-syntax-jsx"],
+      presets: [
+        () => ({
+          plugins: [() => ({ name: "plugin-4" }), () => ({ name: "plugin-5" })],
+        }),
+        () => ({
+          plugins: [() => ({ name: "plugin-2" }), () => ({ name: "plugin-3" })],
+        }),
+      ],
+      plugins: [() => ({ name: "plugin-0" }), () => ({ name: "plugin-1" })],
     });
 
-    expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
-      expect.stringContaining("jsx"),
-    );
+    expect(result.options.plugins[0].key).toBe("plugin-0");
+    expect(result.options.plugins[1].key).toBe("plugin-1");
+    expect(result.options.plugins[2].key).toBe("plugin-2");
+    expect(result.options.plugins[3].key).toBe("plugin-3");
+    expect(result.options.plugins[4].key).toBe("plugin-4");
+    expect(result.options.plugins[5].key).toBe("plugin-5");
   });
 
   it("option wrapPluginVisitorMethod", function () {

@@ -233,9 +233,7 @@ function pushTask(
           false,
     options: taskOpts,
     doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
-    externalHelpers:
-      taskOpts.externalHelpers ??
-      !!tryResolve("@babel/plugin-external-helpers"),
+    externalHelpers: taskOpts.externalHelpers ?? true,
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
     stdout: buildTestFile(stdoutLoc),
