@@ -29,10 +29,17 @@ export default declare((api, { deprecatedAssertSyntax }: Options) => {
         deprecatedAssertSyntax = true;
       }
 
-      parserOpts.plugins.push([
-        "importAttributes",
-        { deprecatedAssertSyntax: Boolean(deprecatedAssertSyntax) },
-      ]);
+      const [major] = api.version.split(".").map(Number);
+      if (major >= 8) {
+        if (deprecatedAssertSyntax) {
+          parserOpts.plugins.push("deprecatedImportAssert");
+        }
+      } else {
+        parserOpts.plugins.push([
+          "importAttributes",
+          { deprecatedAssertSyntax: Boolean(deprecatedAssertSyntax) },
+        ]);
+      }
     },
   };
 });
