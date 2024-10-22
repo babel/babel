@@ -1,11 +1,10 @@
-import _import from "eslint-plugin-import";
-import { fixupPluginRules } from "@eslint/compat";
+import importPlugin from "eslint-plugin-import";
 import babelParser from "@babel/eslint-parser";
 
 export default [
   {
     plugins: {
-      import: fixupPluginRules(_import),
+      import: importPlugin,
     },
 
     languageOptions: {
