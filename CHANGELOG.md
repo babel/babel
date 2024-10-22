@@ -24,6 +24,23 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.25.9 (2024-10-22)
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-template`, `babel-types`
+  * [#16905](https://github.com/babel/babel/pull/16905) fix: Keep type annotations in `syntacticPlaceholders` mode ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#16907](https://github.com/babel/babel/pull/16907) fix: support BROWSERSLIST{,_CONFIG} env ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#16884](https://github.com/babel/babel/pull/16884) Analyze `ClassAccessorProperty` to prevent the `no-undef` rule ([@victorenator](https://github.com/victorenator))
+
+#### :house: Internal
+* `babel-helper-transform-fixture-test-runner`
+  * [#16914](https://github.com/babel/babel/pull/16914) remove test options flaky ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-parser`, `babel-types`
+  * [#16918](https://github.com/babel/babel/pull/16918) perf: Make `VISITOR_KEYS` etc. faster to access ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.25.8 (2024-10-10)
 
 #### :bug: Bug Fix
