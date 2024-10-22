@@ -33,6 +33,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/plugin-external-helpers": "workspace:^",
+    "@babel/plugin-transform-class-properties": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
   },

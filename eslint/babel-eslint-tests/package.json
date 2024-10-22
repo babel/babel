@@ -6,6 +6,7 @@
   "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
+    "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
     "@eslint/compat": "^1.1.1",
     "dedent": "^1.5.3",
