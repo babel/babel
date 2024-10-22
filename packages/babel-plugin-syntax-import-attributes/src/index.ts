@@ -30,7 +30,10 @@ export default declare((api, { deprecatedAssertSyntax }: Options) => {
       }
 
       const [major] = api.version.split(".").map(Number);
-      if (major >= 8) {
+      if (major >= 8 || !process.env.IS_PUBLISH) {
+        // We need the `!IS_PUBLISH` check so because the tests for
+        // Babel 7 plugins with Babel 8 core do not set the major
+        // version of core to 8.x
         if (deprecatedAssertSyntax) {
           parserOpts.plugins.push("deprecatedImportAssert");
         }
