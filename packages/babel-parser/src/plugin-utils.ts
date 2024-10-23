@@ -143,7 +143,7 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     pluginsMap.get("importAttributes").deprecatedAssertSyntax
   ) {
     if (process.env.BABEL_8_BREAKING) {
-      console.warn(
+      throw new Error(
         "The 'importAttributes' plugin has been removed in Babel 8. If you need to enable support " +
           "for the deprecated `assert` syntax, you can enable the `deprecatedImportAssert` parser plugin.",
       );
