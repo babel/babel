@@ -82,6 +82,7 @@
     "transform-function-name",
     "transform-instanceof",
     "transform-jscript",
+    "transform-json-modules",
     "transform-literals",
     "transform-member-expression-literals",
     "transform-modules-amd",
@@ -118,7 +119,6 @@
     "transform-unicode-escapes",
     "transform-unicode-regex",
     "proposal-explicit-resource-management",
-    "proposal-import-defer",
-    "proposal-json-modules"
+    "proposal-import-defer"
   ]
 }

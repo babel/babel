@@ -48,9 +48,6 @@
       "path": "../../packages/babel-plugin-proposal-import-defer"
     },
     {
-      "path": "../../packages/babel-plugin-proposal-json-modules"
-    },
-    {
       "path": "../../packages/babel-plugin-proposal-optional-chaining-assign"
     },
     {
@@ -175,6 +172,9 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-jscript"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-json-modules"
     },
     {
       "path": "../../packages/babel-plugin-transform-json-strings"

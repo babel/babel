@@ -1,0 +1,68 @@
+{
+  "name": "@babel/plugin-transform-json-modules",
+  "version": "7.25.9",
+  "description": "Transform json modules imports (`import '...' with { type: 'json' }`) to work in browsers and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-json-modules"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-json-modules",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "import",
+    "source",
+    "phase",
+    "wasm",
+    "WebAssembly",
+    "assertions",
+    "proposal",
+    "stage-3"
+  ],
+  "dependencies": {
+    "@babel/helper-import-to-platform-api": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.22.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "^0.10.6"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "module",
+  "conditions": {
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
+      }
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+        }
+      },
+      {}
+    ]
+  }
+}

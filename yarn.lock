@@ -1579,21 +1579,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-json-modules@workspace:^, @babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-import-to-platform-api": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
-    babel-plugin-polyfill-corejs3: "npm:^0.10.6"
-  peerDependencies:
-    "@babel/core": ^7.22.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-proposal-optional-chaining-assign@workspace:^, @babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign"
@@ -2671,6 +2656,21 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-transform-json-modules@workspace:^, @babel/plugin-transform-json-modules@workspace:packages/babel-plugin-transform-json-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-json-modules@workspace:packages/babel-plugin-transform-json-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+    babel-plugin-polyfill-corejs3: "npm:^0.10.6"
+  peerDependencies:
+    "@babel/core": ^7.22.0
   languageName: unknown
   linkType: soft
 
@@ -4028,7 +4028,6 @@ __metadata:
     "@babel/plugin-proposal-function-bind": "workspace:^"
     "@babel/plugin-proposal-function-sent": "workspace:^"
     "@babel/plugin-proposal-import-defer": "workspace:^"
-    "@babel/plugin-proposal-json-modules": "workspace:^"
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
@@ -4073,6 +4072,7 @@ __metadata:
     "@babel/plugin-transform-function-name": "workspace:^"
     "@babel/plugin-transform-instanceof": "workspace:^"
     "@babel/plugin-transform-jscript": "workspace:^"
+    "@babel/plugin-transform-json-modules": "workspace:^"
     "@babel/plugin-transform-json-strings": "workspace:^"
     "@babel/plugin-transform-literals": "workspace:^"
     "@babel/plugin-transform-logical-assignment-operators": "workspace:^"

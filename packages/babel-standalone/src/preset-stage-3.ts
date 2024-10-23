@@ -18,7 +18,6 @@ export default (_: any, opts: any = {}) => {
       },
     ],
     babelPlugins.proposalExplicitResourceManagement,
-    babelPlugins.proposalJsonModules,
     // These are Stage 4
     ...(process.env.BABEL_8_BREAKING
       ? []
@@ -29,6 +28,7 @@ export default (_: any, opts: any = {}) => {
           [babelPlugins.transformNullishCoalescingOperator, { loose }],
           [babelPlugins.transformClassProperties, { loose }],
           babelPlugins.transformJsonStrings,
+          babelPlugins.transformJsonModules,
           babelPlugins.transformNumericSeparator,
           [babelPlugins.transformPrivateMethods, { loose }],
           babelPlugins.transformPrivatePropertyInObject,
