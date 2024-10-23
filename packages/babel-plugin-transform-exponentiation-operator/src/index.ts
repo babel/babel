@@ -4,7 +4,7 @@ import type { types as t, Scope } from "@babel/core";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  const { types: t } = api;
+  const { types: t, template } = api;
 
   function build(left: t.Expression, right: t.Expression) {
     return t.callExpression(
@@ -17,8 +17,13 @@ export default declare(api => {
     node: T,
     scope: Scope,
   ) {
-    if (scope.isPure(node) || t.isSuper(node)) {
+    if (scope.isStatic(node)) {
       return { assign: node, ref: t.cloneNode(node) };
+    }
+
+    if (scope.path.isPattern()) {
+      // We cannot inject a temp var in function arguments.
+      return null;
     }
 
     const id = scope.generateUidIdentifierBasedOnNode(node);
@@ -42,6 +47,14 @@ export default declare(api => {
           let member2: t.Expression;
 
           const object = maybeMemoize(node.left.object, scope);
+          if (!object) {
+            // We need to inject a temp var, but we are in function parameters
+            // and thus cannot. Wrap the expression in an IIFE. It will be
+            // eventually requeued and transformed.
+            path.replaceWith(template.expression.ast`(() => ${path.node})()`);
+            return;
+          }
+
           const { property, computed } = node.left;
 
           if (computed) {
