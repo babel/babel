@@ -1,4 +1,4 @@
 namespace N {}
 namespace M.N.O {}
-namespace M {}
+module M {}
 module "m" {}

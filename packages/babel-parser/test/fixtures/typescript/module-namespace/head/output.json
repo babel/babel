@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "kind": "namespace",
         "id": {
           "type": "Identifier",
           "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
@@ -24,6 +25,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":15,"end":33,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":18,"index":33}},
+        "kind": "namespace",
         "id": {
           "type": "Identifier",
           "start":25,"end":26,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":11,"index":26},"identifierName":"M"},
@@ -56,6 +58,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":34,"end":45,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":11,"index":45}},
+        "kind": "module",
         "id": {
           "type": "Identifier",
           "start":41,"end":42,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":8,"index":42},"identifierName":"M"},
@@ -70,6 +73,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":46,"end":59,"loc":{"start":{"line":4,"column":0,"index":46},"end":{"line":4,"column":13,"index":59}},
+        "kind": "module",
         "id": {
           "type": "StringLiteral",
           "start":53,"end":56,"loc":{"start":{"line":4,"column":7,"index":53},"end":{"line":4,"column":10,"index":56}},

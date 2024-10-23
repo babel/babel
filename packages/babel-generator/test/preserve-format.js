@@ -66,12 +66,6 @@ const FAILURES = [
 
   // These tests are about old proposals
   "types/Decorator/input.js",
-
-  // We explicitly always print `module X {}` as `namespace X {}`
-  "typescript/module-namespace-head/input.js",
-  "typescript/module-namespace-head-declare/input.js",
-  "typescript/module-namespace-head-export/input.js",
-  "typescript/export-declare/input.js",
 ];
 
 describe("experimental_preserveFormat", () => {

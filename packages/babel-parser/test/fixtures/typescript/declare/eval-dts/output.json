@@ -10,6 +10,7 @@
       {
         "type": "TSModuleDeclaration",
         "start":22,"end":153,"loc":{"start":{"line":2,"column":0,"index":22},"end":{"line":7,"column":1,"index":153}},
+        "kind": "global",
         "global": true,
         "id": {
           "type": "Identifier",
@@ -29,6 +30,7 @@
               "declaration": {
                 "type": "TSModuleDeclaration",
                 "start":50,"end":151,"loc":{"start":{"line":3,"column":11,"index":50},"end":{"line":6,"column":5,"index":151}},
+                "kind": "namespace",
                 "id": {
                   "type": "Identifier",
                   "start":60,"end":62,"loc":{"start":{"line":3,"column":21,"index":60},"end":{"line":3,"column":23,"index":62},"identifierName":"ns"},

@@ -532,6 +532,9 @@ defineType("TSModuleDeclaration", {
   aliases: ["Statement", "Declaration"],
   visitor: ["id", "body"],
   fields: {
+    kind: {
+      validate: assertOneOf("global", "module", "namespace"),
+    },
     declare: validateOptional(bool),
     global: validateOptional(bool),
     id: validateType("Identifier", "StringLiteral"),
