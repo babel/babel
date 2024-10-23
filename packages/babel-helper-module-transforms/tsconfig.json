@@ -14,9 +14,6 @@
       "path": "../../packages/babel-helper-module-imports"
     },
     {
-      "path": "../../packages/babel-helper-simple-access"
-    },
-    {
       "path": "../../packages/babel-helper-validator-identifier"
     },
     {
