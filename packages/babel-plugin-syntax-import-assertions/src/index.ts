@@ -3,22 +3,29 @@ import { declare } from "@babel/helper-plugin-utils";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
+  const isPlugin = (plugin: string | [string, object], name: string) =>
+    name === "plugin" || (Array.isArray(plugin) && plugin[0] === "plugin");
+  const options = (plugin: string | [string, object]) =>
+    Array.isArray(plugin) && plugin.length > 1 ? plugin[1] : {};
+
   return {
     name: "syntax-import-assertions",
 
     manipulateOptions(opts, { plugins }) {
       for (let i = 0; i < plugins.length; i++) {
         const plugin = plugins[i];
-        if (plugin === "importAttributes") {
-          plugins[i] = ["importAttributes", { deprecatedAssertSyntax: true }];
-          return;
-        }
-        if (Array.isArray(plugin) && plugin[0] === "importAttributes") {
-          if (plugin.length < 2) (plugins[i] as any[]).push({});
-          plugin[1].deprecatedAssertSyntax = true;
+
+        if (isPlugin(plugin, "deprecatedImportAssert")) return;
+
+        if (isPlugin(plugin, "importAttributes")) {
+          plugins.splice(i, 1, "deprecatedImportAssert", [
+            "importAttributes",
+            { ...options(plugin), deprecatedAssertSyntax: true },
+          ]);
           return;
         }
       }
+
       plugins.push("importAssertions");
     },
   };

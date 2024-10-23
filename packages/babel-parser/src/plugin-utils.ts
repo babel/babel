@@ -138,16 +138,18 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     }
   }
   if (
+    !pluginsMap.has("deprecatedImportAssert") &&
     pluginsMap.has("importAttributes") &&
     pluginsMap.get("importAttributes").deprecatedAssertSyntax
   ) {
     if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
+      console.warn(
         "The 'importAttributes' plugin has been removed in Babel 8. If you need to enable support " +
           "for the deprecated `assert` syntax, you can enable the `deprecatedImportAssert` parser plugin.",
       );
+    } else {
+      pluginsMap.set("deprecatedImportAssert", {});
     }
-    pluginsMap.set("deprecatedImportAssert", {});
   }
 
   if (pluginsMap.has("recordAndTuple")) {
