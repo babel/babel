@@ -244,6 +244,14 @@ describe("asynchronicity", () => {
           code: `"success"`,
         });
       });
+
+      it("called asynchronously when contain TLA", async () => {
+        process.chdir("plugin-mjs-tla-native");
+
+        await expect(spawnTransformAsync()).resolves.toMatchObject({
+          code: `"success"`,
+        });
+      });
     });
   });
 
