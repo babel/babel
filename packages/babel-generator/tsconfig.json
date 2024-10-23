@@ -11,6 +11,9 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-parser"
+    },
+    {
       "path": "../../packages/babel-types"
     }
   ]

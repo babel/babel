@@ -101,9 +101,20 @@ export function NewExpression(
     // TODO: This can never happen
     this.token("?.");
   }
+
+  if (
+    node.arguments.length === 0 &&
+    this.tokenMap &&
+    !this.tokenMap.endMatches(node, ")")
+  ) {
+    return;
+  }
+
   this.token("(");
   const exit = this.enterDelimited();
-  this.printList(node.arguments);
+  this.printList(node.arguments, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }
@@ -199,7 +210,9 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeParameters); // TS
   this.token("(");
   const exit = this.enterDelimited();
-  this.printList(node.arguments);
+  this.printList(node.arguments, {
+    printTrailingSeparator: this.shouldPrintTrailingComma(")"),
+  });
   exit();
   this.rightParens(node);
 }

@@ -89,14 +89,14 @@ export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   }
   if (node.selfClosing) {
     this.space();
-    this.token("/>");
-  } else {
-    this.token(">");
+    this.token("/");
   }
+  this.token(">");
 }
 
 export function JSXClosingElement(this: Printer, node: t.JSXClosingElement) {
-  this.token("</");
+  this.token("<");
+  this.token("/");
   this.print(node.name);
   this.token(">");
 }

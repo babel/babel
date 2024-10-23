@@ -516,8 +516,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
+    "@babel/plugin-transform-typescript": "workspace:^"
     "@babel/types": "workspace:^"
     "@jridgewell/gen-mapping": "npm:^0.3.5"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"

@@ -3,9 +3,25 @@ import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
+let lastRawIdentNode: t.Identifier | null = null;
+let lastRawIdentResult: string = "";
+export function _getRawIdentifier(this: Printer, node: t.Identifier) {
+  if (node === lastRawIdentNode) return lastRawIdentResult;
+  lastRawIdentNode = node;
+
+  const { name } = node;
+  const token = this.tokenMap.find(node, tok => tok.value === name);
+  if (token) {
+    lastRawIdentResult = this._originalCode.slice(token.start, token.end);
+    return lastRawIdentResult;
+  }
+  return (lastRawIdentResult = node.name);
+}
+
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
-  this.word(node.name);
+
+  this.word(this.tokenMap ? this._getRawIdentifier(node) : node.name);
 }
 
 export function ArgumentPlaceholder(this: Printer) {
@@ -27,7 +43,11 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   if (props.length) {
     const exit = this.enterDelimited();
     this.space();
-    this.printList(props, { indent: true, statement: true });
+    this.printList(props, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
+    });
     this.space();
     exit();
   }
@@ -96,14 +116,16 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (i < len - 1) this.token(",");
+      if (i < len - 1 || this.shouldPrintTrailingComma("]")) {
+        this.token(",", false, i);
+      }
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      this.token(",");
+      this.token(",", false, i);
     }
   }
 
@@ -145,7 +167,11 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   if (props.length) {
     this.space();
-    this.printList(props, { indent: true, statement: true });
+    this.printList(props, {
+      indent: true,
+      statement: true,
+      printTrailingSeparator: this.shouldPrintTrailingComma(endToken),
+    });
     this.space();
   }
   this.token(endToken);
@@ -181,7 +207,9 @@ export function TupleExpression(this: Printer, node: t.TupleExpression) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem);
-      if (i < len - 1) this.token(",");
+      if (i < len - 1 || this.shouldPrintTrailingComma(endToken)) {
+        this.token(",", false, i);
+      }
     }
   }
 
