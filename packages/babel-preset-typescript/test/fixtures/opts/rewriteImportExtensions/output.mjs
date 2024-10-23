@@ -8,3 +8,7 @@ import "./react.ctsx";
 import "a-package/file.js";
 // Bare import, it's either a node package or remapped by an import map
 import "soundcloud.ts";
+export * from "./a.js";
+export { x } from "./a.mjs";
+import("./a.js");
+import((a + "").replace(/([\/].*.[mc]?)tsx?$/, "$1js"));

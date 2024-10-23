@@ -1134,15 +1134,15 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 153, gzip size: 136
+  // size: 149, gzip size: 134
   superPropGet: helper(
     "7.25.0",
-    'function _superPropertyGet(t,e,o,r){var p=get(getPrototypeOf(1&r?t.prototype:t),e,o);return 2&r&&"function"==typeof p?function(t){return p.apply(o,t)}:p}',
+    'function _superPropGet(t,o,e,r){var p=get(getPrototypeOf(1&r?t.prototype:t),o,e);return 2&r&&"function"==typeof p?function(t){return p.apply(e,t)}:p}',
     {
       globals: [],
-      locals: { _superPropertyGet: ["body.0.id"] },
+      locals: { _superPropGet: ["body.0.id"] },
       exportBindingAssignments: [],
-      exportName: "_superPropertyGet",
+      exportName: "_superPropGet",
       dependencies: {
         get: ["body.0.body.body.0.declarations.0.init.callee"],
         getPrototypeOf: [
@@ -1151,15 +1151,15 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 92, gzip size: 98
+  // size: 88, gzip size: 95
   superPropSet: helper(
     "7.25.0",
-    "function _superPropertySet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
+    "function _superPropSet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
     {
       globals: [],
-      locals: { _superPropertySet: ["body.0.id"] },
+      locals: { _superPropSet: ["body.0.id"] },
       exportBindingAssignments: [],
-      exportName: "_superPropertySet",
+      exportName: "_superPropSet",
       dependencies: {
         set: ["body.0.body.body.0.argument.callee"],
         getPrototypeOf: ["body.0.body.body.0.argument.arguments.0.callee"],
