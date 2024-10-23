@@ -29,7 +29,14 @@ export default declare(api => {
     const id = scope.generateUidIdentifierBasedOnNode(node);
     scope.push({ id });
     return {
-      assign: t.assignmentExpression("=", t.cloneNode(id), node),
+      assign: t.assignmentExpression(
+        "=",
+        t.cloneNode(id),
+        // This is not t.Super, because otherwise the .isStatic check above
+        // would have returned true.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        node as t.Expression,
+      ),
       ref: t.cloneNode(id),
     };
   }
