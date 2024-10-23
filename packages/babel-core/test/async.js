@@ -12,6 +12,7 @@ import { itGte, itESM, itLt } from "$repo-utils";
 
 // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
 const nodeGte8 = itGte("8.0.0");
+const nodeGte14 = itGte("14.8.0");
 
 // "minNodeVersion": "23.0.0" <-- For Ctrl+F when dropping node 22
 const nodeGte23 = itGte("23.0.0");
@@ -245,7 +246,7 @@ describe("asynchronicity", () => {
         });
       });
 
-      it("called asynchronously when contain TLA", async () => {
+      nodeGte14("called asynchronously when contain TLA", async () => {
         process.chdir("plugin-mjs-tla-native");
 
         await expect(spawnTransformAsync()).resolves.toMatchObject({
