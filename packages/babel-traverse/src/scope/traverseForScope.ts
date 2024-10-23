@@ -1,6 +1,6 @@
 import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
-import type { Visitor } from "../index.ts";
+import type { HubInterface, Visitor } from "../index.ts";
 import { NodePath } from "../index.ts";
 import { explode } from "../visitors.ts";
 import { setScope } from "../path/context.ts";
@@ -23,6 +23,7 @@ export default function traverseForScope(
     path.container,
     path.key,
     path.listKey,
+    path.hub,
   );
 
   function _traverse(
@@ -32,12 +33,14 @@ export default function traverseForScope(
     container: t.Node | t.Node[],
     key: string | number,
     listKey: string,
+    hub?: HubInterface,
   ) {
     if (!node) {
       return;
     }
 
     const path = NodePath.get({
+      hub,
       parentPath,
       parent,
       container,
