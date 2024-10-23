@@ -30,8 +30,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 
 # Create a React Native project
 cd /tmp
-npm install react-native
-npx react-native init rnbabel
+npx @react-native-community/cli init rnbabel
 cd rnbabel
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
