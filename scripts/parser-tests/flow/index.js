@@ -10,6 +10,8 @@ const flowOptionsMapping = {
   esproposal_decorators: "decorators-legacy",
   types: "flowComments",
   intern_comments: false,
+  // We don't support these
+  components: false,
 };
 
 function getPlugins(test) {
