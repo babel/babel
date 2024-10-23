@@ -21,7 +21,9 @@ export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const {
-    development,
+    development = process.env.BABEL_8_BREAKING
+      ? api.env(env => env === "development")
+      : false,
     importSource,
     pragma,
     pragmaFrag,
