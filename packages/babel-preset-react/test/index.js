@@ -1,3 +1,5 @@
+import * as babel from "@babel/core";
+
 import _reactPreset from "../lib/index.js";
 const reactPreset = _reactPreset.default || _reactPreset;
 
@@ -23,5 +25,34 @@ describe("react preset", () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"@babel/preset-react: 'runtime' option must be a string."`,
     );
+  });
+
+  itBabel8("respects envName", () => {
+    expect(
+      babel.transformSync("<a />", {
+        configFile: false,
+        presets: [reactPreset],
+        envName: "development",
+      }).code,
+    ).toMatchInlineSnapshot(`
+      "var _jsxFileName = \\"\\";
+      import { jsxDEV as _jsxDEV } from \\"react/jsx-dev-runtime\\";
+      /*#__PURE__*/_jsxDEV(\\"a\\", {}, void 0, false, {
+        fileName: _jsxFileName,
+        lineNumber: 1,
+        columnNumber: 1
+      }, this);"
+    `);
+
+    expect(
+      babel.transformSync("<a />", {
+        configFile: false,
+        presets: [reactPreset],
+        envName: "production",
+      }).code,
+    ).toMatchInlineSnapshot(`
+      "import { jsx as _jsx } from \\"react/jsx-runtime\\";
+      /*#__PURE__*/_jsx(\\"a\\", {});"
+    `);
   });
 });
