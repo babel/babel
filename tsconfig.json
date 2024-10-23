@@ -188,9 +188,6 @@
       "path": "./packages/babel-plugin-proposal-record-and-tuple"
     },
     {
-      "path": "./packages/babel-plugin-proposal-regexp-modifiers"
-    },
-    {
       "path": "./packages/babel-plugin-proposal-throw-expressions"
     },
     {
@@ -423,6 +420,9 @@
     },
     {
       "path": "./packages/babel-plugin-transform-regenerator"
+    },
+    {
+      "path": "./packages/babel-plugin-transform-regexp-modifiers"
     },
     {
       "path": "./packages/babel-plugin-transform-reserved-words"

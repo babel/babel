@@ -68,6 +68,7 @@
     "@babel/plugin-transform-private-property-in-object": "workspace:^",
     "@babel/plugin-transform-property-literals": "workspace:^",
     "@babel/plugin-transform-regenerator": "workspace:^",
+    "@babel/plugin-transform-regexp-modifiers": "workspace:^",
     "@babel/plugin-transform-reserved-words": "workspace:^",
     "@babel/plugin-transform-shorthand-properties": "workspace:^",
     "@babel/plugin-transform-spread": "workspace:^",

@@ -1,7 +1,7 @@
 name: Open issue to remind doing something
 on:
   schedule:
-    - cron: 0 0 15 08 *
+    - cron: 0 0 30 11 *
 
 permissions:
   issues: write
@@ -20,4 +20,5 @@ jobs:
             Please run these commands:
             ```
             npm deprecate @babel/plugin-proposal-duplicate-named-capturing-groups-regex "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-duplicate-named-capturing-groups-regex instead."
+            npm deprecate @babel/plugin-proposal-regexp-modifiers "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-regexp-modifiers instead."
             ```

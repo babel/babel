@@ -42,6 +42,7 @@ import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import transformPropertyLiterals from "@babel/plugin-transform-property-literals";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
+import transformRegExpModifiers from "@babel/plugin-transform-regexp-modifiers";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformShorthandProperties from "@babel/plugin-transform-shorthand-properties";
 import transformSpread from "@babel/plugin-transform-spread";
@@ -130,6 +131,7 @@ const availablePlugins = {
     transformPrivatePropertyInObject,
   "transform-property-literals": () => transformPropertyLiterals,
   "transform-regenerator": () => transformRegenerator,
+  "transform-regexp-modifiers": () => transformRegExpModifiers,
   "transform-reserved-words": () => transformReservedWords,
   "transform-shorthand-properties": () => transformShorthandProperties,
   "transform-spread": () => transformSpread,
@@ -157,6 +159,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "transform-class-static-block": "7.12.0",
     "transform-duplicate-named-capturing-groups-regex": "7.19.0",
     "transform-private-property-in-object": "7.10.0",
+    "transform-regexp-modifiers": "7.19.0",
   });
 
   // This is a factory to create a plugin that enables a parser plugin
