@@ -59,7 +59,7 @@ const FAILURES = [
   "importAttributesKeyword/attributes-assert-to-with/input.js",
   "importAttributesKeyword/attributes-assert-to-with-legacy/input.js",
   "importAttributesKeyword/attributes-with-to-assert/input.js",
-  "importAttributesKeyword/attributes-with-to-default/input.js",
+  "importAttributesKeyword/attributes-with-to-default-babel-7/input.js",
   "importAttributesKeyword/attributes-with-to-with-legacy/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
