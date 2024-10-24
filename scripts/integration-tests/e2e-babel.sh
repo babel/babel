@@ -28,6 +28,10 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
+# This packages has been renamed
+sed -i 's/proposal-json-modules/transform-json-modules/g' package.json
+sed -i 's/proposal-json-modules/transform-json-modules/g' babel.config.js
+
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
@@ -35,10 +39,6 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Babel 8 only supports ESM
   make use-esm
 fi
-
-# This packages has been renamed
-sed -i 's/proposal-json-modules/transform-json-modules/g' package.json
-sed -i 's/proposal-json-modules/transform-json-modules/g' babel.config.js
 
 # Build and test
 make -j test-ci
