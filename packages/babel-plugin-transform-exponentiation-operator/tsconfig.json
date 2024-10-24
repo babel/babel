@@ -11,9 +11,6 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-builder-binary-assignment-operator-visitor"
-    },
-    {
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
