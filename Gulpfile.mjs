@@ -529,11 +529,11 @@ function buildRollup(packages, buildStandalone) {
                 path.dirname(fileURLToPath(import.meta.url)),
                 "/packages/" + id.replace("@babel/", "babel-")
               );
-              if (!fs.existsSync(srcPath)) return "compat";
+              if (!fs.existsSync(srcPath)) return "default";
             }
 
             if (id.includes("@babel/preset-modules")) {
-              return "compat";
+              return "default";
             }
 
             return "auto";
