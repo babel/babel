@@ -71,7 +71,8 @@ function loadCjsDefault(filepath: string) {
 const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
   filepath: string,
 ) {
-  const url = pathToFileURL(filepath).toString();
+  // Add ?import as a workaround for https://github.com/nodejs/node/issues/55500
+  const url = pathToFileURL(filepath).toString() + "?import";
 
   if (process.env.BABEL_8_BREAKING) {
     return await import(url);
@@ -132,16 +133,17 @@ export default function* loadCodeDefault(
           );
         }
       } catch (e) {
-        if (
-          e.code === "ERR_REQUIRE_ASYNC_MODULE" &&
-          !(async ??= yield* isAsync())
+        if (e.code === "ERR_REQUIRE_ASYNC_MODULE") {
+          if (!(async ??= yield* isAsync())) {
+            throw new ConfigError(tlaError, filepath);
+          }
+          // fall through: require() failed due to TLA
+        } else if (
+          e.code === "ERR_REQUIRE_ESM" ||
+          (!process.env.BABEL_8_BREAKING && ext === ".mjs")
         ) {
-          throw new ConfigError(tlaError, filepath);
-        }
-        if (
-          e.code !== "ERR_REQUIRE_ESM" &&
-          (process.env.BABEL_8_BREAKING || ext !== ".mjs")
-        ) {
+          // fall through: require() failed due to ESM
+        } else {
           throw e;
         }
       }

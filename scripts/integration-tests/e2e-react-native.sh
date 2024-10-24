@@ -30,11 +30,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 
 # Create a React Native project
 cd /tmp
-# Remove the patch when react-native bumps @react-native-community/cli to 12
-npm install react-native
-npx replace '_fs\(\)\.default\.chmodSync\(destPath, mode\);' '' node_modules/@react-native-community/cli/build/tools/copyFiles.js
-npx replace 'createWriteStream\(destPath\);' 'createWriteStream(destPath, {mode});' node_modules/@react-native-community/cli/build/tools/copyFiles.js
-npx react-native init rnbabel
+YARN_ENABLE_IMMUTABLE_INSTALLS=false npx @react-native-community/cli init rnbabel
 cd rnbabel
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
