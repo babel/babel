@@ -30,7 +30,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 
 # Create a React Native project
 cd /tmp
-npx @react-native-community/cli init rnbabel
+YARN_ENABLE_IMMUTABLE_INSTALLS=false npx @react-native-community/cli init rnbabel
 cd rnbabel
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
