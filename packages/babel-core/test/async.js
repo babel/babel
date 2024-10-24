@@ -4,6 +4,7 @@ import * as babel from "../lib/index.js";
 
 import {
   spawnTransformAsync,
+  spawnTransformAsyncParallel,
   spawnTransformSync,
   supportsESM,
 } from "./helpers/esm.js";
@@ -253,6 +254,18 @@ describe("asynchronicity", () => {
           code: `"success"`,
         });
       });
+
+      nodeGte14(
+        "called asynchronously twice in parallel when contain TLA",
+        async () => {
+          process.chdir("config-mjs-tla-native");
+
+          await expect(spawnTransformAsyncParallel()).resolves.toMatchObject([
+            { code: `"success"` },
+            { code: `"success"` },
+          ]);
+        },
+      );
     });
   });
 
