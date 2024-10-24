@@ -36,6 +36,10 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   make use-esm
 fi
 
+# This packages has been renamed
+sed -i 's/proposal-json-modules/transform-json-modules/g' package.json
+sed -i 's/proposal-json-modules/transform-json-modules/g' babel.config.js
+
 # Build and test
 make -j test-ci
 
