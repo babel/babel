@@ -2033,10 +2033,7 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          this.addTrailingCommaExtraToNode(
-            // @ts-expect-error todo(flow->ts) improve node types
-            node,
-          );
+          this.addTrailingCommaExtraToNode(node);
           break;
         }
       }
