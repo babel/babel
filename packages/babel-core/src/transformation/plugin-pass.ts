@@ -7,19 +7,32 @@ export default class PluginPass<Options = object> {
   file: File;
   opts: Partial<Options>;
 
-  // The working directory that Babel's programmatic options are loaded
-  // relative to.
+  /**
+   * The working directory that Babel's programmatic options are loaded
+   * relative to.
+   */
   cwd: string;
 
-  // The absolute path of the file being compiled.
+  /** The absolute path of the file being compiled. */
   filename: string | void;
 
-  constructor(file: File, key?: string | null, options?: Options) {
+  /**
+   * Is Babel executed in async mode or not.
+   */
+  isAsync: boolean;
+
+  constructor(
+    file: File,
+    key: string | null,
+    options: Options | undefined,
+    isAsync: boolean,
+  ) {
     this.key = key;
     this.file = file;
     this.opts = options || {};
     this.cwd = file.opts.cwd;
     this.filename = file.opts.filename;
+    this.isAsync = isAsync;
   }
 
   set(key: unknown, val: unknown) {

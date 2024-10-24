@@ -85,8 +85,8 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
     options: ValidatedOptions,
     parserOpts: ParserOptions,
   ) => void;
-  pre?: (this: S, file: File) => void;
-  post?: (this: S, file: File) => void;
+  pre?: (this: S, file: File) => void | Promise<void>;
+  post?: (this: S, file: File) => void | Promise<void>;
   inherits?: (
     api: PluginAPI,
     options: unknown,
