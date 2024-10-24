@@ -91,6 +91,8 @@ const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
 const SUPPORTED_EXTENSIONS = new Set([".js", ".mjs", ".cjs", ".cts"] as const);
 type SetValue<T extends Set<unknown>> = T extends Set<infer U> ? U : never;
 
+const asyncModules = new Set();
+
 export default function* loadCodeDefault(
   filepath: string,
   loader: "require" | "auto",
@@ -133,7 +135,16 @@ export default function* loadCodeDefault(
           );
         }
       } catch (e) {
-        if (e.code === "ERR_REQUIRE_ASYNC_MODULE") {
+        if (
+          e.code === "ERR_REQUIRE_ASYNC_MODULE" ||
+          // Node.js 13.0.0 throws ERR_REQUIRE_CYCLE_MODULE instead of
+          // ERR_REQUIRE_ASYNC_MODULE when requiring a module a second time
+          // https://github.com/nodejs/node/issues/55516
+          // This `asyncModules` won't catch all of such cases, but it will
+          // at least catch those caused by Babel trying to load a module twice.
+          (e.code === "ERR_REQUIRE_CYCLE_MODULE" && asyncModules.has(filepath))
+        ) {
+          asyncModules.add(filepath);
           if (!(async ??= yield* isAsync())) {
             throw new ConfigError(tlaError, filepath);
           }

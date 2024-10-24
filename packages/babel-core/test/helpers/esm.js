@@ -38,6 +38,11 @@ export function spawnTransformAsync() {
   return spawn("compile-async");
 }
 
+export function spawnTransformAsyncParallel() {
+  // import() crashes with jest
+  return spawn("compile-async-parallel");
+}
+
 export function spawnTransformSync() {
   // import() crashes with jest
   return spawn("compile-sync");
