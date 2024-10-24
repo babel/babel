@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "targets": { "firefox": "110", "node": "20.6" },
+  "plugins": ["transform-json-modules"]
+}

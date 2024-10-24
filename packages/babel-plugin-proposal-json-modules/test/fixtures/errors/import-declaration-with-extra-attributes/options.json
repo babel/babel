@@ -1,5 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": ["proposal-json-modules"],
-  "throws": "Unknown attribute for JSON modules."
-}

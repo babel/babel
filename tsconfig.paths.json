@@ -161,9 +161,6 @@
       "@babel/plugin-proposal-import-wasm-source": [
         "./packages/babel-plugin-proposal-import-wasm-source/src"
       ],
-      "@babel/plugin-proposal-json-modules": [
-        "./packages/babel-plugin-proposal-json-modules/src"
-      ],
       "@babel/plugin-proposal-optional-chaining-assign": [
         "./packages/babel-plugin-proposal-optional-chaining-assign/src"
       ],
@@ -307,6 +304,9 @@
       ],
       "@babel/plugin-transform-jscript": [
         "./packages/babel-plugin-transform-jscript/src"
+      ],
+      "@babel/plugin-transform-json-modules": [
+        "./packages/babel-plugin-transform-json-modules/src"
       ],
       "@babel/plugin-transform-json-strings": [
         "./packages/babel-plugin-transform-json-strings/src"

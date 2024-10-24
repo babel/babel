@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "targets": { "node": "16" },
+  "plugins": [["transform-json-modules", { "uncheckedRequire": true }]]
+}

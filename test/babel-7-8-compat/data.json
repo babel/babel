@@ -10,7 +10,7 @@
     "babel-plugin-proposal-explicit-resource-management",
     "babel-plugin-proposal-import-attributes-to-assertions",
     "babel-plugin-proposal-import-wasm-source",
-    "babel-plugin-proposal-json-modules",
+    "babel-plugin-transform-json-modules",
     "babel-plugin-syntax-decorators",
     "babel-plugin-syntax-explicit-resource-management",
     "babel-plugin-syntax-import-source",
