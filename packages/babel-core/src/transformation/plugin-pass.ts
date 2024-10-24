@@ -19,13 +19,13 @@ export default class PluginPass<Options = object> {
   /**
    * Is Babel executed in async mode or not.
    */
-  isAsync: boolean | undefined;
+  isAsync: boolean;
 
   constructor(
     file: File,
-    key?: string | null,
-    options?: Options,
-    isAsync?: boolean,
+    key: string | null,
+    options: Options | undefined,
+    isAsync: boolean,
   ) {
     this.key = key;
     this.file = file;
