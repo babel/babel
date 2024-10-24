@@ -133,8 +133,8 @@ export function stop(this: NodePath) {
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
-export function setScope(this: NodePath) {
-  if (this.opts?.noScope) return;
+export function setScope(this: NodePath, ignoreNoScope?: boolean) {
+  if (!ignoreNoScope && this.opts?.noScope) return;
 
   let path = this.parentPath;
 
@@ -150,7 +150,7 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (path.opts?.noScope) return;
+    if (!ignoreNoScope && path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
