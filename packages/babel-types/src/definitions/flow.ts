@@ -1,3 +1,4 @@
+import { importAttributes } from "./core.ts";
 import {
   defineAliasedType,
   arrayOfType,
@@ -140,7 +141,7 @@ defineType("DeclareVariable", {
 });
 
 defineType("DeclareExportDeclaration", {
-  visitor: ["declaration", "specifiers", "source"],
+  visitor: ["declaration", "specifiers", "source", "attributes"],
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     declaration: validateOptionalType("Flow"),
@@ -149,15 +150,17 @@ defineType("DeclareExportDeclaration", {
     ),
     source: validateOptionalType("StringLiteral"),
     default: validateOptional(assertValueType("boolean")),
+    ...importAttributes,
   },
 });
 
 defineType("DeclareExportAllDeclaration", {
-  visitor: ["source"],
+  visitor: ["source", "attributes"],
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     source: validateType("StringLiteral"),
     exportKind: validateOptional(assertOneOf("type", "value")),
+    ...importAttributes,
   },
 });
 

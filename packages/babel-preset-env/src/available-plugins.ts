@@ -1,7 +1,6 @@
 /* eslint sort-keys: "error" */
 
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
-import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
+import otherBabel7Plugins from "./babel-7-available-plugins.cjs";
 
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
@@ -84,8 +83,6 @@ const availablePlugins = {
     bugfixV8SpreadParametersInOptionalChaining,
   "bugfix/transform-v8-static-class-fields-redefine-readonly": () =>
     bugfixV8StaticClassFieldsRedefineReadonly,
-  "syntax-import-assertions": () => syntaxImportAssertions,
-  "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => transformAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -164,11 +161,11 @@ if (!process.env.BABEL_8_BREAKING) {
 
   // This is a factory to create a plugin that enables a parser plugin
   const syntax =
-    (name: ParserPlugin) => (): typeof syntaxImportAttributes => () => ({
+    (name: ParserPlugin) => (): typeof transformJsonStrings => () => ({
       manipulateOptions: (_, p) => p.plugins.push(name),
     });
   type ParserPlugin = Parameters<
-    ReturnType<typeof syntaxImportAttributes>["manipulateOptions"]
+    ReturnType<typeof transformJsonStrings>["manipulateOptions"]
   >[1]["plugins"][number];
 
   const legacyBabel7SyntaxPluginsLoaders = {
@@ -187,18 +184,34 @@ if (!process.env.BABEL_8_BREAKING) {
     "syntax-optional-chaining": syntax("optionalChaining"),
     "syntax-private-property-in-object": syntax("privateIn"),
     "syntax-top-level-await": syntax("topLevelAwait"),
-  };
 
-  // This is a CJS plugin that depends on a package from the monorepo, so it
-  // breaks using ESM. Given that ESM builds are new enough to have this
-  // syntax enabled by default, we can safely skip enabling it.
-  if (!USE_ESM) {
-    // @ts-expect-error unknown key
-    legacyBabel7SyntaxPluginsLoaders["syntax-unicode-sets-regex"] =
-      IS_STANDALONE
+    // These are CJS plugins that depend on a package from the monorepo, so it
+    // breaks using ESM. Given that ESM builds are new enough to have this
+    // syntax enabled by default, we can safely skip enabling it.
+
+    "syntax-unicode-sets-regex":
+      USE_ESM || IS_STANDALONE
         ? () => () => ({})
-        : () => require("@babel/plugin-syntax-unicode-sets-regex");
-  }
+        : () => require("@babel/plugin-syntax-unicode-sets-regex"),
+
+    // We need to keep these plugins because they do not simply enable a
+    // feature, but can affect the AST shape (.attributes vs .assertions).
+    // TLA is only used for local development with ESM, since we cannot
+    // require() monorepo files in that case.
+    // eslint-disable-next-line sort-keys
+    "syntax-import-assertions":
+      USE_ESM && !IS_STANDALONE
+        ? await import("@babel/plugin-syntax-import-assertions").then(
+            m => () => m.default,
+          )
+        : otherBabel7Plugins["syntax-import-assertions"],
+    "syntax-import-attributes":
+      USE_ESM && !IS_STANDALONE
+        ? await import("@babel/plugin-syntax-import-attributes").then(
+            m => () => m.default,
+          )
+        : otherBabel7Plugins["syntax-import-attributes"],
+  };
 
   Object.assign(availablePlugins, legacyBabel7SyntaxPluginsLoaders);
 

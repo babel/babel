@@ -47,7 +47,8 @@
             "raw": "\"./module.wasm\""
           },
           "value": "./module.wasm"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

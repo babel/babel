@@ -53,7 +53,8 @@
                   "raw": "'json-schema'"
                 },
                 "value": "json-schema"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "TSModuleDeclaration",

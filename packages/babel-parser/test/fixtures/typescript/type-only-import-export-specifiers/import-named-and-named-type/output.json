@@ -51,7 +51,8 @@
             "raw": "\"./exports.js\""
           },
           "value": "./exports.js"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

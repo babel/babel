@@ -78,6 +78,7 @@ export function _printAttributes(
   const { attributes, assertions } = node;
 
   if (
+    !process.env.BABEL_8_BREAKING &&
     attributes &&
     !importAttributesKeyword &&
     // In the production build only show the warning once.
@@ -101,7 +102,11 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
   this.word(useAssertKeyword ? "assert" : "with");
   this.space();
 
-  if (!useAssertKeyword && importAttributesKeyword !== "with") {
+  if (
+    !process.env.BABEL_8_BREAKING &&
+    !useAssertKeyword &&
+    importAttributesKeyword !== "with"
+  ) {
     // with-legacy
     this.printList(attributes || assertions);
     return;
@@ -132,11 +137,9 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
   if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, true);
     this.space();
-    // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
     this._printAttributes(node, false);
   } else {
     this.print(node.source);

@@ -48,7 +48,8 @@
                 "type": "Identifier",
                 "start":39,"end":51,"loc":{"start":{"line":2,"column":7,"index":39},"end":{"line":2,"column":19,"index":51},"identifierName":"testVariable"},
                 "name": "testVariable"
-              }
+              },
+              "options": null
             },
             "computed": false,
             "property": {

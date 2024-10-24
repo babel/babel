@@ -7,10 +7,9 @@ const proposalPlugins = new Set<string>([]);
 
 // proposal syntax plugins enabled by the `shippedProposals` option.
 // Unlike proposalPlugins above, they are independent of compiler targets.
-const proposalSyntaxPlugins = [
-  "syntax-import-assertions",
-  "syntax-import-attributes",
-] as const;
+const proposalSyntaxPlugins = process.env.BABEL_8_BREAKING
+  ? ([] as const)
+  : (["syntax-import-assertions", "syntax-import-attributes"] as const);
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = process.env.BABEL_8_BREAKING

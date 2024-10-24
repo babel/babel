@@ -29,7 +29,8 @@
             "raw": "'test'"
           },
           "value": "test"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

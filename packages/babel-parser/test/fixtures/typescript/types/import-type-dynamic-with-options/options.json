@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "typescript",
-    "importAttributes"
+    "typescript"
   ]
 }

@@ -29,7 +29,8 @@
             "raw": "\"\""
           },
           "value": ""
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",

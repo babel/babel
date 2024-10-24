@@ -36,7 +36,8 @@
             "raw": "\"bar\""
           },
           "value": "bar"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -73,7 +74,8 @@
             "raw": "\"bar\""
           },
           "value": "bar"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": [],

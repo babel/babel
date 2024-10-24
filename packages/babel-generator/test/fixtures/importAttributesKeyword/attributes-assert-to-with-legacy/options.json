@@ -1,5 +1,6 @@
 {
-  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
+  "BABEL_8_BREAKING": false,
+  "plugins": ["deprecatedImportAssert"],
   "importAttributesKeyword": "with-legacy",
   "expectedReParseError": true
 }

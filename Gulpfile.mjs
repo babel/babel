@@ -410,6 +410,7 @@ function buildRollup(packages, buildStandalone) {
                 bool(process.env.BABEL_8_BREAKING)
                   ? [
                       // These require()s are all in babel-preset-env/src/polyfills/babel-7-plugins.cjs
+                      // and packages/babel-preset-env/src/babel-7-available-plugins.cjs.
                       // They are gated by a !process.env.BABEL_8_BREAKING check, but
                       // @rollup/plugin-commonjs extracts them to import statements outside of the
                       // check and thus they end up in the final bundle.
@@ -418,6 +419,8 @@ function buildRollup(packages, buildStandalone) {
                       "./babel-polyfill.cjs",
                       "./regenerator.cjs",
                       "@babel/compat-data/corejs2-built-ins",
+                      "@babel/plugin-syntax-import-assertions",
+                      "@babel/plugin-syntax-import-attributes",
                     ]
                   : [],
               dynamicRequireTargets: [

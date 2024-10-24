@@ -102,6 +102,7 @@
           ]
         },
         "declaration": null,
+        "attributes": [],
         "innerComments": [
           {
             "type": "CommentBlock",
@@ -149,6 +150,7 @@
             }
           ]
         },
+        "attributes": [],
         "innerComments": [
           {
             "type": "CommentBlock",

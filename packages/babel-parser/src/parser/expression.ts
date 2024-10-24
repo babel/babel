@@ -881,9 +881,7 @@ export default abstract class ExpressionParser extends LValParser {
     } else {
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        base.type === "Import",
         base.type !== "Super",
-        // @ts-expect-error todo(flow->ts)
         node,
         refExpressionErrors,
       );
@@ -960,27 +958,8 @@ export default abstract class ExpressionParser extends LValParser {
     optional: boolean,
   ): T {
     if (node.callee.type === "Import") {
-      if (node.arguments.length === 2) {
-        if (
-          process.env.BABEL_8_BREAKING ||
-          !(
-            this.hasPlugin("moduleAttributes") ||
-            this.hasPlugin("importAssertions")
-          )
-        ) {
-          this.expectPlugin("importAttributes");
-        }
-      }
       if (node.arguments.length === 0 || node.arguments.length > 2) {
-        this.raise(Errors.ImportCallArity, node, {
-          maxArgumentCount:
-            this.hasPlugin("importAttributes") ||
-            (!process.env.BABEL_8_BREAKING &&
-              (this.hasPlugin("importAssertions") ||
-                this.hasPlugin("moduleAttributes")))
-              ? 2
-              : 1,
-        });
+        this.raise(Errors.ImportCallArity, node);
       } else {
         for (const arg of node.arguments) {
           if (arg.type === "SpreadElement") {
@@ -998,11 +977,10 @@ export default abstract class ExpressionParser extends LValParser {
   parseCallExpressionArguments(
     this: Parser,
     close: TokenType,
-    dynamicImport?: boolean,
     allowPlaceholder?: boolean,
-    nodeForExtra?: N.Node | null,
+    nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
-  ): Array<N.Expression | undefined | null> {
+  ): Array<N.Expression> {
     const elts: N.Expression[] = [];
     let first = true;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
@@ -1014,18 +992,6 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (
-            dynamicImport &&
-            !this.hasPlugin("importAttributes") &&
-            (process.env.BABEL_8_BREAKING ||
-              (!this.hasPlugin("importAssertions") &&
-                !this.hasPlugin("moduleAttributes")))
-          ) {
-            this.raise(
-              Errors.ImportCallArgumentTrailingComma,
-              this.state.lastTokStartLoc,
-            );
-          }
           if (nodeForExtra) {
             this.addTrailingCommaExtraToNode(nodeForExtra);
           }
@@ -2067,10 +2033,7 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          this.addTrailingCommaExtraToNode(
-            // @ts-expect-error todo(flow->ts) improve node types
-            node,
-          );
+          this.addTrailingCommaExtraToNode(node);
           break;
         }
       }
@@ -2115,7 +2078,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, type);
   }
 
-  addTrailingCommaExtraToNode(node: N.Node): void {
+  addTrailingCommaExtraToNode(node: Undone<N.Node>): void {
     this.addExtra(node, "trailingComma", this.state.lastTokStartLoc.index);
     this.addExtra(node, "trailingCommaLoc", this.state.lastTokStartLoc, false);
   }
@@ -2982,25 +2945,20 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.ImportExpression {
     this.next(); // eat tt.parenL
     node.source = this.parseMaybeAssignAllowIn();
-    if (
-      this.hasPlugin("importAttributes") ||
-      (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions"))
-    ) {
-      node.options = null;
-    }
+    node.options = null;
     if (this.eat(tt.comma)) {
-      if (
-        process.env.BABEL_8_BREAKING ||
-        !(
-          this.hasPlugin("moduleAttributes") ||
-          this.hasPlugin("importAssertions")
-        )
-      ) {
-        this.expectPlugin("importAttributes");
-      }
       if (!this.match(tt.parenR)) {
         node.options = this.parseMaybeAssignAllowIn();
-        this.eat(tt.comma);
+
+        if (this.eat(tt.comma) && !this.match(tt.parenR)) {
+          // keep consuming arguments, to then throw ImportCallArity
+          // instead of "expected )"
+          do {
+            this.parseMaybeAssignAllowIn();
+          } while (this.eat(tt.comma) && !this.match(tt.parenR));
+
+          this.raise(Errors.ImportCallArity, node);
+        }
       }
     }
     this.expect(tt.parenR);

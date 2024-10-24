@@ -59,7 +59,8 @@
             "raw": "\"module-a\""
           },
           "value": "module-a"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -88,7 +89,8 @@
             "raw": "\"module-b\""
           },
           "value": "module-b"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -123,7 +125,8 @@
           },
           "value": "module-b"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

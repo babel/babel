@@ -29,10 +29,14 @@ export default declare((api, { deprecatedAssertSyntax }: Options) => {
         deprecatedAssertSyntax = true;
       }
 
-      parserOpts.plugins.push([
-        "importAttributes",
-        { deprecatedAssertSyntax: Boolean(deprecatedAssertSyntax) },
-      ]);
+      if (deprecatedAssertSyntax) {
+        parserOpts.plugins.push("deprecatedImportAssert", [
+          "importAttributes",
+          { deprecatedAssertSyntax: true },
+        ]);
+      } else {
+        parserOpts.plugins.push("importAttributes");
+      }
     },
   };
 });

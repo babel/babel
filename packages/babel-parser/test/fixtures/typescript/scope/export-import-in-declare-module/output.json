@@ -53,7 +53,8 @@
                   "raw": "'~popsicle/dist/request'"
                 },
                 "value": "~popsicle/dist/request"
-              }
+              },
+              "attributes": []
             },
             {
               "type": "ExportNamedDeclaration",
