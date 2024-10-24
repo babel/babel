@@ -3153,7 +3153,7 @@ export default (superClass: typeof Parser) =>
 
         const node = this.startNodeAt<N.CallExpression>(startLoc);
         node.callee = base;
-        node.arguments = super.parseCallExpressionArguments(tt.parenR, false);
+        node.arguments = super.parseCallExpressionArguments(tt.parenR);
         base = this.finishNode(node, "CallExpression");
       } else if (
         base.type === "Identifier" &&
@@ -3212,7 +3212,7 @@ export default (superClass: typeof Parser) =>
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        node.arguments = this.parseCallExpressionArguments(tt.parenR);
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);
       } else if (!noCalls && this.shouldParseTypes() && this.match(tt.lt)) {
@@ -3225,7 +3225,7 @@ export default (superClass: typeof Parser) =>
           node.typeArguments =
             this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
-          node.arguments = super.parseCallExpressionArguments(tt.parenR, false);
+          node.arguments = super.parseCallExpressionArguments(tt.parenR);
           if (subscriptState.optionalChainMember) {
             (node as Undone<N.OptionalCallExpression>).optional = false;
           }

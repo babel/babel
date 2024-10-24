@@ -2538,12 +2538,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               N.CallExpression | N.OptionalCallExpression
             >(startLoc);
             node.callee = base;
-            // possibleAsync always false here, because we would have handled it above.
             // @ts-expect-error (won't be any undefined arguments)
-            node.arguments = this.parseCallExpressionArguments(
-              tt.parenR,
-              /* possibleAsync */ false,
-            );
+            node.arguments = this.parseCallExpressionArguments(tt.parenR);
 
             // Handles invalid case: `f<T>(a:b)`
             this.tsCheckForInvalidTypeCasts(node.arguments);

@@ -802,7 +802,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.eat(tt.parenL)) {
       const node = this.startNodeAtNode<N.CallExpression>(expr);
       node.callee = expr;
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR);
       this.toReferencedList(node.arguments);
       return this.finishNode(node, "CallExpression");
     }
