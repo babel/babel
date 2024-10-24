@@ -1,38 +1,8 @@
 import stripAnsi from "strip-ansi";
-import colors, { createColors } from "picocolors";
-import _codeFrame, { codeFrameColumns } from "../lib/index.js";
+import _codeFrame, { codeFrameColumns, highlight } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const babelHighlightPicocolors = require(
-  require.resolve("picocolors", {
-    paths: [require.resolve("@babel/highlight")],
-  }),
-);
-
-const compose = (f, g) => v => f(g(v));
-
 describe("@babel/code-frame", function () {
-  function stubColorSupport(colors, supported) {
-    let originalColorsCopy;
-
-    beforeEach(function () {
-      if (supported === colors.isColorSupported) {
-        originalColorsCopy = null;
-      } else {
-        originalColorsCopy = { ...colors };
-        Object.assign(colors, createColors(supported));
-      }
-    });
-
-    afterEach(function () {
-      if (originalColorsCopy) {
-        Object.assign(colors, originalColorsCopy);
-      }
-    });
-  }
-
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(codeFrame(rawLines, 2, 16)).toEqual(
@@ -120,112 +90,6 @@ describe("@babel/code-frame", function () {
         "  3 | \t};",
       ].join("\n"),
     );
-  });
-
-  describe("when colors are supported", () => {
-    stubColorSupport(colors, true);
-    stubColorSupport(babelHighlightPicocolors, true);
-
-    test("opts.highlightCode", function () {
-      const rawLines = "console.log('babel')";
-      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-      const stripped = stripAnsi(result);
-      expect(result.length).toBeGreaterThan(stripped.length);
-      expect(stripped).toEqual(
-        ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
-      );
-    });
-
-    test("opts.highlightCode with multiple columns and lines", function () {
-      // prettier-ignore
-      const rawLines = [
-        "function a(b, c) {",
-        "  return b + c;",
-        "}"
-      ].join("\n");
-
-      const result = codeFrameColumns(
-        rawLines,
-        {
-          start: {
-            line: 1,
-            column: 1,
-          },
-          end: {
-            line: 3,
-            column: 1,
-          },
-        },
-        {
-          highlightCode: true,
-          message: "Message about things",
-        },
-      );
-      const stripped = stripAnsi(result);
-      expect(result.length).toBeGreaterThan(stripped.length);
-      expect(stripped).toEqual(
-        // prettier-ignore
-        [
-          "> 1 | function a(b, c) {",
-          "    | ^^^^^^^^^^^^^^^^^^",
-          "> 2 |   return b + c;",
-          "    | ^^^^^^^^^^^^^^^",
-          "> 3 | }",
-          "    | ^ Message about things",
-        ].join('\n'),
-      );
-    });
-    test("opts.forceColor", function () {
-      const marker = compose(colors.red, colors.bold);
-      const gutter = colors.gray;
-
-      const rawLines = ["", "", "", ""].join("\n");
-      expect(
-        codeFrame(rawLines, 3, null, {
-          linesAbove: 1,
-          linesBelow: 1,
-          forceColor: true,
-        }),
-      ).toEqual(
-        colors.reset(
-          [
-            " " + gutter(" 2 |"),
-            marker(">") + gutter(" 3 |"),
-            " " + gutter(" 4 |"),
-          ].join("\n"),
-        ),
-      );
-    });
-
-    test("jsx", function () {
-      const gutter = colors.gray;
-      const yellow = colors.yellow;
-
-      const rawLines = ["<div />"].join("\n");
-
-      expect(
-        JSON.stringify(
-          codeFrame(rawLines, 0, null, {
-            linesAbove: 1,
-            linesBelow: 1,
-            forceColor: true,
-          }),
-        ),
-      ).toEqual(
-        JSON.stringify(
-          colors.reset(
-            " " +
-              gutter(" 1 |") +
-              " " +
-              yellow("<") +
-              yellow("div") +
-              " " +
-              yellow("/") +
-              yellow(">"),
-          ),
-        ),
-      );
-    });
   });
 
   test("opts.linesAbove", function () {
@@ -547,5 +411,13 @@ describe("@babel/code-frame", function () {
         "  5 | };",
       ].join("\n"),
     );
+  });
+
+  test("highlight works", function () {
+    const raw = "const a = 1";
+    const highlighted = highlight(raw);
+
+    expect(stripAnsi(highlighted)).toBe(raw);
+    expect(highlighted.length).toBeGreaterThan(raw.length);
   });
 });

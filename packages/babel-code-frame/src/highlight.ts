@@ -6,18 +6,7 @@ import {
   isKeyword,
 } from "@babel/helper-validator-identifier";
 
-import _colors, { createColors } from "picocolors";
-import type { Colors, Formatter } from "picocolors/types";
-// See https://github.com/alexeyraspopov/picocolors/issues/62
-const colors =
-  typeof process === "object" &&
-  (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false")
-    ? createColors(false)
-    : _colors;
-
-const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
-  (f, g) => v =>
-    f(g(v));
+import { getDefs, type InternalTokenType } from "./defs.ts";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -30,37 +19,10 @@ const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
  */
 const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
 
-type InternalTokenType =
-  | "keyword"
-  | "capitalized"
-  | "jsxIdentifier"
-  | "punctuator"
-  | "number"
-  | "string"
-  | "regex"
-  | "comment"
-  | "invalid";
-
 type Token = {
   type: InternalTokenType | "uncolored";
   value: string;
 };
-/**
- * Styles for token types.
- */
-function getDefs(colors: Colors): Record<InternalTokenType, Formatter> {
-  return {
-    keyword: colors.cyan,
-    capitalized: colors.yellow,
-    jsxIdentifier: colors.yellow,
-    punctuator: colors.yellow,
-    number: colors.magenta,
-    string: colors.green,
-    regex: colors.magenta,
-    comment: colors.gray,
-    invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
-  };
-}
 
 /**
  * RegExp to test for newlines in terminal.
@@ -224,18 +186,18 @@ if (process.env.BABEL_8_BREAKING) {
   };
 }
 
-/**
- * Highlight `text` using the token definitions in `defs`.
- */
-function highlightTokens(defs: Record<string, Formatter>, text: string) {
+export function highlight(text: string) {
+  if (text === "") return "";
+
+  const defs = getDefs(true);
+
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
-    const colorize = defs[type];
-    if (colorize) {
+    if (type in defs) {
       highlighted += value
         .split(NEWLINE)
-        .map(str => colorize(str))
+        .map(str => defs[type as InternalTokenType](str))
         .join("\n");
     } else {
       highlighted += value;
@@ -243,57 +205,4 @@ function highlightTokens(defs: Record<string, Formatter>, text: string) {
   }
 
   return highlighted;
-}
-
-/**
- * Highlight `text` using the token definitions in `defs`.
- */
-
-type Options = {
-  forceColor?: boolean;
-};
-
-/**
- * Whether the code should be highlighted given the passed options.
- */
-export function shouldHighlight(options: Options): boolean {
-  return colors.isColorSupported || options.forceColor;
-}
-
-let pcWithForcedColor: Colors = undefined;
-function getColors(forceColor: boolean) {
-  if (forceColor) {
-    pcWithForcedColor ??= createColors(true);
-    return pcWithForcedColor;
-  }
-  return colors;
-}
-
-/**
- * Highlight `code`.
- */
-export default function highlight(code: string, options: Options = {}): string {
-  if (code !== "" && shouldHighlight(options)) {
-    const defs = getDefs(getColors(options.forceColor));
-    return highlightTokens(defs, code);
-  } else {
-    return code;
-  }
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-  let chalk: any, chalkWithForcedColor: any;
-  // eslint-disable-next-line no-restricted-globals
-  exports.getChalk = ({ forceColor }: Options) => {
-    // eslint-disable-next-line no-restricted-globals
-    chalk ??= require("chalk");
-    if (forceColor) {
-      chalkWithForcedColor ??= new chalk.constructor({
-        enabled: true,
-        level: 1,
-      });
-      return chalkWithForcedColor;
-    }
-    return chalk;
-  };
 }
