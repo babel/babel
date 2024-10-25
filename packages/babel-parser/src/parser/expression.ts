@@ -64,7 +64,7 @@ import { setInnerComments } from "./comments.ts";
 import { cloneIdentifier, type Undone } from "./node.ts";
 import type Parser from "./index.ts";
 
-import type { SourceType } from "../options.ts";
+import { OptionFlags, type SourceType } from "../options.ts";
 
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -140,7 +140,7 @@ export default abstract class ExpressionParser extends LValParser {
           // Store the first redefinition's position, otherwise ignore because
           // we are parsing ambiguous pattern
           if (refExpressionErrors.doubleProtoLoc === null) {
-            refExpressionErrors.doubleProtoLoc = key.loc.start;
+            refExpressionErrors.doubleProtoLoc = key.start;
           }
         } else {
           this.raise(Errors.DuplicateProto, key);
@@ -311,7 +311,7 @@ export default abstract class ExpressionParser extends LValParser {
         const startIndex = startLoc.index;
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          refExpressionErrors.doubleProtoLoc.index >= startIndex
+          refExpressionErrors.doubleProtoLoc >= startIndex
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
@@ -431,12 +431,12 @@ export default abstract class ExpressionParser extends LValParser {
         !this.prodParam.hasIn ||
         !this.match(tt._in)
       ) {
-        this.raise(Errors.PrivateInExpectedIn, left, {
+        this.raise(Errors.PrivateInExpectedIn, leftStartLoc, {
           identifierName: value,
         });
       }
 
-      this.classScope.usePrivateName(value, left.loc.start);
+      this.classScope.usePrivateName(value, leftStartLoc);
     }
 
     const op = this.state.type;
@@ -2286,7 +2286,7 @@ export default abstract class ExpressionParser extends LValParser {
       //   IdentifierReference
       //   CoverInitializedName
       // Note: `{ eval } = {}` will be checked in `checkLVal` later.
-      this.checkReservedWord(prop.key.name, prop.key.loc.start, true, false);
+      this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
@@ -2577,8 +2577,11 @@ export default abstract class ExpressionParser extends LValParser {
               (node.kind === "method" || node.kind === "constructor") &&
                 // @ts-expect-error key may not index node
                 !!node.key
-                ? // @ts-expect-error node.key has been guarded
-                  node.key.loc.end
+                ? this.optionFlags & OptionFlags.Locations
+                  ? // @ts-expect-error node.key has been guarded
+                    node.key.loc.end
+                  : // @ts-expect-error node.key has been guarded
+                    node.key
                 : node,
             );
           }
@@ -2751,7 +2754,9 @@ export default abstract class ExpressionParser extends LValParser {
     name: string,
   ): N.Identifier {
     node.name = name;
-    node.loc.identifierName = name;
+    if (this.optionFlags & OptionFlags.Locations) {
+      node.loc.identifierName = name;
+    }
 
     return this.finishNode(node, "Identifier");
   }
@@ -2759,7 +2764,7 @@ export default abstract class ExpressionParser extends LValParser {
   parseIdentifierName(liberal?: boolean): string {
     let name: string;
 
-    const { startLoc, type } = this.state;
+    const { start, type } = this.state;
 
     if (tokenIsKeywordOrIdentifier(type)) {
       name = this.state.value;
@@ -2776,7 +2781,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.replaceToken(tt.name);
       }
     } else {
-      this.checkReservedWord(name, startLoc, tokenIsKeyword, false);
+      this.checkReservedWord(name, start, tokenIsKeyword, false);
     }
 
     this.next();
@@ -2786,7 +2791,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   checkReservedWord(
     word: string,
-    startLoc: Position,
+    startLoc: number,
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
@@ -2860,16 +2865,17 @@ export default abstract class ExpressionParser extends LValParser {
   // Parses await expression inside async function.
 
   parseAwait(this: Parser, startLoc: Position): N.AwaitExpression {
+    const startIndex = startLoc.index - this.startIndex;
+    this.setLoc(startIndex, startLoc);
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      // @ts-expect-error todo(flow->ts)
-      node,
+      startIndex,
     );
 
     if (this.eat(tt.star)) {
-      this.raise(Errors.ObsoleteAwaitStar, node);
+      this.raise(Errors.ObsoleteAwaitStar, startLoc);
     }
 
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
@@ -2915,8 +2921,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      // @ts-expect-error todo(flow->ts)
-      node,
+      this.state.start,
     );
 
     this.next();
