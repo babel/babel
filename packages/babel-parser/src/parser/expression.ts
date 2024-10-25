@@ -1965,12 +1965,7 @@ export default abstract class ExpressionParser extends LValParser {
     const endOffset = isTail ? -1 : -2;
     const elemEnd = end + endOffset;
     elem.value = {
-      raw: this.input
-        .slice(
-          this.state.offsetToSourcePos(elemStart),
-          this.state.offsetToSourcePos(elemEnd),
-        )
-        .replace(/\r\n?/g, "\n"),
+      raw: this.input.slice(elemStart, elemEnd).replace(/\r\n?/g, "\n"),
       cooked: value === null ? null : value.slice(1, endOffset),
     };
     elem.tail = isTail;
