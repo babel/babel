@@ -60,12 +60,18 @@ async function spawn(runner, filename, cwd = process.cwd()) {
       cwd,
       env: {
         ...process.env,
-        NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
+        NODE_OPTIONS:
+          parseInt(process.versions.node) >= 22
+            ? "--disable-warning=ExperimentalWarning"
+            : "",
       },
     },
   );
 
-  if (stderr.trim()) {
+  const EXPERIMENTAL_WARNING =
+    /\(node:\d+\) ExperimentalWarning: (The ESM module loader is experimental\.|Support for loading ES Module in require\(\) is an experimental feature and might change at any time\n\(Use `node --trace-warnings ...` to show where the warning was created\))/;
+
+  if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
     throw new Error(
       `error is thrown in babel-${runner}.mjs: stdout\n` +
         stdout +
