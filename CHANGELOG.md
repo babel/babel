@@ -24,6 +24,42 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.0 (2024-10-25)
+
+#### :rocket: New Feature
+* `babel-core`, `babel-generator`, `babel-parser`, `babel-plugin-syntax-import-assertions`, `babel-plugin-syntax-import-attributes`, `babel-preset-env`, `babel-standalone`, `babel-types`
+  * [#16850](https://github.com/babel/babel/pull/16850) Enable import attributes parsing by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#16862](https://github.com/babel/babel/pull/16862) feat: support async plugin's pre/post ([@timofei-iatsenko](https://github.com/timofei-iatsenko))
+* `babel-compat-data`, `babel-plugin-proposal-regexp-modifiers`, `babel-plugin-transform-regexp-modifiers`, `babel-preset-env`, `babel-standalone`
+  * [#16692](https://github.com/babel/babel/pull/16692) Add `transform-regexp-modifiers` to `preset-env` ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#16849](https://github.com/babel/babel/pull/16849) feat: add `startIndex` parser option ([@DylanPiercey](https://github.com/DylanPiercey))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-flow`
+  * [#16841](https://github.com/babel/babel/pull/16841) Always enable parsing of Flow enums ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-preset-typescript`, `babel-runtime-corejs3`
+  * [#16794](https://github.com/babel/babel/pull/16794) Support `import()` in `rewriteImportExtensions` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-parser`
+  * [#16708](https://github.com/babel/babel/pull/16708) Add experimental format-preserving mode to `@babel/generator` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#16928](https://github.com/babel/babel/pull/16928) Workaround Node.js bug for parallel loading of TLA modules ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16926](https://github.com/babel/babel/pull/16926) Fix loading of modules with TLA in Node.js 23 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-plugin-proposal-json-modules`, `babel-plugin-transform-json-modules`, `babel-standalone`
+  * [#16924](https://github.com/babel/babel/pull/16924) Rename `proposal-json-modules` to `transform-json-modules` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-code-frame`, `babel-highlight`
+  * [#16896](https://github.com/babel/babel/pull/16896) Inline `@babel/highlight` in `@babel/code-frame` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#16732](https://github.com/babel/babel/pull/16732) Add `kind` to `TSModuleDeclaration` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#16882](https://github.com/babel/babel/pull/16882) perf: Improve module transforms ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.25.9 (2024-10-22)
 
 #### :bug: Bug Fix
