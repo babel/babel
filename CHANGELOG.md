@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.1 (2024-10-25)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#16936](https://github.com/babel/babel/pull/16936) fix(parser): offset internal index locations by startIndex ([@DylanPiercey](https://github.com/DylanPiercey))
 ## v7.26.0 (2024-10-25)
 
 #### :rocket: New Feature
