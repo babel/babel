@@ -470,6 +470,7 @@ export default (superClass: typeof Parser) =>
               startLoc = this.state.startLoc;
               this.next();
               if (this.eat(tt.slash)) {
+                this.setLoc(startLoc.index, startLoc);
                 closingElement = this.jsxParseClosingElementAt(startLoc);
                 break contents;
               }
