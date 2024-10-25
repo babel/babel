@@ -56,16 +56,7 @@ async function spawn(runner, filename, cwd = process.cwd()) {
     process.execPath,
     // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
     [require.resolve(`../fixtures/babel-${runner}.mjs`), filename, cwd],
-    {
-      cwd,
-      env: {
-        ...process.env,
-        NODE_OPTIONS:
-          parseInt(process.versions.node) >= 23
-            ? "--disable-warning=ExperimentalWarning"
-            : "",
-      },
-    },
+    { cwd, env: process.env },
   );
 
   const EXPERIMENTAL_WARNING =
