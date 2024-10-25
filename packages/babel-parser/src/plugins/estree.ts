@@ -1,32 +1,30 @@
 import type { TokenType } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
 import type * as N from "../types.ts";
-import type { Node as NodeType, NodeBase, File } from "../types.ts";
-import type { Position } from "../util/location.ts";
+import type { NodeBase, Node as NodeType, File } from "../types.ts";
+import { Position } from "../util/location.ts";
 import { Errors } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
 import { OptionFlags } from "../options.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
 
-const { defineProperty } = Object;
-const toUnenumerable = (object: any, key: string) => {
-  if (object) {
-    defineProperty(object, key, { enumerable: false, value: object[key] });
-  }
-};
-
 function toESTreeLocation(node: any) {
-  toUnenumerable(node.loc.start, "index");
-  toUnenumerable(node.loc.end, "index");
+  const { start, end } = node.loc;
+  node.loc.start = new Position(start.line, start.column);
+  node.loc.end = new Position(end.line, end.column);
 
   return node;
 }
 
 export default (superClass: typeof Parser) =>
   class ESTreeParserMixin extends superClass implements Parser {
+    createPosition(loc: Position): Position {
+      return new Position(loc.line, loc.column);
+    }
+
     parse(): File {
-      const file = toESTreeLocation(super.parse());
+      const file = super.parse();
 
       if (this.optionFlags & OptionFlags.Tokens) {
         file.tokens = file.tokens.map(toESTreeLocation);
@@ -103,11 +101,11 @@ export default (superClass: typeof Parser) =>
     // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
     estreeParseChainExpression(
       node: N.Expression,
-      endLoc: Position,
+      endNode: NodeType,
     ): N.EstreeChainExpression {
       const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
       chain.expression = node;
-      return this.finishNodeAt(chain, "ChainExpression", endLoc);
+      return this.finishNodeAtNode(chain, "ChainExpression", endNode);
     }
 
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
@@ -463,10 +461,7 @@ export default (superClass: typeof Parser) =>
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(
-            this.getPrivateNameSV(key),
-            key.loc.start,
-          );
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
         }
         this.toAssignable(value, isLHS);
       } else {
@@ -590,7 +585,7 @@ export default (superClass: typeof Parser) =>
     stopParseSubscript(base: N.Expression, state: N.ParseSubscriptState) {
       const node = super.stopParseSubscript(base, state);
       if (state.optionalChainMember) {
-        return this.estreeParseChainExpression(node, base.loc.end);
+        return this.estreeParseChainExpression(node, base);
       }
       return node;
     }
@@ -672,6 +667,14 @@ export default (superClass: typeof Parser) =>
       endLoc: Position,
     ): T {
       return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
+    }
+
+    finishNodeAtNode<T extends NodeType>(
+      node: Undone<T>,
+      type: T["type"],
+      endNode: NodeType,
+    ): T {
+      return toESTreeLocation(super.finishNodeAtNode(node, type, endNode));
     }
 
     // Override for TS-ESLint that does not allow optional AST properties
