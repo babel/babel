@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.25.9",
+  "version": "7.26.0",
   "version_babel8": "8.0.0-alpha.12",
   "private": true,
   "type": "commonjs",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.25.4",
+  "version": "7.26.0",
   "description": "Tests for babel/eslint-* packages",
   "private": true,
   "dependencies": {

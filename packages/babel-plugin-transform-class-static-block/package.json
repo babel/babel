@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-class-static-block",
-  "version": "7.25.9",
+  "version": "7.26.0",
   "description": "Transform class static blocks",
   "repository": {
     "type": "git",
