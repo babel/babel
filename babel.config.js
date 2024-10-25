@@ -187,7 +187,7 @@ module.exports = function (api) {
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
       env !== "standalone"
-        ? ["@babel/plugin-proposal-json-modules", { uncheckedRequire: true }]
+        ? ["@babel/plugin-transform-json-modules", { uncheckedRequire: true }]
         : null,
 
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
