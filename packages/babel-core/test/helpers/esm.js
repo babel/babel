@@ -61,7 +61,7 @@ async function spawn(runner, filename, cwd = process.cwd()) {
       env: {
         ...process.env,
         NODE_OPTIONS:
-          parseInt(process.versions.node) >= 22
+          parseInt(process.versions.node) >= 23
             ? "--disable-warning=ExperimentalWarning"
             : "",
       },
