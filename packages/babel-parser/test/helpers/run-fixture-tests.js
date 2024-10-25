@@ -145,7 +145,7 @@ function runParseTest(parse, test, onlyCompareErrors, ignoreLocations) {
       actual.ast &&
       expected.ast &&
       !actual.ast.errors &&
-      !options.plugins?.includes("estree") &&
+      !(options.plugins && options.plugins.includes("estree")) &&
       !options.ranges
     ) {
       removeLocations(actual.ast);
