@@ -3237,7 +3237,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             propertyName:
               key.type === "Identifier" && !node.computed
                 ? key.name
-                : `[${this.input.slice(key.start, key.end)}]`,
+                : `[${this.input.slice(this.state.offsetToSourcePos(key.start), this.state.offsetToSourcePos(key.end))}]`,
           },
         );
       }
@@ -4002,7 +4002,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             methodName:
               key.type === "Identifier" && !method.computed
                 ? key.name
-                : `[${this.input.slice(key.start, key.end)}]`,
+                : `[${this.input.slice(this.state.offsetToSourcePos(key.start), this.state.offsetToSourcePos(key.end))}]`,
           });
         }
       }

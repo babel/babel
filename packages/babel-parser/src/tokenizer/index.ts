@@ -153,6 +153,8 @@ export default abstract class Tokenizer extends CommentsParser {
       curLine: state.curLine,
       lineStart: state.lineStart,
       curPosition: state.curPosition,
+      sourceToOffsetPos: state.sourceToOffsetPos,
+      offsetToSourcePos: state.offsetToSourcePos,
     };
   }
 

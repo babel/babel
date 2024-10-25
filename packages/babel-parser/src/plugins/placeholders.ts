@@ -391,7 +391,10 @@ export default (superClass: typeof Parser) =>
 
     // Throws if the current token and the prev one are separated by a space.
     assertNoSpace(): void {
-      if (this.state.start > this.state.lastTokEndLoc.index) {
+      if (
+        this.state.start >
+        this.state.offsetToSourcePos(this.state.lastTokEndLoc.index)
+      ) {
         this.raise(PlaceholderErrors.UnexpectedSpace, this.state.lastTokEndLoc);
       }
     }

@@ -2180,7 +2180,11 @@ export default (superClass: typeof Parser) =>
       parse: () => T,
     ): T {
       let result: T;
-      if (this.state.noArrowParamsConversionAt.includes(node.start)) {
+      if (
+        this.state.noArrowParamsConversionAt.includes(
+          this.state.offsetToSourcePos(node.start),
+        )
+      ) {
         this.state.noArrowParamsConversionAt.push(this.state.start);
         result = parse();
         this.state.noArrowParamsConversionAt.pop();
@@ -3097,7 +3101,11 @@ export default (superClass: typeof Parser) =>
         | Array<N.Expression | N.SpreadElement>
         | Array<N.Expression | N.RestElement>,
     ): void {
-      if (this.state.noArrowParamsConversionAt.includes(node.start)) {
+      if (
+        this.state.noArrowParamsConversionAt.includes(
+          this.state.offsetToSourcePos(node.start),
+        )
+      ) {
         node.params = params as N.ArrowFunctionExpression["params"];
       } else {
         super.setArrowFunctionParameters(node, params);
@@ -3112,7 +3120,9 @@ export default (superClass: typeof Parser) =>
     ): void {
       if (
         isArrowFunction &&
-        this.state.noArrowParamsConversionAt.includes(node.start)
+        this.state.noArrowParamsConversionAt.includes(
+          this.state.offsetToSourcePos(node.start),
+        )
       ) {
         return;
       }
@@ -3134,7 +3144,10 @@ export default (superClass: typeof Parser) =>
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
       return super.parseParenAndDistinguishExpression(
-        canBeArrow && !this.state.noArrowAt.includes(this.state.start),
+        canBeArrow &&
+          !this.state.noArrowAt.includes(
+            this.state.sourceToOffsetPos(this.state.start),
+          ),
       );
     }
 
