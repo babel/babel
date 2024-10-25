@@ -128,7 +128,7 @@ export default abstract class UtilParser extends Tokenizer {
   hasPrecedingLineBreak(): boolean {
     return hasNewLine(
       this.input,
-      this.state.offsetToSourcePos(this.state.lastTokEndLoc.index),
+      this.offsetToSourcePos(this.state.lastTokEndLoc.index),
       this.state.start,
     );
   }

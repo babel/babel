@@ -253,8 +253,8 @@ export default abstract class StatementParser extends ExpressionParser {
     const directiveLiteral = directive.value;
     const expressionValue = directiveLiteral.value;
     const raw = this.input.slice(
-      this.state.offsetToSourcePos(directiveLiteral.start),
-      this.state.offsetToSourcePos(directiveLiteral.end),
+      this.offsetToSourcePos(directiveLiteral.start),
+      this.offsetToSourcePos(directiveLiteral.end),
     );
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
@@ -1285,7 +1285,7 @@ export default abstract class StatementParser extends ExpressionParser {
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];
       if (label.statementStart === node.start) {
-        label.statementStart = this.state.sourceToOffsetPos(this.state.start);
+        label.statementStart = this.sourceToOffsetPos(this.state.start);
         label.kind = kind;
       } else {
         break;
@@ -1295,7 +1295,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.state.labels.push({
       name: maybeName,
       kind: kind,
-      statementStart: this.state.sourceToOffsetPos(this.state.start),
+      statementStart: this.sourceToOffsetPos(this.state.start),
     });
     // https://tc39.es/ecma262/#prod-LabelledItem
     node.body =

@@ -168,9 +168,8 @@ export default class CommentsParser extends BaseParser {
       /*:: invariant(commentWS.containingNode !== null) */
       const { containingNode: node, start: commentStart } = commentWS;
       if (
-        this.input.charCodeAt(
-          this.state.offsetToSourcePos(commentStart) - 1,
-        ) === charCodes.comma
+        this.input.charCodeAt(this.offsetToSourcePos(commentStart) - 1) ===
+        charCodes.comma
       ) {
         // If a commentWhitespace follows a comma and the containingNode allows
         // list structures with trailing comma, merge it to the trailingComment

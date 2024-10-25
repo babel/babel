@@ -174,7 +174,7 @@ export default class State {
    */
 
   curPosition(): Position {
-    const index = this.sourceToOffsetPos(this.pos);
+    const index = this.startIndex + this.pos;
     return new Position(this.curLine, index - this.lineStart, index);
   }
 
@@ -208,14 +208,6 @@ export default class State {
 
     return state;
   }
-
-  sourceToOffsetPos(sourcePos: number) {
-    return sourcePos + this.startIndex;
-  }
-
-  offsetToSourcePos(offsetPos: number) {
-    return offsetPos - this.startIndex;
-  }
 }
 
 export type LookaheadState = {
@@ -230,8 +222,6 @@ export type LookaheadState = {
   curLine: number;
   lineStart: number;
   curPosition: State["curPosition"];
-  sourceToOffsetPos: State["sourceToOffsetPos"];
-  offsetToSourcePos: State["offsetToSourcePos"];
   /* Used only in readToken_mult_modulo */
   inType: boolean;
   // These boolean properties are not initialized in createLookaheadState()

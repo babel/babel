@@ -157,7 +157,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): expr is N.ArrowFunctionExpression {
     return (
       expr.type === "ArrowFunctionExpression" &&
-      this.state.offsetToSourcePos(expr.start) === potentialArrowAt
+      this.offsetToSourcePos(expr.start) === potentialArrowAt
     );
   }
 
@@ -950,7 +950,7 @@ export default abstract class ExpressionParser extends LValParser {
       !this.canInsertSemicolon() &&
       // check there are no escape sequences, such as \u{61}sync
       base.end - base.start === 5 &&
-      this.state.offsetToSourcePos(base.start) === this.state.potentialArrowAt
+      this.offsetToSourcePos(base.start) === this.state.potentialArrowAt
     );
   }
 
@@ -1666,10 +1666,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.addExtra(
       node,
       "raw",
-      this.input.slice(
-        this.state.offsetToSourcePos(node.start),
-        this.state.end,
-      ),
+      this.input.slice(this.offsetToSourcePos(node.start), this.state.end),
     );
     node.value = value;
     this.next();
@@ -1707,10 +1704,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.addExtra(
       node,
       "raw",
-      this.input.slice(
-        this.state.offsetToSourcePos(node.start),
-        this.state.end,
-      ),
+      this.input.slice(this.offsetToSourcePos(node.start), this.state.end),
     );
     node.pattern = value.pattern;
     node.flags = value.flags;

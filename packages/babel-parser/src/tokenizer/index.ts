@@ -153,8 +153,6 @@ export default abstract class Tokenizer extends CommentsParser {
       curLine: state.curLine,
       lineStart: state.lineStart,
       curPosition: state.curPosition,
-      sourceToOffsetPos: state.sourceToOffsetPos,
-      offsetToSourcePos: state.offsetToSourcePos,
     };
   }
 
@@ -448,8 +446,8 @@ export default abstract class Tokenizer extends CommentsParser {
     if (comments.length > 0) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
-        start: this.state.sourceToOffsetPos(spaceStart),
-        end: this.state.sourceToOffsetPos(end),
+        start: this.sourceToOffsetPos(spaceStart),
+        end: this.sourceToOffsetPos(end),
         comments,
         leadingNode: null,
         trailingNode: null,
