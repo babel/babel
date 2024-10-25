@@ -30,6 +30,7 @@ export default class Parser extends StatementParser {
     this.initializeScopes();
     this.plugins = pluginsMap;
     this.filename = options.sourceFilename;
+    this.startIndex = options.startIndex;
   }
 
   // This can be overwritten, for example, by the TypeScript plugin.

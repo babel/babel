@@ -446,8 +446,8 @@ export default abstract class Tokenizer extends CommentsParser {
     if (comments.length > 0) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
-        start: spaceStart,
-        end,
+        start: this.sourceToOffsetPos(spaceStart),
+        end: this.sourceToOffsetPos(end),
         comments,
         leadingNode: null,
         trailingNode: null,
@@ -1172,6 +1172,7 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   readRadixNumber(radix: number): void {
+    const start = this.state.pos;
     const startLoc = this.state.curPosition();
     let isBigInt = false;
 
@@ -1201,9 +1202,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
 
     if (isBigInt) {
-      const str = this.input
-        .slice(startLoc.index, this.state.pos)
-        .replace(/[_n]/g, "");
+      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
     }

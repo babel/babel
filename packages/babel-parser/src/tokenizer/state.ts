@@ -174,7 +174,7 @@ export default class State {
    */
 
   curPosition(): Position {
-    const index = this.pos + this.startIndex;
+    const index = this.startIndex + this.pos;
     return new Position(this.curLine, index - this.lineStart, index);
   }
 
@@ -221,7 +221,7 @@ export type LookaheadState = {
   lastTokEndLoc: Position;
   curLine: number;
   lineStart: number;
-  curPosition: () => Position;
+  curPosition: State["curPosition"];
   /* Used only in readToken_mult_modulo */
   inType: boolean;
   // These boolean properties are not initialized in createLookaheadState()
