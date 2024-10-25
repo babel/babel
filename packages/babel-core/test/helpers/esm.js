@@ -56,20 +56,11 @@ async function spawn(runner, filename, cwd = process.cwd()) {
     process.execPath,
     // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
     [require.resolve(`../fixtures/babel-${runner}.mjs`), filename, cwd],
-    {
-      cwd,
-      env: {
-        ...process.env,
-        NODE_OPTIONS:
-          parseInt(process.versions.node) >= 23
-            ? "--disable-warning=ExperimentalWarning"
-            : "",
-      },
-    },
+    { cwd, env: process.env },
   );
 
   const EXPERIMENTAL_WARNING =
-    /\(node:\d+\) ExperimentalWarning: (The ESM module loader is experimental\.|Support for loading ES Module in require\(\) is an experimental feature and might change at any time\n\(Use `node --trace-warnings ...` to show where the warning was created\))/;
+    /\(node:\d+\) ExperimentalWarning: (The ESM module loader is experimental\.|CommonJS module .+? is loading ES Module .+? using require\(\)\.\nSupport for loading ES Module in require\(\) is an experimental feature and might change at any time\n\(Use `node --trace-warnings ...` to show where the warning was created\))/;
 
   if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
     throw new Error(
