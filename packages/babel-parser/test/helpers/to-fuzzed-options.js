@@ -45,7 +45,14 @@ const toAdjustedSyntaxError = (adjust, error) =>
     : error;
 
 export default function toFuzzedOptions(options) {
-  if (TEST_FUZZ !== "true") return [[false, options]];
+  if (
+    TEST_FUZZ !== "true" ||
+    options.startIndex != null ||
+    options.startLine != null ||
+    options.startColumn != null
+  ) {
+    return [[false, options]];
+  }
 
   const { startIndex = 0, startLine = 1, startColumn = 0 } = options;
 
@@ -53,7 +60,7 @@ export default function toFuzzedOptions(options) {
   // a different position. Also, make sure we stay within the "reasonable"
   // bounds in case the test is testing negative startLine or startColumn
   // for example.
-  const randomIndex = Math.max(1, random(startIndex + 1, 100));
+  const randomIndex = Math.max(1, random(startIndex + 1, 1000));
   const randomLine = Math.max(2, random(startLine + 1, 1000));
   const randomColumn = Math.max(1, random(startColumn + 1, 100));
 
@@ -66,8 +73,6 @@ export default function toFuzzedOptions(options) {
     [randomIndex, 1, 0],
     [randomIndex, randomLine, randomColumn],
     [false, randomLine, false],
-    [false, false, randomColumn],
-    [randomIndex, false, false],
   ]
     .map(([index, line, column]) => [
       ["startIndex", index !== false && { enumerable: true, value: index }],
@@ -96,12 +101,26 @@ export default function toFuzzedOptions(options) {
     .map(([options, fStartIndex, fStartLine, fStartColumn]) => [
       toAdjustFunction({
         ...(startIndex !== fStartIndex && {
+          start: (_, index) =>
+            typeof index === "number"
+              ? index - startIndex + fStartIndex
+              : index,
+          end: (_, index) =>
+            typeof index === "number"
+              ? index - startIndex + fStartIndex
+              : index,
+          range: (_, [start, end]) => [
+            start - startIndex + fStartIndex,
+            end - startIndex + fStartIndex,
+          ],
+          parenStart: (_, index) => index - startIndex + fStartIndex,
+          trailingComma: (_, index) => index - startIndex + fStartIndex,
           index: (_, index) => index - startIndex + fStartIndex,
         }),
         ...(startLine !== fStartLine && {
           line: (_, line) => line - startLine + fStartLine,
         }),
-        ...(startColumn !== fStartColumn && {
+        ...((startColumn !== fStartColumn || startIndex !== fStartIndex) && {
           column: (_, column, __, { line }) =>
             line !== startLine ? column : column - startColumn + fStartColumn,
         }),

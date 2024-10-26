@@ -67,10 +67,11 @@ const VALID_REGEX_FLAGS = new Set([
 
 export class Token {
   constructor(state: State) {
+    const startIndex = state.startIndex || 0;
     this.type = state.type;
     this.value = state.value;
-    this.start = state.start;
-    this.end = state.end;
+    this.start = startIndex + state.start;
+    this.end = startIndex + state.end;
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
@@ -303,8 +304,8 @@ export default abstract class Tokenizer extends CommentsParser {
     const comment: N.CommentBlock = {
       type: "CommentBlock",
       value: this.input.slice(start + 2, end),
-      start,
-      end: end + commentEnd.length,
+      start: this.sourceToOffsetPos(start),
+      end: this.sourceToOffsetPos(end + commentEnd.length),
       loc: new SourceLocation(startLoc, this.state.curPosition()),
     };
     if (this.options.tokens) this.pushToken(comment);
@@ -332,8 +333,8 @@ export default abstract class Tokenizer extends CommentsParser {
     const comment: N.CommentLine = {
       type: "CommentLine",
       value,
-      start,
-      end,
+      start: this.sourceToOffsetPos(start),
+      end: this.sourceToOffsetPos(end),
       loc: new SourceLocation(startLoc, this.state.curPosition()),
     };
     if (this.options.tokens) this.pushToken(comment);
