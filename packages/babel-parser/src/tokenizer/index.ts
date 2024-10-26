@@ -1369,7 +1369,7 @@ export default abstract class Tokenizer extends CommentsParser {
       this.state.firstInvalidTemplateEscapePos = new Position(
         firstInvalidLoc.curLine,
         firstInvalidLoc.pos - firstInvalidLoc.lineStart,
-        firstInvalidLoc.pos,
+        this.sourceToOffsetPos(firstInvalidLoc.pos),
       );
     }
 
