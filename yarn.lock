@@ -14523,13 +14523,13 @@ __metadata:
   linkType: hard
 
 "regjsparser@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "regjsparser@npm:0.11.0"
+  version: 0.11.2
+  resolution: "regjsparser@npm:0.11.2"
   dependencies:
     jsesc: "npm:~3.0.2"
   bin:
     regjsparser: bin/parser
-  checksum: 10/d8963f9bbb4da0795faaea11130abdb15c17565d515f15c990a2433912e5ed80077cbd7ad99530bb1fc8471c82c321a0699c5f48a2ce00715a7151b027fced55
+  checksum: 10/8075eb76d6cde8a3f188696eb18ebf229376944d35e3043f73b889a15156cf539f2801941a5630433060512cbcb2f92f6a194fac44f2e0f1497517e12aa565b3
   languageName: node
   linkType: hard
 
