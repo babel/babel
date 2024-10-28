@@ -1,13 +1,13 @@
 coverage:
   parsers:
     javascript:
-      enable_partials: yes
+      enable_partials: 'yes
   status:
     project:
       default:
         target: "90%" "100%"
     patch:
-      enabled: false
+      enabled: 'false
 ignore:
   - packages/babel-types/src/*/generated/*
   - packages/babel-helpers/src/helpers/*
