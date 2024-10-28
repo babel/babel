@@ -35,7 +35,7 @@ const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
 /**
  * Styles for token types.
  */
-function builDefs(colors: Colors): Defs {
+function buildDefs(colors: Colors): Defs {
   return {
     keyword: colors.cyan,
     capitalized: colors.yellow,
@@ -55,8 +55,8 @@ function builDefs(colors: Colors): Defs {
   };
 }
 
-const defsOn = builDefs(createColors(true));
-const defsOff = builDefs(createColors(false));
+const defsOn = buildDefs(createColors(true));
+const defsOff = buildDefs(createColors(false));
 
 export function getDefs(enabled: boolean): Defs {
   return enabled ? defsOn : defsOff;
