@@ -73,6 +73,7 @@ export default function toFuzzedOptions(options) {
     [randomIndex, 1, 0],
     [randomIndex, randomLine, randomColumn],
     [false, randomLine, false],
+    [randomIndex, false, randomIndex],
   ]
     .map(([index, line, column]) => [
       ["startIndex", index !== false && { enumerable: true, value: index }],
