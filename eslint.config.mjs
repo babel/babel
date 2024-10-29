@@ -272,7 +272,7 @@ export default [
             "itBabel7NodeGte14NoESM",
             "itBabel8",
             "itESLint7",
-            "itESLint8",
+            "itESLintGte8",
             "itNoESM",
             "itNoWin32",
             "itESM",
