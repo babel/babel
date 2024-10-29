@@ -38,12 +38,8 @@ const PROPS_TO_REMOVE = [
   { key: "typeArguments", type: null },
   { key: "filename", type: null },
   { key: "identifierName", type: null },
-  // espree doesn't support these yet
-  { key: "attributes", type: "ImportDeclaration" },
-  { key: "attributes", type: "ExportNamedDeclaration" },
-  { key: "attributes", type: "ExportAllDeclaration" },
+  // For legacy estree AST
   { key: "attributes", type: "ImportExpression" },
-  { key: "options", type: "ImportExpression" },
 ];
 
 function deeplyRemoveProperties(obj, props) {
@@ -109,7 +105,6 @@ describe("Babel and Espree", () => {
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-      deeplyRemoveProperties(espreeAST, ["offset"]);
       expect(babelAST).toEqual(espreeAST);
     } else {
       // ESLint 8
@@ -126,7 +121,6 @@ describe("Babel and Espree", () => {
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-      deeplyRemoveProperties(espreeAST, ["offset"]);
       expect(babelAST).toEqual(espreeAST);
     }
   }
