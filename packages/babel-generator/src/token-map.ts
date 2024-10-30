@@ -158,7 +158,8 @@ export class TokenMap {
     const indexes = [];
 
     for (const child of children) {
-      if (!child) continue;
+      if (child == null) continue;
+      if (child.start == null || child.end == null) continue;
 
       const childTok = this._findTokensOfNode(child, low, last);
 

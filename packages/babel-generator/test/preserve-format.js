@@ -203,5 +203,47 @@ describe("experimental_preserveFormat", () => {
 
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
     });
+
+    it("node injection", () => {
+      const input = `
+        const    foo
+            = 3;
+                  const  bar          =
+            3;
+        bax
+      `;
+      const expected = `
+        const    foo
+            = 3;hello;
+                  const  bar          =
+            3;
+        bax
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [
+          ({ types: t }) => ({
+            visitor: {
+              Program(path) {
+                path
+                  .get("body.0")
+                  .insertAfter(t.expressionStatement(t.identifier("hello")));
+              },
+            },
+          }),
+        ],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          experimental_preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
+    });
   });
 });
