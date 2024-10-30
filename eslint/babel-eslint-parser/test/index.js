@@ -18,12 +18,13 @@ function parseForESLint(code, options) {
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint7 = ESLINT_VERSION.startsWith("7.");
+const isESLint8 = ESLINT_VERSION.startsWith("8.");
 const { __dirname: dirname, require } = commonJS(import.meta.url);
 
 // @babel/eslint-parser 8 will drop ESLint 7 support
 
 const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : itDummy;
-const itESLint8 = isESLint7 ? itDummy : it;
+const itESLintGte8 = isESLint7 ? itDummy : it;
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(
@@ -38,11 +39,14 @@ const PROPS_TO_REMOVE = [
   { key: "typeArguments", type: null },
   { key: "filename", type: null },
   { key: "identifierName", type: null },
-  // espree doesn't support these yet
+  // For legacy estree AST
+  { key: "attributes", type: "ImportExpression" },
+];
+const PROPS_TO_REMOVE_ESLINT_LT_9 = [
+  // old espree doesn't support these
   { key: "attributes", type: "ImportDeclaration" },
   { key: "attributes", type: "ExportNamedDeclaration" },
   { key: "attributes", type: "ExportAllDeclaration" },
-  { key: "attributes", type: "ImportExpression" },
   { key: "options", type: "ImportExpression" },
 ];
 
@@ -108,11 +112,32 @@ describe("Babel and Espree", () => {
         ecmaFeatures: babelEcmaFeatures,
       }).ast;
 
-      deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-      deeplyRemoveProperties(espreeAST, ["offset"]);
+      deeplyRemoveProperties(babelAST, [
+        ...PROPS_TO_REMOVE,
+        ...PROPS_TO_REMOVE_ESLINT_LT_9,
+      ]);
+      expect(babelAST).toEqual(espreeAST);
+    } else if (isESLint8) {
+      // ESLint 8
+      const espreeAST = espree.parse(code, {
+        ...espreeOptions,
+        ecmaVersion: 2024,
+      });
+
+      const babelAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+        ecmaFeatures: babelEcmaFeatures,
+      }).ast;
+
+      deeplyRemoveProperties(babelAST, [
+        ...PROPS_TO_REMOVE,
+        ...PROPS_TO_REMOVE_ESLINT_LT_9,
+      ]);
       expect(babelAST).toEqual(espreeAST);
     } else {
-      // ESLint 8
+      // ESLint 9
       const espreeAST = espree.parse(code, {
         ...espreeOptions,
         ecmaVersion: "latest",
@@ -126,7 +151,6 @@ describe("Babel and Espree", () => {
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-      deeplyRemoveProperties(espreeAST, ["offset"]);
       expect(babelAST).toEqual(espreeAST);
     }
   }
@@ -453,7 +477,7 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[3].value).toEqual("#");
   });
 
-  itESLint8("private identifier (token) - ESLint 8", () => {
+  itESLintGte8("private identifier (token) - ESLint 8", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
@@ -506,7 +530,7 @@ describe("Babel and Espree", () => {
     expect(classDeclaration.body.body[0].type).toEqual("PropertyDefinition");
   });
 
-  itESLint8("class fields with ESLint 8", () => {
+  itESLintGte8("class fields with ESLint 8", () => {
     parseAndAssertSame(
       `
         class A {
@@ -550,7 +574,7 @@ describe("Babel and Espree", () => {
     ).toMatchObject(staticKw);
   });
 
-  itESLint8("static (token) - ESLint 8", () => {
+  itESLintGte8("static (token) - ESLint 8", () => {
     const code = `
       class A {
         static m() {}
@@ -607,7 +631,7 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[17]).toMatchObject(topicToken);
   });
 
-  itESLint8("pipeline # topic token - ESLint 8", () => {
+  itESLintGte8("pipeline # topic token - ESLint 8", () => {
     const code = `
       x |> #
       y |> #[0]
