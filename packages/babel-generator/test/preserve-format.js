@@ -215,8 +215,8 @@ describe("experimental_preserveFormat", () => {
       const expected = `
         const    foo
             = 3;hello;
-                  const  bar=
-            3
+                  const  bar          =
+            3;
         bax
       `;
 
