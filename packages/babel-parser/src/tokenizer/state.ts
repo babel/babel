@@ -174,8 +174,11 @@ export default class State {
    */
 
   curPosition(): Position {
-    const index = this.startIndex + this.pos;
-    return new Position(this.curLine, index - this.lineStart, index);
+    return new Position(
+      this.curLine,
+      this.pos - this.lineStart,
+      this.pos + this.startIndex,
+    );
   }
 
   clone(): State {

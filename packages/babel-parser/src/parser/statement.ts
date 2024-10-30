@@ -63,7 +63,11 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * For performance reasons this routine mutates `tokens`, it is okay
  * here since we execute `parseTopLevel` once for every file.
  */
-function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
+function babel7CompatTokens(
+  tokens: (Token | N.Comment)[],
+  input: string,
+  startIndex: number,
+) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
@@ -104,7 +108,7 @@ function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
           const backquoteEnd = start + 1;
           const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
           let startToken;
-          if (input.charCodeAt(start) === charCodes.graveAccent) {
+          if (input.charCodeAt(start - startIndex) === charCodes.graveAccent) {
             startToken = new Token({
               // @ts-expect-error: hacky way to create token
               type: getExportedToken(tt.backQuote),
@@ -200,7 +204,11 @@ export default abstract class StatementParser extends ExpressionParser {
     file.comments = this.comments;
 
     if (this.options.tokens) {
-      file.tokens = babel7CompatTokens(this.tokens, this.input);
+      file.tokens = babel7CompatTokens(
+        this.tokens,
+        this.input,
+        this.startIndex,
+      );
     }
 
     return this.finishNode(file, "File");
