@@ -24,6 +24,14 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.2 (2024-10-30)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#16903](https://github.com/babel/babel/pull/16903) fix: Parse placeholder for TS namespace ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16937](https://github.com/babel/babel/pull/16937) fix: Account for offsets when creating new Position instances ([@DylanPiercey](https://github.com/DylanPiercey))
+* `babel-generator`
+  * [#16948](https://github.com/babel/babel/pull/16948) Fix mapping of tokens with generated nodes in between ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.26.1 (2024-10-25)
 
 #### :bug: Bug Fix
