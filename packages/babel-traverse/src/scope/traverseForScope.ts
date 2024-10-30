@@ -3,7 +3,7 @@ import type * as t from "@babel/types";
 import type { HubInterface, Visitor } from "../index.ts";
 import { NodePath } from "../index.ts";
 import { explode } from "../visitors.ts";
-import { setScope } from "../path/context.ts";
+import { _forceSetScope } from "../path/context.ts";
 
 export default function traverseForScope(
   path: NodePath,
@@ -48,7 +48,7 @@ export default function traverseForScope(
       key,
     });
 
-    setScope.call(path, true);
+    _forceSetScope(path);
 
     const visitor = exploded[node.type];
     if (visitor) {
