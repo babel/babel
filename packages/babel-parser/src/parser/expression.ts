@@ -2801,7 +2801,12 @@ export default abstract class ExpressionParser extends LValParser {
         this.replaceToken(tt.name);
       }
     } else {
-      this.checkReservedWord(name, start, tokenIsKeyword, false);
+      this.checkReservedWord(
+        name,
+        this.sourceToOffsetPos(start),
+        tokenIsKeyword,
+        false,
+      );
     }
 
     this.next();
@@ -2886,8 +2891,8 @@ export default abstract class ExpressionParser extends LValParser {
   // Parses await expression inside async function.
 
   parseAwait(this: Parser, startLoc: Position): N.AwaitExpression {
-    const startIndex = startLoc.index - this.startIndex;
-    this.setLoc(startIndex, startLoc);
+    const startIndex = startLoc.index;
+    this.setLoc(startLoc);
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
@@ -2941,13 +2946,12 @@ export default abstract class ExpressionParser extends LValParser {
   // Parses yield expression inside generator.
 
   parseYield(this: Parser, startLoc: Position): N.YieldExpression {
-    const startIndex = startLoc.index - this.startIndex;
-    this.setLoc(startIndex, startLoc);
+    this.setLoc(startLoc);
     const node = this.startNodeAt<N.YieldExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      startIndex,
+      startLoc.index,
     );
 
     let delegating = false;

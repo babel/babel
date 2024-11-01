@@ -108,18 +108,19 @@ export default abstract class Tokenizer extends CommentsParser {
     this.locData = locDataCache;
   }
 
-  setLoc(index: number, loc: Position) {
-    this.locData[index * 2] = loc.line;
-    this.locData[index * 2 + 1] = loc.column;
+  setLoc(loc: Position) {
+    const dataIndex = this.offsetToSourcePos(loc.index);
+    this.locData[dataIndex * 2] = loc.line;
+    this.locData[dataIndex * 2 + 1] = loc.column;
   }
 
-  getLoc(index: number): Position {
+  getLoc(locIndex: number): Position {
+    const dataIndex = this.offsetToSourcePos(locIndex);
     const loc = new Position(
-      this.locData[index * 2],
-      this.locData[index * 2 + 1],
-      index,
+      this.locData[dataIndex * 2],
+      this.locData[dataIndex * 2 + 1],
+      locIndex,
     );
-
     return loc;
   }
 
@@ -1529,7 +1530,7 @@ export default abstract class Tokenizer extends CommentsParser {
           ? this.getLoc(at)
           : this.optionFlags & OptionFlags.Locations
             ? at.loc.start
-            : this.getLoc(at.start - this.startIndex);
+            : this.getLoc(at.start);
     const error = toParseError(loc, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
