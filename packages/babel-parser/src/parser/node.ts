@@ -115,8 +115,8 @@ export abstract class NodeUtils extends UtilParser {
   }
 
   startNode<T extends NodeType = never>(): Undone<T> {
-    const { start, startLoc } = this.state;
-    this.setLoc(start, startLoc);
+    const { startLoc } = this.state;
+    this.setLoc(startLoc);
 
     return this.startNodeAt<T>(startLoc);
   }

@@ -27,6 +27,7 @@ import type { Pattern } from "../../types.ts";
 import type { Expression } from "../../types.ts";
 import type { IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
+import { OptionFlags } from "../../options.ts";
 
 type TsModifier =
   | "readonly"
@@ -3498,7 +3499,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               // or a trailing comma, otherwise it's ambiguous with JSX.
               this.raise(
                 TSErrors.SingleTypeParameterWithoutTrailingComma,
-                createPositionWithColumnOffset(parameter.loc.end, 1),
+                this.optionFlags & OptionFlags.Locations
+                  ? createPositionWithColumnOffset(parameter.loc.end, 1)
+                  : parameter,
                 {
                   typeParameterName: process.env.BABEL_8_BREAKING
                     ? (parameter.name as N.Identifier).name
