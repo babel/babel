@@ -57,15 +57,15 @@ function test(title, command, expectedName) {
 
   console.log(`Testing with Node.js ${process.version} - ${title}`);
   const out = normalize(
-    cp.execSync(`node ${command}`, {
-      cwd: __dirname,
-      encoding: "utf8",
-      env: {
-        ...(major >= 23 && {
-          NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
-        }),
-      },
-    })
+    cp.execSync(
+      `node ${
+        major >= 23 ? "--disable-warning=ExperimentalWarning " : ""
+      }${command}`,
+      {
+        cwd: __dirname,
+        encoding: "utf8",
+      }
+    )
   );
 
   if (expected === out) {
