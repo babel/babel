@@ -646,10 +646,18 @@ export function TSModuleDeclaration(
     this.space();
   }
 
-  if (!node.global) {
-    this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
-    this.space();
+  if (process.env.BABEL_8_BREAKING) {
+    if (kind !== "global") {
+      this.word(kind);
+      this.space();
+    }
+  } else {
+    if (!node.global) {
+      this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
+      this.space();
+    }
   }
+
   this.print(id);
 
   if (!node.body) {

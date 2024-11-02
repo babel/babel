@@ -536,7 +536,7 @@ defineType("TSModuleDeclaration", {
       validate: assertOneOf("global", "module", "namespace"),
     },
     declare: validateOptional(bool),
-    global: validateOptional(bool),
+    ...(!process.env.BABEL_8_BREAKING && { global: validateOptional(bool) }),
     id: validateType("Identifier", "StringLiteral"),
     body: validateType("TSModuleBlock", "TSModuleDeclaration"),
   },
