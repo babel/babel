@@ -474,7 +474,7 @@ function normalizeOutput(
 ) {
   const dir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
-    "../../..",
+    "../../../",
   );
   const symbol = "<CWD>";
   let result = code
