@@ -104,7 +104,6 @@ jobs:
         run: yarn jest --ci
         env:
           BABEL_ENV: test
-          NODE_OPTIONS: ${{matrix.node-version == '23' && '--disable-warning=ExperimentalWarning' || ''}}
           USE_ESM: true
 
   build:

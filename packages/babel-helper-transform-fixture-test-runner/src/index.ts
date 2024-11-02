@@ -920,7 +920,14 @@ export function buildProcessTests(
                 : [test.binLoc];
 
             args = args.concat(opts.args);
-            const env = { ...process.env, FORCE_COLOR: "false", ...opts.env };
+            const env = {
+              ...process.env,
+              FORCE_COLOR: "false",
+              ...(parseInt(process.versions.node) >= 23 && {
+                NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
+              }),
+              ...opts.env,
+            };
             const child = spawn(process.execPath, args, {
               env,
               cwd: tmpLoc,
