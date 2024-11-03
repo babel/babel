@@ -652,6 +652,7 @@ export function TSModuleDeclaration(
       this.space();
     }
   } else {
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
     if (!node.global) {
       this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
       this.space();
