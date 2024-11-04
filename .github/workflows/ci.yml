@@ -459,7 +459,7 @@ jobs:
       - name: Use Node.js 12.0
         uses: actions/setup-node@v4
         with:
-          node-version: "12.0" # quoted, otherwise it's just 13
+          node-version: "12.0" # quoted, otherwise it's just 12
       - name: Test Node.js 12.0
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.17
@@ -509,6 +509,12 @@ jobs:
         with:
           node-version: 16.6
       - name: Test Node.js 16.6
+        run: node test/runtime-integration/node.cjs
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test Node.js 22
         run: node test/runtime-integration/node.cjs
 
   eslint7-test:
