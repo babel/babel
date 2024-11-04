@@ -924,7 +924,7 @@ export function buildProcessTests(
               ...process.env,
               FORCE_COLOR: "false",
               ...(parseInt(process.versions.node) >= 23 && {
-                NODE_OPTIONS: (process.env.NODE_OPTIONS || "") + " --disable-warning=ExperimentalWarning",
+                NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
               }),
               ...opts.env,
             };
