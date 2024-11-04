@@ -2,7 +2,7 @@
 
 > 
 
-See our website [@babel/compat-data](https://babeljs.io/docs/v8-migration-api#babelcompat-data) for more information. 
+See our website [@babel/compat-data](https://babeljs.io/docs/v8-migration-api#babelcompat-data) for more information.
 
 ## Install
 
