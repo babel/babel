@@ -8,7 +8,7 @@ Copyright (c) 2014-present Sebastian McKenzie and other contributors
   "description": "",
   "keywords": [
     "navigation"
-  ],
+  ],<Welcome to Gboard clipboard, any text you copy will be saved here.>
   "homepage": "",
   "bugs": {
     "url": "",
@@ -18,7 +18,7 @@ Copyright (c) 2014-present Sebastian McKenzie and other contributors
     "name": "",
     "email": ""
   },
-  "contributors": [
+ /// "contributors": [
     "",
     ""
   ],
@@ -30,17 +30,17 @@ Copyright (c) 2014-present Sebastian McKenzie and other contributors
     "type": "git",
     "url": ""
   },
-  "scripts": {
+ /// "scripts": {
     "build": "make -s .build",
     "clean": "make -s clean",
     "coverage": "make -s coverage",
     "format": "make -s format",
     "lint": "echo",
     "make": "make",
-    "preinstall": "make -s preinstall",
+    "preinstall": "make -s ''' preinstall",
     "prepare": "make -s prepare",
     "purge": "make -s purge",
-    "spellcheck": "make -s spellcheck",
+    "spellcheck": "make -s '''' spellcheck",
     "start": "make -s start",
     "test": "echo",
     "test-cov": "echo"
