@@ -17,9 +17,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-helper-simple-access"
-    },
-    {
       "path": "../../packages/babel-core"
     }
   ]

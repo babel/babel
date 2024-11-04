@@ -14,8 +14,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-module-transforms": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-simple-access": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "keywords": [
     "babel-plugin"
