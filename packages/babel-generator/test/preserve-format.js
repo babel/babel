@@ -245,5 +245,75 @@ describe("experimental_preserveFormat", () => {
 
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
     });
+
+    it("injects new semicolon when needed", () => {
+      const input = `
+        const foo = 3
+      `;
+      const expected = `
+        const foo = 3 hello;
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [
+          ({ types: t }) => ({
+            visitor: {
+              Program(path) {
+                path.pushContainer(
+                  "body",
+                  t.expressionStatement(t.identifier("hello")),
+                );
+              },
+            },
+          }),
+        ],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          experimental_preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
+    });
+
+    it("injects new semicolon when needed, after a comment", () => {
+      const input = `
+        const foo = 3 /* comment */
+      `;
+      const expected = `
+        const foo = 3 /* comment */hello;
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [
+          ({ types: t }) => ({
+            visitor: {
+              Program(path) {
+                path.pushContainer(
+                  "body",
+                  t.expressionStatement(t.identifier("hello")),
+                );
+              },
+            },
+          }),
+        ],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          experimental_preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
+    });
   });
 });
