@@ -251,7 +251,7 @@ describe("experimental_preserveFormat", () => {
         const foo = 3
       `;
       const expected = `
-        const foo = 3 hello;
+        const foo = 3;hello;
       `;
 
       const out = babel.transformSync(input, {
@@ -286,7 +286,7 @@ describe("experimental_preserveFormat", () => {
         const foo = 3 /* comment */
       `;
       const expected = `
-        const foo = 3 /* comment */hello;
+        const foo = 3 /* comment */;hello;
       `;
 
       const out = babel.transformSync(input, {
