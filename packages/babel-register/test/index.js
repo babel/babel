@@ -413,7 +413,13 @@ describe("@babel/register", function () {
 function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
   const spawn = child.spawn(process.execPath, args, {
     cwd,
-    env,
+    env: {
+      ...env,
+      ...(parseInt(process.versions.node) >= 23 && {
+        NODE_OPTIONS:
+          "--disable-warning=ExperimentalWarning " + (env.NODE_OPTIONS || ""),
+      }),
+    },
   });
 
   let output = "";

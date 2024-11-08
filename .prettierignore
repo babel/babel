@@ -8,7 +8,6 @@ packages/babel-standalone/examples/**
 packages/babel-parser/test/expressions/**
 scripts/integration-tests/fixtures/**
 packages/babel-parser/test/schema.json
-test/runtime-integration/node.cjs
 
 CHANGELOG.md
 .github/*.md
