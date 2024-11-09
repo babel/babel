@@ -9,7 +9,6 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
-import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 import type { PluginPass, Visitor, Scope, NodePath } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
@@ -208,12 +207,6 @@ export default declare((api, options: Options) => {
           // These objects are specific to CommonJS and are not available in
           // real ES6 implementations.
           if (!allowCommonJSExports) {
-            if (process.env.BABEL_8_BREAKING) {
-              simplifyAccess(path, new Set(["module", "exports"]));
-            } else {
-              // @ts-ignore(Babel 7 vs Babel 8) The third param has been removed in Babel 8.
-              simplifyAccess(path, new Set(["module", "exports"]), false);
-            }
             path.traverse(moduleExportsVisitor, {
               scope: path.scope,
             });

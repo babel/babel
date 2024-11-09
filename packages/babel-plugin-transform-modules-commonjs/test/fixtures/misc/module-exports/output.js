@@ -12,9 +12,7 @@ exports += (function () {
 }(), function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
-exports = (function () {
-  throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}() + 4, function () {
+exports += (4, function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
 ({
@@ -42,9 +40,7 @@ module += (function () {
 }(), function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
-module = (function () {
-  throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}() + 4, function () {
+module += (4, function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
 ({
