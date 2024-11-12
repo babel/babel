@@ -452,7 +452,7 @@ export function IntersectionTypeAnnotation(
   this: Printer,
   node: t.IntersectionTypeAnnotation,
 ) {
-  this.printJoin(node.types, { separator: andSeparator });
+  this.printJoin(node.types, undefined, undefined, andSeparator);
 }
 
 export function MixedTypeAnnotation(this: Printer) {
@@ -544,7 +544,7 @@ export function TypeParameterInstantiation(
   node: t.TypeParameterInstantiation,
 ): void {
   this.token("<");
-  this.printList(node.params, {});
+  this.printList(node.params);
   this.token(">");
 }
 
@@ -615,19 +615,22 @@ export function ObjectTypeAnnotation(
 
     this.space();
 
-    this.printJoin(props, {
-      addNewlines(leading) {
+    this.printJoin(
+      props,
+      true,
+      true,
+      undefined,
+      undefined,
+      function addNewlines(leading) {
         if (leading && !props[0]) return 1;
       },
-      indent: true,
-      statement: true,
-      iterator: () => {
+      () => {
         if (props.length !== 1 || node.inexact) {
           this.token(",");
           this.space();
         }
       },
-    });
+    );
 
     this.space();
   }
@@ -753,7 +756,7 @@ export function UnionTypeAnnotation(
   this: Printer,
   node: t.UnionTypeAnnotation,
 ) {
-  this.printJoin(node.types, { separator: orSeparator });
+  this.printJoin(node.types, undefined, undefined, orSeparator);
 }
 
 export function TypeCastExpression(this: Printer, node: t.TypeCastExpression) {

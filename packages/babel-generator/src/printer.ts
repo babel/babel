@@ -865,11 +865,15 @@ class Printer {
 
   printJoin(
     nodes: Array<t.Node> | undefined | null,
-    opts: PrintJoinOptions = {},
+    statement?: boolean,
+    indent?: boolean,
+    separator?: PrintJoinOptions["separator"],
+    printTrailingSeparator?: boolean,
+    addNewlines?: PrintJoinOptions["addNewlines"],
+    iterator?: PrintJoinOptions["iterator"],
+    trailingCommentsLineOffset?: number,
   ) {
     if (!nodes?.length) return;
-
-    let { indent } = opts;
 
     if (indent == null && this.format.retainLines) {
       const startLine = nodes[0].loc?.start.line;
@@ -881,29 +885,29 @@ class Printer {
     if (indent) this.indent();
 
     const newlineOpts: AddNewlinesOptions = {
-      addNewlines: opts.addNewlines,
+      addNewlines: addNewlines,
       nextNodeStartLine: 0,
     };
 
-    const separator = opts.separator ? opts.separator.bind(this) : null;
+    const boundSeparator = separator?.bind(this);
 
     const len = nodes.length;
     for (let i = 0; i < len; i++) {
       const node = nodes[i];
       if (!node) continue;
 
-      if (opts.statement) this._printNewline(i === 0, newlineOpts);
+      if (statement) this._printNewline(i === 0, newlineOpts);
 
-      this.print(node, undefined, opts.trailingCommentsLineOffset || 0);
+      this.print(node, undefined, trailingCommentsLineOffset || 0);
 
-      opts.iterator?.(node, i);
+      iterator?.(node, i);
 
-      if (separator != null) {
-        if (i < len - 1) separator(i, false);
-        else if (opts.printTrailingSeparator) separator(i, true);
+      if (boundSeparator != null) {
+        if (i < len - 1) boundSeparator(i, false);
+        else if (printTrailingSeparator) boundSeparator(i, true);
       }
 
-      if (opts.statement) {
+      if (statement) {
         if (!node.trailingComments?.length) {
           this._lastCommentLine = 0;
         }
@@ -1014,18 +1018,41 @@ class Printer {
     this._indentInnerComments = false;
   }
 
-  printSequence(nodes: t.Node[], opts: PrintSequenceOptions = {}) {
-    opts.statement = true;
-    opts.indent ??= false;
-    this.printJoin(nodes, opts);
+  printSequence(
+    nodes: t.Node[],
+    indent?: boolean,
+    trailingCommentsLineOffset?: number,
+    addNewlines?: PrintSequenceOptions["addNewlines"],
+  ) {
+    this.printJoin(
+      nodes,
+      true,
+      indent ?? false,
+      undefined,
+      undefined,
+      addNewlines,
+      undefined,
+      trailingCommentsLineOffset,
+    );
   }
 
-  printList(items: t.Node[], opts: PrintListOptions = {}) {
-    if (opts.separator == null) {
-      opts.separator = commaSeparator;
-    }
-
-    this.printJoin(items, opts);
+  printList(
+    items: t.Node[],
+    printTrailingSeparator?: boolean,
+    statement?: boolean,
+    indent?: boolean,
+    separator?: PrintListOptions["separator"],
+    iterator?: PrintListOptions["iterator"],
+  ) {
+    this.printJoin(
+      items,
+      statement,
+      indent,
+      separator ?? commaSeparator,
+      printTrailingSeparator,
+      undefined,
+      iterator,
+    );
   }
 
   shouldPrintTrailingComma(listEnd: string): boolean | null {

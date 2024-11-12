@@ -116,9 +116,7 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
 
   this.token("{", null, occurrenceCount);
   this.space();
-  this.printList(attributes || assertions, {
-    printTrailingSeparator: this.shouldPrintTrailingComma("}"),
-  });
+  this.printList(attributes || assertions, this.shouldPrintTrailingComma("}"));
   this.space();
   this.token("}", null, occurrenceCount);
 }
@@ -207,9 +205,7 @@ export function ExportNamedDeclaration(
       this.token("{");
       if (specifiers.length) {
         this.space();
-        this.printList(specifiers, {
-          printTrailingSeparator: this.shouldPrintTrailingComma("}"),
-        });
+        this.printList(specifiers, this.shouldPrintTrailingComma("}"));
         this.space();
       }
       this.token("}");
@@ -290,9 +286,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     hasBrace = true;
     this.token("{");
     this.space();
-    this.printList(specifiers, {
-      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
-    });
+    this.printList(specifiers, this.shouldPrintTrailingComma("}"));
     this.space();
     this.token("}");
   } else if (isTypeKind && !hasSpecifiers) {

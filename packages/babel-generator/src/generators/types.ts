@@ -43,11 +43,7 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   if (props.length) {
     const exit = this.enterDelimited();
     this.space();
-    this.printList(props, {
-      indent: true,
-      statement: true,
-      printTrailingSeparator: this.shouldPrintTrailingComma("}"),
-    });
+    this.printList(props, this.shouldPrintTrailingComma("}"), true, true);
     this.space();
     exit();
   }
@@ -167,11 +163,7 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   if (props.length) {
     this.space();
-    this.printList(props, {
-      indent: true,
-      statement: true,
-      printTrailingSeparator: this.shouldPrintTrailingComma(endToken),
-    });
+    this.printList(props, this.shouldPrintTrailingComma(endToken), true, true);
     this.space();
   }
   this.token(endToken);
