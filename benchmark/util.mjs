@@ -77,7 +77,7 @@ function generateCaseName(url) {
 class Benchmark {
   constructor() {
     this.bench = new Bench({
-      iterations: 30,
+      time: 5000,
     });
   }
   add(name, fn, options) {
