@@ -17,7 +17,7 @@ fixtures.forEach(({ name, content }) => {
 
   addBenchCase(
     `${generateCaseName(import.meta.url)} ${name}`,
-    baselineGenerator.default,
+    baselineGenerator,
     currentGenerator,
     [ast]
   );
