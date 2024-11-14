@@ -42,8 +42,8 @@ fixtures.forEach(({ name, content }) => {
     `${generateCaseName(import.meta.url)} parser+traverse+generate ${name}`,
     () => {
       const ast = baselineParser.parse(content, opts.parserOpts);
-      baselineTraverse.default(ast);
-      baselineGenerator.default(ast, opts.generatorOpts);
+      baselineTraverse(ast);
+      baselineGenerator(ast, opts.generatorOpts);
     },
     () => {
       const ast = currentParser.parse(content, opts.parserOpts);
