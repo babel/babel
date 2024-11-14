@@ -1,10 +1,10 @@
 import {
   loadFixtures,
   addBenchCase,
+  generateCaseName,
   baselineParser,
   baselineTraverse,
   currentTraverse,
-  generateCaseName,
 } from "../util.mjs";
 
 const fixtures = loadFixtures();
@@ -17,10 +17,19 @@ fixtures.forEach(({ name, content }) => {
     plugins: name.endsWith(".ts") ? ["typescript"] : [],
   });
 
+  const opts = {
+    Identifier() {},
+  };
+
   addBenchCase(
     `${generateCaseName(import.meta.url)} ${name}`,
-    baselineTraverse.default,
-    currentTraverse,
-    [ast]
+    () => {
+      baselineTraverse(ast, opts);
+      baselineTraverse.cache.clear();
+    },
+    () => {
+      currentTraverse(ast, opts);
+      currentTraverse.cache.clear();
+    }
   );
 });

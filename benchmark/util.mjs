@@ -5,11 +5,11 @@ import baselineTypes from "@babel-baseline/types";
 import * as currentParser from "@babel/parser";
 import baselineParser from "@babel-baseline/parser";
 import _currentGenerator from "@babel/generator";
-import baselineGenerator from "@babel-baseline/generator";
+import _baselineGenerator from "@babel-baseline/generator";
 import * as currentCore from "@babel/core";
 import baselineCore from "@babel-baseline/core";
 import _currentTraverse from "@babel/traverse";
-import baselineTraverse from "@babel-baseline/traverse";
+import _baselineTraverse from "@babel-baseline/traverse";
 import currentPresetEnv from "@babel/preset-env";
 import currentPresetTypescript from "@babel/preset-typescript";
 import currentPluginCommonjs from "@babel/plugin-transform-modules-commonjs";
@@ -29,6 +29,8 @@ const currentGenerator = USE_ESM
   ? _currentGenerator
   : _currentGenerator.default;
 const currentTraverse = USE_ESM ? _currentTraverse : _currentTraverse.default;
+const baselineTraverse = _baselineTraverse.default;
+const baselineGenerator = _baselineGenerator.default;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
