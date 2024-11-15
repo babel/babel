@@ -910,8 +910,15 @@ class Scope {
     this.uids = Object.create(null);
     this.data = Object.create(null);
 
-    const programParent = this.getProgramParent();
-    if (programParent.crawling) return;
+    let scope: Scope = this;
+    do {
+      if (scope.crawling) return;
+      if (scope.path.isProgram()) {
+        break;
+      }
+    } while ((scope = scope.parent));
+
+    const programParent = scope;
 
     const state: CollectVisitorState = {
       references: [],
