@@ -1937,7 +1937,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
         node.kind = "global";
-        node.global = true;
+        if (!process.env.BABEL_8_BREAKING) {
+          node.global = true;
+        }
         node.id = this.parseIdentifier();
       } else if (this.match(tt.string)) {
         node.kind = "module";
@@ -2142,7 +2144,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.prodParam.enter(ParamKind.PARAM);
             const mod = node;
             mod.kind = "global";
-            mod.global = true;
+            if (!process.env.BABEL_8_BREAKING) {
+              node.global = true;
+            }
             mod.id = expr;
             mod.body = this.tsParseModuleBlock();
             this.scope.exit();

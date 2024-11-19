@@ -72,6 +72,7 @@
         "type": "TSModuleDeclaration",
         "start":67,"end":84,"loc":{"start":{"line":4,"column":0,"index":67},"end":{"line":4,"column":17,"index":84}},
         "kind": "global",
+        "global": true,
         "id": {
           "type": "Identifier",
           "start":75,"end":81,"loc":{"start":{"line":4,"column":8,"index":75},"end":{"line":4,"column":14,"index":81},"identifierName":"global"},
