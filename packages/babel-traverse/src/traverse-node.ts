@@ -35,8 +35,9 @@ function _visitPaths(ctx: TraversalContext, paths: NodePath[]): boolean {
     if (path.key === null) continue;
 
     // ensure we don't visit the same node twice
-    if (visited.has(path.node)) continue;
-    visited.add(path.node);
+    const { node } = path;
+    if (visited.has(node)) continue;
+    if (node) visited.add(node);
 
     if (_visit(ctx, path)) {
       stop = true;
