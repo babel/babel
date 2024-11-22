@@ -224,9 +224,22 @@ class Printer {
   }
 
   /**
+   * If the next token is on the same line, we must first print a semicolon.
+   * This option is only used in `preserveFormat` node, for semicolons that
+   * might have omitted due to them being absent in the original code (thanks
+   * to ASI).
+   *
+   * We need both *NextToken and *NextNode because we only want to insert the
+   * semicolon when the next token starts a new node, and not in cases like
+   * foo} (where } is not starting a new node). So we first set *NextNode, and
+   * then the print() method will move it to *NextToken.
+   */
+  _printSemicolonBeforeNextNode: number = -1;
+  _printSemicolonBeforeNextToken: number = -1;
+
+  /**
    * Add a semicolon to the buffer.
    */
-
   semicolon(force: boolean = false): void {
     this._maybeAddAuxComment();
     if (force) {
@@ -239,6 +252,7 @@ class Printer {
       if (node.start != null && node.end != null) {
         if (!this.tokenMap.endMatches(node, ";")) {
           // no semicolon
+          this._printSemicolonBeforeNextNode = this._buf.getCurrentLine();
           return;
         }
         const indexes = this.tokenMap.getIndexes(this._currentNode);
@@ -293,6 +307,10 @@ class Printer {
 
     this._maybePrintInnerComments(str);
 
+    this._maybeAddAuxComment();
+
+    if (this.tokenMap) this._catchUpToCurrentToken(str);
+
     // prevent concatenating words and creating // comment out of division and regex
     if (
       this._endsWithWord ||
@@ -300,8 +318,6 @@ class Printer {
     ) {
       this._space();
     }
-
-    this._maybeAddAuxComment();
     this._append(str, false);
 
     this._endsWithWord = true;
@@ -353,6 +369,10 @@ class Printer {
 
     this._maybePrintInnerComments(str, occurrenceCount);
 
+    this._maybeAddAuxComment();
+
+    if (this.tokenMap) this._catchUpToCurrentToken(str, occurrenceCount);
+
     const lastChar = this.getLastChar();
     const strFirst = str.charCodeAt(0);
     if (
@@ -370,16 +390,19 @@ class Printer {
     ) {
       this._space();
     }
-
-    this._maybeAddAuxComment();
-    this._append(str, maybeNewline, occurrenceCount);
+    this._append(str, maybeNewline);
     this._noLineTerminator = false;
   }
 
   tokenChar(char: number): void {
     this.tokenContext = 0;
 
-    this._maybePrintInnerComments(String.fromCharCode(char));
+    const str = String.fromCharCode(char);
+    this._maybePrintInnerComments(str);
+
+    this._maybeAddAuxComment();
+
+    if (this.tokenMap) this._catchUpToCurrentToken(str);
 
     const lastChar = this.getLastChar();
     if (
@@ -391,8 +414,6 @@ class Printer {
     ) {
       this._space();
     }
-
-    this._maybeAddAuxComment();
     this._appendChar(char);
     this._noLineTerminator = false;
   }
@@ -489,20 +510,30 @@ class Printer {
     this._queue(charCodes.lineFeed);
   }
 
-  _append(
-    str: string,
-    maybeNewline: boolean,
-    occurrenceCount: number = 0,
-  ): void {
-    if (this.tokenMap) {
-      const token = this.tokenMap.findMatching(
-        this._currentNode,
-        str,
-        occurrenceCount,
-      );
-      if (token) this._catchUpTo(token.loc.start);
-    }
+  _catchUpToCurrentToken(str: string, occurrenceCount: number = 0): void {
+    // Assert: this.tokenMap
 
+    const token = this.tokenMap.findMatching(
+      this._currentNode,
+      str,
+      occurrenceCount,
+    );
+    if (token) this._catchUpTo(token.loc.start);
+
+    if (
+      this._printSemicolonBeforeNextToken !== -1 &&
+      this._printSemicolonBeforeNextToken === this._buf.getCurrentLine()
+    ) {
+      this._buf.appendChar(charCodes.semicolon);
+      this._endsWithWord = false;
+      this._endsWithInteger = false;
+      this._endsWithDiv = false;
+    }
+    this._printSemicolonBeforeNextToken = -1;
+    this._printSemicolonBeforeNextNode = -1;
+  }
+
+  _append(str: string, maybeNewline: boolean): void {
     this._maybeIndent(str.charCodeAt(0));
 
     this._buf.append(str, maybeNewline);
@@ -514,14 +545,6 @@ class Printer {
   }
 
   _appendChar(char: number): void {
-    if (this.tokenMap) {
-      const token = this.tokenMap.findMatching(
-        this._currentNode,
-        String.fromCharCode(char),
-      );
-      if (token) this._catchUpTo(token.loc.start);
-    }
-
     this._maybeIndent(char);
 
     this._buf.appendChar(char);
@@ -683,6 +706,10 @@ class Printer {
 
     const parent = this._currentNode;
     this._currentNode = node;
+
+    if (this.tokenMap) {
+      this._printSemicolonBeforeNextToken = this._printSemicolonBeforeNextNode;
+    }
 
     const oldInAux = this._insideAux;
     this._insideAux = node.loc == null;
@@ -1187,8 +1214,19 @@ class Printer {
     // Avoid converting a / operator into a line comment by appending /* to it
     if (this._endsWithDiv) this._space();
 
-    this.source("start", comment.loc);
-    this._append(val, isBlockComment);
+    if (this.tokenMap) {
+      const { _printSemicolonBeforeNextToken, _printSemicolonBeforeNextNode } =
+        this;
+      this._printSemicolonBeforeNextToken = -1;
+      this._printSemicolonBeforeNextNode = -1;
+      this.source("start", comment.loc);
+      this._append(val, isBlockComment);
+      this._printSemicolonBeforeNextNode = _printSemicolonBeforeNextNode;
+      this._printSemicolonBeforeNextToken = _printSemicolonBeforeNextToken;
+    } else {
+      this.source("start", comment.loc);
+      this._append(val, isBlockComment);
+    }
 
     if (!isBlockComment && !noLineTerminator) {
       this.newline(1, true);

@@ -25,7 +25,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "*"
           cache: "yarn"
       - name: Use ESM
         run: make use-esm
@@ -71,7 +71,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "*"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT

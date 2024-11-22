@@ -3,7 +3,7 @@
   "version": "7.26.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
-  "description": "",
+  "description": "The compat-data to determine required Babel plugins",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",

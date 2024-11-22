@@ -31,6 +31,7 @@ const ignoredFields = {
           typeAnnotation: true,
         },
         TSMappedType: { typeParameter: true },
+        TSModuleDeclaration: { global: true },
       }
     : {
         TSFunctionType: { params: true, returnType: true },

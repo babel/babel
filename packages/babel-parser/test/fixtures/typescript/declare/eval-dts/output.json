@@ -11,7 +11,6 @@
         "type": "TSModuleDeclaration",
         "start":22,"end":153,"loc":{"start":{"line":2,"column":0,"index":22},"end":{"line":7,"column":1,"index":153}},
         "kind": "global",
-        "global": true,
         "id": {
           "type": "Identifier",
           "start":30,"end":36,"loc":{"start":{"line":2,"column":8,"index":30},"end":{"line":2,"column":14,"index":36},"identifierName":"global"},

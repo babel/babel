@@ -13,8 +13,10 @@ if (
     major === 13 && minor <= 3
       ? "expected-esm-13.2.txt"
       : major < 16 || (major === 16 && minor <= 5)
-      ? "expected-esm-16.0.txt"
-      : "expected-esm.txt";
+        ? "expected-esm-16.0.txt"
+        : major < 23
+          ? "expected-esm-22.txt"
+          : "expected-esm.txt";
 
   test("ESM", "./src/main-esm.mjs", expectedEsm);
   // TODO: This never worked in any Babel version
@@ -25,12 +27,14 @@ const expectedCjs =
   major === 10 || (major === 12 && minor < 12.17)
     ? "expected-cjs-10.txt"
     : major === 13 && minor <= 1
-    ? "expected-cjs-13.0.txt"
-    : major === 13 && minor <= 3
-    ? "expected-cjs-13.2.txt"
-    : major < 16 || (major === 16 && minor <= 5)
-    ? "expected-cjs-16.0.txt"
-    : "expected-cjs.txt";
+      ? "expected-cjs-13.0.txt"
+      : major === 13 && minor <= 3
+        ? "expected-cjs-13.2.txt"
+        : major < 16 || (major === 16 && minor <= 5)
+          ? "expected-cjs-16.0.txt"
+          : major < 23
+            ? "expected-cjs-22.txt"
+            : "expected-cjs.txt";
 
 test("CJS", "./src/main-cjs.cjs", expectedCjs);
 
@@ -38,12 +42,14 @@ const expectedCjsAbsolute =
   major === 10 || (major === 12 && minor < 12.17)
     ? "expected-cjs-absolute-10.txt"
     : major === 13 && minor <= 1
-    ? "expected-cjs-absolute-13.0.txt"
-    : major === 13 && minor <= 3
-    ? "expected-cjs-absolute-13.2.txt"
-    : major < 16 || (major === 16 && minor <= 5)
-    ? "expected-cjs-absolute-16.0.txt"
-    : "expected-cjs-absolute.txt";
+      ? "expected-cjs-absolute-13.0.txt"
+      : major === 13 && minor <= 3
+        ? "expected-cjs-absolute-13.2.txt"
+        : major < 16 || (major === 16 && minor <= 5)
+          ? "expected-cjs-absolute-16.0.txt"
+          : major < 23
+            ? "expected-cjs-absolute-22.txt"
+            : "expected-cjs-absolute.txt";
 
 test(
   "CJS - absoluteRuntime",
@@ -57,10 +63,15 @@ function test(title, command, expectedName) {
 
   console.log(`Testing with Node.js ${process.version} - ${title}`);
   const out = normalize(
-    cp.execSync(`node ${command}`, {
-      cwd: __dirname,
-      encoding: "utf8",
-    })
+    cp.execSync(
+      `node ${
+        major >= 23 ? "--disable-warning=ExperimentalWarning " : ""
+      }${command}`,
+      {
+        cwd: __dirname,
+        encoding: "utf8",
+      }
+    )
   );
 
   if (expected === out) {
