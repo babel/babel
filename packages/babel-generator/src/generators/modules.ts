@@ -105,7 +105,7 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
   if (
     !process.env.BABEL_8_BREAKING &&
     !useAssertKeyword &&
-    importAttributesKeyword !== "with"
+    importAttributesKeyword === "with-legacy"
   ) {
     // with-legacy
     this.printList(attributes || assertions);

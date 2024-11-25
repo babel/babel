@@ -3,5 +3,6 @@
   "noWarnInPublishBuild": true,
   "plugins": [["moduleAttributes", { "version": "may-2020" }]],
   "warns": "You are using import attributes, without specifying the desired output syntax.",
+  "expectedReParseError": true,
   "BABEL_8_BREAKING": false
 }
