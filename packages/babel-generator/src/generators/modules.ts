@@ -81,6 +81,9 @@ export function _printAttributes(
     !process.env.BABEL_8_BREAKING &&
     attributes &&
     !importAttributesKeyword &&
+    node.extra &&
+    (node.extra.deprecatedAssertSyntax ||
+      node.extra.deprecatedWithLegacySyntax) &&
     // In the production build only show the warning once.
     // We want to show it per-usage locally for tests.
     (!process.env.IS_PUBLISH || !warningShown)
