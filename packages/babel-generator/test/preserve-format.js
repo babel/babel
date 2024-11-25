@@ -60,7 +60,6 @@ const FAILURES = [
   "importAttributesKeyword/attributes-with-to-assert/input.js",
   "importAttributesKeyword/attributes-with-to-with-legacy/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
-  "importAttributesKeyword/legacy-module-attributes-to-default/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
 
   // These tests are about old proposals

@@ -108,7 +108,8 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
   if (
     !process.env.BABEL_8_BREAKING &&
     !useAssertKeyword &&
-    importAttributesKeyword === "with-legacy"
+    (importAttributesKeyword === "with-legacy" ||
+      (!importAttributesKeyword && node.extra?.deprecatedWithLegacySyntax))
   ) {
     // with-legacy
     this.printList(attributes || assertions);
