@@ -530,18 +530,41 @@ defineType("TSTypeAssertion", {
   },
 });
 
-defineType("TSEnumDeclaration", {
-  // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
-  aliases: ["Statement", "Declaration"],
-  visitor: ["id", "members"],
-  fields: {
-    declare: validateOptional(bool),
-    const: validateOptional(bool),
-    id: validateType("Identifier"),
-    members: validateArrayOfType("TSEnumMember"),
-    initializer: validateOptionalType("Expression"),
-  },
-});
+if (process.env.BABEL_8_BREAKING) {
+  defineType("TSEnumDeclaration", {
+    // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
+    aliases: ["Statement", "Declaration"],
+    visitor: ["id", "body"],
+    fields: {
+      declare: validateOptional(bool),
+      const: validateOptional(bool),
+      id: validateType("Identifier"),
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+      body: validateType("TSEnumBody"),
+      initializer: validateOptionalType("Expression"),
+    },
+  });
+
+  defineType("TSEnumBody", {
+    visitor: ["members"],
+    fields: {
+      members: validateArrayOfType("TSEnumMember"),
+    },
+  });
+} else {
+  defineType("TSEnumDeclaration", {
+    // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
+    aliases: ["Statement", "Declaration"],
+    visitor: ["id", "members"],
+    fields: {
+      declare: validateOptional(bool),
+      const: validateOptional(bool),
+      id: validateType("Identifier"),
+      members: validateArrayOfType("TSEnumMember"),
+      initializer: validateOptionalType("Expression"),
+    },
+  });
+}
 
 defineType("TSEnumMember", {
   visitor: ["id", "initializer"],
