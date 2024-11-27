@@ -3,6 +3,7 @@ import glob from "glob";
 import { readFileSync } from "fs";
 import { inspect } from "util";
 import { commonJS } from "$repo-utils";
+import path from "path";
 
 const { __dirname } = commonJS(import.meta.url);
 
@@ -20,33 +21,29 @@ const ignoredFields = {
   ObjectProperty: { method: true },
   ObjectMethod: { method: true, id: true, predicate: true },
   TSDeclareMethod: { id: true },
-  ...(process.env.BABEL_8_BREAKING
-    ? {
-        TSFunctionType: { parameters: true, typeAnnotation: true },
-        TSMethodSignature: { parameters: true, typeAnnotation: true },
-        TSConstructorType: { parameters: true, typeAnnotation: true },
-        TSCallSignatureDeclaration: { parameters: true, typeAnnotation: true },
-        TSConstructSignatureDeclaration: {
-          parameters: true,
-          typeAnnotation: true,
-        },
-        TSMappedType: { typeParameter: true },
-        TSModuleDeclaration: { global: true },
-      }
-    : {
-        TSFunctionType: { params: true, returnType: true },
-        TSMethodSignature: { params: true, returnType: true },
-        TSConstructorType: { params: true, returnType: true },
-        TSCallSignatureDeclaration: { params: true, returnType: true },
-        TSConstructSignatureDeclaration: { params: true, returnType: true },
-        TSMappedType: { key: true, constraint: true },
-      }),
 };
 
 describe("NODE_FIELDS contains all fields, and the visitor order is correct, in", function () {
   const reportedVisitorOrders = new Set();
 
   it.each(files)("%s", async file => {
+    const fixturePath = path.dirname(file);
+    let isBabel8Test;
+    try {
+      isBabel8Test = JSON.parse(
+        readFileSync(path.join(fixturePath, "options.json")),
+      ).BABEL_8_BREAKING;
+    } catch {
+      try {
+        isBabel8Test ??= JSON.parse(
+          readFileSync(path.resolve(fixturePath, "../options.json")),
+        ).BABEL_8_BREAKING;
+      } catch {
+        isBabel8Test = true;
+      }
+    }
+    if (isBabel8Test !== !!process.env.BABEL_8_BREAKING) return;
+
     const ast = JSON.parse(readFileSync(file, "utf8"));
     if (ast.type === "File" && ast.errors && ast.errors.length) return;
     t[`assert${ast.type}`](ast);
@@ -58,10 +55,6 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         case "CommentBlock":
         case "CommentLine":
           return;
-      }
-
-      if (process.env.BABEL_8_BREAKING) {
-        if (type === "TSExpressionWithTypeArguments") return;
       }
 
       if (ignoredFields[type] === true) return;
