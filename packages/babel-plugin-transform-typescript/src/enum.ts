@@ -183,9 +183,13 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
   let lastName: string;
   let isPure = true;
 
-  const enumValues: Array<[name: string, value: t.Expression]> = path
-    .get("members")
-    .map(memberPath => {
+  const enumMembers: NodePath<t.TSEnumMember>[] = process.env.BABEL_8_BREAKING
+    ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+      path.get("body").get("members")
+    : path.get("members");
+
+  const enumValues: Array<[name: string, value: t.Expression]> =
+    enumMembers.map(memberPath => {
       const member = memberPath.node;
       const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
       const initializerPath = memberPath.get("initializer");
