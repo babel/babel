@@ -1772,6 +1772,14 @@ export interface TsEnumDeclaration extends DeclarationBase {
   type: "TSEnumDeclaration";
   const?: true;
   id: Identifier;
+  body: TsEnumBody;
+  /**
+   * @deprecated
+   */
+  members?: TsEnumMember[];
+}
+
+export interface TsEnumBody extends NodeBase {
   members: TsEnumMember[];
 }
 
