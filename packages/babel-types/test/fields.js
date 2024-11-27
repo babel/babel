@@ -2,7 +2,7 @@ import * as t from "../lib/index.js";
 import glob from "glob";
 import { readFileSync } from "fs";
 import { inspect } from "util";
-import { commonJS } from "$repo-utils";
+import { commonJS, IS_BABEL_8 } from "$repo-utils";
 import path from "path";
 
 const { __dirname } = commonJS(import.meta.url);
@@ -34,15 +34,17 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         readFileSync(path.join(fixturePath, "options.json")),
       ).BABEL_8_BREAKING;
     } catch {
-      try {
-        isBabel8Test ??= JSON.parse(
-          readFileSync(path.resolve(fixturePath, "../options.json")),
-        ).BABEL_8_BREAKING;
-      } catch {
-        isBabel8Test = true;
+      if (isBabel8Test === undefined) {
+        try {
+          isBabel8Test = JSON.parse(
+            readFileSync(path.resolve(fixturePath, "../options.json")),
+          ).BABEL_8_BREAKING;
+        } catch {
+          isBabel8Test = true;
+        }
       }
     }
-    if (isBabel8Test !== !!process.env.BABEL_8_BREAKING) return;
+    if (isBabel8Test !== IS_BABEL_8()) return;
 
     const ast = JSON.parse(readFileSync(file, "utf8"));
     if (ast.type === "File" && ast.errors && ast.errors.length) return;
