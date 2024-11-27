@@ -541,7 +541,6 @@ if (process.env.BABEL_8_BREAKING) {
       id: validateType("Identifier"),
       // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
       body: validateType("TSEnumBody"),
-      initializer: validateOptionalType("Expression"),
     },
   });
 
