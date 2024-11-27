@@ -7,9 +7,9 @@ var Values = /*#__PURE__*/function (Values) {
   // 10
   Values[Values["Second"] = 11] = "Second";
   // 11
-  Values[Values["Third"] = 12] = "Third";
+  Values[Values["Third"] = 12] = "Third"; // 12
   return Values;
-}(Values || {}); // 12
+}(Values || {});
 const xxx = 100 + Values.First;
 const yyy = xxx;
 var Routes = /*#__PURE__*/function (Routes) {
