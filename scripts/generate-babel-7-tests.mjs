@@ -1,11 +1,11 @@
 /**
  * Usage:
- * # Update AST for Babel 8
- * OVERWRITE=1 BABEL_8_BREAKING=1 yarn jest babel-parser
+ * # Update AST/output.js for Babel 8
+ * OVERWRITE=1 BABEL_8_BREAKING=1 yarn jest
  * # Run this script to create all Babel 7 tests required for the Babel 8 AST changes
- * node ./packages/babel-parser/scripts/generate-babel-7-ast-tests.mjs
- * # Update AST for Babel 7
- * OVERWRITE=1 yarn jest babel-parser
+ * node ./scripts/generate-babel-7-tests.mjs
+ * # Update AST/output.js for Babel 7
+ * OVERWRITE=1 yarn jest
  */
 
 import { execSync } from "node:child_process";
@@ -16,7 +16,7 @@ function getUnstagedModifiedOutputJSON() {
   try {
     // Get the status and filter for unstaged files
     const output = execSync(
-      "git status --porcelain=v1 -z -- ./packages/babel-parser/test/fixtures/**/output.json",
+      "git status --porcelain=v1 -z -- './packages/*/test/fixtures/**/output.*'",
       { encoding: "utf-8" }
     );
 
