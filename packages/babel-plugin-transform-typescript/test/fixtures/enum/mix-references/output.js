@@ -28,6 +28,6 @@ var A = function (A) {
   // a is shadowed
   A[A["c"] = (() => {
     return A.a + 2;
-  })()] = "c";
+  })()] = "c"; // a refers to A.a
   return A;
-}(A || {}); // a refers to A.a
+}(A || {});
