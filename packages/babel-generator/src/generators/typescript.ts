@@ -674,9 +674,12 @@ export function TSModuleDeclaration(
     }
 
     let body = node.body;
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
     while (body.type === "TSModuleDeclaration") {
       this.token(".");
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
       this.print(body.id);
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
       body = body.body;
     }
 
