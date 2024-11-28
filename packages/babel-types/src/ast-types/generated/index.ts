@@ -221,6 +221,7 @@ export type Node =
   | TSConstructorType
   | TSDeclareFunction
   | TSDeclareMethod
+  | TSEnumBody
   | TSEnumDeclaration
   | TSEnumMember
   | TSExportAssignment
@@ -2006,10 +2007,16 @@ export interface TSTypeAssertion extends BaseNode {
   expression: Expression;
 }
 
+export interface TSEnumBody extends BaseNode {
+  type: "TSEnumBody";
+  members: Array<TSEnumMember>;
+}
+
 export interface TSEnumDeclaration extends BaseNode {
   type: "TSEnumDeclaration";
   id: Identifier;
   members: Array<TSEnumMember>;
+  body?: TSEnumBody | null;
   const?: boolean | null;
   declare?: boolean | null;
   initializer?: Expression | null;
@@ -2689,6 +2696,7 @@ export type TypeScript =
   | TSAsExpression
   | TSSatisfiesExpression
   | TSTypeAssertion
+  | TSEnumBody
   | TSEnumDeclaration
   | TSEnumMember
   | TSModuleDeclaration
@@ -6970,6 +6978,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement;
   TSDeclareMethod: ClassBody;
+  TSEnumBody: TSEnumDeclaration;
   TSEnumDeclaration:
     | BlockStatement
     | DoWhileStatement
@@ -6985,7 +6994,7 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TSEnumMember: TSEnumDeclaration;
+  TSEnumMember: TSEnumBody | TSEnumDeclaration;
   TSExportAssignment:
     | BlockStatement
     | DoWhileStatement
