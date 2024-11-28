@@ -651,30 +651,38 @@ export function TSModuleDeclaration(
       this.word(kind);
       this.space();
     }
+
+    this.print(node.id);
+    if (!node.body) {
+      this.semicolon();
+      return;
+    }
+    this.space();
+    this.print(node.body);
   } else {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
     if (!node.global) {
       this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
       this.space();
     }
+
+    this.print(id);
+
+    if (!node.body) {
+      this.semicolon();
+      return;
+    }
+
+    let body = node.body;
+    while (body.type === "TSModuleDeclaration") {
+      this.token(".");
+      this.print(body.id);
+      body = body.body;
+    }
+
+    this.space();
+    this.print(body);
   }
-
-  this.print(id);
-
-  if (!node.body) {
-    this.semicolon();
-    return;
-  }
-
-  let body = node.body;
-  while (body.type === "TSModuleDeclaration") {
-    this.token(".");
-    this.print(body.id);
-    body = body.body;
-  }
-
-  this.space();
-  this.print(body);
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {

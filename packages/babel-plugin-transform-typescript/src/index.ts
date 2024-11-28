@@ -12,7 +12,7 @@ import {
   isGlobalType,
   registerGlobalType,
 } from "./global-types.ts";
-import transpileNamespace from "./namespace.ts";
+import transpileNamespace, { getFirstIdentifier } from "./namespace.ts";
 
 function isInType(path: NodePath) {
   switch (path.parent.type) {
@@ -457,8 +457,8 @@ export default declare((api, opts: Options) => {
         // replace its parent path.
         if (t.isTSModuleDeclaration(path.node.declaration)) {
           const namespace = path.node.declaration;
-          const { id } = namespace;
-          if (t.isIdentifier(id)) {
+          if (!t.isStringLiteral(namespace.id)) {
+            const id = getFirstIdentifier(namespace.id);
             if (path.scope.hasOwnBinding(id.name)) {
               path.replaceWith(namespace);
             } else {

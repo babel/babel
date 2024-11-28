@@ -1911,13 +1911,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.TsModuleDeclaration>,
       nested: boolean = false,
     ): N.TsModuleDeclaration {
-      node.id = this.parseIdentifier();
+      node.id = process.env.BABEL_8_BREAKING
+        ? this.tsParseEntityName()
+        : this.parseIdentifier();
 
-      if (!nested) {
+      if (
+        process.env.BABEL_8_BREAKING ? node.id.type === "Identifier" : !nested
+      ) {
+        // @ts-expect-error checked above
         this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
-      if (this.eat(tt.dot)) {
+      if (!process.env.BABEL_8_BREAKING && this.eat(tt.dot)) {
         const inner = this.startNode<N.TsModuleDeclaration>();
         this.tsParseModuleOrNamespaceDeclaration(inner, true);
         // @ts-expect-error Fixme: refine typings

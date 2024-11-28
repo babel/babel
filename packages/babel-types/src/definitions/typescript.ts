@@ -537,8 +537,12 @@ defineType("TSModuleDeclaration", {
     },
     declare: validateOptional(bool),
     ...(!process.env.BABEL_8_BREAKING && { global: validateOptional(bool) }),
-    id: validateType("Identifier", "StringLiteral"),
-    body: validateType("TSModuleBlock", "TSModuleDeclaration"),
+    id: process.env.BABEL_8_BREAKING
+      ? validateType("TSEntityName", "StringLiteral")
+      : validateType("Identifier", "StringLiteral"),
+    body: process.env.BABEL_8_BREAKING
+      ? validateType("TSModuleBlock")
+      : validateType("TSModuleBlock", "TSModuleDeclaration"),
   },
 });
 
