@@ -530,6 +530,13 @@ defineType("TSTypeAssertion", {
   },
 });
 
+defineType("TSEnumBody", {
+  visitor: ["members"],
+  fields: {
+    members: validateArrayOfType("TSEnumMember"),
+  },
+});
+
 if (process.env.BABEL_8_BREAKING) {
   defineType("TSEnumDeclaration", {
     // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
@@ -543,13 +550,6 @@ if (process.env.BABEL_8_BREAKING) {
       body: validateType("TSEnumBody"),
     },
   });
-
-  defineType("TSEnumBody", {
-    visitor: ["members"],
-    fields: {
-      members: validateArrayOfType("TSEnumMember"),
-    },
-  });
 } else {
   defineType("TSEnumDeclaration", {
     // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
@@ -561,6 +561,7 @@ if (process.env.BABEL_8_BREAKING) {
       id: validateType("Identifier"),
       members: validateArrayOfType("TSEnumMember"),
       initializer: validateOptionalType("Expression"),
+      body: validateOptionalType("TSEnumBody"),
     },
   });
 }
