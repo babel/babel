@@ -637,7 +637,6 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   }
 }
 
-// @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
 export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
   printBraced(this, node, () =>
     this.printList(node.members, {
