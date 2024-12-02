@@ -622,7 +622,8 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
     this.print(node.body);
   } else {
-    TSEnumBody.call(this, node);
+    // cast to TSEnumBody for Babel 7 AST
+    TSEnumBody.call(this, node as unknown as t.TSEnumBody);
   }
 }
 
