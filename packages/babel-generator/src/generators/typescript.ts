@@ -622,18 +622,7 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
     this.print(node.body);
   } else {
-    printBraced(this, node, () =>
-      this.printList(
-        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-        node.members,
-        {
-          indent: true,
-          statement: true,
-          // TODO: Default to false for consistency with everything else
-          printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
-        },
-      ),
-    );
+    TSEnumBody.call(this, node);
   }
 }
 
