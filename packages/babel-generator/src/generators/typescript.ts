@@ -632,8 +632,9 @@ export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
     this.printList(node.members, {
       indent: true,
       statement: true,
-      // TODO: Default to false for consistency with everything else
-      printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
+      printTrailingSeparator:
+        this.shouldPrintTrailingComma("}") ??
+        (process.env.BABEL_8_BREAKING ? false : true),
     }),
   );
 }
