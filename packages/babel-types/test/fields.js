@@ -25,6 +25,8 @@ const ignoredFields = {
 
 describe("NODE_FIELDS contains all fields, and the visitor order is correct, in", function () {
   const reportedVisitorOrders = new Set();
+  const testingOnBabel8 = IS_BABEL_8();
+  const { traverseFast, VISITOR_KEYS } = t;
 
   it.each(files)("%s", async file => {
     const fixturePath = path.dirname(file);
@@ -44,13 +46,13 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         }
       }
     }
-    if (isBabel8Test !== IS_BABEL_8()) return;
+    if (isBabel8Test !== testingOnBabel8) return;
 
     const ast = JSON.parse(readFileSync(file, "utf8"));
     if (ast.type === "File" && ast.errors && ast.errors.length) return;
     t[`assert${ast.type}`](ast);
-    const missingFields = {};
-    t.traverseFast(ast, node => {
+    let missingFields = null;
+    traverseFast(ast, node => {
       const { type } = node;
       switch (type) {
         case "File":
@@ -62,6 +64,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
       if (ignoredFields[type] === true) return;
       const fields = t.NODE_FIELDS[type];
       if (!fields) {
+        if (missingFields === null) missingFields = {};
         if (!missingFields[type]) {
           missingFields[type] = {
             MISSING_TYPE: true,
@@ -85,6 +88,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         }
         if (!fields[field]) {
           if (ignoredFields[type] && ignoredFields[type][field]) continue;
+          if (missingFields === null) missingFields = {};
           if (!missingFields[type]) missingFields[type] = {};
           if (!missingFields[type][field]) {
             missingFields[type][field] = true;
@@ -92,7 +96,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         }
       }
 
-      if (Object.keys(missingFields).length) {
+      if (missingFields !== null) {
         throw new Error(
           `The following NODE_FIELDS were missing: ${inspect(missingFields)}`,
         );
@@ -108,7 +112,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         return;
       }
 
-      const keys = t.VISITOR_KEYS[type];
+      const keys = VISITOR_KEYS[type];
       for (let prev, i = 0; i < keys.length; i++) {
         if (!node[prev]) {
           prev = keys[i];
