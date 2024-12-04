@@ -59,7 +59,7 @@ describe("normalize options", () => {
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
-          "development": false,
+          "development": undefined,
           "importSource": "react",
           "pragma": undefined,
           "pragmaFrag": undefined,
@@ -70,7 +70,7 @@ describe("normalize options", () => {
       `);
       expect(normalizeOptions({ runtime: "classic" })).toMatchInlineSnapshot(`
         Object {
-          "development": false,
+          "development": undefined,
           "importSource": undefined,
           "pragma": "React.createElement",
           "pragmaFrag": "React.Fragment",
@@ -100,7 +100,7 @@ describe("normalize options", () => {
     it("default values in Babel 7", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
-          "development": false,
+          "development": undefined,
           "importSource": undefined,
           "pragma": "React.createElement",
           "pragmaFrag": "React.Fragment",
@@ -113,7 +113,7 @@ describe("normalize options", () => {
       `);
       expect(normalizeOptions({ runtime: "automatic" })).toMatchInlineSnapshot(`
         Object {
-          "development": false,
+          "development": undefined,
           "importSource": undefined,
           "pragma": undefined,
           "pragmaFrag": undefined,
