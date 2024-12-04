@@ -2,7 +2,8 @@ import * as t from "../lib/index.js";
 import glob from "glob";
 import { readFileSync } from "fs";
 import { inspect } from "util";
-import { commonJS } from "$repo-utils";
+import { commonJS, IS_BABEL_8 } from "$repo-utils";
+import path from "path";
 
 const { __dirname } = commonJS(import.meta.url);
 
@@ -20,38 +21,38 @@ const ignoredFields = {
   ObjectProperty: { method: true },
   ObjectMethod: { method: true, id: true, predicate: true },
   TSDeclareMethod: { id: true },
-  ...(process.env.BABEL_8_BREAKING
-    ? {
-        TSFunctionType: { parameters: true, typeAnnotation: true },
-        TSMethodSignature: { parameters: true, typeAnnotation: true },
-        TSConstructorType: { parameters: true, typeAnnotation: true },
-        TSCallSignatureDeclaration: { parameters: true, typeAnnotation: true },
-        TSConstructSignatureDeclaration: {
-          parameters: true,
-          typeAnnotation: true,
-        },
-        TSMappedType: { typeParameter: true },
-        TSModuleDeclaration: { global: true },
-      }
-    : {
-        TSFunctionType: { params: true, returnType: true },
-        TSMethodSignature: { params: true, returnType: true },
-        TSConstructorType: { params: true, returnType: true },
-        TSCallSignatureDeclaration: { params: true, returnType: true },
-        TSConstructSignatureDeclaration: { params: true, returnType: true },
-        TSMappedType: { key: true, constraint: true },
-      }),
 };
 
 describe("NODE_FIELDS contains all fields, and the visitor order is correct, in", function () {
   const reportedVisitorOrders = new Set();
+  const testingOnBabel8 = IS_BABEL_8();
+  const { traverseFast, VISITOR_KEYS } = t;
 
   it.each(files)("%s", async file => {
+    const fixturePath = path.dirname(file);
+    let isBabel8Test;
+    try {
+      isBabel8Test = JSON.parse(
+        readFileSync(path.join(fixturePath, "options.json")),
+      ).BABEL_8_BREAKING;
+    } catch {
+      if (isBabel8Test === undefined) {
+        try {
+          isBabel8Test = JSON.parse(
+            readFileSync(path.resolve(fixturePath, "../options.json")),
+          ).BABEL_8_BREAKING;
+        } catch {
+          isBabel8Test = true;
+        }
+      }
+    }
+    if (isBabel8Test !== testingOnBabel8) return;
+
     const ast = JSON.parse(readFileSync(file, "utf8"));
     if (ast.type === "File" && ast.errors && ast.errors.length) return;
     t[`assert${ast.type}`](ast);
-    const missingFields = {};
-    t.traverseFast(ast, node => {
+    let missingFields = null;
+    traverseFast(ast, node => {
       const { type } = node;
       switch (type) {
         case "File":
@@ -60,13 +61,10 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
           return;
       }
 
-      if (process.env.BABEL_8_BREAKING) {
-        if (type === "TSExpressionWithTypeArguments") return;
-      }
-
       if (ignoredFields[type] === true) return;
       const fields = t.NODE_FIELDS[type];
       if (!fields) {
+        if (missingFields === null) missingFields = {};
         if (!missingFields[type]) {
           missingFields[type] = {
             MISSING_TYPE: true,
@@ -90,6 +88,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         }
         if (!fields[field]) {
           if (ignoredFields[type] && ignoredFields[type][field]) continue;
+          if (missingFields === null) missingFields = {};
           if (!missingFields[type]) missingFields[type] = {};
           if (!missingFields[type][field]) {
             missingFields[type][field] = true;
@@ -97,7 +96,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         }
       }
 
-      if (Object.keys(missingFields).length) {
+      if (missingFields !== null) {
         throw new Error(
           `The following NODE_FIELDS were missing: ${inspect(missingFields)}`,
         );
@@ -113,7 +112,7 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         return;
       }
 
-      const keys = t.VISITOR_KEYS[type];
+      const keys = VISITOR_KEYS[type];
       for (let prev, i = 0; i < keys.length; i++) {
         if (!node[prev]) {
           prev = keys[i];
