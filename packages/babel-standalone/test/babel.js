@@ -91,6 +91,7 @@ describe("@babel/standalone", () => {
       "const someDiv = <div>{getMessage()}</div>",
       {
         presets: [["react", { runtime: "classic" }]],
+        envName: "production",
       },
     ).code;
     expect(output).toBe(
