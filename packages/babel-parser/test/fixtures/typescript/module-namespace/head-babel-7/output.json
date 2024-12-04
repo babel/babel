@@ -27,32 +27,32 @@
         "start":15,"end":33,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":18,"index":33}},
         "kind": "namespace",
         "id": {
-          "type": "TSQualifiedName",
-          "start":25,"end":30,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":15,"index":30}},
-          "left": {
-            "type": "TSQualifiedName",
-            "start":25,"end":28,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":13,"index":28}},
-            "left": {
-              "type": "Identifier",
-              "start":25,"end":26,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":11,"index":26},"identifierName":"M"},
-              "name": "M"
-            },
-            "right": {
-              "type": "Identifier",
-              "start":27,"end":28,"loc":{"start":{"line":2,"column":12,"index":27},"end":{"line":2,"column":13,"index":28},"identifierName":"N"},
-              "name": "N"
-            }
-          },
-          "right": {
-            "type": "Identifier",
-            "start":29,"end":30,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":15,"index":30},"identifierName":"O"},
-            "name": "O"
-          }
+          "type": "Identifier",
+          "start":25,"end":26,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":11,"index":26},"identifierName":"M"},
+          "name": "M"
         },
         "body": {
-          "type": "TSModuleBlock",
-          "start":31,"end":33,"loc":{"start":{"line":2,"column":16,"index":31},"end":{"line":2,"column":18,"index":33}},
-          "body": []
+          "type": "TSModuleDeclaration",
+          "start":27,"end":33,"loc":{"start":{"line":2,"column":12,"index":27},"end":{"line":2,"column":18,"index":33}},
+          "id": {
+            "type": "Identifier",
+            "start":27,"end":28,"loc":{"start":{"line":2,"column":12,"index":27},"end":{"line":2,"column":13,"index":28},"identifierName":"N"},
+            "name": "N"
+          },
+          "body": {
+            "type": "TSModuleDeclaration",
+            "start":29,"end":33,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":18,"index":33}},
+            "id": {
+              "type": "Identifier",
+              "start":29,"end":30,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":15,"index":30},"identifierName":"O"},
+              "name": "O"
+            },
+            "body": {
+              "type": "TSModuleBlock",
+              "start":31,"end":33,"loc":{"start":{"line":2,"column":16,"index":31},"end":{"line":2,"column":18,"index":33}},
+              "body": []
+            }
+          }
         }
       },
       {

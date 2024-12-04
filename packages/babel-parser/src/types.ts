@@ -1793,7 +1793,7 @@ export interface TsNamespaceDeclaration extends TsModuleDeclaration {
   body: TsNamespaceBody;
 }
 
-export type TsModuleName = Identifier | StringLiteral;
+export type TsModuleName = TsEntityName | StringLiteral;
 
 export interface TsImportEqualsDeclaration extends NodeBase {
   type: "TSImportEqualsDeclaration";

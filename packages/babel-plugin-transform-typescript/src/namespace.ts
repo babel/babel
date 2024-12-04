@@ -2,6 +2,13 @@ import { template, types as t, type NodePath } from "@babel/core";
 
 import { registerGlobalType } from "./global-types.ts";
 
+export function getFirstIdentifier(node: t.TSEntityName): t.Identifier {
+  if (t.isIdentifier(node)) {
+    return node;
+  }
+  return getFirstIdentifier(node.left);
+}
+
 export default function transpileNamespace(
   path: NodePath<t.TSModuleDeclaration>,
   allowNamespaces: boolean,
@@ -22,7 +29,7 @@ export default function transpileNamespace(
       );
   }
 
-  const name = path.node.id.name;
+  const name = getFirstIdentifier(path.node.id).name;
   const value = handleNested(path, path.node);
   if (value === null) {
     // This means that `path` is a type-only namespace.
@@ -120,18 +127,47 @@ function handleNested(
   parentExport?: t.Expression,
 ): t.Statement | null {
   const names = new Set();
-  const realName = node.id;
-  t.assertIdentifier(realName);
+  const realName =
+    !process.env.BABEL_8_BREAKING || t.isIdentifier(node.id)
+      ? (node.id as t.Identifier)
+      : getFirstIdentifier(node.id as unknown as t.TSQualifiedName);
 
   const name = path.scope.generateUid(realName.name);
 
-  const namespaceTopLevel: t.Statement[] = t.isTSModuleBlock(node.body)
-    ? node.body.body
-    : // We handle `namespace X.Y {}` as if it was
-      //   namespace X {
-      //     export namespace Y {}
-      //   }
-      [t.exportNamedDeclaration(node.body)];
+  const body = node.body;
+  let id = node.id;
+  let namespaceTopLevel: t.Statement[];
+  if (process.env.BABEL_8_BREAKING) {
+    if (t.isTSQualifiedName(id)) {
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
+      namespaceTopLevel = body.body;
+      while (t.isTSQualifiedName(id)) {
+        namespaceTopLevel = [
+          t.exportNamedDeclaration(
+            t.tsModuleDeclaration(
+              // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
+              t.cloneNode(id.right),
+              t.tsModuleBlock(namespaceTopLevel),
+            ),
+          ),
+        ];
+
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
+        id = id.left;
+      }
+    } else {
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
+      namespaceTopLevel = body.body;
+    }
+  } else {
+    namespaceTopLevel = t.isTSModuleBlock(body)
+      ? body.body
+      : // We handle `namespace X.Y {}` as if it was
+        //   namespace X {
+        //     export namespace Y {}
+        //   }
+        [t.exportNamedDeclaration(body)];
+  }
 
   let isEmpty = true;
 
