@@ -24,6 +24,24 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.3 (2024-12-04)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16958](https://github.com/babel/babel/pull/16958) [preserveFormat] force semicolons when invalidating ASI ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-builder-binary-assignment-operator-visitor`, `babel-plugin-transform-exponentiation-operator`
+  * [#16895](https://github.com/babel/babel/pull/16895) Remove helper-builder-binary-assignment-operator-visitor ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-generator`
+  * [#16959](https://github.com/babel/babel/pull/16959) perf: Reduce the use of temporary objects ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#16923](https://github.com/babel/babel/pull/16923) perf: Improve scope information collection performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16964](https://github.com/babel/babel/pull/16964) perf: Avoid repeated traversal when creating scope ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-modules-commonjs`
+  * [#16954](https://github.com/babel/babel/pull/16954) perf: Remove use of `simplifyAccess` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.26.2 (2024-10-30)
 
 #### :bug: Bug Fix
