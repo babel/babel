@@ -923,7 +923,7 @@ export function buildProcessTests(
             const env = {
               ...process.env,
               FORCE_COLOR: "false",
-              ...(parseInt(process.versions.node) >= 23 && {
+              ...(parseInt(process.versions.node) >= 22 && {
                 NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
               }),
               ...opts.env,

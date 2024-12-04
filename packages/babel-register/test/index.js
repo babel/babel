@@ -415,7 +415,7 @@ function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
     cwd,
     env: {
       ...env,
-      ...(parseInt(process.versions.node) >= 23 && {
+      ...(parseInt(process.versions.node) >= 22 && {
         NODE_OPTIONS:
           "--disable-warning=ExperimentalWarning " + (env.NODE_OPTIONS || ""),
       }),
