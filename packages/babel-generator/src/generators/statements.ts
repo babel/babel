@@ -227,12 +227,14 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
   this.space();
   this.token("{");
 
-  this.printSequence(node.cases, {
-    indent: true,
-    addNewlines(leading, cas) {
+  this.printSequence(
+    node.cases,
+    true,
+    undefined,
+    function addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
     },
-  });
+  );
 
   this.rightBrace(node);
 }
@@ -250,7 +252,7 @@ export function SwitchCase(this: Printer, node: t.SwitchCase) {
 
   if (node.consequent.length) {
     this.newline();
-    this.printSequence(node.consequent, { indent: true });
+    this.printSequence(node.consequent, true);
   }
 }
 
@@ -303,15 +305,18 @@ export function VariableDeclaration(
   //       bar = "foo";
   //
 
-  this.printList(node.declarations, {
-    separator: hasInits
+  this.printList(
+    node.declarations,
+    undefined,
+    undefined,
+    node.declarations.length > 1,
+    hasInits
       ? function (this: Printer, occurrenceCount: number) {
           this.token(",", false, occurrenceCount);
           this.newline();
         }
       : undefined,
-    indent: node.declarations.length > 1 ? true : false,
-  });
+  );
 
   if (isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator

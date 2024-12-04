@@ -44,7 +44,7 @@ export function TSTypeParameterInstantiation(
     printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
   }
 
-  this.printList(node.params, { printTrailingSeparator });
+  this.printList(node.params, printTrailingSeparator);
   this.token(">");
 }
 
@@ -321,9 +321,7 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
-  printBraced(this, node, () =>
-    this.printJoin(node.members, { indent: true, statement: true }),
-  );
+  printBraced(this, node, () => this.printJoin(node.members, true, true));
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
@@ -335,9 +333,7 @@ export function TSArrayType(this: Printer, node: t.TSArrayType) {
 
 export function TSTupleType(this: Printer, node: t.TSTupleType) {
   this.token("[");
-  this.printList(node.elementTypes, {
-    printTrailingSeparator: this.shouldPrintTrailingComma("]"),
-  });
+  this.printList(node.elementTypes, this.shouldPrintTrailingComma("]"));
   this.token("]");
 }
 
@@ -378,12 +374,10 @@ function tsPrintUnionOrIntersectionType(
     printer.token(sep);
   }
 
-  printer.printJoin(node.types, {
-    separator(i) {
-      this.space();
-      this.token(sep, null, i + hasLeadingToken);
-      this.space();
-    },
+  printer.printJoin(node.types, undefined, undefined, function (i) {
+    this.space();
+    this.token(sep, null, i + hasLeadingToken);
+    this.space();
   });
 }
 
@@ -540,9 +534,7 @@ export function TSInterfaceDeclaration(
 }
 
 export function TSInterfaceBody(this: Printer, node: t.TSInterfaceBody) {
-  printBraced(this, node, () =>
-    this.printJoin(node.body, { indent: true, statement: true }),
-  );
+  printBraced(this, node, () => this.printJoin(node.body, true, true));
 }
 
 export function TSTypeAliasDeclaration(
@@ -615,12 +607,13 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.space();
 
   printBraced(this, node, () =>
-    this.printList(members, {
-      indent: true,
-      statement: true,
+    this.printList(
+      members,
       // TODO: Default to false for consistency with everything else
-      printTrailingSeparator: this.shouldPrintTrailingComma("}") ?? true,
-    }),
+      this.shouldPrintTrailingComma("}") ?? true,
+      true,
+      true,
+    ),
   );
 }
 
@@ -678,9 +671,7 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  printBraced(this, node, () =>
-    this.printSequence(node.body, { indent: true }),
-  );
+  printBraced(this, node, () => this.printSequence(node.body, true));
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {

@@ -79,12 +79,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
     separator?.(-1); // print leading semicolons in preserveFormat mode
 
     const exit = this.enterDelimited();
-    this.printJoin(node.body, {
-      statement: true,
-      indent: true,
-      separator,
-      printTrailingSeparator: true,
-    });
+    this.printJoin(node.body, true, true, separator, true);
     exit();
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
@@ -287,7 +282,7 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.token("}");
   } else {
     this.newline();
-    this.printSequence(node.body, { indent: true });
+    this.printSequence(node.body, true);
     this.rightBrace(node);
   }
 }
