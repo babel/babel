@@ -629,13 +629,13 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
 
 export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
   printBraced(this, node, () =>
-    this.printList(node.members, {
-      indent: true,
-      statement: true,
-      printTrailingSeparator:
-        this.shouldPrintTrailingComma("}") ??
+    this.printList(
+      node.members,
+      this.shouldPrintTrailingComma("}") ??
         (process.env.BABEL_8_BREAKING ? false : true),
-    }),
+      true,
+      true,
+    ),
   );
 }
 
