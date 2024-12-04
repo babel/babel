@@ -4,8 +4,8 @@ import { describeESM, describeGte, itLt } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
-// "minNodeVersion": "23.0.0" <-- For Ctrl+F when dropping node 22
-const nodeLt23 = itLt("23.0.0");
+// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
+const nodeLt22_12 = itLt("22.12.0");
 
 async function run(name, ...flags) {
   return new Promise((res, rej) => {
@@ -116,7 +116,7 @@ describeESM("usage from cjs", () => {
 });
 
 describeESM("sync loading of ESM plugins", () => {
-  nodeLt23("without --experimental-require-module flag", async () => {
+  nodeLt22_12("without --experimental-require-module flag", async () => {
     await expect(run("transform-sync-esm-plugin.mjs")).rejects.toThrow(
       "You appear to be using a native ECMAScript module plugin, which is " +
         "only supported when running Babel asynchronously or when using the " +
@@ -124,7 +124,7 @@ describeESM("sync loading of ESM plugins", () => {
     );
   });
 
-  describeGte("23.0.0")("without --experimental-require-module flag", () => {
+  describeGte("22.12.0")("without --experimental-require-module flag", () => {
     it("sync", async () => {
       const { stdout } = await run(
         "transform-sync-esm-plugin.mjs",

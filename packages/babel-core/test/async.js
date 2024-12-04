@@ -15,9 +15,9 @@ import { itGte, itESM, itLt } from "$repo-utils";
 const nodeGte8 = itGte("8.0.0");
 const nodeGte14 = itGte("14.8.0");
 
-// "minNodeVersion": "23.0.0" <-- For Ctrl+F when dropping node 22
-const nodeGte23 = itGte("23.0.0");
-const nodeLt23 = itLt("23.0.0");
+// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
+const nodeGte22_12 = itGte("22.12.0");
+const nodeLt22_12 = itLt("22.12.0");
 
 describe("asynchronicity", () => {
   const base = path.join(
@@ -252,7 +252,7 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      nodeLt23("called synchronously", async () => {
+      nodeLt22_12("called synchronously", async () => {
         process.chdir("plugin-mjs-native");
 
         await expect(spawnTransformSync()).rejects.toThrow(
@@ -261,7 +261,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte23("called asynchronously", async () => {
+      nodeGte22_12("called asynchronously", async () => {
         process.chdir("plugin-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({
@@ -344,7 +344,7 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      nodeLt23("called synchronously", async () => {
+      nodeLt22_12("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
         await expect(spawnTransformSync()).rejects.toThrow(
@@ -353,7 +353,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte23("called synchronously", async () => {
+      nodeGte22_12("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({
