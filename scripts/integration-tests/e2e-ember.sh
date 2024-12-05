@@ -27,6 +27,8 @@ startLocalRegistry "$root"/verdaccio-config.yml
 
 npm install --ignore-scripts
 
+npm ls --all
+
 # Test
 
 npm run build
