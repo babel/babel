@@ -104,9 +104,13 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     const types = virtualTypes[nodeType];
     if (types !== null) {
       for (const type of types) {
-        // @ts-expect-error Expression produces too complex union
-        visitor[type] ??= {};
-        mergePair(visitor[type], fns);
+        // merge the visitor if necessary or just put it back in
+        if (visitor[type]) {
+          mergePair(visitor[type], fns);
+        } else {
+          // @ts-expect-error Expression produces too complex union
+          visitor[type] = fns;
+        }
       }
     } else {
       mergePair(visitor, fns);
