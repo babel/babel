@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.4 (2024-12-05)
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-traverse`
+  * [#17005](https://github.com/babel/babel/pull/17005) Revert "perf: Improve scope information collection performance" ([@JLHwung](https://github.com/JLHwung))
 ## v7.26.3 (2024-12-04)
 
 #### :bug: Bug Fix
