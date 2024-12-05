@@ -39,7 +39,7 @@ export function readdir(
             (!filter || filter(filename))
           );
         })
-        .map(dirent => path.join(dirent.path, dirent.name))
+        .map(dirent => path.join(dirent.parentPath, dirent.name))
         // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
         // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
         .sort(alphasort)

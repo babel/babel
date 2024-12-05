@@ -671,7 +671,7 @@ const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
       fs.readdirSync(loc, { withFileTypes: true, recursive: true })
         .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
         .forEach(dirent => {
-          const fullpath = path.join(dirent.path, dirent.name);
+          const fullpath = path.join(dirent.parentPath, dirent.name);
           files[path.relative(loc, fullpath)] = readFile(fullpath);
         });
     } else {
