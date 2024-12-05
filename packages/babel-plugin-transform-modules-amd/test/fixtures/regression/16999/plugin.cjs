@@ -8,6 +8,9 @@ module.exports = function plugin({ types: t }) {
           path.parentPath.parentPath.pushContainer("body", t.functionDeclaration(t.identifier("fn"), [t.identifier("x")], t.blockStatement([])));
         }
       },
+      FunctionDeclaration(path) {
+        expect(path.container[path.key]).not.toBeFalsy();
+      }
     },
   };
 };
