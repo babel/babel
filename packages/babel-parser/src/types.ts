@@ -1607,6 +1607,10 @@ export interface TsConstructorType
 export interface TsTypeReference extends TsTypeBase {
   type: "TSTypeReference";
   typeName: TsEntityName;
+  typeArguments?: TsTypeParameterInstantiation;
+  /**
+   * @deprecated
+   */
   typeParameters?: TsTypeParameterInstantiation;
 }
 

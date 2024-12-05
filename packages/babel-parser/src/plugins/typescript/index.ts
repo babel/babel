@@ -601,7 +601,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const node = this.startNode<N.TsTypeReference>();
       node.typeName = this.tsParseEntityName();
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
-        node.typeParameters = this.tsParseTypeArguments();
+        if (process.env.BABEL_8_BREAKING) {
+          node.typeArguments = this.tsParseTypeArguments();
+        } else {
+          node.typeParameters = this.tsParseTypeArguments();
+        }
       }
       return this.finishNode(node, "TSTypeReference");
     }
