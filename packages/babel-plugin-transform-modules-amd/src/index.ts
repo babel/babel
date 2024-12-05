@@ -29,6 +29,7 @@ function injectWrapper(
   path: NodePath<t.Program>,
   wrapper: t.ExpressionStatement,
 ) {
+  const bodyPaths = path.get("body");
   const { body, directives } = path.node;
   path.node.directives = [];
   path.node.body = [];
@@ -43,6 +44,11 @@ function injectWrapper(
   ).get("body");
   amdFactory.pushContainer("directives", directives);
   amdFactory.pushContainer("body", body);
+  // Avoid paths in the queue of traversal holding invalid `container` in later traversals.
+  // https://github.com/babel/babel/issues/16999
+  for (const bodyPath of bodyPaths) {
+    bodyPath.parentPath = amdFactory;
+  }
 }
 
 export interface Options extends PluginOptions {
