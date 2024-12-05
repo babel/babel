@@ -926,7 +926,7 @@ gulp.task(
     gulp.parallel("generate-type-helpers", "generate-runtime-helpers"),
     // rebuild @babel/types and @babel/helpers since
     // type-helpers and generated helpers may be changed
-    "build-babel",
+    gulp.parallel("build-rollup", "build-babel"),
     gulp.parallel("generate-standalone", "build-cjs-bundles")
   )
 );
