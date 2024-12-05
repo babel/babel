@@ -17,6 +17,7 @@ set -x
 startLocalRegistry "$root"/verdaccio-config.yml
 
 # Create example app
+# ember-cli will run npm install in the ember-quickstart folder
 cd /tmp
 npx ember-cli new ember-quickstart --lang en
 cd /tmp/ember-quickstart
@@ -24,8 +25,6 @@ cd /tmp/ember-quickstart
 #==============================================================================#
 #                                   TEST                                       #
 #==============================================================================#
-
-npm install --ignore-scripts
 
 # Test
 
