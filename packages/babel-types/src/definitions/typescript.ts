@@ -350,9 +350,11 @@ defineType("TSParenthesizedType", {
 
 defineType("TSTypeOperator", {
   aliases: ["TSType"],
-  visitor: ["typeAnnotation"],
+  visitor: ["typeAnnotation", "operator"],
   fields: {
-    operator: validate(assertValueType("string")),
+    operator: {
+      validate: assertOneOf("keyof", "readonly", "unique"),
+    },
     typeAnnotation: validateType("TSType"),
   },
 });

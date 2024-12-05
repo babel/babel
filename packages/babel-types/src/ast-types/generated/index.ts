@@ -1926,7 +1926,7 @@ export interface TSParenthesizedType extends BaseNode {
 export interface TSTypeOperator extends BaseNode {
   type: "TSTypeOperator";
   typeAnnotation: TSType;
-  operator: string;
+  operator: "keyof" | "readonly" | "unique";
 }
 
 export interface TSIndexedAccessType extends BaseNode {
