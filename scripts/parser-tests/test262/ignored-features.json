@@ -103,6 +103,7 @@
   "hashbang",
   "host-gc-required",
   "import-attributes",
+  "import-defer",
   "import.meta",
   "intl-normative-optional",
   "iterator-helpers",
