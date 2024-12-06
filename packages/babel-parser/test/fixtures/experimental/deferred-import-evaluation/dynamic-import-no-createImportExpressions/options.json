@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "deferredImportEvaluation"
+  ],
+  "throws": "'import.defer(...)' can only be parsed when using the 'createImportExpressions' option. (1:7)"
+}
