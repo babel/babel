@@ -64,7 +64,6 @@
     "glob": "^10.3.10",
     "globals": "^15.9.0",
     "gulp": "^5.0.0",
-    "gulp-plumber": "^1.2.1",
     "husky": "^9.0.11",
     "import-meta-resolve": "^4.1.0",
     "is-ci": "^3.0.1",
