@@ -865,7 +865,8 @@ export interface ClassBase extends HasDecorators {
   decorators?: Decorator[];
   // TODO: All not in spec
   typeParameters?: TypeParameterDeclarationBase | null;
-  superTypeParameters?: TypeParameterInstantiationBase | null;
+  superTypeParameters?: TypeParameterInstantiationBase | null; // babel 7
+  superTypeArguments?: TypeParameterInstantiationBase | null; // babel 8
   abstract?: boolean;
   implements?: TSClassImplements[] | undefined | null | FlowClassImplements[];
 }

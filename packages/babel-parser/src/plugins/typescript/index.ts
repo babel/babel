@@ -3352,7 +3352,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.parseClassSuper(node);
       // handle `extends f<<T>
       if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
-        node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
+        if (process.env.BABEL_8_BREAKING) {
+          node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
+        } else {
+          node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
+        }
       }
       if (this.eatContextual(tt._implements)) {
         node.implements = this.tsParseHeritageClause("implements");
