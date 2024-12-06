@@ -101,9 +101,9 @@ async function generateHelpers(generator, dest, filename, message) {
   const { default: generateCode } = await import(generator);
   const result = await formatCode(
     await generateCode(filename),
-    dest + filename
+    path.join(dest, filename)
   );
-  fs.writeFileSync(dest + filename, result, { mode: 0o644 });
+  fs.writeFileSync(path.join(dest, filename), result, { mode: 0o644 });
   log(`${colors.green("✔")} Generated ${message}`);
 }
 
@@ -139,7 +139,7 @@ function generateTraverseHelpers(helperKind, outBase = "") {
 async function generateRuntimeHelpers() {
   await generateHelpers(
     `./packages/babel-helpers/scripts/generate-regenerator-runtime.js`,
-    `./packages/babel-helpers/src/helpers`,
+    `./packages/babel-helpers/src/helpers/`,
     "regeneratorRuntime.js",
     "@babel/helpers -> regeneratorRuntime"
   );
