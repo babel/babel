@@ -14,7 +14,11 @@ describe("Printer", () => {
       if (IS_BABEL_8()) {
         if (type === "TSExpressionWithTypeArguments") return;
       } else {
-        if (type === "TSClassImplements" || type === "TSInterfaceHeritage") {
+        if (
+          type === "TSClassImplements" ||
+          type === "TSEnumBody" ||
+          type === "TSInterfaceHeritage"
+        ) {
           return;
         }
       }
