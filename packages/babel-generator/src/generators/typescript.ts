@@ -320,10 +320,11 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
   this.space();
   this.print(node.exprName);
 
-  //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
   const typeArguments = process.env.BABEL_8_BREAKING
-    ? node.typeArguments
-    : node.typeParameters;
+    ? //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+      node.typeArguments
+    : //@ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+      node.typeParameters;
   if (typeArguments) {
     this.print(typeArguments);
   }
