@@ -1625,6 +1625,10 @@ export interface TsTypePredicate extends TsTypeBase {
 export interface TsTypeQuery extends TsTypeBase {
   type: "TSTypeQuery";
   exprName: TsEntityName | TsImportType;
+  typeArguments?: TsTypeParameterInstantiation;
+  /**
+   * @deprecated
+   */
   typeParameters?: TsTypeParameterInstantiation;
 }
 
