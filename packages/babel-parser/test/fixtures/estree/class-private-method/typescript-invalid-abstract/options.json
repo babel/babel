@@ -1,3 +1,7 @@
 {
-  "plugins": ["typescript", "estree"]
+  "plugins": [
+    "typescript",
+    "estree"
+  ],
+  "BABEL_8_BREAKING": true
 }

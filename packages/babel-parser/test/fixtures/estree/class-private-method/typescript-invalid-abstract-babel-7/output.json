@@ -22,18 +22,22 @@
           "start":31,"end":74,"loc":{"start":{"line":1,"column":31},"end":{"line":3,"column":1}},
           "body": [
             {
-              "type": "TSAbstractMethodDefinition",
+              "type": "MethodDefinition",
               "start":35,"end":72,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":39}},
               "abstract": true,
               "static": false,
               "key": {
-                "type": "PrivateIdentifier",
+                "type": "PrivateName",
                 "start":44,"end":48,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15}},
-                "name": "foo"
+                "id": {
+                  "type": "Identifier",
+                  "start":45,"end":48,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15},"identifierName":"foo"},
+                  "name": "foo"
+                }
               },
               "kind": "method",
               "value": {
-                "type": "TSEmptyBodyFunctionExpression",
+                "type": "FunctionExpression",
                 "start":48,"end":72,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":39}},
                 "id": null,
                 "generator": false,

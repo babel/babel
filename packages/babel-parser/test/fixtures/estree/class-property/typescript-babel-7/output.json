@@ -22,7 +22,7 @@
           "start":31,"end":59,"loc":{"start":{"line":1,"column":31},"end":{"line":3,"column":1}},
           "body": [
             {
-              "type": "TSAbstractPropertyDefinition",
+              "type": "PropertyDefinition",
               "start":35,"end":57,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":24}},
               "abstract": true,
               "static": false,
