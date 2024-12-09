@@ -771,7 +771,7 @@ export default abstract class StatementParser extends ExpressionParser {
         expr = this.wrapParenthesis(startLoc, expr);
 
         const paramsStartLoc = this.state.startLoc;
-        node.expression = this.parseMaybeDecoratorArguments(expr);
+        node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
         if (
           this.getPluginOption("decorators", "allowCallParenthesized") ===
             false &&
@@ -801,7 +801,7 @@ export default abstract class StatementParser extends ExpressionParser {
           expr = this.finishNode(node, "MemberExpression");
         }
 
-        node.expression = this.parseMaybeDecoratorArguments(expr);
+        node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
       }
     } else {
       node.expression = this.parseExprSubscripts();
@@ -809,9 +809,13 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "Decorator");
   }
 
-  parseMaybeDecoratorArguments(this: Parser, expr: N.Expression): N.Expression {
+  parseMaybeDecoratorArguments(
+    this: Parser,
+    expr: N.Expression,
+    startLoc: Position,
+  ): N.Expression {
     if (this.eat(tt.parenL)) {
-      const node = this.startNodeAtNode<N.CallExpression>(expr);
+      const node = this.startNodeAt<N.CallExpression>(startLoc);
       node.callee = expr;
       node.arguments = this.parseCallExpressionArguments(tt.parenR);
       this.toReferencedList(node.arguments);

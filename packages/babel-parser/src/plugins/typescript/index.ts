@@ -3739,7 +3739,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.parseBindingAtom();
     }
 
-    parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
+    parseMaybeDecoratorArguments(
+      expr: N.Expression,
+      startLoc: Position,
+    ): N.Expression {
       // handles `@f<<T>`
       if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         const typeArguments = this.tsParseTypeArgumentsInExpression();
@@ -3747,6 +3750,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (this.match(tt.parenL)) {
           const call = super.parseMaybeDecoratorArguments(
             expr,
+            startLoc,
           ) as N.CallExpression;
           call.typeParameters = typeArguments;
           return call;
@@ -3755,7 +3759,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.unexpected(null, tt.parenL);
       }
 
-      return super.parseMaybeDecoratorArguments(expr);
+      return super.parseMaybeDecoratorArguments(expr, startLoc);
     }
 
     checkCommaAfterRest(
