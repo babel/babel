@@ -961,6 +961,9 @@ export interface ClassPrivateProperty extends NodeBase {
   definite?: true;
   readonly?: true;
   override?: true;
+  // For error recovery
+  abstract?: null;
+  accessibility?: null;
   // Flow only
   variance?: FlowVariance | null;
 }
@@ -1378,14 +1381,17 @@ export interface EstreeProperty extends NodeBase {
   variance?: FlowVariance | null;
 }
 
-export interface EstreeMethodDefinition extends NodeBase {
-  type: "MethodDefinition";
+interface EstreeMethodDefinitionBase extends NodeBase {
   static: boolean;
   key: Expression;
   computed: boolean;
-  value: FunctionExpression;
   decorators: Decorator[];
   kind?: "get" | "set" | "method";
+}
+
+export interface EstreeMethodDefinition extends EstreeMethodDefinitionBase {
+  type: "MethodDefinition";
+  value: FunctionExpression;
   variance?: FlowVariance | null;
 }
 
@@ -1404,11 +1410,14 @@ export interface EstreePrivateIdentifier extends NodeBase {
   name: string;
 }
 
-export interface EstreePropertyDefinition extends NodeBase {
-  type: "PropertyDefinition";
+interface EstreePropertyDefinitionBase extends NodeBase {
   static: boolean;
   key: Expression | EstreePrivateIdentifier;
   computed: boolean;
+}
+
+export interface EstreePropertyDefinition extends EstreePropertyDefinitionBase {
+  type: "PropertyDefinition";
   value: Expression;
 }
 
@@ -1537,6 +1546,22 @@ export interface TsIndexSignature
   static?: true;
   type: "TSIndexSignature";
   // Note: parameters.length must be 1.
+}
+
+export interface EstreeTSEmptyBodyFunctionExpression extends NodeBase {
+  type: "TSEmptyBodyFunctionExpression";
+}
+
+export interface EstreeTSAbstractMethodDefinition
+  extends EstreeMethodDefinitionBase {
+  type: "TSAbstractMethodDefinition";
+  value: EstreeTSEmptyBodyFunctionExpression;
+}
+
+export interface EstreeTSAbstractPropertyDefinition
+  extends EstreePropertyDefinitionBase {
+  type: "TSAbstractPropertyDefinition";
+  value: null;
 }
 
 // ================
@@ -1932,6 +1957,9 @@ export type Node =
   | EstreePrivateIdentifier
   | EstreeProperty
   | EstreePropertyDefinition
+  | EstreeTSAbstractMethodDefinition
+  | EstreeTSAbstractPropertyDefinition
+  | EstreeTSEmptyBodyFunctionExpression
   | ExportAllDeclaration
   | ExportDefaultDeclaration
   | ExportDefaultSpecifier
