@@ -505,20 +505,16 @@ export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
 export function TSClassImplements(
   this: Printer,
   // TODO(Babel 8): Just use t.TSClassImplements
-  node: Extract<
-    t.Node,
-    { type: "TSClassImplements" | "TSExpressionWithTypeArguments" }
-  >,
+  node: t.Node & {
+    expression: t.TSEntityName;
+    typeArguments?: t.TSTypeParameterInstantiation;
+  },
 ) {
   this.print(node.expression);
-  this.print(node.typeParameters);
+  this.print(node.typeArguments);
 }
 
-export {
-  // TODO: Remove this in Babel 8
-  TSClassImplements as TSExpressionWithTypeArguments,
-  TSClassImplements as TSInterfaceHeritage,
-};
+export { TSClassImplements as TSInterfaceHeritage };
 
 export function TSInterfaceDeclaration(
   this: Printer,

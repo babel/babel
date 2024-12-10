@@ -1750,7 +1750,7 @@ export interface TSInterfaceBody extends NodeBase {
 
 export interface TSHeritageBase extends NodeBase {
   expression: TsEntityName;
-  typeParameters?: TsTypeParameterInstantiation;
+  typeArguments?: TsTypeParameterInstantiation;
 }
 
 export interface TSClassImplements extends TSHeritageBase {
