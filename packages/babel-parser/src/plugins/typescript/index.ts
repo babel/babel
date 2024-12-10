@@ -3259,16 +3259,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
 
-      const property = super.parseClassProperty(node);
-      if (
-        process.env.BABEL_8_BREAKING &&
-        node.abstract &&
-        this.hasPlugin("estree")
-      ) {
-        (property as unknown as N.EstreeTSAbstractPropertyDefinition).type =
-          "TSAbstractPropertyDefinition";
-      }
-      return property;
+      return super.parseClassProperty(node);
     }
 
     parseClassPrivateProperty(
@@ -3285,16 +3276,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       this.parseClassPropertyAnnotation(node);
-      const property = super.parseClassPrivateProperty(node);
-      if (
-        process.env.BABEL_8_BREAKING &&
-        node.abstract &&
-        this.hasPlugin("estree")
-      ) {
-        (property as unknown as N.EstreeTSAbstractPropertyDefinition).type =
-          "TSAbstractPropertyDefinition";
-      }
-      return property;
+      return super.parseClassPrivateProperty(node);
     }
 
     parseClassAccessorProperty(
@@ -4041,14 +4023,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
                 ? key.name
                 : `[${this.input.slice(this.offsetToSourcePos(key.start), this.offsetToSourcePos(key.end))}]`,
           });
-        }
-        if (process.env.BABEL_8_BREAKING && hasEstreePlugin) {
-          if (!methodFn.body) {
-            (methodFn as N.EstreeTSEmptyBodyFunctionExpression).type =
-              "TSEmptyBodyFunctionExpression";
-          }
-          (method as unknown as N.EstreeTSAbstractMethodDefinition).type =
-            "TSAbstractMethodDefinition";
         }
       }
       return method;
