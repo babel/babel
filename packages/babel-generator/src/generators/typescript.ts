@@ -502,15 +502,6 @@ export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal);
 }
 
-// TODO: Remove this in Babel 8
-export function TSExpressionWithTypeArguments(
-  this: Printer,
-  node: t.TSExpressionWithTypeArguments,
-) {
-  this.print(node.expression);
-  this.print(node.typeParameters);
-}
-
 export function TSClassImplements(
   this: Printer,
   // TODO(Babel 8): Just use t.TSClassImplements
