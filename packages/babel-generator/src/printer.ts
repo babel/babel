@@ -15,7 +15,10 @@ import type { Opts as jsescOptions } from "jsesc";
 import { TokenMap } from "./token-map.ts";
 import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
-import { addDeprecatedGenerators } from "./generators/deprecated.ts";
+import {
+  addDeprecatedGenerators,
+  type DeprecatedBabel7ASTTypes,
+} from "./generators/deprecated.ts";
 import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 import type { Token } from "@babel/parser";
@@ -691,8 +694,7 @@ class Printer {
       this[
         nodeType as Exclude<
           t.Node["type"],
-          // removed
-          | "Noop"
+          | DeprecatedBabel7ASTTypes
           // renamed
           | t.DeprecatedAliases["type"]
         >
