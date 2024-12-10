@@ -5,6 +5,23 @@ import type { PluginList } from "./plugin-utils.ts";
 
 export type SourceType = "script" | "module" | "unambiguous";
 
+export const enum OptionFlags {
+  AllowAwaitOutsideFunction = 1 << 0,
+  AllowReturnOutsideFunction = 1 << 1,
+  AllowImportExportEverywhere = 1 << 2,
+  AllowSuperOutsideMethod = 1 << 3,
+  AllowUndeclaredExports = 1 << 4,
+  AllowNewTargetOutsideFunction = 1 << 5,
+  Ranges = 1 << 6,
+  Locations = 1 << 7,
+  Tokens = 1 << 8,
+  CreateImportExpressions = 1 << 9,
+  CreateParenthesizedExpressions = 1 << 10,
+  ErrorRecovery = 1 << 11,
+  AttachComment = 1 << 12,
+  AnnexB = 1 << 13,
+}
+
 export interface Options {
   sourceType?: SourceType;
   sourceFilename?: string;
@@ -20,6 +37,7 @@ export interface Options {
   plugins?: PluginList;
   strictMode?: boolean | undefined | null;
   ranges?: boolean;
+  locations?: boolean;
   tokens?: boolean;
   createImportExpressions?: boolean;
   createParenthesizedExpressions?: boolean;
@@ -74,6 +92,8 @@ function createDefaultOptions(): OptionsWithDefaults {
     //
     // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
     ranges: false,
+    // Nodes have their start and end line/columns recorded in `loc` property.
+    locations: true,
     // Adds all parsed tokens to a `tokens` property on the `File` node
     tokens: false,
     // Whether to create ImportExpression AST nodes (if false

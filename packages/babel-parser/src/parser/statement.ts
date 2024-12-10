@@ -1590,7 +1590,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const id = this.parseBindingAtom();
     if (kind === "using" || kind === "await using") {
       if (id.type === "ArrayPattern" || id.type === "ObjectPattern") {
-        this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
+        this.raise(Errors.UsingDeclarationHasBindingPattern, id);
       }
     }
     this.checkLVal(
@@ -1712,7 +1712,7 @@ export default abstract class StatementParser extends ExpressionParser {
           ? BindingFlag.TYPE_VAR
           : BindingFlag.TYPE_LEXICAL
         : BindingFlag.TYPE_FUNCTION,
-      node.id.loc.start,
+      node.id.start,
     );
   }
 
@@ -2165,7 +2165,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       ClassElementType.OTHER,
-      node.key.loc.start,
+      node.key.start,
     );
   }
 
@@ -2188,7 +2188,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.classScope.declarePrivateName(
         this.getPrivateNameSV(node.key as N.PrivateName),
         ClassElementType.OTHER,
-        node.key.loc.start,
+        node.key.start,
       );
     }
   }
@@ -2253,7 +2253,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key as N.PrivateName),
       kind,
-      node.key.loc.start,
+      node.key.start,
     );
   }
 
@@ -2441,7 +2441,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): node is Undone<N.ExportNamedDeclaration> {
     if (maybeDefaultIdentifier || this.isExportDefaultSpecifier()) {
       // export defaultObj ...
-      this.expectPlugin("exportDefaultFrom", maybeDefaultIdentifier?.loc.start);
+      this.expectPlugin("exportDefaultFrom", maybeDefaultIdentifier?.start);
       const id = maybeDefaultIdentifier || this.parseIdentifier(true);
       const specifier = this.startNodeAtNode<N.ExportDefaultSpecifier>(id);
       specifier.exported = id;
@@ -2731,7 +2731,7 @@ export default abstract class StatementParser extends ExpressionParser {
               });
             } else {
               // check for keywords used as local names
-              this.checkReservedWord(local.name, local.loc.start, true, false);
+              this.checkReservedWord(local.name, local.start, true, false);
               // check if export is defined
               this.scope.checkLocalExport(local);
             }
@@ -2891,27 +2891,18 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (node.phase === "source") {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(
-          Errors.SourcePhaseImportRequiresDefault,
-          specifiers[0].loc.start,
-        );
+        this.raise(Errors.SourcePhaseImportRequiresDefault, specifiers[0]);
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
-        this.raise(
-          Errors.DeferImportRequiresNamespace,
-          specifiers[0].loc.start,
-        );
+        this.raise(Errors.DeferImportRequiresNamespace, specifiers[0]);
       }
     } else if (node.module) {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(Errors.ImportReflectionNotBinding, specifiers[0].loc.start);
+        this.raise(Errors.ImportReflectionNotBinding, specifiers[0]);
       }
       if (node.assertions?.length > 0) {
-        this.raise(
-          Errors.ImportReflectionHasAssertion,
-          specifiers[0].loc.start,
-        );
+        this.raise(Errors.ImportReflectionHasAssertion, specifiers[0]);
       }
     }
   }
@@ -2943,7 +2934,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (nonDefaultNamedSpecifier !== undefined) {
           this.raise(
             Errors.ImportJSONBindingNotDefault,
-            nonDefaultNamedSpecifier.loc.start,
+            nonDefaultNamedSpecifier,
           );
         }
       }
@@ -2963,7 +2954,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
     isExport: boolean,
     phase: string | null,
-    loc?: Position,
+    loc?: number,
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
@@ -3047,7 +3038,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node as Undone<N.ImportDeclaration>,
         isExport,
         phaseIdentifier.name,
-        phaseIdentifier.loc.start,
+        phaseIdentifier.start,
       );
       return null;
     } else {
@@ -3421,7 +3412,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.checkReservedWord(
         (imported as N.Identifier).name,
-        specifier.loc.start,
+        specifier.start,
         true,
         true,
       );
