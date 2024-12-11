@@ -23,7 +23,7 @@ import {
   newExpressionScope,
   newParameterDeclarationScope,
 } from "../util/expression-scope.ts";
-import type { SourceType } from "../options.ts";
+import { OptionFlags, type SourceType } from "../options.ts";
 import { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
 import { createPositionWithColumnOffset } from "../util/location.ts";
@@ -203,7 +203,7 @@ export default abstract class StatementParser extends ExpressionParser {
     file.program = this.parseProgram(program);
     file.comments = this.comments;
 
-    if (this.options.tokens) {
+    if (this.optionFlags & OptionFlags.Tokens) {
       file.tokens = babel7CompatTokens(
         this.tokens,
         this.input,
@@ -225,7 +225,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.parseBlockBody(program, true, true, end);
     if (this.inModule) {
       if (
-        !this.options.allowUndeclaredExports &&
+        !(this.optionFlags & OptionFlags.AllowUndeclaredExports) &&
         this.scope.undefinedExports.size > 0
       ) {
         for (const [localName, at] of Array.from(this.scope.undefinedExports)) {
@@ -587,7 +587,10 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       // fall through
       case tt._export: {
-        if (!this.options.allowImportExportEverywhere && !topLevel) {
+        if (
+          !(this.optionFlags & OptionFlags.AllowImportExportEverywhere) &&
+          !topLevel
+        ) {
           this.raise(Errors.UnexpectedImportExport, this.state.startLoc);
         }
 
@@ -676,7 +679,10 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   assertModuleNodeAllowed(node: N.Node): void {
-    if (!this.options.allowImportExportEverywhere && !this.inModule) {
+    if (
+      !(this.optionFlags & OptionFlags.AllowImportExportEverywhere) &&
+      !this.inModule
+    ) {
       this.raise(Errors.ImportOutsideModule, node);
     }
   }
@@ -701,7 +707,7 @@ export default abstract class StatementParser extends ExpressionParser {
     exportNode?: Undone<N.ExportDefaultDeclaration | N.ExportNamedDeclaration>,
   ): T {
     if (maybeDecorators) {
-      if (classNode.decorators && classNode.decorators.length > 0) {
+      if (classNode.decorators?.length) {
         // Note: decorators attachment is only attempred multiple times
         // when the class is part of an export declaration.
         if (
@@ -1062,7 +1068,10 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   parseReturnStatement(this: Parser, node: Undone<N.ReturnStatement>) {
-    if (!this.prodParam.hasReturn && !this.options.allowReturnOutsideFunction) {
+    if (
+      !this.prodParam.hasReturn &&
+      !(this.optionFlags & OptionFlags.AllowReturnOutsideFunction)
+    ) {
       this.raise(Errors.IllegalReturn, this.state.startLoc);
     }
 

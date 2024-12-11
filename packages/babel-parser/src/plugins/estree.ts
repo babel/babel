@@ -7,6 +7,7 @@ import type { Position } from "../util/location.ts";
 import { Errors } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
+import { OptionFlags } from "../options.ts";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object: any, key: string) => {
@@ -27,7 +28,7 @@ export default (superClass: typeof Parser) =>
     parse(): File {
       const file = toESTreeLocation(super.parse());
 
-      if (this.options.tokens) {
+      if (this.optionFlags & OptionFlags.Tokens) {
         file.tokens = file.tokens.map(toESTreeLocation);
       }
 
