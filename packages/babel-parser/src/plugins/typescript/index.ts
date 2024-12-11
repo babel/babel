@@ -3272,15 +3272,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseClassPrivateProperty(
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
-      // @ts-expect-error abstract may not index node
       if (node.abstract) {
         this.raise(TSErrors.PrivateElementHasAbstract, node);
       }
 
-      // @ts-expect-error accessibility may not index node
       if (node.accessibility) {
         this.raise(TSErrors.PrivateElementHasAccessibility, node, {
-          // @ts-expect-error refine typings
           modifier: node.accessibility,
         });
       }
@@ -4024,11 +4021,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
       // @ts-expect-error todo(flow->ts) property not defined for all types in union
       if (method.abstract) {
-        const hasBody = this.hasPlugin("estree")
+        const hasEstreePlugin = this.hasPlugin("estree");
+        const methodFn = hasEstreePlugin
           ? // @ts-expect-error estree typings
-            !!method.value.body
-          : !!method.body;
-        if (hasBody) {
+            method.value
+          : method;
+        if (methodFn.body) {
           const { key } = method;
           this.raise(TSErrors.AbstractMethodHasImplementation, method, {
             methodName:
