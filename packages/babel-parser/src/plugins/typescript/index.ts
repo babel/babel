@@ -1708,19 +1708,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             N.TSClassImplements | N.TSInterfaceHeritage
           >();
           node.expression = this.tsParseEntityName();
-          if (this.match(tt.lt)) {
-            node.typeParameters = this.tsParseTypeArguments();
-          }
+          if (process.env.BABEL_8_BREAKING) {
+            if (this.match(tt.lt)) {
+              node.typeArguments = this.tsParseTypeArguments();
+            }
+            return this.finishNode(
+              node,
+              token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements",
+            );
+          } else {
+            if (this.match(tt.lt)) {
+              // @ts-expect-error Babel 7 vs Babel 8
+              node.typeParameters = this.tsParseTypeArguments();
+            }
 
-          return this.finishNode(
-            node,
-            // @ts-expect-error Babel 7 vs Babel 8
-            process.env.BABEL_8_BREAKING
-              ? token === "extends"
-                ? "TSInterfaceHeritage"
-                : "TSClassImplements"
-              : "TSExpressionWithTypeArguments",
-          );
+            return this.finishNode(
+              node,
+              // @ts-expect-error Babel 7 vs Babel 8
+              "TSExpressionWithTypeArguments",
+            );
+          }
         },
       );
 
