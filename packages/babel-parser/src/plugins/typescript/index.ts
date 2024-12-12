@@ -27,6 +27,7 @@ import type { Pattern } from "../../types.ts";
 import type { Expression } from "../../types.ts";
 import type { IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
+import { OptionFlags } from "../../options.ts";
 
 type TsModifier =
   | "readonly"
@@ -1265,7 +1266,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return this.tsParseTupleType();
         case tt.parenL:
           if (process.env.BABEL_8_BREAKING) {
-            if (!this.options.createParenthesizedExpressions) {
+            if (
+              !(this.optionFlags & OptionFlags.CreateParenthesizedExpressions)
+            ) {
               const startLoc = this.state.startLoc;
               this.next();
               const type = this.tsParseType();
