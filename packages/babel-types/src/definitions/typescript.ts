@@ -576,7 +576,8 @@ defineType("TSModuleBlock", {
 
 defineType("TSImportType", {
   aliases: ["TSType"],
-  visitor: ["argument", "qualifier", "typeParameters"],
+  builder: ["argument", "qualifier", "typeParameters"],
+  visitor: ["argument", "options", "qualifier", "typeParameters"],
   fields: {
     argument: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
@@ -658,7 +659,9 @@ defineType("TSTypeParameterDeclaration", {
 
 defineType("TSTypeParameter", {
   builder: ["constraint", "default", "name"],
-  visitor: ["constraint", "default"],
+  visitor: process.env.BABEL_8_BREAKING
+    ? ["name", "constraint", "default"]
+    : ["constraint", "default"],
   fields: {
     name: {
       validate: !process.env.BABEL_8_BREAKING
