@@ -18,7 +18,7 @@
             "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"f"},
             "name": "f"
           },
-          "typeArguments": {
+          "typeParameters": {
             "type": "TSTypeParameterInstantiation",
             "start":5,"end":24,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":24,"index":24}},
             "params": [
@@ -32,15 +32,11 @@
                     {
                       "type": "TSTypeParameter",
                       "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
-                      "name": {
-                        "type": "Identifier",
-                        "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"T"},
-                        "name": "T"
-                      }
+                      "name": "T"
                     }
                   ]
                 },
-                "params": [
+                "parameters": [
                   {
                     "type": "Identifier",
                     "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14},"identifierName":"v"},
@@ -60,7 +56,7 @@
                     }
                   }
                 ],
-                "returnType": {
+                "typeAnnotation": {
                   "type": "TSTypeAnnotation",
                   "start":16,"end":23,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":23,"index":23}},
                   "typeAnnotation": {

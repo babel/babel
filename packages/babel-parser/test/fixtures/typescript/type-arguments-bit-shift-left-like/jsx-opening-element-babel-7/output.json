@@ -21,7 +21,7 @@
               "start":1,"end":10,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":10,"index":10}},
               "name": "Component"
             },
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":10,"end":29,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":29,"index":29}},
               "params": [
@@ -35,15 +35,11 @@
                       {
                         "type": "TSTypeParameter",
                         "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
-                        "name": {
-                          "type": "Identifier",
-                          "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"T"},
-                          "name": "T"
-                        }
+                        "name": "T"
                       }
                     ]
                   },
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19},"identifierName":"v"},
@@ -63,7 +59,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28}},
                     "typeAnnotation": {
