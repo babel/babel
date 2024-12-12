@@ -36,17 +36,17 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         readFileSync(path.join(fixturePath, "options.json")),
       ).BABEL_8_BREAKING;
     } catch {
+
+    } finally {
       if (isBabel8Test === undefined) {
         try {
           isBabel8Test = JSON.parse(
             readFileSync(path.resolve(fixturePath, "../options.json")),
           ).BABEL_8_BREAKING;
-        } catch {
-          isBabel8Test = true;
-        }
+        } catch {}
       }
     }
-    if (isBabel8Test !== testingOnBabel8) return;
+    if (isBabel8Test !== undefined && isBabel8Test !== testingOnBabel8) return;
 
     const ast = JSON.parse(readFileSync(file, "utf8"));
     if (ast.type === "File" && ast.errors && ast.errors.length) return;
