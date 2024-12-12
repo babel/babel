@@ -576,7 +576,8 @@ defineType("TSModuleBlock", {
 
 defineType("TSImportType", {
   aliases: ["TSType"],
-  visitor: ["argument", "qualifier", "typeParameters"],
+  builder: ["argument", "qualifier", "typeParameters"],
+  visitor: ["argument", "options", "qualifier", "typeParameters"],
   fields: {
     argument: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),

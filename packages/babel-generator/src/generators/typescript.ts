@@ -692,10 +692,14 @@ export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
-  const { argument, qualifier, typeParameters } = node;
+  const { argument, qualifier, typeParameters, options } = node;
   this.word("import");
   this.token("(");
   this.print(argument);
+  if (options) {
+    this.token(",");
+    this.print(options);
+  }
   this.token(")");
   if (qualifier) {
     this.token(".");
