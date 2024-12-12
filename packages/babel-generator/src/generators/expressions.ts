@@ -95,6 +95,7 @@ export function NewExpression(
 
   this.print(node.typeArguments);
   if (!process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // Legacy TS AST
   }
 
@@ -189,6 +190,7 @@ export function OptionalCallExpression(
   this.print(node.callee);
 
   if (!process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // legacy TS AST
   }
 
@@ -210,6 +212,7 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
 
   this.print(node.typeArguments); // Flow
   if (!process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // legacy TS AST
   }
   this.token("(");

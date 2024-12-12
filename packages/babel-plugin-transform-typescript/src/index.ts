@@ -697,6 +697,7 @@ export default declare((api, opts: Options) => {
         if (process.env.BABEL_8_BREAKING) {
           path.node.typeArguments = null;
         } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
           path.node.typeParameters = null;
         }
       },
@@ -705,6 +706,7 @@ export default declare((api, opts: Options) => {
         if (process.env.BABEL_8_BREAKING) {
           path.node.typeArguments = null;
         } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
           path.node.typeParameters = null;
         }
       },
@@ -713,6 +715,7 @@ export default declare((api, opts: Options) => {
         if (process.env.BABEL_8_BREAKING) {
           path.node.typeArguments = null;
         } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
           path.node.typeParameters = null;
         }
       },
@@ -722,6 +725,7 @@ export default declare((api, opts: Options) => {
           //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
           path.node.typeArguments = null;
         } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
           path.node.typeParameters = null;
         }
       },
@@ -731,6 +735,7 @@ export default declare((api, opts: Options) => {
           // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
           path.node.typeArguments = null;
         } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
           path.node.typeParameters = null;
         }
       },
