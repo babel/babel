@@ -107,7 +107,8 @@ describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, 
           node[field].type &&
           !(
             ignoredVisitorKeysCheckTypes[type] === true ||
-            ignoredVisitorKeysCheckTypes[type]?.[field] === true
+            (ignoredVisitorKeysCheckTypes[type] !== undefined &&
+              ignoredVisitorKeysCheckTypes[type][field] === true)
           )
         ) {
           throw new Error(
