@@ -23,7 +23,13 @@ const ignoredFields = {
   TSDeclareMethod: { id: true },
 };
 
-describe("NODE_FIELDS contains all fields, and the visitor order is correct, in", function () {
+const ignoredVisitorKeysCheckTypes = {
+  Placeholder: true,
+  // See the Program's definition for why `interpreter` is excluded
+  Program: { interpreter: true },
+};
+
+describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, and the visitor order is correct, in", function () {
   const reportedVisitorOrders = new Set();
   const testingOnBabel8 = IS_BABEL_8();
   const { traverseFast, VISITOR_KEYS } = t;
@@ -36,7 +42,6 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
         readFileSync(path.join(fixturePath, "options.json")),
       ).BABEL_8_BREAKING;
     } catch {
-
     } finally {
       if (isBabel8Test === undefined) {
         try {
@@ -93,6 +98,21 @@ describe("NODE_FIELDS contains all fields, and the visitor order is correct, in"
           if (!missingFields[type][field]) {
             missingFields[type][field] = true;
           }
+        }
+
+        if (
+          !VISITOR_KEYS[type].includes(field) &&
+          node[field] != null &&
+          typeof node[field] === "object" &&
+          node[field].type &&
+          !(
+            ignoredVisitorKeysCheckTypes[type] === true ||
+            ignoredVisitorKeysCheckTypes[type]?.[field] === true
+          )
+        ) {
+          throw new Error(
+            `${type}.${field} is an AST node (type=${node[field].type}), but "${field}" is missing in "${type}"'s current visitors definition: ${inspect(VISITOR_KEYS[type])}`,
+          );
         }
       }
 
