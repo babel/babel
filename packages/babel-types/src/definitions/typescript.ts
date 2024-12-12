@@ -659,7 +659,9 @@ defineType("TSTypeParameterDeclaration", {
 
 defineType("TSTypeParameter", {
   builder: ["constraint", "default", "name"],
-  visitor: ["constraint", "default"],
+  visitor: process.env.BABEL_8_BREAKING
+    ? ["name", "constraint", "default"]
+    : ["constraint", "default"],
   fields: {
     name: {
       validate: !process.env.BABEL_8_BREAKING
