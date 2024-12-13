@@ -71,6 +71,9 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 # Temporarily ignore tests, use `rm -f path/to/jsfmt.spec.js`
 # rm -f path/to/jsfmt.spec.js
 
+# Suppress REQUIRE_ESM warning from Node.js 22.12
+export NODE_OPTIONS="--disable-warning=ExperimentalWarning"
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
+unset NODE_OPTIONS
 
 cleanup
