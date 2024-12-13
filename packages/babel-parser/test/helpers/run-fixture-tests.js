@@ -104,7 +104,8 @@ function runParseTest(parse, test, onlyCompareErrors) {
 
   if (
     Array.isArray(onlyCompareErrors) &&
-    actual.ast.errors?.some(error =>
+    actual.ast.errors &&
+    actual.ast.errors.some(error =>
       onlyCompareErrors.includes(error.reasonCode),
     )
   ) {
