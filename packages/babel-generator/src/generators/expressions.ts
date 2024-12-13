@@ -210,7 +210,7 @@ export function OptionalCallExpression(
 export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.callee);
 
-  this.print(node.typeArguments); // Flow
+  this.print(node.typeArguments);
   if (!process.env.BABEL_8_BREAKING) {
     // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // legacy TS AST
