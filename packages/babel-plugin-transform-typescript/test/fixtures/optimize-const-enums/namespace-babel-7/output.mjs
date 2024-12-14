@@ -1,6 +1,6 @@
 export let Tags;
 (function (_Tags) {
-  const TagsType = {
+  var TagsType = {
     Unknown: 0,
     PC: 1,
     Mobile: 2,
