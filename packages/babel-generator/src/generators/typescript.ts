@@ -604,7 +604,7 @@ export function TSInstantiationExpression(
 }
 
 export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
-  const { declare, const: isConst, id, members } = node;
+  const { declare, const: isConst, id } = node;
   if (declare) {
     this.word("declare");
     this.space();
@@ -618,11 +618,21 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.print(id);
   this.space();
 
+  if (process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+    this.print(node.body);
+  } else {
+    // cast to TSEnumBody for Babel 7 AST
+    TSEnumBody.call(this, node as unknown as t.TSEnumBody);
+  }
+}
+
+export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
   printBraced(this, node, () =>
     this.printList(
-      members,
-      // TODO: Default to false for consistency with everything else
-      this.shouldPrintTrailingComma("}") ?? true,
+      node.members,
+      this.shouldPrintTrailingComma("}") ??
+        (process.env.BABEL_8_BREAKING ? false : true),
       true,
       true,
     ),
