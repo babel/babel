@@ -19,7 +19,7 @@
             "start":24,"end":25,"loc":{"start":{"line":2,"column":15,"index":24},"end":{"line":2,"column":16,"index":25},"identifierName":"f"},
             "name": "f"
           },
-          "superTypeArguments": {
+          "superTypeParameters": {
             "type": "TypeParameterInstantiation",
             "start":25,"end":44,"loc":{"start":{"line":2,"column":16,"index":25},"end":{"line":2,"column":35,"index":44}},
             "params": [
