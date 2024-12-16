@@ -1556,10 +1556,7 @@ export interface JSXOpeningElement extends BaseNode {
   attributes: Array<JSXAttribute | JSXSpreadAttribute>;
   selfClosing: boolean;
   typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+  typeParameters?: TSTypeParameterInstantiation | null;
 }
 
 export interface JSXSpreadAttribute extends BaseNode {
