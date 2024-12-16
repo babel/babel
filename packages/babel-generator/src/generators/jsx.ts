@@ -87,6 +87,9 @@ export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
     this.print(node.typeArguments);
   } else {
     // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+    if (node.typeArguments) {
+      this.print(node.typeArguments); // Flow AST
+    }
     this.print(node.typeParameters); // Legacy TS AST
   }
 
