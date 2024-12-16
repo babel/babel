@@ -617,6 +617,12 @@ export default declare((api, opts: Options) => {
       ) {
         const { id, moduleReference, isExport } = path.node;
 
+        const binding = path.scope.getBinding(id.name);
+        if (binding?.referencePaths.every(ref => isInType(ref))) {
+          path.remove();
+          return;
+        }
+
         let init: t.Expression;
         let varKind: "var" | "const";
         if (t.isTSExternalModuleReference(moduleReference)) {
