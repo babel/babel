@@ -1,3 +1,4 @@
+var _foo$bar;
 var {
-  qux = foo.bar !== null && foo.bar !== void 0 ? foo.bar : "qux"
+  qux = (_foo$bar = foo.bar) !== null && _foo$bar !== void 0 ? _foo$bar : "qux"
 } = {};

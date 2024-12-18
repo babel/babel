@@ -28,6 +28,7 @@ export default declare((api, { loose = false }: Options) => {
         // skip creating extra reference when `left` is pure
         if (
           (pureGetters &&
+            scope.path.isPattern() &&
             t.isMemberExpression(node.left) &&
             !node.left.computed &&
             t.isIdentifier(node.left.object) &&
