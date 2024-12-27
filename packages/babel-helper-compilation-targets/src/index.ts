@@ -268,7 +268,7 @@ export default function getTargets(
 
     if (esmodules === "intersect") {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
-        if (browser !== "deno" && browser !== "ie") {
+        if (browser !== "deno" && browser !== "hermes" && browser !== "ie") {
           const esmSupportVersion =
             ESM_SUPPORT[browser === "opera_mobile" ? "op_mob" : browser];
 
