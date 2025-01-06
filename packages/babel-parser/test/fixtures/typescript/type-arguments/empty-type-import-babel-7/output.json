@@ -37,7 +37,7 @@
                     "value": ""
                   },
                   "options": null,
-                  "typeArguments": {
+                  "typeParameters": {
                     "type": "TSTypeParameterInstantiation",
                     "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19}},
                     "params": []
