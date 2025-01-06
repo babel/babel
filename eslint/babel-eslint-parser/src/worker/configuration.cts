@@ -78,12 +78,11 @@ function validateResolvedConfig(
   if (process.env.BABEL_8_BREAKING) {
     const configOptions: InputOptions = {
       plugins: [],
-      ...config?.options,
       babelrc: false,
+      ...(config?.options || parseOptions),
       configFile: false,
       ignore: null,
       only: null,
-      ...parseOptions,
       browserslistConfigFile: false,
     };
 
