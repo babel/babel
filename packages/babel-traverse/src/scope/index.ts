@@ -1,6 +1,7 @@
 import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
 import traverse from "../index.ts";
+import traverseForScope from "./traverseForScope.ts";
 import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globals from "globals";
@@ -969,9 +970,6 @@ class Scope {
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
     if (path.type !== "Program") {
-      for (const visit of scopeVisitor.enter) {
-        visit.call(state, path, state);
-      }
       const typeVisitors = scopeVisitor[path.type];
       if (typeVisitors) {
         for (const visit of typeVisitors.enter) {
@@ -979,7 +977,7 @@ class Scope {
         }
       }
     }
-    path.traverse(scopeVisitor, state);
+    traverseForScope(path, scopeVisitor, state);
     this.crawling = false;
 
     // register assignments
