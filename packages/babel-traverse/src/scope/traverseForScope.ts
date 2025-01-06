@@ -24,6 +24,7 @@ export default function traverseForScope(
     path.key,
     path.listKey,
     path.hub,
+    path,
   );
 
   function _traverse(
@@ -34,19 +35,22 @@ export default function traverseForScope(
     key: string | number,
     listKey: string,
     hub?: HubInterface,
+    inPath?: NodePath,
   ) {
     if (!node) {
       return;
     }
 
-    const path = NodePath.get({
-      hub,
-      parentPath,
-      parent,
-      container,
-      listKey,
-      key,
-    });
+    const path =
+      inPath ||
+      NodePath.get({
+        hub,
+        parentPath,
+        parent,
+        container,
+        listKey,
+        key,
+      });
 
     _forceSetScope(path);
 
