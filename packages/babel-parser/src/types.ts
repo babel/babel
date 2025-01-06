@@ -1763,6 +1763,10 @@ export interface TsImportType extends TsTypeBase {
   type: "TSImportType";
   argument: StringLiteral;
   qualifier?: TsEntityName;
+  typeArguments?: TsTypeParameterInstantiation;
+  /**
+   * @deprecated
+   */
   typeParameters?: TsTypeParameterInstantiation;
   options?: Expression | null;
 }
