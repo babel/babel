@@ -118,7 +118,7 @@
                       "name": "bar"
                     }
                   },
-                  "typeArguments": {
+                  "typeParameters": {
                     "type": "TSTypeParameterInstantiation",
                     "start":80,"end":88,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":35}},
                     "params": [

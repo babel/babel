@@ -581,7 +581,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.qualifier = this.tsParseEntityName();
       }
       if (this.match(tt.lt)) {
-        node.typeParameters = this.tsParseTypeArguments();
+        if (process.env.BABEL_8_BREAKING) {
+          node.typeArguments = this.tsParseTypeArguments();
+        } else {
+          node.typeParameters = this.tsParseTypeArguments();
+        }
       }
       return this.finishNode(node, "TSImportType");
     }
