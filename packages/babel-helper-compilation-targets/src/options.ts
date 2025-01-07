@@ -1,6 +1,7 @@
 export const TargetNames = {
   node: "node",
   deno: "deno",
+  hermes: "hermes",
   chrome: "chrome",
   opera: "opera",
   edge: "edge",

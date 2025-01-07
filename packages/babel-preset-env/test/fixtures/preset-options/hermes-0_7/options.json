@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "hermes": "0.7"
+        }
+      }
+    ]
+  ]
+}
