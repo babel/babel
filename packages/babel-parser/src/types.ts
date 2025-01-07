@@ -1761,7 +1761,7 @@ export interface TsLiteralType extends TsTypeBase {
 
 export interface TsImportType extends TsTypeBase {
   type: "TSImportType";
-  argument: StringLiteral;
+  argument: TsLiteralType;
   qualifier?: TsEntityName;
   typeArguments?: TsTypeParameterInstantiation;
   /**

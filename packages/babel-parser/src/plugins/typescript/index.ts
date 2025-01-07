@@ -556,10 +556,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
         this.raise(TSErrors.UnsupportedImportTypeArgument, this.state.startLoc);
+        // Consume as a primary expression so that we can recover from this error
+        node.argument = super.parseExprAtom() as any;
+      } else {
+        if (process.env.BABEL_8_BREAKING) {
+          node.argument = this.tsParseLiteralTypeNode();
+        } else {
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+          node.argument = this.parseStringLiteral(this.state.value);
+        }
       }
-
-      // For compatibility to estree we cannot call parseLiteral directly here
-      node.argument = super.parseExprAtom() as N.StringLiteral;
       if (this.eat(tt.comma) && !this.match(tt.parenR)) {
         node.options = super.parseMaybeAssignAllowIn();
         this.eat(tt.comma);
@@ -1209,7 +1215,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSLiteralType");
     }
 
-    tsParseTemplateLiteralType(): N.TsType {
+    tsParseTemplateLiteralType(): N.TsLiteralType {
       const node = this.startNode<N.TsLiteralType>();
       node.literal = super.parseTemplate(false);
       return this.finishNode(node, "TSLiteralType");

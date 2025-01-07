@@ -591,7 +591,9 @@ defineType("TSImportType", {
     process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters",
   ],
   fields: {
-    argument: validateType("StringLiteral"),
+    argument: process.env.BABEL_8_BREAKING
+      ? validateType("TSLiteralType")
+      : validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
     [process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters"]:
       validateOptionalType("TSTypeParameterInstantiation"),
