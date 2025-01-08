@@ -162,7 +162,20 @@ function ReferencedIdentifier(
 ) {
   const { seen, path, t } = state;
   const name = expr.node.name;
-  if (seen.has(name) && !expr.scope.hasOwnBinding(name)) {
+
+  let hasBindingInsideEnum = false;
+  for (
+    let curScope = expr.scope;
+    curScope !== path.scope;
+    curScope = curScope.parent
+  ) {
+    if (curScope.hasOwnBinding(name)) {
+      hasBindingInsideEnum = true;
+      break;
+    }
+  }
+
+  if (seen.has(name) && !hasBindingInsideEnum) {
     expr.replaceWith(
       t.memberExpression(t.cloneNode(path.node.id), t.cloneNode(expr.node)),
     );
@@ -340,12 +353,15 @@ function computeConstantValue(
       if (value !== undefined) {
         return value;
       }
+      if (prevMembers?.has(name)) {
+        // prevMembers contains name => undefined. This means the value couldn't be pre-computed.
+        return undefined;
+      }
 
       if (seen.has(path.node)) return;
       seen.add(path.node);
 
       value = computeConstantValue(path.resolve(), prevMembers, seen);
-      prevMembers?.set(name, value);
       return value;
     }
   }
