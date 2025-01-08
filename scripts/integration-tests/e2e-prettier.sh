@@ -43,6 +43,10 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i 's/node.type !== "MemberExpression" ||/node.type !== "MemberExpression" || \/\/@ts-expect-error/g' src/language-js/utils/is-node-matches.js
 fi
 
+# Re-enable this test once prettier updated the snapshot
+# https://github.com/babel/babel/pull/17028
+rm -r tests/format/flow/jsx/format.test.js
+
 #==============================================================================#
 #                                 ENVIRONMENT                                  #
 #==============================================================================#
