@@ -556,8 +556,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
         this.raise(TSErrors.UnsupportedImportTypeArgument, this.state.startLoc);
-        // Consume as a primary expression so that we can recover from this error
-        node.argument = super.parseExprAtom() as any;
+        if (process.env.BABEL_8_BREAKING) {
+          // Consume as an non-conditional type so that we can recover from this error
+          node.argument = this.tsParseNonConditionalType() as any;
+        } else {
+          node.argument = super.parseExprAtom() as any;
+        }
       } else {
         if (process.env.BABEL_8_BREAKING) {
           node.argument = this.tsParseLiteralTypeNode();
