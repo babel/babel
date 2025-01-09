@@ -1812,6 +1812,15 @@ export interface TsEnumDeclaration extends DeclarationBase {
   type: "TSEnumDeclaration";
   const?: true;
   id: Identifier;
+  body: TsEnumBody;
+  /**
+   * @deprecated
+   */
+  members?: TsEnumMember[];
+}
+
+export interface TsEnumBody extends NodeBase {
+  type: "TSEnumBody";
   members: TsEnumMember[];
 }
 
@@ -2112,6 +2121,7 @@ export type Node =
   | TsConstructSignatureDeclaration
   | TsConstructorType
   | TsEnumDeclaration
+  | TsEnumBody
   | TsEnumMember
   | TsExportAssignment
   | TSClassImplements

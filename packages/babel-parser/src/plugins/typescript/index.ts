@@ -1912,13 +1912,28 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.const ? BindingFlag.TYPE_TS_CONST_ENUM : BindingFlag.TYPE_TS_ENUM,
       );
 
+      if (process.env.BABEL_8_BREAKING) {
+        node.body = this.tsParseEnumBody();
+      } else {
+        this.expect(tt.braceL);
+        node.members = this.tsParseDelimitedList(
+          "EnumMembers",
+          this.tsParseEnumMember.bind(this),
+        );
+        this.expect(tt.braceR);
+      }
+      return this.finishNode(node, "TSEnumDeclaration");
+    }
+
+    tsParseEnumBody(): N.TsEnumBody {
+      const node = this.startNode<N.TsEnumBody>();
       this.expect(tt.braceL);
       node.members = this.tsParseDelimitedList(
         "EnumMembers",
         this.tsParseEnumMember.bind(this),
       );
       this.expect(tt.braceR);
-      return this.finishNode(node, "TSEnumDeclaration");
+      return this.finishNode(node, "TSEnumBody");
     }
 
     tsParseModuleBlock(): N.TsModuleBlock {
