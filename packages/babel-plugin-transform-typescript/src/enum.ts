@@ -163,19 +163,25 @@ function ReferencedIdentifier(
   const { seen, path, t } = state;
   const name = expr.node.name;
 
-  let hasBindingInsideEnum = false;
-  for (
-    let curScope = expr.scope;
-    curScope !== path.scope;
-    curScope = curScope.parent
-  ) {
-    if (curScope.hasOwnBinding(name)) {
-      hasBindingInsideEnum = true;
-      break;
+  if (seen.has(name)) {
+    for (
+      let curScope = expr.scope;
+      curScope !== path.scope;
+      curScope = curScope.parent
+    ) {
+      if (curScope.hasOwnBinding(name)) {
+        /* The name is declared inside enum:
+        enum Foo {
+          A,
+          B = (() => {
+            const A = 1;
+            return A;
+          })())
+        } */
+        return;
+      }
     }
-  }
 
-  if (seen.has(name) && !hasBindingInsideEnum) {
     expr.replaceWith(
       t.memberExpression(t.cloneNode(path.node.id), t.cloneNode(expr.node)),
     );
