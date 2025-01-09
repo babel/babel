@@ -6,7 +6,8 @@
     "./tsconfig.overrides.json"
   ],
   "include": [
-    "./src/**/*",
+    "./src/**/*.ts",
+    "./src/**/*.cts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],

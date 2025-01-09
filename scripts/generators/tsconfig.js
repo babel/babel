@@ -253,7 +253,8 @@ function buildTSConfig(pkgs, allDeps, hasOverrides) {
       hasOverrides && "./tsconfig.overrides.json",
     ].filter(Boolean),
     include: [
-      "./src/**/*",
+      "./src/**/*.ts",
+      "./src/**/*.cts",
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
       pkgs.some(p => p.name === "@babel/parser")
