@@ -5,7 +5,7 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../eslint/babel-eslint-parser/src/**/*.cts",
+    "./src/**/*",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],

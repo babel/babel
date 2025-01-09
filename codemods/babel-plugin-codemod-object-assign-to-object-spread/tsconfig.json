@@ -5,7 +5,7 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
+    "./src/**/*",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],

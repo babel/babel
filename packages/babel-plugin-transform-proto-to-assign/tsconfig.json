@@ -5,7 +5,7 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../packages/babel-plugin-transform-proto-to-assign/src/**/*.ts",
+    "./src/**/*",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],

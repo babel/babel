@@ -6,7 +6,7 @@
     "./tsconfig.overrides.json"
   ],
   "include": [
-    "../../packages/babel-standalone/src/**/*.ts",
+    "./src/**/*",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],

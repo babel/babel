@@ -5,7 +5,7 @@
     "../../tsconfig.paths.json"
   ],
   "include": [
-    "../../packages/babel-helper-member-expression-to-functions/src/**/*.ts",
+    "./src/**/*",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],
