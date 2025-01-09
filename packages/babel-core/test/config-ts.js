@@ -1,7 +1,7 @@
 import { loadPartialConfigSync, loadPartialConfigAsync } from "../lib/index.js";
 import path from "path";
 import semver from "semver";
-import { commonJS, itGte, itLt } from "$repo-utils";
+import { commonJS, itGte, itLt, USE_ESM } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -14,6 +14,12 @@ const shouldSkip = semver.lt(process.version, "14.0.0");
 const nodeLt23_6 = itLt("23.6.0");
 const nodeGte23_6 = itGte("23.6.0");
 
+const nodeLt23_6_andRequireBabelPackages =
+  semver.lt(process.version, "23.6.0") &&
+  (!USE_ESM || semver.gt(process.version, "22.12.0"))
+    ? it
+    : it.skip;
+
 (shouldSkip ? describe : describe.skip)(
   "@babel/core config with ts [dummy]",
   () => {
@@ -24,22 +30,27 @@ const nodeGte23_6 = itGte("23.6.0");
 );
 
 (shouldSkip ? describe.skip : describe)("@babel/core config with ts", () => {
-  nodeLt23_6("should transpile .cts when needed", () => {
-    const config = loadPartialConfigSync({
-      configFile: path.join(
-        __dirname,
-        "fixtures/config-ts/simple-cts-modules/babel.config.cts",
-      ),
-    });
+  nodeLt23_6_andRequireBabelPackages(
+    "should transpile .cts when needed",
+    () => {
+      const config = loadPartialConfigSync({
+        configFile: path.join(
+          __dirname,
+          "fixtures/config-ts/simple-cts-modules/babel.config.cts",
+        ),
+      });
 
-    expect(config.options.targets).toMatchInlineSnapshot(`
-      Object {
-        "node": "12.0.0",
-      }
-    `);
+      // eslint-disable-next-line jest/no-standalone-expect
+      expect(config.options.targets).toMatchInlineSnapshot(`
+        Object {
+          "node": "12.0.0",
+        }
+      `);
 
-    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
-  });
+      // eslint-disable-next-line jest/no-standalone-expect
+      expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+    },
+  );
 
   // Node.js >=23.6 has builtin .ts register, so this test can be removed
   // when we dropped Node.js 23 support in the future
