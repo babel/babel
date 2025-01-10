@@ -374,6 +374,7 @@ export default declare((api, opts: Options) => {
               const { id, isExport } = stmt.node;
               const binding = stmt.scope.getBinding(id.name);
               if (
+                binding &&
                 !isExport &&
                 isImportTypeOnly({
                   binding,
