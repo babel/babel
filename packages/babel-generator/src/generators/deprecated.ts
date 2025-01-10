@@ -1,7 +1,10 @@
 import type Printer from "../printer";
 import type * as t from "@babel/types";
 
-export type DeprecatedBabel7ASTTypes = "Noop" | "TSExpressionWithTypeArguments";
+export type DeprecatedBabel7ASTTypes =
+  | "Noop"
+  | "TSExpressionWithTypeArguments"
+  | "DecimalLiteral";
 
 export function addDeprecatedGenerators(PrinterClass: typeof Printer) {
   // Add Babel 7 generator methods that is removed in Babel 8
@@ -26,7 +29,10 @@ export function addDeprecatedGenerators(PrinterClass: typeof Printer) {
         }
         this.word(node.value + "m");
       },
-    };
+    } satisfies Record<
+      DeprecatedBabel7ASTTypes,
+      (this: Printer, node: any) => void
+    >;
     Object.assign(PrinterClass.prototype, deprecatedBabel7Generators);
   }
 }
