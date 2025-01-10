@@ -1055,7 +1055,7 @@ __metadata:
     fs-readdir-recursive: "npm:^1.1.0"
     jest-diff: "npm:^29.6.4"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
-    make-dir: "npm:^2.1.0"
+    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
   languageName: unknown
   linkType: soft
 
@@ -12583,7 +12583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0, make-dir@npm:^2.1.0":
+"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0":
   version: 2.1.0
   resolution: "make-dir@npm:2.1.0"
   dependencies:
