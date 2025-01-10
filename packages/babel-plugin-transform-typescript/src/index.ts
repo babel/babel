@@ -370,6 +370,23 @@ export default declare((api, opts: Options) => {
               continue;
             }
 
+            if (stmt.isTSImportEqualsDeclaration()) {
+              const { id, isExport } = stmt.node;
+              const binding = stmt.scope.getBinding(id.name);
+              if (
+                !isExport &&
+                isImportTypeOnly({
+                  binding,
+                  programPath: path,
+                  pragmaImportName,
+                  pragmaFragImportName,
+                })
+              ) {
+                stmt.remove();
+                continue;
+              }
+            }
+
             if (stmt.isExportDeclaration()) {
               stmt = stmt.get("declaration");
             }
@@ -616,12 +633,6 @@ export default declare((api, opts: Options) => {
         pass,
       ) {
         const { id, moduleReference, isExport } = path.node;
-
-        const binding = path.scope.getBinding(id.name);
-        if (binding?.referencePaths.every(ref => isInType(ref))) {
-          path.remove();
-          return;
-        }
 
         let init: t.Expression;
         let varKind: "var" | "const";
