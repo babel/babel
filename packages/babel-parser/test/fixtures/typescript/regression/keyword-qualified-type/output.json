@@ -56,9 +56,8 @@
             "type": "TSQualifiedName",
             "start":44,"end":53,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":25,"index":53}},
             "left": {
-              "type": "Identifier",
-              "start":44,"end":48,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":20,"index":48},"identifierName":"this"},
-              "name": "this"
+              "type": "ThisExpression",
+              "start":44,"end":48,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":20,"index":48}}
             },
             "right": {
               "type": "Identifier",
