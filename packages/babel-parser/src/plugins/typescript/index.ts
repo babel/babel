@@ -260,7 +260,7 @@ function tsIsVarianceAnnotations(
   return modifier === "in" || modifier === "out";
 }
 
-const enum tsParseEntityNameFlags {
+export const enum tsParseEntityNameFlags {
   NONE = 0b00,
   ALLOW_RESERVED_WORDS = 0b01,
   ALLOW_THIS_EXPRESSION = 0b10,
