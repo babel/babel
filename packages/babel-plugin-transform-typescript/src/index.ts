@@ -370,7 +370,7 @@ export default declare((api, opts: Options) => {
               continue;
             }
 
-            if (stmt.isTSImportEqualsDeclaration()) {
+            if (!onlyRemoveTypeImports && stmt.isTSImportEqualsDeclaration()) {
               const { id, isExport } = stmt.node;
               const binding = stmt.scope.getBinding(id.name);
               if (
