@@ -241,6 +241,13 @@ export function ClassPrivateProperty(
     this.space();
   }
   this.print(node.key);
+  // TS
+  if (node.optional) {
+    this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
+  }
   this.print(node.typeAnnotation);
   if (node.value) {
     this.space();
