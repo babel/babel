@@ -28,10 +28,14 @@
                     "type": "TSImportType",
                     "start":14,"end":32,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":32}},
                     "argument": {
-                      "type": "Literal",
+                      "type": "TSLiteralType",
                       "start":21,"end":26,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":26}},
-                      "value": "./x",
-                      "raw": "'./x'"
+                      "literal": {
+                        "type": "Literal",
+                        "start":21,"end":26,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":26}},
+                        "value": "./x",
+                        "raw": "'./x'"
+                      }
                     },
                     "options": null,
                     "qualifier": {
@@ -66,10 +70,14 @@
                   "type": "TSImportType",
                   "start":41,"end":59,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":25}},
                   "argument": {
-                    "type": "Literal",
+                    "type": "TSLiteralType",
                     "start":48,"end":53,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}},
-                    "value": "./y",
-                    "raw": "'./y'"
+                    "literal": {
+                      "type": "Literal",
+                      "start":48,"end":53,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}},
+                      "value": "./y",
+                      "raw": "'./y'"
+                    }
                   },
                   "options": null,
                   "qualifier": {
@@ -103,10 +111,14 @@
                   "type": "TSImportType",
                   "start":68,"end":91,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":30}},
                   "argument": {
-                    "type": "Literal",
+                    "type": "TSLiteralType",
                     "start":75,"end":79,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":18}},
-                    "value": "/z",
-                    "raw": "\"/z\""
+                    "literal": {
+                      "type": "Literal",
+                      "start":75,"end":79,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":18}},
+                      "value": "/z",
+                      "raw": "\"/z\""
+                    }
                   },
                   "options": null,
                   "qualifier": {
@@ -114,7 +126,7 @@
                     "start":81,"end":85,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":24},"identifierName":"this"},
                     "name": "this"
                   },
-                  "typeParameters": {
+                  "typeArguments": {
                     "type": "TSTypeParameterInstantiation",
                     "start":85,"end":91,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":30}},
                     "params": [

@@ -57,8 +57,9 @@
                               "type": "TSTypeQuery",
                               "start":42,"end":53,"loc":{"start":{"line":3,"column":14,"index":42},"end":{"line":3,"column":25,"index":53}},
                               "exprName": {
-                                "type": "ThisExpression",
-                                "start":49,"end":53,"loc":{"start":{"line":3,"column":21,"index":49},"end":{"line":3,"column":25,"index":53}}
+                                "type": "Identifier",
+                                "start":49,"end":53,"loc":{"start":{"line":3,"column":21,"index":49},"end":{"line":3,"column":25,"index":53},"identifierName":"this"},
+                                "name": "this"
                               }
                             }
                           }
