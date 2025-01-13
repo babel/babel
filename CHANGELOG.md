@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.6 (2025-01-13)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-nullish-coalescing-operator`
+  * [#17061](https://github.com/babel/babel/pull/17061) fix: Chaining nullish coalescing operators output size regression ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.26.5 (2025-01-10)
 
 #### :eyeglasses: Spec Compliance
