@@ -1,3 +1,4 @@
 function foo() {
-  var foo = this !== null && this !== void 0 ? this : {};
+  var _this;
+  var foo = (_this = this) !== null && _this !== void 0 ? _this : {};
 }

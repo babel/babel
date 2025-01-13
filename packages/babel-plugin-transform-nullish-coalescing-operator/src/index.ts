@@ -36,8 +36,7 @@ export default declare((api, { loose = false }: Options) => {
           (t.isIdentifier(node.left) &&
             (pureGetters ||
               // globalThis
-              scope.hasBinding(node.left.name))) ||
-          scope.isPure(node.left)
+              scope.hasBinding(node.left.name)))
         ) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
