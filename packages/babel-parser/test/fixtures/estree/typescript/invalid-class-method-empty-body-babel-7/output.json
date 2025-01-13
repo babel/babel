@@ -35,7 +35,7 @@
               "computed": false,
               "kind": "method",
               "value": {
-                "type": "TSEmptyBodyFunctionExpression",
+                "type": "FunctionExpression",
                 "start":18,"end":21,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11}},
                 "id": null,
                 "generator": false,
@@ -49,13 +49,17 @@
               "start":24,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":12}},
               "static": false,
               "key": {
-                "type": "PrivateIdentifier",
+                "type": "PrivateName",
                 "start":24,"end":31,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":9}},
-                "name": "method"
+                "id": {
+                  "type": "Identifier",
+                  "start":25,"end":31,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":9},"identifierName":"method"},
+                  "name": "method"
+                }
               },
               "kind": "method",
               "value": {
-                "type": "TSEmptyBodyFunctionExpression",
+                "type": "FunctionExpression",
                 "start":31,"end":34,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12}},
                 "id": null,
                 "generator": false,
@@ -78,7 +82,7 @@
               "computed": false,
               "kind": "method",
               "value": {
-                "type": "TSEmptyBodyFunctionExpression",
+                "type": "FunctionExpression",
                 "start":51,"end":54,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":19}},
                 "id": null,
                 "generator": false,
