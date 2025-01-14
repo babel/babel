@@ -263,7 +263,7 @@ function tsIsVarianceAnnotations(
 export const enum tsParseEntityNameFlags {
   NONE = 0b00,
   ALLOW_RESERVED_WORDS = 0b01,
-  ALLOW_THIS_EXPRESSION = 0b10,
+  LEADING_THIS_AS_IDENTIFIER = 0b10,
 }
 
 export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
@@ -588,7 +588,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // In this instance, the entity name will actually itself be a
         // qualifier, so allow it to be a reserved word as well.
         node.qualifier = this.tsParseEntityName(
-          tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
+          tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
+            tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
         );
       }
       if (this.match(tt.lt)) {
@@ -604,12 +605,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseEntityName(flags: tsParseEntityNameFlags): N.TsEntityName {
       let entity: N.TsEntityName;
       if (
-        flags & tsParseEntityNameFlags.ALLOW_THIS_EXPRESSION &&
+        flags & tsParseEntityNameFlags.ALLOW_RESERVED_WORDS &&
         this.match(tt._this)
       ) {
-        const node = this.startNode<N.ThisExpression>();
-        this.next();
-        entity = this.finishNode(node, "ThisExpression");
+        if (flags & tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER) {
+          entity = this.parseIdentifier(true);
+        } else {
+          const node = this.startNode<N.ThisExpression>();
+          this.next();
+          entity = this.finishNode(node, "ThisExpression");
+        }
       } else {
         entity = this.parseIdentifier(
           !!(flags & tsParseEntityNameFlags.ALLOW_RESERVED_WORDS),
@@ -665,12 +670,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       } else {
         if (process.env.BABEL_8_BREAKING) {
           node.exprName = this.tsParseEntityName(
-            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
-              tsParseEntityNameFlags.ALLOW_THIS_EXPRESSION,
+            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
           );
         } else {
           node.exprName = this.tsParseEntityName(
-            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
+            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
+              tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
           );
         }
       }
@@ -1750,10 +1755,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           const node = this.startNode<
             N.TSClassImplements | N.TSInterfaceHeritage
           >();
-          node.expression = this.tsParseEntityName(
-            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
-          );
           if (process.env.BABEL_8_BREAKING) {
+            node.expression = this.tsParseEntityName(
+              tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
+            );
             if (this.match(tt.lt)) {
               node.typeArguments = this.tsParseTypeArguments();
             }
@@ -1762,6 +1767,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements",
             );
           } else {
+            node.expression = this.tsParseEntityName(
+              tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
+                tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
+            );
             if (this.match(tt.lt)) {
               // @ts-expect-error Babel 7 vs Babel 8
               node.typeParameters = this.tsParseTypeArguments();
