@@ -105,8 +105,11 @@ export default declare((api, options: Options) => {
       },
 
       TemplateLiteral(path) {
-        // Skip TemplateLiteral in TSLiteralType
-        if (path.parent.type === "TSLiteralType") {
+        if (
+          !process.env.BABEL_8_BREAKING &&
+          path.parent.type === "TSLiteralType"
+        ) {
+          // Skip TemplateLiteral in TSLiteralType
           return;
         }
         const nodes: t.Expression[] = [];

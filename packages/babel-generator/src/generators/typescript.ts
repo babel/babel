@@ -1,5 +1,6 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
+import { TemplateLiteral } from "./template-literals.ts";
 
 export function TSTypeAnnotation(
   this: Printer,
@@ -497,6 +498,8 @@ function tokenIfPlusMinus(self: Printer, tok: true | "+" | "-") {
     self.token(tok);
   }
 }
+
+export { TemplateLiteral as TSTemplateLiteralType };
 
 export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal);

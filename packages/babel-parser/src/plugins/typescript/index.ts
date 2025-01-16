@@ -1257,10 +1257,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSLiteralType");
     }
 
-    tsParseTemplateLiteralType(): N.TsLiteralType {
-      const node = this.startNode<N.TsLiteralType>();
-      node.literal = super.parseTemplate(false);
-      return this.finishNode(node, "TSLiteralType");
+    tsParseTemplateLiteralType(): N.TsTemplateLiteralType | N.TsLiteralType {
+      if (process.env.BABEL_8_BREAKING) {
+        const node = this.startNode<N.TsTemplateLiteralType>();
+        let curElt = this.parseTemplateElement(false);
+        const quasis = [curElt];
+        const substitutions: N.TsType[] = [];
+        while (!curElt.tail) {
+          substitutions.push(this.tsParseType());
+          this.readTemplateContinuation();
+          quasis.push((curElt = this.parseTemplateElement(false)));
+        }
+        node.expressions = substitutions;
+        node.quasis = quasis;
+        return this.finishNode(node, "TSTemplateLiteralType");
+      } else {
+        const node = this.startNode<N.TsLiteralType>();
+        node.literal = super.parseTemplate(false);
+        return this.finishNode(node, "TSLiteralType");
+      }
     }
 
     parseTemplateSubstitution(): N.TsType | N.Expression {
