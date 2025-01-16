@@ -51,6 +51,11 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/keywords/format.test.js
   rm tests/format/typescript/declare/format.test.js
   rm tests/format/typescript/const/format.test.js
+  # https://github.com/babel/babel/pull/17066
+  rm tests/format/typescript/typeparams/consistent/format.test.js
+  rm tests/format/typescript/template-literal-types/format.test.js
+  rm tests/format/typescript/method/format.test.js
+  rm tests/format/typescript/argument-expansion/format.test.js
 fi
 
 # Re-enable this test once prettier updated the snapshot
