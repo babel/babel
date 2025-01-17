@@ -74,6 +74,7 @@
   "async-functions",
   "async-iteration",
   "caller",
+  "canonical-tz",
   "change-array-by-copy",
   "class",
   "class-fields-private",
