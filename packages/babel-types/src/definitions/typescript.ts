@@ -392,10 +392,10 @@ defineType("TSMappedType", {
 if (process.env.BABEL_8_BREAKING) {
   defineType("TSTemplateLiteralType", {
     aliases: ["TSType", "TSBaseType"],
-    visitor: ["quasis", "expressions"],
+    visitor: ["quasis", "types"],
     fields: {
       quasis: validateArrayOfType("TemplateElement"),
-      expressions: {
+      types: {
         validate: chain(
           assertValueType("array"),
           assertEach(assertNodeType("TSType")),
@@ -405,7 +405,7 @@ if (process.env.BABEL_8_BREAKING) {
               throw new TypeError(
                 `Number of ${
                   node.type
-                } quasis should be exactly one more than the number of expressions.\nExpected ${
+                } quasis should be exactly one more than the number of types.\nExpected ${
                   val.length + 1
                 } quasis but got ${node.quasis.length}`,
               );

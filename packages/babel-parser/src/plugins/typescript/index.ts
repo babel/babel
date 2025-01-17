@@ -1268,7 +1268,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.readTemplateContinuation();
           quasis.push((curElt = this.parseTemplateElement(false)));
         }
-        node.expressions = substitutions;
+        node.types = substitutions;
         node.quasis = quasis;
         return this.finishNode(node, "TSTemplateLiteralType");
       } else {

@@ -1,6 +1,5 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
-import { TemplateLiteral } from "./template-literals.ts";
 
 export function TSTypeAnnotation(
   this: Printer,
@@ -499,7 +498,27 @@ function tokenIfPlusMinus(self: Printer, tok: true | "+" | "-") {
   }
 }
 
-export { TemplateLiteral as TSTemplateLiteralType };
+// @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+export function TSTemplateLiteralType(
+  this: Printer,
+  node: t.TSTemplateLiteralType,
+) {
+  const quasis = node.quasis;
+
+  let partRaw = "`";
+
+  for (let i = 0; i < quasis.length; i++) {
+    partRaw += quasis[i].value.raw;
+
+    if (i + 1 < quasis.length) {
+      this.token(partRaw + "${", true);
+      this.print(node.types[i]);
+      partRaw = "}";
+    }
+  }
+
+  this.token(partRaw + "`", true);
+}
 
 export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal);

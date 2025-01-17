@@ -1758,7 +1758,7 @@ export interface TsMappedType extends TsTypeBase {
 export interface TsTemplateLiteralType extends TsTypeBase {
   type: "TSTemplateLiteralType";
   quasis: TemplateElement[];
-  expressions: TsType[];
+  types: TsType[];
 }
 
 export interface TsLiteralType extends TsTypeBase {
