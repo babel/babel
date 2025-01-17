@@ -232,6 +232,7 @@ export interface ExplVisitorBase<S> {
   TSSatisfiesExpression?: ExplVisitNode<S, t.TSSatisfiesExpression>;
   TSStringKeyword?: ExplVisitNode<S, t.TSStringKeyword>;
   TSSymbolKeyword?: ExplVisitNode<S, t.TSSymbolKeyword>;
+  TSTemplateLiteralType?: ExplVisitNode<S, t.TSTemplateLiteralType>;
   TSThisType?: ExplVisitNode<S, t.TSThisType>;
   TSTupleType?: ExplVisitNode<S, t.TSTupleType>;
   TSTypeAliasDeclaration?: ExplVisitNode<S, t.TSTypeAliasDeclaration>;
@@ -496,6 +497,7 @@ export interface VisitorBaseNodes<S> {
   TSSatisfiesExpression?: VisitNode<S, t.TSSatisfiesExpression>;
   TSStringKeyword?: VisitNode<S, t.TSStringKeyword>;
   TSSymbolKeyword?: VisitNode<S, t.TSSymbolKeyword>;
+  TSTemplateLiteralType?: VisitNode<S, t.TSTemplateLiteralType>;
   TSThisType?: VisitNode<S, t.TSThisType>;
   TSTupleType?: VisitNode<S, t.TSTupleType>;
   TSTypeAliasDeclaration?: VisitNode<S, t.TSTypeAliasDeclaration>;

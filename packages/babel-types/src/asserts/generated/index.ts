@@ -1377,6 +1377,12 @@ export function assertTSMappedType(
 ): asserts node is t.TSMappedType {
   assert("TSMappedType", node, opts);
 }
+export function assertTSTemplateLiteralType(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TSTemplateLiteralType {
+  assert("TSTemplateLiteralType", node, opts);
+}
 export function assertTSLiteralType(
   node: object | null | undefined,
   opts?: object | null,

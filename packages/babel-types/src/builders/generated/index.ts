@@ -3065,6 +3065,21 @@ export function tsMappedType(
   return node;
 }
 export { tsMappedType as tSMappedType };
+export function tsTemplateLiteralType(
+  quasis: Array<t.TemplateElement>,
+  types: Array<t.TSType>,
+): t.TSTemplateLiteralType {
+  const node: t.TSTemplateLiteralType = {
+    type: "TSTemplateLiteralType",
+    quasis,
+    types,
+  };
+  const defs = NODE_FIELDS.TSTemplateLiteralType;
+  validate(defs.quasis, node, "quasis", quasis, 1);
+  validate(defs.types, node, "types", types, 1);
+  return node;
+}
+export { tsTemplateLiteralType as tSTemplateLiteralType };
 export function tsLiteralType(
   literal:
     | t.NumericLiteral

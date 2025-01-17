@@ -498,7 +498,6 @@ function tokenIfPlusMinus(self: Printer, tok: true | "+" | "-") {
   }
 }
 
-// @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
 export function TSTemplateLiteralType(
   this: Printer,
   node: t.TSTemplateLiteralType,
