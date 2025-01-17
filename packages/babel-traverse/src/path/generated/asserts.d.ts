@@ -723,6 +723,9 @@ export interface NodePathAssertions {
   assertTSSymbolKeyword(
     opts?: Opts<t.TSSymbolKeyword>,
   ): asserts this is NodePath<t.TSSymbolKeyword>;
+  assertTSTemplateLiteralType(
+    opts?: Opts<t.TSTemplateLiteralType>,
+  ): asserts this is NodePath<t.TSTemplateLiteralType>;
   assertTSThisType(
     opts?: Opts<t.TSThisType>,
   ): asserts this is NodePath<t.TSThisType>;

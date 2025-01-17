@@ -988,6 +988,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.TSSymbolKeyword>,
   ): this is NodePath<t.TSSymbolKeyword>;
+  isTSTemplateLiteralType(
+    this: NodePath,
+    opts?: Opts<t.TSTemplateLiteralType>,
+  ): this is NodePath<t.TSTemplateLiteralType>;
   isTSThisType(
     this: NodePath,
     opts?: Opts<t.TSThisType>,

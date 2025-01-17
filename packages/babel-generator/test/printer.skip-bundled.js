@@ -24,7 +24,8 @@ describe("Printer", () => {
         if (
           type === "TSClassImplements" ||
           type === "TSEnumBody" ||
-          type === "TSInterfaceHeritage"
+          type === "TSInterfaceHeritage" ||
+          type === "TSTemplateLiteralType"
         ) {
           return;
         }

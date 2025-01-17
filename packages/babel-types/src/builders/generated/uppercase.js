@@ -236,6 +236,7 @@ export {
   tsTypeOperator as TSTypeOperator,
   tsIndexedAccessType as TSIndexedAccessType,
   tsMappedType as TSMappedType,
+  tsTemplateLiteralType as TSTemplateLiteralType,
   tsLiteralType as TSLiteralType,
   tsExpressionWithTypeArguments as TSExpressionWithTypeArguments,
   tsInterfaceDeclaration as TSInterfaceDeclaration,
