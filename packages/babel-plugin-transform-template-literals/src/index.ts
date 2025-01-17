@@ -105,10 +105,7 @@ export default declare((api, options: Options) => {
       },
 
       TemplateLiteral(path) {
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          path.parent.type === "TSLiteralType"
-        ) {
+        if (path.parent.type === "TSLiteralType") {
           // Skip TemplateLiteral in TSLiteralType
           return;
         }
