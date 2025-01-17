@@ -1259,18 +1259,28 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseTemplateLiteralType(): N.TsTemplateLiteralType | N.TsLiteralType {
       if (process.env.BABEL_8_BREAKING) {
-        const node = this.startNode<N.TsTemplateLiteralType>();
+        const startLoc = this.state.startLoc;
         let curElt = this.parseTemplateElement(false);
         const quasis = [curElt];
-        const substitutions: N.TsType[] = [];
-        while (!curElt.tail) {
-          substitutions.push(this.tsParseType());
-          this.readTemplateContinuation();
-          quasis.push((curElt = this.parseTemplateElement(false)));
+        if (curElt.tail) {
+          const node = this.startNodeAt<N.TsLiteralType>(startLoc);
+          const literal = this.startNodeAt<N.TemplateLiteral>(startLoc);
+          literal.expressions = [];
+          literal.quasis = quasis;
+          node.literal = this.finishNode(literal, "TemplateLiteral");
+          return this.finishNode(node, "TSLiteralType");
+        } else {
+          const substitutions: N.TsType[] = [];
+          while (!curElt.tail) {
+            substitutions.push(this.tsParseType());
+            this.readTemplateContinuation();
+            quasis.push((curElt = this.parseTemplateElement(false)));
+          }
+          const node = this.startNodeAt<N.TsTemplateLiteralType>(startLoc);
+          node.types = substitutions;
+          node.quasis = quasis;
+          return this.finishNode(node, "TSTemplateLiteralType");
         }
-        node.types = substitutions;
-        node.quasis = quasis;
-        return this.finishNode(node, "TSTemplateLiteralType");
       } else {
         const node = this.startNode<N.TsLiteralType>();
         node.literal = super.parseTemplate(false);
