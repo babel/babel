@@ -37,7 +37,7 @@ Babel (pronounced ["babble"](https://soundcloud.com/sebmck/how-to-pronounce-babe
 
 ## Sponsors
 
-Our top sponsors are shown below! [[Become a sponsor](https://opencollective.com/babel#sponsor)]
+Our top sponsors ar1e shown below! [[Become a sponsor](https://opencollective.com/babel#sponsor)]
 
 <a href="https://opencollective.com/babel/sponsor/0/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/babel/sponsor/1/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/1/avatar.svg"></a>
