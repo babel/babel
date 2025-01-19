@@ -36,13 +36,13 @@ expect(z).toBe(3);
 
 // pure, computed property should remain as-is
 key = 2;
-_$z = {
-  2: "two",
-  z: "zee"
-}, {
+({
   [key]: y,
   z
-} = _$z, x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
+} = _$z = {
+  2: "two",
+  z: "zee"
+}), x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
 expect(y).toBe("two");
 expect(x).toEqual({});
 expect(z).toBe("zee");

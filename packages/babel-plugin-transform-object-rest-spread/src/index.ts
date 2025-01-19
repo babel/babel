@@ -580,7 +580,11 @@ export default declare((api, opts: Options) => {
           }
 
           const nodeWithoutSpread = t.cloneNode(path.node);
-          nodeWithoutSpread.right = t.identifier(refName);
+          if (nodes.length === 1) {
+            nodeWithoutSpread.right = nodes.shift();
+          } else {
+            nodeWithoutSpread.right = t.identifier(refName);
+          }
           nodes.push(nodeWithoutSpread);
           nodes.push(t.assignmentExpression("=", argument, callExpression));
 
