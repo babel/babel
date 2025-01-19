@@ -1,10 +1,9 @@
 const _excluded = ["excluded", "excluded2", "used", "used2"],
   _excluded2 = ["unused"];
-var _c;
 // should not remove when destructuring into existing bindings
-_c = c2, {
+({
   a2
-} = _c, b2 = babelHelpers.objectWithoutProperties(_c, ["a2"]);
+} = c2), b2 = babelHelpers.objectWithoutProperties(c2, ["a2"]);
 function render() {
   const _this$props = this.props,
     {

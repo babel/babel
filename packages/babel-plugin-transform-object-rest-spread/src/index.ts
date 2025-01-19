@@ -539,7 +539,15 @@ export default declare((api, opts: Options) => {
           const { right } = path.node;
 
           let refName;
-          if (t.isIdentifier(right) && path.scope.hasBinding(right.name)) {
+
+          if (
+            t.isIdentifier(right) &&
+            (pureGetters ||
+              path.scope.getBinding(right.name)?.constantViolations.every(
+                // declared in loop
+                p => p.isVariableDeclarator(),
+              ))
+          ) {
             refName = right.name;
           } else {
             refName = path.scope.generateUidBasedOnNode(path.node.right, "ref");
@@ -634,6 +642,8 @@ export default declare((api, opts: Options) => {
             ]),
           );
         }
+
+        path.scope.registerDeclaration(path.get("left"));
       },
 
       // [{a, ...b}] = c;
