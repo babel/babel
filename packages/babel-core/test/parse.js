@@ -41,12 +41,7 @@ describe("parseSync", function () {
   });
 
   it("should show correct codeFrame with startLine and startColumn", function () {
-    const input = `const* a = 1;
-
-
-
-
-`;
+    const input = `const* a = 1;`;
     let err;
     try {
       parseSync(input, {
@@ -68,10 +63,7 @@ describe("parseSync", function () {
         1 |
         2 |
       > 3 |    const* a = 1;
-          |         ^
-        4 |
-        5 |
-        6 |"
+          |         ^"
     `);
   });
 });
