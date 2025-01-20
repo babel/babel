@@ -53,6 +53,7 @@ describe("parseSync", function () {
         parserOpts: {
           startLine: 3,
           startColumn: 3,
+          startIndex: 6,
         },
         highlightCode: false,
         configFile: false,
