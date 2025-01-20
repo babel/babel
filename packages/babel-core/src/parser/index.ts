@@ -49,6 +49,13 @@ export default function* parser(
       // err.code will be changed to BABEL_PARSE_ERROR later.
     }
 
+    const startLine = parserOpts?.startLine;
+    const startColumn = parserOpts?.startColumn;
+
+    if (startLine != null || startColumn != null) {
+      code = "\n".repeat(startLine - 1) + " ".repeat(startColumn) + code;
+    }
+
     const { loc, missingPlugin } = err;
     if (loc) {
       const codeFrame = codeFrameColumns(
