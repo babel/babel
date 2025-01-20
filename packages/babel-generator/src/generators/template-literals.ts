@@ -20,27 +20,34 @@ export function TemplateElement(this: Printer) {
   throw new Error("TemplateElement printing is handled in TemplateLiteral");
 }
 
-export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
+export type TemplateLiteralBase = t.Node & {
+  quasis: t.TemplateElement[];
+};
+
+export function _printTemplate<T extends t.Node>(
+  this: Printer,
+  node: TemplateLiteralBase,
+  substitutions: T[],
+) {
   const quasis = node.quasis;
-
   let partRaw = "`";
-
-  for (let i = 0; i < quasis.length; i++) {
+  for (let i = 0; i < quasis.length - 1; i++) {
     partRaw += quasis[i].value.raw;
+    this.token(partRaw + "${", true);
+    this.print(substitutions[i]);
+    partRaw = "}";
 
-    if (i + 1 < quasis.length) {
-      this.token(partRaw + "${", true);
-      this.print(node.expressions[i]);
-      partRaw = "}";
-
-      // In Babel 7 we have individual tokens for ${ and }, so the automatic
-      // catchup logic does not work. Manually look for those tokens.
-      if (!process.env.BABEL_8_BREAKING && this.tokenMap) {
-        const token = this.tokenMap.findMatching(node, "}", i);
-        if (token) this._catchUpTo(token.loc.start);
-      }
+    // In Babel 7 we have individual tokens for ${ and }, so the automatic
+    // catchup logic does not work. Manually look for those tokens.
+    if (!process.env.BABEL_8_BREAKING && this.tokenMap) {
+      const token = this.tokenMap.findMatching(node, "}", i);
+      if (token) this._catchUpTo(token.loc.start);
     }
   }
-
+  partRaw += quasis[quasis.length - 1].value.raw;
   this.token(partRaw + "`", true);
+}
+
+export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
+  this._printTemplate(node, node.expressions);
 }

@@ -502,21 +502,7 @@ export function TSTemplateLiteralType(
   this: Printer,
   node: t.TSTemplateLiteralType,
 ) {
-  const quasis = node.quasis;
-
-  let partRaw = "`";
-
-  for (let i = 0; i < quasis.length; i++) {
-    partRaw += quasis[i].value.raw;
-
-    if (i + 1 < quasis.length) {
-      this.token(partRaw + "${", true);
-      this.print(node.types[i]);
-      partRaw = "}";
-    }
-  }
-
-  this.token(partRaw + "`", true);
+  this._printTemplate(node, node.types);
 }
 
 export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
