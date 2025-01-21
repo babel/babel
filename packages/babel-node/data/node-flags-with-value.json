@@ -67,6 +67,7 @@
   "--tls-keylog",
   "--trace-event-categories",
   "--trace-event-file-pattern",
+  "--trace-require-module",
   "--unhandled-rejections",
   "--use-largepages",
   "--v8-pool-size",
