@@ -171,6 +171,7 @@ export type Declaration =
   | VariableDeclaration
   | ClassDeclaration
   | FunctionDeclaration
+  | TsImportEqualsDeclaration
   | TsInterfaceDeclaration
   | TsTypeAliasDeclaration
   | TsEnumDeclaration
@@ -1855,10 +1856,11 @@ export type TsModuleName = TsEntityName | StringLiteral;
 
 export interface TsImportEqualsDeclaration extends NodeBase {
   type: "TSImportEqualsDeclaration";
-  isExport: boolean;
   id: Identifier;
   importKind: "type" | "value";
   moduleReference: TsModuleReference;
+  /** @deprecated */
+  isExport: boolean;
 }
 
 export type TsModuleReference = TsEntityName | TsExternalModuleReference;

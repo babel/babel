@@ -2059,7 +2059,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       maybeDefaultIdentifier?: N.Identifier | null,
       isExport?: boolean,
     ): N.TsImportEqualsDeclaration {
-      node.isExport = isExport || false;
+      if (!process.env.BABEL_8_BREAKING) {
+        node.isExport = isExport || false;
+      }
       node.id = maybeDefaultIdentifier || this.parseIdentifier();
       this.checkIdentifier(node.id, BindingFlag.TYPE_TS_VALUE_IMPORT);
       this.expect(tt.eq);
@@ -2135,7 +2137,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.state = state;
     }
 
-    tsTryParseDeclare(nany: any): N.Declaration | undefined {
+    tsTryParseDeclare(nany: any) {
       if (this.isLineTerminator()) {
         return;
       }
@@ -2147,7 +2149,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         kind = "let";
       }
 
-      // @ts-expect-error refine typings
       return this.tsInAmbientContext(() => {
         switch (startType) {
           case tt._function:
@@ -2162,7 +2163,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             // before parsing the class declaration to know how to register it in the scope.
             nany.declare = true;
             return this.parseClass(
-              nany,
+              nany as Undone<N.ClassDeclaration>,
               /* isStatement */ true,
               /* optionalId */ false,
             );
@@ -2265,7 +2266,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       value: string,
       next: boolean,
       decorators: N.Decorator[] | null,
-    ): N.Declaration | undefined | null {
+    ) {
       // no declaration apart from enum can be followed by a line break.
       switch (value) {
         case "abstract":
@@ -2893,8 +2894,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
+        const nodeImportEquals = process.env.BABEL_8_BREAKING
+          ? this.startNode<N.TsImportEqualsDeclaration>()
+          : (node as Undone<N.TsImportEqualsDeclaration>);
         this.next(); // eat `tt._import`
-        const nodeImportEquals = node as Undone<N.TsImportEqualsDeclaration>;
         let maybeDefaultIdentifier: N.Identifier | null = null;
         if (
           this.isContextual(tt._type) &&
@@ -2908,11 +2911,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         } else {
           nodeImportEquals.importKind = "value";
         }
-        return this.tsParseImportEqualsDeclaration(
+        const declaration = this.tsParseImportEqualsDeclaration(
           nodeImportEquals,
           maybeDefaultIdentifier,
           /* isExport */ true,
         );
+        if (process.env.BABEL_8_BREAKING) {
+          (node as Undone<N.ExportNamedDeclaration>).declaration = declaration;
+          (node as Undone<N.ExportNamedDeclaration>).specifiers = [];
+          return this.finishNode(node, "ExportNamedDeclaration");
+        } else {
+          return declaration;
+        }
       } else if (this.eat(tt.eq)) {
         // `export = x;`
         const assign = node as Undone<N.TsExportAssignment>;
@@ -3279,7 +3289,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.exportKind = "type";
       }
 
-      if (isDeclare) {
+      if (isDeclare && declaration.type !== "TSImportEqualsDeclaration") {
         // Reset location to include `declare` in range
         this.resetStartLocation(declaration, startLoc);
 

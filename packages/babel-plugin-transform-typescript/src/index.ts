@@ -435,6 +435,13 @@ export default declare((api, opts: Options) => {
           return;
         }
 
+        if (
+          process.env.BABEL_8_BREAKING &&
+          t.isTSImportEqualsDeclaration(path.node.declaration)
+        ) {
+          return;
+        }
+
         // remove export declaration that is filled with type-only specifiers
         //   export { type A1, type A2 } from "a";
         if (
@@ -659,9 +666,13 @@ export default declare((api, opts: Options) => {
           t.variableDeclarator(id, init),
         ]);
 
-        path.replaceWith(
-          isExport ? t.exportNamedDeclaration(newNode) : newNode,
-        );
+        if (process.env.BABEL_8_BREAKING) {
+          path.replaceWith(newNode);
+        } else {
+          path.replaceWith(
+            isExport ? t.exportNamedDeclaration(newNode) : newNode,
+          );
+        }
         path.scope.registerDeclaration(path);
       },
 

@@ -736,7 +736,7 @@ export function TSImportEqualsDeclaration(
   node: t.TSImportEqualsDeclaration,
 ) {
   const { isExport, id, moduleReference } = node;
-  if (isExport) {
+  if (!process.env.BABEL_8_BREAKING && isExport) {
     this.word("export");
     this.space();
   }
