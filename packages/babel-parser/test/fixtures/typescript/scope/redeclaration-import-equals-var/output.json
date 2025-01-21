@@ -26,7 +26,6 @@
         "type": "TSImportEqualsDeclaration",
         "start":13,"end":26,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":13,"index":26}},
         "importKind": "value",
-        "isExport": false,
         "id": {
           "type": "Identifier",
           "start":20,"end":21,"loc":{"start":{"line":2,"column":7,"index":20},"end":{"line":2,"column":8,"index":21},"identifierName":"a"},

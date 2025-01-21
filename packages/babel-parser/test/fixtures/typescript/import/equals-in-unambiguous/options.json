@@ -1,3 +1,4 @@
 {
-    "sourceType": "unambiguous"
+  "sourceType": "unambiguous",
+  "BABEL_8_BREAKING": true
 }

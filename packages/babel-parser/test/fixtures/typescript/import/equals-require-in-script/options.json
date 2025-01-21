@@ -1,3 +1,4 @@
 {
-    "sourceType": "script"
+  "sourceType": "script",
+  "BABEL_8_BREAKING": true
 }
