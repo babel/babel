@@ -95,15 +95,7 @@
                         24,
                         25
                       ],
-                      "name": {
-                        "type": "Identifier",
-                        "start":24,"end":25,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":2},"identifierName":"T"},
-                        "range": [
-                          24,
-                          25
-                        ],
-                        "name": "T"
-                      }
+                      "name": "T"
                     }
                   ]
                 }
