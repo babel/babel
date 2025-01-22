@@ -60,28 +60,24 @@ function filterStageFromList(
   }, {});
 }
 
-const pluginLists = {
-  withProposals: {
-    withoutBugfixes: pluginsList,
-    withBugfixes: Object.assign({}, pluginsList, pluginsBugfixesList),
-  },
-  withoutProposals: {
-    withoutBugfixes: filterStageFromList(pluginsList, proposalPlugins),
-    withBugfixes: filterStageFromList(
-      Object.assign({}, pluginsList, pluginsBugfixesList),
-      proposalPlugins,
-    ),
-  },
-};
+const pluginsListWithProposals = Object.assign(
+  {},
+  pluginsList,
+  pluginsBugfixesList,
+);
+const pluginsListWithuotProposals = filterStageFromList(
+  pluginsListWithProposals,
+  proposalPlugins,
+);
 
-function getPluginList(proposals: boolean, bugfixes: boolean) {
-  if (proposals) {
-    if (bugfixes) return pluginLists.withProposals.withBugfixes;
-    else return pluginLists.withProposals.withoutBugfixes;
-  } else {
-    if (bugfixes) return pluginLists.withoutProposals.withBugfixes;
-    else return pluginLists.withoutProposals.withoutBugfixes;
-  }
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var pluginsListNoBugfixesWithProposals = pluginsList;
+  // eslint-disable-next-line no-var
+  var pluginsListNoBugfixesWithoutProposals = filterStageFromList(
+    pluginsList,
+    proposalPlugins,
+  );
 }
 
 const getPlugin = (pluginName: string) => {
@@ -328,7 +324,6 @@ export default declarePreset((api, opts: Options) => {
   }
 
   const {
-    bugfixes,
     configPath,
     debug,
     exclude: optionsExclude,
@@ -345,7 +340,7 @@ export default declarePreset((api, opts: Options) => {
 
   if (!process.env.BABEL_8_BREAKING) {
     // eslint-disable-next-line no-var
-    var { loose, spec = false } = opts;
+    var { loose, spec = false, bugfixes = false } = opts;
   }
 
   let targets = babelTargets;
@@ -397,7 +392,14 @@ option \`forceAllTransforms: true\` instead.
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const compatData = getPluginList(shippedProposals, bugfixes);
+  const compatData =
+    process.env.BABEL_8_BREAKING || bugfixes
+      ? shippedProposals
+        ? pluginsListWithProposals
+        : pluginsListWithuotProposals
+      : shippedProposals
+        ? pluginsListNoBugfixesWithProposals
+        : pluginsListNoBugfixesWithoutProposals;
   const modules =
     optionsModules === "auto"
       ? api.caller(supportsStaticESM)

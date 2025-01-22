@@ -1,0 +1,19 @@
+{
+  "BABEL_8_BREAKING": true,
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": "40"
+        },
+        "exclude": [
+          "transform-destructuring",
+          "transform-arrow-functions"
+        ]
+      }
+    ]
+  ]
+}

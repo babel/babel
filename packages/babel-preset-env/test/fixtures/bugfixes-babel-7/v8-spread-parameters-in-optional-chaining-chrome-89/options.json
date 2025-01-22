@@ -1,0 +1,16 @@
+{
+  "BABEL_8_BREAKING": false,
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": true,
+        "targets": {
+          "chrome": "89"
+        }
+      }
+    ]
+  ]
+}

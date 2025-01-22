@@ -1,5 +1,4 @@
 export const TopLevelOptions = {
-  bugfixes: "bugfixes",
   configPath: "configPath",
   corejs: "corejs",
   debug: "debug",
@@ -16,6 +15,7 @@ export const TopLevelOptions = {
 
 if (!process.env.BABEL_8_BREAKING) {
   Object.assign(TopLevelOptions, {
+    bugfixes: "bugfixes",
     loose: "loose",
     spec: "spec",
   });

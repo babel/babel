@@ -1,0 +1,37 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "edge": "15"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-duplicate-named-capturing-groups-regex { edge < 126 }
+  transform-regexp-modifiers { edge < 125 }
+  transform-unicode-sets-regex { edge < 112 }
+  transform-class-static-block { edge < 94 }
+  transform-private-property-in-object { edge < 91 }
+  transform-class-properties { edge < 79 }
+  transform-private-methods { edge < 84 }
+  transform-numeric-separator { edge < 79 }
+  transform-logical-assignment-operators { edge < 85 }
+  transform-nullish-coalescing-operator { edge < 80 }
+  transform-optional-chaining { edge < 80 }
+  transform-json-strings { edge < 79 }
+  transform-optional-catch-binding { edge < 79 }
+  transform-async-generator-functions { edge < 79 }
+  transform-object-rest-spread { edge < 79 }
+  transform-dotall-regex { edge < 79 }
+  transform-unicode-property-regex { edge < 79 }
+  transform-named-capturing-groups-regex { edge < 79 }
+  transform-export-namespace-from { edge < 79 }
+  bugfix/transform-edge-default-parameters { edge < 18 }
+  bugfix/transform-edge-function-name { edge < 79 }
+  transform-modules-commonjs
+  transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
