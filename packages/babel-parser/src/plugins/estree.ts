@@ -270,8 +270,7 @@ export default (superClass: typeof Parser) =>
       if (typeParameters) {
         delete node.typeParameters;
         funcNode.typeParameters = typeParameters;
-        funcNode.start = typeParameters.start;
-        funcNode.loc.start = typeParameters.loc.start;
+        this.resetStartLocationFromNode(funcNode, typeParameters);
       }
       if (type === "ClassPrivateMethod") {
         node.computed = false;
