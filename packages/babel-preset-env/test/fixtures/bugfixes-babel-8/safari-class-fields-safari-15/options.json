@@ -1,0 +1,14 @@
+{
+  "BABEL_8_BREAKING": true,
+  "validateLogs": true,
+  "targets": "safari 15",
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "modules": false
+      }
+    ]
+  ]
+}

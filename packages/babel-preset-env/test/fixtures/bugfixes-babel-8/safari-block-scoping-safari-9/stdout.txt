@@ -1,0 +1,50 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "9"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
+  transform-regexp-modifiers { safari }
+  transform-unicode-sets-regex { safari < 17 }
+  transform-class-static-block { safari < 16.4 }
+  transform-private-property-in-object { safari < 15 }
+  transform-class-properties { safari < 14.1 }
+  transform-private-methods { safari < 15 }
+  transform-numeric-separator { safari < 13 }
+  transform-logical-assignment-operators { safari < 14 }
+  transform-nullish-coalescing-operator { safari < 13.1 }
+  transform-optional-chaining { safari < 13.1 }
+  transform-json-strings { safari < 12 }
+  transform-optional-catch-binding { safari < 11.1 }
+  transform-parameters { safari < 10 }
+  transform-async-generator-functions { safari < 12 }
+  transform-object-rest-spread { safari < 11.1 }
+  transform-dotall-regex { safari < 11.1 }
+  transform-unicode-property-regex { safari < 11.1 }
+  transform-named-capturing-groups-regex { safari < 11.1 }
+  transform-async-to-generator { safari < 10.1 }
+  transform-exponentiation-operator { safari < 10.1 }
+  transform-function-name { safari < 10 }
+  transform-block-scoped-functions { safari < 10 }
+  transform-classes { safari < 10 }
+  transform-object-super { safari < 10 }
+  transform-sticky-regex { safari < 10 }
+  transform-unicode-regex { safari < 12 }
+  transform-spread { safari < 10 }
+  transform-destructuring { safari < 10 }
+  transform-block-scoping { safari < 10 }
+  transform-new-target { safari < 10 }
+  transform-regenerator { safari < 10 }
+  transform-export-namespace-from { safari < 14.1 }
+  bugfix/transform-tagged-template-caching { safari < 13 }
+  transform-modules-commonjs
+  transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

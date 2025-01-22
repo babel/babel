@@ -240,6 +240,14 @@ export function normalizeCoreJSOption(
 }
 
 export default function normalizeOptions(opts: Options) {
+  if (process.env.BABEL_8_BREAKING) {
+    v.invariant(
+      !Object.hasOwn(opts, "bugfixes"),
+      "The 'bugfixes' option has been removed, and now bugfix plugins are" +
+        " always enabled. Please remove it from your config.",
+    );
+  }
+
   v.validateTopLevelOptions(opts, TopLevelOptions);
 
   const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
@@ -263,14 +271,10 @@ export default function normalizeOptions(opts: Options) {
   if (!process.env.BABEL_8_BREAKING) {
     v.validateBooleanOption("loose", opts.loose);
     v.validateBooleanOption("spec", opts.spec);
+    v.validateBooleanOption("bugfixes", opts.bugfixes);
   }
 
   return {
-    bugfixes: v.validateBooleanOption(
-      TopLevelOptions.bugfixes,
-      opts.bugfixes,
-      process.env.BABEL_8_BREAKING ? true : false,
-    ),
     configPath: v.validateStringOption(
       TopLevelOptions.configPath,
       opts.configPath,

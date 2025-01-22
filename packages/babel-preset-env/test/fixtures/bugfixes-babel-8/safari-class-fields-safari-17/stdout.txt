@@ -1,0 +1,28 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "17"
+}
+
+Using modules transform: false
+
+Using plugins:
+  transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
+  transform-regexp-modifiers { safari }
+  syntax-class-static-block
+  syntax-private-property-in-object
+  syntax-class-properties
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  syntax-export-namespace-from
+  syntax-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

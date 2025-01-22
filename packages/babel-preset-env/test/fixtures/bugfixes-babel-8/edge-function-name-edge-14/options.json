@@ -1,0 +1,15 @@
+{
+  "BABEL_8_BREAKING": true,
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "edge": "14"
+        }
+      }
+    ]
+  ]
+}

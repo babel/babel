@@ -1,0 +1,20 @@
+{
+  "BABEL_8_BREAKING": false,
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": true,
+        "targets": {
+          "safari": "9"
+        },
+        "exclude": [
+          "transform-for-of",
+          "transform-arrow-functions"
+        ]
+      }
+    ]
+  ]
+}
