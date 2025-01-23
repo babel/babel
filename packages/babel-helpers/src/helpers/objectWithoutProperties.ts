@@ -29,7 +29,6 @@ export default function _objectWithoutProperties<
     var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
     for (i = 0; i < sourceSymbolKeys.length; i++) {
       key = sourceSymbolKeys[i] as keyof typeof source & keyof typeof target;
-      // eslint-disable-next-line @typescript-eslint/prefer-includes
       if (excluded.indexOf(key) !== -1) continue;
       if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
       target[key] = source[key];
