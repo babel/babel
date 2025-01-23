@@ -21,7 +21,8 @@ export default function _objectWithoutPropertiesLoose<T extends object>(
 
   for (var key in source) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
-      if (excluded.includes(key)) continue;
+      // eslint-disable-next-line @typescript-eslint/prefer-includes
+      if (excluded.indexOf(key) !== -1) continue;
       target[key] = source[key];
     }
   }
