@@ -1204,11 +1204,17 @@ class Scope {
   // was used to declare a variable in a different scope.
   hasBinding(
     name: string,
-    opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
+    opts?:
+      | boolean
+      | { noGlobals?: boolean; noUids?: boolean; upToScope?: Scope },
   ) {
     if (!name) return false;
+    const upToScope = (opts as { upToScope?: Scope })?.upToScope;
     let scope: Scope = this;
     do {
+      if (upToScope === scope) {
+        return false;
+      }
       if (scope.hasOwnBinding(name)) {
         return true;
       }
