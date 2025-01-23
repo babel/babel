@@ -54,9 +54,13 @@
               "start":48,"end":62,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":16}},
               "static": false,
               "key": {
-                "type": "PrivateIdentifier",
+                "type": "PrivateName",
                 "start":57,"end":61,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}},
-                "name": "qux"
+                "id": {
+                  "type": "Identifier",
+                  "start":58,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"qux"},
+                  "name": "qux"
+                }
               },
               "computed": false,
               "value": null
