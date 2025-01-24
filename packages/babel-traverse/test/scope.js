@@ -1240,4 +1240,21 @@ describe("scope", () => {
       expect(bindingA.constantViolations).toHaveLength(1);
     });
   });
+
+  describe("hasBinding", () => {
+    it("upToScope", () => {
+      const program = getPath(`
+        function x() {
+          function y() {
+            var a = 1;
+          }
+        }
+      `);
+
+      const scope = program.get("body.0.body.body.0").scope;
+      expect(scope.hasBinding("a", { upToScope: program.scope })).toBe(true);
+      expect(scope.hasBinding("a", { upToScope: scope })).toBe(false);
+      expect(scope.hasBinding("a", { upToScope: scope.parent })).toBe(true);
+    });
+  });
 });
