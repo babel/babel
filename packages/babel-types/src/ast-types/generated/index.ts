@@ -2410,7 +2410,8 @@ export type Declaration =
   | TSInterfaceDeclaration
   | TSTypeAliasDeclaration
   | TSEnumDeclaration
-  | TSModuleDeclaration;
+  | TSModuleDeclaration
+  | TSImportEqualsDeclaration;
 export type PatternLike =
   | Identifier
   | RestElement
@@ -7056,6 +7057,7 @@ export interface ParentMaps {
   TSImportEqualsDeclaration:
     | BlockStatement
     | DoWhileStatement
+    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement

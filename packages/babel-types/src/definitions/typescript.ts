@@ -628,10 +628,10 @@ defineType("TSImportType", {
 });
 
 defineType("TSImportEqualsDeclaration", {
-  aliases: ["Statement"],
+  aliases: ["Statement", "Declaration"],
   visitor: ["id", "moduleReference"],
   fields: {
-    isExport: validate(bool),
+    ...(process.env.BABEL_8_BREAKING ? {} : { isExport: validate(bool) }),
     id: validateType("Identifier"),
     moduleReference: validateType("TSEntityName", "TSExternalModuleReference"),
     importKind: {

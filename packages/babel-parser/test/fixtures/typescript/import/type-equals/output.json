@@ -15,7 +15,6 @@
         "type": "TSImportEqualsDeclaration",
         "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
         "importKind": "type",
-        "isExport": false,
         "id": {
           "type": "Identifier",
           "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"A"},
@@ -40,7 +39,6 @@
         "type": "TSImportEqualsDeclaration",
         "start":21,"end":39,"loc":{"start":{"line":2,"column":0,"index":21},"end":{"line":2,"column":18,"index":39}},
         "importKind": "type",
-        "isExport": false,
         "id": {
           "type": "Identifier",
           "start":33,"end":34,"loc":{"start":{"line":2,"column":12,"index":33},"end":{"line":2,"column":13,"index":34},"identifierName":"B"},

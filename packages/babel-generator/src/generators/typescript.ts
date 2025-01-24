@@ -735,8 +735,12 @@ export function TSImportEqualsDeclaration(
   this: Printer,
   node: t.TSImportEqualsDeclaration,
 ) {
-  const { isExport, id, moduleReference } = node;
-  if (isExport) {
+  const { id, moduleReference } = node;
+  if (
+    !process.env.BABEL_8_BREAKING &&
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+    node.isExport
+  ) {
     this.word("export");
     this.space();
   }

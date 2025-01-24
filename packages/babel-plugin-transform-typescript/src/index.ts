@@ -371,11 +371,13 @@ export default declare((api, opts: Options) => {
             }
 
             if (!onlyRemoveTypeImports && stmt.isTSImportEqualsDeclaration()) {
-              const { id, isExport } = stmt.node;
+              const { id } = stmt.node;
               const binding = stmt.scope.getBinding(id.name);
               if (
                 binding &&
-                !isExport &&
+                (process.env.BABEL_8_BREAKING ||
+                  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+                  !stmt.node.isExport) &&
                 isImportTypeOnly({
                   binding,
                   programPath: path,
@@ -432,6 +434,13 @@ export default declare((api, opts: Options) => {
 
         if (path.node.exportKind === "type") {
           path.remove();
+          return;
+        }
+
+        if (
+          process.env.BABEL_8_BREAKING &&
+          t.isTSImportEqualsDeclaration(path.node.declaration)
+        ) {
           return;
         }
 
@@ -633,7 +642,7 @@ export default declare((api, opts: Options) => {
         path: NodePath<t.TSImportEqualsDeclaration>,
         pass,
       ) {
-        const { id, moduleReference, isExport } = path.node;
+        const { id, moduleReference } = path.node;
 
         let init: t.Expression;
         let varKind: "var" | "const";
@@ -659,9 +668,14 @@ export default declare((api, opts: Options) => {
           t.variableDeclarator(id, init),
         ]);
 
-        path.replaceWith(
-          isExport ? t.exportNamedDeclaration(newNode) : newNode,
-        );
+        if (process.env.BABEL_8_BREAKING) {
+          path.replaceWith(newNode);
+        } else {
+          path.replaceWith(
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+            path.node.isExport ? t.exportNamedDeclaration(newNode) : newNode,
+          );
+        }
         path.scope.registerDeclaration(path);
       },
 
