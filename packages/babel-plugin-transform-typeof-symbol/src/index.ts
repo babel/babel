@@ -39,7 +39,7 @@ export default declare(api => {
         }
 
         let isUnderHelper = path.findParent(path => {
-          if (path.isFunction()) {
+          if (path.isFunctionDeclaration()) {
             return (
               path.get("body.directives.0")?.node.value.value ===
               "@babel/helpers - typeof"
