@@ -307,14 +307,23 @@ jobs:
           # Downloaded as ./docs/types.md
           path: docs
       - name: Commit Babel website changes
+        id: prepare-website-changes
         run: |
+          if [[ -z "$(git status --porcelain=v1 2>/dev/null)" ]]
+          then
+            echo "No babel-types docs changes."
+            exit 0
+          else
+            echo "hasChanges=true" >> $GITHUB_OUTPUT
+          fi
+          git checkout -b update-types-docs
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
-          git checkout -b update-types-docs
           git commit -am "docs: update babel types"
           git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
       - name: Create Pull Request
         uses: babel/actions/create-pull-request@v2
+        if: steps.prepare-website-changes.outputs.hasChanges == 'true'
         with:
           token: ${{ secrets.BOT_TOKEN }}
           repository: babel/website
