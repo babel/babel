@@ -21,7 +21,7 @@ export default function _objectWithoutPropertiesLoose<T extends object>(
 
   for (var key in source) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
-      if (excluded.includes(key)) continue;
+      if (excluded.indexOf(key) !== -1) continue;
       target[key] = source[key];
     }
   }

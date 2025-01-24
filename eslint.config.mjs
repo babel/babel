@@ -351,6 +351,7 @@ export default [
       "prefer-spread": "off",
       "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
+      "@typescript-eslint/prefer-includes": "off",
       "@typescript-eslint/prefer-optional-chain": "off",
       "unicorn/prefer-includes": "off",
     },
