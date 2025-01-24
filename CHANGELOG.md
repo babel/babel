@@ -24,6 +24,21 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.7 (2025-01-24)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17086](https://github.com/babel/babel/pull/17086) Make "object without properties" helpers ES6-compatible ([@tquetano-netflix](https://github.com/tquetano-netflix))
+* `babel-plugin-transform-typeof-symbol`
+  * [#17085](https://github.com/babel/babel/pull/17085) fix: Correctly handle `typeof` in arrow functions ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#17079](https://github.com/babel/babel/pull/17079) Respect `ranges` option in estree method value ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#17052](https://github.com/babel/babel/pull/17052) Do not try to parse .ts configs as JSON if natively supported ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#17050](https://github.com/babel/babel/pull/17050) fix: correctly resolve references to non-constant enum members ([@branchseer](https://github.com/branchseer))
+* `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#17025](https://github.com/babel/babel/pull/17025) fix: Remove type-only `import x = y.z` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.26.6 (2025-01-13)
 
 #### :bug: Bug Fix
