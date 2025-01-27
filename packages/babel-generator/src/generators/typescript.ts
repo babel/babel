@@ -498,6 +498,13 @@ function tokenIfPlusMinus(self: Printer, tok: true | "+" | "-") {
   }
 }
 
+export function TSTemplateLiteralType(
+  this: Printer,
+  node: t.TSTemplateLiteralType,
+) {
+  this._printTemplate(node, node.types);
+}
+
 export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal);
 }

@@ -87,7 +87,10 @@ const convertNodesVisitor = {
     }
 
     // template string range fixes
-    if (node.type === "TemplateLiteral") {
+    if (
+      node.type === "TemplateLiteral" ||
+      node.type === "TSTemplateLiteralType"
+    ) {
       for (let i = 0; i < node.quasis.length; i++) {
         const q = node.quasis[i];
         q.range[0] -= 1;

@@ -1599,6 +1599,7 @@ export type TsType =
   | TsIndexedAccessType
   | TsMappedType
   | TsLiteralType // TODO: This probably shouldn't be included here.
+  | TsTemplateLiteralType
   | TsImportType
   | TsTypePredicate;
 
@@ -1753,6 +1754,12 @@ export interface TsMappedType extends TsTypeBase {
   optional?: true | "+" | "-";
   typeAnnotation: TsType | undefined | null;
   nameType: TsType | undefined | null;
+}
+
+export interface TsTemplateLiteralType extends TsTypeBase {
+  type: "TSTemplateLiteralType";
+  quasis: TemplateElement[];
+  types: TsType[];
 }
 
 export interface TsLiteralType extends TsTypeBase {
@@ -2153,6 +2160,7 @@ export type Node =
   | TsQualifiedName
   | TsRestType
   | TsSatisfiesExpression
+  | TsTemplateLiteralType
   | TsThisType
   | TsTupleType
   | TsTypeAliasDeclaration
