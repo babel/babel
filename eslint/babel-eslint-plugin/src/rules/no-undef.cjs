@@ -14,10 +14,12 @@ const rule = (
  * @returns {Boolean} Returns true if the node is under a decorator.
  */
 function isAccessorFieldName(node) {
+  const parent = node.parent;
   return (
-    node.parent.type === "ClassAccessorProperty" &&
-    node.parent.key === node &&
-    !node.parent.computed
+    (parent.type === "AccessorProperty" ||
+      parent.type === "ClassAccessorProperty") &&
+    parent.key === node &&
+    !parent.computed
   );
 }
 
