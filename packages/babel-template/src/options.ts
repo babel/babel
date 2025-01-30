@@ -38,7 +38,7 @@ export type PublicOpts = {
    * otherwise as 'false'.
    */
   syntacticPlaceholders?: boolean | null;
-};
+} & ParserOpts;
 
 export type TemplateOpts = {
   parser: ParserOpts;
