@@ -131,6 +131,7 @@ defineType("TSPropertySignature", {
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     kind: {
+      optional: true,
       validate: assertOneOf("get", "set"),
     },
   },
