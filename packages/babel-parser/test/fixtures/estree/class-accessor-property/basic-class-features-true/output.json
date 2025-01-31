@@ -21,7 +21,7 @@
           "start":8,"end":64,"loc":{"start":{"line":1,"column":8},"end":{"line":5,"column":1}},
           "body": [
             {
-              "type": "ClassAccessorProperty",
+              "type": "AccessorProperty",
               "start":12,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
               "static": false,
               "key": {
@@ -33,7 +33,7 @@
               "value": null
             },
             {
-              "type": "ClassAccessorProperty",
+              "type": "AccessorProperty",
               "start":28,"end":45,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":19}},
               "static": false,
               "key": {
@@ -50,17 +50,13 @@
               }
             },
             {
-              "type": "ClassAccessorProperty",
+              "type": "AccessorProperty",
               "start":48,"end":62,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":16}},
               "static": false,
               "key": {
-                "type": "PrivateName",
+                "type": "PrivateIdentifier",
                 "start":57,"end":61,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}},
-                "id": {
-                  "type": "Identifier",
-                  "start":58,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"qux"},
-                  "name": "qux"
-                }
+                "name": "qux"
               },
               "computed": false,
               "value": null
