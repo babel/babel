@@ -5290,9 +5290,9 @@ __metadata:
   linkType: hard
 
 "@types/gensync@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@types/gensync@npm:1.0.0"
-  checksum: 10/f17581b8067057994c59d3351d0253ffbb90afb27a8636641d2c1d764c196ef7a735a674bb34ecc45ef1b3bfc0c8d37f92e0c6808cc8dc178d4746631dd31fba
+  version: 1.0.4
+  resolution: "@types/gensync@npm:1.0.4"
+  checksum: 10/99c3aa0d3f1198973c7e51bea5947b815f3338ce89ce09a39ac8abb41cd844c5b95189da254ea45e50a395fe25fd215664d8ca76c5438814963597afb01f686e
   languageName: node
   linkType: hard
 
