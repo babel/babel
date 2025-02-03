@@ -17,7 +17,7 @@
         },
         "typeAnnotation": {
           "type": "TSIndexedAccessType",
-          "start":10,"end":33,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":33,"index":33}},
+          "start":9,"end":33,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":33,"index":33}},
           "objectType": {
             "type": "TSTypeLiteral",
             "start":10,"end":25,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":25,"index":25}},
