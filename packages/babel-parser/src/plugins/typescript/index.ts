@@ -1127,9 +1127,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseTupleElementType(): N.TsNamedTupleMember | N.TsType {
       // parses `...TsType[]`
 
-      const { startLoc } = this.state;
+      const restStartLoc = this.state.startLoc;
 
       const rest = this.eat(tt.ellipsis);
+      const { startLoc } = this.state;
 
       let labeled: boolean;
       let label: N.Identifier;
@@ -1146,7 +1147,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         type = this.tsParseType();
       } else if (chAfterWord === charCodes.questionMark) {
         optional = true;
-        const startLoc = this.state.startLoc;
         const wordName = this.state.value;
         const typeOrLabel = this.tsParseNonArrayType();
 
@@ -1176,7 +1176,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (labeled) {
         let labeledNode: Undone<N.TsNamedTupleMember>;
         if (label) {
-          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(label);
+          labeledNode = this.startNodeAt<N.TsNamedTupleMember>(startLoc);
           labeledNode.optional = optional;
           labeledNode.label = label;
           labeledNode.elementType = type;
@@ -1189,7 +1189,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             );
           }
         } else {
-          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
+          labeledNode = this.startNodeAt<N.TsNamedTupleMember>(startLoc);
           labeledNode.optional = optional;
           this.raise(TSErrors.InvalidTupleMemberLabel, type);
           // @ts-expect-error This produces an invalid AST, but at least we don't drop
@@ -1199,13 +1199,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         type = this.finishNode(labeledNode, "TSNamedTupleMember");
       } else if (optional) {
-        const optionalTypeNode = this.startNodeAtNode<N.TsOptionalType>(type);
+        const optionalTypeNode = this.startNodeAt<N.TsOptionalType>(startLoc);
         optionalTypeNode.typeAnnotation = type;
         type = this.finishNode(optionalTypeNode, "TSOptionalType");
       }
 
       if (rest) {
-        const restNode = this.startNodeAt<N.TsRestType>(startLoc);
+        const restNode = this.startNodeAt<N.TsRestType>(restStartLoc);
         restNode.typeAnnotation = type;
         type = this.finishNode(restNode, "TSRestType");
       }
@@ -1383,15 +1383,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParseArrayTypeOrHigher(): N.TsType {
+      const { startLoc } = this.state;
       let type = this.tsParseNonArrayType();
       while (!this.hasPrecedingLineBreak() && this.eat(tt.bracketL)) {
         if (this.match(tt.bracketR)) {
-          const node = this.startNodeAtNode<N.TsArrayType>(type);
+          const node = this.startNodeAt<N.TsArrayType>(startLoc);
           node.elementType = type;
           this.expect(tt.bracketR);
           type = this.finishNode(node, "TSArrayType");
         } else {
-          const node = this.startNodeAtNode<N.TsIndexedAccessType>(type);
+          const node = this.startNodeAt<N.TsIndexedAccessType>(startLoc);
           node.objectType = type;
           node.indexType = this.tsParseType();
           this.expect(tt.bracketR);
