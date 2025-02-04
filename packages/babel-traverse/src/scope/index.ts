@@ -1209,7 +1209,17 @@ class Scope {
       | { noGlobals?: boolean; noUids?: boolean; upToScope?: Scope },
   ) {
     if (!name) return false;
-    const upToScope = (opts as { upToScope?: Scope })?.upToScope;
+    // TODO: Only accept the object form.
+    let noGlobals;
+    let noUids;
+    let upToScope;
+    if (typeof opts === "object") {
+      noGlobals = opts.noGlobals;
+      noUids = opts.noUids;
+      upToScope = opts.upToScope;
+    } else if (typeof opts === "boolean") {
+      noGlobals = opts;
+    }
     let scope: Scope = this;
     do {
       if (upToScope === scope) {
@@ -1219,16 +1229,6 @@ class Scope {
         return true;
       }
     } while ((scope = scope.parent));
-
-    // TODO: Only accept the object form.
-    let noGlobals;
-    let noUids;
-    if (typeof opts === "object") {
-      noGlobals = opts.noGlobals;
-      noUids = opts.noUids;
-    } else if (typeof opts === "boolean") {
-      noGlobals = opts;
-    }
 
     if (!noUids && this.hasUid(name)) return true;
     if (!noGlobals && Scope.globals.includes(name)) return true;
