@@ -611,20 +611,10 @@ export default abstract class StatementParser extends ExpressionParser {
             node as Undone<
               | N.ExportAllDeclaration
               | N.ExportDefaultDeclaration
-              | N.ExportDefaultDeclaration
+              | N.ExportNamedDeclaration
             >,
             decorators,
           );
-
-          if (
-            (result.type === "ExportNamedDeclaration" &&
-              (!result.exportKind || result.exportKind === "value")) ||
-            (result.type === "ExportAllDeclaration" &&
-              (!result.exportKind || result.exportKind === "value")) ||
-            result.type === "ExportDefaultDeclaration"
-          ) {
-            this.sawUnambiguousESM = true;
-          }
         }
 
         this.assertModuleNodeAllowed(result);
@@ -2374,6 +2364,10 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.parseExportFrom(node, true);
 
+      if (node.exportKind !== "type") {
+        this.sawUnambiguousESM = true;
+      }
+
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
@@ -2411,6 +2405,9 @@ export default abstract class StatementParser extends ExpressionParser {
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
+      if (node2.exportKind !== "type") {
+        this.sawUnambiguousESM = true;
+      }
       return this.finishNode(node2, "ExportNamedDeclaration");
     }
 
@@ -2427,7 +2424,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
 
       this.checkExport(node2, true, true);
-
+      this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportDefaultDeclaration");
     }
 
