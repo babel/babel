@@ -2482,3 +2482,16 @@ defineType("StaticBlock", {
   },
   aliases: ["Scopable", "BlockParent", "FunctionParent"],
 });
+
+// --- ES2025 ---
+defineType("ImportAttribute", {
+  visitor: ["key", "value"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier", "StringLiteral"),
+    },
+    value: {
+      validate: assertNodeType("StringLiteral"),
+    },
+  },
+});
