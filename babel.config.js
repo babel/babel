@@ -692,7 +692,7 @@ function pluginToggleBooleanFlag(
         }
       },
       ImportDeclaration(path) {
-        if (!path.node.attributes?.length) return;
+        if (!path.node.attributes) return;
 
         /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
         const attribute = path
