@@ -34,18 +34,6 @@ defineType("BindExpression", {
         },
 });
 
-defineType("ImportAttribute", {
-  visitor: ["key", "value"],
-  fields: {
-    key: {
-      validate: assertNodeType("Identifier", "StringLiteral"),
-    },
-    value: {
-      validate: assertNodeType("StringLiteral"),
-    },
-  },
-});
-
 defineType("Decorator", {
   visitor: ["expression"],
   fields: {
