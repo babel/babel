@@ -1098,6 +1098,12 @@ export interface StaticBlock extends BaseNode {
   body: Array<Statement>;
 }
 
+export interface ImportAttribute extends BaseNode {
+  type: "ImportAttribute";
+  key: Identifier | StringLiteral;
+  value: StringLiteral;
+}
+
 export interface AnyTypeAnnotation extends BaseNode {
   type: "AnyTypeAnnotation";
 }
@@ -1622,12 +1628,6 @@ export interface BindExpression extends BaseNode {
   type: "BindExpression";
   object: Expression;
   callee: Expression;
-}
-
-export interface ImportAttribute extends BaseNode {
-  type: "ImportAttribute";
-  key: Identifier | StringLiteral;
-  value: StringLiteral;
 }
 
 export interface Decorator extends BaseNode {
@@ -2196,7 +2196,8 @@ export type Standardized =
   | ClassPrivateProperty
   | ClassPrivateMethod
   | PrivateName
-  | StaticBlock;
+  | StaticBlock
+  | ImportAttribute;
 export type Expression =
   | ArrayExpression
   | AssignmentExpression
