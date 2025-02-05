@@ -9,8 +9,7 @@ import {
 } from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
-// TODO(Babel 8): Remove this
-import babel7 from "./polyfills/babel-7-plugins.cjs";
+import babel7 from "./polyfills/babel-7-plugins.cjs" with { BABEL_8_BREAKING: "false" };
 
 import type {
   BuiltInsOption,

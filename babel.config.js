@@ -244,16 +244,20 @@ module.exports = function (api) {
               name: "process.env.IS_PUBLISH",
               value: bool(process.env.IS_PUBLISH),
             },
+            "flag-IS_PUBLISH",
           ],
 
-          process.env.STRIP_BABEL_8_FLAG && [
-            pluginToggleBooleanFlag,
-            {
-              name: "process.env.BABEL_8_BREAKING",
-              value: bool(process.env.BABEL_8_BREAKING),
-            },
-            "flag-BABEL_8_BREAKING",
-          ],
+          process.env.STRIP_BABEL_8_FLAG
+            ? [
+                pluginToggleBooleanFlag,
+                {
+                  name: "process.env.BABEL_8_BREAKING",
+                  attributeName: "BABEL_8_BREAKING",
+                  value: bool(process.env.BABEL_8_BREAKING),
+                },
+                "flag-BABEL_8_BREAKING",
+              ]
+            : [pluginDropBooleanImportAttribute, { name: "BABEL_8_BREAKING" }],
 
           pluginPackageJsonMacro,
 
@@ -575,7 +579,10 @@ function pluginPolyfillsOldNode({ template, types: t }) {
  * @param {import("@babel/core")} pluginAPI
  * @returns {import("@babel/core").PluginObject}
  */
-function pluginToggleBooleanFlag({ types: t }, { name, value }) {
+function pluginToggleBooleanFlag(
+  { types: t },
+  { name, attributeName = name, value }
+) {
   if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
 
   function evaluate(test) {
@@ -682,6 +689,64 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       ReferencedIdentifier(path) {
         if (path.node.name === name) {
           throw path.buildCodeFrameError("This check could not be stripped.");
+        }
+      },
+      ImportDeclaration(path) {
+        if (!path.node.attributes?.length) return;
+
+        /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
+        const attribute = path
+          .get("attributes")
+          .find(attr => attr.node.key.name === attributeName);
+        if (attribute == null) {
+          return;
+        }
+
+        const attributeValue = attribute.node.value.value;
+        if (attributeValue !== "true" && attributeValue !== "false") {
+          throw new path.buildCodeFrameError(
+            `${attributeName} attribute must be "true" or "false"`
+          );
+        }
+
+        if (attributeValue !== String(value)) {
+          path.remove();
+        } else {
+          attribute.remove();
+          if (path.node.attributes.length === 0) {
+            path.node.attributes = null;
+          }
+        }
+      },
+    },
+  };
+}
+
+/**
+ * @param {import("@babel/core")} pluginAPI
+ * @returns {import("@babel/core").PluginObject}
+ */
+function pluginDropBooleanImportAttribute(_babel, { name }) {
+  return {
+    visitor: {
+      ImportDeclaration(path) {
+        if (!path.node.attributes?.length) return;
+
+        const attribute = path
+          .get("attributes")
+          .find(attr => attr.node.key.name === name);
+        if (attribute == null) return;
+
+        const attributeValue = attribute.node.value.value;
+        if (attributeValue !== "true" && attributeValue !== "false") {
+          throw new path.buildCodeFrameError(
+            `${name} attribute must be "true" or "false"`
+          );
+        }
+
+        attribute.remove();
+        if (path.node.attributes.length === 0) {
+          path.node.attributes = null;
         }
       },
     },
@@ -916,6 +981,12 @@ function pluginImportMetaUrl({ types: t, template }) {
 
             // Let's just remove this declaration to unshadow the "global" cjs require.
             path.remove();
+            path.scope.crawl();
+
+            const createRequireBinding = path.scope.getBinding("createRequire");
+            if (!createRequireBinding.referenced) {
+              createRequireBinding.path.remove();
+            }
           },
 
           // import.meta.url

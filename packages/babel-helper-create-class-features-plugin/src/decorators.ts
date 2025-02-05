@@ -9,6 +9,15 @@ import {
 } from "./fields.ts";
 import { memoiseComputedKey } from "./misc.ts";
 
+export function hasOwnDecorators(node: t.Class | t.ClassBody["body"][number]) {
+  // @ts-expect-error: 'decorators' not in TSIndexSignature
+  return !!node.decorators?.length;
+}
+
+export function hasDecorators(node: t.Class) {
+  return hasOwnDecorators(node) || node.body.body.some(hasOwnDecorators);
+}
+
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
