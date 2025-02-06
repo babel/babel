@@ -13,7 +13,7 @@ import {
 import type { PropPath } from "./fields.ts";
 import createDecoratorTransform, { hasDecorators } from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
-import { buildDecoratedClass } from "./decorators-2018-09.ts" with { BABEL_8_BREAKING: "false" };
+import { buildDecoratedClass } from "./decorators-2018-09.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import { injectInitialization, extractComputedKeys } from "./misc.ts";
 import {
   enableFeature,

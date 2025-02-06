@@ -9,7 +9,7 @@ import {
 } from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
-import babel7 from "./polyfills/babel-7-plugins.cjs" with { BABEL_8_BREAKING: "false" };
+import babel7 from "./polyfills/babel-7-plugins.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
 
 import type {
   BuiltInsOption,

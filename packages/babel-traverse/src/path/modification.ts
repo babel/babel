@@ -402,7 +402,7 @@ export function pushContainer<
   return path.replaceWithMultiple(verifiedNodes);
 }
 
-import PathHoister from "./lib/hoister.ts" with { BABEL_8_BREAKING: "false", USE_ESM: "false" };
+import PathHoister from "./lib/hoister.ts" with { if: "!process.env.BABEL_8_BREAKING && !USE_ESM" };
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   /**
    * Hoist the current node to the highest scope possible and return a UID

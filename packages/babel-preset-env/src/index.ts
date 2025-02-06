@@ -24,7 +24,7 @@ import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 // TODO(Babel 8): Just use the default import
 const pluginCoreJS3 = _pluginCoreJS3.default || _pluginCoreJS3;
 
-import babel7 from "./polyfills/babel-7-plugins.cjs" with { BABEL_8_BREAKING: "false" };
+import babel7 from "./polyfills/babel-7-plugins.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
 
 import getTargets, {
   prettifyTargets,

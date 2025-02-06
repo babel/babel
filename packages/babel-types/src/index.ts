@@ -109,7 +109,7 @@ export type * from "./ast-types/generated/index.ts";
 // this is used by @babel/traverse to warn about deprecated visitors
 export { default as __internal__deprecationWarning } from "./utils/deprecationWarning.ts";
 
-import toSequenceExpression from "./converters/toSequenceExpression.ts" with { BABEL_8_BREAKING: "false", USE_ESM: "false", IS_STANDALONE: "false" };
+import toSequenceExpression from "./converters/toSequenceExpression.ts" with { if: "!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE" };
 if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   // eslint-disable-next-line no-restricted-globals
   exports.toSequenceExpression = toSequenceExpression;

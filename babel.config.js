@@ -247,17 +247,16 @@ module.exports = function (api) {
             "flag-IS_PUBLISH",
           ],
 
-          process.env.STRIP_BABEL_8_FLAG
-            ? [
-                pluginToggleBooleanFlag,
-                {
-                  name: "process.env.BABEL_8_BREAKING",
-                  attributeName: "BABEL_8_BREAKING",
-                  value: bool(process.env.BABEL_8_BREAKING),
-                },
-                "flag-BABEL_8_BREAKING",
-              ]
-            : [pluginDropBooleanImportAttribute, { name: "BABEL_8_BREAKING" }],
+          [
+            pluginToggleBooleanFlag,
+            {
+              name: "process.env.BABEL_8_BREAKING",
+              value: process.env.STRIP_BABEL_8_FLAG
+                ? bool(process.env.BABEL_8_BREAKING)
+                : null,
+            },
+            "flag-BABEL_8_BREAKING",
+          ],
 
           pluginPackageJsonMacro,
 
@@ -576,32 +575,38 @@ function pluginPolyfillsOldNode({ template, types: t }) {
 }
 
 /**
+ * If `value` is null, it will leave the conditions in code. It will remove
+ * them in attributes by replacing them with <if true> || <if false>
+ *
  * @param {import("@babel/core")} pluginAPI
  * @returns {import("@babel/core").PluginObject}
  */
-function pluginToggleBooleanFlag(
-  { types: t },
-  { name, attributeName = name, value }
-) {
-  if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
+function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
+  if (typeof value !== "boolean" && value !== null) {
+    throw new Error(`.value must be a boolean, or null`);
+  }
 
-  function evaluate(test) {
+  function parseExpression(source) {
+    // eslint-disable-next-line regexp/no-useless-assertions
+    return template.expression(source, { placeholderPattern: /(?!.)./ })({});
+  }
+
+  /**
+   * @param {import("@babel/core").types.Expression} test
+   */
+  function evaluate(test, value) {
     const res = {
       replace: replacement => ({ replacement, value: null, unrelated: false }),
       value: value => ({ replacement: null, value, unrelated: false }),
-      unrelated: () => ({
-        replacement: test.node,
-        value: null,
-        unrelated: true,
-      }),
+      unrelated: () => ({ replacement: test, value: null, unrelated: true }),
     };
 
-    if (test.isIdentifier({ name }) || test.matchesPattern(name)) {
+    if (t.isIdentifier(test, { name }) || t.matchesPattern(test, name)) {
       return res.value(value);
     }
 
-    if (test.isUnaryExpression({ operator: "!" })) {
-      const arg = evaluate(test.get("argument"));
+    if (t.isUnaryExpression(test, { operator: "!" })) {
+      const arg = evaluate(test.argument, value);
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
@@ -609,9 +614,9 @@ function pluginToggleBooleanFlag(
           : res.value(!arg.value);
     }
 
-    if (test.isLogicalExpression({ operator: "||" })) {
-      const left = evaluate(test.get("left"));
-      const right = evaluate(test.get("right"));
+    if (t.isLogicalExpression(test, { operator: "||" })) {
+      const left = evaluate(test.left, value);
+      const right = evaluate(test.right, value);
 
       if (left.value === true || right.value === true) return res.value(true);
       if (left.value === false && right.value === false) {
@@ -625,9 +630,9 @@ function pluginToggleBooleanFlag(
       );
     }
 
-    if (test.isLogicalExpression({ operator: "&&" })) {
-      const left = evaluate(test.get("left"));
-      const right = evaluate(test.get("right"));
+    if (t.isLogicalExpression(test, { operator: "&&" })) {
+      const left = evaluate(test.left, value);
+      const right = evaluate(test.right, value);
 
       if (left.value === true && right.value === true) return res.value(true);
       if (left.value === false || right.value === false) {
@@ -647,6 +652,8 @@ function pluginToggleBooleanFlag(
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
+        if (value === null) return;
+
         let test = path.get("test");
 
         // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
@@ -659,7 +666,7 @@ function pluginToggleBooleanFlag(
           test = test.get("arguments")[0];
         }
 
-        const res = evaluate(test);
+        const res = evaluate(test.node, value);
 
         if (res.unrelated) return;
         if (res.replacement) {
@@ -673,7 +680,9 @@ function pluginToggleBooleanFlag(
         }
       },
       LogicalExpression(path) {
-        const res = evaluate(path);
+        if (value === null) return;
+
+        const res = evaluate(path.node, value);
         if (res.unrelated) return;
         if (res.replacement) {
           path.replaceWith(res.replacement);
@@ -682,11 +691,15 @@ function pluginToggleBooleanFlag(
         }
       },
       MemberExpression(path) {
+        if (value === null) return;
+
         if (path.matchesPattern(name)) {
           throw path.buildCodeFrameError("This check could not be stripped.");
         }
       },
       ReferencedIdentifier(path) {
+        if (value === null) return;
+
         if (path.node.name === name) {
           throw path.buildCodeFrameError("This check could not be stripped.");
         }
@@ -695,58 +708,71 @@ function pluginToggleBooleanFlag(
         if (!path.node.attributes) return;
 
         /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
-        const attribute = path
+        const ifAttribute = path
           .get("attributes")
-          .find(attr => attr.node.key.name === attributeName);
-        if (attribute == null) {
+          .find(attr => attr.node.key.name === "if");
+        if (ifAttribute == null) {
           return;
         }
 
-        const attributeValue = attribute.node.value.value;
-        if (attributeValue !== "true" && attributeValue !== "false") {
-          throw new path.buildCodeFrameError(
-            `${attributeName} attribute must be "true" or "false"`
-          );
+        const condition = parseExpression(ifAttribute.node.value.value);
+
+        let res;
+        res_block: if (value !== null) {
+          res = evaluate(condition, value);
+        } else {
+          const ifTrue = evaluate(condition, true);
+          if (ifTrue.unrelated || ifTrue.value === true) {
+            res = ifTrue;
+            break res_block;
+          }
+          const ifFalse = evaluate(condition, false);
+          if (ifFalse.unrelated) throw new Error("Cannot be unrelated");
+          if (ifFalse.value === true) {
+            res = ifFalse;
+            break res_block;
+          }
+
+          if (ifTrue.value === false) {
+            res = ifFalse;
+            break res_block;
+          }
+          if (ifTrue.value === false) {
+            res = ifTrue;
+            break res_block;
+          }
+
+          if (!ifTrue.replacement && !ifFalse.replacement) {
+            throw new Error("Expected two replacements");
+          }
+
+          res = {
+            replacement: t.binaryExpression(
+              "||",
+              ifTrue.replacement,
+              ifFalse.replacement
+            ),
+            value: null,
+            unrelated: false,
+          };
         }
 
-        if (attributeValue !== String(value)) {
-          path.remove();
-        } else {
-          attribute.remove();
+        if (res.unrelated) return;
+        if (res.replacement) {
+          ifAttribute
+            .get("value")
+            .replaceWith(
+              t.stringLiteral(
+                ifAttribute.toString.call({ node: res.replacement })
+              )
+            );
+        } else if (res.value === true) {
+          ifAttribute.remove();
           if (path.node.attributes.length === 0) {
             path.node.attributes = null;
           }
-        }
-      },
-    },
-  };
-}
-
-/**
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObject}
- */
-function pluginDropBooleanImportAttribute(_babel, { name }) {
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        if (!path.node.attributes?.length) return;
-
-        const attribute = path
-          .get("attributes")
-          .find(attr => attr.node.key.name === name);
-        if (attribute == null) return;
-
-        const attributeValue = attribute.node.value.value;
-        if (attributeValue !== "true" && attributeValue !== "false") {
-          throw new path.buildCodeFrameError(
-            `${name} attribute must be "true" or "false"`
-          );
-        }
-
-        attribute.remove();
-        if (path.node.attributes.length === 0) {
-          path.node.attributes = null;
+        } else if (res.value === false) {
+          path.remove();
         }
       },
     },

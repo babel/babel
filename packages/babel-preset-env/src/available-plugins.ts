@@ -1,7 +1,7 @@
 /* eslint sort-keys: "error" */
 
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions" with { BABEL_8_BREAKING: "false" };
-import syntaxImportAttributes from "@babel/plugin-syntax-import-assertions" with { BABEL_8_BREAKING: "false" };
+import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions" with { if: "!process.env.BABEL_8_BREAKING" };
+import syntaxImportAttributes from "@babel/plugin-syntax-import-assertions" with { if: "!process.env.BABEL_8_BREAKING" };
 
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
