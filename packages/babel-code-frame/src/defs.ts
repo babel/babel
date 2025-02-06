@@ -1,16 +1,6 @@
 import picocolors, { createColors } from "picocolors";
 import type { Colors, Formatter } from "picocolors/types";
 
-export function isColorSupported() {
-  return (
-    // See https://github.com/alexeyraspopov/picocolors/issues/62
-    typeof process === "object" &&
-      (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false")
-      ? false
-      : picocolors.isColorSupported
-  );
-}
-
 export type InternalTokenType =
   | "keyword"
   | "capitalized"

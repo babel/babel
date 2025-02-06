@@ -1,4 +1,5 @@
-import { getDefs, isColorSupported } from "./defs.ts";
+import picocolors from "picocolors";
+import { getDefs } from "./defs.ts";
 import { highlight } from "./highlight.ts";
 
 export { highlight };
@@ -126,7 +127,7 @@ export function codeFrameColumns(
   opts: Options = {},
 ): string {
   const shouldHighlight =
-    opts.forceColor || (isColorSupported() && opts.highlightCode);
+    opts.forceColor || (picocolors.isColorSupported && opts.highlightCode);
   const defs = getDefs(shouldHighlight);
 
   const lines = rawLines.split(NEWLINE);

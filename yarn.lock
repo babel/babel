@@ -287,7 +287,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     import-meta-resolve: "npm:^4.1.0"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
-    picocolors: "npm:^1.0.0"
+    picocolors: "npm:^1.1.1"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -13785,6 +13785,13 @@ __metadata:
   version: 1.0.1
   resolution: "picocolors@npm:1.0.1"
   checksum: 10/fa68166d1f56009fc02a34cdfd112b0dd3cf1ef57667ac57281f714065558c01828cdf4f18600ad6851cbe0093952ed0660b1e0156bddf2184b6aaf5817553a5
+  languageName: node
+  linkType: hard
+
+"picocolors@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "picocolors@npm:1.1.1"
+  checksum: 10/e1cf46bf84886c79055fdfa9dcb3e4711ad259949e3565154b004b260cd356c5d54b31a1437ce9782624bf766272fe6b0154f5f0c744fb7af5d454d2b60db045
   languageName: node
   linkType: hard
 
