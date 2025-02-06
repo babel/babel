@@ -1223,7 +1223,7 @@ class Scope {
     let scope: Scope = this;
     do {
       if (upToScope === scope) {
-        return false;
+        break;
       }
       if (scope.hasOwnBinding(name)) {
         return true;

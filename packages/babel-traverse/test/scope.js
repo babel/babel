@@ -1255,6 +1255,11 @@ describe("scope", () => {
       expect(scope.hasBinding("a", { upToScope: program.scope })).toBe(true);
       expect(scope.hasBinding("a", { upToScope: scope })).toBe(false);
       expect(scope.hasBinding("a", { upToScope: scope.parent })).toBe(true);
+
+      expect(scope.hasBinding("Symbol", { upToScope: scope })).toBe(true);
+      expect(
+        scope.hasBinding("Symbol", { upToScope: scope, noGlobals: true }),
+      ).toBe(false);
     });
   });
 });
