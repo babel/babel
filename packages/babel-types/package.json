@@ -15,14 +15,6 @@
     "directory": "packages/babel-types"
   },
   "main": "./lib/index.js",
-  "types": "./lib/index-legacy.d.ts",
-  "typesVersions": {
-    ">=4.1": {
-      "lib/index-legacy.d.ts": [
-        "lib/index.d.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^"
@@ -43,7 +35,15 @@
         }
       },
       {
-        "exports": null
+        "exports": null,
+        "types": "./lib/index-legacy.d.ts",
+        "typesVersions": {
+          ">=4.1": {
+            "lib/index-legacy.d.ts": [
+              "lib/index.d.ts"
+            ]
+          }
+        }
       }
     ],
     "USE_ESM": [
@@ -55,8 +55,7 @@
   },
   "exports": {
     ".": {
-      "types@>=4.1": "./lib/index.d.ts",
-      "types": "./lib/index-legacy.d.ts",
+      "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
