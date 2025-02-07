@@ -3,8 +3,6 @@ import type { PluginConfig } from "./typings.ts";
 
 export type Plugin = PluginConfig;
 
-export type PluginList = PluginConfig[];
-
 export type MixinPlugin = (
   superClass: new (...args: any) => Parser,
 ) => new (...args: any) => Parser;
