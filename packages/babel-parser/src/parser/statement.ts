@@ -599,13 +599,6 @@ export default abstract class StatementParser extends ExpressionParser {
         let result;
         if (startType === tt._import) {
           result = this.parseImport(node as Undone<N.ImportDeclaration>);
-
-          if (
-            result.type === "ImportDeclaration" &&
-            (!result.importKind || result.importKind === "value")
-          ) {
-            this.sawUnambiguousESM = true;
-          }
         } else {
           result = this.parseExport(
             node as Undone<
@@ -2364,9 +2357,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.parseExportFrom(node, true);
 
-      if (node.exportKind !== "type") {
-        this.sawUnambiguousESM = true;
-      }
+      this.sawUnambiguousESM = true;
 
       return this.finishNode(node, "ExportAllDeclaration");
     }
@@ -2405,9 +2396,7 @@ export default abstract class StatementParser extends ExpressionParser {
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
-      if (node2.exportKind !== "type") {
-        this.sawUnambiguousESM = true;
-      }
+      this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportNamedDeclaration");
     }
 
@@ -3147,6 +3136,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.checkJSONModuleImport(node);
 
     this.semicolon();
+    this.sawUnambiguousESM = true;
     return this.finishNode(node, "ImportDeclaration");
   }
 
