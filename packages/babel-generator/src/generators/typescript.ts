@@ -820,24 +820,26 @@ export function tsPrintClassMemberModifiers(
   node:
     | t.ClassProperty
     | t.ClassAccessorProperty
+    | t.ClassPrivateProperty
     | t.ClassMethod
     | t.ClassPrivateMethod
     | t.TSDeclareMethod,
 ) {
-  const isField =
+  const isPrivateField = node.type === "ClassPrivateProperty";
+  const isPublicField =
     node.type === "ClassAccessorProperty" || node.type === "ClassProperty";
   printModifiersList(this, node, [
-    isField && node.declare && "declare",
-    node.accessibility,
+    isPublicField && node.declare && "declare",
+    !isPrivateField && node.accessibility,
   ]);
   if (node.static) {
     this.word("static");
     this.space();
   }
   printModifiersList(this, node, [
-    node.override && "override",
-    node.abstract && "abstract",
-    isField && node.readonly && "readonly",
+    !isPrivateField && node.override && "override",
+    !isPrivateField && node.abstract && "abstract",
+    (isPublicField || isPrivateField) && node.readonly && "readonly",
   ]);
 }
 

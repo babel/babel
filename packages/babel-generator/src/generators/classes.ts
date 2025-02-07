@@ -236,10 +236,7 @@ export function ClassPrivateProperty(
   node: t.ClassPrivateProperty,
 ) {
   this.printJoin(node.decorators);
-  if (node.static) {
-    this.word("static");
-    this.space();
-  }
+  this.tsPrintClassMemberModifiers(node);
   this.print(node.key);
   // TS
   if (node.optional) {
