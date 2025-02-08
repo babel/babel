@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-json-modules",
-  "version": "7.26.0",
+  "version": "7.26.8",
   "description": "Transform json modules imports (`import '...' with { type: 'json' }`) to work in browsers and Node.js.",
   "repository": {
     "type": "git",
