@@ -101,8 +101,12 @@ export default abstract class Tokenizer extends CommentsParser {
     this.comments = [];
     this.isLookahead = false;
 
-    if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
-      locDataCache = new Uint32Array((this.length + 1) * 2);
+    if (process.env.IS_PUBLISH) {
+      if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
+        locDataCache = new Uint32Array((this.length + 1) * 2);
+      }
+    } else {
+      locDataCache = new Uint32Array((this.length + 1) * 2).fill(4294967295);
     }
 
     this.locData = locDataCache;
@@ -116,6 +120,17 @@ export default abstract class Tokenizer extends CommentsParser {
 
   getLoc(locIndex: number): Position {
     const dataIndex = this.offsetToSourcePos(locIndex);
+    if (!process.env.IS_PUBLISH) {
+      if (
+        this.locData[dataIndex * 2] === 4294967295 ||
+        this.locData[dataIndex * 2 + 1] === 4294967295
+      ) {
+        throw new Error(
+          "Attempted to get location data for an index that has not been set",
+        );
+      }
+    }
+
     const loc = new Position(
       this.locData[dataIndex * 2],
       this.locData[dataIndex * 2 + 1],
