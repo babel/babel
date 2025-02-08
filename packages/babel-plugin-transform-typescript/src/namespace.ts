@@ -224,6 +224,15 @@ function handleNested(
     }
 
     if ("declare" in subNode.declaration && subNode.declaration.declare) {
+      if (subNode.declaration.type === "VariableDeclaration") {
+        throw path.hub.buildError(
+          subNode,
+          "Namespaces exporting declared variables are not supported by Babel." +
+            " Change to const or see:" +
+            " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
+          Error,
+        );
+      }
       continue;
     }
 
