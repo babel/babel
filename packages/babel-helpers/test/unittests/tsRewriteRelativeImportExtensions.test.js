@@ -24,7 +24,7 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["./a.tSx", "./a.js"],
 
     // rewrite relative import containing .d
-    ["./.d.a.ts", "./.d.a.ts"], // This is a bug!
+    ["./.d.a.ts", "./.d.a.js"],
     ["./.d.a.cts", "./.d.a.cjs"],
     ["./.d.a.mts", "./.d.a.mjs"],
     ["./.d.a.tsx", "./.d.a.js"],
@@ -35,6 +35,13 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["./a.d.mts", "./a.d.mts"],
     // transform d.tsx
     ["./a.d.tsx", "./a.d.js"],
+
+    // skip bare .d.ts, .d.cts, and .d.mts
+    ["./.d.ts", "./.d.ts"],
+    ["./.d.cts", "./.d.cts"],
+    ["./.d.mts", "./.d.mts"],
+    // transform bare .d.tsx
+    ["./.d.tsx", "./.d.js"],
 
     // skip absolute
     ["/a.ts", "/a.ts"],
@@ -47,6 +54,12 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["a.cts", "a.cts"],
     ["a.mts", "a.mts"],
     ["a.tsx", "a.tsx"],
+
+    // skip dot-leading library
+    [".a.ts", ".a.ts"],
+    [".a.cts", ".a.cts"],
+    [".a.mts", ".a.mts"],
+    [".a.tsx", ".a.tsx"],
 
     // skip non-terminal
     ["./a.ts.foo", "./a.ts.foo"],
