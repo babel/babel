@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t, type NodePath } from "@babel/core";
 
-import transformWithoutHelper from "./no-helper-implementation.ts";
+import transformWithoutHelper from "./no-helper-implementation.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 export interface Options {

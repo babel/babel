@@ -1,6 +1,6 @@
 import type { File, types as t } from "@babel/core";
 import type { NodePath } from "@babel/core";
-import { hasOwnDecorators } from "./decorators-2018-09.ts";
+import { hasOwnDecorators } from "./decorators.ts";
 
 export const FEATURES = Object.freeze({
   //classes: 1 << 0,

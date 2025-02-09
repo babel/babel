@@ -6,7 +6,7 @@ import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
 
 // TODO(Babel 8): Remove this
-import babel7 from "./babel-7/index.cjs";
+import babel7 from "./babel-7/index.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
 
 export interface Options {
   absoluteRuntime?: boolean;

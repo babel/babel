@@ -92,8 +92,8 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
   ".cjs",
 ] as const);
 
-import Module from "module";
-import * as thisFile from "./index.ts";
+import Module from "module" with { if: "USE_ESM && !IS_STANDALONE" };
+import * as thisFile from "./index.ts" with { if: "USE_ESM && !IS_STANDALONE" };
 if (USE_ESM && !IS_STANDALONE) {
   // Pass this module to the CJS proxy, so that it can be synchronously accessed.
   const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");

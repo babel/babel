@@ -1,7 +1,6 @@
 // This file contains methods that modify the path/node in some ways.
 
 import { getCachedPaths } from "../cache.ts";
-import PathHoister from "./lib/hoister.ts";
 import NodePath from "./index.ts";
 import { _getQueueContexts, pushContext, setScope } from "./context.ts";
 import { _assertUnremoved } from "./removal.ts";
@@ -403,6 +402,7 @@ export function pushContainer<
   return path.replaceWithMultiple(verifiedNodes);
 }
 
+import PathHoister from "./lib/hoister.ts" with { if: "!process.env.BABEL_8_BREAKING && !USE_ESM" };
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   /**
    * Hoist the current node to the highest scope possible and return a UID

@@ -1,7 +1,5 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
-import createDecoratorTransform from "./decorators.ts";
-import type { DecoratorVersionKind } from "./decorators.ts";
 
 import semver from "semver";
 
@@ -13,7 +11,9 @@ import {
   buildCheckInRHS,
 } from "./fields.ts";
 import type { PropPath } from "./fields.ts";
-import { buildDecoratedClass, hasDecorators } from "./decorators-2018-09.ts";
+import createDecoratorTransform, { hasDecorators } from "./decorators.ts";
+import type { DecoratorVersionKind } from "./decorators.ts";
+import { buildDecoratedClass } from "./decorators-2018-09.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import { injectInitialization, extractComputedKeys } from "./misc.ts";
 import {
   enableFeature,

@@ -1,19 +1,15 @@
 // TODO(Babel 8): Remove this file
+if (process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH) {
+  throw new Error(
+    "Internal Babel error: This file should only be loaded in Babel 7",
+  );
+}
 
 import { types as t, template } from "@babel/core";
 import type { File, NodePath } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 
 type Decoratable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
-
-export function hasOwnDecorators(node: t.Class | t.ClassBody["body"][number]) {
-  // @ts-expect-error: 'decorators' not in TSIndexSignature
-  return !!node.decorators?.length;
-}
-
-export function hasDecorators(node: t.Class) {
-  return hasOwnDecorators(node) || node.body.body.some(hasOwnDecorators);
-}
 
 function prop(key: string, value?: t.Expression) {
   if (!value) return null;

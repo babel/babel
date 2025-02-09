@@ -10,7 +10,7 @@ import semver from "semver";
 import type { NormalizedFile } from "../normalize-file.ts";
 
 // @ts-expect-error This file is `any`
-import * as babel7 from "./babel-7-helpers.cjs";
+import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
 
 const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
   enter(path, state) {

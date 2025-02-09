@@ -244,13 +244,16 @@ module.exports = function (api) {
               name: "process.env.IS_PUBLISH",
               value: bool(process.env.IS_PUBLISH),
             },
+            "flag-IS_PUBLISH",
           ],
 
-          process.env.STRIP_BABEL_8_FLAG && [
+          [
             pluginToggleBooleanFlag,
             {
               name: "process.env.BABEL_8_BREAKING",
-              value: bool(process.env.BABEL_8_BREAKING),
+              value: process.env.STRIP_BABEL_8_FLAG
+                ? bool(process.env.BABEL_8_BREAKING)
+                : null,
             },
             "flag-BABEL_8_BREAKING",
           ],
@@ -572,29 +575,38 @@ function pluginPolyfillsOldNode({ template, types: t }) {
 }
 
 /**
+ * If `value` is null, it will leave the conditions in code. It will remove
+ * them in attributes by replacing them with <if true> || <if false>
+ *
  * @param {import("@babel/core")} pluginAPI
  * @returns {import("@babel/core").PluginObject}
  */
-function pluginToggleBooleanFlag({ types: t }, { name, value }) {
-  if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
+function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
+  if (typeof value !== "boolean" && value !== null) {
+    throw new Error(`.value must be a boolean, or null`);
+  }
 
-  function evaluate(test) {
+  function parseExpression(source) {
+    // eslint-disable-next-line regexp/no-useless-assertions
+    return template.expression(source, { placeholderPattern: /(?!.)./ })({});
+  }
+
+  /**
+   * @param {import("@babel/core").types.Expression} test
+   */
+  function evaluate(test, value) {
     const res = {
       replace: replacement => ({ replacement, value: null, unrelated: false }),
       value: value => ({ replacement: null, value, unrelated: false }),
-      unrelated: () => ({
-        replacement: test.node,
-        value: null,
-        unrelated: true,
-      }),
+      unrelated: () => ({ replacement: test, value: null, unrelated: true }),
     };
 
-    if (test.isIdentifier({ name }) || test.matchesPattern(name)) {
+    if (t.isIdentifier(test, { name }) || t.matchesPattern(test, name)) {
       return res.value(value);
     }
 
-    if (test.isUnaryExpression({ operator: "!" })) {
-      const arg = evaluate(test.get("argument"));
+    if (t.isUnaryExpression(test, { operator: "!" })) {
+      const arg = evaluate(test.argument, value);
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
@@ -602,9 +614,9 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
           : res.value(!arg.value);
     }
 
-    if (test.isLogicalExpression({ operator: "||" })) {
-      const left = evaluate(test.get("left"));
-      const right = evaluate(test.get("right"));
+    if (t.isLogicalExpression(test, { operator: "||" })) {
+      const left = evaluate(test.left, value);
+      const right = evaluate(test.right, value);
 
       if (left.value === true || right.value === true) return res.value(true);
       if (left.value === false && right.value === false) {
@@ -618,9 +630,9 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       );
     }
 
-    if (test.isLogicalExpression({ operator: "&&" })) {
-      const left = evaluate(test.get("left"));
-      const right = evaluate(test.get("right"));
+    if (t.isLogicalExpression(test, { operator: "&&" })) {
+      const left = evaluate(test.left, value);
+      const right = evaluate(test.right, value);
 
       if (left.value === true && right.value === true) return res.value(true);
       if (left.value === false || right.value === false) {
@@ -640,6 +652,8 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
+        if (value === null) return;
+
         let test = path.get("test");
 
         // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
@@ -652,7 +666,7 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
           test = test.get("arguments")[0];
         }
 
-        const res = evaluate(test);
+        const res = evaluate(test.node, value);
 
         if (res.unrelated) return;
         if (res.replacement) {
@@ -666,7 +680,9 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
         }
       },
       LogicalExpression(path) {
-        const res = evaluate(path);
+        if (value === null) return;
+
+        const res = evaluate(path.node, value);
         if (res.unrelated) return;
         if (res.replacement) {
           path.replaceWith(res.replacement);
@@ -675,13 +691,88 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
         }
       },
       MemberExpression(path) {
+        if (value === null) return;
+
         if (path.matchesPattern(name)) {
           throw path.buildCodeFrameError("This check could not be stripped.");
         }
       },
       ReferencedIdentifier(path) {
+        if (value === null) return;
+
         if (path.node.name === name) {
           throw path.buildCodeFrameError("This check could not be stripped.");
+        }
+      },
+      ImportDeclaration(path) {
+        if (!path.node.attributes) return;
+
+        /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
+        const ifAttribute = path
+          .get("attributes")
+          .find(attr => attr.node.key.name === "if");
+        if (ifAttribute == null) {
+          return;
+        }
+
+        const condition = parseExpression(ifAttribute.node.value.value);
+
+        let res;
+        res_block: if (value !== null) {
+          res = evaluate(condition, value);
+        } else {
+          const ifTrue = evaluate(condition, true);
+          if (ifTrue.unrelated || ifTrue.value === true) {
+            res = ifTrue;
+            break res_block;
+          }
+          const ifFalse = evaluate(condition, false);
+          if (ifFalse.unrelated) throw new Error("Cannot be unrelated");
+          if (ifFalse.value === true) {
+            res = ifFalse;
+            break res_block;
+          }
+
+          if (ifTrue.value === false) {
+            res = ifFalse;
+            break res_block;
+          }
+          if (ifTrue.value === false) {
+            res = ifTrue;
+            break res_block;
+          }
+
+          if (!ifTrue.replacement && !ifFalse.replacement) {
+            throw new Error("Expected two replacements");
+          }
+
+          res = {
+            replacement: t.binaryExpression(
+              "||",
+              ifTrue.replacement,
+              ifFalse.replacement
+            ),
+            value: null,
+            unrelated: false,
+          };
+        }
+
+        if (res.unrelated) return;
+        if (res.replacement) {
+          ifAttribute
+            .get("value")
+            .replaceWith(
+              t.stringLiteral(
+                ifAttribute.toString.call({ node: res.replacement })
+              )
+            );
+        } else if (res.value === true) {
+          ifAttribute.remove();
+          if (path.node.attributes.length === 0) {
+            path.node.attributes = null;
+          }
+        } else if (res.value === false) {
+          path.remove();
         }
       },
     },
@@ -916,6 +1007,12 @@ function pluginImportMetaUrl({ types: t, template }) {
 
             // Let's just remove this declaration to unshadow the "global" cjs require.
             path.remove();
+            path.scope.crawl();
+
+            const createRequireBinding = path.scope.getBinding("createRequire");
+            if (!createRequireBinding.referenced) {
+              createRequireBinding.path.remove();
+            }
           },
 
           // import.meta.url

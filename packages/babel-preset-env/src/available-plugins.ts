@@ -1,6 +1,7 @@
 /* eslint sort-keys: "error" */
 
-import otherBabel7Plugins from "./babel-7-available-plugins.cjs";
+import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions" with { if: "!process.env.BABEL_8_BREAKING" };
+import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes" with { if: "!process.env.BABEL_8_BREAKING" };
 
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
@@ -185,6 +186,11 @@ if (!process.env.BABEL_8_BREAKING) {
     "syntax-private-property-in-object": syntax("privateIn"),
     "syntax-top-level-await": syntax("topLevelAwait"),
 
+    // These plugins have more logic than just enabling/disabling a feature
+    // eslint-disable-next-line sort-keys
+    "syntax-import-assertions": () => syntaxImportAssertions,
+    "syntax-import-attributes": () => syntaxImportAttributes,
+
     // These are CJS plugins that depend on a package from the monorepo, so it
     // breaks using ESM. Given that ESM builds are new enough to have this
     // syntax enabled by default, we can safely skip enabling it.
@@ -193,24 +199,6 @@ if (!process.env.BABEL_8_BREAKING) {
       USE_ESM || IS_STANDALONE
         ? () => () => ({})
         : () => require("@babel/plugin-syntax-unicode-sets-regex"),
-
-    // We need to keep these plugins because they do not simply enable a
-    // feature, but can affect the AST shape (.attributes vs .assertions).
-    // TLA is only used for local development with ESM, since we cannot
-    // require() monorepo files in that case.
-    // eslint-disable-next-line sort-keys
-    "syntax-import-assertions":
-      USE_ESM && !IS_STANDALONE
-        ? await import("@babel/plugin-syntax-import-assertions").then(
-            m => () => m.default,
-          )
-        : otherBabel7Plugins["syntax-import-assertions"],
-    "syntax-import-attributes":
-      USE_ESM && !IS_STANDALONE
-        ? await import("@babel/plugin-syntax-import-attributes").then(
-            m => () => m.default,
-          )
-        : otherBabel7Plugins["syntax-import-attributes"],
   };
 
   Object.assign(availablePlugins, legacyBabel7SyntaxPluginsLoaders);
