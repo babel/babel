@@ -2604,6 +2604,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-transform-import-meta@workspace:packages/babel-plugin-transform-import-meta":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-import-meta@workspace:packages/babel-plugin-transform-import-meta"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-transform-instanceof@workspace:^, @babel/plugin-transform-instanceof@workspace:packages/babel-plugin-transform-instanceof":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-instanceof@workspace:packages/babel-plugin-transform-instanceof"
