@@ -316,11 +316,7 @@ maybeWriteFile(
         compilerOptions: {
           skipLibCheck: false,
         },
-        include: [
-          "./lib/libdom-minimal.d.ts",
-          "packages/babel-parser/typings/*.d.ts",
-          "dts/**/*.d.ts",
-        ],
+        include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts"],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),

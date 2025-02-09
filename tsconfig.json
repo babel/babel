@@ -9,7 +9,6 @@
   },
   "include": [
     "./lib/libdom-minimal.d.ts",
-    "packages/babel-parser/typings/*.d.ts",
     "dts/**/*.d.ts"
   ],
   "references": [
