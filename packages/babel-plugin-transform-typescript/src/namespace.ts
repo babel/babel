@@ -228,8 +228,7 @@ function handleNested(
         throw path.hub.buildError(
           subNode,
           "Namespaces exporting declared variables are not supported by Babel." +
-            " Change to const or see:" +
-            " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
+            " See: https://babeljs.io/docs/en/babel-plugin-transform-typescript",
           Error,
         );
       }

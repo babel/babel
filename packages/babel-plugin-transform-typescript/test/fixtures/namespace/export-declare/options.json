@@ -1,3 +1,3 @@
 {
-  "throws": "Namespaces exporting declared variables are not supported by Babel. Change to const or see: https://babeljs.io/docs/en/babel-plugin-transform-typescript"
+  "throws": "Namespaces exporting declared variables are not supported by Babel. See: https://babeljs.io/docs/en/babel-plugin-transform-typescript"
 }
