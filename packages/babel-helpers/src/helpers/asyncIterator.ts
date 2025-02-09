@@ -56,7 +56,6 @@ declare class AsyncFromSyncIterator<T = any, TReturn = any, TNext = undefined>
 // This makes ESLint and TypeScript complain a lot, but it's the only way
 function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
   // @ts-expect-error - Intentionally overriding the constructor.
-  // eslint-disable-next-line no-class-assign
   AsyncFromSyncIterator = function (
     this: AsyncFromSyncIterator,
     s: Iterator<T>,

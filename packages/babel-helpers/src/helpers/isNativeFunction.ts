@@ -3,7 +3,6 @@
 export default function _isNativeFunction(fn: unknown): fn is Function {
   // Note: This function returns "true" for core-js functions.
   try {
-    // eslint-disable-next-line @typescript-eslint/prefer-includes
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   } catch (_e) {
     // Firefox 31 throws when "toString" is applied to an HTMLElement
