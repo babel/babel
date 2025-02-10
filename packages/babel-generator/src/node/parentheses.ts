@@ -245,6 +245,7 @@ export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   const parentType = parent.type;
   return (
     parentType === "TSArrayType" ||
+    parentType === "TSIndexedAccessType" ||
     parentType === "TSOptionalType" ||
     parentType === "TSIntersectionType" ||
     parentType === "TSRestType"
@@ -281,7 +282,15 @@ export function TSFunctionType(
   parent: t.Node,
 ): boolean {
   const parentType = parent.type;
-  return parentType === "TSIntersectionType" || parentType === "TSUnionType";
+  return (
+    parentType === "TSIntersectionType" ||
+    parentType === "TSUnionType" ||
+    parentType === "TSOptionalType" ||
+    parentType === "TSArrayType" ||
+    parentType === "TSIndexedAccessType" ||
+    (parentType === "TSConditionalType" &&
+      (parent.checkType === node || parent.extendsType === node))
+  );
 }
 
 export function BinaryExpression(
