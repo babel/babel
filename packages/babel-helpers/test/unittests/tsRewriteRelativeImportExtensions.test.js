@@ -23,11 +23,30 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["./a.MTs", "./a.mjs"],
     ["./a.tSx", "./a.js"],
 
+    // keep .d.css.ts
+    ["./.d.css.ts", "./.d.css.ts"],
     // rewrite relative import containing .d
-    ["./.d.a.ts", "./.d.a.js"],
-    ["./.d.a.cts", "./.d.a.cjs"],
-    ["./.d.a.mts", "./.d.a.mjs"],
-    ["./.d.a.tsx", "./.d.a.js"],
+    ["./.d.css.cts", "./.d.css.cjs"],
+    ["./.d.css.mts", "./.d.css.mjs"],
+    ["./.d.css.tsx", "./.d.css.js"],
+
+    // rewrite relative import starting with .d
+    ["./.dcss.ts", "./.dcss.js"],
+    ["./.dcss.cts", "./.dcss.cjs"],
+    ["./.dcss.mts", "./.dcss.mjs"],
+    ["./.dcss.tsx", "./.dcss.js"],
+
+    // rewrite relative import containing .d and 3 extra extensions
+    ["./.d.a.css.ts", "./.d.a.css.js"],
+    ["./.d.a.css.cts", "./.d.a.css.cjs"],
+    ["./.d.a.css.mts", "./.d.a.css.mjs"],
+    ["./.d.a.css.tsx", "./.d.a.css.js"],
+
+    // rewrite relative import directory containing .d
+    ["./.d/.css.ts", "./.d/.css.js"],
+    ["./.d/.css.cts", "./.d/.css.cjs"],
+    ["./.d/.css.mts", "./.d/.css.mjs"],
+    ["./.d/.css.tsx", "./.d/.css.js"],
 
     // skip d.ts, d.cts, and d.mts
     ["./a.d.ts", "./a.d.ts"],
