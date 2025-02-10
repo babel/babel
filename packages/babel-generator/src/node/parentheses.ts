@@ -276,6 +276,14 @@ export function TSInstantiationExpression(
   );
 }
 
+export function TSFunctionType(
+  node: t.TSFunctionType,
+  parent: t.Node,
+): boolean {
+  const parentType = parent.type;
+  return parentType === "TSIntersectionType" || parentType === "TSUnionType";
+}
+
 export function BinaryExpression(
   node: t.BinaryExpression,
   parent: t.Node,
