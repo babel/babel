@@ -67,7 +67,7 @@ export default declare(function ({ types: t, template }) {
         }
       },
       CallExpression(path, state) {
-        if (t.isImport(path.node.callee)) {
+        if (!process.env.BABEL_8_BREAKING && t.isImport(path.node.callee)) {
           maybeReplace(
             // The argument of import must not be a spread element
             path.node.arguments[0] as t.ArgumentPlaceholder | t.Expression,
