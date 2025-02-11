@@ -11,6 +11,12 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["./a.mts", "./a.mjs"],
     ["./a.tsx", "./a.js"],
 
+    // rewrite relative import with windows path separator
+    [".\\a.ts", ".\\a.js"],
+    [".\\a.cts", ".\\a.cjs"],
+    [".\\a.mts", ".\\a.mjs"],
+    [".\\a.tsx", ".\\a.js"],
+
     // rewrite relative import from parent directory
     ["../a.ts", "../a.js"],
     ["../a.cts", "../a.cjs"],
