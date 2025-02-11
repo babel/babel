@@ -5,7 +5,7 @@ export default function tsRewriteRelativeImportExtensions(
   path: unknown,
   preserveJsx?: boolean,
 ) {
-  if (typeof path === "string" && /^\.\.?[\\/]/.test(path)) {
+  if (typeof path === "string" && /^\.\.?\//.test(path)) {
     return path.replace(
       /\.(tsx)$|((?:\.d)?)((?:\.[^./]+)?)\.([cm]?)ts$/i,
       function (m, tsx, d, ext, cm) {

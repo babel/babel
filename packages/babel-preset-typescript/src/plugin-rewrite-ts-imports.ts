@@ -11,7 +11,7 @@ export default declare(function ({ types: t, template }) {
     // todo: if we want to support `preserveJsx`, we can register a global flag via file.set from transform-react-jsx, and read it here.
     const preserveJsx = false;
     if (t.isStringLiteral(source)) {
-      if (/^\.\.?[\\/]/.test(source.value)) {
+      if (/^\.\.?\//.test(source.value)) {
         // @see packages/babel-helpers/src/helpers/tsRewriteRelativeImportExtensions.ts
         source.value = source.value.replace(
           /\.(tsx)$|((?:\.d)?)((?:\.[^./]+)?)\.([cm]?)ts$/i,
