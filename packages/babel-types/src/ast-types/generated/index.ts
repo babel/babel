@@ -1059,6 +1059,7 @@ export interface ClassPrivateProperty extends BaseNode {
   decorators?: Array<Decorator> | null;
   static: boolean;
   definite?: boolean | null;
+  optional?: boolean | null;
   readonly?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   variance?: Variance | null;
