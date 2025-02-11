@@ -85,6 +85,13 @@ describe("tsRewriteRelativeImportExtensions", () => {
     ["./a.cts.foo", "./a.cts.foo"],
     ["./a.mts.foo", "./a.mts.foo"],
     ["./a.tsx.foo", "./a.tsx.foo"],
+
+    // skip import path with windows path separator
+    // Node.js ESM does not support them either
+    [".\\a.ts", ".\\a.ts"],
+    [".\\a.cts", ".\\a.cts"],
+    [".\\a.mts", ".\\a.mts"],
+    [".\\a.tsx", ".\\a.tsx"],
   ])("%p -> %p", (input, result) => {
     expect(tsRewriteRelativeImportExtensions(input)).toBe(result);
   });
