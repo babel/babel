@@ -323,6 +323,7 @@ export function TSFunctionType(
   return (
     parentType === "TSIntersectionType" ||
     parentType === "TSUnionType" ||
+    parentType === "TSTypeOperator" ||
     parentType === "TSOptionalType" ||
     parentType === "TSArrayType" ||
     (parentType === "TSIndexedAccessType" && parent.objectType === node) ||

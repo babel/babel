@@ -12,3 +12,5 @@ type t9 = (a|b)["name"];
 type t10 = (a&b)["name"];
 
 function foo(...args: [number, (() => a)?, ...(() => a)[]]) {}
+
+type t11 = keyof (() => c);
