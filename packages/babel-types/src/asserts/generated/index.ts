@@ -543,6 +543,12 @@ export function assertStaticBlock(
 ): asserts node is t.StaticBlock {
   assert("StaticBlock", node, opts);
 }
+export function assertImportAttribute(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ImportAttribute {
+  assert("ImportAttribute", node, opts);
+}
 export function assertAnyTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,
@@ -1052,12 +1058,6 @@ export function assertBindExpression(
   opts?: object | null,
 ): asserts node is t.BindExpression {
   assert("BindExpression", node, opts);
-}
-export function assertImportAttribute(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.ImportAttribute {
-  assert("ImportAttribute", node, opts);
 }
 export function assertDecorator(
   node: object | null | undefined,
