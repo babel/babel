@@ -1,5 +1,5 @@
 import type { Handler } from "gensync";
-import { parse, type File as ParseResult } from "@babel/parser";
+import { parse, type ParseResult } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";

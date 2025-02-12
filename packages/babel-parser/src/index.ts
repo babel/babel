@@ -4,11 +4,13 @@ import {
   mixinPluginNames,
   mixinPlugins,
 } from "./plugin-utils.ts";
-import type {
+export type {
   PluginConfig as ParserPlugin,
+  DecoratorsPluginOptions,
   FlowPluginOptions,
-  RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
+  RecordAndTuplePluginOptions,
+  TypeScriptPluginOptions,
 } from "./typings.ts";
 import Parser, { type PluginsMap } from "./parser/index.ts";
 
@@ -20,10 +22,28 @@ import {
 } from "./tokenizer/types.ts";
 export type { Token } from "./tokenizer/index.ts";
 
-import type { Expression, File } from "./types.ts";
+// TODO: Rather than type-casting the internal AST definitions to the
+// @babel/types one, we should actually unify them.
+import type { Expression, File } from "@babel/types";
 export type { Expression, File };
 
-export function parse(input: string, options?: Options): File {
+export type ParserOptions = Partial<Options>;
+
+export interface ParseError {
+  code: string;
+  reasonCode: string;
+}
+export type ParseResult<Result extends File | Expression = File> = Result & {
+  errors: null | ParseError[];
+};
+
+/**
+ * Parse the provided code as an entire ECMAScript program.
+ */
+export function parse(
+  input: string,
+  options?: ParserOptions,
+): ParseResult<File> {
   if (options?.sourceType === "unambiguous") {
     options = {
       ...options,
@@ -34,7 +54,7 @@ export function parse(input: string, options?: Options): File {
       const ast = parser.parse();
 
       if (parser.sawUnambiguousESM) {
-        return ast;
+        return ast as unknown as ParseResult<File>;
       }
 
       if (parser.ambiguousScriptDifferentAst) {
@@ -45,7 +65,10 @@ export function parse(input: string, options?: Options): File {
         // can be parsed either as an AwaitExpression, or as two ExpressionStatements.
         try {
           options.sourceType = "script";
-          return getParser(options, input).parse();
+          return getParser(
+            options,
+            input,
+          ).parse() as unknown as ParseResult<File>;
         } catch {}
       } else {
         // This is both a valid module and a valid script, but
@@ -53,26 +76,32 @@ export function parse(input: string, options?: Options): File {
         ast.program.sourceType = "script";
       }
 
-      return ast;
+      return ast as unknown as ParseResult<File>;
     } catch (moduleError) {
       try {
         options.sourceType = "script";
-        return getParser(options, input).parse();
+        return getParser(
+          options,
+          input,
+        ).parse() as unknown as ParseResult<File>;
       } catch {}
 
       throw moduleError;
     }
   } else {
-    return getParser(options, input).parse();
+    return getParser(options, input).parse() as unknown as ParseResult<File>;
   }
 }
 
-export function parseExpression(input: string, options?: Options): Expression {
+export function parseExpression(
+  input: string,
+  options?: ParserOptions,
+): ParseResult<Expression> {
   const parser = getParser(options, input);
   if (parser.options.strictMode) {
     parser.state.strict = true;
   }
-  return parser.getExpression();
+  return parser.getExpression() as unknown as ParseResult<Expression>;
 }
 
 function generateExportedTokenTypes(
@@ -135,11 +164,3 @@ function getParserClass(
   }
   return cls;
 }
-
-export type {
-  FlowPluginOptions,
-  ParserPlugin,
-  PipelineOperatorPluginOptions,
-  RecordAndTuplePluginOptions,
-};
-export type ParserOptions = Partial<Options>;

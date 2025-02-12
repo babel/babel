@@ -56,6 +56,7 @@ export default [
       "packages/babel-standalone/babel.min.js",
       "packages/babel-parser/test/expressions",
       "packages/babel-core/src/vendor",
+      "packages/babel-parser/typings/**/*",
       "eslint/*/lib",
       "eslint/*/node_modules",
       "eslint/*/test/fixtures",
