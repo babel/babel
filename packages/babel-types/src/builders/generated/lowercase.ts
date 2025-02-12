@@ -3,7 +3,7 @@
  * To re-generate run 'make build'
  */
 import * as _validate from "../../validators/validate.ts";
-import type * as t from "../../index.ts";
+import type * as t from "../../ast-types/generated/index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 import * as utils from "../../definitions/utils.ts";
 
