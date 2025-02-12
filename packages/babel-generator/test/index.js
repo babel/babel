@@ -1237,13 +1237,6 @@ describe("programmatic generation", function () {
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)[]");
     });
-    it("wraps around rest", () => {
-      const typeStatement = t.tsRestType(
-        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
-      );
-      const output = generate(typeStatement).code;
-      expect(output).toBe("...(number & boolean)");
-    });
     it("wraps around optional type", () => {
       const typeStatement = t.tsOptionalType(
         t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),

@@ -245,14 +245,23 @@ export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   const parentType = parent.type;
   return (
     parentType === "TSArrayType" ||
-    parentType === "TSIndexedAccessType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
     parentType === "TSOptionalType" ||
-    parentType === "TSIntersectionType" ||
-    parentType === "TSRestType"
+    parentType === "TSIntersectionType"
   );
 }
 
-export { TSUnionType as TSIntersectionType };
+export function TSIntersectionType(
+  node: t.TSUnionType,
+  parent: t.Node,
+): boolean {
+  const parentType = parent.type;
+  return (
+    parentType === "TSArrayType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
+    parentType === "TSOptionalType"
+  );
+}
 
 export function TSInferType(node: t.TSInferType, parent: t.Node): boolean {
   const parentType = parent.type;
