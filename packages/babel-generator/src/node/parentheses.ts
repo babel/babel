@@ -241,6 +241,36 @@ export { TSAsExpression as TSSatisfiesExpression };
 
 export { UnaryLike as TSTypeAssertion };
 
+export function TSConditionalType(
+  node: t.TSConditionalType,
+  parent: t.Node,
+): boolean {
+  const parentType = parent.type;
+  if (
+    parentType === "TSArrayType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
+    parentType === "TSOptionalType" ||
+    parentType === "TSTypeOperator" ||
+    // for `infer K extends (L extends M ? M : ...)`
+    parentType === "TSTypeParameter"
+  ) {
+    return true;
+  }
+  if (
+    (parentType === "TSIntersectionType" || parentType === "TSUnionType") &&
+    parent.types[0] === node
+  ) {
+    return true;
+  }
+  if (
+    parentType === "TSConditionalType" &&
+    (parent.checkType === node || parent.extendsType === node)
+  ) {
+    return true;
+  }
+  return false;
+}
+
 export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   const parentType = parent.type;
   return (
