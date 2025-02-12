@@ -287,11 +287,14 @@ export function TSFunctionType(
     parentType === "TSUnionType" ||
     parentType === "TSOptionalType" ||
     parentType === "TSArrayType" ||
-    parentType === "TSIndexedAccessType" ||
+    parentType === "TSConstructorType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
     (parentType === "TSConditionalType" &&
       (parent.checkType === node || parent.extendsType === node))
   );
 }
+
+export { TSFunctionType as TSConstructorType };
 
 export function BinaryExpression(
   node: t.BinaryExpression,
