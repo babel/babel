@@ -20,7 +20,7 @@
               "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17},"identifierName":"Foo"},
               "name": "Foo"
             },
-            "importKind": null,
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17},"identifierName":"Foo"},
@@ -52,6 +52,7 @@
               "start":46,"end":49,"loc":{"start":{"line":2,"column":14,"index":46},"end":{"line":2,"column":17,"index":49},"identifierName":"Foo"},
               "name": "Foo"
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":46,"end":49,"loc":{"start":{"line":2,"column":14,"index":46},"end":{"line":2,"column":17,"index":49},"identifierName":"Foo"},
