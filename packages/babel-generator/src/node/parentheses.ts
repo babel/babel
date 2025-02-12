@@ -265,7 +265,22 @@ export function TSIntersectionType(
 
 export function TSInferType(node: t.TSInferType, parent: t.Node): boolean {
   const parentType = parent.type;
-  return parentType === "TSArrayType" || parentType === "TSOptionalType";
+  if (
+    parentType === "TSArrayType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
+    parentType === "TSOptionalType"
+  ) {
+    return true;
+  }
+  if (node.typeParameter.constraint) {
+    if (
+      (parentType === "TSIntersectionType" || parentType === "TSUnionType") &&
+      parent.types[0] === node
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function TSInstantiationExpression(
