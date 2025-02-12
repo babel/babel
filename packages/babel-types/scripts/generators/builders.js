@@ -87,9 +87,11 @@ function generateBuilderArgs(type) {
 }
 
 export default function generateBuilders(kind) {
-  return kind === "uppercase.js"
-    ? generateUppercaseBuilders()
-    : generateLowercaseBuilders();
+  return kind === "lowercase.ts"
+    ? generateLowercaseBuilders()
+    : kind === "uppercase.ts"
+      ? generateUppercaseBuilders()
+      : generateBuildersAndAstTypesReexports();
 }
 
 function generateLowercaseBuilders() {
@@ -98,7 +100,7 @@ function generateLowercaseBuilders() {
  * To re-generate run 'make build'
  */
 import * as _validate from "../../validators/validate.ts";
-import type * as t from "../../index.ts";
+import type * as t from "../../ast-types/generated/index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 import * as utils from "../../definitions/utils.ts";
 
@@ -204,11 +206,6 @@ function generateUppercaseBuilders() {
  * To re-generate run 'make build'
  */
 
-/**
- * This file is written in JavaScript and not TypeScript because uppercase builders
- * conflict with AST types. TypeScript reads the uppercase.d.ts file instead.
- */
-
   export {\n`;
 
   Object.keys(BUILDER_KEYS).forEach(type => {
@@ -221,6 +218,39 @@ function generateUppercaseBuilders() {
     output += `  ${formattedBuilderName} as ${type},\n`;
   });
 
-  output += ` } from './index.ts';\n`;
+  output += ` } from './lowercase.ts';\n`;
   return output;
+}
+
+function generateBuildersAndAstTypesReexports() {
+  return `/*
+    * This file is auto-generated! Do not modify it directly.
+    * To re-generate run 'make build'
+    */
+
+    export * from "./lowercase.ts";
+    export * from "./uppercase.ts";
+
+    // Uppercase builders and AST types conflict with each other, which is
+    // not allowed by TypeScript when using \`export * from ...\`
+    // We instead explicity list the AST types here, so that:
+    // - From a TypeScript perspective, the AST types win over the uppercase
+    //   builders (which is the standard behavior for JS when a named
+    //   re-export conflicts with a * re-export.)
+    // - At runtime, this \`export type\` is removed, leaving only the uppercase
+    //   builders behind (which are thus visible to JavaScript code).
+    // This ensures compatibility with legacy code that uses the uppercase
+    // builders, while allowing TypeScript users to use the lowercase builders
+    // together with the AST types.
+
+// prettier-ignore
+export type {
+  ${Object.keys(BUILDER_KEYS).join(", ")},
+  ${Object.keys(DEPRECATED_KEYS).join(", ")}
+} from "../../ast-types/generated/index.ts";
+
+    // This will re-export all the type definitions that do not conflict with
+    // uppercase builders, such as aliases.
+    export type * from "../../ast-types/generated/index.ts";
+  `;
 }

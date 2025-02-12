@@ -3,11 +3,6 @@
  * To re-generate run 'make build'
  */
 
-/**
- * This file is written in JavaScript and not TypeScript because uppercase builders
- * conflict with AST types. TypeScript reads the uppercase.d.ts file instead.
- */
-
 export {
   arrayExpression as ArrayExpression,
   assignmentExpression as AssignmentExpression,
@@ -265,4 +260,4 @@ export {
   regexLiteral as RegexLiteral,
   restProperty as RestProperty,
   spreadProperty as SpreadProperty,
-} from "./index.ts";
+} from "./lowercase.ts";

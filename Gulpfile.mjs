@@ -768,8 +768,9 @@ gulp.task("generate-type-helpers", () => {
 
   return Promise.all([
     generateTypeHelpers("asserts"),
+    generateTypeHelpers("builders", "lowercase.ts"),
+    generateTypeHelpers("builders", "uppercase.ts"),
     generateTypeHelpers("builders"),
-    generateTypeHelpers("builders", "uppercase.js"),
     generateTypeHelpers("constants"),
     generateTypeHelpers("validators"),
     generateTypeHelpers("ast-types"),
