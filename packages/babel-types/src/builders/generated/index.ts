@@ -2665,7 +2665,6 @@ export function tsPropertySignature(
     type: "TSPropertySignature",
     key,
     typeAnnotation,
-    kind: null,
   };
   const defs = NODE_FIELDS.TSPropertySignature;
   validate(defs.key, node, "key", key, 1);

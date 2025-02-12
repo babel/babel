@@ -1749,7 +1749,7 @@ export interface TSPropertySignature extends BaseNode {
   key: Expression;
   typeAnnotation?: TSTypeAnnotation | null;
   computed?: boolean;
-  kind: "get" | "set";
+  kind?: "get" | "set" | null;
   optional?: boolean | null;
   readonly?: boolean | null;
 }
