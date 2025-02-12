@@ -244,10 +244,11 @@ export { UnaryLike as TSTypeAssertion };
 export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
   const parentType = parent.type;
   return (
+    parentType === "TSIntersectionType" ||
+    parentType === "TSTypeOperator" ||
     parentType === "TSArrayType" ||
     (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
-    parentType === "TSOptionalType" ||
-    parentType === "TSIntersectionType"
+    parentType === "TSOptionalType"
   );
 }
 
@@ -257,6 +258,7 @@ export function TSIntersectionType(
 ): boolean {
   const parentType = parent.type;
   return (
+    parentType === "TSTypeOperator" ||
     parentType === "TSArrayType" ||
     (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
     parentType === "TSOptionalType"
@@ -281,6 +283,18 @@ export function TSInferType(node: t.TSInferType, parent: t.Node): boolean {
     }
   }
   return false;
+}
+
+export function TSTypeOperator(
+  node: t.TSTypeOperator,
+  parent: t.Node,
+): boolean {
+  const parentType = parent.type;
+  return (
+    parentType === "TSArrayType" ||
+    (parentType === "TSIndexedAccessType" && parent.objectType === node) ||
+    parentType === "TSOptionalType"
+  );
 }
 
 export function TSInstantiationExpression(

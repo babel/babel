@@ -18,3 +18,4 @@ type s8<T> = T extends Array<infer K extends string extends string ? string : ne
 type s9<T> = T extends Array<string extends infer K extends string ? K : never> ? string : never;
 type s10<T> = T extends Array<string extends string ? infer K extends string : string> ? K : never;
 type s11<T> = T extends Array<string extends string ? string : infer K extends string> ? K : never;
+type s12<T> = T extends Array<keyof infer K> ? K : never;
