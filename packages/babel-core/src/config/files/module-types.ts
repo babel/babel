@@ -14,15 +14,14 @@ import { transformFileSync } from "../../transform-file.ts";
 
 const debug = buildDebug("babel:config:loading:files:module-types");
 
-const require = createRequire(import.meta.url);
+const nodeRequire = createRequire(import.meta.url);
 
 if (!process.env.BABEL_8_BREAKING) {
   try {
     // Old Node.js versions don't support import() syntax.
     // eslint-disable-next-line no-var
-    var import_:
-      | ((specifier: string | URL) => any)
-      | undefined = require("./import.cjs");
+    var import_: ((specifier: string | URL) => any) | undefined =
+      nodeRequire("./import.cjs");
   } catch {}
 }
 
@@ -49,7 +48,7 @@ function loadCjsDefault(filepath: string) {
   let module;
   try {
     LOADING_CJS_FILES.add(filepath);
-    module = endHiddenCallStack(require)(filepath);
+    module = endHiddenCallStack(nodeRequire)(filepath);
   } finally {
     LOADING_CJS_FILES.delete(filepath);
   }
@@ -192,9 +191,9 @@ function ensureTsSupport<T>(
   callback: () => T,
 ): T {
   if (
-    require.extensions[".ts"] ||
-    require.extensions[".cts"] ||
-    require.extensions[".mts"]
+    nodeRequire.extensions[".ts"] ||
+    nodeRequire.extensions[".cts"] ||
+    nodeRequire.extensions[".mts"]
   ) {
     return callback();
   }
@@ -242,9 +241,9 @@ You are using a ${ext} config file, but Babel only supports transpiling .cts con
           filename,
         );
       } catch (error) {
-        // TODO(Babel 8): Add this as an optional peer dependency
-        // eslint-disable-next-line import/no-extraneous-dependencies
-        const packageJson = require("@babel/preset-typescript/package.json");
+        const packageJson = nodeRequire(
+          "@babel/preset-typescript/package.json",
+        );
         if (semver.lt(packageJson.version, "7.21.4")) {
           console.error(
             "`.cts` configuration file failed to load, please try to update `@babel/preset-typescript`.",
@@ -253,22 +252,23 @@ You are using a ${ext} config file, but Babel only supports transpiling .cts con
         throw error;
       }
     }
-    return require.extensions[".js"](m, filename);
+    return nodeRequire.extensions[".js"](m, filename);
   };
-  require.extensions[ext] = handler;
+  nodeRequire.extensions[ext] = handler;
 
   try {
     return callback();
   } finally {
-    if (require.extensions[ext] === handler) delete require.extensions[ext];
+    if (nodeRequire.extensions[ext] === handler) {
+      delete nodeRequire.extensions[ext];
+    }
     handler = undefined;
   }
 }
 
 function getTSPreset(filepath: string) {
   try {
-    // eslint-disable-next-line import/no-extraneous-dependencies
-    return require("@babel/preset-typescript");
+    return nodeRequire("@babel/preset-typescript");
   } catch (error) {
     if (error.code !== "MODULE_NOT_FOUND") throw error;
 
