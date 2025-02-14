@@ -206,19 +206,37 @@ function generateUppercaseBuilders() {
  * To re-generate run 'make build'
  */
 
-  export {\n`;
+  import * as b from "./lowercase.ts";
+  import deprecationWarning from "../../utils/deprecationWarning.ts";
 
-  Object.keys(BUILDER_KEYS).forEach(type => {
-    const formattedBuilderName = formatBuilderName(type);
-    output += `  ${formattedBuilderName} as ${type},\n`;
-  });
+  function alias<const N extends keyof typeof b>(lowercase: N): typeof b[N] {
+    if (process.env.BABEL_8_BREAKING) {
+      return function () {
+        deprecationWarning(
+          lowercase.replace(/^[a-z]+/, x => x.toUpperCase()),
+          lowercase
+        );
+        return (b[lowercase] as any)(...arguments);
+      } as any;
+    } else {
+      return b[lowercase];
+    }
+  }
 
-  Object.keys(DEPRECATED_KEYS).forEach(type => {
-    const formattedBuilderName = formatBuilderName(type);
-    output += `  ${formattedBuilderName} as ${type},\n`;
-  });
+  export const\n`;
+  output += Object.keys(BUILDER_KEYS)
+    .map(type => `  ${type} = alias("${formatBuilderName(type)}")`)
+    .join(",\n");
+  output += `;\n`;
 
-  output += ` } from './lowercase.ts';\n`;
+  if (!process.env.BABEL_8_BREAKING) {
+    output += `export const\n`;
+    output += Object.keys(DEPRECATED_KEYS)
+      .map(type => `  ${type} = b.${formatBuilderName(type)}`)
+      .join(",\n");
+    output += `;\n`;
+  }
+
   return output;
 }
 
