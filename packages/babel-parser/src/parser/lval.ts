@@ -483,10 +483,11 @@ export default abstract class LValParser extends NodeUtils {
     ) {
       this.parseFunctionParamType(left);
     }
-    const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
+      this.resetStartLocationFromNode(left, decorators[0]);
     }
+    const elt = this.parseMaybeDefault(left.loc.start, left);
     return elt;
   }
 
