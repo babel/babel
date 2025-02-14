@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":64,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":64,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":64,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":64,"loc":{"start":{"line":1,"column":8},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ClassAccessorProperty",
+              "start":12,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":21,"end":24,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":28,"end":45,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":19}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":37,"end":40,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":14},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "value": {
+                "type": "Literal",
+                "start":43,"end":44,"loc":{"start":{"line":3,"column":17},"end":{"line":3,"column":18}},
+                "value": 0,
+                "raw": "0"
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":48,"end":62,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":16}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":57,"end":61,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}},
+                "id": {
+                  "type": "Identifier",
+                  "start":58,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"qux"},
+                  "name": "qux"
+                }
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
