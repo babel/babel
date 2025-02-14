@@ -97,6 +97,7 @@ export function assertEach(callback: Validator): Validator {
     if (!Array.isArray(val)) return;
 
     let i = 0;
+    // We lazily concatenate strings here for performance reasons.
     // Concatenating the strings is expensive because we are actually concatenating a string and a number,
     // so V8 cannot just create a "rope string" but has to allocate memory for the string resulting from the number
     // This string is very rarely used, only in error paths, so we can skip the concatenation cost in most cases
