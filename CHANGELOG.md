@@ -24,6 +24,19 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.9 (2025-02-14)
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#17103](https://github.com/babel/babel/pull/17103) fix: Definition for `TSPropertySignature.kind` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-types`
+  * [#17062](https://github.com/babel/babel/pull/17062) Print TypeScript optional/definite in ClassPrivateProperty ([@jamiebuilds-signal](https://github.com/jamiebuilds-signal))
+
+#### :house: Internal
+* `babel-types`
+  * [#17130](https://github.com/babel/babel/pull/17130) Use `.ts` files with explicit reexports to solve name conflicts ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#17127](https://github.com/babel/babel/pull/17127) Do not depend on `@types/gensync` in Babel 7 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.26.7 (2025-01-24)
 
