@@ -1,4 +1,4 @@
-/* @minVersion 7.26.8 */
+/* @minVersion 7.27.0 */
 
 // https://github.com/microsoft/TypeScript/blob/71716a2868c87248af5020e33a84a2178d41a2d6/src/compiler/factory/emitHelpers.ts#L1451
 export default function tsRewriteRelativeImportExtensions(
