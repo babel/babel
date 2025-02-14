@@ -257,9 +257,6 @@ function buildTSConfig(pkgs, allDeps, hasOverrides) {
       "./src/**/*.cts",
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
-      pkgs.some(p => p.name === "@babel/parser")
-        ? "../../packages/babel-parser/typings/*.d.ts"
-        : null,
     ].filter(Boolean),
     references: Array.from(referencePaths, path => ({ path })),
   };
@@ -319,11 +316,7 @@ maybeWriteFile(
         compilerOptions: {
           skipLibCheck: false,
         },
-        include: [
-          "./lib/libdom-minimal.d.ts",
-          "packages/babel-parser/typings/*.d.ts",
-          "dts/**/*.d.ts",
-        ],
+        include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts"],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),

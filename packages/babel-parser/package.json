@@ -49,6 +49,7 @@
   "conditions": {
     "BABEL_8_BREAKING": [
       {
+        "types": null,
         "engines": {
           "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
         }
