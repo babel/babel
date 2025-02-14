@@ -16,6 +16,32 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.16 (2025-02-14)
+
+#### :boom: Breaking Change
+* `babel-types`
+  * [#17099](https://github.com/babel/babel/pull/17099) [babel 8] Remove legacy `.d.ts` for TypeScript <= 4.0 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-template-literals`, `babel-traverse`, `babel-types`
+  * [#17066](https://github.com/babel/babel/pull/17066) [Babel 8] Create TSTemplateLiteralType ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`, `babel-types`
+  * [#17073](https://github.com/babel/babel/pull/17073) [Babel 8] Parse `export import =` as an ExportNamedDeclaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#17078](https://github.com/babel/babel/pull/17078) [babel 8] Remove bugfixes option ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#17063](https://github.com/babel/babel/pull/17063) [Babel 8] Create TSEmptyBodyFunctionExpression also on invalid input ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-transform-typescript`, `babel-types`
+  * [#17059](https://github.com/babel/babel/pull/17059) [Babel 8] Create ThisExpression for `typeof this` ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#17131](https://github.com/babel/babel/pull/17131) [Babel 8] Add several TS type parentheses rules ([@JLHwung](https://github.com/JLHwung))
+  * [#17125](https://github.com/babel/babel/pull/17125) fix: Missing parentheses when printing a TS arrow function type in a union ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#17106](https://github.com/babel/babel/pull/17106) Fix TS non-array type start ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#17058](https://github.com/babel/babel/pull/17058) [babel 8] Remove remaining references to minimal/smart pipelines ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.0-alpha.15 (2025-01-10)
 
 #### :boom: Breaking Change
