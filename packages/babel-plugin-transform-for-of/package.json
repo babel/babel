@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-for-of",
-  "version": "7.25.9",
+  "version": "7.26.9",
   "description": "Compile ES2015 for...of to ES5",
   "repository": {
     "type": "git",
