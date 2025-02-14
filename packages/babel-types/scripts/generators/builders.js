@@ -229,7 +229,7 @@ function generateUppercaseBuilders() {
     .join(",\n");
   output += `;\n`;
 
-  if (!process.env.BABEL_8_BREAKING) {
+  if (!IS_BABEL_8()) {
     output += `export const\n`;
     output += Object.keys(DEPRECATED_KEYS)
       .map(type => `  ${type} = b.${formatBuilderName(type)}`)
