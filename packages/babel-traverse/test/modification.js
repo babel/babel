@@ -1,5 +1,6 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+import { IS_BABEL_8 } from "$repo-utils";
 
 import _traverse from "../lib/index.js";
 import _generate from "@babel/generator";
@@ -388,24 +389,10 @@ describe("modification", function () {
           },
         });
 
-        expect(logs).toMatchInlineSnapshot(`
-          Array [
-            Array [
-              "a",
-              "b",
-              "b",
-              "b",
-              "b",
-            ],
-            Array [
-              "a",
-              "b",
-              "b",
-              "b",
-              "b",
-            ],
-          ]
-        `);
+        expect(logs[0]).toEqual(
+          IS_BABEL_8() ? ["a", "b", "b", "b", "b"] : ["a"],
+        );
+        expect(logs[1]).toEqual(["a", "b", "b", "b", "b"]);
       });
     });
   });

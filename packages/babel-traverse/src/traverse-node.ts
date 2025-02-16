@@ -92,7 +92,7 @@ function _visit(ctx: TraversalContext, path: NodePath) {
     if (_call.call(path, opts[node.type]?.enter)) return path.shouldStop;
   }
 
-  path.shouldStop = traverse(
+  path.shouldStop = _traverse(
     path.node,
     opts,
     path.scope,
@@ -111,7 +111,7 @@ function _visit(ctx: TraversalContext, path: NodePath) {
   return path.shouldStop;
 }
 
-function traverse<S>(
+function _traverse<S>(
   node: t.Node,
   opts: ExplodedTraverseOptions<S>,
   scope?: Scope,
@@ -190,5 +190,25 @@ export function traverseNode<S = unknown>(
   skipKeys?: Record<string, boolean>,
   visitSelf?: boolean,
 ): boolean {
-  return traverse(node, opts, scope, state, path, skipKeys, visitSelf);
+  if (process.env.BABEL_8_BREAKING) {
+    return _traverse(node, opts, scope, state, path, skipKeys, visitSelf);
+  }
+
+  const keys = VISITOR_KEYS[node.type];
+  if (!keys) return false;
+
+  const context = new TraversalContext<S>(scope, opts, state, path);
+  if (visitSelf) {
+    if (skipKeys?.[path.parentKey]) return false;
+    return context.visitQueue([path]);
+  }
+
+  for (const key of keys) {
+    if (skipKeys?.[key]) continue;
+    if (context.visit(node, key)) {
+      return true;
+    }
+  }
+
+  return false;
 }
