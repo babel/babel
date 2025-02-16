@@ -1,5 +1,5 @@
 async function p(x) {
-  var _temp3, _temp5, _temp6, _temp7;
+  var _temp3;
   _temp3 = effect(0);
   {
     var _temp4;
@@ -25,17 +25,5 @@ async function p(x) {
     }
   }
   const y = _temp3 + _temp4 + effect(3);
-  _temp5 = effect(1);
-  _temp6 = effect(2);
-  _temp7 = effect(3);
-  {
-    var _temp8;
-    if (effect(4)) return 0;
-  }
-  const obj = {
-    [_temp5]: _temp6,
-    [_temp7]: _temp8,
-    [effect(5)]: effect(6)
-  };
   return y;
 }

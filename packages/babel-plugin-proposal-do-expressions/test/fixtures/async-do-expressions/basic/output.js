@@ -1,3 +1,1 @@
-{
-  var _temp;
-}
+async do {};
