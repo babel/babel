@@ -1,11 +1,12 @@
 let p;
-let a = function (_ret) {
+{
+  var _temp;
   while (p = p.parentPath) {
     if (a) {
-      _ret = 'a';
+      _temp = 'a';
     } else {
-      _ret = 'b';
+      _temp = 'b';
     }
   }
-  return _ret;
-}();
+}
+let a = _temp;

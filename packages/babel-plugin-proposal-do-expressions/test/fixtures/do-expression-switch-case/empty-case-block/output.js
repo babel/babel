@@ -1,8 +1,12 @@
-const x = () => function () {
-  switch (new Date().getDay()) {
-    case 0:
-      return void 0;
-    default:
-      return "weekday 🚴";
+const x = () => {
+  {
+    var _temp;
+    switch (new Date().getDay()) {
+      case 0:
+        break;
+      default:
+        _temp = "weekday 🚴";
+    }
   }
-}();
+  return _temp;
+};

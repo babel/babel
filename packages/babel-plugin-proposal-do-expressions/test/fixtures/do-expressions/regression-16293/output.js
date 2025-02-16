@@ -1,5 +1,9 @@
-async () => await async function () {
-  await 0;
-  while (0) {}
-  return 0;
-}();
+async () => {
+  {
+    var _temp;
+    await 0;
+    while (0) {}
+    _temp = 0;
+  }
+  return _temp;
+};

@@ -1,4 +1,5 @@
 async function p(x) {
+  var _temp3, _temp5, _temp6, _temp7;
   _temp3 = effect(0);
   {
     var _temp4;
@@ -6,6 +7,7 @@ async function p(x) {
       return x;
     }
     if (effect(2)) {
+      var _temp;
       _temp = effect(10);
       {
         var _temp2;
@@ -14,7 +16,7 @@ async function p(x) {
         }
         if (effect(12)) {
           _temp2 = 11;
-        } else _temp2 = void 0;
+        }
       }
       const zz = _temp + _temp2 + effect(13);
       _temp4 = zz;
@@ -28,7 +30,7 @@ async function p(x) {
   _temp7 = effect(3);
   {
     var _temp8;
-    if (effect(4)) return 0;else _temp8 = void 0;
+    if (effect(4)) return 0;
   }
   const obj = {
     [_temp5]: _temp6,

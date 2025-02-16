@@ -1,1 +1,4 @@
-async do {};
+{
+  var _temp;
+}
+_temp;

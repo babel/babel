@@ -1,2 +1,6 @@
-var bar;
-var x = (bar = "foo", bar);
+{
+  var _temp;
+  var bar = "foo";
+  _temp = bar;
+}
+var x = _temp;

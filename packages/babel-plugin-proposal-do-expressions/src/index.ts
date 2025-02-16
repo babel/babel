@@ -12,95 +12,33 @@ export default declare(api => {
     visitor: {
       DoExpression: {
         exit(path) {
-          const { node } = path;
-          if (node.async) {
-            // Async do expressions are not yet supported
-            return;
-          }
-
-          if (hasEarlyExit(path)) {
-            const statement = path.getStatementParent();
-            explodeStatement(statement);
-          } else {
-            const body = node.body.body;
-            if (body.length) {
-              path.replaceExpressionWithStatements(body);
-            } else {
-              path.replaceWith(path.scope.buildUndefinedNode());
-            }
-          }
+          transformDoExpression(path);
         },
       },
     },
   };
 });
 
-function hasEarlyExit(path: NodePath<t.DoExpression>): boolean {
-  let result = false;
-  const ignored: string[] = [];
-
-  const Loop = {
-    enter() {
-      ignored.push("break", "continue");
-    },
-    exit() {
-      ignored.length -= 2;
-    },
-  };
-  path.traverse({
-    Statement(path) {
-      if (result) path.stop();
-    },
-    LabeledStatement: {
-      enter(path) {
-        ignored.push("label_" + path.node.label.name);
-      },
-      exit() {
-        ignored.length -= 1;
-      },
-    },
-    ForStatement: Loop,
-    ForInStatement: Loop,
-    ForOfStatement: Loop,
-    WhileStatement: Loop,
-    DoWhileStatement: Loop,
-    SwitchStatement: {
-      enter() {
-        ignored.push("break");
-      },
-      exit() {
-        ignored.length -= 1;
-      },
-    },
-    TryStatement: {
-      enter() {
-        ignored.push("throw");
-      },
-      exit() {
-        ignored.length -= 1;
-      },
-    },
-    ReturnStatement() {
-      result = true;
-    },
-    BreakStatement(path) {
-      result ||= !(
-        ignored.includes("break") ||
-        (path.node.label && ignored.includes("label_" + path.node.label.name))
+function transformDoExpression(path: NodePath) {
+  do {
+    if (!path.parentPath) {
+      throw new Error("DoExpression must be in a statement");
+    }
+    if (Array.isArray(path.container) && path.isStatement()) {
+      explodeStatement(path);
+      break;
+    }
+    if (path.isArrowFunctionExpression()) {
+      const body = path.get("body");
+      body.assertExpression();
+      const [newBody] = body.replaceWith(
+        t.blockStatement([t.returnStatement(body.node as t.Expression)]),
       );
-    },
-    ContinueStatement(path) {
-      result ||= !(
-        ignored.includes("continue") ||
-        (path.node.label && ignored.includes("label_" + path.node.label.name))
-      );
-    },
-    ThrowStatement() {
-      result ||= !ignored.includes("throw");
-    },
-  });
-
-  return result;
+      explodeStatement(newBody.get("body")[0]);
+      break;
+    }
+    path = path.parentPath;
+  } while (path);
 }
 
 function explodeStatement(path: NodePath<t.Statement>) {
@@ -156,7 +94,7 @@ function explodeStatement(path: NodePath<t.Statement>) {
         if (assertHasDoExpression || traverse.hasType(node, "DoExpression")) {
           explode(path);
         }
-        const uid = path.scope.generateUidIdentifier();
+        const uid = path.scope.generateDeclaredUidIdentifier();
         effects.push(
           t.expressionStatement(
             t.assignmentExpression("=", t.cloneNode(uid), node),
@@ -197,10 +135,7 @@ function captureDoExpressionResult(
   node: t.Statement | undefined,
   uid: t.Identifier,
 ): t.Statement {
-  if (!node)
-    return t.expressionStatement(
-      t.assignmentExpression("=", t.cloneNode(uid), t.buildUndefinedNode()),
-    );
+  if (!node) return undefined;
 
   switch (node.type) {
     case "ExpressionStatement":
@@ -208,12 +143,7 @@ function captureDoExpressionResult(
         t.assignmentExpression("=", t.cloneNode(uid), node.expression),
       );
     case "BlockStatement":
-      if (node.body.length) {
-        node.body[node.body.length - 1] = captureDoExpressionResult(
-          node.body[node.body.length - 1],
-          uid,
-        );
-      }
+      captureLastNonEmpty(node.body);
       return node;
     case "IfStatement":
       node.consequent = captureDoExpressionResult(node.consequent, uid);
@@ -222,8 +152,68 @@ function captureDoExpressionResult(
     case "LabeledStatement":
       node.body = captureDoExpressionResult(node.body, uid);
       return node;
+    case "SwitchStatement": {
+      let lastCaptured = false;
+      for (let index = node.cases.length - 1; index >= 0; index--) {
+        const { consequent } = node.cases[index];
+        let foundBreak = false;
+        if (!handleStatements(consequent)) {
+          if (!lastCaptured) {
+            lastCaptured = captureLastNonEmpty(consequent);
+          }
+        }
+
+        // Returns true if the result has been captured
+        function handleStatements(statements: t.Statement[]): boolean {
+          for (let i = 0; i < statements.length; i++) {
+            const statement = statements[i];
+            if (t.isBreakStatement(statement)) {
+              foundBreak = true;
+              return captureLastNonEmpty(statements, i);
+            }
+            if (t.isBlockStatement(statement)) {
+              if (!handleStatements(statement.body)) {
+                if (foundBreak) {
+                  return captureLastNonEmpty(statements, i);
+                }
+              } else {
+                return true;
+              }
+            }
+          }
+          return false;
+        }
+      }
+      return node;
+    }
+    case "ForStatement":
+    case "ForInStatement":
+    case "ForOfStatement":
+    case "WhileStatement":
+    case "DoWhileStatement":
+      node.body = captureDoExpressionResult(node.body, uid);
+      return node;
     default:
       return node;
+  }
+
+  function captureLastNonEmpty(
+    statements: t.Statement[],
+    end: number = statements.length,
+  ): boolean {
+    for (let i = end - 1; i >= 0; i--) {
+      if (!isEmpty(statements[i])) {
+        statements[i] = captureDoExpressionResult(statements[i], uid);
+        return true;
+      }
+    }
+    return false;
+    function isEmpty(node: t.Statement): boolean {
+      return (
+        t.isEmptyStatement(node) ||
+        (t.isBlockStatement(node) && node.body.every(isEmpty))
+      );
+    }
   }
 }
 

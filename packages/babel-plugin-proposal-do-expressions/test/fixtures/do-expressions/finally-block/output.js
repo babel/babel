@@ -1,9 +1,11 @@
-var x = function () {
+{
+  var _temp;
   try {
-    return a();
+    a();
   } catch (e) {
-    return b();
+    b();
   } finally {
     c();
   }
-}();
+}
+var x = _temp;
