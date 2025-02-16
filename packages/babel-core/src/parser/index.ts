@@ -53,7 +53,7 @@ export default function* parser(
     const startColumn = parserOpts?.startColumn;
 
     if (startLine != null || startColumn != null) {
-      code = "\n".repeat(startLine - 1) + " ".repeat(startColumn) + code;
+      code = " ".repeat(startColumn) + code;
     }
 
     const { loc, missingPlugin } = err;
@@ -68,6 +68,7 @@ export default function* parser(
         },
         {
           highlightCode,
+          startLine: startLine,
         },
       );
       if (missingPlugin) {
