@@ -25,7 +25,8 @@ function transformDoExpression(path: NodePath) {
       throw new Error("DoExpression must be in a statement");
     }
     if (Array.isArray(path.container) && path.isStatement()) {
-      explodeStatement(path);
+      // Flatten the closest parent statement
+      flattenStatement(path);
       break;
     }
     if (path.isArrowFunctionExpression()) {
@@ -34,14 +35,14 @@ function transformDoExpression(path: NodePath) {
       const [newBody] = body.replaceWith(
         t.blockStatement([t.returnStatement(body.node as t.Expression)]),
       );
-      explodeStatement(newBody.get("body")[0]);
+      flattenStatement(newBody.get("body")[0]);
       break;
     }
     path = path.parentPath;
   } while (path);
 }
 
-function explodeStatement(path: NodePath<t.Statement>) {
+function flattenStatement(path: NodePath<t.Statement>) {
   const effects: t.Statement[] = [];
   switch (path.type) {
     case "WhileStatement": {
@@ -72,40 +73,47 @@ function explodeStatement(path: NodePath<t.Statement>) {
       );
       break;
     }
+    case "ExpressionStatement":
+      pushEffect(path.get("expression"), false);
+      path.replaceWithMultiple(effects);
+      break;
     default:
-      explode(path);
+      flattenNormal(path);
       path.replaceWithMultiple([...effects, path.node]);
   }
 
-  function pushEffect(
-    path: NodePath<t.Expression>,
-    assertHasDoExpression = false,
-  ) {
+  function pushEffect(path: NodePath<t.Expression>, needResult = true) {
     const { node } = path;
     if (node.type === "DoExpression") {
       const uid = path.get("body").scope.generateDeclaredUidIdentifier();
       effects.push(node.body);
-      captureDoExpressionResult(node.body, uid);
-      path.replaceWith(uid);
+      if (needResult) {
+        captureDoExpressionResult(node.body, uid);
+        path.replaceWith(uid);
+      }
     } else {
       if (isTopLevelSideEffectFree(node)) {
-        explode(path);
+        flattenNormal(path);
       } else {
-        if (assertHasDoExpression || traverse.hasType(node, "DoExpression")) {
-          explode(path);
+        if (traverse.hasType(node, "DoExpression")) {
+          flattenNormal(path);
         }
-        const uid = path.scope.generateDeclaredUidIdentifier();
-        effects.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", t.cloneNode(uid), node),
-          ),
-        );
-        path.replaceWith(uid);
+        if (needResult) {
+          const uid = path.scope.generateDeclaredUidIdentifier();
+          effects.push(
+            t.expressionStatement(
+              t.assignmentExpression("=", t.cloneNode(uid), node),
+            ),
+          );
+          path.replaceWith(uid);
+        } else {
+          effects.push(t.expressionStatement(node));
+        }
       }
     }
   }
 
-  function explode(path: NodePath) {
+  function flattenNormal(path: NodePath) {
     const expressions: NodePath<t.Expression>[] = [];
     path.traverse({
       Statement(path) {
