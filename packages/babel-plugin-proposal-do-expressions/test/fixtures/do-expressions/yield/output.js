@@ -1,9 +1,9 @@
 function* g() {
   {
-    var _temp;
+    var _do;
     let z;
-    _temp = yield 1;
+    _do = yield 1;
   }
-  const y = _temp;
+  const y = _do;
   return y;
 }

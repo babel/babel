@@ -1,9 +1,9 @@
 async () => {
   {
-    var _temp;
+    var _do;
     await 0;
     while (0) {}
-    _temp = 0;
+    _do = 0;
   }
-  return _temp;
+  return _do;
 };

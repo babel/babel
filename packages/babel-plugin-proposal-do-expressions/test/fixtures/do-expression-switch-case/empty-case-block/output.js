@@ -1,12 +1,12 @@
 const x = () => {
   {
-    var _temp;
+    var _do;
     switch (new Date().getDay()) {
       case 0:
         break;
       default:
-        _temp = "weekday 🚴";
+        _do = "weekday 🚴";
     }
   }
-  return _temp;
+  return _do;
 };

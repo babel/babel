@@ -1,15 +1,15 @@
 function main(a, b) {
-  var _temp;
-  _temp = effect(0);
+  var _do;
+  _do = effect(0);
   {
-    var _temp2;
+    var _do2;
     if (effect(1)) return 0;
-    _temp2 = a;
+    _do2 = a;
   }
   {
-    var _temp3;
+    var _do3;
     if (effect(2)) return 1;
-    _temp3 = 'arg';
+    _do3 = 'arg';
   }
-  return _temp + _temp2 + _temp3 + effect(3);
+  return _do + _do2 + _do3 + effect(3);
 }

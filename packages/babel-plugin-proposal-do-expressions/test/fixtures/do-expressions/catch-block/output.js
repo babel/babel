@@ -1,9 +1,9 @@
 {
-  var _temp;
+  var _do;
   try {
     a();
   } catch (e) {
     b();
   }
 }
-var x = _temp;
+var x = _do;

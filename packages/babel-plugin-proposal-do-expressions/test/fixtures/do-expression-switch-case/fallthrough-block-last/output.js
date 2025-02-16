@@ -1,6 +1,6 @@
 const x = n => {
   {
-    var _temp;
+    var _do;
     switch (n) {
       case 0:
         {
@@ -8,7 +8,7 @@ const x = n => {
         }
       case 1:
         {
-          _temp = 'b';
+          _do = 'b';
           break;
         }
       default:
@@ -17,11 +17,11 @@ const x = n => {
         }
       case 2:
         {
-          _temp = 'c';
+          _do = 'c';
         }
       case 3:
       case 4:
     }
   }
-  return _temp;
+  return _do;
 };

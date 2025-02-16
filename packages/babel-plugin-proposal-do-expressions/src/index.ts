@@ -91,7 +91,7 @@ function flattenStatement(path: NodePath<t.Statement>) {
     if (node.type === "DoExpression") {
       effects.push(node.body);
       if (needResult) {
-        const uid = path.get("body").scope.generateDeclaredUidIdentifier();
+        const uid = path.get("body").scope.generateDeclaredUidIdentifier("do");
         captureDoExpressionResult(node.body, uid);
         path.replaceWith(uid);
       }
@@ -103,7 +103,7 @@ function flattenStatement(path: NodePath<t.Statement>) {
           flattenNormal(path);
         }
         if (needResult) {
-          const uid = path.scope.generateDeclaredUidIdentifier();
+          const uid = path.scope.generateDeclaredUidIdentifier("do");
           effects.push(
             t.expressionStatement(
               t.assignmentExpression("=", t.cloneNode(uid), node),

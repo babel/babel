@@ -1,16 +1,16 @@
 const x = n => {
   {
-    var _temp;
+    var _do;
     switch (n) {
       case 0:
       case 6:
         {
-          _temp = "weekend 🚵";
+          _do = "weekend 🚵";
           break;
         }
       default:
-        _temp = "weekday 🚴";
+        _do = "weekday 🚴";
     }
   }
-  return _temp;
+  return _do;
 };

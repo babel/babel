@@ -1,33 +1,33 @@
 function main() {
   {
-    var _temp;
+    var _do;
     if (effect(1)) return 0;
-    _temp = fn;
+    _do = fn;
   }
   {
-    var _temp2;
+    var _do2;
     if (effect(2)) return 1;
-    _temp2 = 'arg';
+    _do2 = 'arg';
   }
-  _temp(_temp2);
+  _do(_do2);
 }
 function withThis() {
-  var _temp5;
+  var _do5;
   {
-    var _temp3;
+    var _do3;
     if (this.effect(1)) return 0;
-    _temp3 = obj;
+    _do3 = obj;
   }
   {
-    var _temp4;
+    var _do4;
     if (this.effect(2)) return 1;
-    _temp4 = 'key';
+    _do4 = 'key';
   }
-  _temp5 = _temp3[_temp4];
+  _do5 = _do3[_do4];
   {
-    var _temp6;
+    var _do6;
     if (this.effect(3)) return 2;
-    _temp6 = 'arg';
+    _do6 = 'arg';
   }
-  _temp5(_temp6);
+  _do5(_do6);
 }

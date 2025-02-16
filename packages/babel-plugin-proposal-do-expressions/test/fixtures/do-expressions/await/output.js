@@ -1,9 +1,9 @@
 async function p(x) {
   {
-    var _temp;
+    var _do;
     let z;
-    _temp = await x;
+    _do = await x;
   }
-  const y = _temp;
+  const y = _do;
   return y;
 }

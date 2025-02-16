@@ -1,6 +1,6 @@
 const x = n => {
   {
-    var _temp;
+    var _do;
     switch (n) {
       case 0:
       case 6:
@@ -23,15 +23,15 @@ const x = n => {
           if (n === 2) {
             const c = 1;
           } else {
-            _temp = "c";
+            _do = "c";
           }
           {
             break;
           }
         }
       default:
-        _temp = "bar";
+        _do = "bar";
     }
   }
-  return _temp;
+  return _do;
 };

@@ -1,7 +1,7 @@
 {
-  var _temp;
+  var _do;
   var bar = "foo";
   if (!bar) throw new Error("unreachable");
-  _temp = bar;
+  _do = bar;
 }
-var x = _temp;
+var x = _do;

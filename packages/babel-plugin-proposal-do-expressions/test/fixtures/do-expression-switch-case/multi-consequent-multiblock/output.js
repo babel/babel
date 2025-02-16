@@ -1,10 +1,10 @@
 const x = n => {
   {
-    var _temp;
+    var _do;
     switch (n) {
       case 0:
         {
-          _temp = "a";
+          _do = "a";
         }
         {
           break;
@@ -15,7 +15,7 @@ const x = n => {
         ;
       case 1:
         {
-          _temp = "a";
+          _do = "a";
         }
         break;
         {
@@ -23,7 +23,7 @@ const x = n => {
         }
         ;
       case 2:
-        _temp = "a";
+        _do = "a";
         {
           break;
         }
@@ -31,7 +31,7 @@ const x = n => {
       case 3:
         "a";
         {
-          _temp = "b";
+          _do = "b";
           break;
         }
         {
@@ -45,7 +45,7 @@ const x = n => {
           "b";
         }
         {
-          _temp = "c";
+          _do = "c";
           break;
           "d";
         }
@@ -56,7 +56,7 @@ const x = n => {
         }
       case 5:
         {
-          _temp = "a";
+          _do = "a";
         }
         {
           break;
@@ -68,5 +68,5 @@ const x = n => {
         }
     }
   }
-  return _temp;
+  return _do;
 };

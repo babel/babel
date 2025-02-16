@@ -1,12 +1,12 @@
 let p;
 {
-  var _temp;
+  var _do;
   while (p = p.parentPath) {
     if (a) {
-      _temp = 'a';
+      _do = 'a';
     } else {
-      _temp = 'b';
+      _do = 'b';
     }
   }
 }
-let a = _temp;
+let a = _do;

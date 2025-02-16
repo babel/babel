@@ -1,6 +1,6 @@
 const x = n => {
   {
-    var _temp;
+    var _do;
     switch (n) {
       case 0:
         if (true) {
@@ -9,5 +9,5 @@ const x = n => {
         }
     }
   }
-  return _temp;
+  return _do;
 };

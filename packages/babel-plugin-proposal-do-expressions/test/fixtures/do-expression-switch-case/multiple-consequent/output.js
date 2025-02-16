@@ -1,14 +1,14 @@
 const x = () => {
   {
-    var _temp;
+    var _do;
     switch (new Date().getDay()) {
       case 0:
         get();
-        _temp = 1 + 1;
+        _do = 1 + 1;
         break;
       default:
-        _temp = "weekday 🚴";
+        _do = "weekday 🚴";
     }
   }
-  return _temp;
+  return _do;
 };
