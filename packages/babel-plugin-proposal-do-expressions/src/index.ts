@@ -89,9 +89,9 @@ function flattenStatement(path: NodePath<t.Statement>) {
   function pushEffect(path: NodePath<t.Expression>, needResult = true) {
     const { node } = path;
     if (node.type === "DoExpression") {
-      const uid = path.get("body").scope.generateDeclaredUidIdentifier();
       effects.push(node.body);
       if (needResult) {
+        const uid = path.get("body").scope.generateDeclaredUidIdentifier();
         captureDoExpressionResult(node.body, uid);
         path.replaceWith(uid);
       }
