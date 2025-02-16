@@ -22,6 +22,8 @@ export interface Options {
   linesAbove?: number;
   /**  The number of lines to show below the error. default: 3 */
   linesBelow?: number;
+
+  startLine?: number;
   /**
    * Forcibly syntax highlight the code as JavaScript (for non-terminals);
    * overrides highlightCode.
@@ -53,6 +55,7 @@ function getMarkerLines(
   loc: NodeLocation,
   source: string[],
   opts: Options,
+  startLineBaseZero: number,
 ): {
   start: number;
   end: number;
@@ -68,9 +71,9 @@ function getMarkerLines(
     ...loc.end,
   };
   const { linesAbove = 2, linesBelow = 3 } = opts || {};
-  const startLine = startLoc.line;
+  const startLine = startLoc.line - startLineBaseZero;
   const startColumn = startLoc.column;
-  const endLine = endLoc.line;
+  const endLine = endLoc.line - startLineBaseZero;
   const endColumn = endLoc.column;
 
   let start = Math.max(startLine - (linesAbove + 1), 0);
@@ -127,13 +130,19 @@ export function codeFrameColumns(
 ): string {
   const shouldHighlight =
     opts.forceColor || (isColorSupported() && opts.highlightCode);
+  const startLineBaseZero = (opts.startLine || 1) - 1;
   const defs = getDefs(shouldHighlight);
 
   const lines = rawLines.split(NEWLINE);
-  const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
+  const { start, end, markerLines } = getMarkerLines(
+    loc,
+    lines,
+    opts,
+    startLineBaseZero,
+  );
   const hasColumns = loc.start && typeof loc.start.column === "number";
 
-  const numberMaxWidth = String(end).length;
+  const numberMaxWidth = String(end + startLineBaseZero).length;
 
   const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
 
@@ -142,7 +151,9 @@ export function codeFrameColumns(
     .slice(start, end)
     .map((line, index) => {
       const number = start + 1 + index;
-      const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
+      const paddedNumber = ` ${number + startLineBaseZero}`.slice(
+        -numberMaxWidth,
+      );
       const gutter = ` ${paddedNumber} |`;
       const hasMarker = markerLines[number];
       const lastMarkerLine = !markerLines[number + 1];

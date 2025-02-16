@@ -420,4 +420,14 @@ describe("@babel/code-frame", function () {
     expect(stripAnsi(highlighted)).toBe(raw);
     expect(highlighted.length).toBeGreaterThan(raw.length);
   });
+
+  test("opts.startLine", function () {
+    const rawLines = "const a = 1;\nconst b = 1";
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 102 } }, { startLine: 101 }),
+    ).toMatchInlineSnapshot(`
+      "  101 | const a = 1;
+      > 102 | const b = 1"
+    `);
+  });
 });

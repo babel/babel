@@ -60,8 +60,6 @@ describe("parseSync", function () {
     expect(err.message).toMatchInlineSnapshot(`
       "unknown: Unexpected token (3:8)
 
-        1 |
-        2 |
       > 3 |    const* a = 1;
           |         ^"
     `);
