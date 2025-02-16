@@ -1,7 +1,9 @@
-var x = function () {
+{
+  var _do;
   try {
-    return a();
+    a();
   } catch (e) {
-    return b();
+    b();
   }
-}();
+}
+var x = _do;
