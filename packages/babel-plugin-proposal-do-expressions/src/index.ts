@@ -12,6 +12,10 @@ export default declare(api => {
     visitor: {
       DoExpression: {
         exit(path) {
+          if (path.node.async) {
+            // Async do expressions are not yet supported
+            return;
+          }
           transformDoExpression(path);
         },
       },
