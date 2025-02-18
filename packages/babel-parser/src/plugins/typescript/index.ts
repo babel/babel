@@ -265,11 +265,16 @@ function tsIsVarianceAnnotations(
 function tsIsEntityName(
   node: N.Expression,
 ): node is N.MemberExpression | N.Identifier {
+  if (node.extra?.parenthesized) {
+    return false;
+  }
   switch (node.type) {
     case "Identifier":
       return true;
     case "MemberExpression":
       return !node.computed && tsIsEntityName(node.object);
+    case "TSInstantiationExpression":
+      return tsIsEntityName(node.expression);
     default:
       return false;
   }
@@ -1793,9 +1798,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const node = this.startNode<
-            N.TSClassImplements | N.TSInterfaceHeritage
-          >();
           if (process.env.BABEL_8_BREAKING) {
             const expression = super.parseExprSubscripts();
             if (!tsIsEntityName(expression)) {
@@ -1805,15 +1807,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
                 { token },
               );
             }
-            node.expression = expression;
-            if (this.match(tt.lt)) {
-              node.typeArguments = this.tsParseTypeArguments();
+            const nodeType =
+              token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements";
+            if (expression.type === "TSInstantiationExpression") {
+              // @ts-expect-error cast TSInstantiationExpression to TSInterfaceHeritage/TSClassImplements
+              expression.type = nodeType;
+              return expression;
             }
-            return this.finishNode(
-              node,
-              token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements",
-            );
+            const node = this.startNodeAtNode<
+              N.TSInterfaceHeritage | N.TSClassImplements
+            >(expression);
+            node.expression = expression;
+            // The last element can not form a TSInstantiationExpression because of the bail condition in
+            // `parseSubscript`, in this case we have to parse type arguments again
+            if (this.match(tt.lt)) {
+              node.typeArguments = this.tsParseTypeArgumentsInExpression();
+            }
+            return this.finishNode(node, nodeType);
           } else {
+            const node = this.startNode<
+              N.TSInterfaceHeritage | N.TSClassImplements
+            >();
             // @ts-expect-error Babel 7 vs Babel 8
             node.expression = this.tsParseEntityName(
               tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
