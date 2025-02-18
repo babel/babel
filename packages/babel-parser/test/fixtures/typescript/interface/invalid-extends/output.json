@@ -1,0 +1,123 @@
+{
+  "type": "File",
+  "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":67,"index":107}},
+  "errors": [
+    "SyntaxError: 'extends' list can only include identifiers or qualified-names with optional type arguments. (2:26)",
+    "SyntaxError: 'extends' list can only include identifiers or qualified-names with optional type arguments. (2:36)",
+    "SyntaxError: 'extends' list can only include identifiers or qualified-names with optional type arguments. (2:46)",
+    "SyntaxError: 'extends' list can only include identifiers or qualified-names with optional type arguments. (2:53)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":67,"index":107}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":40,"end":107,"loc":{"start":{"line":2,"column":0,"index":40},"end":{"line":2,"column":67,"index":107}},
+        "id": {
+          "type": "Identifier",
+          "start":50,"end":57,"loc":{"start":{"line":2,"column":10,"index":50},"end":{"line":2,"column":17,"index":57},"identifierName":"Invalid"},
+          "name": "Invalid"
+        },
+        "extends": [
+          {
+            "type": "TSInterfaceHeritage",
+            "start":66,"end":74,"loc":{"start":{"line":2,"column":26,"index":66},"end":{"line":2,"column":34,"index":74}},
+            "expression": {
+              "type": "MemberExpression",
+              "start":66,"end":74,"loc":{"start":{"line":2,"column":26,"index":66},"end":{"line":2,"column":34,"index":74}},
+              "object": {
+                "type": "Identifier",
+                "start":66,"end":69,"loc":{"start":{"line":2,"column":26,"index":66},"end":{"line":2,"column":29,"index":69},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": true,
+              "property": {
+                "type": "Identifier",
+                "start":70,"end":73,"loc":{"start":{"line":2,"column":30,"index":70},"end":{"line":2,"column":33,"index":73},"identifierName":"bar"},
+                "name": "bar"
+              }
+            }
+          },
+          {
+            "type": "TSInterfaceHeritage",
+            "start":76,"end":84,"loc":{"start":{"line":2,"column":36,"index":76},"end":{"line":2,"column":44,"index":84}},
+            "expression": {
+              "type": "OptionalMemberExpression",
+              "start":76,"end":84,"loc":{"start":{"line":2,"column":36,"index":76},"end":{"line":2,"column":44,"index":84}},
+              "object": {
+                "type": "Identifier",
+                "start":76,"end":79,"loc":{"start":{"line":2,"column":36,"index":76},"end":{"line":2,"column":39,"index":79},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":81,"end":84,"loc":{"start":{"line":2,"column":41,"index":81},"end":{"line":2,"column":44,"index":84},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "optional": true
+            }
+          },
+          {
+            "type": "TSInterfaceHeritage",
+            "start":86,"end":91,"loc":{"start":{"line":2,"column":46,"index":86},"end":{"line":2,"column":51,"index":91}},
+            "expression": {
+              "type": "CallExpression",
+              "start":86,"end":91,"loc":{"start":{"line":2,"column":46,"index":86},"end":{"line":2,"column":51,"index":91}},
+              "callee": {
+                "type": "Identifier",
+                "start":86,"end":89,"loc":{"start":{"line":2,"column":46,"index":86},"end":{"line":2,"column":49,"index":89},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "type": "TSInterfaceHeritage",
+            "start":93,"end":104,"loc":{"start":{"line":2,"column":53,"index":93},"end":{"line":2,"column":64,"index":104}},
+            "expression": {
+              "type": "MetaProperty",
+              "start":93,"end":104,"loc":{"start":{"line":2,"column":53,"index":93},"end":{"line":2,"column":64,"index":104}},
+              "meta": {
+                "type": "Identifier",
+                "start":93,"end":99,"loc":{"start":{"line":2,"column":53,"index":93},"end":{"line":2,"column":59,"index":99},"identifierName":"import"},
+                "name": "import"
+              },
+              "property": {
+                "type": "Identifier",
+                "start":100,"end":104,"loc":{"start":{"line":2,"column":60,"index":100},"end":{"line":2,"column":64,"index":104},"identifierName":"meta"},
+                "name": "meta"
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":105,"end":107,"loc":{"start":{"line":2,"column":65,"index":105},"end":{"line":2,"column":67,"index":107}},
+          "body": []
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Every extend element here is invalid",
+            "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Every extend element here is invalid",
+      "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}}
+    }
+  ]
+}

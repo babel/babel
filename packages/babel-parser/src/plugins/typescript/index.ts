@@ -132,6 +132,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Index signatures cannot have the 'static' modifier.",
   InitializerNotAllowedInAmbientContext:
     "Initializers are not allowed in ambient contexts.",
+  InvalidHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
+    `'${token}' list can only include identifiers or qualified-names with optional type arguments.`,
   InvalidModifierOnTypeMember: ({ modifier }: { modifier: TsModifier }) =>
     `'${modifier}' modifier cannot appear on a type member.`,
   InvalidModifierOnTypeParameter: ({ modifier }: { modifier: TsModifier }) =>
@@ -258,6 +260,19 @@ function tsIsVarianceAnnotations(
   modifier: string,
 ): modifier is N.VarianceAnnotations {
   return modifier === "in" || modifier === "out";
+}
+
+function tsIsEntityName(
+  node: N.Expression,
+): node is N.MemberExpression | N.Identifier {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return !node.computed && tsIsEntityName(node.object);
+    default:
+      return false;
+  }
 }
 
 export const enum tsParseEntityNameFlags {
@@ -1782,9 +1797,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             N.TSClassImplements | N.TSInterfaceHeritage
           >();
           if (process.env.BABEL_8_BREAKING) {
-            node.expression = this.tsParseEntityName(
-              tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
-            );
+            const expression = super.parseExprSubscripts();
+            if (!tsIsEntityName(expression)) {
+              this.raise(
+                TSErrors.InvalidHeritageClauseType,
+                expression.loc.start,
+                { token },
+              );
+            }
+            node.expression = expression;
             if (this.match(tt.lt)) {
               node.typeArguments = this.tsParseTypeArguments();
             }
@@ -1793,6 +1814,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements",
             );
           } else {
+            // @ts-expect-error Babel 7 vs Babel 8
             node.expression = this.tsParseEntityName(
               tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
                 tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
