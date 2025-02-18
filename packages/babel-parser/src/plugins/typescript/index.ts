@@ -1820,7 +1820,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             node.expression = expression;
             // The last element can not form a TSInstantiationExpression because of the bail condition in
             // `parseSubscript`, in this case we have to parse type arguments again
-            if (this.match(tt.lt)) {
+            if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
               node.typeArguments = this.tsParseTypeArgumentsInExpression();
             }
             return this.finishNode(node, nodeType);
