@@ -1797,7 +1797,7 @@ export interface TSInterfaceBody extends NodeBase {
 }
 
 export interface TSHeritageBase extends NodeBase {
-  expression: TsEntityName;
+  expression: Expression;
   typeArguments?: TsTypeParameterInstantiation;
 }
 
