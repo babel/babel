@@ -176,6 +176,8 @@ export default declare(api => {
       t.isArrowFunctionExpression(node) ||
       t.isParenthesizedExpression(node) ||
       t.isRecordExpression(node) ||
+      t.isTupleExpression(node) ||
+      t.isSequenceExpression(node) ||
       (t.isUnaryExpression(node) &&
         node.operator !== "throw" &&
         node.operator !== "delete")
