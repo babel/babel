@@ -100,12 +100,17 @@ export default declare(api => {
       if (node.type === "DoExpression") {
         effects.push(node.body);
         if (needResult) {
+          const completions = path
+            .get("body")
+            .getCompletionRecords(/* shouldPreserveBreak */ true)
+            .filter(completion => completion.isExpressionStatement());
+          if (completions.length === 0) {
+            path.replaceWith(path.scope.buildUndefinedNode());
+            return;
+          }
           const uid = path
             .get("body")
             .scope.generateDeclaredUidIdentifier("do");
-          const completions = path
-            .get("body")
-            .getCompletionRecords(/* shouldPreserveBreak */ true);
           for (const completion of completions) {
             if (!completion.isExpressionStatement()) continue;
             completion.replaceWith(
