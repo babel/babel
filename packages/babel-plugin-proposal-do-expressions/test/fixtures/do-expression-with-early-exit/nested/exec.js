@@ -17,3 +17,19 @@ function f(x, y, z) {
   } + (effects.push(3), 100);
   return t;
 }
+
+effects = [];
+expect(f(0, 0, 0)).toBe(131);
+expect(effects).toEqual([0, 1, 2, 3]);
+
+effects = [];
+expect(f(0, 1, 0)).toBe(161);
+expect(effects).toEqual([0, 1, 2, 10, 11, 12, 3]);
+
+effects = [];
+expect(f(1, 0, 0)).toBe('x');
+expect(effects).toEqual([0, 1]);
+
+effects = [];
+expect(f(0, 1, 1)).toBe('z');
+expect(effects).toEqual([0, 1, 2, 10, 11]);

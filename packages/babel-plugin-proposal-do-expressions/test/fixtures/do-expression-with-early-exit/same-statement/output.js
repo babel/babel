@@ -1,15 +1,15 @@
-function main(a, b) {
+function f(x, y) {
   var _do;
-  _do = effect(0);
+  _do = effects.push(0);
   {
     var _do2;
-    if (effect(1)) return 0;
-    _do2 = a;
+    if (effects.push(1), x) return 'x';
+    _do2 = 'b';
   }
   {
     var _do3;
-    if (effect(2)) return 1;
-    _do3 = 'arg';
+    if (effects.push(2), y) return 'y';
+    _do3 = 'c';
   }
-  return _do + _do2 + _do3 + effect(3);
+  return (_do, 'a') + _do2 + _do3 + (effects.push(3), 'd');
 }

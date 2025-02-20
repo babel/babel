@@ -1,6 +1,6 @@
-function main(a, b) {
-  return effect(0) +
-    (do { if (effect(1)) return 0; a }) +
-    (do { if (effect(2)) return 1; 'arg' }) +
-    effect(3);
+function f(x, y) {
+  return (effects.push(0), 'a') +
+    (do { if (effects.push(1), x) return 'x'; 'b' }) +
+    (do { if (effects.push(2), y) return 'y'; 'c' }) +
+    (effects.push(3), 'd');
 }

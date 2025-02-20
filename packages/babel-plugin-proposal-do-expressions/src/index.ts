@@ -50,7 +50,7 @@ export default declare(api => {
     switch (path.type) {
       case "WhileStatement": {
         const test = path.get("test");
-        pushEffect(test);
+        pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
@@ -67,7 +67,7 @@ export default declare(api => {
       }
       case "DoWhileStatement": {
         const test = path.get("test");
-        pushEffect(test);
+        pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
@@ -83,15 +83,19 @@ export default declare(api => {
         break;
       }
       case "ExpressionStatement":
-        pushEffect(path.get("expression"), false);
+        pushEffect(path.get("expression"), true, false);
         path.replaceWithMultiple(effects);
         break;
       default:
-        flattenNormal(path);
+        flattenNormal(path, true);
         path.replaceWithMultiple([...effects, path.node]);
     }
 
-    function pushEffect(path: NodePath<t.Expression>, needResult = true) {
+    function pushEffect(
+      path: NodePath<t.Expression>,
+      skipTrailing: boolean,
+      needResult = true,
+    ) {
       const { node } = path;
       if (node.type === "DoExpression") {
         effects.push(node.body);
@@ -116,10 +120,10 @@ export default declare(api => {
         }
       } else {
         if (isTopLevelSideEffectFree(node)) {
-          flattenNormal(path);
+          flattenNormal(path, skipTrailing);
         } else {
           if (traverse.hasType(node, "DoExpression")) {
-            flattenNormal(path);
+            flattenNormal(path, skipTrailing);
           }
           if (needResult) {
             const uid = path.scope.generateDeclaredUidIdentifier("do");
@@ -136,7 +140,8 @@ export default declare(api => {
       }
     }
 
-    function flattenNormal(path: NodePath) {
+    function flattenNormal(path: NodePath, skipTrailing: boolean) {
+      // Collect immediate descendant expressions
       const expressions: NodePath<t.Expression>[] = [];
       path.traverse({
         Statement(path) {
@@ -147,18 +152,27 @@ export default declare(api => {
           path.skip();
         },
       });
-      for (let i = expressions.length - 1; i >= 0; i--) {
-        const path = expressions[i];
-        if (
-          path.node.type !== "DoExpression" &&
-          !traverse.hasType(path.node, "DoExpression")
-        ) {
-          expressions.pop();
-        } else {
-          break;
+
+      // Skip flattening trailing expressions that are after all the DoExpressions
+      let lastDoExpression: NodePath<t.Expression>;
+      if (skipTrailing) {
+        while (expressions.length) {
+          const path = expressions.pop();
+          if (
+            path.node.type === "DoExpression" ||
+            traverse.hasType(path.node, "DoExpression")
+          ) {
+            lastDoExpression = path;
+            break;
+          }
         }
       }
-      expressions.forEach(path => pushEffect(path));
+
+      // Flatten the expressions
+      expressions.forEach(path => pushEffect(path, false));
+      if (lastDoExpression) {
+        pushEffect(lastDoExpression, true);
+      }
     }
   }
 
