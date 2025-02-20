@@ -4,7 +4,7 @@ const x = n => {
     switch (n) {
       case 0:
         if (true) {
-          'out';
+          _do = 'out';
           break;
         }
     }

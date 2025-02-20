@@ -29,6 +29,8 @@ type CompletionContext = {
   // when a `break` statement is an immediate descendant of a block statement, e.g.
   // `{ break }`, it can influence the control flow in the upper levels.
   shouldPopulateBreak: boolean;
+  // Whether the `break` statement should be preserved.
+  shouldPreserveBreak: boolean;
 };
 
 function NormalCompletion(path: NodePath): Completion {
@@ -169,18 +171,22 @@ function getStatementListCompletion(
           // directly in return statement, i.e. `return (var a = 1)` is invalid.
           if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
             completions.push(...statementCompletions);
+            if (!context.shouldPreserveBreak) {
+              replaceBreakStatementInBreakCompletion(
+                statementCompletions,
+                /* reachable */ true,
+              );
+            }
+          }
+          if (!context.shouldPreserveBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
-              /* reachable */ true,
+              /* reachable */ false,
             );
           }
-          replaceBreakStatementInBreakCompletion(
-            statementCompletions,
-            /* reachable */ false,
-          );
         } else {
           completions.push(...statementCompletions);
-          if (!context.shouldPopulateBreak) {
+          if (!context.shouldPopulateBreak && !context.shouldPreserveBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
               /* reachable */ true,
@@ -213,7 +219,8 @@ function getStatementListCompletion(
       if (
         pathCompletions.length > 1 ||
         (pathCompletions.length === 1 &&
-          !pathCompletions[0].path.isVariableDeclaration())
+          !pathCompletions[0].path.isVariableDeclaration() &&
+          !pathCompletions[0].path.isEmptyStatement())
       ) {
         completions.push(...pathCompletions);
         break;
@@ -254,6 +261,7 @@ function _getCompletionRecords(
       canHaveBreak: true,
       shouldPopulateBreak: false,
       inCaseClause: true,
+      shouldPreserveBreak: context.shouldPreserveBreak,
     });
   } else if (path.isBreakStatement()) {
     records.push(BreakCompletion(path));
@@ -272,13 +280,18 @@ function _getCompletionRecords(
  *
  * @export
  * @param {NodePath} this
+ * @param {boolean} [shouldPreserveBreak=false] Whether the `break` statement should be preserved.
  * @returns {NodePath[]} Completion records
  */
-export function getCompletionRecords(this: NodePath): NodePath[] {
+export function getCompletionRecords(
+  this: NodePath,
+  shouldPreserveBreak = false,
+): NodePath[] {
   const records = _getCompletionRecords(this, {
     canHaveBreak: false,
     shouldPopulateBreak: false,
     inCaseClause: false,
+    shouldPreserveBreak,
   });
   return records.map(r => r.path);
 }

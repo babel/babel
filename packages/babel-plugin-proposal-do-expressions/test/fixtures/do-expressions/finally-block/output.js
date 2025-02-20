@@ -1,9 +1,9 @@
 {
   var _do;
   try {
-    a();
+    _do = a();
   } catch (e) {
-    b();
+    _do = b();
   } finally {
     c();
   }
