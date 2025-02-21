@@ -466,7 +466,7 @@ if (process.env.BABEL_8_BREAKING) {
     aliases: ["TSType"],
     visitor: ["expression", "typeArguments"],
     fields: {
-      expression: validateType("TSEntityName"),
+      expression: validateType("Expression"),
       typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
     },
   });
@@ -474,7 +474,7 @@ if (process.env.BABEL_8_BREAKING) {
     aliases: ["TSType"],
     visitor: ["expression", "typeArguments"],
     fields: {
-      expression: validateType("TSEntityName"),
+      expression: validateType("Expression"),
       typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
     },
   });
