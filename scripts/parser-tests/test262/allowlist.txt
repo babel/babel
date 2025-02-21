@@ -3,10 +3,7 @@
 
 
 
-# 5 valid programs produced a parsing error
+# 2 valid programs produced a parsing error
 
 staging/sm/String/make-normalize-generateddata-input.py(default)
 staging/sm/String/make-normalize-generateddata-input.py(strict mode)
-staging/sm/extensions/inc-dec-functioncall.js(default)
-staging/sm/regress/regress-609617.js(default)
-staging/sm/statements/for-of-iterator-close.js(default)
