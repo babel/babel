@@ -599,32 +599,15 @@ export default abstract class StatementParser extends ExpressionParser {
         let result;
         if (startType === tt._import) {
           result = this.parseImport(node as Undone<N.ImportDeclaration>);
-
-          if (
-            result.type === "ImportDeclaration" &&
-            (!result.importKind || result.importKind === "value")
-          ) {
-            this.sawUnambiguousESM = true;
-          }
         } else {
           result = this.parseExport(
             node as Undone<
               | N.ExportAllDeclaration
               | N.ExportDefaultDeclaration
-              | N.ExportDefaultDeclaration
+              | N.ExportNamedDeclaration
             >,
             decorators,
           );
-
-          if (
-            (result.type === "ExportNamedDeclaration" &&
-              (!result.exportKind || result.exportKind === "value")) ||
-            (result.type === "ExportAllDeclaration" &&
-              (!result.exportKind || result.exportKind === "value")) ||
-            result.type === "ExportDefaultDeclaration"
-          ) {
-            this.sawUnambiguousESM = true;
-          }
         }
 
         this.assertModuleNodeAllowed(result);
@@ -2374,6 +2357,8 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.parseExportFrom(node, true);
 
+      this.sawUnambiguousESM = true;
+
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
@@ -2411,6 +2396,7 @@ export default abstract class StatementParser extends ExpressionParser {
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
+      this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportNamedDeclaration");
     }
 
@@ -2427,7 +2413,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
 
       this.checkExport(node2, true, true);
-
+      this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportDefaultDeclaration");
     }
 
@@ -3150,6 +3136,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.checkJSONModuleImport(node);
 
     this.semicolon();
+    this.sawUnambiguousESM = true;
     return this.finishNode(node, "ImportDeclaration");
   }
 
