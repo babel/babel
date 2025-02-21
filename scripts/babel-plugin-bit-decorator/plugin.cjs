@@ -65,7 +65,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
             }
             if (!storageName) {
               throw path.buildCodeFrameError(
-                "Cannot use @bit withuot also declaring a @bit.storage field"
+                "Cannot use @bit without also declaring a @bit.storage field"
               );
             }
             if (nextMask === 0) {
