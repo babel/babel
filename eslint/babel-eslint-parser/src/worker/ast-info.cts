@@ -23,10 +23,6 @@ export function getVisitorKeys() {
 
     // AST Types that shares `"type"` property with Babel but have different shape
     const conflictTypes = {
-      // todo: remove this when we drop Babel 7 support
-      ClassPrivateMethod: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.MethodDefinition,
-      ),
       ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
     };
 
@@ -34,6 +30,13 @@ export function getVisitorKeys() {
       ...newTypes,
       ...babel.types.VISITOR_KEYS,
       ...conflictTypes,
+      ...(process.env.BABEL_8_BREAKING
+        ? {}
+        : {
+            ClassPrivateMethod: ["decorators"].concat(
+              ESLINT_VISITOR_KEYS.MethodDefinition,
+            ),
+          }),
     };
   }
   return visitorKeys;
