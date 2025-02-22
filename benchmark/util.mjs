@@ -19,6 +19,7 @@ import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-com
 
 import { USE_ESM } from "$repo-utils";
 import { Bench } from "tinybench";
+import { withCodSpeed } from "@codspeed/tinybench-plugin";
 import { globSync } from "glob";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -76,9 +77,11 @@ function generateCaseName(url) {
 }
 class Benchmark {
   constructor() {
-    this.bench = new Bench({
-      time: 5000,
-    });
+    this.bench = withCodSpeed(
+      new Bench({
+        time: 5000,
+      })
+    );
   }
   add(name, fn, options) {
     this.bench.add(name, fn, options);

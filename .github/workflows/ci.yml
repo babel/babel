@@ -859,3 +859,26 @@ jobs:
         with:
           key: ${{ steps.results-cache-restore.outputs.cache-primary-key }}
           path: babel-test262-runner/cache.lmdb
+
+  codspeed:
+    name: Codspeed
+    runs-on: ubuntu-latest
+    needs: prepare-yarn-cache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: babel-artifact
+      - name: Build
+        run: make prepublish-build
+      - name: Run benchmarks
+        run: node --expose-gc ./benchmark/index.mjs
