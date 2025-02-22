@@ -264,7 +264,7 @@ function tsIsVarianceAnnotations(
 
 function tsIsEntityName(
   node: N.Expression,
-): node is N.MemberExpression | N.Identifier {
+): node is N.MemberExpression | N.Identifier | N.TsInstantiationExpression {
   if (node.extra?.parenthesized) {
     return false;
   }
