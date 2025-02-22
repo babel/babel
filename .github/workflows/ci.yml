@@ -829,9 +829,6 @@ jobs:
           cache: "yarn"
       - name: Install
         run: yarn install
-      - uses: actions/download-artifact@v3
-        with:
-          name: babel-artifact
       - name: Build
         run: make prepublish-build
       - name: Run benchmarks
