@@ -832,4 +832,6 @@ jobs:
       - name: Build
         run: make prepublish-build
       - name: Run benchmarks
-        run: node --expose-gc ./benchmark/index.mjs
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: node --expose-gc ./benchmark/index.mjs
