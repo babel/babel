@@ -834,4 +834,4 @@ jobs:
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
         with:
-          run: node --expose-gc ./benchmark/index.mjs
+          run: node ./benchmark/index.mjs --only-current
