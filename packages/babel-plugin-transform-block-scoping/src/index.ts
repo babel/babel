@@ -254,12 +254,6 @@ function isInLoop(path: NodePath<t.Node>): boolean {
 
 function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
   if (!t.isVariableDeclaration(node)) return false;
-  if (
-    // @ts-expect-error Fixme: document symbol properties
-    node[t.BLOCK_SCOPED_SYMBOL]
-  ) {
-    return true;
-  }
 
   if (!isLetOrConst(node.kind) && node.kind !== "using") {
     return false;
