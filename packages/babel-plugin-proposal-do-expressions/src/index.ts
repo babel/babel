@@ -22,23 +22,41 @@ export default declare(api => {
     },
   };
 
-  function transformDoExpression(path: NodePath) {
+  function transformDoExpression(doExprPath: NodePath<t.DoExpression>) {
+    let path: NodePath = doExprPath;
     do {
       if (!path.parentPath) {
         throw new Error("DoExpression must be in a statement");
       }
+      if (path.isArrowFunctionExpression()) {
+        // Do expression appears in parameters declarations OR expression body
+        const body = path.get("body");
+        if (
+          body.isExpression() &&
+          traverse.hasType(body.node, "DoExpression")
+        ) {
+          const [newBody] = body.replaceWith(
+            t.blockStatement([t.returnStatement(body.node as t.Expression)]),
+          );
+          flattenStatement(newBody.get("body")[0]);
+          break;
+        }
+      }
+      if (path.isFunction()) {
+        // Do expression appears in parameters declarations
+        // According to https://github.com/tc39/proposal-do-expressions#exceptions,
+        // `return` is not allowed in the do expression. So simply wrap it in IIFE.
+        const body = doExprPath.node.body.body;
+        if (body.length) {
+          doExprPath.replaceExpressionWithStatements(body);
+        } else {
+          doExprPath.replaceWith(doExprPath.scope.buildUndefinedNode());
+        }
+        break;
+      }
       if (Array.isArray(path.container) && path.isStatement()) {
         // Flatten the closest parent statement
         flattenStatement(path);
-        break;
-      }
-      if (path.isArrowFunctionExpression()) {
-        const body = path.get("body");
-        body.assertExpression();
-        const [newBody] = body.replaceWith(
-          t.blockStatement([t.returnStatement(body.node as t.Expression)]),
-        );
-        flattenStatement(newBody.get("body")[0]);
         break;
       }
       path = path.parentPath;
@@ -112,7 +130,6 @@ export default declare(api => {
             .get("body")
             .scope.generateDeclaredUidIdentifier("do");
           for (const completion of completions) {
-            if (!completion.isExpressionStatement()) continue;
             completion.replaceWith(
               t.assignmentExpression(
                 "=",
