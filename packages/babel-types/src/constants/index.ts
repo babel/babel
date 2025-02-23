@@ -67,7 +67,8 @@ export const INHERIT_KEYS = {
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // eslint-disable-next-line no-restricted-globals
   exports.BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
+  // eslint-disable-next-line no-restricted-globals
+  exports.NOT_LOCAL_BINDING = Symbol.for(
+    "should not be considered a local binding",
+  );
 }
-export const NOT_LOCAL_BINDING = Symbol.for(
-  "should not be considered a local binding",
-);
