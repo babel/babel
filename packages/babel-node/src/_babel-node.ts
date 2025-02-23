@@ -48,9 +48,13 @@ for (const key of Object.keys(babelOptions) as Array<
 
 register(babelOptions);
 
+let hasTopLevelAwait = false;
+
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
     Program(path) {
+      hasTopLevelAwait = path.node.extra.topLevelAwait as boolean;
+
       let hasExpressionStatement: boolean;
       for (const bodyPath of path.get("body")) {
         if (bodyPath.isExpressionStatement()) {
@@ -64,6 +68,21 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
           );
         }
       }
+
+      if (hasTopLevelAwait) {
+        const body = path.node.body;
+        for (let i = body.length - 1; i >= 0; i--) {
+          if (t.isExpressionStatement(body[i])) {
+            body[i] = t.returnStatement(
+              (body[i] as babel.types.ExpressionStatement).expression,
+            );
+            break;
+          }
+        }
+
+        return;
+      }
+
       if (hasExpressionStatement) return;
 
       // If the executed code doesn't evaluate to a value,
@@ -80,11 +99,20 @@ const _eval = function (code: string, filename: string) {
   code = code.trim();
   if (!code) return undefined;
 
+  hasTopLevelAwait = false;
+
   code = babel.transformSync(code, {
     filename: filename,
     ...babelOptions,
+    parserOpts: {
+      allowAwaitOutsideFunction: true,
+    },
     plugins: (opts.plugins || []).concat([replPlugin]),
   }).code;
+
+  if (hasTopLevelAwait) {
+    code = `(async () => { ${code} })()`;
+  }
 
   return vm.runInThisContext(code, {
     filename: filename,
@@ -193,7 +221,17 @@ function replEval(
     err = e;
   }
 
-  callback(err, result);
+  if (hasTopLevelAwait && !err) {
+    (result as Promise<any>)
+      .then(v => {
+        callback(null, v);
+      })
+      .catch(e => {
+        callback(e, null);
+      });
+  } else {
+    callback(err, result);
+  }
 }
 
 function replStart() {
