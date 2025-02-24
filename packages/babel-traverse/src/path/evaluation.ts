@@ -229,6 +229,10 @@ function _evaluate(path: NodePath, state: State): any {
         deopt(binding.path, state);
         return;
       }
+      if (binding.kind === "var" && binding.path.scope !== binding.scope) {
+        deopt(binding.path, state);
+        return;
+      }
       if (binding.hasValue) {
         return binding.value;
       }

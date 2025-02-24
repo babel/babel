@@ -346,6 +346,17 @@ describe("evaluation", function () {
     expect(result.value).toEqual(["foo", "bar"]);
   });
 
+  it("should not evaluate vars in child scope", function () {
+    const path = getPath(`
+      if (typeof Bar != "undefined") {
+        var doesExist = true;
+      }
+      doesExist;
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
