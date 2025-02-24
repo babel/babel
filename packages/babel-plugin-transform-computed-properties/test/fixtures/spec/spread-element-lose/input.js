@@ -5,5 +5,7 @@ const first = {
 const second = {
   ...first,
   a: 'a',
-  ['c']: 'c'
+  ['c']: 'c',
 }
+
+const third = {...second}
