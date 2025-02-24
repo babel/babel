@@ -230,8 +230,16 @@ function _evaluate(path: NodePath, state: State): any {
         return;
       }
       if (binding.kind === "var" && binding.path.scope !== binding.scope) {
-        deopt(binding.path, state);
-        return;
+        for (
+          let scope = binding.path.scope.parent;
+          scope;
+          scope = scope.parent
+        ) {
+          if (scope === path.scope) {
+            deopt(binding.path, state);
+            return;
+          }
+        }
       }
       if (binding.hasValue) {
         return binding.value;

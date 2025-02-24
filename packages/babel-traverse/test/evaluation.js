@@ -357,6 +357,17 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  it("should not evaluate vars in child scope 2", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        doesExist;
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
