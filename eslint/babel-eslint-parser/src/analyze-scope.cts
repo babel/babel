@@ -194,6 +194,10 @@ class Referencer extends OriginalReferencer {
     this._visitClassProperty(node);
   }
 
+  AccessorProperty(node: any) {
+    this._visitClassProperty(node);
+  }
+
   ClassAccessorProperty(node: any) {
     this._visitClassProperty(node);
   }

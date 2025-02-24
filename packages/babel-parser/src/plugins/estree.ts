@@ -344,6 +344,21 @@ export default (superClass: typeof Parser) =>
       return propertyNode;
     }
 
+    parseClassAccessorProperty(
+      this: Parser,
+      node: N.ClassAccessorProperty,
+    ): any {
+      const accessorPropertyNode = super.parseClassAccessorProperty(node);
+      if (!process.env.BABEL_8_BREAKING) {
+        if (!this.getPluginOption("estree", "classFeatures")) {
+          return accessorPropertyNode;
+        }
+      }
+      (accessorPropertyNode as unknown as N.EstreeAccessorProperty).type =
+        "AccessorProperty";
+      return accessorPropertyNode;
+    }
+
     parseObjectMethod(
       prop: N.ObjectMethod,
       isGenerator: boolean,
