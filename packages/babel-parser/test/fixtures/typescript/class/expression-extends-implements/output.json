@@ -44,14 +44,15 @@
               "type": "TSClassImplements",
               "start":33,"end":39,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":39,"index":39}},
               "expression": {
-                "type": "TSQualifiedName",
+                "type": "MemberExpression",
                 "start":33,"end":36,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":36,"index":36}},
-                "left": {
+                "object": {
                   "type": "Identifier",
                   "start":33,"end":34,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":34,"index":34},"identifierName":"X"},
                   "name": "X"
                 },
-                "right": {
+                "computed": false,
+                "property": {
                   "type": "Identifier",
                   "start":35,"end":36,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":36,"index":36},"identifierName":"Y"},
                   "name": "Y"
@@ -126,14 +127,15 @@
               "type": "TSClassImplements",
               "start":80,"end":86,"loc":{"start":{"line":2,"column":35,"index":80},"end":{"line":2,"column":41,"index":86}},
               "expression": {
-                "type": "TSQualifiedName",
+                "type": "MemberExpression",
                 "start":80,"end":83,"loc":{"start":{"line":2,"column":35,"index":80},"end":{"line":2,"column":38,"index":83}},
-                "left": {
+                "object": {
                   "type": "Identifier",
                   "start":80,"end":81,"loc":{"start":{"line":2,"column":35,"index":80},"end":{"line":2,"column":36,"index":81},"identifierName":"X"},
                   "name": "X"
                 },
-                "right": {
+                "computed": false,
+                "property": {
                   "type": "Identifier",
                   "start":82,"end":83,"loc":{"start":{"line":2,"column":37,"index":82},"end":{"line":2,"column":38,"index":83},"identifierName":"Y"},
                   "name": "Y"
