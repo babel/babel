@@ -39,6 +39,13 @@ export interface Options {
   allowUndeclaredExports?: boolean;
 
   /**
+   * By default, yield use is not allowed outside of a generator function.
+   * Set this to true to accept such code.
+   */
+
+  allowYieldOutsideFunction?: boolean;
+
+  /**
    * By default, Babel parser JavaScript code according to Annex B syntax.
    * Set this to `false` to disable such behavior.
    */
@@ -141,17 +148,18 @@ export const enum OptionFlags {
   AllowNewTargetOutsideFunction = 1 << 2,
   AllowImportExportEverywhere = 1 << 3,
   AllowSuperOutsideMethod = 1 << 4,
-  AllowUndeclaredExports = 1 << 5,
-  Ranges = 1 << 6,
-  Tokens = 1 << 7,
-  CreateImportExpressions = 1 << 8,
-  CreateParenthesizedExpressions = 1 << 9,
-  ErrorRecovery = 1 << 10,
-  AttachComment = 1 << 11,
-  AnnexB = 1 << 12,
+  AllowYieldOutsideFunction = 1 << 5,
+  AllowUndeclaredExports = 1 << 6,
+  Ranges = 1 << 7,
+  Tokens = 1 << 8,
+  CreateImportExpressions = 1 << 9,
+  CreateParenthesizedExpressions = 1 << 10,
+  ErrorRecovery = 1 << 11,
+  AttachComment = 1 << 12,
+  AnnexB = 1 << 13,
 }
 
-type OptionsWithDefaults = { [P in keyof Options]-?: Options[P] };
+type OptionsWithDefaults = Required<Options>;
 
 function createDefaultOptions(): OptionsWithDefaults {
   return {
@@ -184,6 +192,7 @@ function createDefaultOptions(): OptionsWithDefaults {
     allowSuperOutsideMethod: false,
     // When enabled, export statements can reference undeclared variables.
     allowUndeclaredExports: false,
+    allowYieldOutsideFunction: false,
     // An array of plugins to enable
     plugins: [],
     // TODO
