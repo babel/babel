@@ -204,12 +204,13 @@ export default declare((api, options: Options) => {
           // put all getters/setters into the first object expression as well as all initialisers up
           // to the first computed property
 
-          const initProps: t.ObjectMember[] = [];
+          const initProps: Array<t.ObjectMember | t.SpreadElement> = [];
           const computedProps: t.ObjectMember[] = [];
           let foundComputed = false;
 
           for (const prop of node.properties) {
             if (t.isSpreadElement(prop)) {
+              initProps.push(prop);
               continue;
             }
             if (prop.computed) {
