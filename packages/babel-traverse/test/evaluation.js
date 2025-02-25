@@ -368,6 +368,35 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(true);
   });
 
+  it("should not evaluate vars in child scope 3", function () {
+    const path = getPath(`
+      var doesExist = true;
+      { doesExist }
+    `);
+    const evalResult = path.get("body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 4", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        { doesExist }
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 5", function () {
+    const path = getPath(`
+      { { var doesExist = true; } }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
