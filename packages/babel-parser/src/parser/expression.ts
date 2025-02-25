@@ -274,7 +274,8 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.isContextual(tt._yield)) {
       if (
-        this.optionFlags & OptionFlags.AllowYieldOutsideFunction ||
+        (this.optionFlags & OptionFlags.AllowYieldOutsideFunction &&
+          !this.scope.inFunction) ||
         this.prodParam.hasYield
       ) {
         let left = this.parseYield();
