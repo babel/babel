@@ -54,6 +54,10 @@ export default [
   "TS1161", // Unterminated regular expression literal.
   "TS1162", // An object member cannot be declared optional.
   "TS1163", // A 'yield' expression is only allowed in a generator body.
+  "TS1172", // 'extends' clause already seen."
+  "TS1173", // 'extends' clause must precede 'implements' clause.
+  "TS1175", // 'implements' clause already seen.
+  "TS1182", // A destructuring declaration must have an initializer.
   "TS1184", // Modifiers cannot appear here.
   "TS1185", // Merge conflict marker encountered.
   "TS1191", // An import declaration cannot have modifiers.
@@ -72,6 +76,7 @@ export default [
   "TS1384", // A 'new' expression with type arguments must always be followed by a parenthesized argument list.
   "TS1385", // Function type notation must be parenthesized when used in a union type.
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
+  "TS1434", // Unexpected keyword or identifier.
   "TS1437", // Namespace must be given a name.
   "TS1194", // Export declarations are not permitted in a namespace.
   // "TS2300", // Duplicate identifier '{0}'.
