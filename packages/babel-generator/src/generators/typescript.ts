@@ -837,8 +837,8 @@ export function tsPrintClassMemberModifiers(
     this.space();
   }
   printModifiersList(this, node, [
-    !isPrivateField && node.override && "override",
     !isPrivateField && node.abstract && "abstract",
+    !isPrivateField && node.override && "override",
     (isPublicField || isPrivateField) && node.readonly && "readonly",
   ]);
 }
