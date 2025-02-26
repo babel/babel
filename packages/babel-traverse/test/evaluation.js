@@ -346,6 +346,75 @@ describe("evaluation", function () {
     expect(result.value).toEqual(["foo", "bar"]);
   });
 
+  it("should not evaluate vars in child scope", function () {
+    const path = getPath(`
+      if (typeof Bar != "undefined") {
+        var doesExist = true;
+      }
+      doesExist;
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate vars in child scope 2", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        doesExist;
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 3", function () {
+    const path = getPath(`
+      var doesExist = true;
+      { doesExist }
+    `);
+    const evalResult = path.get("body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 4", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        { doesExist }
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 5", function () {
+    const path = getPath(`
+      { { var doesExist = true; } }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 6", function () {
+    const path = getPath(`
+      for (var i = 0; i < 1; i++) { var doesExist = true; }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate vars in child scope 7", function () {
+    const path = getPath(`
+      do { break; var doesExist = true; } while (false);
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
