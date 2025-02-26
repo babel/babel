@@ -229,22 +229,20 @@ function _evaluate(path: NodePath, state: State): any {
         deopt(binding.path, state);
         return;
       }
-      if (binding.kind === "var" && binding.path.scope !== binding.scope) {
-        let hasIf = binding.path.scope.path.parentPath.isIfStatement();
-        for (
-          let scope = binding.path.scope.parent;
-          scope;
-          scope = scope.parent
-        ) {
+      const bindingPathScope = binding.path.scope;
+      if (binding.kind === "var" && bindingPathScope !== binding.scope) {
+        let hasUnsafeBlock =
+          !bindingPathScope.path.parentPath.isBlockStatement();
+        for (let scope = bindingPathScope.parent; scope; scope = scope.parent) {
           if (scope === path.scope) {
-            if (hasIf) {
+            if (hasUnsafeBlock) {
               deopt(binding.path, state);
               return;
             }
             break;
           }
-          if (scope.path.parentPath?.isIfStatement()) {
-            hasIf = true;
+          if (scope.path.parentPath?.isBlockStatement()) {
+            hasUnsafeBlock = true;
           }
         }
       }

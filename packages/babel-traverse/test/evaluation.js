@@ -397,6 +397,24 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(true);
   });
 
+  it("should not evaluate vars in child scope 6", function () {
+    const path = getPath(`
+      for (var i = 0; i < 1; i++) { var doesExist = true; }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate vars in child scope 7", function () {
+    const path = getPath(`
+      do { break; var doesExist = true; } while (false);
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
