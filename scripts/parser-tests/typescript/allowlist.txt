@@ -1,16 +1,15 @@
-# 8 invalid programs did not produce a parsing error
+# 7 invalid programs did not produce a parsing error
 
-bigintIndex.ts
 collisionArgumentsArrowFunctions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunction.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunctionExpressions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 dynamicImportTrailingComma.ts
-es3-oldStyleOctalLiteralInEnums.ts # We don't support ES3-style octal literal errors.
 exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
+regularExpressionAnnexB.ts # Babel parser does not handle regex parsing
 
 
-# 128 valid programs produced a parsing error
+# 130 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -50,6 +49,7 @@ decrementAndIncrementOperators.ts
 defaultArgsInOverloads.ts
 defaultValueInFunctionTypes.ts
 deleteOperatorInStrictMode.ts
+duplicateErrorNameNotFound.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
 duplicateIdentifierBindingElementInParameterDeclaration2.ts
 duplicateIdentifierEnum.ts
@@ -61,7 +61,6 @@ emptyGenericParamList.ts
 emptyTypeArgumentList.ts
 emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
-es3-oldStyleOctalLiteralTypes.ts
 es6ImportDefaultBindingMergeErrors.ts
 es6ImportNameSpaceImportMergeErrors.ts
 es6ImportNamedImportMergeErrors.ts
@@ -78,7 +77,7 @@ exportSpecifierForAGlobal.ts # We handle this fine, but it doesn't consider the 
 exportSpecifierReferencingOuterDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
 expressionWithJSDocTypeArguments.ts
 expressionsForbiddenInParameterInitializers.ts
-fileWithNextLine2.ts
+fileWithNextLine2.ts # This is a bug in TS: U+0085 is not a whitespace in ECMAScript
 funClodule.ts
 functionCall15.ts
 importAndVariableDeclarationConflict3.ts
@@ -113,13 +112,14 @@ mismatchedClassConstructorVariable.ts
 misspelledNewMetaProperty.ts
 modifiersOnInterfaceIndexSignature1.ts
 moduleDuplicateIdentifiers.ts
+modulePreserve2.ts
 moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
 multipleInheritance.ts
 nameCollisions.ts
 nonMergedOverloads.ts
 optionalChainWithInstantiationExpression1.ts
-parameterInitializerBeforeDestructuringEmit.ts
+parameterInitializerBeforeDestructuringEmit.ts # This is a bug in TS: "use strict" is not allowed when a function has destructuring parameters
 parameterPropertyOutsideConstructor.ts
 parseInvalidNonNullableTypes.ts
 parseInvalidNullableTypes.ts
@@ -131,6 +131,7 @@ reExportGlobalDeclaration4.ts # We handle this fine, but it doesn't consider the
 reExportUndefined1.ts
 readonlyInNonPropertyParameters.ts
 redeclareParameterInCatchBlock.ts
+regularExpressionScanning.ts
 restParamModifier2.ts
 shadowedReservedCompilerDeclarationsWithNoEmit.ts
 sourceMap-LineBreaks.ts

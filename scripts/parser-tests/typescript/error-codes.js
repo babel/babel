@@ -61,8 +61,10 @@ export default [
   "TS1184", // Modifiers cannot appear here.
   "TS1185", // Merge conflict marker encountered.
   "TS1191", // An import declaration cannot have modifiers.
+  "TS1194", // Export declarations are not permitted in a namespace.
   "TS1196", // Catch clause variable type annotation must be 'any' or 'unknown' if specified.
   "TS1197", // Catch clause variable cannot have an initializer.
+  "TS1198", // An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
   "TS1200", // Line terminator not permitted before arrow.
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -78,7 +80,10 @@ export default [
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
   "TS1434", // Unexpected keyword or identifier.
   "TS1437", // Namespace must be given a name.
-  "TS1194", // Export declarations are not permitted in a namespace.
+  "TS1487", // Octal escape sequences are not allowed.
+  "TS1488", // Escape sequence '\8' is not allowed.
+  "TS1490", // File appears to be binary.
+  "TS1499", // Unknown regular expression flag.
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
@@ -90,6 +95,7 @@ export default [
   // "TS2440", // Import declaration conflicts with local declaration of '{0}'.
   // "TS2451", // Cannot redeclare block-scoped variable '{0}'.
   "TS2452", // An enum member cannot have a numeric name.
+  // "TS2552", // Cannot find name 'foo'. Did you mean 'zoo'?
   "TS2566", // A rest element cannot have a property name.
   //"TS2580",
   "TS2481", // Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{0}'.
