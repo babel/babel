@@ -51,7 +51,7 @@ export type Validator = (
   | { shapeOf: { [x: string]: FieldOptions } }
   | object
 ) &
-  ((node: t.Node, key: string, val: any) => void);
+  ((node: t.Node, key: string | { toString(): string }, val: any) => void);
 
 export type FieldOptions = {
   default?: string | number | boolean | [];
@@ -96,11 +96,21 @@ export function assertEach(callback: Validator): Validator {
   function validator(node: t.Node, key: string, val: any) {
     if (!Array.isArray(val)) return;
 
-    for (let i = 0; i < val.length; i++) {
-      const subkey = `${key}[${i}]`;
+    let i = 0;
+    // We lazily concatenate strings here for performance reasons.
+    // Concatenating the strings is expensive because we are actually concatenating a string and a number,
+    // so V8 cannot just create a "rope string" but has to allocate memory for the string resulting from the number
+    // This string is very rarely used, only in error paths, so we can skip the concatenation cost in most cases
+    const subKey = {
+      toString() {
+        return `${key}[${i}]`;
+      },
+    };
+
+    for (; i < val.length; i++) {
       const v = val[i];
-      callback(node, subkey, v);
-      childValidator(node, subkey, v);
+      callback(node, subKey, v);
+      childValidator(node, subKey, v);
     }
   }
   validator.each = callback;
@@ -123,12 +133,30 @@ export function assertOneOf(...values: Array<any>): Validator {
   return validate;
 }
 
+export const allExpandedTypes: {
+  types: NodeTypes[];
+  set: Set<string>;
+}[] = [];
+
 export function assertNodeType(...types: NodeTypes[]): Validator {
+  const expandedTypes = new Set<string>();
+
+  allExpandedTypes.push({ types, set: expandedTypes });
+
   function validate(node: t.Node, key: string, val: any) {
-    for (const type of types) {
-      if (is(type, val)) {
+    const valType = val?.type;
+    if (valType != null) {
+      if (expandedTypes.has(valType)) {
         validateChild(node, key, val);
         return;
+      }
+      if (valType === "Placeholder") {
+        for (const type of types) {
+          if (is(type, val)) {
+            validateChild(node, key, val);
+            return;
+          }
+        }
       }
     }
 
@@ -137,7 +165,7 @@ export function assertNodeType(...types: NodeTypes[]): Validator {
         node.type
       } expected node to be of a type ${JSON.stringify(
         types,
-      )} but instead got ${JSON.stringify(val?.type)}`,
+      )} but instead got ${JSON.stringify(valType)}`,
     );
   }
 
@@ -150,8 +178,9 @@ export function assertNodeOrValueType(
   ...types: (NodeTypes | PrimitiveTypes)[]
 ): Validator {
   function validate(node: t.Node, key: string, val: any) {
+    const primitiveType = getType(val);
     for (const type of types) {
-      if (getType(val) === type || is(type, val)) {
+      if (primitiveType === type || is(type, val)) {
         validateChild(node, key, val);
         return;
       }
@@ -173,13 +202,13 @@ export function assertNodeOrValueType(
 
 export function assertValueType(type: PrimitiveTypes): Validator {
   function validate(node: t.Node, key: string, val: any) {
-    const valid = getType(val) === type;
-
-    if (!valid) {
-      throw new TypeError(
-        `Property ${key} expected type of ${type} but got ${getType(val)}`,
-      );
+    if (getType(val) === type) {
+      return;
     }
+
+    throw new TypeError(
+      `Property ${key} expected type of ${type} but got ${getType(val)}`,
+    );
   }
 
   validate.type = type;
@@ -188,9 +217,10 @@ export function assertValueType(type: PrimitiveTypes): Validator {
 }
 
 export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
+  const keys = Object.keys(shape);
   function validate(node: t.Node, key: string, val: any) {
     const errors = [];
-    for (const property of Object.keys(shape)) {
+    for (const property of keys) {
       try {
         validateField(node, property, val[property], shape[property]);
       } catch (error) {
