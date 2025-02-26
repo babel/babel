@@ -3901,7 +3901,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TSParameterProperty":
           return "parameter";
         case "TSNonNullExpression":
-        case "TSInstantiationExpression":
           return "expression";
         case "TSAsExpression":
         case "TSSatisfiesExpression":

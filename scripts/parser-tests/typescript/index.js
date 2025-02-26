@@ -93,7 +93,8 @@ function toFiles(strictMode, contents, name) {
       strictMode,
       plugins: [
         ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
-        "decorators-legacy",
+        "decorators-legacy", // For TS parameter decorator
+        "decoratorAutoAccessors",
         "importAssertions",
         /\.[tj]sx$/.test(sourceFilename) && "jsx",
       ].filter(plugin => !!plugin),
