@@ -415,6 +415,26 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  it("should not evaluate arrays with multiple references", function () {
+    const path = getPath(`
+      const value = [];
+      value.push(Math.random());
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate objects with multiple references", function () {
+    const path = getPath(`
+      const value = {};
+      value.x = Math.random();
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
