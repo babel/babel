@@ -1,6 +1,9 @@
 {
   "type": "File",
   "start":0,"end":397,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":397}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in assignment expression. (15:4)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":397,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":397}},
@@ -52,11 +55,7 @@
                         {
                           "type": "TSTypeParameter",
                           "start":66,"end":89,"loc":{"start":{"line":2,"column":28,"index":66},"end":{"line":2,"column":51,"index":89}},
-                          "name": {
-                            "type": "Identifier",
-                            "start":66,"end":67,"loc":{"start":{"line":2,"column":28,"index":66},"end":{"line":2,"column":29,"index":67},"identifierName":"M"},
-                            "name": "M"
-                          },
+                          "name": "M",
                           "constraint": {
                             "type": "TSTypeReference",
                             "start":76,"end":89,"loc":{"start":{"line":2,"column":38,"index":76},"end":{"line":2,"column":51,"index":89}},
@@ -69,7 +68,7 @@
                         }
                       ]
                     },
-                    "params": [
+                    "parameters": [
                       {
                         "type": "Identifier",
                         "start":100,"end":119,"loc":{"start":{"line":3,"column":8,"index":100},"end":{"line":3,"column":27,"index":119},"identifierName":"this"},
@@ -107,7 +106,7 @@
                         }
                       }
                     ],
-                    "returnType": {
+                    "typeAnnotation": {
                       "type": "TSTypeAnnotation",
                       "start":148,"end":155,"loc":{"start":{"line":5,"column":6,"index":148},"end":{"line":5,"column":13,"index":155}},
                       "typeAnnotation": {
@@ -246,7 +245,7 @@
                               "name": "myFunc"
                             }
                           },
-                          "typeArguments": {
+                          "typeParameters": {
                             "type": "TSTypeParameterInstantiation",
                             "start":317,"end":332,"loc":{"start":{"line":15,"column":14,"index":317},"end":{"line":15,"column":29,"index":332}},
                             "params": [
