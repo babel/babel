@@ -13,6 +13,7 @@ import { itBabel8 } from "$repo-utils";
 );
 
 describe("util", () => {
+  const clone = cloneDeep.default || cloneDeep;
   itBabel8("deep clone", () => {
     const circle = {};
     circle.circle = circle;
@@ -27,7 +28,7 @@ describe("util", () => {
       object,
       object2: object,
     };
-    const cloned = (cloneDeep.default || cloneDeep)(ast);
+    const cloned = clone(ast);
 
     expect(cloned.object === ast.object).toBe(false);
     expect(cloned.object === cloned.object2).toBe(false);
@@ -35,5 +36,18 @@ describe("util", () => {
     expect(cloned.extra.circle === ast.extra.circle).toBe(false);
     expect(cloned.extra.circle === cloned.extra.circle2).toBe(true);
     expect(cloned.extra.circle === cloned.extra.circle.circle).toBe(true);
+  });
+
+  itBabel8("deep clone circle", () => {
+    const circle = {};
+    circle.circle = circle;
+
+    const ast = {
+      type: "Program",
+      circle,
+    };
+    expect(() => {
+      clone(ast);
+    }).toThrow("Babel-deepClone: Cycles are not allowed in AST");
   });
 });

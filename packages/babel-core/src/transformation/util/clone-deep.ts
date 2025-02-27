@@ -1,3 +1,4 @@
+const circleSet = new Set();
 // https://github.com/babel/babel/pull/14583#discussion_r882828856
 function deepClone(
   value: any,
@@ -5,7 +6,15 @@ function deepClone(
   allowCircle: boolean,
 ): any {
   if (value !== null) {
-    if (allowCircle && cache.has(value)) return cache.get(value);
+    if (allowCircle) {
+      if (cache.has(value)) return cache.get(value);
+    } else {
+      if (circleSet.has(value)) {
+        circleSet.clear();
+        throw new Error("Babel-deepClone: Cycles are not allowed in AST");
+      }
+      circleSet.add(value);
+    }
     let cloned: any;
     if (Array.isArray(value)) {
       cloned = new Array(value.length);
@@ -36,6 +45,7 @@ function deepClone(
               );
       }
     }
+    if (!allowCircle) circleSet.delete(value);
     return cloned;
   }
   return value;
