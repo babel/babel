@@ -1,4 +1,5 @@
 const circleSet = new Set();
+let depth = 0;
 // https://github.com/babel/babel/pull/14583#discussion_r882828856
 function deepClone(
   value: any,
@@ -8,8 +9,9 @@ function deepClone(
   if (value !== null) {
     if (allowCircle) {
       if (cache.has(value)) return cache.get(value);
-    } else {
+    } else if (++depth > 100) {
       if (circleSet.has(value)) {
+        depth = 0;
         circleSet.clear();
         throw new Error("Babel-deepClone: Cycles are not allowed in AST");
       }
@@ -45,7 +47,9 @@ function deepClone(
               );
       }
     }
-    if (!allowCircle) circleSet.delete(value);
+    if (!allowCircle) {
+      if (depth-- > 100) circleSet.delete(value);
+    }
     return cloned;
   }
   return value;
@@ -55,6 +59,9 @@ export default function <T>(value: T): T {
   if (typeof value !== "object") return value;
 
   if (process.env.BABEL_8_BREAKING) {
+    if (!process.env.IS_PUBLISH && depth > 0) {
+      throw new Error("depth > 0");
+    }
     return deepClone(value, new Map(), false);
   } else {
     try {
