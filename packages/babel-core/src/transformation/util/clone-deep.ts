@@ -9,7 +9,7 @@ function deepClone(
   if (value !== null) {
     if (allowCircle) {
       if (cache.has(value)) return cache.get(value);
-    } else if (++depth > 100) {
+    } else if (++depth > 250) {
       if (circleSet.has(value)) {
         depth = 0;
         circleSet.clear();
@@ -48,7 +48,7 @@ function deepClone(
       }
     }
     if (!allowCircle) {
-      if (depth-- > 100) circleSet.delete(value);
+      if (depth-- > 250) circleSet.delete(value);
     }
     return cloned;
   }
