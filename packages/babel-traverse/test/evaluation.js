@@ -435,6 +435,16 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  it("should evaluate strings with multiple references", function () {
+    const path = getPath(`
+      const value = "hello";
+      ref(value);
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
