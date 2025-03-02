@@ -264,9 +264,13 @@ function _evaluate(path: NodePath, state: State): any {
     if (resolved === path) {
       deopt(path, state);
       return;
-    } else {
-      return evaluateCached(resolved, state);
     }
+    const value = evaluateCached(resolved, state);
+    if (typeof value === "object" && value !== null && binding.references > 1) {
+      deopt(resolved, state);
+      return;
+    }
+    return value;
   }
 
   if (path.isUnaryExpression({ prefix: true })) {
