@@ -432,7 +432,7 @@ export default abstract class LValParser extends NodeUtils {
             decorators.push(this.parseDecorator());
           }
         }
-        elts.push(this.parseAssignableListItem(flags, decorators));
+        elts.push(this.parseBindingElement(flags, decorators));
       }
     }
     return elts;
@@ -476,7 +476,8 @@ export default abstract class LValParser extends NodeUtils {
     );
   }
 
-  parseAssignableListItem(
+  // https://tc39.es/ecma262/#prod-BindingElement
+  parseBindingElement(
     this: Parser,
     flags: ParseBindingListFlags,
     decorators: Decorator[],

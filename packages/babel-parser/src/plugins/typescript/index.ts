@@ -2457,7 +2457,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.isExportDefaultSpecifier();
     }
 
-    parseAssignableListItem(
+    parseBindingElement(
       flags: ParseBindingListFlags,
       decorators: N.Decorator[],
     ): N.Pattern | N.TSParameterProperty {
