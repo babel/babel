@@ -24,7 +24,6 @@ import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import { cloneIdentifier, type Undone } from "../../parser/node.ts";
 import type { Pattern } from "../../types.ts";
-import type { Expression } from "../../types.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 import { OptionFlags } from "../../options.ts";
@@ -4032,18 +4031,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return type;
     }
 
-    toAssignableList(
-      exprList: Expression[],
-      trailingCommaLoc: Position | undefined | null,
+    toAssignableListItem(
+      exprList: (N.Expression | N.SpreadElement | N.RestElement)[],
+      index: number,
       isLHS: boolean,
     ): void {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr?.type === "TSTypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
-        }
+      const node = exprList[index];
+      if (node.type === "TSTypeCastExpression") {
+        exprList[index] = this.typeCastToParameter(node);
       }
-      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
+      super.toAssignableListItem(exprList, index, isLHS);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Expression {

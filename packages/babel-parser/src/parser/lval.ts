@@ -230,7 +230,7 @@ export default abstract class LValParser extends NodeUtils {
   // Convert list of expression atoms to binding list.
 
   toAssignableList(
-    exprList: (Expression | SpreadElement | RestElement)[],
+    exprList: (Expression | SpreadElement | RestElement | null)[],
     trailingCommaLoc: Position | undefined | null,
     isLHS: boolean,
   ): void {
@@ -240,14 +240,7 @@ export default abstract class LValParser extends NodeUtils {
       const elt = exprList[i];
       if (!elt) continue;
 
-      if (elt.type === "SpreadElement") {
-        (elt as unknown as RestElement).type = "RestElement";
-        const arg = elt.argument;
-        this.checkToRestConversion(arg, /* allowPattern */ true);
-        this.toAssignable(arg, isLHS);
-      } else {
-        this.toAssignable(elt, isLHS);
-      }
+      this.toAssignableListItem(exprList, i, isLHS);
 
       if (elt.type === "RestElement") {
         if (i < end) {
@@ -256,6 +249,22 @@ export default abstract class LValParser extends NodeUtils {
           this.raise(Errors.RestTrailingComma, trailingCommaLoc);
         }
       }
+    }
+  }
+
+  toAssignableListItem(
+    exprList: (Expression | SpreadElement | RestElement)[],
+    index: number,
+    isLHS: boolean,
+  ): void {
+    const node = exprList[index];
+    if (node.type === "SpreadElement") {
+      (node as unknown as RestElement).type = "RestElement";
+      const arg = node.argument;
+      this.checkToRestConversion(arg, /* allowPattern */ true);
+      this.toAssignable(arg, isLHS);
+    } else {
+      this.toAssignable(node, isLHS);
     }
   }
 
