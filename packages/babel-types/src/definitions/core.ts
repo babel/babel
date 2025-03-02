@@ -340,6 +340,7 @@ defineType("ForInStatement", {
               "MemberExpression",
               "ArrayPattern",
               "ObjectPattern",
+              "VoidPattern",
               "TSAsExpression",
               "TSSatisfiesExpression",
               "TSTypeAssertion",
@@ -1233,7 +1234,12 @@ defineType("VariableDeclarator", {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
           ? assertNodeType("LVal")
-          : assertNodeType("Identifier", "ArrayPattern", "ObjectPattern"),
+          : assertNodeType(
+              "Identifier",
+              "ArrayPattern",
+              "ObjectPattern",
+              "VoidPattern",
+            ),
     },
     definite: {
       optional: true,
@@ -1689,6 +1695,7 @@ defineType("ForOfStatement", {
           "MemberExpression",
           "ArrayPattern",
           "ObjectPattern",
+          "VoidPattern",
           "TSAsExpression",
           "TSSatisfiesExpression",
           "TSTypeAssertion",
