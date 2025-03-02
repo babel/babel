@@ -2,6 +2,7 @@ import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import type { Position } from "./location.ts";
 import type { Node } from "../types.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import type { Undone } from "../parser/node.ts";
 
 /**
  * @module util/expression-scope
@@ -133,7 +134,7 @@ export default class ExpressionScopeHandler {
    */
   recordParameterInitializerError(
     toParseError: ArrowHeadParsingParameterInitializerError,
-    node: Node,
+    node: Undone<Node>,
   ): void {
     const origin = node.loc.start;
     const { stack } = this;
