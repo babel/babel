@@ -420,14 +420,19 @@ export default abstract class LValParser extends NodeUtils {
         }
       } else {
         const decorators = [];
-        if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(Errors.UnsupportedParameterDecorator, this.state.startLoc);
+        if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
+          if (this.match(tt.at) && this.hasPlugin("decorators")) {
+            this.raise(
+              Errors.UnsupportedParameterDecorator,
+              this.state.startLoc,
+            );
+          }
+          // invariant: hasPlugin("decorators-legacy")
+          while (this.match(tt.at)) {
+            decorators.push(this.parseDecorator());
+          }
         }
-        // invariant: hasPlugin("decorators-legacy")
-        while (this.match(tt.at)) {
-          decorators.push(this.parseDecorator());
-        }
-        elts.push(this.parseAssignableListItem(flags, decorators));
+        elts.push(this.parseBindingElement(flags, decorators));
       }
     }
     return elts;
@@ -471,7 +476,8 @@ export default abstract class LValParser extends NodeUtils {
     );
   }
 
-  parseAssignableListItem(
+  // https://tc39.es/ecma262/#prod-BindingElement
+  parseBindingElement(
     this: Parser,
     flags: ParseBindingListFlags,
     decorators: Decorator[],

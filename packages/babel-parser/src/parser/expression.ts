@@ -2857,7 +2857,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      // @ts-expect-error todo(flow->ts)
       node,
     );
 
@@ -2911,7 +2910,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      // @ts-expect-error todo(flow->ts)
       node,
     );
 
