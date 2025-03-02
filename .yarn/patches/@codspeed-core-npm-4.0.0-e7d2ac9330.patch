@@ -1,0 +1,28 @@
+diff --git a/dist/index.cjs.js b/dist/index.cjs.js
+index b6068ea4f95a6415f50231ec1bb5192d12aa7087..02bcafcd859111402442d06c1bc8cda69a81c3df 100644
+--- a/dist/index.cjs.js
++++ b/dist/index.cjs.js
+@@ -29,8 +29,7 @@ const getV8Flags = () => {
+     "--interpreted-frames-native-stack",
+     "--allow-natives-syntax",
+     "--expose-gc",
+-    "--no-concurrent-sweeping",
+-    "--max-old-space-size=4096"
++    "--no-concurrent-sweeping"
+   ];
+   if (nodeVersionMajor < 18) {
+     flags.push("--no-randomize-hashes");
+diff --git a/dist/index.es5.js b/dist/index.es5.js
+index 956b6f2b337cd47b158482857a3af066834dfdd4..8d669b08abb9b3c90b8c52a249ef96a4c945a78e 100644
+--- a/dist/index.es5.js
++++ b/dist/index.es5.js
+@@ -27,8 +27,7 @@ const getV8Flags = () => {
+     "--interpreted-frames-native-stack",
+     "--allow-natives-syntax",
+     "--expose-gc",
+-    "--no-concurrent-sweeping",
+-    "--max-old-space-size=4096"
++    "--no-concurrent-sweeping"
+   ];
+   if (nodeVersionMajor < 18) {
+     flags.push("--no-randomize-hashes");
