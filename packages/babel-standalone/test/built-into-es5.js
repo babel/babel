@@ -33,4 +33,11 @@ describe("@babel/standalone", () => {
     // 6 vs 13 depends on the build configuration
     expect([6, 13]).toContain(requireCount);
   });
+
+  // https://github.com/babel/babel/issues/14301
+  it("should not contain require.resolve()", () => {
+    expect(babelStandaloneSource.includes("return require.resolve(")).toBe(
+      false,
+    );
+  });
 });

@@ -478,6 +478,16 @@ function buildRollup(packages, buildStandalone) {
                 sourceMap: sourcemap,
                 include: "**/*.{js,mjs,cjs,ts}",
               }),
+            // https://github.com/babel/babel/issues/14301
+            buildStandalone &&
+              rollupReplace({
+                preventAssignment: false,
+                delimiters: ["", ""],
+                values: {
+                  "return require.resolve(path);":
+                    "throw new Error('Babel internal error');",
+                },
+              }),
           ].filter(Boolean),
         });
 
