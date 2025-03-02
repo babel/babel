@@ -420,12 +420,17 @@ export default abstract class LValParser extends NodeUtils {
         }
       } else {
         const decorators = [];
-        if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(Errors.UnsupportedParameterDecorator, this.state.startLoc);
-        }
-        // invariant: hasPlugin("decorators-legacy")
-        while (this.match(tt.at)) {
-          decorators.push(this.parseDecorator());
+        if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
+          if (this.match(tt.at) && this.hasPlugin("decorators")) {
+            this.raise(
+              Errors.UnsupportedParameterDecorator,
+              this.state.startLoc,
+            );
+          }
+          // invariant: hasPlugin("decorators-legacy")
+          while (this.match(tt.at)) {
+            decorators.push(this.parseDecorator());
+          }
         }
         elts.push(this.parseAssignableListItem(flags, decorators));
       }
