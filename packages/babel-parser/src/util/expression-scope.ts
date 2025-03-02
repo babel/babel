@@ -45,7 +45,7 @@ There are four different expression scope
   recorded in this scope will be thrown immediately. No errors will be recorded in
   this scope.
 
-// @see {@link https://docs.google.com/document/d/1FAvEp9EUK-G8kHfDIEo_385Hs2SUBCYbJ5H-NnLvq8M|V8 Expression Scope design docs}
+// @see {@link https://docs.google.com/document/d/1FAvEp9EUK-G8kHfDIEo_385Hs2SUBCYbJ5H-NnLvq8M | V8 Expression Scope design docs}
  */
 
 const enum ExpressionScopeType {

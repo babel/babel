@@ -21,7 +21,7 @@ import type {
   AssignmentProperty,
   Assignable,
 } from "../types.ts";
-import type { Pos, Position } from "../util/location.ts";
+import type { Position } from "../util/location.ts";
 import {
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
@@ -50,13 +50,11 @@ export default abstract class LValParser extends NodeUtils {
   abstract parseMaybeAssign(
     refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: Pos | null,
   ): Expression;
 
   abstract parseMaybeAssignAllowIn(
     refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: Pos | null,
   ): Expression;
 
   abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
