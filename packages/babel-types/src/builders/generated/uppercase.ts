@@ -189,6 +189,7 @@ export {
   pipelineTopicExpression as PipelineTopicExpression,
   pipelineBareFunction as PipelineBareFunction,
   pipelinePrimaryTopicReference as PipelinePrimaryTopicReference,
+  voidPattern as VoidPattern,
   tsParameterProperty as TSParameterProperty,
   tsDeclareFunction as TSDeclareFunction,
   tsDeclareMethod as TSDeclareMethod,
