@@ -5,6 +5,7 @@ import {
   nullLiteral,
   stringLiteral,
   numericLiteral,
+  bigIntLiteral,
   regExpLiteral,
   arrayExpression,
   objectProperty,
@@ -21,6 +22,7 @@ export default valueToNode as {
   (value: string): t.StringLiteral;
   // Infinities and NaN need to use a BinaryExpression; negative values must be wrapped in UnaryExpression
   (value: number): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
+  (value: bigint): t.BigIntLiteral;
   (value: RegExp): t.RegExpLiteral;
   (value: ReadonlyArray<unknown>): t.ArrayExpression;
 
@@ -99,6 +101,11 @@ function valueToNode(value: unknown): t.Expression {
     }
 
     return result;
+  }
+
+  // bigints
+  if (typeof value === "bigint") {
+    return bigIntLiteral(value.toString());
   }
 
   // regexes
