@@ -55,7 +55,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope.ts";
-import { Errors, type ParseError } from "../parse-error.ts";
+import { Errors } from "../parse-error.ts";
 import {
   UnparenthesizedPipeBodyDescriptions,
   type UnparenthesizedPipeBodyTypes,
@@ -108,18 +108,16 @@ export default abstract class ExpressionParser extends LValParser {
   checkProto(
     prop: N.ObjectMember | N.SpreadElement,
     isRecord: boolean | undefined | null,
-    protoRef: {
-      used: boolean;
-    },
+    sawProto: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-  ): void {
+  ): boolean {
     if (
       prop.type === "SpreadElement" ||
       this.isObjectMethod(prop) ||
       prop.computed ||
       prop.shorthand
     ) {
-      return;
+      return sawProto;
     }
 
     const key = prop.key as
@@ -133,9 +131,9 @@ export default abstract class ExpressionParser extends LValParser {
     if (name === "__proto__") {
       if (isRecord) {
         this.raise(Errors.RecordNoProto, key);
-        return;
+        return true;
       }
-      if (protoRef.used) {
+      if (sawProto) {
         if (refExpressionErrors) {
           // Store the first redefinition's position, otherwise ignore because
           // we are parsing ambiguous pattern
@@ -147,8 +145,10 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      protoRef.used = true;
+      return true;
     }
+
+    return sawProto;
   }
 
   shouldExitDescending(
@@ -255,12 +255,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // This method is only used by
   // the typescript and flow plugins.
-  setOptionalParametersError(
-    refExpressionErrors: ExpressionErrors,
-    resultError?: ParseError<any>,
-  ) {
-    refExpressionErrors.optionalParametersLoc =
-      resultError?.loc ?? this.state.startLoc;
+  setOptionalParametersError(refExpressionErrors: ExpressionErrors) {
+    refExpressionErrors.optionalParametersLoc = this.state.startLoc;
   }
 
   // Parse an assignment expression. This includes applications of
@@ -2019,7 +2015,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
-    const propHash: any = Object.create(null);
+    let sawProto = false;
     let first = true;
     const node = this.startNode<
       N.ObjectExpression | N.ObjectPattern | N.RecordExpression
@@ -2044,7 +2040,12 @@ export default abstract class ExpressionParser extends LValParser {
         prop = this.parseBindingProperty();
       } else {
         prop = this.parsePropertyDefinition(refExpressionErrors);
-        this.checkProto(prop, isRecord, propHash, refExpressionErrors);
+        sawProto = this.checkProto(
+          prop,
+          isRecord,
+          sawProto,
+          refExpressionErrors,
+        );
       }
 
       if (

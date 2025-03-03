@@ -24,7 +24,6 @@ import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import { cloneIdentifier, type Undone } from "../../parser/node.ts";
 import type { Pattern } from "../../types.ts";
-import type { Expression } from "../../types.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 import { OptionFlags } from "../../options.ts";
@@ -3261,31 +3260,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
-      // only do the expensive clone if there is a question mark
-      // and if we come from inside parens
-      if (!this.state.maybeInArrowParameters || !this.match(tt.question)) {
-        return super.parseConditional(
-          expr,
+      if (!this.match(tt.question)) return expr;
 
-          startLoc,
-          refExpressionErrors,
-        );
-      }
-
-      const result = this.tryParse(() =>
-        super.parseConditional(expr, startLoc),
-      );
-
-      if (!result.node) {
-        if (result.error) {
+      if (this.state.maybeInArrowParameters) {
+        const nextCh = this.lookaheadCharCode();
+        // These tokens cannot start an expression, so if one of them follows
+        // ? then we are probably in an arrow function parameters list and we
+        // don't parse the conditional expression.
+        if (
+          nextCh === charCodes.comma || // (a?, b) => c
+          nextCh === charCodes.equalsTo || // (a? = b) => c
+          nextCh === charCodes.colon || // (a?: b) => c
+          nextCh === charCodes.rightParenthesis // (a?) => c
+        ) {
           /*:: invariant(refExpressionErrors != null) */
-          super.setOptionalParametersError(refExpressionErrors, result.error);
+          this.setOptionalParametersError(refExpressionErrors);
+          return expr;
         }
-
-        return expr;
       }
-      if (result.error) this.state = result.failState;
-      return result.node;
+
+      return super.parseConditional(expr, startLoc, refExpressionErrors);
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
@@ -4032,18 +4026,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return type;
     }
 
-    toAssignableList(
-      exprList: Expression[],
-      trailingCommaLoc: Position | undefined | null,
+    toAssignableListItem(
+      exprList: (N.Expression | N.SpreadElement | N.RestElement)[],
+      index: number,
       isLHS: boolean,
     ): void {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr?.type === "TSTypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
-        }
+      const node = exprList[index];
+      if (node.type === "TSTypeCastExpression") {
+        exprList[index] = this.typeCastToParameter(node);
       }
-      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
+      super.toAssignableListItem(exprList, index, isLHS);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Expression {
