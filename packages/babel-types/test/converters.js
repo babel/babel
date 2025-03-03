@@ -36,6 +36,9 @@ describe("converters", function () {
         ),
       );
     });
+    it("bigint", function () {
+      expect(t.valueToNode(123n)).toEqual(t.bigIntLiteral("123"));
+    });
     it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(
         t.stringLiteral('This is a "string"'),
