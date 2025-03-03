@@ -1,4 +1,5 @@
 import * as t from "../lib/index.js";
+import { itGte } from "$repo-utils";
 
 describe("converters", function () {
   it("toIdentifier", function () {
@@ -36,8 +37,10 @@ describe("converters", function () {
         ),
       );
     });
-    it("bigint", function () {
-      expect(t.valueToNode(123n)).toEqual(t.bigIntLiteral("123"));
+
+    const nodeGte10 = itGte("10.4.0");
+    nodeGte10("bigint", function () {
+      expect(t.valueToNode(BigInt(123))).toEqual(t.bigIntLiteral("123"));
     });
     it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(
