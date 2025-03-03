@@ -55,7 +55,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope.ts";
-import { Errors, type ParseError } from "../parse-error.ts";
+import { Errors } from "../parse-error.ts";
 import {
   UnparenthesizedPipeBodyDescriptions,
   type UnparenthesizedPipeBodyTypes,
@@ -255,12 +255,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // This method is only used by
   // the typescript and flow plugins.
-  setOptionalParametersError(
-    refExpressionErrors: ExpressionErrors,
-    resultError?: ParseError<any>,
-  ) {
-    refExpressionErrors.optionalParametersLoc =
-      resultError?.loc ?? this.state.startLoc;
+  setOptionalParametersError(refExpressionErrors: ExpressionErrors) {
+    refExpressionErrors.optionalParametersLoc = this.state.startLoc;
   }
 
   // Parse an assignment expression. This includes applications of

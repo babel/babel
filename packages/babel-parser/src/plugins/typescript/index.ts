@@ -3260,31 +3260,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
-      // only do the expensive clone if there is a question mark
-      // and if we come from inside parens
-      if (!this.state.maybeInArrowParameters || !this.match(tt.question)) {
-        return super.parseConditional(
-          expr,
+      if (!this.match(tt.question)) return expr;
 
-          startLoc,
-          refExpressionErrors,
-        );
-      }
-
-      const result = this.tryParse(() =>
-        super.parseConditional(expr, startLoc),
-      );
-
-      if (!result.node) {
-        if (result.error) {
+      if (this.state.maybeInArrowParameters) {
+        const nextCh = this.lookaheadCharCode();
+        // These tokens cannot start an expression, so if one of them follows
+        // ? then we are probably in an arrow function parameters list and we
+        // don't parse the conditional expression.
+        if (
+          nextCh === charCodes.comma || // (a?, b) => c
+          nextCh === charCodes.equalsTo || // (a? = b) => c
+          nextCh === charCodes.colon || // (a?: b) => c
+          nextCh === charCodes.rightParenthesis // (a?) => c
+        ) {
           /*:: invariant(refExpressionErrors != null) */
-          super.setOptionalParametersError(refExpressionErrors, result.error);
+          this.setOptionalParametersError(refExpressionErrors);
+          return expr;
         }
-
-        return expr;
       }
-      if (result.error) this.state = result.failState;
-      return result.node;
+
+      return super.parseConditional(expr, startLoc, refExpressionErrors);
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
