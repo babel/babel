@@ -175,6 +175,7 @@
               "decoratorAutoAccessors",
               "deferredImportEvaluation",
               "destructuringPrivate",
+              "discardBinding",
               "doExpressions",
               "estree",
               "explicitResourceManagement",

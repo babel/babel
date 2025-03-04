@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "discardBinding",
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ],
+  "throws": "Unexpected token (1:11)"
+}
