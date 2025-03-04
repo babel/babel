@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":62}},
+  "errors": [
+    "SyntaxError: Unexpected void binding. (2:11)",
+    "SyntaxError: Unexpected void binding. (5:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":62}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":27}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":4,"end":25,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":23,"index":25}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":8,"end":24,"loc":{"start":{"line":2,"column":6,"index":8},"end":{"line":2,"column":22,"index":24}},
+                "id": {
+                  "type": "ArrayPattern",
+                  "start":8,"end":19,"loc":{"start":{"line":2,"column":6,"index":8},"end":{"line":2,"column":17,"index":19}},
+                  "elements": [
+                    {
+                      "type": "RestElement",
+                      "start":10,"end":17,"loc":{"start":{"line":2,"column":8,"index":10},"end":{"line":2,"column":15,"index":17}},
+                      "argument": {
+                        "type": "VoidPattern",
+                        "start":13,"end":17,"loc":{"start":{"line":2,"column":11,"index":13},"end":{"line":2,"column":15,"index":17}}
+                      }
+                    }
+                  ]
+                },
+                "init": {
+                  "type": "ArrayExpression",
+                  "start":22,"end":24,"loc":{"start":{"line":2,"column":20,"index":22},"end":{"line":2,"column":22,"index":24}},
+                  "elements": []
+                }
+              }
+            ],
+            "kind": "var"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":28,"end":62,"loc":{"start":{"line":4,"column":0,"index":28},"end":{"line":6,"column":1,"index":62}},
+        "body": [
+          {
+            "type": "ForOfStatement",
+            "start":32,"end":60,"loc":{"start":{"line":5,"column":2,"index":32},"end":{"line":5,"column":30,"index":60}},
+            "await": false,
+            "left": {
+              "type": "VariableDeclaration",
+              "start":37,"end":50,"loc":{"start":{"line":5,"column":7,"index":37},"end":{"line":5,"column":20,"index":50}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":41,"end":50,"loc":{"start":{"line":5,"column":11,"index":41},"end":{"line":5,"column":20,"index":50}},
+                  "id": {
+                    "type": "ArrayPattern",
+                    "start":41,"end":50,"loc":{"start":{"line":5,"column":11,"index":41},"end":{"line":5,"column":20,"index":50}},
+                    "elements": [
+                      {
+                        "type": "RestElement",
+                        "start":42,"end":49,"loc":{"start":{"line":5,"column":12,"index":42},"end":{"line":5,"column":19,"index":49}},
+                        "argument": {
+                          "type": "VoidPattern",
+                          "start":45,"end":49,"loc":{"start":{"line":5,"column":15,"index":45},"end":{"line":5,"column":19,"index":49}}
+                        }
+                      }
+                    ]
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "var"
+            },
+            "right": {
+              "type": "ArrayExpression",
+              "start":54,"end":58,"loc":{"start":{"line":5,"column":24,"index":54},"end":{"line":5,"column":28,"index":58}},
+              "elements": [
+                {
+                  "type": "ArrayExpression",
+                  "start":55,"end":57,"loc":{"start":{"line":5,"column":25,"index":55},"end":{"line":5,"column":27,"index":57}},
+                  "elements": []
+                }
+              ]
+            },
+            "body": {
+              "type": "EmptyStatement",
+              "start":59,"end":60,"loc":{"start":{"line":5,"column":29,"index":59},"end":{"line":5,"column":30,"index":60}}
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

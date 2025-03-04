@@ -20,6 +20,7 @@ import type {
   ArrayPattern,
   AssignmentProperty,
   Assignable,
+  VoidPattern,
 } from "../types.ts";
 import type { Position } from "../util/location.ts";
 import {
@@ -129,6 +130,7 @@ export default abstract class LValParser extends NodeUtils {
       case "ArrayPattern":
       case "AssignmentPattern":
       case "RestElement":
+      case "VoidPattern":
         break;
 
       case "ObjectExpression":
@@ -187,6 +189,9 @@ export default abstract class LValParser extends NodeUtils {
 
         this.castNodeTo(node, "AssignmentPattern");
         delete node.operator;
+        if (node.left.type === "VoidPattern") {
+          this.raise(Errors.VoidPatternInitializer, node.left);
+        }
         this.toAssignable(node.left, isLHS);
         break;
 
@@ -230,7 +235,14 @@ export default abstract class LValParser extends NodeUtils {
   // Convert list of expression atoms to binding list.
 
   toAssignableList(
-    exprList: (Expression | SpreadElement | RestElement | null)[],
+    exprList: (
+      | Expression
+      | SpreadElement
+      | RestElement
+      | VoidPattern
+      | AssignmentPattern
+      | null
+    )[],
     trailingCommaLoc: Position | undefined | null,
     isLHS: boolean,
   ): void {
@@ -253,7 +265,13 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   toAssignableListItem(
-    exprList: (Expression | SpreadElement | RestElement)[],
+    exprList: (
+      | Expression
+      | SpreadElement
+      | RestElement
+      | VoidPattern
+      | AssignmentPattern
+    )[],
     index: number,
     isLHS: boolean,
   ): void {
@@ -275,6 +293,7 @@ export default abstract class LValParser extends NodeUtils {
       case "ArrayPattern":
       case "AssignmentPattern":
       case "RestElement":
+      case "VoidPattern":
         return true;
 
       case "ObjectExpression": {
@@ -318,20 +337,32 @@ export default abstract class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList:
-      | ReadonlyArray<Expression | SpreadElement>
-      | ReadonlyArray<Expression | RestElement>,
+      | ReadonlyArray<
+          Expression | SpreadElement | VoidPattern | AssignmentPattern
+        >
+      | ReadonlyArray<
+          Expression | RestElement | VoidPattern | AssignmentPattern
+        >,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isParenthesizedExpr?: boolean,
   ):
-    | ReadonlyArray<Expression | SpreadElement>
-    | ReadonlyArray<Expression | RestElement> {
+    | ReadonlyArray<
+        Expression | SpreadElement | VoidPattern | AssignmentPattern
+      >
+    | ReadonlyArray<
+        Expression | RestElement | VoidPattern | AssignmentPattern
+      > {
     return exprList;
   }
 
   toReferencedListDeep(
     exprList:
-      | ReadonlyArray<Expression | SpreadElement>
-      | ReadonlyArray<Expression | RestElement>,
+      | ReadonlyArray<
+          Expression | SpreadElement | VoidPattern | AssignmentPattern
+        >
+      | ReadonlyArray<
+          Expression | RestElement | VoidPattern | AssignmentPattern
+        >,
     isParenthesizedExpr?: boolean,
   ): void {
     this.toReferencedList(exprList, isParenthesizedExpr);
@@ -358,12 +389,15 @@ export default abstract class LValParser extends NodeUtils {
     return this.finishNode(node, "SpreadElement");
   }
 
-  // https://tc39.es/ecma262/#prod-BindingRestProperty
   // https://tc39.es/ecma262/#prod-BindingRestElement
   parseRestBinding(this: Parser): RestElement {
     const node = this.startNode<RestElement>();
     this.next(); // eat `...`
-    node.argument = this.parseBindingAtom();
+    const argument = this.parseBindingAtom();
+    if (argument.type === "VoidPattern") {
+      this.raise(Errors.UnexpectedVoidPattern, argument);
+    }
+    node.argument = argument;
     return this.finishNode(node, "RestElement");
   }
 
@@ -374,7 +408,6 @@ export default abstract class LValParser extends NodeUtils {
       case tt.bracketL: {
         const node = this.startNode<ArrayPattern>();
         this.next();
-        // @ts-expect-error: Fixme: TSParameterProperty can not be assigned to node.elements
         node.elements = this.parseBindingList(
           tt.bracketR,
           charCodes.rightSquareBracket,
@@ -385,6 +418,9 @@ export default abstract class LValParser extends NodeUtils {
 
       case tt.braceL:
         return this.parseObjectLike(tt.braceR, true);
+
+      case tt._void:
+        return this.parseVoidPattern(null);
     }
 
     // https://tc39.es/ecma262/#prod-BindingIdentifier
@@ -392,6 +428,18 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   // https://tc39.es/ecma262/#prod-BindingElementList
+  parseBindingList(
+    this: Parser,
+    close: TokenType,
+    closeCharCode: (typeof charCodes)[keyof typeof charCodes],
+    flags: ParseBindingListFlags.ALLOW_EMPTY,
+  ): Array<Pattern>;
+  parseBindingList(
+    this: Parser,
+    close: TokenType,
+    closeCharCode: (typeof charCodes)[keyof typeof charCodes],
+    flags: ParseBindingListFlags.IS_FUNCTION_PARAMS,
+  ): Array<Pattern | TSParameterProperty>;
   parseBindingList(
     this: Parser,
     close: TokenType,
@@ -451,8 +499,13 @@ export default abstract class LValParser extends NodeUtils {
     prop: Undone<RestElement>,
   ): RestElement {
     this.next(); // eat '...'
-    // Don't use parseRestBinding() as we only allow Identifier here.
-    prop.argument = this.parseIdentifier();
+    if (this.hasPlugin("discardBinding") && this.match(tt._void)) {
+      prop.argument = this.parseVoidPattern(null);
+      this.raise(Errors.UnexpectedVoidPattern, prop.argument);
+    } else {
+      // Don't use parseRestBinding() as we only allow Identifier here.
+      prop.argument = this.parseIdentifier();
+    }
     this.checkCommaAfterRest(charCodes.rightCurlyBrace);
     return this.finishNode(prop, "RestElement");
   }
@@ -511,6 +564,11 @@ export default abstract class LValParser extends NodeUtils {
 
   // Parses assignment pattern around given atom if possible.
   // https://tc39.es/ecma262/#prod-BindingElement
+  parseMaybeDefault<P extends Pattern>(
+    this: Parser,
+    startLoc?: Position | null,
+    left?: P,
+  ): P | AssignmentPattern;
   parseMaybeDefault(
     this: Parser,
     startLoc?: Position | null,
@@ -521,6 +579,9 @@ export default abstract class LValParser extends NodeUtils {
     if (!this.eat(tt.eq)) return left;
 
     const node = this.startNodeAt<AssignmentPattern>(startLoc);
+    if (left.type === "VoidPattern") {
+      this.raise(Errors.VoidPatternInitializer, left);
+    }
     node.left = left;
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
@@ -574,6 +635,8 @@ export default abstract class LValParser extends NodeUtils {
         return "elements";
       case "ObjectPattern":
         return "properties";
+      case "VoidPattern":
+        return binding !== BindingFlag.TYPE_CATCH_PARAM;
     }
     return false;
   }

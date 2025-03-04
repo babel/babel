@@ -282,6 +282,7 @@ export default {
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnexpectedUsingDeclaration:
     "Using declaration cannot appear in the top level when source type is `script`.",
+  UnexpectedVoidPattern: "Unexpected void binding.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
@@ -312,6 +313,7 @@ export default {
     "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>
     `Identifier '${identifierName}' has already been declared.`,
+  VoidPatternInitializer: "A void binding may not have an initializer.",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator.",
   YieldInParameter: "Yield expression is not allowed in formal parameters.",

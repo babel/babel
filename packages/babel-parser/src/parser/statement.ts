@@ -351,7 +351,10 @@ export default abstract class StatementParser extends ExpressionParser {
     if (type === tt._of && !containsEsc) {
       // `using of` must start a for-lhs-of statement
       return false;
-    } else if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
+    } else if (
+      (tokenIsIdentifier(type) || type === tt._void) &&
+      !this.hasFollowingLineBreak()
+    ) {
       this.expectPlugin("explicitResourceManagement");
       return true;
     }
@@ -807,7 +810,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.eat(tt.parenL)) {
       const node = this.startNodeAt<N.CallExpression>(startLoc);
       node.callee = expr;
-      node.arguments = this.parseCallExpressionArguments(tt.parenR);
+      node.arguments = this.parseCallExpressionArguments();
       this.toReferencedList(node.arguments);
       return this.finishNode(node, "CallExpression");
     }
@@ -1584,6 +1587,10 @@ export default abstract class StatementParser extends ExpressionParser {
     if (kind === "using" || kind === "await using") {
       if (id.type === "ArrayPattern" || id.type === "ObjectPattern") {
         this.raise(Errors.UsingDeclarationHasBindingPattern, id.loc.start);
+      }
+    } else {
+      if (id.type === "VoidPattern") {
+        this.raise(Errors.UnexpectedVoidPattern, id.loc.start);
       }
     }
     this.checkLVal(
