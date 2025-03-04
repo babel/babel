@@ -51,11 +51,11 @@ export default class Parser extends StatementParser {
     if (options.allowNewTargetOutsideFunction) {
       optionFlags |= OptionFlags.AllowNewTargetOutsideFunction;
     }
-    if (options.allowYieldOutsideFunction) {
-      optionFlags |= OptionFlags.AllowYieldOutsideFunction;
-    }
     if (options.ranges) {
       optionFlags |= OptionFlags.Ranges;
+    }
+    if (options.template) {
+      optionFlags |= OptionFlags.Template;
     }
     if (options.tokens) {
       optionFlags |= OptionFlags.Tokens;

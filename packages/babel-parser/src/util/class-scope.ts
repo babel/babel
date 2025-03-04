@@ -2,6 +2,7 @@ import { ClassElementType } from "./scopeflags.ts";
 import type { Position } from "./location.ts";
 import { Errors } from "../parse-error.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import { OptionFlags } from "../options.ts";
 
 export class ClassScope {
   // A list of private named declared in the current class
@@ -101,7 +102,7 @@ export default class ClassScopeHandler {
 
     if (classScope) {
       classScope.undefinedPrivateNames.set(name, loc);
-    } else {
+    } else if (!(this.parser.optionFlags & OptionFlags.Template)) {
       // top-level
       this.parser.raise(Errors.InvalidPrivateFieldResolution, loc, {
         identifierName: name,

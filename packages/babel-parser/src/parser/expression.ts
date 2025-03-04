@@ -273,11 +273,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression {
     const startLoc = this.state.startLoc;
     if (this.isContextual(tt._yield)) {
-      if (
-        (this.optionFlags & OptionFlags.AllowYieldOutsideFunction &&
-          !this.scope.inFunction) ||
-        this.prodParam.hasYield
-      ) {
+      if (this.prodParam.hasYield) {
         let left = this.parseYield();
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startLoc);
@@ -1521,16 +1517,16 @@ export default abstract class ExpressionParser extends LValParser {
     const node = this.startNode<N.Super>();
     this.next(); // eat `super`
     if (
-      this.match(tt.parenL) &&
-      !this.scope.allowDirectSuper &&
-      !(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)
+      !(
+        this.optionFlags & OptionFlags.AllowSuperOutsideMethod ||
+        this.optionFlags & OptionFlags.Template
+      )
     ) {
-      this.raise(Errors.SuperNotAllowed, node);
-    } else if (
-      !this.scope.allowSuper &&
-      !(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)
-    ) {
-      this.raise(Errors.UnexpectedSuper, node);
+      if (this.match(tt.parenL) && !this.scope.allowDirectSuper) {
+        this.raise(Errors.SuperNotAllowed, node);
+      } else if (!this.scope.allowSuper) {
+        this.raise(Errors.UnexpectedSuper, node);
+      }
     }
 
     if (
@@ -1886,7 +1882,10 @@ export default abstract class ExpressionParser extends LValParser {
       if (
         !this.scope.inNonArrowFunction &&
         !this.scope.inClass &&
-        !(this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction)
+        !(
+          this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction ||
+          this.optionFlags & OptionFlags.Template
+        )
       ) {
         this.raise(Errors.UnexpectedNewTarget, metaProp);
       }

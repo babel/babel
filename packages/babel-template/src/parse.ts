@@ -194,18 +194,14 @@ function parseWithCodeFrame(
   parserOpts: ParserOpts,
   syntacticPlaceholders?: boolean,
 ): t.File {
-  const plugins = (parserOpts.plugins || []).slice();
+  let plugins = parserOpts.plugins;
   if (syntacticPlaceholders !== false) {
-    plugins.push("placeholders");
+    plugins = plugins ? plugins.concat("placeholders") : ["placeholders"];
   }
 
   parserOpts = {
-    allowAwaitOutsideFunction: true,
-    allowReturnOutsideFunction: true,
-    allowNewTargetOutsideFunction: true,
-    allowSuperOutsideMethod: true,
-    allowYieldOutsideFunction: true,
     sourceType: "module",
+    template: true,
     ...parserOpts,
     plugins,
   };

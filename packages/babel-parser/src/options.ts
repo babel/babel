@@ -39,13 +39,6 @@ export interface Options {
   allowUndeclaredExports?: boolean;
 
   /**
-   * By default, yield use is not allowed outside of a generator function.
-   * Set this to true to accept such code.
-   */
-
-  allowYieldOutsideFunction?: boolean;
-
-  /**
    * By default, Babel parser JavaScript code according to Annex B syntax.
    * Set this to `false` to disable such behavior.
    */
@@ -121,6 +114,8 @@ export interface Options {
    */
   ranges?: boolean;
 
+  template?: boolean;
+
   /**
    * Adds all parsed tokens to a tokens property on the File node.
    */
@@ -148,9 +143,9 @@ export const enum OptionFlags {
   AllowNewTargetOutsideFunction = 1 << 2,
   AllowImportExportEverywhere = 1 << 3,
   AllowSuperOutsideMethod = 1 << 4,
-  AllowYieldOutsideFunction = 1 << 5,
-  AllowUndeclaredExports = 1 << 6,
-  Ranges = 1 << 7,
+  AllowUndeclaredExports = 1 << 5,
+  Ranges = 1 << 6,
+  Template = 1 << 7,
   Tokens = 1 << 8,
   CreateImportExpressions = 1 << 9,
   CreateParenthesizedExpressions = 1 << 10,
@@ -192,7 +187,6 @@ function createDefaultOptions(): OptionsWithDefaults {
     allowSuperOutsideMethod: false,
     // When enabled, export statements can reference undeclared variables.
     allowUndeclaredExports: false,
-    allowYieldOutsideFunction: false,
     // An array of plugins to enable
     plugins: [],
     // TODO
@@ -206,6 +200,7 @@ function createDefaultOptions(): OptionsWithDefaults {
     //
     // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
     ranges: false,
+    template: false,
     // Adds all parsed tokens to a `tokens` property on the `File` node
     tokens: false,
     // Whether to create ImportExpression AST nodes (if false

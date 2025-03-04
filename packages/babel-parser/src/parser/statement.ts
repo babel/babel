@@ -225,7 +225,10 @@ export default abstract class StatementParser extends ExpressionParser {
     this.parseBlockBody(program, true, true, end);
     if (this.inModule) {
       if (
-        !(this.optionFlags & OptionFlags.AllowUndeclaredExports) &&
+        !(
+          this.optionFlags & OptionFlags.AllowUndeclaredExports ||
+          this.optionFlags & OptionFlags.Template
+        ) &&
         this.scope.undefinedExports.size > 0
       ) {
         for (const [localName, at] of Array.from(this.scope.undefinedExports)) {

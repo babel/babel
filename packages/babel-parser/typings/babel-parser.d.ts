@@ -125,11 +125,6 @@ interface Options {
      */
     allowUndeclaredExports?: boolean;
     /**
-     * By default, yield use is not allowed outside of a generator function.
-     * Set this to true to accept such code.
-     */
-    allowYieldOutsideFunction?: boolean;
-    /**
      * By default, Babel parser JavaScript code according to Annex B syntax.
      * Set this to `false` to disable such behavior.
      */
