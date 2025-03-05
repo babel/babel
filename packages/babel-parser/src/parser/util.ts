@@ -29,7 +29,6 @@ import {
 import type Parser from "./index.ts";
 
 import type ScopeHandler from "../util/scope.ts";
-import { OptionFlags } from "../options.ts";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -359,10 +358,6 @@ export default abstract class UtilParser extends Tokenizer {
     let paramFlags = ParamKind.PARAM;
     if (this.inModule) {
       paramFlags |= ParamKind.PARAM_AWAIT;
-    }
-    if (this.optionFlags & OptionFlags.Template) {
-      paramFlags |=
-        ParamKind.PARAM_YIELD | ParamKind.PARAM_RETURN | ParamKind.PARAM_AWAIT;
     }
     this.scope.enter(ScopeFlag.PROGRAM);
     this.prodParam.enter(paramFlags);
