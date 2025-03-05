@@ -20,6 +20,7 @@ type Plugin$1 =
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "deprecatedImportAssert"
+  | "discardBinding"
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
   | "explicitResourceManagement"
