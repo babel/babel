@@ -272,13 +272,11 @@ export default abstract class ExpressionParser extends LValParser {
     afterLeftParse?: Function,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    if (this.isContextual(tt._yield)) {
-      if (
-        (this.optionFlags & OptionFlags.AllowYieldOutsideFunction &&
-          !this.scope.inFunction) ||
-        this.prodParam.hasYield
-      ) {
-        let left = this.parseYield();
+    const isYield = this.isContextual(tt._yield);
+    if (isYield) {
+      if (this.prodParam.hasYield) {
+        this.next();
+        let left = this.parseYield(startLoc);
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startLoc);
         }
@@ -343,6 +341,17 @@ export default abstract class ExpressionParser extends LValParser {
       return node;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
+    }
+
+    if (isYield) {
+      const { type } = this.state;
+      const startsExpr = this.hasPlugin("v8intrinsic")
+        ? tokenCanStartExpression(type)
+        : tokenCanStartExpression(type) && !this.match(tt.modulo);
+      if (startsExpr && !this.isAmbiguousAst()) {
+        this.raiseOverwrite(Errors.YieldNotInGeneratorFunction, startLoc);
+        return this.parseYield(startLoc);
+      }
     }
 
     return left;
@@ -668,7 +677,7 @@ export default abstract class ExpressionParser extends LValParser {
       const startsExpr = this.hasPlugin("v8intrinsic")
         ? tokenCanStartExpression(type)
         : tokenCanStartExpression(type) && !this.match(tt.modulo);
-      if (startsExpr && !this.isAmbiguousAwait()) {
+      if (startsExpr && !this.isAmbiguousAst()) {
         this.raiseOverwrite(Errors.AwaitNotInAsyncContext, startLoc);
         return this.parseAwait(startLoc);
       }
@@ -2873,7 +2882,7 @@ export default abstract class ExpressionParser extends LValParser {
       !this.scope.inFunction &&
       !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
     ) {
-      if (this.isAmbiguousAwait()) {
+      if (this.isAmbiguousAst()) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
@@ -2887,7 +2896,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, "AwaitExpression");
   }
 
-  isAmbiguousAwait(): boolean {
+  isAmbiguousAst(): boolean {
     if (this.hasPrecedingLineBreak()) return true;
     const { type } = this.state;
     return (
@@ -2910,8 +2919,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Parses yield expression inside generator.
 
-  parseYield(this: Parser): N.YieldExpression {
-    const node = this.startNode<N.YieldExpression>();
+  parseYield(this: Parser, startLoc: Position): N.YieldExpression {
+    const node = this.startNodeAt<N.YieldExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
@@ -2919,7 +2928,6 @@ export default abstract class ExpressionParser extends LValParser {
       node,
     );
 
-    this.next();
     let delegating = false;
     let argument: N.Expression | null = null;
     if (!this.hasPrecedingLineBreak()) {
