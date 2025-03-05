@@ -2,11 +2,9 @@
   "plugins": [
     "discardBinding",
     [
-      "recordAndTuple",
-      {
-        "syntaxType": "hash"
-      }
+      "recordAndTuple"
     ]
   ],
-  "throws": "Unexpected token (1:6)"
+  "throws": "Unexpected token (1:6)",
+  "BABEL_8_BREAKING": true
 }
