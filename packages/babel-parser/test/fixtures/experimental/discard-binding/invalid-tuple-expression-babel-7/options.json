@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "discardBinding",
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ],
+  "throws": "Unexpected token (1:6)",
+  "BABEL_8_BREAKING": false
+}
