@@ -47,8 +47,6 @@
           },
           "value": "./fixture.json"
         },
-        "declaration": null,
-        "attributes": [],
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -68,7 +66,8 @@
               "value": "json"
             }
           }
-        ]
+        ],
+        "declaration": null
       }
     ],
     "directives": [],

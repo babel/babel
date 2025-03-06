@@ -52,9 +52,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
-        "attributes": [],
-        "assertions": []
+        "assertions": [],
+        "declaration": null
       }
     ],
     "directives": [],

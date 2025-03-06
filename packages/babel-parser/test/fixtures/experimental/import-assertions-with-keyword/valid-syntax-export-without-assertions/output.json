@@ -35,9 +35,8 @@
           },
           "value": "foo.json"
         },
-        "declaration": null,
-        "attributes": [],
-        "assertions": []
+        "assertions": [],
+        "declaration": null
       }
     ],
     "directives": [],

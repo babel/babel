@@ -99,9 +99,8 @@
           },
           "value": "foo"
         },
-        "declaration": null,
-        "attributes": [],
-        "assertions": []
+        "assertions": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",

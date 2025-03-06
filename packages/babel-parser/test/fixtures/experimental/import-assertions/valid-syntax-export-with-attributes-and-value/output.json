@@ -39,8 +39,6 @@
           },
           "value": "foo"
         },
-        "declaration": null,
-        "attributes": [],
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -60,7 +58,8 @@
               "value": "json"
             }
           }
-        ]
+        ],
+        "declaration": null
       },
       {
         "type": "ExpressionStatement",
