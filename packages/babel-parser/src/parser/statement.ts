@@ -2478,13 +2478,12 @@ export default abstract class StatementParser extends ExpressionParser {
       if (!node2.specifiers) node2.specifiers = [];
       const isTypeExport = node2.exportKind === "type";
       node2.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
-
       node2.source = null;
-      node2.declaration = null;
+      node2.attributes = [];
       if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node2.assertions = [];
       }
-
+      node2.declaration = null;
       return true;
     }
     return false;
@@ -2497,6 +2496,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.shouldParseExportDeclaration()) {
       node.specifiers = [];
       node.source = null;
+      node.attributes = [];
       if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
         node.assertions = [];
       }
