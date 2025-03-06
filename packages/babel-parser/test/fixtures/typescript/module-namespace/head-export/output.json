@@ -13,6 +13,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":7,"end":23,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":23,"index":23}},
@@ -44,6 +45,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":31,"end":42,"loc":{"start":{"line":2,"column":7,"index":31},"end":{"line":2,"column":18,"index":42}},

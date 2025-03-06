@@ -13,6 +13,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":7,"end":13,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":13,"index":13}},
@@ -37,6 +38,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "FunctionDeclaration",
           "start":21,"end":36,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":22,"index":36}},
@@ -62,6 +64,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":44,"end":54,"loc":{"start":{"line":3,"column":7,"index":44},"end":{"line":3,"column":17,"index":54}},
@@ -84,6 +87,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSEnumDeclaration",
           "start":63,"end":72,"loc":{"start":{"line":5,"column":7,"index":63},"end":{"line":5,"column":16,"index":72}},
@@ -105,6 +109,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":80,"end":94,"loc":{"start":{"line":6,"column":7,"index":80},"end":{"line":6,"column":21,"index":94}},
