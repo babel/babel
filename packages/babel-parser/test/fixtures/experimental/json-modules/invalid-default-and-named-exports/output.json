@@ -48,6 +48,7 @@
           "value": "./fixture.json"
         },
         "declaration": null,
+        "attributes": [],
         "assertions": [
           {
             "type": "ImportAttribute",

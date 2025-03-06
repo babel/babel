@@ -12,6 +12,7 @@
         "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":7,"end":25,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":25,"index":25}},
@@ -64,6 +65,7 @@
                     "start":46,"end":70,"loc":{"start":{"line":2,"column":20,"index":46},"end":{"line":2,"column":44,"index":70}},
                     "specifiers": [],
                     "source": null,
+                    "attributes": [],
                     "declaration": {
                       "type": "VariableDeclaration",
                       "start":53,"end":70,"loc":{"start":{"line":2,"column":27,"index":53},"end":{"line":2,"column":44,"index":70}},
@@ -127,6 +129,7 @@
                     "start":94,"end":118,"loc":{"start":{"line":3,"column":20,"index":94},"end":{"line":3,"column":44,"index":118}},
                     "specifiers": [],
                     "source": null,
+                    "attributes": [],
                     "declaration": {
                       "type": "VariableDeclaration",
                       "start":101,"end":118,"loc":{"start":{"line":3,"column":27,"index":101},"end":{"line":3,"column":44,"index":118}},

@@ -40,6 +40,7 @@
           "value": "foo"
         },
         "declaration": null,
+        "attributes": [],
         "assertions": [
           {
             "type": "ImportAttribute",

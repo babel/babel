@@ -36,6 +36,7 @@
           "value": "foo.json"
         },
         "declaration": null,
+        "attributes": [],
         "assertions": []
       }
     ],
