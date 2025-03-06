@@ -56,8 +56,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
-        "assertions": []
+        "assertions": [],
+        "declaration": null
       },
       {
         "type": "ExpressionStatement",

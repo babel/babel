@@ -78,6 +78,7 @@
         ],
         "source": null,
         "declaration": null,
+        "attributes": [],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -111,6 +112,7 @@
         ],
         "source": null,
         "declaration": null,
+        "attributes": [],
         "trailingComments": [
           {
             "type": "CommentLine",

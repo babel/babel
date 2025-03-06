@@ -288,6 +288,7 @@ describe("@babel/template", function () {
       expect(result).toMatchInlineSnapshot(`
         Array [
           Object {
+            "attributes": Array [],
             "declaration": null,
             "loc": undefined,
             "source": null,

@@ -79,7 +79,6 @@
           },
           "value": "foo.json"
         },
-        "declaration": null,
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -99,7 +98,8 @@
               "value": "for"
             }
           }
-        ]
+        ],
+        "declaration": null
       }
     ],
     "directives": [],

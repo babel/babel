@@ -30,13 +30,15 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
         "start":16,"end":35,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":19,"index":35}},
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":23,"end":35,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":19,"index":35}},

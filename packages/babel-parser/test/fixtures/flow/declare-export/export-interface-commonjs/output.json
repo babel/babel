@@ -28,6 +28,7 @@
               "start":23,"end":54,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":54,"index":54}},
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "InterfaceDeclaration",
                 "start":38,"end":54,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":54,"index":54}},

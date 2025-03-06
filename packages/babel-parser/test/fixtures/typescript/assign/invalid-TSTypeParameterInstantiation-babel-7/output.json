@@ -16,6 +16,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":7,"end":158,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":6,"column":1,"index":158}},
@@ -128,6 +129,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":167,"end":241,"loc":{"start":{"line":8,"column":7,"index":167},"end":{"line":10,"column":1,"index":241}},
@@ -176,6 +178,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":250,"end":397,"loc":{"start":{"line":12,"column":7,"index":250},"end":{"line":18,"column":1,"index":397}},

@@ -38,7 +38,6 @@
           },
           "value": "foo.json"
         },
-        "declaration": null,
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -76,7 +75,8 @@
               "value": "html"
             }
           }
-        ]
+        ],
+        "declaration": null
       }
     ],
     "directives": [],

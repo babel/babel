@@ -20,7 +20,7 @@
     "eslint": ">=7.5.0"
   },
   "devDependencies": {
-    "eslint": "^9.7.0"
+    "eslint": "^9.21.0"
   },
   "type": "module"
 }

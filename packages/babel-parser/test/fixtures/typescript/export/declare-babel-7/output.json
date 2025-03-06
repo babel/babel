@@ -13,6 +13,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":7,"end":31,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":31,"index":31}},
@@ -46,6 +47,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSDeclareFunction",
           "start":39,"end":66,"loc":{"start":{"line":2,"column":7,"index":39},"end":{"line":2,"column":34,"index":66}},
@@ -74,6 +76,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":74,"end":92,"loc":{"start":{"line":3,"column":7,"index":74},"end":{"line":3,"column":25,"index":92}},
@@ -97,6 +100,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSInterfaceDeclaration",
           "start":100,"end":122,"loc":{"start":{"line":4,"column":7,"index":100},"end":{"line":4,"column":29,"index":122}},
@@ -119,6 +123,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSTypeAliasDeclaration",
           "start":130,"end":154,"loc":{"start":{"line":5,"column":7,"index":130},"end":{"line":5,"column":31,"index":154}},
@@ -140,6 +145,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":162,"end":181,"loc":{"start":{"line":6,"column":7,"index":162},"end":{"line":6,"column":26,"index":181}},
@@ -163,6 +169,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":189,"end":211,"loc":{"start":{"line":7,"column":7,"index":189},"end":{"line":7,"column":29,"index":211}},
@@ -186,6 +193,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSEnumDeclaration",
           "start":219,"end":238,"loc":{"start":{"line":8,"column":7,"index":219},"end":{"line":8,"column":26,"index":238}},
@@ -204,6 +212,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":246,"end":270,"loc":{"start":{"line":9,"column":7,"index":246},"end":{"line":9,"column":31,"index":270}},
@@ -237,6 +246,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":278,"end":295,"loc":{"start":{"line":10,"column":7,"index":278},"end":{"line":10,"column":24,"index":295}},

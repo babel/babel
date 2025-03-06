@@ -46,6 +46,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":54,"end":67,"loc":{"start":{"line":4,"column":9,"index":54},"end":{"line":4,"column":22,"index":67}},

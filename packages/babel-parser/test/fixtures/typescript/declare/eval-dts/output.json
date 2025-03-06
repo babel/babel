@@ -26,6 +26,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "TSModuleDeclaration",
                 "start":50,"end":151,"loc":{"start":{"line":3,"column":11,"index":50},"end":{"line":6,"column":5,"index":151}},
@@ -45,6 +46,7 @@
                       "exportKind": "value",
                       "specifiers": [],
                       "source": null,
+                      "attributes": [],
                       "declaration": {
                         "type": "TSDeclareFunction",
                         "start":80,"end":102,"loc":{"start":{"line":4,"column":15,"index":80},"end":{"line":4,"column":37,"index":102}},
@@ -72,6 +74,7 @@
                       "exportKind": "value",
                       "specifiers": [],
                       "source": null,
+                      "attributes": [],
                       "declaration": {
                         "type": "TSDeclareFunction",
                         "start":118,"end":145,"loc":{"start":{"line":5,"column":15,"index":118},"end":{"line":5,"column":42,"index":145}},
@@ -156,6 +159,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": null
       }
     ],
