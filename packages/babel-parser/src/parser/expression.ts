@@ -348,7 +348,7 @@ export default abstract class ExpressionParser extends LValParser {
       const startsExpr = this.hasPlugin("v8intrinsic")
         ? tokenCanStartExpression(type)
         : tokenCanStartExpression(type) && !this.match(tt.modulo);
-      if (startsExpr && !this.isAmbiguousAst()) {
+      if (startsExpr && !this.isAmbiguousPrefixOrIdentifier()) {
         this.raiseOverwrite(Errors.YieldNotInGeneratorFunction, startLoc);
         return this.parseYield(startLoc);
       }
@@ -677,7 +677,7 @@ export default abstract class ExpressionParser extends LValParser {
       const startsExpr = this.hasPlugin("v8intrinsic")
         ? tokenCanStartExpression(type)
         : tokenCanStartExpression(type) && !this.match(tt.modulo);
-      if (startsExpr && !this.isAmbiguousAst()) {
+      if (startsExpr && !this.isAmbiguousPrefixOrIdentifier()) {
         this.raiseOverwrite(Errors.AwaitNotInAsyncContext, startLoc);
         return this.parseAwait(startLoc);
       }
@@ -2882,7 +2882,7 @@ export default abstract class ExpressionParser extends LValParser {
       !this.scope.inFunction &&
       !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
     ) {
-      if (this.isAmbiguousAst()) {
+      if (this.isAmbiguousPrefixOrIdentifier()) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
@@ -2896,7 +2896,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, "AwaitExpression");
   }
 
-  isAmbiguousAst(): boolean {
+  isAmbiguousPrefixOrIdentifier(): boolean {
     if (this.hasPrecedingLineBreak()) return true;
     const { type } = this.state;
     return (
