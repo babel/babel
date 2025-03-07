@@ -155,3 +155,8 @@ defineType("PipelineBareFunction", {
 defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
 });
+
+// https://github.com/tc39/proposal-discard-binding
+defineType("VoidPattern", {
+  aliases: ["Pattern", "PatternLike", "LVal"],
+});

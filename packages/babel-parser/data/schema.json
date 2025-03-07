@@ -9,6 +9,14 @@
       },
       "type": "object"
     },
+    "DiscardBindingPluginOptions": {
+      "properties": {
+        "syntaxType": {
+          "enum": ["void"],
+          "type": "string"
+        }
+      }
+    },
     "FlowPluginOptions": {
       "properties": {
         "all": {
@@ -93,6 +101,19 @@
               },
               {
                 "$ref": "#/definitions/DecoratorsPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
+                "enum": ["discardBinding"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/DiscardBindingPluginOptions"
               }
             ],
             "additionalItems": false,
