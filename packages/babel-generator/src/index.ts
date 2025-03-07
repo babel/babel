@@ -287,7 +287,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
  * @param code - the original source code, used for source maps.
  * @returns - an object containing the output code and source map.
  */
-export default function generate(
+export function generate(
   ast: t.Node,
   opts: GeneratorOptions = {},
   code?: string | { [filename: string]: string },
@@ -304,3 +304,5 @@ export default function generate(
 
   return printer.generate(ast);
 }
+
+export default generate;
