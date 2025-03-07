@@ -9,6 +9,14 @@
       },
       "type": "object"
     },
+    "DiscardBindingPluginOptions": {
+      "properties": {
+        "syntaxType": {
+          "enum": ["void"],
+          "type": "string"
+        }
+      }
+    },
     "EstreePluginOptions": {
       "properties": {
         "classFeatures": {
@@ -108,6 +116,19 @@
           {
             "items": [
               {
+                "enum": ["discardBinding"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/DiscardBindingPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
                 "enum": ["estree"],
                 "type": "string"
               },
@@ -195,7 +216,6 @@
               "decoratorAutoAccessors",
               "deferredImportEvaluation",
               "destructuringPrivate",
-              "discardBinding",
               "doExpressions",
               "estree",
               "explicitResourceManagement",
