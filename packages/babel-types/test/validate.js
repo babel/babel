@@ -51,7 +51,63 @@ describe("validate", () => {
     itBabel8("destructuring, no initializer, in block", () => {
       expect(() => {
         t.blockStatement([t.cloneNode(ast)]);
-      }).toThrow();
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"Missing initializer in 'const' declaration"`,
+      );
+    });
+
+    itBabel8("const without initializer should throw", () => {
+      expect(() =>
+        t.blockStatement([
+          t.variableDeclaration("const", [
+            t.variableDeclarator(t.identifier("x")),
+          ]),
+        ]),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Missing initializer in 'const' declaration"`,
+      );
+    });
+
+    itBabel8("using without initializer should throw", () => {
+      expect(() =>
+        t.blockStatement([
+          t.variableDeclaration("using", [
+            t.variableDeclarator(t.identifier("x")),
+          ]),
+        ]),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Missing initializer in 'using' declaration"`,
+      );
+    });
+
+    itBabel8("var void pattern should throw", () => {
+      expect(() =>
+        t.blockStatement([
+          t.variableDeclaration("var", [
+            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
+          ]),
+        ]),
+      ).toThrow();
+    });
+
+    itBabel8("let void pattern should throw", () => {
+      expect(() =>
+        t.blockStatement([
+          t.variableDeclaration("let", [
+            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
+          ]),
+        ]),
+      ).toThrow();
+    });
+
+    itBabel8("const void pattern should throw", () => {
+      expect(() =>
+        t.blockStatement([
+          t.variableDeclaration("const", [
+            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
+          ]),
+        ]),
+      ).toThrow();
     });
   });
 });
