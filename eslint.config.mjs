@@ -279,6 +279,7 @@ export default [
             "itNoWin32",
             "itESM",
             "nodeGte8",
+            "nodeGte10",
             "nodeGte14",
             "nodeGte12",
             "nodeGte20",
