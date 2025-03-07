@@ -725,7 +725,7 @@ describe("scope", () => {
       it(`${name} and function in sub scope`, () => {
         const ast = [
           t.variableDeclaration(name, [
-            t.variableDeclarator(t.identifier("foo")),
+            t.variableDeclarator(t.identifier("foo"), t.nullLiteral()),
           ]),
           t.blockStatement([
             t.functionDeclaration(
@@ -784,7 +784,7 @@ describe("scope", () => {
           case "const":
           case "var":
             return t.variableDeclaration(kind, [
-              t.variableDeclarator(t.identifier("foo")),
+              t.variableDeclarator(t.identifier("foo"), t.nullLiteral()),
             ]);
           case "class":
             return t.classDeclaration(
