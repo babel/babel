@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "discardBinding",
+    ["discardBinding", { "syntaxType": "void" }],
     [
       "recordAndTuple",
       {

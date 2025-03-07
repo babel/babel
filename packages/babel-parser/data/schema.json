@@ -9,6 +9,14 @@
       },
       "type": "object"
     },
+    "DiscardBindingPluginOptions": {
+      "properties": {
+        "syntaxType": {
+          "enum": ["void"],
+          "type": "string"
+        }
+      }
+    },
     "FlowPluginOptions": {
       "properties": {
         "all": {
@@ -101,6 +109,19 @@
           {
             "items": [
               {
+                "enum": ["discardBinding"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/DiscardBindingPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
                 "enum": ["importAttributes"],
                 "type": "string"
               },
@@ -175,7 +196,6 @@
               "decoratorAutoAccessors",
               "deferredImportEvaluation",
               "destructuringPrivate",
-              "discardBinding",
               "doExpressions",
               "estree",
               "explicitResourceManagement",
