@@ -1,8 +1,11 @@
-const x = n => function () {
-  switch (n) {
-    case 0:
-      if (true) {
-        return void 0;
-      }
+const x = n => {
+  {
+    switch (n) {
+      case 0:
+        if (true) {
+          break;
+        }
+    }
   }
-}();
+  return void 0;
+};
