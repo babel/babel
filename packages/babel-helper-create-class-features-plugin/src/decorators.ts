@@ -919,7 +919,8 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
 }
 
 function usesPrivateField(expression: t.Node) {
-  t.traverseFast(expression, node => {
+  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+  return t.traverseFast(expression, node => {
     if (t.isPrivateName(node)) {
       return "stop";
     }
@@ -1067,7 +1068,8 @@ function transformClass(
   // context or the given identifier name or contains yield or await expression.
   // `true` means "maybe" and `false` means "no".
   const usesFunctionContextOrYieldAwait = (decorator: t.Decorator) => {
-    t.traverseFast(decorator, node => {
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+    return t.traverseFast(decorator, node => {
       if (
         t.isThisExpression(node) ||
         t.isSuper(node) ||
@@ -1245,6 +1247,7 @@ function transformClass(
       }
       decoratorsThis.push(object);
       hasSideEffects ||= !scopeParent.isStatic(expression);
+      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
       usesFnContext ||= usesFunctionContextOrYieldAwait(decorator);
     }
     return { hasSideEffects, usesFnContext, decoratorsThis };
