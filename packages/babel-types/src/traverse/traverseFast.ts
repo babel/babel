@@ -9,18 +9,18 @@ export default function traverseFast<Options = object>(
   node: t.Node | null | undefined,
   enter: (node: t.Node, opts?: Options) => void | "skip" | "stop",
   opts?: Options,
-): boolean | undefined {
-  if (!node) return;
+): boolean {
+  if (!node) return false;
 
   const keys = VISITOR_KEYS[node.type];
-  if (!keys) return;
+  if (!keys) return false;
 
   opts = opts || ({} as Options);
   const ret = enter(node, opts);
   if (ret !== undefined) {
     switch (ret) {
       case "skip":
-        return;
+        return false;
       case "stop":
         return true;
     }
@@ -41,4 +41,5 @@ export default function traverseFast<Options = object>(
       if (traverseFast(subNode, enter, opts)) return true;
     }
   }
+  return false;
 }

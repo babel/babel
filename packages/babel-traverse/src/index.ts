@@ -137,16 +137,14 @@ traverse.hasType = function (
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  return (
-    traverseFast(tree, function (node) {
-      if (denylistTypes?.includes(node.type)) {
-        return "skip";
-      }
-      if (node.type === type) {
-        return "stop";
-      }
-    }) || false
-  );
+  return traverseFast(tree, function (node) {
+    if (denylistTypes?.includes(node.type)) {
+      return "skip";
+    }
+    if (node.type === type) {
+      return "stop";
+    }
+  });
 };
 
 traverse.cache = cache;
