@@ -45,7 +45,14 @@ export default class Binding {
     this.kind = kind;
 
     if ((kind === "var" || kind === "hoisted") && isDeclaredInLoop(path)) {
-      this.reassign(path);
+      if (
+        !path.isVariableDeclarator() ||
+        (path.parentPath.parentPath.isForXStatement() &&
+          path.parentPath.parentKey === "left") ||
+        path.node.init
+      ) {
+        this.reassign(path);
+      }
     }
 
     this.clearValue();
