@@ -602,6 +602,18 @@ describe("scope", () => {
       expect(path.scope.references._jsx).toBe(true);
     });
 
+    it("should reset child scopes", function () {
+      const path = getPath("function f() { var a; a; a; }");
+      const fnScope = path.get("body.0").scope;
+
+      expect(fnScope.getBinding("a").references).toBe(2);
+
+      path.get("body.0.body.body.1").remove();
+      path.scope.crawl();
+
+      expect(fnScope.getBinding("a").references).toBe(1);
+    });
+
     test("generateUid collision check after re-crawling", function () {
       const path = getPath("function Foo() { var _jsx; }");
 
