@@ -935,102 +935,96 @@ function pluginImportMetaUrl({ types: t, template }) {
 
   return {
     visitor: {
-      Program(programPath) {
-        // We must be sure to run this before the istanbul plugins, because its
-        // instrumentation breaks our detection.
-        programPath.traverse({
-          CallExpression(path) {
-            const { node } = path;
+      CallExpression(path) {
+        const { node } = path;
 
-            // fileURLToPath(import.meta.url)
+        // fileURLToPath(import.meta.url)
+        if (
+          (function () {
             if (
-              (function () {
-                if (
-                  !t.isIdentifier(node.callee, {
-                    name: "fileURLToPath",
-                  }) ||
-                  node.arguments.length !== 1
-                ) {
-                  return;
-                }
-
-                const arg = node.arguments[0];
-
-                if (
-                  !t.isMemberExpression(arg, {
-                    computed: false,
-                  }) ||
-                  !t.isIdentifier(arg.property, {
-                    name: "url",
-                  }) ||
-                  !isImportMeta(arg.object)
-                ) {
-                  return;
-                }
-                path.replaceWith(t.identifier("__filename"));
-                return true;
-              })()
-            ) {
-              return;
-            }
-
-            // const { __dirname: cwd } = commonJS(import.meta.url)
-            if (
-              !t.isIdentifier(node.callee, { name: "commonJS" }) ||
+              !t.isIdentifier(node.callee, {
+                name: "fileURLToPath",
+              }) ||
               node.arguments.length !== 1
             ) {
               return;
             }
 
-            const binding = path.scope.getBinding("commonJS");
-            if (!binding) return;
-
-            if (binding.path.isImportSpecifier()) {
-              path.parentPath.parentPath.assertVariableDeclaration();
-              path.parentPath.parentPath.remove();
-            }
-          },
-
-          // const require = createRequire(import.meta.url)
-          VariableDeclarator(path) {
-            const { node } = path;
+            const arg = node.arguments[0];
 
             if (
-              !t.isIdentifier(node.id, { name: "require" }) ||
-              !t.isCallExpression(node.init) ||
-              !t.isIdentifier(node.init.callee, { name: "createRequire" }) ||
-              node.init.arguments.length !== 1 ||
-              !isImportMetaUrl(node.init.arguments[0])
+              !t.isMemberExpression(arg, {
+                computed: false,
+              }) ||
+              !t.isIdentifier(arg.property, {
+                name: "url",
+              }) ||
+              !isImportMeta(arg.object)
             ) {
               return;
             }
+            path.replaceWith(t.identifier("__filename"));
+            return true;
+          })()
+        ) {
+          return;
+        }
 
-            // Let's just remove this declaration to unshadow the "global" cjs require.
-            path.remove();
-            path.scope.crawl();
+        // const { __dirname: cwd } = commonJS(import.meta.url)
+        if (
+          !t.isIdentifier(node.callee, { name: "commonJS" }) ||
+          node.arguments.length !== 1
+        ) {
+          return;
+        }
 
-            const createRequireBinding = path.scope.getBinding("createRequire");
-            if (!createRequireBinding.referenced) {
-              createRequireBinding.path.remove();
-            }
-          },
+        const binding = path.scope.getBinding("commonJS");
+        if (!binding) return;
 
-          // import.meta.url
-          MemberExpression(path) {
-            if (!isImportMetaUrl(path.node)) return;
+        if (binding.path.isImportSpecifier()) {
+          path.parentPath.parentPath.assertVariableDeclaration();
+          path.parentPath.parentPath.remove();
+        }
+      },
 
-            path.replaceWith(
-              template.expression
-                .ast`\`file://\${__filename.replace(/\\\\/g, "/")}\``
-            );
-          },
+      // const require = createRequire(import.meta.url)
+      VariableDeclarator(path) {
+        const { node } = path;
 
-          MetaProperty(path) {
-            if (isImportMeta(path.node)) {
-              throw path.buildCodeFrameError("Unsupported import.meta");
-            }
-          },
-        });
+        if (
+          !t.isIdentifier(node.id, { name: "require" }) ||
+          !t.isCallExpression(node.init) ||
+          !t.isIdentifier(node.init.callee, { name: "createRequire" }) ||
+          node.init.arguments.length !== 1 ||
+          !isImportMetaUrl(node.init.arguments[0])
+        ) {
+          return;
+        }
+
+        // Let's just remove this declaration to unshadow the "global" cjs require.
+        path.remove();
+        path.scope.crawl();
+
+        const createRequireBinding = path.scope.getBinding("createRequire");
+        if (!createRequireBinding.referenced) {
+          createRequireBinding.path.remove();
+        }
+      },
+
+      // import.meta.url
+      MemberExpression(path) {
+        if (!isImportMetaUrl(path.node)) return;
+
+        path.replaceWith(
+          template.expression
+            .ast`\`file://\${__filename.replace(/\\\\/g, "/")}\``
+        );
+      },
+
+      MetaProperty(path) {
+        if (isImportMeta(path.node)) {
+          throw path.buildCodeFrameError("Unsupported import.meta");
+        }
       },
     },
   };
