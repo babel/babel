@@ -231,7 +231,6 @@ function resetScope(scope: Scope) {
   scope.bindings = Object.create(null);
   scope.globals = Object.create(null);
   scope.uids = Object.create(null);
-  scope.data = Object.create(null);
 }
 
 interface CollectVisitorState {
@@ -924,6 +923,7 @@ class Scope {
     const path = this.path;
 
     resetScope(this);
+    this.data = Object.create(null);
 
     let scope: Scope = this;
     do {
