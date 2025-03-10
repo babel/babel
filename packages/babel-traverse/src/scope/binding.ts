@@ -44,15 +44,8 @@ export default class Binding {
     this.path = path;
     this.kind = kind;
 
-    if ((kind === "var" || kind === "hoisted") && isDeclaredInLoop(path)) {
-      if (
-        !path.isVariableDeclarator() ||
-        (path.parentPath.parentPath.isForXStatement() &&
-          path.parentPath.parentKey === "left") ||
-        path.node.init
-      ) {
-        this.reassign(path);
-      }
+    if ((kind === "var" || kind === "hoisted") && isInitInLoop(path)) {
+      this.reassign(path);
     }
 
     this.clearValue();
@@ -121,19 +114,26 @@ export default class Binding {
   }
 }
 
-function isDeclaredInLoop(path: NodePath) {
-  for (
-    let { parentPath, key } = path;
-    parentPath;
-    { parentPath, key } = parentPath
+function isInitInLoop(path: NodePath) {
+  if (
+    !path.isVariableDeclarator() ||
+    (path.parentPath.parentPath.isForXStatement() &&
+      path.parentPath.parentKey === "left") ||
+    path.node.init
   ) {
-    if (parentPath.isFunctionParent()) return false;
-    if (
-      parentPath.isWhile() ||
-      parentPath.isForXStatement() ||
-      (parentPath.isForStatement() && key === "body")
+    for (
+      let { parentPath, key } = path;
+      parentPath;
+      { parentPath, key } = parentPath
     ) {
-      return true;
+      if (parentPath.isFunctionParent()) return false;
+      if (
+        parentPath.isWhile() ||
+        parentPath.isForXStatement() ||
+        (parentPath.isForStatement() && key === "body")
+      ) {
+        return true;
+      }
     }
   }
   return false;
