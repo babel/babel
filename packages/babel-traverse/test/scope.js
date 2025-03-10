@@ -455,6 +455,8 @@ describe("scope", () => {
       expect(isAConstant("while (1) { let a = 1; }")).toBe(true);
       expect(isAConstant("do { let a = 1; } while (1)")).toBe(true);
 
+      expect(isAConstant("for (_ of ns) { function a() {} }")).toBe(false);
+
       scopePath = "body.0";
       expect(isAConstant("for (let a of ns) {}")).toBe(true);
       expect(isAConstant("for (let a in ns) {}")).toBe(true);

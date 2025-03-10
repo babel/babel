@@ -115,25 +115,19 @@ export default class Binding {
 }
 
 function isInitInLoop(path: NodePath) {
-  if (
-    !path.isVariableDeclarator() ||
-    (path.parentPath.parentPath.isForXStatement() &&
-      path.parentPath.parentKey === "left") ||
-    path.node.init
+  const isFunctionDeclarationOrHasInit =
+    !path.isVariableDeclarator() || path.node.init;
+  for (
+    let { parentPath, key } = path;
+    parentPath;
+    { parentPath, key } = parentPath
   ) {
-    for (
-      let { parentPath, key } = path;
-      parentPath;
-      { parentPath, key } = parentPath
+    if (parentPath.isFunctionParent()) return false;
+    if (
+      (key === "left" && parentPath.isForXStatement()) ||
+      (isFunctionDeclarationOrHasInit && key === "body" && parentPath.isLoop())
     ) {
-      if (parentPath.isFunctionParent()) return false;
-      if (
-        parentPath.isWhile() ||
-        parentPath.isForXStatement() ||
-        (parentPath.isForStatement() && key === "body")
-      ) {
-        return true;
-      }
+      return true;
     }
   }
   return false;
