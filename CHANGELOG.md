@@ -24,6 +24,33 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.26.10 (2025-03-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17159](https://github.com/babel/babel/pull/17159) Disallow decorator in array pattern ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-template`
+  * [#17164](https://github.com/babel/babel/pull/17164) Fix: always initialize ExportDeclaration attributes ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#17142](https://github.com/babel/babel/pull/17142) fix: "Map maximum size exceeded" in deepClone ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#17154](https://github.com/babel/babel/pull/17154) Update typescript parser tests ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17151](https://github.com/babel/babel/pull/17151) fix: Should not evaluate vars in child scope ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#17153](https://github.com/babel/babel/pull/17153) fix: Correctly generate `abstract override` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#17107](https://github.com/babel/babel/pull/17107) Fix source type detection when parsing TypeScript ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-standalone`
+  * [#17158](https://github.com/babel/babel/pull/17158) Avoid warnings when re-bundling @babel/standalone with webpack ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-parser`
+  * [#17160](https://github.com/babel/babel/pull/17160) Left-value parsing cleanup ([@JLHwung](https://github.com/JLHwung))
 ## v7.26.9 (2025-02-14)
 
 #### :bug: Bug Fix
