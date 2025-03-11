@@ -80,4 +80,15 @@ describe("wrapRegExp", () => {
 
     it.todo("$<__proto__>");
   });
+  describe("substitutions", () => {
+    it("unknown group", () => {
+      const pattern = "(foo)";
+      const groups = { group: 1 };
+      const myRegExp = wrapRegExp(pattern, groups);
+      const targetStr = "foobar";
+      const replacement = "$<UNKNOWN>";
+      const result = myRegExp[Symbol.replace](targetStr, replacement);
+      expect(result).toBe("bar");
+    });
+  });
 });
