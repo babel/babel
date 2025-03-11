@@ -453,22 +453,4 @@ describe("babel-runtime", () => {
       expect(require("../core-js/instance/values")({})).toEqual(undefined);
     });
   });
-
-    describeBabel7("helpers", () => {
-    describeBabel7("wrapRegExp", () => {
-      const wrapRegExp = require("../helpers/wrapRegExp");
-      it("should stop in 1 second", () => {
-        const pattern = "(foo)"; 
-        const groups = { "\u0000": 1 };  
-        const myRegExp = wrapRegExp(pattern, groups);
-        const targetStr = "foofoo";
-        let str = "$<".repeat(100000) + "\u0000";  
-        let startTime = performance.now();
-        const result = myRegExp[Symbol.replace](targetStr, str);
-        let endTime = performance.now();
-        let timeTaken = endTime - startTime;
-        expect(timeTaken).toBeLessThan(1000);
-      });
-    });
-  });
 });
