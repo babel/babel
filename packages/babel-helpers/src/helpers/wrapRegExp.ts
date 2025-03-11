@@ -72,7 +72,7 @@ export default function _wrapRegExp(this: any): RegExp {
       ).call(
         this,
         str,
-        substitution.replace(/\$<([^>]+)>/g, function (_, name) {
+        substitution.replace(/\$<(?!\$<)([^>]+)>/g, function (_, name) {
           var group = groups[name];
           return "$" + (Array.isArray(group) ? group.join("$") : group);
         }),
