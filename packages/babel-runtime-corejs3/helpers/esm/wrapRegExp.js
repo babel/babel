@@ -42,10 +42,10 @@ function _wrapRegExp() {
   }, BabelRegExp.prototype[_Symbol$replace] = function (t, p) {
     if ("string" == typeof p) {
       var o = r.get(this);
-      return e[_Symbol$replace].call(this, t, p.replace(/\$<([^>]+)(>|\$)/g, function (e, r, t) {
-        if ("$" === t) return e;
+      return e[_Symbol$replace].call(this, t, p.replace(/\$<([^>]+)(>|$)/g, function (e, r, t) {
+        if ("" === t) return e;
         var p = o[r];
-        return p ? "$" + (_Array$isArray(p) ? p.join("$") : p) : "";
+        return _Array$isArray(p) ? "$" + p.join("$") : "string" == typeof p ? "$" + p : "";
       }));
     }
     if ("function" == typeof p) {
