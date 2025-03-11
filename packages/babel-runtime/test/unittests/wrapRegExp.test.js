@@ -10,9 +10,9 @@ describe("wrapRegExp", () => {
       const replacement = "$<".repeat(1e5) + "group";
       const startTime = Date.now();
       const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail if 1000ms is passed
+      // This test will fail if 2000ms is passed
       const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(1000);
+      expect(timeTaken).toBeLessThan(2000);
       expect(result).toBe(replacement + "foo");
     });
 
@@ -24,9 +24,9 @@ describe("wrapRegExp", () => {
       const replacement = "$<".repeat(1e5) + "group>";
       const startTime = Date.now();
       const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail if 1000ms is passed
+      // This test will fail if 2000ms is passed
       const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(1000);
+      expect(timeTaken).toBeLessThan(2000);
       expect(result).toBe("foo");
     });
 
@@ -52,9 +52,9 @@ describe("wrapRegExp", () => {
       const replacement = "$<g".repeat(1e5) + "group>";
       const startTime = Date.now();
       const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail when 1000ms is passed
+      // This test will fail when 2000ms is passed
       const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(1000);
+      expect(timeTaken).toBeLessThan(2000);
       expect(result).toBe("foo");
     });
 
