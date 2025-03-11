@@ -456,7 +456,7 @@ describe("babel-runtime", () => {
 
     describeBabel7("helpers", () => {
     describeBabel7("wrapRegExp", () => {
-      const wrapRegExp = require("../helpers/esm/wrapRegExp");
+      const wrapRegExp = require("../helpers/wrapRegExp");
       it("should stop in 1 second", () => {
         const pattern = "(foo)"; 
         const groups = { "\u0000": 1 };  
