@@ -68,7 +68,38 @@ describe("wrapRegExp", () => {
       expect(result).toBe("foofoobar");
     });
 
-    it.skip("$<hasOwnProperty>", () => {
+    it("$<hasOwnProperty>", () => {
+      const pattern = "(foo)";
+      const groups = { hasOwnProperty: 1 };
+      const myRegExp = wrapRegExp(pattern, groups);
+      const targetStr = "foobar";
+      const replacement = "$<hasOwnProperty>";
+      const result = myRegExp[Symbol.replace](targetStr, replacement);
+      expect(result).toBe("foobar");
+    });
+
+    it("$<__proto__>", () => {
+      const pattern = "(foo)";
+      const groups = { ["__proto__"]: 1 };
+      const myRegExp = wrapRegExp(pattern, groups);
+      const targetStr = "foobar";
+      const replacement = "$<__proto__>";
+      const result = myRegExp[Symbol.replace](targetStr, replacement);
+      expect(result).toBe("foobar");
+    });
+  });
+  describe("substitutions", () => {
+    it("unknown group", () => {
+      const pattern = "(foo)";
+      const groups = { group: 1 };
+      const myRegExp = wrapRegExp(pattern, groups);
+      const targetStr = "foobar";
+      const replacement = "$<UNKNOWN>";
+      const result = myRegExp[Symbol.replace](targetStr, replacement);
+      expect(result).toBe("bar");
+    });
+
+    it("$<hasOwnProperty> - unknown group", () => {
       const pattern = "(foo)";
       const groups = { group: 1 };
       const myRegExp = wrapRegExp(pattern, groups);
@@ -78,15 +109,12 @@ describe("wrapRegExp", () => {
       expect(result).toBe("bar");
     });
 
-    it.todo("$<__proto__>");
-  });
-  describe("substitutions", () => {
-    it("unknown group", () => {
+    it("$<__proto__> -- unknown group", () => {
       const pattern = "(foo)";
       const groups = { group: 1 };
       const myRegExp = wrapRegExp(pattern, groups);
       const targetStr = "foobar";
-      const replacement = "$<UNKNOWN>";
+      const replacement = "$<__proto__>";
       const result = myRegExp[Symbol.replace](targetStr, replacement);
       expect(result).toBe("bar");
     });
