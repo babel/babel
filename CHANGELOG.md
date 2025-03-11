@@ -43,6 +43,8 @@ This file contains the changelog starting from v7.15.0.
   * [#17153](https://github.com/babel/babel/pull/17153) fix: Correctly generate `abstract override` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 * `babel-parser`
   * [#17107](https://github.com/babel/babel/pull/17107) Fix source type detection when parsing TypeScript ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`
+  * [#17173](https://github.com/babel/babel/pull/17173) Fix processing of replacement pattern with named capture groups ([@mmmsssttt404](https://github.com/[mmmsssttt404](https://github.com/mmmsssttt404)))
 
 #### :nail_care: Polish
 * `babel-standalone`
