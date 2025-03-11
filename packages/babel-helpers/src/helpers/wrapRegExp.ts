@@ -72,9 +72,15 @@ export default function _wrapRegExp(this: any): RegExp {
       ).call(
         this,
         str,
-        substitution.replace(/\$<(?!\$<)([^>]+)>/g, function (_, name) {
-          var group = groups[name];
-          return "$" + (Array.isArray(group) ? group.join("$") : group);
+        substitution.replace(/\$<([^>]+)(>|\$)/g, function (match, name, end) {
+          if (end === "$") {
+            return match;
+          } else {
+            var group = groups[name];
+            return group
+              ? "$" + (Array.isArray(group) ? group.join("$") : group)
+              : "";
+          }
         }),
       );
     } else if (typeof substitution === "function") {
