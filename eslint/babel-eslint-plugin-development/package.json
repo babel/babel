@@ -31,7 +31,7 @@
   },
   "homepage": "https://babel.dev/",
   "devDependencies": {
-    "eslint": "^9.7.0"
+    "eslint": "^9.21.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

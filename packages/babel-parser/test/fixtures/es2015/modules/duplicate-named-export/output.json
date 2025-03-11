@@ -32,7 +32,8 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
@@ -54,7 +55,8 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

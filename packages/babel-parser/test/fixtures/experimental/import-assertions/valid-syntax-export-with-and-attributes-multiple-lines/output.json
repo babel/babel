@@ -35,7 +35,6 @@
           },
           "value": "foo"
         },
-        "declaration": null,
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -55,7 +54,8 @@
               "value": "json"
             }
           }
-        ]
+        ],
+        "declaration": null
       }
     ],
     "directives": [],

@@ -13,6 +13,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSTypeAliasDeclaration",
           "start":7,"end":23,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":23,"index":23}},
@@ -33,6 +34,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSEnumDeclaration",
           "start":31,"end":40,"loc":{"start":{"line":2,"column":7,"index":31},"end":{"line":2,"column":16,"index":40}},
@@ -50,6 +52,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSInterfaceDeclaration",
           "start":48,"end":62,"loc":{"start":{"line":3,"column":7,"index":48},"end":{"line":3,"column":21,"index":62}},
