@@ -45,7 +45,7 @@ function _wrapRegExp() {
       return e[_Symbol$replace].call(this, t, p.replace(/\$<([^>]+)(>|$)/g, function (e, r, t) {
         if ("" === t) return e;
         var p = o[r];
-        return _Array$isArray(p) ? "$" + p.join("$") : "number" == typeof p ? "$" + +p : "";
+        return _Array$isArray(p) ? "$" + p.join("$") : "number" == typeof p ? "$" + p : "";
       }));
     }
     if ("function" == typeof p) {
