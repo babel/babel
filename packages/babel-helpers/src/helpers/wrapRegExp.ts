@@ -81,7 +81,7 @@ export default function _wrapRegExp(this: any): RegExp {
             return Array.isArray(group)
               ? "$" + group.join("$")
               : typeof group === "number"
-                ? "$" + +group
+                ? "$" + group
                 : "";
           }
         }),
