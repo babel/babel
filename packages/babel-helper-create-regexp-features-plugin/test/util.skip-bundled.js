@@ -7,7 +7,6 @@ describe("generateRegexpuOptions", () => {
       const startTime = Date.now();
       const options = generateRegexpuOptions(pattern, 0);
       const timeTaken = Date.now() - startTime;
-      console.log(timeTaken);
       expect(timeTaken).toBeLessThan(2000);
       expect(options).toHaveProperty("namedGroups", false);
     });
