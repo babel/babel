@@ -23,8 +23,8 @@ export function generateRegexpuOptions(
     const seen = new Set();
     for (
       let match;
-      (match = regex.exec(pattern));
-      match[2] && seen.add(match[1])
+      (match = regex.exec(pattern)) && match[2];
+      seen.add(match[1])
     ) {
       if (seen.has(match[1])) return "transform";
     }
