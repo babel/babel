@@ -18,9 +18,14 @@ export function generateRegexpuOptions(
     // However, it's such a rare occurrence that it's ok to compile
     // the regexp even if we only need to compile regexps with
     // duplicate named capturing groups.
-    const regex = /\(\?<([^>]+)>/g;
+    // The $ is to exit early for malicious input such as \(?<\(?<\(?<...
+    const regex = /\(\?<([^>]+)(>|$)/g;
     const seen = new Set();
-    for (let match; (match = regex.exec(pattern)); seen.add(match[1])) {
+    for (
+      let match;
+      (match = regex.exec(pattern)) && match[2];
+      seen.add(match[1])
+    ) {
       if (seen.has(match[1])) return "transform";
     }
     return false;
