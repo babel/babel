@@ -431,6 +431,12 @@ describe("scope", () => {
       expect(isAConstant("while (1) { var a = 1; }")).toBe(false);
       expect(isAConstant("do { var a = 1; } while (1)")).toBe(false);
 
+      expect(isAConstant("for (_ of ns) { var a; }")).toBe(true);
+      expect(isAConstant("for (_ in ns) { var a; }")).toBe(true);
+      expect(isAConstant("for (;;) { var a; }")).toBe(true);
+      expect(isAConstant("while (1) { var a; }")).toBe(true);
+      expect(isAConstant("do { var a; } while (1)")).toBe(true);
+
       expect(isAConstant("for (var a of ns) {}")).toBe(false);
       expect(isAConstant("for (var a in ns) {}")).toBe(false);
       expect(isAConstant("for (var a;;) {}")).toBe(true);
@@ -448,6 +454,8 @@ describe("scope", () => {
       expect(isAConstant("for (;;) { let a = 1; }")).toBe(true);
       expect(isAConstant("while (1) { let a = 1; }")).toBe(true);
       expect(isAConstant("do { let a = 1; } while (1)")).toBe(true);
+
+      expect(isAConstant("for (_ of ns) { function a() {} }")).toBe(false);
 
       scopePath = "body.0";
       expect(isAConstant("for (let a of ns) {}")).toBe(true);
