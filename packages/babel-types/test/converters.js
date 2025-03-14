@@ -73,6 +73,23 @@ describe("converters", function () {
         ]),
       );
     });
+    it("object with __proto__ key", () => {
+      expect(
+        t.valueToNode({
+          ["__proto__"]: "__proto__",
+          // eslint-disable-next-line no-dupe-keys
+          __proto__: null,
+        }),
+      ).toEqual(
+        t.objectExpression([
+          t.objectProperty(
+            t.stringLiteral("__proto__"),
+            t.stringLiteral("__proto__"),
+            true,
+          ),
+        ]),
+      );
+    });
     it("throws if cannot convert", function () {
       expect(function () {
         t.valueToNode(Object);
