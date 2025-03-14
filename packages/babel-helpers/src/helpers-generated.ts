@@ -1303,6 +1303,18 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
+  // size: 243, gzip size: 210
+  tsRewriteRelativeImportExtensions: helper(
+    "7.27.0",
+    'function tsRewriteRelativeImportExtensions(t,e){return"string"==typeof t&&/^\\.\\.?\\//.test(t)?t.replace(/\\.(tsx)$|((?:\\.d)?)((?:\\.[^./]+)?)\\.([cm]?)ts$/i,(function(t,s,r,n,o){return s?e?".jsx":".js":!r||n&&o?r+n+"."+o.toLowerCase()+"js":t})):t}',
+    {
+      globals: [],
+      locals: { tsRewriteRelativeImportExtensions: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "tsRewriteRelativeImportExtensions",
+      dependencies: {},
+    },
+  ),
   // size: 274, gzip size: 157
   typeof: helper(
     "7.0.0-beta.0",

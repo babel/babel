@@ -755,6 +755,15 @@
       "./helpers/toSetter.js"
     ],
     "./helpers/esm/toSetter": "./helpers/esm/toSetter.js",
+    "./helpers/tsRewriteRelativeImportExtensions": [
+      {
+        "node": "./helpers/tsRewriteRelativeImportExtensions.js",
+        "import": "./helpers/esm/tsRewriteRelativeImportExtensions.js",
+        "default": "./helpers/tsRewriteRelativeImportExtensions.js"
+      },
+      "./helpers/tsRewriteRelativeImportExtensions.js"
+    ],
+    "./helpers/esm/tsRewriteRelativeImportExtensions": "./helpers/esm/tsRewriteRelativeImportExtensions.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
