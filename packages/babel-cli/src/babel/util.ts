@@ -103,6 +103,7 @@ const CALLER = {
 export function transformRepl(filename: string, code: string, opts: any) {
   opts = {
     ...opts,
+    sourceMaps: opts.sourceMaps === "inline" ? true : opts.sourceMaps,
     caller: CALLER,
     filename,
   };
