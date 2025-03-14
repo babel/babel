@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
   "errors": [
-    "SyntaxError: Missing semicolon. (1:20)"
+    "SyntaxError: 'yield' is only allowed within generator functions. (1:15)"
   ],
   "program": {
     "type": "Program",
@@ -26,24 +26,20 @@
             "body": [
               {
                 "type": "ExpressionStatement",
-                "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20}},
+                "start":15,"end":23,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":23,"index":23}},
                 "expression": {
-                  "type": "Identifier",
-                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"yield"},
-                  "name": "yield"
-                }
-              },
-              {
-                "type": "ExpressionStatement",
-                "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23}},
-                "expression": {
-                  "type": "NumericLiteral",
-                  "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23}},
-                  "extra": {
-                    "rawValue": 10,
-                    "raw": "10"
-                  },
-                  "value": 10
+                  "type": "YieldExpression",
+                  "start":15,"end":23,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":23,"index":23}},
+                  "delegate": false,
+                  "argument": {
+                    "type": "NumericLiteral",
+                    "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23}},
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
+                  }
                 }
               }
             ],

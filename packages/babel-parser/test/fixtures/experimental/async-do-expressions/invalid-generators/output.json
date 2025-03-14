@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":63}},
   "errors": [
-    "SyntaxError: Missing semicolon. (3:9)"
+    "SyntaxError: 'yield' is only allowed within generator functions. (3:4)"
   ],
   "program": {
     "type": "Program",
@@ -41,24 +41,20 @@
                     "body": [
                       {
                         "type": "ExpressionStatement",
-                        "start":48,"end":53,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":9,"index":53}},
+                        "start":48,"end":56,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":12,"index":56}},
                         "expression": {
-                          "type": "Identifier",
-                          "start":48,"end":53,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":9,"index":53},"identifierName":"yield"},
-                          "name": "yield"
-                        }
-                      },
-                      {
-                        "type": "ExpressionStatement",
-                        "start":54,"end":56,"loc":{"start":{"line":3,"column":10,"index":54},"end":{"line":3,"column":12,"index":56}},
-                        "expression": {
-                          "type": "NumericLiteral",
-                          "start":54,"end":55,"loc":{"start":{"line":3,"column":10,"index":54},"end":{"line":3,"column":11,"index":55}},
-                          "extra": {
-                            "rawValue": 1,
-                            "raw": "1"
-                          },
-                          "value": 1
+                          "type": "YieldExpression",
+                          "start":48,"end":55,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":11,"index":55}},
+                          "delegate": false,
+                          "argument": {
+                            "type": "NumericLiteral",
+                            "start":54,"end":55,"loc":{"start":{"line":3,"column":10,"index":54},"end":{"line":3,"column":11,"index":55}},
+                            "extra": {
+                              "rawValue": 1,
+                              "raw": "1"
+                            },
+                            "value": 1
+                          }
                         }
                       }
                     ],
