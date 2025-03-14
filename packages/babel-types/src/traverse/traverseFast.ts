@@ -7,28 +7,39 @@ import type * as t from "../index.ts";
  */
 export default function traverseFast<Options = object>(
   node: t.Node | null | undefined,
-  enter: (node: t.Node, opts?: Options) => void,
+  enter: (node: t.Node, opts?: Options) => void | "skip" | "stop",
   opts?: Options,
-): void {
-  if (!node) return;
+): boolean {
+  if (!node) return false;
 
   const keys = VISITOR_KEYS[node.type];
-  if (!keys) return;
+  if (!keys) return false;
 
   opts = opts || ({} as Options);
-  enter(node, opts);
+  const ret = enter(node, opts);
+  if (ret !== undefined) {
+    switch (ret) {
+      case "skip":
+        return false;
+      case "stop":
+        return true;
+    }
+  }
 
   for (const key of keys) {
     const subNode: t.Node | undefined | null =
       // @ts-expect-error key must present in node
       node[key];
 
+    if (!subNode) continue;
+
     if (Array.isArray(subNode)) {
       for (const node of subNode) {
-        traverseFast(node, enter, opts);
+        if (traverseFast(node, enter, opts)) return true;
       }
     } else {
-      traverseFast(subNode, enter, opts);
+      if (traverseFast(subNode, enter, opts)) return true;
     }
   }
+  return false;
 }
