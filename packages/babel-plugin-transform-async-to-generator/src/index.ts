@@ -3,47 +3,45 @@ import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import { addNamed } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-export interface Options {
-  method?: string;
-  module?: string;
-}
-
 type State = {
   methodWrapper?: t.Identifier | t.SequenceExpression;
 };
 
-export default declare<State>((api, options: Options) => {
+export default declare<State>(function (api) {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  const { method, module } = options;
   // Todo(BABEL 8): Consider default it to false
   const noNewArrows = api.assumption("noNewArrows") ?? true;
   const ignoreFunctionLength = api.assumption("ignoreFunctionLength") ?? false;
 
-  if (method && module) {
-    return {
-      name: "transform-async-to-generator",
+  if (!process.env.BABEL_8_BREAKING) {
+    const { method, module } = arguments[1];
 
-      visitor: {
-        Function(path, state) {
-          if (!path.node.async || path.node.generator) return;
+    if (method && module) {
+      return {
+        name: "transform-async-to-generator",
 
-          let wrapAsync = state.methodWrapper;
-          if (wrapAsync) {
-            wrapAsync = t.cloneNode(wrapAsync);
-          } else {
-            wrapAsync = state.methodWrapper = addNamed(path, method, module);
-          }
+        visitor: {
+          Function(path, state) {
+            if (!path.node.async || path.node.generator) return;
 
-          remapAsyncToGenerator(
-            path,
-            { wrapAsync },
-            noNewArrows,
-            ignoreFunctionLength,
-          );
+            let wrapAsync = state.methodWrapper;
+            if (wrapAsync) {
+              wrapAsync = t.cloneNode(wrapAsync);
+            } else {
+              wrapAsync = state.methodWrapper = addNamed(path, method, module);
+            }
+
+            remapAsyncToGenerator(
+              path,
+              { wrapAsync },
+              noNewArrows,
+              ignoreFunctionLength,
+            );
+          },
         },
-      },
-    };
+      };
+    }
   }
 
   return {
