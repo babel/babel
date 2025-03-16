@@ -2,23 +2,23 @@
 
 Using targets:
 {
-  "android": "128",
+  "android": "132",
   "chrome": "109",
-  "edge": "127",
-  "firefox": "115",
+  "edge": "132",
+  "firefox": "128",
   "ios": "15.6",
-  "opera": "110",
+  "opera": "113",
   "opera_mobile": "80",
-  "safari": "17.5",
-  "samsung": "24"
+  "safari": "18.2",
+  "samsung": "26"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, ios < 17.4, opera < 112, opera_mobile, samsung }
-  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera < 111, opera_mobile, safari, samsung }
-  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios < 17, samsung }
+  transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, ios < 17.4, opera_mobile, samsung }
+  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari, samsung }
+  transform-unicode-sets-regex { chrome < 112, ios < 17, samsung }
   bugfix/transform-firefox-class-in-computed-class-key { firefox, ios < 16 }
   bugfix/transform-safari-class-field-initializer-scope { ios < 16 }
   transform-class-static-block { ios < 16.4 }
