@@ -26,11 +26,14 @@ export type Browsers = string | ReadonlyArray<string>;
 
 export type InputTargets = {
   browsers?: Browsers;
+  // Babel 8:
+  // When `true`, this is intersected with the `browsers`
+  // option (giving the higher browsers as the result).
+
+  // Babel 7:
   // When `true`, this completely replaces the `browsers` option.
   // When `intersect`, this is intersected with the `browsers`
   // option (giving the higher browsers as the result).
-  // TODO(Babel 8): Make `true` behave like `intersect` and
-  // remove `intersect`.
   esmodules?: boolean | "intersect";
 } & Targets;
 

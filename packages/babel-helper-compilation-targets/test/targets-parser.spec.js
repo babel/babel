@@ -223,7 +223,7 @@ describe("getTargets", () => {
   describe("esmodules", () => {
     let baseESModulesTargets;
     beforeAll(() => {
-      baseESModulesTargets = getTargets({ esmodules: true });
+      baseESModulesTargets = getTargets({ esmodules: true, browsers: [] });
     });
 
     it("returns browsers supporting modules", () => {
@@ -243,14 +243,41 @@ describe("getTargets", () => {
       `);
     });
 
-    it("returns browsers supporting modules, ignoring browsers key", () => {
-      expect(
-        getTargets({
-          esmodules: true,
-          browsers: "ie 8",
-        }),
-      ).toEqual(baseESModulesTargets);
-    });
+    itBabel7(
+      "returns browsers supporting modules, ignoring browsers key",
+      () => {
+        expect(
+          getTargets({
+            esmodules: true,
+            browsers: "ie 8",
+          }),
+        ).toEqual(baseESModulesTargets);
+      },
+    );
+
+    itBabel7(
+      "returns browsers supporting modules, intersect with browsers key",
+      () => {
+        expect(
+          getTargets({
+            esmodules: "intersect",
+            browsers: "ie 8",
+          }),
+        ).toEqual({});
+      },
+    );
+
+    itBabel8(
+      "returns browsers supporting modules, intersect with browsers key",
+      () => {
+        expect(
+          getTargets({
+            esmodules: true,
+            browsers: "ie 8",
+          }),
+        ).toEqual({});
+      },
+    );
 
     it("returns browser supporting modules and keyed browser overrides", () => {
       expect(
@@ -261,20 +288,70 @@ describe("getTargets", () => {
       ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
     });
 
-    it("returns browser supporting modules and keyed browser overrides, ignoring browsers field", () => {
-      expect(
-        getTargets({
-          esmodules: true,
-          browsers: "ie 10",
-          ie: 11,
-        }),
-      ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
-    });
+    itBabel7(
+      "returns browser supporting modules and  keyed browser overrides",
+      () => {
+        expect(
+          getTargets({
+            esmodules: "intersect",
+            ie: 11,
+          }),
+        ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
+      },
+    );
 
-    it("can be intersected with the browsers option", () => {
+    itBabel7(
+      "returns browser supporting modules and keyed browser overrides, ignoring browsers field",
+      () => {
+        expect(
+          getTargets({
+            esmodules: true,
+            browsers: "ie 10",
+            ie: 11,
+          }),
+        ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
+      },
+    );
+
+    itBabel7(
+      "returns browser supporting modules, intersect with browsers key, then combined with keyed browser overrides, ",
+      () => {
+        expect(
+          getTargets({
+            esmodules: "intersect",
+            browsers: "ie 10",
+            ie: 11,
+          }),
+        ).toEqual({ ie: "11.0.0" });
+      },
+    );
+
+    itBabel8(
+      "returns browser supporting modules, intersect with browsers key, then combined with keyed browser overrides, ",
+      () => {
+        expect(
+          getTargets({
+            esmodules: true,
+            browsers: "ie 10",
+            ie: 11,
+          }),
+        ).toEqual({ ie: "11.0.0" });
+      },
+    );
+
+    itBabel7("can be intersected with the browsers option", () => {
       expect(
         getTargets({
           esmodules: "intersect",
+          browsers: ["chrome >= 70", "firefox >= 30"],
+        }),
+      ).toEqual({ chrome: "70.0.0", firefox: baseESModulesTargets.firefox });
+    });
+
+    itBabel8("can be intersected with the browsers option", () => {
+      expect(
+        getTargets({
+          esmodules: true,
           browsers: ["chrome >= 70", "firefox >= 30"],
         }),
       ).toEqual({ chrome: "70.0.0", firefox: baseESModulesTargets.firefox });
