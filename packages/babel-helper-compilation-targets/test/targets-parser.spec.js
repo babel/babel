@@ -28,14 +28,9 @@ describe("getTargets", () => {
 
   it("does not mutate the input", () => {
     const input = Object.freeze({ browsers: "defaults", esmodules: true });
-    const expected = getTargets({
-      browsers: browserslist.defaults,
-      esmodules: true,
-    });
-    const actual = getTargets(input);
-    expect(actual).toEqual(expected);
-    expect(input.browsers).toEqual("defaults");
-    expect(input.esmodules).toEqual(true);
+    const expected = { ...input };
+    getTargets(input);
+    expect(input).toEqual(expected);
   });
 
   it("allows 'defaults' query", () => {
