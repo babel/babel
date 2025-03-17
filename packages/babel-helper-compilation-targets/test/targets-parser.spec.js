@@ -441,6 +441,37 @@ describe("getTargets", () => {
         getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
       );
     });
+
+    it("esmodules: intersect and ignoreBrowserslistConfig: true returns base esmodules targets", () => {
+      expect(
+        getTargets(
+          { esmodules: "intersect" },
+          { ignoreBrowserslistConfig: true },
+        ),
+      ).toEqual(baseESModulesTargets);
+    });
+
+    itBabel8(
+      "esmodules: true and ignoreBrowserslistConfig: true returns base esmodules targets",
+      () => {
+        expect(
+          getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
+        ).toEqual(baseESModulesTargets);
+      },
+    );
+
+    itBabel7("esmodules: true returns base esmodules targets", () => {
+      expect(getTargets({ esmodules: true })).toEqual(baseESModulesTargets);
+    });
+
+    itBabel8("esmodules: true returns default browserslist query", () => {
+      expect(getTargets({ esmodules: true })).toEqual(
+        getTargets(
+          { browsers: "defaults" },
+          { ignoreBrowserslistConfig: true },
+        ),
+      );
+    });
   });
 
   describe("node", () => {
