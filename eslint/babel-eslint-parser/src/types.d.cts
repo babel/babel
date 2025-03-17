@@ -128,6 +128,7 @@ declare class ESLintScope {
   isUsedName(name: any): boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare class Referencer extends Visitor {
   readonly scopeManager: ScopeManager & {
     __currentScope: ESLintScope;

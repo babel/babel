@@ -262,10 +262,10 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
     this.path.replaceWith(cloneNode(uid));
 
-    // @ts-expect-error TS cannot refine the type of `attached`
     // TODO: Should we use `attached.isVariableDeclaration()`?
     return attachTo.isVariableDeclarator()
-      ? attached.get("init")
+      ? // @ts-expect-error TS cannot refine the type of `attached`
+        attached.get("init")
       : attached.get("declarations.0.init");
   }
 }
