@@ -221,12 +221,26 @@ describe("getTargets", () => {
   });
 
   describe("esmodules", () => {
+    let baseESModulesTargets;
+    beforeAll(() => {
+      baseESModulesTargets = getTargets({ esmodules: true });
+    });
+
     it("returns browsers supporting modules", () => {
-      expect(
-        getTargets({
-          esmodules: true,
-        }),
-      ).toMatchSnapshot();
+      expect(baseESModulesTargets).toMatchInlineSnapshot(`
+        Object {
+          "android": "61.0.0",
+          "chrome": "61.0.0",
+          "edge": "16.0.0",
+          "firefox": "60.0.0",
+          "ios": "10.3.0",
+          "node": "13.2.0",
+          "opera": "48.0.0",
+          "opera_mobile": "80.0.0",
+          "safari": "10.1.0",
+          "samsung": "8.2.0",
+        }
+      `);
     });
 
     it("returns browsers supporting modules, ignoring browsers key", () => {
@@ -235,7 +249,7 @@ describe("getTargets", () => {
           esmodules: true,
           browsers: "ie 8",
         }),
-      ).toMatchSnapshot();
+      ).toEqual(baseESModulesTargets);
     });
 
     it("returns browser supporting modules and keyed browser overrides", () => {
@@ -244,7 +258,7 @@ describe("getTargets", () => {
           esmodules: true,
           ie: 11,
         }),
-      ).toMatchSnapshot();
+      ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
     });
 
     it("returns browser supporting modules and keyed browser overrides, ignoring browsers field", () => {
@@ -254,7 +268,7 @@ describe("getTargets", () => {
           browsers: "ie 10",
           ie: 11,
         }),
-      ).toMatchSnapshot();
+      ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
     });
 
     it("can be intersected with the browsers option", () => {
@@ -263,7 +277,7 @@ describe("getTargets", () => {
           esmodules: "intersect",
           browsers: ["chrome >= 70", "firefox >= 30"],
         }),
-      ).toMatchSnapshot();
+      ).toEqual({ chrome: "70.0.0", firefox: baseESModulesTargets.firefox });
     });
 
     it("can be intersected with ios browsers option", () => {
@@ -272,7 +286,7 @@ describe("getTargets", () => {
           esmodules: "intersect",
           browsers: ["ios >= 12"],
         }),
-      ).toMatchSnapshot();
+      ).toEqual({ ios: "12.0.0" });
     });
 
     it("can be intersected with a .browserslistrc file", () => {
@@ -285,7 +299,7 @@ describe("getTargets", () => {
             configPath: require.resolve("./fixtures/.browserslistrc"),
           },
         ),
-      ).toMatchSnapshot();
+      ).toEqual({ chrome: "70.0.0", firefox: baseESModulesTargets.firefox });
     });
 
     it("explicit browser versions have the precedence over 'esmodules'", () => {
@@ -296,7 +310,7 @@ describe("getTargets", () => {
           chrome: 20,
           firefox: 70,
         }),
-      ).toMatchSnapshot();
+      ).toEqual({ chrome: "20.0.0", firefox: "70.0.0" });
     });
 
     itBabel7(
@@ -382,7 +396,9 @@ describe("getTargets", () => {
     it("throws when version is not a semver", () => {
       expect(() =>
         getTargets({ chrome: "seventy-two" }),
-      ).toThrowErrorMatchingSnapshot();
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"@babel/helper-compilation-targets: 'seventy-two' is not a valid value for 'targets.chrome'."`,
+      );
     });
   });
 });
