@@ -1,16 +1,12 @@
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 import "core-js/modules/es.symbol.js";
 import "core-js/modules/es.symbol.description.js";
-import "core-js/modules/es.symbol.async-iterator.js";
 import "core-js/modules/es.symbol.iterator.js";
-import "core-js/modules/es.symbol.to-string-tag.js";
 import "core-js/modules/es.array.for-each.js";
 import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/es.array.reverse.js";
 import "core-js/modules/es.array.slice.js";
 import "core-js/modules/es.function.name.js";
-import "core-js/modules/es.json.to-string-tag.js";
-import "core-js/modules/es.math.to-string-tag.js";
 import "core-js/modules/es.object.create.js";
 import "core-js/modules/es.object.define-property.js";
 import "core-js/modules/es.object.get-prototype-of.js";
