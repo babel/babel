@@ -453,4 +453,33 @@ describe("babel-runtime", () => {
       expect(require("../core-js/instance/values")({})).toEqual(undefined);
     });
   });
+    describeBabel7("helpers1", () => {
+    describeBabel7("TestRunner", () => {
+     
+      it("should stop in 1 second", async () => {
+        // 创建 TestRunner 实例，传入必要的配置参数
+        const runner = new TestRunner({
+          testDir: './tests',
+          allowlist: './scripts/parser-tests/utils/allowlist.txt',
+          logInterval: 1,
+          shouldUpdate: false,
+          // 这里定义生成测试用例的 async generator 函数
+          getTests: async function* () {
+            // 示例：生成一个简单的测试用例
+            yield { id: "test1", contents: "const a = 1;", expectedError: false };
+          },
+        });
+        
+        // 记录开始时间
+        let startTime = performance.now();
+        // runner.run() 是异步方法，需要 await 等待其完成
+        await runner.run();
+        let endTime = performance.now();
+        let timeTaken = endTime - startTime;
+        
+        // 断言运行时间小于 1000 毫秒（1秒）
+        expect(timeTaken).toBeLessThan(1000);
+      });
+    });
+  });
 });
