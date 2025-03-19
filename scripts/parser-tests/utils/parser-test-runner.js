@@ -71,7 +71,7 @@ class TestRunner {
     const table = new Set();
 
     for (const line of contents.split("\n")) {
-      const filename = line.replace(/#.*$/, "").trim();
+      const filename = line.replace(/#(?!#).*$/, "").trim();
       if (filename) table.add(filename);
     }
 
@@ -96,7 +96,7 @@ class TestRunner {
     let validWithError = [];
 
     for (const line of contents.split("\n")) {
-      const testId = line.replace(/#.*$/, "").trim();
+      const testId = line.replace(/#(?!#).*$/, "").trim();
       if (testId && !toRemove.has(testId)) {
         if (allowedFalsePositiveIds.has(testId)) {
           invalidWithoutError.push(line);
