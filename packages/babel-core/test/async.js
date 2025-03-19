@@ -9,15 +9,14 @@ import {
   supportsESM,
 } from "./helpers/esm.js";
 
-import { itGte, itESM, itLt } from "$repo-utils";
+import { itGte, itESM, itNegate, itSatisfies } from "$repo-utils";
 
 // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
 const nodeGte8 = itGte("8.0.0");
 const nodeGte14 = itGte("14.8.0");
 
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const nodeGte22_12 = itGte("22.12.0");
-const nodeLt22_12 = itLt("22.12.0");
+const nodeGte22_12OrHat20_19 = itSatisfies("^20.19.0 || >= 22.12.0");
 
 describe("asynchronicity", () => {
   const base = path.join(
@@ -252,7 +251,7 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      nodeLt22_12("called synchronously", async () => {
+      itNegate(nodeGte22_12OrHat20_19)("called synchronously", async () => {
         process.chdir("plugin-mjs-native");
 
         await expect(spawnTransformSync()).rejects.toThrow(
@@ -261,7 +260,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte22_12("called asynchronously", async () => {
+      nodeGte22_12OrHat20_19("called asynchronously", async () => {
         process.chdir("plugin-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({
@@ -344,7 +343,7 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      nodeLt22_12("called synchronously", async () => {
+      itNegate(nodeGte22_12OrHat20_19)("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
         await expect(spawnTransformSync()).rejects.toThrow(
@@ -353,7 +352,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte22_12("called synchronously", async () => {
+      nodeGte22_12OrHat20_19("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({
