@@ -18,7 +18,6 @@ export default declare(({ types: t, assertVersion }) => {
           if (!this.availableHelper?.("regeneratorRuntime")) {
             // When using an older @babel/helpers version, fallback
             // to the old behavior.
-            // TODO: Remove this in Babel 8.
             return;
           }
         }
@@ -34,8 +33,7 @@ export default declare(({ types: t, assertVersion }) => {
 
           if (!process.env.BABEL_8_BREAKING) {
             if (
-              // TODO: Remove this in Babel 8, it's necessary to
-              // avoid the IIFE when using older Babel versions.
+              // It's necessary to avoid the IIFE when using older Babel versions.
               t.isArrowFunctionExpression(helper)
             ) {
               obj.replaceWith(helper.body);

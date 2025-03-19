@@ -51,20 +51,21 @@ export default declare(api => {
 
         const helper = this.addHelper("typeof");
 
-        // TODO: This is needed for backward compatibility with
+        // This is needed for backward compatibility with
         // @babel/helpers <= 7.8.3.
-        // Remove in Babel 8
-        isUnderHelper = path.findParent(path => {
-          return (
-            (path.isVariableDeclarator() && path.node.id === helper) ||
-            (path.isFunctionDeclaration() &&
-              path.node.id &&
-              path.node.id.name === helper.name)
-          );
-        });
+        if (!process.env.BABEL_8_BREAKING) {
+          isUnderHelper = path.findParent(path => {
+            return (
+              (path.isVariableDeclarator() && path.node.id === helper) ||
+              (path.isFunctionDeclaration() &&
+                path.node.id &&
+                path.node.id.name === helper.name)
+            );
+          });
 
-        if (isUnderHelper) {
-          return;
+          if (isUnderHelper) {
+            return;
+          }
         }
 
         const call = t.callExpression(helper, [node.argument]);

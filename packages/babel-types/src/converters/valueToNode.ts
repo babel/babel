@@ -117,9 +117,15 @@ function valueToNode(value: unknown): t.Expression {
   if (isPlainObject(value)) {
     const props = [];
     for (const key of Object.keys(value)) {
-      let nodeKey;
+      let nodeKey,
+        computed = false;
       if (isValidIdentifier(key)) {
-        nodeKey = identifier(key);
+        if (key === "__proto__") {
+          computed = true;
+          nodeKey = stringLiteral(key);
+        } else {
+          nodeKey = identifier(key);
+        }
       } else {
         nodeKey = stringLiteral(key);
       }
@@ -130,6 +136,7 @@ function valueToNode(value: unknown): t.Expression {
             // @ts-expect-error key must present in value
             value[key],
           ),
+          computed,
         ),
       );
     }
