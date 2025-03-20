@@ -9,11 +9,8 @@ import {
   isRestElement,
   returnStatement,
   isCallExpression,
-  cloneNode,
   toExpression,
   identifier,
-  assignmentExpression,
-  logicalExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -72,15 +69,6 @@ const buildWrapper = template.statement(`
 `) as (
   replacements: Parameters<ReturnType<typeof template.expression>>[0],
 ) => t.FunctionDeclaration;
-
-const wrappedFns = new WeakMap<t.CallExpression, t.Function>();
-
-function markCallWrapped(path: NodePath<t.Function>) {
-  wrappedFns.set(
-    (path.get("body.body.0.argument") as NodePath<t.CallExpression>).node,
-    (path.get("body.body.0.argument.callee") as NodePath<t.Function>).node,
-  );
-}
 
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
@@ -291,7 +279,6 @@ export default function wrapFunction(
         (!ignoreFunctionLength && params.length)
       ) {
         path.replaceWith(wrapper);
-        markCallWrapped(path);
       } else {
         // we can omit this wrapper as the conditions it protects for do not apply
         path.replaceWith(
@@ -325,45 +312,4 @@ export default function wrapFunction(
       hadName,
     );
   }
-}
-
-export function buildOnCallExpression(helperName: string) {
-  return {
-    CallExpression: {
-      exit(path: NodePath<t.CallExpression>, state: any) {
-        if (!state.availableHelper(helperName)) {
-          return;
-        }
-        if (isCallExpression(path.parent)) {
-          const wrappedFn = wrappedFns.get(path.parent);
-
-          if (!wrappedFn || wrappedFn === path.node.callee) return;
-
-          const fnPath = path.findParent(p => p.isFunction());
-
-          if (
-            fnPath
-              .findParent(p => p.isLoop() || p.isFunction() || p.isClass())
-              ?.isLoop() !== true
-          ) {
-            const ref = path.scope.generateUidIdentifier("ref");
-            fnPath.parentPath.scope.push({
-              id: ref,
-            });
-            const oldNode = path.node;
-            const comments = path.node.leadingComments;
-            if (comments) path.node.leadingComments = undefined;
-            path.replaceWith(
-              assignmentExpression(
-                "=",
-                cloneNode(ref),
-                logicalExpression("||", cloneNode(ref), oldNode),
-              ),
-            );
-            if (comments) oldNode.leadingComments = comments;
-          }
-        }
-      },
-    },
-  };
 }

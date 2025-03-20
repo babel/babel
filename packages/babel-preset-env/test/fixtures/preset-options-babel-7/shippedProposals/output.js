@@ -1,4 +1,3 @@
-var _ref;
 var _x$y$a$b = {
     x: 1,
     y: 2,
@@ -13,7 +12,10 @@ var n = babelHelpers.objectSpread2({
   y: y
 }, z);
 function agf() {
-  return babelHelpers.newAsyncGenerator(_ref = _ref || /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  return _agf.apply(this, arguments);
+}
+function _agf() {
+  _agf = babelHelpers.wrapAsyncGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -27,5 +29,6 @@ function agf() {
           return _context.stop();
       }
     }, _callee);
-  }), this, arguments);
+  }));
+  return _agf.apply(this, arguments);
 }

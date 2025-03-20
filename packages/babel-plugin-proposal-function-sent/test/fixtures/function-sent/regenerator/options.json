@@ -1,3 +1,4 @@
 {
-  "presets": [["env", { "targets": { "node": "4" } }]]
+  "presets": [["env", { "targets": { "node": "4" } }]],
+  "BABEL_8_BREAKING": true
 }

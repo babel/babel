@@ -1,10 +1,10 @@
-var Example = /*#__PURE__*/function (_ref) {
+var Example = /*#__PURE__*/function () {
   "use strict";
 
   function Example() {}
   var _proto = Example.prototype;
   _proto.test1 = function test1() {
-    return babelHelpers.callAsync(_ref = _ref || /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+    return babelHelpers.callAsync(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
       return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:

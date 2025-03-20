@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-explicit-resource-management",
+    "transform-async-to-generator"
+  ],
+  "BABEL_8_BREAKING": false
+}

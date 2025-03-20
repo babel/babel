@@ -1,3 +1,4 @@
 {
-  "plugins": [["transform-classes", { "loose": true }]]
+  "plugins": [["transform-classes", { "loose": true }]],
+  "BABEL_8_BREAKING": true
 }

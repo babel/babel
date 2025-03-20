@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import * as remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 import { types as t } from "@babel/core";
 import { visitors } from "@babel/traverse";
@@ -84,9 +84,9 @@ export default declare(api => {
 
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
-      remapAsyncToGenerator.default(
+      remapAsyncToGenerator(
         path,
-        state.availableHelper("newAsyncGenerator")
+        process.env.BABEL_8_BREAKING
           ? {
               wrapAsync: () => state.addHelper("wrapAsyncGenerator"),
               wrapAwait: () => state.addHelper("awaitAsyncGenerator"),
@@ -108,7 +108,6 @@ export default declare(api => {
       : (_, parser) => parser.plugins.push("asyncGenerators"),
 
     visitor: api.traverse.visitors.merge([
-      remapAsyncToGenerator.buildOnCallExpression("newAsyncGenerator"),
       {
         Program(path, state) {
           // We need to traverse the ast here (instead of just vising Function

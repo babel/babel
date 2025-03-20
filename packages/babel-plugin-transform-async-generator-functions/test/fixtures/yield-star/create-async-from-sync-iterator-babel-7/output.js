@@ -1,5 +1,9 @@
 function fn() {
-  return babelHelpers.newAsyncGenerator(function* () {
+  return _fn.apply(this, arguments);
+}
+function _fn() {
+  _fn = babelHelpers.wrapAsyncGenerator(function* () {
     yield* babelHelpers.asyncGeneratorDelegate(babelHelpers.asyncIterator([Promise.resolve("ok")]), babelHelpers.awaitAsyncGenerator); // CreateAsyncFromSyncIterator
-  }, this, arguments);
+  });
+  return _fn.apply(this, arguments);
 }
