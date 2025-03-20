@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "typescript",
-    "jsx"
-  ],
-  "throws": "Unexpected token, expected \"jsxTagEnd\" (1:65)"
-}
