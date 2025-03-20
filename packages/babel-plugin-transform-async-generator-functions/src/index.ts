@@ -107,19 +107,17 @@ export default declare(api => {
       ? undefined
       : (_, parser) => parser.plugins.push("asyncGenerators"),
 
-    visitor: api.traverse.visitors.merge([
-      {
-        Program(path, state) {
-          // We need to traverse the ast here (instead of just vising Function
-          // in the top level visitor) because for-await needs to run before the
-          // async-to-generator plugin. This is because for-await is transpiled
-          // using "await" expressions, which are then converted to "yield".
-          //
-          // This is bad for performance, but plugin ordering will allow as to
-          // directly visit Function in the top level visitor.
-          path.traverse(visitor, state);
-        },
+    visitor: {
+      Program(path, state) {
+        // We need to traverse the ast here (instead of just vising Function
+        // in the top level visitor) because for-await needs to run before the
+        // async-to-generator plugin. This is because for-await is transpiled
+        // using "await" expressions, which are then converted to "yield".
+        //
+        // This is bad for performance, but plugin ordering will allow as to
+        // directly visit Function in the top level visitor.
+        path.traverse(visitor, state);
       },
-    ]),
+    },
   };
 });

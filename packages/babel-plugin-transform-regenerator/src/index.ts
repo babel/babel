@@ -57,7 +57,6 @@ export default declare(({ types: t, assertVersion }) => {
               const fnPath = path.findParent(p => p.isFunction());
 
               if (
-                fnPath &&
                 fnPath
                   .findParent(p => p.isLoop() || p.isFunction() || p.isClass())
                   ?.isLoop() !== true
