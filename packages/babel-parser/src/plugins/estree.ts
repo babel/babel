@@ -1,6 +1,5 @@
 import type { TokenType } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
-import type { ExpressionErrors } from "../parser/util.ts";
 import type * as N from "../types.ts";
 import type { Node as NodeType, NodeBase, File } from "../types.ts";
 import type { Position } from "../util/location.ts";
@@ -370,25 +369,12 @@ export default (superClass: typeof Parser) =>
       return node as any;
     }
 
-    parseObjectProperty(
-      prop: N.ObjectProperty,
-      startLoc: Position | undefined | null,
-      isPattern: boolean,
-      refExpressionErrors?: ExpressionErrors | null,
-    ): N.ObjectProperty | undefined | null {
-      const node: N.EstreeProperty = super.parseObjectProperty(
-        prop,
-        startLoc,
-        isPattern,
-        refExpressionErrors,
+    finishObjectProperty(node: Undone<N.ObjectProperty>): N.ObjectProperty {
+      (node as unknown as Undone<N.EstreeProperty>).kind = "init";
+      return this.finishNode(
+        node as unknown as Undone<N.EstreeProperty>,
+        "Property",
       ) as any;
-
-      if (node) {
-        node.kind = "init";
-        node.type = "Property";
-      }
-
-      return node as any;
     }
 
     isValidLVal(

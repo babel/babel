@@ -596,7 +596,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
       if (this.eat(tt.comma) && !this.match(tt.parenR)) {
-        node.options = super.parseMaybeAssignAllowIn();
+        node.options = this.tsParseImportTypeOptions();
         this.eat(tt.comma);
       } else {
         node.options = null;
@@ -619,6 +619,43 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
       return this.finishNode(node, "TSImportType");
+    }
+
+    tsParseImportTypeOptions(): N.ObjectExpression {
+      const node = this.startNode<N.ObjectExpression>();
+      this.expect(tt.braceL);
+      const withProperty = this.startNode<N.ObjectProperty>();
+      if (this.isContextual(tt._with)) {
+        withProperty.method = false;
+        withProperty.key = this.parseIdentifier(true);
+        withProperty.computed = false;
+        withProperty.shorthand = false;
+      } else {
+        this.unexpected(null, tt._with);
+      }
+      this.expect(tt.colon);
+      withProperty.value = this.tsParseImportTypeWithPropertyValue();
+      node.properties = [this.finishObjectProperty(withProperty)];
+      this.expect(tt.braceR);
+      return this.finishNode(node, "ObjectExpression");
+    }
+
+    tsParseImportTypeWithPropertyValue(): N.ObjectExpression {
+      const node = this.startNode<N.ObjectExpression>();
+      const properties = [];
+      this.expect(tt.braceL);
+      while (!this.match(tt.braceR)) {
+        const type = this.state.type;
+        if (tokenIsIdentifier(type) || type === tt.string) {
+          properties.push(super.parsePropertyDefinition(null));
+        } else {
+          this.unexpected();
+        }
+        this.eat(tt.comma);
+      }
+      node.properties = properties;
+      this.next(); // eat }
+      return this.finishNode(node, "ObjectExpression");
     }
 
     tsParseEntityName(flags: tsParseEntityNameFlags): N.TsEntityName {
