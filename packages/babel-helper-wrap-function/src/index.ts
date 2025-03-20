@@ -178,6 +178,13 @@ function plainFunction(
   }
 }
 
+function markCall(path: NodePath<t.Function>) {
+  (path.get("body.body.0.argument") as NodePath<t.CallExpression>).setData(
+    "@babel/helper-wrap-function/call-wrapped-function",
+    true,
+  );
+}
+
 export default function wrapFunction(
   path: NodePath<t.Function>,
   callId: t.Expression | (() => t.Expression),
@@ -279,6 +286,7 @@ export default function wrapFunction(
         (!ignoreFunctionLength && params.length)
       ) {
         path.replaceWith(wrapper);
+        markCall(path);
       } else {
         // we can omit this wrapper as the conditions it protects for do not apply
         path.replaceWith(

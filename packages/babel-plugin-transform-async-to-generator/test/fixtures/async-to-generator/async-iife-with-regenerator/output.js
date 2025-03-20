@@ -1,3 +1,4 @@
+var _ref;
 babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
   return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
@@ -23,7 +24,7 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mar
   }, _callee2);
 }))();
 (function notIIFE() {
-  return babelHelpers.callAsync(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
+  return babelHelpers.callAsync(_ref = _ref || /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
     return babelHelpers.regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:

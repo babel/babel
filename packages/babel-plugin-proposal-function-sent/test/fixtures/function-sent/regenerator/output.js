@@ -1,5 +1,6 @@
+var _ref;
 function gen() {
-  return babelHelpers.callSkipFirstGeneratorNext(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  return babelHelpers.callSkipFirstGeneratorNext(_ref = _ref || /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     var _functionSent, sent;
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
