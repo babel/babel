@@ -10,7 +10,7 @@ import {
 const require = createRequire(import.meta.url);
 
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const nodeHasUnflaggedRequireESM = "^20.19.0 || >=22.12.0";
+const versionHasRequireESM = "^20.19.0 || >=22.12.0";
 
 async function run(name, ...flags) {
   return new Promise((res, rej) => {
@@ -121,7 +121,7 @@ describeESM("usage from cjs", () => {
 });
 
 describeESM("sync loading of ESM plugins", () => {
-  itNegate(itSatisfies(nodeHasUnflaggedRequireESM))(
+  itNegate(itSatisfies(versionHasRequireESM))(
     "without --experimental-require-module flag",
     async () => {
       await expect(run("transform-sync-esm-plugin.mjs")).rejects.toThrow(
@@ -132,7 +132,7 @@ describeESM("sync loading of ESM plugins", () => {
     },
   );
 
-  describeSatisfies(nodeHasUnflaggedRequireESM)(
+  describeSatisfies(versionHasRequireESM)(
     "without --experimental-require-module flag",
     () => {
       it("sync", async () => {

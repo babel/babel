@@ -16,7 +16,7 @@ const nodeGte8 = itGte("8.0.0");
 const nodeGte14 = itGte("14.8.0");
 
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const nodeGte22_12OrHat20_19 = itSatisfies("^20.19.0 || >= 22.12.0");
+const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 describe("asynchronicity", () => {
   const base = path.join(
@@ -251,16 +251,19 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      itNegate(nodeGte22_12OrHat20_19)("called synchronously", async () => {
-        process.chdir("plugin-mjs-native");
+      itNegate(itSatisfies(versionHasRequireESM))(
+        "called synchronously",
+        async () => {
+          process.chdir("plugin-mjs-native");
 
-        await expect(spawnTransformSync()).rejects.toThrow(
-          `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
-            ` only supported when running Babel asynchronously`,
-        );
-      });
+          await expect(spawnTransformSync()).rejects.toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
+              ` only supported when running Babel asynchronously`,
+          );
+        },
+      );
 
-      nodeGte22_12OrHat20_19("called asynchronously", async () => {
+      itSatisfies(versionHasRequireESM)("called asynchronously", async () => {
         process.chdir("plugin-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({
@@ -343,16 +346,19 @@ describe("asynchronicity", () => {
     });
 
     (supportsESM ? describe : describe.skip)(".mjs files", () => {
-      itNegate(nodeGte22_12OrHat20_19)("called synchronously", async () => {
-        process.chdir("preset-mjs-native");
+      itNegate(itSatisfies(versionHasRequireESM))(
+        "called synchronously",
+        async () => {
+          process.chdir("preset-mjs-native");
 
-        await expect(spawnTransformSync()).rejects.toThrow(
-          `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
-            ` only supported when running Babel asynchronously`,
-        );
-      });
+          await expect(spawnTransformSync()).rejects.toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
+              ` only supported when running Babel asynchronously`,
+          );
+        },
+      );
 
-      nodeGte22_12OrHat20_19("called synchronously", async () => {
+      itSatisfies(versionHasRequireESM)("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
         await expect(spawnTransformSync()).resolves.toMatchObject({

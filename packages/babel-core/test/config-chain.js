@@ -12,7 +12,7 @@ const getTargets = _getTargets.default || _getTargets;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const nodeGte22_12OrHat20_19 = itSatisfies("^20.19.0 || >= 22.12.0");
+const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 
@@ -1168,7 +1168,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      itNegate(nodeGte22_12OrHat20_19)(
+      itNegate(itSatisfies(versionHasRequireESM))(
         "should not load babel.config.mjs synchronously",
         async () => {
           const { cwd, tmp, config } = await getTemp(
@@ -1184,7 +1184,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      nodeGte22_12OrHat20_19(
+      itSatisfies(versionHasRequireESM)(
         "should load babel.config.mjs synchronously",
         async () => {
           const { cwd, tmp, config } = await getTemp(
@@ -1287,7 +1287,7 @@ describe("buildConfigChain", function () {
         });
       });
 
-      itNegate(nodeGte22_12OrHat20_19)(
+      itNegate(itSatisfies(versionHasRequireESM))(
         "should not load .babelrc.mjs synchronously",
         async () => {
           const { cwd, tmp, config } = await getTemp(
@@ -1303,7 +1303,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      nodeGte22_12OrHat20_19(
+      itSatisfies(versionHasRequireESM)(
         "should load .babelrc.mjs synchronously",
         async () => {
           const { cwd, tmp, config } = await getTemp(
