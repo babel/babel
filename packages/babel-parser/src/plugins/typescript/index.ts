@@ -595,9 +595,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.argument = this.parseStringLiteral(this.state.value);
         }
       }
-      if (this.eat(tt.comma) && !this.match(tt.parenR)) {
+      if (this.eat(tt.comma)) {
         node.options = this.tsParseImportTypeOptions();
-        this.eat(tt.comma);
       } else {
         node.options = null;
       }
