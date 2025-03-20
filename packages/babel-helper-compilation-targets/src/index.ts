@@ -245,6 +245,10 @@ export default function getTargets(
     }
   }
 
+  if (process.env.BABEL_8_BREAKING && esmodules) {
+    esmodules = "intersect";
+  }
+
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
   if (esmodules && (esmodules !== "intersect" || !browsers?.length)) {
