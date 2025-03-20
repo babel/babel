@@ -4,16 +4,15 @@ import "core-js/modules/es6.object.to-string.js";
 import "core-js/modules/es6.promise.js";
 import "core-js/modules/es6.object.define-property.js";
 import "core-js/modules/es6.symbol.js";
-import "core-js/modules/es6.string.iterator.js";
-import "core-js/modules/es6.array.iterator.js";
-import "core-js/modules/web.dom.iterable.js";
-import "core-js/modules/es7.symbol.async-iterator.js";
 import "core-js/modules/es6.object.create.js";
 import "core-js/modules/es6.object.get-prototype-of.js";
 import "core-js/modules/es6.array.for-each.js";
 import "core-js/modules/es6.function.name.js";
 import "core-js/modules/es6.object.set-prototype-of.js";
 import "core-js/modules/es6.array.slice.js";
+import "core-js/modules/es6.string.iterator.js";
+import "core-js/modules/es6.array.iterator.js";
+import "core-js/modules/web.dom.iterable.js";
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function a() {

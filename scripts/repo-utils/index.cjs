@@ -41,6 +41,12 @@ if (typeof jest !== "undefined") {
   exports.itLt = function (version) {
     return semver.lt(process.version, version) ? it : dummy;
   };
+  exports.itSatisfies = function (version) {
+    return semver.satisfies(process.version, version) ? it : dummy;
+  };
+  exports.itNegate = function (jestIt) {
+    return jestIt === dummy ? it : dummy;
+  };
   exports.itNoWin32 = process.platform === "win32" ? dummy : it;
   exports.itBabel8 = process.env.BABEL_8_BREAKING ? it : dummy;
   exports.itBabel7 = process.env.BABEL_8_BREAKING ? dummy : it;
@@ -56,6 +62,11 @@ if (typeof jest !== "undefined") {
   exports.describeBabel8 = process.env.BABEL_8_BREAKING ? describe : dummy;
   exports.describeGte = function (version) {
     return semver.gte(process.version, version) ? describe : describe.skip;
+  };
+  exports.describeSatisfies = function (version) {
+    return semver.satisfies(process.version, version)
+      ? describe
+      : describe.skip;
   };
 }
 

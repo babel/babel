@@ -4,7 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import * as babel from "../lib/index.js";
 import rimraf from "rimraf";
-import { itBabel7, itBabel8, itGte, itLt } from "$repo-utils";
+import { itBabel7, itBabel8, itSatisfies, itNegate } from "$repo-utils";
 
 import _getTargets from "@babel/helper-compilation-targets";
 const getTargets = _getTargets.default || _getTargets;
@@ -12,8 +12,7 @@ const getTargets = _getTargets.default || _getTargets;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const nodeGte22_12 = itGte("22.12.0");
-const nodeLt22_12 = itLt("22.12.0");
+const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
 
@@ -1169,7 +1168,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      nodeLt22_12(
+      itNegate(itSatisfies(versionHasRequireESM))(
         "should not load babel.config.mjs synchronously",
         async () => {
           const { cwd, tmp, config } = await getTemp(
@@ -1185,22 +1184,25 @@ describe("buildConfigChain", function () {
         },
       );
 
-      nodeGte22_12("should load babel.config.mjs synchronously", async () => {
-        const { cwd, tmp, config } = await getTemp(
-          "babel-test-load-config-sync-babel.config.mjs",
-        );
-        const filename = tmp("src.js");
+      itSatisfies(versionHasRequireESM)(
+        "should load babel.config.mjs synchronously",
+        async () => {
+          const { cwd, tmp, config } = await getTemp(
+            "babel-test-load-config-sync-babel.config.mjs",
+          );
+          const filename = tmp("src.js");
 
-        await config("babel.config.mjs");
+          await config("babel.config.mjs");
 
-        expect(loadOptionsSync({ filename, cwd })).toEqual({
-          ...getDefaults(),
-          filename,
-          cwd,
-          root: cwd,
-          comments: true,
-        });
-      });
+          expect(loadOptionsSync({ filename, cwd })).toEqual({
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          });
+        },
+      );
 
       test.each([
         "babel.config.json",
@@ -1285,35 +1287,41 @@ describe("buildConfigChain", function () {
         });
       });
 
-      nodeLt22_12("should not load .babelrc.mjs synchronously", async () => {
-        const { cwd, tmp, config } = await getTemp(
-          "babel-test-load-config-sync-.babelrc.mjs",
-        );
-        const filename = tmp("src.js");
+      itNegate(itSatisfies(versionHasRequireESM))(
+        "should not load .babelrc.mjs synchronously",
+        async () => {
+          const { cwd, tmp, config } = await getTemp(
+            "babel-test-load-config-sync-.babelrc.mjs",
+          );
+          const filename = tmp("src.js");
 
-        await config(".babelrc.mjs");
+          await config(".babelrc.mjs");
 
-        expect(() => loadOptionsSync({ filename, cwd })).toThrow(
-          /is only supported when running Babel asynchronously/,
-        );
-      });
+          expect(() => loadOptionsSync({ filename, cwd })).toThrow(
+            /is only supported when running Babel asynchronously/,
+          );
+        },
+      );
 
-      nodeGte22_12("should load .babelrc.mjs synchronously", async () => {
-        const { cwd, tmp, config } = await getTemp(
-          "babel-test-load-config-sync-.babelrc.mjs",
-        );
-        const filename = tmp("src.js");
+      itSatisfies(versionHasRequireESM)(
+        "should load .babelrc.mjs synchronously",
+        async () => {
+          const { cwd, tmp, config } = await getTemp(
+            "babel-test-load-config-sync-.babelrc.mjs",
+          );
+          const filename = tmp("src.js");
 
-        await config(".babelrc.mjs");
+          await config(".babelrc.mjs");
 
-        expect(loadOptionsSync({ filename, cwd })).toEqual({
-          ...getDefaults(),
-          filename,
-          cwd,
-          root: cwd,
-          comments: true,
-        });
-      });
+          expect(loadOptionsSync({ filename, cwd })).toEqual({
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          });
+        },
+      );
 
       test.each(
         [

@@ -13,10 +13,11 @@ const shouldSkip = semver.lt(process.version, "14.0.0");
 // Node.js 23.6 unflags --experimental-strip-types
 const nodeLt23_6 = itLt("23.6.0");
 const nodeGte23_6 = itGte("23.6.0");
+const versionHasRequireESM = "^20.19.0 || >=22.12.0";
 
 const nodeLt23_6_andRequireBabelPackages =
   semver.lt(process.version, "23.6.0") &&
-  (!USE_ESM || semver.gt(process.version, "22.12.0"))
+  (!USE_ESM || semver.satisfies(process.version, versionHasRequireESM))
     ? it
     : it.skip;
 
