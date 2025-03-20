@@ -1,5 +1,3 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
 import fs from "fs";
 import { parse as acornParse } from "acorn";
 import { itGte } from "$repo-utils";
@@ -8,9 +6,12 @@ describe("@babel/standalone", () => {
   let babelStandaloneSource;
 
   beforeAll(() => {
-    babelStandaloneSource = fs.readFileSync(require.resolve("../babel.js"), {
-      encoding: "utf8",
-    });
+    babelStandaloneSource = fs.readFileSync(
+      new URL("../babel.js", import.meta.url),
+      {
+        encoding: "utf8",
+      },
+    );
   });
 
   it("should be built into ES5", () => {
