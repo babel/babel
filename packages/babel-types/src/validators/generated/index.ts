@@ -897,16 +897,6 @@ export function isStaticBlock(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isImportAttribute(
-  node: t.Node | null | undefined,
-  opts?: Opts<t.ImportAttribute> | null,
-): node is t.ImportAttribute {
-  if (!node) return false;
-
-  if (node.type !== "ImportAttribute") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
 export function isAnyTypeAnnotation(
   node: t.Node | null | undefined,
   opts?: Opts<t.AnyTypeAnnotation> | null,
@@ -1754,6 +1744,16 @@ export function isBindExpression(
   if (!node) return false;
 
   if (node.type !== "BindExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isImportAttribute(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.ImportAttribute> | null,
+): node is t.ImportAttribute {
+  if (!node) return false;
+
+  if (node.type !== "ImportAttribute") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
@@ -2632,7 +2632,6 @@ export function isStandardized(
     case "ClassPrivateMethod":
     case "PrivateName":
     case "StaticBlock":
-    case "ImportAttribute":
       break;
     case "Placeholder":
       switch (node.expectedNode) {
