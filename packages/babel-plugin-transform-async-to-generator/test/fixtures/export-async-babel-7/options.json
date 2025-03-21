@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-modules-commonjs", "transform-async-to-generator"],
+  "BABEL_8_BREAKING": false
+}

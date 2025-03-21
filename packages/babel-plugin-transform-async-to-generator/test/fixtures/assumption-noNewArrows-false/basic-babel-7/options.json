@@ -1,0 +1,7 @@
+{
+  "plugins": ["transform-async-to-generator"],
+  "assumptions": {
+    "noNewArrows": false
+  },
+  "BABEL_8_BREAKING": false
+}

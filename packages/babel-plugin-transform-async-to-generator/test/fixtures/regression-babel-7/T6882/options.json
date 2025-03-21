@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-block-scoping",
+    "transform-arrow-functions",
+    "transform-regenerator"
+  ]
+}

@@ -60,7 +60,17 @@ export default declare(api => {
           ]),
         );
 
-        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+        if (process.env.BABEL_8_BREAKING) {
+          wrapFunction(
+            fnPath,
+            () => state.addHelper("skipFirstGeneratorNext"),
+            undefined,
+            undefined,
+            () => state.addHelper("callSkipFirstGeneratorNext"),
+          );
+        } else {
+          wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+        }
       },
     },
   };

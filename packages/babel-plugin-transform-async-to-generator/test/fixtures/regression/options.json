@@ -1,3 +1,4 @@
 {
-  "plugins": ["transform-async-to-generator"]
+  "plugins": ["transform-async-to-generator"],
+  "BABEL_8_BREAKING": true
 }

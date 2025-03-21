@@ -42,6 +42,41 @@ export default declare(({ types: t, assertVersion }) => {
           }
 
           obj.replaceWith(t.callExpression(helper, []));
+
+          if (process.env.BABEL_8_BREAKING) {
+            if (
+              callee.get("property").isIdentifier({ name: "mark" }) &&
+              path.parentPath.isCallExpression() &&
+              path.parentKey === "arguments" &&
+              path.parentPath.getData(
+                "@babel/helper-wrap-function/call-wrapped-function",
+              )
+            ) {
+              const fnPath = path.findParent(p => p.isFunction());
+
+              if (
+                fnPath
+                  .findParent(p => p.isLoop() || p.isFunction() || p.isClass())
+                  ?.isLoop() !== true
+              ) {
+                const ref = path.scope.generateUidIdentifier("ref");
+                fnPath.parentPath.scope.push({
+                  id: ref,
+                });
+                const oldNode = path.node;
+                const comments = path.node.leadingComments;
+                if (comments) path.node.leadingComments = null;
+                path.replaceWith(
+                  t.assignmentExpression(
+                    "=",
+                    t.cloneNode(ref),
+                    t.logicalExpression("||", t.cloneNode(ref), oldNode),
+                  ),
+                );
+                if (comments) oldNode.leadingComments = comments;
+              }
+            }
+          }
         }
       },
     },

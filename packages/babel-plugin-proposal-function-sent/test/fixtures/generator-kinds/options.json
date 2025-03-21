@@ -1,3 +1,4 @@
 {
-  "plugins": ["proposal-function-sent"]
+  "plugins": ["proposal-function-sent"],
+  "BABEL_8_BREAKING": true
 }

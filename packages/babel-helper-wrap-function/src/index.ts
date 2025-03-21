@@ -9,6 +9,8 @@ import {
   isRestElement,
   returnStatement,
   isCallExpression,
+  toExpression,
+  identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -59,6 +61,14 @@ const buildDeclarationWrapper = template.statements(`
     return REF.apply(this, arguments);
   }
 `);
+
+const buildWrapper = template.statement(`
+  function NAME(PARAMS) {
+    return CALL;
+  }
+`) as (
+  replacements: Parameters<ReturnType<typeof template.expression>>[0],
+) => t.FunctionDeclaration;
 
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
@@ -127,9 +137,7 @@ function plainFunction(
     functionId = node.id;
     node.id = null;
     node.type = "FunctionExpression";
-    built = callExpression(callId, [
-      node as Exclude<typeof node, t.FunctionDeclaration>,
-    ]);
+    built = callExpression(callId, [node as t.FunctionExpression]);
   }
 
   const params: t.Identifier[] = [];
@@ -170,15 +178,123 @@ function plainFunction(
   }
 }
 
+function markCall(path: NodePath<t.Function>) {
+  (path.get("body.body.0.argument") as NodePath<t.CallExpression>).setData(
+    "@babel/helper-wrap-function/call-wrapped-function",
+    true,
+  );
+}
+
 export default function wrapFunction(
   path: NodePath<t.Function>,
-  callId: t.Expression,
+  callId: t.Expression | (() => t.Expression),
   // TODO(Babel 8): Consider defaulting to false for spec compliance
   noNewArrows: boolean = true,
   ignoreFunctionLength: boolean = false,
+  callAsync?: () => t.Expression,
 ) {
+  if (callAsync) {
+    if (path.isMethod()) {
+      const node = path.node;
+      const body = node.body;
+
+      const container = functionExpression(
+        null,
+        [],
+        blockStatement(body.body),
+        true,
+      );
+      body.body = [returnStatement(callExpression(callAsync(), [container]))];
+
+      // Regardless of whether or not the wrapped function is an async method
+      // or generator the outer function should not be
+      node.async = false;
+      node.generator = false;
+
+      // Unwrap the wrapper IIFE's environment so super and this and such still work.
+      (
+        path.get("body.body.0.argument.arguments.0") as NodePath
+      ).unwrapFunctionEnvironment();
+    } else {
+      let node;
+      let functionId = null;
+      const nodeParams = path.node.params;
+
+      if (path.isArrowFunctionExpression()) {
+        const path2 = path.arrowFunctionToExpression({ noNewArrows });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        node = path2.node as
+          | t.FunctionDeclaration
+          | t.FunctionExpression
+          | t.CallExpression;
+      } else {
+        node = path.node;
+      }
+      const isDeclaration = path.isFunctionDeclaration();
+
+      let built = node;
+      if (!isCallExpression(node)) {
+        if (!isDeclaration) {
+          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+            // polyfill when being run by an older Babel version
+            path.ensureFunctionName ??=
+              // eslint-disable-next-line no-restricted-globals
+              require("@babel/traverse").NodePath.prototype.ensureFunctionName;
+          }
+
+          if (!path.isCallExpression()) {
+            // @ts-expect-error !isDeclaration check above
+            path.ensureFunctionName(false);
+          }
+        }
+
+        functionId = node.id;
+        built = callExpression(callAsync(), [
+          functionExpression(null, node.params, node.body, node.generator),
+          identifier("this"),
+          identifier("arguments"),
+        ]);
+      }
+
+      const params: t.Identifier[] = [];
+      for (const param of nodeParams) {
+        if (isAssignmentPattern(param) || isRestElement(param)) {
+          break;
+        }
+        params.push(path.scope.generateUidIdentifier("x"));
+      }
+
+      let wrapper: t.Function = buildWrapper({
+        NAME: functionId,
+        CALL: built,
+        PARAMS: params,
+      });
+
+      if (!isDeclaration) {
+        wrapper = toExpression(wrapper);
+      }
+
+      if (
+        isDeclaration ||
+        wrapper.id ||
+        (!ignoreFunctionLength && params.length)
+      ) {
+        path.replaceWith(wrapper);
+        markCall(path);
+      } else {
+        // we can omit this wrapper as the conditions it protects for do not apply
+        path.replaceWith(
+          callExpression((callId as () => t.Expression)(), [
+            node as t.FunctionExpression,
+          ]),
+        );
+      }
+    }
+    return;
+  }
+
   if (path.isMethod()) {
-    classOrObjectMethod(path, callId);
+    classOrObjectMethod(path, callId as t.Expression);
   } else {
     const hadName = "id" in path.node && !!path.node.id;
     if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
@@ -192,7 +308,7 @@ export default function wrapFunction(
     path = path.ensureFunctionName(false);
     plainFunction(
       path as NodePath<Exclude<t.Function, t.Method>>,
-      callId,
+      callId as t.Expression,
       noNewArrows,
       ignoreFunctionLength,
       hadName,

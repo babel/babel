@@ -9,7 +9,7 @@ export interface Options {
 }
 
 type State = {
-  methodWrapper?: t.Identifier | t.SequenceExpression;
+  methodWrapper?: t.Expression;
 };
 
 export default declare<State>((api, options: Options) => {
@@ -55,7 +55,14 @@ export default declare<State>((api, options: Options) => {
 
         remapAsyncToGenerator(
           path,
-          { wrapAsync: state.addHelper("asyncToGenerator") },
+          process.env.BABEL_8_BREAKING
+            ? {
+                wrapAsync: () => state.addHelper("asyncToGenerator"),
+                callAsync: () => state.addHelper("callAsync"),
+              }
+            : {
+                wrapAsync: state.addHelper("asyncToGenerator"),
+              },
           noNewArrows,
           ignoreFunctionLength,
         );

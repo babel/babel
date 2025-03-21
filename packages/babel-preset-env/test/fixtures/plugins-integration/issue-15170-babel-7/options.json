@@ -1,0 +1,5 @@
+{
+  "presets": ["env"],
+  "assumptions": { "noNewArrows": false },
+  "BABEL_8_BREAKING": false
+}
