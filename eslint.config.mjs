@@ -281,6 +281,7 @@ export default [
             "itNegate",
             "itSatisfies",
             "nodeGte8",
+            "nodeGte10",
             "nodeGte14",
             "nodeGte12",
             "nodeGte20",
