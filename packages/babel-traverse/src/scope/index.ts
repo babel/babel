@@ -5,7 +5,6 @@ import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globals from "globals";
 import {
-  NOT_LOCAL_BINDING,
   assignmentExpression,
   callExpression,
   cloneNode,
@@ -239,6 +238,13 @@ interface CollectVisitorState {
   constantViolations: NodePath[];
 }
 
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var NOT_LOCAL_BINDING = Symbol.for(
+    "should not be considered a local binding",
+  );
+}
+
 const collectorVisitor: Visitor<CollectVisitorState> = {
   ForStatement(path) {
     const declar = path.get("init");
@@ -373,8 +379,9 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (
       path.isFunctionExpression() &&
       path.node.id &&
-      // @ts-expect-error Fixme: document symbol ast properties
-      !path.node.id[NOT_LOCAL_BINDING]
+      (process.env.BABEL_8_BREAKING ||
+        // @ts-expect-error Fixme: document symbol ast properties
+        !path.node.id[NOT_LOCAL_BINDING])
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
     }
@@ -383,8 +390,9 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   ClassExpression(path) {
     if (
       path.node.id &&
-      // @ts-expect-error Fixme: document symbol ast properties
-      !path.node.id[NOT_LOCAL_BINDING]
+      (process.env.BABEL_8_BREAKING ||
+        // @ts-expect-error Fixme: document symbol ast properties
+        !path.node.id[NOT_LOCAL_BINDING])
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
     }
