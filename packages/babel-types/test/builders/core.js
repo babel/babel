@@ -12,4 +12,24 @@ describe("builders", function () {
   it("t.bigIntLiteral expects a string value", () => {
     expect(t.bigIntLiteral("1")).toHaveProperty("value", "1");
   });
+
+  itBabel8("uppercase builders are deprecated", () => {
+    const spyConsoleWarn = jest
+      .spyOn(console, "warn")
+      .mockImplementation(() => {});
+
+    const node = t.ThisTypeAnnotation();
+    expect(spyConsoleWarn).toHaveBeenCalledWith(
+      "`ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
+    );
+
+    t.TSAnyKeyword();
+    expect(spyConsoleWarn).toHaveBeenCalledWith(
+      "`TSAnyKeyword` has been deprecated, please migrate to `tsAnyKeyword`",
+    );
+
+    spyConsoleWarn.mockRestore();
+
+    expect(node).toEqual(t.thisTypeAnnotation());
+  });
 });
