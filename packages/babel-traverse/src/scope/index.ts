@@ -57,8 +57,7 @@ import {
 } from "@babel/types";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
-import type { Visitor } from "../types.ts";
-import { isExplodedVisitor } from "../visitors.ts";
+import type { ExplodedVisitor, Visitor } from "../types.ts";
 
 type NodePart = string | number | boolean;
 // Recursively gathers the identifying names of a node.
@@ -227,7 +226,13 @@ function gatherNodeParts(node: t.Node, parts: NodePart[]) {
   }
 }
 
-//
+function resetScope(scope: Scope) {
+  scope.references = Object.create(null);
+  scope.bindings = Object.create(null);
+  scope.globals = Object.create(null);
+  scope.uids = Object.create(null);
+}
+
 interface CollectVisitorState {
   assignments: NodePath<t.AssignmentExpression>[];
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
@@ -389,6 +394,8 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     path.skip();
   },
 };
+
+let scopeVisitor: ExplodedVisitor<CollectVisitorState>;
 
 let uid = 0;
 
@@ -915,10 +922,7 @@ class Scope {
   crawl() {
     const path = this.path;
 
-    this.references = Object.create(null);
-    this.bindings = Object.create(null);
-    this.globals = Object.create(null);
-    this.uids = Object.create(null);
+    resetScope(this);
     this.data = Object.create(null);
 
     let scope: Scope = this;
@@ -938,20 +942,28 @@ class Scope {
     };
 
     this.crawling = true;
+    scopeVisitor ||= traverse.visitors.merge([
+      {
+        Scope(path) {
+          resetScope(path.scope);
+        },
+      },
+      collectorVisitor,
+    ]);
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
-    if (path.type !== "Program" && isExplodedVisitor(collectorVisitor)) {
-      for (const visit of collectorVisitor.enter) {
+    if (path.type !== "Program") {
+      for (const visit of scopeVisitor.enter) {
         visit.call(state, path, state);
       }
-      const typeVisitors = collectorVisitor[path.type];
+      const typeVisitors = scopeVisitor[path.type];
       if (typeVisitors) {
         for (const visit of typeVisitors.enter) {
           visit.call(state, path, state);
         }
       }
     }
-    path.traverse(collectorVisitor, state);
+    path.traverse(scopeVisitor, state);
     this.crawling = false;
 
     // register assignments
