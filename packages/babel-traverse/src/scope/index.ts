@@ -1204,25 +1204,31 @@ class Scope {
   // was used to declare a variable in a different scope.
   hasBinding(
     name: string,
-    opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
+    opts?:
+      | boolean
+      | { noGlobals?: boolean; noUids?: boolean; upToScope?: Scope },
   ) {
     if (!name) return false;
+    // TODO: Only accept the object form.
+    let noGlobals;
+    let noUids;
+    let upToScope;
+    if (typeof opts === "object") {
+      noGlobals = opts.noGlobals;
+      noUids = opts.noUids;
+      upToScope = opts.upToScope;
+    } else if (typeof opts === "boolean") {
+      noGlobals = opts;
+    }
     let scope: Scope = this;
     do {
+      if (upToScope === scope) {
+        break;
+      }
       if (scope.hasOwnBinding(name)) {
         return true;
       }
     } while ((scope = scope.parent));
-
-    // TODO: Only accept the object form.
-    let noGlobals;
-    let noUids;
-    if (typeof opts === "object") {
-      noGlobals = opts.noGlobals;
-      noUids = opts.noUids;
-    } else if (typeof opts === "boolean") {
-      noGlobals = opts;
-    }
 
     if (!noUids && this.hasUid(name)) return true;
     if (!noGlobals && Scope.globals.includes(name)) return true;

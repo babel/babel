@@ -175,21 +175,27 @@ function ReferencedIdentifier(
   const name = expr.node.name;
 
   if (seen.has(name)) {
-    for (
-      let curScope = expr.scope;
-      curScope !== path.scope;
-      curScope = curScope.parent
-    ) {
-      if (curScope.hasOwnBinding(name)) {
-        /* The name is declared inside enum:
-        enum Foo {
-          A,
-          B = (() => {
-            const A = 1;
-            return A;
-          })())
-        } */
+    /* The name is declared inside enum:
+      enum Foo {
+        A,
+        B = (() => {
+          const A = 1;
+          return A;
+        })())
+      } */
+    if (process.env.BABEL_8_BREAKING) {
+      if (expr.scope.hasBinding(name, { upToScope: path.scope })) {
         return;
+      }
+    } else {
+      for (
+        let curScope = expr.scope;
+        curScope !== path.scope;
+        curScope = curScope.parent
+      ) {
+        if (curScope.hasOwnBinding(name)) {
+          return;
+        }
       }
     }
 
