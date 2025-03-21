@@ -7,14 +7,14 @@ export default function _newAsyncGenerator(
   self: any,
   args: any[],
 ) {
-  return new AsyncGenerator(fn.apply(self, args));
+  return new _AsyncGenerator(fn.apply(self, args));
 }
 
 /* == The implementation of the AsyncGenerator class == */
 
 type AsyncIteratorMethod = "next" | "throw" | "return";
 
-declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
+declare class _AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
   implements globalThis.AsyncGenerator<T, TReturn, TNext>
 {
   _invoke: (
@@ -29,7 +29,7 @@ declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
     value: TReturn | PromiseLike<TReturn>,
   ): Promise<IteratorResult<T, TReturn>>;
   throw(e: any): Promise<IteratorResult<T, TReturn>>;
-  [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
+  [Symbol.asyncIterator](): _AsyncGenerator<T, TReturn, TNext>;
   [Symbol.asyncDispose](): Promise<void>;
 }
 
@@ -41,8 +41,8 @@ interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
   next: AsyncGeneratorRequest<T, TReturn, TNext> | null;
 }
 
-function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
-  this: AsyncGenerator<T, TReturn, TNext>,
+function _AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
+  this: _AsyncGenerator<T, TReturn, TNext>,
   gen: Generator<T, TReturn, TNext>,
 ) {
   var front: AsyncGeneratorRequest<T, TReturn, TNext> | null,
@@ -146,19 +146,19 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
   }
 }
 
-AsyncGenerator.prototype[
+_AsyncGenerator.prototype[
   ((typeof Symbol === "function" && Symbol.asyncIterator) ||
     "@@asyncIterator") as typeof Symbol.asyncIterator
 ] = function () {
   return this;
 };
 
-AsyncGenerator.prototype.next = function (arg: IteratorResult<any>) {
+_AsyncGenerator.prototype.next = function (arg: IteratorResult<any>) {
   return this._invoke("next", arg);
 };
-AsyncGenerator.prototype.throw = function (arg: IteratorResult<any>) {
+_AsyncGenerator.prototype.throw = function (arg: IteratorResult<any>) {
   return this._invoke("throw", arg);
 };
-AsyncGenerator.prototype.return = function (arg: IteratorResult<any>) {
+_AsyncGenerator.prototype.return = function (arg: IteratorResult<any>) {
   return this._invoke("return", arg);
 };
