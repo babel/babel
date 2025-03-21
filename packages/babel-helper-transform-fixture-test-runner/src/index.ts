@@ -22,7 +22,7 @@ import path from "path";
 import vm from "vm";
 import LruCache from "lru-cache";
 import { fileURLToPath } from "url";
-import { diff } from "jest-diff";
+import * as _diff from "jest-diff";
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
 import os from "os";
@@ -34,6 +34,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 import { createHash } from "crypto";
+
+// @ts-expect-error expected
+const diff = _diff.diff || (_diff.default as typeof _diff.diff);
 
 type Module = {
   id: string;
