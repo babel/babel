@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+  "errors": [
+    "SyntaxError: 'yield' is only allowed within generator functions. (1:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":40,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":40,"index":40}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":12,"end":40,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":40,"index":40}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":28,"end":38,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":38,"index":38}},
+                "expression": {
+                  "type": "CallExpression",
+                  "start":28,"end":38,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":38,"index":38}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":28,"end":29,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":29,"index":29},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "arguments": [
+                    {
+                      "type": "YieldExpression",
+                      "start":30,"end":37,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":37,"index":37}},
+                      "delegate": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start":36,"end":37,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":37,"index":37},"identifierName":"v"},
+                        "name": "v"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": [
+              {
+                "type": "Directive",
+                "start":14,"end":27,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":27,"index":27}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":14,"end":26,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":26,"index":26}},
+                  "extra": {
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\"",
+                    "expressionValue": "use strict"
+                  },
+                  "value": "use strict"
+                }
+              }
+            ]
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

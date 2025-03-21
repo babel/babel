@@ -200,8 +200,11 @@ function parseWithCodeFrame(
   }
 
   parserOpts = {
+    allowAwaitOutsideFunction: true,
     allowReturnOutsideFunction: true,
+    allowNewTargetOutsideFunction: true,
     allowSuperOutsideMethod: true,
+    allowYieldOutsideFunction: true,
     sourceType: "module",
     ...parserOpts,
     plugins,
