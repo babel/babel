@@ -19,10 +19,15 @@ describe("builders", function () {
       .mockImplementation(() => {});
 
     const node = t.ThisTypeAnnotation();
-
     expect(spyConsoleWarn).toHaveBeenCalledWith(
-      expect.stringContaining("uppercase builders are deprecated"),
+      "`ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
     );
+
+    t.TSAnyKeyword();
+    expect(spyConsoleWarn).toHaveBeenCalledWith(
+      "`TSAnyKeyword` has been deprecated, please migrate to `tsAnyKeyword`",
+    );
+
     spyConsoleWarn.mockRestore();
 
     expect(node).toEqual(t.thisTypeAnnotation());
