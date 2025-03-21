@@ -10,7 +10,7 @@ function alias<const N extends keyof typeof b>(lowercase: N): (typeof b)[N] {
   if (process.env.BABEL_8_BREAKING) {
     return function () {
       deprecationWarning(
-        lowercase.replace(/^[a-z]+/, x => x.toUpperCase()),
+        lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
         lowercase,
       );
       return (b[lowercase] as any)(...arguments);
