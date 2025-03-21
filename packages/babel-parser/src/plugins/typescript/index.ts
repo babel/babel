@@ -2460,8 +2460,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       flags: ParseBindingListFlags,
       decorators: N.Decorator[],
     ): N.Pattern | N.TSParameterProperty {
-      // Store original location to include modifiers in range
-      const startLoc = this.state.startLoc;
+      // Store original location to include decorators/modifiers in range
+      const startLoc = decorators.length
+        ? decorators[0].loc.start
+        : this.state.startLoc;
 
       const modified: ModifierBase = {};
       this.tsParseModifiers(
