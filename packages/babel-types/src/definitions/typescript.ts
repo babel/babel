@@ -651,7 +651,7 @@ defineType("TSImportType", {
     [process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters"]:
       validateOptionalType("TSTypeParameterInstantiation"),
     options: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("ObjectExpression"),
       optional: true,
     },
   },
