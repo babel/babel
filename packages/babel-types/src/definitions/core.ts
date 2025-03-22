@@ -545,7 +545,7 @@ defineType("Identifier", {
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? function (parent, key, node) {
-          const match = /\.(\w+)$/.exec(key);
+          const match = /\.(\w+)$/.exec(key.toString());
           if (!match) return;
 
           const [, parentKey] = match;
@@ -1025,7 +1025,7 @@ defineType("RestElement", {
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? function (parent: t.ArrayPattern | t.ObjectPattern, key) {
-          const match = /(\w+)\[(\d+)\]/.exec(key);
+          const match = /(\w+)\[(\d+)\]/.exec(key.toString());
           if (!match) throw new Error("Internal Babel error: malformed key.");
 
           const [, listKey, index] = match as unknown as [
