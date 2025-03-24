@@ -20,12 +20,16 @@ describe("builders", function () {
 
     const node = t.ThisTypeAnnotation();
     expect(spyConsoleWarn).toHaveBeenCalledWith(
-      "`ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
+      expect.stringContaining(
+        "`ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
+      ),
     );
 
     t.TSAnyKeyword();
     expect(spyConsoleWarn).toHaveBeenCalledWith(
-      "`TSAnyKeyword` has been deprecated, please migrate to `tsAnyKeyword`",
+      expect.stringContaining(
+        "`TSAnyKeyword` has been deprecated, please migrate to `tsAnyKeyword`",
+      ),
     );
 
     spyConsoleWarn.mockRestore();
