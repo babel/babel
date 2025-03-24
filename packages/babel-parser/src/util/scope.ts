@@ -41,7 +41,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     return (this.currentScope().flags & ScopeFlag.PROGRAM) > 0;
   }
   get inFunction() {
-    return (this.currentVarScopeFlags() & ScopeFlag.FUNCTION) > 0;
+    return (this.currentVarScopeFlags() & ScopeFlag.FUNCTION_BASE) > 0;
   }
   get allowSuper() {
     return (this.currentThisScopeFlags() & ScopeFlag.SUPER) > 0;
@@ -49,12 +49,18 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   get allowDirectSuper() {
     return (this.currentThisScopeFlags() & ScopeFlag.DIRECT_SUPER) > 0;
   }
+  get allowNewTarget() {
+    return (this.currentThisScopeFlags() & ScopeFlag.NEW_TARGET) > 0;
+  }
   get inClass() {
-    return (this.currentThisScopeFlags() & ScopeFlag.CLASS) > 0;
+    return (this.currentThisScopeFlags() & ScopeFlag.CLASS_BASE) > 0;
   }
   get inClassAndNotInNonArrowFunction() {
     const flags = this.currentThisScopeFlags();
-    return (flags & ScopeFlag.CLASS) > 0 && (flags & ScopeFlag.FUNCTION) === 0;
+    return (
+      (flags & ScopeFlag.CLASS_BASE) > 0 &&
+      (flags & ScopeFlag.FUNCTION_BASE) === 0
+    );
   }
   get inStaticBlock() {
     for (let i = this.scopeStack.length - 1; ; i--) {
@@ -62,14 +68,14 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       if (flags & ScopeFlag.STATIC_BLOCK) {
         return true;
       }
-      if (flags & (ScopeFlag.VAR | ScopeFlag.CLASS)) {
+      if (flags & (ScopeFlag.VAR | ScopeFlag.CLASS_BASE)) {
         // function body, module body, class property initializers
         return false;
       }
     }
   }
   get inNonArrowFunction() {
-    return (this.currentThisScopeFlags() & ScopeFlag.FUNCTION) > 0;
+    return (this.currentThisScopeFlags() & ScopeFlag.FUNCTION_BASE) > 0;
   }
   get inBareCaseStatement() {
     return (this.currentScope().flags & ScopeFlag.SWITCH) > 0;
@@ -98,7 +104,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   // > treated like var declarations rather than like lexical declarations.
   treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
-      scope.flags & (ScopeFlag.FUNCTION | ScopeFlag.STATIC_BLOCK) ||
+      scope.flags & (ScopeFlag.FUNCTION_BASE | ScopeFlag.STATIC_BLOCK) ||
       (!this.parser.inModule && scope.flags & ScopeFlag.PROGRAM)
     );
   }
@@ -220,7 +226,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];
       if (
-        flags & (ScopeFlag.VAR | ScopeFlag.CLASS) &&
+        flags & (ScopeFlag.VAR | ScopeFlag.CLASS_BASE) &&
         !(flags & ScopeFlag.ARROW)
       ) {
         return flags;

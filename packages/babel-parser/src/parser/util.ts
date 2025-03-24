@@ -372,6 +372,9 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.optionFlags & OptionFlags.AllowSuperOutsideMethod) {
       scopeFlags |= ScopeFlag.SUPER | ScopeFlag.DIRECT_SUPER;
     }
+    if (this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction) {
+      scopeFlags |= ScopeFlag.NEW_TARGET;
+    }
     this.scope.enter(scopeFlags);
     this.prodParam.enter(paramFlags);
   }
