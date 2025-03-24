@@ -213,7 +213,7 @@ function generateUppercaseBuilders() {
     if (process.env.BABEL_8_BREAKING) {
       return function () {
         deprecationWarning(
-          lowercase.replace(/^[a-z]+/, x => x.toUpperCase()),
+          lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
           lowercase
         );
         return (b[lowercase] as any)(...arguments);
