@@ -1536,9 +1536,16 @@ export default abstract class ExpressionParser extends LValParser {
   parseSuper(): N.Super {
     const node = this.startNode<N.Super>();
     this.next(); // eat `super`
-    if (this.match(tt.parenL) && !this.scope.allowDirectSuper) {
+    if (
+      this.match(tt.parenL) &&
+      !this.scope.allowDirectSuper &&
+      !(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)
+    ) {
       this.raise(Errors.SuperNotAllowed, node);
-    } else if (!this.scope.allowSuper) {
+    } else if (
+      !this.scope.allowSuper &&
+      !(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)
+    ) {
       this.raise(Errors.UnexpectedSuper, node);
     }
 
