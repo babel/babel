@@ -227,9 +227,7 @@ export function isDescendant(this: NodePath, maybeAncestor: NodePath): boolean {
 export function inType(this: NodePath, ...candidateTypes: string[]): boolean {
   let path = this;
   while (path) {
-    for (const type of candidateTypes) {
-      if (path.node.type === type) return true;
-    }
+    if (candidateTypes.includes(path.node.type)) return true;
     path = path.parentPath;
   }
 

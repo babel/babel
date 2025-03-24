@@ -919,17 +919,24 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
 }
 
 function usesPrivateField(expression: t.Node) {
-  try {
-    t.traverseFast(expression, node => {
+  if (process.env.BABEL_8_BREAKING) {
+    return t.traverseFast(expression, node => {
       if (t.isPrivateName(node)) {
-        // TODO: Add early return support to t.traverseFast
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
-        throw null;
+        return t.traverseFast.stop;
       }
     });
-    return false;
-  } catch {
-    return true;
+  } else {
+    try {
+      t.traverseFast(expression, node => {
+        if (t.isPrivateName(node)) {
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
+          throw null;
+        }
+      });
+      return false;
+    } catch {
+      return true;
+    }
   }
 }
 
@@ -1074,8 +1081,8 @@ function transformClass(
   // context or the given identifier name or contains yield or await expression.
   // `true` means "maybe" and `false` means "no".
   const usesFunctionContextOrYieldAwait = (decorator: t.Decorator) => {
-    try {
-      t.traverseFast(decorator, node => {
+    if (process.env.BABEL_8_BREAKING) {
+      return t.traverseFast(decorator, node => {
         if (
           t.isThisExpression(node) ||
           t.isSuper(node) ||
@@ -1085,14 +1092,29 @@ function transformClass(
           (classIdName && t.isIdentifier(node, { name: classIdName })) ||
           (t.isMetaProperty(node) && node.meta.name !== "import")
         ) {
-          // TODO: Add early return support to t.traverseFast
-          // eslint-disable-next-line @typescript-eslint/only-throw-error
-          throw null;
+          return t.traverseFast.stop;
         }
       });
-      return false;
-    } catch {
-      return true;
+    } else {
+      try {
+        t.traverseFast(decorator, node => {
+          if (
+            t.isThisExpression(node) ||
+            t.isSuper(node) ||
+            t.isYieldExpression(node) ||
+            t.isAwaitExpression(node) ||
+            t.isIdentifier(node, { name: "arguments" }) ||
+            (classIdName && t.isIdentifier(node, { name: classIdName })) ||
+            (t.isMetaProperty(node) && node.meta.name !== "import")
+          ) {
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
+            throw null;
+          }
+        });
+        return false;
+      } catch {
+        return true;
+      }
     }
   };
 
