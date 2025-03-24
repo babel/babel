@@ -24,6 +24,45 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.0 (2025-03-24)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`
+  * [#16977](https://github.com/babel/babel/pull/16977) Default `importAttributesKeyword` to `with` ([@JLHwung](https://github.com/JLHwung))
+
+#### :rocket: New Feature
+* `babel-helper-create-class-features-plugin`, `babel-traverse`, `babel-types`
+  * [#17169](https://github.com/babel/babel/pull/17169) Allow `traverseFast` to exit early ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`, `babel-types`
+  * [#17110](https://github.com/babel/babel/pull/17110) Add `ImportAttributes` to `Standardized` and move its parser test fixtures ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#17100](https://github.com/babel/babel/pull/17100) fix(babel-generator): add named export of generate function ([@vovkasm](https://github.com/vovkasm))
+* `babel-parser`, `babel-template`
+  * [#17149](https://github.com/babel/babel/pull/17149) Add `allowYieldOutsideFunction` to parser ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#17102](https://github.com/babel/babel/pull/17102) feat: Add `upToScope` parameter to `hasBinding` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#17082](https://github.com/babel/babel/pull/17082) Support ESTree AccessorProperty ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#17162](https://github.com/babel/babel/pull/17162) feat(babel-types): Add support for BigInt literal conversion in valueToNode ([@ishchhabra](https://github.com/ishchhabra))
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-class-properties`
+  * [#16816](https://github.com/babel/babel/pull/16816) fix: Class reference in type throws error ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#17170](https://github.com/babel/babel/pull/17170) fix: Reset child scopes when `scope.crawl()` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-preset-typescript`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17118](https://github.com/babel/babel/pull/17118) Fix: align behaviour to tsc `rewriteRelativeImportExtensions` ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#17182](https://github.com/babel/babel/pull/17182) fix: `@babel/cli` generates duplicate inline source maps ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-named-capturing-groups-regex`, `babel-types`
+  * [#17175](https://github.com/babel/babel/pull/17175) Generate computed proto key ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-types`
+  * [#16870](https://github.com/babel/babel/pull/16870) perf: Improve builders of `@babel/types` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-regexp-features-plugin`
+  * [#17176](https://github.com/babel/babel/pull/17176) fix: improve duplicate named groups check ([@JLHwung](https://github.com/JLHwung))
 ## v7.26.10 (2025-03-11)
 
 #### :eyeglasses: Spec Compliance
