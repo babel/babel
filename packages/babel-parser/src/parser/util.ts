@@ -356,7 +356,10 @@ export default abstract class UtilParser extends Tokenizer {
 
   enterInitialScopes() {
     let paramFlags = ParamKind.PARAM;
-    if (this.inModule) {
+    if (
+      this.inModule ||
+      this.optionFlags & OptionFlags.AllowAwaitOutsideFunction
+    ) {
       paramFlags |= ParamKind.PARAM_AWAIT;
     }
     if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
