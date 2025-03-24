@@ -1867,6 +1867,16 @@ export function isPipelinePrimaryTopicReference(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isVoidPattern(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.VoidPattern> | null,
+): node is t.VoidPattern {
+  if (!node) return false;
+
+  if (node.type !== "VoidPattern") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
   opts?: Opts<t.TSParameterProperty> | null,
@@ -3163,6 +3173,7 @@ export function isPatternLike(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
     case "TSTypeAssertion":
@@ -3196,6 +3207,7 @@ export function isLVal(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
     case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
@@ -3389,6 +3401,7 @@ export function isPattern(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
       break;
     case "Placeholder":
       if (node.expectedNode === "Pattern") break;

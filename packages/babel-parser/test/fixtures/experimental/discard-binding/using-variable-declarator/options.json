@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["discardBinding", { "syntaxType": "void" }],
+    "explicitResourceManagement"
+  ]
+}

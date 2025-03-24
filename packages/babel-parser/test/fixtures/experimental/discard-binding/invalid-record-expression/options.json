@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    ["discardBinding", { "syntaxType": "void" }],
+    [
+      "recordAndTuple"
+    ]
+  ],
+  "throws": "Unexpected token (1:11)",
+  "BABEL_8_BREAKING": true
+}
