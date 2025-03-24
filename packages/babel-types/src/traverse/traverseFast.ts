@@ -1,13 +1,20 @@
 import { VISITOR_KEYS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 
+const _skip = Symbol();
+const _stop = Symbol();
+
 /**
- * A prefix AST traversal implementation meant for simple searching
- * and processing.
+ * A prefix AST traversal implementation meant for simple searching and processing.
+ * @param enter The callback can return `traverseFast.skip` to skip the subtree of the current node, or `traverseFast.stop` to stop the traversal.
+ * @returns `true` if the traversal was stopped by callback, `false` otherwise.
  */
 export default function traverseFast<Options = object>(
   node: t.Node | null | undefined,
-  enter: (node: t.Node, opts?: Options) => void | "skip" | "stop",
+  enter: (
+    node: t.Node,
+    opts?: Options,
+  ) => void | typeof traverseFast.skip | typeof traverseFast.stop,
   opts?: Options,
 ): boolean {
   if (!node) return false;
@@ -19,9 +26,9 @@ export default function traverseFast<Options = object>(
   const ret = enter(node, opts);
   if (ret !== undefined) {
     switch (ret) {
-      case "skip":
+      case _skip:
         return false;
-      case "stop":
+      case _stop:
         return true;
     }
   }
@@ -43,3 +50,6 @@ export default function traverseFast<Options = object>(
   }
   return false;
 }
+
+traverseFast.skip = _skip;
+traverseFast.stop = _stop;

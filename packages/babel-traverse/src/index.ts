@@ -139,10 +139,10 @@ traverse.hasType = function (
 
   return traverseFast(tree, function (node) {
     if (denylistTypes?.includes(node.type)) {
-      return "skip";
+      return traverseFast.skip;
     }
     if (node.type === type) {
-      return "stop";
+      return traverseFast.stop;
     }
   });
 };
