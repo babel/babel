@@ -1090,10 +1090,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   parseReturnStatement(this: Parser, node: Undone<N.ReturnStatement>) {
-    if (
-      !this.prodParam.hasReturn &&
-      !(this.optionFlags & OptionFlags.AllowReturnOutsideFunction)
-    ) {
+    if (!this.prodParam.hasReturn) {
       this.raise(Errors.IllegalReturn, this.state.startLoc);
     }
 
