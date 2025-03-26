@@ -12,6 +12,8 @@ function alias<const N extends keyof typeof b>(lowercase: N): (typeof b)[N] {
       deprecationWarning(
         lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
         lowercase,
+        "Usage of builders starting with an uppercase letter such as ",
+        "uppercase builders",
       );
       return (b[lowercase] as any)(...arguments);
     } as any;

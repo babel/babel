@@ -214,7 +214,9 @@ function generateUppercaseBuilders() {
       return function () {
         deprecationWarning(
           lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
-          lowercase
+          lowercase,
+          "Usage of builders starting with an uppercase letter such as ",
+          "uppercase builders",
         );
         return (b[lowercase] as any)(...arguments);
       } as any;

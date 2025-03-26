@@ -21,16 +21,14 @@ describe("builders", function () {
     const node = t.ThisTypeAnnotation();
     expect(spyConsoleWarn).toHaveBeenCalledWith(
       expect.stringContaining(
-        "`ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
+        "Usage of builders starting with an uppercase letter such as `ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`",
       ),
     );
+    spyConsoleWarn.mockClear();
 
+    // only warns once
     t.TSAnyKeyword();
-    expect(spyConsoleWarn).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "`TSAnyKeyword` has been deprecated, please migrate to `tsAnyKeyword`",
-      ),
-    );
+    expect(spyConsoleWarn).toHaveBeenCalledWith();
 
     spyConsoleWarn.mockRestore();
 

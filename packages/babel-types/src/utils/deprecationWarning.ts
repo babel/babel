@@ -4,9 +4,10 @@ export default function deprecationWarning(
   oldName: string,
   newName: string,
   prefix: string = "",
+  cacheKey: string = oldName,
 ) {
-  if (warnings.has(oldName)) return;
-  warnings.add(oldName);
+  if (warnings.has(cacheKey)) return;
+  warnings.add(cacheKey);
 
   const { internal, trace } = captureShortStackTrace(1, 2);
   if (internal) {
