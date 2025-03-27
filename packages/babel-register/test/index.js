@@ -1,7 +1,7 @@
-import { Module } from "module";
-import path from "path";
-import fs from "fs";
-import child from "child_process";
+import { Module } from "node:module";
+import path from "node:path";
+import fs from "node:fs";
+import child from "node:child_process";
 import { USE_ESM, commonJS, describeGte, itSatisfies } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);

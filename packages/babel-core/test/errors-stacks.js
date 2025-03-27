@@ -1,8 +1,8 @@
 import * as babel from "../lib/index.js";
 
 import { commonJS, itGte } from "$repo-utils";
-import path from "path";
-import { spawnSync } from "child_process";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const { __dirname } = commonJS(import.meta.url);
 

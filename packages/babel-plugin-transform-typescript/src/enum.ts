@@ -1,5 +1,5 @@
 import { template, types as t, type NodePath } from "@babel/core";
-import assert from "assert";
+import assert from "node:assert";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 

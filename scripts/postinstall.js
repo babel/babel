@@ -1,4 +1,4 @@
-import { existsSync, copyFileSync } from "fs";
+import { existsSync, copyFileSync } from "node:fs";
 import isCI from "is-ci";
 import husky from "husky";
 

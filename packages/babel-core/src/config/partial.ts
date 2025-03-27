@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import type { Handler } from "gensync";
 import Plugin from "./plugin.ts";
 import { mergeOptions } from "./util.ts";

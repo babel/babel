@@ -3,9 +3,9 @@
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-import path from "path";
-import child_process from "child_process";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import child_process from "node:child_process";
+import { fileURLToPath } from "node:url";
 import getV8FlagsRaw from "v8flags";
 
 import { splitArgs, nodeFlagsWithValue } from "./split-args.ts";

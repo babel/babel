@@ -1,15 +1,15 @@
-import Module from "module";
-import { inspect } from "util";
-import path from "path";
-import repl from "repl";
+import Module from "node:module";
+import { inspect } from "node:util";
+import path from "node:path";
+import repl from "node:repl";
 import * as babel from "@babel/core";
-import vm from "vm";
+import vm from "node:vm";
 import "core-js/stable/index.js";
 import "regenerator-runtime/runtime.js";
 // @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import type { PluginAPI, PluginObject } from "@babel/core";
 
 import { program } from "./program-setup.ts";

@@ -1,5 +1,5 @@
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import _getTargets from "../../lib/index.js";
 const getTargets = _getTargets.default || _getTargets;

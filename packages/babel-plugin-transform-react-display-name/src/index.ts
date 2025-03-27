@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import path from "path";
+import path from "node:path";
 import { types as t } from "@babel/core";
 
 type ReactCreateClassCall = t.CallExpression & {

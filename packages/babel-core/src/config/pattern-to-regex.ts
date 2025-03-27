@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;

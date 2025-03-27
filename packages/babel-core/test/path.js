@@ -1,6 +1,6 @@
 import { transformSync } from "../lib/index.js";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 import _Plugin from "../lib/config/plugin.js";
 const Plugin = _Plugin.default || _Plugin;

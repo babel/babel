@@ -1,6 +1,6 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-import fs from "fs";
+import fs from "node:fs";
 import { parse as acornParse } from "acorn";
 import { itGte } from "$repo-utils";
 

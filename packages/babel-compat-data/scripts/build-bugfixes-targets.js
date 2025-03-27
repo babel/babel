@@ -2,7 +2,7 @@
 
 // NOTE: This script must be run _after_ build-data.js
 
-const path = require("path");
+const path = require("node:path");
 
 const {
   generateData,

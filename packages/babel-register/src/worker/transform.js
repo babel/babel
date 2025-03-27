@@ -1,8 +1,8 @@
 "use strict";
 
 const cloneDeep = require("clone-deep");
-const path = require("path");
-const fs = require("fs");
+const path = require("node:path");
+const fs = require("node:fs");
 
 const babel = require("./babel-core.js");
 const registerCache = require("../cache.js");

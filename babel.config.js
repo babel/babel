@@ -10,8 +10,8 @@ if (typeof it === "function") {
   jestSnapshot = true;
 }
 
-const pathUtils = require("path");
-const fs = require("fs");
+const pathUtils = require("node:path");
+const fs = require("node:fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
 const babel7_8compat = require("./test/babel-7-8-compat/data.json");

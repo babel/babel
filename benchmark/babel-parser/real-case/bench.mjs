@@ -2,7 +2,7 @@ import Benchmark from "benchmark";
 import baseline from "@babel-baseline/parser";
 import current from "@babel/parser";
 import { report } from "../../util.mjs";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 
 const suite = new Benchmark.Suite();
 
