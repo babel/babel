@@ -15,9 +15,13 @@ function replaceNodeProtocol(input) {
  * @returns {import("@babel/core").PluginObject}
  */
 function pluginBabelTransformNodeProtocolImports({ types: t, targets }) {
-  const target = targets();
-  // Skip this plugin for Node.js >= 16
-  if (target.node && +target.node.split(".")[0] >= 16) {
+  let target;
+  // Skip this plugin for Node.js >= 16, api.targets could be undefined in e2e-old-babel test
+  if (
+    targets &&
+    (target = targets()).node &&
+    +target.node.split(".")[0] >= 16
+  ) {
     return {};
   }
   return {
