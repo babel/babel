@@ -544,7 +544,8 @@ export default declare((api, opts: Options) => {
             t.isIdentifier(right) &&
             (pureGetters ||
               path.scope.getBinding(right.name)?.constantViolations.every(
-                // declared in loop
+                // If a variable is only reassigned through other variable declarations,
+                // we are sure that it is not being reassigned while destructuring it.
                 p => p.isVariableDeclarator(),
               ))
           ) {
