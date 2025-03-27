@@ -1,3 +1,5 @@
+// NOTE: This file must be runnable on all Node.js version
+/* eslint-disable unicorn/prefer-node-protocol */
 "use strict";
 
 let jestSnapshot = false;
@@ -10,8 +12,8 @@ if (typeof it === "function") {
   jestSnapshot = true;
 }
 
-const pathUtils = require("node:path");
-const fs = require("node:fs");
+const pathUtils = require("path");
+const fs = require("fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
 const babel7_8compat = require("./test/babel-7-8-compat/data.json");
