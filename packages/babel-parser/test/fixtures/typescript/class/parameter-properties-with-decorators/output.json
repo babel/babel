@@ -37,7 +37,7 @@
               "params": [
                 {
                   "type": "TSParameterProperty",
-                  "start":31,"end":49,"loc":{"start":{"line":2,"column":21,"index":31},"end":{"line":2,"column":39,"index":49}},
+                  "start":26,"end":49,"loc":{"start":{"line":2,"column":16,"index":26},"end":{"line":2,"column":39,"index":49}},
                   "decorators": [
                     {
                       "type": "Decorator",
