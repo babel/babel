@@ -1,6 +1,6 @@
 "use strict";
 
-const path = require("path");
+const path = require("node:path");
 const compatData = require("@mdn/browser-compat-data").javascript;
 const { generateModuleSupport } = require("./build-modules-support");
 const {

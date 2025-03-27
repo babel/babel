@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 
 import * as commander from "commander";
 import { version, DEFAULT_EXTENSIONS } from "@babel/core";

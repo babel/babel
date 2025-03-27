@@ -17,7 +17,7 @@ const availablePlugins = _availablePlugins.default || _availablePlugins;
 // because our tests rely on function identity.
 let pluginCoreJS3;
 import _pluginCoreJS3_esm from "babel-plugin-polyfill-corejs3";
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 if (USE_ESM) {
   pluginCoreJS3 = _pluginCoreJS3_esm;

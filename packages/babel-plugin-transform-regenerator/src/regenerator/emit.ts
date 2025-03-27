@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-case-declarations */
-import assert from "assert";
+import assert from "node:assert";
 import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
 import * as util from "./util.ts";

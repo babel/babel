@@ -11,9 +11,9 @@ import {
   copyFileSync,
   mkdirSync,
   readFileSync,
-} from "fs";
-import { dirname, join } from "path";
-import { spawn } from "child_process";
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
 import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 const checkDuplicatedNodes =
@@ -30,8 +30,8 @@ import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functio
 import pluginTransformParameters from "@babel/plugin-transform-parameters";
 import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
 
-import { createRequire } from "module";
-import { fileURLToPath } from "url";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

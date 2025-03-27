@@ -1,5 +1,5 @@
 import { ESLint } from "eslint";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 describe("https://github.com/babel/babel-eslint/issues/558", () => {
   it(

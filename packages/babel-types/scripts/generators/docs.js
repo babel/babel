@@ -1,4 +1,4 @@
-import util from "util";
+import util from "node:util";
 import stringifyValidator from "../utils/stringifyValidator.js";
 import toFunctionName from "../utils/toFunctionName.js";
 

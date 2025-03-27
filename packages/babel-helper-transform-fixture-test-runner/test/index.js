@@ -1,5 +1,5 @@
 import { runCodeInTestContext } from "../lib/index.js";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 const filename = fileURLToPath(import.meta.url);
 

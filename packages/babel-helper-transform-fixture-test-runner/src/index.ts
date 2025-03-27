@@ -16,24 +16,24 @@ import {
 import { codeFrameColumns } from "@babel/code-frame";
 import * as helpers from "./helpers.ts";
 import visualizeSourceMap from "./source-map-visualizer.ts";
-import assert from "assert";
-import fs, { readFileSync, realpathSync } from "fs";
-import path from "path";
-import vm from "vm";
+import assert from "node:assert";
+import fs, { readFileSync, realpathSync } from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
 import LruCache from "lru-cache";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import { diff } from "jest-diff";
-import type { ChildProcess } from "child_process";
-import { spawn } from "child_process";
-import os from "os";
+import type { ChildProcess } from "node:child_process";
+import { spawn } from "node:child_process";
+import os from "node:os";
 import readdirRecursive from "fs-readdir-recursive";
 
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 type Module = {
   id: string;

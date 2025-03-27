@@ -54,7 +54,7 @@ export class Client {
 export class WorkerClient extends Client {
   static #worker_threads_cache: typeof import("worker_threads");
   static get #worker_threads() {
-    return (WorkerClient.#worker_threads_cache ??= require("worker_threads"));
+    return (WorkerClient.#worker_threads_cache ??= require("node:worker_threads"));
   }
 
   #worker = new WorkerClient.#worker_threads.Worker(

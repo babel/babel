@@ -1,7 +1,7 @@
 import browserify from "browserify";
-import path from "path";
-import vm from "vm";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import vm from "node:vm";
+import { fileURLToPath } from "node:url";
 import { itBabel7, itBabel8 } from "$repo-utils";
 
 describe("browserify", function () {

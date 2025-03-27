@@ -307,7 +307,7 @@ export default [
     rules: {
       "n/no-unsupported-features/node-builtins": [
         "error",
-        { version: "12.17.0", ignores: ["module"] },
+        { version: "20.19.0", ignores: ["module"] },
       ],
       "@babel/development-internal/require-default-import-fallback": "error",
       "import/no-unresolved": "error",

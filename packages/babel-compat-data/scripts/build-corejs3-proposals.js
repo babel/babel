@@ -1,6 +1,6 @@
 const data = require("core-js-compat/data.json");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const features = Object.keys(data);
 

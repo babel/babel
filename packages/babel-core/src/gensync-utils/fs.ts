@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import gensync from "gensync";
 
 export const readFile = gensync<[filepath: string, encoding: "utf8"], string>({

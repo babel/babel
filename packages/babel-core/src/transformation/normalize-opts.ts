@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import type { ResolvedConfig } from "../config/index.ts";
 
 export default function normalizeOptions(config: ResolvedConfig) {

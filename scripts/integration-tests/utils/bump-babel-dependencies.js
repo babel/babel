@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const packageJSONPath = path.resolve(process.cwd(), "./package.json");
 const content = (await import(packageJSONPath, { with: { type: "json" } }))

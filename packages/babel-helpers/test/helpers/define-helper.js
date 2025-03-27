@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import _template from "@babel/template";
 import _helpers from "../../lib/helpers-generated.js";
 const template = _template.default || _template;

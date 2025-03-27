@@ -1,8 +1,8 @@
 import * as babel7_12 from "@babel/core-7.12";
 import * as babel from "@babel/core";
 import env from "../lib/index.js";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { commonJS, itBabel7, itBabel7GteNoESM } from "$repo-utils";
 
 const { require } = commonJS(import.meta.url);

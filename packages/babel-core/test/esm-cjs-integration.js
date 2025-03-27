@@ -1,5 +1,5 @@
-import { execFile } from "child_process";
-import { createRequire } from "module";
+import { execFile } from "node:child_process";
+import { createRequire } from "node:module";
 import {
   describeESM,
   describeSatisfies,

@@ -1,6 +1,6 @@
 import * as babel from "../lib/index.js";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { itBabel7, itBabel7NoESM } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));

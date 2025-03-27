@@ -1,8 +1,8 @@
 import { Linter, ESLint } from "eslint";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import * as parser from "../../../../../babel-eslint-parser/lib/index.cjs";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import {
   babelESLintParserPath,
   eslintConfigCompat,

@@ -1,6 +1,6 @@
 import runner from "@babel/helper-transform-fixture-test-runner";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import cloneDeep from "../lib/transformation/util/clone-deep.js";
 import { itBabel8 } from "$repo-utils";
 

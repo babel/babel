@@ -1,6 +1,6 @@
 import { loadOptionsSync as loadOptionsSyncOrig } from "../lib/index.js";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const cwd = dirname(fileURLToPath(import.meta.url));
 

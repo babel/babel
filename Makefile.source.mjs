@@ -1,12 +1,12 @@
 import "shelljs/make.js";
-import path from "path";
+import path from "node:path";
 import {
   readFileSync,
   writeFileSync,
   readdirSync,
   existsSync,
   mkdirSync,
-} from "fs";
+} from "node:fs";
 import semver from "semver";
 import { execaSync } from "execa";
 

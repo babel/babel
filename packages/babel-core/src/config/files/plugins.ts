@@ -3,16 +3,16 @@
  */
 
 import buildDebug from "debug";
-import path from "path";
+import path from "node:path";
 import type { Handler } from "gensync";
 import { isAsync } from "../../gensync-utils/async.ts";
 import loadCodeDefault, { supportsESM } from "./module-types.ts";
-import { fileURLToPath, pathToFileURL } from "url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { resolve as importMetaResolve } from "../../vendor/import-meta-resolve.js";
 
-import { createRequire } from "module";
-import { existsSync } from "fs";
+import { createRequire } from "node:module";
+import { existsSync } from "node:fs";
 const require = createRequire(import.meta.url);
 
 const debug = buildDebug("babel:config:loading:files:plugins");
