@@ -85,7 +85,7 @@ module.exports = function (api) {
   let ignoreLib = true;
   let needsPolyfillsForOldNode = false;
 
-  const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "16.20" : "6.9";
+  const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "20.19" : "6.9";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
