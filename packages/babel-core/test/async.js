@@ -15,7 +15,7 @@ import { itGte, itESM, itNegate, itSatisfies } from "$repo-utils";
 const nodeGte8 = itGte("8.0.0");
 const nodeGte14 = itGte("14.8.0");
 
-// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
+// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 22
 const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 describe("asynchronicity", () => {
