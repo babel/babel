@@ -121,6 +121,7 @@ export default [
       "unicorn/prefer-array-find": "error",
       "unicorn/prefer-array-index-of": "error",
       "unicorn/prefer-includes": "error",
+      "unicorn/prefer-node-protocol": "error",
       "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
