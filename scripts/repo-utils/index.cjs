@@ -1,9 +1,11 @@
+// NOTE: This file must be runnable on all Node.js version
 /* eslint-disable no-undef */
+/* eslint-disable unicorn/prefer-node-protocol */
 
-const path = require("node:path");
-const { readFileSync } = require("node:fs");
-const { fileURLToPath } = require("node:url");
-const { createRequire } = require("node:module");
+const path = require("path");
+const { readFileSync } = require("fs");
+const { fileURLToPath } = require("url");
+const { createRequire } = require("module");
 const semver = require("semver");
 
 exports.repoRoot = path.resolve(__dirname, "../../");

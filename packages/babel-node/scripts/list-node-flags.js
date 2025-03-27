@@ -1,8 +1,9 @@
 // NOTE: This file must be runnable on all Node.js version
+/* eslint-disable unicorn/prefer-node-protocol */
 
-const cp = require("node:child_process");
-const fs = require("node:fs");
-const path = require("node:path");
+const cp = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 const flags = require("../data/node-flags-with-value.json");
 const knownFlagsSet = new Set(flags);
