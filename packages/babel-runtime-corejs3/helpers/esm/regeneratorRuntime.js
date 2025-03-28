@@ -10,7 +10,7 @@ import _Promise from "core-js-pure/features/promise/index.js";
 import _reverseInstanceProperty from "core-js-pure/features/instance/reverse.js";
 import _sliceInstanceProperty from "core-js-pure/features/instance/slice.js";
 function _regeneratorRuntime() {
-  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
   _regeneratorRuntime = function _regeneratorRuntime() {
     return e;
   };
@@ -179,7 +179,7 @@ function _regeneratorRuntime() {
     }], _forEachInstanceProperty(t).call(t, pushTryEntry, this), this.reset(!0);
   }
   function values(e) {
-    if (e || "" === e) {
+    if (null != e) {
       var r = e[a];
       if (r) return r.call(e);
       if ("function" == typeof e.next) return e;
