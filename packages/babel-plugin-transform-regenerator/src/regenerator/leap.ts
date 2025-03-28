@@ -1,22 +1,26 @@
 import assert from "assert";
-import { Emitter } from "./emit";
+import { Emitter } from "./emit.ts";
 import { inherits } from "util";
-import { getTypes } from "./util";
+import { getTypes } from "./util.ts";
 
-function Entry() {
+function Entry(this: any) {
   assert.ok(this instanceof Entry);
 }
 
-function FunctionEntry(returnLoc) {
+export function FunctionEntry(this: any, returnLoc: any) {
   Entry.call(this);
   getTypes().assertLiteral(returnLoc);
   this.returnLoc = returnLoc;
 }
 
 inherits(FunctionEntry, Entry);
-exports.FunctionEntry = FunctionEntry;
 
-function LoopEntry(breakLoc, continueLoc, label) {
+export function LoopEntry(
+  this: any,
+  breakLoc: any,
+  continueLoc: any,
+  label: any,
+) {
   Entry.call(this);
 
   const t = getTypes();
@@ -36,18 +40,21 @@ function LoopEntry(breakLoc, continueLoc, label) {
 }
 
 inherits(LoopEntry, Entry);
-exports.LoopEntry = LoopEntry;
 
-function SwitchEntry(breakLoc) {
+export function SwitchEntry(this: any, breakLoc: any) {
   Entry.call(this);
   getTypes().assertLiteral(breakLoc);
   this.breakLoc = breakLoc;
 }
 
 inherits(SwitchEntry, Entry);
-exports.SwitchEntry = SwitchEntry;
 
-function TryEntry(firstLoc, catchEntry, finallyEntry) {
+export function TryEntry(
+  this: any,
+  firstLoc: any,
+  catchEntry: any,
+  finallyEntry: any,
+) {
   Entry.call(this);
 
   const t = getTypes();
@@ -74,9 +81,8 @@ function TryEntry(firstLoc, catchEntry, finallyEntry) {
 }
 
 inherits(TryEntry, Entry);
-exports.TryEntry = TryEntry;
 
-function CatchEntry(firstLoc, paramId) {
+export function CatchEntry(this: any, firstLoc: any, paramId: any) {
   Entry.call(this);
 
   const t = getTypes();
@@ -89,9 +95,8 @@ function CatchEntry(firstLoc, paramId) {
 }
 
 inherits(CatchEntry, Entry);
-exports.CatchEntry = CatchEntry;
 
-function FinallyEntry(firstLoc, afterLoc) {
+export function FinallyEntry(this: any, firstLoc: any, afterLoc: any) {
   Entry.call(this);
   const t = getTypes();
   t.assertLiteral(firstLoc);
@@ -101,9 +106,8 @@ function FinallyEntry(firstLoc, afterLoc) {
 }
 
 inherits(FinallyEntry, Entry);
-exports.FinallyEntry = FinallyEntry;
 
-function LabeledEntry(breakLoc, label) {
+export function LabeledEntry(this: any, breakLoc: any, label: any) {
   Entry.call(this);
 
   const t = getTypes();
@@ -116,39 +120,39 @@ function LabeledEntry(breakLoc, label) {
 }
 
 inherits(LabeledEntry, Entry);
-exports.LabeledEntry = LabeledEntry;
 
-function LeapManager(emitter) {
+export function LeapManager(this: any, emitter: any) {
   assert.ok(this instanceof LeapManager);
 
   assert.ok(emitter instanceof Emitter);
 
-  this.emitter = emitter;
-  this.entryStack = [new FunctionEntry(emitter.finalLoc)];
+  (this as any).emitter = emitter;
+  (this as any).entryStack = [
+    // @ts-expect-error -- TODO (regenerator import)
+    new FunctionEntry(emitter.finalLoc),
+  ];
 }
 
-let LMp = LeapManager.prototype;
-exports.LeapManager = LeapManager;
+const LMp = LeapManager.prototype;
 
-LMp.withEntry = function(entry, callback) {
+LMp.withEntry = function (entry: any, callback: any) {
   assert.ok(entry instanceof Entry);
   this.entryStack.push(entry);
   try {
     callback.call(this.emitter);
   } finally {
-    let popped = this.entryStack.pop();
+    const popped = this.entryStack.pop();
     assert.strictEqual(popped, entry);
   }
 };
 
-LMp._findLeapLocation = function(property, label) {
+LMp._findLeapLocation = function (property: any, label: any) {
   for (let i = this.entryStack.length - 1; i >= 0; --i) {
-    let entry = this.entryStack[i];
-    let loc = entry[property];
+    const entry = this.entryStack[i];
+    const loc = entry[property];
     if (loc) {
       if (label) {
-        if (entry.label &&
-            entry.label.name === label.name) {
+        if (entry.label && entry.label.name === label.name) {
           return loc;
         }
       } else if (entry instanceof LabeledEntry) {
@@ -163,10 +167,10 @@ LMp._findLeapLocation = function(property, label) {
   return null;
 };
 
-LMp.getBreakLoc = function(label) {
+LMp.getBreakLoc = function (label: any) {
   return this._findLeapLocation("breakLoc", label);
 };
 
-LMp.getContinueLoc = function(label) {
+LMp.getContinueLoc = function (label: any) {
   return this._findLeapLocation("continueLoc", label);
 };

@@ -3321,7 +3321,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    regenerator-transform: "npm:^0.15.2"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
