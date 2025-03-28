@@ -15,6 +15,80 @@ import {
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
 
+/**
+ * Generate Babel plugin for helpers processing
+ * The plugin will
+ * - rewrite relative imports to other helpers and remove .ts extension
+ * - collect function names to `noMangleFns` if `mangleFns` is `true`.
+ * @param {boolean} mangleFns Whether the function names in the helper should be mangled
+ * @param {string[]} noMangleFns A list of function names that should not be mangled
+ * @returns
+ */
+function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
+  /**
+   * @param {import("@babel/core").PluginAPI} api
+   * @returns {import("@babel/core").PluginObject}
+   */
+  return function BabelPluginProcessHelpers({ types: t }) {
+    /**
+     * @type {import("@babel/core").PluginObject}
+     */
+    const pluginObj = {
+      pre: undefined,
+      post: undefined,
+      visitor: {
+        ImportDeclaration(path) {
+          const source = path.node.source;
+          source.value = source.value.replace(/(^\.\/|\.ts$)/g, "");
+        },
+        FunctionDeclaration: mangleFns
+          ? path => {
+              if (
+                path.node.leadingComments?.find(c =>
+                  c.value.includes("@no-mangle")
+                )
+              ) {
+                const name = path.node.id.name;
+                if (name) noMangleFns.push(name);
+              }
+            }
+          : () => {},
+      },
+    };
+    if (!IS_BABEL_8() && process.env.IS_BABEL_OLD_E2E) {
+      // These pre/post hooks are needed because the TS transform is,
+      // when building in the old Babel e2e test, removing the
+      // `export { OverloadYield as default }` in the OverloadYield helper.
+      pluginObj.pre = file => {
+        file.metadata.exportName = null;
+        file.path.traverse({
+          ExportSpecifier(path) {
+            if (path.node.exported.name === "default") {
+              file.metadata.exportName = path.node.local.name;
+            }
+          },
+        });
+      };
+      pluginObj.post = file => {
+        if (!process.env.IS_BABEL_OLD_E2E) return;
+        if (!file.metadata.exportName) return;
+        file.path.traverse({
+          ExportNamedDeclaration(path) {
+            if (!path.node.declaration && path.node.specifiers.length === 0) {
+              path.node.specifiers.push(
+                t.exportSpecifier(
+                  t.identifier(file.metadata.exportName),
+                  t.identifier("default")
+                )
+              );
+            }
+          },
+        });
+      };
+    }
+    return pluginObj;
+  };
+}
 export default async function generateHelpers() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
@@ -93,66 +167,7 @@ const helpers: Record<string, Helper> = {
           },
         ],
       ],
-      plugins: [
-        /**
-         * @type {import("@babel/core").PluginObj}
-         */
-        ({ types: t }) => ({
-          // These pre/post hooks are needed because the TS transform is,
-          // when building in the old Babel e2e test, removing the
-          // `export { OverloadYield as default }` in the OverloadYield helper.
-          // TODO: Remove in Babel 8.
-          pre(file) {
-            if (!process.env.IS_BABEL_OLD_E2E) return;
-            file.metadata.exportName = null;
-            file.path.traverse({
-              ExportSpecifier(path) {
-                if (path.node.exported.name === "default") {
-                  file.metadata.exportName = path.node.local.name;
-                }
-              },
-            });
-          },
-          post(file) {
-            if (!process.env.IS_BABEL_OLD_E2E) return;
-            if (!file.metadata.exportName) return;
-            file.path.traverse({
-              ExportNamedDeclaration(path) {
-                if (
-                  !path.node.declaration &&
-                  path.node.specifiers.length === 0
-                ) {
-                  path.node.specifiers.push(
-                    t.exportSpecifier(
-                      t.identifier(file.metadata.exportName),
-                      t.identifier("default")
-                    )
-                  );
-                }
-              },
-            });
-          },
-          visitor: {
-            ImportDeclaration(path) {
-              const source = path.node.source;
-              source.value = source.value
-                .replace(/\.ts$/, "")
-                .replace(/^\.\//, "");
-            },
-            FunctionDeclaration(path) {
-              if (
-                mangleFns &&
-                path.node.leadingComments?.find(c =>
-                  c.value.includes("@no-mangle")
-                )
-              ) {
-                const name = path.node.id.name;
-                if (name) noMangleFns.push(name);
-              }
-            },
-          },
-        }),
-      ],
+      plugins: [BabelPluginProcessHelpersFactory(mangleFns, noMangleFns)],
     }).code;
     code = (
       await minify(code, {

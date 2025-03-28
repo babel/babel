@@ -497,7 +497,6 @@ option \`forceAllTransforms: true\` instead.
       ) {
         // For backward compatibility with the import-assertions plugin, we
         // allow the deprecated `assert` keyword.
-        // TODO(Babel 8): Revisit this.
         return [getPlugin(pluginName), { deprecatedAssertSyntax: true }];
       }
       return [
