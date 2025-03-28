@@ -3,7 +3,7 @@ import type { Handler } from "gensync";
 import { makeStrongCache } from "../caching.ts";
 import type { CacheConfigurator } from "../caching.ts";
 import * as fs from "../../gensync-utils/fs.ts";
-import nodeFs from "fs";
+import nodeFs from "node:fs";
 
 export function makeStaticFileCache<T>(
   fn: (filepath: string, contents: string) => T,

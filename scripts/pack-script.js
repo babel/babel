@@ -1,12 +1,12 @@
-import path from "path";
-import { readFileSync, writeFileSync } from "fs";
+import path from "node:path";
+import { readFileSync, writeFileSync } from "node:fs";
 import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
 import terser from "@rollup/plugin-terser";
 import { commonJS } from "$repo-utils";
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 const { __dirname, require } = commonJS(import.meta.url);
 

@@ -1,5 +1,5 @@
-import fs from "fs";
-import { createRequire } from "module";
+import fs from "node:fs";
+import { createRequire } from "node:module";
 import { describeGte } from "$repo-utils";
 const require = createRequire(import.meta.url);
 

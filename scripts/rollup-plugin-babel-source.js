@@ -1,7 +1,7 @@
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const monorepoRoot = path.join(

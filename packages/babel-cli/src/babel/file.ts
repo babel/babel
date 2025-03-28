@@ -1,8 +1,8 @@
 import convertSourceMap from "convert-source-map";
 import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
 import slash from "slash";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as util from "./util.ts";
 import type { CmdOptions } from "./options.ts";

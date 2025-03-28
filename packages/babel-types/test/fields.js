@@ -1,9 +1,9 @@
 import * as t from "../lib/index.js";
 import glob from "glob";
-import { readFileSync } from "fs";
-import { inspect } from "util";
+import { readFileSync } from "node:fs";
+import { inspect } from "node:util";
 import { commonJS, IS_BABEL_8 } from "$repo-utils";
-import path from "path";
+import path from "node:path";
 
 const { __dirname } = commonJS(import.meta.url);
 

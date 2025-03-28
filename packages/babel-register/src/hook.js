@@ -32,7 +32,7 @@ if (!process.env.BABEL_8_BREAKING) {
   // All the `!process.env.BABEL_8_BREAKING` code in this file is for
   // this purpose.
 
-  const Module = require("module");
+  const Module = require("node:module");
 
   let compiling = false;
   const internalModuleCache = Module._cache;

@@ -7,7 +7,7 @@
 
 // TODO: Remove this file in Babel 8
 
-const Module = require("module");
+const Module = require("node:module");
 
 const globalModuleCache = Module._cache;
 const internalModuleCache = Object.create(null);

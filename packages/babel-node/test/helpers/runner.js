@@ -1,5 +1,5 @@
-import path from "path";
-import { writeFileSync } from "fs";
+import path from "node:path";
+import { writeFileSync } from "node:fs";
 import { commonJS } from "$repo-utils";
 import {
   buildProcessTests,

@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" with { type: "json" };
 
 function importJSON(path) {

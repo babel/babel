@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import colors from "picocolors";
 import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 

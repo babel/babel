@@ -1,6 +1,6 @@
 "use strict";
 
-import assert from "assert";
+import assert from "node:assert";
 import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";

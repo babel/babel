@@ -1,7 +1,7 @@
 import { Linter, ESLint } from "eslint";
 import unpad from "dedent";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   eslintConfigCompat,
   babelESLintParserPath,

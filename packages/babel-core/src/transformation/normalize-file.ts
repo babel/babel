@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";

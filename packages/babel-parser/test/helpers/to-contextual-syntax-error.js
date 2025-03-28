@@ -1,5 +1,5 @@
 import { codeFrameColumns } from "@babel/code-frame";
-import { runInThisContext } from "vm";
+import { runInThisContext } from "node:vm";
 
 export default function toContextualSyntaxError(
   error,

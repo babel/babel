@@ -1,7 +1,7 @@
-import path from "path";
+import path from "node:path";
 import runFixtureTests from "./helpers/run-fixture-tests.js";
 import { parse } from "../lib/index.js";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import { VISITOR_KEYS } from "@babel/types";
 
 runFixtureTests(

@@ -1,9 +1,9 @@
-import path from "path";
-import fs from "fs";
-import { createRequire } from "module";
+import path from "node:path";
+import fs from "node:fs";
+import { createRequire } from "node:module";
 import * as helpers from "@babel/helpers";
 import { transformFromAstSync, template, types as t } from "@babel/core";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 import transformRuntime from "../lib/index.js";
 import corejs2Definitions from "./runtime-corejs2-definitions.js";

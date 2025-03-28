@@ -2,7 +2,7 @@
 /* eslint no-var: 0 */
 
 var parser = require("..");
-var fs = require("fs");
+var fs = require("node:fs");
 
 var filename = process.argv[2];
 if (!filename) {

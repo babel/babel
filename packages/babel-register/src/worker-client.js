@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("node:path");
 
 const ACTIONS = {
   GET_DEFAULT_EXTENSIONS: "GET_DEFAULT_EXTENSIONS",
@@ -51,7 +51,7 @@ exports.WorkerClient = class WorkerClient extends Client {
 
   /** @type {typeof import("worker_threads")} */
   static get #worker_threads() {
-    return require("worker_threads");
+    return require("node:worker_threads");
   }
 
   static get #markInRegisterWorker() {

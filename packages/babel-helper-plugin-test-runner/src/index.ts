@@ -1,6 +1,6 @@
 import testRunner from "@babel/helper-transform-fixture-test-runner";
-import path from "path";
-import { URL } from "url";
+import path from "node:path";
+import { URL } from "node:url";
 
 export default function (loc: string) {
   if (!process.env.BABEL_8_BREAKING) {

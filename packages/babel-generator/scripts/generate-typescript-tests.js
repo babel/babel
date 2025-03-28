@@ -1,8 +1,8 @@
 /*
 Copies tests from the @babel/parser's TypeScript test suite to @babel/generator.
 */
-const fs = require("fs");
-const { join } = require("path");
+const fs = require("node:fs");
+const { join } = require("node:path");
 
 const testsFrom = join(
   __dirname,

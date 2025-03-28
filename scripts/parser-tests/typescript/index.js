@@ -1,6 +1,6 @@
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 import TestRunner from "../utils/parser-test-runner.js";
 import ErrorCodes from "./error-codes.js";
 

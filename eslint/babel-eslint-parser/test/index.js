@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";

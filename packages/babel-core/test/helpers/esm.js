@@ -1,6 +1,6 @@
-import cp from "child_process";
-import util from "util";
-import path from "path";
+import cp from "node:child_process";
+import util from "node:util";
+import path from "node:path";
 import { USE_ESM, commonJS } from "$repo-utils";
 
 import * as babel from "../../lib/index.js";

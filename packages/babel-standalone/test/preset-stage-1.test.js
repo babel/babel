@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { itBabel7 } from "$repo-utils";
 const require = createRequire(import.meta.url);
 
