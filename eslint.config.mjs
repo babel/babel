@@ -57,6 +57,7 @@ export default [
       "packages/babel-parser/test/expressions",
       "packages/babel-core/src/vendor",
       "packages/babel-parser/typings/**/*",
+      "packages/babel-plugin-transform-regenerator/test/regenerator-fixtures",
       "eslint/*/lib",
       "eslint/*/node_modules",
       "eslint/*/test/fixtures",

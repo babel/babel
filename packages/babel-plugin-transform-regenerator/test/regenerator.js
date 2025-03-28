@@ -5,133 +5,179 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-var fs = require("fs");
-var path = require("path");
-var semver = require("semver");
-var spawn = require("child_process").spawn;
-var babel = require("@babel/core");
-var checkDuplicatedNodes = require("babel-check-duplicated-nodes").default;
-var regenerator = require("../main");
-var mochaDir = path.dirname(require.resolve("mocha"));
+import {
+  readFile,
+  writeFileSync,
+  copyFileSync,
+  mkdirSync,
+  readFileSync,
+} from "fs";
+import { dirname, join } from "path";
+import { spawn } from "child_process";
+import { transformSync } from "@babel/core";
+import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
+const checkDuplicatedNodes =
+  _checkDuplicatedNodes.default || _checkDuplicatedNodes;
+
+import { describeGte } from "$repo-utils";
+
+import pluginTransformRegenerator from "../lib/index.js";
+
+import pluginTransformClasses from "@babel/plugin-transform-classes";
+import pluginTransformForOf from "@babel/plugin-transform-for-of";
+import pluginTransformBlockScoping from "@babel/plugin-transform-block-scoping";
+import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functions";
+import pluginTransformParameters from "@babel/plugin-transform-parameters";
+import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
+
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+const require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const mochaDir = dirname(require.resolve("mocha"));
+
+// https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/packages/preset/index.js#L9
+const regeneratorPreset = [
+  pluginProposalFunctionSent,
+  pluginTransformClasses,
+  pluginTransformArrowFunctions,
+  pluginTransformBlockScoping,
+  pluginTransformForOf,
+  pluginTransformRegenerator,
+];
 
 function convert(es6File, es5File, callback) {
-  var transformOptions = {
-    presets:[require("regenerator-preset")],
+  const transformOptions = {
+    plugins: regeneratorPreset,
     parserOpts: {
       strictMode: false,
     },
-    ast: true
+    ast: true,
+    configFile: false,
   };
 
-  fs.readFile(es6File, "utf-8", function(err, es6) {
+  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
     if (err) {
       return callback(err);
     }
 
-    var { code: es5, ast } = babel.transformSync(es6, transformOptions);
-    fs.writeFileSync(es5File, es5);
+    const { code: es5, ast } = transformSync(es6, transformOptions);
+    writeFileSync(join(__dirname, es5File), es5);
     try {
-      checkDuplicatedNodes(babel, ast);
+      checkDuplicatedNodes(ast);
     } catch (err) {
-      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
+      err.message =
+        "Occurred while transforming: " + es6File + "\n" + err.message;
       throw err;
     }
     callback();
   });
 }
 
-function bundle(es5Files, browserFile, callback) {
-  var bundle = require("browserify")();
-  es5Files.forEach(bundle.add, bundle);
-  bundle.bundle(function(err, src) {
-    if (err) {
-      return callback(err);
-    }
-    fs.writeFile(browserFile, src, callback);
-  });
-}
-
-var queue = [];
-function enqueue(cmd, args, quiet) {
-  queue.push({
-    cmd: cmd,
-    args: args || [],
-    quiet: !!quiet
-  });
-}
-
-function flush() {
-  var entry = queue.shift();
-  if (entry) {
-    var cmd = entry.cmd;
+function enqueue(cmd, args = []) {
+  describe("regenerator", () => {
     if (typeof cmd === "function") {
-      cmd.apply(null, entry.args.concat(asyncCallback));
+      it(`${cmd.name} (${args.join(", ")})`, () =>
+        new Promise((resolve, reject) =>
+          cmd(...args, err => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }),
+        ));
+    } else if (cmd === "mocha") {
+      // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
+      describeGte("12.0.0")("mocha", () => {
+        it(`${args.join(" ")}`, () =>
+          new Promise((resolve, reject) => {
+            let stdout = "";
+            let stderr = "";
+            const cp = spawn(
+              process.execPath,
+              [
+                join(mochaDir, "bin", "mocha.js"),
+                "--reporter",
+                "spec",
+                ...args,
+              ],
+              { cwd: __dirname },
+            );
+            cp.stdout.on("data", chunk => {
+              stdout += chunk;
+            });
+            cp.stderr.on("data", chunk => {
+              stderr += chunk;
+            });
+            cp.on("exit", async err => {
+              if (err) {
+                reject(new Error(`STDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
+              } else {
+                resolve();
+              }
+            });
+          }));
+      });
     } else {
-      spawn(cmd, entry.args, {
-        stdio: [
-          process.stdin,
-          entry.quiet ? "ignore" : process.stdout,
-          process.stderr
-        ]
-      }).on("exit", asyncCallback);
+      it(`${cmd} ${args.join(" ")}`, () =>
+        new Promise((resolve, reject) => {
+          const cp = spawn(cmd, args, { cwd: __dirname });
+          let stderr = "";
+          cp.stderr.on("data", chunk => {
+            stderr += chunk;
+          });
+          cp.on("exit", async err => {
+            if (err) {
+              reject(new Error("Exited with " + err + "\n" + stderr));
+            } else {
+              resolve();
+            }
+          });
+        }));
     }
-  }
+  });
 }
 
-function asyncCallback(err) {
-  if (err) {
-    console.error("process exited abnormally:", err);
-    process.exit(typeof err === "number" ? err : -1);
-  } else {
-    process.nextTick(flush);
-  }
-}
-
-function makeMochaCopyFunction(fileName) {
-  return function copy(callback) {
-    var src = path.join(mochaDir, fileName);
-    var dst = path.join(__dirname, fileName);
-    fs.unlink(dst, function() {
-      fs.symlink(src, dst, callback);
-    });
-  };
-}
+try {
+  mkdirSync(join(__dirname, "regenerator-fixtures/tmp"));
+} catch {}
+// TODO: Remove fallback aftr dropping Node.js 6
+// "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
+(copyFileSync || ((from, to) => writeFileSync(to, readFileSync(from))))(
+  join(__dirname, "./regenerator-fixtures/shared.js"),
+  join(__dirname, "./regenerator-fixtures/tmp/shared.js"),
+);
 
 enqueue(convert, [
-  "./test/tests.es6.js",
-  "./test/tests.es5.js"
-]);
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue(convert, [
-    "./test/tests-node4.es6.js",
-    "./test/tests-node4.es5.js"
-  ]);
-} else {
-  // we are on an older platform, but we still need to create an empty
-  // tests-node4.es5.js file so that the test commands below have a file to refer
-  // to.
-  fs.writeFileSync("./test/tests-node4.es5.js", "");
-}
-
-enqueue(convert, [
-  "./test/non-native.js",
-  "./test/non-native.es5.js"
+  "./regenerator-fixtures/tests.es6.js",
+  "./regenerator-fixtures/tmp/tests.es5.js",
 ]);
 
 enqueue(convert, [
-  "./test/async.js",
-  "./test/async.es5.js"
+  "./regenerator-fixtures/tests-node4.es6.js",
+  "./regenerator-fixtures/tmp/tests-node4.es5.js",
 ]);
 
 enqueue(convert, [
-  "./test/class.js",
-  "./test/class.es5.js"
+  "./regenerator-fixtures/non-native.js",
+  "./regenerator-fixtures/tmp/non-native.es5.js",
+]);
+
+enqueue(convert, [
+  "./regenerator-fixtures/async.js",
+  "./regenerator-fixtures/tmp/async.es5.js",
+]);
+
+enqueue(convert, [
+  "./regenerator-fixtures/class.js",
+  "./regenerator-fixtures/tmp/class.es5.js",
 ]);
 
 enqueue(convertWithRegeneratorPluginOnly, [
-  "./test/class.js",
-  "./test/class.regenerator.js"
+  "./regenerator-fixtures/class.js",
+  "./regenerator-fixtures/tmp/class.regenerator.js",
 ]);
 
 Error.stackTraceLimit = 1000;
@@ -140,30 +186,32 @@ Error.stackTraceLimit = 1000;
  * Comvert without using the preset (which also transforms things like classes and arrows)
  */
 function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
-  var transformOptions = {
-    plugins:[require("regenerator-transform")],
+  const transformOptions = {
+    plugins: [pluginTransformRegenerator],
     parserOpts: {
       sourceType: "module",
       allowImportExportEverywhere: true,
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       strictMode: false,
-      plugins: ["*", "jsx", "flow"]
+      plugins: ["*", "jsx", "flow"],
     },
-    ast: true
+    ast: true,
+    configFile: false,
   };
 
-  fs.readFile(inputFile, "utf-8", function(err, input) {
+  readFile(join(__dirname, inputFile), "utf-8", function (err, input) {
     if (err) {
       return callback(err);
     }
 
-    var { code: output, ast } = babel.transformSync(input, transformOptions);
-    fs.writeFileSync(outputFile, output);
+    const { code: output, ast } = transformSync(input, transformOptions);
+    writeFileSync(join(__dirname, outputFile), output);
     try {
-      checkDuplicatedNodes(babel, ast);
+      checkDuplicatedNodes(ast);
     } catch (err) {
-      err.message = "Occurred while transforming: " + inputFile + "\n" + err.message;
+      err.message =
+        "Occurred while transforming: " + inputFile + "\n" + err.message;
       throw err;
     }
     callback();
@@ -171,33 +219,32 @@ function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
 }
 
 function convertWithParamsTransform(es6File, es5File, callback) {
-  var transformOptions = {
-    presets:[require("regenerator-preset")],
-    plugins: [
-      require("@babel/plugin-transform-parameters")
-    ],
+  const transformOptions = {
+    plugins: [pluginTransformParameters, ...regeneratorPreset],
     parserOpts: {
       sourceType: "module",
       allowImportExportEverywhere: true,
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       strictMode: false,
-      plugins: ["*", "jsx", "flow"]
+      plugins: ["*", "jsx", "flow"],
     },
-    ast: true
+    ast: true,
+    configFile: false,
   };
 
-  fs.readFile(es6File, "utf-8", function(err, es6) {
+  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
     if (err) {
       return callback(err);
     }
 
-    var { code: es5, ast } = babel.transformSync(es6, transformOptions);
-    fs.writeFileSync(es5File, es5);
+    const { code: es5, ast } = transformSync(es6, transformOptions);
+    writeFileSync(join(__dirname, es5File), es5);
     try {
-      checkDuplicatedNodes(babel, ast);
+      checkDuplicatedNodes(ast);
     } catch (err) {
-      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
+      err.message =
+        "Occurred while transforming: " + es6File + "\n" + err.message;
       throw err;
     }
     callback();
@@ -205,55 +252,63 @@ function convertWithParamsTransform(es6File, es5File, callback) {
 }
 
 enqueue(convertWithParamsTransform, [
-  "./test/regression.js",
-  "./test/regression.es5.js"
+  "./regenerator-fixtures/regression.js",
+  "./regenerator-fixtures/tmp/regression.es5.js",
 ]);
 
 function convertWithCustomPromiseReplacer(es6File, es5File, callback) {
-  var transformOptions = {
-    presets: [require("regenerator-preset")],
-    plugins: [function(babel) {
-      return {
-        visitor: {
-          FunctionExpression: {
-            exit(path) {
-              const stmt = path.get("body.body").find(function (stmt) {
-                return stmt.isLabeledStatement() &&
-                  stmt.get("label").isIdentifier({ name: "babelInjectPromise" });
-              });
-              if (!stmt) return;
+  const transformOptions = {
+    plugins: [
+      function (babel) {
+        return {
+          visitor: {
+            FunctionExpression: {
+              exit(path) {
+                const stmt = path.get("body.body").find(function (stmt) {
+                  return (
+                    stmt.isLabeledStatement() &&
+                    stmt
+                      .get("label")
+                      .isIdentifier({ name: "babelInjectPromise" })
+                  );
+                });
+                if (!stmt) return;
 
-              path.traverse({
-                ReferencedIdentifier(path) {
-                  if (path.node.name === "Promise") {
-                    path.replaceWith(
-                      babel.types.cloneNode(stmt.node.body.expression)
-                    );
-                  }
-                }
-              });
-            }
-          }
-        }
-      };
-    }],
+                path.traverse({
+                  ReferencedIdentifier(path) {
+                    if (path.node.name === "Promise") {
+                      path.replaceWith(
+                        babel.types.cloneNode(stmt.node.body.expression),
+                      );
+                    }
+                  },
+                });
+              },
+            },
+          },
+        };
+      },
+      ...regeneratorPreset,
+    ],
     parserOpts: {
       strictMode: false,
     },
-    ast: true
+    ast: true,
+    configFile: false,
   };
 
-  fs.readFile(es6File, "utf-8", function(err, es6) {
+  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
     if (err) {
       return callback(err);
     }
 
-    var { code: es5, ast } = babel.transformSync(es6, transformOptions);
-    fs.writeFileSync(es5File, es5);
+    const { code: es5, ast } = transformSync(es6, transformOptions);
+    writeFileSync(join(__dirname, es5File), es5);
     try {
-      checkDuplicatedNodes(babel, ast);
+      checkDuplicatedNodes(ast);
     } catch (err) {
-      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
+      err.message =
+        "Occurred while transforming: " + es6File + "\n" + err.message;
       callback(err);
     }
     callback();
@@ -261,165 +316,28 @@ function convertWithCustomPromiseReplacer(es6File, es5File, callback) {
 }
 
 enqueue(convertWithCustomPromiseReplacer, [
-  "./test/async-custom-promise.js",
-  "./test/async-custom-promise.es5.js"
-])
-
-enqueue(makeMochaCopyFunction("mocha.js"));
-enqueue(makeMochaCopyFunction("mocha.css"));
-
-// uglify-js does not work properly due to Node 0.11.7 bug.
-// (https://github.com/joyent/node/issues/6235)
-if (!semver.eq(process.version, "0.11.7")) {
-  try {
-    require.resolve("browserify"); // Throws if missing.
-    enqueue(bundle, [
-      [
-        "./test/runtime.js",
-        "./test/tests.es5.js",
-        "./test/tests-node4.es5.js",
-        "./test/non-native.es5.js",
-        "./test/async.es5.js",
-        "./test/regression.es5.js"
-      ],
-      "./test/tests.browser.js"
-    ]);
-  } catch (ignored) {
-    console.error("browserify not installed; skipping bundle step");
-  }
-}
-
-enqueue("mocha", [
-  "--reporter", "spec",
-  "--require", "./test/runtime.js",
-  "./test/tests.es5.js",
-  "./test/tests-node4.es5.js",
-  "./test/non-native.es5.js",
-  "./test/async.es5.js",
-  "./test/async-custom-promise.es5.js",
-  "./test/regression.es5.js",
-  "./test/tests.transform.js"
+  "./regenerator-fixtures/async-custom-promise.js",
+  "./regenerator-fixtures/tmp/async-custom-promise.es5.js",
 ]);
 
-// Run command-line tool with available options to make sure it works.
-
-enqueue("./bin/regenerator", [
-  "./test/async.es5.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "./test/async.es5.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--disable-async",
-  "./test/async.es5.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "--disable-async",
-  "./test/async.es5.js"
-], true);
-
-// Make sure we run the command-line tool on a file that does not need any
-// transformation, too.
-
-enqueue("./bin/regenerator", [
-  "./test/nothing-to-transform.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "./test/nothing-to-transform.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--disable-async",
-  "./test/nothing-to-transform.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "--disable-async",
-  "./test/nothing-to-transform.js"
-], true);
-
-// Make sure we run the command-line tool on a file that would trigger this error:
-//
-//     You passed `path.replaceWith()` a falsy node, use `path.remove()` instead
-
-enqueue("./bin/regenerator", [
-  "./test/replaceWith-falsy.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "./test/replaceWith-falsy.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--disable-async",
-  "./test/replaceWith-falsy.js"
-], true);
-
-enqueue("./bin/regenerator", [
-  "--include-runtime",
-  "--disable-async",
-  "./test/replaceWith-falsy.js"
-], true);
-
-enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "--require", "./test/runtime.js",
-  "./test/tests.es5.js",
+enqueue(convert, [
+  "./regenerator-fixtures/replaceWith-falsy.js",
+  "./regenerator-fixtures/tmp/replaceWith-falsy.es5.js",
 ]);
 
-enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "--require", "./test/runtime.js",
-  "./test/async.es5.js",
-]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/regression.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tests.transform.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
 
-if (semver.gte(process.version, "6.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/class.regenerator.js",
-  ]);
-}
-enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "--require", "./test/runtime.js",
-  "./test/class.es5.js",
-]);
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "--require", "./test/runtime.js",
-    "./test/tests-node4.es6.js",
-  ]);
-}
-
-if (semver.gte(process.version, "4.0.0")) {
-  enqueue("mocha", [
-    "--harmony",
-    "--reporter", "spec",
-    "./test/non-writable-tostringtag-property.js",
-  ]);
-}
+enqueue("mocha", ["./regenerator-fixtures/tests-node4.es6.js"]);
 
 enqueue("mocha", [
-  "--harmony",
-  "--reporter", "spec",
-  "./test/frozen-intrinsics.js",
+  "./regenerator-fixtures/non-writable-tostringtag-property.js",
 ]);
 
-flush();
+enqueue("mocha", ["./regenerator-fixtures/frozen-intrinsics.js"]);

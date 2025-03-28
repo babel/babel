@@ -6,17 +6,17 @@
  */
 
 var assert = require("assert");
-var runningInTranslation = /\.wrap\(/.test(function*(){});
+var runningInTranslation = /\.wrap\(/.test(function* () {});
 var shared = require("./shared.js");
 var Symbol = shared.Symbol;
 var check = shared.check;
 var assertAlreadyFinished = shared.assertAlreadyFinished;
-var fullCompatibility = runningInTranslation ||
-  require("semver").gte(process.version, "7.0.0");
+var fullCompatibility =
+  runningInTranslation || require("semver").gte(process.version, "7.0.0");
 
 assert(
-  function*() {}.toString().indexOf("regenerator") !== -1,
-  "regenerator-transform should be enabled"
+  function* () {}.toString().indexOf("regenerator") !== -1,
+  "regenerator-transform should be enabled",
 );
 
 // A version of `throw` whose behavior can't be statically analyzed.
@@ -25,32 +25,9 @@ function raise(argument) {
   throw argument;
 }
 
-describe("regeneratorRuntime", function() {
-  it("should be defined globally", function() {
-    var global = Function("return this")();
-    assert.ok("regeneratorRuntime" in global);
-    assert.strictEqual(global.regeneratorRuntime, regeneratorRuntime);
-  });
-
-  it("should have a .wrap method", function() {
-    assert.strictEqual(typeof regeneratorRuntime.wrap, "function");
-  });
-
-  it("should have a .mark method", function() {
-    assert.strictEqual(typeof regeneratorRuntime.mark, "function");
-  });
-
-  it("should be the object name returned by util.runtimeProperty", function() {
-    assert.strictEqual(
-      require("../lib/util").runtimeProperty("foo").object.name,
-      "regeneratorRuntime"
-    );
-  });
-});
-
-describe("simple argument yielder", function() {
-  it("should yield only its first argument", function() {
-    function *gen(x) {
+describe("simple argument yielder", function () {
+  it("should yield only its first argument", function () {
+    function* gen(x) {
       yield x;
     }
 
@@ -58,8 +35,10 @@ describe("simple argument yielder", function() {
     check(gen("foo", "bar"), ["foo"]);
   });
 
-  it("should support multiple yields in expression", function() {
-    function *gen() { return (yield 0) + (yield 0); }
+  it("should support multiple yields in expression", function () {
+    function* gen() {
+      return (yield 0) + (yield 0);
+    }
     var itr = gen();
     itr.next();
     itr.next(1);
@@ -67,24 +46,24 @@ describe("simple argument yielder", function() {
   });
 });
 
-function *range(n) {
+function* range(n) {
   for (var i = 0; i < n; ++i) {
     yield i;
   }
 }
 
-describe("range generator", function() {
-  it("should yield the empty range", function() {
+describe("range generator", function () {
+  it("should yield the empty range", function () {
     check(range(0), []);
-  })
+  });
 
-  it("should yield the range 0..n-1", function() {
+  it("should yield the range 0..n-1", function () {
     check(range(5), [0, 1, 2, 3, 4]);
   });
 });
 
-describe("collatz generator", function() {
-  function *gen(n) {
+describe("collatz generator", function () {
+  function* gen(n) {
     var count = 0;
 
     yield n;
@@ -93,9 +72,9 @@ describe("collatz generator", function() {
       count += 1;
 
       if (n % 2) {
-        yield n = n * 3 + 1;
+        yield (n = n * 3 + 1);
       } else {
-        yield n >>= 1;
+        yield (n >>= 1);
       }
     }
 
@@ -123,26 +102,25 @@ describe("collatz generator", function() {
   var fiftyTwo = seven.slice(seven.indexOf(52));
   var eightyTwo = collatz(82);
 
-  it("seven", function() {
+  it("seven", function () {
     check(gen(7), seven, 16);
   });
 
-  it("fifty two", function() {
+  it("fifty two", function () {
     check(gen(52), fiftyTwo, 11);
   });
 
-  it("eighty two", function() {
+  it("eighty two", function () {
     check(gen(82), eightyTwo, 110);
   });
 });
 
-describe("try-catch generator", function() {
-  function *usingThrow(x) {
+describe("try-catch generator", function () {
+  function* usingThrow(x) {
     yield 0;
     try {
       yield 1;
-      if (x % 2 === 0)
-        throw 2;
+      if (x % 2 === 0) throw 2;
       yield x;
     } catch (x) {
       yield x;
@@ -150,12 +128,11 @@ describe("try-catch generator", function() {
     yield 3;
   }
 
-  function *usingRaise(x) {
+  function* usingRaise(x) {
     yield 0;
     try {
       yield 1;
-      if (x % 2 === 0)
-        raise(2);
+      if (x % 2 === 0) raise(2);
       yield x;
     } catch (x) {
       yield x;
@@ -163,29 +140,29 @@ describe("try-catch generator", function() {
     yield 3;
   }
 
-  it("should catch static exceptions properly", function() {
+  it("should catch static exceptions properly", function () {
     check(usingThrow(4), [0, 1, 2, 3]);
     check(usingThrow(5), [0, 1, 5, 3]);
   });
 
-  it("should catch dynamic exceptions properly", function() {
+  it("should catch dynamic exceptions properly", function () {
     check(usingRaise(4), [0, 1, 2, 3]);
     check(usingRaise(5), [0, 1, 5, 3]);
   });
 });
 
-describe("nested generators in try-catch", function() {
-  function *gen() {
+describe("nested generators in try-catch", function () {
+  function* gen() {
     try {
-       nonExistent;
+      nonExistent;
     } catch (e) {
       yield function* () {
         yield e;
-      }
+      };
     }
   }
 
-  it('should get a reference to the caught error', function () {
+  it("should get a reference to the caught error", function () {
     var genFun2 = gen().next().value;
     assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
     var gen2 = genFun2();
@@ -195,11 +172,10 @@ describe("nested generators in try-catch", function() {
     // across browsers (if we ever want to run tests in browsers).
     assert.ok(res.value.message.match(/nonExistent/));
   });
-
 });
 
-describe("try-finally generator", function() {
-  function *usingThrow(condition) {
+describe("try-finally generator", function () {
+  function* usingThrow(condition) {
     yield 0;
     try {
       yield 1;
@@ -215,7 +191,7 @@ describe("try-finally generator", function() {
     }
   }
 
-  function *usingRaise(condition) {
+  function* usingRaise(condition) {
     yield 0;
     try {
       yield 1;
@@ -231,7 +207,7 @@ describe("try-finally generator", function() {
     }
   }
 
-  function *usingAbrupt(abruptType, finallyAbruptType) {
+  function* usingAbrupt(abruptType, finallyAbruptType) {
     yield 0;
     for (;;) {
       try {
@@ -244,8 +220,7 @@ describe("try-finally generator", function() {
           abruptType = "return";
           continue;
         }
-      }
-      finally {
+      } finally {
         yield 3;
         if (finallyAbruptType === "return") {
           return 4;
@@ -260,50 +235,50 @@ describe("try-finally generator", function() {
     return 5;
   }
 
-  it("should honor return", function() {
+  it("should honor return", function () {
     check(usingAbrupt("return", null), [0, 1, 3], 2);
   });
 
-  it("should honor break", function() {
+  it("should honor break", function () {
     check(usingAbrupt("break", null), [0, 1, 3], 5);
   });
 
-  it("should honor continue", function() {
+  it("should honor continue", function () {
     check(usingAbrupt("continue", null), [0, 1, 3, 1, 3], 2);
   });
 
-  it("should override abrupt with return", function() {
+  it("should override abrupt with return", function () {
     check(usingAbrupt("return", "return"), [0, 1, 3], 4);
     check(usingAbrupt("break", "return"), [0, 1, 3], 4);
     check(usingAbrupt("continue", "return"), [0, 1, 3], 4);
   });
 
-  it("should override abrupt with break", function() {
+  it("should override abrupt with break", function () {
     check(usingAbrupt("return", "break"), [0, 1, 3], 5);
     check(usingAbrupt("break", "break"), [0, 1, 3], 5);
     check(usingAbrupt("continue", "break"), [0, 1, 3], 5);
   });
 
-  it("should override abrupt with continue", function() {
+  it("should override abrupt with continue", function () {
     check(usingAbrupt("return", "continue"), [0, 1, 3, 1, 3], 2);
     check(usingAbrupt("break", "continue"), [0, 1, 3, 1, 3], 5);
     check(usingAbrupt("continue", "continue"), [0, 1, 3, 1, 3], 2);
   });
 
-  it("should execute finally blocks statically", function() {
+  it("should execute finally blocks statically", function () {
     check(usingThrow(true), [0, 1, 4], 5);
     check(usingThrow(false), [0, 1, 6], 7);
   });
 
-  it("should execute finally blocks dynamically", function() {
+  it("should execute finally blocks dynamically", function () {
     check(usingRaise(true), [0, 1, 4], 5);
     check(usingRaise(false), [0, 1, 6], 7);
   });
 
-  it("should execute finally blocks before throwing", function() {
+  it("should execute finally blocks before throwing", function () {
     var uncaughtError = new Error("uncaught");
 
-    function *uncaught(condition) {
+    function* uncaught(condition) {
       try {
         yield 0;
         if (condition) {
@@ -333,11 +308,11 @@ describe("try-finally generator", function() {
     }
   });
 
-  it("should throw correct error when finally contains catch", function() {
+  it("should throw correct error when finally contains catch", function () {
     var right = new Error("right");
     var wrong = new Error("wrong");
 
-    function *gen() {
+    function* gen() {
       try {
         yield 0;
         raise(right);
@@ -356,17 +331,17 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(g.next(), {
       value: 0,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(), {
       value: 2,
-      done: false
+      done: false,
     });
 
     try {
@@ -377,8 +352,8 @@ describe("try-finally generator", function() {
     }
   });
 
-  it("should run finally after break within try", function() {
-    function *gen() {
+  it("should run finally after break within try", function () {
+    function* gen() {
       try {
         yield 0;
         while (true) {
@@ -394,7 +369,7 @@ describe("try-finally generator", function() {
     check(gen(), [0, 1, 2, 3]);
   });
 
-  it("should return the correct value when overridden by finally", function() {
+  it("should return the correct value when overridden by finally", function () {
     function* gen() {
       try {
         return yield 1;
@@ -407,23 +382,23 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(g.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     if (typeof g.return === "function") {
       assert.deepEqual(g.return(5), {
         value: 3,
-        done: true
+        done: true,
       });
     } else {
       assert.deepEqual(g.next(5), {
         value: 3,
-        done: true
+        done: true,
       });
     }
   });
 
-  it("should let the last finally block override all others", function() {
+  it("should let the last finally block override all others", function () {
     function* gen(condition) {
       try {
         try {
@@ -446,7 +421,7 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(g1.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     // The generator function has been carefully constructed so that .next
@@ -456,23 +431,23 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(method.call(g1, 5), {
       value: 4,
-      done: true
+      done: true,
     });
 
     var g2 = gen(false);
 
     assert.deepEqual(g2.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(method.call(g2, 5), {
       value: 3,
-      done: true
+      done: true,
     });
   });
 
-  it("should allow additional yields during finally propagation", function() {
+  it("should allow additional yields during finally propagation", function () {
     function* gen(condition) {
       try {
         try {
@@ -495,7 +470,7 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(g1.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     // The generator function has been carefully constructed so that .next
@@ -505,35 +480,35 @@ describe("try-finally generator", function() {
 
     assert.deepEqual(method.call(g1, 5), {
       value: "oyez",
-      done: false
+      done: false,
     });
 
     assert.deepEqual(method.call(g1, 5), {
       value: 4,
-      done: true
+      done: true,
     });
 
     var g2 = gen(false);
 
     assert.deepEqual(g2.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(method.call(g2, 5), {
       value: "oyez",
-      done: false
+      done: false,
     });
 
     assert.deepEqual(method.call(g2, 5), {
       value: 5,
-      done: true
+      done: true,
     });
   });
 });
 
-describe("try-catch-finally generator", function() {
-  function *usingThrow() {
+describe("try-catch-finally generator", function () {
+  function* usingThrow() {
     yield 0;
     try {
       try {
@@ -551,7 +526,7 @@ describe("try-catch-finally generator", function() {
     yield 6;
   }
 
-  function *usingRaise() {
+  function* usingRaise() {
     yield 0;
     try {
       try {
@@ -569,25 +544,25 @@ describe("try-catch-finally generator", function() {
     yield 6;
   }
 
-  it("should statically catch and then finalize", function() {
+  it("should statically catch and then finalize", function () {
     check(usingThrow(), [0, 1, 2, 5, 3, 6]);
   });
 
-  it("should dynamically catch and then finalize", function() {
+  it("should dynamically catch and then finalize", function () {
     check(usingRaise(), [0, 1, 2, 5, 3, 6]);
   });
 
-  it("should execute catch and finally blocks at most once", function() {
+  it("should execute catch and finally blocks at most once", function () {
     var error = new Error();
 
-    function *gen() {
+    function* gen() {
       try {
         switch (1) {
-        case 1:
-          yield "a";
-          break;
-        default:
-          break;
+          case 1:
+            yield "a";
+            break;
+          default:
+            break;
         }
         throw error;
       } catch (e) {
@@ -610,11 +585,10 @@ describe("try-catch-finally generator", function() {
     check(gen(), ["a", "b", "c", "d", "e", "f"]);
   });
 
-  it("should handle backwards jumps in labeled loops", function() {
-    function *gen() {
+  it("should handle backwards jumps in labeled loops", function () {
+    function* gen() {
       var firstTime = true;
-      outer:
-      while (true) {
+      outer: while (true) {
         yield 0;
         try {
           while (true) {
@@ -641,11 +615,11 @@ describe("try-catch-finally generator", function() {
     check(gen(), [0, 1, 2, 5, 0, 1, 3, 4, 5, 7]);
   });
 
-  it("should handle loop continue statements properly", function() {
+  it("should handle loop continue statements properly", function () {
     var error = new Error("thrown");
     var markers = [];
 
-    function *gen() {
+    function* gen() {
       var c = 2;
       while (c > 0) {
         try {
@@ -679,13 +653,13 @@ describe("try-catch-finally generator", function() {
       "decrement",
       "try",
       "finally",
-      "decrement"
+      "decrement",
     ]);
   });
 });
 
-describe("dynamic exception", function() {
-  function *gen(x, fname) {
+describe("dynamic exception", function () {
+  function* gen(x, fname) {
     try {
       return fns[fname](x);
     } catch (thrown) {
@@ -694,23 +668,23 @@ describe("dynamic exception", function() {
   }
 
   var fns = {
-    f: function(x) {
+    f: function (x) {
       throw x;
     },
 
-    g: function(x) {
+    g: function (x) {
       return x;
-    }
+    },
   };
 
-  it("should be dispatched correctly", function() {
+  it("should be dispatched correctly", function () {
     check(gen("asdf", "f"), ["asdf"]);
     check(gen("asdf", "g"), [], "asdf");
   });
 });
 
-describe("nested finally blocks", function() {
-  function *usingThrow() {
+describe("nested finally blocks", function () {
+  function* usingThrow() {
     try {
       try {
         try {
@@ -728,7 +702,7 @@ describe("nested finally blocks", function() {
     }
   }
 
-  function *usingRaise() {
+  function* usingRaise() {
     try {
       try {
         try {
@@ -746,20 +720,20 @@ describe("nested finally blocks", function() {
     }
   }
 
-  it("should statically execute in order", function() {
+  it("should statically execute in order", function () {
     check(usingThrow(), [1, "thrown", 2, 3]);
   });
 
-  it("should dynamically execute in order", function() {
+  it("should dynamically execute in order", function () {
     check(usingRaise(), [1, "thrown", 2, 3]);
   });
 });
 
-describe("for-in loop generator", function() {
-  it("should handle the simple case", function() {
-    function *gen() {
+describe("for-in loop generator", function () {
+  it("should handle the simple case", function () {
+    function* gen() {
       var count = 0;
-      var obj = {foo: 1, bar: 2};
+      var obj = { foo: 1, bar: 2 };
       for (var key in obj) {
         assert(obj.hasOwnProperty(key), key + " must be own property");
         yield [key, obj[key]];
@@ -768,11 +742,18 @@ describe("for-in loop generator", function() {
       return count;
     }
 
-    check(gen(), [["foo", 1], ["bar", 2]], 2);
+    check(
+      gen(),
+      [
+        ["foo", 1],
+        ["bar", 2],
+      ],
+      2,
+    );
   });
 
-  it("should handle break in loop", function() {
-    function *gen(obj) {
+  it("should handle break in loop", function () {
+    function* gen(obj) {
       var count = 0;
       for (var key in (yield "why not", obj)) {
         if (obj.hasOwnProperty(key)) {
@@ -789,14 +770,14 @@ describe("for-in loop generator", function() {
     check(
       gen({ a: 1, b: 2, skip: 3, c: 4 }),
       ["why not", ["a", 1], ["b", 2]],
-      2
+      2,
     );
   });
 
-  it("should handle property deletion in loop", function() {
-    function *gen() {
+  it("should handle property deletion in loop", function () {
+    function* gen() {
       var count = 0;
-      var obj = {foo: 1, bar: 2};
+      var obj = { foo: 1, bar: 2 };
       for (var key in obj) {
         assert(obj.hasOwnProperty(key), key + " must be own property");
         yield [key, obj[key]];
@@ -809,11 +790,11 @@ describe("for-in loop generator", function() {
     check(gen(), [["foo", 1]], 1);
   });
 
-  it("should loop over inherited properties", function() {
-    function *gen() {
+  it("should loop over inherited properties", function () {
+    function* gen() {
       var count = 0;
       function Foo() {
-        this.baz = 1
+        this.baz = 1;
       }
       Foo.prototype.bar = 2;
 
@@ -825,10 +806,17 @@ describe("for-in loop generator", function() {
       return count;
     }
 
-    check(gen(), [["baz", 1], ["bar", 2]], 2);
+    check(
+      gen(),
+      [
+        ["baz", 1],
+        ["bar", 2],
+      ],
+      2,
+    );
   });
 
-  it("should handle risky object expressions", function() {
+  it("should handle risky object expressions", function () {
     function a(sent) {
       assert.strictEqual(sent, 1);
       a.called = true;
@@ -840,16 +828,16 @@ describe("for-in loop generator", function() {
       return { callee: b };
     }
 
-    function *gen() {
+    function* gen() {
       assert.ok(!a.called);
       assert.ok(!b.called);
-      for (var key in a(yield 0), b(yield 1)) {
+      for (var key in (a(yield 0), b(yield 1))) {
         assert.ok(a.called);
         assert.ok(b.called);
         assert.strictEqual(yield key, 3);
       }
 
-      for (var key in a(1), { foo: "foo", bar: "bar" }) {
+      for (var key in (a(1), { foo: "foo", bar: "bar" })) {
         yield key;
       }
     }
@@ -857,7 +845,7 @@ describe("for-in loop generator", function() {
     check(gen(), [0, 1, "callee", "foo", "bar"]);
   });
 
-  it("should allow non-Identifier left-hand expressions", function() {
+  it("should allow non-Identifier left-hand expressions", function () {
     var obj = {};
     var baz = { a: 1, b: 2, c: 3 };
     var markers = [];
@@ -867,7 +855,7 @@ describe("for-in loop generator", function() {
       return obj;
     }
 
-    function *gen() {
+    function* gen() {
       for (foo().bar in baz) {
         markers.push(obj.bar);
         yield obj.bar;
@@ -882,25 +870,25 @@ describe("for-in loop generator", function() {
       "called foo",
       "b",
       "called foo",
-      "c"
+      "c",
     ]);
   });
 
   it("should work with primitives", function () {
-    function *gen() {
+    function* gen() {
       for (var key in "abc") yield key;
     }
 
     check(gen(), [0, 1, 2]);
-  })
+  });
 });
 
-describe("yield chain", function() {
-  function *gen(n) {
+describe("yield chain", function () {
+  function* gen(n) {
     return yield yield yield yield n;
   }
 
-  it("should have correct associativity", function() {
+  it("should have correct associativity", function () {
     check(gen(5), [5, 1, 2, 3], 4);
     check(gen("asdf"), ["asdf", 1, 2, 3], 4);
   });
@@ -908,51 +896,54 @@ describe("yield chain", function() {
 
 describe("call expression ordering", function test() {
   it("should be correct with chained calls (#244)", function () {
-    var g = (function *gen() {
+    var g = (function* gen() {
       return (yield 1)(yield 2)(yield 3);
     })();
 
     assert.deepEqual(g.next(), { value: 1, done: false });
 
-    assert.deepEqual(g.next(function (sent2) {
-      assert.strictEqual(sent2, "sent 2");
+    assert.deepEqual(
+      g.next(function (sent2) {
+        assert.strictEqual(sent2, "sent 2");
 
-      return function (sent3) {
-        assert.strictEqual(sent3, "sent 3")
-        return "done";
-      };
-    }), { value: 2, done: false });
+        return function (sent3) {
+          assert.strictEqual(sent3, "sent 3");
+          return "done";
+        };
+      }),
+      { value: 2, done: false },
+    );
 
     assert.deepEqual(g.next("sent 2"), { value: 3, done: false });
     assert.deepEqual(g.next("sent 3"), { value: "done", done: true });
   });
 
-  describe("when the callee is a member expression", function() {
-    it("should allow vars assigned in the callee to be used in the args (#379)", function() {
+  describe("when the callee is a member expression", function () {
+    it("should allow vars assigned in the callee to be used in the args (#379)", function () {
       var g = (function* fn() {
         var _ref;
         (_ref = yield).method(_ref);
       })();
-  
+
       var res;
       var obj = {
         method(arg) {
           res = arg;
-        }
+        },
       };
-      
+
       g.next();
       g.next(obj);
-  
+
       assert.strictEqual(obj, res);
     });
 
-    it("should be correct when only the callee contains yield", function() {
+    it("should be correct when only the callee contains yield", function () {
       var order = [];
 
       function step(n) {
         order.push(n);
-        return { method() {} }
+        return { method() {} };
       }
 
       var g = (function* fn() {
@@ -965,16 +956,16 @@ describe("call expression ordering", function test() {
       assert.deepStrictEqual(order, [1, 2]);
     });
 
-    it("should be correct when only the arguments contains yield", function() {
+    it("should be correct when only the arguments contains yield", function () {
       var order = [];
 
       function step(n) {
         order.push(n);
-        return { method() {} }
+        return { method() {} };
       }
 
       var g = (function* fn() {
-        (step(1)).method(step(2), yield, step(3));
+        step(1).method(step(2), yield, step(3));
       })();
 
       g.next();
@@ -983,12 +974,12 @@ describe("call expression ordering", function test() {
       assert.deepStrictEqual(order, [1, 2, 3]);
     });
 
-    it("should be correct when the callee and the arguments contain yield", function() {
+    it("should be correct when the callee and the arguments contain yield", function () {
       var order = [];
 
       function step(n) {
         order.push(n);
-        return { method() {} }
+        return { method() {} };
       }
 
       var g = (function* fn() {
@@ -1004,38 +995,38 @@ describe("call expression ordering", function test() {
   });
 });
 
-describe("object literal generator", function() {
-  function *gen(a, b) {
+describe("object literal generator", function () {
+  function* gen(a, b) {
     yield {
       a: a - (yield a),
-      b: yield b
+      b: yield b,
     };
   }
 
-  it("should yield the correct object", function() {
+  it("should yield the correct object", function () {
     check(gen(1, 2), [1, 2, { a: 0, b: 2 }]);
     check(gen(4, 2), [4, 2, { a: 3, b: 2 }]);
   });
 });
 
-describe("switch statement generator", function() {
-  function *gen(a) {
+describe("switch statement generator", function () {
+  function* gen(a) {
     switch (yield a) {
-    case (yield "x") - a:
-      return "first case";
-    case (yield "y") - a:
-      return "second case";
+      case (yield "x") - a:
+        return "first case";
+      case (yield "y") - a:
+        return "second case";
     }
   }
 
-  it("should jump to the correct cases", function() {
+  it("should jump to the correct cases", function () {
     check(gen(1), [1, "x"], "first case");
     check(gen(2), [2, "x", "y"], "second case");
   });
 });
 
-describe("infinite sequence generator", function() {
-  function *gen(start, step) {
+describe("infinite sequence generator", function () {
+  function* gen(start, step) {
     step = step || 1;
     while (true) {
       yield start;
@@ -1043,7 +1034,7 @@ describe("infinite sequence generator", function() {
     }
   }
 
-  function *limit(g, stop) {
+  function* limit(g, stop) {
     while (true) {
       var info = g.next();
       if (info.done) {
@@ -1056,7 +1047,7 @@ describe("infinite sequence generator", function() {
     }
   }
 
-  it("should generate a lot of plausible values", function() {
+  it("should generate a lot of plausible values", function () {
     var g = gen(10, 2);
 
     assert.deepEqual(g.next(), { value: 10, done: false });
@@ -1075,24 +1066,28 @@ describe("infinite sequence generator", function() {
     assert.strictEqual(sum, 1017052);
   });
 
-  it("should allow limiting", function() {
+  it("should allow limiting", function () {
     check(limit(gen(10, 3), 20), [10, 13, 16, 19]);
   });
 });
 
-describe("generator function expression", function() {
-  it("should behave just like a declared generator", function() {
-    check(function *(x, y) {
-      yield x;
-      yield y;
-      yield x + y;
-      return x * y;
-    }(3, 7), [3, 7, 10], 21);
-  })
+describe("generator function expression", function () {
+  it("should behave just like a declared generator", function () {
+    check(
+      (function* (x, y) {
+        yield x;
+        yield y;
+        yield x + y;
+        return x * y;
+      })(3, 7),
+      [3, 7, 10],
+      21,
+    );
+  });
 });
 
-describe("generator reentry attempt", function() {
-  function *gen(x) {
+describe("generator reentry attempt", function () {
+  function* gen(x) {
     try {
       (yield x).next(x);
     } catch (err) {
@@ -1101,22 +1096,19 @@ describe("generator reentry attempt", function() {
     return x + 1;
   }
 
-  it("should complain with a TypeError", function() {
+  it("should complain with a TypeError", function () {
     var g = gen(3);
     assert.deepEqual(g.next(), { value: 3, done: false });
     var complaint = g.next(g); // Sending the generator to itself.
     assert.ok(complaint.value instanceof Error);
-    assert.strictEqual(
-      complaint.value.message,
-      "Generator is already running"
-    );
+    assert.strictEqual(complaint.value.message, "Generator is already running");
     assert.deepEqual(g.next(), { value: 4, done: true });
   });
 });
 
-describe("delegated yield", function() {
-  it("should delegate correctly", function() {
-    function *gen(condition) {
+describe("delegated yield", function () {
+  it("should delegate correctly", function () {
+    function* gen(condition) {
       yield 0;
       if (condition) {
         yield 1;
@@ -1130,8 +1122,8 @@ describe("delegated yield", function() {
     check(gen(false), [0, 3]);
   });
 
-  it("should cope with empty delegatees", function() {
-    function *gen(condition) {
+  it("should cope with empty delegatees", function () {
+    function* gen(condition) {
       if (condition) {
         yield 0;
         yield* gen(false);
@@ -1143,34 +1135,34 @@ describe("delegated yield", function() {
     check(gen(false), []);
   });
 
-  it("should support deeper nesting", function() {
-    function *outer(n) {
+  it("should support deeper nesting", function () {
+    function* outer(n) {
       yield n;
       yield* middle(n - 1, inner(n + 10));
       yield n + 1;
     }
 
-    function *middle(n, plusTen) {
+    function* middle(n, plusTen) {
       yield n;
       yield* inner(n - 1);
       yield n + 1;
       yield* plusTen;
     }
 
-    function *inner(n) {
+    function* inner(n) {
       yield n;
     }
 
     check(outer(5), [5, 4, 3, 5, 15, 6]);
   });
 
-  it("should pass sent values through", function() {
-    function *outer(n) {
+  it("should pass sent values through", function () {
+    function* outer(n) {
       yield* inner(n << 1);
       yield "zxcv";
     }
 
-    function *inner(n) {
+    function* inner(n) {
       return yield yield yield n;
     }
 
@@ -1182,10 +1174,10 @@ describe("delegated yield", function() {
     assert.deepEqual(g.next(5), { value: void 0, done: true });
   });
 
-  it("should be governed by enclosing try statements", function() {
+  it("should be governed by enclosing try statements", function () {
     var error = new Error("thrown");
 
-    function *outer(n) {
+    function* outer(n) {
       try {
         yield 0;
         yield* inner(n);
@@ -1196,8 +1188,8 @@ describe("delegated yield", function() {
       yield 4;
     }
 
-    function *inner(n) {
-      while (n --> 0) {
+    function* inner(n) {
+      while (n-- > 0) {
         try {
           if (n === 3) {
             raise(error);
@@ -1212,10 +1204,10 @@ describe("delegated yield", function() {
     check(outer(5), [0, 4, 3, "thrown", 4]);
   });
 
-  it("should dispatch .thrown exceptions correctly", function() {
+  it("should dispatch .thrown exceptions correctly", function () {
     var count = 0;
 
-    function *gen() {
+    function* gen() {
       yield* inner();
       try {
         yield* inner();
@@ -1225,7 +1217,7 @@ describe("delegated yield", function() {
       return yield* inner();
     }
 
-    function *inner() {
+    function* inner() {
       return yield count++;
     }
 
@@ -1233,12 +1225,12 @@ describe("delegated yield", function() {
 
     assert.deepEqual(g.next(), {
       value: 0,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.throw(new Error("lol")), {
@@ -1248,16 +1240,16 @@ describe("delegated yield", function() {
 
     assert.deepEqual(g.next("sent"), {
       value: "sent",
-      done: true
+      done: true,
     });
   });
 
-  it("should call .return methods of delegate iterators", function() {
+  it("should call .return methods of delegate iterators", function () {
     var throwee = new Error("argument to gen.throw");
     var thrownFromThrow = new Error("thrown from throw method");
     var thrownFromReturn = new Error("thrown from return method");
 
-    function *gen(delegate) {
+    function* gen(delegate) {
       try {
         return yield* delegate;
       } catch (err) {
@@ -1270,24 +1262,24 @@ describe("delegated yield", function() {
       var returnCalled = false;
       var count = 0;
       var iterator = {
-        next: function() {
+        next: function () {
           return { value: count++, done: false };
-        }
+        },
       };
 
-      iterator[Symbol.iterator] = function() {
+      iterator[Symbol.iterator] = function () {
         return this;
       };
 
       if (throwMethod) {
-        iterator["throw"] = function() {
+        iterator["throw"] = function () {
           throwCalled = true;
           return throwMethod.apply(this, arguments);
         };
       }
 
       if (returnMethod) {
-        iterator["return"] = function() {
+        iterator["return"] = function () {
           returnCalled = true;
           return returnMethod.apply(this, arguments);
         };
@@ -1312,7 +1304,7 @@ describe("delegated yield", function() {
       return result;
     }
 
-    var checkResult = check(undefined, function() {
+    var checkResult = check(undefined, function () {
       throw thrownFromReturn;
     });
     if (fullCompatibility) {
@@ -1327,7 +1319,7 @@ describe("delegated yield", function() {
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
 
-    checkResult = check(undefined, function() {
+    checkResult = check(undefined, function () {
       return { value: "from return", done: true };
     });
     assert.notStrictEqual(checkResult.throwResult.value, throwee);
@@ -1341,21 +1333,27 @@ describe("delegated yield", function() {
       assert.strictEqual(checkResult.returnCalled, true);
     }
 
-    var checkResult = check(function(thrown) {
-      return { value: "from throw", done: true };
-    }, function() {
-      throw thrownFromReturn;
-    });
+    var checkResult = check(
+      function (thrown) {
+        return { value: "from throw", done: true };
+      },
+      function () {
+        throw thrownFromReturn;
+      },
+    );
     assert.strictEqual(checkResult.throwResult.value, "from throw");
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, true);
     assert.strictEqual(checkResult.returnCalled, false);
 
-    var checkResult = check(function(thrown) {
-      throw thrownFromThrow;
-    }, function() {
-      throw thrownFromReturn;
-    });
+    var checkResult = check(
+      function (thrown) {
+        throw thrownFromThrow;
+      },
+      function () {
+        throw thrownFromReturn;
+      },
+    );
     assert.strictEqual(checkResult.throwResult.value, thrownFromThrow);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, true);
@@ -1373,14 +1371,14 @@ describe("delegated yield", function() {
     assert.strictEqual(checkResult.returnCalled, false);
   });
 
-  it("should not be required to have a .return method", function() {
-    function *gen(delegate) {
+  it("should not be required to have a .return method", function () {
+    function* gen(delegate) {
       return yield* delegate;
     }
 
     var inner = range(5);
     var iterator = { next: inner.next.bind(inner) };
-    iterator[Symbol.iterator] = function() {
+    iterator[Symbol.iterator] = function () {
       return this;
     };
 
@@ -1398,7 +1396,7 @@ describe("delegated yield", function() {
     }
   });
 
-  it("should execute finally blocks of delegate generators", function() {
+  it("should execute finally blocks of delegate generators", function () {
     var markers = [];
 
     function* parent() {
@@ -1422,7 +1420,7 @@ describe("delegated yield", function() {
 
     assert.deepEqual(g.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     // The generator function has been carefully constructed so that .next
@@ -1430,24 +1428,24 @@ describe("delegated yield", function() {
     // in versions of Node that do not support .return.
     assert.deepEqual((g.return || g.next).call(g, 3), {
       value: 2,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(), {
       value: 3,
-      done: true
+      done: true,
     });
 
     assert.deepEqual(markers, ["child", "parent"]);
   });
 
-  it("should evaluate to the return value of the delegate", function() {
-    function *inner() {
+  it("should evaluate to the return value of the delegate", function () {
+    function* inner() {
       yield 1;
       return 2;
     }
 
-    function *outer(delegate) {
+    function* outer(delegate) {
       return yield* delegate;
     }
 
@@ -1466,22 +1464,24 @@ describe("delegated yield", function() {
     }
 
     var iterator = {
-      next: function() {
+      next: function () {
         return { value: "oyez", done: true };
-      }
+      },
     };
 
-    iterator[Symbol.iterator] = function () { return this };
+    iterator[Symbol.iterator] = function () {
+      return this;
+    };
 
     check(outer(iterator), [], "oyez");
   });
 
-  it("should work as a subexpression", function() {
-    function *inner(arg) {
+  it("should work as a subexpression", function () {
+    function* inner(arg) {
       return arg;
     }
 
-    function *gen(delegate) {
+    function* gen(delegate) {
       // Unfortunately these parentheses appear to be necessary.
       return 1 + (yield* delegate);
     }
@@ -1494,28 +1494,30 @@ describe("delegated yield", function() {
     }
 
     var iterator = {
-      next: function() {
+      next: function () {
         return { value: "foo", done: true };
-      }
+      },
     };
 
-    iterator[Symbol.iterator] = function () { return this };
+    iterator[Symbol.iterator] = function () {
+      return this;
+    };
 
     check(gen(iterator), [], "1foo");
   });
 
-  it("should work with empty string", function() {
+  it("should work with empty string", function () {
     function* f() {
       yield* "";
-    };
+    }
 
     assert.deepEqual(f().next(), { value: undefined, done: true });
   });
 
-  it("should throw if not iterable", function() {
+  it("should throw if not iterable", function () {
     function* f(x) {
       yield* x;
-    };
+    }
 
     assert.throws(() => f(undefined).next(), TypeError);
     assert.throws(() => f(null).next(), TypeError);
@@ -1526,12 +1528,12 @@ describe("delegated yield", function() {
     assert.throws(() => f({}).next(), TypeError);
   });
 
-  it("should throw if the delegated iterable's iterator doesn't have .next", function() {
-    var it = function* () {
+  it("should throw if the delegated iterable's iterator doesn't have .next", function () {
+    var it = (function* () {
       yield* {
         [Symbol.iterator]: x => [],
       };
-    }();
+    })();
 
     assert.throws(() => {
       it.next();
@@ -1540,8 +1542,12 @@ describe("delegated yield", function() {
 
   it("should work with falsy values", function () {
     try {
-      Boolean.prototype[Symbol.iterator] = function* () { yield "Hello" };
-      function* gen() { yield* false; };
+      Boolean.prototype[Symbol.iterator] = function* () {
+        yield "Hello";
+      };
+      function* gen() {
+        yield* false;
+      }
 
       check(gen(), ["Hello"]);
     } finally {
@@ -1551,110 +1557,110 @@ describe("delegated yield", function() {
 });
 
 (fullCompatibility
- ? describe // run these tests
- : xdescribe // skip running these tests
-)("generator return method", function() {
-  it("should work with newborn generators", function() {
-    function *gen() {
-      yield 0;
-    }
-
-    var g = gen();
-
-    assert.deepEqual(g.return("argument"), {
-      value: "argument",
-      done: true
-    });
-
-    assertAlreadyFinished(g);
-  });
-
-  it("should behave as if generator actually returned", function() {
-    var executedFinally = false;
-
-    function *gen() {
-      try {
+  ? describe // run these tests
+  : xdescribe)(
+  // skip running these tests
+  "generator return method",
+  function () {
+    it("should work with newborn generators", function () {
+      function* gen() {
         yield 0;
-      } catch (err) {
-        assert.ok(false, "should not have executed the catch handler");
-      } finally {
-        executedFinally = true;
       }
-    }
 
-    var g = gen();
-    assert.deepEqual(g.next(), { value: 0, done: false });
+      var g = gen();
 
-    assert.deepEqual(g.return("argument"), {
-      value: "argument",
-      done: true
+      assert.deepEqual(g.return("argument"), {
+        value: "argument",
+        done: true,
+      });
+
+      assertAlreadyFinished(g);
     });
 
-    assert.strictEqual(executedFinally, true);
-    assertAlreadyFinished(g);
-  });
+    it("should behave as if generator actually returned", function () {
+      var executedFinally = false;
 
-  it("should return both delegate and delegator", function() {
-    var checkpoints = [];
-
-    function* callee(errorToThrow) {
-      try {
-        yield 1;
-        yield 2;
-      } finally {
-        checkpoints.push("callee finally");
-        if (errorToThrow) {
-          throw errorToThrow;
+      function* gen() {
+        try {
+          yield 0;
+        } catch (err) {
+          assert.ok(false, "should not have executed the catch handler");
+        } finally {
+          executedFinally = true;
         }
       }
-    }
 
-    function* caller(errorToThrow) {
-      try {
-        yield 0;
-        yield* callee(errorToThrow);
-        yield 3;
-      } finally {
-        checkpoints.push("caller finally");
+      var g = gen();
+      assert.deepEqual(g.next(), { value: 0, done: false });
+
+      assert.deepEqual(g.return("argument"), {
+        value: "argument",
+        done: true,
+      });
+
+      assert.strictEqual(executedFinally, true);
+      assertAlreadyFinished(g);
+    });
+
+    it("should return both delegate and delegator", function () {
+      var checkpoints = [];
+
+      function* callee(errorToThrow) {
+        try {
+          yield 1;
+          yield 2;
+        } finally {
+          checkpoints.push("callee finally");
+          if (errorToThrow) {
+            throw errorToThrow;
+          }
+        }
       }
-    }
 
-    var g1 = caller();
+      function* caller(errorToThrow) {
+        try {
+          yield 0;
+          yield* callee(errorToThrow);
+          yield 3;
+        } finally {
+          checkpoints.push("caller finally");
+        }
+      }
 
-    assert.deepEqual(g1.next(), { value: 0, done: false });
-    assert.deepEqual(g1.next(), { value: 1, done: false });
+      var g1 = caller();
 
-    assert.deepEqual(g1.return(-1), { value: -1, done: true });
-    assert.deepEqual(checkpoints, [
-      "callee finally",
-      "caller finally"
-    ]);
+      assert.deepEqual(g1.next(), { value: 0, done: false });
+      assert.deepEqual(g1.next(), { value: 1, done: false });
 
-    var error = new Error("thrown from callee");
-    var g2 = caller(error);
+      assert.deepEqual(g1.return(-1), { value: -1, done: true });
+      assert.deepEqual(checkpoints, ["callee finally", "caller finally"]);
 
-    assert.deepEqual(g2.next(), { value: 0, done: false });
-    assert.deepEqual(g2.next(), { value: 1, done: false });
+      var error = new Error("thrown from callee");
+      var g2 = caller(error);
 
-    try {
-      g2.return(-1);
-      assert.ok(false, "should have thrown an exception");
-    } catch (thrown) {
-      assert.strictEqual(thrown, error);
-    }
+      assert.deepEqual(g2.next(), { value: 0, done: false });
+      assert.deepEqual(g2.next(), { value: 1, done: false });
 
-    assert.deepEqual(checkpoints, [
-      "callee finally",
-      "caller finally",
-      "callee finally",
-      "caller finally"
-    ]);
-  });
-});
+      try {
+        g2.return(-1);
+        assert.ok(false, "should have thrown an exception");
+      } catch (thrown) {
+        assert.strictEqual(thrown, error);
+      }
 
-describe("function declaration hoisting", function() {
-  it("should work even if the declarations are out of order", function() {
-    function *gen(n) {
+      assert.deepEqual(checkpoints, [
+        "callee finally",
+        "caller finally",
+        "callee finally",
+        "caller finally",
+      ]);
+    });
+  },
+);
+
+describe("function declaration hoisting", function () {
+  it("should work even if the declarations are out of order", function () {
+    function* gen(n) {
       yield increment(n);
 
       function increment(x) {
@@ -1686,15 +1692,15 @@ describe("function declaration hoisting", function() {
     check(gen(4), [5, 6]);
   });
 
-  it("should work for nested generator function declarations", function() {
-    function *outer(n) {
+  it("should work for nested generator function declarations", function () {
+    function* outer(n) {
       yield 0;
       assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
       return yield* inner(n);
 
       // Note that this function declaration comes after everything else
       // in the outer function, but needs to be fully available above.
-      function *inner(n) {
+      function* inner(n) {
         yield n - 1;
         yield n;
         return yield n + 1;
@@ -1704,14 +1710,14 @@ describe("function declaration hoisting", function() {
     check(outer(2), [0, 1, 2, 3], 4);
   });
 
-  it("should not interfere with function rebinding", function() {
+  it("should not interfere with function rebinding", function () {
     function rebindTo(value) {
       var oldValue = toBeRebound;
       toBeRebound = value;
       return oldValue;
     }
 
-    function *toBeRebound() {
+    function* toBeRebound() {
       var originalValue = toBeRebound;
       yield toBeRebound;
       assert.strictEqual(rebindTo(42), originalValue);
@@ -1729,21 +1735,21 @@ describe("function declaration hoisting", function() {
       return oldValue;
     }
 
-    var safe = function *safe() {
+    var safe = function* safe() {
       var originalValue = safe;
       yield safe;
       assert.strictEqual(attemptToRebind(42), originalValue);
       yield safe;
       assert.strictEqual(attemptToRebind("asdf"), 42);
       yield safe;
-    }
+    };
 
     original = safe;
     check(safe(), [safe, safe, safe]);
   });
 
-  it("should not interfere with nested function rebinding itself", function() {
-    function *parent() {
+  it("should not interfere with nested function rebinding itself", function () {
+    function* parent() {
       function toBeRebound() {
         toBeRebound = 42;
       }
@@ -1756,13 +1762,13 @@ describe("function declaration hoisting", function() {
   });
 });
 
-describe("the arguments object", function() {
-  it("should work in simple variadic functions", function() {
-    function *sum() {
+describe("the arguments object", function () {
+  it("should work in simple variadic functions", function () {
+    function* sum() {
       var result = 0;
 
       for (var i = 0; i < arguments.length; ++i) {
-        yield result += arguments[i];
+        yield (result += arguments[i]);
       }
 
       return result;
@@ -1772,8 +1778,8 @@ describe("the arguments object", function() {
     check(sum(9, -5, 3, 0, 2), [9, 4, 7, 7, 9], 9);
   });
 
-  it("should alias function parameters", function() {
-    function *gen(x, y) {
+  it("should alias function parameters", function () {
+    function* gen(x, y) {
       yield x;
       ++arguments[0];
       yield x;
@@ -1794,8 +1800,8 @@ describe("the arguments object", function() {
     check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
   });
 
-  it("should be shadowable by explicit declarations (sloppy)", function() {
-    function *asParameter(x, arguments) {
+  it("should be shadowable by explicit declarations (sloppy)", function () {
+    function* asParameter(x, arguments) {
       arguments = arguments + 1;
       yield x + arguments;
     }
@@ -1803,7 +1809,7 @@ describe("the arguments object", function() {
     check(asParameter(4, 5), [10]);
     check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
 
-    function *asVariable(x) {
+    function* asVariable(x) {
       // TODO References to arguments before the variable declaration
       // seem to see the object instead of the undefined value.
       var arguments = x + 1;
@@ -1814,8 +1820,8 @@ describe("the arguments object", function() {
     check(asVariable("asdf"), ["asdf1"]);
   });
 
-  it("should not get confused by properties", function() {
-    function *gen(args) {
+  it("should not get confused by properties", function () {
+    function* gen(args) {
       var obj = { arguments: args };
       yield obj.arguments;
       obj.arguments = "oyez";
@@ -1825,15 +1831,15 @@ describe("the arguments object", function() {
     check(gen(42), [42, { arguments: "oyez" }]);
   });
 
-  it("supports .callee", function() {
-    function *gen(doYield) {
+  it("supports .callee", function () {
+    function* gen(doYield) {
       yield 1;
       if (doYield) {
         yield 2;
       } else {
-        yield 3
+        yield 3;
         yield* arguments.callee(true);
-        yield 4
+        yield 4;
       }
       yield 5;
     }
@@ -1844,7 +1850,7 @@ describe("the arguments object", function() {
 
 describe("the this object", function () {
   it("should default to undefined (strict)", function () {
-    function *gen() {
+    function* gen() {
       "use strict";
 
       yield this;
@@ -1857,7 +1863,7 @@ describe("the this object", function () {
   });
 
   it("should respect .call's this", function () {
-    function *gen() {
+    function* gen() {
       yield this;
       return this;
     }
@@ -1871,7 +1877,7 @@ describe("the this object", function () {
   it("shouldn't capture this when not needed", function () {
     // https://github.com/babel/babel/issues/4056
 
-    function *gen() {
+    function* gen() {
       return 0;
     }
 
@@ -1881,13 +1887,13 @@ describe("the this object", function () {
 });
 
 describe("directive strings", function () {
-  function *strict() {
+  function* strict() {
     "use strict";
-    yield ! this;
+    yield !this;
   }
 
-  function *sloppy() {
-    yield ! this;
+  function* sloppy() {
+    yield !this;
   }
 
   it("should be kept at top of outer function", function () {
@@ -1905,9 +1911,9 @@ describe("directive strings", function () {
   });
 });
 
-describe("catch parameter shadowing", function() {
-  it("should leave outer variables unmodified", function() {
-    function *gen(x) {
+describe("catch parameter shadowing", function () {
+  it("should leave outer variables unmodified", function () {
+    function* gen(x) {
       var y = x + 1;
       try {
         throw x + 2;
@@ -1933,43 +1939,45 @@ describe("catch parameter shadowing", function() {
 
   // This test will be fixed by https://github.com/babel/babel/pull/4880.
   (fullCompatibility ? xit : it)(
-    "should not replace variables defined in inner scopes", function() {
-    function *gen(x) {
-      try {
-        throw x;
-      } catch (x) {
+    "should not replace variables defined in inner scopes",
+    function () {
+      function* gen(x) {
+        try {
+          throw x;
+        } catch (x) {
+          yield x;
+
+          yield (function (x) {
+            return (x += 1);
+          })(x + 1);
+
+          yield (function () {
+            var x = arguments[0];
+            return x * 2;
+          })(x + 2);
+
+          yield (function () {
+            function notCalled(x) {
+              throw x;
+            }
+
+            x >>= 1;
+            return x;
+          })();
+
+          yield (x -= 1);
+        }
+
         yield x;
-
-        yield (function(x) {
-          return x += 1;
-        }(x + 1));
-
-        yield (function() {
-          var x = arguments[0];
-          return x * 2;
-        }(x + 2));
-
-        yield (function() {
-          function notCalled(x) {
-            throw x;
-          }
-
-          x >>= 1;
-          return x;
-        }());
-
-        yield x -= 1;
       }
 
-      yield x;
-    }
+      check(gen(10), [10, 12, 24, 5, 4, 10]);
+      check(gen(11), [11, 13, 26, 5, 4, 11]);
+    },
+  );
 
-    check(gen(10), [10, 12, 24, 5, 4, 10]);
-    check(gen(11), [11, 13, 26, 5, 4, 11]);
-  });
-
-  it("should allow nested catch parameters of the same name", function() {
-    function *gen() {
+  it("should allow nested catch parameters of the same name", function () {
+    function* gen() {
       try {
         raise("e1");
       } catch (e) {
@@ -1986,8 +1994,8 @@ describe("catch parameter shadowing", function() {
     check(gen(), ["e1", "e2", "e1"]);
   });
 
-  it("should not interfere with non-referential identifiers", function() {
-    function *gen() {
+  it("should not interfere with non-referential identifiers", function () {
+    function* gen() {
       try {
         yield 1;
         raise(new Error("oyez"));
@@ -1998,10 +2006,10 @@ describe("catch parameter shadowing", function() {
         e[e.message] = "e.oyez";
         return {
           e: e,
-          identity: function(x) {
+          identity: function (x) {
             var e = x;
             return e;
-          }
+          },
         };
       }
       yield 4;
@@ -2020,9 +2028,9 @@ describe("catch parameter shadowing", function() {
   });
 });
 
-describe("empty while loops", function() {
-  it("should be preserved in generated code", function() {
-    function *gen(x) {
+describe("empty while loops", function () {
+  it("should be preserved in generated code", function () {
+    function* gen(x) {
       while (x) {
         // empty while loop
       }
@@ -2041,31 +2049,35 @@ describe("empty while loops", function() {
   });
 });
 
-describe("object literals with multiple yields", function() {
-  it("should receive different sent values", function() {
-    function *gen(fn) {
+describe("object literals with multiple yields", function () {
+  it("should receive different sent values", function () {
+    function* gen(fn) {
       return {
         a: yield "a",
         b: yield "b",
         c: fn(yield "c", yield "d"),
-        d: [yield "e", yield "f"]
+        d: [yield "e", yield "f"],
       };
     }
 
-    check(gen(function sum(x, y) {
-      return x + y;
-    }), ["a", "b", "c", "d", "e", "f"], {
-      a: 1,
-      b: 2,
-      c: 3 + 4,
-      d: [5, 6]
-    });
+    check(
+      gen(function sum(x, y) {
+        return x + y;
+      }),
+      ["a", "b", "c", "d", "e", "f"],
+      {
+        a: 1,
+        b: 2,
+        c: 3 + 4,
+        d: [5, 6],
+      },
+    );
   });
 });
 
-describe("generator .throw method", function() {
-  it("should work after the final call to .next", function() {
-    function *gen() {
+describe("generator .throw method", function () {
+  it("should work after the final call to .next", function () {
+    function* gen() {
       yield 1;
     }
 
@@ -2081,10 +2093,10 @@ describe("generator .throw method", function() {
     }
   });
 
-  it("should immediately complete a new-born generator", function() {
+  it("should immediately complete a new-born generator", function () {
     var began = false;
 
-    function *gen() {
+    function* gen() {
       began = true;
       yield 1;
     }
@@ -2100,8 +2112,8 @@ describe("generator .throw method", function() {
     }
   });
 
-  it("should not propagate errors handled inside a delegate", function() {
-    function *outer() {
+  it("should not propagate errors handled inside a delegate", function () {
+    function* outer() {
       try {
         yield* inner();
       } catch (err) {
@@ -2110,7 +2122,7 @@ describe("generator .throw method", function() {
       return 1;
     }
 
-    function *inner() {
+    function* inner() {
       try {
         yield void 0;
       } catch (e) {
@@ -2120,11 +2132,11 @@ describe("generator .throw method", function() {
 
     var g = outer();
     g.next();
-    assert.equal(g.throw(new Error('foo')).value, 1);
+    assert.equal(g.throw(new Error("foo")).value, 1);
   });
 
-  it("should propagate errors unhandled inside a delegate", function() {
-    function *outer() {
+  it("should propagate errors unhandled inside a delegate", function () {
+    function* outer() {
       try {
         yield* inner();
       } catch (err) {
@@ -2133,18 +2145,18 @@ describe("generator .throw method", function() {
       return 1;
     }
 
-    function *inner() {
+    function* inner() {
       yield void 0;
     }
 
     var g = outer();
     g.next();
-    assert.equal(g.throw(new Error('foo')).value, -1);
+    assert.equal(g.throw(new Error("foo")).value, -1);
   });
 });
 
-describe("unqualified function calls", function() {
-  it("should have a global `this` object", function() {
+describe("unqualified function calls", function () {
+  it("should have a global `this` object", function () {
     function getThis() {
       return this;
     }
@@ -2153,7 +2165,7 @@ describe("unqualified function calls", function() {
     // might be null or undefined (in strict mode).
     var unqualifiedThis = getThis();
 
-    function *invoke() {
+    function* invoke() {
       // It seems like a bug in the ES6 spec that we have to yield an
       // argument instead of just calling (yield)().
       return (yield "dummy")();
@@ -2215,54 +2227,51 @@ describe("yield* expression results", function () {
   });
 });
 
-describe("isGeneratorFunction", function() {
-  it("should work for function declarations", function() {
+describe("isGeneratorFunction", function () {
+  it("should work for function declarations", function () {
     // Do the assertions up here to make sure the generator function is
     // marked at the beginning of the block the function is declared in.
-    assert.strictEqual(
-      regeneratorRuntime.isGeneratorFunction(genFun),
-      true
-    );
+    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(genFun), true);
 
     assert.strictEqual(
       regeneratorRuntime.isGeneratorFunction(normalFun),
-      false
+      false,
     );
 
     function normalFun() {
       return 0;
     }
 
-    function *genFun() {
+    function* genFun() {
       yield 0;
     }
   });
 
-  it("should work for function expressions", function() {
+  it("should work for function expressions", function () {
     assert.strictEqual(
-      regeneratorRuntime.isGeneratorFunction(function *genFun() {
+      regeneratorRuntime.isGeneratorFunction(function* genFun() {
         yield 0;
       }),
-      true
+      true,
     );
 
     assert.strictEqual(
       regeneratorRuntime.isGeneratorFunction(function normalFun() {
         return 0;
       }),
-      false
+      false,
     );
   });
 });
 
-describe("new expressions", function() {
-  it("should be able to contain yield sub-expressions", function() {
+describe("new expressions", function () {
+  it("should be able to contain yield sub-expressions", function () {
     function A(first, second) {
       this.first = first;
       this.second = second;
     }
 
-    function *gen() {
+    function* gen() {
       return yield new (yield 0)(yield 1, yield 2);
     }
 
@@ -2282,12 +2291,13 @@ describe("new expressions", function() {
   });
 });
 
-describe("block binding", function() {
-  it("should translate block binding correctly", function() {
+describe("block binding", function () {
+  it("should translate block binding correctly", function () {
     "use strict";
 
-    function *gen() {
-      var a$0 = 0, a$1 = 1;
+    function* gen() {
+      var a$0 = 0,
+        a$1 = 1;
 
       let a = 3;
 
@@ -2312,20 +2322,22 @@ describe("block binding", function() {
     assert.deepEqual(g.next(), { value: void 0, done: true });
   });
 
-  it("should translate block binding with iife correctly", function() {
+  it("should translate block binding with iife correctly", function () {
     "use strict";
 
-    function *gen() {
+    function* gen() {
       let arr = [];
 
       for (let x = 0; x < 3; x++) {
         let y = x;
-        arr.push(function() { return y; });
+        arr.push(function () {
+          return y;
+        });
       }
 
       {
         let x;
-        while( x = arr.pop() ) {
+        while ((x = arr.pop())) {
           yield x;
         }
       }
@@ -2340,13 +2352,13 @@ describe("block binding", function() {
   });
 });
 
-describe("newborn generators", function() {
-  it("should be able to yield* non-newborn generators", function() {
-    function *inner() {
+describe("newborn generators", function () {
+  it("should be able to yield* non-newborn generators", function () {
+    function* inner() {
       return [yield 1, yield 2];
     }
 
-    function *outer(delegate) {
+    function* outer(delegate) {
       return yield* delegate;
     }
 
@@ -2354,7 +2366,7 @@ describe("newborn generators", function() {
 
     assert.deepEqual(n.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     var g = outer(n);
@@ -2364,19 +2376,19 @@ describe("newborn generators", function() {
     // a TypeError.
     assert.deepEqual(g.next(), {
       value: 2,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(4), {
       value: [void 0, 4],
-      done: true
+      done: true,
     });
   });
 
-  it("should support the ignore-initial-yield wrapper idiom", function() {
+  it("should support the ignore-initial-yield wrapper idiom", function () {
     var markers = [];
 
-    function *inner() {
+    function* inner() {
       markers.push(0);
       var sent1 = yield 1;
       markers.push(2);
@@ -2386,9 +2398,10 @@ describe("newborn generators", function() {
     }
 
     function wrapper(delegate) {
-      var gen = (function*() {
+      var gen = (function* () {
         // This yield is the "initial yield" whose argument we ignore.
-        var sent = yield "ignored", info;
+        var sent = yield "ignored",
+          info;
 
         markers.push(1);
 
@@ -2412,7 +2425,7 @@ describe("newborn generators", function() {
 
     assert.deepEqual(n.next(), {
       value: 1,
-      done: false
+      done: false,
     });
 
     var g = wrapper(n);
@@ -2422,55 +2435,52 @@ describe("newborn generators", function() {
     // before g was returned from the wrapper function.
     assert.deepEqual(g.next(3), {
       value: 2,
-      done: false
+      done: false,
     });
 
     assert.deepEqual(g.next(4), {
       value: [3, 4],
-      done: true
+      done: true,
     });
 
     // Ensure we encountered the marker points in the expected order.
     assert.deepEqual(markers, [0, 1, 2, 3, 4]);
   });
 
-  it("should allow chaining newborn and non-newborn generators", function() {
-    function *range(n) {
+  it("should allow chaining newborn and non-newborn generators", function () {
+    function* range(n) {
       for (var i = 0; i < n; ++i) {
         yield i;
       }
     }
 
-    function *chain(a, b) {
+    function* chain(a, b) {
       yield* a;
       yield* b;
     }
 
     check(chain(range(3), range(5)), [0, 1, 2, 0, 1, 2, 3, 4]);
 
-    function *y3(x) {
+    function* y3(x) {
       return yield yield yield x;
     }
 
-    function *y5(x) {
+    function* y5(x) {
       return yield yield yield yield yield x;
     }
 
-    check(
-      chain(y3("foo"), y5("bar")),
-      ["foo", 1, 2, "bar", 4, 5, 6, 7]
-    );
+    check(chain(y3("foo"), y5("bar")), ["foo", 1, 2, "bar", 4, 5, 6, 7]);
 
     var g3 = y3("three");
     assert.deepEqual(g3.next(), {
       value: "three",
-      done: false
+      done: false,
     });
 
     var g5 = y5("five");
     assert.deepEqual(g5.next(), {
       value: "five",
-      done: false
+      done: false,
     });
 
     var undef; // A little easier to read than void 0.
@@ -2478,23 +2488,21 @@ describe("newborn generators", function() {
   });
 });
 
-describe("labeled break and continue statements", function() {
-  it("should be able to exit multiple try statements", function() {
+describe("labeled break and continue statements", function () {
+  it("should be able to exit multiple try statements", function () {
     var e1 = "first";
     var e2 = "second";
     var e3 = "third";
     var e4 = "fourth";
 
-    function *gen(n, which) {
+    function* gen(n, which) {
       try {
         yield 0;
         raise(e1);
-
       } finally {
         yield 1;
 
-        loop:
-        for (var i = 0; i < n; ++i) {
+        loop: for (var i = 0; i < n; ++i) {
           yield i;
 
           try {
@@ -2533,9 +2541,7 @@ describe("labeled break and continue statements", function() {
     }
 
     try {
-      check(gen(1, "break"), [
-        0, 1, 0, 2, 3, 4, "breaking", 6
-      ]);
+      check(gen(1, "break"), [0, 1, 0, 2, 3, 4, "breaking", 6]);
       assert.ok(false, "should have thrown an exception");
     } catch (err) {
       assert.strictEqual(err, e1);
@@ -2543,10 +2549,24 @@ describe("labeled break and continue statements", function() {
 
     try {
       check(gen(3, "continue"), [
-        0, 1, 0, 2, 3, 4, "continuing",
-        1, 2, 3, 4, "continuing",
-        2, 2, 3, 4, "continuing",
-        6 // Loop finished naturally.
+        0,
+        1,
+        0,
+        2,
+        3,
+        4,
+        "continuing",
+        1,
+        2,
+        3,
+        4,
+        "continuing",
+        2,
+        2,
+        3,
+        4,
+        "continuing",
+        6, // Loop finished naturally.
       ]);
       assert.ok(false, "should have thrown an exception");
     } catch (err) {
@@ -2554,16 +2574,14 @@ describe("labeled break and continue statements", function() {
     }
 
     try {
-      check(gen(3, "neither"), [
-        0, 1, 0, 2, 3, 4, 5
-      ]);
+      check(gen(3, "neither"), [0, 1, 0, 2, 3, 4, 5]);
       assert.ok(false, "should have thrown an exception");
     } catch (err) {
       assert.strictEqual(err, e4);
     }
   });
 
-  it("should allow breaking from any labeled statement", function() {
+  it("should allow breaking from any labeled statement", function () {
     function* gen(limit) {
       yield 0;
 
@@ -2576,22 +2594,22 @@ describe("labeled break and continue statements", function() {
           yield 3;
         }
 
-        label2:
-        if (limit === 3) label3: {
-          yield 4;
-          if (i === 0) break label2;
-          yield 5;
-          if (i === 1) break label3;
-          label4: yield 6;
-          // This should break from the for-loop.
-          if (i === 2) xxx: break;
-          yield 7;
-        }
+        label2: if (limit === 3)
+          label3: {
+            yield 4;
+            if (i === 0) break label2;
+            yield 5;
+            if (i === 1) break label3;
+            label4: yield 6;
+            // This should break from the for-loop.
+            if (i === 2) xxx: break;
+            yield 7;
+          }
 
         // This should be a no-op.
         xxx: break xxx;
 
-        yield 8
+        yield 8;
       }
 
       yield 9;
@@ -2604,44 +2622,50 @@ describe("labeled break and continue statements", function() {
   });
 });
 
-describe("for loop with var decl and no update expression", function() {
+describe("for loop with var decl and no update expression", function () {
   // https://github.com/facebook/regenerator/issues/103
-  function *range() {
-    for (var i = 0; false; ) {
-    }
+  function* range() {
+    for (var i = 0; false; ) {}
   }
 
-  it("should compile and run", function() {
+  it("should compile and run", function () {
     check(range(), []);
   });
 });
 
-describe("generator function prototype", function() {
+describe("generator function prototype", function () {
   function getProto(obj) {
-    return Object.getPrototypeOf
-      ? Object.getPrototypeOf(obj)
-      : obj.__proto__;
+    return Object.getPrototypeOf ? Object.getPrototypeOf(obj) : obj.__proto__;
   }
 
-  it("should follow the expected object model", function() {
+  it("should follow the expected object model", function () {
     var GeneratorFunctionPrototype = getProto(f);
     var GeneratorFunction = GeneratorFunctionPrototype.constructor;
 
-    assert.strictEqual(GeneratorFunction.name, 'GeneratorFunction');
-    assert.strictEqual(GeneratorFunction.prototype,
-                       GeneratorFunctionPrototype);
-    assert.strictEqual(GeneratorFunctionPrototype.prototype.constructor,
-                       GeneratorFunctionPrototype);
-    assert.strictEqual(GeneratorFunctionPrototype.prototype,
-                       getProto(f.prototype));
-    assert.strictEqual(getProto(GeneratorFunctionPrototype),
-                       Function.prototype);
+    assert.strictEqual(GeneratorFunction.name, "GeneratorFunction");
+    assert.strictEqual(GeneratorFunction.prototype, GeneratorFunctionPrototype);
+    assert.strictEqual(
+      GeneratorFunctionPrototype.prototype.constructor,
+      GeneratorFunctionPrototype,
+    );
+    assert.strictEqual(
+      GeneratorFunctionPrototype.prototype,
+      getProto(f.prototype),
+    );
+    assert.strictEqual(
+      getProto(GeneratorFunctionPrototype),
+      Function.prototype,
+    );
 
-    if (typeof process === "undefined" ||
-        process.version.slice(1, 3) === "0.") {
+    if (
+      typeof process === "undefined" ||
+      process.version.slice(1, 3) === "0."
+    ) {
       // Node version strings start with 0.
-      assert.strictEqual(GeneratorFunctionPrototype.name,
-                         "GeneratorFunctionPrototype");
+      assert.strictEqual(
+        GeneratorFunctionPrototype.name,
+        "GeneratorFunctionPrototype",
+      );
     } else if (process.version.slice(1, 3) === "1.") {
       // iojs version strings start with 1., and iojs gets this .name
       // property wrong. TODO report this?
@@ -2670,8 +2694,8 @@ describe("generator function prototype", function() {
     }
 
     assert.strictEqual(getProto(f), getProto(f2));
-    assert.strictEqual(f.hasOwnProperty('constructor'), false);
-    assert.strictEqual(getProto(f).constructor.name, 'GeneratorFunction');
+    assert.strictEqual(f.hasOwnProperty("constructor"), false);
+    assert.strictEqual(getProto(f).constructor.name, "GeneratorFunction");
 
     // Intentionally at the end to test hoisting.
     function* f() {
@@ -2692,28 +2716,30 @@ describe("generator function prototype", function() {
   });
 });
 
-describe("for-of loops", function() {
+describe("for-of loops", function () {
   var arraysAreIterable =
     typeof Array.prototype[Symbol.iterator] === "function";
 
-  (fullCompatibility && arraysAreIterable ? it : xit)
-  ("should work for Arrays", function() {
-    var sum = 0;
-    for (var x of [1, 2].concat(3)) {
-      sum += x;
-    }
-    assert.strictEqual(sum, 6);
-  });
+  (fullCompatibility && arraysAreIterable ? it : xit)(
+    "should work for Arrays",
+    function () {
+      var sum = 0;
+      for (var x of [1, 2].concat(3)) {
+        sum += x;
+      }
+      assert.strictEqual(sum, 6);
+    },
+  );
 
-  it("should work for generators", function() {
-    var value, values = [];
-    for (value of range(3))
-      values.push(value);
+  it("should work for generators", function () {
+    var value,
+      values = [];
+    for (value of range(3)) values.push(value);
     assert.deepEqual(values, [0, 1, 2]);
   });
 
-  it("should work inside of generators", function() {
-    function *yieldPermutations(list) {
+  it("should work inside of generators", function () {
+    function* yieldPermutations(list) {
       if (list.length < 2) {
         yield list;
         return 1;
@@ -2745,26 +2771,39 @@ describe("for-of loops", function() {
 
     check(yieldPermutations([1]), [[1]], 1);
 
-    check(yieldPermutations([2, 1]), [
-      [2, 1],
-      [1, 2]
-    ], 2);
+    check(
+      yieldPermutations([2, 1]),
+      [
+        [2, 1],
+        [1, 2],
+      ],
+      2,
+    );
 
-    check(yieldPermutations([1,3,2]), [
-      [1, 3, 2],
-      [3, 1, 2],
-      [3, 2, 1],
-      [1, 2, 3],
-      [2, 1, 3],
-      [2, 3, 1]
-    ], 6);
+    check(
+      yieldPermutations([1, 3, 2]),
+      [
+        [1, 3, 2],
+        [3, 1, 2],
+        [3, 2, 1],
+        [1, 2, 3],
+        [2, 1, 3],
+        [2, 3, 1],
+      ],
+      6,
+    );
   });
 });
 
-describe("expressions containing yield subexpressions", function() {
-  it("should evaluate all subexpressions before yielding", function() {
-    function *gen(x) {
-      return x * (yield (function(y) { x = y }));
+describe("expressions containing yield subexpressions", function () {
+  it("should evaluate all subexpressions before yielding", function () {
+    function* gen(x) {
+      return (
+        x *
+        (yield function (y) {
+          x = y;
+        })
+      );
     }
 
     var g = gen(2);
@@ -2775,12 +2814,12 @@ describe("expressions containing yield subexpressions", function() {
 
     assert.deepEqual(g.next(5), {
       value: 10,
-      done: true
+      done: true,
     });
   });
 
-  it("should work even with getter member expressions", function() {
-    function *gen() {
+  it("should work even with getter member expressions", function () {
+    function* gen() {
       return a.b + (yield "asdf");
     }
 
@@ -2788,9 +2827,9 @@ describe("expressions containing yield subexpressions", function() {
     var b = 0;
 
     Object.defineProperty(a, "b", {
-      get: function() {
+      get: function () {
         return ++b;
-      }
+      },
     });
 
     var g = gen();
@@ -2799,19 +2838,19 @@ describe("expressions containing yield subexpressions", function() {
 
     assert.deepEqual(g.next(), {
       value: "asdf",
-      done: false
+      done: false,
     });
 
     assert.strictEqual(a.b, 3);
 
     assert.deepEqual(g.next(2), {
       value: 4,
-      done: true
+      done: true,
     });
   });
 
-  it("should evaluate all array elements before yielding", function() {
-    function *gen() {
+  it("should evaluate all array elements before yielding", function () {
+    function* gen() {
       return [a, yield "asdf", a];
     }
 
@@ -2820,19 +2859,19 @@ describe("expressions containing yield subexpressions", function() {
 
     assert.deepEqual(g.next(), {
       value: "asdf",
-      done: false
+      done: false,
     });
 
     a = 3;
 
     assert.deepEqual(g.next(2), {
       value: [1, 2, 3],
-      done: true
+      done: true,
     });
   });
 
-  it("should handle callee member expressions correctly", function() {
-    function *gen() {
+  it("should handle callee member expressions correctly", function () {
+    function* gen() {
       a = a.slice(0).concat(yield "asdf");
       return a;
     }
@@ -2842,19 +2881,19 @@ describe("expressions containing yield subexpressions", function() {
 
     assert.deepEqual(g.next(), {
       value: "asdf",
-      done: false
+      done: false,
     });
 
     a.push(1);
 
     assert.deepEqual(g.next(2), {
       value: [2],
-      done: true
+      done: true,
     });
   });
 
-  it("should handle implicit stringification correctly", function() {
-    function *gen() {
+  it("should handle implicit stringification correctly", function () {
+    function* gen() {
       return a + (yield "asdf");
     }
 
@@ -2863,19 +2902,19 @@ describe("expressions containing yield subexpressions", function() {
 
     assert.deepEqual(g.next(), {
       value: "asdf",
-      done: false
+      done: false,
     });
 
-    a = [4,5];
+    a = [4, 5];
 
     assert.deepEqual(g.next(",3"), {
       value: "1,2,3",
-      done: true
+      done: true,
     });
   });
 
-  it("should work when yield is in an array spread", function() {
-    function *gen() {
+  it("should work when yield is in an array spread", function () {
+    function* gen() {
       return [0, ...(yield "foo"), 3];
     }
 
@@ -2892,8 +2931,8 @@ describe("expressions containing yield subexpressions", function() {
     });
   });
 
-  it("should work when yield is in a sparse array", function() {
-    function *gen() {
+  it("should work when yield is in a sparse array", function () {
+    function* gen() {
       return [0, yield "foo", , 3];
     }
 
