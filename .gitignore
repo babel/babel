@@ -10,8 +10,10 @@
 **/node_modules
 !**/test/fixtures/**/node_modules
 /packages/*/LICENSE
+!/packages/babel-helpers/LICENSE
 !/packages/babel-parser/LICENSE
 !/packages/babel-plugin-transform-object-assign/LICENSE
+!/packages/babel-plugin-transform-regenerator/LICENSE
 *.log
 *.cache
 /build
