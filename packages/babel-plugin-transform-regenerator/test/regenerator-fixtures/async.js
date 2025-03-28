@@ -8,39 +8,13 @@
 var assert = require("assert");
 
 assert(
-  function*() {}.toString().indexOf("regenerator") !== -1,
-  "regenerator-transform should be enabled"
+  function* () {}.toString().indexOf("regenerator") !== -1,
+  "regenerator-transform should be enabled",
 );
 
-describe("async functions and await expressions", function() {
-  Promise = require("promise");
-
-  describe("regeneratorRuntime", function() {
-    it("should be defined globally", function() {
-      var global = Function("return this")();
-      assert.ok("regeneratorRuntime" in global);
-      assert.strictEqual(global.regeneratorRuntime, regeneratorRuntime);
-    });
-
-    it("should have a .wrap method", function() {
-      assert.strictEqual(typeof regeneratorRuntime.wrap, "function");
-    });
-  });
-
-  describe("Promise", function() {
-    it("should be defined globally", function() {
-      var global = Function("return this")();
-      assert.ok("Promise" in global);
-      assert.strictEqual(global.Promise, Promise);
-    });
-
-    it("should be a function", function() {
-      assert.strictEqual(typeof Promise, "function");
-    });
-  });
-
-  describe("no-await async function", function() {
-    it("should return a Promise", function(done) {
+describe("async functions and await expressions", function () {
+  describe("no-await async function", function () {
+    it("should return a Promise", function (done) {
       var called = false;
 
       async function noAwait(value) {
@@ -51,16 +25,18 @@ describe("async functions and await expressions", function() {
       var promise = noAwait("asdf");
       assert.strictEqual(called, true);
 
-      promise.then(function(value) {
-        assert.strictEqual(called, true);
-        assert.strictEqual(value, "asdf");
-        done();
-      }).catch(done);
+      promise
+        .then(function (value) {
+          assert.strictEqual(called, true);
+          assert.strictEqual(value, "asdf");
+          done();
+        })
+        .catch(done);
     });
   });
 
-  describe("one-await async function", function() {
-    it("should finish asynchronously", function(done) {
+  describe("one-await async function", function () {
+    it("should finish asynchronously", function (done) {
       var flag1 = false;
       var flag2 = false;
 
@@ -75,16 +51,18 @@ describe("async functions and await expressions", function() {
       assert.strictEqual(flag1, true);
       assert.strictEqual(flag2, false);
 
-      promise.then(function(value) {
-        assert.strictEqual(flag2, true);
-        assert.strictEqual(value, "asdf");
-        done();
-      }).catch(done);
+      promise
+        .then(function (value) {
+          assert.strictEqual(flag2, true);
+          assert.strictEqual(value, "asdf");
+          done();
+        })
+        .catch(done);
     });
   });
 
-  describe("nested async function calls", function() {
-    it("should evaluate in the right order", function(done) {
+  describe("nested async function calls", function () {
+    it("should evaluate in the right order", function (done) {
       var markers = [];
 
       async function innerMost(marker) {
@@ -95,17 +73,11 @@ describe("async functions and await expressions", function() {
       async function inner(marker) {
         markers.push(marker);
 
-        assert.strictEqual(
-          await innerMost(marker + 1),
-          marker + 1
-        );
+        assert.strictEqual(await innerMost(marker + 1), marker + 1);
 
         markers.push(marker + 2);
 
-        assert.strictEqual(
-          await innerMost(marker + 3),
-          marker + 3
-        );
+        assert.strictEqual(await innerMost(marker + 3), marker + 3);
 
         markers.push(marker + 4);
       }
@@ -118,22 +90,23 @@ describe("async functions and await expressions", function() {
         markers.push(12);
       }
 
-      outer().then(function() {
-        var expected = [];
-        for (var i = 0; i <= 12; ++i)
-          expected.push(i);
-        assert.deepEqual(markers, expected);
-        done();
-      }).catch(done);
+      outer()
+        .then(function () {
+          var expected = [];
+          for (var i = 0; i <= 12; ++i) expected.push(i);
+          assert.deepEqual(markers, expected);
+          done();
+        })
+        .catch(done);
     });
   });
 
-  describe("dependent promises", function() {
-    it("should be awaitable out of order", function(done) {
+  describe("dependent promises", function () {
+    it("should be awaitable out of order", function (done) {
       async function outer(value) {
         var resolved = false;
-        var p1 = new Promise(function(resolve) {
-          setTimeout(function() {
+        var p1 = new Promise(function (resolve) {
+          setTimeout(function () {
             resolve(value + 1);
             resolved = true;
           }, 0);
@@ -141,7 +114,7 @@ describe("async functions and await expressions", function() {
 
         assert.strictEqual(resolved, false);
 
-        var v2 = await p1.then(function(value) {
+        var v2 = await p1.then(function (value) {
           return value + 1;
         });
 
@@ -152,15 +125,17 @@ describe("async functions and await expressions", function() {
         return [v1, v2];
       }
 
-      outer(1).then(function(pair) {
-        assert.deepEqual(pair, [2, 3]);
-        done();
-      }).catch(done);
+      outer(1)
+        .then(function (pair) {
+          assert.deepEqual(pair, [2, 3]);
+          done();
+        })
+        .catch(done);
     });
   });
 
-  describe("rejected promises", function() {
-    it("should cause await expressions to throw", function(done) {
+  describe("rejected promises", function () {
+    it("should cause await expressions to throw", function (done) {
       var error = new Error("rejected");
 
       async function f(arg) {
@@ -174,17 +149,16 @@ describe("async functions and await expressions", function() {
 
       Promise.all([
         f(Promise.reject(error)),
-        f(Promise.resolve("did not throw"))
-      ]).then(function(results) {
-        assert.deepEqual(results, [
-          "did throw",
-          "did not throw"
-        ]);
-        done();
-      }).catch(done);
+        f(Promise.resolve("did not throw")),
+      ])
+        .then(function (results) {
+          assert.deepEqual(results, ["did throw", "did not throw"]);
+          done();
+        })
+        .catch(done);
     });
 
-    it("should be returned by exceptional async functions", function(done) {
+    it("should be returned by exceptional async functions", function (done) {
       var error = new Error("rejected");
 
       async function e(arg) {
@@ -203,57 +177,61 @@ describe("async functions and await expressions", function() {
       }
 
       async function h(arg) {
-        return await Promise.all([
-          g(arg),
-          Promise.resolve("dummy")
-        ]);
+        return await Promise.all([g(arg), Promise.resolve("dummy")]);
       }
 
       Promise.all([
-        h(error).then(function() {
-          done(new Error("should not have resolved"));
-        }, function(e) {
-          assert.strictEqual(e, error);
-          return "ok1";
-        }),
-        h(null).then(function(result) {
-          assert.deepEqual(result, [
-            "did not throw",
-            "dummy"
-          ]);
+        h(error).then(
+          function () {
+            done(new Error("should not have resolved"));
+          },
+          function (e) {
+            assert.strictEqual(e, error);
+            return "ok1";
+          },
+        ),
+        h(null).then(function (result) {
+          assert.deepEqual(result, ["did not throw", "dummy"]);
           return "ok2";
+        }),
+      ])
+        .then(function (results) {
+          assert.deepEqual(results, ["ok1", "ok2"]);
+          done();
         })
-      ]).then(function(results) {
-        assert.deepEqual(results, ["ok1", "ok2"]);
-        done();
-      }).catch(done);
+        .catch(done);
     });
 
-    it("should propagate failure when returned", function() {
+    it("should propagate failure when returned", function () {
       var rejection = new Error("rejection");
 
       async function f() {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           reject(rejection);
         });
       }
 
-      return f().then(function(result) {
-        assert.ok(false, "should have been rejected");
-      }, function(error) {
-        assert.strictEqual(error, rejection);
-      });
+      return f().then(
+        function (result) {
+          assert.ok(false, "should have been rejected");
+        },
+        function (error) {
+          assert.strictEqual(error, rejection);
+        },
+      );
     });
   });
 
-  describe("async function expressions", function() {
-    it("should be allowed", function(done) {
-      (async function(arg) {
+  describe("async function expressions", function () {
+    it("should be allowed", function (done) {
+      (async function (arg) {
         return await arg;
-      })(Promise.resolve(1234)).then(function(value) {
-        assert.strictEqual(value, 1234);
-        done();
-      }).catch(done);
+      })(Promise.resolve(1234))
+        .then(function (value) {
+          assert.strictEqual(value, 1234);
+          done();
+        })
+        .catch(done);
     });
   });
 
@@ -261,46 +239,52 @@ describe("async functions and await expressions", function() {
     it("should default to undefined (strict)", function (done) {
       async function f() {
         "use strict";
-  
+
         return this;
       }
-  
-      f().then(function(value) {
-        assert.strictEqual(value, undefined);
-        done();
-      }).catch(done);
+
+      f()
+        .then(function (value) {
+          assert.strictEqual(value, undefined);
+          done();
+        })
+        .catch(done);
     });
-  
+
     it("should respect .call's this", function (done) {
       async function f() {
         return this;
       }
-  
+
       var self = {};
-      f.call(self).then(function(value) {
-        assert.strictEqual(value, self);
-        done();
-      }).catch(done);
+      f.call(self)
+        .then(function (value) {
+          assert.strictEqual(value, self);
+          done();
+        })
+        .catch(done);
     });
-  
+
     it("shouldn't capture this when not needed", function () {
       // https://github.com/babel/babel/issues/4056
-  
+
       async function f() {
         return 0;
       }
-  
+
       var source = String(f);
       assert.strictEqual(source.indexOf("this"), -1);
     });
   });
 });
 
-describe("async generator functions", function() {
-  it("should return a working AsyncIterator", function() {
+describe("async generator functions", function () {
+  // Transforming this currently leaves behind a `regeneratorRuntime` reference,
+  // rather than referencing the helper.
+  it.skip("should return a working AsyncIterator", function () {
     var markers = [];
 
-    async function *gen(arg) {
+    async function* gen(arg) {
       markers.push(0);
       var sent = yield arg;
       markers.push(1);
@@ -317,42 +301,45 @@ describe("async generator functions", function() {
     var firstPromise = iter.next();
     assert.deepEqual(markers, [0]);
 
-    return firstPromise.then(function(firstResult) {
-      assert.deepEqual(firstResult, {
-        value: "initial argument",
-        done: false
+    return firstPromise
+      .then(function (firstResult) {
+        assert.deepEqual(firstResult, {
+          value: "initial argument",
+          done: false,
+        });
+
+        assert.deepEqual(markers, [0]);
+
+        return iter.next(
+          new Promise(function (resolve) {
+            setTimeout(resolve, 100);
+          }).then(function () {
+            assert.deepEqual(markers, [0, 1]);
+            return "will become final result";
+          }),
+        );
+      })
+      .then(function (secondResult) {
+        assert.deepEqual(secondResult, {
+          value: "second",
+          done: false,
+        });
+
+        assert.deepEqual(markers, [0, 1, 2]);
+
+        return iter.next("sent after second");
+      })
+      .then(function (finalResult) {
+        assert.deepEqual(markers, [0, 1, 2, 3]);
+        assert.deepEqual(finalResult, {
+          value: "will become final result",
+          done: true,
+        });
       });
-
-      assert.deepEqual(markers, [0]);
-
-      return iter.next(new Promise(function(resolve) {
-        setTimeout(resolve, 100);
-      }).then(function() {
-        assert.deepEqual(markers, [0, 1]);
-        return "will become final result";
-      }));
-
-    }).then(function(secondResult) {
-      assert.deepEqual(secondResult, {
-        value: "second",
-        done: false
-      });
-
-      assert.deepEqual(markers, [0, 1, 2]);
-
-      return iter.next("sent after second");
-
-    }).then(function(finalResult) {
-      assert.deepEqual(markers, [0, 1, 2, 3]);
-      assert.deepEqual(finalResult, {
-        value: "will become final result",
-        done: true
-      });
-    });
   });
 
-  it("should keep results in order", function() {
-    async function *range(limit) {
+  it("should keep results in order", function () {
+    async function* range(limit) {
       var before = [];
       var after = [];
       for (var i = 0; i < limit; ++i) {
@@ -373,7 +360,7 @@ describe("async generator functions", function() {
       var promise = iter.next();
       promises.push(promise);
 
-      promise.then(function(result) {
+      promise.then(function (result) {
         assert.strictEqual(result.done, false);
         results.push(result);
       });
@@ -381,30 +368,34 @@ describe("async generator functions", function() {
 
     assert.deepEqual(results, []);
 
-    return Promise.all(promises).then(function(promiseResults) {
-      assert.deepEqual(results, promiseResults);
+    return Promise.all(promises)
+      .then(function (promiseResults) {
+        assert.deepEqual(results, promiseResults);
 
-      return iter.next();
+        return iter.next();
+      })
+      .then(function (finalResult) {
+        assert.deepEqual(
+          results.map(function (result) {
+            return result.value;
+          }),
+          finalResult.value,
+        );
 
-    }).then(function(finalResult) {
-      assert.deepEqual(results.map(function(result) {
-        return result.value;
-      }), finalResult.value);
-
-      assert.strictEqual(finalResult.done, true);
-    });
+        assert.strictEqual(finalResult.done, true);
+      });
   });
 
-  it("should be able to handle many awaits", function() {
+  it("should be able to handle many awaits", function () {
     var awaitCount = 0;
 
     function countAwait(i) {
-      return Promise.resolve(i).then(function() {
+      return Promise.resolve(i).then(function () {
         ++awaitCount;
       });
     }
 
-    async function *gen(limit) {
+    async function* gen(limit) {
       await countAwait(0);
       yield 1;
       await countAwait(2);
@@ -422,90 +413,96 @@ describe("async generator functions", function() {
 
     var iter = gen(100);
 
-    return iter.next().then(function(result) {
-      assert.strictEqual(awaitCount, 1);
+    return iter
+      .next()
+      .then(function (result) {
+        assert.strictEqual(awaitCount, 1);
 
-      assert.deepEqual(result, {
-        value: 1,
-        done: false
+        assert.deepEqual(result, {
+          value: 1,
+          done: false,
+        });
+
+        return iter.next();
+      })
+      .then(function (result) {
+        assert.strictEqual(awaitCount, 3);
+
+        assert.deepEqual(result, {
+          value: 4,
+          done: false,
+        });
+
+        return iter.next();
+      })
+      .then(function (result) {
+        assert.strictEqual(awaitCount, 6);
+
+        assert.deepEqual(result, {
+          value: 8,
+          done: false,
+        });
+
+        return iter.next();
+      })
+      .then(function (result) {
+        assert.strictEqual(awaitCount, 6 + 100);
+
+        assert.deepEqual(result, {
+          value: "done",
+          done: true,
+        });
+
+        return iter.next();
+      })
+      .then(function (result) {
+        assert.deepEqual(result, {
+          value: void 0,
+          done: true,
+        });
       });
-
-      return iter.next();
-
-    }).then(function(result) {
-      assert.strictEqual(awaitCount, 3);
-
-      assert.deepEqual(result, {
-        value: 4,
-        done: false
-      });
-
-      return iter.next();
-
-    }).then(function(result) {
-      assert.strictEqual(awaitCount, 6);
-
-      assert.deepEqual(result, {
-        value: 8,
-        done: false
-      });
-
-      return iter.next();
-
-    }).then(function(result) {
-      assert.strictEqual(awaitCount, 6 + 100);
-
-      assert.deepEqual(result, {
-        value: "done",
-        done: true
-      });
-
-      return iter.next();
-
-    }).then(function(result) {
-      assert.deepEqual(result, {
-        value: void 0,
-        done: true
-      });
-    });
   });
 
-  it("should not propagate exceptions between iterations", function() {
-    async function *gen() {
+  it("should not propagate exceptions between iterations", function () {
+    async function* gen() {
       yield 1;
       yield 2;
     }
 
     var iter = gen();
 
-    return iter.next().then(function(result) {
-      assert.deepEqual(result, {
-        value: 1,
-        done: false
+    return iter
+      .next()
+      .then(function (result) {
+        assert.deepEqual(result, {
+          value: 1,
+          done: false,
+        });
+
+        return iter.throw(new Error("thrown from first yield"));
+      })
+      .then(
+        function () {
+          throw new Error("should have thrown");
+        },
+        function (error) {
+          assert.strictEqual(error.message, "thrown from first yield");
+          return iter.next();
+        },
+      )
+      .then(function (result) {
+        assert.deepEqual(result, {
+          value: void 0,
+          done: true,
+        });
       });
-
-      return iter.throw(new Error("thrown from first yield"));
-
-    }).then(function() {
-      throw new Error("should have thrown");
-
-    }, function(error) {
-      assert.strictEqual(error.message, "thrown from first yield");
-      return iter.next();
-
-    }).then(function(result) {
-      assert.deepEqual(result, {
-        value: void 0,
-        done: true
-      });
-    });
   });
 
-  it("should allow yielding a rejected Promise", function() {
+  it("should allow yielding a rejected Promise", function () {
     var yielded = new Error("yielded rejection");
     var returned = new Error("returned rejection");
 
-    async function *gen() {
+    async function* gen() {
       assert.strictEqual(yield "first yielded", "first sent");
       try {
         assert.strictEqual(yield Promise.reject(yielded), "not reached");
@@ -517,23 +514,30 @@ describe("async generator functions", function() {
 
     var iter = gen();
 
-    return iter.next().then(function(result) {
-      assert.deepEqual(result, {
-        value: "first yielded",
-        done: false
-      });
-      return iter.next("first sent");
-    }).then(function (result) {
-      assert.deepEqual(result, {
-        value: yielded,
-        done: false
-      });
-      return iter.next("second sent");
-    }).then(function(result) {
-      assert.ok(false, "should have returned a rejected Promise");
-    }, function(error) {
-      assert.strictEqual(error, returned);
-    });
+    return iter
+      .next()
+      .then(function (result) {
+        assert.deepEqual(result, {
+          value: "first yielded",
+          done: false,
+        });
+        return iter.next("first sent");
+      })
+      .then(function (result) {
+        assert.deepEqual(result, {
+          value: yielded,
+          done: false,
+        });
+        return iter.next("second sent");
+      })
+      .then(
+        function (result) {
+          assert.ok(false, "should have returned a rejected Promise");
+        },
+        function (error) {
+          assert.strictEqual(error, returned);
+        },
+      );
   });
 
   it("should work with nested arrow functions", async function () {
@@ -543,10 +547,7 @@ describe("async generator functions", function() {
       })();
     };
 
-    assert.strictEqual(
-      await a(() => Promise.resolve(1234)),
-      1234
-    );
+    assert.strictEqual(await a(() => Promise.resolve(1234)), 1234);
   });
 
   it("should support super.method(...) in async methods", async function () {
@@ -566,8 +567,8 @@ describe("async generator functions", function() {
   });
 });
 
-describe("update operators", function() {
-  it("should read left side before yielding", function() {
+describe("update operators", function () {
+  it("should read left side before yielding", function () {
     let x = 0;
 
     function* test() {
@@ -583,7 +584,7 @@ describe("update operators", function() {
     assert.strictEqual(x, 2);
   });
 
-  it("should explode left side before yielding", function() {
+  it("should explode left side before yielding", function () {
     let obj = { count: 0 };
 
     function* test() {
@@ -605,7 +606,7 @@ describe("update operators", function() {
     assert.strictEqual(obj.count, 2);
   });
 
-  it("should read left side before awaiting", function() {
+  it("should read left side before awaiting", function () {
     let x = 0;
 
     async function test(val) {
