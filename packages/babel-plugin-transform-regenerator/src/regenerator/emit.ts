@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-case-declarations */
 import assert from "assert";
+import type { types as t } from "@babel/core";
 import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
 import * as util from "./util.ts";
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
-export function Emitter(this: any, contextId: any) {
+export function Emitter(
+  this: any,
+  contextId: any,
+  getRegeneratorRuntime: () => t.Expression,
+) {
   assert.ok(this instanceof Emitter);
 
   util.getTypes().assertIdentifier(contextId);
@@ -42,6 +47,8 @@ export function Emitter(this: any, contextId: any) {
   // to enter a nested loop context that determines the meaning of break
   // and continue statements therein.
   (this as any).leapManager = new (leap.LeapManager as any)(this);
+
+  (this as any).getRegeneratorRuntime = getRegeneratorRuntime;
 }
 
 const Ep = Emitter.prototype;
@@ -532,9 +539,10 @@ Ep.explodeStatement = function (path: any, labelId: any) {
       const keyIterNextFn = self.makeTempVar();
       self.emitAssign(
         keyIterNextFn,
-        t.callExpression(util.runtimeProperty("keys"), [
-          self.explodeExpression(path.get("right")),
-        ]),
+        t.callExpression(
+          util.runtimeProperty(this.getRegeneratorRuntime, "keys"),
+          [self.explodeExpression(path.get("right"))],
+        ),
       );
 
       self.mark(head);

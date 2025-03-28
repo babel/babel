@@ -164,7 +164,6 @@ describe("nested generators in try-catch", function () {
 
   it("should get a reference to the caught error", function () {
     var genFun2 = gen().next().value;
-    assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
     var gen2 = genFun2();
     var res = gen2.next();
     assert.ok(res.value instanceof ReferenceError);
@@ -1695,7 +1694,6 @@ describe("function declaration hoisting", function () {
   it("should work for nested generator function declarations", function () {
     function* outer(n) {
       yield 0;
-      assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
       return yield* inner(n);
 
       // Note that this function declaration comes after everything else
@@ -2224,43 +2222,6 @@ describe("yield* expression results", function () {
 
     assert.strictEqual(pumpNumber(bar()), 5);
     assert.strictEqual(pumpNumber(foo()), 10);
-  });
-});
-
-describe("isGeneratorFunction", function () {
-  it("should work for function declarations", function () {
-    // Do the assertions up here to make sure the generator function is
-    // marked at the beginning of the block the function is declared in.
-    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(genFun), true);
-
-    assert.strictEqual(
-      regeneratorRuntime.isGeneratorFunction(normalFun),
-      false,
-    );
-
-    function normalFun() {
-      return 0;
-    }
-
-    function* genFun() {
-      yield 0;
-    }
-  });
-
-  it("should work for function expressions", function () {
-    assert.strictEqual(
-      regeneratorRuntime.isGeneratorFunction(function* genFun() {
-        yield 0;
-      }),
-      true,
-    );
-
-    assert.strictEqual(
-      regeneratorRuntime.isGeneratorFunction(function normalFun() {
-        return 0;
-      }),
-      false,
-    );
   });
 });
 

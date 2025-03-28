@@ -1,3 +1,5 @@
+import type { types as t } from "@babel/core";
+
 let currentTypes: any = null;
 
 export function wrapWithTypes(types: any, fn: any) {
@@ -16,13 +18,12 @@ export function getTypes() {
   return currentTypes;
 }
 
-export function runtimeProperty(name: any) {
+export function runtimeProperty(
+  getRegeneratorRuntime: () => t.Expression,
+  name: any,
+) {
   const t = getTypes();
-  return t.memberExpression(
-    t.identifier("regeneratorRuntime"),
-    t.identifier(name),
-    false,
-  );
+  return t.memberExpression(getRegeneratorRuntime(), t.identifier(name), false);
 }
 
 export function isReference(path: any) {
