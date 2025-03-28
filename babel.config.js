@@ -193,6 +193,7 @@ module.exports = function (api) {
         : null,
 
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
+      require("./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs"),
     ].filter(Boolean),
     overrides: [
       {
