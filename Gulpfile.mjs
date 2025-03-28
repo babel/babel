@@ -136,22 +136,6 @@ function generateTraverseHelpers(helperKind, outBase = "") {
   );
 }
 
-async function generateRuntimeHelpers() {
-  await generateHelpers(
-    `./packages/babel-helpers/scripts/generate-regenerator-runtime.js`,
-    `./packages/babel-helpers/src/helpers/`,
-    "regeneratorRuntime.js",
-    "@babel/helpers -> regeneratorRuntime"
-  );
-
-  return generateHelpers(
-    `./packages/babel-helpers/scripts/generate-helpers.js`,
-    `./packages/babel-helpers/src/`,
-    "helpers-generated.ts",
-    "@babel/helpers"
-  );
-}
-
 const kebabToCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
 function generateStandalone() {
@@ -791,10 +775,15 @@ gulp.task("generate-type-helpers", () => {
   ]);
 });
 
-gulp.task("generate-runtime-helpers", () => {
+gulp.task("generate-runtime-helpers", async () => {
   log("Generating @babel/helpers runtime helpers");
 
-  return generateRuntimeHelpers();
+  await generateHelpers(
+    `./packages/babel-helpers/scripts/generate-helpers.js`,
+    `./packages/babel-helpers/src/`,
+    "helpers-generated.ts",
+    "@babel/helpers"
+  );
 });
 
 gulp.task("generate-standalone", () => generateStandalone());
