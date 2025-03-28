@@ -2,9 +2,12 @@ import { Module } from "module";
 import path from "path";
 import fs from "fs";
 import child from "child_process";
-import { USE_ESM, commonJS, describeGte } from "$repo-utils";
+import { USE_ESM, commonJS, describeGte, itSatisfies } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
+
+// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 22
+const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 const testCacheFilename = path.join(__dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
@@ -137,7 +140,7 @@ describe("@babel/register", function () {
             {
               babelrc: true,
               sourceMaps: false,
-              cwd: path.dirname(testFileMjs),
+              cwd: path.dirname(testFile),
               extensions: [".js"],
             },
             proxyHandler,
@@ -150,6 +153,21 @@ describe("@babel/register", function () {
         expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
         expect(proxyHandler.set).not.toHaveBeenCalled();
       });
+
+      itSatisfies(versionHasRequireESM)(
+        "works with mjs config files without top-level await",
+        () => {
+          setupRegister({
+            babelrc: true,
+            sourceMaps: false,
+            cwd: path.dirname(testFileMjs),
+          });
+
+          const result = currentHook(testFileMjsContent, testFileMjs);
+
+          expect(result).toBe('"use strict";\n\nrequire("assert");');
+        },
+      );
     });
   }
 
