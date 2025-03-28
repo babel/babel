@@ -84,10 +84,19 @@ export default declare(api => {
 
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
-      remapAsyncToGenerator(path, {
-        wrapAsync: state.addHelper("wrapAsyncGenerator"),
-        wrapAwait: state.addHelper("awaitAsyncGenerator"),
-      });
+      remapAsyncToGenerator(
+        path,
+        process.env.BABEL_8_BREAKING
+          ? {
+              wrapAsync: () => state.addHelper("wrapAsyncGenerator"),
+              wrapAwait: () => state.addHelper("awaitAsyncGenerator"),
+              callAsync: () => state.addHelper("newAsyncGenerator"),
+            }
+          : {
+              wrapAsync: state.addHelper("wrapAsyncGenerator"),
+              wrapAwait: state.addHelper("awaitAsyncGenerator"),
+            },
+      );
     },
   };
 

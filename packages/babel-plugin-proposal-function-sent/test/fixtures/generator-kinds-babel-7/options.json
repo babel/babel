@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-function-sent"],
+  "BABEL_8_BREAKING": false
+}

@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-parameters", "transform-async-to-generator"],
+  "BABEL_8_BREAKING": false
+}

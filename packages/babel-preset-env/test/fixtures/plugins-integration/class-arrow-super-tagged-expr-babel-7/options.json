@@ -1,0 +1,5 @@
+{
+  "targets": "chrome 50",
+  "presets": ["env"],
+  "BABEL_8_BREAKING": false
+}

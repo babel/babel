@@ -1,0 +1,20 @@
+function foo(_x) {
+  return _foo.apply(this, arguments);
+}
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(x) {
+    var _args = arguments;
+    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          this;
+          _args;
+          return _context.abrupt("return", _args[0]);
+        case 3:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee, this);
+  }));
+  return _foo.apply(this, arguments);
+}

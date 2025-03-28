@@ -3,5 +3,6 @@
     "transform-parameters",
     "transform-async-to-generator",
     "transform-arrow-functions"
-  ]
+  ],
+  "BABEL_8_BREAKING": true
 }
