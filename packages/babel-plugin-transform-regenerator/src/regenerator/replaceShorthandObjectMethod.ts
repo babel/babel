@@ -1,4 +1,4 @@
-import * as util from "./util";
+import * as util from "./util.ts";
 
 // this function converts a shorthand object generator method into a normal
 // (non-shorthand) object property which is a generator function expression. for
@@ -28,11 +28,13 @@ import * as util from "./util";
 //
 // If this function is called with an AST node path that is not a Function (or with an
 // argument that isn't an AST node path), it will throw an error.
-export default function replaceShorthandObjectMethod(path) {
+export default function replaceShorthandObjectMethod(path: any) {
   const t = util.getTypes();
 
   if (!path.node || !t.isFunction(path.node)) {
-    throw new Error("replaceShorthandObjectMethod can only be called on Function AST node paths.");
+    throw new Error(
+      "replaceShorthandObjectMethod can only be called on Function AST node paths.",
+    );
   }
 
   // this function only replaces shorthand object methods (called ObjectMethod
@@ -46,25 +48,26 @@ export default function replaceShorthandObjectMethod(path) {
     return path;
   }
 
-  const parameters = path.node.params.map(function (param) {
+  const parameters = path.node.params.map(function (param: any) {
     return t.cloneDeep(param);
-  })
+  });
 
   const functionExpression = t.functionExpression(
     null, // id
     parameters, // params
     t.cloneDeep(path.node.body), // body
     path.node.generator,
-    path.node.async
+    path.node.async,
   );
 
-  util.replaceWithOrRemove(path,
+  util.replaceWithOrRemove(
+    path,
     t.objectProperty(
       t.cloneDeep(path.node.key), // key
       functionExpression, //value
       path.node.computed, // computed
-      false // shorthand
-    )
+      false, // shorthand
+    ),
   );
 
   // path now refers to the ObjectProperty AST node path, but we want to return a
