@@ -1,27 +1,77 @@
 /* @minVersion 7.18.0 */
 
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
+type Completion = {
+  type: "normal" | "throw" | "break" | "continue" | "return";
+  arg?: any;
+};
+
+type TryEntry = {
+  tryLoc: number | "root";
+  catchLoc?: number;
+  finallyLoc?: number;
+  afterLoc?: number;
+  completion?: Completion;
+};
+
+type TryLocs = [number, number, number, number];
+
+type Context = {
+  tryEntries?: TryEntry[];
+  prev?: number;
+  next?: number | "end";
+  sent?: any;
+  _sent?: any;
+  done?: boolean;
+  delegate?: {
+    iterator: Iterator<any>;
+    resultName: string;
+    nextLoc: number;
+  } | null;
+  method?: "next" | "throw" | "return";
+  arg?: any;
+  rval?: any;
+
+  reset(skipTempReset: boolean): void;
+  stop(): Context["rval"];
+  dispatchException(exception: any): boolean;
+  abrupt(
+    type: "normal" | "throw" | "break" | "continue" | "return",
+    arg: any,
+  ): any;
+  complete(record: Completion, afterLoc?: number): any;
+  finish(finallyLoc: number): any;
+  catch(tryLoc: number): any;
+  delegateYield(iterable: any, resultName: string, nextLoc: number): any;
+
+  [key: `t${string}`]: any;
+};
+
 export default function _regeneratorRuntime() {
   "use strict";
 
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+  // @ts-expect-error explicit function reassign
   _regeneratorRuntime = function () {
     return exports;
   };
-  var exports = {};
+  var exports: any = {};
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
   var defineProperty =
     Object.defineProperty ||
-    function (obj, key, desc) {
+    function (obj: any, key, desc) {
       obj[key] = desc.value;
     };
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var undefined: undefined; // More compressible than void 0.
+  var $Symbol =
+    typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
-  function define(obj, key, value) {
+  function define(obj: any, key: PropertyKey, value?: unknown) {
     Object.defineProperty(obj, key, {
       value: value,
       enumerable: true,
@@ -33,18 +83,25 @@ export default function _regeneratorRuntime() {
   try {
     // IE 8 has a broken Object.defineProperty that only works on DOM objects.
     define({}, "");
-  } catch (err) {
+  } catch (_) {
+    // @ts-expect-error explicit function reassign
     define = function (obj, key, value) {
       return (obj[key] = value);
     };
   }
 
-  function wrap(innerFn, outerFn, self, tryLocsList) {
+  function wrap(
+    innerFn: Function,
+    outerFn: Function,
+    self: unknown,
+    tryLocsList: TryLocs[],
+  ) {
     // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
     var protoGenerator =
       outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
     var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
+    // @ts-expect-error new Context()
+    var context = new Context(tryLocsList || []) as Context;
 
     // The ._invoke method unifies the implementations of the .next,
     // .throw, and .return methods.
@@ -66,7 +123,7 @@ export default function _regeneratorRuntime() {
   // in every case, so we don't have to touch the arguments object. The
   // only additional allocation required is the completion record, which
   // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
+  function tryCatch(fn: Function, obj: unknown, arg: unknown) {
     try {
       return { type: "normal", arg: fn.call(obj, arg) };
     } catch (err) {
@@ -94,7 +151,7 @@ export default function _regeneratorRuntime() {
   // This is a polyfill for %IteratorPrototype% for environments that
   // don't natively support it.
   var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
+  define(IteratorPrototype, iteratorSymbol, function (this: unknown) {
     return this;
   });
 
@@ -131,15 +188,15 @@ export default function _regeneratorRuntime() {
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
+  function defineIteratorMethods(prototype: any) {
     ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
+      define(prototype, method, function (this: any, arg: any) {
         return this._invoke(method, arg);
       });
     });
   }
 
-  exports.isGeneratorFunction = function (genFun) {
+  exports.isGeneratorFunction = function (genFun: any) {
     var ctor = typeof genFun === "function" && genFun.constructor;
     return ctor
       ? ctor === GeneratorFunction ||
@@ -149,10 +206,11 @@ export default function _regeneratorRuntime() {
       : false;
   };
 
-  exports.mark = function (genFun) {
+  exports.mark = function (genFun: Function) {
     if (Object.setPrototypeOf) {
       Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
     } else {
+      // @ts-expect-error assign to __proto__
       genFun.__proto__ = GeneratorFunctionPrototype;
       define(genFun, toStringTagSymbol, "GeneratorFunction");
     }
@@ -164,12 +222,21 @@ export default function _regeneratorRuntime() {
   // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
   // `hasOwn.call(value, "__await")` to determine if the yielded value is
   // meant to be awaited.
-  exports.awrap = function (arg) {
+  exports.awrap = function (arg: any) {
     return { __await: arg };
   };
 
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
+  function AsyncIterator(
+    this: any,
+    generator: Generator,
+    PromiseImpl: PromiseConstructor,
+  ) {
+    function invoke(
+      method: "next" | "throw" | "return",
+      arg: any,
+      resolve: (value: any) => void,
+      reject: (error: any) => void,
+    ): any {
       var record = tryCatch(generator[method], generator, arg);
       if (record.type === "throw") {
         reject(record.arg);
@@ -208,9 +275,9 @@ export default function _regeneratorRuntime() {
       }
     }
 
-    var previousPromise;
+    var previousPromise: Promise<any>;
 
-    function enqueue(method, arg) {
+    function enqueue(method: "next" | "throw" | "return", arg: any) {
       function callInvokeWithMethodAndArg() {
         return new PromiseImpl(function (resolve, reject) {
           invoke(method, arg, resolve, reject);
@@ -246,7 +313,7 @@ export default function _regeneratorRuntime() {
   }
 
   defineIteratorMethods(AsyncIterator.prototype);
-  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function (this: any) {
     return this;
   });
   exports.AsyncIterator = AsyncIterator;
@@ -254,9 +321,16 @@ export default function _regeneratorRuntime() {
   // Note that simple async functions are implemented on top of
   // AsyncIterator objects; they just return a Promise for the value of
   // the final result produced by the iterator.
-  exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+  exports.async = function (
+    innerFn: Function,
+    outerFn: Function,
+    self: any,
+    tryLocsList: TryLocs[],
+    PromiseImpl: PromiseConstructor,
+  ) {
     if (PromiseImpl === void 0) PromiseImpl = Promise;
 
+    // @ts-expect-error new AsyncIterator()
     var iter = new AsyncIterator(
       wrap(innerFn, outerFn, self, tryLocsList),
       PromiseImpl,
@@ -264,15 +338,19 @@ export default function _regeneratorRuntime() {
 
     return exports.isGeneratorFunction(outerFn)
       ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function (result) {
+      : iter.next().then(function (result: IteratorResult<any>) {
           return result.done ? result.value : iter.next();
         });
   };
 
-  function makeInvokeMethod(innerFn, self, context) {
+  function makeInvokeMethod(
+    innerFn: Function,
+    self: unknown,
+    context: Context,
+  ) {
     var state = GenStateSuspendedStart;
 
-    return function invoke(method, arg) {
+    return function invoke(method: "next" | "throw" | "return", arg: any) {
       if (state === GenStateExecuting) {
         throw new Error("Generator is already running");
       }
@@ -347,8 +425,8 @@ export default function _regeneratorRuntime() {
   // result, either by returning a { value, done } result from the
   // delegate iterator, or by modifying context.method and context.arg,
   // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method;
+  function maybeInvokeDelegate(delegate: any, context: Context) {
+    var methodName = context.method!;
     var method = delegate.iterator[methodName];
     if (method === undefined) {
       // A .throw or .return when the delegate iterator has no .throw
@@ -364,6 +442,7 @@ export default function _regeneratorRuntime() {
         context.arg = undefined;
         maybeInvokeDelegate(delegate, context);
 
+        // @ts-expect-error maybeInvokeDelegate may change context.method
         if (context.method === "throw") {
           // If maybeInvokeDelegate(context) changed context.method from
           // "return" to "throw", let that override the TypeError below.
@@ -438,7 +517,7 @@ export default function _regeneratorRuntime() {
   // iterator prototype chain incorrectly implement this, causing the Generator
   // object to not be returned from this call. This ensures that doesn't happen.
   // See https://github.com/facebook/regenerator/issues/274 for more details.
-  define(Gp, iteratorSymbol, function () {
+  define(Gp, iteratorSymbol, function (this: Generator) {
     return this;
   });
 
@@ -446,8 +525,8 @@ export default function _regeneratorRuntime() {
     return "[object Generator]";
   });
 
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
+  function pushTryEntry(this: Context, locs: TryLocs) {
+    var entry: TryEntry = { tryLoc: locs[0] };
 
     if (1 in locs) {
       entry.catchLoc = locs[1];
@@ -458,17 +537,17 @@ export default function _regeneratorRuntime() {
       entry.afterLoc = locs[3];
     }
 
-    this.tryEntries.push(entry);
+    this.tryEntries!.push(entry);
   }
 
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
+  function resetTryEntry(entry: TryEntry) {
+    var record = entry.completion || ({} as Completion);
     record.type = "normal";
     delete record.arg;
     entry.completion = record;
   }
 
-  function Context(tryLocsList) {
+  function Context(this: Context, tryLocsList: TryLocs[]) {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
@@ -477,9 +556,9 @@ export default function _regeneratorRuntime() {
     this.reset(true);
   }
 
-  exports.keys = function (val) {
+  exports.keys = function (val: unknown) {
     var object = Object(val);
-    var keys = [];
+    var keys: string[] = [];
     // eslint-disable-next-line guard-for-in
     for (var key in object) {
       keys.push(key);
@@ -491,8 +570,11 @@ export default function _regeneratorRuntime() {
     return function next() {
       while (keys.length) {
         var key = keys.pop();
+        // @ts-expect-error key may be undefined
         if (key in object) {
+          // @ts-expect-error assign to () => ...
           next.value = key;
+          // @ts-expect-error assign to () => ...
           next.done = false;
           return next;
         }
@@ -501,12 +583,13 @@ export default function _regeneratorRuntime() {
       // To avoid creating an additional object, we just hang the .value
       // and .done properties off the next function object itself. This
       // also ensures that the minifier will not anonymize the function.
+      // @ts-expect-error assign to () => ...
       next.done = true;
       return next;
     };
   };
 
-  function values(iterable) {
+  function values(iterable: any) {
     if (iterable != null) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) {
@@ -522,18 +605,23 @@ export default function _regeneratorRuntime() {
           next = function next() {
             while (++i < iterable.length) {
               if (hasOwn.call(iterable, i)) {
+                // @ts-expect-error assign to () => ...
                 next.value = iterable[i];
+                // @ts-expect-error assign to () => ...
                 next.done = false;
                 return next;
               }
             }
 
+            // @ts-expect-error assign to () => ...
             next.value = undefined;
+            // @ts-expect-error assign to () => ...
             next.done = true;
 
             return next;
           };
 
+        // @ts-expect-error assign to () => ...
         return (next.next = next);
       }
     }
@@ -561,7 +649,7 @@ export default function _regeneratorRuntime() {
       this.method = "next";
       this.arg = undefined;
 
-      this.tryEntries.forEach(resetTryEntry);
+      this.tryEntries!.forEach(resetTryEntry);
 
       if (!skipTempReset) {
         for (var name in this) {
@@ -571,7 +659,7 @@ export default function _regeneratorRuntime() {
             hasOwn.call(this, name) &&
             !isNaN(+name.slice(1))
           ) {
-            this[name] = undefined;
+            this[name as `t${string}`] = undefined;
           }
         }
       }
@@ -580,8 +668,8 @@ export default function _regeneratorRuntime() {
     stop: function () {
       this.done = true;
 
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
+      var rootEntry = this.tryEntries![0];
+      var rootRecord = rootEntry.completion!;
       if (rootRecord.type === "throw") {
         throw rootRecord.arg;
       }
@@ -595,7 +683,7 @@ export default function _regeneratorRuntime() {
       }
 
       var context = this;
-      function handle(loc, caught) {
+      function handle(loc: number | "end", caught?: boolean) {
         record.type = "throw";
         record.arg = exception;
         context.next = loc;
@@ -610,9 +698,9 @@ export default function _regeneratorRuntime() {
         return !!caught;
       }
 
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
+      for (var i = this.tryEntries!.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries![i];
+        var record = entry.completion!;
 
         if (entry.tryLoc === "root") {
           // Exception thrown outside of any try block that could handle
@@ -621,23 +709,23 @@ export default function _regeneratorRuntime() {
           return handle("end");
         }
 
-        if (entry.tryLoc <= this.prev) {
+        if (entry.tryLoc <= this.prev!) {
           var hasCatch = hasOwn.call(entry, "catchLoc");
           var hasFinally = hasOwn.call(entry, "finallyLoc");
 
           if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
+            if (this.prev! < entry.catchLoc!) {
+              return handle(entry.catchLoc!, true);
+            } else if (this.prev! < entry.finallyLoc!) {
+              return handle(entry.finallyLoc!);
             }
           } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
+            if (this.prev! < entry.catchLoc!) {
+              return handle(entry.catchLoc!, true);
             }
           } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
+            if (this.prev! < entry.finallyLoc!) {
+              return handle(entry.finallyLoc!);
             }
           } else {
             throw new Error("try statement without catch or finally");
@@ -647,34 +735,37 @@ export default function _regeneratorRuntime() {
     },
 
     abrupt: function (type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
+      for (var i = this.tryEntries!.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries![i];
         if (
+          // @ts-expect-error number | string <= number
           entry.tryLoc <= this.prev &&
           hasOwn.call(entry, "finallyLoc") &&
-          this.prev < entry.finallyLoc
+          this.prev! < entry.finallyLoc!
         ) {
-          var finallyEntry = entry;
+          var finallyEntry: TryEntry | null = entry;
           break;
         }
       }
 
       if (
-        finallyEntry &&
+        finallyEntry! &&
         (type === "break" || type === "continue") &&
         finallyEntry.tryLoc <= arg &&
-        arg <= finallyEntry.finallyLoc
+        arg <= finallyEntry.finallyLoc!
       ) {
         // Ignore the finally entry if control is not jumping to a
         // location outside the try/catch block.
         finallyEntry = null;
       }
 
-      var record = finallyEntry ? finallyEntry.completion : {};
+      var record = finallyEntry!
+        ? finallyEntry.completion!
+        : ({} as Completion);
       record.type = type;
       record.arg = arg;
 
-      if (finallyEntry) {
+      if (finallyEntry!) {
         this.method = "next";
         this.next = finallyEntry.finallyLoc;
         return ContinueSentinel;
@@ -702,10 +793,10 @@ export default function _regeneratorRuntime() {
     },
 
     finish: function (finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
+      for (var i = this.tryEntries!.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries![i];
         if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
+          this.complete(entry.completion!, entry.afterLoc);
           resetTryEntry(entry);
           return ContinueSentinel;
         }
@@ -713,10 +804,10 @@ export default function _regeneratorRuntime() {
     },
 
     catch: function (tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
+      for (var i = this.tryEntries!.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries![i];
         if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
+          var record = entry.completion!;
           if (record.type === "throw") {
             var thrown = record.arg;
             resetTryEntry(entry);
@@ -745,7 +836,7 @@ export default function _regeneratorRuntime() {
 
       return ContinueSentinel;
     },
-  };
+  } as Context;
 
   return exports;
 }
