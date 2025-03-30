@@ -1,4 +1,5 @@
 /* @minVersion 7.18.0 */
+/* @mangleFns */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
@@ -56,8 +57,8 @@ const enum GenState {
   Completed = 4,
 }
 
-export default function _regeneratorRuntime() {
-  "use strict";
+export default function /* @no-mangle */ _regeneratorRuntime() {
+  ("use strict");
 
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
   // @ts-expect-error explicit function reassign
@@ -144,8 +145,11 @@ export default function _regeneratorRuntime() {
   // .constructor.prototype properties for functions that return Generator
   // objects. For full spec compliance, you may wish to configure your
   // minifier not to mangle the names of these two functions.
+  /* @no-mangle */
   function Generator() {}
+  /* @no-mangle */
   function GeneratorFunction() {}
+  /* @no-mangle */
   function GeneratorFunctionPrototype() {}
 
   // This is a polyfill for %IteratorPrototype% for environments that
@@ -215,6 +219,7 @@ export default function _regeneratorRuntime() {
     return { __await: arg };
   };
 
+  /* @no-mangle */
   function AsyncIterator(
     this: any,
     generator: Generator,
@@ -525,6 +530,7 @@ export default function _regeneratorRuntime() {
     entry[4] = record;
   }
 
+  /* @no-mangle */
   function Context(this: Context, tryLocsList: TryLocs[]) {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
