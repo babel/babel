@@ -16,7 +16,7 @@ MAKEJS := node Makefile.mjs
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
 
-Makefile.mjs: Makefile.source.mjs yarn.lock
+Makefile.mjs: Makefile.source.mjs yarn.lock .yarn/install-state.gz
 	$(NODE) ./scripts/pack-script.js
 
 build:
