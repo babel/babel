@@ -19,7 +19,7 @@ import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 const checkDuplicatedNodes =
   _checkDuplicatedNodes.default || _checkDuplicatedNodes;
 
-import { describeGte } from "$repo-utils";
+import { describeGte, commonJS } from "$repo-utils";
 
 import pluginTransformRegenerator from "../lib/index.js";
 
@@ -30,10 +30,7 @@ import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functio
 import pluginTransformParameters from "@babel/plugin-transform-parameters";
 import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
 
-import { createRequire } from "module";
-import { fileURLToPath } from "url";
-const require = createRequire(import.meta.url);
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const { require, __dirname } = commonJS(import.meta.url);
 
 const mochaDir = dirname(require.resolve("mocha"));
 
@@ -143,7 +140,7 @@ function enqueue(cmd, args = []) {
 try {
   mkdirSync(join(__dirname, "regenerator-fixtures/tmp"));
 } catch {}
-// TODO: Remove fallback aftr dropping Node.js 6
+// TODO: Remove fallback after dropping Node.js 6
 // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
 (copyFileSync || ((from, to) => writeFileSync(to, readFileSync(from))))(
   join(__dirname, "./regenerator-fixtures/shared.js"),
@@ -183,7 +180,7 @@ enqueue(convertWithRegeneratorPluginOnly, [
 Error.stackTraceLimit = 1000;
 
 /**
- * Comvert without using the preset (which also transforms things like classes and arrows)
+ * Convert without using the preset (which also transforms things like classes and arrows)
  */
 function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
   const transformOptions = {
