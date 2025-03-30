@@ -51,6 +51,11 @@ export function TSTypeParameterInstantiation(
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
+  if (node.const) {
+    this.word("const");
+    this.space();
+  }
+
   if (node.in) {
     this.word("in");
     this.space();
