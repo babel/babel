@@ -83,7 +83,6 @@ const helpers: Record<string, Helper> = {
     code = babel.transformSync(code, {
       configFile: false,
       babelrc: false,
-      browserslistConfigFile: false,
       filename: filePath,
       presets: [
         [
