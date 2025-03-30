@@ -176,7 +176,7 @@ function _regeneratorRuntime() {
     }
     throw new TypeError(_typeof(r) + " is not iterable");
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), r.isGeneratorFunction = function (t) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), c(GeneratorFunctionPrototype, u, "GeneratorFunction"), r.isGeneratorFunction = function (t) {
     var r = "function" == typeof t && t.constructor;
     return !!r && (r === GeneratorFunction || "GeneratorFunction" === r.name);
   }, r.mark = function (t) {

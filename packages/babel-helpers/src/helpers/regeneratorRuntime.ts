@@ -178,6 +178,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
