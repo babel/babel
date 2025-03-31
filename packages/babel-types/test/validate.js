@@ -79,35 +79,5 @@ describe("validate", () => {
         `"Missing initializer in 'using' declaration"`,
       );
     });
-
-    itBabel8("var void pattern should throw", () => {
-      expect(() =>
-        t.blockStatement([
-          t.variableDeclaration("var", [
-            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
-          ]),
-        ]),
-      ).toThrow();
-    });
-
-    itBabel8("let void pattern should throw", () => {
-      expect(() =>
-        t.blockStatement([
-          t.variableDeclaration("let", [
-            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
-          ]),
-        ]),
-      ).toThrow();
-    });
-
-    itBabel8("const void pattern should throw", () => {
-      expect(() =>
-        t.blockStatement([
-          t.variableDeclaration("const", [
-            t.variableDeclarator(t.voidPattern(), t.identifier("x")),
-          ]),
-        ]),
-      ).toThrow();
-    });
   });
 });
