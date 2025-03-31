@@ -6,7 +6,7 @@ type nodeType = typeof import("./resolve-targets");
 ({}) as any as browserType as nodeType;
 
 import type { ValidatedOptions } from "./validation/options.ts";
-import path from "path";
+import path from "node:path";
 import getTargets, {
   type InputTargets,
 } from "@babel/helper-compilation-targets";

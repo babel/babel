@@ -1,7 +1,7 @@
 import runner from "@babel/helper-plugin-test-runner";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { commonJS } from "$repo-utils";
-import path from "path";
+import path from "node:path";
 import {
   runCodeInTestContext,
   createTestContext,

@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import path from "path";
+import path from "node:path";
 import fixtures from "@babel/helper-fixtures";
 import * as babel from "@babel/core";
 import pluginTransformTypeScript from "@babel/plugin-transform-typescript";

@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import { template, types as t } from "@babel/core";
 
 import { isModule } from "@babel/helper-module-imports";

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import path from "path";
+import path from "node:path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { validate } from "./validation/options.ts";

@@ -1,7 +1,7 @@
 import { parse, parseExpression } from "@babel/parser";
 import * as t from "@babel/types";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import fixtures from "@babel/helper-fixtures";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { commonJS, describeBabel7NoESM, itBabel7, itBabel8 } from "$repo-utils";

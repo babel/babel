@@ -1,8 +1,8 @@
 "use strict";
 
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
+const path = require("node:path");
+const fs = require("node:fs");
+const os = require("node:os");
 const findCacheDir = require("find-cache-dir");
 
 let FILENAME = process.env.BABEL_CACHE_PATH;

@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import fs from "fs";
-import { join } from "path";
-import { URL, fileURLToPath } from "url";
+import fs from "node:fs";
+import { join } from "node:path";
+import { URL, fileURLToPath } from "node:url";
 import { minify } from "terser";
 import { babel, presetTypescript } from "$repo-utils/babel-top-level";
 import { IS_BABEL_8 } from "$repo-utils";
-import { gzipSync } from "zlib";
+import { gzipSync } from "node:zlib";
 
 import {
   getHelperMetadata,

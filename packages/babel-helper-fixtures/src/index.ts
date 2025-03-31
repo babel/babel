@@ -1,8 +1,8 @@
 import semver from "semver";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import type { InputOptions } from "@babel/core";
 import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 

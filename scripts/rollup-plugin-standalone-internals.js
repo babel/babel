@@ -1,4 +1,4 @@
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import pluginConfig from "../packages/babel-standalone/scripts/pluginConfig.json" with { type: "json" };
 
 const standaloneURL = new URL("../packages/babel-standalone/", import.meta.url);

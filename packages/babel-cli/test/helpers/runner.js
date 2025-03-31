@@ -2,7 +2,7 @@ import {
   buildProcessTests,
   buildParallelProcessTests,
 } from "@babel/helper-transform-fixture-test-runner";
-import path from "path";
+import path from "node:path";
 import { commonJS } from "$repo-utils";
 
 const { __dirname } = commonJS(import.meta.url);
