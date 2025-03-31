@@ -1,10 +1,10 @@
-import path from "path";
-import fs from "fs";
-import { cpus } from "os";
-import { createRequire } from "module";
-import { fileURLToPath } from "url";
-import { Transform as TransformStream } from "stream";
-import { callbackify } from "util";
+import path from "node:path";
+import fs from "node:fs";
+import { cpus } from "node:os";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import { Transform as TransformStream } from "node:stream";
+import { callbackify } from "node:util";
 import colors from "picocolors";
 import gulp from "gulp";
 import { rollup } from "rollup";

@@ -1,6 +1,8 @@
 "use strict";
 
-import { types as t, type NodePath } from "@babel/core";
+import { types as t } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/traverse";
+import type * as tTypes from "@babel/types";
 import assert from "assert";
 import { hoist } from "./hoist";
 import { Emitter } from "./emit";
@@ -13,25 +15,31 @@ interface VisitorState {
     generators?: boolean;
     async?: boolean;
   };
+  file?: any;
 }
 
 interface Context {
   usesThis: boolean;
   usesArguments: boolean;
-  getArgsId: () => t.Identifier;
+  getArgsId: () => tTypes.Identifier;
 }
-
-type FunctionNode = t.FunctionDeclaration | t.FunctionExpression | t.Method;
 
 interface MarkInfo {
-  decl?: t.VariableDeclaration;
-  declPath?: NodePath<t.VariableDeclaration>;
+  decl?: tTypes.VariableDeclaration;
+  declPath?: NodePath<tTypes.VariableDeclaration>;
 }
 
-const markInfo = new WeakMap<t.Node, MarkInfo>();
+interface EmitterInstance {
+  explode(path: NodePath): void;
+  getContextFunction(id: tTypes.Identifier): tTypes.Expression;
+  getTryLocsList(): tTypes.Expression | null;
+  getInsertedLocs(): Set<tTypes.NumericLiteral>;
+}
+
+const markInfo = new WeakMap<tTypes.Node, MarkInfo>();
 
 export const getVisitor = (_t: typeof t) => ({
-  Method(path: NodePath<t.Method>, state: VisitorState) {
+  Method(path: NodePath<tTypes.ObjectMethod>, state: VisitorState) {
     const node = path.node;
 
     if (!shouldRegenerate(node, state)) return;
@@ -50,23 +58,25 @@ export const getVisitor = (_t: typeof t) => ({
 
     node.async = false;
     node.generator = false;
-    path.get("body.body.0.argument.callee").unwrapFunctionEnvironment();
+    
+    const calleePath = path.get("body.body.0.argument.callee") as NodePath<tTypes.FunctionExpression>;
+    calleePath.unwrapFunctionEnvironment();
   },
 
   Function: {
-    exit: util.wrapWithTypes(t, (path: NodePath<t.Function>, state: VisitorState) => {
+    exit: util.wrapWithTypes(t, (path: NodePath<tTypes.Function>, state: VisitorState) => {
       let node = path.node;
 
       if (!shouldRegenerate(node, state)) return;
 
-      path = replaceShorthandObjectMethod(path);
+      path = replaceShorthandObjectMethod(path) as NodePath<tTypes.Function>;
       node = path.node;
 
       const contextId = path.scope.generateUidIdentifier("context");
       const argsId = path.scope.generateUidIdentifier("args");
 
       path.ensureBlock();
-      const bodyBlockPath = path.get("body");
+      const bodyBlockPath = path.get("body") as NodePath<tTypes.BlockStatement>;
 
       if (node.async) {
         bodyBlockPath.traverse(awaitVisitor);
@@ -76,15 +86,15 @@ export const getVisitor = (_t: typeof t) => ({
         context: contextId,
       });
 
-      const outerBody: t.Statement[] = [];
-      const innerBody: t.Statement[] = [];
+      const outerBody: tTypes.Statement[] = [];
+      const innerBody: tTypes.Statement[] = [];
 
-      bodyBlockPath.get("body").forEach((childPath: NodePath<t.Node>) => {
+      (bodyBlockPath.get("body") as NodePath<tTypes.Statement>[]).forEach((childPath) => {
         const node = childPath.node;
         if (t.isExpressionStatement(node) && t.isStringLiteral(node.expression)) {
           outerBody.push(node);
-        } else if (node?._blockHoist != null) {
-          outerBody.push(node);
+        } else if ("_blockHoist" in node && node._blockHoist != null) {
+          outerBody.push(node as tTypes.Statement);
         } else {
           innerBody.push(node);
         }
@@ -95,8 +105,16 @@ export const getVisitor = (_t: typeof t) => ({
       }
 
       const outerFnExpr = getOuterFnExpr(path);
-      t.assertIdentifier(node.id);
-      const innerFnId = t.identifier(node.id.name + "$");
+      let functionId: tTypes.Identifier;
+      if (t.isFunctionDeclaration(node)) {
+        if (!node.id) {
+          node.id = path.scope.parent.generateUidIdentifier("callee");
+        }
+        functionId = node.id;
+      } else {
+        functionId = path.scope.parent.generateUidIdentifier("callee");
+      }
+      const innerFnId = t.identifier(functionId.name + "$");
 
       let vars = hoist(path);
 
@@ -115,7 +133,7 @@ export const getVisitor = (_t: typeof t) => ({
         );
       }
 
-      const emitter = new Emitter(contextId);
+      const emitter: EmitterInstance = new (Emitter as any)(contextId);
       emitter.explode(path.get("body"));
 
       if (vars?.declarations.length > 0) {
@@ -156,11 +174,11 @@ export const getVisitor = (_t: typeof t) => ({
 
       outerBody.push(t.returnStatement(wrapCall));
       node.body = t.blockStatement(outerBody);
-      path.get("body.body").forEach(p => p.scope.registerDeclaration(p));
+      (path.get("body.body") as NodePath[]).forEach(p => p.scope.registerDeclaration(p));
 
-      const oldDirectives = bodyBlockPath.node.directives;
+      const oldDirectives = (bodyBlockPath.node as tTypes.BlockStatement & { directives?: any[] }).directives;
       if (oldDirectives) {
-        node.body.directives = oldDirectives;
+        (node.body as tTypes.BlockStatement & { directives?: any[] }).directives = oldDirectives;
       }
 
       const wasGeneratorFunction = node.generator;
@@ -183,7 +201,7 @@ export const getVisitor = (_t: typeof t) => ({
       const insertedLocs = emitter.getInsertedLocs();
 
       path.traverse({
-        NumericLiteral(path: NodePath<t.NumericLiteral>) {
+        NumericLiteral(path: NodePath<tTypes.NumericLiteral>) {
           if (insertedLocs.has(path.node)) {
             path.replaceWith(t.numericLiteral(path.node.value));
           }
@@ -207,22 +225,23 @@ function shouldRegenerate(
   return node.async ? state.opts.async !== false : false;
 }
 
-function getOuterFnExpr(funPath: NodePath<FunctionNode>): t.Expression {
+function getOuterFnExpr(funPath: NodePath<tTypes.Function>): tTypes.Expression {
   const node = funPath.node;
-  t.assertFunction(node);
 
-  if (!node.id) {
-    node.id = funPath.scope.parent.generateUidIdentifier("callee");
+  if (t.isFunctionDeclaration(node)) {
+    if (!node.id) {
+      node.id = funPath.scope.parent.generateUidIdentifier("callee");
+    }
+    if (node.generator) {
+      return getMarkedFunctionId(funPath as NodePath<tTypes.FunctionDeclaration>);
+    }
+    return t.cloneNode(node.id);
   }
 
-  if (node.generator && t.isFunctionDeclaration(node)) {
-    return getMarkedFunctionId(funPath);
-  }
-
-  return t.cloneNode(node.id);
+  return funPath.scope.parent.generateUidIdentifier("callee");
 }
 
-function getMarkInfo(node: t.Node): MarkInfo {
+function getMarkInfo(node: tTypes.Node): MarkInfo {
   let info = markInfo.get(node);
   if (!info) {
     info = {};
@@ -231,24 +250,26 @@ function getMarkInfo(node: t.Node): MarkInfo {
   return info;
 }
 
-function getMarkedFunctionId(funPath: NodePath<t.FunctionDeclaration>): t.Identifier {
+function getMarkedFunctionId(funPath: NodePath<tTypes.FunctionDeclaration>): tTypes.Identifier {
   const node = funPath.node;
-  t.assertIdentifier(node.id);
+  if (!node.id) {
+    throw new Error("FunctionDeclaration must have an id");
+  }
 
-  const blockPath = funPath.findParent((path): path is NodePath<t.BlockStatement | t.Program> =>
+  const blockPath = funPath.findParent((path): path is NodePath<tTypes.BlockStatement | tTypes.Program> =>
     path.isProgram() || path.isBlockStatement()
   );
 
   if (!blockPath) return t.cloneNode(node.id);
 
   const block = blockPath.node;
-  assert.ok(Array.isArray(block.body));
+  assert.ok(Array.isArray((block as tTypes.BlockStatement).body));
 
   const info = getMarkInfo(block);
   if (!info.decl) {
     info.decl = t.variableDeclaration("var", []);
-    blockPath.unshiftContainer("body", info.decl);
-    info.declPath = blockPath.get("body.0") as NodePath<t.VariableDeclaration>;
+    blockPath.unshiftContainer("body" as any, info.decl);
+    info.declPath = blockPath.get("body.0") as NodePath<tTypes.VariableDeclaration>;
   }
 
   const markedId = blockPath.scope.generateUidIdentifier("marked");
@@ -259,31 +280,35 @@ function getMarkedFunctionId(funPath: NodePath<t.FunctionDeclaration>): t.Identi
   info.decl.declarations.push(t.variableDeclarator(markedId, markCallExp));
   const markCallExpPath = info.declPath!.get(
     `declarations.${info.decl.declarations.length - 1}.init`
-  );
+  ) as NodePath<tTypes.CallExpression>;
   markCallExpPath.addComment("leading", "#__PURE__");
 
   return t.cloneNode(markedId);
 }
 
-const argumentsThisVisitor = {
-  "FunctionExpression|FunctionDeclaration|Method"(path: NodePath<FunctionNode>) {
+const argumentsThisVisitor: Visitor = {
+  FunctionExpression(path: NodePath<tTypes.FunctionExpression>) {
     path.skip();
   },
-
-  Identifier(path: NodePath<t.Identifier>, state: Context) {
+  FunctionDeclaration(path: NodePath<tTypes.FunctionDeclaration>) {
+    path.skip();
+  },
+  Method(path: NodePath<tTypes.ObjectMethod>) {
+    path.skip();
+  },
+  Identifier(path: NodePath<tTypes.Identifier>, state: Context) {
     if (path.node.name === "arguments" && util.isReference(path)) {
       util.replaceWithOrRemove(path, state.getArgsId());
       state.usesArguments = true;
     }
   },
-
-  ThisExpression(_path: NodePath<t.ThisExpression>, state: Context) {
+  ThisExpression(path: NodePath<tTypes.ThisExpression>, state: Context) {
     state.usesThis = true;
   }
 };
 
-const functionSentVisitor = {
-  MetaProperty(path: NodePath<t.MetaProperty>, state: { context: t.Identifier }) {
+const functionSentVisitor: Visitor = {
+  MetaProperty(path: NodePath<tTypes.MetaProperty>, state: { context: tTypes.Identifier }) {
     const { node } = path;
     if (node.meta.name === "function" && node.property.name === "sent") {
       util.replaceWithOrRemove(
@@ -297,12 +322,11 @@ const functionSentVisitor = {
   }
 };
 
-const awaitVisitor = {
-  Function(path: NodePath<FunctionNode>) {
+const awaitVisitor: Visitor = {
+  Function(path: NodePath<tTypes.Function>) {
     path.skip();
   },
-
-  AwaitExpression(path: NodePath<t.AwaitExpression>) {
+  AwaitExpression(path: NodePath<tTypes.AwaitExpression>) {
     util.replaceWithOrRemove(
       path,
       t.yieldExpression(

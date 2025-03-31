@@ -64,7 +64,7 @@ export default [
       "scripts/integration-tests/fixtures",
       "test/runtime-integration/*/output.js",
       "test/runtime-integration/*/output-absolute.js",
-      "Makefile.js",
+      "Makefile.mjs",
       ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
   },
@@ -121,6 +121,7 @@ export default [
       "unicorn/prefer-array-find": "error",
       "unicorn/prefer-array-index-of": "error",
       "unicorn/prefer-includes": "error",
+      "unicorn/prefer-node-protocol": "error",
       "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
@@ -306,7 +307,7 @@ export default [
     rules: {
       "n/no-unsupported-features/node-builtins": [
         "error",
-        { version: "12.17.0", ignores: ["module"] },
+        { version: "20.19.0", ignores: ["module"] },
       ],
       "@babel/development-internal/require-default-import-fallback": "error",
       "import/no-unresolved": "error",

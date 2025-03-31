@@ -8,7 +8,7 @@ import {
   createConfigItem,
   createConfigItemSync,
 } from "../lib/index.js";
-import path from "path";
+import path from "node:path";
 import { itNoWin32, itBabel8, commonJS } from "$repo-utils";
 import { supportsESM } from "./helpers/esm.js";
 

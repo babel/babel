@@ -1,7 +1,7 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import _checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { readFileSync, unlinkSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
+import { readFileSync, unlinkSync, writeFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
 import Difference from "./difference.js";
 import FixtureError from "./fixture-error.js";
 import toFuzzedOptions from "./to-fuzzed-options.js";

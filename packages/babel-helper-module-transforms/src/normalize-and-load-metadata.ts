@@ -1,4 +1,4 @@
-import { basename, extname } from "path";
+import { basename, extname } from "node:path";
 import type { types as t, NodePath } from "@babel/core";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";

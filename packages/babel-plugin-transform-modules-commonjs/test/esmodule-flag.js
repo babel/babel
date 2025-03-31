@@ -1,7 +1,7 @@
 import * as babel from "@babel/core";
-import vm from "vm";
-import { fileURLToPath } from "url";
-import path from "path";
+import vm from "node:vm";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 import transformCommonJS from "../lib/index.js";
 

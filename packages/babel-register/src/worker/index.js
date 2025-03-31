@@ -1,7 +1,7 @@
 const babel = require("./babel-core.js");
 const handleMessage = require("./handle-message.js");
 
-const { parentPort } = require("worker_threads");
+const { parentPort } = require("node:worker_threads");
 
 parentPort.addListener("message", async ({ signal, port, action, payload }) => {
   let response;

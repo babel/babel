@@ -1,5 +1,5 @@
 import { loadPartialConfigSync, loadPartialConfigAsync } from "../lib/index.js";
-import path from "path";
+import path from "node:path";
 import semver from "semver";
 import { commonJS, itGte, itLt, USE_ESM } from "$repo-utils";
 

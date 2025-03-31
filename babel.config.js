@@ -1,3 +1,5 @@
+// NOTE: This file must be runnable on all Node.js version
+/* eslint-disable unicorn/prefer-node-protocol */
 "use strict";
 
 let jestSnapshot = false;
@@ -191,6 +193,7 @@ module.exports = function (api) {
         : null,
 
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
+      require("./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs"),
     ].filter(Boolean),
     overrides: [
       {
