@@ -173,7 +173,11 @@ const helpers: Record<string, Helper> = {
       await minify(code, {
         ecma: 5,
         mangle: {
-          keep_fnames: mangleFns ? new RegExp(noMangleFns.join("|")) : true,
+          keep_fnames: mangleFns
+            ? noMangleFns.length
+              ? new RegExp(noMangleFns.join("|"))
+              : false
+            : true,
         },
         // The _typeof helper has a custom directive that we must keep
         compress: {
