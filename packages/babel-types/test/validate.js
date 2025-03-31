@@ -52,7 +52,7 @@ describe("validate", () => {
       expect(() => {
         t.blockStatement([t.cloneNode(ast)]);
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Missing initializer in 'const' declaration"`,
+        `"Property id of VariableDeclarator expected node to be of a type [\\"Identifier\\",\\"Placeholder\\"] but instead got \\"ObjectPattern\\""`,
       );
     });
 
