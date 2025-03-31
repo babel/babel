@@ -1229,21 +1229,11 @@ defineType("VariableDeclaration", {
             for (const decl of declarations) {
               if (kind === "const" || kind === "let" || kind === "var") {
                 if (!parentIsForX && !decl.init) {
-                  if (kind === "const") {
-                    throw new TypeError(
-                      `Missing initializer in '${kind}' declaration`,
-                    );
-                  }
                   withoutInit(decl, "id", decl.id);
                 } else {
                   constOrLetOrVar(decl, "id", decl.id);
                 }
               } else {
-                if (!decl.init) {
-                  throw new TypeError(
-                    `Missing initializer in '${kind}' declaration`,
-                  );
-                }
                 usingOrAwaitUsing(decl, "id", decl.id);
               }
             }

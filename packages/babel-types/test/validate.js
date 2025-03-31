@@ -56,28 +56,36 @@ describe("validate", () => {
       );
     });
 
-    itBabel8("const without initializer should throw", () => {
-      expect(() =>
-        t.blockStatement([
-          t.variableDeclaration("const", [
-            t.variableDeclarator(t.identifier("x")),
+    itBabel8("const without initializer should pass", () => {
+      expect(() => {
+        const moduleDeclaration = t.tsModuleDeclaration(
+          t.identifier("M"),
+          t.tsModuleBlock([
+            t.blockStatement([
+              t.variableDeclaration("const", [
+                t.variableDeclarator(t.identifier("x")),
+              ]),
+            ]),
           ]),
-        ]),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"Missing initializer in 'const' declaration"`,
-      );
+        );
+        moduleDeclaration.declare = true;
+      }).not.toThrow();
     });
 
-    itBabel8("using without initializer should throw", () => {
-      expect(() =>
-        t.blockStatement([
-          t.variableDeclaration("using", [
-            t.variableDeclarator(t.identifier("x")),
+    itBabel8("using without initializer should pass", () => {
+      expect(() => {
+        const moduleDeclaration = t.tsModuleDeclaration(
+          t.identifier("M"),
+          t.tsModuleBlock([
+            t.blockStatement([
+              t.variableDeclaration("using", [
+                t.variableDeclarator(t.identifier("x")),
+              ]),
+            ]),
           ]),
-        ]),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"Missing initializer in 'using' declaration"`,
-      );
+        );
+        moduleDeclaration.declare = true;
+      }).not.toThrow();
     });
   });
 });
