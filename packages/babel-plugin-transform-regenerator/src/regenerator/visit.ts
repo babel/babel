@@ -29,13 +29,6 @@ interface MarkInfo {
   declPath?: NodePath<tTypes.VariableDeclaration>;
 }
 
-interface EmitterInstance {
-  explode(path: NodePath): void;
-  getContextFunction(id: tTypes.Identifier): tTypes.Expression;
-  getTryLocsList(): tTypes.Expression | null;
-  getInsertedLocs(): Set<tTypes.NumericLiteral>;
-}
-
 const markInfo = new WeakMap<tTypes.Node, MarkInfo>();
 
 export const getVisitor = (_t: typeof t) => ({
@@ -52,8 +45,7 @@ export const getVisitor = (_t: typeof t) => ({
       node.async
     );
 
-    path
-      .get("body")
+    path.get("body")
       .set("body", [t.returnStatement(t.callExpression(container, []))]);
 
     node.async = false;
@@ -133,7 +125,7 @@ export const getVisitor = (_t: typeof t) => ({
         );
       }
 
-      const emitter: EmitterInstance = new (Emitter as any)(contextId);
+      const emitter = new (Emitter as any)(contextId);
       emitter.explode(path.get("body"));
 
       if (vars?.declarations.length > 0) {
