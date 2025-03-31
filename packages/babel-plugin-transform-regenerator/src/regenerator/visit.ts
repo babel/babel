@@ -1,7 +1,6 @@
 "use strict";
 
-import { types as t } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, type NodePath } from "@babel/core";
 import assert from "assert";
 import { hoist } from "./hoist";
 import { Emitter } from "./emit";
