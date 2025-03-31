@@ -1,5 +1,5 @@
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 import TestStream from "test262-stream";
 import TestRunner from "../utils/parser-test-runner.js";

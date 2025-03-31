@@ -1,6 +1,6 @@
 import * as babel from "@babel/core";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 import { ImportInjector } from "../lib/index.js";
 

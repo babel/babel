@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import shell from "shelljs";
-import path from "path";
+import path from "node:path";
 
 console.log("Cloning LICENSE to babel packages");
 

@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { basename, extname } from "path";
+import { basename, extname } from "node:path";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,

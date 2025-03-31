@@ -1,4 +1,5 @@
 // NOTE: This file must be runnable on all Node.js version
+/* eslint-disable unicorn/prefer-node-protocol */
 
 const cp = require("child_process");
 const fs = require("fs");

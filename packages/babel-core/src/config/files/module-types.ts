@@ -1,8 +1,8 @@
 import { isAsync, waitFor } from "../../gensync-utils/async.ts";
 import type { Handler } from "gensync";
-import path from "path";
-import { pathToFileURL } from "url";
-import { createRequire } from "module";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
 import semver from "semver";
 import buildDebug from "debug";
 

@@ -11,9 +11,9 @@ import {
   copyFileSync,
   mkdirSync,
   readFileSync,
-} from "fs";
-import { dirname, join } from "path";
-import { spawn } from "child_process";
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
 import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 const checkDuplicatedNodes =

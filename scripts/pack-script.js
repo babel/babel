@@ -1,16 +1,16 @@
-import path from "path";
-import { readFileSync, writeFileSync } from "fs";
+import path from "node:path";
+import { readFileSync, writeFileSync } from "node:fs";
 import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
 import terser from "@rollup/plugin-terser";
 import { commonJS } from "$repo-utils";
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
-pack("../Makefile.source.mjs", "../Makefile.js", [
+pack("../Makefile.source.mjs", "../Makefile.mjs", [
   "node_modules/shelljs/src/*.js",
 ]);
 
@@ -45,18 +45,18 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
           [
             "@babel/preset-env",
             {
-              targets: "maintained node versions",
               useBuiltIns: "usage",
               corejs: require("core-js/package.json").version,
             },
           ],
         ],
+        targets: "maintained node versions",
       }),
       terser(),
     ],
   });
   const result = await bundle.generate({
-    format: "cjs",
+    format: "esm",
   });
 
   const output = `// source hash: ${hash}

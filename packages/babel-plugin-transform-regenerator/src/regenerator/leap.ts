@@ -1,6 +1,6 @@
-import assert from "assert";
+import assert from "node:assert";
 import { Emitter } from "./emit.ts";
-import { inherits } from "util";
+import { inherits } from "node:util";
 import { getTypes } from "./util.ts";
 
 function Entry(this: any) {

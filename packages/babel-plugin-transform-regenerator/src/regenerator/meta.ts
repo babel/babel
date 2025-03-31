@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import { getTypes } from "./util.ts";
 
 const mMap = new WeakMap();

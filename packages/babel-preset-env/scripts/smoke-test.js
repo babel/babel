@@ -1,6 +1,6 @@
-const fs = require("fs");
-const execSync = require("child_process").execSync;
-const path = require("path");
+const fs = require("node:fs");
+const execSync = require("node:child_process").execSync;
+const path = require("node:path");
 const pkg = require("../package.json");
 
 let errorOccurred = false;

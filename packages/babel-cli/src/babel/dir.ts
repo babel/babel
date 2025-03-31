@@ -1,6 +1,6 @@
 import slash from "slash";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as util from "./util.ts";
 import * as watcher from "./watcher.ts";

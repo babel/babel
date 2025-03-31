@@ -1,7 +1,7 @@
 import * as babel from "@babel/core";
 import transformUmd from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
-import path from "path";
+import path from "node:path";
 
 describe("'importInterop'", () => {
   function transform(code, importInterop, filename) {

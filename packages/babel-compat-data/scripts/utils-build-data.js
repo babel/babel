@@ -1,6 +1,6 @@
 "use strict";
 
-const fs = require("fs");
+const fs = require("node:fs");
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 const envs = require("../build/compat-table/environments");

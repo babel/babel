@@ -1,6 +1,6 @@
 import * as t from "../../lib/index.js";
 import { itBabel8 } from "$repo-utils";
-import cp from "child_process";
+import cp from "node:child_process";
 
 describe("builders", function () {
   itBabel8("t.numericLiteral expects a non-negative finite value", () => {

@@ -5,9 +5,9 @@
  * This script write the link to the website in every READMEs.
  */
 
-import { join } from "path";
-import { readdirSync, writeFileSync } from "fs";
-import { createRequire } from "module";
+import { join } from "node:path";
+import { readdirSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 
