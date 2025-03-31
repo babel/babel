@@ -17,7 +17,7 @@ CHANGELOG.md
 # Generated
 lib/archived-libs.d.ts
 packages/babel-parser/typings/babel-parser.d.ts
-Makefile.js
+Makefile.mjs
 packages/babel-runtime-corejs2/helpers/**
 packages/babel-runtime-corejs2/core-js/**
 packages/babel-runtime-corejs3/helpers/**

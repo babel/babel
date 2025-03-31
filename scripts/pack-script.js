@@ -10,7 +10,7 @@ import { createHash } from "crypto";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
-pack("../Makefile.source.mjs", "../Makefile.js", [
+pack("../Makefile.source.mjs", "../Makefile.mjs", [
   "node_modules/shelljs/src/*.js",
 ]);
 
@@ -45,18 +45,18 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
           [
             "@babel/preset-env",
             {
-              targets: "maintained node versions",
               useBuiltIns: "usage",
               corejs: require("core-js/package.json").version,
             },
           ],
         ],
+        targets: "maintained node versions",
       }),
       terser(),
     ],
   });
   const result = await bundle.generate({
-    format: "cjs",
+    format: "esm",
   });
 
   const output = `// source hash: ${hash}
