@@ -8,6 +8,10 @@ type Completion = {
   arg?: any;
 };
 
+const enum TryLoc {
+  Root = -1,
+}
+
 type TryLocs = [
   tryLoc: number,
   catchLoc?: number,
@@ -17,11 +21,14 @@ type TryLocs = [
 
 type TryEntry = [...TryLocs, completion?: Completion];
 
-type Delegate = [
-  iterator: Iterator<any>,
-  resultName: `t${number}`,
-  nextLoc: number,
-];
+type Delegate = {
+  // iterator
+  i: Iterator<any>;
+  // resultName
+  r: `t${number}`;
+  // nextLoc
+  n: number;
+};
 
 type Context = {
   tryEntries?: TryEntry[];
@@ -58,7 +65,7 @@ const enum GenState {
 }
 
 export default function /* @no-mangle */ _regeneratorRuntime() {
-  ("use strict");
+  "use strict";
 
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
   // @ts-expect-error explicit function reassign
@@ -103,7 +110,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     var protoGenerator =
       outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
     var generator = Object.create(protoGenerator.prototype);
-    // @ts-expect-error new Context()
+    // @ts-expect-error target lacks a construct signature
     var context = new Context(tryLocsList || []) as Context;
 
     // The ._invoke method unifies the implementations of the .next,
@@ -178,7 +185,11 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction",
+  );
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
@@ -196,7 +207,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       ? ctor === GeneratorFunction ||
           // For the native GeneratorFunction constructor, the best we can
           // do is to check its .name property.
-          ctor.name === "GeneratorFunction"
+          (ctor.displayName || ctor.name) === "GeneratorFunction"
       : false;
   };
 
@@ -325,7 +336,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   ) {
     if (PromiseImpl === void 0) PromiseImpl = Promise;
 
-    // @ts-expect-error new AsyncIterator()
+    // @ts-expect-error target lacks a construct signature
     var iter = new AsyncIterator(
       wrap(innerFn, outerFn, self, tryLocsList),
       PromiseImpl,
@@ -422,7 +433,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   // setting context.delegate to null, and returning the ContinueSentinel.
   function maybeInvokeDelegate(delegate: Delegate, context: Context) {
     var methodName = context.method!;
-    var method = delegate[0][methodName];
+    var method = delegate.i[methodName];
     if (method === undefined) {
       // A .throw or .return when the delegate iterator has no .throw
       // method, or a missing .next method, always terminate the
@@ -430,7 +441,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       context.delegate = null;
 
       // Note: ["return"] must be used for ES3 parsing compatibility.
-      if (methodName === "throw" && delegate[0]["return"]) {
+      if (methodName === "throw" && delegate.i["return"]) {
         // If the delegate iterator has a return method, give it a
         // chance to clean up.
         context.method = "return";
@@ -454,7 +465,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       return ContinueSentinel;
     }
 
-    var record = tryCatch(method, delegate[0], context.arg);
+    var record = tryCatch(method, delegate.i, context.arg);
 
     if (record.type === "throw") {
       context.method = "throw";
@@ -475,10 +486,10 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     if (info.done) {
       // Assign the result of the finished delegate to the temporary
       // variable specified by delegate.resultName (see delegateYield).
-      context[delegate[1]] = info.value;
+      context[delegate.r] = info.value;
 
       // Resume execution at the desired location (see delegateYield).
-      context.next = delegate[2];
+      context.next = delegate.n;
 
       // If context.method was "throw" but the delegate handled the
       // exception, let the outer generator proceed normally. If
@@ -536,8 +547,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
-    // -1 means "root"
-    this.tryEntries = [[-1]];
+    this.tryEntries = [[TryLoc.Root]];
     tryLocsList.forEach(pushTryEntry, this);
     this.reset(true);
   }
@@ -676,8 +686,8 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
 
-        // -1 means "root"
-        if (entry[0] === -1) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+        if (entry[0] === TryLoc.Root) {
           // Exception thrown outside of any try block that could handle
           // it, so set the completion value of the entire function to
           // throw the exception.
@@ -709,8 +719,12 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     abrupt: function (type, arg) {
       for (var i = this.tryEntries!.length - 1; i >= 0; --i) {
         var entry = this.tryEntries![i];
-        // -1 means "root"
-        if (entry[0] > -1 && entry[0] <= this.prev! && this.prev! < entry[2]!) {
+        if (
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          entry[0] > TryLoc.Root &&
+          entry[0] <= this.prev! &&
+          this.prev! < entry[2]!
+        ) {
           var finallyEntry: TryEntry | null = entry;
           break;
         }
@@ -788,7 +802,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     },
 
     delegateYield: function (iterable, resultName, nextLoc) {
-      this.delegate = [values(iterable), resultName, nextLoc];
+      this.delegate = { i: values(iterable), r: resultName, n: nextLoc };
 
       if (this.method === "next") {
         // Deliberately forget the last sent value so that we don't
