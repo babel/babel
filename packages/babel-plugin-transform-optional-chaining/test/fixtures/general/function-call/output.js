@@ -1,4 +1,4 @@
-var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo$bar2, _foo7, _foo$bar3, _foo8, _foo9, _foo9$bar, _foo10, _foo10$bar;
+var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo$bar2, _foo7, _foo$bar3, _foo8, _foo9, _foo9$bar, _foo0, _foo0$bar;
 (_foo = foo) === null || _foo === void 0 || _foo(foo);
 (_foo2 = foo) === null || _foo2 === void 0 || _foo2.bar();
 (_foo$bar = (_foo3 = foo).bar) === null || _foo$bar === void 0 || _foo$bar.call(_foo3, foo.bar, false);
@@ -8,4 +8,4 @@ var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo$bar2, _fo
 (_foo$bar2 = (_foo7 = foo).bar) === null || _foo$bar2 === void 0 || _foo$bar2.call(_foo7).baz;
 (_foo$bar3 = (_foo8 = foo).bar) === null || _foo$bar3 === void 0 || (_foo$bar3 = _foo$bar3.call(_foo8)) === null || _foo$bar3 === void 0 || _foo$bar3.baz;
 (_foo9 = foo) === null || _foo9 === void 0 || (_foo9$bar = _foo9.bar) === null || _foo9$bar === void 0 || _foo9$bar.call(_foo9).baz;
-(_foo10 = foo) === null || _foo10 === void 0 || (_foo10$bar = _foo10.bar) === null || _foo10$bar === void 0 || (_foo10$bar = _foo10$bar.call(_foo10)) === null || _foo10$bar === void 0 ? void 0 : _foo10$bar.baz;
+(_foo0 = foo) === null || _foo0 === void 0 || (_foo0$bar = _foo0.bar) === null || _foo0$bar === void 0 || (_foo0$bar = _foo0$bar.call(_foo0)) === null || _foo0$bar === void 0 ? void 0 : _foo0$bar.baz;
