@@ -151,13 +151,16 @@ export class Emitter {
 
   // Shorthand for emitting assignment statements. This will come in handy
   // for assignments to temporary variables.
-  emitAssign<T extends t.LVal>(lhs: T, rhs: t.Expression) {
+  emitAssign<T extends t.AssignmentExpression["left"]>(
+    lhs: T,
+    rhs: t.Expression,
+  ) {
     this.emit(this.assign(lhs, rhs));
     return lhs;
   }
 
   // Shorthand for an assignment statement.
-  assign(lhs: t.LVal, rhs: t.Expression) {
+  assign(lhs: t.AssignmentExpression["left"], rhs: t.Expression) {
     return t.expressionStatement(
       t.assignmentExpression("=", t.cloneNode(lhs), rhs),
     );
@@ -966,7 +969,9 @@ export class Emitter {
       case "MemberExpression":
         return finish(
           t.memberExpression(
-            self.explodeExpression(path.get("object")),
+            self.explodeExpression(
+              path.get("object") as NodePath<t.Expression>,
+            ),
             path.node.computed
               ? self.explodeViaTempVar(
                   null,
@@ -1003,7 +1008,7 @@ export class Emitter {
               // Assign the exploded callee.object expression to a temporary
               // variable so that we can use it twice without reevaluating it.
               self.makeTempVar(),
-              calleePath.get("object"),
+              calleePath.get("object") as NodePath<t.Expression>,
               hasLeapingChildren,
             );
 
@@ -1280,7 +1285,9 @@ export class Emitter {
         return finish(
           t.updateExpression(
             path.node.operator,
-            self.explodeExpression(path.get("argument")),
+            self.explodeExpression(path.get("argument")) as
+              | t.Identifier
+              | t.MemberExpression,
             path.node.prefix,
           ),
         );
