@@ -105,13 +105,15 @@ export default (superClass: typeof Parser) =>
       const expression = directive.value as any as N.EstreeLiteral;
       delete directive.value;
 
-      expression.type = "Literal";
+      this.castNodeAs<N.EstreeLiteral>(expression, "Literal");
       // @ts-expect-error N.EstreeLiteral.raw is not defined.
       expression.raw = expression.extra.raw;
       expression.value = expression.extra.expressionValue;
 
-      const stmt = directive as any as N.ExpressionStatement;
-      stmt.type = "ExpressionStatement";
+      const stmt = this.castNodeAs<N.ExpressionStatement>(
+        directive,
+        "ExpressionStatement",
+      );
       stmt.expression = expression;
       // @ts-expect-error N.ExpressionStatement.directive is not defined
       stmt.directive = expression.extra.rawValue;
@@ -119,6 +121,24 @@ export default (superClass: typeof Parser) =>
       delete expression.extra;
 
       return stmt;
+    }
+
+    /**
+     * The TS-ESLint always define optional AST properties, here we provide the
+     * default value for such properties immediately after `finishNode` was invoked.
+     * This hook will be implemented by the typescript plugin.
+     *
+     * Note: This hook should be manually invoked when we change the `type` of a given AST
+     * node, to ensure that the optional properties are correctly filled.
+     * @param node The AST node finished by finishNode
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    fillOptionalPropertiesForTSESLint(node: NodeType) {}
+
+    castNodeAs<T extends N.Node>(node: N.Node, type: T["type"]): T {
+      (node as any as T).type = type;
+      this.fillOptionalPropertiesForTSESLint(node);
+      return node as any as T;
     }
 
     // ==================================
@@ -193,9 +213,10 @@ export default (superClass: typeof Parser) =>
       delete node.id;
       // @ts-expect-error mutate AST types
       node.name = name;
-      // @ts-expect-error mutate AST types
-      node.type = "PrivateIdentifier";
-      return node as unknown as N.EstreePrivateIdentifier;
+      return this.castNodeAs<N.EstreePrivateIdentifier>(
+        node,
+        "PrivateIdentifier",
+      );
     }
 
     // @ts-expect-error ESTree plugin changes node types
@@ -248,21 +269,25 @@ export default (superClass: typeof Parser) =>
       allowDirectSuper: boolean,
       type: T["type"],
       inClassScope: boolean = false,
-    ): N.EstreeMethodDefinition | N.EstreeTSAbstractMethodDefinition {
+    ):
+      | N.EstreeProperty
+      | N.EstreeMethodDefinition
+      | N.EstreeTSAbstractMethodDefinition {
       let funcNode = this.startNode<N.MethodLike>();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
-      funcNode = super.parseMethod(
-        // @ts-expect-error todo(flow->ts)
-        funcNode,
-        isGenerator,
-        isAsync,
-        isConstructor,
-        allowDirectSuper,
-        type,
-        inClassScope,
+      funcNode = this.castNodeAs<N.FunctionExpression>(
+        super.parseMethod(
+          // @ts-expect-error todo(flow->ts)
+          funcNode,
+          isGenerator,
+          isAsync,
+          isConstructor,
+          allowDirectSuper,
+          type,
+          inClassScope,
+        ),
+        "FunctionExpression",
       );
-      // @ts-expect-error mutate AST types
-      funcNode.type = "FunctionExpression";
       delete funcNode.kind;
       // @ts-expect-error mutate AST types
       node.value = funcNode;
@@ -289,11 +314,23 @@ export default (superClass: typeof Parser) =>
           );
         }
       }
-      return this.finishNode(
-        // @ts-expect-error cast methods to estree types
-        node as Undone<N.EstreeMethodDefinition>,
-        "MethodDefinition",
-      );
+      if (type === "ObjectMethod") {
+        if ((node as any as N.ObjectMethod).kind === "method") {
+          (node as any as N.EstreeProperty).kind = "init";
+        }
+        (node as any as N.EstreeProperty).shorthand = false;
+        return this.finishNode(
+          // @ts-expect-error cast methods to estree types
+          node as Undone<N.EstreeProperty>,
+          "Property",
+        );
+      } else {
+        return this.finishNode(
+          // @ts-expect-error cast methods to estree types
+          node as Undone<N.EstreeMethodDefinition>,
+          "MethodDefinition",
+        );
+      }
     }
 
     nameIsConstructor(key: N.Expression | N.PrivateName): boolean {
@@ -313,11 +350,16 @@ export default (superClass: typeof Parser) =>
         propertyNode.abstract &&
         this.hasPlugin("typescript")
       ) {
-        (propertyNode as unknown as N.EstreeTSAbstractPropertyDefinition).type =
-          "TSAbstractPropertyDefinition";
+        delete propertyNode.abstract;
+        this.castNodeAs<N.EstreeTSAbstractPropertyDefinition>(
+          propertyNode,
+          "TSAbstractPropertyDefinition",
+        );
       } else {
-        (propertyNode as unknown as N.EstreePropertyDefinition).type =
-          "PropertyDefinition";
+        this.castNodeAs<N.EstreePropertyDefinition>(
+          propertyNode,
+          "PropertyDefinition",
+        );
       }
       return propertyNode;
     }
@@ -334,11 +376,15 @@ export default (superClass: typeof Parser) =>
         propertyNode.abstract &&
         this.hasPlugin("typescript")
       ) {
-        (propertyNode as unknown as N.EstreeTSAbstractPropertyDefinition).type =
-          "TSAbstractPropertyDefinition";
+        this.castNodeAs<N.EstreeTSAbstractPropertyDefinition>(
+          propertyNode,
+          "TSAbstractPropertyDefinition",
+        );
       } else {
-        (propertyNode as unknown as N.EstreePropertyDefinition).type =
-          "PropertyDefinition";
+        this.castNodeAs<N.EstreePropertyDefinition>(
+          propertyNode,
+          "PropertyDefinition",
+        );
       }
       propertyNode.computed = false;
       return propertyNode;
@@ -359,32 +405,6 @@ export default (superClass: typeof Parser) =>
       return accessorPropertyNode;
     }
 
-    parseObjectMethod(
-      prop: N.ObjectMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
-      isPattern: boolean,
-      isAccessor: boolean,
-    ): N.ObjectMethod | undefined | null {
-      const node: N.EstreeProperty = super.parseObjectMethod(
-        prop,
-        isGenerator,
-        isAsync,
-        isPattern,
-        isAccessor,
-      ) as any;
-
-      if (node) {
-        node.type = "Property";
-        if ((node as any as N.ClassMethod).kind === "method") {
-          node.kind = "init";
-        }
-        node.shorthand = false;
-      }
-
-      return node as any;
-    }
-
     parseObjectProperty(
       prop: N.ObjectProperty,
       startLoc: Position | undefined | null,
@@ -400,7 +420,7 @@ export default (superClass: typeof Parser) =>
 
       if (node) {
         node.kind = "init";
-        node.type = "Property";
+        this.castNodeAs<N.EstreeProperty>(node, "Property");
       }
 
       return node as any;
@@ -462,7 +482,7 @@ export default (superClass: typeof Parser) =>
       const node = super.finishCallExpression(unfinished, optional);
 
       if (node.callee.type === "Import") {
-        (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
+        this.castNodeAs<N.ImportExpression>(node, "ImportExpression");
         (node as N.Node as N.EstreeImportExpression).source = node
           .arguments[0] as N.Expression;
         (node as N.Node as N.EstreeImportExpression).options =
@@ -513,8 +533,10 @@ export default (superClass: typeof Parser) =>
             node.specifiers.length === 1 &&
             node.specifiers[0].type === "ExportNamespaceSpecifier"
           ) {
-            // @ts-expect-error mutating AST types
-            node.type = "ExportAllDeclaration";
+            this.castNodeAs<N.ExportAllDeclaration>(
+              node,
+              "ExportAllDeclaration",
+            );
             // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
             delete node.specifiers;
@@ -614,6 +636,13 @@ export default (superClass: typeof Parser) =>
       endLoc: Position,
     ): T {
       return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
+    }
+
+    // Override for TS-ESLint that does not allow optional AST properties
+    finishNode<T extends NodeType>(node: Undone<T>, type: T["type"]): T {
+      const result = super.finishNode(node, type);
+      this.fillOptionalPropertiesForTSESLint(result);
+      return result;
     }
 
     resetStartLocation(node: N.Node, startLoc: Position) {

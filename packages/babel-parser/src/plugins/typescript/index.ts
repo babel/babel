@@ -3469,7 +3469,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.raise(TSErrors.ConstructorHasTypeParameters, typeParameters);
       }
 
-      // @ts-expect-error declare does not exist in ClassMethod
       const { declare = false, kind } = method;
 
       if (declare && (kind === "get" || kind === "set")) {
@@ -4377,6 +4376,70 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             ? BindingFlag.TYPE_TS_TYPE_IMPORT
             : BindingFlag.TYPE_TS_VALUE_IMPORT,
         );
+      }
+    }
+
+    /**
+     * This hook is defined in the ESTree plugin.
+     * The TS-ESLint always define optional AST properties, here we provide the
+     * default value for such properties immediately after `finishNode` was invoked.
+     *
+     * @param node The AST node finished by finishNode
+     * @returns
+     */
+    fillOptionalPropertiesForTSESLint(node: N.Node): void {
+      switch (node.type) {
+        case "SpreadElement":
+        case "RestElement":
+          node.value = undefined;
+        /* fallthrough */
+        case "Identifier":
+        case "ArrayPattern":
+        case "AssignmentPattern":
+        case "ObjectPattern":
+          node.decorators ??= [];
+          node.optional ??= false;
+          node.typeAnnotation ??= undefined;
+          return;
+        case "FunctionDeclaration":
+        case "FunctionExpression":
+        case "ClassMethod":
+        case "ClassPrivateMethod":
+          node.declare ??= false;
+          node.returnType ??= undefined;
+          node.typeParameters ??= undefined;
+          return;
+        case "Property":
+          node.optional ??= false;
+          return;
+        case "TSAbstractPropertyDefinition":
+        case "PropertyDefinition":
+          node.declare ??= false;
+          node.definite ??= false;
+          node.readonly ??= false;
+          node.typeAnnotation ??= undefined;
+        /* fallthrough */
+        case "MethodDefinition":
+          node.accessibility ??= undefined;
+          node.decorators ??= [];
+          node.override ??= false;
+          node.optional ??= false;
+          return;
+        case "ClassDeclaration":
+        case "ClassExpression":
+          node.abstract ??= false;
+          node.declare ??= false;
+          node.decorators ??= [];
+          node.implements ??= [];
+          node.superTypeArguments ??= undefined;
+          node.typeParameters ??= undefined;
+          return;
+        case "VariableDeclaration":
+          node.declare ??= false;
+          return;
+        case "VariableDeclarator":
+          node.definite ??= false;
+          return;
       }
     }
   };

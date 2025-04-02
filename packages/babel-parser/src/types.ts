@@ -181,7 +181,7 @@ export type Declaration =
 export interface DeclarationBase extends NodeBase {
   // TypeScript allows declarations to be prefixed by `declare`.
   //TODO: a FunctionDeclaration is never "declare", because it's a TSDeclareFunction instead.
-  declare?: true;
+  declare?: boolean;
 }
 
 // TODO: Not in spec
@@ -200,7 +200,7 @@ export interface Identifier extends PatternBase {
   // @deprecated
   __clone(): Identifier;
   // TypeScript only. Used in case of an optional parameter.
-  optional?: true | null;
+  optional?: boolean | null;
 }
 // | Placeholder<"Identifier">;
 
@@ -460,7 +460,7 @@ export interface VariableDeclarator extends NodeBase {
   id: Pattern;
   init: Expression | undefined | null;
   // TypeScript only:
-  definite?: true;
+  definite?: boolean;
 }
 
 // Misc
@@ -574,7 +574,8 @@ export interface ObjectMethod extends ObjectMemberBase, FunctionBase {
   value: Expression;
 }
 
-export interface FunctionExpression extends FunctionBase {
+// DeclarationBase: For TS-ESLint
+export interface FunctionExpression extends FunctionBase, DeclarationBase {
   kind?: void; // never set,
   type: "FunctionExpression";
 }
@@ -676,9 +677,12 @@ export interface LogicalExpression extends NodeBase {
 
 export type LogicalOperator = "||" | "&&";
 
-export interface SpreadElement extends NodeBase {
+// PatternBase: For TS-ESLint
+export interface SpreadElement extends NodeBase, PatternBase {
   type: "SpreadElement";
   argument: Expression;
+  // For TS-ESLint
+  value: undefined;
 }
 
 export interface MemberExpression extends NodeBase {
@@ -834,6 +838,7 @@ export type VarianceAnnotations = "in" | "out";
 export interface PatternBase extends HasDecorators {
   // TODO: All not in spec
   // Flow/TypeScript only:
+  optional?: boolean;
   typeAnnotation?: TypeAnnotationBase | null;
 }
 
@@ -854,6 +859,8 @@ export interface ArrayPattern extends PatternBase {
 export interface RestElement extends PatternBase {
   type: "RestElement";
   argument: Pattern;
+  // For TS-ESLint
+  value: undefined;
 }
 
 export interface AssignmentPattern extends PatternBase {
@@ -924,6 +931,7 @@ export interface ClassMethodOrDeclareMethodCommon extends ClassMemberBase {
   key: Expression | PrivateName;
   kind: MethodKind;
   static: boolean;
+  declare?: boolean;
   decorators?: Decorator[];
 }
 
@@ -995,14 +1003,15 @@ export interface OptClassDeclaration
     HasDecorators {
   type: "ClassDeclaration";
   // TypeScript only
-  abstract?: true | null;
+  abstract?: boolean | null;
 }
 
 export interface ClassDeclaration extends OptClassDeclaration {
   id: Identifier;
 }
 
-export interface ClassExpression extends ClassBase {
+// DeclarationBase: For TS-ESLint
+export interface ClassExpression extends ClassBase, DeclarationBase {
   type: "ClassExpression";
 }
 
@@ -1391,6 +1400,7 @@ export interface EstreeProperty extends NodeBase {
   decorators: Decorator[];
   kind?: "get" | "set" | "init";
   variance?: FlowVariance | null;
+  optional?: boolean;
 }
 
 interface EstreeMethodDefinitionBase extends NodeBase {
@@ -1399,6 +1409,10 @@ interface EstreeMethodDefinitionBase extends NodeBase {
   computed: boolean;
   decorators: Decorator[];
   kind?: "get" | "set" | "method";
+
+  accessibility?: Accessibility | null;
+  override?: boolean;
+  optional?: boolean;
 }
 
 export interface EstreeMethodDefinition extends EstreeMethodDefinitionBase {
@@ -1426,6 +1440,15 @@ interface EstreePropertyDefinitionBase extends NodeBase {
   static: boolean;
   key: Expression | EstreePrivateIdentifier;
   computed: boolean;
+
+  accessibility?: Accessibility | null;
+  override?: boolean;
+  optional?: boolean;
+  declare?: boolean;
+  decorators?: Decorator[];
+  definite?: boolean;
+  readonly?: boolean;
+  typeAnnotation?: TsTypeAnnotation | null;
 }
 
 export interface EstreePropertyDefinition extends EstreePropertyDefinitionBase {
