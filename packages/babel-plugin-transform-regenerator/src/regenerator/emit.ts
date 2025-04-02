@@ -387,13 +387,6 @@ export class Emitter {
     if (path.isExpression()) return self.explodeExpression(path, ignoreResult);
 
     switch (node.type) {
-      case "Program":
-        return (path.get("body") as NodePath[]).map(
-          // @ts-expect-error FIXME: The second parameter of `explodeStatement` is `t.Identifier`
-          self.explodeStatement,
-          self,
-        );
-
       case "VariableDeclarator":
         throw getDeclError(node);
 
