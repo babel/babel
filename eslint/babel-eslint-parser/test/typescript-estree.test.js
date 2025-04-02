@@ -51,6 +51,7 @@ function deeplyRemoveProperties(obj, props) {
   }
 }
 
+// Only ESLint 9 or above will be tested
 (isESLint9 ? describe : describe.skip)(
   "Babel should output the same AST as TypeScript-Estree",
   () => {
@@ -73,25 +74,22 @@ function deeplyRemoveProperties(obj, props) {
     };
 
     function parseAndAssertSame(code, babelEcmaFeatures = null) {
-      if (isESLint9) {
-        // ESLint 9
-        const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
-        const babelAST = parseForESLint(code, {
-          eslintVisitorKeys: true,
-          eslintScopeManager: true,
-          ecmaFeatures: babelEcmaFeatures,
-          requireConfigFile: false,
-          babelOptions: {
-            configFile: false,
-            parserOpts: {
-              plugins: ["jsx", "typescript"],
-            },
+      const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
+      const babelAST = parseForESLint(code, {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        ecmaFeatures: babelEcmaFeatures,
+        requireConfigFile: false,
+        babelOptions: {
+          configFile: false,
+          parserOpts: {
+            plugins: ["jsx", "typescript"],
           },
-        }).ast;
+        },
+      }).ast;
 
-        deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-        expect(babelAST).toEqual(tsEstreeAST);
-      }
+      deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+      expect(babelAST).toEqual(tsEstreeAST);
     }
 
     beforeAll(() => {
