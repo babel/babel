@@ -36,12 +36,14 @@ export default declare(api => {
     },
   };
 
+  const shouldWrapped = new Set<t.Node>();
+
   return {
     name: "proposal-function-sent",
     manipulateOptions: (_, parser) => parser.plugins.push("functionSent"),
 
     visitor: {
-      MetaProperty(path, state) {
+      MetaProperty(path) {
         if (!isFunctionSent(path.node)) return;
 
         const fnPath = path.getFunctionParent();
@@ -60,7 +62,16 @@ export default declare(api => {
           ]),
         );
 
-        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+        shouldWrapped.add(fnPath.node);
+      },
+      Function: {
+        exit(path, state) {
+          if (shouldWrapped.has(path.node)) {
+            shouldWrapped.delete(path.node);
+            wrapFunction(path, state.addHelper("skipFirstGeneratorNext"));
+            return;
+          }
+        },
       },
     },
   };
