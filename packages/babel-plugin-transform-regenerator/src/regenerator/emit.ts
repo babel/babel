@@ -194,7 +194,10 @@ export class Emitter {
     );
   }
 
-  clearPendingException(tryLoc: t.NumericLiteral, assignee: t.LVal) {
+  clearPendingException(
+    tryLoc: t.NumericLiteral,
+    assignee: t.AssignmentExpression["left"],
+  ) {
     t.assertLiteral(tryLoc);
 
     const catchCall = t.callExpression(this.contextProperty("catch", true), [
@@ -588,7 +591,7 @@ export class Emitter {
         );
 
         self.emitAssign(
-          path.node.left as t.LVal,
+          path.node.left as t.AssignmentExpression["left"],
           t.memberExpression(
             t.cloneNode(keyInfoTmpVar),
             t.identifier("value"),
