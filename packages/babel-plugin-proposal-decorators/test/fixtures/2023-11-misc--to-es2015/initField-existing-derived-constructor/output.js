@@ -142,7 +142,7 @@
     expect(log + "").toBe("7,8");
   }
   {
-    var _A10;
+    var _A0;
     let _init_foo5, _init_extra_foo5;
     "super() within decorated derived constructor should be transformed: computed key";
     let log = [];
@@ -164,24 +164,24 @@
         babelHelpers.classPrivateFieldSet2(_A9, this, v);
       }
     }
-    _A10 = A;
-    [_init_foo5, _init_extra_foo5] = babelHelpers.applyDecs2311(_A10, [], [[dec, 1, "foo"]], 0, void 0, B).e;
+    _A0 = A;
+    [_init_foo5, _init_extra_foo5] = babelHelpers.applyDecs2311(_A0, [], [[dec, 1, "foo"]], 0, void 0, B).e;
     const a = new A();
     expect(log + "").toBe("9,10");
     expect(a.foo).toBe(142);
   }
   {
-    var _A12;
+    var _A10;
     let _init_foo6, _init_extra_foo6;
     "super() within decorated derived constructor should be transformed: decorator expression";
     let log = [];
     const noop = () => fn => fn;
-    var _A11 = /*#__PURE__*/new WeakMap();
+    var _A1 = /*#__PURE__*/new WeakMap();
     class A extends B {
       constructor() {
         var _Dummy2;
         let _initProto2, _noopDecs2, _ref3;
-        new (_ref3 = (_noopDecs2 = noop(log.push((super(11), babelHelpers.classPrivateFieldInitSpec(this, _A11, _init_foo6(this, 42)), this, _init_extra_foo6(this)).method())), "noop"), _Dummy2 = class Dummy extends B {
+        new (_ref3 = (_noopDecs2 = noop(log.push((super(11), babelHelpers.classPrivateFieldInitSpec(this, _A1, _init_foo6(this, 42)), this, _init_extra_foo6(this)).method())), "noop"), _Dummy2 = class Dummy extends B {
           constructor() {
             log.push(_initProto2(super(12)).method());
           }
@@ -189,14 +189,14 @@
         }, [_initProto2] = babelHelpers.applyDecs2311(_Dummy2, [], [[_noopDecs2, 2, "noop"]], 0, void 0, B).e, _Dummy2)();
       }
       get foo() {
-        return babelHelpers.classPrivateFieldGet2(_A11, this);
+        return babelHelpers.classPrivateFieldGet2(_A1, this);
       }
       set foo(v) {
-        babelHelpers.classPrivateFieldSet2(_A11, this, v);
+        babelHelpers.classPrivateFieldSet2(_A1, this, v);
       }
     }
-    _A12 = A;
-    [_init_foo6, _init_extra_foo6] = babelHelpers.applyDecs2311(_A12, [], [[dec, 1, "foo"]], 0, void 0, B).e;
+    _A10 = A;
+    [_init_foo6, _init_extra_foo6] = babelHelpers.applyDecs2311(_A10, [], [[dec, 1, "foo"]], 0, void 0, B).e;
     const a = new A();
     expect(log + "").toBe("11,12");
     expect(a.foo).toBe(142);

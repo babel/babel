@@ -6,7 +6,7 @@ class Foo {
     return this;
   }
   static test() {
-    var _deep$very$o, _babelHelpers$classPr, _babelHelpers$classPr2, _fnDeep$very$o, _babelHelpers$classPr3, _babelHelpers$classPr4, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref20;
+    var _deep$very$o, _babelHelpers$classPr, _babelHelpers$classPr2, _fnDeep$very$o, _babelHelpers$classPr3, _babelHelpers$classPr4, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _ref0, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18;
     const o = {
       Foo: Foo
     };
@@ -35,22 +35,22 @@ class Foo {
     (_ref7 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self].getSelf()) == null || delete _ref7.self.unicorn;
     (_ref8 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self]).getSelf) == null || (_ref8 = _ref8.call(_babelHelpers$classPr2)) == null || delete _ref8.self.unicorn;
     (_ref9 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self]) == null || (_ref9 = _ref9.getSelf()) == null || delete _ref9.self.unicorn;
-    (_ref10 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self]) == null || _ref10.getSelf == null || (_ref10 = _ref10.getSelf()) == null || delete _ref10.self.unicorn;
+    (_ref0 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self]) == null || _ref0.getSelf == null || (_ref0 = _ref0.getSelf()) == null || delete _ref0.self.unicorn;
     fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].unicorn;
     (_fnDeep$very$o = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o === void 0 ? true : delete babelHelpers.classPrivateFieldLooseBase(_fnDeep$very$o.Foo, _self)[_self].unicorn;
     fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].unicorn;
     fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].self.unicorn;
-    (_ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || delete _ref11.self.unicorn;
-    (_ref12 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].self) == null || delete _ref12.self.unicorn;
-    (_ref13 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || (_ref13 = _ref13.self) == null || delete _ref13.self.unicorn;
+    (_ref1 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || delete _ref1.self.unicorn;
+    (_ref10 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].self) == null || delete _ref10.self.unicorn;
+    (_ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || (_ref11 = _ref11.self) == null || delete _ref11.self.unicorn;
     fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf().unicorn;
-    (_ref14 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]).getSelf) == null || delete _ref14.call(_babelHelpers$classPr3).unicorn;
-    (_ref15 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || delete _ref15.getSelf().unicorn;
-    (_ref16 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || _ref16.getSelf == null || delete _ref16.getSelf().unicorn;
-    (_ref17 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf()) == null || delete _ref17.self.unicorn;
-    (_ref18 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]).getSelf) == null || (_ref18 = _ref18.call(_babelHelpers$classPr4)) == null || delete _ref18.self.unicorn;
-    (_ref19 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || (_ref19 = _ref19.getSelf()) == null || delete _ref19.self.unicorn;
-    (_ref20 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || _ref20.getSelf == null || (_ref20 = _ref20.getSelf()) == null || delete _ref20.self.unicorn;
+    (_ref12 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]).getSelf) == null || delete _ref12.call(_babelHelpers$classPr3).unicorn;
+    (_ref13 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || delete _ref13.getSelf().unicorn;
+    (_ref14 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || _ref14.getSelf == null || delete _ref14.getSelf().unicorn;
+    (_ref15 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf()) == null || delete _ref15.self.unicorn;
+    (_ref16 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]).getSelf) == null || (_ref16 = _ref16.call(_babelHelpers$classPr4)) == null || delete _ref16.self.unicorn;
+    (_ref17 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || (_ref17 = _ref17.getSelf()) == null || delete _ref17.self.unicorn;
+    (_ref18 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null || _ref18.getSelf == null || (_ref18 = _ref18.getSelf()) == null || delete _ref18.self.unicorn;
   }
 }
 _Foo = Foo;

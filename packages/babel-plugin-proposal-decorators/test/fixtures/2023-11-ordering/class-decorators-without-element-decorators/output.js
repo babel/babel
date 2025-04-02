@@ -138,13 +138,13 @@ const classDec2 = log => (cls, ctxClass) => {
   );
 }
 {
-  let _initClass6, _classDecs6, _computedKey8, _computedKey9, _computedKey10;
+  let _initClass6, _classDecs6, _computedKey8, _computedKey9, _computedKey0;
   const log = [];
   _classDecs6 = [classDec1(log), classDec2(log)];
   let _C6;
   new class extends babelHelpers.identity {
     static [class C {
-      static [(_computedKey8 = log.push("k1"), _computedKey9 = log.push("k2"), _computedKey10 = log.push("k3"), "_")];
+      static [(_computedKey8 = log.push("k1"), _computedKey9 = log.push("k2"), _computedKey0 = log.push("k3"), "_")];
       static {
         delete this._;
         [_C6, _initClass6] = babelHelpers.applyDecs2311(this, _classDecs6, []).c;
@@ -152,7 +152,7 @@ const classDec2 = log => (cls, ctxClass) => {
     }];
     [_computedKey8];
     [_computedKey9];
-    [_computedKey10];
+    [_computedKey0];
     constructor() {
       super(_C6), _initClass6();
     }

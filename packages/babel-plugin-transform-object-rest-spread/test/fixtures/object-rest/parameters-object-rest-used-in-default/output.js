@@ -44,10 +44,10 @@ _ref6 => {
 }) => {
   let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref9), _ref9));
 };
-(_ref10, {
+(_ref0, {
   a = R => R
 } = {
   b: R => R
 }) => {
-  let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref10), _ref10));
+  let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref0), _ref0));
 };
