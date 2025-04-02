@@ -254,9 +254,15 @@ export function merge(
     Object.defineProperty(mergedVisitor, "_verified", { enumerable: false });
   }
 
+  let noScope;
+
   for (let i = 0; i < visitors.length; i++) {
     const visitor = explode$1(visitors[i]);
     const state = states[i];
+
+    noScope =
+      // @ts-expect-error no type for `noScope`
+      noScope == null ? visitor.noScope : noScope && visitor.noScope;
 
     let topVisitor: ExplVisitNode<unknown, Node> = visitor;
     if (state || wrapper) {
@@ -277,6 +283,11 @@ export function merge(
       const nodeVisitor = (mergedVisitor[key] ||= {});
       mergePair(nodeVisitor, typeVisitor);
     }
+  }
+
+  if (noScope) {
+    // @ts-expect-error no type for `noScope`
+    mergedVisitor.noScope = true;
   }
 
   return mergedVisitor;
