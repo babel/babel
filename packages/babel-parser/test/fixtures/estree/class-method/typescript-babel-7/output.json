@@ -14,7 +14,9 @@
         "id": {
           "type": "Identifier",
           "start":15,"end":30,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":30},"identifierName":"TSAbstractClass"},
-          "name": "TSAbstractClass"
+          "name": "TSAbstractClass",
+          "decorators": [],
+          "optional": false
         },
         "superClass": null,
         "body": {
@@ -29,7 +31,9 @@
               "key": {
                 "type": "Identifier",
                 "start":44,"end":47,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
-                "name": "foo"
+                "name": "foo",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "method",
@@ -45,6 +49,8 @@
                     "type": "Identifier",
                     "start":48,"end":60,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":27},"identifierName":"name"},
                     "name": "name",
+                    "decorators": [],
+                    "optional": false,
                     "typeAnnotation": {
                       "type": "TSTypeAnnotation",
                       "start":52,"end":60,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":27}},
@@ -62,11 +68,18 @@
                     "type": "TSBooleanKeyword",
                     "start":63,"end":70,"loc":{"start":{"line":2,"column":30},"end":{"line":2,"column":37}}
                   }
-                }
-              }
+                },
+                "declare": false
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
             }
           ]
-        }
+        },
+        "declare": false,
+        "decorators": [],
+        "implements": []
       }
     ]
   }

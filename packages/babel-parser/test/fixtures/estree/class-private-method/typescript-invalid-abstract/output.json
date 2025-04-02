@@ -14,7 +14,9 @@
         "id": {
           "type": "Identifier",
           "start":15,"end":30,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":30},"identifierName":"TSAbstractClass"},
-          "name": "TSAbstractClass"
+          "name": "TSAbstractClass",
+          "decorators": [],
+          "optional": false
         },
         "superClass": null,
         "body": {
@@ -44,6 +46,8 @@
                     "type": "Identifier",
                     "start":49,"end":61,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":28},"identifierName":"name"},
                     "name": "name",
+                    "decorators": [],
+                    "optional": false,
                     "typeAnnotation": {
                       "type": "TSTypeAnnotation",
                       "start":53,"end":61,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":28}},
@@ -61,12 +65,16 @@
                     "type": "TSBooleanKeyword",
                     "start":64,"end":71,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":38}}
                   }
-                }
+                },
+                "declare": false
               },
               "computed": false
             }
           ]
-        }
+        },
+        "declare": false,
+        "decorators": [],
+        "implements": []
       }
     ]
   }

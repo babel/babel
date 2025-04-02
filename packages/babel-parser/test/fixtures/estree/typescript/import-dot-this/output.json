@@ -18,6 +18,8 @@
               "type": "Identifier",
               "start":4,"end":32,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":32},"identifierName":"x"},
               "name": "x",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":5,"end":32,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":32}},
@@ -41,16 +43,20 @@
                     "qualifier": {
                       "type": "Identifier",
                       "start":28,"end":32,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":32},"identifierName":"this"},
-                      "name": "this"
+                      "name": "this",
+                      "decorators": [],
+                      "optional": false
                     }
                   }
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       },
       {
         "type": "VariableDeclaration",
@@ -63,6 +69,8 @@
               "type": "Identifier",
               "start":38,"end":59,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":25},"identifierName":"Y"},
               "name": "Y",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":39,"end":59,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":25}},
@@ -83,15 +91,19 @@
                   "qualifier": {
                     "type": "Identifier",
                     "start":55,"end":59,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":25},"identifierName":"this"},
-                    "name": "this"
+                    "name": "this",
+                    "decorators": [],
+                    "optional": false
                   }
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       },
       {
         "type": "VariableDeclaration",
@@ -104,6 +116,8 @@
               "type": "Identifier",
               "start":65,"end":91,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":30},"identifierName":"z"},
               "name": "z",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":66,"end":91,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":30}},
@@ -124,7 +138,9 @@
                   "qualifier": {
                     "type": "Identifier",
                     "start":81,"end":85,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":24},"identifierName":"this"},
-                    "name": "this"
+                    "name": "this",
+                    "decorators": [],
+                    "optional": false
                   },
                   "typeArguments": {
                     "type": "TSTypeParameterInstantiation",
@@ -139,10 +155,12 @@
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       }
     ]
   }

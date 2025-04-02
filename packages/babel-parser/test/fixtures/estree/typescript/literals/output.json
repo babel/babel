@@ -13,7 +13,9 @@
         "id": {
           "type": "Identifier",
           "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"Foo"},
-          "name": "Foo"
+          "name": "Foo",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -32,7 +34,9 @@
         "id": {
           "type": "Identifier",
           "start":23,"end":27,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":9},"identifierName":"Foo2"},
-          "name": "Foo2"
+          "name": "Foo2",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -51,7 +55,9 @@
         "id": {
           "type": "Identifier",
           "start":41,"end":45,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":9},"identifierName":"Foo3"},
-          "name": "Foo3"
+          "name": "Foo3",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -70,7 +76,9 @@
         "id": {
           "type": "Identifier",
           "start":63,"end":67,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9},"identifierName":"Foo4"},
-          "name": "Foo4"
+          "name": "Foo4",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -89,7 +97,9 @@
         "id": {
           "type": "Identifier",
           "start":80,"end":84,"loc":{"start":{"line":5,"column":5},"end":{"line":5,"column":9},"identifierName":"Foo5"},
-          "name": "Foo5"
+          "name": "Foo5",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -108,7 +118,9 @@
         "id": {
           "type": "Identifier",
           "start":99,"end":103,"loc":{"start":{"line":6,"column":5},"end":{"line":6,"column":9},"identifierName":"Foo6"},
-          "name": "Foo6"
+          "name": "Foo6",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -133,7 +145,9 @@
         "id": {
           "type": "Identifier",
           "start":117,"end":121,"loc":{"start":{"line":7,"column":5},"end":{"line":7,"column":9},"identifierName":"Foo7"},
-          "name": "Foo7"
+          "name": "Foo7",
+          "decorators": [],
+          "optional": false
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
