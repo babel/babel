@@ -1207,19 +1207,35 @@ defineType("VariableDeclaration", {
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? (() => {
-          const withoutInit = assertNodeType("Identifier");
+          const withoutInit = assertNodeType("Identifier", "Placeholder");
+          const constOrLetOrVar = assertNodeType(
+            "Identifier",
+            "ArrayPattern",
+            "ObjectPattern",
+            "Placeholder",
+          );
+          const usingOrAwaitUsing = withoutInit;
 
           return function (parent, key, node: t.VariableDeclaration) {
-            if (is("ForXStatement", parent, { left: node })) {
-              if (node.declarations.length !== 1) {
+            const { kind, declarations } = node;
+            const parentIsForX = is("ForXStatement", parent, { left: node });
+            if (parentIsForX) {
+              if (declarations.length !== 1) {
                 throw new TypeError(
                   `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
                 );
               }
-            } else {
-              node.declarations.forEach(decl => {
-                if (!decl.init) withoutInit(decl, "id", decl.id);
-              });
+            }
+            for (const decl of declarations) {
+              if (kind === "const" || kind === "let" || kind === "var") {
+                if (!parentIsForX && !decl.init) {
+                  withoutInit(decl, "id", decl.id);
+                } else {
+                  constOrLetOrVar(decl, "id", decl.id);
+                }
+              } else {
+                usingOrAwaitUsing(decl, "id", decl.id);
+              }
             }
           };
         })()
