@@ -26,7 +26,6 @@
             {
               "type": "TSAbstractMethodDefinition",
               "start":35,"end":72,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":39}},
-              "abstract": true,
               "static": false,
               "key": {
                 "type": "PrivateIdentifier",
@@ -66,9 +65,13 @@
                     "start":64,"end":71,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":38}}
                   }
                 },
+                "body": null,
                 "declare": false
               },
-              "computed": false
+              "computed": false,
+              "decorators": [],
+              "override": false,
+              "optional": false
             }
           ]
         },

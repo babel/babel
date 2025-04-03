@@ -46,6 +46,7 @@
                 "async": false,
                 "expression": false,
                 "params": [],
+                "body": null,
                 "declare": false
               },
               "decorators": [],
@@ -70,6 +71,7 @@
                 "async": false,
                 "expression": false,
                 "params": [],
+                "body": null,
                 "declare": false
               },
               "computed": false,
@@ -99,6 +101,7 @@
                 "async": false,
                 "expression": false,
                 "params": [],
+                "body": null,
                 "declare": false
               },
               "decorators": [],
