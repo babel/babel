@@ -135,7 +135,7 @@ export default (superClass: typeof Parser) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fillOptionalPropertiesForTSESLint(node: NodeType) {}
 
-    castNodeAs<T extends N.Node>(node: N.Node, type: T["type"]): T {
+    castNodeTo<T extends N.Node>(node: N.Node, type: T["type"]): T {
       (node as any as T).type = type;
       this.fillOptionalPropertiesForTSESLint(node);
       return node as any as T;
