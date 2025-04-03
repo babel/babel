@@ -299,8 +299,10 @@ export default (superClass: typeof Parser) =>
       }
       if (process.env.BABEL_8_BREAKING && this.hasPlugin("typescript")) {
         if (!funcNode.body) {
-          (funcNode as unknown as N.EstreeTSEmptyBodyFunctionExpression).type =
-            "TSEmptyBodyFunctionExpression";
+          this.castNodeTo(
+            funcNode as N.FunctionExpression,
+            "TSEmptyBodyFunctionExpression",
+          );
         }
         // @ts-expect-error todo(flow->ts) property not defined for all types in union
         if (node.abstract) {
