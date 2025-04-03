@@ -158,8 +158,9 @@ function deeplyRemoveProperties(obj, props) {
 
       // pending cloneIdentifier support
       // ["export declaration", `const foo = 0;export { foo }`],
+      ["export declaration as", `const foo = 0;export { foo as bar }`],
       ["export function declaration", `export function foo() {}`],
-      ["export function declaration", `export class foo {}`],
+      ["export class declaration", `export class foo {}`],
 
       ["member expression", `foo.bar`],
       ["call expression", `foo(bar)`],
@@ -173,6 +174,7 @@ function deeplyRemoveProperties(obj, props) {
         // ["class private method", "class C { #m() {} }"],
         ["class abstract property", "abstract class C { abstract p; }"],
         // ["class abstract private property", "abstract class C { abstract #p; }"]
+        ["class abstract method", "abstract class C { abstract m(): void }"],
       ])("%s: %s", (_, input) => {
         parseAndAssertSame(input);
       });
