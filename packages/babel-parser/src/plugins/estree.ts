@@ -131,15 +131,6 @@ export default (superClass: typeof Parser) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fillOptionalPropertiesForTSESLint(node: NodeType) {}
 
-    castNodeTo<T extends N.Node["type"]>(
-      node: N.Node,
-      type: T,
-    ): Extract<N.Node, { type: T }> {
-      node.type = type;
-      this.fillOptionalPropertiesForTSESLint(node);
-      return node as Extract<N.Node, { type: T }>;
-    }
-
     cloneEstreeStringLiteral(node: N.EstreeLiteral): N.EstreeLiteral {
       const { start, end, loc, range, raw, value } = node;
       const cloned = Object.create(node.constructor.prototype);
@@ -634,6 +625,15 @@ export default (superClass: typeof Parser) =>
     /* ============================================================ *
      * parser/node.ts                                               *
      * ============================================================ */
+
+    castNodeTo<T extends N.Node["type"]>(
+      node: N.Node,
+      type: T,
+    ): Extract<N.Node, { type: T }> {
+      const result = super.castNodeTo(node, type);
+      this.fillOptionalPropertiesForTSESLint(result);
+      return result;
+    }
 
     cloneIdentifier<T extends N.Identifier | N.Placeholder>(node: T): T {
       const cloned = super.cloneIdentifier(node);

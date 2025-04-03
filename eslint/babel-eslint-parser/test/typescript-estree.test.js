@@ -143,8 +143,10 @@ function deeplyRemoveProperties(obj, props) {
       ],
 
       ["assignment expression", "x = 1"],
-      // pending toAssignable support
-      // ["assignment expression destructuring", "[{ a: x = 0 }, ...b] = [{ a: 0 }]"],
+      [
+        "assignment expression destructuring",
+        "[{ a: x = 0 }, ...b] = [{ a: 0 }]",
+      ],
 
       ["async call expression", "async ([ x ])"],
 
