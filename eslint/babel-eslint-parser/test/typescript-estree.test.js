@@ -1,5 +1,6 @@
 import path from "node:path";
 import { parseForESLint } from "../lib/index.cjs";
+import unpad from "dedent";
 import { ESLint } from "eslint";
 import { itDummy, commonJS, IS_BABEL_8 } from "$repo-utils";
 
@@ -72,6 +73,7 @@ function deeplyRemoveProperties(obj, props) {
     };
 
     function parseAndAssertSame(code, babelEcmaFeatures = null) {
+      code = unpad(code);
       const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
       const babelAST = parseForESLint(code, {
         eslintVisitorKeys: true,
@@ -114,6 +116,15 @@ function deeplyRemoveProperties(obj, props) {
       ["regexp u flag", `/foo/dgimsuy;`],
       ["regexp v flag", `/foo/dgimsvy;`],
       ["identifier", "i"],
+
+      // ["null", "null"],
+
+      [
+        "template with braces",
+        `
+        { \`\${foo} \${bar}\` }
+      `,
+      ],
 
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
@@ -161,12 +172,18 @@ function deeplyRemoveProperties(obj, props) {
 
       ["export declaration", `const foo = 0;export { foo }`],
       ["export declaration as", `const foo = 0;export { foo as bar }`],
+      ["export const declaration", `export const foo = 0`],
+      ["export declaration from", `export { foo } from "foo"`],
       ["export function declaration", `export function foo() {}`],
       ["export class declaration", `export class foo {}`],
 
       ["member expression", `foo.bar`],
+      ["optional member expression", `foo?.bar`],
       ["call expression", `foo(bar)`],
+      ["optional call expression", `foo?.(bar)`],
       ["new expression", `new foo`],
+
+      ["logical assignment", "x ??= y ||= z &&= x"],
     ])("%s: %s", (_, input) => {
       parseAndAssertSame(input);
     });
