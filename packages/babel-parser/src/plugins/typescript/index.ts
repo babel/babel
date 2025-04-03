@@ -3504,13 +3504,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ) {
       if (node.type === "TSDeclareMethod") return;
       // This happens when using the "estree" plugin.
-      if (
-        (node as N.Node).type === "MethodDefinition" &&
-        !Object.hasOwn(
-          (node as unknown as N.EstreeMethodDefinition).value,
-          "body",
-        )
-      ) {
+      if ((node as N.Node).type === "MethodDefinition" && node.body == null) {
         return;
       }
 
@@ -4185,7 +4179,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         inClassScope,
       );
       // @ts-expect-error todo(flow->ts) property not defined for all types in union
-      if (method.abstract) {
+      if (method.abstract || method.type === "TSAbstractMethodDefinition") {
         const hasEstreePlugin = this.hasPlugin("estree");
         const methodFn = hasEstreePlugin
           ? // @ts-expect-error estree typings
