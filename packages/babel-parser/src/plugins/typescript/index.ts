@@ -4401,6 +4401,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.optional ??= false;
           node.typeAnnotation ??= undefined;
           return;
+        case "TSEmptyBodyFunctionExpression":
+          node.body = null;
+        /* fallthrough */
         case "FunctionDeclaration":
         case "FunctionExpression":
         case "ClassMethod":
@@ -4419,6 +4422,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.readonly ??= false;
           node.typeAnnotation ??= undefined;
         /* fallthrough */
+        case "TSAbstractMethodDefinition":
         case "MethodDefinition":
           node.accessibility ??= undefined;
           node.decorators ??= [];

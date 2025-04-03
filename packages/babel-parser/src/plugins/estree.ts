@@ -272,40 +272,46 @@ export default (superClass: typeof Parser) =>
       | N.EstreeTSAbstractMethodDefinition {
       let funcNode = this.startNode<N.MethodLike>();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
-      funcNode = this.castNodeTo(
-        super.parseMethod(
-          // @ts-expect-error todo(flow->ts)
-          funcNode,
-          isGenerator,
-          isAsync,
-          isConstructor,
-          allowDirectSuper,
-          type,
-          inClassScope,
-        ),
-        "FunctionExpression",
+      funcNode = super.parseMethod(
+        // @ts-expect-error todo(flow->ts)
+        funcNode,
+        isGenerator,
+        isAsync,
+        isConstructor,
+        allowDirectSuper,
+        type,
+        inClassScope,
       );
       delete funcNode.kind;
-      // @ts-expect-error mutate AST types
-      node.value = funcNode;
       const { typeParameters } = node;
       if (typeParameters) {
         delete node.typeParameters;
         funcNode.typeParameters = typeParameters;
         this.resetStartLocationFromNode(funcNode, typeParameters);
       }
+      const valueNode = this.castNodeTo(
+        funcNode as N.MethodLike,
+        process.env.BABEL_8_BREAKING &&
+          this.hasPlugin("typescript") &&
+          !funcNode.body
+          ? "TSEmptyBodyFunctionExpression"
+          : "FunctionExpression",
+      );
+      (
+        node as unknown as Undone<
+          | N.EstreeProperty
+          | N.EstreeMethodDefinition
+          | N.EstreeTSAbstractMethodDefinition
+        >
+      ).value = valueNode;
       if (type === "ClassPrivateMethod") {
         node.computed = false;
       }
       if (process.env.BABEL_8_BREAKING && this.hasPlugin("typescript")) {
-        if (!funcNode.body) {
-          this.castNodeTo(
-            funcNode as N.FunctionExpression,
-            "TSEmptyBodyFunctionExpression",
-          );
-        }
         // @ts-expect-error todo(flow->ts) property not defined for all types in union
         if (node.abstract) {
+          // @ts-expect-error remove abstract from TSAbstractMethodDefinition
+          delete node.abstract;
           return this.finishNode(
             // @ts-expect-error cast methods to estree types
             node as Undone<N.EstreeTSAbstractMethodDefinition>,

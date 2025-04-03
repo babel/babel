@@ -1588,8 +1588,11 @@ export interface TsIndexSignature
   // Note: parameters.length must be 1.
 }
 
-export interface EstreeTSEmptyBodyFunctionExpression extends NodeBase {
+export interface EstreeTSEmptyBodyFunctionExpression
+  extends BodilessFunctionOrMethodBase,
+    DeclarationBase {
   type: "TSEmptyBodyFunctionExpression";
+  body: null;
 }
 
 export interface EstreeTSAbstractMethodDefinition
