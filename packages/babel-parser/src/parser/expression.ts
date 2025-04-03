@@ -61,7 +61,7 @@ import {
   type UnparenthesizedPipeBodyTypes,
 } from "../parse-error/pipeline-operator-errors.ts";
 import { setInnerComments } from "./comments.ts";
-import { cloneIdentifier, type Undone } from "./node.ts";
+import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 
 import { OptionFlags, type SourceType } from "../options.ts";
@@ -2297,7 +2297,7 @@ export default abstract class ExpressionParser extends LValParser {
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
           startLoc,
-          cloneIdentifier(prop.key),
+          this.cloneIdentifier(prop.key),
         );
       } else if (this.match(tt.eq)) {
         const shorthandAssignLoc = this.state.startLoc;
@@ -2310,10 +2310,10 @@ export default abstract class ExpressionParser extends LValParser {
         }
         prop.value = this.parseMaybeDefault(
           startLoc,
-          cloneIdentifier(prop.key),
+          this.cloneIdentifier(prop.key),
         );
       } else {
-        prop.value = cloneIdentifier(prop.key);
+        prop.value = this.cloneIdentifier(prop.key);
       }
       prop.shorthand = true;
 

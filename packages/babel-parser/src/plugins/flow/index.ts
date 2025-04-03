@@ -21,7 +21,7 @@ import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
-import { cloneIdentifier, type Undone } from "../../parser/node.ts";
+import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 
 const reservedTypes = new Set([
@@ -2836,7 +2836,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
           specifier.importKind = specifierTypeKind;
-          specifier.local = cloneIdentifier(as_ident);
+          specifier.local = this.cloneIdentifier(as_ident);
         } else {
           // `import {type as foo`
           specifier.imported = firstIdent;
@@ -2867,7 +2867,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           specifier.local = this.parseIdentifier();
         } else {
           isBinding = true;
-          specifier.local = cloneIdentifier(specifier.imported);
+          specifier.local = this.cloneIdentifier(specifier.imported);
         }
       }
 

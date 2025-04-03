@@ -1374,6 +1374,7 @@ export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
   decimal?: string;
+  raw: any;
 }
 
 interface EstreeRegExpLiteralRegex {
