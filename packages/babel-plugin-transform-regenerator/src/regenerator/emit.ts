@@ -7,7 +7,18 @@ import * as util from "./util.ts";
 import type { NodePath, Visitor } from "@babel/core";
 import { types as t } from "@babel/core";
 
-const hasOwn = Object.prototype.hasOwnProperty;
+type Completion =
+  | {
+      type: "normal";
+    }
+  | {
+      type: "break" | "continue";
+      target: t.NumericLiteral;
+    }
+  | {
+      type: "return" | "throw";
+      value: t.Expression | null;
+    };
 
 // Offsets into this.listing that could be used as targets for branches or
 // jumps are represented as numeric Literal nodes. This representation has
@@ -44,41 +55,17 @@ const catchParamVisitor: Visitor = {
   },
 };
 
-function isValidCompletion(record: any) {
-  const type = record.type;
-
-  if (type === "normal") {
-    return !hasOwn.call(record, "target");
-  }
-
-  if (type === "break" || type === "continue") {
-    return (
-      !hasOwn.call(record, "value") && util.getTypes().isLiteral(record.target)
-    );
-  }
-
-  if (type === "return" || type === "throw") {
-    return hasOwn.call(record, "value") && !hasOwn.call(record, "target");
-  }
-
-  return false;
-}
-
 export class Emitter {
-  declare nextTempId: number;
-  declare contextId: t.Identifier;
-  declare listing: t.Statement[];
-  declare marked: boolean[];
-  declare insertedLocs: Set<t.NumericLiteral>;
-  declare finalLoc: t.NumericLiteral;
-  declare tryEntries: leap.TryEntry[];
-  declare leapManager: leap.LeapManager;
+  nextTempId: number;
+  contextId: t.Identifier;
+  listing: t.Statement[];
+  marked: boolean[];
+  insertedLocs: Set<t.NumericLiteral>;
+  finalLoc: t.NumericLiteral;
+  tryEntries: leap.TryEntry[];
+  leapManager: leap.LeapManager;
 
   constructor(contextId: t.Identifier) {
-    assert.ok(this instanceof Emitter);
-
-    t.assertIdentifier(contextId);
-
     // Used to generate unique temporary names.
     this.nextTempId = 0;
 
@@ -128,7 +115,6 @@ export class Emitter {
   // Sets the exact value of the given location to the offset of the next
   // Statement emitted.
   mark(loc: t.NumericLiteral) {
-    t.assertNumericLiteral(loc);
     const index = this.listing.length;
     if (loc.value === PENDING_LOCATION) {
       loc.value = index;
@@ -198,8 +184,6 @@ export class Emitter {
     tryLoc: t.NumericLiteral,
     assignee: t.AssignmentExpression["left"],
   ) {
-    t.assertLiteral(tryLoc);
-
     const catchCall = t.callExpression(this.contextProperty("catch", true), [
       t.cloneNode(tryLoc),
     ]);
@@ -220,9 +204,6 @@ export class Emitter {
 
   // Conditional jump.
   jumpIf(test: t.Expression, toLoc: t.NumericLiteral) {
-    t.assertExpression(test);
-    t.assertLiteral(toLoc);
-
     this.emit(
       t.ifStatement(
         test,
@@ -236,9 +217,6 @@ export class Emitter {
 
   // Conditional jump, with the condition negated.
   jumpIfNot(test: t.Expression, toLoc: t.NumericLiteral) {
-    t.assertExpression(test);
-    t.assertLiteral(toLoc);
-
     let negatedTest;
     if (t.isUnaryExpression(test) && test.operator === "!") {
       // Avoid double negation.
@@ -384,8 +362,6 @@ export class Emitter {
     const node = path.node;
     const self = this;
 
-    t.assertNode(node);
-
     if (t.isDeclaration(node)) throw getDeclError(node);
 
     if (path.isStatement()) return self.explodeStatement(path);
@@ -410,20 +386,12 @@ export class Emitter {
     }
   }
 
-  explodeStatement(path: NodePath<t.Statement>, labelId?: t.Identifier) {
+  explodeStatement(path: NodePath<t.Statement>, labelId: t.Identifier = null) {
     const stmt = path.node;
     const self = this;
     let before: t.NumericLiteral,
       after: t.NumericLiteral,
       head: t.NumericLiteral;
-
-    t.assertStatement(stmt);
-
-    if (labelId) {
-      t.assertIdentifier(labelId);
-    } else {
-      labelId = null;
-    }
 
     // Explode BlockStatement nodes even if they do not contain a yield,
     // because we don't want or need the curly braces.
@@ -646,7 +614,6 @@ export class Emitter {
 
         for (let i = cases.length - 1; i >= 0; --i) {
           const c = cases[i];
-          t.assertSwitchCase(c);
 
           if (c.test) {
             condition = t.conditionalExpression(
@@ -808,30 +775,24 @@ export class Emitter {
     }
   }
 
-  emitAbruptCompletion(record: any) {
-    if (!isValidCompletion(record)) {
-      assert.ok(false, "invalid completion record: " + JSON.stringify(record));
-    }
-
+  emitAbruptCompletion(record: Completion) {
     assert.notStrictEqual(
       record.type,
       "normal",
       "normal completions are not abrupt",
     );
 
-    const abruptArgs = [t.stringLiteral(record.type)];
+    const abruptArgs: [t.StringLiteral, t.Expression?] = [
+      t.stringLiteral(record.type),
+    ];
 
     if (record.type === "break" || record.type === "continue") {
-      t.assertLiteral(record.target);
       abruptArgs[1] = this.insertedLocs.has(record.target)
         ? record.target
         : t.cloneNode(record.target);
     } else if (record.type === "return" || record.type === "throw") {
       if (record.value) {
-        t.assertExpression(record.value);
-        abruptArgs[1] = this.insertedLocs.has(record.value)
-          ? record.value
-          : t.cloneNode(record.value);
+        abruptArgs[1] = t.cloneNode(record.value);
       }
     }
 
@@ -867,8 +828,6 @@ export class Emitter {
   // be costly and verbose to set context.prev before every statement.
   updateContextPrevLoc(loc: t.NumericLiteral) {
     if (loc) {
-      t.assertLiteral(loc);
-
       if (loc.value === PENDING_LOCATION) {
         // If an uninitialized location literal was passed in, set its value
         // to the current this.listing.length.
@@ -934,9 +893,7 @@ export class Emitter {
     ignoreResult?: boolean,
   ): t.Expression {
     const expr = path.node;
-    if (expr) {
-      t.assertExpression(expr);
-    } else {
+    if (!expr) {
       return expr;
     }
 
@@ -945,7 +902,6 @@ export class Emitter {
     let after;
 
     function finish(expr: t.Expression) {
-      t.assertExpression(expr);
       if (ignoreResult) {
         self.emit(expr);
       }
