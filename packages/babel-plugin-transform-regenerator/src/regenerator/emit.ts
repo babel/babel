@@ -7,10 +7,7 @@ import * as util from "./util.ts";
 import type { NodePath, Visitor } from "@babel/core";
 import { types as t } from "@babel/core";
 
-type Completion =
-  | {
-      type: "normal";
-    }
+type AbruptCompletion =
   | {
       type: "break" | "continue";
       target: t.NumericLiteral;
@@ -159,24 +156,6 @@ export class Emitter {
       this.getContextId(),
       computed ? t.stringLiteral(name) : t.identifier(name),
       !!computed,
-    );
-  }
-
-  // Shorthand for setting context.rval and jumping to `context.stop()`.
-  stop(rval: any) {
-    if (rval) {
-      this.setReturnValue(rval);
-    }
-
-    this.jump(this.finalLoc);
-  }
-
-  setReturnValue(valuePath: any) {
-    t.assertExpression(valuePath.value);
-
-    this.emitAssign(
-      this.contextProperty("rval"),
-      this.explodeExpression(valuePath),
     );
   }
 
@@ -395,8 +374,8 @@ export class Emitter {
 
     // Explode BlockStatement nodes even if they do not contain a yield,
     // because we don't want or need the curly braces.
-    if (t.isBlockStatement(stmt)) {
-      (path.get("body") as NodePath<t.Statement>[]).forEach(function (path) {
+    if (path.isBlockStatement()) {
+      path.get("body").forEach(function (path) {
         self.explodeStatement(path);
       });
       return;
@@ -775,7 +754,7 @@ export class Emitter {
     }
   }
 
-  emitAbruptCompletion(record: Completion) {
+  emitAbruptCompletion(record: AbruptCompletion) {
     assert.notStrictEqual(
       record.type,
       "normal",
@@ -1302,7 +1281,7 @@ export class Emitter {
       explodingChildren.push(path.get("superClass"));
     }
 
-    (path.get("body.body") as NodePath[]).forEach((member: any) => {
+    path.get("body.body").forEach((member: any) => {
       if (member.node.computed) {
         explodingChildren.push(member.get("key"));
       }
