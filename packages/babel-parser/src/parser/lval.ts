@@ -132,7 +132,7 @@ export default abstract class LValParser extends NodeUtils {
         break;
 
       case "ObjectExpression":
-        (node as Node).type = "ObjectPattern";
+        this.castNodeTo(node, "ObjectPattern");
         for (
           let i = 0, length = node.properties.length, last = length - 1;
           i < length;
@@ -172,7 +172,7 @@ export default abstract class LValParser extends NodeUtils {
       }
 
       case "ArrayExpression":
-        (node as Node).type = "ArrayPattern";
+        this.castNodeTo(node, "ArrayPattern");
         this.toAssignableList(
           node.elements,
           node.extra?.trailingCommaLoc,
@@ -185,7 +185,7 @@ export default abstract class LValParser extends NodeUtils {
           this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
         }
 
-        (node as Node).type = "AssignmentPattern";
+        this.castNodeTo(node, "AssignmentPattern");
         delete node.operator;
         this.toAssignable(node.left, isLHS);
         break;

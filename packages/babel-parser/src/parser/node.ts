@@ -128,6 +128,14 @@ export abstract class NodeUtils extends UtilParser {
     this.resetStartLocation(node, locationNode.loc.start);
   }
 
+  castNodeTo<T extends NodeType["type"]>(
+    node: NodeType,
+    type: T,
+  ): Extract<NodeType, { type: T }> {
+    node.type = type;
+    return node as Extract<NodeType, { type: T }>;
+  }
+
   cloneIdentifier<T extends Identifier | Placeholder>(node: T): T {
     // We don't need to clone `typeAnnotations` and `optional`: because
     // cloneIdentifier is only used in object shorthand and named import/export.
