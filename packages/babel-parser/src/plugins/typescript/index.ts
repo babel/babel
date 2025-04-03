@@ -22,7 +22,7 @@ import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
-import { cloneIdentifier, type Undone } from "../../parser/node.ts";
+import type { Undone } from "../../parser/node.ts";
 import type { Pattern } from "../../types.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
@@ -4361,7 +4361,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.parseModuleExportName();
       }
       if (!node[rightOfAsKey]) {
-        node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
+        node[rightOfAsKey] = this.cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
         this.checkIdentifier(

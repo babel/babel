@@ -27,7 +27,7 @@ import { OptionFlags, type SourceType } from "../options.ts";
 import { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
 import { createPositionWithColumnOffset } from "../util/location.ts";
-import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node.ts";
+import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
 import { LoopLabelKind } from "../tokenizer/state.ts";
@@ -2841,9 +2841,9 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
     } else if (isString) {
-      node.exported = cloneStringLiteral(node.local);
+      node.exported = this.cloneStringLiteral(node.local);
     } else if (!node.exported) {
-      node.exported = cloneIdentifier(node.local);
+      node.exported = this.cloneIdentifier(node.local);
     }
     return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
   }
@@ -3425,7 +3425,7 @@ export default abstract class StatementParser extends ExpressionParser {
         true,
       );
       if (!specifier.local) {
-        specifier.local = cloneIdentifier(imported);
+        specifier.local = this.cloneIdentifier(imported as N.Identifier);
       }
     }
     return this.finishImportSpecifier(

@@ -106,7 +106,6 @@ export default (superClass: typeof Parser) =>
       delete directive.value;
 
       this.castNodeTo(expression, "Literal");
-      // @ts-expect-error N.EstreeLiteral.raw is not defined.
       expression.raw = expression.extra.raw;
       expression.value = expression.extra.expressionValue;
 
@@ -139,6 +138,19 @@ export default (superClass: typeof Parser) =>
       node.type = type;
       this.fillOptionalPropertiesForTSESLint(node);
       return node as Extract<N.Node, { type: T }>;
+    }
+
+    cloneEstreeStringLiteral(node: N.EstreeLiteral): N.EstreeLiteral {
+      const { start, end, loc, range, raw, value } = node;
+      const cloned = Object.create(node.constructor.prototype);
+      cloned.type = "Literal";
+      cloned.start = start;
+      cloned.end = end;
+      cloned.loc = loc;
+      cloned.range = range;
+      cloned.raw = raw;
+      cloned.value = value;
+      return cloned;
     }
 
     // ==================================
@@ -617,6 +629,25 @@ export default (superClass: typeof Parser) =>
         node.type === "Property" &&
         (node.method || node.kind === "get" || node.kind === "set")
       );
+    }
+
+    /* ============================================================ *
+     * parser/node.ts                                               *
+     * ============================================================ */
+
+    cloneIdentifier<T extends N.Identifier | N.Placeholder>(node: T): T {
+      const cloned = super.cloneIdentifier(node);
+      this.fillOptionalPropertiesForTSESLint(cloned);
+      return cloned;
+    }
+
+    cloneStringLiteral<
+      T extends N.EstreeLiteral | N.StringLiteral | N.Placeholder,
+    >(node: T): T {
+      if (node.type === "Literal") {
+        return this.cloneEstreeStringLiteral(node) as T;
+      }
+      return super.cloneStringLiteral(node);
     }
 
     finishNodeAt<T extends NodeType>(

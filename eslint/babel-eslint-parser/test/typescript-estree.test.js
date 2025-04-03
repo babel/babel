@@ -137,8 +137,10 @@ function deeplyRemoveProperties(obj, props) {
         "variable declaration destructuring",
         "var [{ a: x = 0 }, ...b] = [{ a: 0 }]",
       ],
-      // pending cloneIdentifier support
-      // ["variable declaration destructuring shorthand", "let { a = 0 } = { a: 0 }"]
+      [
+        "variable declaration destructuring shorthand",
+        "var { a = 0 } = { a: 0 }",
+      ],
 
       ["assignment expression", "x = 1"],
       // pending toAssignable support
@@ -148,16 +150,14 @@ function deeplyRemoveProperties(obj, props) {
 
       ["import declaration", `import "foo"`],
       ["import declaration default", `import foo from "foo"`],
-      // pending cloneIdentifier support
-      // ["import declaration named", `import { foo } from "foo"`]
+      ["import declaration named", `import { foo } from "foo"`],
       ["import declaration named as", `import { foo as bar } from "foo"`],
       [
         "import declaration with attributes",
         `import foo from "./foo.json" with { type: "json" }`,
       ],
 
-      // pending cloneIdentifier support
-      // ["export declaration", `const foo = 0;export { foo }`],
+      ["export declaration", `const foo = 0;export { foo }`],
       ["export declaration as", `const foo = 0;export { foo as bar }`],
       ["export function declaration", `export function foo() {}`],
       ["export class declaration", `export class foo {}`],
