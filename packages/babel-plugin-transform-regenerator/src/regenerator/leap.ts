@@ -54,7 +54,7 @@ export class TryEntry extends Entry {
   declare firstLoc: t.NumericLiteral;
   declare catchEntry: CatchEntry;
   declare finallyEntry: FinallyEntry;
-  constructor(firstLoc: any, catchEntry: any, finallyEntry: any) {
+  constructor(firstLoc: t.NumericLiteral, catchEntry: CatchEntry | null, finallyEntry: FinallyEntry | null) {
     super();
     getTypes().assertLiteral(firstLoc);
     if (catchEntry) {
