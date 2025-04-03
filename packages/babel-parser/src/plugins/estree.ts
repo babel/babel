@@ -105,15 +105,12 @@ export default (superClass: typeof Parser) =>
       const expression = directive.value as any as N.EstreeLiteral;
       delete directive.value;
 
-      this.castNodeAs<N.EstreeLiteral>(expression, "Literal");
+      this.castNodeTo(expression, "Literal");
       // @ts-expect-error N.EstreeLiteral.raw is not defined.
       expression.raw = expression.extra.raw;
       expression.value = expression.extra.expressionValue;
 
-      const stmt = this.castNodeAs<N.ExpressionStatement>(
-        directive,
-        "ExpressionStatement",
-      );
+      const stmt = this.castNodeTo(directive, "ExpressionStatement");
       stmt.expression = expression;
       // @ts-expect-error N.ExpressionStatement.directive is not defined
       stmt.directive = expression.extra.rawValue;
@@ -135,10 +132,13 @@ export default (superClass: typeof Parser) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fillOptionalPropertiesForTSESLint(node: NodeType) {}
 
-    castNodeTo<T extends N.Node>(node: N.Node, type: T["type"]): T {
-      (node as any as T).type = type;
+    castNodeTo<T extends N.Node["type"]>(
+      node: N.Node,
+      type: T,
+    ): Extract<N.Node, { type: T }> {
+      node.type = type;
       this.fillOptionalPropertiesForTSESLint(node);
-      return node as any as T;
+      return node as Extract<N.Node, { type: T }>;
     }
 
     // ==================================
@@ -213,10 +213,7 @@ export default (superClass: typeof Parser) =>
       delete node.id;
       // @ts-expect-error mutate AST types
       node.name = name;
-      return this.castNodeAs<N.EstreePrivateIdentifier>(
-        node,
-        "PrivateIdentifier",
-      );
+      return this.castNodeTo(node, "PrivateIdentifier");
     }
 
     // @ts-expect-error ESTree plugin changes node types
@@ -275,7 +272,7 @@ export default (superClass: typeof Parser) =>
       | N.EstreeTSAbstractMethodDefinition {
       let funcNode = this.startNode<N.MethodLike>();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
-      funcNode = this.castNodeAs<N.FunctionExpression>(
+      funcNode = this.castNodeTo(
         super.parseMethod(
           // @ts-expect-error todo(flow->ts)
           funcNode,
@@ -351,15 +348,9 @@ export default (superClass: typeof Parser) =>
         this.hasPlugin("typescript")
       ) {
         delete propertyNode.abstract;
-        this.castNodeAs<N.EstreeTSAbstractPropertyDefinition>(
-          propertyNode,
-          "TSAbstractPropertyDefinition",
-        );
+        this.castNodeTo(propertyNode, "TSAbstractPropertyDefinition");
       } else {
-        this.castNodeAs<N.EstreePropertyDefinition>(
-          propertyNode,
-          "PropertyDefinition",
-        );
+        this.castNodeTo(propertyNode, "PropertyDefinition");
       }
       return propertyNode;
     }
@@ -376,15 +367,9 @@ export default (superClass: typeof Parser) =>
         propertyNode.abstract &&
         this.hasPlugin("typescript")
       ) {
-        this.castNodeAs<N.EstreeTSAbstractPropertyDefinition>(
-          propertyNode,
-          "TSAbstractPropertyDefinition",
-        );
+        this.castNodeTo(propertyNode, "TSAbstractPropertyDefinition");
       } else {
-        this.castNodeAs<N.EstreePropertyDefinition>(
-          propertyNode,
-          "PropertyDefinition",
-        );
+        this.castNodeTo(propertyNode, "PropertyDefinition");
       }
       propertyNode.computed = false;
       return propertyNode;
@@ -420,7 +405,7 @@ export default (superClass: typeof Parser) =>
 
       if (node) {
         node.kind = "init";
-        this.castNodeAs<N.EstreeProperty>(node, "Property");
+        this.castNodeTo(node, "Property");
       }
 
       return node as any;
@@ -482,7 +467,7 @@ export default (superClass: typeof Parser) =>
       const node = super.finishCallExpression(unfinished, optional);
 
       if (node.callee.type === "Import") {
-        this.castNodeAs<N.ImportExpression>(node, "ImportExpression");
+        this.castNodeTo(node, "ImportExpression");
         (node as N.Node as N.EstreeImportExpression).source = node
           .arguments[0] as N.Expression;
         (node as N.Node as N.EstreeImportExpression).options =
@@ -533,10 +518,7 @@ export default (superClass: typeof Parser) =>
             node.specifiers.length === 1 &&
             node.specifiers[0].type === "ExportNamespaceSpecifier"
           ) {
-            this.castNodeAs<N.ExportAllDeclaration>(
-              node,
-              "ExportAllDeclaration",
-            );
+            this.castNodeTo(node, "ExportAllDeclaration");
             // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
             delete node.specifiers;
