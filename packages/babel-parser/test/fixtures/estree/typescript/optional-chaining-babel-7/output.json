@@ -22,13 +22,17 @@
               "object": {
                 "type": "Identifier",
                 "start":0,"end":3,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":3},"identifierName":"foo"},
-                "name": "foo"
+                "name": "foo",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"foo"},
-                "name": "foo"
+                "name": "foo",
+                "decorators": [],
+                "optional": false
               },
               "optional": true
             },
@@ -43,7 +47,9 @@
                   "typeName": {
                     "type": "Identifier",
                     "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"T"},
-                    "name": "T"
+                    "name": "T",
+                    "decorators": [],
+                    "optional": false
                   }
                 }
               ]
@@ -67,13 +73,17 @@
               "object": {
                 "type": "Identifier",
                 "start":15,"end":18,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":3},"identifierName":"foo"},
-                "name": "foo"
+                "name": "foo",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "property": {
                 "type": "Identifier",
                 "start":20,"end":23,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":8},"identifierName":"foo"},
-                "name": "foo"
+                "name": "foo",
+                "decorators": [],
+                "optional": false
               },
               "optional": true
             },
@@ -88,7 +98,9 @@
                   "typeName": {
                     "type": "Identifier",
                     "start":26,"end":27,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"T"},
-                    "name": "T"
+                    "name": "T",
+                    "decorators": [],
+                    "optional": false
                   }
                 }
               ]

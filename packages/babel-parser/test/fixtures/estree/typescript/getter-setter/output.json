@@ -25,7 +25,9 @@
               "key": {
                 "type": "Identifier",
                 "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"x"},
-                "name": "x"
+                "name": "x",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "set",
@@ -40,16 +42,20 @@
                   {
                     "type": "Identifier",
                     "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
-                    "name": "foo"
+                    "name": "foo",
+                    "decorators": [],
+                    "optional": false
                   }
                 ],
                 "body": {
                   "type": "BlockStatement",
                   "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16}},
                   "body": []
-                }
+                },
+                "declare": false
               },
-              "shorthand": false
+              "shorthand": false,
+              "optional": false
             }
           ],
           "extra": {
@@ -72,7 +78,9 @@
               "key": {
                 "type": "Identifier",
                 "start":28,"end":29,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":8},"identifierName":"x"},
-                "name": "x"
+                "name": "x",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "get",
@@ -99,9 +107,11 @@
                       }
                     }
                   ]
-                }
+                },
+                "declare": false
               },
-              "shorthand": false
+              "shorthand": false,
+              "optional": false
             }
           ],
           "extra": {
@@ -124,7 +134,9 @@
               "key": {
                 "type": "Identifier",
                 "start":56,"end":57,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":8},"identifierName":"x"},
-                "name": "x"
+                "name": "x",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "set",
@@ -140,9 +152,11 @@
                   "type": "BlockStatement",
                   "start":60,"end":62,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":13}},
                   "body": []
-                }
+                },
+                "declare": false
               },
-              "shorthand": false
+              "shorthand": false,
+              "optional": false
             }
           ],
           "extra": {
@@ -165,7 +179,9 @@
               "key": {
                 "type": "Identifier",
                 "start":74,"end":75,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":8},"identifierName":"x"},
-                "name": "x"
+                "name": "x",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "get",
@@ -180,16 +196,20 @@
                   {
                     "type": "Identifier",
                     "start":76,"end":77,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":10},"identifierName":"x"},
-                    "name": "x"
+                    "name": "x",
+                    "decorators": [],
+                    "optional": false
                   }
                 ],
                 "body": {
                   "type": "BlockStatement",
                   "start":79,"end":81,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":14}},
                   "body": []
-                }
+                },
+                "declare": false
               },
-              "shorthand": false
+              "shorthand": false,
+              "optional": false
             }
           ],
           "extra": {
