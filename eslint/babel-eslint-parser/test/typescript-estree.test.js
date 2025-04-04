@@ -116,6 +116,7 @@ function deeplyRemoveProperties(obj, props) {
             plugins: [
               "decorators",
               "decoratorAutoAccessors",
+              "explicitResourceManagement",
               "jsx",
               "typescript",
             ],
@@ -171,6 +172,8 @@ function deeplyRemoveProperties(obj, props) {
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
 
+      ["nullish coalescing", "a ?? b"],
+
       ["yield expression", "function *f() { yield; yield* f; yield f }"],
       ["await expression", "async function f() { await f() }"],
 
@@ -199,6 +202,10 @@ function deeplyRemoveProperties(obj, props) {
         "variable declaration destructuring shorthand",
         "var { a = 0 } = { a: 0 }",
       ],
+      ["let declaration", "let a = 0"],
+      ["const declaration", "const a = 0"],
+      ["using declaration", "{ using a = 0 }"],
+      ["await using declaration", "async () => { await using a = 0 }"],
 
       ["assignment expression", "x = 1"],
       [
