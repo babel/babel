@@ -21,6 +21,36 @@ const PROPS_TO_REMOVE = [
   { key: "attributes", type: "ImportExpression" },
 ];
 
+// TODO: remove the ESLint token fixes after they are fixed in upstream
+function fixTSESLintTokens(ast) {
+  const { tokens } = ast;
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const { type, value } = token;
+    switch (type) {
+      case "Identifier":
+        {
+          if (value.match(/^\d.*n$/)) {
+            token.type = "Numeric";
+          } else if (value.match(/^#/)) {
+            token.type = "PrivateIdentifier";
+            token.value = value.slice(1);
+          }
+        }
+        break;
+      case "Keyword":
+        {
+          if (value === "null") {
+            token.type = "Null";
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 function deeplyRemoveProperties(obj, props) {
   for (const [k, v] of Object.entries(obj)) {
     if (
@@ -89,6 +119,7 @@ function deeplyRemoveProperties(obj, props) {
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+      fixTSESLintTokens(tsEstreeAST);
       expect(babelAST).toEqual(tsEstreeAST);
     }
 
@@ -110,14 +141,14 @@ function deeplyRemoveProperties(obj, props) {
       ["boolean", "true"],
       ["boolean", "false"],
       ["numeric", "0"],
-      // ["bigint", "0n"],
+      ["bigint", "0n"],
       ["string", `"string"`],
       ["regexp without flag", `/foo/;`],
       ["regexp u flag", `/foo/dgimsuy;`],
       ["regexp v flag", `/foo/dgimsvy;`],
       ["identifier", "i"],
 
-      // ["null", "null"],
+      ["null", "null"],
 
       [
         "template with braces",
@@ -190,10 +221,12 @@ function deeplyRemoveProperties(obj, props) {
 
     if (IS_BABEL_8()) {
       it.each([
-        // ["class private method", "class C { #m() {} }"],
+        ["class private method", "class C { #m() {} }"],
         ["class abstract property", "abstract class C { abstract p; }"],
-        // ["class abstract private property", "abstract class C { abstract #p; }"]
-        ["class abstract method", "abstract class C { abstract m(): void }"],
+        [
+          "class abstract private property",
+          "abstract class C { abstract #p; }",
+        ][("class abstract method", "abstract class C { abstract m(): void }")],
       ])("%s: %s", (_, input) => {
         parseAndAssertSame(input);
       });
