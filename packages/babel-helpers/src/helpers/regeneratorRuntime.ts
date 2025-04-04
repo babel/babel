@@ -45,10 +45,7 @@ type Context = {
   reset(skipTempReset: boolean): void;
   stop(): Context["rval"];
   dispatchException(exception: any): boolean;
-  abrupt(
-    type: "normal" | "throw" | "break" | "continue" | "return",
-    arg: any,
-  ): any;
+  abrupt(type: "throw" | "break" | "continue" | "return", arg: any): any;
   complete(record: Completion, afterLoc?: number): any;
   finish(finallyLoc: number): any;
   catch(tryLoc: number): any;
