@@ -252,13 +252,13 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * cast a Statement to a Directive. This method mutates input statement.
    */
-  stmtToDirective(stmt: N.Statement): N.Directive {
-    const directive = stmt as any;
-    directive.type = "Directive";
-    directive.value = directive.expression;
-    delete directive.expression;
+  stmtToDirective(stmt: N.ExpressionStatement): N.Directive {
+    const directive = this.castNodeTo(stmt, "Directive");
 
-    const directiveLiteral = directive.value;
+    const directiveLiteral = this.castNodeTo(
+      stmt.expression,
+      "DirectiveLiteral",
+    );
     const expressionValue = directiveLiteral.value;
     const raw = this.input.slice(
       this.offsetToSourcePos(directiveLiteral.start),
@@ -270,7 +270,8 @@ export default abstract class StatementParser extends ExpressionParser {
     this.addExtra(directiveLiteral, "rawValue", val);
     this.addExtra(directiveLiteral, "expressionValue", expressionValue);
 
-    directiveLiteral.type = "DirectiveLiteral";
+    directive.value = directiveLiteral;
+    delete stmt.expression;
 
     return directive;
   }
@@ -1354,7 +1355,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "BlockStatement");
   }
 
-  isValidDirective(stmt: N.Statement): boolean {
+  isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
     return (
       stmt.type === "ExpressionStatement" &&
       stmt.expression.type === "StringLiteral" &&

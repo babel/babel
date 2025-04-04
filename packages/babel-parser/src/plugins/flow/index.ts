@@ -628,14 +628,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             /* decorators */ null,
           );
           if (node.type === "ExportNamedDeclaration") {
-            node.type = "ExportDeclaration";
             node.default = false;
             delete node.exportKind;
+            return this.castNodeTo(
+              node as N.ExportNamedDeclaration,
+              "DeclareExportDeclaration",
+            );
+          } else {
+            return this.castNodeTo(
+              node as N.ExportAllDeclaration,
+              "DeclareExportAllDeclaration",
+            );
           }
-
-          node.type = "Declare" + node.type;
-
-          return node as N.FlowDeclareExportDeclaration;
         }
       }
 
@@ -661,7 +665,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node,
       ) as unknown as N.FlowDeclareTypeAlias;
       // Don't do finishNode as we don't want to process comments twice
-      finished.type = "DeclareTypeAlias";
+      this.castNodeTo(finished, "DeclareTypeAlias");
       return finished;
     }
 
@@ -674,7 +678,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         true,
       ) as unknown as N.FlowDeclareOpaqueType;
       // Don't do finishNode as we don't want to process comments twice
-      finished.type = "DeclareOpaqueType";
+      this.castNodeTo(finished, "DeclareOpaqueType");
       return finished;
     }
 
