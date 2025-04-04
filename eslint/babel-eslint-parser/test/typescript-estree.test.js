@@ -248,10 +248,7 @@ function deeplyRemoveProperties(obj, props) {
       it.each([
         ["class private method", "class C { #m() {} }"],
         ["class abstract property", "abstract class C { abstract p; }"],
-        [
-          "class abstract private property",
-          "abstract class C { abstract #p; }",
-        ][("class abstract method", "abstract class C { abstract m(): void }")],
+        ["class abstract method", "abstract class C { abstract m(): void }"],
       ])("%s: %s", (_, input) => {
         parseAndAssertSame(input);
       });
