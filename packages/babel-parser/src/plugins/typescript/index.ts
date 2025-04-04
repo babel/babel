@@ -4413,6 +4413,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return;
         case "TSAbstractPropertyDefinition":
         case "PropertyDefinition":
+        case "AccessorProperty":
           node.declare ??= false;
           node.definite ??= false;
           node.readonly ??= false;

@@ -113,7 +113,12 @@ function deeplyRemoveProperties(obj, props) {
         babelOptions: {
           configFile: false,
           parserOpts: {
-            plugins: ["jsx", "typescript"],
+            plugins: [
+              "decorators",
+              "decoratorAutoAccessors",
+              "jsx",
+              "typescript",
+            ],
           },
         },
       }).ast;
@@ -182,6 +187,8 @@ function deeplyRemoveProperties(obj, props) {
       ["class method", "class C { m() {} }"],
       ["class property", "class C { p; }"],
       ["class static block", "class C { static {}; }"],
+      ["class accessor", "class C { accessor a = 0 }"],
+      ["class decorators", "@dec class C { @dec static p; @dec accessor a; }"],
 
       ["variable declaration", "var a = 0"],
       [
