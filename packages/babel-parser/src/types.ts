@@ -204,6 +204,11 @@ export interface Identifier extends PatternBase {
 }
 // | Placeholder<"Identifier">;
 
+export interface V8IntrinsicIdentifier extends NodeBase {
+  type: "V8IntrinsicIdentifier";
+  name: string;
+}
+
 export interface PrivateName extends NodeBase {
   type: "PrivateName";
   id: Identifier;
@@ -2022,6 +2027,7 @@ export type Node =
   | DoExpression
   | DoWhileStatement
   | EmptyStatement
+  | EstreeAccessorProperty
   | EstreeChainExpression
   | EstreeLiteral
   | EstreeMethodDefinition
@@ -2220,6 +2226,7 @@ export type Node =
   | UpdateExpression
   | VariableDeclaration
   | VariableDeclarator
+  | V8IntrinsicIdentifier
   | WhileStatement
   | WithStatement
   | YieldExpression;

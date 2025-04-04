@@ -165,7 +165,7 @@ export default (superClass: typeof Parser) =>
       return (method as unknown as N.EstreeMethodDefinition).value.params;
     }
 
-    isValidDirective(stmt: N.Statement): boolean {
+    isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
       return (
         stmt.type === "ExpressionStatement" &&
         stmt.expression.type === "Literal" &&
