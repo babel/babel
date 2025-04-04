@@ -214,7 +214,7 @@ export default abstract class LValParser extends NodeUtils {
         prop.key,
       );
     } else if (prop.type === "SpreadElement") {
-      (prop as Node).type = "RestElement";
+      this.castNodeTo(prop, "RestElement");
       const arg = prop.argument;
       this.checkToRestConversion(arg, /* allowPattern */ false);
       this.toAssignable(arg, isLHS);
@@ -259,7 +259,7 @@ export default abstract class LValParser extends NodeUtils {
   ): void {
     const node = exprList[index];
     if (node.type === "SpreadElement") {
-      (node as unknown as RestElement).type = "RestElement";
+      this.castNodeTo(node, "RestElement");
       const arg = node.argument;
       this.checkToRestConversion(arg, /* allowPattern */ true);
       this.toAssignable(arg, isLHS);

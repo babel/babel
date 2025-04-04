@@ -157,6 +157,10 @@ function deeplyRemoveProperties(obj, props) {
       `,
       ],
 
+      // https://github.com/typescript-eslint/typescript-eslint/issues/11026
+      // ["empty program with line comment", "// single comment"],
+      // ["empty program with block comment", "  /* multiline\n * comment\n*/"],
+
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
 
@@ -189,6 +193,8 @@ function deeplyRemoveProperties(obj, props) {
         "assignment expression destructuring",
         "[{ a: x = 0 }, ...b] = [{ a: 0 }]",
       ],
+
+      ["spread element", "var a = { b, ...[...c] }"],
 
       ["async call expression", "async ([ x ])"],
 
