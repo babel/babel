@@ -27,7 +27,7 @@ import { OptionFlags, type SourceType } from "../options.ts";
 import { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
 import { createPositionWithColumnOffset } from "../util/location.ts";
-import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node.ts";
+import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
 import { LoopLabelKind } from "../tokenizer/state.ts";
@@ -252,13 +252,13 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * cast a Statement to a Directive. This method mutates input statement.
    */
-  stmtToDirective(stmt: N.Statement): N.Directive {
-    const directive = stmt as any;
-    directive.type = "Directive";
-    directive.value = directive.expression;
-    delete directive.expression;
+  stmtToDirective(stmt: N.ExpressionStatement): N.Directive {
+    const directive = this.castNodeTo(stmt, "Directive");
 
-    const directiveLiteral = directive.value;
+    const directiveLiteral = this.castNodeTo(
+      stmt.expression,
+      "DirectiveLiteral",
+    );
     const expressionValue = directiveLiteral.value;
     const raw = this.input.slice(
       this.offsetToSourcePos(directiveLiteral.start),
@@ -270,7 +270,8 @@ export default abstract class StatementParser extends ExpressionParser {
     this.addExtra(directiveLiteral, "rawValue", val);
     this.addExtra(directiveLiteral, "expressionValue", expressionValue);
 
-    directiveLiteral.type = "DirectiveLiteral";
+    directive.value = directiveLiteral;
+    delete stmt.expression;
 
     return directive;
   }
@@ -1354,7 +1355,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "BlockStatement");
   }
 
-  isValidDirective(stmt: N.Statement): boolean {
+  isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
     return (
       stmt.type === "ExpressionStatement" &&
       stmt.expression.type === "StringLiteral" &&
@@ -2841,9 +2842,9 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
     } else if (isString) {
-      node.exported = cloneStringLiteral(node.local);
+      node.exported = this.cloneStringLiteral(node.local);
     } else if (!node.exported) {
-      node.exported = cloneIdentifier(node.local);
+      node.exported = this.cloneIdentifier(node.local);
     }
     return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
   }
@@ -3425,7 +3426,7 @@ export default abstract class StatementParser extends ExpressionParser {
         true,
       );
       if (!specifier.local) {
-        specifier.local = cloneIdentifier(imported);
+        specifier.local = this.cloneIdentifier(imported as N.Identifier);
       }
     }
     return this.finishImportSpecifier(

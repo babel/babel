@@ -132,7 +132,7 @@ export default abstract class LValParser extends NodeUtils {
         break;
 
       case "ObjectExpression":
-        (node as Node).type = "ObjectPattern";
+        this.castNodeTo(node, "ObjectPattern");
         for (
           let i = 0, length = node.properties.length, last = length - 1;
           i < length;
@@ -172,7 +172,7 @@ export default abstract class LValParser extends NodeUtils {
       }
 
       case "ArrayExpression":
-        (node as Node).type = "ArrayPattern";
+        this.castNodeTo(node, "ArrayPattern");
         this.toAssignableList(
           node.elements,
           node.extra?.trailingCommaLoc,
@@ -185,7 +185,7 @@ export default abstract class LValParser extends NodeUtils {
           this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
         }
 
-        (node as Node).type = "AssignmentPattern";
+        this.castNodeTo(node, "AssignmentPattern");
         delete node.operator;
         this.toAssignable(node.left, isLHS);
         break;
@@ -214,7 +214,7 @@ export default abstract class LValParser extends NodeUtils {
         prop.key,
       );
     } else if (prop.type === "SpreadElement") {
-      (prop as Node).type = "RestElement";
+      this.castNodeTo(prop, "RestElement");
       const arg = prop.argument;
       this.checkToRestConversion(arg, /* allowPattern */ false);
       this.toAssignable(arg, isLHS);
@@ -259,7 +259,7 @@ export default abstract class LValParser extends NodeUtils {
   ): void {
     const node = exprList[index];
     if (node.type === "SpreadElement") {
-      (node as unknown as RestElement).type = "RestElement";
+      this.castNodeTo(node, "RestElement");
       const arg = node.argument;
       this.checkToRestConversion(arg, /* allowPattern */ true);
       this.toAssignable(arg, isLHS);

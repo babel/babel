@@ -14,8 +14,7 @@ export default (superClass: typeof Parser) =>
         if (tokenIsIdentifier(this.state.type)) {
           const name = this.parseIdentifierName();
           const identifier = this.createIdentifier(node, name);
-          // @ts-expect-error: avoid mutating AST types
-          identifier.type = "V8IntrinsicIdentifier";
+          this.castNodeTo(identifier, "V8IntrinsicIdentifier");
           if (this.match(tt.parenL)) {
             return identifier;
           }

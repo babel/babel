@@ -50,8 +50,25 @@ const convertNodesVisitor = {
       delete node.extra;
     }
 
-    if (node.loc.identifierName) {
-      delete node.loc.identifierName;
+    if (process.env.IS_PUBLISH) {
+      if (node.loc.identifierName) {
+        delete node.loc.identifierName;
+      }
+    } else {
+      // To minimize the jest-diff noise comparing Babel AST and third-party AST,
+      // here we generate a deep copy of loc without identifierName and index
+      if (node.loc) {
+        node.loc = {
+          end: {
+            column: node.loc.end.column,
+            line: node.loc.end.line,
+          },
+          start: {
+            column: node.loc.start.column,
+            line: node.loc.start.line,
+          },
+        } as any;
+      }
     }
 
     if (node.type === "TypeParameter") {

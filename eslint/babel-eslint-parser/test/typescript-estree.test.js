@@ -1,7 +1,8 @@
 import path from "node:path";
 import { parseForESLint } from "../lib/index.cjs";
+import unpad from "dedent";
 import { ESLint } from "eslint";
-import { itDummy, commonJS } from "$repo-utils";
+import { itDummy, commonJS, IS_BABEL_8 } from "$repo-utils";
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint9 = ESLINT_VERSION.startsWith("9.");
@@ -12,8 +13,6 @@ const PROPS_TO_REMOVE = [
   { key: "start", type: "Node" },
   { key: "end", type: "Node" },
 
-  { key: "importKind", type: "Node" },
-  { key: "exportKind", type: "Node" },
   { key: "variance", type: "Node" },
   { key: "typeArguments", type: "Node" },
   { key: "filename", type: null },
@@ -21,6 +20,36 @@ const PROPS_TO_REMOVE = [
   // For legacy estree AST
   { key: "attributes", type: "ImportExpression" },
 ];
+
+// TODO: remove the ESLint token fixes after they are fixed in upstream
+function fixTSESLintTokens(ast) {
+  const { tokens } = ast;
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const { type, value } = token;
+    switch (type) {
+      case "Identifier":
+        {
+          if (value.match(/^\d.*n$/)) {
+            token.type = "Numeric";
+          } else if (value.match(/^#/)) {
+            token.type = "PrivateIdentifier";
+            token.value = value.slice(1);
+          }
+        }
+        break;
+      case "Keyword":
+        {
+          if (value === "null") {
+            token.type = "Null";
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+}
 
 function deeplyRemoveProperties(obj, props) {
   for (const [k, v] of Object.entries(obj)) {
@@ -74,6 +103,7 @@ function deeplyRemoveProperties(obj, props) {
     };
 
     function parseAndAssertSame(code, babelEcmaFeatures = null) {
+      code = unpad(code);
       const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
       const babelAST = parseForESLint(code, {
         eslintVisitorKeys: true,
@@ -83,12 +113,19 @@ function deeplyRemoveProperties(obj, props) {
         babelOptions: {
           configFile: false,
           parserOpts: {
-            plugins: ["jsx", "typescript"],
+            plugins: [
+              "decorators",
+              "decoratorAutoAccessors",
+              "explicitResourceManagement",
+              "jsx",
+              "typescript",
+            ],
           },
         },
       }).ast;
 
       deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+      fixTSESLintTokens(tsEstreeAST);
       expect(babelAST).toEqual(tsEstreeAST);
     }
 
@@ -107,22 +144,115 @@ function deeplyRemoveProperties(obj, props) {
 
     it.each([
       ["empty", ""],
-
       ["boolean", "true"],
       ["boolean", "false"],
-
       ["numeric", "0"],
-      // ["bigint", "0n"],
-
+      ["bigint", "0n"],
+      ["string", `"string"`],
       ["regexp without flag", `/foo/;`],
       ["regexp u flag", `/foo/dgimsuy;`],
       ["regexp v flag", `/foo/dgimsvy;`],
+      ["identifier", "i"],
+
+      ["null", "null"],
+
+      [
+        "template with braces",
+        `
+        { \`\${foo} \${bar}\` }
+      `,
+      ],
+
+      ["directive", `"use strict";`],
+
+      // https://github.com/typescript-eslint/typescript-eslint/issues/11026
+      // ["empty program with line comment", "// single comment"],
+      // ["empty program with block comment", "  /* multiline\n * comment\n*/"],
 
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
+
+      ["nullish coalescing", "a ?? b"],
+
+      ["yield expression", "function *f() { yield; yield* f; yield f }"],
+      ["await expression", "async function f() { await f() }"],
+
+      ["function declaration", "function f(p) {}"],
+      ["function expression", "0, function f(p) {}"],
+      ["arrow function expression", "() => {}"],
+      ["async arrow function expression", "async () => {}"],
+
+      ["object method", "({ m() {} })"],
+      ["object property", "({ p: 0 })"],
+
+      ["class declaration", "class C {}"],
+      ["class expression", "0, class C {}"],
+      ["class method", "class C { m() {} }"],
+      ["class property", "class C { p; }"],
+      ["class static block", "class C { static {}; }"],
+      ["class accessor", "class C { accessor a = 0 }"],
+      ["class decorators", "@dec class C { @dec static p; @dec accessor a; }"],
+
+      ["variable declaration", "var a = 0"],
+      [
+        "variable declaration destructuring",
+        "var [{ a: x = 0 }, ...b] = [{ a: 0 }]",
+      ],
+      [
+        "variable declaration destructuring shorthand",
+        "var { a = 0 } = { a: 0 }",
+      ],
+      ["let declaration", "let a = 0"],
+      ["const declaration", "const a = 0"],
+      ["using declaration", "{ using a = 0 }"],
+      ["await using declaration", "async () => { await using a = 0 }"],
+
+      ["assignment expression", "x = 1"],
+      [
+        "assignment expression destructuring",
+        "[{ a: x = 0 }, ...b] = [{ a: 0 }]",
+      ],
+
+      ["spread element", "var a = { b, ...[...c] }"],
+
+      ["async call expression", "async ([ x ])"],
+
+      ["import declaration", `import "foo"`],
+      ["import declaration default", `import foo from "foo"`],
+      ["import declaration named", `import { foo } from "foo"`],
+      ["import declaration named as", `import { foo as bar } from "foo"`],
+      [
+        "import declaration with attributes",
+        `import foo from "./foo.json" with { type: "json" }`,
+      ],
+
+      ["export declaration", `const foo = 0;export { foo }`],
+      ["export declaration as", `const foo = 0;export { foo as bar }`],
+      ["export const declaration", `export const foo = 0`],
+      ["export declaration from", `export { foo } from "foo"`],
+      ["export function declaration", `export function foo() {}`],
+      ["export class declaration", `export class foo {}`],
+
+      ["member expression", `foo.bar`],
+      ["optional member expression", `foo?.bar`],
+      ["call expression", `foo(bar)`],
+      ["optional call expression", `foo?.(bar)`],
+      ["new expression", `new foo`],
+
+      ["logical assignment", "x ??= y ||= z &&= x"],
     ])("%s: %s", (_, input) => {
       parseAndAssertSame(input);
     });
+
+    if (IS_BABEL_8()) {
+      it.each([
+        ["class private method", "class C { #m() {} }"],
+        ["class abstract property", "abstract class C { abstract p; }"],
+        ["class abstract method", "abstract class C { abstract m(): void }"],
+      ])("%s: %s", (_, input) => {
+        parseAndAssertSame(input);
+      });
+    }
   },
 );
 

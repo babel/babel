@@ -73,7 +73,7 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * tokenizer/index.js                                           *
+     * tokenizer/index.ts                                           *
      * ============================================================ */
 
     getTokenFromCode(code: number) {
@@ -88,7 +88,7 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/expression.js                                         *
+     * parser/expression.ts                                         *
      * ============================================================ */
 
     parseExprAtom(
@@ -125,7 +125,28 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/lval.js                                               *
+     * parser/node.ts                                               *
+     * ============================================================ */
+
+    cloneIdentifier<T extends N.Identifier | N.Placeholder>(node: T): T {
+      const cloned = super.cloneIdentifier(node);
+      if (cloned.type === "Placeholder") {
+        cloned.expectedNode = (node as N.Placeholder).expectedNode;
+      }
+      return cloned;
+    }
+
+    cloneStringLiteral<
+      T extends N.EstreeLiteral | N.StringLiteral | N.Placeholder,
+    >(node: T): T {
+      if (node.type === "Placeholder") {
+        return this.cloneIdentifier(node) as T;
+      }
+      return super.cloneStringLiteral(node);
+    }
+
+    /* ============================================================ *
+     * parser/lval.ts                                               *
      * ============================================================ */
 
     parseBindingAtom(): MaybePlaceholder<"Pattern"> {
@@ -152,7 +173,7 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/statement.js                                          *
+     * parser/statement.ts                                          *
      * ============================================================ */
 
     chStartsBindingIdentifier(ch: number, pos: number): boolean {

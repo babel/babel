@@ -1,4 +1,5 @@
 import type { BabelToken } from "../types.cts";
+import type * as t from "@babel/types";
 import ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
 function convertTemplateType(tokens: BabelToken[], tl: Record<string, any>) {
@@ -101,11 +102,12 @@ function convertToken(
       pattern: string;
       flags: string;
     };
+    loc?: t.SourceLocation | null;
   } = token as any;
   newToken.range = [token.start, token.end];
 
   if (label === tl.name) {
-    if (token.value === "static") {
+    if (token.value.match(/^(?:let|static|yield)$/)) {
       newToken.type = "Keyword";
     } else {
       newToken.type = "Identifier";
@@ -202,6 +204,20 @@ function convertToken(
     label === tl.Template
   ) {
     newToken.type = "Template";
+  }
+  if (!process.env.IS_PUBLISH) {
+    // To minimize the jest-diff noise comparing Babel AST and third-party AST,
+    // here we generate a deep copy of loc without identifierName and index
+    newToken.loc = {
+      end: {
+        column: newToken.loc.end.column,
+        line: newToken.loc.end.line,
+      },
+      start: {
+        column: newToken.loc.start.column,
+        line: newToken.loc.start.line,
+      },
+    } as any;
   }
   return newToken;
 }
