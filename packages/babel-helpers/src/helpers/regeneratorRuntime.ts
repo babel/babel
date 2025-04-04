@@ -3,7 +3,7 @@
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-type AbruptCompletion = {
+type Completion = {
   type: "normal" | "throw" | "break" | "continue" | "return";
   arg?: any;
 };
@@ -19,7 +19,7 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, completion?: AbruptCompletion];
+type TryEntry = [...TryLocs, completion?: Completion];
 
 type Delegate = {
   // iterator
@@ -46,7 +46,7 @@ type Context = {
   stop(): Context["rval"];
   dispatchException(exception: any): boolean;
   abrupt(type: "throw" | "break" | "continue" | "return", arg: any): any;
-  complete(record: AbruptCompletion, afterLoc?: number): any;
+  complete(record: Completion, afterLoc?: number): any;
   finish(finallyLoc: number): any;
   catch(tryLoc: number): any;
   delegateYield(iterable: any, resultName: `t${number}`, nextLoc: number): any;
@@ -533,7 +533,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   }
 
   function resetTryEntry(entry: TryEntry) {
-    var record = entry[4] || ({} as AbruptCompletion);
+    var record = entry[4] || ({} as Completion);
     record.type = "normal";
     record.arg = undefined;
     entry[4] = record;
@@ -738,7 +738,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         finallyEntry = null;
       }
 
-      var record = finallyEntry! ? finallyEntry[4]! : ({} as AbruptCompletion);
+      var record = finallyEntry! ? finallyEntry[4]! : ({} as Completion);
       record.type = type;
       record.arg = arg;
 
