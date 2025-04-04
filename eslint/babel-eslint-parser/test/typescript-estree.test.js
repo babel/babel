@@ -164,6 +164,9 @@ function deeplyRemoveProperties(obj, props) {
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
 
+      ["yield expression", "function *f() { yield; yield* f; yield f }"],
+      ["await expression", "async function f() { await f() }"],
+
       ["function declaration", "function f(p) {}"],
       ["function expression", "0, function f(p) {}"],
       ["arrow function expression", "() => {}"],

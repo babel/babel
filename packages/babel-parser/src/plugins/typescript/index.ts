@@ -4383,6 +4383,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
      */
     fillOptionalPropertiesForTSESLint(node: N.Node): void {
       switch (node.type) {
+        case "ExpressionStatement":
+          node.directive ??= undefined;
+          return;
         case "RestElement":
           node.value = undefined;
         /* fallthrough */
