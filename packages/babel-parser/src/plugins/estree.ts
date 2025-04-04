@@ -111,7 +111,6 @@ export default (superClass: typeof Parser) =>
 
       const stmt = this.castNodeTo(directive, "ExpressionStatement");
       stmt.expression = expression;
-      // @ts-expect-error N.ExpressionStatement.directive is not defined
       stmt.directive = expression.extra.rawValue;
 
       delete expression.extra;
