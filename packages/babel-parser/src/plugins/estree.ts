@@ -394,8 +394,7 @@ export default (superClass: typeof Parser) =>
           return accessorPropertyNode;
         }
       }
-      (accessorPropertyNode as unknown as N.EstreeAccessorProperty).type =
-        "AccessorProperty";
+      this.castNodeTo(accessorPropertyNode, "AccessorProperty");
       return accessorPropertyNode;
     }
 
@@ -570,13 +569,10 @@ export default (superClass: typeof Parser) =>
 
       if (state.optionalChainMember) {
         // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
-        if (
-          node.type === "OptionalMemberExpression" ||
-          node.type === "OptionalCallExpression"
-        ) {
-          // strip Optional prefix
-          (node as unknown as N.CallExpression | N.MemberExpression).type =
-            node.type.substring(8) as "CallExpression" | "MemberExpression";
+        if (node.type === "OptionalCallExpression") {
+          this.castNodeTo(node, "CallExpression");
+        } else if (node.type === "OptionalMemberExpression") {
+          this.castNodeTo(node, "MemberExpression");
         }
         if (state.stop) {
           const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
