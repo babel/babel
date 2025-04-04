@@ -157,6 +157,8 @@ function deeplyRemoveProperties(obj, props) {
       `,
       ],
 
+      ["directive", `"use strict";`],
+
       // https://github.com/typescript-eslint/typescript-eslint/issues/11026
       // ["empty program with line comment", "// single comment"],
       // ["empty program with block comment", "  /* multiline\n * comment\n*/"],

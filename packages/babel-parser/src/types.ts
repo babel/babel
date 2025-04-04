@@ -311,6 +311,8 @@ export interface FunctionBase extends BodilessFunctionOrMethodBase {
 export interface ExpressionStatement extends NodeBase {
   type: "ExpressionStatement";
   expression: Expression;
+  // For ESTree
+  directive?: Directive | undefined;
 }
 
 export interface BlockStatement extends NodeBase {
