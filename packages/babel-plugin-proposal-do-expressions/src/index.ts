@@ -55,7 +55,7 @@ export default declare(api => {
             actualParam.node,
             "DoExpression",
           );
-          if (foundDoExpression && !isParamSideEffectFree(actualParam.node)) {
+          if (foundDoExpression && !isLValSideEffectFree(actualParam)) {
             const pattern = actualParam.node;
             const uid = body.scope.generateUidIdentifier("do");
             actualParam.replaceWith(t.cloneNode(uid));
@@ -276,10 +276,29 @@ export default declare(api => {
     } else if (isTopLevelSideEffectFree(path)) {
       return flattenByTraverse(path, skipTrailing);
     } else {
+      const hasDoExpression = traverse.hasType(path.node, "DoExpression");
+      if (hasDoExpression && path.isAssignmentExpression()) {
+        const left = path.get("left");
+        const right = path.get("right");
+        if (traverse.hasType(left.node, "DoExpression")) {
+          if (path.node.operator !== "=") {
+            throw path.buildCodeFrameError(
+              "Do expression inside complex assignment expression is not supported",
+            );
+          }
+          const uid = path.scope.generateDeclaredUidIdentifier("do");
+          path.replaceWith(uid);
+          return [
+            ...flattenExpression(right, true),
+            ...flattenLVal(left, right.node, null),
+          ];
+        }
+      }
+
       const statements: t.Statement[] = [];
 
-      if (traverse.hasType(path.node, "DoExpression")) {
-        let thisArgument: NodePath<t.Expression> | null = null;
+      if (hasDoExpression) {
+        let thisArgument: NodePath<t.Expression | t.Super> | null = null;
         if (path.isCallExpression()) {
           let callee = path.get("callee");
           while (true) {
@@ -311,7 +330,9 @@ export default declare(api => {
               ),
               [
                 callee as t.Expression,
-                t.cloneNode(thisArgument.node),
+                thisArgument.isSuper()
+                  ? t.thisExpression()
+                  : t.cloneNode(thisArgument.node),
                 t.arrayExpression(
                   args as Array<t.Expression | t.SpreadElement>,
                 ),
@@ -338,7 +359,7 @@ export default declare(api => {
   }
 
   function flattenLVal(
-    path: NodePath<t.LVal>,
+    path: NodePath<t.LVal | t.OptionalMemberExpression>,
     init: t.Expression | null | undefined,
     declare: "var" | "let" | "const" | "using" | "await using" | null,
   ): t.Statement[] {
@@ -356,6 +377,7 @@ export default declare(api => {
           ];
         }
       }
+      case "OptionalMemberExpression":
       case "MemberExpression": {
         return [
           ...flattenByTraverse(path, true),
@@ -394,8 +416,9 @@ export default declare(api => {
         const elements: t.ArrayPattern["elements"] = [];
         const statements: t.Statement[] = [];
         for (const element of path.get("elements")) {
-          if (!element) {
-            elements.push(null);
+          if (!element.type || isLValSideEffectFree(element)) {
+            elements.push(element.node);
+            continue;
           }
           const uid = path.scope.generateDeclaredUidIdentifier("do");
           if (element.isRestElement()) {
@@ -416,10 +439,15 @@ export default declare(api => {
         ];
       }
       case "ObjectPattern": {
-        unsafeUseIIFE(path);
+        unsafeWrapIIFE(path);
         return [
           t.expressionStatement(t.assignmentExpression("=", path.node, init)),
         ];
+      }
+      default: {
+        throw path.buildCodeFrameError(
+          `Do expression inside ${path.type} is not supported`,
+        );
       }
     }
   }
@@ -462,50 +490,51 @@ export default declare(api => {
     }
     return statements;
   }
-
-  // Wrap all do expressions in an IIFE.
-  // This doesn't work with control flow statements like break/continue/return.
-  // Only use this when the code is too hard to transform.
-  function unsafeUseIIFE(path: NodePath<t.Node>) {
-    path.traverse({
-      DoExpression(path) {
-        const body = path.node.body.body;
-        if (body.length) {
-          path.replaceExpressionWithStatements(body);
-        } else {
-          path.replaceWith(path.scope.buildUndefinedNode());
-        }
-      },
-    });
-  }
-
-  function isTopLevelSideEffectFree(path: NodePath<t.Node>): boolean {
-    return (
-      path.isPure() ||
-      path.isBinaryExpression() ||
-      path.isLogicalExpression() ||
-      path.isConditionalExpression() ||
-      path.isObjectExpression() ||
-      path.isArrayExpression() ||
-      path.isClassExpression() ||
-      path.isFunctionExpression() ||
-      path.isArrowFunctionExpression() ||
-      path.isParenthesizedExpression() ||
-      path.isRecordExpression() ||
-      path.isTupleExpression() ||
-      path.isSequenceExpression() ||
-      (path.isUnaryExpression() &&
-        path.node.operator !== "throw" &&
-        path.node.operator !== "delete")
-    );
-  }
-
-  function isParamSideEffectFree(node: t.Node): boolean {
-    return (
-      t.isIdentifier(node) ||
-      (t.isAssignmentPattern(node) &&
-        isParamSideEffectFree(node.left) &&
-        t.isPureish(node.right))
-    );
-  }
 });
+
+// Wrap all do expressions in an IIFE.
+// This doesn't work with control flow statements like break/continue/return.
+// Only use this when the code is too hard to transform.
+function unsafeWrapIIFE(path: NodePath<t.Node>) {
+  path.traverse({
+    DoExpression(path) {
+      const body = path.node.body.body;
+      if (body.length) {
+        path.replaceExpressionWithStatements(body);
+      } else {
+        path.replaceWith(path.scope.buildUndefinedNode());
+      }
+    },
+  });
+}
+
+function isTopLevelSideEffectFree(path: NodePath<t.Node>): boolean {
+  return (
+    path.isPure() ||
+    path.isBinaryExpression() ||
+    path.isLogicalExpression() ||
+    path.isConditionalExpression() ||
+    path.isObjectExpression() ||
+    path.isArrayExpression() ||
+    path.isClassExpression() ||
+    path.isFunctionExpression() ||
+    path.isArrowFunctionExpression() ||
+    path.isParenthesizedExpression() ||
+    path.isRecordExpression() ||
+    path.isTupleExpression() ||
+    path.isSequenceExpression() ||
+    (path.isUnaryExpression() &&
+      path.node.operator !== "throw" &&
+      path.node.operator !== "delete")
+  );
+}
+
+function isLValSideEffectFree(path: NodePath<t.Node>): boolean {
+  return (
+    path.isIdentifier() ||
+    (path.isAssignmentPattern() &&
+      isLValSideEffectFree(path.get("left")) &&
+      path.get("right").isPureish()) ||
+    (path.isRestElement() && isLValSideEffectFree(path.get("argument")))
+  );
+}
