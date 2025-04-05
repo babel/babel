@@ -28,29 +28,61 @@ export default declare(api => {
       if (!path.parentPath) {
         throw new Error("DoExpression must be in a statement");
       }
-      if (path.isArrowFunctionExpression()) {
-        // Do expression appears in parameters declarations OR expression body
-        const body = path.get("body");
-        if (
-          body.isExpression() &&
-          traverse.hasType(body.node, "DoExpression")
-        ) {
-          const [newBody] = body.replaceWith(
-            t.blockStatement([t.returnStatement(body.node as t.Expression)]),
-          );
-          flattenStatement(newBody.get("body")[0]);
-          break;
-        }
-      }
       if (path.isFunction()) {
-        // Do expression appears in parameters declarations
-        // According to https://github.com/tc39/proposal-do-expressions#exceptions,
-        // `return` is not allowed in the do expression. So simply wrap it in IIFE.
-        const body = doExprPath.node.body.body;
-        if (body.length) {
-          doExprPath.replaceExpressionWithStatements(body);
-        } else {
-          doExprPath.replaceWith(doExprPath.scope.buildUndefinedNode());
+        let body = path.get("body");
+        if (path.isArrowFunctionExpression()) {
+          // Do expression within parameters declarations OR expression body
+          if (
+            body.isExpression() &&
+            traverse.hasType(body.node, "DoExpression")
+          ) {
+            [body] = body.replaceWith(
+              t.blockStatement([t.returnStatement(body.node)]),
+            );
+            flattenStatement(body.get("body")[0]);
+          }
+        }
+
+        // Do expression within function parameter lists
+        let foundDoExpression = false;
+        const deferredPatterns: t.LVal[] = [];
+        const deferredUIDs: t.Identifier[] = [];
+        for (const param of path.get("params")) {
+          const actualParam = param.isRestElement()
+            ? param.get("argument")
+            : param;
+          foundDoExpression ||= traverse.hasType(
+            actualParam.node,
+            "DoExpression",
+          );
+          if (foundDoExpression && !isParamSideEffectFree(actualParam.node)) {
+            const pattern = actualParam.node;
+            const uid = body.scope.generateUidIdentifier("do");
+            actualParam.replaceWith(t.cloneNode(uid));
+            deferredPatterns.push(pattern);
+            deferredUIDs.push(uid);
+          }
+        }
+        if (deferredPatterns.length) {
+          let blockBody: NodePath<t.BlockStatement>;
+          if (body.isBlockStatement()) {
+            blockBody = body;
+          } else {
+            [blockBody] = body.replaceWith(
+              t.blockStatement([t.expressionStatement(body.node)]),
+            );
+          }
+
+          blockBody.unshiftContainer(
+            "body",
+            t.variableDeclaration("var", [
+              t.variableDeclarator(
+                t.arrayPattern(deferredPatterns),
+                t.arrayExpression(deferredUIDs),
+              ),
+            ]),
+          );
+          flattenStatement(blockBody.get("body")[0]);
         }
         break;
       }
@@ -66,7 +98,42 @@ export default declare(api => {
   function flattenStatement(path: NodePath<t.Statement>) {
     const effects: t.Statement[] = [];
     switch (path.type) {
+      case "ForStatement": {
+        // Example:       for (var i = do { f1(); }; do { f2(); }; do { f3(); }) { ... }
+        // Transform to:  var temp1 = f1();
+        //                for (var i = temp1; ;) {
+        //                  var temp2 = f2();
+        //                  if (!temp2) break;
+        //                  ...
+        //                  f3();
+        //                }
+        const init = path.get("init");
+        if (traverse.hasType(init.node, "DoExpression")) {
+          throw new Error("todo");
+        }
+        effects.length = 0;
+        const test = path.get("test");
+        if (traverse.hasType(test.node, "DoExpression")) {
+          pushEffect(test, true);
+          effects.push(
+            t.ifStatement(
+              t.unaryExpression("!", test.node),
+              t.breakStatement(),
+            ),
+          );
+          test.replaceWith(null);
+        }
+        effects.push(path.node.body);
+        const update = path.get("update");
+        if (traverse.hasType(update.node, "DoExpression")) {
+          pushEffect(update, true, false);
+        }
+        path.set("body", t.blockStatement(effects));
+        break;
+      }
       case "WhileStatement": {
+        // Example:      while (do { foo(); }) { ... }
+        // Transform to: while (true) { var temp = foo(); if (!temp) break; ... }
         const test = path.get("test");
         pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
@@ -84,6 +151,8 @@ export default declare(api => {
         break;
       }
       case "DoWhileStatement": {
+        // Example:      do { ... } while (do { foo(); })
+        // Transform to: do { ...; var temp = foo(); if (!temp) break; } while (true)
         const test = path.get("test");
         pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
@@ -180,10 +249,7 @@ export default declare(api => {
       if (skipTrailing) {
         while (expressions.length) {
           const path = expressions.pop();
-          if (
-            path.node.type === "DoExpression" ||
-            traverse.hasType(path.node, "DoExpression")
-          ) {
+          if (traverse.hasType(path.node, "DoExpression")) {
             lastDoExpression = path;
             break;
           }
@@ -217,6 +283,15 @@ export default declare(api => {
       (t.isUnaryExpression(node) &&
         node.operator !== "throw" &&
         node.operator !== "delete")
+    );
+  }
+
+  function isParamSideEffectFree(node: t.Node): boolean {
+    return (
+      t.isIdentifier(node) ||
+      (t.isAssignmentPattern(node) &&
+        isParamSideEffectFree(node.left) &&
+        t.isPureish(node.right))
     );
   }
 });
