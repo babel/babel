@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire, Module } from "module";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createRequire, Module } from "node:module";
 
 const require = createRequire(import.meta.url);
 
@@ -59,7 +59,7 @@ describe("@babel/register - caching", () => {
       } else {
         Module._cache = {};
       }
-      const cache = require("../lib/cache.js");
+      const cache = require("../lib/cache.cjs");
 
       load = cache.load;
       get = cache.get;

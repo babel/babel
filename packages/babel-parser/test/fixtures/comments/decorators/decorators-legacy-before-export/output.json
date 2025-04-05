@@ -12,6 +12,7 @@
         "start":8,"end":86,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":2,"column":50,"index":86}},
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":8,"end":86,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":2,"column":50,"index":86}},

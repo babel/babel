@@ -533,7 +533,14 @@ function _guessExecutionStatusRelativeToDifferentFunctionsCached(
 }
 
 /**
- * Resolve a "pointer" `NodePath` to it's absolute path.
+ * Resolve the value pointed to by a NodePath
+ * e.g.
+ * ```
+ *  var a = 1;
+ *  var b = a;
+ *  b;
+ * ```
+ * `b.resolve()` will return `1`
  */
 export function resolve(
   this: NodePath,

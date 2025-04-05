@@ -21,7 +21,7 @@ import type {
   AssignmentProperty,
   Assignable,
 } from "../types.ts";
-import type { Pos, Position } from "../util/location.ts";
+import type { Position } from "../util/location.ts";
 import {
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
@@ -50,13 +50,11 @@ export default abstract class LValParser extends NodeUtils {
   abstract parseMaybeAssign(
     refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: Pos | null,
   ): Expression;
 
   abstract parseMaybeAssignAllowIn(
     refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: Pos | null,
   ): Expression;
 
   abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
@@ -232,7 +230,7 @@ export default abstract class LValParser extends NodeUtils {
   // Convert list of expression atoms to binding list.
 
   toAssignableList(
-    exprList: (Expression | SpreadElement | RestElement)[],
+    exprList: (Expression | SpreadElement | RestElement | null)[],
     trailingCommaLoc: Position | undefined | null,
     isLHS: boolean,
   ): void {
@@ -242,14 +240,7 @@ export default abstract class LValParser extends NodeUtils {
       const elt = exprList[i];
       if (!elt) continue;
 
-      if (elt.type === "SpreadElement") {
-        (elt as unknown as RestElement).type = "RestElement";
-        const arg = elt.argument;
-        this.checkToRestConversion(arg, /* allowPattern */ true);
-        this.toAssignable(arg, isLHS);
-      } else {
-        this.toAssignable(elt, isLHS);
-      }
+      this.toAssignableListItem(exprList, i, isLHS);
 
       if (elt.type === "RestElement") {
         if (i < end) {
@@ -258,6 +249,22 @@ export default abstract class LValParser extends NodeUtils {
           this.raise(Errors.RestTrailingComma, trailingCommaLoc);
         }
       }
+    }
+  }
+
+  toAssignableListItem(
+    exprList: (Expression | SpreadElement | RestElement)[],
+    index: number,
+    isLHS: boolean,
+  ): void {
+    const node = exprList[index];
+    if (node.type === "SpreadElement") {
+      (node as unknown as RestElement).type = "RestElement";
+      const arg = node.argument;
+      this.checkToRestConversion(arg, /* allowPattern */ true);
+      this.toAssignable(arg, isLHS);
+    } else {
+      this.toAssignable(node, isLHS);
     }
   }
 
@@ -420,14 +427,19 @@ export default abstract class LValParser extends NodeUtils {
         }
       } else {
         const decorators = [];
-        if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(Errors.UnsupportedParameterDecorator, this.state.startLoc);
+        if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
+          if (this.match(tt.at) && this.hasPlugin("decorators")) {
+            this.raise(
+              Errors.UnsupportedParameterDecorator,
+              this.state.startLoc,
+            );
+          }
+          // invariant: hasPlugin("decorators-legacy")
+          while (this.match(tt.at)) {
+            decorators.push(this.parseDecorator());
+          }
         }
-        // invariant: hasPlugin("decorators-legacy")
-        while (this.match(tt.at)) {
-          decorators.push(this.parseDecorator());
-        }
-        elts.push(this.parseAssignableListItem(flags, decorators));
+        elts.push(this.parseBindingElement(flags, decorators));
       }
     }
     return elts;
@@ -471,7 +483,8 @@ export default abstract class LValParser extends NodeUtils {
     );
   }
 
-  parseAssignableListItem(
+  // https://tc39.es/ecma262/#prod-BindingElement
+  parseBindingElement(
     this: Parser,
     flags: ParseBindingListFlags,
     decorators: Decorator[],
@@ -483,10 +496,11 @@ export default abstract class LValParser extends NodeUtils {
     ) {
       this.parseFunctionParamType(left);
     }
-    const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
+      this.resetStartLocationFromNode(left, decorators[0]);
     }
+    const elt = this.parseMaybeDefault(left.loc.start, left);
     return elt;
   }
 

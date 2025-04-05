@@ -5,6 +5,7 @@ import {
   nullLiteral,
   stringLiteral,
   numericLiteral,
+  bigIntLiteral,
   regExpLiteral,
   arrayExpression,
   objectProperty,
@@ -21,6 +22,7 @@ export default valueToNode as {
   (value: string): t.StringLiteral;
   // Infinities and NaN need to use a BinaryExpression; negative values must be wrapped in UnaryExpression
   (value: number): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
+  (value: bigint): t.BigIntLiteral;
   (value: RegExp): t.RegExpLiteral;
   (value: ReadonlyArray<unknown>): t.ArrayExpression;
 
@@ -101,6 +103,11 @@ function valueToNode(value: unknown): t.Expression {
     return result;
   }
 
+  // bigints
+  if (typeof value === "bigint") {
+    return bigIntLiteral(value.toString());
+  }
+
   // regexes
   if (isRegExp(value)) {
     const pattern = value.source;
@@ -117,9 +124,15 @@ function valueToNode(value: unknown): t.Expression {
   if (isPlainObject(value)) {
     const props = [];
     for (const key of Object.keys(value)) {
-      let nodeKey;
+      let nodeKey,
+        computed = false;
       if (isValidIdentifier(key)) {
-        nodeKey = identifier(key);
+        if (key === "__proto__") {
+          computed = true;
+          nodeKey = stringLiteral(key);
+        } else {
+          nodeKey = identifier(key);
+        }
       } else {
         nodeKey = stringLiteral(key);
       }
@@ -130,6 +143,7 @@ function valueToNode(value: unknown): t.Expression {
             // @ts-expect-error key must present in value
             value[key],
           ),
+          computed,
         ),
       );
     }

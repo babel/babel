@@ -8,6 +8,7 @@ packages/babel-standalone/examples/**
 packages/babel-parser/test/expressions/**
 scripts/integration-tests/fixtures/**
 packages/babel-parser/test/schema.json
+packages/babel-plugin-transform-regenerator/test/regenerator-fixtures/**
 
 CHANGELOG.md
 .github/*.md
@@ -16,7 +17,7 @@ CHANGELOG.md
 # Generated
 lib/archived-libs.d.ts
 packages/babel-parser/typings/babel-parser.d.ts
-Makefile.js
+Makefile.mjs
 packages/babel-runtime-corejs2/helpers/**
 packages/babel-runtime-corejs2/core-js/**
 packages/babel-runtime-corejs3/helpers/**

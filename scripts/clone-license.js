@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import shell from "shelljs";
-import path from "path";
+import path from "node:path";
 
 console.log("Cloning LICENSE to babel packages");
 
@@ -11,7 +11,7 @@ console.log(LICENSE);
 shell.ls("-d", "./packages/*/").forEach(dir => {
   if (
     !dir.match(
-      /.*packages\/(babel-parser|babel-plugin-transform-object-assign)\/?$/
+      /.*packages\/babel-(helpers|parser|plugin-transform-object-assign|plugin-transform-regenerator)\/?$/
     )
   ) {
     writeFileSync(path.join(dir, "LICENSE"), LICENSE);

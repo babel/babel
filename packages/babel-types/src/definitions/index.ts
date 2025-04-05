@@ -12,6 +12,7 @@ import {
   BUILDER_KEYS,
   DEPRECATED_KEYS,
   NODE_PARENT_VALIDATIONS,
+  allExpandedTypes,
 } from "./utils.ts";
 import {
   PLACEHOLDERS,
@@ -26,6 +27,17 @@ import { DEPRECATED_ALIASES } from "./deprecated-aliases.ts";
   FLIPPED_ALIAS_KEYS[deprecatedAlias] =
     FLIPPED_ALIAS_KEYS[DEPRECATED_ALIASES[deprecatedAlias]];
 });
+
+for (const { types, set } of allExpandedTypes) {
+  for (const type of types) {
+    const aliases = FLIPPED_ALIAS_KEYS[type];
+    if (aliases) {
+      aliases.forEach(set.add, set);
+    } else {
+      set.add(type);
+    }
+  }
+}
 
 const TYPES: Array<string> = [].concat(
   Object.keys(VISITOR_KEYS),

@@ -265,23 +265,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               path.traverse(injectMetaPropertiesVisitor, state);
             }
           },
-
-          // TODO(Babel 8): Decide if this should be removed or brought back.
-          // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
-          //
-          // exit(path, state) {
-          //   if (
-          //     get(state, "runtime") === "classic" &&
-          //     get(state, "pragmaSet") &&
-          //     get(state, "usedFragment") &&
-          //     !get(state, "pragmaFragSet")
-          //   ) {
-          //     throw new Error(
-          //       "transform-react-jsx: pragma has been set but " +
-          //         "pragmaFrag has not been set",
-          //     );
-          //   }
-          // },
         },
 
         JSXFragment: {

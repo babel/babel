@@ -1,0 +1,111 @@
+{
+  "type": "File",
+  "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":113}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":113}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":113}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":20,"end":113,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":4,"column":1,"index":113}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":24,"end":34,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":12,"index":34}},
+              "expression": {
+                "type": "BinaryExpression",
+                "start":24,"end":33,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":11,"index":33}},
+                "left": {
+                  "type": "Identifier",
+                  "start":24,"end":29,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":7,"index":29},"identifierName":"yield"},
+                  "name": "yield"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "NumericLiteral",
+                  "start":32,"end":33,"loc":{"start":{"line":2,"column":10,"index":32},"end":{"line":2,"column":11,"index":33}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " this is a sum between \"yield\" and 1",
+                  "start":35,"end":73,"loc":{"start":{"line":2,"column":13,"index":35},"end":{"line":2,"column":51,"index":73}}
+                }
+              ]
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":76,"end":86,"loc":{"start":{"line":3,"column":2,"index":76},"end":{"line":3,"column":12,"index":86}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":76,"end":85,"loc":{"start":{"line":3,"column":2,"index":76},"end":{"line":3,"column":11,"index":85}},
+                "argument": {
+                  "type": "UnaryExpression",
+                  "start":82,"end":85,"loc":{"start":{"line":3,"column":8,"index":82},"end":{"line":3,"column":11,"index":85}},
+                  "operator": "+",
+                  "prefix": true,
+                  "argument": {
+                    "type": "NumericLiteral",
+                    "start":84,"end":85,"loc":{"start":{"line":3,"column":10,"index":84},"end":{"line":3,"column":11,"index":85}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  }
+                }
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " this is awaiting \"+1\"",
+                  "start":87,"end":111,"loc":{"start":{"line":3,"column":13,"index":87},"end":{"line":3,"column":37,"index":111}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " this is a sum between \"yield\" and 1",
+                  "start":35,"end":73,"loc":{"start":{"line":2,"column":13,"index":35},"end":{"line":2,"column":51,"index":73}}
+                }
+              ]
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " this is a sum between \"yield\" and 1",
+      "start":35,"end":73,"loc":{"start":{"line":2,"column":13,"index":35},"end":{"line":2,"column":51,"index":73}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " this is awaiting \"+1\"",
+      "start":87,"end":111,"loc":{"start":{"line":3,"column":13,"index":87},"end":{"line":3,"column":37,"index":111}}
+    }
+  ]
+}

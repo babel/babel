@@ -1,7 +1,7 @@
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as watcher from "./watcher.ts";
 
@@ -103,6 +103,7 @@ const CALLER = {
 export function transformRepl(filename: string, code: string, opts: any) {
   opts = {
     ...opts,
+    sourceMaps: opts.sourceMaps === "inline" ? true : opts.sourceMaps,
     caller: CALLER,
     filename,
   };

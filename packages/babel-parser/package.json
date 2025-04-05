@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "7.26.9",
+  "version": "7.27.0",
   "description": "A JavaScript parser",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",
@@ -51,7 +51,7 @@
       {
         "types": null,
         "engines": {
-          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "node": "^20.19.0 || >=22.12.0"
         }
       },
       {

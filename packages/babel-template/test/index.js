@@ -38,6 +38,29 @@ describe("@babel/template", function () {
     expect(generator(output2).code).toBe(comments);
   });
 
+  it("should allow yield outside generator function by default", function () {
+    expect(template.ast("yield 1")).toMatchInlineSnapshot(`
+      Object {
+        "expression": Object {
+          "argument": Object {
+            "extra": Object {
+              "raw": "1",
+              "rawValue": 1,
+            },
+            "loc": undefined,
+            "type": "NumericLiteral",
+            "value": 1,
+          },
+          "delegate": false,
+          "loc": undefined,
+          "type": "YieldExpression",
+        },
+        "loc": undefined,
+        "type": "ExpressionStatement",
+      }
+    `);
+  });
+
   describe("string-based", () => {
     it("should handle replacing values from an object", () => {
       const value = t.stringLiteral("some string value");
@@ -288,6 +311,7 @@ describe("@babel/template", function () {
       expect(result).toMatchInlineSnapshot(`
         Array [
           Object {
+            "attributes": Array [],
             "declaration": null,
             "loc": undefined,
             "source": null,

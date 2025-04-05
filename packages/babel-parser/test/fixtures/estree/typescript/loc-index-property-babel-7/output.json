@@ -13,6 +13,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSEnumDeclaration",
           "start":7,"end":54,"loc":{"start":{"line":1,"column":7},"end":{"line":4,"column":1}},

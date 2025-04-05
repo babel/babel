@@ -51,6 +51,11 @@ export function TSTypeParameterInstantiation(
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
+  if (node.const) {
+    this.word("const");
+    this.space();
+  }
+
   if (node.in) {
     this.word("in");
     this.space();
@@ -837,8 +842,8 @@ export function tsPrintClassMemberModifiers(
     this.space();
   }
   printModifiersList(this, node, [
-    !isPrivateField && node.override && "override",
     !isPrivateField && node.abstract && "abstract",
+    !isPrivateField && node.override && "override",
     (isPublicField || isPrivateField) && node.readonly && "readonly",
   ]);
 }

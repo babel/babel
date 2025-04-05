@@ -1,10 +1,10 @@
-import path from "path";
-import fs from "fs";
-import { cpus } from "os";
-import { createRequire } from "module";
-import { fileURLToPath } from "url";
-import { Transform as TransformStream } from "stream";
-import { callbackify } from "util";
+import path from "node:path";
+import fs from "node:fs";
+import { cpus } from "node:os";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import { Transform as TransformStream } from "node:stream";
+import { callbackify } from "node:util";
 import colors from "picocolors";
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -133,22 +133,6 @@ function generateTraverseHelpers(helperKind, outBase = "") {
     `./packages/babel-traverse/src/${outBase}/generated/`,
     `${helperKind}.d.ts`,
     `@babel/traverse -> ${helperKind}`
-  );
-}
-
-async function generateRuntimeHelpers() {
-  await generateHelpers(
-    `./packages/babel-helpers/scripts/generate-regenerator-runtime.js`,
-    `./packages/babel-helpers/src/helpers/`,
-    "regeneratorRuntime.js",
-    "@babel/helpers -> regeneratorRuntime"
-  );
-
-  return generateHelpers(
-    `./packages/babel-helpers/scripts/generate-helpers.js`,
-    `./packages/babel-helpers/src/`,
-    "helpers-generated.ts",
-    "@babel/helpers"
   );
 }
 
@@ -478,6 +462,16 @@ function buildRollup(packages, buildStandalone) {
                 sourceMap: sourcemap,
                 include: "**/*.{js,mjs,cjs,ts}",
               }),
+            // https://github.com/babel/babel/issues/14301
+            buildStandalone &&
+              rollupReplace({
+                preventAssignment: false,
+                delimiters: ["", ""],
+                values: {
+                  "return require.resolve(path);":
+                    "throw new Error('Babel internal error');",
+                },
+              }),
           ].filter(Boolean),
         });
 
@@ -781,10 +775,15 @@ gulp.task("generate-type-helpers", () => {
   ]);
 });
 
-gulp.task("generate-runtime-helpers", () => {
+gulp.task("generate-runtime-helpers", async () => {
   log("Generating @babel/helpers runtime helpers");
 
-  return generateRuntimeHelpers();
+  await generateHelpers(
+    `./packages/babel-helpers/scripts/generate-helpers.js`,
+    `./packages/babel-helpers/src/`,
+    "helpers-generated.ts",
+    "@babel/helpers"
+  );
 });
 
 gulp.task("generate-standalone", () => generateStandalone());
@@ -935,10 +934,7 @@ function watch() {
   gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
-    [
-      "./packages/babel-helpers/src/helpers/*",
-      "!./packages/babel-helpers/src/helpers/regeneratorRuntime.js",
-    ],
+    ["./packages/babel-helpers/src/helpers/*"],
     gulp.task("generate-runtime-helpers")
   );
   if (USE_ESM) {

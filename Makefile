@@ -1,6 +1,6 @@
 FLOW_COMMIT = b7f56844ec194c8901a18d11e6b356dd56b3bdeb
-TEST262_COMMIT = 6310295c8017b2fbd09b5857f414638cdc3ad5fa
-TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
+TEST262_COMMIT = 4ba104a21c5f8ede20ee5105bc89fa9693c2bfe1
+TYPESCRIPT_COMMIT = afc463980f55d634c56dfedc6852f6f46f596621
 
 SOURCES = packages codemods eslint
 
@@ -11,12 +11,12 @@ COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
 YARN := yarn
 NODE := $(YARN) node
-MAKEJS := node Makefile.js
+MAKEJS := node Makefile.mjs
 
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
 
-Makefile.js: Makefile.source.mjs yarn.lock
+Makefile.mjs: Makefile.source.mjs yarn.lock .yarn/install-state.gz
 	$(NODE) ./scripts/pack-script.js
 
 build:

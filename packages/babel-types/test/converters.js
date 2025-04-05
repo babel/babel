@@ -1,4 +1,5 @@
 import * as t from "../lib/index.js";
+import { itGte } from "$repo-utils";
 
 describe("converters", function () {
   it("toIdentifier", function () {
@@ -36,6 +37,11 @@ describe("converters", function () {
         ),
       );
     });
+
+    const nodeGte10 = itGte("10.4.0");
+    nodeGte10("bigint", function () {
+      expect(t.valueToNode(BigInt(123))).toEqual(t.bigIntLiteral("123"));
+    });
     it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(
         t.stringLiteral('This is a "string"'),
@@ -70,6 +76,23 @@ describe("converters", function () {
         t.objectExpression([
           t.objectProperty(t.identifier("a"), t.numericLiteral(1)),
           t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2)),
+        ]),
+      );
+    });
+    it("object with __proto__ key", () => {
+      expect(
+        t.valueToNode({
+          ["__proto__"]: "__proto__",
+          // eslint-disable-next-line no-dupe-keys
+          __proto__: null,
+        }),
+      ).toEqual(
+        t.objectExpression([
+          t.objectProperty(
+            t.stringLiteral("__proto__"),
+            t.stringLiteral("__proto__"),
+            true,
+          ),
         ]),
       );
     });

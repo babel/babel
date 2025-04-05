@@ -2,7 +2,7 @@
   "name": "@babel/plugin-transform-regenerator",
   "author": "The Babel Team (https://babel.dev/team)",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "7.25.9",
+  "version": "7.27.0",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
@@ -11,8 +11,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "regenerator-transform": "^0.15.2"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "license": "MIT",
   "publishConfig": {
@@ -23,7 +22,19 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-check-duplicate-nodes": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-proposal-function-sent": "workspace:^",
+    "@babel/plugin-transform-arrow-functions": "workspace:^",
+    "@babel/plugin-transform-block-scoping": "workspace:^",
+    "@babel/plugin-transform-classes": "workspace:^",
+    "@babel/plugin-transform-for-of": "workspace:^",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "@babel/plugin-transform-parameters": "workspace:^",
+    "@babel/plugin-transform-runtime": "workspace:^",
+    "mocha": "^10.0.0",
+    "recast": "^0.23.3",
+    "uglify-js": "^3.14.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -32,7 +43,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "node": "^20.19.0 || >=22.12.0"
         }
       },
       {

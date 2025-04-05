@@ -126,17 +126,6 @@ traverse.removeProperties = function (
   return tree;
 };
 
-type HasDenylistedTypeState = {
-  has: boolean;
-  type: t.Node["type"];
-};
-function hasDenylistedType(path: NodePath, state: HasDenylistedTypeState) {
-  if (path.node.type === state.type) {
-    state.has = true;
-    path.stop();
-  }
-}
-
 traverse.hasType = function (
   tree: t.Node,
   type: t.Node["type"],
@@ -148,23 +137,14 @@ traverse.hasType = function (
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  const state: HasDenylistedTypeState = {
-    has: false,
-    type: type,
-  };
-
-  traverse(
-    tree,
-    {
-      noScope: true,
-      denylist: denylistTypes,
-      enter: hasDenylistedType,
-    },
-    null,
-    state,
-  );
-
-  return state.has;
+  return traverseFast(tree, function (node) {
+    if (denylistTypes?.includes(node.type)) {
+      return traverseFast.skip;
+    }
+    if (node.type === type) {
+      return traverseFast.stop;
+    }
+  });
 };
 
 traverse.cache = cache;

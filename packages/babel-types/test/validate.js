@@ -51,7 +51,41 @@ describe("validate", () => {
     itBabel8("destructuring, no initializer, in block", () => {
       expect(() => {
         t.blockStatement([t.cloneNode(ast)]);
-      }).toThrow();
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"Property id of VariableDeclarator expected node to be of a type [\\"Identifier\\",\\"Placeholder\\"] but instead got \\"ObjectPattern\\""`,
+      );
+    });
+
+    itBabel8("const without initializer should pass", () => {
+      expect(() => {
+        const moduleDeclaration = t.tsModuleDeclaration(
+          t.identifier("M"),
+          t.tsModuleBlock([
+            t.blockStatement([
+              t.variableDeclaration("const", [
+                t.variableDeclarator(t.identifier("x")),
+              ]),
+            ]),
+          ]),
+        );
+        moduleDeclaration.declare = true;
+      }).not.toThrow();
+    });
+
+    itBabel8("using without initializer should pass", () => {
+      expect(() => {
+        const moduleDeclaration = t.tsModuleDeclaration(
+          t.identifier("M"),
+          t.tsModuleBlock([
+            t.blockStatement([
+              t.variableDeclaration("using", [
+                t.variableDeclarator(t.identifier("x")),
+              ]),
+            ]),
+          ]),
+        );
+        moduleDeclaration.declare = true;
+      }).not.toThrow();
     });
   });
 });

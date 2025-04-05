@@ -16,6 +16,11 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.17 (2025-03-11)
+
+#### :boom: Breaking Change
+* `babel-parser`, `babel-types`
+  * [#17139](https://github.com/babel/babel/pull/17139) [Babel 8] Parse TSHeritageBase.expression as an expression ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.0-alpha.16 (2025-02-14)
 
 #### :boom: Breaking Change

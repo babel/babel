@@ -5,7 +5,7 @@ import inherits from "./inherits.ts";
 
 // Define interfaces for clarity and type safety
 interface GroupMap {
-  [key: string]: string | [number, number];
+  [key: string]: number | [number, number];
 }
 
 declare class BabelRegExp extends RegExp {
@@ -72,9 +72,18 @@ export default function _wrapRegExp(this: any): RegExp {
       ).call(
         this,
         str,
-        substitution.replace(/\$<([^>]+)>/g, function (_, name) {
-          var group = groups[name];
-          return "$" + (Array.isArray(group) ? group.join("$") : group);
+        substitution.replace(/\$<([^>]+)(>|$)/g, function (match, name, end) {
+          if (end === "") {
+            // return unterminated group name as-is
+            return match;
+          } else {
+            var group = groups[name];
+            return Array.isArray(group)
+              ? "$" + group.join("$")
+              : typeof group === "number"
+                ? "$" + group
+                : "";
+          }
         }),
       );
     } else if (typeof substitution === "function") {
@@ -116,13 +125,10 @@ export default function _wrapRegExp(this: any): RegExp {
       if (typeof i === "number") groups[name] = result[i];
       else {
         var k = 0;
-        while (
-          result[(i as [number, number])[k]] === undefined &&
-          k + 1 < i.length
-        ) {
+        while (result[i[k]] === undefined && k + 1 < i.length) {
           k++;
         }
-        groups[name] = result[(i as [number, number])[k]];
+        groups[name] = result[i[k]];
       }
       return groups;
     }, Object.create(null));

@@ -1,5 +1,5 @@
 import * as t from "../lib/index.js";
-import * as vm from "vm";
+import * as vm from "node:vm";
 import { itBabel7 } from "$repo-utils";
 
 describe("regressions", () => {

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.26.9",
+  "version": "7.27.0",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -43,7 +43,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "node": "^20.19.0 || >=22.12.0"
         }
       },
       {

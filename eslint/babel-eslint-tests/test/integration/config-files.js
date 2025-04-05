@@ -1,5 +1,5 @@
 import { ESLint } from "eslint";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 describe("Babel config files", () => {
   it("works with babel.config.mjs - ESLint " + ESLint.version, async () => {

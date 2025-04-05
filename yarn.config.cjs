@@ -97,7 +97,7 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
       if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
         workspace.set(
           "conditions.BABEL_8_BREAKING.0.engines.node",
-          "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "^20.19.0 || >=22.12.0"
         );
       }
 
@@ -337,6 +337,7 @@ function enforceExports({ Yarn }) {
         "@babel/plugin-transform-react-jsx", // TODO: Remove in Babel 8
         "@babel/standalone",
         "@babel/types", // @babel/types has types exports
+        "@babel/register", // index.cjs
       ].includes(packageName) ||
       packageName.startsWith("@babel/eslint-") ||
       packageName.startsWith("@babel/runtime")

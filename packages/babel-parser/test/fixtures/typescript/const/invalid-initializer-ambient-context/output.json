@@ -35,6 +35,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":28,"end":59,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":40,"index":59}},
@@ -83,6 +84,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":69,"end":101,"loc":{"start":{"line":3,"column":9,"index":69},"end":{"line":3,"column":41,"index":101}},
@@ -129,6 +131,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":111,"end":129,"loc":{"start":{"line":4,"column":9,"index":111},"end":{"line":4,"column":27,"index":129}},
@@ -161,6 +164,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":139,"end":167,"loc":{"start":{"line":5,"column":9,"index":139},"end":{"line":5,"column":37,"index":167}},
@@ -189,6 +193,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":177,"end":195,"loc":{"start":{"line":6,"column":9,"index":177},"end":{"line":6,"column":27,"index":195}},
@@ -216,6 +221,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":205,"end":245,"loc":{"start":{"line":7,"column":9,"index":205},"end":{"line":7,"column":49,"index":245}},
@@ -244,6 +250,7 @@
               "exportKind": "value",
               "specifiers": [],
               "source": null,
+              "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
                 "start":255,"end":282,"loc":{"start":{"line":8,"column":9,"index":255},"end":{"line":8,"column":36,"index":282}},

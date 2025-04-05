@@ -55,7 +55,7 @@ import {
   newAsyncArrowScope,
   newExpressionScope,
 } from "../util/expression-scope.ts";
-import { Errors, type ParseError } from "../parse-error.ts";
+import { Errors } from "../parse-error.ts";
 import {
   UnparenthesizedPipeBodyDescriptions,
   type UnparenthesizedPipeBodyTypes,
@@ -108,18 +108,16 @@ export default abstract class ExpressionParser extends LValParser {
   checkProto(
     prop: N.ObjectMember | N.SpreadElement,
     isRecord: boolean | undefined | null,
-    protoRef: {
-      used: boolean;
-    },
+    sawProto: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-  ): void {
+  ): boolean {
     if (
       prop.type === "SpreadElement" ||
       this.isObjectMethod(prop) ||
       prop.computed ||
       prop.shorthand
     ) {
-      return;
+      return sawProto;
     }
 
     const key = prop.key as
@@ -133,9 +131,9 @@ export default abstract class ExpressionParser extends LValParser {
     if (name === "__proto__") {
       if (isRecord) {
         this.raise(Errors.RecordNoProto, key);
-        return;
+        return true;
       }
-      if (protoRef.used) {
+      if (sawProto) {
         if (refExpressionErrors) {
           // Store the first redefinition's position, otherwise ignore because
           // we are parsing ambiguous pattern
@@ -147,8 +145,10 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      protoRef.used = true;
+      return true;
     }
+
+    return sawProto;
   }
 
   shouldExitDescending(
@@ -255,12 +255,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // This method is only used by
   // the typescript and flow plugins.
-  setOptionalParametersError(
-    refExpressionErrors: ExpressionErrors,
-    resultError?: ParseError<any>,
-  ) {
-    refExpressionErrors.optionalParametersLoc =
-      resultError?.loc ?? this.state.startLoc;
+  setOptionalParametersError(refExpressionErrors: ExpressionErrors) {
+    refExpressionErrors.optionalParametersLoc = this.state.startLoc;
   }
 
   // Parse an assignment expression. This includes applications of
@@ -272,9 +268,11 @@ export default abstract class ExpressionParser extends LValParser {
     afterLeftParse?: Function,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    if (this.isContextual(tt._yield)) {
+    const isYield = this.isContextual(tt._yield);
+    if (isYield) {
       if (this.prodParam.hasYield) {
-        let left = this.parseYield();
+        this.next();
+        let left = this.parseYield(startLoc);
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startLoc);
         }
@@ -339,6 +337,17 @@ export default abstract class ExpressionParser extends LValParser {
       return node;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
+    }
+
+    if (isYield) {
+      const { type } = this.state;
+      const startsExpr = this.hasPlugin("v8intrinsic")
+        ? tokenCanStartExpression(type)
+        : tokenCanStartExpression(type) && !this.match(tt.modulo);
+      if (startsExpr && !this.isAmbiguousPrefixOrIdentifier()) {
+        this.raiseOverwrite(Errors.YieldNotInGeneratorFunction, startLoc);
+        return this.parseYield(startLoc);
+      }
     }
 
     return left;
@@ -664,7 +673,7 @@ export default abstract class ExpressionParser extends LValParser {
       const startsExpr = this.hasPlugin("v8intrinsic")
         ? tokenCanStartExpression(type)
         : tokenCanStartExpression(type) && !this.match(tt.modulo);
-      if (startsExpr && !this.isAmbiguousAwait()) {
+      if (startsExpr && !this.isAmbiguousPrefixOrIdentifier()) {
         this.raiseOverwrite(Errors.AwaitNotInAsyncContext, startLoc);
         return this.parseAwait(startLoc);
       }
@@ -2019,7 +2028,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
-    const propHash: any = Object.create(null);
+    let sawProto = false;
     let first = true;
     const node = this.startNode<
       N.ObjectExpression | N.ObjectPattern | N.RecordExpression
@@ -2044,7 +2053,12 @@ export default abstract class ExpressionParser extends LValParser {
         prop = this.parseBindingProperty();
       } else {
         prop = this.parsePropertyDefinition(refExpressionErrors);
-        this.checkProto(prop, isRecord, propHash, refExpressionErrors);
+        sawProto = this.checkProto(
+          prop,
+          isRecord,
+          sawProto,
+          refExpressionErrors,
+        );
       }
 
       if (
@@ -2857,7 +2871,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      // @ts-expect-error todo(flow->ts)
       node,
     );
 
@@ -2869,7 +2882,7 @@ export default abstract class ExpressionParser extends LValParser {
       !this.scope.inFunction &&
       !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
     ) {
-      if (this.isAmbiguousAwait()) {
+      if (this.isAmbiguousPrefixOrIdentifier()) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
@@ -2883,7 +2896,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, "AwaitExpression");
   }
 
-  isAmbiguousAwait(): boolean {
+  isAmbiguousPrefixOrIdentifier(): boolean {
     if (this.hasPrecedingLineBreak()) return true;
     const { type } = this.state;
     return (
@@ -2906,16 +2919,14 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Parses yield expression inside generator.
 
-  parseYield(this: Parser): N.YieldExpression {
-    const node = this.startNode<N.YieldExpression>();
+  parseYield(this: Parser, startLoc: Position): N.YieldExpression {
+    const node = this.startNodeAt<N.YieldExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      // @ts-expect-error todo(flow->ts)
       node,
     );
 
-    this.next();
     let delegating = false;
     let argument: N.Expression | null = null;
     if (!this.hasPrecedingLineBreak()) {

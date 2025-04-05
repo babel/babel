@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin-development-internal",
-  "version": "7.25.9",
+  "version": "7.26.10",
   "description": "The Babel Team's ESLint custom rules plugin. Since it's internal, it might not respect semver.",
   "main": "./lib/index.cjs",
   "keywords": [
@@ -20,7 +20,7 @@
     "eslint": ">=7.5.0"
   },
   "devDependencies": {
-    "eslint": "^9.7.0"
+    "eslint": "^9.21.0"
   },
   "type": "module"
 }

@@ -16,6 +16,7 @@
         "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "FunctionDeclaration",
           "start":7,"end":25,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":25,"index":25}},
@@ -44,6 +45,7 @@
         "start":27,"end":96,"loc":{"start":{"line":2,"column":0,"index":27},"end":{"line":2,"column":69,"index":96}},
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":34,"end":96,"loc":{"start":{"line":2,"column":7,"index":34},"end":{"line":2,"column":69,"index":96}},

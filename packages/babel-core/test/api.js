@@ -1,6 +1,6 @@
 import * as babel from "../lib/index.js";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
-import path from "path";
+import path from "node:path";
 import generator from "@babel/generator";
 
 import _Plugin from "../lib/config/plugin.js";

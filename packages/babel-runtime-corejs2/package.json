@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.26.9",
+  "version": "7.27.0",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -756,6 +756,15 @@
       "./helpers/toSetter.js"
     ],
     "./helpers/esm/toSetter": "./helpers/esm/toSetter.js",
+    "./helpers/tsRewriteRelativeImportExtensions": [
+      {
+        "node": "./helpers/tsRewriteRelativeImportExtensions.js",
+        "import": "./helpers/esm/tsRewriteRelativeImportExtensions.js",
+        "default": "./helpers/tsRewriteRelativeImportExtensions.js"
+      },
+      "./helpers/tsRewriteRelativeImportExtensions.js"
+    ],
+    "./helpers/esm/tsRewriteRelativeImportExtensions": "./helpers/esm/tsRewriteRelativeImportExtensions.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",

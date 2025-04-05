@@ -4,7 +4,7 @@
   "program": {
     "type": "Program",
     "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":25,"index":78}},
-    "sourceType": "script",
+    "sourceType": "module",
     "interpreter": null,
     "body": [
       {
@@ -60,7 +60,8 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       },
       {
         "type": "ExportAllDeclaration",

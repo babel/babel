@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.26.9",
+  "version": "7.27.0",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
@@ -152,7 +152,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "node": "^20.19.0 || >=22.12.0"
         }
       },
       {

@@ -9,6 +9,13 @@
       },
       "type": "object"
     },
+    "EstreePluginOptions": {
+      "properties": {
+        "classFeatures": {
+          "type": "boolean"
+        }
+      }
+    },
     "FlowPluginOptions": {
       "properties": {
         "all": {
@@ -93,6 +100,19 @@
               },
               {
                 "$ref": "#/definitions/DecoratorsPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
+                "enum": ["estree"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/EstreePluginOptions"
               }
             ],
             "additionalItems": false,

@@ -1433,6 +1433,11 @@ export interface EstreePropertyDefinition extends EstreePropertyDefinitionBase {
   value: Expression;
 }
 
+export interface EstreeAccessorProperty extends EstreePropertyDefinitionBase {
+  type: "AccessorProperty";
+  value: Expression;
+}
+
 export interface EstreeChainExpression extends NodeBase {
   type: "ChainExpression";
   expression: Expression;
@@ -1797,7 +1802,7 @@ export interface TSInterfaceBody extends NodeBase {
 }
 
 export interface TSHeritageBase extends NodeBase {
-  expression: TsEntityName;
+  expression: Expression;
   typeArguments?: TsTypeParameterInstantiation;
 }
 

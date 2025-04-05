@@ -29,6 +29,7 @@ import {
 import type Parser from "./index.ts";
 
 import type ScopeHandler from "../util/scope.ts";
+import { OptionFlags } from "../options.ts";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -359,6 +360,9 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.inModule) {
       paramFlags |= ParamKind.PARAM_AWAIT;
     }
+    if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
+      paramFlags |= ParamKind.PARAM_YIELD;
+    }
     this.scope.enter(ScopeFlag.PROGRAM);
     this.prodParam.enter(paramFlags);
   }
@@ -374,15 +378,15 @@ export default abstract class UtilParser extends Tokenizer {
 /**
  * The ExpressionErrors is a context struct used to track ambiguous patterns
  * When we are sure the parsed pattern is a RHS, which means it is not a pattern,
- * we will throw on this position on invalid assign syntax, otherwise it will be reset to -1
+ * we will throw on this position on invalid assign syntax, otherwise it will be reset to null
  *
  * Types of ExpressionErrors:
  *
  * - **shorthandAssignLoc**: track initializer `=` position
  * - **doubleProtoLoc**: track the duplicate `__proto__` key position
- * - **privateKey**: track private key `#p` position
+ * - **privateKeyLoc**: track private key `#p` position
  * - **optionalParametersLoc**: track the optional parameter (`?`).
- * It's only used by typescript and flow plugins
+ *   It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
   shorthandAssignLoc: Position | undefined | null = null;

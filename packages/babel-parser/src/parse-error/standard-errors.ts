@@ -38,7 +38,6 @@ export default {
     "'await using' is only allowed within async functions and at the top levels of modules.",
   AwaitNotInAsyncContext:
     "'await' is only allowed within async functions and at the top levels of modules.",
-  AwaitNotInAsyncFunction: "'await' is only allowed within async functions.",
   BadGetterArity: "A 'get' accessor must not have any formal parameters.",
   BadSetterArity: "A 'set' accessor must have exactly one formal parameter.",
   BadSetterRestParameter:
@@ -316,6 +315,8 @@ export default {
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator.",
   YieldInParameter: "Yield expression is not allowed in formal parameters.",
+  YieldNotInGeneratorFunction:
+    "'yield' is only allowed within generator functions.",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0.",
 } satisfies ParseErrorTemplates;

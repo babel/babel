@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.26.0",
+  "version": "7.27.0",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
     "BABEL_8_BREAKING": [
       {
         "engines": {
-          "node": "^18.20.0 || ^20.17.0 || >=22.8.0"
+          "node": "^20.19.0 || >=22.12.0"
         }
       },
       {
