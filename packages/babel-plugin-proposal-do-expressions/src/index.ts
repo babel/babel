@@ -275,9 +275,12 @@ export default declare(api => {
       return [body.node];
     } else if (isTopLevelSideEffectFree(path)) {
       return flattenByTraverse(path, skipTrailing);
-    } else {
-      const hasDoExpression = traverse.hasType(path.node, "DoExpression");
-      if (hasDoExpression && path.isAssignmentExpression()) {
+    }
+
+    const hasDoExpression = traverse.hasType(path.node, "DoExpression");
+
+    if (hasDoExpression) {
+      if (path.isAssignmentExpression()) {
         const left = path.get("left");
         const right = path.get("right");
         if (traverse.hasType(left.node, "DoExpression")) {
@@ -293,69 +296,87 @@ export default declare(api => {
             ...flattenLVal(left, right.node, null),
           ];
         }
+      } else if (path.isLogicalExpression()) {
+        const operator = path.node.operator;
+        const left = path.get("left");
+        const right = path.get("right");
+        const statements = [
+          ...flattenExpression(left, true),
+          t.ifStatement(
+            operator === "&&"
+              ? t.cloneNode(left.node)
+              : operator === "||"
+                ? t.unaryExpression("!", t.cloneNode(left.node))
+                : t.binaryExpression(
+                    "==",
+                    t.cloneNode(left.node),
+                    t.nullLiteral(),
+                  ),
+            t.blockStatement(flattenExpression(right, true)),
+          ),
+        ];
+        path.replaceWith(
+          t.logicalExpression(path.node.operator, left.node, right.node),
+        );
+        return statements;
       }
+    }
 
-      const statements: t.Statement[] = [];
+    const statements: t.Statement[] = [];
 
-      if (hasDoExpression) {
-        let thisArgument: NodePath<t.Expression | t.Super> | null = null;
-        if (path.isCallExpression()) {
-          let callee = path.get("callee");
-          while (true) {
-            if (callee.isParenthesizedExpression()) {
-              callee = callee.get("expression");
-            } else if (
-              callee.isMemberExpression() ||
-              callee.isOptionalMemberExpression()
-            ) {
-              thisArgument = callee.get("object");
-              break;
-            } else {
-              break;
-            }
+    if (hasDoExpression) {
+      let thisArgument: NodePath<t.Expression | t.Super> | null = null;
+      if (path.isCallExpression()) {
+        let callee = path.get("callee");
+        while (true) {
+          if (callee.isParenthesizedExpression()) {
+            callee = callee.get("expression");
+          } else if (
+            callee.isMemberExpression() ||
+            callee.isOptionalMemberExpression()
+          ) {
+            thisArgument = callee.get("object");
+            break;
+          } else {
+            break;
           }
         }
-
-        statements.push(...flattenByTraverse(path, skipTrailing));
-
-        if (thisArgument) {
-          // Use `Reflect.apply` to ensure this argument is correct
-          path.assertCallExpression();
-          const { callee, arguments: args } = path.node as t.CallExpression;
-          path.replaceWith(
-            t.callExpression(
-              t.memberExpression(
-                t.identifier("Reflect"),
-                t.identifier("apply"),
-              ),
-              [
-                callee as t.Expression,
-                thisArgument.isSuper()
-                  ? t.thisExpression()
-                  : t.cloneNode(thisArgument.node),
-                t.arrayExpression(
-                  args as Array<t.Expression | t.SpreadElement>,
-                ),
-              ],
-            ),
-          );
-        }
       }
 
-      if (needResult) {
-        const uid = path.scope.generateDeclaredUidIdentifier("do");
-        statements.push(
-          t.expressionStatement(
-            t.assignmentExpression("=", t.cloneNode(uid), path.node),
+      statements.push(...flattenByTraverse(path, skipTrailing));
+
+      if (thisArgument) {
+        // Use `Reflect.apply` to ensure this argument is correct
+        path.assertCallExpression();
+        const { callee, arguments: args } = path.node as t.CallExpression;
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(t.identifier("Reflect"), t.identifier("apply")),
+            [
+              callee as t.Expression,
+              thisArgument.isSuper()
+                ? t.thisExpression()
+                : t.cloneNode(thisArgument.node),
+              t.arrayExpression(args as Array<t.Expression | t.SpreadElement>),
+            ],
           ),
         );
-        path.replaceWith(uid);
-      } else {
-        statements.push(t.expressionStatement(path.node));
       }
-
-      return statements;
     }
+
+    if (needResult) {
+      const uid = path.scope.generateDeclaredUidIdentifier("do");
+      statements.push(
+        t.expressionStatement(
+          t.assignmentExpression("=", t.cloneNode(uid), path.node),
+        ),
+      );
+      path.replaceWith(uid);
+    } else {
+      statements.push(t.expressionStatement(path.node));
+    }
+
+    return statements;
   }
 
   function flattenLVal(
@@ -512,7 +533,6 @@ function isTopLevelSideEffectFree(path: NodePath<t.Node>): boolean {
   return (
     path.isPure() ||
     path.isBinaryExpression() ||
-    path.isLogicalExpression() ||
     path.isConditionalExpression() ||
     path.isObjectExpression() ||
     path.isArrayExpression() ||
