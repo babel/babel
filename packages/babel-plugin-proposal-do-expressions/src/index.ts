@@ -123,10 +123,6 @@ export default declare(api => {
         //                  ...
         //                  f3();
         //                }
-        const init = path.get("init");
-        if (traverse.hasType(init.node, "DoExpression")) {
-          throw new Error("todo");
-        }
         const body: t.Statement[] = [];
         const test = path.get("test");
         if (traverse.hasType(test.node, "DoExpression")) {
@@ -137,15 +133,70 @@ export default declare(api => {
               t.breakStatement(),
             ),
           );
-          test.replaceWith(null);
+          test.remove();
         }
         body.push(path.node.body);
         const update = path.get("update");
         if (traverse.hasType(update.node, "DoExpression")) {
           body.push(...flattenExpression(update, true, false));
-          update.replaceWith(null);
+          update.remove();
         }
         path.set("body", t.blockStatement(body));
+
+        // Handle do expression within `init`
+        const init = path.get("init");
+        if (traverse.hasType(init.node, "DoExpression")) {
+          const initNode = init.isExpression()
+            ? t.expressionStatement(init.node)
+            : init.node;
+          init.remove();
+          const [newPath] = path.replaceWith(
+            t.blockStatement([initNode, path.node]),
+          );
+          flattenStatement(newPath.get("body")[0]);
+        }
+        break;
+      }
+      case "ForInStatement":
+      case "ForOfStatement": {
+        // Example:       for (const i in do { f1(); }) { ... }
+        // Transform to:  var temp1 = f1();
+        //                for (var temp2 in temp1) {
+        //                  const i = temp2;
+        //                  ...
+        //                }
+
+        // Handle left side
+        const left = path.get("left");
+        if (traverse.hasType(left.node, "DoExpression")) {
+          const body = path.get("body");
+          const uid = body.scope.generateDeclaredUidIdentifier("do");
+          if (left.isVariableDeclaration()) {
+            const declarator = left.get("declarations")[0];
+            declarator.get("init").replaceWith(t.cloneNode(uid));
+            const [newBody] = body.replaceWith(
+              t.blockStatement([left.node, body.node]),
+            );
+            flattenStatement(newBody.get("body")[0]);
+          } else {
+            body.replaceWith(
+              t.blockStatement([
+                ...flattenLVal(left, t.cloneNode(uid), null),
+                body.node,
+              ]),
+            );
+          }
+          left.replaceWith(uid);
+        }
+
+        // Handle right side
+        const right = path.get("right");
+        if (traverse.hasType(right.node, "DoExpression")) {
+          path.replaceWithMultiple([
+            ...flattenExpression(right, true),
+            path.node,
+          ]);
+        }
         break;
       }
       case "WhileStatement": {
