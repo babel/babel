@@ -203,7 +203,6 @@ export default declare(api => {
         // Example:      while (do { foo(); }) { ... }
         // Transform to: while (true) { var temp = foo(); if (!temp) break; ... }
         const test = path.get("test");
-        path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
           t.blockStatement([
@@ -215,13 +214,13 @@ export default declare(api => {
             path.node.body,
           ]),
         );
+        test.replaceWith(t.booleanLiteral(true));
         break;
       }
       case "DoWhileStatement": {
         // Example:      do { ... } while (do { foo(); })
         // Transform to: do { ...; var temp = foo(); if (!temp) break; } while (true)
         const test = path.get("test");
-        path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
           t.blockStatement([
@@ -233,6 +232,7 @@ export default declare(api => {
             ),
           ]),
         );
+        test.replaceWith(t.booleanLiteral(true));
         break;
       }
       case "ExpressionStatement":
