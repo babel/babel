@@ -96,8 +96,24 @@ export default declare(api => {
   }
 
   function flattenStatement(path: NodePath<t.Statement>) {
-    const effects: t.Statement[] = [];
     switch (path.type) {
+      case "VariableDeclaration": {
+        const statements: t.Statement[] = [];
+        for (const decl of path.get("declarations")) {
+          const init = decl.get("init");
+          const id = decl.get("id");
+          if (traverse.hasType(init.node, "DoExpression")) {
+            statements.push(...flattenExpression(init, true));
+          }
+          if (traverse.hasType(id.node, "DoExpression")) {
+            statements.push(...flattenLVal(id, init.node, path.node.kind));
+          } else {
+            statements.push(t.variableDeclaration(path.node.kind, [decl.node]));
+          }
+        }
+        path.replaceWithMultiple(statements);
+        break;
+      }
       case "ForStatement": {
         // Example:       for (var i = do { f1(); }; do { f2(); }; do { f3(); }) { ... }
         // Transform to:  var temp1 = f1();
@@ -111,11 +127,11 @@ export default declare(api => {
         if (traverse.hasType(init.node, "DoExpression")) {
           throw new Error("todo");
         }
-        effects.length = 0;
+        const body: t.Statement[] = [];
         const test = path.get("test");
         if (traverse.hasType(test.node, "DoExpression")) {
-          pushEffect(test, true);
-          effects.push(
+          body.push(
+            ...flattenExpression(test, true),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -123,24 +139,24 @@ export default declare(api => {
           );
           test.replaceWith(null);
         }
-        effects.push(path.node.body);
+        body.push(path.node.body);
         const update = path.get("update");
         if (traverse.hasType(update.node, "DoExpression")) {
-          pushEffect(update, true, false);
+          body.push(...flattenExpression(update, true, false));
+          update.replaceWith(null);
         }
-        path.set("body", t.blockStatement(effects));
+        path.set("body", t.blockStatement(body));
         break;
       }
       case "WhileStatement": {
         // Example:      while (do { foo(); }) { ... }
         // Transform to: while (true) { var temp = foo(); if (!temp) break; ... }
         const test = path.get("test");
-        pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
           t.blockStatement([
-            ...effects,
+            ...flattenExpression(test, true),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -154,13 +170,12 @@ export default declare(api => {
         // Example:      do { ... } while (do { foo(); })
         // Transform to: do { ...; var temp = foo(); if (!temp) break; } while (true)
         const test = path.get("test");
-        pushEffect(test, true);
         path.set("test", t.booleanLiteral(true));
         path.set(
           "body",
           t.blockStatement([
             path.node.body,
-            ...effects,
+            ...flattenExpression(test, true),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -170,34 +185,29 @@ export default declare(api => {
         break;
       }
       case "ExpressionStatement":
-        pushEffect(path.get("expression"), true, false);
-        path.replaceWithMultiple(effects);
+        path.replaceWithMultiple(
+          flattenExpression(path.get("expression"), true, false),
+        );
         break;
       default:
-        flattenNormal(path, true);
-        path.replaceWithMultiple([...effects, path.node]);
+        path.replaceWithMultiple([...flattenByTraverse(path, true), path.node]);
     }
+  }
 
-    function pushEffect(
-      path: NodePath<t.Expression>,
-      skipTrailing: boolean,
-      needResult = true,
-    ) {
-      const { node } = path;
-      if (node.type === "DoExpression") {
-        effects.push(node.body);
-        if (needResult) {
-          const completions = path
-            .get("body")
-            .getCompletionRecords(/* shouldPreserveBreak */ true)
-            .filter(completion => completion.isExpressionStatement());
-          if (completions.length === 0) {
-            path.replaceWith(path.scope.buildUndefinedNode());
-            return;
-          }
-          const uid = path
-            .get("body")
-            .scope.generateDeclaredUidIdentifier("do");
+  function flattenExpression(
+    path: NodePath<t.Expression>,
+    skipTrailing: boolean,
+    needResult = true,
+  ): t.Statement[] {
+    const { node } = path;
+    if (node.type === "DoExpression") {
+      const body = path.get("body");
+      if (needResult) {
+        const completions = body
+          .getCompletionRecords(/* shouldPreserveBreak */ true)
+          .filter(completion => completion.isExpressionStatement());
+        if (completions.length) {
+          const uid = body.scope.generateDeclaredUidIdentifier("do");
           for (const completion of completions) {
             completion.replaceWith(
               t.assignmentExpression(
@@ -208,60 +218,169 @@ export default declare(api => {
             );
           }
           path.replaceWith(uid);
-        }
-      } else {
-        if (isTopLevelSideEffectFree(node)) {
-          flattenNormal(path, skipTrailing);
         } else {
-          if (traverse.hasType(node, "DoExpression")) {
-            flattenNormal(path, skipTrailing);
-          }
-          if (needResult) {
-            const uid = path.scope.generateDeclaredUidIdentifier("do");
-            effects.push(
-              t.expressionStatement(
-                t.assignmentExpression("=", t.cloneNode(uid), node),
+          path.replaceWith(path.scope.buildUndefinedNode());
+        }
+      }
+      return [node.body];
+    } else {
+      if (isTopLevelSideEffectFree(node)) {
+        return flattenByTraverse(path, skipTrailing);
+      } else {
+        const statements = traverse.hasType(node, "DoExpression")
+          ? flattenByTraverse(path, skipTrailing)
+          : [];
+        if (needResult) {
+          const uid = path.scope.generateDeclaredUidIdentifier("do");
+          path.replaceWith(t.cloneNode(uid));
+          statements.push(
+            t.expressionStatement(t.assignmentExpression("=", uid, node)),
+          );
+        } else {
+          statements.push(t.expressionStatement(node));
+        }
+        return statements;
+      }
+    }
+  }
+
+  function flattenLVal(
+    path: NodePath<t.LVal>,
+    init: t.Expression | null | undefined,
+    declare: "var" | "let" | "const" | "using" | "await using" | null,
+  ): t.Statement[] {
+    switch (path.type) {
+      case "Identifier": {
+        if (declare) {
+          return [
+            t.variableDeclaration(declare, [
+              t.variableDeclarator(path.node, init),
+            ]),
+          ];
+        } else {
+          return [
+            t.expressionStatement(t.assignmentExpression("=", path.node, init)),
+          ];
+        }
+      }
+      case "MemberExpression": {
+        return [
+          ...flattenByTraverse(path, true),
+          t.expressionStatement(t.assignmentExpression("=", path.node, init)),
+        ];
+      }
+      case "AssignmentPattern": {
+        const left = path.get("left");
+        const right = path.get("right");
+        if (init) {
+          const uid = path.scope.generateDeclaredUidIdentifier("do");
+          return [
+            t.expressionStatement(
+              t.assignmentExpression("=", t.cloneNode(uid), init),
+            ),
+            t.ifStatement(
+              t.binaryExpression(
+                "===",
+                t.cloneNode(uid),
+                t.buildUndefinedNode(),
               ),
+              t.blockStatement([
+                ...flattenExpression(right, true),
+                t.expressionStatement(
+                  t.assignmentExpression("=", t.cloneNode(uid), right.node),
+                ),
+              ]),
+            ),
+            ...flattenLVal(left, uid, declare),
+          ];
+        } else {
+          return flattenLVal(path.get("left"), right.node, declare);
+        }
+      }
+      case "ArrayPattern": {
+        const elements: t.ArrayPattern["elements"] = [];
+        const statements: t.Statement[] = [];
+        for (const element of path.get("elements")) {
+          if (!element) {
+            elements.push(null);
+          }
+          const uid = path.scope.generateDeclaredUidIdentifier("do");
+          if (element.isRestElement()) {
+            elements.push(t.restElement(t.cloneNode(uid)));
+            statements.push(
+              ...flattenLVal(element.get("argument"), uid, declare),
             );
-            path.replaceWith(uid);
           } else {
-            effects.push(t.expressionStatement(node));
+            elements.push(t.cloneNode(uid));
+            statements.push(...flattenLVal(element, uid, declare));
           }
+        }
+        return [
+          t.expressionStatement(
+            t.assignmentExpression("=", t.arrayPattern(elements), init),
+          ),
+          ...statements,
+        ];
+      }
+      case "ObjectPattern": {
+        unsafeUseIIFE(path);
+        return [
+          t.expressionStatement(t.assignmentExpression("=", path.node, init)),
+        ];
+      }
+    }
+  }
+
+  function flattenByTraverse(
+    path: NodePath,
+    skipTrailing: boolean,
+  ): t.Statement[] {
+    // Collect immediate descendant expressions
+    const expressions: NodePath<t.Expression>[] = [];
+    path.traverse({
+      Statement(path) {
+        path.skip();
+      },
+      Expression(path) {
+        expressions.push(path);
+        path.skip();
+      },
+    });
+
+    // Skip flattening trailing expressions that are after all the DoExpressions
+    let lastDoExpression: NodePath<t.Expression>;
+    if (skipTrailing) {
+      while (expressions.length) {
+        const path = expressions.pop();
+        if (traverse.hasType(path.node, "DoExpression")) {
+          lastDoExpression = path;
+          break;
         }
       }
     }
 
-    function flattenNormal(path: NodePath, skipTrailing: boolean) {
-      // Collect immediate descendant expressions
-      const expressions: NodePath<t.Expression>[] = [];
-      path.traverse({
-        Statement(path) {
-          path.skip();
-        },
-        Expression(path) {
-          expressions.push(path);
-          path.skip();
-        },
-      });
-
-      // Skip flattening trailing expressions that are after all the DoExpressions
-      let lastDoExpression: NodePath<t.Expression>;
-      if (skipTrailing) {
-        while (expressions.length) {
-          const path = expressions.pop();
-          if (traverse.hasType(path.node, "DoExpression")) {
-            lastDoExpression = path;
-            break;
-          }
-        }
-      }
-
-      // Flatten the expressions
-      expressions.forEach(path => pushEffect(path, false));
-      if (lastDoExpression) {
-        pushEffect(lastDoExpression, true);
-      }
+    // Flatten the expressions
+    const statements = expressions.map(path => flattenExpression(path, false));
+    if (lastDoExpression) {
+      statements.push(flattenExpression(lastDoExpression, true));
     }
+    return statements.flat();
+  }
+
+  // Wrap all do expressions in an IIFE.
+  // This doesn't work with control flow statements like break/continue/return.
+  // Only use this when the code is too hard to transform.
+  function unsafeUseIIFE(path: NodePath<t.Node>) {
+    path.traverse({
+      DoExpression(path) {
+        const body = path.node.body.body;
+        if (body.length) {
+          path.replaceExpressionWithStatements(body);
+        } else {
+          path.replaceWith(path.scope.buildUndefinedNode());
+        }
+      },
+    });
   }
 
   function isTopLevelSideEffectFree(node: t.Node): boolean {
