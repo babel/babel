@@ -32,5 +32,5 @@ function f2(a) {
     if (effects.push(3), false) return 2;
     _do6 = 'arg';
   }
-  _do5(_do6);
+  Reflect.apply(_do5, _do3, [_do6]);
 }

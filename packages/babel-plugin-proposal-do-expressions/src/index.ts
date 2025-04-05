@@ -250,8 +250,7 @@ export default declare(api => {
     skipTrailing: boolean,
     needResult = true,
   ): t.Statement[] {
-    const { node } = path;
-    if (node.type === "DoExpression") {
+    if (path.isDoExpression()) {
       const body = path.get("body");
       if (needResult) {
         const completions = body
@@ -273,25 +272,68 @@ export default declare(api => {
           path.replaceWith(path.scope.buildUndefinedNode());
         }
       }
-      return [node.body];
+      return [body.node];
+    } else if (isTopLevelSideEffectFree(path)) {
+      return flattenByTraverse(path, skipTrailing);
     } else {
-      if (isTopLevelSideEffectFree(node)) {
-        return flattenByTraverse(path, skipTrailing);
-      } else {
-        const statements = traverse.hasType(node, "DoExpression")
-          ? flattenByTraverse(path, skipTrailing)
-          : [];
-        if (needResult) {
-          const uid = path.scope.generateDeclaredUidIdentifier("do");
-          path.replaceWith(t.cloneNode(uid));
-          statements.push(
-            t.expressionStatement(t.assignmentExpression("=", uid, node)),
-          );
-        } else {
-          statements.push(t.expressionStatement(node));
+      const statements: t.Statement[] = [];
+
+      if (traverse.hasType(path.node, "DoExpression")) {
+        let thisArgument: NodePath<t.Expression> | null = null;
+        if (path.isCallExpression()) {
+          let callee = path.get("callee");
+          while (true) {
+            if (callee.isParenthesizedExpression()) {
+              callee = callee.get("expression");
+            } else if (
+              callee.isMemberExpression() ||
+              callee.isOptionalMemberExpression()
+            ) {
+              thisArgument = callee.get("object");
+              break;
+            } else {
+              break;
+            }
+          }
         }
-        return statements;
+
+        statements.push(...flattenByTraverse(path, skipTrailing));
+
+        if (thisArgument) {
+          // Use `Reflect.apply` to ensure this argument is correct
+          path.assertCallExpression();
+          const { callee, arguments: args } = path.node as t.CallExpression;
+          path.replaceWith(
+            t.callExpression(
+              t.memberExpression(
+                t.identifier("Reflect"),
+                t.identifier("apply"),
+              ),
+              [
+                callee as t.Expression,
+                t.cloneNode(thisArgument.node),
+                t.arrayExpression(
+                  args as Array<t.Expression | t.SpreadElement>,
+                ),
+              ],
+            ),
+          );
+        }
       }
+
+      if (needResult) {
+        const uid = path.scope.generateDeclaredUidIdentifier("do");
+        statements.push(
+          t.expressionStatement(
+            t.assignmentExpression("=", t.cloneNode(uid), path.node),
+          ),
+        );
+        path.replaceWith(uid);
+      } else {
+        statements.push(t.expressionStatement(path.node));
+      }
+
+      return statements;
     }
   }
 
@@ -411,11 +453,14 @@ export default declare(api => {
     }
 
     // Flatten the expressions
-    const statements = expressions.map(path => flattenExpression(path, false));
-    if (lastDoExpression) {
-      statements.push(flattenExpression(lastDoExpression, true));
+    const statements: t.Statement[] = [];
+    for (const path of expressions) {
+      statements.push(...flattenExpression(path, false));
     }
-    return statements.flat();
+    if (lastDoExpression) {
+      statements.push(...flattenExpression(lastDoExpression, true));
+    }
+    return statements;
   }
 
   // Wrap all do expressions in an IIFE.
@@ -434,25 +479,24 @@ export default declare(api => {
     });
   }
 
-  function isTopLevelSideEffectFree(node: t.Node): boolean {
+  function isTopLevelSideEffectFree(path: NodePath<t.Node>): boolean {
     return (
-      t.isLiteral(node) ||
-      t.isIdentifier(node) ||
-      t.isBinaryExpression(node) ||
-      t.isLogicalExpression(node) ||
-      t.isConditionalExpression(node) ||
-      t.isObjectExpression(node) ||
-      t.isArrayExpression(node) ||
-      t.isClassExpression(node) ||
-      t.isFunctionExpression(node) ||
-      t.isArrowFunctionExpression(node) ||
-      t.isParenthesizedExpression(node) ||
-      t.isRecordExpression(node) ||
-      t.isTupleExpression(node) ||
-      t.isSequenceExpression(node) ||
-      (t.isUnaryExpression(node) &&
-        node.operator !== "throw" &&
-        node.operator !== "delete")
+      path.isPure() ||
+      path.isBinaryExpression() ||
+      path.isLogicalExpression() ||
+      path.isConditionalExpression() ||
+      path.isObjectExpression() ||
+      path.isArrayExpression() ||
+      path.isClassExpression() ||
+      path.isFunctionExpression() ||
+      path.isArrowFunctionExpression() ||
+      path.isParenthesizedExpression() ||
+      path.isRecordExpression() ||
+      path.isTupleExpression() ||
+      path.isSequenceExpression() ||
+      (path.isUnaryExpression() &&
+        path.node.operator !== "throw" &&
+        path.node.operator !== "delete")
     );
   }
 
