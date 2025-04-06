@@ -249,6 +249,7 @@ export default declare(api => {
     path: NodePath<t.Expression>,
     skipTrailing: boolean,
     needResult = true,
+    thisArgument?: NodePath<t.Expression | t.Super>,
   ): t.Statement[] {
     if (path.isDoExpression()) {
       const body = path.get("body");
@@ -360,36 +361,39 @@ export default declare(api => {
             ]),
           ),
         ];
+      } else if (path.isOptionalCallExpression()) {
+        const thisArgument = findThisArgument(path);
+        const callee = path.get("callee");
+        const calleeStatements = flattenExpression(callee, true);
+        const [newPath] = path.replaceWith(
+          t.callExpression(t.cloneNode(callee.node), path.node.arguments),
+        );
+        const callStatements = flattenExpression(
+          newPath,
+          true,
+          true,
+          thisArgument,
+        );
+        return [
+          ...calleeStatements,
+          t.ifStatement(
+            t.binaryExpression("!=", callee.node, t.nullLiteral()),
+            t.blockStatement(callStatements),
+          ),
+        ];
       }
     }
 
     const statements: t.Statement[] = [];
 
     if (hasDoExpression) {
-      let thisArgument: NodePath<t.Expression | t.Super> | null = null;
-      if (path.isCallExpression()) {
-        let callee = path.get("callee");
-        while (true) {
-          if (callee.isParenthesizedExpression()) {
-            callee = callee.get("expression");
-          } else if (
-            callee.isMemberExpression() ||
-            callee.isOptionalMemberExpression()
-          ) {
-            thisArgument = callee.get("object");
-            break;
-          } else {
-            break;
-          }
-        }
-      }
+      thisArgument ??= findThisArgument(path);
 
       statements.push(...flattenByTraverse(path, skipTrailing));
 
       if (thisArgument) {
-        // Use `Reflect.apply` to ensure this argument is correct
-        path.assertCallExpression();
         const { callee, arguments: args } = path.node as t.CallExpression;
+        // Use `Reflect.apply` to ensure this argument is correct
         path.replaceWith(
           t.callExpression(
             t.memberExpression(t.identifier("Reflect"), t.identifier("apply")),
@@ -596,4 +600,24 @@ function isLValSideEffectFree(path: NodePath<t.Node>): boolean {
       path.get("right").isPureish()) ||
     (path.isRestElement() && isLValSideEffectFree(path.get("argument")))
   );
+}
+
+function findThisArgument(
+  path: NodePath<t.Node>,
+): NodePath<t.Expression | t.Super> | undefined {
+  if (path.isCallExpression() || path.isOptionalCallExpression()) {
+    let callee = path.get("callee");
+    while (true) {
+      if (callee.isParenthesizedExpression()) {
+        callee = callee.get("expression");
+      } else if (
+        callee.isMemberExpression() ||
+        callee.isOptionalMemberExpression()
+      ) {
+        return callee.get("object");
+      } else {
+        return;
+      }
+    }
+  }
 }
