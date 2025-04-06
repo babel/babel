@@ -319,6 +319,22 @@ export default declare(api => {
           t.logicalExpression(path.node.operator, left.node, right.node),
         );
         return statements;
+      } else if (path.isConditionalExpression()) {
+        const test = path.get("test");
+        const alternate = path.get("alternate");
+        const consequent = path.get("consequent");
+        const statements = [
+          ...flattenExpression(test, true),
+          t.ifStatement(
+            t.cloneNode(test.node),
+            t.blockStatement(flattenExpression(consequent, true)),
+            t.blockStatement(flattenExpression(alternate, true)),
+          ),
+        ];
+        path.replaceWith(
+          t.conditionalExpression(test.node, consequent.node, alternate.node),
+        );
+        return statements;
       }
     }
 
@@ -533,7 +549,6 @@ function isTopLevelSideEffectFree(path: NodePath<t.Node>): boolean {
   return (
     path.isPure() ||
     path.isBinaryExpression() ||
-    path.isConditionalExpression() ||
     path.isObjectExpression() ||
     path.isArrayExpression() ||
     path.isClassExpression() ||
