@@ -24,10 +24,7 @@ export default declare(api => {
 
   function transformDoExpression(doExprPath: NodePath<t.DoExpression>) {
     let path: NodePath = doExprPath;
-    do {
-      if (!path.parentPath) {
-        throw new Error("DoExpression must be in a statement");
-      }
+    while (path) {
       if (path.isFunction()) {
         let body = path.get("body");
         if (path.isArrowFunctionExpression()) {
@@ -84,15 +81,16 @@ export default declare(api => {
           );
           flattenStatement(blockBody.get("body")[0]);
         }
-        break;
+        return;
       }
       if (path.isStatement()) {
         // Flatten the closest parent statement
         flattenStatement(path);
-        break;
+        return;
       }
       path = path.parentPath;
-    } while (path);
+    }
+    throw new Error("DoExpression must be in a statement");
   }
 
   function flattenStatement(path: NodePath<t.Statement>) {
