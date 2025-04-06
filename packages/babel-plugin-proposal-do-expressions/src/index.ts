@@ -396,7 +396,9 @@ export default declare(api => {
     const statements = [];
     if (callee.isMemberExpression()) {
       thisArgument = callee.get("object");
-      statements.push(...flattenExpression(thisArgument));
+      if (!thisArgument.isSuper()) {
+        statements.push(...flattenExpression(thisArgument));
+      }
     }
     statements.push(...flattenExpression(callee as NodePath<t.Expression>));
 
