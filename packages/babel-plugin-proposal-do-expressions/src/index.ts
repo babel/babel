@@ -101,7 +101,7 @@ export default declare(api => {
           const init = decl.get("init");
           const id = decl.get("id");
           if (traverse.hasType(init.node, "DoExpression")) {
-            statements.push(...flattenExpression(init, true));
+            statements.push(...flattenExpression(init));
           }
           if (traverse.hasType(id.node, "DoExpression")) {
             statements.push(...flattenLVal(id, init.node, path.node.kind));
@@ -125,7 +125,7 @@ export default declare(api => {
         const test = path.get("test");
         if (traverse.hasType(test.node, "DoExpression")) {
           body.push(
-            ...flattenExpression(test, true),
+            ...flattenExpression(test),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -136,7 +136,7 @@ export default declare(api => {
         body.push(path.node.body);
         const update = path.get("update");
         if (traverse.hasType(update.node, "DoExpression")) {
-          body.push(...flattenExpression(update, true, false));
+          body.push(...flattenExpression(update, { discardResult: true }));
           update.remove();
         }
         path.set("body", t.blockStatement(body));
@@ -190,10 +190,7 @@ export default declare(api => {
         // Handle right side
         const right = path.get("right");
         if (traverse.hasType(right.node, "DoExpression")) {
-          path.replaceWithMultiple([
-            ...flattenExpression(right, true),
-            path.node,
-          ]);
+          path.replaceWithMultiple([...flattenExpression(right), path.node]);
         }
         break;
       }
@@ -204,7 +201,7 @@ export default declare(api => {
         path.set(
           "body",
           t.blockStatement([
-            ...flattenExpression(test, true),
+            ...flattenExpression(test),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -223,7 +220,7 @@ export default declare(api => {
           "body",
           t.blockStatement([
             path.node.body,
-            ...flattenExpression(test, true),
+            ...flattenExpression(test),
             t.ifStatement(
               t.unaryExpression("!", test.node),
               t.breakStatement(),
@@ -235,51 +232,51 @@ export default declare(api => {
       }
       case "ExpressionStatement":
         path.replaceWithMultiple(
-          flattenExpression(path.get("expression"), true, false),
+          flattenExpression(path.get("expression"), { discardResult: true }),
         );
         break;
       default:
-        path.replaceWithMultiple([...flattenByTraverse(path, true), path.node]);
+        path.replaceWithMultiple([...flattenByTraverse(path), path.node]);
     }
   }
 
   function flattenExpression(
     path: NodePath<t.Expression>,
-    skipTrailing: boolean,
-    needResult = true,
-    thisArgument?: NodePath<t.Expression | t.Super>,
+    opts: {
+      flattenTrailing?: boolean;
+      discardResult?: boolean;
+      thisArgument?: NodePath<t.Expression | t.Super>;
+    } = {},
   ): t.Statement[] {
-    if (path.isDoExpression()) {
-      const body = path.get("body");
-      if (needResult) {
-        const completions = body
-          .getCompletionRecords(/* shouldPreserveBreak */ true)
-          .filter(completion => completion.isExpressionStatement());
-        if (completions.length) {
-          const uid = body.scope.generateDeclaredUidIdentifier("do");
-          for (const completion of completions) {
-            completion.replaceWith(
-              t.assignmentExpression(
-                "=",
-                t.cloneNode(uid),
-                completion.node.expression,
-              ),
-            );
-          }
-          path.replaceWith(uid);
-        } else {
-          path.replaceWith(path.scope.buildUndefinedNode());
-        }
-      }
-      return [body.node];
-    } else if (isTopLevelSideEffectFree(path)) {
-      return flattenByTraverse(path, skipTrailing);
+    if (isTopLevelSideEffectFree(path)) {
+      return flattenByTraverse(path, opts.flattenTrailing);
     }
-
     const hasDoExpression = traverse.hasType(path.node, "DoExpression");
-
     if (hasDoExpression) {
-      if (path.isAssignmentExpression()) {
+      if (path.isDoExpression()) {
+        const body = path.get("body");
+        if (!opts.discardResult) {
+          const completions = body
+            .getCompletionRecords(/* shouldPreserveBreak */ true)
+            .filter(completion => completion.isExpressionStatement());
+          if (completions.length) {
+            const uid = body.scope.generateDeclaredUidIdentifier("do");
+            for (const completion of completions) {
+              completion.replaceWith(
+                t.assignmentExpression(
+                  "=",
+                  t.cloneNode(uid),
+                  completion.node.expression,
+                ),
+              );
+            }
+            path.replaceWith(uid);
+          } else {
+            path.replaceWith(path.scope.buildUndefinedNode());
+          }
+        }
+        return [body.node];
+      } else if (path.isAssignmentExpression()) {
         const left = path.get("left");
         const right = path.get("right");
         if (traverse.hasType(left.node, "DoExpression")) {
@@ -291,7 +288,7 @@ export default declare(api => {
           const uid = path.scope.generateDeclaredUidIdentifier("do");
           path.replaceWith(uid);
           return [
-            ...flattenExpression(right, true),
+            ...flattenExpression(right),
             ...flattenLVal(left, right.node, null),
           ];
         }
@@ -300,7 +297,7 @@ export default declare(api => {
         const left = path.get("left");
         const right = path.get("right");
         const statements = [
-          ...flattenExpression(left, true),
+          ...flattenExpression(left),
           t.ifStatement(
             operator === "&&"
               ? t.cloneNode(left.node)
@@ -311,7 +308,7 @@ export default declare(api => {
                     t.cloneNode(left.node),
                     t.nullLiteral(),
                   ),
-            t.blockStatement(flattenExpression(right, true)),
+            t.blockStatement(flattenExpression(right)),
           ),
         ];
         path.replaceWith(
@@ -323,11 +320,11 @@ export default declare(api => {
         const alternate = path.get("alternate");
         const consequent = path.get("consequent");
         const statements = [
-          ...flattenExpression(test, true),
+          ...flattenExpression(test),
           t.ifStatement(
             t.cloneNode(test.node),
-            t.blockStatement(flattenExpression(consequent, true)),
-            t.blockStatement(flattenExpression(alternate, true)),
+            t.blockStatement(flattenExpression(consequent)),
+            t.blockStatement(flattenExpression(alternate)),
           ),
         ];
         path.replaceWith(
@@ -340,11 +337,11 @@ export default declare(api => {
         const uid = path.scope.generateDeclaredUidIdentifier("do");
         path.replaceWith(uid);
         return [
-          ...flattenExpression(object, true),
+          ...flattenExpression(object),
           t.ifStatement(
             t.binaryExpression("!=", t.cloneNode(object.node), t.nullLiteral()),
             t.blockStatement([
-              ...flattenExpression(property, true),
+              ...flattenExpression(property),
               t.expressionStatement(
                 t.assignmentExpression(
                   "=",
@@ -362,16 +359,11 @@ export default declare(api => {
       } else if (path.isOptionalCallExpression()) {
         const thisArgument = findThisArgument(path);
         const callee = path.get("callee");
-        const calleeStatements = flattenExpression(callee, true);
+        const calleeStatements = flattenExpression(callee);
         const [newPath] = path.replaceWith(
           t.callExpression(t.cloneNode(callee.node), path.node.arguments),
         );
-        const callStatements = flattenExpression(
-          newPath,
-          true,
-          true,
-          thisArgument,
-        );
+        const callStatements = flattenExpression(newPath, { thisArgument });
         return [
           ...calleeStatements,
           t.ifStatement(
@@ -385,9 +377,9 @@ export default declare(api => {
     const statements: t.Statement[] = [];
 
     if (hasDoExpression) {
-      thisArgument ??= findThisArgument(path);
+      const thisArgument = opts.thisArgument || findThisArgument(path);
 
-      statements.push(...flattenByTraverse(path, skipTrailing));
+      statements.push(...flattenByTraverse(path, opts.flattenTrailing));
 
       if (thisArgument) {
         const { callee, arguments: args } = path.node as t.CallExpression;
@@ -407,7 +399,9 @@ export default declare(api => {
       }
     }
 
-    if (needResult) {
+    if (opts.discardResult) {
+      statements.push(t.expressionStatement(path.node));
+    } else {
       const uid = path.scope.generateDeclaredUidIdentifier("do");
       statements.push(
         t.expressionStatement(
@@ -415,8 +409,6 @@ export default declare(api => {
         ),
       );
       path.replaceWith(uid);
-    } else {
-      statements.push(t.expressionStatement(path.node));
     }
 
     return statements;
@@ -443,7 +435,7 @@ export default declare(api => {
       }
       case "MemberExpression": {
         return [
-          ...flattenByTraverse(path, true),
+          ...flattenByTraverse(path),
           t.expressionStatement(t.assignmentExpression("=", path.node, init)),
         ];
       }
@@ -463,7 +455,7 @@ export default declare(api => {
                 t.buildUndefinedNode(),
               ),
               t.blockStatement([
-                ...flattenExpression(right, true),
+                ...flattenExpression(right),
                 t.expressionStatement(
                   t.assignmentExpression("=", t.cloneNode(uid), right.node),
                 ),
@@ -517,7 +509,7 @@ export default declare(api => {
 
   function flattenByTraverse(
     path: NodePath,
-    skipTrailing: boolean,
+    flattenTrailing?: boolean,
   ): t.Statement[] {
     // Collect immediate descendant expressions
     const expressions: NodePath<t.Expression>[] = [];
@@ -533,7 +525,7 @@ export default declare(api => {
 
     // Skip flattening trailing expressions that are after all the DoExpressions
     let lastDoExpression: NodePath<t.Expression>;
-    if (skipTrailing) {
+    if (!flattenTrailing) {
       while (expressions.length) {
         const path = expressions.pop();
         if (traverse.hasType(path.node, "DoExpression")) {
@@ -546,10 +538,10 @@ export default declare(api => {
     // Flatten the expressions
     const statements: t.Statement[] = [];
     for (const path of expressions) {
-      statements.push(...flattenExpression(path, false));
+      statements.push(...flattenExpression(path, { flattenTrailing: true }));
     }
     if (lastDoExpression) {
-      statements.push(...flattenExpression(lastDoExpression, true));
+      statements.push(...flattenExpression(lastDoExpression));
     }
     return statements;
   }
