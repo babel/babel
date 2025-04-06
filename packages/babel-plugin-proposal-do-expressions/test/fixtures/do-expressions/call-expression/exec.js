@@ -22,4 +22,9 @@ const object = {
   "arg"
 });
 
-expect(effects).toEqual([1, 2, 4, 3, 'this', 'arg']);
+(() => {
+  effects.push(5);
+  return { x: () => effects.push(6) };
+})().x(do { effects.push(7); });
+
+expect(effects).toEqual([1, 2, 4, 3, 'this', 'arg', 5, 7, 6]);

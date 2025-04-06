@@ -1,4 +1,4 @@
-var _do, _do2, _do6, _do9, _do10, _do11, _do12, _do15, _do18, _do20;
+var _do, _do2, _do6, _do9, _do10, _do11, _do12, _do13, _do16, _do17, _do18, _do21, _do22, _do24;
 {
   var _do3;
   effects.push(1);
@@ -50,47 +50,51 @@ const v2 = _do9;
 }
 _do10 = _do0[_do1];
 if (_do10 != null) {
-  _do11 = _do10();
+  _do11 = _do10;
+  _do12 = _do11();
 }
-const v3 = _do11;
+const v3 = _do12;
 {
-  var _do13;
+  var _do14;
   effects.push(8);
-  _do13 = null;
+  _do14 = null;
+}
+if (_do14 != null) {
+  {
+    var _do15;
+    effects.push(9);
+    _do15 = 0;
+  }
+  _do13 = _do14[_do15];
 }
 if (_do13 != null) {
-  {
-    var _do14;
-    effects.push(9);
-    _do14 = 0;
-  }
-  _do12 = _do13[_do14];
+  _do16 = _do13;
+  _do17 = effects.push(10);
+  _do18 = _do16(_do17);
 }
-if (_do12 != null) {
-  _do15 = _do12(effects.push(10));
-}
-const v4 = _do15;
+const v4 = _do18;
 {
-  var _do17;
+  var _do20;
   effects.push(11);
-  _do17 = {
+  _do20 = {
     s: x => {
       {
-        var _do16;
+        var _do19;
         effects.push(12);
-        _do16 = x;
+        _do19 = x;
       }
-      return _do16;
+      return _do19;
     }
   };
 }
-_do18 = _do17.s;
-if (_do18 != null) {
+_do21 = _do20.s;
+if (_do21 != null) {
+  _do22 = _do21;
   {
-    var _do19;
+    var _do23;
     effects.push(13);
-    _do19 = 'a';
+    _do23 = 'a';
   }
-  _do20 = Reflect.apply(_do18, _do17, [_do19]);
+  _do24 = _do22(_do23);
 }
-const v5 = _do20;
+const v5 = _do24;

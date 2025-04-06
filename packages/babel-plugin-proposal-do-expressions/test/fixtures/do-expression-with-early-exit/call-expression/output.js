@@ -12,7 +12,7 @@ function f1(a) {
   _do(_do2);
 }
 function f2(a) {
-  var _do5;
+  var _do4, _do6;
   ;
   {
     var _do3;
@@ -21,16 +21,17 @@ function f2(a) {
       key: arg => effects.push(arg)
     };
   }
+  _do4 = _do3;
   {
-    var _do4;
+    var _do5;
     if (effects.push(2), a) return 1;
-    _do4 = 'key';
+    _do5 = 'key';
   }
-  _do5 = _do3[_do4];
+  _do6 = _do4[_do5];
   {
-    var _do6;
+    var _do7;
     if (effects.push(3), false) return 2;
-    _do6 = 'arg';
+    _do7 = 'arg';
   }
-  Reflect.apply(_do5, _do3, [_do6]);
+  Reflect.apply(_do6, _do4, [_do7]);
 }

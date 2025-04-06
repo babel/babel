@@ -21,3 +21,8 @@ const object = {
   effects.push(3);
   "arg"
 });
+
+(() => {
+  effects.push(5);
+  return { x: () => effects.push(6) };
+})().x(do { effects.push(7); });
