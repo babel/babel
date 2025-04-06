@@ -335,6 +335,31 @@ export default declare(api => {
           t.conditionalExpression(test.node, consequent.node, alternate.node),
         );
         return statements;
+      } else if (path.isOptionalMemberExpression() && path.node.computed) {
+        const object = path.get("object");
+        const property = path.get("property");
+        const uid = path.scope.generateDeclaredUidIdentifier("do");
+        path.replaceWith(uid);
+        return [
+          ...flattenExpression(object, true),
+          t.ifStatement(
+            t.binaryExpression("!=", t.cloneNode(object.node), t.nullLiteral()),
+            t.blockStatement([
+              ...flattenExpression(property, true),
+              t.expressionStatement(
+                t.assignmentExpression(
+                  "=",
+                  t.cloneNode(uid),
+                  t.memberExpression(
+                    object.node,
+                    property.node,
+                    true /* computed */,
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ];
       }
     }
 
@@ -414,7 +439,6 @@ export default declare(api => {
           ];
         }
       }
-      case "OptionalMemberExpression":
       case "MemberExpression": {
         return [
           ...flattenByTraverse(path, true),
