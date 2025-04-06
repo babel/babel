@@ -86,7 +86,7 @@ export default declare(api => {
         }
         break;
       }
-      if (Array.isArray(path.container) && path.isStatement()) {
+      if (path.isStatement()) {
         // Flatten the closest parent statement
         flattenStatement(path);
         break;
