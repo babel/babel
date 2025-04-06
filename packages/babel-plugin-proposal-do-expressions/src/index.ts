@@ -391,27 +391,11 @@ export default declare(api => {
     path: NodePath<t.CallExpression>,
     discardResult?: boolean,
   ): t.Statement[] {
-    let callee = path.get("callee");
-    let calleeMemberExpression: NodePath<t.MemberExpression> | null = null;
-    while (true) {
-      if (callee.isParenthesizedExpression()) {
-        callee = callee.get("expression");
-      } else if (callee.isMemberExpression()) {
-        calleeMemberExpression = callee;
-        break;
-      } else if (callee.isOptionalMemberExpression()) {
-        throw callee.buildCodeFrameError(
-          "Internal Error: OptionalMemberExpression as callee should have been handled",
-        );
-      } else {
-        break;
-      }
-    }
-
-    const statements = [];
+    const callee = path.get("callee");
     let thisArgument: NodePath<t.Expression | t.Super> | undefined;
-    if (calleeMemberExpression) {
-      thisArgument = calleeMemberExpression.get("object");
+    const statements = [];
+    if (callee.isMemberExpression()) {
+      thisArgument = callee.get("object");
       statements.push(...flattenExpression(thisArgument));
     }
     statements.push(...flattenExpression(callee as NodePath<t.Expression>));
@@ -435,7 +419,7 @@ export default declare(api => {
       }
     }
 
-    if (calleeMemberExpression) {
+    if (thisArgument) {
       // Use `Reflect.apply` to ensure this argument is correct
       path.replaceWith(
         t.callExpression(
