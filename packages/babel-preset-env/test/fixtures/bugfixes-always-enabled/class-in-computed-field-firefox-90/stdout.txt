@@ -11,7 +11,7 @@ Using plugins:
   transform-duplicate-named-capturing-groups-regex { firefox < 129 }
   transform-regexp-modifiers { firefox < 132 }
   transform-unicode-sets-regex { firefox < 116 }
-  bugfix/transform-firefox-class-in-computed-class-key { firefox }
+  bugfix/transform-firefox-class-in-computed-class-key { firefox < 126 }
   transform-class-static-block { firefox < 93 }
   syntax-private-property-in-object
   syntax-class-properties
