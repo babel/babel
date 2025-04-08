@@ -150,8 +150,7 @@ exports.generateData = (environments, features) => {
     }
   }
 
-  // eslint-disable-next-line prefer-const
-  for (let [key, options] of Object.entries(normalized)) {
+  for (const [key, options] of Object.entries(normalized)) {
     const plugin = {};
 
     environments.forEach(env => {

@@ -46,6 +46,7 @@
     "chrome": "74",
     "opera": "62",
     "edge": "79",
+    "firefox": "126",
     "safari": "16",
     "node": "12",
     "deno": "1",

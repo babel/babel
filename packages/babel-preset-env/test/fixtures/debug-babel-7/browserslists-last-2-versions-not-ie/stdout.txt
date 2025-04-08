@@ -19,7 +19,6 @@ Using plugins:
   transform-duplicate-named-capturing-groups-regex { opera_mobile, samsung }
   transform-regexp-modifiers { ios, opera_mobile, safari, samsung }
   transform-unicode-sets-regex { samsung }
-  bugfix/transform-firefox-class-in-computed-class-key { firefox }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties

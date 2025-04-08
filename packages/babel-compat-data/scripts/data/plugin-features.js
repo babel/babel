@@ -169,8 +169,8 @@ const es2022 = {
   "bugfix/transform-firefox-class-in-computed-class-key": {
     replaces: "transform-class-properties",
     overwrite: {
-      // TODO: Once Firefox releases the fix, write the correct version here.
-      firefox: undefined,
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1887677
+      firefox: "126",
     },
   },
   "bugfix/transform-safari-class-field-initializer-scope": {
