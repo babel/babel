@@ -17,7 +17,8 @@
   "dependencies": {
     "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
     "clone-deep": "^4.0.1",
-    "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
+    "find-cache-dir": "condition:BABEL_8_BREAKING ? ^5.0.0 : ^2.0.0 (esm:default)",
+    "lmdb": "condition:BABEL_8_BREAKING ? ^3.2.6 : (esm:open)",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "pirates": "^4.0.6",
     "source-map-support": "condition:BABEL_8_BREAKING ? : ^0.5.16"

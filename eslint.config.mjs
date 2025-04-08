@@ -126,7 +126,7 @@ export default [
     },
   },
   ...typescriptEslint.config({
-    files: ["**/*.{ts,cts}"],
+    files: ["**/*.{ts,cts,mts}"],
     extends: [
       ...typescriptEslint.configs.recommendedTypeChecked,
       ...typescriptEslint.configs.stylisticTypeChecked,

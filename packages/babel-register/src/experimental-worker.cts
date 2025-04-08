@@ -14,6 +14,14 @@ import workerClient = require("./worker-client.cjs");
 
 let client: IClient;
 function register(opts?: Options) {
+  if (process.env.BABEL_8_BREAKING && !client) {
+    function listener() {
+      client.close();
+    }
+    process.on("exit", listener);
+    process.on("SIGINT", listener);
+    process.on("SIGTERM", listener);
+  }
   client ||= new workerClient.WorkerClient();
   hook.register(client, opts);
 }

@@ -2,9 +2,9 @@
 import cloneDeep = require("clone-deep");
 import path = require("node:path");
 import fs = require("node:fs");
+import crypto = require("node:crypto");
 
 const babel = require("./babel-core.cjs");
-const registerCache = require("./cache.cjs");
 
 const nmRE = escapeRegExp(path.sep + "node_modules" + path.sep);
 
@@ -13,16 +13,30 @@ function escapeRegExp(string: string) {
 }
 
 type CacheItem = { value: { code: string; map: any }; mtime: number };
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var registerCache = require("./cache-babel-7.cjs");
+  // eslint-disable-next-line no-var
+  var oldCache: Record<string, CacheItem>;
+}
 
-let cache: Record<string, CacheItem>;
 let transformOpts: any;
 function setOptions(opts: any) {
-  if (opts.cache === false && cache) {
-    registerCache.clear();
-    cache = null;
-  } else if (opts.cache !== false && !cache) {
-    registerCache.load();
-    cache = registerCache.get();
+  if (process.env.BABEL_8_BREAKING) {
+    const cache = babel.cache;
+    if (opts.cache === false && cache.enabled) {
+      cache.disable();
+    } else if (opts.cache !== false && !cache.enabled) {
+      cache.enable();
+    }
+  } else {
+    if (opts.cache === false && oldCache) {
+      registerCache.clear();
+      oldCache = null;
+    } else if (opts.cache !== false && !oldCache) {
+      registerCache.load();
+      oldCache = registerCache.get();
+    }
   }
 
   delete opts.cache;
@@ -107,25 +121,40 @@ if (!process.env.BABEL_8_BREAKING) {
 const id = (value: unknown) => value;
 
 function cacheLookup(opts: unknown, filename: string) {
-  if (!cache) return { cached: null, store: id };
+  if (process.env.BABEL_8_BREAKING ? !babel.cache.enabled : !oldCache) {
+    return { cached: null, store: id };
+  }
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
   const env = babel.getEnv();
   if (env) cacheKey += `:${env}`;
 
-  const cached = cache[cacheKey];
+  if (process.env.BABEL_8_BREAKING) {
+    cacheKey = crypto.createHash("sha1").update(cacheKey).digest("hex");
+  }
+
+  const cached = process.env.BABEL_8_BREAKING
+    ? babel.cache.get(cacheKey)
+    : oldCache[cacheKey];
   const fileMtime = +fs.statSync(filename).mtime;
 
-  if (cached && cached.mtime === fileMtime) {
+  if (cached?.mtime === fileMtime) {
     return { cached: cached.value, store: id };
   }
 
   return {
     cached: null,
     store(value: CacheItem["value"]) {
-      cache[cacheKey] = { value, mtime: fileMtime };
-      registerCache.setDirty();
+      if (process.env.BABEL_8_BREAKING) {
+        babel.cache.set(cacheKey, {
+          value,
+          mtime: fileMtime,
+        });
+      } else {
+        oldCache[cacheKey] = { value, mtime: fileMtime };
+        registerCache.setDirty();
+      }
       return value;
     },
   };

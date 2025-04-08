@@ -259,6 +259,9 @@ function buildTSConfig(pkgs, allDeps, hasOverrides) {
     include: [
       "./src/**/*.ts",
       "./src/**/*.cts",
+      ...(pkgs.some(p => p.name === "@babel/register")
+        ? ["./src/**/*.mts"]
+        : []),
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
     ].filter(Boolean),

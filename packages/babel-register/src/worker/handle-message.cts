@@ -18,6 +18,9 @@ export = function handleMessage(action: ACTIONS, payload: any) {
         // @ts-expect-error Babel 7
         return transform.transformSync(payload.code, payload.filename);
       }
+      break;
+    case "CLOSE":
+      return babel.cache.close();
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);
