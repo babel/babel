@@ -1,6 +1,14 @@
 import UtilParser from "./util.ts";
 import { SourceLocation, type Position } from "../util/location.ts";
-import type { Comment, Node as NodeType, NodeBase } from "../types.ts";
+import type {
+  Comment,
+  Node as NodeType,
+  NodeBase,
+  EstreeLiteral,
+  Identifier,
+  Placeholder,
+  StringLiteral,
+} from "../types.ts";
 import { OptionFlags } from "../options.ts";
 
 // Start an AST node, attaching a start offset.
@@ -48,50 +56,6 @@ if (!process.env.BABEL_8_BREAKING) {
 
     return newNode;
   };
-}
-
-function clonePlaceholder(node: any): any {
-  return cloneIdentifier(node);
-}
-
-export function cloneIdentifier(node: any): any {
-  // We don't need to clone `typeAnnotations` and `optional`: because
-  // cloneIdentifier is only used in object shorthand and named import/export.
-  // Neither of them allow type annotations after the identifier or optional identifier
-  const { type, start, end, loc, range, extra, name } = node;
-  const cloned = Object.create(NodePrototype);
-  cloned.type = type;
-  cloned.start = start;
-  cloned.end = end;
-  cloned.loc = loc;
-  cloned.range = range;
-  cloned.extra = extra;
-  cloned.name = name;
-  if (type === "Placeholder") {
-    cloned.expectedNode = node.expectedNode;
-  }
-  return cloned;
-}
-
-export function cloneStringLiteral(node: any): any {
-  const { type, start, end, loc, range, extra } = node;
-  if (type === "Placeholder") {
-    return clonePlaceholder(node);
-  }
-  const cloned = Object.create(NodePrototype);
-  cloned.type = type;
-  cloned.start = start;
-  cloned.end = end;
-  cloned.loc = loc;
-  cloned.range = range;
-  if (node.raw !== undefined) {
-    // estree set node.raw instead of node.extra
-    cloned.raw = node.raw;
-  } else {
-    cloned.extra = extra;
-  }
-  cloned.value = node.value;
-  return cloned;
 }
 
 export type Undone<T extends NodeType> = Omit<T, "type">;
@@ -162,5 +126,44 @@ export abstract class NodeUtils extends UtilParser {
    */
   resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
     this.resetStartLocation(node, locationNode.loc.start);
+  }
+
+  castNodeTo<T extends NodeType["type"]>(
+    node: NodeType,
+    type: T,
+  ): Extract<NodeType, { type: T }> {
+    node.type = type;
+    return node as Extract<NodeType, { type: T }>;
+  }
+
+  cloneIdentifier<T extends Identifier | Placeholder>(node: T): T {
+    // We don't need to clone `typeAnnotations` and `optional`: because
+    // cloneIdentifier is only used in object shorthand and named import/export.
+    // Neither of them allow type annotations after the identifier or optional identifier
+    const { type, start, end, loc, range, name } = node;
+    const cloned = Object.create(NodePrototype);
+    cloned.type = type;
+    cloned.start = start;
+    cloned.end = end;
+    cloned.loc = loc;
+    cloned.range = range;
+    cloned.name = name;
+    if (node.extra) cloned.extra = node.extra;
+    return cloned;
+  }
+
+  cloneStringLiteral<T extends StringLiteral | EstreeLiteral | Placeholder>(
+    node: T,
+  ): T {
+    const { type, start, end, loc, range, extra } = node;
+    const cloned = Object.create(NodePrototype);
+    cloned.type = type;
+    cloned.start = start;
+    cloned.end = end;
+    cloned.loc = loc;
+    cloned.range = range;
+    cloned.extra = extra;
+    cloned.value = (node as StringLiteral).value;
+    return cloned;
   }
 }

@@ -38,7 +38,7 @@ const FAILURES = [
   "flow/iterator-inside-types/input.js",
   "flow/object-literal-types/input.js",
   "flow/opaque-type-alias/input.js",
-  "flow/parantheses/input.js",
+  "flow/parentheses/input.js",
   "flow/predicates/input.js",
   "flow/this-param/input.js",
   "flow/tuples/input.js",

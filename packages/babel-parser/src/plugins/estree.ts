@@ -106,13 +106,11 @@ export default (superClass: typeof Parser) =>
       delete directive.value;
 
       this.castNodeTo(expression, "Literal");
-      // @ts-expect-error N.EstreeLiteral.raw is not defined.
       expression.raw = expression.extra.raw;
       expression.value = expression.extra.expressionValue;
 
       const stmt = this.castNodeTo(directive, "ExpressionStatement");
       stmt.expression = expression;
-      // @ts-expect-error N.ExpressionStatement.directive is not defined
       stmt.directive = expression.extra.rawValue;
 
       delete expression.extra;
@@ -132,13 +130,17 @@ export default (superClass: typeof Parser) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fillOptionalPropertiesForTSESLint(node: NodeType) {}
 
-    castNodeTo<T extends N.Node["type"]>(
-      node: N.Node,
-      type: T,
-    ): Extract<N.Node, { type: T }> {
-      node.type = type;
-      this.fillOptionalPropertiesForTSESLint(node);
-      return node as Extract<N.Node, { type: T }>;
+    cloneEstreeStringLiteral(node: N.EstreeLiteral): N.EstreeLiteral {
+      const { start, end, loc, range, raw, value } = node;
+      const cloned = Object.create(node.constructor.prototype);
+      cloned.type = "Literal";
+      cloned.start = start;
+      cloned.end = end;
+      cloned.loc = loc;
+      cloned.range = range;
+      cloned.raw = raw;
+      cloned.value = value;
+      return cloned;
     }
 
     // ==================================
@@ -163,7 +165,7 @@ export default (superClass: typeof Parser) =>
       return (method as unknown as N.EstreeMethodDefinition).value.params;
     }
 
-    isValidDirective(stmt: N.Statement): boolean {
+    isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
       return (
         stmt.type === "ExpressionStatement" &&
         stmt.expression.type === "Literal" &&
@@ -392,8 +394,7 @@ export default (superClass: typeof Parser) =>
           return accessorPropertyNode;
         }
       }
-      (accessorPropertyNode as unknown as N.EstreeAccessorProperty).type =
-        "AccessorProperty";
+      this.castNodeTo(accessorPropertyNode, "AccessorProperty");
       return accessorPropertyNode;
     }
 
@@ -568,13 +569,10 @@ export default (superClass: typeof Parser) =>
 
       if (state.optionalChainMember) {
         // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
-        if (
-          node.type === "OptionalMemberExpression" ||
-          node.type === "OptionalCallExpression"
-        ) {
-          // strip Optional prefix
-          (node as unknown as N.CallExpression | N.MemberExpression).type =
-            node.type.substring(8) as "CallExpression" | "MemberExpression";
+        if (node.type === "OptionalCallExpression") {
+          this.castNodeTo(node, "CallExpression");
+        } else if (node.type === "OptionalMemberExpression") {
+          this.castNodeTo(node, "MemberExpression");
         }
         if (state.stop) {
           const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
@@ -617,6 +615,34 @@ export default (superClass: typeof Parser) =>
         node.type === "Property" &&
         (node.method || node.kind === "get" || node.kind === "set")
       );
+    }
+
+    /* ============================================================ *
+     * parser/node.ts                                               *
+     * ============================================================ */
+
+    castNodeTo<T extends N.Node["type"]>(
+      node: N.Node,
+      type: T,
+    ): Extract<N.Node, { type: T }> {
+      const result = super.castNodeTo(node, type);
+      this.fillOptionalPropertiesForTSESLint(result);
+      return result;
+    }
+
+    cloneIdentifier<T extends N.Identifier | N.Placeholder>(node: T): T {
+      const cloned = super.cloneIdentifier(node);
+      this.fillOptionalPropertiesForTSESLint(cloned);
+      return cloned;
+    }
+
+    cloneStringLiteral<
+      T extends N.EstreeLiteral | N.StringLiteral | N.Placeholder,
+    >(node: T): T {
+      if (node.type === "Literal") {
+        return this.cloneEstreeStringLiteral(node) as T;
+      }
+      return super.cloneStringLiteral(node);
     }
 
     finishNodeAt<T extends NodeType>(

@@ -204,6 +204,11 @@ export interface Identifier extends PatternBase {
 }
 // | Placeholder<"Identifier">;
 
+export interface V8IntrinsicIdentifier extends NodeBase {
+  type: "V8IntrinsicIdentifier";
+  name: string;
+}
+
 export interface PrivateName extends NodeBase {
   type: "PrivateName";
   id: Identifier;
@@ -311,6 +316,8 @@ export interface FunctionBase extends BodilessFunctionOrMethodBase {
 export interface ExpressionStatement extends NodeBase {
   type: "ExpressionStatement";
   expression: Expression;
+  // For ESTree
+  directive?: Directive | undefined;
 }
 
 export interface BlockStatement extends NodeBase {
@@ -1372,6 +1379,7 @@ export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
   decimal?: string;
+  raw: any;
 }
 
 interface EstreeRegExpLiteralRegex {
@@ -2017,6 +2025,7 @@ export type Node =
   | DoExpression
   | DoWhileStatement
   | EmptyStatement
+  | EstreeAccessorProperty
   | EstreeChainExpression
   | EstreeLiteral
   | EstreeMethodDefinition
@@ -2215,6 +2224,7 @@ export type Node =
   | UpdateExpression
   | VariableDeclaration
   | VariableDeclarator
+  | V8IntrinsicIdentifier
   | WhileStatement
   | WithStatement
   | YieldExpression;
