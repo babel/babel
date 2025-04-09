@@ -107,7 +107,12 @@ function convertToken(
   newToken.range = [token.start, token.end];
 
   if (label === tl.name) {
-    if (token.value.match(/^(?:let|static|yield)$/)) {
+    const tokenValue = token.value;
+    if (
+      tokenValue === "let" ||
+      tokenValue === "static" ||
+      tokenValue === "yield"
+    ) {
       newToken.type = "Keyword";
     } else {
       newToken.type = "Identifier";
