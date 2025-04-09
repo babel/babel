@@ -10,14 +10,14 @@ describeBabel8("@babel/register - caching", () => {
   beforeAll(async () => {
     Cache = (await import("../lib/worker/cache.mjs")).default;
 
-    // jest.useFakeTimers({
-    //   doNotFake: ["nextTick", "setImmediate", "queueMicrotask"],
-    // });
+    jest.useFakeTimers({
+      doNotFake: ["nextTick", "setImmediate", "queueMicrotask"],
+    });
   });
 
-  // afterAll(() => {
-  //   jest.useRealTimers();
-  // });
+  afterAll(() => {
+    jest.useRealTimers();
+  });
 
   const defaultCachePath = path.join(
     __dirname,
@@ -70,7 +70,7 @@ describeBabel8("@babel/register - caching", () => {
     );
   });
 
-  it.skip("should clean after 30 days", async () => {
+  it("should clean after 30 days", async () => {
     const cache = new Cache();
     cache.enable();
 

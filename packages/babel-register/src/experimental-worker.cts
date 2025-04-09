@@ -15,7 +15,10 @@ import workerClient = require("./worker-client.cjs");
 let client: IClient;
 function register(opts?: Options) {
   if (process.env.BABEL_8_BREAKING && !client) {
+    let hasClosed = false;
     function listener() {
+      if (hasClosed) return;
+      hasClosed = true;
       client.close();
     }
     process.on("exit", listener);
