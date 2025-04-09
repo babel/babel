@@ -18,6 +18,8 @@
               "type": "Identifier",
               "start":4,"end":55,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":55},"identifierName":"x"},
               "name": "x",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":5,"end":55,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":55}},
@@ -44,7 +46,9 @@
                           "key": {
                             "type": "Identifier",
                             "start":30,"end":34,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":34},"identifierName":"with"},
-                            "name": "with"
+                            "name": "with",
+                            "decorators": [],
+                            "optional": false
                           },
                           "computed": false,
                           "shorthand": false,
@@ -59,7 +63,9 @@
                                 "key": {
                                   "type": "Identifier",
                                   "start":38,"end":42,"loc":{"start":{"line":1,"column":38},"end":{"line":1,"column":42},"identifierName":"type"},
-                                  "name": "type"
+                                  "name": "type",
+                                  "decorators": [],
+                                  "optional": false
                                 },
                                 "computed": false,
                                 "shorthand": false,
@@ -69,11 +75,13 @@
                                   "value": "json",
                                   "raw": "\"json\""
                                 },
-                                "kind": "init"
+                                "kind": "init",
+                                "optional": false
                               }
                             ]
                           },
-                          "kind": "init"
+                          "kind": "init",
+                          "optional": false
                         }
                       ]
                     }
@@ -81,10 +89,12 @@
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       },
       {
         "type": "VariableDeclaration",
@@ -97,6 +107,8 @@
               "type": "Identifier",
               "start":61,"end":107,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":50},"identifierName":"Y"},
               "name": "Y",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":62,"end":107,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":50}},
@@ -120,7 +132,9 @@
                         "key": {
                           "type": "Identifier",
                           "start":80,"end":84,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":27},"identifierName":"with"},
-                          "name": "with"
+                          "name": "with",
+                          "decorators": [],
+                          "optional": false
                         },
                         "computed": false,
                         "shorthand": false,
@@ -135,7 +149,9 @@
                               "key": {
                                 "type": "Identifier",
                                 "start":88,"end":92,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":35},"identifierName":"type"},
-                                "name": "type"
+                                "name": "type",
+                                "decorators": [],
+                                "optional": false
                               },
                               "computed": false,
                               "shorthand": false,
@@ -145,26 +161,32 @@
                                 "value": "json",
                                 "raw": "\"json\""
                               },
-                              "kind": "init"
+                              "kind": "init",
+                              "optional": false
                             }
                           ]
                         },
-                        "kind": "init"
+                        "kind": "init",
+                        "optional": false
                       }
                     ]
                   },
                   "qualifier": {
                     "type": "Identifier",
                     "start":106,"end":107,"loc":{"start":{"line":2,"column":49},"end":{"line":2,"column":50},"identifierName":"Y"},
-                    "name": "Y"
+                    "name": "Y",
+                    "decorators": [],
+                    "optional": false
                   }
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       },
       {
         "type": "VariableDeclaration",
@@ -177,6 +199,8 @@
               "type": "Identifier",
               "start":113,"end":172,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":63},"identifierName":"z"},
               "name": "z",
+              "decorators": [],
+              "optional": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":114,"end":172,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":63}},
@@ -200,7 +224,9 @@
                         "key": {
                           "type": "Identifier",
                           "start":131,"end":135,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":26},"identifierName":"with"},
-                          "name": "with"
+                          "name": "with",
+                          "decorators": [],
+                          "optional": false
                         },
                         "computed": false,
                         "shorthand": false,
@@ -215,7 +241,9 @@
                               "key": {
                                 "type": "Identifier",
                                 "start":139,"end":143,"loc":{"start":{"line":3,"column":30},"end":{"line":3,"column":34},"identifierName":"type"},
-                                "name": "type"
+                                "name": "type",
+                                "decorators": [],
+                                "optional": false
                               },
                               "computed": false,
                               "shorthand": false,
@@ -225,11 +253,13 @@
                                 "value": "json",
                                 "raw": "\"json\""
                               },
-                              "kind": "init"
+                              "kind": "init",
+                              "optional": false
                             }
                           ]
                         },
-                        "kind": "init"
+                        "kind": "init",
+                        "optional": false
                       }
                     ]
                   },
@@ -239,12 +269,16 @@
                     "left": {
                       "type": "Identifier",
                       "start":157,"end":160,"loc":{"start":{"line":3,"column":48},"end":{"line":3,"column":51},"identifierName":"foo"},
-                      "name": "foo"
+                      "name": "foo",
+                      "decorators": [],
+                      "optional": false
                     },
                     "right": {
                       "type": "Identifier",
                       "start":161,"end":164,"loc":{"start":{"line":3,"column":52},"end":{"line":3,"column":55},"identifierName":"bar"},
-                      "name": "bar"
+                      "name": "bar",
+                      "decorators": [],
+                      "optional": false
                     }
                   },
                   "typeParameters": {
@@ -260,10 +294,12 @@
                 }
               }
             },
-            "init": null
+            "init": null,
+            "definite": false
           }
         ],
-        "kind": "let"
+        "kind": "let",
+        "declare": false
       }
     ]
   }

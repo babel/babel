@@ -29,7 +29,9 @@
             6,
             11
           ],
-          "name": "Class"
+          "name": "Class",
+          "decorators": [],
+          "optional": false
         },
         "superClass": null,
         "body": {
@@ -55,7 +57,9 @@
                   16,
                   22
                 ],
-                "name": "method"
+                "name": "method",
+                "decorators": [],
+                "optional": false
               },
               "computed": false,
               "kind": "method",
@@ -80,6 +84,7 @@
                   ],
                   "body": []
                 },
+                "declare": false,
                 "typeParameters": {
                   "type": "TSTypeParameterDeclaration",
                   "start":23,"end":26,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3}},
@@ -102,15 +107,24 @@
                           24,
                           25
                         ],
-                        "name": "T"
+                        "name": "T",
+                        "decorators": [],
+                        "optional": false
                       }
                     }
                   ]
                 }
-              }
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
             }
           ]
-        }
+        },
+        "abstract": false,
+        "declare": false,
+        "decorators": [],
+        "implements": []
       }
     ]
   }

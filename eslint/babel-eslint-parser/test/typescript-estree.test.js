@@ -1,7 +1,7 @@
 import path from "node:path";
 import { parseForESLint } from "../lib/index.cjs";
 import { ESLint } from "eslint";
-import { itDummy, commonJS } from "$repo-utils";
+import { itDummy, commonJS, IS_BABEL_8 } from "$repo-utils";
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint9 = ESLINT_VERSION.startsWith("9.");
@@ -12,8 +12,6 @@ const PROPS_TO_REMOVE = [
   { key: "start", type: "Node" },
   { key: "end", type: "Node" },
 
-  { key: "importKind", type: "Node" },
-  { key: "exportKind", type: "Node" },
   { key: "variance", type: "Node" },
   { key: "typeArguments", type: "Node" },
   { key: "filename", type: null },
@@ -107,22 +105,80 @@ function deeplyRemoveProperties(obj, props) {
 
     it.each([
       ["empty", ""],
-
       ["boolean", "true"],
       ["boolean", "false"],
-
       ["numeric", "0"],
       // ["bigint", "0n"],
-
+      ["string", `"string"`],
       ["regexp without flag", `/foo/;`],
       ["regexp u flag", `/foo/dgimsuy;`],
       ["regexp v flag", `/foo/dgimsvy;`],
+      ["identifier", "i"],
 
       ["logical NOT", `!0`],
       ["bitwise NOT", `~0`],
+
+      ["function declaration", "function f(p) {}"],
+      ["function expression", "0, function f(p) {}"],
+      ["arrow function expression", "() => {}"],
+      ["async arrow function expression", "async () => {}"],
+
+      ["object method", "({ m() {} })"],
+      ["object property", "({ p: 0 })"],
+
+      ["class declaration", "class C {}"],
+      ["class expression", "0, class C {}"],
+      ["class method", "class C { m() {} }"],
+      ["class property", "class C { p; }"],
+      ["class static block", "class C { static {}; }"],
+
+      ["variable declaration", "var a = 0"],
+      [
+        "variable declaration destructuring",
+        "var [{ a: x = 0 }, ...b] = [{ a: 0 }]",
+      ],
+      // pending cloneIdentifier support
+      // ["variable declaration destructuring shorthand", "let { a = 0 } = { a: 0 }"]
+
+      ["assignment expression", "x = 1"],
+      // pending toAssignable support
+      // ["assignment expression destructuring", "[{ a: x = 0 }, ...b] = [{ a: 0 }]"],
+
+      ["async call expression", "async ([ x ])"],
+
+      ["import declaration", `import "foo"`],
+      ["import declaration default", `import foo from "foo"`],
+      // pending cloneIdentifier support
+      // ["import declaration named", `import { foo } from "foo"`]
+      ["import declaration named as", `import { foo as bar } from "foo"`],
+      [
+        "import declaration with attributes",
+        `import foo from "./foo.json" with { type: "json" }`,
+      ],
+
+      // pending cloneIdentifier support
+      // ["export declaration", `const foo = 0;export { foo }`],
+      ["export declaration as", `const foo = 0;export { foo as bar }`],
+      ["export function declaration", `export function foo() {}`],
+      ["export class declaration", `export class foo {}`],
+
+      ["member expression", `foo.bar`],
+      ["call expression", `foo(bar)`],
+      ["new expression", `new foo`],
     ])("%s: %s", (_, input) => {
       parseAndAssertSame(input);
     });
+
+    if (IS_BABEL_8()) {
+      it.each([
+        // ["class private method", "class C { #m() {} }"],
+        ["class abstract property", "abstract class C { abstract p; }"],
+        // ["class abstract private property", "abstract class C { abstract #p; }"]
+        ["class abstract method", "abstract class C { abstract m(): void }"],
+      ])("%s: %s", (_, input) => {
+        parseAndAssertSame(input);
+      });
+    }
   },
 );
 
