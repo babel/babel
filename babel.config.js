@@ -307,7 +307,7 @@ module.exports = function (api) {
       },
       convertESM && {
         test: sources.map(normalize),
-        exclude: lazyRequireSources.map(normalize),
+        exclude: lazyRequireSources.concat(["**/*.mts"]).map(normalize),
         plugins: [
           [
             "@babel/transform-modules-commonjs",

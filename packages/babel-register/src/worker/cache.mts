@@ -79,6 +79,7 @@ export default class Cache {
   }
 
   async close() {
+    if (!this.db) return;
     await this.db.close();
     this.db = null;
   }

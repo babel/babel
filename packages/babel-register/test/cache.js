@@ -7,9 +7,15 @@ const Cache = _Cache.default || _Cache;
 import { describeBabel7, describeBabel8, commonJS } from "$repo-utils";
 const { require, __filename, __dirname } = commonJS(import.meta.url);
 
-jest.useFakeTimers();
-
 describeBabel8("@babel/register - caching", () => {
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   const defaultCachePath = path.join(
     __dirname,
     "../../../node_modules/.cache/@babel/register/cache.lmdb",
