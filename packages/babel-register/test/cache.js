@@ -1,15 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 import { Module } from "node:module";
-import _Cache from "../lib/worker/cache.mjs";
-const Cache = _Cache.default || _Cache;
 
 import { describeBabel7, describeBabel8, commonJS } from "$repo-utils";
 const { require, __filename, __dirname } = commonJS(import.meta.url);
 
 describeBabel8("@babel/register - caching", () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
+  let Cache;
+  beforeAll(async () => {
+    Cache = (await import("../lib/worker/cache.mjs")).default;
+
+    jest.useFakeTimers({
+      doNotFake: ["nextTick", "setImmediate", "queueMicrotask"],
+    });
   });
 
   afterAll(() => {
