@@ -281,6 +281,10 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("a = 1");
   });
 
+  it("let declaration", () => {
+    parseAndAssertSame("let a = 1");
+  });
+
   it("logical NOT", () => {
     parseAndAssertSame("!0");
   });
@@ -293,8 +297,20 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("class Foo {}");
   });
 
+  it("static class method", () => {
+    parseAndAssertSame("class Foo { static m() {} }");
+  });
+
   it("class expression", () => {
     parseAndAssertSame("var a = class Foo {}");
+  });
+
+  it("yield expression", () => {
+    parseAndAssertSame("function *g() { yield* g }");
+  });
+
+  it("await expression", () => {
+    parseAndAssertSame("async function a() { await a() }");
   });
 
   it("jsx expression", () => {
