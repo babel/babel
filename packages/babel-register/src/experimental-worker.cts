@@ -16,10 +16,14 @@ let client: IClient;
 function register(opts?: Options) {
   if (process.env.BABEL_8_BREAKING && !client) {
     let hasClosed = false;
-    function listener() {
+    function listener(signalOrCode: string | number) {
       if (hasClosed) return;
       hasClosed = true;
       client.close();
+      if (typeof signalOrCode !== "number") {
+        // eslint-disable-next-line n/no-process-exit
+        process.exit(0);
+      }
     }
     process.on("exit", listener);
     process.on("SIGINT", listener);
