@@ -896,17 +896,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParsePropertyOrMethodSignature(
-      node: N.TsPropertySignature | N.TsMethodSignature,
+      node: Undone<N.TsPropertySignature | N.TsMethodSignature>,
       readonly: boolean,
     ): N.TsPropertySignature | N.TsMethodSignature {
       if (this.eat(tt.question)) node.optional = true;
-      const nodeAny: any = node;
 
       if (this.match(tt.parenL) || this.match(tt.lt)) {
         if (readonly) {
           this.raise(TSErrors.ReadonlyForMethodSignature, node);
         }
-        const method: N.TsMethodSignature = nodeAny;
+        const method = node as Undone<N.TsMethodSignature>;
         if (method.kind && this.match(tt.lt)) {
           this.raise(
             TSErrors.AccessorCannotHaveTypeParameters,
@@ -969,7 +968,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         return this.finishNode(method, "TSMethodSignature");
       } else {
-        const property: N.TsPropertySignature = nodeAny;
+        const property = node as Undone<N.TsPropertySignature>;
         if (readonly) property.readonly = true;
         const type = this.tsTryParseTypeAnnotation();
         if (type) property.typeAnnotation = type;
@@ -1029,6 +1028,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       ) {
         node.kind = node.key.name;
         super.parsePropertyName(node);
+        // Allow < here so that we can recover from get key<T> later
+        if (!this.match(tt.parenL) && !this.match(tt.lt)) {
+          this.unexpected(null, tt.parenL);
+        }
       }
       return this.tsParsePropertyOrMethodSignature(node, !!node.readonly);
     }
