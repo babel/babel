@@ -576,7 +576,6 @@ export interface ObjectMethod extends ObjectMemberBase, FunctionBase {
 
 // DeclarationBase: For TS-ESLint
 export interface FunctionExpression extends FunctionBase, DeclarationBase {
-  kind?: void; // never set,
   type: "FunctionExpression";
 }
 
@@ -916,7 +915,6 @@ export type ClassMember =
 
 export type MethodLike =
   | ObjectMethod
-  | FunctionExpression
   | ClassMethod
   | ClassPrivateMethod
   | TSDeclareMethod;
