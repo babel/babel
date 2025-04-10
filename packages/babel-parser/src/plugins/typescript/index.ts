@@ -4443,6 +4443,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.optional ??= false;
           node.typeAnnotation ??= undefined;
           return;
+        case "TSParameterProperty":
+          node.accessibility ??= undefined;
+          node.override ??= false;
+          node.readonly ??= false;
+          node.static ??= false;
+          return;
         case "TSEmptyBodyFunctionExpression":
           node.body = null;
         /* fallthrough */
@@ -4456,6 +4462,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return;
         case "Property":
           node.optional ??= false;
+          return;
+        case "TSMethodSignature":
+        case "TSPropertySignature":
+          node.optional ??= false;
+        /* fallthrough */
+        case "TSIndexSignature":
+          node.accessibility ??= undefined;
+          node.readonly ??= false;
+          node.static ??= false;
           return;
         case "TSAbstractPropertyDefinition":
         case "PropertyDefinition":
@@ -4481,11 +4496,39 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.superTypeArguments ??= undefined;
           node.typeParameters ??= undefined;
           return;
+        case "TSTypeAliasDeclaration":
         case "VariableDeclaration":
           node.declare ??= false;
           return;
         case "VariableDeclarator":
           node.definite ??= false;
+          return;
+        case "TSEnumDeclaration":
+          node.const ??= false;
+          node.declare ??= false;
+          return;
+        case "TSEnumMember":
+          node.computed ??= false;
+          return;
+        case "TSImportType":
+          node.qualifier ??= null;
+          node.options ??= null;
+          if (process.env.BABEL_8_BREAKING) {
+            node.typeArguments ??= null;
+          }
+          return;
+        case "TSInterfaceDeclaration":
+          node.declare ??= false;
+          node.extends ??= [];
+          return;
+        case "TSModuleDeclaration":
+          node.declare ??= false;
+          node.global ??= false;
+          return;
+        case "TSTypeParameter":
+          node.const ??= false;
+          node.in ??= false;
+          node.out ??= false;
           return;
       }
     }

@@ -17,7 +17,8 @@
           "value": "hot-new-module",
           "raw": "\"hot-new-module\""
         },
-        "declare": true
+        "declare": true,
+        "global": false
       }
     ],
     "extra": {

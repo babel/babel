@@ -88,7 +88,9 @@
                           "optional": false
                         }
                       ]
-                    }
+                    },
+                    "qualifier": null,
+                    "typeArguments": null
                   }
                 }
               }
@@ -185,7 +187,8 @@
                     "name": "Y",
                     "decorators": [],
                     "optional": false
-                  }
+                  },
+                  "typeArguments": null
                 }
               }
             },

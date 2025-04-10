@@ -46,7 +46,8 @@
                       "name": "this",
                       "decorators": [],
                       "optional": false
-                    }
+                    },
+                    "typeArguments": null
                   }
                 }
               }
@@ -94,7 +95,8 @@
                     "name": "this",
                     "decorators": [],
                     "optional": false
-                  }
+                  },
+                  "typeArguments": null
                 }
               }
             },
