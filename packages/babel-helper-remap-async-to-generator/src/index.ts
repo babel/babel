@@ -72,25 +72,37 @@ export default function (
     }
 
     // try to catch calls to Function#bind, as emitted by arrowFunctionToExpression in spec mode
-    // this may also catch .bind(this) written by users, but does it matter? 🤔
+    // this may also catch .bind(this)/.call()/.apply() written by users, but does it matter? 🤔
     const { parentPath } = path;
+
     if (
       parentPath.isMemberExpression() &&
-      isIdentifier(parentPath.node.property, { name: "bind" })
+      isIdentifier(parentPath.node.property)
     ) {
-      const { parentPath: bindCall } = parentPath;
+      const { parentPath: methodCall } = parentPath;
+      const { name: methodName } = parentPath.node.property;
 
-      // (function () { ... }).bind(this)()
+      if (["call", "apply"].includes(methodName)) {
+        // (function () { ... }).apply(...)
+        // (function () { ... }).call(...)
 
-      return (
-        // first, check if the .bind is actually being called
-        bindCall.isCallExpression() &&
-        // and whether its sole argument is 'this'
-        bindCall.node.arguments.length === 1 &&
-        isThisExpression(bindCall.node.arguments[0]) &&
-        // and whether the result of the .bind(this) is being called
-        bindCall.parentPath.isCallExpression({ callee: bindCall.node })
-      );
+        // check if the result of '.call()' or '.apply()' is immediately invoked
+        return methodCall.isCallExpression({ callee: parentPath.node });
+      }
+
+      if (methodName === "bind") {
+        // (function () { ... }).bind(this)()
+
+        return (
+          // first, check if the .bind is actually being called
+          methodCall.isCallExpression() &&
+          // and whether its sole argument is 'this'
+          methodCall.node.arguments.length === 1 &&
+          isThisExpression(methodCall.node.arguments[0]) &&
+          // and whether the result of the .bind(this) is being called
+          methodCall.parentPath.isCallExpression({ callee: methodCall.node })
+        );
+      }
     }
 
     return false;
