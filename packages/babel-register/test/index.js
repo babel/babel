@@ -3,6 +3,7 @@ import path from "node:path";
 import fs from "node:fs";
 import child from "node:child_process";
 import {
+  IS_BABEL_8,
   commonJS,
   describeBabel7NoESM,
   describeGte,
@@ -14,7 +15,10 @@ const { __dirname, require } = commonJS(import.meta.url);
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 22
 const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
-const testCacheFilename = path.join(__dirname, ".index.babel");
+const testCacheFilename = path.join(
+  __dirname,
+  IS_BABEL_8() ? ".index.babel" : ".index.babel/cache.json",
+);
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileLog = require.resolve("./fixtures/babelrc/log");
 const testFileMjs = require.resolve("./fixtures/mjs-babelrc/es2015");
@@ -32,7 +36,7 @@ const defaultOptions = {
 
 function cleanCache() {
   try {
-    fs.unlinkSync(testCacheFilename);
+    fs.rmSync(testCacheFilename, { recursive: true, force: true });
   } catch (e) {
     // It is convenient to always try to clear
   }

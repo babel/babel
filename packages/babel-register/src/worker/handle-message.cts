@@ -9,8 +9,7 @@ export = function handleMessage(action: ACTIONS, payload: any) {
     case "GET_DEFAULT_EXTENSIONS":
       return babel.DEFAULT_EXTENSIONS;
     case "SET_OPTIONS":
-      transform.setOptions(payload);
-      return;
+      return transform.setOptions(payload);
     case "TRANSFORM":
       return transform.transform(payload.code, payload.filename);
     case "TRANSFORM_SYNC":
@@ -20,7 +19,7 @@ export = function handleMessage(action: ACTIONS, payload: any) {
       }
       break;
     case "CLOSE":
-      return babel.cache.close();
+      return babel.cache.disable();
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);

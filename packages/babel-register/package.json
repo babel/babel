@@ -16,9 +16,9 @@
   "main": "./lib/index.cjs",
   "dependencies": {
     "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
+    "cacache": "condition:BABEL_8_BREAKING ? ^19.0.1 :",
     "clone-deep": "^4.0.1",
     "find-cache-dir": "condition:BABEL_8_BREAKING ? ^5.0.0 : ^2.0.0 (esm:default)",
-    "lmdb": "condition:BABEL_8_BREAKING ? ^3.2.6 : (esm:open)",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "pirates": "^4.0.6",
     "source-map-support": "condition:BABEL_8_BREAKING ? : ^0.5.16"
@@ -30,6 +30,7 @@
     "@babel/core": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "@types/cacache": "^17.0.2",
     "browserify": "^16.5.2"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",

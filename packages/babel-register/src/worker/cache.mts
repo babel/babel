@@ -3,8 +3,9 @@ import fs from "node:fs";
 import os from "node:os";
 // @ts-expect-error no types
 import findCacheDir from "find-cache-dir";
-// @ts-expect-error no types
-import * as lmdb from "lmdb";
+import cacache from "cacache";
+import { gzipSync } from "node:zlib";
+import { unzipSync } from "node:zlib";
 
 let globalDisableCache = false;
 
@@ -14,8 +15,10 @@ export default class Cache {
     process.env.BABEL_CACHE_PATH ||
     findCacheDir({ name: "@babel/register" }) ||
     path.join(os.tmpdir() || os.homedir(), `.babel-register`);
-  db: lmdb.Database = null;
-  cache: Map<string, unknown> = null;
+  batched: { key: string; data: unknown }[] = [];
+  batchedSize = 0;
+  cache = new Map<string, unknown>();
+  index = new Map<string, string>();
 
   constructor() {
     globalDisableCache = !!process.env.BABEL_DISABLE_CACHE;
@@ -46,58 +49,81 @@ export default class Cache {
     }
   }
 
-  enable() {
+  async enable() {
     if (globalDisableCache) return;
-    this.cache = new Map();
     this.enabled = true;
 
-    if (!this.db) {
-      this.db = lmdb.open({
-        path: path.join(this.cacheDir, "cache.lmdb"),
-        compression: true,
-        noSync: true,
-      });
-
-      let createdAt = this.db.get("created_at");
-      // If the cache is older than 30 days, clear it
-      if (
-        createdAt != null &&
-        Date.now() > createdAt + 1000 * 60 * 60 * 24 * 30
-      ) {
-        this.db.clearSync();
-        createdAt = null;
+    const entries = await cacache.ls(this.cacheDir);
+    for (const [key, cache] of Object.entries(entries)) {
+      const now = Date.now();
+      if (now - cache.time > 1000 * 60 * 60 * 24) {
+        await cacache.rm.content(this.cacheDir, cache.integrity);
+        await cacache.rm.entry(this.cacheDir, key);
+        continue;
       }
-      if (createdAt == null) {
-        this.db.putSync("created_at", Date.now());
+      key.split("|").forEach(k => {
+        this.index.set(k, cache.integrity);
+      });
+    }
+  }
+
+  async get(key: string) {
+    if (!this.enabled) return;
+
+    if (this.cache.has(key)) {
+      return this.cache.get(key);
+    }
+
+    const integrity = this.index.get(key);
+    if (!integrity) return;
+
+    try {
+      let cache = (await cacache.get.byDigest(this.cacheDir, integrity, {
+        memoize: false,
+      })) as unknown as Buffer;
+      cache = unzipSync(cache);
+      const items = JSON.parse(cache.toString("utf8"));
+      for (const item of items) {
+        this.cache.set(item.key, item.data);
+      }
+      return this.cache.get(key);
+    } catch (error) {
+      if (error.code !== "ENOENT") {
+        throw error;
       }
     }
   }
 
-  disable() {
-    if (!this.enabled) return;
+  async disable() {
+    await this.flush();
     this.enabled = false;
   }
 
-  async close() {
-    if (!this.db) return;
-    await this.db.close();
-    this.db = null;
-  }
+  async set(key: string, data: unknown) {
+    if (!this.enabled) return;
 
-  get(key: string) {
-    let data = this.cache.get(key);
-    if (!data && !globalDisableCache) {
-      data = this.db.get(key);
-      if (data) {
-        this.cache.set(key, data);
-      }
-    }
-
-    return data;
-  }
-
-  set(key: string, data: unknown) {
     this.cache.set(key, data);
-    this.db.putSync(key, data);
+
+    this.batched.push({ key, data });
+    this.batchedSize += JSON.stringify(data).length;
+
+    // 1MB
+    if (this.batchedSize >= 1024 * 1024) {
+      await this.flush();
+    }
+  }
+
+  async flush() {
+    if (!this.enabled) return;
+
+    const key = this.batched.map(item => item.key).join("|");
+    const buf = Buffer.from(JSON.stringify(this.batched));
+
+    await cacache.put(this.cacheDir, key, gzipSync(buf), {
+      algorithms: ["sha1"],
+    });
+
+    this.batched = [];
+    this.batchedSize = 0;
   }
 }
