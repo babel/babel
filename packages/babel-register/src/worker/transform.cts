@@ -141,7 +141,9 @@ async function transform(input: string, filename: string) {
   // Bail out ASAP if the file has been ignored.
   if (opts === null) return null;
 
-  const { cached, store } = await cacheLookup(opts, filename);
+  const { cached, store } = process.env.BABEL_8_BREAKING
+    ? await cacheLookup(opts, filename)
+    : cacheLookupBabel7(opts, filename);
   if (cached) return cached;
 
   const { code, map } = await babel.transformAsync(input, {
