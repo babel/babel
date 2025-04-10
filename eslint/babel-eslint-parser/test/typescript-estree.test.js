@@ -30,9 +30,7 @@ function fixTSESLintTokens(ast) {
     switch (type) {
       case "Identifier":
         {
-          if (value.match(/^\d.*n$/)) {
-            token.type = "Numeric";
-          } else if (value.match(/^#/)) {
+          if (value.match(/^#/)) {
             token.type = "PrivateIdentifier";
             token.value = value.slice(1);
           }
