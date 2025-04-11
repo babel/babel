@@ -3026,7 +3026,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           /* isExport */ true,
         );
         if (process.env.BABEL_8_BREAKING) {
+          (node as Undone<N.ExportNamedDeclaration>).attributes = [];
           (node as Undone<N.ExportNamedDeclaration>).declaration = declaration;
+          (node as Undone<N.ExportNamedDeclaration>).exportKind = "value";
+          (node as Undone<N.ExportNamedDeclaration>).source = null;
           (node as Undone<N.ExportNamedDeclaration>).specifiers = [];
           return this.finishNode(node, "ExportNamedDeclaration");
         } else {
@@ -4445,6 +4448,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return;
         case "TSParameterProperty":
           node.accessibility ??= undefined;
+          node.decorators ??= [];
           node.override ??= false;
           node.readonly ??= false;
           node.static ??= false;
@@ -4452,6 +4456,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TSEmptyBodyFunctionExpression":
           node.body = null;
         /* fallthrough */
+        case "TSDeclareFunction":
         case "FunctionDeclaration":
         case "FunctionExpression":
         case "ClassMethod":
@@ -4474,6 +4479,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return;
         case "TSAbstractPropertyDefinition":
         case "PropertyDefinition":
+        case "TSAbstractAccessorProperty":
         case "AccessorProperty":
           node.declare ??= false;
           node.definite ??= false;
@@ -4487,8 +4493,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.override ??= false;
           node.optional ??= false;
           return;
-        case "ClassDeclaration":
         case "ClassExpression":
+          node.id ??= null;
+        /* fallthrough */
+        case "ClassDeclaration":
           node.abstract ??= false;
           node.declare ??= false;
           node.decorators ??= [];
@@ -4523,7 +4531,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return;
         case "TSModuleDeclaration":
           node.declare ??= false;
-          node.global ??= false;
+          node.global ??= node.kind === "global";
           return;
         case "TSTypeParameter":
           node.const ??= false;
