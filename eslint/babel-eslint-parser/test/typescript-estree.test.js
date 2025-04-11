@@ -109,7 +109,7 @@ function deeplyRemoveProperties(obj, props) {
       "typescript",
     ];
 
-    function parseAndAssertSame(code, options, withoutTokens) {
+    function parseAndAssertSame(code, options = {}, withoutTokens) {
       code = unpad(code);
       const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
       const babelAST = parseForESLint(code, {
@@ -121,6 +121,13 @@ function deeplyRemoveProperties(obj, props) {
           parserOpts: {
             plugins: tsEslintSupportedParserPlugins,
             ...options,
+            // These options are not supported by the Babel eslint-parser
+            createParenthesizedExpressions: false,
+            // These options are not mirrored by the typescript-eslint/parser
+            sourceType:
+              options.sourceType === "unambiguous"
+                ? "module"
+                : options.sourceType,
           },
         },
       }).ast;
@@ -401,7 +408,7 @@ function deeplyRemoveProperties(obj, props) {
               } else {
                 testFn(test.actual.loc, () => {
                   const input = readFileSync(test.actual.loc, "utf-8");
-                  parseAndAssertSame(input, undefined, true);
+                  parseAndAssertSame(input, test.options, true);
                 });
               }
             }
