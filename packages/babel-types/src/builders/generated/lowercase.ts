@@ -1338,6 +1338,20 @@ export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
   validate(defs.body, node, "body", body, 1);
   return node;
 }
+export function importAttribute(
+  key: t.Identifier | t.StringLiteral,
+  value: t.StringLiteral,
+): t.ImportAttribute {
+  const node: t.ImportAttribute = {
+    type: "ImportAttribute",
+    key,
+    value,
+  };
+  const defs = NODE_FIELDS.ImportAttribute;
+  validate(defs.key, node, "key", key, 1);
+  validate(defs.value, node, "value", value, 1);
+  return node;
+}
 export function anyTypeAnnotation(): t.AnyTypeAnnotation {
   return {
     type: "AnyTypeAnnotation",
@@ -2408,20 +2422,6 @@ export function bindExpression(
   const defs = NODE_FIELDS.BindExpression;
   validate(defs.object, node, "object", object, 1);
   validate(defs.callee, node, "callee", callee, 1);
-  return node;
-}
-export function importAttribute(
-  key: t.Identifier | t.StringLiteral,
-  value: t.StringLiteral,
-): t.ImportAttribute {
-  const node: t.ImportAttribute = {
-    type: "ImportAttribute",
-    key,
-    value,
-  };
-  const defs = NODE_FIELDS.ImportAttribute;
-  validate(defs.key, node, "key", key, 1);
-  validate(defs.value, node, "value", value, 1);
   return node;
 }
 export function decorator(expression: t.Expression): t.Decorator {
