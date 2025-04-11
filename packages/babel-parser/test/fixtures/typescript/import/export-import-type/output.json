@@ -13,6 +13,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "attributes": [],
         "declaration": {
           "type": "TSImportEqualsDeclaration",
           "start":7,"end":27,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":27,"index":27}},
@@ -37,6 +38,8 @@
             }
           }
         },
+        "exportKind": "value",
+        "source": null,
         "specifiers": []
       }
     ],
