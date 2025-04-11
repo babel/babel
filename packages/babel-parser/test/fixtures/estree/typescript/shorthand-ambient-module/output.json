@@ -4,7 +4,7 @@
   "program": {
     "type": "Program",
     "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
-    "sourceType": "module",
+    "sourceType": "script",
     "interpreter": null,
     "body": [
       {
@@ -20,9 +20,6 @@
         "declare": true,
         "global": false
       }
-    ],
-    "extra": {
-      "topLevelAwait": false
-    }
+    ]
   }
 }

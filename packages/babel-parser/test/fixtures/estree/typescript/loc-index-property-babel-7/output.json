@@ -41,7 +41,8 @@
                 "start":42,"end":43,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
                 "value": 1,
                 "raw": "1"
-              }
+              },
+              "computed": false
             },
             {
               "type": "TSEnumMember",
@@ -52,7 +53,8 @@
                 "name": "bar",
                 "decorators": [],
                 "optional": false
-              }
+              },
+              "computed": false
             }
           ],
           "declare": true
