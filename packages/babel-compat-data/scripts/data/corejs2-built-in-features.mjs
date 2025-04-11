@@ -26,7 +26,7 @@ const typedArrayMethods = [
   "typed arrays / %TypedArray%[Symbol.species]",
 ];
 
-module.exports = {
+export default {
   "es6.array.copy-within":
     "Array.prototype methods / Array.prototype.copyWithin",
   "es6.array.every": "Array methods / Array.prototype.every",

@@ -1,9 +1,8 @@
-const path = require("node:path");
+import browserCompatData from "@mdn/browser-compat-data" with { type: "json" };
+import { addElectronSupportFromChromium } from "./chromium-to-electron.mjs";
+import { writeFile, babel7Only } from "./utils-build-data.mjs";
 
-const compatData = require("@mdn/browser-compat-data").javascript;
-const { addElectronSupportFromChromium } = require("./chromium-to-electron");
-const { writeFile, babel7Only } = require("./utils-build-data");
-
+const compatData = browserCompatData.javascript;
 const browserNameMaps = {
   // Map @mdn/browser-compat-data to browserslist browser names
   toBrowserslist: {
@@ -69,7 +68,7 @@ function generateModuleSupport(source, toCompatTable) {
   return allowedBrowsers;
 }
 
-const dataPath = path.join(__dirname, "../data/native-modules.json");
+const dataURL = new URL("../data/native-modules.json", import.meta.url);
 const processed = generateModuleSupport(compatData.statements.export, false);
 // todo: restore deno support when browserslist recognizes deno
 delete processed.deno;
@@ -81,5 +80,5 @@ babel7Only(() => {
 const data = {
   "es6.module": processed,
 };
-writeFile(data, dataPath, "native-modules");
-exports.generateModuleSupport = generateModuleSupport;
+writeFile(data, dataURL, "native-modules");
+export { generateModuleSupport };

@@ -212,7 +212,7 @@ const es2025 = {
 const shippedProposal = {};
 
 // Run plugins for modern features first
-module.exports = Object.assign(
+export default Object.assign(
   {},
   shippedProposal,
   es2025,

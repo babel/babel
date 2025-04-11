@@ -1,6 +1,6 @@
-const data = require("core-js-compat/data.json");
-const fs = require("node:fs");
-const path = require("node:path");
+import data from "core-js-compat/data.json" with { type: "json" };
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const features = Object.keys(data);
 
@@ -9,7 +9,7 @@ const shippedProposals = features.filter(feature => {
 });
 
 fs.writeFileSync(
-  path.join(__dirname, "../data/corejs3-shipped-proposals.json"),
+  new URL("../data/corejs3-shipped-proposals.json", import.meta.url),
   JSON.stringify(shippedProposals, undefined, 2) + "\n"
 );
 
@@ -17,18 +17,18 @@ const finishedProposals = shippedProposals.filter(feature => {
   return features.includes(feature.replace("esnext.", "es."));
 });
 
-const builtInDefinitionsPath = path.join(
-  __dirname,
-  "../../babel-preset-env/src/polyfills/corejs3/built-in-definitions.js"
+const builtinDefinitionsURL = new URL(
+  "../../babel-preset-env/src/polyfills/corejs3/built-in-definitions.js",
+  import.meta.url
 );
 
-const builtInDefinitions = fs.readFileSync(builtInDefinitionsPath, "utf-8");
+const builtInDefinitions = fs.readFileSync(builtinDefinitionsURL, "utf-8");
 
 for (const feature of finishedProposals) {
   const standardizedName = feature.replace("esnext.", "es.");
   if (!builtInDefinitions.includes(standardizedName)) {
     console.log(
-      `${feature} is now standardized as ${standardizedName}, please add "${standardizedName}" to "${builtInDefinitionsPath}"`
+      `${feature} is now standardized as ${standardizedName}, please add "${standardizedName}" to "${fileURLToPath(builtinDefinitionsURL)}"`
     );
   }
 }

@@ -1,7 +1,7 @@
 // TODO(Babel 8): This won't be needed anymore
 
 // prettier-ignore
-module.exports = {
+export default {
   __proto__: null,
   "transform-class-static-block": "proposal-class-static-block",
   "transform-private-property-in-object": "proposal-private-property-in-object",

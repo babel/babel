@@ -1,25 +1,19 @@
-"use strict";
-
 // NOTE: This script must be run _after_ build-data.js
-
-const path = require("node:path");
-
-const {
+import {
   generateData,
   environments,
   writeFile,
   maybeDefineLegacyPluginAliases,
-} = require("./utils-build-data");
+} from "./utils-build-data.mjs";
 
-const pluginBugfixes = require("./data/plugin-bugfixes");
-const pluginFeatures = require("./data/plugin-features");
+import pluginBugfixes from "./data/plugin-bugfixes.mjs";
+import pluginFeatures from "./data/plugin-features.mjs";
+import dataWithoutBugfixes from "../data/plugins.json" with { type: "json" };
 
 const { data: dataWithBugfixes, overlapping } = generateData(
   environments,
   Object.assign({}, pluginBugfixes, pluginFeatures)
 );
-
-const dataWithoutBugfixes = require("../data/plugins.json");
 
 for (const [key, support] of Object.entries(dataWithBugfixes)) {
   const originalSupport = dataWithoutBugfixes[key];
@@ -37,9 +31,9 @@ for (const [filename, data] of [
   ["plugin-bugfixes", dataWithBugfixes],
   ["overlapping-plugins", overlapping],
 ]) {
-  const dataPath = path.join(__dirname, `../data/${filename}.json`);
+  const dataURL = new URL(`../data/${filename}.json`, import.meta.url);
 
-  if (!writeFile(maybeDefineLegacyPluginAliases(data), dataPath, filename)) {
+  if (!writeFile(maybeDefineLegacyPluginAliases(data), dataURL, filename)) {
     process.exitCode = 1;
     break;
   }
