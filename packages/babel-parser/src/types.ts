@@ -730,8 +730,6 @@ export interface CallOrNewBase extends NodeBase {
   // For ESTree
   optional: boolean;
   typeArguments: TypeParameterInstantiationBase | undefined | null;
-  // For ESTree
-  optional?: boolean;
   /**
    * @deprecated
    */
