@@ -1624,6 +1624,12 @@ export interface EstreeTSAbstractPropertyDefinition
   value: null;
 }
 
+export interface EstreeTSAbstractAccessorProperty
+  extends EstreePropertyDefinitionBase {
+  type: "TSAbstractAccessorProperty";
+  value: null;
+}
+
 // ================
 // TypeScript types
 // ================
@@ -2045,6 +2051,7 @@ export type Node =
   | EstreePrivateIdentifier
   | EstreeProperty
   | EstreePropertyDefinition
+  | EstreeTSAbstractAccessorProperty
   | EstreeTSAbstractMethodDefinition
   | EstreeTSAbstractPropertyDefinition
   | EstreeTSEmptyBodyFunctionExpression
