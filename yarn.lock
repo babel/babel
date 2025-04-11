@@ -410,6 +410,7 @@ __metadata:
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-fixtures": "workspace:^"
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1"
     "@types/eslint": "npm:^8.56.2"
     "@types/estree": "npm:^1.0.5"
