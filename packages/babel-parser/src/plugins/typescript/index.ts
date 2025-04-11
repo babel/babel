@@ -2741,6 +2741,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return;
           }
 
+          // A TSInstantiationExpression must be the end of a subscript chain
+          base = super.stopParseSubscript(base, state);
           const node = this.startNodeAt<N.TsInstantiationExpression>(startLoc);
           node.expression = base;
           if (process.env.BABEL_8_BREAKING) {

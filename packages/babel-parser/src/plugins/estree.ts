@@ -101,10 +101,13 @@ export default (superClass: typeof Parser) =>
     }
 
     // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
-    estreeParseChainExpression(node: N.Expression): N.EstreeChainExpression {
+    estreeParseChainExpression(
+      node: N.Expression,
+      endLoc: Position,
+    ): N.EstreeChainExpression {
       const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
       chain.expression = node;
-      return this.finishNode(chain, "ChainExpression");
+      return this.finishNodeAt(chain, "ChainExpression", endLoc);
     }
 
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
@@ -573,7 +576,7 @@ export default (superClass: typeof Parser) =>
     stopParseSubscript(base: N.Expression, state: N.ParseSubscriptState) {
       const node = super.stopParseSubscript(base, state);
       if (state.optionalChainMember) {
-        return this.estreeParseChainExpression(node);
+        return this.estreeParseChainExpression(node, base.loc.end);
       }
       return node;
     }
