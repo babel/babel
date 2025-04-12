@@ -5,6 +5,7 @@ import { wrapDoExpressionInIIFE } from "./utils.ts";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
   const { types: t } = api;
+  const noDocumentAll = api.assumption("noDocumentAll") ?? false;
 
   return {
     name: "proposal-do-expressions",
@@ -344,11 +345,7 @@ export default declare(api => {
           return [
             ...flattenExpression(object),
             t.ifStatement(
-              t.binaryExpression(
-                "!=",
-                t.cloneNode(object.node),
-                t.nullLiteral(),
-              ),
+              buildOptionalChainChecker(object.node),
               t.blockStatement([
                 ...flattenExpression(property),
                 t.expressionStatement(
@@ -378,7 +375,7 @@ export default declare(api => {
           return [
             ...calleeStatements,
             t.ifStatement(
-              t.binaryExpression("!=", callee.node, t.nullLiteral()),
+              buildOptionalChainChecker(callee.node),
               t.blockStatement(callStatements),
             ),
           ];
@@ -599,6 +596,18 @@ export default declare(api => {
         path.replaceWith(uid);
         return statement;
       }
+    }
+  }
+
+  function buildOptionalChainChecker(node: t.Expression) {
+    if (noDocumentAll) {
+      return t.binaryExpression("!=", t.cloneNode(node), t.nullLiteral());
+    } else {
+      return t.logicalExpression(
+        "&&",
+        t.binaryExpression("!==", t.cloneNode(node), t.nullLiteral()),
+        t.binaryExpression("!==", t.cloneNode(node), t.buildUndefinedNode()),
+      );
     }
   }
 });

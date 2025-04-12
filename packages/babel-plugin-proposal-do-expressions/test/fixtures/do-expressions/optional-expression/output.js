@@ -4,7 +4,7 @@ var _do, _do2, _do4, _do5, _do6, _do8, _do9, _do1, _do10, _do11, _do12, _do14, _
   effects.push(1);
   _do3 = null;
 }
-if (_do3 != null) {
+if (_do3 !== null && _do3 !== void 0) {
   {
     var _do24;
     effects.push(2);
@@ -13,7 +13,7 @@ if (_do3 != null) {
   _do4 = _do24;
   _do2 = _do3[_do4];
 }
-if (_do2 != null) {
+if (_do2 !== null && _do2 !== void 0) {
   {
     var _do25;
     effects.push(3);
@@ -30,7 +30,7 @@ const v1 = _do;
     x: 1
   }];
 }
-if (_do7 != null) {
+if (_do7 !== null && _do7 !== void 0) {
   {
     var _do26;
     effects.push(5);
@@ -54,7 +54,7 @@ _do27 = _do0;
 }
 _do29 = _do27[_do28];
 _do1 = _do29;
-if (_do1 != null) {
+if (_do1 !== null && _do1 !== void 0) {
   _do10 = _do1;
   _do11 = _do10();
 }
@@ -64,7 +64,7 @@ const v3 = _do11;
   effects.push(8);
   _do13 = null;
 }
-if (_do13 != null) {
+if (_do13 !== null && _do13 !== void 0) {
   {
     var _do30;
     effects.push(9);
@@ -73,7 +73,7 @@ if (_do13 != null) {
   _do14 = _do30;
   _do12 = _do13[_do14];
 }
-if (_do12 != null) {
+if (_do12 !== null && _do12 !== void 0) {
   _do15 = _do12;
   _do16 = effects.push(10);
   _do17 = _do15(_do16);
@@ -94,7 +94,7 @@ const v4 = _do17;
   };
 }
 _do20 = _do19.s;
-if (_do20 != null) {
+if (_do20 !== null && _do20 !== void 0) {
   _do21 = _do20;
   {
     var _do31;
