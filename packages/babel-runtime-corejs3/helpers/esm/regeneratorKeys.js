@@ -1,11 +1,11 @@
 import _unshiftInstanceProperty from "core-js-pure/features/instance/unshift.js";
 function _regeneratorKeys(e) {
   var n = Object(e),
-    t = [];
-  for (var r in n) _unshiftInstanceProperty(t).call(t, r);
-  return function next() {
-    for (; t.length;) if ((r = t.pop()) in n) return next.value = r, next.done = !1, next;
-    return next.done = !0, next;
+    r = [];
+  for (var t in n) _unshiftInstanceProperty(r).call(r, t);
+  return function e() {
+    for (; r.length;) if ((t = r.pop()) in n) return e.value = t, e.done = !1, e;
+    return e.done = !0, e;
   };
 }
 export { _regeneratorKeys as default };
