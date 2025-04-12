@@ -1,4 +1,5 @@
 /* @minVersion 7.27.0 */
+/* @internal */
 
 export default function regeneratorDefine(
   obj: any,

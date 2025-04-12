@@ -18,6 +18,7 @@ export interface HelperMetadata {
   dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportName: string;
+  internal: boolean;
 }
 
 function helper(
@@ -45,6 +46,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_OverloadYield",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 447, gzip size: 270
@@ -57,6 +59,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_applyDecoratedDescriptor",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 2840, gzip size: 1469
@@ -80,6 +83,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 118, gzip size: 124
@@ -92,6 +96,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_arrayLikeToArray",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 57, gzip size: 71
@@ -104,6 +109,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_arrayWithHoles",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 78, gzip size: 83
@@ -118,6 +124,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         arrayLikeToArray: ["body.0.body.body.0.consequent.argument.callee"],
       },
+      internal: false,
     },
   ),
   // size: 172, gzip size: 159
@@ -130,6 +137,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_assertClassBrand",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 144, gzip size: 132
@@ -142,6 +150,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_assertThisInitialized",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 488, gzip size: 278
@@ -158,6 +167,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1081, gzip size: 431
@@ -179,6 +189,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_asyncIterator",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 414, gzip size: 240
@@ -198,6 +209,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_asyncToGenerator",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 63, gzip size: 83
@@ -210,6 +222,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_awaitAsyncGenerator",
       dependencies: { OverloadYield: ["body.0.body.body.0.argument.callee"] },
+      internal: false,
     },
   ),
   // size: 180, gzip size: 144
@@ -233,6 +246,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.1.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 146, gzip size: 145
@@ -245,6 +259,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_checkInRHS",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 139, gzip size: 132
@@ -257,6 +272,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_checkPrivateRedeclaration",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 108, gzip size: 111
@@ -269,6 +285,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classCallCheck",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 121, gzip size: 122
@@ -281,6 +298,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classNameTDZError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 73, gzip size: 88
@@ -295,6 +313,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 85, gzip size: 96
@@ -311,6 +330,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.expression.expressions.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 148, gzip size: 141
@@ -323,6 +343,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldBase",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 73, gzip size: 89
@@ -342,6 +363,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldKey",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 79, gzip size: 95
@@ -358,6 +380,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 68, gzip size: 84
@@ -372,6 +395,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 82, gzip size: 91
@@ -388,6 +412,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.expression.expressions.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 74, gzip size: 89
@@ -404,6 +429,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 76, gzip size: 94
@@ -418,6 +444,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.expressions.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 206, gzip size: 160
@@ -435,6 +462,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.4.argument.expressions.0.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 348, gzip size: 220
@@ -458,6 +486,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 692, gzip size: 423
@@ -474,6 +503,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.consequent.body.0.test.left.right.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 488, gzip size: 335
@@ -490,6 +520,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.2.test.left.right.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 255, gzip size: 172
@@ -513,6 +544,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.argument.body.body.2.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 7029, gzip size: 2057
@@ -570,6 +602,7 @@ const helpers: Record<string, Helper> = {
           "body.2.body.body.0.declarations.1.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 206, gzip size: 169
@@ -582,6 +615,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_defaults",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 115, gzip size: 120
@@ -594,6 +628,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_defineAccessor",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 151, gzip size: 130
@@ -610,6 +645,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.test.left.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 237, gzip size: 179
@@ -628,6 +664,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_extends",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 263, gzip size: 202
@@ -650,6 +687,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 179, gzip size: 106
@@ -668,6 +706,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_getPrototypeOf",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 31, gzip size: 51
@@ -677,6 +716,7 @@ const helpers: Record<string, Helper> = {
     exportBindingAssignments: [],
     exportName: "_identity",
     dependencies: {},
+    internal: false,
   }),
   // size: 537, gzip size: 258
   importDeferProxy: helper(
@@ -688,6 +728,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_importDeferProxy",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 300, gzip size: 219
@@ -704,6 +745,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.expression.expressions.2.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 114, gzip size: 105
@@ -718,6 +760,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         setPrototypeOf: ["body.0.body.body.0.expression.expressions.2.callee"],
       },
+      internal: false,
     },
   ),
   // size: 198, gzip size: 141
@@ -730,6 +773,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_initializerDefineProperty",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 187, gzip size: 154
@@ -742,6 +786,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_initializerWarningHelper",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 134, gzip size: 118
@@ -754,6 +799,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_instanceof",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 72, gzip size: 88
@@ -766,6 +812,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_interopRequireDefault",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 510, gzip size: 310
@@ -783,6 +830,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
       exportName: "_interopRequireWildcard",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 133, gzip size: 128
@@ -795,6 +843,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_isNativeFunction",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 193, gzip size: 144
@@ -812,6 +861,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
       exportName: "_isNativeReflectConstruct",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 129, gzip size: 124
@@ -824,6 +874,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_iterableToArray",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 416, gzip size: 293
@@ -836,6 +887,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_iterableToArrayLimit",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 520, gzip size: 341
@@ -856,6 +908,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_createRawReactElement",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 160, gzip size: 144
@@ -872,6 +925,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.consequent.body.1.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 98, gzip size: 106
@@ -884,6 +938,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_newArrowCheck",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 189, gzip size: 160
@@ -896,6 +951,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nonIterableRest",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 186, gzip size: 156
@@ -908,6 +964,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nonIterableSpread",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 99, gzip size: 108
@@ -920,6 +977,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nullishReceiverError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 94, gzip size: 103
@@ -932,6 +990,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_objectDestructuringEmpty",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 619, gzip size: 295
@@ -955,6 +1014,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 279, gzip size: 205
@@ -971,6 +1031,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.declarations.2.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 169, gzip size: 156
@@ -983,6 +1044,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_objectWithoutPropertiesLoose",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 225, gzip size: 180
@@ -997,6 +1059,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertThisInitialized: ["body.0.body.body.2.argument.callee"],
       },
+      internal: false,
     },
   ),
   // size: 71, gzip size: 85
@@ -1009,6 +1072,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_readOnlyError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 4506, gzip size: 1780
@@ -1051,6 +1115,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.12.body.body.2.declarations.0.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 132, gzip size: 119
@@ -1065,6 +1130,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         regeneratorAsyncGen: ["body.0.body.body.0.declarations.0.init.callee"],
       },
+      internal: false,
     },
   ),
   // size: 103, gzip size: 101
@@ -1082,6 +1148,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.arguments.0.callee.object.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 633, gzip size: 329
@@ -1112,6 +1179,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.2.expression.expressions.0.right.expressions.0.callee",
         ],
       },
+      internal: true,
     },
   ),
   // size: 280, gzip size: 159
@@ -1135,6 +1203,7 @@ const helpers: Record<string, Helper> = {
       ],
       exportName: "regeneratorDefine",
       dependencies: {},
+      internal: true,
     },
   ),
   // size: 133, gzip size: 117
@@ -1149,6 +1218,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         regeneratorDefine: ["body.0.body.body.0.body.body.0.expression.callee"],
       },
+      internal: true,
     },
   ),
   // size: 181, gzip size: 152
@@ -1161,6 +1231,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_regeneratorKeys",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 516, gzip size: 295
@@ -1199,6 +1270,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.7.value",
         ],
       },
+      internal: false,
     },
   ),
   // size: 396, gzip size: 264
@@ -1211,6 +1283,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_regeneratorValues",
       dependencies: {},
+      internal: true,
     },
   ),
   // size: 494, gzip size: 274
@@ -1238,6 +1311,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 178, gzip size: 166
@@ -1250,6 +1324,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "setFunctionName",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 163, gzip size: 102
@@ -1268,6 +1343,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_setPrototypeOf",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 103, gzip size: 107
@@ -1280,6 +1356,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_skipFirstGeneratorNext",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 133, gzip size: 117
@@ -1301,6 +1378,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 104, gzip size: 113
@@ -1315,6 +1393,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         getPrototypeOf: ["body.0.body.body.0.test.right.right.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 149, gzip size: 134
@@ -1332,6 +1411,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.declarations.0.init.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 88, gzip size: 95
@@ -1347,6 +1427,7 @@ const helpers: Record<string, Helper> = {
         set: ["body.0.body.body.0.argument.callee"],
         getPrototypeOf: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 135, gzip size: 128
@@ -1359,6 +1440,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteral",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 77, gzip size: 94
@@ -1371,6 +1453,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteralLoose",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 89, gzip size: 97
@@ -1383,6 +1466,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_tdzError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 53, gzip size: 73
@@ -1398,6 +1482,7 @@ const helpers: Record<string, Helper> = {
         temporalUndefined: ["body.0.body.body.0.argument.test.right"],
         tdz: ["body.0.body.body.0.argument.consequent.callee"],
       },
+      internal: false,
     },
   ),
   // size: 31, gzip size: 51
@@ -1407,6 +1492,7 @@ const helpers: Record<string, Helper> = {
     exportBindingAssignments: [],
     exportName: "_temporalUndefined",
     dependencies: {},
+    internal: false,
   }),
   // size: 116, gzip size: 102
   toArray: helper(
@@ -1425,6 +1511,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 131, gzip size: 114
@@ -1446,6 +1533,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableSpread: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 270, gzip size: 201
@@ -1458,6 +1546,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "toPrimitive",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 88, gzip size: 102
@@ -1472,6 +1561,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         toPrimitive: ["body.0.body.body.0.declarations.0.init.callee"],
       },
+      internal: false,
     },
   ),
   // size: 129, gzip size: 133
@@ -1484,6 +1574,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_toSetter",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 82, gzip size: 86
@@ -1496,6 +1587,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_tryCatch",
       dependencies: {},
+      internal: true,
     },
   ),
   // size: 243, gzip size: 210
@@ -1508,6 +1600,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "tsRewriteRelativeImportExtensions",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 274, gzip size: 157
@@ -1526,6 +1619,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_typeof",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 328, gzip size: 247
@@ -1543,6 +1637,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1117, gzip size: 548
@@ -1562,6 +1657,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_usingCtx",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 1172, gzip size: 526
@@ -1588,6 +1684,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
         ],
       },
+      internal: false,
     },
   ),
   // size: 563, gzip size: 318
@@ -1619,6 +1716,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1213, gzip size: 560
@@ -1642,6 +1740,7 @@ const helpers: Record<string, Helper> = {
         ],
         inherits: ["body.0.body.body.4.argument.expressions.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 73, gzip size: 86
@@ -1654,6 +1753,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_writeOnlyError",
       dependencies: {},
+      internal: false,
     },
   ),
 };
@@ -1670,6 +1770,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_AwaitValue",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 5767, gzip size: 2181
@@ -1767,6 +1868,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.3.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 3845, gzip size: 1570
@@ -1790,6 +1892,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "applyDecs2203",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 3982, gzip size: 1621
@@ -1819,6 +1922,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 4526, gzip size: 1807
@@ -1851,6 +1955,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 3109, gzip size: 1569
@@ -1874,6 +1979,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 231, gzip size: 189
@@ -1886,6 +1992,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorDestructureSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 74, gzip size: 90
@@ -1898,6 +2005,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorGet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 161, gzip size: 149
@@ -1910,6 +2018,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 78, gzip size: 93
@@ -1924,6 +2033,7 @@ if (!process.env.BABEL_8_BREAKING) {
         dependencies: {
           assertClassBrand: ["body.0.body.body.0.argument.callee"],
         },
+        internal: false,
       },
     ),
     // size: 154, gzip size: 145
@@ -1936,6 +2046,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classCheckPrivateStaticFieldDescriptor",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 77, gzip size: 91
@@ -1950,6 +2061,7 @@ if (!process.env.BABEL_8_BREAKING) {
         dependencies: {
           classPrivateFieldGet2: ["body.0.body.body.0.argument.callee"],
         },
+        internal: false,
       },
     ),
     // size: 127, gzip size: 111
@@ -1969,6 +2081,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 105, gzip size: 100
@@ -1986,6 +2099,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 111, gzip size: 109
@@ -2005,6 +2119,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 70, gzip size: 88
@@ -2021,6 +2136,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.0.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 94, gzip size: 102
@@ -2033,6 +2149,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classPrivateMethodSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 172, gzip size: 135
@@ -2055,6 +2172,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 154, gzip size: 133
@@ -2077,6 +2195,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 160, gzip size: 134
@@ -2099,6 +2218,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 111, gzip size: 114
@@ -2111,6 +2231,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateMethodSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 368, gzip size: 204
@@ -2123,6 +2244,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_defineEnumerableProperties",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 653, gzip size: 319
@@ -2146,6 +2268,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_dispose",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 363, gzip size: 237
@@ -2162,6 +2285,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 417, gzip size: 252
@@ -2174,6 +2298,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_using",
         dependencies: {},
+        internal: false,
       },
     ),
   });

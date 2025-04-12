@@ -18,7 +18,7 @@
  *
  * @returns {HelperMetadata}
  */
-export function getHelperMetadata(babel, code, helperName) {
+export function getHelperMetadata(babel, code, helperName, internal = false) {
   const globals = new Set();
   // Maps imported identifier name -> helper name
   const dependenciesBindings = new Map();
@@ -181,6 +181,7 @@ export function getHelperMetadata(babel, code, helperName) {
       dependencies: Object.fromEntries(dependencies),
       exportBindingAssignments,
       exportName,
+      internal,
     },
   ];
 }
@@ -204,6 +205,7 @@ export function stringifyMetadata(metadata) {
       exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
       exportName: ${JSON.stringify(metadata.exportName)},
       dependencies: ${JSON.stringify(metadata.dependencies)},
+      internal: ${JSON.stringify(metadata.internal)},
     }
   `;
 }

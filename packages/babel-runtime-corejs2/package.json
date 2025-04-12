@@ -612,33 +612,6 @@
       "./helpers/regeneratorAsyncGen.js"
     ],
     "./helpers/esm/regeneratorAsyncGen": "./helpers/esm/regeneratorAsyncGen.js",
-    "./helpers/regeneratorAsyncIterator": [
-      {
-        "node": "./helpers/regeneratorAsyncIterator.js",
-        "import": "./helpers/esm/regeneratorAsyncIterator.js",
-        "default": "./helpers/regeneratorAsyncIterator.js"
-      },
-      "./helpers/regeneratorAsyncIterator.js"
-    ],
-    "./helpers/esm/regeneratorAsyncIterator": "./helpers/esm/regeneratorAsyncIterator.js",
-    "./helpers/regeneratorDefine": [
-      {
-        "node": "./helpers/regeneratorDefine.js",
-        "import": "./helpers/esm/regeneratorDefine.js",
-        "default": "./helpers/regeneratorDefine.js"
-      },
-      "./helpers/regeneratorDefine.js"
-    ],
-    "./helpers/esm/regeneratorDefine": "./helpers/esm/regeneratorDefine.js",
-    "./helpers/regeneratorDefineIM": [
-      {
-        "node": "./helpers/regeneratorDefineIM.js",
-        "import": "./helpers/esm/regeneratorDefineIM.js",
-        "default": "./helpers/regeneratorDefineIM.js"
-      },
-      "./helpers/regeneratorDefineIM.js"
-    ],
-    "./helpers/esm/regeneratorDefineIM": "./helpers/esm/regeneratorDefineIM.js",
     "./helpers/regeneratorKeys": [
       {
         "node": "./helpers/regeneratorKeys.js",
@@ -657,15 +630,6 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
-    "./helpers/regeneratorValues": [
-      {
-        "node": "./helpers/regeneratorValues.js",
-        "import": "./helpers/esm/regeneratorValues.js",
-        "default": "./helpers/regeneratorValues.js"
-      },
-      "./helpers/regeneratorValues.js"
-    ],
-    "./helpers/esm/regeneratorValues": "./helpers/esm/regeneratorValues.js",
     "./helpers/set": [
       {
         "node": "./helpers/set.js",
@@ -828,15 +792,6 @@
       "./helpers/toSetter.js"
     ],
     "./helpers/esm/toSetter": "./helpers/esm/toSetter.js",
-    "./helpers/tryCatch": [
-      {
-        "node": "./helpers/tryCatch.js",
-        "import": "./helpers/esm/tryCatch.js",
-        "default": "./helpers/tryCatch.js"
-      },
-      "./helpers/tryCatch.js"
-    ],
-    "./helpers/esm/tryCatch": "./helpers/esm/tryCatch.js",
     "./helpers/tsRewriteRelativeImportExtensions": [
       {
         "node": "./helpers/tsRewriteRelativeImportExtensions.js",

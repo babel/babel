@@ -1,5 +1,6 @@
 /* @minVersion 7.27.0 */
 /* @mangleFns */
+/* @internal */
 
 import define from "./regeneratorDefine.ts";
 

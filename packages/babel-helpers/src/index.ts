@@ -163,6 +163,10 @@ export function getDependencies(name: string): ReadonlyArray<string> {
   return loadHelper(name).getDependencies();
 }
 
+export function isInternal(name: string): boolean {
+  return helpers[name]?.metadata.internal;
+}
+
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // eslint-disable-next-line no-restricted-globals
   exports.ensure = (name: string) => {
