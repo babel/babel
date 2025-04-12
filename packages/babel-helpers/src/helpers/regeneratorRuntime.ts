@@ -241,25 +241,25 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         state = GenState.Executing;
 
         var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done ? GenState.Completed : GenState.SuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done,
-          };
-        } else if (record.type === "throw") {
+        if (/* error */ record.e) {
           state = GenState.Completed;
           // Dispatch the exception by looping back around to the
           // context.dispatchException(context.arg) call above.
           context.method = "throw";
-          context.arg = record.arg;
+          context.arg = record.v;
+        } else {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done ? GenState.Completed : GenState.SuspendedYield;
+
+          if (record.v === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.v,
+            done: context.done,
+          };
         }
       }
     };
@@ -305,14 +305,14 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
 
     var record = tryCatch(method, delegate.i, context.arg);
 
-    if (record.type === "throw") {
+    if (/* error */ record.e) {
       context.method = "throw";
-      context.arg = record.arg;
+      context.arg = record.v;
       context.delegate = null;
       return ContinueSentinel;
     }
 
-    var info = record.arg;
+    var info = record.v;
 
     if (!info) {
       context.method = "throw";

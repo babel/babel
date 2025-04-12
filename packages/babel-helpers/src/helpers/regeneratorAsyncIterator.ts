@@ -29,10 +29,10 @@ export default /* @no-mangle */ function AsyncIterator(
     reject: (error: any) => void,
   ): any {
     var record = tryCatch(generator[method], generator, arg);
-    if (record.type === "throw") {
-      reject(record.arg);
+    if (/* error */ record.e) {
+      reject(record.v);
     } else {
-      var result = record.arg;
+      var result = record.v;
       var value = result.value;
       if (value && value instanceof OverloadYield) {
         return PromiseImpl.resolve(value.v).then(
