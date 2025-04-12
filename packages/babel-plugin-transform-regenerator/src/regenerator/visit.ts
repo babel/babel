@@ -155,7 +155,12 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       }
 
       const wrapCall = t.callExpression(
-        util.runtimeProperty(this, node.async ? "async" : "wrap"),
+        node.async
+          ? process.env.BABEL_8_BREAKING ||
+            this.availableHelper("regeneratorAsync")
+            ? this.addHelper("regeneratorAsync")
+            : util.runtimeProperty(this, "async")
+          : util.runtimeProperty(this, "wrap"),
         wrapArgs,
       );
 

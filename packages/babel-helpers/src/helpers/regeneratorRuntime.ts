@@ -3,9 +3,10 @@
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import OverloadYield from "./OverloadYield.ts";
 import awaitAsyncGenerator from "./awaitAsyncGenerator.ts";
 import keys from "./regeneratorKeys.ts";
+import async from "./regeneratorAsync.ts";
+import AsyncIterator from "./regeneratorAsyncIterator.ts";
 
 type Completion = {
   type: "normal" | "throw" | "break" | "continue" | "return";
@@ -77,6 +78,13 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     // For backward compat
     keys: keys,
     awrap: awaitAsyncGenerator,
+    async: async,
+    AsyncIterator: AsyncIterator,
+
+    // Used by other helpers
+    _t: tryCatch,
+    _d: define,
+    _m: defineIteratorMethods,
   };
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
@@ -84,7 +92,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   var $Symbol =
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
   function define(obj: any, key: PropertyKey, value?: unknown, noFlags?: true) {
@@ -205,6 +212,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       });
     });
   }
+  exports.defineIteratorMethods = defineIteratorMethods;
 
   exports.isGeneratorFunction = function (genFun: any) {
     var ctor = typeof genFun === "function" && genFun.constructor;
@@ -226,120 +234,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     }
     genFun.prototype = Object.create(Gp);
     return genFun;
-  };
-
-  /* @no-mangle */
-  function AsyncIterator(
-    this: any,
-    generator: Generator,
-    PromiseImpl: PromiseConstructor,
-  ) {
-    function invoke(
-      method: "next" | "throw" | "return",
-      arg: any,
-      resolve: (value: any) => void,
-      reject: (error: any) => void,
-    ): any {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value && value instanceof OverloadYield) {
-          return PromiseImpl.resolve(value.v).then(
-            function (value) {
-              invoke("next", value, resolve, reject);
-            },
-            function (err) {
-              invoke("throw", err, resolve, reject);
-            },
-          );
-        }
-
-        return PromiseImpl.resolve(value).then(
-          function (unwrapped) {
-            // When a yielded Promise is resolved, its final value becomes
-            // the .value of the Promise<{value,done}> result for the
-            // current iteration.
-            result.value = unwrapped;
-            resolve(result);
-          },
-          function (error) {
-            // If a rejected Promise was yielded, throw the rejection back
-            // into the async generator function so it can be handled there.
-            return invoke("throw", error, resolve, reject);
-          },
-        );
-      }
-    }
-
-    var previousPromise: Promise<any>;
-
-    function enqueue(method: "next" | "throw" | "return", arg: any) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return (previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise
-          ? previousPromise.then(
-              callInvokeWithMethodAndArg,
-              // Avoid propagating failures to Promises returned by later
-              // invocations of the iterator.
-              callInvokeWithMethodAndArg,
-            )
-          : callInvokeWithMethodAndArg());
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    define(this, "_invoke", enqueue, true);
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  define(AsyncIterator.prototype, asyncIteratorSymbol, function (this: any) {
-    return this;
-  });
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function (
-    innerFn: Function,
-    outerFn: Function,
-    self: any,
-    tryLocsList: TryLocs[],
-    PromiseImpl: PromiseConstructor,
-  ) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    // @ts-expect-error target lacks a construct signature
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl,
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function (result: IteratorResult<any>) {
-          return result.done ? result.value : iter.next();
-        });
   };
 
   function makeInvokeMethod(

@@ -1,7 +1,7 @@
 /*#__PURE__*/React.createElement(Component, null, () => {
   const saveSession = () => {
     var newSessionId;
-    return babelHelpers.regeneratorRuntime().async(function _callee$(_context) {
+    return babelHelpers.regeneratorAsync(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
