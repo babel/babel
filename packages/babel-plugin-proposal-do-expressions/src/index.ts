@@ -458,6 +458,10 @@ export default declare(api => {
       declare: "var" | "let" | "const" | "using" | "await using" | null,
     ): t.Statement[] {
       switch (path.type) {
+        case "ObjectPattern": {
+          unsafeWrapIIFE(path);
+          // Fallthrough
+        }
         case "Identifier": {
           if (declare) {
             return [
@@ -531,12 +535,6 @@ export default declare(api => {
               t.assignmentExpression("=", t.arrayPattern(elements), init),
             ),
             ...statements,
-          ];
-        }
-        case "ObjectPattern": {
-          unsafeWrapIIFE(path);
-          return [
-            t.expressionStatement(t.assignmentExpression("=", path.node, init)),
           ];
         }
         default: {

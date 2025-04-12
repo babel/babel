@@ -11,9 +11,9 @@ function func(_do) {
     _do4 = _do5;
     _do3 = _do4;
   }
-  ({
+  var {
     [(effects.push(1), 'key')]: x
-  } = _do3);
+  } = _do3;
 }
 const arrow = _do6 => {
   var _do7, _do8, _do9;
@@ -28,7 +28,7 @@ const arrow = _do6 => {
     _do9 = _do0;
     _do8 = _do9;
   }
-  ({
+  var {
     [(effects.push(1), 'key')]: x
-  } = _do8);
+  } = _do8;
 };
