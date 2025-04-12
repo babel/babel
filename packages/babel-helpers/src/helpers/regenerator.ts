@@ -24,7 +24,7 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, completion?: Completion];
+type TryEntry = TryLocs | [...TryLocs, completion?: Completion];
 
 type Delegate = {
   // iterator
@@ -345,10 +345,6 @@ export default function /* @no-mangle */ _regenerator() {
     return "[object Generator]";
   });
 
-  function pushTryEntry(this: Context, locs: TryLocs) {
-    this.tryEntries!.push(locs);
-  }
-
   function resetTryEntry(entry: TryEntry) {
     var record = entry[4] || ({} as Completion);
     record.type = "normal";
@@ -361,8 +357,7 @@ export default function /* @no-mangle */ _regenerator() {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
-    this.tryEntries = [[TryLoc.Root]];
-    tryLocsList.forEach(pushTryEntry, this);
+    this.tryEntries = [[TryLoc.Root] as TryLocs].concat(tryLocsList);
     this.reset(true);
   }
 
