@@ -1,37 +1,40 @@
 function f1(a) {
+  var _do2;
   {
     var _do;
     if (effects.push(1), a) return 0;
     _do = arg => effects.push(arg);
   }
   {
-    var _do2;
+    var _do3;
     if (effects.push(2), false) return 1;
-    _do2 = 'arg';
+    _do3 = 'arg';
   }
+  _do2 = _do3;
   _do(_do2);
 }
 function f2(a) {
-  var _do4, _do6;
-  ;
+  var _do5, _do6, _do7, _do9;
   {
-    var _do3;
+    var _do4;
     if (effects.push(1), false) return 0;
-    _do3 = {
+    _do4 = {
       key: arg => effects.push(arg)
     };
   }
-  _do4 = _do3;
+  _do7 = _do4;
   {
-    var _do5;
+    var _do8;
     if (effects.push(2), a) return 1;
-    _do5 = 'key';
+    _do8 = 'key';
   }
-  _do6 = _do4[_do5];
+  _do9 = _do7[_do8];
+  _do5 = _do9;
   {
-    var _do7;
+    var _do0;
     if (effects.push(3), false) return 2;
-    _do7 = 'arg';
+    _do0 = 'arg';
   }
-  Reflect.apply(_do6, _do4, [_do7]);
+  _do6 = _do0;
+  Reflect.apply(_do5, _do4, [_do6]);
 }

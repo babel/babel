@@ -1,4 +1,4 @@
-var _do2, _do4, _do6, _do7;
+var _do2, _do3, _do4, _do5, _do7, _do9;
 const effects = [];
 const object = {
   value: 'this',
@@ -15,28 +15,30 @@ const object = {
   effects.push(1);
   _do = object;
 }
-_do2 = _do;
+_do7 = _do;
 {
-  var _do3;
+  var _do8;
   effects.push(2);
-  _do3 = "method";
+  _do8 = "method";
 }
-_do4 = _do2[_do3];
+_do9 = _do7[_do8];
+_do2 = _do9;
 {
-  var _do5;
+  var _do0;
   effects.push(3);
-  _do5 = "arg";
+  _do0 = "arg";
 }
-Reflect.apply(_do4, _do2, [_do5]);
-_do6 = (() => {
+_do3 = _do0;
+Reflect.apply(_do2, _do, [_do3]);
+_do4 = (() => {
   effects.push(5);
   return {
     x: () => effects.push(6)
   };
 })();
-_do7 = _do6.x;
+_do5 = _do4.x;
 {
-  var _do8;
-  _do8 = effects.push(7);
+  var _do6;
+  _do6 = effects.push(7);
 }
-Reflect.apply(_do7, _do6, [_do8]);
+Reflect.apply(_do5, _do4, [_do6]);

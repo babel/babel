@@ -3,7 +3,7 @@ import type { types as t, NodePath } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
-  const { types: t, traverse } = api;
+  const { types: t } = api;
 
   return {
     name: "proposal-do-expressions",
@@ -23,16 +23,16 @@ export default declare(api => {
   };
 
   function transformDoExpression(doExprPath: NodePath<t.DoExpression>) {
+    const doAncestors = new WeakSet<t.Node>();
     let path: NodePath = doExprPath;
     while (path) {
+      if (!path.node) return; // This node has been removed due to previous transformation
+      doAncestors.add(path.node);
       if (path.isFunction()) {
         let body = path.get("body");
         if (path.isArrowFunctionExpression()) {
           // Do expression within parameters declarations OR expression body
-          if (
-            body.isExpression() &&
-            traverse.hasType(body.node, "DoExpression")
-          ) {
+          if (body.isExpression() && doAncestors.has(body.node)) {
             [body] = body.replaceWith(
               t.blockStatement([t.returnStatement(body.node)]),
             );
@@ -43,21 +43,18 @@ export default declare(api => {
         // Do expression within function parameter lists
         let foundDoExpression = false;
         const deferredPatterns: t.LVal[] = [];
-        const deferredUIDs: t.Identifier[] = [];
+        const deferredTemps: t.Identifier[] = [];
         for (const param of path.get("params")) {
           const actualParam = param.isRestElement()
             ? param.get("argument")
             : param;
-          foundDoExpression ||= traverse.hasType(
-            actualParam.node,
-            "DoExpression",
-          );
+          foundDoExpression ||= doAncestors.has(actualParam.node);
           if (foundDoExpression && !isLValSideEffectFree(actualParam)) {
             const pattern = actualParam.node;
             const uid = body.scope.generateUidIdentifier("do");
             actualParam.replaceWith(t.cloneNode(uid));
             deferredPatterns.push(pattern);
-            deferredUIDs.push(uid);
+            deferredTemps.push(uid);
           }
         }
         if (deferredPatterns.length) {
@@ -66,7 +63,7 @@ export default declare(api => {
             blockBody = body;
           } else {
             [blockBody] = body.replaceWith(
-              t.blockStatement([t.expressionStatement(body.node)]),
+              t.blockStatement([t.returnStatement(body.node)]),
             );
           }
 
@@ -75,7 +72,7 @@ export default declare(api => {
             t.variableDeclaration("var", [
               t.variableDeclarator(
                 t.arrayPattern(deferredPatterns),
-                t.arrayExpression(deferredUIDs),
+                t.arrayExpression(deferredTemps),
               ),
             ]),
           );
@@ -101,10 +98,10 @@ export default declare(api => {
           for (const decl of path.get("declarations")) {
             const init = decl.get("init");
             const id = decl.get("id");
-            if (traverse.hasType(init.node, "DoExpression")) {
+            if (doAncestors.has(init.node)) {
               statements.push(...flattenExpression(init));
             }
-            if (traverse.hasType(id.node, "DoExpression")) {
+            if (doAncestors.has(id.node)) {
               statements.push(...flattenLVal(id, init.node, path.node.kind));
             } else {
               statements.push(
@@ -126,7 +123,7 @@ export default declare(api => {
           //                }
           const body: t.Statement[] = [];
           const test = path.get("test");
-          if (traverse.hasType(test.node, "DoExpression")) {
+          if (doAncestors.has(test.node)) {
             body.push(
               ...flattenExpression(test),
               t.ifStatement(
@@ -138,7 +135,7 @@ export default declare(api => {
           }
           body.push(path.node.body);
           const update = path.get("update");
-          if (traverse.hasType(update.node, "DoExpression")) {
+          if (doAncestors.has(update.node)) {
             body.push(...flattenExpression(update, { discardResult: true }));
             update.remove();
           }
@@ -146,7 +143,7 @@ export default declare(api => {
 
           // Handle do expression within `init`
           const init = path.get("init");
-          if (traverse.hasType(init.node, "DoExpression")) {
+          if (doAncestors.has(init.node)) {
             const initNode = init.isExpression()
               ? t.expressionStatement(init.node)
               : init.node;
@@ -169,7 +166,7 @@ export default declare(api => {
 
           // Handle left side
           const left = path.get("left");
-          if (traverse.hasType(left.node, "DoExpression")) {
+          if (doAncestors.has(left.node)) {
             const body = path.get("body");
             const uid = body.scope.generateDeclaredUidIdentifier("do");
             if (left.isVariableDeclaration()) {
@@ -192,7 +189,7 @@ export default declare(api => {
 
           // Handle right side
           const right = path.get("right");
-          if (traverse.hasType(right.node, "DoExpression")) {
+          if (doAncestors.has(right.node)) {
             path.replaceWithMultiple([...flattenExpression(right), path.node]);
           }
           break;
@@ -239,7 +236,7 @@ export default declare(api => {
           );
           break;
         default:
-          path.replaceWithMultiple([...flattenByTraverse(path), path.node]);
+          path.insertBefore(flattenByTraverse(path));
       }
     }
 
@@ -253,7 +250,7 @@ export default declare(api => {
       if (isTopLevelCopyable(path)) {
         return flattenByTraverse(path, opts.flattenTrailing);
       }
-      const hasDoExpression = traverse.hasType(path.node, "DoExpression");
+      const hasDoExpression = doAncestors.has(path.node);
       if (hasDoExpression) {
         if (path.isDoExpression()) {
           const body = path.get("body");
@@ -281,7 +278,7 @@ export default declare(api => {
         } else if (path.isAssignmentExpression()) {
           const left = path.get("left");
           const right = path.get("right");
-          if (traverse.hasType(left.node, "DoExpression")) {
+          if (doAncestors.has(left.node)) {
             if (path.node.operator !== "=") {
               throw path.buildCodeFrameError(
                 "Do expression inside complex assignment expression is not currently supported",
@@ -567,7 +564,7 @@ export default declare(api => {
       if (!flattenTrailing) {
         while (expressions.length) {
           const path = expressions.pop();
-          if (traverse.hasType(path.node, "DoExpression")) {
+          if (doAncestors.has(path.node)) {
             lastDoExpression = path;
             break;
           }

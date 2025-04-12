@@ -1,3 +1,4 @@
+var _do2, _do3, _do5, _do6, _do8, _do0;
 {
   var _do;
   effects.push(1);
@@ -5,17 +6,19 @@
 }
 if (_do) {
   {
-    var _do2;
+    var _do1;
     effects.push(2);
-    _do2 = 2;
+    _do1 = 2;
   }
+  _do2 = _do1;
 }
 if (_do && _do2) {
   {
-    var _do3;
+    var _do10;
     effects.push(3);
-    _do3 = 3;
+    _do10 = 3;
   }
+  _do3 = _do10;
 }
 const v1 = _do && _do2 && _do3;
 {
@@ -25,16 +28,18 @@ const v1 = _do && _do2 && _do3;
 }
 if (_do4) {
   {
-    var _do5;
+    var _do11;
     effects.push(5);
-    _do5 = 0;
+    _do11 = 0;
   }
+  _do5 = _do11;
 }
 if (_do4 && _do5) {
   {
-    var _do6;
-    _do6 = effects.push(6);
+    var _do12;
+    _do12 = effects.push(6);
   }
+  _do6 = _do12;
 }
 const v2 = _do4 && _do5 && _do6;
 {
@@ -44,10 +49,11 @@ const v2 = _do4 && _do5 && _do6;
 }
 if (!_do7) {
   {
-    var _do8;
+    var _do13;
     effects.push(8);
-    _do8 = 2;
+    _do13 = 2;
   }
+  _do8 = _do13;
 }
 const v3 = _do7 || _do8;
 {
@@ -57,9 +63,10 @@ const v3 = _do7 || _do8;
 }
 if (_do9 == null) {
   {
-    var _do0;
+    var _do14;
     effects.push(10);
-    _do0 = 1;
+    _do14 = 1;
   }
+  _do0 = _do14;
 }
 const v4 = _do9 ?? _do0;

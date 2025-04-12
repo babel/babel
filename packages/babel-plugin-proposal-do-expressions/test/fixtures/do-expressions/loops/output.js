@@ -1,21 +1,25 @@
 {
   {
-    var _do3;
+    var _do;
     effects.push(1);
-    _do3 = 0;
+    _do = 0;
   }
-  let i = _do3;
+  let i = _do;
   for (;;) {
-    _do = i;
     {
-      var _do2;
-      effects.push(2);
-      _do2 = 3;
-    }
-    if (!(_do < _do2)) break;
-    {
-      var _do;
-      effects.push(3);
+      _do2 = i;
+      {
+        var _do3;
+        effects.push(2);
+        _do3 = 3;
+      }
+      if (!(_do2 < _do3)) break;
+      {
+        var _do2;
+        {
+          effects.push(3);
+        }
+      }
     }
     {
       effects.push(4);

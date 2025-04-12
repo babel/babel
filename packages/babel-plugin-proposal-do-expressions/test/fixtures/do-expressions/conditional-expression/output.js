@@ -1,3 +1,4 @@
+var _do2, _do3, _do5, _do6;
 {
   var _do;
   effects.push(1);
@@ -5,16 +6,18 @@
 }
 if (_do) {
   {
-    var _do2;
+    var _do7;
     effects.push(2);
-    _do2 = 2;
+    _do7 = 2;
   }
+  _do2 = _do7;
 } else {
   {
-    var _do3;
+    var _do8;
     effects.push(3);
-    _do3 = 3;
+    _do8 = 3;
   }
+  _do3 = _do8;
 }
 const v1 = _do ? _do2 : _do3;
 {
@@ -24,15 +27,17 @@ const v1 = _do ? _do2 : _do3;
 }
 if (_do4) {
   {
-    var _do5;
+    var _do9;
     effects.push(5);
-    _do5 = 2;
+    _do9 = 2;
   }
+  _do5 = _do9;
 } else {
   {
-    var _do6;
+    var _do0;
     effects.push(6);
-    _do6 = 3;
+    _do0 = 3;
   }
+  _do6 = _do0;
 }
 const v2 = _do4 ? _do5 : _do6;
