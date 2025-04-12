@@ -1,3 +1,4 @@
+var _regeneratorRuntime = require("regenerator-runtime");
 var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(fn);
 function fn() {
   return babelHelpers.regeneratorRuntime().wrap(function fn$(_context) {
@@ -8,4 +9,4 @@ function fn() {
     }
   }, _marked);
 }
-regeneratorRuntime.isGeneratorFunction(fn);
+_regeneratorRuntime.isGeneratorFunction(fn);

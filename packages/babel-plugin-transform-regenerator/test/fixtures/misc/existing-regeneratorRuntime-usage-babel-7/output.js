@@ -8,4 +8,4 @@ function fn() {
     }
   }, _marked);
 }
-regeneratorRuntime.isGeneratorFunction(fn);
+babelHelpers.regeneratorRuntime().isGeneratorFunction(fn);
