@@ -696,6 +696,8 @@ export interface MemberExpression extends NodeBase {
   object: Expression | Super;
   property: Expression | PrivateName;
   computed: boolean;
+  // For ESTree
+  optional?: boolean;
 }
 
 export interface OptionalMemberExpression extends NodeBase {
@@ -726,6 +728,8 @@ export interface ConditionalExpression extends NodeBase {
 export interface CallOrNewBase extends NodeBase {
   callee: Expression | Super | Import;
   arguments: Array<Expression | SpreadElement>; // TODO: $ReadOnlyArray,
+  // For ESTree
+  optional: boolean;
   typeArguments: TypeParameterInstantiationBase | undefined | null;
   /**
    * @deprecated
@@ -739,7 +743,6 @@ export interface CallExpression extends CallOrNewBase {
 
 export interface NewExpression extends CallOrNewBase {
   type: "NewExpression";
-  optional?: boolean; // TODO: Not in spec
 }
 
 export interface ImportExpression extends NodeBase {

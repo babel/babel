@@ -2792,16 +2792,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
 
         if (result) {
-          if (
-            result.type === "TSInstantiationExpression" &&
-            (this.match(tt.dot) ||
+          if (result.type === "TSInstantiationExpression") {
+            if (
+              this.match(tt.dot) ||
               (this.match(tt.questionDot) &&
-                this.lookaheadCharCode() !== charCodes.leftParenthesis))
-          ) {
-            this.raise(
-              TSErrors.InvalidPropertyAccessAfterInstantiationExpression,
-              this.state.startLoc,
-            );
+                this.lookaheadCharCode() !== charCodes.leftParenthesis)
+            ) {
+              this.raise(
+                TSErrors.InvalidPropertyAccessAfterInstantiationExpression,
+                this.state.startLoc,
+              );
+            }
+            if (!this.match(tt.dot) && !this.match(tt.questionDot)) {
+              // If TSInstantiationExpression is not followed by . / ?.,
+              // it must be the end of a subscript chain. Note that `(` already forms
+              // call expression arguments
+              result.expression = super.stopParseSubscript(base, state);
+            }
           }
           return result;
         }

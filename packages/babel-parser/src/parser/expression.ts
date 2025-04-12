@@ -774,8 +774,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.OptionalChainingNoNew, this.state.startLoc);
         if (this.lookaheadCharCode() === charCodes.leftParenthesis) {
           // stop at `?.` when parsing `new a?.()`
-          state.stop = true;
-          return base;
+          return this.stopParseSubscript(base, state);
         }
       }
       state.optionalChainMember = optional = true;
@@ -794,10 +793,18 @@ export default abstract class ExpressionParser extends LValParser {
       if (computed || optional || this.eat(tt.dot)) {
         return this.parseMember(base, startLoc, state, computed, optional);
       } else {
-        state.stop = true;
-        return base;
+        return this.stopParseSubscript(base, state);
       }
     }
+  }
+
+  stopParseSubscript(
+    this: Parser,
+    base: N.Expression,
+    state: N.ParseSubscriptState,
+  ) {
+    state.stop = true;
+    return base;
   }
 
   // base[?Yield, ?Await] [ Expression[+In, ?Yield, ?Await] ]
@@ -831,7 +838,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (state.optionalChainMember) {
-      (node as N.OptionalMemberExpression).optional = optional;
+      (node as Undone<N.OptionalMemberExpression>).optional = optional;
       return this.finishNode(node, "OptionalMemberExpression");
     } else {
       return this.finishNode(node, "MemberExpression");
@@ -887,8 +894,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (optionalChainMember) {
-      // @ts-expect-error when optionalChainMember is true, node must be an optional call
-      node.optional = optional;
+      (node as Undone<N.OptionalCallExpression>).optional = optional;
     }
 
     if (optional) {

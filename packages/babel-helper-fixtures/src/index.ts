@@ -494,7 +494,7 @@ export default function get(entryLoc: string) {
 }
 
 export function multiple(entryLoc: string, ignore?: Array<string>) {
-  const categories: Record<string, unknown> = {};
+  const categories: Record<string, Suite[]> = {};
 
   for (const name of fs.readdirSync(entryLoc)) {
     if (shouldIgnore(name, ignore)) continue;

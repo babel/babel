@@ -100,6 +100,16 @@ export default (superClass: typeof Parser) =>
       return this.estreeParseLiteral(value);
     }
 
+    // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
+    estreeParseChainExpression(
+      node: N.Expression,
+      endLoc: Position,
+    ): N.EstreeChainExpression {
+      const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
+      chain.expression = node;
+      return this.finishNodeAt(chain, "ChainExpression", endLoc);
+    }
+
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
       const expression = directive.value as any as N.EstreeLiteral;
@@ -496,6 +506,10 @@ export default (superClass: typeof Parser) =>
         delete node.arguments;
         // callee isn't optional in the type definition
         delete node.callee;
+      } else if (node.type === "OptionalCallExpression") {
+        this.castNodeTo(node, "CallExpression");
+      } else {
+        node.optional = false;
       }
 
       return node;
@@ -567,34 +581,27 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    parseSubscript(
+    stopParseSubscript(base: N.Expression, state: N.ParseSubscriptState) {
+      const node = super.stopParseSubscript(base, state);
+      if (state.optionalChainMember) {
+        return this.estreeParseChainExpression(node, base.loc.end);
+      }
+      return node;
+    }
+
+    parseMember(
       base: N.Expression,
       startLoc: Position,
-      noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
-    ): N.Expression {
-      const node = super.parseSubscript(base, startLoc, noCalls, state);
-
-      if (state.optionalChainMember) {
-        // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
-        if (node.type === "OptionalCallExpression") {
-          this.castNodeTo(node, "CallExpression");
-        } else if (node.type === "OptionalMemberExpression") {
-          this.castNodeTo(node, "MemberExpression");
-        }
-        if (state.stop) {
-          const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
-          chain.expression = node;
-          return this.finishNode(chain, "ChainExpression");
-        }
-      } else if (
-        node.type === "MemberExpression" ||
-        node.type === "CallExpression"
-      ) {
-        // @ts-expect-error not in the type definitions
+      computed: boolean,
+      optional: boolean,
+    ) {
+      const node = super.parseMember(base, startLoc, state, computed, optional);
+      if (node.type === "OptionalMemberExpression") {
+        this.castNodeTo(node, "MemberExpression");
+      } else {
         node.optional = false;
       }
-
       return node;
     }
 
