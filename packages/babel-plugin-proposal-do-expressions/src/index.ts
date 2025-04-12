@@ -531,7 +531,7 @@ export default declare(api => {
       }
       default: {
         throw path.buildCodeFrameError(
-          `Do expression inside ${path.type} is not supported`,
+          `Do expression inside ${path.type} is not currently supported`,
         );
       }
     }
