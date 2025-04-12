@@ -426,18 +426,17 @@ export default declare(api => {
       }
 
       if (thisArgument) {
-        // Use `Reflect.apply` to ensure this argument is correct
         path.replaceWith(
           t.callExpression(
-            t.memberExpression(t.identifier("Reflect"), t.identifier("apply")),
-            [
+            t.memberExpression(
               path.node.callee as t.Expression,
+              t.identifier("call"),
+            ),
+            [
               thisArgument.isSuper()
                 ? t.thisExpression()
                 : t.cloneNode(thisArgument.node),
-              t.arrayExpression(
-                path.node.arguments as Array<t.Expression | t.SpreadElement>,
-              ),
+              ...(path.node.arguments as Array<t.Expression | t.SpreadElement>),
             ],
           ),
         );

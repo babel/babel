@@ -36,5 +36,5 @@ function f2(a) {
     _do0 = 'arg';
   }
   _do6 = _do0;
-  Reflect.apply(_do5, _do4, [_do6]);
+  _do5.call(_do4, _do6);
 }
