@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath } from "@babel/core";
+import { wrapDoExpressionInIIFE } from "./utils.ts";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
@@ -459,7 +460,7 @@ export default declare(api => {
     ): t.Statement[] {
       switch (path.type) {
         case "ObjectPattern": {
-          unsafeWrapIIFE(path);
+          wrapDoExpressionInIIFE(path);
           // Fallthrough
         }
         case "Identifier": {
@@ -601,22 +602,6 @@ export default declare(api => {
     }
   }
 });
-
-// Wrap all do expressions in an IIFE.
-// This doesn't work with control flow statements like break/continue/return.
-// Only use this when the code is too hard to transform.
-function unsafeWrapIIFE(path: NodePath<t.Node>) {
-  path.traverse({
-    DoExpression(path) {
-      const body = path.node.body.body;
-      if (body.length) {
-        path.replaceExpressionWithStatements(body);
-      } else {
-        path.replaceWith(path.scope.buildUndefinedNode());
-      }
-    },
-  });
-}
 
 function isTopLevelCopyable(path: NodePath<t.Node>): boolean {
   return (
