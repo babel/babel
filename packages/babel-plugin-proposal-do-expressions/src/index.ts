@@ -281,7 +281,7 @@ export default declare(api => {
         if (traverse.hasType(left.node, "DoExpression")) {
           if (path.node.operator !== "=") {
             throw path.buildCodeFrameError(
-              "Do expression inside complex assignment expression is not supported",
+              "Do expression inside complex assignment expression is not currently supported",
             );
           }
           const uid = path.scope.generateDeclaredUidIdentifier("do");
