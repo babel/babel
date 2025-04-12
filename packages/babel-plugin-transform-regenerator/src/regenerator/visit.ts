@@ -5,8 +5,9 @@ import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
+import type { PluginPass, Visitor } from "@babel/core";
 
-export const getVisitor = (t: any) => ({
+export const getVisitor = (t: any): Visitor<PluginPass> => ({
   Method(path: any, state: any) {
     const node = path.node;
 
@@ -50,7 +51,7 @@ export const getVisitor = (t: any) => ({
 
       if (node.async) {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        bodyBlockPath.traverse(awaitVisitor);
+        bodyBlockPath.traverse(awaitVisitor, this);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -86,7 +87,7 @@ export const getVisitor = (t: any) => ({
         bodyBlockPath.node.body = innerBody;
       }
 
-      const outerFnExpr = getOuterFnExpr(path);
+      const outerFnExpr = getOuterFnExpr(this, path);
       // Note that getOuterFnExpr has the side-effect of ensuring that the
       // function has a name (so node.id will always be an Identifier), even
       // if a temporary name has to be synthesized.
@@ -112,14 +113,14 @@ export const getVisitor = (t: any) => ({
         );
       }
 
-      const emitter = new (Emitter as any)(contextId);
+      const emitter = new Emitter(contextId, this);
       emitter.explode(path.get("body"));
 
       if (vars && vars.declarations.length > 0) {
         outerBody.push(vars);
       }
 
-      const wrapArgs = [emitter.getContextFunction(innerFnId)];
+      const wrapArgs: any[] = [emitter.getContextFunction(innerFnId)];
       const tryLocsList = emitter.getTryLocsList();
 
       if (node.generator) {
@@ -154,7 +155,7 @@ export const getVisitor = (t: any) => ({
       }
 
       const wrapCall = t.callExpression(
-        util.runtimeProperty(node.async ? "async" : "wrap"),
+        util.runtimeProperty(this, node.async ? "async" : "wrap"),
         wrapArgs,
       );
 
@@ -183,7 +184,7 @@ export const getVisitor = (t: any) => ({
       if (wasGeneratorFunction && t.isExpression(node)) {
         util.replaceWithOrRemove(
           path,
-          t.callExpression(util.runtimeProperty("mark"), [node]),
+          t.callExpression(util.runtimeProperty(this, "mark"), [node]),
         );
         path.addComment("leading", "#__PURE__");
       }
@@ -231,7 +232,7 @@ function shouldRegenerate(node: any, state: any) {
 // used to refer reliably to the function object from inside the function.
 // This expression is essentially a replacement for arguments.callee, with
 // the key advantage that it works in strict mode.
-function getOuterFnExpr(funPath: any) {
+function getOuterFnExpr(state: PluginPass, funPath: any) {
   const t = util.getTypes();
   const node = funPath.node;
   t.assertFunction(node);
@@ -247,7 +248,7 @@ function getOuterFnExpr(funPath: any) {
     t.isFunctionDeclaration(node)
   ) {
     // Return the identifier returned by runtime.mark(<node.id>).
-    return getMarkedFunctionId(funPath);
+    return getMarkedFunctionId(state, funPath);
   }
 
   return t.clone(node.id);
@@ -262,7 +263,7 @@ function getMarkInfo(node: any) {
   return markInfo.get(node);
 }
 
-function getMarkedFunctionId(funPath: any) {
+function getMarkedFunctionId(state: PluginPass, funPath: any) {
   const t = util.getTypes();
   const node = funPath.node;
   t.assertIdentifier(node.id);
@@ -289,7 +290,7 @@ function getMarkedFunctionId(funPath: any) {
 
   // Get a new unique identifier for our marked variable.
   const markedId = blockPath.scope.generateUidIdentifier("marked");
-  const markCallExp = t.callExpression(util.runtimeProperty("mark"), [
+  const markCallExp = t.callExpression(util.runtimeProperty(state, "mark"), [
     t.clone(node.id),
   ]);
 
@@ -340,7 +341,7 @@ const functionSentVisitor = {
   },
 };
 
-const awaitVisitor = {
+const awaitVisitor: Visitor<PluginPass> = {
   Function: function (path: any) {
     path.skip(); // Don't descend into nested function scopes.
   },
@@ -357,7 +358,7 @@ const awaitVisitor = {
     util.replaceWithOrRemove(
       path,
       t.yieldExpression(
-        t.callExpression(util.runtimeProperty("awrap"), [argument]),
+        t.callExpression(util.runtimeProperty(this, "awrap"), [argument]),
         false,
       ),
     );
