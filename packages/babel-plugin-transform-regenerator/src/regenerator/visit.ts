@@ -352,15 +352,22 @@ const awaitVisitor: Visitor<PluginPass> = {
     // Convert await expressions to yield expressions.
     const argument = path.node.argument;
 
+    const helper =
+      // This is slightly tricky: newer versions of the `regeneratorRuntime`
+      // helper support using `awaitAsyncGenerator` as an alternative to
+      // `regeneratorRuntime().awrap`. There is no direct way to test if we
+      // have that part of the helper available, but we know that it has been
+      // introduced in the same version as `regeneratorKeys`.
+      process.env.BABEL_8_BREAKING || this.availableHelper("regeneratorKeys")
+        ? this.addHelper("awaitAsyncGenerator")
+        : util.runtimeProperty(this, "awrap");
+
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
     // causes the argument to be wrapped in such a way that the runtime
     // can distinguish between awaited and merely yielded values.
     util.replaceWithOrRemove(
       path,
-      t.yieldExpression(
-        t.callExpression(util.runtimeProperty(this, "awrap"), [argument]),
-        false,
-      ),
+      t.yieldExpression(t.callExpression(helper, [argument]), false),
     );
   },
 };
