@@ -585,6 +585,15 @@
       "./helpers/readOnlyError.js"
     ],
     "./helpers/esm/readOnlyError": "./helpers/esm/readOnlyError.js",
+    "./helpers/regeneratorKeys": [
+      {
+        "node": "./helpers/regeneratorKeys.js",
+        "import": "./helpers/esm/regeneratorKeys.js",
+        "default": "./helpers/regeneratorKeys.js"
+      },
+      "./helpers/regeneratorKeys.js"
+    ],
+    "./helpers/esm/regeneratorKeys": "./helpers/esm/regeneratorKeys.js",
     "./helpers/regeneratorRuntime": [
       {
         "node": "./helpers/regeneratorRuntime.js",

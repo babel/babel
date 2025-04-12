@@ -518,11 +518,16 @@ export class Emitter {
         after = this.loc();
 
         const keyIterNextFn = self.makeTempVar();
+
+        const helper =
+          process.env.BABEL_8_BREAKING ||
+          this.pluginPass.availableHelper("regeneratorKeys")
+            ? this.pluginPass.addHelper("regeneratorKeys")
+            : util.runtimeProperty(this.pluginPass, "keys");
+
         self.emitAssign(
           keyIterNextFn,
-          t.callExpression(util.runtimeProperty(this.pluginPass, "keys"), [
-            self.explodeExpression(path.get("right")),
-          ]),
+          t.callExpression(helper, [self.explodeExpression(path.get("right"))]),
         );
 
         self.mark(head);
