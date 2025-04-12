@@ -1,4 +1,5 @@
 /* @minVersion 7.27.0 */
+/* @mangleFns */
 
 export default function _regeneratorKeys(val: unknown) {
   var object = Object(val);

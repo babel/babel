@@ -1,4 +1,5 @@
 /* @minVersion 7.27.0 */
+/* @mangleFns */
 
 import OverloadYield from "./OverloadYield.ts";
 import define from "./regeneratorDefine.ts";

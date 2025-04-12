@@ -1084,10 +1084,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 758, gzip size: 353
+  // size: 633, gzip size: 329
   regeneratorAsyncIterator: helper(
     "7.27.0",
-    'function AsyncIterator(e,t){function invoke(n,o,r,i){var a=tryCatch(e[n],e,o);if(!a.e){var f=a.v,c=f.value;return c&&c instanceof OverloadYield?t.resolve(c.v).then((function(e){invoke("next",e,r,i)}),(function(e){invoke("throw",e,r,i)})):t.resolve(c).then((function(e){f.value=e,r(f)}),(function(e){return invoke("throw",e,r,i)}))}i(a.v)}var n;this.next||(defineIteratorMethods(AsyncIterator.prototype),define(AsyncIterator.prototype,"function"==typeof Symbol&&Symbol.asyncIterator||"@asyncIterator",(function(){return this}))),define(this,"_invoke",(function(e,o){function callInvokeWithMethodAndArg(){return new t((function(t,n){invoke(e,o,t,n)}))}return n=n?n.then(callInvokeWithMethodAndArg,callInvokeWithMethodAndArg):callInvokeWithMethodAndArg()}),!0)}',
+    'function AsyncIterator(t,e){function r(n,o,i,f){var a=tryCatch(t[n],t,o);if(!a.e){var c=a.v,u=c.value;return u&&u instanceof OverloadYield?e.resolve(u.v).then((function(t){r("next",t,i,f)}),(function(t){r("throw",t,i,f)})):e.resolve(u).then((function(t){c.value=t,i(c)}),(function(t){return r("throw",t,i,f)}))}f(a.v)}var n;this.next||(defineIteratorMethods(AsyncIterator.prototype),define(AsyncIterator.prototype,"function"==typeof Symbol&&Symbol.asyncIterator||"@asyncIterator",(function(){return this}))),define(this,"_invoke",(function(t,o){function i(){return new e((function(e,n){r(t,o,e,n)}))}return n=n?n.then(i,i):i()}),!0)}',
     {
       globals: ["Symbol"],
       locals: {
@@ -1137,26 +1137,24 @@ const helpers: Record<string, Helper> = {
       dependencies: {},
     },
   ),
-  // size: 136, gzip size: 124
+  // size: 133, gzip size: 117
   regeneratorDefineIM: helper(
     "7.27.0",
-    'function defineIteratorMethods(e){["next","throw","return"].forEach((function(n){define(e,n,(function(e){return this._invoke(n,e)}))}))}',
+    'function defineIteratorMethods(e){function n(n){define(e,n,(function(e){return this._invoke(n,e)}))}n("next"),n("throw"),n("return")}',
     {
       globals: [],
       locals: { defineIteratorMethods: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "defineIteratorMethods",
       dependencies: {
-        regeneratorDefine: [
-          "body.0.body.body.0.expression.arguments.0.body.body.0.expression.callee",
-        ],
+        regeneratorDefine: ["body.0.body.body.0.body.body.0.expression.callee"],
       },
     },
   ),
-  // size: 199, gzip size: 158
+  // size: 181, gzip size: 152
   regeneratorKeys: helper(
     "7.27.0",
-    "function _regeneratorKeys(e){var n=Object(e),t=[];for(var r in n)t.unshift(r);return function next(){for(;t.length;)if((r=t.pop())in n)return next.value=r,next.done=!1,next;return next.done=!0,next}}",
+    "function _regeneratorKeys(e){var n=Object(e),r=[];for(var t in n)r.unshift(t);return function e(){for(;r.length;)if((t=r.pop())in n)return e.value=t,e.done=!1,e;return e.done=!0,e}}",
     {
       globals: ["Object"],
       locals: { _regeneratorKeys: ["body.0.id"] },
@@ -1203,10 +1201,10 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 417, gzip size: 267
+  // size: 396, gzip size: 264
   regeneratorValues: helper(
     "7.18.0",
-    'function _regeneratorValues(e){if(null!=e){var t=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"];if(t)return t.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var n=-1,r=function next(){for(;++n<e.length;)if({}.hasOwnProperty.call(e,n))return next.value=e[n],next.done=!1,next;return next.value=void 0,next.done=!0,next};return r.next=r}}throw new TypeError(typeof e+" is not iterable")}',
+    'function _regeneratorValues(e){if(null!=e){var r=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var t=-1,n=function r(){for(;++t<e.length;)if({}.hasOwnProperty.call(e,t))return r.value=e[t],r.done=!1,r;return r.value=void 0,r.done=!0,r};return n.next=n}}throw new TypeError(typeof e+" is not iterable")}',
     {
       globals: ["Symbol", "isNaN", "TypeError"],
       locals: { _regeneratorValues: ["body.0.id"] },
