@@ -1,18 +1,18 @@
 /* @minVersion 7.27.0 */
 
 import OverloadYield from "./OverloadYield.ts";
-import regeneratorRuntime from "./regeneratorRuntime.ts";
+import define from "./regeneratorDefine.ts";
+import tryCatch from "./tryCatch.ts";
+import defineIteratorMethods from "./regeneratorDefineIM.ts";
 
 export default /* @no-mangle */ function AsyncIterator(
   this: any,
   generator: Generator,
   PromiseImpl: PromiseConstructor,
 ) {
-  var r = regeneratorRuntime();
-
   if (!this.next) {
-    r._m(AsyncIterator.prototype);
-    r._d(
+    defineIteratorMethods(AsyncIterator.prototype);
+    define(
       AsyncIterator.prototype,
       (typeof Symbol === "function" && Symbol.asyncIterator) ||
         "@asyncIterator",
@@ -28,7 +28,7 @@ export default /* @no-mangle */ function AsyncIterator(
     resolve: (value: any) => void,
     reject: (error: any) => void,
   ): any {
-    var record = r._t(generator[method], generator, arg);
+    var record = tryCatch(generator[method], generator, arg);
     if (record.type === "throw") {
       reject(record.arg);
     } else {
@@ -96,5 +96,5 @@ export default /* @no-mangle */ function AsyncIterator(
 
   // Define the unified helper method that is used to implement .next,
   // .throw, and .return (see defineIteratorMethods).
-  r._d(this, "_invoke", enqueue, true);
+  define(this, "_invoke", enqueue, true);
 }

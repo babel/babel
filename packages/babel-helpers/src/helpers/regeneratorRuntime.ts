@@ -7,6 +7,9 @@ import awaitAsyncGenerator from "./awaitAsyncGenerator.ts";
 import keys from "./regeneratorKeys.ts";
 import async from "./regeneratorAsync.ts";
 import AsyncIterator from "./regeneratorAsyncIterator.ts";
+import define from "./regeneratorDefine.ts";
+import defineIteratorMethods from "./regeneratorDefineIM.ts";
+import tryCatch from "./tryCatch.ts";
 
 type Completion = {
   type: "normal" | "throw" | "break" | "continue" | "return";
@@ -80,11 +83,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     awrap: awaitAsyncGenerator,
     async: async,
     AsyncIterator: AsyncIterator,
-
-    // Used by other helpers
-    _t: tryCatch,
-    _d: define,
-    _m: defineIteratorMethods,
   };
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
@@ -93,24 +91,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj: any, key: PropertyKey, value?: unknown, noFlags?: true) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !noFlags,
-      configurable: !noFlags,
-      writable: !noFlags,
-    });
-  }
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (_) {
-    // @ts-expect-error explicit function reassign
-    define = function (obj, key, value) {
-      return (obj[key] = value);
-    };
-  }
 
   function wrap(
     innerFn: Function,
@@ -137,24 +117,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     return generator;
   }
   exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn: Function, obj: unknown, arg: unknown) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
 
   // Returning this object from the innerFn has the same effect as
   // breaking out of the dispatch switch statement.
@@ -202,17 +164,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     toStringTagSymbol,
     "GeneratorFunction",
   );
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype: any) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (this: any, arg: any) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-  exports.defineIteratorMethods = defineIteratorMethods;
 
   exports.isGeneratorFunction = function (genFun: any) {
     var ctor = typeof genFun === "function" && genFun.constructor;
