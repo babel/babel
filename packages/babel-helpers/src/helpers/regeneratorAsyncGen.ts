@@ -8,7 +8,7 @@ export default function _regeneratorAsyncGen(
   outerFn: Function,
   self: any,
   tryLocsList: any[],
-  PromiseImpl: PromiseConstructor,
+  PromiseImpl: PromiseConstructor | undefined,
 ) {
   return new (AsyncIterator as any)(
     regenerator().w(innerFn, outerFn, self, tryLocsList),

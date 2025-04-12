@@ -557,6 +557,6 @@ export default function /* @no-mangle */ _regenerator() {
 
   // @ts-expect-error explicit function assignment
   return (_regenerator = function () {
-    return { w: wrap, m: mark, G: GeneratorFunction };
+    return { w: wrap, m: mark };
   })();
 }

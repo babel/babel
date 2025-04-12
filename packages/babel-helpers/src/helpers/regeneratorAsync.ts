@@ -7,7 +7,7 @@ export default function _regeneratorAsync(
   outerFn: Function,
   self: any,
   tryLocsList: any[],
-  PromiseImpl: PromiseConstructor,
+  PromiseImpl: PromiseConstructor | undefined,
 ) {
   var iter = asyncGen(innerFn, outerFn, self, tryLocsList, PromiseImpl);
   return iter.next().then(function (result: IteratorResult<any>) {
