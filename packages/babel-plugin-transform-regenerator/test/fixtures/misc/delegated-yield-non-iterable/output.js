@@ -1,7 +1,7 @@
 // #15172
 var _Symbol$iterator = {
-    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-      return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
+    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+      return babelHelpers.regenerator().w(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             return _context.delegateYield(0, "t0", 1);

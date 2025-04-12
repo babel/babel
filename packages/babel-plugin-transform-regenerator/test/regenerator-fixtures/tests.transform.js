@@ -183,7 +183,7 @@ context("functions", function () {
     // assigning a call expression to regeneratorRuntime.mark()
 
     n.CallExpression.assert(node);
-    assert.strictEqual(node.callee.property.name, "mark");
+    assert.strictEqual(node.callee.property.name, "m");
 
     // with said call expression marked as a pure function
     assert.strictEqual(node.leadingComments[0].value, "#__PURE__");
@@ -196,7 +196,7 @@ context("functions", function () {
       });
 
       // get our declarations
-      const declaration = (await transform(ast)).program.body[6];
+      const declaration = (await transform(ast)).program.body[5];
       n.VariableDeclaration.assert(declaration);
       const declarations = declaration.declarations;
 
@@ -216,7 +216,7 @@ context("functions", function () {
       );
 
       // get our declarations
-      const declaration = (await transform(ast)).program.body[6];
+      const declaration = (await transform(ast)).program.body[5];
       n.VariableDeclaration.assert(declaration);
       const declarations = declaration.declarations;
 
@@ -239,7 +239,7 @@ context("functions", function () {
       });
 
       // get our declarations
-      const declaration = (await transform(ast)).program.body[6];
+      const declaration = (await transform(ast)).program.body[5];
       n.VariableDeclaration.assert(declaration);
       const declarator = declaration.declarations[0];
 
@@ -257,7 +257,7 @@ context("functions", function () {
       });
 
       // get our declarations
-      const declaration = (await transform(ast)).program.body[6];
+      const declaration = (await transform(ast)).program.body[5];
       n.VariableDeclaration.assert(declaration);
       const declarator = declaration.declarations[0];
 
@@ -285,7 +285,7 @@ context("functions", function () {
         plugins: [require("../../lib/index.js")],
       });
 
-      const method = ast.program.body[6].body.body[0];
+      const method = ast.program.body[5].body.body[0];
       n.ClassMethod.assert(method);
 
       const return_ = method.body.body[0];

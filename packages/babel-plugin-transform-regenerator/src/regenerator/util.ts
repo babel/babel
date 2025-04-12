@@ -21,20 +21,22 @@ export function getTypes() {
   return currentTypes;
 }
 
-export function runtimeProperty(file: PluginPass, name: any) {
-  const t = getTypes();
-  const helper = file.addHelper("regeneratorRuntime");
-  return t.memberExpression(
-    !process.env.BABEL_8_BREAKING &&
+export let runtimeProperty: (file: PluginPass, name: any) => any;
+if (!process.env.BABEL_8_BREAKING) {
+  runtimeProperty = function (file, name) {
+    const t = getTypes();
+    const helper = file.addHelper("regeneratorRuntime");
+    return t.memberExpression(
       // In some cases, `helper` will be (() => regeneratorRuntime).
       // Se the implementation in transform-runtime for more details.
       t.isArrowFunctionExpression(helper) &&
-      t.isIdentifier((helper as any).body)
-      ? (helper as any).body
-      : t.callExpression(helper, []),
-    t.identifier(name),
-    false,
-  );
+        t.isIdentifier((helper as any).body)
+        ? (helper as any).body
+        : t.callExpression(helper, []),
+      t.identifier(name),
+      false,
+    );
+  };
 }
 
 export function isReference(path: any) {

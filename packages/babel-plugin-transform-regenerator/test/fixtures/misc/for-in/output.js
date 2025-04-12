@@ -1,6 +1,6 @@
-var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(fn);
+var _marked = /*#__PURE__*/babelHelpers.regenerator().m(fn);
 function fn() {
-  return babelHelpers.regeneratorRuntime().wrap(function fn$(_context) {
+  return babelHelpers.regenerator().w(function fn$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.t0 = babelHelpers.regeneratorKeys(y);

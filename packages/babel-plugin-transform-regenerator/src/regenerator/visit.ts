@@ -155,12 +155,14 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       }
 
       const wrapCall = t.callExpression(
-        node.async
-          ? process.env.BABEL_8_BREAKING ||
-            this.availableHelper("regeneratorAsync")
+        process.env.BABEL_8_BREAKING || this.availableHelper("regeneratorAsync")
+          ? node.async
             ? this.addHelper("regeneratorAsync")
-            : util.runtimeProperty(this, "async")
-          : util.runtimeProperty(this, "wrap"),
+            : t.memberExpression(
+                t.callExpression(this.addHelper("regenerator"), []),
+                t.identifier("w"),
+              )
+          : util.runtimeProperty(this, node.async ? "async" : "wrap"),
         wrapArgs,
       );
 
@@ -189,7 +191,15 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       if (wasGeneratorFunction && t.isExpression(node)) {
         util.replaceWithOrRemove(
           path,
-          t.callExpression(util.runtimeProperty(this, "mark"), [node]),
+          t.callExpression(
+            process.env.BABEL_8_BREAKING || this.availableHelper("regenerator")
+              ? t.memberExpression(
+                  t.callExpression(this.addHelper("regenerator"), []),
+                  t.identifier("m"),
+                )
+              : util.runtimeProperty(this, "mark"),
+            [node],
+          ),
         );
         path.addComment("leading", "#__PURE__");
       }
@@ -295,9 +305,15 @@ function getMarkedFunctionId(state: PluginPass, funPath: any) {
 
   // Get a new unique identifier for our marked variable.
   const markedId = blockPath.scope.generateUidIdentifier("marked");
-  const markCallExp = t.callExpression(util.runtimeProperty(state, "mark"), [
-    t.clone(node.id),
-  ]);
+  const markCallExp = t.callExpression(
+    process.env.BABEL_8_BREAKING || state.availableHelper("regenerator")
+      ? t.memberExpression(
+          t.callExpression(state.addHelper("regenerator"), []),
+          t.identifier("m"),
+        )
+      : util.runtimeProperty(state, "mark"),
+    [t.clone(node.id)],
+  );
 
   const index =
     info.decl.declarations.push(t.variableDeclarator(markedId, markCallExp)) -
