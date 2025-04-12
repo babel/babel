@@ -1,25 +1,32 @@
-"use strict";
+import fs from "node:fs";
+import { addElectronSupportFromChromium } from "./chromium-to-electron.mjs";
 
-const fs = require("node:fs");
-const { addElectronSupportFromChromium } = require("./chromium-to-electron");
+import envs from "../build/compat-table/environments.json" with { type: "json" };
+import parseEnvsVersions from "../build/compat-table/build-utils/parse-envs-versions.js";
+import interpolateAllResults from "../build/compat-table/build-utils/interpolate-all-results.js";
+import compareVersions from "../build/compat-table/build-utils/compare-versions.js";
+import legacyPluginAliases from "./data/legacy-plugin-aliases.mjs";
 
-const envs = require("../build/compat-table/environments");
-const parseEnvsVersions = require("../build/compat-table/build-utils/parse-envs-versions");
-const interpolateAllResults = require("../build/compat-table/build-utils/interpolate-all-results");
-const compareVersions = require("../build/compat-table/build-utils/compare-versions");
-const legacyPluginAliases = require("./data/legacy-plugin-aliases");
+import * as es5CompatSources from "../build/compat-table/data-es5.js";
+import * as es6CompatSources from "../build/compat-table/data-es6.js";
+import * as es2016PlusCompatSources from "../build/compat-table/data-es2016plus.js";
+import * as esnextCompatSources from "../build/compat-table/data-esnext.js";
 
 const envsVersions = parseEnvsVersions(envs);
 
-const compatSources = ["es5", "es6", "es2016plus", "esnext"].map(source => {
-  const data = require(`../build/compat-table/data-${source}`);
+const compatSources = [
+  es5CompatSources,
+  es6CompatSources,
+  es2016PlusCompatSources,
+  esnextCompatSources,
+].map(data => {
   interpolateAllResults(data.tests, envs);
   return data;
 });
 
 // End of compat-table code adaptation
 
-exports.environments = [
+export const environments = [
   "chrome",
   "opera",
   "edge",
@@ -98,7 +105,7 @@ const expandFeatures = features =>
       .filter(name => name === feat || name.startsWith(feat + " / "));
   });
 
-exports.generateData = (environments, features) => {
+export function generateData(environments, features) {
   const data = {};
 
   const normalized = {};
@@ -165,9 +172,9 @@ exports.generateData = (environments, features) => {
   }
 
   return { data, overlapping };
-};
+}
 
-exports.writeFile = function (data, dataPath, name) {
+export function writeFile(data, dataPath, name) {
   const stringified = JSON.stringify(data, null, 2) + "\n";
   if (process.env.CHECK_COMPAT_DATA) {
     const currentData = fs.readFileSync(dataPath, "utf8");
@@ -184,7 +191,7 @@ exports.writeFile = function (data, dataPath, name) {
     fs.writeFileSync(dataPath, stringified);
   }
   return true;
-};
+}
 
 // TODO(Babel 8): Remove this.
 // Since these scripts generates different compat data files, we generate
@@ -195,25 +202,27 @@ exports.writeFile = function (data, dataPath, name) {
 // the actual Babel 8 files so that:
 // - we don't accidentally release Babel 8 with the Babel 7 file
 // - at lest in our e2e tests, we use the new file
-function babel7Only(fn, arg) {
+export function babel7Only(fn, arg) {
   if (process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH) {
     return arg;
   } else {
     return fn(arg);
   }
 }
-exports.babel7Only = babel7Only;
 
 // TODO(Babel 8): Remove this.
-exports.maybeDefineLegacyPluginAliases = babel7Only.bind(null, function (data) {
-  // We create a new object to inject legacy aliases in the correct
-  // order, rather than all at the end.
-  const result = {};
-  for (const key in data) {
-    result[key] = data[key];
-    if (key in legacyPluginAliases) {
-      result[legacyPluginAliases[key]] = data[key];
+export const maybeDefineLegacyPluginAliases = babel7Only.bind(
+  null,
+  function (data) {
+    // We create a new object to inject legacy aliases in the correct
+    // order, rather than all at the end.
+    const result = {};
+    for (const key in data) {
+      result[key] = data[key];
+      if (key in legacyPluginAliases) {
+        result[legacyPluginAliases[key]] = data[key];
+      }
     }
+    return result;
   }
-  return result;
-});
+);

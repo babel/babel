@@ -37,7 +37,7 @@
     "./plugin-bugfixes": "./plugin-bugfixes.js"
   },
   "scripts": {
-    "build-data": "./scripts/download-compat-table.sh && node ./scripts/build-data.js && node ./scripts/build-modules-support.js && node ./scripts/build-bugfixes-targets.js"
+    "build-data": "./scripts/download-compat-table.sh && node ./scripts/build-data.mjs && node ./scripts/build-modules-support.mjs && node ./scripts/build-bugfixes-targets.mjs"
   },
   "keywords": [
     "babel",

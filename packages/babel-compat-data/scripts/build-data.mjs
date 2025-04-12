@@ -1,15 +1,13 @@
-"use strict";
-
-const path = require("node:path");
-const compatData = require("@mdn/browser-compat-data").javascript;
-const { generateModuleSupport } = require("./build-modules-support");
-const {
+import browserCompatData from "@mdn/browser-compat-data" with { type: "json" };
+import { generateModuleSupport } from "./build-modules-support.mjs";
+import {
   generateData,
   environments,
   writeFile,
   maybeDefineLegacyPluginAliases,
-} = require("./utils-build-data");
+} from "./utils-build-data.mjs";
 
+const compatData = browserCompatData.javascript;
 if (process.cwd().endsWith("scripts")) {
   throw new Error("Please run this script from the root of the package");
 }
@@ -20,7 +18,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   // plugins that we have data for.
   let { data: newData } = generateData(
     environments,
-    require(`./data/${target}-features`)
+    (await import(`./data/${target}-features.mjs`)).default
   );
   if (target === "plugin") {
     // add export-namespace-from from @mdn/browser-compat-data
@@ -36,9 +34,9 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     // Add proposal-* aliases for backward compatibility.
     newData = maybeDefineLegacyPluginAliases(newData);
   }
-  const dataPath = path.join(__dirname, `../data/${target}s.json`);
+  const dataURL = new URL(`../data/${target}s.json`, import.meta.url);
 
-  if (!writeFile(newData, dataPath, target)) {
+  if (!writeFile(newData, dataURL, target)) {
     process.exitCode = 1;
     break;
   }

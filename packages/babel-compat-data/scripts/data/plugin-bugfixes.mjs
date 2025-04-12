@@ -1,6 +1,6 @@
 /* eslint sort-keys: "error" */
 
-module.exports = {
+export default {
   "bugfix/transform-async-arrows-in-class": {
     features: ["async functions / async arrow functions in methods, classes"],
     replaces: "transform-async-to-generator",

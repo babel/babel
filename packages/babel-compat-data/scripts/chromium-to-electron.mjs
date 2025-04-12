@@ -1,4 +1,4 @@
-const { chromiumVersions } = require("electron-to-chromium");
+import { chromiumVersions } from "electron-to-chromium";
 const chromiumVersionList = Object.keys(chromiumVersions);
 
 function chromiumToElectron(version) {
@@ -12,7 +12,7 @@ function chromiumToElectron(version) {
   return chromiumVersions[nextSupportedVersion];
 }
 
-function addElectronSupportFromChromium(supportData) {
+export function addElectronSupportFromChromium(supportData) {
   if (supportData.chrome) {
     const electronVersion = chromiumToElectron(supportData.chrome);
     if (electronVersion) {
@@ -20,5 +20,3 @@ function addElectronSupportFromChromium(supportData) {
     }
   }
 }
-
-exports.addElectronSupportFromChromium = addElectronSupportFromChromium;

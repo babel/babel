@@ -37,7 +37,7 @@ export * as packages from "./packages.ts";
 // bundled anyway.
 // TODO: Remove this in Babel 8
 // @ts-expect-error TS complains about importing a JS file without type declarations
-import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases.js";
+import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases.mjs";
 // eslint-disable-next-line guard-for-in
 for (const name in legacyPluginAliases) {
   all[legacyPluginAliases[name]] = all[name];
