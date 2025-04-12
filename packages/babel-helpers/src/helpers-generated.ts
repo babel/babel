@@ -1053,20 +1053,34 @@ const helpers: Record<string, Helper> = {
       },
     },
   ),
-  // size: 220, gzip size: 167
+  // size: 132, gzip size: 119
   regeneratorAsync: helper(
     "7.27.0",
-    "function _regeneratorAsync(r,e,n,t,o){null==o&&(o=Promise);var a=regeneratorRuntime(),u=new AsyncIterator(a.wrap(r,e,n,t),o);return a.isGeneratorFunction(e)?u:u.next().then((function(r){return r.done?r.value:u.next()}))}",
+    "function _regeneratorAsync(n,e,r,t,o){var a=asyncGen(n,e,r,t,o);return a.next().then((function(n){return n.done?n.value:a.next()}))}",
     {
-      globals: ["Promise"],
+      globals: [],
       locals: { _regeneratorAsync: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_regeneratorAsync",
       dependencies: {
-        regeneratorAsyncIterator: [
-          "body.0.body.body.1.declarations.1.init.callee",
+        regeneratorAsyncGen: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+    },
+  ),
+  // size: 103, gzip size: 101
+  regeneratorAsyncGen: helper(
+    "7.27.0",
+    "function _regeneratorAsyncGen(r,e,t,o,n){return new AsyncIterator(regenerator().w(r,e,t,o),n||Promise)}",
+    {
+      globals: ["Promise"],
+      locals: { _regeneratorAsyncGen: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorAsyncGen",
+      dependencies: {
+        regeneratorAsyncIterator: ["body.0.body.body.0.argument.callee"],
+        regenerator: [
+          "body.0.body.body.0.argument.arguments.0.callee.object.callee",
         ],
-        regeneratorRuntime: ["body.0.body.body.1.declarations.0.init.callee"],
       },
     },
   ),
