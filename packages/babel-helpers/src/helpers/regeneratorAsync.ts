@@ -7,7 +7,7 @@ export default function _regeneratorAsync(
   innerFn: Function,
   outerFn: Function,
   self: any,
-  tryLocsList: unknown[],
+  tryLocsList: any[],
   PromiseImpl: PromiseConstructor,
 ) {
   if (PromiseImpl == null) PromiseImpl = Promise;
