@@ -2284,7 +2284,7 @@ export default abstract class ExpressionParser extends LValParser {
         ? this.parseMaybeDefault(this.state.startLoc)
         : this.parseMaybeAssignAllowIn(refExpressionErrors);
 
-      return this.finishNode(prop, "ObjectProperty");
+      return this.finishObjectProperty(prop);
     }
 
     if (!prop.computed && prop.key.type === "Identifier") {
@@ -2317,8 +2317,12 @@ export default abstract class ExpressionParser extends LValParser {
       }
       prop.shorthand = true;
 
-      return this.finishNode(prop, "ObjectProperty");
+      return this.finishObjectProperty(prop);
     }
+  }
+
+  finishObjectProperty(node: Undone<N.ObjectProperty>) {
+    return this.finishNode(node, "ObjectProperty");
   }
 
   parseObjPropValue<T extends N.ObjectMember>(
