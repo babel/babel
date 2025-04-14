@@ -21,6 +21,26 @@ export function getTypes() {
   return currentTypes;
 }
 
+export let newHelpersAvailable: (file: PluginPass) => boolean;
+if (!process.env.BABEL_8_BREAKING) {
+  newHelpersAvailable = (file: PluginPass) => {
+    return (
+      file.availableHelper("regenerator") &&
+      // At this point, we can safely try to inject the `regenerator` helper.
+      // If this plugin tries to inject any helper, than we are sure that
+      // `regenerator` is one of them.
+      !getTypes().isIdentifier(file.addHelper("regenerator"), {
+        // This is a special marker returned by transform-runtime, which means
+        // "the version of `@babel/runtime` does not have the helper".
+        // Normally transform-runtime will fallback to just injecting the
+        // helper inline, but we special handle this case to instead be able
+        // to fallback to the old `regeneratorRuntime` helper
+        name: "__interal_marker_fallback_regenerator__",
+      })
+    );
+  };
+}
+
 export let runtimeProperty: (file: PluginPass, name: any) => any;
 if (!process.env.BABEL_8_BREAKING) {
   runtimeProperty = function (file, name) {

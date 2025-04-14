@@ -521,7 +521,7 @@ export class Emitter {
 
         const helper =
           process.env.BABEL_8_BREAKING ||
-          this.pluginPass.availableHelper("regeneratorKeys")
+          util.newHelpersAvailable(this.pluginPass)
             ? this.pluginPass.addHelper("regeneratorKeys")
             : util.runtimeProperty(this.pluginPass, "keys");
 

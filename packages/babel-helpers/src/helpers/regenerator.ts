@@ -1,4 +1,4 @@
-/* @minVersion 7.18.0 */
+/* @minVersion 7.27.0 */
 /* @mangleFns */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */

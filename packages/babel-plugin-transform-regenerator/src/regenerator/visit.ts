@@ -155,7 +155,7 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       }
 
       const wrapCall = t.callExpression(
-        process.env.BABEL_8_BREAKING || this.availableHelper("regeneratorAsync")
+        process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
           ? !node.async
             ? t.memberExpression(
                 t.callExpression(this.addHelper("regenerator"), []),
@@ -194,7 +194,7 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
         util.replaceWithOrRemove(
           path,
           t.callExpression(
-            process.env.BABEL_8_BREAKING || this.availableHelper("regenerator")
+            process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
               ? t.memberExpression(
                   t.callExpression(this.addHelper("regenerator"), []),
                   t.identifier("m"),
@@ -308,7 +308,7 @@ function getMarkedFunctionId(state: PluginPass, funPath: any) {
   // Get a new unique identifier for our marked variable.
   const markedId = blockPath.scope.generateUidIdentifier("marked");
   const markCallExp = t.callExpression(
-    process.env.BABEL_8_BREAKING || state.availableHelper("regenerator")
+    process.env.BABEL_8_BREAKING || util.newHelpersAvailable(state)
       ? t.memberExpression(
           t.callExpression(state.addHelper("regenerator"), []),
           t.identifier("m"),
@@ -381,7 +381,7 @@ const awaitVisitor: Visitor<PluginPass> = {
       // `regeneratorRuntime().awrap`. There is no direct way to test if we
       // have that part of the helper available, but we know that it has been
       // introduced in the same version as `regeneratorKeys`.
-      process.env.BABEL_8_BREAKING || this.availableHelper("regeneratorKeys")
+      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
         ? this.addHelper("awaitAsyncGenerator")
         : util.runtimeProperty(this, "awrap");
 
