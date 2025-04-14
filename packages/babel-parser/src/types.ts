@@ -479,7 +479,6 @@ export interface ArgumentPlaceholder extends NodeBase {
 export interface Decorator extends NodeBase {
   type: "Decorator";
   expression: Expression;
-  arguments?: Array<Expression | SpreadElement>;
 }
 
 export interface Directive extends NodeBase {
@@ -1498,9 +1497,11 @@ export interface TSParameterProperty extends HasDecorators {
   type: "TSParameterProperty";
   // At least one of `accessibility` or `readonly` must be set.
   accessibility?: Accessibility | null;
-  readonly?: true | null;
-  override?: true | null;
+  readonly?: boolean | null;
+  override?: boolean | null;
   parameter: Identifier | AssignmentPattern;
+  // For TS-ESLint
+  static?: false;
 }
 
 export interface OptTSDeclareFunction extends FunctionBase, DeclarationBase {
@@ -1572,12 +1573,15 @@ export interface TsNamedTypeElementBase extends NodeBase {
   // This is usually an Identifier but may be e.g. `Symbol.iterator` if `computed` is true.
   key: Expression;
   computed: boolean;
-  optional?: true;
+  optional?: boolean;
+  // For TS-ESLint
+  accessibility?: Accessibility | undefined;
+  readonly?: boolean;
+  static?: boolean;
 }
 
 export interface TsPropertySignature extends TsNamedTypeElementBase {
   type: "TSPropertySignature";
-  readonly?: true;
   typeAnnotation?: TsTypeAnnotation;
 }
 
@@ -1591,10 +1595,12 @@ export interface TsMethodSignature
 // *Not* a ClassMemberBase: Can't have accessibility, can't be abstract, can't be optional.
 export interface TsIndexSignature
   extends TsSignatureDeclarationOrIndexSignatureBase {
-  readonly?: true;
-  static?: true;
+  readonly?: boolean;
+  static?: boolean;
   type: "TSIndexSignature";
   // Note: parameters.length must be 1.
+  // For TS-ESLint
+  accessibility?: Accessibility | undefined;
 }
 
 export interface EstreeTSEmptyBodyFunctionExpression
@@ -1613,6 +1619,12 @@ export interface EstreeTSAbstractMethodDefinition
 export interface EstreeTSAbstractPropertyDefinition
   extends EstreePropertyDefinitionBase {
   type: "TSAbstractPropertyDefinition";
+  value: null;
+}
+
+export interface EstreeTSAbstractAccessorProperty
+  extends EstreePropertyDefinitionBase {
+  type: "TSAbstractAccessorProperty";
   value: null;
 }
 
@@ -1858,7 +1870,7 @@ export interface TsTypeAliasDeclaration extends DeclarationBase {
 
 export interface TsEnumDeclaration extends DeclarationBase {
   type: "TSEnumDeclaration";
-  const?: true;
+  const?: boolean;
   id: Identifier;
   body: TsEnumBody;
   /**
@@ -1876,12 +1888,14 @@ export interface TsEnumMember extends NodeBase {
   type: "TSEnumMember";
   id: Identifier | StringLiteral;
   initializer?: Expression;
+  // For TS-ESLint
+  computed?: false;
 }
 
 export interface TsModuleDeclaration extends DeclarationBase {
   type: "TSModuleDeclaration";
   kind: "global" | "module" | "namespace";
-  global?: true; // In TypeScript, this is only available through `node.flags`.,
+  global?: boolean; // In TypeScript, this is only available through `node.flags`.,
   id: TsModuleName;
   body: TsNamespaceBody;
 }
@@ -2035,6 +2049,7 @@ export type Node =
   | EstreePrivateIdentifier
   | EstreeProperty
   | EstreePropertyDefinition
+  | EstreeTSAbstractAccessorProperty
   | EstreeTSAbstractMethodDefinition
   | EstreeTSAbstractPropertyDefinition
   | EstreeTSEmptyBodyFunctionExpression

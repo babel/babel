@@ -84,7 +84,8 @@
                           "optional": false
                         }
                       ]
-                    }
+                    },
+                    "qualifier": null
                   }
                 }
               }

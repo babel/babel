@@ -100,7 +100,10 @@
                         24,
                         25
                       ],
-                      "name": "T"
+                      "name": "T",
+                      "const": false,
+                      "in": false,
+                      "out": false
                     }
                   ]
                 }

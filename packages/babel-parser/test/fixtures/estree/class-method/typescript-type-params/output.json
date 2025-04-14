@@ -62,7 +62,10 @@
                         "name": "T",
                         "decorators": [],
                         "optional": false
-                      }
+                      },
+                      "const": false,
+                      "in": false,
+                      "out": false
                     }
                   ]
                 }

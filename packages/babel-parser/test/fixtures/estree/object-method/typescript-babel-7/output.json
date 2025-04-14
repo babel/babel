@@ -101,7 +101,6 @@
                         }
                       ]
                     },
-                    "declare": false,
                     "typeParameters": {
                       "type": "TSTypeParameterDeclaration",
                       "start":17,"end":20,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":8}},
@@ -109,10 +108,14 @@
                         {
                           "type": "TSTypeParameter",
                           "start":18,"end":19,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7}},
-                          "name": "T"
+                          "name": "T",
+                          "const": false,
+                          "in": false,
+                          "out": false
                         }
                       ]
-                    }
+                    },
+                    "declare": false
                   },
                   "shorthand": false,
                   "optional": false

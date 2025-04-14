@@ -26,7 +26,8 @@
             "value": false,
             "raw": "false"
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -47,7 +48,8 @@
             "value": true,
             "raw": "true"
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -68,7 +70,8 @@
             "value": "string",
             "raw": "\"string\""
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -89,7 +92,8 @@
             "value": 123,
             "raw": "123"
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -110,7 +114,8 @@
             "value": 123.4,
             "raw": "123.4"
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -137,7 +142,8 @@
               "raw": "123"
             }
           }
-        }
+        },
+        "declare": false
       },
       {
         "type": "TSTypeAliasDeclaration",
@@ -164,7 +170,8 @@
               "raw": "123.5"
             }
           }
-        }
+        },
+        "declare": false
       }
     ]
   }

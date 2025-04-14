@@ -404,7 +404,12 @@ export default (superClass: typeof Parser) =>
           return accessorPropertyNode;
         }
       }
-      this.castNodeTo(accessorPropertyNode, "AccessorProperty");
+      if (accessorPropertyNode.abstract && this.hasPlugin("typescript")) {
+        delete accessorPropertyNode.abstract;
+        this.castNodeTo(accessorPropertyNode, "TSAbstractAccessorProperty");
+      } else {
+        this.castNodeTo(accessorPropertyNode, "AccessorProperty");
+      }
       return accessorPropertyNode;
     }
 

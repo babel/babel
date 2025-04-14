@@ -39,7 +39,9 @@
                         "raw": "'./x'"
                       }
                     },
-                    "options": null
+                    "options": null,
+                    "qualifier": null,
+                    "typeArguments": null
                   }
                 }
               }
@@ -87,7 +89,8 @@
                     "name": "Y",
                     "decorators": [],
                     "optional": false
-                  }
+                  },
+                  "typeArguments": null
                 }
               }
             },

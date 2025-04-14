@@ -35,7 +35,8 @@
                       "value": "./x",
                       "raw": "'./x'"
                     },
-                    "options": null
+                    "options": null,
+                    "qualifier": null
                   }
                 }
               }

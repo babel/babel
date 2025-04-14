@@ -56,6 +56,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":62,"end":98,"loc":{"start":{"line":8,"column":0,"index":62},"end":{"line":10,"column":17,"index":98}},
+        "attributes": [],
         "declaration": {
           "type": "TSImportEqualsDeclaration",
           "start":69,"end":98,"loc":{"start":{"line":8,"column":7,"index":69},"end":{"line":10,"column":17,"index":98}},
@@ -79,11 +80,14 @@
             }
           }
         },
+        "exportKind": "value",
+        "source": null,
         "specifiers": []
       },
       {
         "type": "ExportNamedDeclaration",
         "start":100,"end":136,"loc":{"start":{"line":12,"column":0,"index":100},"end":{"line":15,"column":17,"index":136}},
+        "attributes": [],
         "declaration": {
           "type": "TSImportEqualsDeclaration",
           "start":107,"end":136,"loc":{"start":{"line":13,"column":0,"index":107},"end":{"line":15,"column":17,"index":136}},
@@ -107,6 +111,8 @@
             }
           }
         },
+        "exportKind": "value",
+        "source": null,
         "specifiers": []
       }
     ],

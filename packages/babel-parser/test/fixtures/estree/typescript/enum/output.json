@@ -30,7 +30,8 @@
                 "name": "a",
                 "decorators": [],
                 "optional": false
-              }
+              },
+              "computed": false
             },
             {
               "type": "TSEnumMember",
@@ -40,10 +41,13 @@
                 "start":16,"end":19,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5}},
                 "value": "r",
                 "raw": "\"r\""
-              }
+              },
+              "computed": false
             }
           ]
-        }
+        },
+        "const": false,
+        "declare": false
       }
     ]
   }

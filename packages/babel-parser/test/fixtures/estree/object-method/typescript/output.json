@@ -101,7 +101,6 @@
                         }
                       ]
                     },
-                    "declare": false,
                     "typeParameters": {
                       "type": "TSTypeParameterDeclaration",
                       "start":17,"end":20,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":8}},
@@ -115,10 +114,14 @@
                             "name": "T",
                             "decorators": [],
                             "optional": false
-                          }
+                          },
+                          "const": false,
+                          "in": false,
+                          "out": false
                         }
                       ]
-                    }
+                    },
+                    "declare": false
                   },
                   "shorthand": false,
                   "optional": false
