@@ -8,7 +8,7 @@ function getPath(code) {
   const ast = parse(code, {
     plugins: [
       ["decorators", { version: "2023-11", decoratorsBeforeExport: true }],
-      ...(IS_BABEL_8() ? [] : ["recordAndTuple", { syntaxType: "hash" }]),
+      ...(IS_BABEL_8() ? [] : [["recordAndTuple", { syntaxType: "hash" }]]),
       "decoratorAutoAccessors",
       ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
     ],
