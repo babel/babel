@@ -36,42 +36,45 @@ export default declare(api => {
     },
   };
 
-  const shouldWrapp = new Set<t.Node>();
-
   return {
     name: "proposal-function-sent",
     manipulateOptions: (_, parser) => parser.plugins.push("functionSent"),
 
     visitor: {
-      MetaProperty(path) {
-        if (!isFunctionSent(path.node)) return;
+      Function(path, state) {
+        if (!path.node.generator) return;
 
-        const fnPath = path.getFunctionParent();
-
-        if (!fnPath.node.generator) {
-          throw new Error("Parent generator function not found");
-        }
+        const hasSent = process.env.BABEL_8_BREAKING
+          ? t.traverseFast(path.node, node => {
+              if (t.isMetaProperty(node) && isFunctionSent(node)) {
+                return t.traverseFast.stop;
+              }
+            })
+          : (function () {
+              try {
+                t.traverseFast(path.node, node => {
+                  if (t.isMetaProperty(node) && isFunctionSent(node)) {
+                    // eslint-disable-next-line @typescript-eslint/only-throw-error
+                    throw null;
+                  }
+                });
+                return false;
+              } catch {
+                return true;
+              }
+            })();
+        if (!hasSent) return;
 
         const sentId = path.scope.generateUid("function.sent");
-
-        fnPath.traverse(yieldVisitor, { sentId });
+        path.traverse(yieldVisitor, { sentId });
         // @ts-expect-error A generator must not be an arrow function
-        fnPath.node.body.body.unshift(
+        path.node.body.body.unshift(
           t.variableDeclaration("let", [
             t.variableDeclarator(t.identifier(sentId), t.yieldExpression()),
           ]),
         );
 
-        shouldWrapped.add(fnPath.node);
-      },
-      Function: {
-        exit(path, state) {
-          if (shouldWrapped.has(path.node)) {
-            shouldWrapped.delete(path.node);
-            wrapFunction(path, state.addHelper("skipFirstGeneratorNext"));
-            return;
-          }
-        },
+        wrapFunction(path, state.addHelper("skipFirstGeneratorNext"));
       },
     },
   };
