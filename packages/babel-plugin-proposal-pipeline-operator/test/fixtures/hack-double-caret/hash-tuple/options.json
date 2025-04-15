@@ -1,7 +1,0 @@
-{
-  "BABEL_8_BREAKING": true,
-  "plugins": [
-    ["proposal-pipeline-operator", { "proposal": "hack", "topicToken": "^^" }],
-    ["proposal-record-and-tuple"]
-  ]
-}
