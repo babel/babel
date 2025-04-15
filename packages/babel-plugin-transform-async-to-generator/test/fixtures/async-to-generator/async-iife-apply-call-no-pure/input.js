@@ -9,3 +9,6 @@
 
 (async function() {
 }).apply();
+
+(async function() {
+}).test();

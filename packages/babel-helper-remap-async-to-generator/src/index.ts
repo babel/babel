@@ -1,5 +1,3 @@
-/* @noflow */
-
 import type { NodePath } from "@babel/core";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
@@ -72,37 +70,25 @@ export default function (
     }
 
     // try to catch calls to Function#bind, as emitted by arrowFunctionToExpression in spec mode
-    // this may also catch .bind(this)/.call()/.apply() written by users, but does it matter? 🤔
+    // this may also catch .bind(this) written by users, but does it matter? 🤔
     const { parentPath } = path;
+    if (parentPath.isMemberExpression()) {
+      if (isIdentifier(parentPath.node.property, { name: "bind" })) {
+        const { parentPath: bindCall } = parentPath;
 
-    if (
-      parentPath.isMemberExpression() &&
-      isIdentifier(parentPath.node.property)
-    ) {
-      const { parentPath: methodCall } = parentPath;
-      const { name: methodName } = parentPath.node.property;
-
-      if (["call", "apply"].includes(methodName)) {
-        // (function () { ... }).apply(...)
-        // (function () { ... }).call(...)
-
-        // check if the result of '.call()' or '.apply()' is immediately invoked
-        return methodCall.isCallExpression({ callee: parentPath.node });
-      }
-
-      if (methodName === "bind") {
         // (function () { ... }).bind(this)()
 
         return (
           // first, check if the .bind is actually being called
-          methodCall.isCallExpression() &&
+          bindCall.isCallExpression() &&
           // and whether its sole argument is 'this'
-          methodCall.node.arguments.length === 1 &&
-          isThisExpression(methodCall.node.arguments[0]) &&
+          bindCall.node.arguments.length === 1 &&
+          isThisExpression(bindCall.node.arguments[0]) &&
           // and whether the result of the .bind(this) is being called
-          methodCall.parentPath.isCallExpression({ callee: methodCall.node })
+          bindCall.parentPath.isCallExpression({ callee: bindCall.node })
         );
       }
+      return true;
     }
 
     return false;
