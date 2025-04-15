@@ -25,7 +25,8 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/plugin-external-helpers": "workspace:^",
+    "cjs-module-lexer": "^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-commonjs",
   "engines": {
