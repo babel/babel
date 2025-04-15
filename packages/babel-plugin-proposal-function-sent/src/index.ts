@@ -36,7 +36,7 @@ export default declare(api => {
     },
   };
 
-  const shouldWrapped = new Set<t.Node>();
+  const shouldWrapp = new Set<t.Node>();
 
   return {
     name: "proposal-function-sent",
