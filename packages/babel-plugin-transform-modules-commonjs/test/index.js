@@ -10,21 +10,22 @@ import path from "node:path";
 import { commonJS, describeGte } from "$repo-utils";
 import { transformFileSync } from "@babel/core";
 import transformModulesCommonjs from "../lib/index.js";
-import * as lexer from "cjs-module-lexer";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
 runner(import.meta.url);
 
-describeGte("10.0.0")("compat", () => {
-  it("should work with cjs-module-lexer", () => {
+describeGte("14.0.0")("compat", () => {
+  it("should work with cjs-module-lexer", async () => {
     const code = readFileSync(
       path.join(__dirname, "./fixtures/real-world/babel-types-index/output.js"),
       "utf8",
     );
 
+    const lexer = await import("cjs-module-lexer");
     lexer.initSync();
     const exports = lexer.parse(code);
+
     expect(exports).toMatchInlineSnapshot(`
       Object {
         "exports": Array [
@@ -101,25 +102,26 @@ describeGte("10.0.0")("compat", () => {
       }
     `);
   });
-});
 
-const execFixtures = path.join(__dirname, "./fixtures/.exec/");
-readdirSync(execFixtures).forEach(testName => {
-  if (testName.includes(".")) return;
-  const inputDir = path.join(execFixtures, testName, "input");
-  const outputPath = path.join(execFixtures, testName, "output");
-  try {
-    rmSync(outputPath, { recursive: true });
-  } catch (error) {}
-  mkdirSync(outputPath);
+  it("should work with circle", () => {
+    const execFixtures = path.join(__dirname, "./fixtures/.exec/");
+    readdirSync(execFixtures).forEach(testName => {
+      if (testName.includes(".")) return;
+      const inputDir = path.join(execFixtures, testName, "input");
+      const outputPath = path.join(execFixtures, testName, "output");
 
-  readdirSync(inputDir).forEach(file => {
-    const result = transformFileSync(path.join(inputDir, file), {
-      plugins: [transformModulesCommonjs],
-      configFile: false,
-      babelrc: false,
+      rmSync(outputPath, { recursive: true, force: true });
+      mkdirSync(outputPath);
+
+      readdirSync(inputDir).forEach(file => {
+        const result = transformFileSync(path.join(inputDir, file), {
+          plugins: [transformModulesCommonjs],
+          configFile: false,
+          babelrc: false,
+        });
+        writeFileSync(path.join(outputPath, file), result.code);
+      });
+      require(path.join(outputPath, "index.js"));
     });
-    writeFileSync(path.join(outputPath, file), result.code);
   });
-  require(path.join(outputPath, "index.js"));
 });
