@@ -59,10 +59,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       );
     }
 
-    const tupleSyntaxIsHash = process.env.BABEL_8_BREAKING
-      ? pluginsMap.has("recordAndTuple")
-      : pluginsMap.get("recordAndTuple")?.syntaxType === "hash";
-
     if (proposal === "hack") {
       if (pluginsMap.has("placeholders")) {
         throw new Error(
@@ -86,15 +82,20 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         );
       }
 
-      if (topicToken === "#" && tupleSyntaxIsHash) {
-        throw new Error(
-          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
-        );
+      if (!process.env.BABEL_8_BREAKING) {
+        if (
+          topicToken === "#" &&
+          pluginsMap.get("recordAndTuple")?.syntaxType === "hash"
+        ) {
+          throw new Error(
+            `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
+          );
+        }
       }
     } else if (
       !process.env.BABEL_8_BREAKING &&
       proposal === "smart" &&
-      tupleSyntaxIsHash
+      pluginsMap.get("recordAndTuple")?.syntaxType === "hash"
     ) {
       throw new Error(
         `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
@@ -155,19 +156,13 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
   }
 
   if (pluginsMap.has("recordAndTuple")) {
-    const syntaxType = pluginsMap.get("recordAndTuple").syntaxType;
-    if (syntaxType != null) {
-      if (process.env.BABEL_8_BREAKING) {
-        if (syntaxType === "hash") {
-          throw new Error(
-            'The syntaxType option is no longer required in Babel 8. You can safely remove { syntaxType: "hash" } from the recordAndTuple config.',
-          );
-        } else {
-          throw new Error(
-            'The syntaxType option is no longer required in Babel 8. Please remove { syntaxType: "bar" } from the recordAndTuple config and migrate to the hash syntax #{} and #[].',
-          );
-        }
-      } else {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "The 'recordAndTuple' plugin has been removed in Babel 8. Please remove it from your configuration.",
+      );
+    } else {
+      const syntaxType = pluginsMap.get("recordAndTuple").syntaxType;
+      if (syntaxType != null) {
         const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
         if (!RECORD_AND_TUPLE_SYNTAX_TYPES.includes(syntaxType)) {
           throw new Error(

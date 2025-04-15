@@ -139,12 +139,17 @@ export type InternalTokenTypes = typeof tt;
 export const tt = {
   // Punctuation token types.
   bracketL: createToken("[", { beforeExpr, startsExpr }),
+  // TODO: Remove this in Babel 8
   bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
+  // TODO: Remove this in Babel 8
   bracketBarL: createToken("[|", { beforeExpr, startsExpr }),
   bracketR: createToken("]"),
+  // TODO: Remove this in Babel 8
   bracketBarR: createToken("|]"),
   braceL: createToken("{", { beforeExpr, startsExpr }),
+  // TODO: Remove this in Babel 8
   braceBarL: createToken("{|", { beforeExpr, startsExpr }),
+  // TODO: Remove this in Babel 8
   braceHashL: createToken("#{", { beforeExpr, startsExpr }),
   braceR: createToken("}"),
   braceBarR: createToken("|}"),
