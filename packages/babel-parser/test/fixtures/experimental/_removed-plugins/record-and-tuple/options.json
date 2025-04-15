@@ -1,0 +1,8 @@
+{
+  "BABEL_8_BREAKING": true,
+  "plugins": [
+    "recordAndTuple"
+  ],
+  "sourceType": "module",
+  "throws": "The 'recordAndTuple' plugin has been removed in Babel 8. Please remove it from your configuration."
+}

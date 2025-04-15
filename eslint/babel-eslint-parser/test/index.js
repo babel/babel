@@ -3,7 +3,7 @@ import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
-import { itDummy, commonJS, IS_BABEL_8, itBabel7 } from "$repo-utils";
+import { itDummy, commonJS, itBabel7 } from "$repo-utils";
 
 function parseForESLint(code, options) {
   return parseForESLintOriginal(code, {
@@ -430,7 +430,7 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
-  it("brace and bracket hash operator (token)", () => {
+  itBabel7("brace and bracket hash operator (token)", () => {
     const code = "#[]; #{}";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
@@ -438,11 +438,7 @@ describe("Babel and Espree", () => {
       babelOptions: {
         filename: "test.js",
         parserOpts: {
-          plugins: [
-            IS_BABEL_8()
-              ? "recordAndTuple"
-              : ["recordAndTuple", { syntaxType: "hash" }],
-          ],
+          plugins: [["recordAndTuple", { syntaxType: "hash" }]],
           tokens: true,
         },
       },
