@@ -41,40 +41,28 @@ export default declare(api => {
     manipulateOptions: (_, parser) => parser.plugins.push("functionSent"),
 
     visitor: {
-      Function(path, state) {
-        if (!path.node.generator) return;
+      MetaProperty(path, state) {
+        if (!isFunctionSent(path.node)) return;
 
-        const hasSent = process.env.BABEL_8_BREAKING
-          ? t.traverseFast(path.node, node => {
-              if (t.isMetaProperty(node) && isFunctionSent(node)) {
-                return t.traverseFast.stop;
-              }
-            })
-          : (function () {
-              try {
-                t.traverseFast(path.node, node => {
-                  if (t.isMetaProperty(node) && isFunctionSent(node)) {
-                    // eslint-disable-next-line @typescript-eslint/only-throw-error
-                    throw null;
-                  }
-                });
-                return false;
-              } catch {
-                return true;
-              }
-            })();
-        if (!hasSent) return;
+        const fnPath = path.getFunctionParent();
+
+        if (!fnPath.node.generator) {
+          throw new Error("Parent generator function not found");
+        }
 
         const sentId = path.scope.generateUid("function.sent");
-        path.traverse(yieldVisitor, { sentId });
+
+        fnPath.traverse(yieldVisitor, { sentId });
         // @ts-expect-error A generator must not be an arrow function
-        path.node.body.body.unshift(
+        fnPath.node.body.body.unshift(
           t.variableDeclaration("let", [
             t.variableDeclarator(t.identifier(sentId), t.yieldExpression()),
           ]),
         );
 
-        wrapFunction(path, state.addHelper("skipFirstGeneratorNext"));
+        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+
+        fnPath.requeue();
       },
     },
   };

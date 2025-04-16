@@ -3,9 +3,9 @@ const o = {
   s() {
     return babelHelpers.skipFirstGeneratorNext(function* () {
       let _functionSent = yield;
-      t || (t = 'value'); // former logical assignment - ✔ Transformed
+      t || (t = 'value'); // former logical assignment
       _functionSent;
-      t || (t = 'value'); // latter logical assignment - ❌ Not transformed
+      t || (t = 'value'); // latter logical assignment
     })();
   }
 };
