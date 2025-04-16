@@ -14,7 +14,9 @@ const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
   runner: supportsESMAndJestLightRunner
-    ? "./scripts/jest-light-process-runner.mjs"
+    ? nodeVersion.startsWith("12.")
+      ? "jest-light-runner"
+      : "./scripts/jest-light-process-runner.mjs"
     : "jest-runner",
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
