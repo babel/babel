@@ -135,7 +135,7 @@ function __exportStar(mod) {
   Object.keys(mod).forEach(function (k) {
     if (["default", "__esModule", "react", "assertNode", "createTypeAnnotationBasedOnTypeof", "createUnionTypeAnnotation", "createFlowUnionType", "createTSUnionType", "cloneNode", "clone", "cloneDeep", "cloneDeepWithoutLoc", "cloneWithoutLoc", "addComment", "addComments", "inheritInnerComments", "inheritLeadingComments", "inheritsComments", "inheritTrailingComments", "removeComments", "ensureBlock", "toBindingIdentifierName", "toBlock", "toComputedKey", "toExpression", "toIdentifier", "toKeyAlias", "toStatement", "valueToNode", "appendToMemberExpression", "inherits", "prependToMemberExpression", "removeProperties", "removePropertiesDeep", "removeTypeDuplicates", "getBindingIdentifiers", "getOuterBindingIdentifiers", "traverse", "traverseFast", "shallowEqual", "is", "isBinding", "isBlockScoped", "isImmutable", "isLet", "isNode", "isNodesEquivalent", "isPlaceholderType", "isReferenced", "isScope", "isSpecifierDefault", "isType", "isValidES3Identifier", "isValidIdentifier", "isVar", "matchesPattern", "validate", "buildMatchMemberExpression", "__internal__deprecationWarning"].indexOf(k) < 0 && !(k in exports && exports[k] === mod[k])) {
       Object.defineProperty(exports, k, {
-        get: function () {
+        get() {
           return mod[k];
         },
         enumerable: true
@@ -148,7 +148,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _export(name, mod, name2) {
   Object.defineProperty(exports, name, {
     enumerable: true,
-    get: function () {
+    get() {
       return mod[name2 == null ? name : name2];
     }
   });

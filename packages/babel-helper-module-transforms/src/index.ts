@@ -327,7 +327,7 @@ const ReexportTemplate = {
     template.statement.ast`
       Object.defineProperty(${exports}, "${exportName}", {
         enumerable: true,
-        get: function() {
+        get() {
           return ${namespaceImport};
         },
       });
@@ -387,7 +387,7 @@ function buildReexportsFromMeta(
               function (name, mod, name2) {
                 Object.defineProperty(EXPORTS, name, {
                   enumerable: true,
-                  get: function () {
+                  get() {
                     return mod[name2 == null ? name : name2];
                   }
                 });
@@ -496,7 +496,7 @@ function buildNamespaceReexport(
       ? template.statement.ast`${metadata.exportName}[k] = mod[k]`
       : template.statement.ast`
           Object.defineProperty(${metadata.exportName}, k, {
-            get: function () {
+            get() {
               return mod[k];
             },
             enumerable: true

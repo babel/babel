@@ -14,7 +14,7 @@ function __exportStar(mod) {
   Object.keys(mod).forEach(function (k) {
     if (["default", "__esModule", "z", "a", "b", "d", "e", "f", "c"].indexOf(k) < 0 && !(k in exports && exports[k] === mod[k])) {
       Object.defineProperty(exports, k, {
-        get: function () {
+        get() {
           return mod[k];
         },
         enumerable: true
@@ -26,7 +26,7 @@ function __exportStar(mod) {
 function _export(name, mod, name2) {
   Object.defineProperty(exports, name, {
     enumerable: true,
-    get: function () {
+    get() {
       return mod[name2 == null ? name : name2];
     }
   });

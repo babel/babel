@@ -13,7 +13,7 @@ _export("__proto__", _xyz);
 function _export(name, mod, name2) {
   Object.defineProperty(exports, name, {
     enumerable: true,
-    get: function () {
+    get() {
       return mod[name2 == null ? name : name2];
     }
   });

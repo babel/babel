@@ -8,7 +8,7 @@ function __exportStar(mod) {
   Object.keys(mod).forEach(function (k) {
     if (["default", "__esModule"].indexOf(k) < 0 && !(k in exports && exports[k] === mod[k])) {
       Object.defineProperty(exports, k, {
-        get: function () {
+        get() {
           return mod[k];
         },
         enumerable: true

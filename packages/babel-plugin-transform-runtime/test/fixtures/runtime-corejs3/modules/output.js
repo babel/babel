@@ -18,7 +18,7 @@ function __exportStar(mod) {
     var _context2;
     if (_indexOfInstanceProperty(_context2 = ["default", "__esModule", "exp"]).call(_context2, k) < 0 && !(k in exports && exports[k] === mod[k])) {
       _Object$defineProperty(exports, k, {
-        get: function () {
+        get() {
           return mod[k];
         },
         enumerable: true
