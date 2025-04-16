@@ -17,16 +17,16 @@ export default (_: any, opts: any = {}) => {
       ],
       babelPlugins.proposalFunctionSent,
       babelPlugins.proposalThrowExpressions,
-      process.env.BABEL_8_BREAKING
-        ? babelPlugins.proposalRecordAndTuple
-        : [
-            babelPlugins.proposalRecordAndTuple,
-            { syntaxType: opts.recordAndTupleSyntax ?? "hash" },
-          ],
       babelPlugins.syntaxModuleBlocks,
       ...(process.env.BABEL_8_BREAKING
         ? []
-        : [babelPlugins.syntaxImportReflection]),
+        : [
+            [
+              babelPlugins.proposalRecordAndTuple,
+              { syntaxType: opts.recordAndTupleSyntax ?? "hash" },
+            ],
+            babelPlugins.syntaxImportReflection,
+          ]),
     ],
   };
 };

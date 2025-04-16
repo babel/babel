@@ -73,7 +73,7 @@ describe("stage-1 preset", () => {
     }).code;
     expect(output).toMatchInlineSnapshot(`"/[d-p]/u;"`);
   });
-  it("should support record and tuple", () => {
+  itBabel7("should support record and tuple", () => {
     const output = Babel.transform("#[#{}]", {
       presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
     }).code;
