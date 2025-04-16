@@ -2,9 +2,9 @@
 import cloneDeep = require("clone-deep");
 import path = require("node:path");
 import fs = require("node:fs");
+import crypto = require("node:crypto");
 
 const babel = require("./babel-core.cjs");
-const registerCache = require("./cache.cjs");
 
 const nmRE = escapeRegExp(path.sep + "node_modules" + path.sep);
 
@@ -13,16 +13,92 @@ function escapeRegExp(string: string) {
 }
 
 type CacheItem = { value: { code: string; map: any }; mtime: number };
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var registerCache = require("./cache-babel-7.cjs");
+  // eslint-disable-next-line no-var
+  var oldCache: Record<string, CacheItem>;
+}
 
-let cache: Record<string, CacheItem>;
+const id = (value: unknown) => value;
+
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var cacheLookupBabel7 = function (opts: unknown, filename: string) {
+    if (!oldCache) {
+      return { cached: null, store: id };
+    }
+
+    let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+
+    const env = babel.getEnv();
+    if (env) cacheKey += `:${env}`;
+
+    const cached = oldCache[cacheKey];
+    const fileMtime = +fs.statSync(filename).mtime;
+
+    if (cached?.mtime === fileMtime) {
+      return { cached: cached.value, store: id };
+    }
+
+    return {
+      cached: null,
+      store(value: CacheItem["value"]) {
+        oldCache[cacheKey] = { value, mtime: fileMtime };
+        registerCache.setDirty();
+        return value;
+      },
+    };
+  };
+}
+
+async function cacheLookup(opts: unknown, filename: string) {
+  if (!babel.cache.enabled) {
+    return { cached: null, store: id };
+  }
+
+  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+
+  const env = babel.getEnv();
+  if (env) cacheKey += `:${env}`;
+  cacheKey = crypto.createHash("sha1").update(cacheKey).digest("hex");
+
+  const cached = await babel.cache.get(cacheKey);
+  const fileMtime = +fs.statSync(filename).mtime;
+
+  if (cached?.mtime === fileMtime) {
+    return { cached: cached.value, store: id };
+  }
+
+  return {
+    cached: null,
+    async store(value: CacheItem["value"]) {
+      await babel.cache.set(cacheKey, {
+        value,
+        mtime: fileMtime,
+      });
+      return value;
+    },
+  };
+}
+
 let transformOpts: any;
-function setOptions(opts: any) {
-  if (opts.cache === false && cache) {
-    registerCache.clear();
-    cache = null;
-  } else if (opts.cache !== false && !cache) {
-    registerCache.load();
-    cache = registerCache.get();
+async function setOptions(opts: any) {
+  if (process.env.BABEL_8_BREAKING) {
+    const cache = babel.cache;
+    if (opts.cache === false && cache.enabled) {
+      await cache.disable();
+    } else if (opts.cache !== false && !cache.enabled) {
+      await cache.enable();
+    }
+  } else {
+    if (opts.cache === false && oldCache) {
+      registerCache.clear();
+      oldCache = null;
+    } else if (opts.cache !== false && !oldCache) {
+      registerCache.load();
+      oldCache = registerCache.get();
+    }
   }
 
   delete opts.cache;
@@ -65,7 +141,9 @@ async function transform(input: string, filename: string) {
   // Bail out ASAP if the file has been ignored.
   if (opts === null) return null;
 
-  const { cached, store } = cacheLookup(opts, filename);
+  const { cached, store } = process.env.BABEL_8_BREAKING
+    ? await cacheLookup(opts, filename)
+    : cacheLookupBabel7(opts, filename);
   if (cached) return cached;
 
   const { code, map } = await babel.transformAsync(input, {
@@ -74,7 +152,7 @@ async function transform(input: string, filename: string) {
     ast: false,
   });
 
-  return store({ code, map });
+  return await store({ code, map });
 }
 
 export = { setOptions, transform };
@@ -91,7 +169,7 @@ if (!process.env.BABEL_8_BREAKING) {
     // Bail out ASAP if the file has been ignored.
     if (opts === null) return null;
 
-    const { cached, store } = cacheLookup(opts, filename);
+    const { cached, store } = cacheLookupBabel7(opts, filename);
     if (cached) return cached;
 
     const { code, map } = babel.transformSync(input, {
@@ -101,32 +179,5 @@ if (!process.env.BABEL_8_BREAKING) {
     });
 
     return store({ code, map });
-  };
-}
-
-const id = (value: unknown) => value;
-
-function cacheLookup(opts: unknown, filename: string) {
-  if (!cache) return { cached: null, store: id };
-
-  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
-
-  const env = babel.getEnv();
-  if (env) cacheKey += `:${env}`;
-
-  const cached = cache[cacheKey];
-  const fileMtime = +fs.statSync(filename).mtime;
-
-  if (cached && cached.mtime === fileMtime) {
-    return { cached: cached.value, store: id };
-  }
-
-  return {
-    cached: null,
-    store(value: CacheItem["value"]) {
-      cache[cacheKey] = { value, mtime: fileMtime };
-      registerCache.setDirty();
-      return value;
-    },
   };
 }

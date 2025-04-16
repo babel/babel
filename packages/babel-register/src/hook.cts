@@ -65,7 +65,7 @@ if (!process.env.BABEL_8_BREAKING) {
 function compile(client: IClient, inputCode: string, filename: string) {
   const result = client.transform(inputCode, filename);
 
-  if (result === null) return inputCode;
+  if (result == null) return inputCode;
 
   const { code, map } = result;
   if (map) {

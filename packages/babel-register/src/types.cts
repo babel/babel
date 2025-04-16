@@ -3,6 +3,7 @@ export const enum ACTIONS {
   SET_OPTIONS = "SET_OPTIONS",
   TRANSFORM = "TRANSFORM",
   TRANSFORM_SYNC = "TRANSFORM_SYNC",
+  CLOSE = "CLOSE",
 }
 
 export type Options = {
@@ -16,4 +17,5 @@ export interface IClient {
     code: string,
     filename: string,
   ): { code: string; map: object } | null;
+  close(): void;
 }

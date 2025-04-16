@@ -1,6 +1,9 @@
 "use strict";
 
-const cache = require("./cache.cjs");
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var cache = require("./cache-babel-7.cjs");
+}
 
 function initialize(babel: typeof import("@babel/core")) {
   exports.init = null;
@@ -14,13 +17,18 @@ function initialize(babel: typeof import("@babel/core")) {
     // @ts-expect-error Babel 7
     exports.OptionManager = babel.OptionManager;
     exports.transformSync = babel.transformSync;
-  }
 
-  cache.initializeCacheFilename();
+    cache.initializeCacheFilename();
+  }
 }
 
 if (USE_ESM) {
-  exports.init = import("@babel/core").then(initialize);
+  exports.init = (async function () {
+    await import("@babel/core").then(initialize);
+    if (process.env.BABEL_8_BREAKING) {
+      exports.cache = new (await import("./cache.mjs")).default();
+    }
+  })();
 } else {
   initialize(require("@babel/core"));
 }
