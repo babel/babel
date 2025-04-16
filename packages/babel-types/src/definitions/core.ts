@@ -1214,7 +1214,11 @@ defineType("VariableDeclaration", {
             "ObjectPattern",
             "Placeholder",
           );
-          const usingOrAwaitUsing = withoutInit;
+          const usingOrAwaitUsing = assertNodeType(
+            "Identifier",
+            "VoidPattern",
+            "Placeholder",
+          );
 
           return function (parent, key, node: t.VariableDeclaration) {
             const { kind, declarations } = node;
