@@ -27,7 +27,7 @@ function expectError(run) {
     // visible when using --run-in-band, comes from inside jest but doesn't have an
     // associated file path.
     stack = stack.replace(
-      /(?:\n\s*at (?:[^\n]+?node_modules\/(?:@?jest|tinypool|piscina)|\n\s*at async Promise.all)[^\n]+)+/g,
+      /(?:\n\s*at (?:[^\n]+?node_modules\/(?:@?jest|tinypool|piscina)|async Promise\.all)[^\n]+)+/g,
       "\n    at ... internal jest frames ...",
     );
     // Remove node internal frames, since they change by version

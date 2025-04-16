@@ -68,7 +68,7 @@
     "import-meta-resolve": "^4.1.0",
     "is-ci": "^3.0.1",
     "jest": "^30.0.0-alpha.2",
-    "jest-light-runner": "^0.6.0",
+    "jest-light-runner": "^0.7.0",
     "jest-worker": "^30.0.0-alpha.2",
     "json5": "^2.2.3",
     "lint-staged": "^15.2.7",
