@@ -13,7 +13,9 @@ const supportsESMAndJestLightRunner = semver.satisfies(
 const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
-  runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
+  runner: supportsESMAndJestLightRunner
+    ? "./scripts/jest-light-process-runner.mjs"
+    : "jest-runner",
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
   coverageProvider: "v8",
