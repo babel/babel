@@ -1,2 +1,2 @@
 @cd /d "%~dp0"
-@yarn node ./Makefile.js %*
+@yarn node ./Makefile.mjs %*
