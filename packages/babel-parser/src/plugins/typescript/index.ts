@@ -23,7 +23,6 @@ import type { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
-import type { Pattern } from "../../types.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 import { OptionFlags } from "../../options.ts";
@@ -858,7 +857,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParseBindingListForSignature(): Array<
-      N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern
+      | N.Identifier
+      | N.RestElement
+      | N.ObjectPattern
+      | N.ArrayPattern
+      | N.VoidPattern
     > {
       const list = super.parseBindingList(
         tt.parenR,
@@ -2743,7 +2746,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             >(startLoc);
             node.callee = base;
             // @ts-expect-error (won't be any undefined arguments)
-            node.arguments = this.parseCallExpressionArguments(tt.parenR);
+            node.arguments = this.parseCallExpressionArguments();
 
             // Handles invalid case: `f<T>(a:b)`
             this.tsCheckForInvalidTypeCasts(node.arguments);
@@ -4016,10 +4019,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    parseMaybeDefault(
+    parseMaybeDefault<P extends N.Pattern>(
       startLoc?: Position | null,
-      left?: Pattern | null,
-    ): N.Pattern {
+      left?: P | null,
+    ): P | N.AssignmentPattern {
       const node = super.parseMaybeDefault(startLoc, left);
 
       if (
