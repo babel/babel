@@ -2,11 +2,11 @@
   "type": "File",
   "start":0,"end":108,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":21,"index":108}},
   "errors": [
-    "SyntaxError: Unexpected void binding. (1:4)",
-    "SyntaxError: Unexpected void binding. (3:8)",
-    "SyntaxError: Unexpected void binding. (5:14)",
-    "SyntaxError: Unexpected void binding. (7:2)",
-    "SyntaxError: Unexpected void binding. (9:7)"
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (1:4)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (3:8)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (5:14)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (7:2)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (9:7)"
   ],
   "program": {
     "type": "Program",

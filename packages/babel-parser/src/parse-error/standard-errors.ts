@@ -282,7 +282,8 @@ export default {
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnexpectedUsingDeclaration:
     "Using declaration cannot appear in the top level when source type is `script`.",
-  UnexpectedVoidPattern: "Unexpected void binding.",
+  UnexpectedVoidPattern:
+    "'void' must be followed by an expression when not used in a binding position.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
