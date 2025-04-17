@@ -156,10 +156,10 @@ export default class File {
     if (helpers.isInternal(name)) {
       throw new Error("Cannot use internal helper " + name);
     }
-    return this.#addHelper(name);
+    return this._addHelper(name);
   }
 
-  #addHelper(name: string): t.Identifier {
+  _addHelper(name: string): t.Identifier {
     const declar = this.declarations[name];
     if (declar) return cloneNode(declar);
 
@@ -177,7 +177,7 @@ export default class File {
 
     const dependencies: { [key: string]: t.Identifier } = {};
     for (const dep of helpers.getDependencies(name)) {
-      dependencies[dep] = this.#addHelper(dep);
+      dependencies[dep] = this._addHelper(dep);
     }
 
     const { nodes, globals } = helpers.get(
