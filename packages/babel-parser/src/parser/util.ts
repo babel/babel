@@ -262,7 +262,7 @@ export default abstract class UtilParser extends Tokenizer {
     }
 
     if (voidPatternLoc != null) {
-      this.raise(Errors.UnexpectedVoidPattern, voidPatternLoc);
+      this.raise(Errors.InvalidCoverDiscardElement, voidPatternLoc);
     }
   }
 

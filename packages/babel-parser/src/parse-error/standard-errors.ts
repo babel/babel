@@ -131,6 +131,8 @@ export default {
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",
   InvalidCodePoint: "Code point out of bounds.",
+  InvalidCoverDiscardElement:
+    "'void' must be followed by an expression when not used in a binding position.",
   InvalidCoverInitializedName: "Invalid shorthand property initializer.",
   InvalidDecimal: "Invalid decimal.",
   InvalidDigit: ({ radix }: { radix: number }) =>
@@ -282,8 +284,7 @@ export default {
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnexpectedUsingDeclaration:
     "Using declaration cannot appear in the top level when source type is `script`.",
-  UnexpectedVoidPattern:
-    "'void' must be followed by an expression when not used in a binding position.",
+  UnexpectedVoidPattern: "Unexpected void binding.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
