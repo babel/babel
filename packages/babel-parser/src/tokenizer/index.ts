@@ -508,8 +508,10 @@ export default abstract class Tokenizer extends CommentsParser {
     }
 
     if (
-      next === charCodes.leftCurlyBrace ||
-      (next === charCodes.leftSquareBracket && this.hasPlugin("recordAndTuple"))
+      !process.env.BABEL_8_BREAKING &&
+      (next === charCodes.leftCurlyBrace ||
+        (next === charCodes.leftSquareBracket &&
+          this.hasPlugin("recordAndTuple")))
     ) {
       // When we see `#{`, it is likely to be a hash record.
       // However we don't yell at `#[` since users may intend to use "computed private fields",

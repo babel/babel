@@ -1146,28 +1146,12 @@ export default abstract class ExpressionParser extends LValParser {
         return this.parseParenAndDistinguishExpression(canBeArrow);
       }
 
-      case tt.bracketBarL:
-      case tt.bracketHashL: {
-        return this.parseArrayLike(
-          this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
-          /* canBePattern */ false,
-          /* isTuple */ true,
-        );
-      }
       case tt.bracketL: {
         return this.parseArrayLike(
           tt.bracketR,
           /* canBePattern */ true,
           /* isTuple */ false,
           refExpressionErrors,
-        );
-      }
-      case tt.braceBarL:
-      case tt.braceHashL: {
-        return this.parseObjectLike(
-          this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR,
-          /* isPattern */ false,
-          /* isRecord */ true,
         );
       }
       case tt.braceL: {
@@ -1269,8 +1253,22 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       default:
-        if (!process.env.BABEL_8_BREAKING && type === tt.decimal) {
-          return this.parseDecimalLiteral(this.state.value);
+        if (!process.env.BABEL_8_BREAKING) {
+          if (type === tt.decimal) {
+            return this.parseDecimalLiteral(this.state.value);
+          } else if (type === tt.bracketBarL || type === tt.bracketHashL) {
+            return this.parseArrayLike(
+              this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
+              /* canBePattern */ false,
+              /* isTuple */ true,
+            );
+          } else if (type === tt.braceBarL || type === tt.braceHashL) {
+            return this.parseObjectLike(
+              this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR,
+              /* isPattern */ false,
+              /* isRecord */ true,
+            );
+          }
         }
 
         if (tokenIsIdentifier(type)) {

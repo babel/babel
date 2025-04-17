@@ -1,7 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": [
-    "typescript",
-    "recordAndTuple"
-  ]
-}

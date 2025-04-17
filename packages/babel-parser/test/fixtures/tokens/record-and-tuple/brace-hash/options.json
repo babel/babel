@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    [
-      "recordAndTuple"
-    ]
-  ],
-  "tokens": true
-}
