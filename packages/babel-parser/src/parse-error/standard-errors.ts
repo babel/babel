@@ -313,6 +313,8 @@ export default {
     "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>
     `Identifier '${identifierName}' has already been declared.`,
+  VoidPatternCatchClauseParam:
+    "A void binding can not be the catch clause parameter. Use `try { ... } catch { ... }` if you want to discard the caught error.",
   VoidPatternInitializer: "A void binding may not have an initializer.",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator.",

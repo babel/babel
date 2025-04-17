@@ -636,7 +636,7 @@ export default abstract class LValParser extends NodeUtils {
       case "ObjectPattern":
         return "properties";
       case "VoidPattern":
-        return binding !== BindingFlag.TYPE_CATCH_PARAM;
+        return true;
     }
     return false;
   }
@@ -723,6 +723,8 @@ export default abstract class LValParser extends NodeUtils {
       }
 
       return;
+    } else if (type === "VoidPattern" && ancestor.type === "CatchClause") {
+      this.raise(Errors.VoidPatternCatchClauseParam, expression);
     }
 
     const validity = this.isValidLVal(

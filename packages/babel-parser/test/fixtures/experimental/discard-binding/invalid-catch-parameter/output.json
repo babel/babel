@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
   "errors": [
-    "SyntaxError: Binding invalid left-hand side in catch clause. (1:14)"
+    "SyntaxError: A void binding can not be the catch clause parameter. Use `try { ... } catch { ... }` if you want to discard the caught error. (1:14)"
   ],
   "program": {
     "type": "Program",
