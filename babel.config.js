@@ -62,6 +62,7 @@ module.exports = function (api) {
     noClassCalls: true,
     noDocumentAll: true,
     noNewArrows: true,
+    privateFieldsAsSymbols: true,
     setClassMethods: true,
     setComputedProperties: true,
     setSpreadProperties: true,
