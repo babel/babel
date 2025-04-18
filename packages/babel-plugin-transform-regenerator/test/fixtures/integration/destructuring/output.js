@@ -1,8 +1,8 @@
-var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(foo),
-  _marked2 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(foo3);
+var _marked = /*#__PURE__*/babelHelpers.regenerator().m(foo),
+  _marked2 = /*#__PURE__*/babelHelpers.regenerator().m(foo3);
 function foo() {
   var _bar, bar;
-  return babelHelpers.regeneratorRuntime().wrap(function foo$(_context) {
+  return babelHelpers.regenerator().w(function foo$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _bar = {
@@ -20,8 +20,8 @@ expect(foo().next().value).toBe("bar");
 function foo2(_ref) {
   var _ref$bar = _ref.bar,
     bar = _ref$bar === void 0 ? 0 : _ref$bar;
-  return /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context2) {
+  return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+    return babelHelpers.regenerator().w(function _callee$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           return _context2.abrupt("return", bar);
@@ -40,12 +40,12 @@ expect(foo2({
 }).next().value).toBe(3);
 function foo3() {
   var _loop, _ret;
-  return babelHelpers.regeneratorRuntime().wrap(function foo3$(_context4) {
+  return babelHelpers.regenerator().w(function foo3$(_context4) {
     while (1) switch (_context4.prev = _context4.next) {
       case 0:
-        _loop = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
+        _loop = /*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
           var _yield$iteration, what, value;
-          return babelHelpers.regeneratorRuntime().wrap(function _callee2$(_context3) {
+          return babelHelpers.regenerator().w(function _callee2$(_context3) {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;

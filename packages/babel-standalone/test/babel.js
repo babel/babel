@@ -211,7 +211,7 @@ describe("@babel/standalone", () => {
         presets: ["env"],
       }).code;
 
-      expect(output).toMatch("regeneratorRuntime().mark(fn)");
+      expect(output).toMatch("regenerator().m(fn)");
     });
   });
 
