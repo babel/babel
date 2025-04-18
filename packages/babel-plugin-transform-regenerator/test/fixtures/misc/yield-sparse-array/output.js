@@ -1,10 +1,10 @@
 // #15142
 () => {
-  return babelHelpers.regeneratorRuntime().async(function _callee$(_context) {
+  return babelHelpers.regeneratorAsync(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.next = 2;
-        return babelHelpers.regeneratorRuntime().awrap(0);
+        return babelHelpers.awaitAsyncGenerator(0);
       case 2:
         _context.t0 = _context.sent;
         return _context.abrupt("return", [_context.t0,,]);
