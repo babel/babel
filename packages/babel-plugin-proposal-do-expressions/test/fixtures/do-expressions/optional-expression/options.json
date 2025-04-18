@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-do-expressions"],
+  "minNodeVersion": "14.0.0"
+}

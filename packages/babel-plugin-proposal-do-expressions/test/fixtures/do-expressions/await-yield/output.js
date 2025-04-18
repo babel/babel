@@ -1,7 +1,9 @@
 async function* asyncGenerator(x) {
-  const y = yield* async function* () {
+  {
+    var _do;
     let z;
-    return yield await x;
-  }();
+    _do = yield await x;
+  }
+  const y = _do;
   return y;
 }
