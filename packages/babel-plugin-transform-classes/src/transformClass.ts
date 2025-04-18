@@ -162,18 +162,14 @@ export default function transformClass(
       if (path.isClassMethod({ kind: "constructor" })) return;
     }
 
-    let params: t.FunctionExpression["params"], body;
+    const params: t.FunctionExpression["params"] = [];
+    let body;
 
     if (classState.isDerived) {
-      const constructor = template.expression.ast`
-        (function () {
+      body = template.statement.ast`{
           super(...arguments);
-        })
-      ` as t.FunctionExpression;
-      params = constructor.params;
-      body = constructor.body;
+        }` as t.BlockStatement;
     } else {
-      params = [];
       body = t.blockStatement([]);
     }
 
