@@ -1,6 +1,6 @@
 var _this = this;
-babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-  return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
+babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+  return babelHelpers.regenerator().w(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.next = 2;
@@ -11,8 +11,8 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mar
     }
   }, _callee);
 }))();
-babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
-  return babelHelpers.regeneratorRuntime().wrap(function _callee2$(_context2) {
+babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
+  return babelHelpers.regenerator().w(function _callee2$(_context2) {
     while (1) switch (_context2.prev = _context2.next) {
       case 0:
         babelHelpers.newArrowCheck(this, _this);
@@ -25,8 +25,8 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mar
   }, _callee2, this);
 })).bind(this)();
 /*#__PURE__*/(function () {
-  var _notIIFE = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
-    return babelHelpers.regeneratorRuntime().wrap(function _callee3$(_context3) {
+  var _notIIFE = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
+    return babelHelpers.regenerator().w(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _context3.next = 2;
@@ -42,8 +42,8 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mar
   }
   return notIIFE;
 })();
-/*#__PURE__*/babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee4() {
-  return babelHelpers.regeneratorRuntime().wrap(function _callee4$(_context4) {
+/*#__PURE__*/babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee4() {
+  return babelHelpers.regenerator().w(function _callee4$(_context4) {
     while (1) switch (_context4.prev = _context4.next) {
       case 0:
         babelHelpers.newArrowCheck(this, _this);

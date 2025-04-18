@@ -1,8 +1,8 @@
 var _mapInstanceProperty = require("<CWD>/packages/babel-runtime-corejs3/core-js-stable/instance/map.js");
-var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(makeIterator);
+var _marked = /*#__PURE__*/babelHelpers.regenerator().m(makeIterator);
 _mapInstanceProperty(Array);
 function makeIterator() {
-  return babelHelpers.regeneratorRuntime().wrap(function makeIterator$(_context) {
+  return babelHelpers.regenerator().w(function makeIterator$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.next = 2;
