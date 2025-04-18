@@ -179,6 +179,16 @@ export default declare((api, options: Options, dirname) => {
                 t.identifier("regeneratorRuntime"),
               );
             }
+            if (
+              name === "regenerator" ||
+              name === "regeneratorKeys" ||
+              name === "regeneratorAsync" ||
+              name === "regeneratorAsyncGen"
+            ) {
+              // See the `newHelpersAvailable` function in
+              // babel-plugin-transform-regenerator/src/regenerator/util.ts
+              return t.identifier("__interal_marker_fallback_regenerator__");
+            }
             return;
           }
         } else {

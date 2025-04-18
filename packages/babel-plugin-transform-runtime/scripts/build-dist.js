@@ -193,6 +193,8 @@ function writeHelpers(runtimeName, { polyfillProvider } = {}) {
       { esm: true, polyfillProvider }
     );
 
+    if (helpers.isInternal(helperName)) continue;
+
     if (bool(process.env.BABEL_8_BREAKING)) {
       // Note: This does not work in Node.js 13.0 and 13.1, which support
       // the `exports` field only as strings and not as objects.

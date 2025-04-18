@@ -37,7 +37,7 @@ fi
 
 # vue-cli's tests expect us to import regenerator-runtime from "regenerator-runtime/runtime",
 # but we import it from @babel/runtime.
-sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers/regeneratorRuntime`)%' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
+sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers/regenerator`)%' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is renamed in Babel 8

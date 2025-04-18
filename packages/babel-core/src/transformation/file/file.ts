@@ -107,6 +107,8 @@ export default class File {
    * considered unavailable.
    */
   availableHelper(name: string, versionRange?: string | null): boolean {
+    if (helpers.isInternal(name)) return false;
+
     let minVersion;
     try {
       minVersion = helpers.minVersion(name);
@@ -151,6 +153,13 @@ export default class File {
   }
 
   addHelper(name: string): t.Identifier {
+    if (helpers.isInternal(name)) {
+      throw new Error("Cannot use internal helper " + name);
+    }
+    return this._addHelper(name);
+  }
+
+  _addHelper(name: string): t.Identifier {
     const declar = this.declarations[name];
     if (declar) return cloneNode(declar);
 
@@ -168,7 +177,7 @@ export default class File {
 
     const dependencies: { [key: string]: t.Identifier } = {};
     for (const dep of helpers.getDependencies(name)) {
-      dependencies[dep] = this.addHelper(dep);
+      dependencies[dep] = this._addHelper(dep);
     }
 
     const { nodes, globals } = helpers.get(

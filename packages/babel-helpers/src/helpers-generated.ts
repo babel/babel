@@ -18,6 +18,7 @@ export interface HelperMetadata {
   dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportName: string;
+  internal: boolean;
 }
 
 function helper(
@@ -45,6 +46,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_OverloadYield",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 447, gzip size: 270
@@ -57,6 +59,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_applyDecoratedDescriptor",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 2840, gzip size: 1469
@@ -80,6 +83,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.5.argument.expressions.4.right.body.body.0.body.body.1.consequent.body.1.expression.arguments.3.alternate.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 118, gzip size: 124
@@ -92,6 +96,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_arrayLikeToArray",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 57, gzip size: 71
@@ -104,6 +109,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_arrayWithHoles",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 78, gzip size: 83
@@ -118,6 +124,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         arrayLikeToArray: ["body.0.body.body.0.consequent.argument.callee"],
       },
+      internal: false,
     },
   ),
   // size: 172, gzip size: 159
@@ -130,6 +137,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_assertClassBrand",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 144, gzip size: 132
@@ -142,6 +150,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_assertThisInitialized",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 488, gzip size: 278
@@ -158,6 +167,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.body.body.0.argument.expressions.2.properties.1.value.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1081, gzip size: 431
@@ -179,6 +189,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_asyncIterator",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 414, gzip size: 240
@@ -198,6 +209,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_asyncToGenerator",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 63, gzip size: 83
@@ -210,6 +222,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_awaitAsyncGenerator",
       dependencies: { OverloadYield: ["body.0.body.body.0.argument.callee"] },
+      internal: false,
     },
   ),
   // size: 180, gzip size: 144
@@ -233,6 +246,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.1.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 146, gzip size: 145
@@ -245,6 +259,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_checkInRHS",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 139, gzip size: 132
@@ -257,6 +272,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_checkPrivateRedeclaration",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 108, gzip size: 111
@@ -269,6 +285,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classCallCheck",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 121, gzip size: 122
@@ -281,6 +298,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classNameTDZError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 73, gzip size: 88
@@ -295,6 +313,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 85, gzip size: 96
@@ -311,6 +330,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.expression.expressions.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 148, gzip size: 141
@@ -323,6 +343,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldBase",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 73, gzip size: 89
@@ -342,6 +363,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_classPrivateFieldKey",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 79, gzip size: 95
@@ -358,6 +380,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 68, gzip size: 84
@@ -372,6 +395,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 82, gzip size: 91
@@ -388,6 +412,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.expression.expressions.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 74, gzip size: 89
@@ -404,6 +429,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 76, gzip size: 94
@@ -418,6 +444,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertClassBrand: ["body.0.body.body.0.argument.expressions.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 206, gzip size: 160
@@ -435,6 +462,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.4.argument.expressions.0.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 348, gzip size: 220
@@ -458,6 +486,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.body.body.1.expression.expressions.3.arguments.1.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 692, gzip size: 423
@@ -474,6 +503,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.consequent.body.0.test.left.right.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 488, gzip size: 335
@@ -490,6 +520,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.2.test.left.right.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 255, gzip size: 172
@@ -513,6 +544,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.argument.body.body.2.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 7029, gzip size: 2057
@@ -570,6 +602,7 @@ const helpers: Record<string, Helper> = {
           "body.2.body.body.0.declarations.1.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 206, gzip size: 169
@@ -582,6 +615,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_defaults",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 115, gzip size: 120
@@ -594,6 +628,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_defineAccessor",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 151, gzip size: 130
@@ -610,6 +645,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.test.left.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 237, gzip size: 179
@@ -628,6 +664,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_extends",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 263, gzip size: 202
@@ -650,6 +687,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.0.declarations.0.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 179, gzip size: 106
@@ -668,6 +706,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_getPrototypeOf",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 31, gzip size: 51
@@ -677,6 +716,7 @@ const helpers: Record<string, Helper> = {
     exportBindingAssignments: [],
     exportName: "_identity",
     dependencies: {},
+    internal: false,
   }),
   // size: 537, gzip size: 258
   importDeferProxy: helper(
@@ -688,6 +728,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_importDeferProxy",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 300, gzip size: 219
@@ -704,6 +745,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.expression.expressions.2.right.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 114, gzip size: 105
@@ -718,6 +760,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         setPrototypeOf: ["body.0.body.body.0.expression.expressions.2.callee"],
       },
+      internal: false,
     },
   ),
   // size: 198, gzip size: 141
@@ -730,6 +773,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_initializerDefineProperty",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 187, gzip size: 154
@@ -742,6 +786,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_initializerWarningHelper",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 134, gzip size: 118
@@ -754,6 +799,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_instanceof",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 72, gzip size: 88
@@ -766,6 +812,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_interopRequireDefault",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 510, gzip size: 310
@@ -783,6 +830,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
       exportName: "_interopRequireWildcard",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 133, gzip size: 128
@@ -795,6 +843,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_isNativeFunction",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 193, gzip size: 144
@@ -812,6 +861,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
       exportName: "_isNativeReflectConstruct",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 129, gzip size: 124
@@ -824,6 +874,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_iterableToArray",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 416, gzip size: 293
@@ -836,6 +887,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_iterableToArrayLimit",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 520, gzip size: 341
@@ -856,6 +908,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_createRawReactElement",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 160, gzip size: 144
@@ -872,6 +925,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.consequent.body.1.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 98, gzip size: 106
@@ -884,6 +938,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_newArrowCheck",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 189, gzip size: 160
@@ -896,6 +951,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nonIterableRest",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 186, gzip size: 156
@@ -908,6 +964,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nonIterableSpread",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 99, gzip size: 108
@@ -920,6 +977,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_nullishReceiverError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 94, gzip size: 103
@@ -932,6 +990,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_objectDestructuringEmpty",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 619, gzip size: 295
@@ -955,6 +1014,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 279, gzip size: 205
@@ -971,6 +1031,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.declarations.2.init.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 169, gzip size: 156
@@ -983,6 +1044,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_objectWithoutPropertiesLoose",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 225, gzip size: 180
@@ -997,6 +1059,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertThisInitialized: ["body.0.body.body.2.argument.callee"],
       },
+      internal: false,
     },
   ),
   // size: 71, gzip size: 85
@@ -1009,23 +1072,218 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_readOnlyError",
       dependencies: {},
+      internal: false,
     },
   ),
-  // size: 6401, gzip size: 2432
+  // size: 4506, gzip size: 1780
+  regenerator: helper(
+    "7.27.0",
+    'function _regenerator(){"use strict";\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,e=Object.prototype,r=e.hasOwnProperty,n="function"==typeof Symbol?Symbol:{},o=n.iterator||"@@iterator",i=n.toStringTag||"@@toStringTag";function a(e,r,n,o){var i=r&&r.prototype instanceof Generator?r:Generator,a=Object.create(i.prototype),u=new Context(o||[]);return define(a,"_invoke",function(e,r,n){var o=1;return function(i,a){if(3===o)throw Error("Generator is already running");if(4===o){if("throw"===i)throw a;return{value:t,done:!0}}for(n.method=i,n.arg=a;;){var u=n.delegate;if(u){var s=d(u,n);if(s){if(s===h)continue;return s}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(1===o)throw o=4,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);o=3;var c=tryCatch(e,r,n);if(!c.e){if(o=n.done?4:2,c.v===h)continue;return{value:c.v,done:n.done}}o=4,n.method="throw",n.arg=c.v}}}(e,n,u),!0),a}var h={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var u={};define(u,o,(function(){return this}));var s=Object.getPrototypeOf,c=s&&s(s(values([])));c&&c!==e&&r.call(c,o)&&(u=c);var f=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(u);function p(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,GeneratorFunctionPrototype):(t.__proto__=GeneratorFunctionPrototype,define(t,i,"GeneratorFunction")),t.prototype=Object.create(f),t}function d(e,r){var n=r.method,o=e.i[n];if(o===t)return r.delegate=null,"throw"===n&&e.i.return&&(r.method="return",r.arg=t,d(e,r),"throw"===r.method)||"return"!==n&&(r.method="throw",r.arg=new TypeError("The iterator does not provide a \'"+n+"\' method")),h;var i=tryCatch(o,e.i,r.arg);if(i.e)return r.method="throw",r.arg=i.v,r.delegate=null,h;var a=i.v;return a?a.done?(r[e.r]=a.value,r.next=e.n,"return"!==r.method&&(r.method="next",r.arg=t),r.delegate=null,h):a:(r.method="throw",r.arg=new TypeError("iterator result is not an object"),r.delegate=null,h)}function l(e){var r=e[4]||{};r.type="normal",r.arg=t,e[4]=r}function Context(t){this.tryEntries=[[-1]].concat(t),this.reset(!0)}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(f,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName=define(GeneratorFunctionPrototype,i,"GeneratorFunction"),defineIteratorMethods(f),define(f,i,"Generator"),define(f,o,(function(){return this})),define(f,"toString",(function(){return"[object Generator]"})),Context.prototype={constructor:Context,reset:function(e){if(this.prev=this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(l),!e)for(var n in this)"t"===n.charAt(0)&&r.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=t)},stop:function(){this.done=!0;var t=this.tryEntries[0][4];if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var r=this;function n(t){a.type="throw",a.arg=e,r.next=t}for(var o=r.tryEntries.length-1;o>=0;--o){var i=this.tryEntries[o],a=i[4],h=this.prev,u=i[1],s=i[2];if(-1===i[0])return n("end"),!1;if(!u&&!s)throw Error("try statement without catch or finally");if(null!=i[0]&&i[0]<=h){if(h<u)return this.method="next",this.arg=t,n(u),!0;if(h<s)return n(s),!1}}},abrupt:function(t,e){for(var r=this.tryEntries.length-1;r>=0;--r){var n=this.tryEntries[r];if(n[0]>-1&&n[0]<=this.prev&&this.prev<n[2]){var o=n;break}}o&&("break"===t||"continue"===t)&&o[0]<=e&&e<=o[2]&&(o=null);var i=o?o[4]:{};return i.type=t,i.arg=e,o?(this.method="next",this.next=o[2],h):this.complete(i)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),h},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r[2]===t)return this.complete(r[4],r[3]),l(r),h}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r[0]===t){var n=r[4];if("throw"===n.type){var o=n.arg;l(r)}return o}}throw Error("illegal catch attempt")},delegateYield:function(e,r,n){return this.delegate={i:values(e),r:r,n:n},"next"===this.method&&(this.arg=t),h}},(_regenerator=function(){return{w:a,m:p}})()}',
+    {
+      globals: ["Object", "Symbol", "Error", "TypeError", "isNaN"],
+      locals: {
+        _regenerator: [
+          "body.0.id",
+          "body.0.body.body.15.argument.expressions.9.callee.left",
+        ],
+      },
+      exportBindingAssignments: [
+        "body.0.body.body.15.argument.expressions.9.callee",
+      ],
+      exportName: "_regenerator",
+      dependencies: {
+        regeneratorDefine: [
+          "body.0.body.body.1.body.body.1.argument.expressions.0.callee",
+          "body.0.body.body.7.expression.callee",
+          "body.0.body.body.11.body.body.0.argument.expressions.0.alternate.expressions.1.callee",
+          "body.0.body.body.15.argument.expressions.1.callee",
+          "body.0.body.body.15.argument.expressions.2.callee",
+          "body.0.body.body.15.argument.expressions.3.right.callee",
+          "body.0.body.body.15.argument.expressions.5.callee",
+          "body.0.body.body.15.argument.expressions.6.callee",
+          "body.0.body.body.15.argument.expressions.7.callee",
+        ],
+        regeneratorDefineIM: [
+          "body.0.body.body.15.argument.expressions.4.callee",
+        ],
+        regeneratorValues: [
+          "body.0.body.body.8.declarations.1.init.right.arguments.0.arguments.0.callee",
+          "body.0.body.body.15.argument.expressions.8.right.properties.8.value.body.body.0.argument.expressions.0.right.properties.0.value.callee",
+        ],
+        tryCatch: [
+          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.1.argument.body.body.2.body.body.4.declarations.0.init.callee",
+          "body.0.body.body.12.body.body.2.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+  // size: 132, gzip size: 119
+  regeneratorAsync: helper(
+    "7.27.0",
+    "function _regeneratorAsync(n,e,r,t,o){var a=asyncGen(n,e,r,t,o);return a.next().then((function(n){return n.done?n.value:a.next()}))}",
+    {
+      globals: [],
+      locals: { _regeneratorAsync: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorAsync",
+      dependencies: {
+        regeneratorAsyncGen: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+      internal: false,
+    },
+  ),
+  // size: 103, gzip size: 101
+  regeneratorAsyncGen: helper(
+    "7.27.0",
+    "function _regeneratorAsyncGen(r,e,t,o,n){return new AsyncIterator(regenerator().w(r,e,t,o),n||Promise)}",
+    {
+      globals: ["Promise"],
+      locals: { _regeneratorAsyncGen: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorAsyncGen",
+      dependencies: {
+        regeneratorAsyncIterator: ["body.0.body.body.0.argument.callee"],
+        regenerator: [
+          "body.0.body.body.0.argument.arguments.0.callee.object.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+  // size: 633, gzip size: 329
+  regeneratorAsyncIterator: helper(
+    "7.27.0",
+    'function AsyncIterator(t,e){function r(n,o,i,f){var a=tryCatch(t[n],t,o);if(!a.e){var c=a.v,u=c.value;return u&&u instanceof OverloadYield?e.resolve(u.v).then((function(t){r("next",t,i,f)}),(function(t){r("throw",t,i,f)})):e.resolve(u).then((function(t){c.value=t,i(c)}),(function(t){return r("throw",t,i,f)}))}f(a.v)}var n;this.next||(defineIteratorMethods(AsyncIterator.prototype),define(AsyncIterator.prototype,"function"==typeof Symbol&&Symbol.asyncIterator||"@asyncIterator",(function(){return this}))),define(this,"_invoke",(function(t,o){function i(){return new e((function(e,n){r(t,o,e,n)}))}return n=n?n.then(i,i):i()}),!0)}',
+    {
+      globals: ["Symbol"],
+      locals: {
+        AsyncIterator: [
+          "body.0.id",
+          "body.0.body.body.2.expression.expressions.0.right.expressions.0.arguments.0.object",
+          "body.0.body.body.2.expression.expressions.0.right.expressions.1.arguments.0.object",
+        ],
+      },
+      exportBindingAssignments: [],
+      exportName: "AsyncIterator",
+      dependencies: {
+        OverloadYield: [
+          "body.0.body.body.0.body.body.1.consequent.body.1.argument.test.right.right",
+        ],
+        regeneratorDefine: [
+          "body.0.body.body.2.expression.expressions.0.right.expressions.1.callee",
+          "body.0.body.body.2.expression.expressions.1.callee",
+        ],
+        tryCatch: ["body.0.body.body.0.body.body.0.declarations.0.init.callee"],
+        regeneratorDefineIM: [
+          "body.0.body.body.2.expression.expressions.0.right.expressions.0.callee",
+        ],
+      },
+      internal: true,
+    },
+  ),
+  // size: 280, gzip size: 159
+  regeneratorDefine: helper(
+    "7.27.0",
+    'function regeneratorDefine(e,r,n,t){regeneratorDefine=function(e,r,n,t){return Object.defineProperty(e,r,{value:n,enumerable:!t,configurable:!t,writable:!t})};try{regeneratorDefine({},"")}catch(e){regeneratorDefine=function(e,r,n){return e[r]=n}}return regeneratorDefine(e,r,n,t)}',
+    {
+      globals: ["Object"],
+      locals: {
+        regeneratorDefine: [
+          "body.0.id",
+          "body.0.body.body.1.block.body.0.expression.callee",
+          "body.0.body.body.2.argument.callee",
+          "body.0.body.body.0.expression.left",
+          "body.0.body.body.1.handler.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: [
+        "body.0.body.body.1.handler.body.body.0.expression",
+        "body.0.body.body.0.expression",
+      ],
+      exportName: "regeneratorDefine",
+      dependencies: {},
+      internal: true,
+    },
+  ),
+  // size: 133, gzip size: 117
+  regeneratorDefineIM: helper(
+    "7.27.0",
+    'function defineIteratorMethods(e){function n(n){define(e,n,(function(e){return this._invoke(n,e)}))}n("next"),n("throw"),n("return")}',
+    {
+      globals: [],
+      locals: { defineIteratorMethods: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "defineIteratorMethods",
+      dependencies: {
+        regeneratorDefine: ["body.0.body.body.0.body.body.0.expression.callee"],
+      },
+      internal: true,
+    },
+  ),
+  // size: 181, gzip size: 152
+  regeneratorKeys: helper(
+    "7.27.0",
+    "function _regeneratorKeys(e){var n=Object(e),r=[];for(var t in n)r.unshift(t);return function e(){for(;r.length;)if((t=r.pop())in n)return e.value=t,e.done=!1,e;return e.done=!0,e}}",
+    {
+      globals: ["Object"],
+      locals: { _regeneratorKeys: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorKeys",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+  // size: 516, gzip size: 295
   regeneratorRuntime: helper(
     "7.18.0",
-    'function _regeneratorRuntime(){"use strict";\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */_regeneratorRuntime=function(){return r};var t,r={},e=Object.prototype,n=e.hasOwnProperty,o="function"==typeof Symbol?Symbol:{},i=o.iterator||"@@iterator",a=o.asyncIterator||"@@asyncIterator",u=o.toStringTag||"@@toStringTag";function c(t,r,e,n){return Object.defineProperty(t,r,{value:e,enumerable:!n,configurable:!n,writable:!n})}try{c({},"")}catch(t){c=function(t,r,e){return t[r]=e}}function h(r,e,n,o){var i=e&&e.prototype instanceof Generator?e:Generator,a=Object.create(i.prototype);return c(a,"_invoke",function(r,e,n){var o=1;return function(i,a){if(3===o)throw Error("Generator is already running");if(4===o){if("throw"===i)throw a;return{value:t,done:!0}}for(n.method=i,n.arg=a;;){var u=n.delegate;if(u){var c=d(u,n);if(c){if(c===f)continue;return c}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(1===o)throw o=4,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);o=3;var h=s(r,e,n);if("normal"===h.type){if(o=n.done?4:2,h.arg===f)continue;return{value:h.arg,done:n.done}}"throw"===h.type&&(o=4,n.method="throw",n.arg=h.arg)}}}(r,n,new Context(o||[])),!0),a}function s(t,r,e){try{return{type:"normal",arg:t.call(r,e)}}catch(t){return{type:"throw",arg:t}}}r.wrap=h;var f={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var l={};c(l,i,(function(){return this}));var p=Object.getPrototypeOf,y=p&&p(p(x([])));y&&y!==e&&n.call(y,i)&&(l=y);var v=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(l);function g(t){["next","throw","return"].forEach((function(r){c(t,r,(function(t){return this._invoke(r,t)}))}))}function AsyncIterator(t,r){function e(o,i,a,u){var c=s(t[o],t,i);if("throw"!==c.type){var h=c.arg,f=h.value;return f&&"object"==typeof f&&n.call(f,"__await")?r.resolve(f.__await).then((function(t){e("next",t,a,u)}),(function(t){e("throw",t,a,u)})):r.resolve(f).then((function(t){h.value=t,a(h)}),(function(t){return e("throw",t,a,u)}))}u(c.arg)}var o;c(this,"_invoke",(function(t,n){function i(){return new r((function(r,o){e(t,n,r,o)}))}return o=o?o.then(i,i):i()}),!0)}function d(r,e){var n=e.method,o=r.i[n];if(o===t)return e.delegate=null,"throw"===n&&r.i.return&&(e.method="return",e.arg=t,d(r,e),"throw"===e.method)||"return"!==n&&(e.method="throw",e.arg=new TypeError("The iterator does not provide a \'"+n+"\' method")),f;var i=s(o,r.i,e.arg);if("throw"===i.type)return e.method="throw",e.arg=i.arg,e.delegate=null,f;var a=i.arg;return a?a.done?(e[r.r]=a.value,e.next=r.n,"return"!==e.method&&(e.method="next",e.arg=t),e.delegate=null,f):a:(e.method="throw",e.arg=new TypeError("iterator result is not an object"),e.delegate=null,f)}function w(t){this.tryEntries.push(t)}function m(r){var e=r[4]||{};e.type="normal",e.arg=t,r[4]=e}function Context(t){this.tryEntries=[[-1]],t.forEach(w,this),this.reset(!0)}function x(r){if(null!=r){var e=r[i];if(e)return e.call(r);if("function"==typeof r.next)return r;if(!isNaN(r.length)){var o=-1,a=function e(){for(;++o<r.length;)if(n.call(r,o))return e.value=r[o],e.done=!1,e;return e.value=t,e.done=!0,e};return a.next=a}}throw new TypeError(typeof r+" is not iterable")}return GeneratorFunction.prototype=GeneratorFunctionPrototype,c(v,"constructor",GeneratorFunctionPrototype),c(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName=c(GeneratorFunctionPrototype,u,"GeneratorFunction"),r.isGeneratorFunction=function(t){var r="function"==typeof t&&t.constructor;return!!r&&(r===GeneratorFunction||"GeneratorFunction"===(r.displayName||r.name))},r.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,GeneratorFunctionPrototype):(t.__proto__=GeneratorFunctionPrototype,c(t,u,"GeneratorFunction")),t.prototype=Object.create(v),t},r.awrap=function(t){return{__await:t}},g(AsyncIterator.prototype),c(AsyncIterator.prototype,a,(function(){return this})),r.AsyncIterator=AsyncIterator,r.async=function(t,e,n,o,i){void 0===i&&(i=Promise);var a=new AsyncIterator(h(t,e,n,o),i);return r.isGeneratorFunction(e)?a:a.next().then((function(t){return t.done?t.value:a.next()}))},g(v),c(v,u,"Generator"),c(v,i,(function(){return this})),c(v,"toString",(function(){return"[object Generator]"})),r.keys=function(t){var r=Object(t),e=[];for(var n in r)e.unshift(n);return function t(){for(;e.length;)if((n=e.pop())in r)return t.value=n,t.done=!1,t;return t.done=!0,t}},r.values=x,Context.prototype={constructor:Context,reset:function(r){if(this.prev=this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(m),!r)for(var e in this)"t"===e.charAt(0)&&n.call(this,e)&&!isNaN(+e.slice(1))&&(this[e]=t)},stop:function(){this.done=!0;var t=this.tryEntries[0][4];if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(r){if(this.done)throw r;var e=this;function n(t){a.type="throw",a.arg=r,e.next=t}for(var o=e.tryEntries.length-1;o>=0;--o){var i=this.tryEntries[o],a=i[4],u=this.prev,c=i[1],h=i[2];if(-1===i[0])return n("end"),!1;if(!c&&!h)throw Error("try statement without catch or finally");if(null!=i[0]&&i[0]<=u){if(u<c)return this.method="next",this.arg=t,n(c),!0;if(u<h)return n(h),!1}}},abrupt:function(t,r){for(var e=this.tryEntries.length-1;e>=0;--e){var n=this.tryEntries[e];if(n[0]>-1&&n[0]<=this.prev&&this.prev<n[2]){var o=n;break}}o&&("break"===t||"continue"===t)&&o[0]<=r&&r<=o[2]&&(o=null);var i=o?o[4]:{};return i.type=t,i.arg=r,o?(this.method="next",this.next=o[2],f):this.complete(i)},complete:function(t,r){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&r&&(this.next=r),f},finish:function(t){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e[2]===t)return this.complete(e[4],e[3]),m(e),f}},catch:function(t){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e[0]===t){var n=e[4];if("throw"===n.type){var o=n.arg;m(e)}return o}}throw Error("illegal catch attempt")},delegateYield:function(r,e,n){return this.delegate={i:x(r),r:e,n:n},"next"===this.method&&(this.arg=t),f}},r}',
+    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function o(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}return(_regeneratorRuntime=function(){return{wrap:r.w,isGeneratorFunction:o,mark:r.m,awrap:OverloadYield,AsyncIterator:AsyncIterator,async:function(r,e,t,n,a){return(o(e)?asyncGen:async)(r,e,t,n,a)},keys:keys,values:values}})()}',
     {
-      globals: ["Object", "Symbol", "Error", "TypeError", "isNaN", "Promise"],
+      globals: ["Object"],
       locals: {
         _regeneratorRuntime: [
           "body.0.id",
-          "body.0.body.body.0.expression.left",
+          "body.0.body.body.0.declarations.1.init.arguments.0",
+          "body.0.body.body.2.argument.callee.left",
         ],
       },
-      exportBindingAssignments: ["body.0.body.body.0.expression"],
+      exportBindingAssignments: ["body.0.body.body.2.argument.callee"],
       exportName: "_regeneratorRuntime",
+      dependencies: {
+        OverloadYield: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.3.value",
+        ],
+        regenerator: ["body.0.body.body.0.declarations.0.init.callee"],
+        regeneratorAsync: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
+        ],
+        regeneratorAsyncGen: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
+        ],
+        regeneratorAsyncIterator: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.4.value",
+        ],
+        regeneratorKeys: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.6.value",
+        ],
+        regeneratorValues: [
+          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.7.value",
+        ],
+      },
+      internal: false,
+    },
+  ),
+  // size: 396, gzip size: 264
+  regeneratorValues: helper(
+    "7.18.0",
+    'function _regeneratorValues(e){if(null!=e){var r=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var t=-1,n=function r(){for(;++t<e.length;)if({}.hasOwnProperty.call(e,t))return r.value=e[t],r.done=!1,r;return r.value=void 0,r.done=!0,r};return n.next=n}}throw new TypeError(typeof e+" is not iterable")}',
+    {
+      globals: ["Symbol", "isNaN", "TypeError"],
+      locals: { _regeneratorValues: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorValues",
       dependencies: {},
+      internal: true,
     },
   ),
   // size: 494, gzip size: 274
@@ -1053,6 +1311,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.expressions.0.right.alternate.body.body.2.alternate.expression.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 178, gzip size: 166
@@ -1065,6 +1324,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "setFunctionName",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 163, gzip size: 102
@@ -1083,6 +1343,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_setPrototypeOf",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 103, gzip size: 107
@@ -1095,6 +1356,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_skipFirstGeneratorNext",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 133, gzip size: 117
@@ -1116,6 +1378,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 104, gzip size: 113
@@ -1130,6 +1393,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         getPrototypeOf: ["body.0.body.body.0.test.right.right.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 149, gzip size: 134
@@ -1147,6 +1411,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.declarations.0.init.arguments.0.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 88, gzip size: 95
@@ -1162,6 +1427,7 @@ const helpers: Record<string, Helper> = {
         set: ["body.0.body.body.0.argument.callee"],
         getPrototypeOf: ["body.0.body.body.0.argument.arguments.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 135, gzip size: 128
@@ -1174,6 +1440,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteral",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 77, gzip size: 94
@@ -1186,6 +1453,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_taggedTemplateLiteralLoose",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 89, gzip size: 97
@@ -1198,6 +1466,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_tdzError",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 53, gzip size: 73
@@ -1213,6 +1482,7 @@ const helpers: Record<string, Helper> = {
         temporalUndefined: ["body.0.body.body.0.argument.test.right"],
         tdz: ["body.0.body.body.0.argument.consequent.callee"],
       },
+      internal: false,
     },
   ),
   // size: 31, gzip size: 51
@@ -1222,6 +1492,7 @@ const helpers: Record<string, Helper> = {
     exportBindingAssignments: [],
     exportName: "_temporalUndefined",
     dependencies: {},
+    internal: false,
   }),
   // size: 116, gzip size: 102
   toArray: helper(
@@ -1240,6 +1511,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 131, gzip size: 114
@@ -1261,6 +1533,7 @@ const helpers: Record<string, Helper> = {
         ],
         nonIterableSpread: ["body.0.body.body.0.argument.right.callee"],
       },
+      internal: false,
     },
   ),
   // size: 270, gzip size: 201
@@ -1273,6 +1546,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "toPrimitive",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 88, gzip size: 102
@@ -1287,6 +1561,7 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         toPrimitive: ["body.0.body.body.0.declarations.0.init.callee"],
       },
+      internal: false,
     },
   ),
   // size: 129, gzip size: 133
@@ -1299,6 +1574,20 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_toSetter",
       dependencies: {},
+      internal: false,
+    },
+  ),
+  // size: 82, gzip size: 86
+  tryCatch: helper(
+    "7.27.0",
+    "function _tryCatch(t,r,e){try{return{e:0,v:t.call(r,e)}}catch(t){return{e:1,v:t}}}",
+    {
+      globals: [],
+      locals: { _tryCatch: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_tryCatch",
+      dependencies: {},
+      internal: true,
     },
   ),
   // size: 243, gzip size: 210
@@ -1311,6 +1600,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "tsRewriteRelativeImportExtensions",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 274, gzip size: 157
@@ -1329,6 +1619,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_typeof",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 328, gzip size: 247
@@ -1346,6 +1637,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.consequent.body.2.argument.expressions.1.alternate.consequent.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1117, gzip size: 548
@@ -1365,6 +1657,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_usingCtx",
       dependencies: {},
+      internal: false,
     },
   ),
   // size: 1172, gzip size: 526
@@ -1391,6 +1684,7 @@ const helpers: Record<string, Helper> = {
           "body.1.body.body.1.body.body.0.block.body.0.declarations.2.init.right",
         ],
       },
+      internal: false,
     },
   ),
   // size: 563, gzip size: 318
@@ -1422,6 +1716,7 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.argument.expressions.0.right.body.body.3.body.body.0.argument.callee",
         ],
       },
+      internal: false,
     },
   ),
   // size: 1213, gzip size: 560
@@ -1445,6 +1740,7 @@ const helpers: Record<string, Helper> = {
         ],
         inherits: ["body.0.body.body.4.argument.expressions.0.callee"],
       },
+      internal: false,
     },
   ),
   // size: 73, gzip size: 86
@@ -1457,6 +1753,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_writeOnlyError",
       dependencies: {},
+      internal: false,
     },
   ),
 };
@@ -1473,6 +1770,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_AwaitValue",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 5767, gzip size: 2181
@@ -1570,6 +1868,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.3.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 3845, gzip size: 1570
@@ -1593,6 +1892,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "applyDecs2203",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 3982, gzip size: 1621
@@ -1622,6 +1922,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.1.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 4526, gzip size: 1807
@@ -1654,6 +1955,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.2.body.body.2.declarations.2.init.properties.1.value.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 3109, gzip size: 1569
@@ -1677,6 +1979,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.6.declarations.1.init.callee.body.body.2.body.body.1.consequent.body.2.expression.arguments.3.alternate.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 231, gzip size: 189
@@ -1689,6 +1992,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorDestructureSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 74, gzip size: 90
@@ -1701,6 +2005,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorGet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 161, gzip size: 149
@@ -1713,6 +2018,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classApplyDescriptorSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 78, gzip size: 93
@@ -1727,6 +2033,7 @@ if (!process.env.BABEL_8_BREAKING) {
         dependencies: {
           assertClassBrand: ["body.0.body.body.0.argument.callee"],
         },
+        internal: false,
       },
     ),
     // size: 154, gzip size: 145
@@ -1739,6 +2046,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classCheckPrivateStaticFieldDescriptor",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 77, gzip size: 91
@@ -1753,6 +2061,7 @@ if (!process.env.BABEL_8_BREAKING) {
         dependencies: {
           classPrivateFieldGet2: ["body.0.body.body.0.argument.callee"],
         },
+        internal: false,
       },
     ),
     // size: 127, gzip size: 111
@@ -1772,6 +2081,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 105, gzip size: 100
@@ -1789,6 +2099,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 111, gzip size: 109
@@ -1808,6 +2119,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.declarations.0.init.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 70, gzip size: 88
@@ -1824,6 +2136,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.0.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 94, gzip size: 102
@@ -1836,6 +2149,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classPrivateMethodSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 172, gzip size: 135
@@ -1858,6 +2172,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 154, gzip size: 133
@@ -1880,6 +2195,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 160, gzip size: 134
@@ -1902,6 +2218,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.argument.expressions.1.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 111, gzip size: 114
@@ -1914,6 +2231,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_classStaticPrivateMethodSet",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 368, gzip size: 204
@@ -1926,6 +2244,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_defineEnumerableProperties",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 653, gzip size: 319
@@ -1949,6 +2268,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_dispose",
         dependencies: {},
+        internal: false,
       },
     ),
     // size: 363, gzip size: 237
@@ -1965,6 +2285,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
           ],
         },
+        internal: false,
       },
     ),
     // size: 417, gzip size: 252
@@ -1977,6 +2298,7 @@ if (!process.env.BABEL_8_BREAKING) {
         exportBindingAssignments: [],
         exportName: "_using",
         dependencies: {},
+        internal: false,
       },
     ),
   });
