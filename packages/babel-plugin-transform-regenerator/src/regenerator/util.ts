@@ -1,7 +1,12 @@
+import type { PluginPass } from "@babel/core";
+
 let currentTypes: any = null;
 
-export function wrapWithTypes(types: any, fn: any) {
-  return function (this: any, ...args: any[]) {
+export function wrapWithTypes<This, Args extends unknown[]>(
+  types: any,
+  fn: (this: This, ...args: Args) => unknown,
+) {
+  return function (this: This, ...args: Args) {
     const oldTypes = currentTypes;
     currentTypes = types;
     try {
@@ -16,10 +21,17 @@ export function getTypes() {
   return currentTypes;
 }
 
-export function runtimeProperty(name: any) {
+export function runtimeProperty(file: PluginPass, name: any) {
   const t = getTypes();
+  const helper = file.addHelper("regeneratorRuntime");
   return t.memberExpression(
-    t.identifier("regeneratorRuntime"),
+    !process.env.BABEL_8_BREAKING &&
+      // In some cases, `helper` will be (() => regeneratorRuntime).
+      // Se the implementation in transform-runtime for more details.
+      t.isArrowFunctionExpression(helper) &&
+      t.isIdentifier((helper as any).body)
+      ? (helper as any).body
+      : t.callExpression(helper, []),
     t.identifier(name),
     false,
   );
