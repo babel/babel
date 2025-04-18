@@ -2,15 +2,15 @@ function test() {
   return _test.apply(this, arguments);
 }
 function _test() {
-  _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     var obj, _loop, _i, _arr;
-    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context2) {
+    return babelHelpers.regenerator().w(function _callee$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           obj = {};
-          _loop = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _loop() {
+          _loop = /*#__PURE__*/babelHelpers.regenerator().m(function _loop() {
             var ch;
-            return babelHelpers.regeneratorRuntime().wrap(function _loop$(_context) {
+            return babelHelpers.regenerator().w(function _loop$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
                   ch = _arr[_i];

@@ -4,7 +4,7 @@ import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
 import * as util from "./util.ts";
 
-import type { NodePath, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Visitor } from "@babel/core";
 import { types as t } from "@babel/core";
 
 type AbruptCompletion =
@@ -62,7 +62,11 @@ export class Emitter {
   tryEntries: leap.TryEntry[];
   leapManager: leap.LeapManager;
 
-  constructor(contextId: t.Identifier) {
+  pluginPass: PluginPass;
+
+  constructor(contextId: t.Identifier, pluginPass: PluginPass) {
+    this.pluginPass = pluginPass;
+
     // Used to generate unique temporary names.
     this.nextTempId = 0;
 
@@ -514,11 +518,16 @@ export class Emitter {
         after = this.loc();
 
         const keyIterNextFn = self.makeTempVar();
+
+        const helper =
+          process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+            ? this.pluginPass.addHelper("regeneratorKeys")
+            : util.runtimeProperty(this.pluginPass, "keys");
+
         self.emitAssign(
           keyIterNextFn,
-          t.callExpression(util.runtimeProperty("keys"), [
-            self.explodeExpression(path.get("right")),
-          ]),
+          t.callExpression(helper, [self.explodeExpression(path.get("right"))]),
         );
 
         self.mark(head);
