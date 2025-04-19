@@ -45,7 +45,7 @@ function expectError(run) {
     {
       // Node.js <= 14
       stack = stack.replace(
-        "\n     at Module._extensions..js (... internal node frames ...)",
+        "\n    at Module._extensions..js (... internal node frames ...)",
         "",
       );
       stack = stack.replace(
