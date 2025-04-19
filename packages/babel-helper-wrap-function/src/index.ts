@@ -9,6 +9,9 @@ import {
   isRestElement,
   returnStatement,
   isCallExpression,
+  memberExpression,
+  identifier,
+  thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -92,19 +95,40 @@ function classOrObjectMethod(
     blockStatement(body.body),
     true,
   );
-  body.body = [
-    returnStatement(callExpression(callExpression(callId, [container]), [])),
-  ];
+
+  if (shoudlForwardParams) {
+    // return asyncToGenerator(function*() { ... }).apply(this, arguments);
+    body.body = [
+      returnStatement(
+        callExpression(
+          memberExpression(
+            callExpression(callId, [container]),
+            identifier("apply"),
+          ),
+          [thisExpression(), identifier("arguments")],
+        ),
+      ),
+    ];
+
+    (
+      path.get("body.body.0.argument.callee.object.arguments.0") as NodePath
+    ).unwrapFunctionEnvironment();
+  } else {
+    // return asyncToGenerator(function*() { ... })();
+    body.body = [
+      returnStatement(callExpression(callExpression(callId, [container]), [])),
+    ];
+
+    // Unwrap the wrapper IIFE's environment so super and this and such still work.
+    (
+      path.get("body.body.0.argument.callee.arguments.0") as NodePath
+    ).unwrapFunctionEnvironment();
+  }
 
   // Regardless of whether or not the wrapped function is a an async method
   // or generator the outer function should not be
   node.async = false;
   node.generator = false;
-
-  // Unwrap the wrapper IIFE's environment so super and this and such still work.
-  (
-    path.get("body.body.0.argument.callee.arguments.0") as NodePath
-  ).unwrapFunctionEnvironment();
 }
 
 function plainFunction(
