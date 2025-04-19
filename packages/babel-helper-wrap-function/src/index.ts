@@ -63,13 +63,32 @@ const buildDeclarationWrapper = template.statements(`
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
   callId: t.Expression,
+  ignoreFunctionLength: boolean,
 ) {
   const node = path.node;
   const body = node.body;
 
+  let params: Array<t.Identifier | t.Pattern | t.RestElement> = [];
+
+  // Errors thrown during argument evaluation must reject the resulting promise
+  const shoudlForwardParams = node.params.some(p => p.type.includes("Pattern"));
+
+  if (shoudlForwardParams) {
+    params = node.params as typeof params;
+    node.params = [];
+    if (!ignoreFunctionLength) {
+      for (const param of params) {
+        if (isAssignmentPattern(param) || isRestElement(param)) {
+          break;
+        }
+        node.params.push(path.scope.generateUidIdentifier("x"));
+      }
+    }
+  }
+
   const container = functionExpression(
     null,
-    [],
+    params,
     blockStatement(body.body),
     true,
   );
@@ -178,7 +197,7 @@ export default function wrapFunction(
   ignoreFunctionLength: boolean = false,
 ) {
   if (path.isMethod()) {
-    classOrObjectMethod(path, callId);
+    classOrObjectMethod(path, callId, ignoreFunctionLength);
   } else {
     const hadName = "id" in path.node && !!path.node.id;
     if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
