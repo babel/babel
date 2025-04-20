@@ -43,6 +43,15 @@ function expectError(run) {
     // are quite different from newer stack traces.
     // TODO(Babel 8): Delete this code
     {
+      // Node.js <= 14
+      stack = stack.replace(
+        "\n    at Module._extensions..js (... internal node frames ...)",
+        "",
+      );
+      stack = stack.replace(
+        "\n    at Object.require.extensions.<computed> [as .js] (<CWD>/node_modules/ts-node/src/index.ts:_:_)",
+        "",
+      );
       // Node.js <= 10
       stack = stack.replace(/(?:Object|undefined)(?=\.parseSync)/g, "Module");
       stack = stack.replace(
