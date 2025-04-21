@@ -5,7 +5,6 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context.next = 2;
         return 'ok';
       case 2:
-      case "end":
         return _context.stop();
     }
   }, _callee);
@@ -17,7 +16,6 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context2.next = 2;
         return 'ok';
       case 2:
-      case "end":
         return _context2.stop();
     }
   }, _callee2);
@@ -30,7 +28,6 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
           _context3.next = 2;
           return 'ok';
         case 2:
-        case "end":
           return _context3.stop();
       }
     }, _callee3);
@@ -47,7 +44,6 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context4.next = 2;
         return 'not iife';
       case 2:
-      case "end":
         return _context4.stop();
     }
   }, _callee4);

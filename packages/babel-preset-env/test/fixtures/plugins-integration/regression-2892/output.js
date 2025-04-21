@@ -18,7 +18,6 @@ var Foo = exports["default"] = /*#__PURE__*/function () {
             case 0:
               baz = 0;
             case 1:
-            case "end":
               return _context.stop();
           }
         }, _callee);
@@ -47,7 +46,6 @@ function _foo() {
                   case 0:
                     baz = {};
                   case 1:
-                  case "end":
                     return _context2.stop();
                 }
               }, _callee2);
@@ -58,7 +56,6 @@ function _foo() {
             return _bar2.apply(this, arguments);
           };
         case 2:
-        case "end":
           return _context3.stop();
       }
     }, _callee3);

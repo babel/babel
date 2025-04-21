@@ -16,7 +16,6 @@ function _test() {
                   ch = _arr[_i];
                   obj[ch] = () => ch;
                 case 2:
-                case "end":
                   return _context.stop();
               }
             }, _loop);
@@ -33,7 +32,6 @@ function _test() {
           _context2.next = 3;
           break;
         case 8:
-        case "end":
           return _context2.stop();
       }
     }, _callee);

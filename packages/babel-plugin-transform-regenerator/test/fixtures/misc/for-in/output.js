@@ -16,7 +16,6 @@ function fn() {
         _context.next = 1;
         break;
       case 7:
-      case "end":
         return _context.stop();
     }
   }, _marked);

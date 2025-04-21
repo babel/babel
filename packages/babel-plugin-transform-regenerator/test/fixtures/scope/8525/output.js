@@ -9,7 +9,6 @@
         case 2:
           newSessionId = _context.sent;
         case 3:
-        case "end":
           return _context.stop();
       }
     }, null, null, null, Promise);

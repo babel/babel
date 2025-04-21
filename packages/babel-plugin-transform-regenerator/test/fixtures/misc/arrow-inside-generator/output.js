@@ -8,7 +8,6 @@ function gen() {
           return 1;
         };
       case 1:
-      case "end":
         return _context.stop();
     }
   }, _marked);

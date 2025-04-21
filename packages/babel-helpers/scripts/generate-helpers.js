@@ -177,7 +177,7 @@ const helpers: Record<string, Helper> = {
         mangle: {
           keep_fnames: mangleFns
             ? noMangleFns.length
-              ? new RegExp(noMangleFns.join("|"))
+              ? new RegExp("^" + noMangleFns.join("|") + "$")
               : false
             : true,
         },

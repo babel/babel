@@ -14,7 +14,6 @@ function _foo() {
                   case 0:
                     tmp = number;
                   case 1:
-                  case "end":
                     return _context.stop();
                 }
               }, _callee);
@@ -24,7 +23,6 @@ function _foo() {
             };
           })();
         case 1:
-        case "end":
           return _context2.stop();
       }
     }, _callee2);

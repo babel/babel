@@ -10,7 +10,6 @@ function f() {
         }
         ;
       case 2:
-      case "end":
         return _context.stop();
     }
   }, _marked);

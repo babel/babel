@@ -9,7 +9,6 @@ function _test() {
         case 0:
           console.log('test');
         case 1:
-        case "end":
           return _context.stop();
       }
     }, _callee);
@@ -31,7 +30,6 @@ function _main() {
           _context2.t1 = _context2.sent;
           _context2.t0.log.call(_context2.t0, _context2.t1);
         case 5:
-        case "end":
           return _context2.stop();
       }
     }, _callee2);

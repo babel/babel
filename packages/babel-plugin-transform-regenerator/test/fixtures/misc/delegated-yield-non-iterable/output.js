@@ -6,7 +6,6 @@ var _Symbol$iterator = {
           case 0:
             return _context.delegateYield(0, "t0", 1);
           case 1:
-          case "end":
             return _context.stop();
         }
       }, _callee);

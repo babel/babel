@@ -17,7 +17,6 @@ var _ref7 = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
         case 0:
           throw new Error("Should not throw");
         case 1:
-        case "end":
           return _context.stop();
       }
     }, _callee);
@@ -36,7 +35,6 @@ var _Symbol$iterator7 = {
       return babelHelpers.regeneratorAsyncGen(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-          case "end":
             return _context2.stop();
         }
       }, _callee2, null, null, Promise);
@@ -70,7 +68,6 @@ var _Symbol$iterator11 = {
       return babelHelpers.regeneratorAsyncGen(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-          case "end":
             return _context3.stop();
         }
       }, _callee3, null, null, Promise);

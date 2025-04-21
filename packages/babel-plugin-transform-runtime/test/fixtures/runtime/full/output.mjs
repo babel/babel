@@ -9,7 +9,6 @@ export function giveWord() {
         _context.next = 2;
         return myWord;
       case 2:
-      case "end":
         return _context.stop();
     }
   }, _marked);

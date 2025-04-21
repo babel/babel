@@ -9,13 +9,11 @@ function foo() {
               case 0:
                 tmp = number;
               case 1:
-              case "end":
                 return _context.stop();
             }
           }, null, null, null, Promise);
         });
       case 1:
-      case "end":
         return _context2.stop();
     }
   }, null, null, null, Promise);

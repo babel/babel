@@ -8,7 +8,6 @@ var _Symbol$iterator = {
               [Symbol.iterator]: x => []
             }, "t0", 1);
           case 1:
-          case "end":
             return _context.stop();
         }
       }, _callee);

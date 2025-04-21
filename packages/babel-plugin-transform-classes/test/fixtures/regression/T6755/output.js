@@ -11,7 +11,6 @@ var Example = /*#__PURE__*/function () {
             _context.next = 2;
             return Promise.resolve(2);
           case 2:
-          case "end":
             return _context.stop();
         }
       }, _callee);
@@ -28,7 +27,6 @@ var Example = /*#__PURE__*/function () {
           _context2.next = 2;
           return 3;
         case 2:
-        case "end":
           return _context2.stop();
       }
     }, test2);

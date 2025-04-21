@@ -1075,20 +1075,20 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 4506, gzip size: 1780
+  // size: 3448, gzip size: 1516
   regenerator: helper(
     "7.27.0",
-    'function _regenerator(){"use strict";\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,e=Object.prototype,r=e.hasOwnProperty,n="function"==typeof Symbol?Symbol:{},o=n.iterator||"@@iterator",i=n.toStringTag||"@@toStringTag";function a(e,r,n,o){var i=r&&r.prototype instanceof Generator?r:Generator,a=Object.create(i.prototype),u=new Context(o||[]);return define(a,"_invoke",function(e,r,n){var o=1;return function(i,a){if(3===o)throw Error("Generator is already running");if(4===o){if("throw"===i)throw a;return{value:t,done:!0}}for(n.method=i,n.arg=a;;){var u=n.delegate;if(u){var s=d(u,n);if(s){if(s===h)continue;return s}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(1===o)throw o=4,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);o=3;var c=tryCatch(e,r,n);if(!c.e){if(o=n.done?4:2,c.v===h)continue;return{value:c.v,done:n.done}}o=4,n.method="throw",n.arg=c.v}}}(e,n,u),!0),a}var h={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var u={};define(u,o,(function(){return this}));var s=Object.getPrototypeOf,c=s&&s(s(values([])));c&&c!==e&&r.call(c,o)&&(u=c);var f=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(u);function p(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,GeneratorFunctionPrototype):(t.__proto__=GeneratorFunctionPrototype,define(t,i,"GeneratorFunction")),t.prototype=Object.create(f),t}function d(e,r){var n=r.method,o=e.i[n];if(o===t)return r.delegate=null,"throw"===n&&e.i.return&&(r.method="return",r.arg=t,d(e,r),"throw"===r.method)||"return"!==n&&(r.method="throw",r.arg=new TypeError("The iterator does not provide a \'"+n+"\' method")),h;var i=tryCatch(o,e.i,r.arg);if(i.e)return r.method="throw",r.arg=i.v,r.delegate=null,h;var a=i.v;return a?a.done?(r[e.r]=a.value,r.next=e.n,"return"!==r.method&&(r.method="next",r.arg=t),r.delegate=null,h):a:(r.method="throw",r.arg=new TypeError("iterator result is not an object"),r.delegate=null,h)}function l(e){var r=e[4]||{};r.type="normal",r.arg=t,e[4]=r}function Context(t){this.tryEntries=[[-1]].concat(t),this.reset(!0)}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(f,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName=define(GeneratorFunctionPrototype,i,"GeneratorFunction"),defineIteratorMethods(f),define(f,i,"Generator"),define(f,o,(function(){return this})),define(f,"toString",(function(){return"[object Generator]"})),Context.prototype={constructor:Context,reset:function(e){if(this.prev=this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(l),!e)for(var n in this)"t"===n.charAt(0)&&r.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=t)},stop:function(){this.done=!0;var t=this.tryEntries[0][4];if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var r=this;function n(t){a.type="throw",a.arg=e,r.next=t}for(var o=r.tryEntries.length-1;o>=0;--o){var i=this.tryEntries[o],a=i[4],h=this.prev,u=i[1],s=i[2];if(-1===i[0])return n("end"),!1;if(!u&&!s)throw Error("try statement without catch or finally");if(null!=i[0]&&i[0]<=h){if(h<u)return this.method="next",this.arg=t,n(u),!0;if(h<s)return n(s),!1}}},abrupt:function(t,e){for(var r=this.tryEntries.length-1;r>=0;--r){var n=this.tryEntries[r];if(n[0]>-1&&n[0]<=this.prev&&this.prev<n[2]){var o=n;break}}o&&("break"===t||"continue"===t)&&o[0]<=e&&e<=o[2]&&(o=null);var i=o?o[4]:{};return i.type=t,i.arg=e,o?(this.method="next",this.next=o[2],h):this.complete(i)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),h},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r[2]===t)return this.complete(r[4],r[3]),l(r),h}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r[0]===t){var n=r[4];if("throw"===n.type){var o=n.arg;l(r)}return o}}throw Error("illegal catch attempt")},delegateYield:function(e,r,n){return this.delegate={i:values(e),r:r,n:n},"next"===this.method&&(this.arg=t),h}},(_regenerator=function(){return{w:a,m:p}})()}',
+    'function _regenerator(){"use strict";\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var r,t=Object.prototype,e=t.hasOwnProperty,n="function"==typeof Symbol?Symbol:{},o=n.iterator||"@@iterator",i=n.toStringTag||"@@toStringTag",a=["next","throw","return"];function u(t,e,n,o){var i=e&&e.prototype instanceof Generator?e:Generator,u=Object.create(i.prototype);return define(u,"_invoke",function(t,e,n){var o=1;function i(t){var e=l,n=t.i[a[e]];if(n===r)return y=null,1===e&&t.i.return&&(l=2,s=r,i(t),1===l)||2!==e&&(l=1,s=new TypeError("The iterator does not provide a \'"+a[e]+"\' method")),f;var o=tryCatch(n,t.i,s);if(o.e)return l=1,s=o.v,y=null,f;var u=o.v;return u?u.done?(d[t.r]=u.value,d.next=t.n,2!==l&&(l=0,s=r),y=null,f):u:(l=1,s=new TypeError("iterator result is not an object"),y=null,f)}function u(t){var e=t[4]||{};e.type=0,e.arg=r,t[4]=e}var c,p=[[-1]].concat(n||[]),v=!1,y=null,l=0,s=r;p.forEach(u);var d={prev:0,next:0,sent:r,stop:g,abrupt:G,finish:function(r){for(var t=p.length-1;t>=0;--t){var e=p[t];if(e[2]===r)return F(e[4],e[3]),u(e),f}},catch:function(r){for(var t=p.length-1;t>=0;--t){var e=p[t];if(e[0]===r){var n=e[4];if(1===n.type){var o=n.arg;u(e)}return o}}},delegateYield:function(t,e,n){return y={i:values(t),r:e,n:n},0===l&&(s=r),f}};function g(){v=!0;var r=p[0][4];if(1===r.type)throw r.arg;return c}function h(t){if(v)throw t;function e(r){i.type=1,i.arg=t,d.next=r}for(var n=p.length-1;n>=0;--n){var o=p[n],i=o[4],a=d.prev,u=o[1],f=o[2];if(-1===o[0])return e(-1),!1;if(null!=o[0]&&o[0]<=a){if(a<u)return l=0,s=r,e(u),!0;if(a<f)return e(f),!1}}}function G(r,t){for(var e=p.length-1;e>=0;--e){var n=p[e];if(n[0]>-1&&n[0]<=d.prev&&d.prev<n[2]){var o=n;break}}o&&(2===r||3===r)&&o[0]<=t&&t<=o[2]&&(o=null);var i=o?o[4]:{};return i.type=r,i.arg=t,o?(l=0,d.next=o[2],f):F(i)}function F(r,t){if(1===r.type)throw r.arg;return 2===r.type||3===r.type?d.next=r.arg:4===r.type?(c=s=r.arg,l=2,d.next=-1):0===r.type&&t&&(d.next=t),f}return function(n,u){if(n=a.indexOf(n),3===o)throw Error("Generator is already running");if(4===o){if(1===n)throw u;return{value:r,done:!0}}for(l=n,s=u;;){if(y){var c=i(y);if(c){if(c===f)continue;return c}}if(0===l)d.sent=s;else if(1===l){if(1===o)throw o=4,s;h(s)}else 2===l&&G(4,s);o=3;var p=tryCatch(-1===d.next?g:t,e,d);if(!p.e){if(o=v?4:2,p.v===f)continue;return{value:p.v,done:v}}o=4,l=1,s=p.v}}}(t,n,o),!0),u}var f={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var c={};define(c,o,(function(){return this}));var p=Object.getPrototypeOf,v=p&&p(p(values([])));v&&v!==t&&e.call(v,o)&&(c=v);var y=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(c);function l(r){return Object.setPrototypeOf?Object.setPrototypeOf(r,GeneratorFunctionPrototype):(r.__proto__=GeneratorFunctionPrototype,define(r,i,"GeneratorFunction")),r.prototype=Object.create(y),r}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(y,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName=define(GeneratorFunctionPrototype,i,"GeneratorFunction"),defineIteratorMethods(y),define(y,i,"Generator"),define(y,o,(function(){return this})),define(y,"toString",(function(){return"[object Generator]"})),(_regenerator=function(){return{w:u,m:l}})()}',
     {
-      globals: ["Object", "Symbol", "Error", "TypeError", "isNaN"],
+      globals: ["Object", "Symbol", "TypeError", "Error"],
       locals: {
         _regenerator: [
           "body.0.id",
-          "body.0.body.body.15.argument.expressions.9.callee.left",
+          "body.0.body.body.12.argument.expressions.8.callee.left",
         ],
       },
       exportBindingAssignments: [
-        "body.0.body.body.15.argument.expressions.9.callee",
+        "body.0.body.body.12.argument.expressions.8.callee",
       ],
       exportName: "_regenerator",
       dependencies: {
@@ -1096,23 +1096,23 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.1.body.body.1.argument.expressions.0.callee",
           "body.0.body.body.7.expression.callee",
           "body.0.body.body.11.body.body.0.argument.expressions.0.alternate.expressions.1.callee",
-          "body.0.body.body.15.argument.expressions.1.callee",
-          "body.0.body.body.15.argument.expressions.2.callee",
-          "body.0.body.body.15.argument.expressions.3.right.callee",
-          "body.0.body.body.15.argument.expressions.5.callee",
-          "body.0.body.body.15.argument.expressions.6.callee",
-          "body.0.body.body.15.argument.expressions.7.callee",
+          "body.0.body.body.12.argument.expressions.1.callee",
+          "body.0.body.body.12.argument.expressions.2.callee",
+          "body.0.body.body.12.argument.expressions.3.right.callee",
+          "body.0.body.body.12.argument.expressions.5.callee",
+          "body.0.body.body.12.argument.expressions.6.callee",
+          "body.0.body.body.12.argument.expressions.7.callee",
         ],
         regeneratorDefineIM: [
-          "body.0.body.body.15.argument.expressions.4.callee",
+          "body.0.body.body.12.argument.expressions.4.callee",
         ],
         regeneratorValues: [
+          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.5.declarations.0.init.properties.7.value.body.body.0.argument.expressions.0.right.properties.0.value.callee",
           "body.0.body.body.8.declarations.1.init.right.arguments.0.arguments.0.callee",
-          "body.0.body.body.15.argument.expressions.8.right.properties.8.value.body.body.0.argument.expressions.0.right.properties.0.value.callee",
         ],
         tryCatch: [
-          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.1.argument.body.body.2.body.body.4.declarations.0.init.callee",
-          "body.0.body.body.12.body.body.2.declarations.0.init.callee",
+          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.1.body.body.2.declarations.0.init.callee",
+          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.10.argument.body.body.2.body.body.3.declarations.0.init.callee",
         ],
       },
       internal: false,

@@ -13,9 +13,8 @@ x = /*#__PURE__*/function (_x) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           babelHelpers.newArrowCheck(this, _this);
-          return _context.abrupt("return", 0);
+          return _context.abrupt(4, 0);
         case 2:
-        case "end":
           return _context.stop();
       }
     }, _callee, this);

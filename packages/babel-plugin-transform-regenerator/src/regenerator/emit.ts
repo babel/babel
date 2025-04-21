@@ -7,13 +7,22 @@ import * as util from "./util.ts";
 import type { NodePath, PluginPass, Visitor } from "@babel/core";
 import { types as t } from "@babel/core";
 
+// From packages/babel-helpers/src/helpers/regenerator.ts
+const enum CompletionType {
+  Normal = 0,
+  Throw = 1,
+  Break = 2,
+  Continue = 3,
+  Return = 4,
+}
+
 type AbruptCompletion =
   | {
-      type: "break" | "continue";
+      type: CompletionType.Break | CompletionType.Continue;
       target: t.NumericLiteral;
     }
   | {
-      type: "return" | "throw";
+      type: CompletionType.Return | CompletionType.Throw;
       value: t.Expression | null;
     };
 
@@ -155,7 +164,8 @@ export class Emitter {
 
   // Convenience function for generating expressions like context.next,
   // context.sent, and context.rval.
-  contextProperty(name: string, computed?: boolean) {
+  contextProperty(name: string) {
+    const computed = name === "catch";
     return t.memberExpression(
       this.getContextId(),
       computed ? t.stringLiteral(name) : t.identifier(name),
@@ -167,7 +177,7 @@ export class Emitter {
     tryLoc: t.NumericLiteral,
     assignee: t.AssignmentExpression["left"],
   ) {
-    const catchCall = t.callExpression(this.contextProperty("catch", true), [
+    const catchCall = t.callExpression(this.contextProperty("catch"), [
       t.cloneNode(tryLoc),
     ]);
 
@@ -259,8 +269,7 @@ export class Emitter {
     let alreadyEnded = false;
 
     self.listing.forEach(function (stmt, i) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (self.marked.hasOwnProperty(i)) {
+      if (self.marked[i]) {
         cases.push(t.switchCase(t.numericLiteral(i), (current = [])));
         alreadyEnded = false;
       }
@@ -277,12 +286,6 @@ export class Emitter {
 
     cases.push(
       t.switchCase(this.finalLoc, [
-        // Intentionally fall through to the "end" case...
-      ]),
-
-      // So that the runtime can jump to the final location without having
-      // to know its offset, we provide the "end" case as a synonym.
-      t.switchCase(t.stringLiteral("end"), [
         // This will check/clear both context.thrown and context.rval.
         t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
       ]),
@@ -570,7 +573,7 @@ export class Emitter {
 
       case "BreakStatement":
         self.emitAbruptCompletion({
-          type: "break",
+          type: CompletionType.Break,
           target: self.leapManager.getBreakLoc(path.node.label),
         });
 
@@ -578,7 +581,7 @@ export class Emitter {
 
       case "ContinueStatement":
         self.emitAbruptCompletion({
-          type: "continue",
+          type: CompletionType.Continue,
           target: self.leapManager.getContinueLoc(path.node.label),
         });
 
@@ -660,7 +663,7 @@ export class Emitter {
 
       case "ReturnStatement":
         self.emitAbruptCompletion({
-          type: "return",
+          type: CompletionType.Return,
           value: self.explodeExpression(path.get("argument")),
         });
 
@@ -691,7 +694,7 @@ export class Emitter {
         self.tryEntries.push(tryEntry);
         self.updateContextPrevLoc(tryEntry.firstLoc);
 
-        self.leapManager.withEntry(tryEntry, function () {
+        self.leapManager.withEntry(tryEntry, () => {
           self.explodeStatement(path.get("block"));
 
           if (catchLoc) {
@@ -770,15 +773,21 @@ export class Emitter {
       "normal completions are not abrupt",
     );
 
-    const abruptArgs: [t.StringLiteral, t.Expression?] = [
-      t.stringLiteral(record.type),
+    const abruptArgs: [t.NumericLiteral, t.Expression?] = [
+      t.numericLiteral(record.type),
     ];
 
-    if (record.type === "break" || record.type === "continue") {
+    if (
+      record.type === CompletionType.Break ||
+      record.type === CompletionType.Continue
+    ) {
       abruptArgs[1] = this.insertedLocs.has(record.target)
         ? record.target
         : t.cloneNode(record.target);
-    } else if (record.type === "return" || record.type === "throw") {
+    } else if (
+      record.type === CompletionType.Return ||
+      record.type === CompletionType.Throw
+    ) {
       if (record.value) {
         abruptArgs[1] = t.cloneNode(record.value);
       }

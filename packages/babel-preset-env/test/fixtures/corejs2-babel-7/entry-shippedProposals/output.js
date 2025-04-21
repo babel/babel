@@ -175,7 +175,6 @@ function _agf() {
           _context.next = 4;
           return 2;
         case 4:
-        case "end":
           return _context.stop();
       }
     }, _callee);
