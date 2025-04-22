@@ -18,7 +18,7 @@ const p2 = (new class {
 const r3 = [];
 const p3 = (new class {
   async foo(a, { b }) {
-    console.log(this, arguments);
+    noop(this, arguments);
     r3.push(a, b);
   }
 })
@@ -39,3 +39,6 @@ return Promise.all([p1, p2, p3, p4]).then(() => {
   expect(r3).toEqual([1, 2]);
   expect(r4).toEqual([1, 2, "c"]);
 });
+
+
+function noop() { }
