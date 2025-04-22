@@ -311,9 +311,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
-    "@mdn/browser-compat-data": "npm:^5.5.36"
-    core-js-compat: "npm:^3.40.0"
-    electron-to-chromium: "npm:^1.4.816"
+    "@mdn/browser-compat-data": "npm:^6.0.8"
+    core-js-compat: "npm:^3.41.0"
+    electron-to-chromium: "npm:^1.5.140"
   languageName: unknown
   linkType: soft
 
@@ -4783,10 +4783,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:^5.5.36":
-  version: 5.5.36
-  resolution: "@mdn/browser-compat-data@npm:5.5.36"
-  checksum: 10/0e5663d8f942f7e195bf5c74f8ca392afa69f8bc471188977396d0337cb66ec2e5453cd041ed107bff9964dd6c88f837c32d06599f3c11640f8f7ee4e6587bb5
+"@mdn/browser-compat-data@npm:^6.0.8":
+  version: 6.0.8
+  resolution: "@mdn/browser-compat-data@npm:6.0.8"
+  checksum: 10/3787aab868939822202e283f8fb59044ed137d916537bde2041dd27d51b4eef0009e93c94be0f6ce1e4c95d0c1fd1d8d66fd95d4e8561b7afccb869ad1ff46bb
   languageName: node
   linkType: hard
 
@@ -7985,12 +7985,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.40.0":
-  version: 3.40.0
-  resolution: "core-js-compat@npm:3.40.0"
+"core-js-compat@npm:3.41.0":
+  version: 3.41.0
+  resolution: "core-js-compat@npm:3.41.0"
   dependencies:
-    browserslist: "npm:^4.24.3"
-  checksum: 10/3dd3d717b3d4ae0d9c2930d39c0f2a21ca6f195fcdd5711bda833557996c4d9f90277eab576423478e95689257e2de8d1a2623d6618084416bd224d10d5df9a4
+    browserslist: "npm:^4.24.4"
+  checksum: 10/a59da111fc437cc7ed1a1448dae6883617cabebd7731433d27ad75e0ff77df5f411204979bd8eb5668d2600f99db46eedf6f87e123109b6de728bef489d4229a
   languageName: node
   linkType: hard
 
@@ -8525,10 +8525,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.5.119":
-  version: 1.5.119
-  resolution: "electron-to-chromium@npm:1.5.119"
-  checksum: 10/f1208f2ff0c2fffe092b86da1d43e45203c1f5ef1044af5d254938beb10d5a95822d5bd3f428105f6acc5cffd08225882753ed9bd781565645a02a3ccf134a23
+"electron-to-chromium@npm:1.5.140":
+  version: 1.5.140
+  resolution: "electron-to-chromium@npm:1.5.140"
+  checksum: 10/83e7acfed8616f1f7d97998eeb0edded8dcb2cf616cfa10db5528d1735b6058b3065305478e4f75dbafcf38bd4d802a765d1aa73786051b475abbbe590dee39b
   languageName: node
   linkType: hard
 

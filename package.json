@@ -96,8 +96,8 @@
   "resolutions": {
     "browserslist": "npm:4.24.4",
     "caniuse-lite": "npm:1.0.30001705",
-    "core-js-compat": "npm:3.40.0",
-    "electron-to-chromium": "npm:1.5.119",
+    "core-js-compat": "npm:3.41.0",
+    "electron-to-chromium": "npm:1.5.140",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
