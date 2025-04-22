@@ -51,7 +51,7 @@ Using plugins:
   transform-typeof-symbol { ie }
   transform-new-target { ie }
   transform-regenerator { ie }
-  transform-export-namespace-from { chrome < 72, ie, node < 13.2 }
+  transform-export-namespace-from { chrome < 72, ie, node < 13.2.0 }
   transform-modules-commonjs
   transform-dynamic-import
 corejs3: `DEBUG` option
