@@ -2,7 +2,7 @@
 /* @internal */
 
 // Try/catch helper to minimize deoptimizations.
-export default function _tryCatch(fn: Function, obj: unknown, arg: unknown) {
+export default function _tryCatch(fn: Function, obj: unknown, arg?: unknown) {
   try {
     return { e: 0, v: fn.call(obj, arg) };
   } catch (err) {

@@ -89,6 +89,7 @@ export default function /* @no-mangle */ _regenerator() {
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   var ContextMethodStrings = ["next", "throw", "return"] as const;
+  var _: any;
 
   function wrap(
     innerFn: Function,
@@ -226,11 +227,78 @@ export default function /* @no-mangle */ _regenerator() {
 
       while (true) {
         if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
+          // Call delegate.iterator[context.method](context.arg) and handle the result
+
+          var iterator = delegate.i;
+          var fn = iterator[ContextMethodStrings[method]];
+          if (fn) {
+            var record = tryCatch(fn, iterator, arg);
+
+            if (/* error */ record.e) {
+              method = ContextMethod.Throw;
+              arg = record.v;
+            } else {
+              var info = record.v;
+
+              if (!info) {
+                method = ContextMethod.Throw;
+                arg = new TypeError("iterator result is not an object");
+              } else {
+                if (!info.done) {
+                  // Re-yield the result returned by the delegate method.
+                  return info;
+                }
+
+                // Assign the result of the finished delegate to the temporary
+                // variable specified by delegate.resultName (see delegateYield).
+                ctx[delegate.r] = info.value;
+
+                // Resume execution at the desired location (see delegateYield).
+                ctx.next = delegate.n;
+
+                // If context.method was "throw" but the delegate handled the
+                // exception, let the outer generator proceed normally. If
+                // context.method was "next", forget context.arg since it has been
+                // "consumed" by the delegate iterator. If context.method was
+                // "return", allow the original .return call to continue in the
+                // outer generator.
+                if (method !== ContextMethod.Return) {
+                  method = ContextMethod.Next;
+                  arg = undefined;
+                }
+              }
+            }
+
+            // The delegate iterator is finished, so forget it and continue with
+            // the outer generator.
+            delegate = null;
+            continue;
           }
+          // A .throw or .return when the delegate iterator has no .throw
+          // method, or a missing .next method, always terminate the
+          // yield* loop.
+          delegate = null;
+
+          if (method !== ContextMethod.Return) {
+            method = ContextMethod.Throw;
+            arg = new TypeError(
+              "The iterator does not provide a '" +
+                ContextMethodStrings[method] +
+                "' method",
+            );
+          }
+
+          // Note: ["return"] must be used for ES3 parsing compatibility.
+          if (method === ContextMethod.Throw && (_ = iterator["return"])) {
+            // If the delegate iterator has a return method, give it a
+            // chance to clean up.
+            var record = tryCatch(_, iterator);
+
+            if (/* error */ record.e) {
+              arg = record.v;
+            }
+          }
+          continue;
         }
 
         if (method === ContextMethod.Next) {
@@ -275,92 +343,6 @@ export default function /* @no-mangle */ _regenerator() {
           };
         }
       }
-    }
-
-    // Call delegate.iterator[context.method](context.arg) and handle the
-    // result, either by returning a { value, done } result from the
-    // delegate iterator, or by modifying context.method and context.arg,
-    // setting context.delegate to null, and returning the ContinueSentinel.
-    function maybeInvokeDelegate(_delegate: Delegate) {
-      var methodName = method;
-      var _method = _delegate.i[ContextMethodStrings[methodName]];
-      if (_method === undefined) {
-        // A .throw or .return when the delegate iterator has no .throw
-        // method, or a missing .next method, always terminate the
-        // yield* loop.
-        delegate = null;
-
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (methodName === ContextMethod.Throw && _delegate.i["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          method = ContextMethod.Return;
-          arg = undefined;
-          maybeInvokeDelegate(_delegate);
-
-          if ((method as ContextMethod) === ContextMethod.Throw) {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-        if (methodName !== ContextMethod.Return) {
-          method = ContextMethod.Throw;
-          arg = new TypeError(
-            "The iterator does not provide a '" +
-              ContextMethodStrings[methodName] +
-              "' method",
-          );
-        }
-
-        return ContinueSentinel;
-      }
-
-      var record = tryCatch(_method, _delegate.i, arg);
-
-      if (/* error */ record.e) {
-        method = ContextMethod.Throw;
-        arg = record.v;
-        delegate = null;
-        return ContinueSentinel;
-      }
-
-      var info = record.v;
-
-      if (!info) {
-        method = ContextMethod.Throw;
-        arg = new TypeError("iterator result is not an object");
-        delegate = null;
-        return ContinueSentinel;
-      }
-
-      if (info.done) {
-        // Assign the result of the finished delegate to the temporary
-        // variable specified by delegate.resultName (see delegateYield).
-        ctx[_delegate.r] = info.value;
-
-        // Resume execution at the desired location (see delegateYield).
-        ctx.next = _delegate.n;
-
-        // If context.method was "throw" but the delegate handled the
-        // exception, let the outer generator proceed normally. If
-        // context.method was "next", forget context.arg since it has been
-        // "consumed" by the delegate iterator. If context.method was
-        // "return", allow the original .return call to continue in the
-        // outer generator.
-        if (method !== ContextMethod.Return) {
-          method = ContextMethod.Next;
-          arg = undefined;
-        }
-      } else {
-        // Re-yield the result returned by the delegate method.
-        return info;
-      }
-
-      // The delegate iterator is finished, so forget it and continue with
-      // the outer generator.
-      delegate = null;
-      return ContinueSentinel;
     }
 
     function resetTryEntry(entry: TryEntry) {
