@@ -44,15 +44,6 @@ type TryLocs = [
 
 type TryEntry = [...TryLocs, completion?: Completion];
 
-type Delegate = {
-  // iterator
-  i: Iterator<any>;
-  // resultName
-  r: `t${number}`;
-  // nextLoc
-  n: number;
-};
-
 type Context = {
   prev: number;
   next: number;
@@ -64,9 +55,7 @@ type Context = {
   complete?(record: Completion, afterLoc?: number): any;
   finish?(finallyLoc: number): any;
   catch?(tryLoc: number): any;
-  delegateYield?(iterable: any, resultName: `t${number}`, nextLoc: number): any;
-
-  [key: `t${number}`]: any;
+  delegateYield?(iterable: any, nextLoc: number): any;
 };
 
 const enum GenState {
@@ -226,13 +215,11 @@ export default function /* @no-mangle */ _regenerator() {
       arg = _arg;
 
       while (true) {
-        if (delegate) {
+        if (delegateIterator) {
           // Call delegate.iterator[context.method](context.arg) and handle the result
 
-          var iterator = delegate.i;
-          var fn = iterator[ContextMethodStrings[method]];
-          if (fn) {
-            var record = tryCatch(fn, iterator, arg);
+          if ((_ = delegateIterator[ContextMethodStrings[method]])) {
+            var record = tryCatch(_, delegateIterator, arg);
 
             if (/* error */ record.e) {
               method = ContextMethod.Throw;
@@ -249,13 +236,6 @@ export default function /* @no-mangle */ _regenerator() {
                   return info;
                 }
 
-                // Assign the result of the finished delegate to the temporary
-                // variable specified by delegate.resultName (see delegateYield).
-                ctx[delegate.r] = info.value;
-
-                // Resume execution at the desired location (see delegateYield).
-                ctx.next = delegate.n;
-
                 // If context.method was "throw" but the delegate handled the
                 // exception, let the outer generator proceed normally. If
                 // context.method was "next", forget context.arg since it has been
@@ -264,21 +244,16 @@ export default function /* @no-mangle */ _regenerator() {
                 // outer generator.
                 if (method !== ContextMethod.Return) {
                   method = ContextMethod.Next;
-                  arg = undefined;
+                  arg = info.value;
                 }
               }
             }
 
             // The delegate iterator is finished, so forget it and continue with
             // the outer generator.
-            delegate = null;
+            delegateIterator = undefined;
             continue;
           }
-          // A .throw or .return when the delegate iterator has no .throw
-          // method, or a missing .next method, always terminate the
-          // yield* loop.
-          delegate = null;
-
           if (method !== ContextMethod.Return) {
             method = ContextMethod.Throw;
             arg = new TypeError(
@@ -289,15 +264,23 @@ export default function /* @no-mangle */ _regenerator() {
           }
 
           // Note: ["return"] must be used for ES3 parsing compatibility.
-          if (method === ContextMethod.Throw && (_ = iterator["return"])) {
+          if (
+            method === ContextMethod.Throw &&
+            (_ = delegateIterator["return"])
+          ) {
             // If the delegate iterator has a return method, give it a
             // chance to clean up.
-            var record = tryCatch(_, iterator);
+            var record = tryCatch(_, delegateIterator);
 
             if (/* error */ record.e) {
               arg = record.v;
             }
           }
+
+          // A .throw or .return when the delegate iterator has no .throw
+          // method, or a missing .next method, always terminate the
+          // yield* loop.
+          delegateIterator = undefined;
           continue;
         }
 
@@ -360,7 +343,7 @@ export default function /* @no-mangle */ _regenerator() {
     );
     var rval: any;
     var done = false;
-    var delegate: Delegate | null = null;
+    var delegateIterator: Iterator<any> | undefined;
     var method = ContextMethod.Next;
     var arg: any = undefined;
 
@@ -519,18 +502,13 @@ export default function /* @no-mangle */ _regenerator() {
       }
     }
 
-    function Context_delegateYield(
-      iterable: any,
-      resultName: `t${number}`,
-      nextLoc: number,
-    ) {
-      delegate = { i: values(iterable), r: resultName, n: nextLoc };
+    function Context_delegateYield(iterable: any, nextLoc: number) {
+      delegateIterator = values(iterable);
 
-      if (method === ContextMethod.Next) {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        arg = undefined;
-      }
+      // Deliberately forget the last sent value so that we don't
+      // accidentally pass it on to the delegate.
+      arg = undefined;
+      ctx.next = nextLoc;
 
       return ContinueSentinel;
     }

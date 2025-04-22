@@ -1269,12 +1269,11 @@ export class Emitter {
           path.node.argument && self.explodeExpression(path.get("argument"));
 
         if (arg && path.node.delegate) {
-          const result = self.makeContextTempVar();
+          const result = self.contextProperty("sent");
 
           const ret = t.returnStatement(
             t.callExpression(self.contextProperty("delegateYield"), [
               arg,
-              t.stringLiteral((result.property as t.Identifier).name),
               after,
             ]),
           );

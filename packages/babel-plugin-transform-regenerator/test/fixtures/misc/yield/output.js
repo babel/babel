@@ -5,12 +5,12 @@ function foo() {
   return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
-        return _context.delegateYield(bar(), "t0", 1);
+        return _context.delegateYield(bar(), 1);
       case 1:
-        _t = _context.t0;
-        return _context.delegateYield(bar(), "t1", 3);
+        _t = _context.sent;
+        return _context.delegateYield(bar(), 3);
       case 3:
-        _t2 = _context.t1;
+        _t2 = _context.sent;
         return _context.abrupt(4, _t + _t2);
       case 5:
         return _context.stop();

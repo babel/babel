@@ -87,9 +87,9 @@ function foo3() {
           _context4.next = 8;
           break;
         }
-        return _context4.delegateYield(_loop(), "t0", 3);
+        return _context4.delegateYield(_loop(), 3);
       case 3:
-        _ret = _context4.t0;
+        _ret = _context4.sent;
         if (!(_ret === 0)) {
           _context4.next = 6;
           break;

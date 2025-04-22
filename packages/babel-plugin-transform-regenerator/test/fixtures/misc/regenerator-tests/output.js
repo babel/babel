@@ -1947,7 +1947,7 @@ describe("delegated yield", function () {
             _context45.next = 5;
             return 1;
           case 5:
-            return _context45.delegateYield(gen(false), "t0", 6);
+            return _context45.delegateYield(gen(false), 6);
           case 6:
             _context45.next = 8;
             return 2;
@@ -1975,7 +1975,7 @@ describe("delegated yield", function () {
             _context46.next = 3;
             return 0;
           case 3:
-            return _context46.delegateYield(gen(false), "t0", 4);
+            return _context46.delegateYield(gen(false), 4);
           case 4:
             _context46.next = 6;
             return 1;
@@ -1998,7 +1998,7 @@ describe("delegated yield", function () {
             _context47.next = 2;
             return n;
           case 2:
-            return _context47.delegateYield(middle(n - 1, inner(n + 10)), "t0", 3);
+            return _context47.delegateYield(middle(n - 1, inner(n + 10)), 3);
           case 3:
             _context47.next = 5;
             return n + 1;
@@ -2014,12 +2014,12 @@ describe("delegated yield", function () {
             _context48.next = 2;
             return n;
           case 2:
-            return _context48.delegateYield(inner(n - 1), "t0", 3);
+            return _context48.delegateYield(inner(n - 1), 3);
           case 3:
             _context48.next = 5;
             return n + 1;
           case 5:
-            return _context48.delegateYield(plusTen, "t1", 6);
+            return _context48.delegateYield(plusTen, 6);
           case 6:
             return _context48.stop();
         }
@@ -2045,7 +2045,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context50) {
         while (1) switch (_context50.prev = _context50.next) {
           case 0:
-            return _context50.delegateYield(inner(n << 1), "t0", 1);
+            return _context50.delegateYield(inner(n << 1), 1);
           case 1:
             _context50.next = 3;
             return "zxcv";
@@ -2108,7 +2108,7 @@ describe("delegated yield", function () {
             _context52.next = 3;
             return 0;
           case 3:
-            return _context52.delegateYield(inner(n), "t0", 4);
+            return _context52.delegateYield(inner(n), 4);
           case 4:
             _context52.next = 6;
             return 1;
@@ -2166,10 +2166,10 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context54) {
         while (1) switch (_context54.prev = _context54.next) {
           case 0:
-            return _context54.delegateYield(inner(), "t0", 1);
+            return _context54.delegateYield(inner(), 1);
           case 1:
             _context54.prev = 1;
-            return _context54.delegateYield(inner(), "t1", 3);
+            return _context54.delegateYield(inner(), 3);
           case 3:
             _context54.next = 7;
             break;
@@ -2177,9 +2177,9 @@ describe("delegated yield", function () {
             _context54.prev = 5;
             _t66 = _context54["catch"](1);
           case 7:
-            return _context54.delegateYield(inner(), "t2", 8);
+            return _context54.delegateYield(inner(), 8);
           case 8:
-            return _context54.abrupt(4, _context54.t2);
+            return _context54.abrupt(4, _context54.sent);
           case 9:
             return _context54.stop();
         }
@@ -2227,9 +2227,9 @@ describe("delegated yield", function () {
         while (1) switch (_context56.prev = _context56.next) {
           case 0:
             _context56.prev = 0;
-            return _context56.delegateYield(delegate, "t0", 2);
+            return _context56.delegateYield(delegate, 2);
           case 2:
-            return _context56.abrupt(4, _context56.t0);
+            return _context56.abrupt(4, _context56.sent);
           case 5:
             _context56.prev = 5;
             _t67 = _context56["catch"](0);
@@ -2359,9 +2359,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context57) {
         while (1) switch (_context57.prev = _context57.next) {
           case 0:
-            return _context57.delegateYield(delegate, "t0", 1);
+            return _context57.delegateYield(delegate, 1);
           case 1:
-            return _context57.abrupt(4, _context57.t0);
+            return _context57.abrupt(4, _context57.sent);
           case 2:
             return _context57.stop();
         }
@@ -2410,9 +2410,9 @@ describe("delegated yield", function () {
         while (1) switch (_context58.prev = _context58.next) {
           case 0:
             _context58.prev = 0;
-            return _context58.delegateYield(child(), "t0", 2);
+            return _context58.delegateYield(child(), 2);
           case 2:
-            return _context58.abrupt(4, _context58.t0);
+            return _context58.abrupt(4, _context58.sent);
           case 3:
             _context58.prev = 3;
             markers.push("parent");
@@ -2482,9 +2482,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context61) {
         while (1) switch (_context61.prev = _context61.next) {
           case 0:
-            return _context61.delegateYield(delegate, "t0", 1);
+            return _context61.delegateYield(delegate, 1);
           case 1:
-            return _context61.abrupt(4, _context61.t0);
+            return _context61.abrupt(4, _context61.sent);
           case 2:
             return _context61.stop();
         }
@@ -2533,9 +2533,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context63) {
         while (1) switch (_context63.prev = _context63.next) {
           case 0:
-            return _context63.delegateYield(delegate, "t0", 1);
+            return _context63.delegateYield(delegate, 1);
           case 1:
-            _t68 = _context63.t0;
+            _t68 = _context63.sent;
             return _context63.abrupt(4, 1 + _t68);
           case 3:
             return _context63.stop();
@@ -2566,7 +2566,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context64) {
         while (1) switch (_context64.prev = _context64.next) {
           case 0:
-            return _context64.delegateYield("", "t0", 1);
+            return _context64.delegateYield("", 1);
           case 1:
             return _context64.stop();
         }
@@ -2583,7 +2583,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context65) {
         while (1) switch (_context65.prev = _context65.next) {
           case 0:
-            return _context65.delegateYield(x, "t0", 1);
+            return _context65.delegateYield(x, 1);
           case 1:
             return _context65.stop();
         }
@@ -2604,7 +2604,7 @@ describe("delegated yield", function () {
           case 0:
             return _context66.delegateYield({
               [Symbol.iterator]: x => []
-            }, "t0", 1);
+            }, 1);
           case 1:
             return _context66.stop();
         }
@@ -2632,7 +2632,7 @@ describe("delegated yield", function () {
         return babelHelpers.regenerator().w(function (_context68) {
           while (1) switch (_context68.prev = _context68.next) {
             case 0:
-              return _context68.delegateYield(false, "t0", 1);
+              return _context68.delegateYield(false, 1);
             case 1:
               return _context68.stop();
           }
@@ -2744,7 +2744,7 @@ describe("delegated yield", function () {
             _context72.next = 3;
             return 0;
           case 3:
-            return _context72.delegateYield(callee(errorToThrow), "t0", 4);
+            return _context72.delegateYield(callee(errorToThrow), 4);
           case 4:
             _context72.next = 6;
             return 3;
@@ -2867,9 +2867,9 @@ describe("function declaration hoisting", function () {
             return 0;
           case 4:
             assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
-            return _context75.delegateYield(inner(n), "t0", 6);
+            return _context75.delegateYield(inner(n), 6);
           case 6:
-            return _context75.abrupt(4, _context75.t0);
+            return _context75.abrupt(4, _context75.sent);
           case 7:
             return _context75.stop();
         }
@@ -3113,7 +3113,7 @@ describe("the arguments object", function () {
             _context84.next = 9;
             return 3;
           case 9:
-            return _context84.delegateYield(_args84.callee(true), "t0", 10);
+            return _context84.delegateYield(_args84.callee(true), 10);
           case 10:
             _context84.next = 12;
             return 4;
@@ -3557,7 +3557,7 @@ describe("generator .throw method", function () {
         while (1) switch (_context98.prev = _context98.next) {
           case 0:
             _context98.prev = 0;
-            return _context98.delegateYield(inner(), "t0", 2);
+            return _context98.delegateYield(inner(), 2);
           case 2:
             _context98.next = 7;
             break;
@@ -3605,7 +3605,7 @@ describe("generator .throw method", function () {
         while (1) switch (_context100.prev = _context100.next) {
           case 0:
             _context100.prev = 0;
-            return _context100.delegateYield(inner(), "t0", 2);
+            return _context100.delegateYield(inner(), 2);
           case 2:
             _context100.next = 7;
             break;
@@ -3686,9 +3686,9 @@ describe("yield* expression results", function () {
             _context103.next = 2;
             return 0;
           case 2:
-            return _context103.delegateYield(bar(), "t0", 3);
+            return _context103.delegateYield(bar(), 3);
           case 3:
-            return _context103.abrupt(4, _context103.t0);
+            return _context103.abrupt(4, _context103.sent);
           case 4:
             return _context103.stop();
         }
@@ -3727,12 +3727,12 @@ describe("yield* expression results", function () {
       return babelHelpers.regenerator().w(function (_context105) {
         while (1) switch (_context105.prev = _context105.next) {
           case 0:
-            return _context105.delegateYield(bar(), "t0", 1);
+            return _context105.delegateYield(bar(), 1);
           case 1:
-            _t89 = _context105.t0;
-            return _context105.delegateYield(bar(), "t1", 3);
+            _t89 = _context105.sent;
+            return _context105.delegateYield(bar(), 3);
           case 3:
-            _t90 = _context105.t1;
+            _t90 = _context105.sent;
             return _context105.abrupt(4, _t89 + _t90);
           case 5:
             return _context105.stop();
@@ -3971,9 +3971,9 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context113) {
         while (1) switch (_context113.prev = _context113.next) {
           case 0:
-            return _context113.delegateYield(delegate, "t0", 1);
+            return _context113.delegateYield(delegate, 1);
           case 1:
-            return _context113.abrupt(4, _context113.t0);
+            return _context113.abrupt(4, _context113.sent);
           case 2:
             return _context113.stop();
         }
@@ -4112,9 +4112,9 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context117) {
         while (1) switch (_context117.prev = _context117.next) {
           case 0:
-            return _context117.delegateYield(a, "t0", 1);
+            return _context117.delegateYield(a, 1);
           case 1:
-            return _context117.delegateYield(b, "t1", 2);
+            return _context117.delegateYield(b, 2);
           case 2:
             return _context117.stop();
         }

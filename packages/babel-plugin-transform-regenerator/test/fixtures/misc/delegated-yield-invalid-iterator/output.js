@@ -6,7 +6,7 @@ var _Symbol$iterator = {
           case 0:
             return _context.delegateYield({
               [Symbol.iterator]: x => []
-            }, "t0", 1);
+            }, 1);
           case 1:
             return _context.stop();
         }
