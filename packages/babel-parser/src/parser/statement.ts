@@ -346,15 +346,21 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  startsUsingForOf(): boolean {
-    const { type, containsEsc } = this.lookahead();
+  allowsForUsing(): boolean {
+    const { type, containsEsc, start } = this.lookahead();
     if (type === tt._of && !containsEsc) {
-      // `using of` must start a for-lhs-of statement
-      return false;
-    } else if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
+      // `for( using of` must start either a for-lhs-of statement
+      // or a for lexical declaration
+      const nextAfterOf = this.nextTokenStartSince(start + 2);
+      if (this.input.charCodeAt(nextAfterOf) !== charCodes.equalsTo) {
+        return false;
+      }
+    }
+    if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
       this.expectPlugin("explicitResourceManagement");
       return true;
     }
+    return false;
   }
 
   startsAwaitUsing(): boolean {
@@ -942,7 +948,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.isContextual(tt._await) && this.startsAwaitUsing();
       const starsWithUsingDeclaration =
         startsWithAwaitUsing ||
-        (this.isContextual(tt._using) && this.startsUsingForOf());
+        (this.isContextual(tt._using) && this.allowsForUsing());
       const isLetOrUsing =
         (startsWithLet && this.hasFollowingBindingAtom()) ||
         starsWithUsingDeclaration;
