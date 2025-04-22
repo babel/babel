@@ -18,7 +18,7 @@ Using plugins:
   transform-logical-assignment-operators { node < 15 }
   transform-nullish-coalescing-operator { node < 14 }
   transform-optional-chaining { node < 14 }
-  transform-export-namespace-from { node < 13.2 }
+  transform-export-namespace-from { node < 13.2.0 }
   transform-modules-commonjs
   transform-dynamic-import
 

@@ -31,7 +31,7 @@ Using plugins:
   transform-function-name { node < 6.5 }
   transform-for-of { node < 6.5 }
   transform-destructuring { node < 6.5 }
-  transform-export-namespace-from { node < 13.2 }
+  transform-export-namespace-from { node < 13.2.0 }
   transform-modules-commonjs
   transform-dynamic-import
   syntax-top-level-await

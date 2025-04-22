@@ -22,14 +22,10 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   );
   if (target === "plugin") {
     // add export-namespace-from from @mdn/browser-compat-data
-    const exportNamespaceFromCompatData = generateModuleSupport(
+    newData["transform-export-namespace-from"] = generateModuleSupport(
       compatData.statements.export.namespace,
       true
     );
-    // the node.js compat data is 12.0, the first node version ships `export *` behind a flag
-    // here we overwrite to 13.2 which is the first unflagged version
-    exportNamespaceFromCompatData.node = "13.2";
-    newData["transform-export-namespace-from"] = exportNamespaceFromCompatData;
 
     // Add proposal-* aliases for backward compatibility.
     newData = maybeDefineLegacyPluginAliases(newData);

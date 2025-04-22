@@ -45,9 +45,9 @@
     "compat-data"
   ],
   "devDependencies": {
-    "@mdn/browser-compat-data": "^5.5.36",
-    "core-js-compat": "^3.40.0",
-    "electron-to-chromium": "^1.4.816"
+    "@mdn/browser-compat-data": "^6.0.8",
+    "core-js-compat": "^3.41.0",
+    "electron-to-chromium": "^1.5.140"
   },
   "engines": {
     "node": ">=6.9.0"

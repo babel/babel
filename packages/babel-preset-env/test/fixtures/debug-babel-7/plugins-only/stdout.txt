@@ -33,7 +33,7 @@ Using plugins:
   transform-unicode-escapes { firefox < 53 }
   transform-destructuring { firefox < 53 }
   transform-block-scoping { firefox < 53 }
-  transform-export-namespace-from { firefox < 80, node < 13.2 }
+  transform-export-namespace-from { firefox < 80, node < 13.2.0 }
   transform-modules-commonjs
   transform-dynamic-import
   syntax-top-level-await
