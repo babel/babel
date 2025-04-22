@@ -5,7 +5,7 @@ function _regeneratorDefineIM(e) { function n(n) { _regeneratorDefine(e, n, func
 function _regeneratorDefine(e, r, n, t) { _regeneratorDefine = function (e, r, n, t) { return Object.defineProperty(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }); }; try { _regeneratorDefine({}, ""); } catch (e) { _regeneratorDefine = function (e, r, n) { return e[r] = n; }; } return _regeneratorDefine(e, r, n, t); }
 var _marked = /*#__PURE__*/_regenerator().m(f);
 function f() {
-  return _regenerator().w(function f$(_context) {
+  return _regenerator().w(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         return _context.stop();

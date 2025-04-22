@@ -93,11 +93,10 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       // function has a name (so node.id will always be an Identifier), even
       // if a temporary name has to be synthesized.
       t.assertIdentifier(node.id);
-      const innerFnId = t.identifier(node.id.name + "$");
 
       // Turn all declarations into vars, and replace the original
       // declarations with equivalent assignment expressions.
-      let vars = hoist(path);
+      const vars = hoist(path);
 
       const context = {
         usesThis: false,
@@ -108,20 +107,19 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       path.traverse(argumentsThisVisitor, context);
 
       if (context.usesArguments) {
-        vars = vars || t.variableDeclaration("var", []);
-        vars.declarations.push(
+        vars.push(
           t.variableDeclarator(t.clone(argsId), t.identifier("arguments")),
         );
       }
 
-      const emitter = new Emitter(contextId, this);
+      const emitter = new Emitter(contextId, path.scope, vars, this);
       emitter.explode(path.get("body"));
 
-      if (vars && vars.declarations.length > 0) {
-        outerBody.push(vars);
+      if (vars.length > 0) {
+        outerBody.push(t.variableDeclaration("var", vars));
       }
 
-      const wrapArgs: any[] = [emitter.getContextFunction(innerFnId)];
+      const wrapArgs: any[] = [emitter.getContextFunction()];
       const tryLocsList = emitter.getTryLocsList();
 
       if (node.generator) {

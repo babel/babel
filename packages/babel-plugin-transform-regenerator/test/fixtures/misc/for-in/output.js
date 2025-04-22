@@ -1,15 +1,16 @@
 var _marked = /*#__PURE__*/babelHelpers.regenerator().m(fn);
 function fn() {
-  return babelHelpers.regenerator().w(function fn$(_context) {
+  var _t, _t2;
+  return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
-        _context.t0 = babelHelpers.regeneratorKeys(y);
+        _t = babelHelpers.regeneratorKeys(y);
       case 1:
-        if ((_context.t1 = _context.t0()).done) {
+        if ((_t2 = _t()).done) {
           _context.next = 7;
           break;
         }
-        x = _context.t1.value;
+        x = _t2.value;
         _context.next = 5;
         return x;
       case 5:

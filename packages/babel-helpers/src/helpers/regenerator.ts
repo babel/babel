@@ -198,9 +198,7 @@ export default function /* @no-mangle */ _regenerator() {
   ) {
     var state = GenState.SuspendedStart;
 
-    // We use this variable because of git history
-    // terser can compress it
-    var invoke = function invoke(
+    function invoke(
       _method: ContextMethod | "next" | "throw" | "return",
       _arg: any,
     ) {
@@ -277,7 +275,7 @@ export default function /* @no-mangle */ _regenerator() {
           };
         }
       }
-    };
+    }
 
     // Call delegate.iterator[context.method](context.arg) and handle the
     // result, either by returning a { value, done } result from the

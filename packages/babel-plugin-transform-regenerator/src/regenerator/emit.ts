@@ -4,7 +4,7 @@ import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
 import * as util from "./util.ts";
 
-import type { NodePath, PluginPass, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Visitor, Scope } from "@babel/core";
 import { types as t } from "@babel/core";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
@@ -70,11 +70,20 @@ export class Emitter {
   finalLoc: t.NumericLiteral;
   tryEntries: leap.TryEntry[];
   leapManager: leap.LeapManager;
+  scope: Scope;
+  vars: t.VariableDeclarator[];
 
   pluginPass: PluginPass;
 
-  constructor(contextId: t.Identifier, pluginPass: PluginPass) {
+  constructor(
+    contextId: t.Identifier,
+    scope: Scope,
+    vars: t.VariableDeclarator[],
+    pluginPass: PluginPass,
+  ) {
     this.pluginPass = pluginPass;
+    this.scope = scope;
+    this.vars = vars;
 
     // Used to generate unique temporary names.
     this.nextTempId = 0;
@@ -234,13 +243,19 @@ export class Emitter {
   // the context object, which is presumed to coexist peacefully with all
   // other local variables, and since we just increment `nextTempId`
   // monotonically, uniqueness is assured.
-  makeTempVar() {
+  makeContextTempVar() {
     return this.contextProperty("t" + this.nextTempId++);
   }
 
-  getContextFunction(id: t.Identifier) {
+  makeTempVar() {
+    const id = this.scope.generateUidIdentifier("t");
+    this.vars.push(t.variableDeclarator(id));
+    return t.cloneNode(id);
+  }
+
+  getContextFunction() {
     return t.functionExpression(
-      id || null /*Anonymous*/,
+      null /*Anonymous*/,
       [this.getContextId()],
       t.blockStatement([this.getDispatchLoop()]),
       false, // Not a generator anymore!
@@ -853,7 +868,7 @@ export class Emitter {
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
   explodeViaTempVar(
-    tempVar: t.MemberExpression,
+    tempVar: t.MemberExpression | t.Identifier,
     childPath: NodePath<t.Expression>,
     hasLeapingChildren: boolean,
     ignoreChildResult?: boolean,
@@ -1254,7 +1269,7 @@ export class Emitter {
           path.node.argument && self.explodeExpression(path.get("argument"));
 
         if (arg && path.node.delegate) {
-          const result = self.makeTempVar();
+          const result = self.makeContextTempVar();
 
           const ret = t.returnStatement(
             t.callExpression(self.contextProperty("delegateYield"), [
