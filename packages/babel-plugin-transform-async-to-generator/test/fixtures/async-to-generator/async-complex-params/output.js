@@ -19,7 +19,23 @@ new class {
   b: 2
 });
 new class {
-  foo(_x5, _x6) {
+  foo(_x5) {
+    return babelHelpers.asyncToGenerator(function* (a, b = (() => {
+      throw new Error("required");
+    })()) {
+      console.log(a, b);
+    }).apply(this, arguments);
+  }
+}().foo(1, 2);
+new class {
+  foo(a, ...b) {
+    return babelHelpers.asyncToGenerator(function* () {
+      console.log(a, b);
+    })();
+  }
+}().foo(1, 2);
+new class {
+  foo(_x6, _x7) {
     var _arguments = arguments,
       _this = this;
     return babelHelpers.asyncToGenerator(function* (a, {
@@ -36,7 +52,7 @@ new class extends class {
     return "c";
   }
 } {
-  foo(_x7, _x8) {
+  foo(_x8, _x9) {
     var _superprop_getC = () => super.c;
     return babelHelpers.asyncToGenerator(function* (a, {
       b

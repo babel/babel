@@ -14,6 +14,20 @@
   .foo(1, { b: 2 });
 
 (new class {
+  async foo(a, b = (() => { throw new Error("required") })()) {
+    console.log(a, b);
+  }
+})
+  .foo(1, { b: 2 });
+
+(new class {
+  async foo(a, ...b) {
+    console.log(a, b);
+  }
+})
+  .foo(1, 2);
+
+(new class {
   async foo(a, { b }) {
     console.log(this, arguments);
   }
