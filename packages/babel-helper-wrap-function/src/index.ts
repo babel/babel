@@ -12,6 +12,7 @@ import {
   memberExpression,
   identifier,
   thisExpression,
+  isPattern,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -74,7 +75,7 @@ function classOrObjectMethod(
   let params: Array<t.Identifier | t.Pattern | t.RestElement> = [];
 
   // Errors thrown during argument evaluation must reject the resulting promise
-  const shoudlForwardParams = node.params.some(p => p.type.includes("Pattern"));
+  const shoudlForwardParams = node.params.some(p => isPattern(p));
 
   if (shoudlForwardParams) {
     params = node.params as typeof params;
