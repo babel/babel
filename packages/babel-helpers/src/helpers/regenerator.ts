@@ -21,10 +21,6 @@ type Completion = {
   arg?: any;
 };
 
-const enum TryLoc {
-  Root = -1,
-}
-
 const enum ContextNext {
   End = -1,
 }
@@ -320,9 +316,7 @@ export default function /* @no-mangle */ _regenerator() {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
-    var tryEntries: TryEntry[] = [[TryLoc.Root] as TryLocs].concat(
-      tryLocsList || [],
-    );
+    var tryEntries: TryEntry[] = tryLocsList || [];
     var rval: any;
     var done = false;
     var delegateIterator: Iterator<any> | undefined;
@@ -346,13 +340,6 @@ export default function /* @no-mangle */ _regenerator() {
 
     function Context_stop() {
       done = true;
-
-      var rootEntry = tryEntries[0];
-      var rootRecord = rootEntry[4]!;
-      if (rootRecord.type === CompletionType.Throw) {
-        throw rootRecord.arg;
-      }
-
       return rval;
     }
 
@@ -374,13 +361,7 @@ export default function /* @no-mangle */ _regenerator() {
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
 
-        if (entry[0] === TryLoc.Root) {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          handle(ContextNext.End);
-          return;
-        } else if (entry[0] != null && entry[0] <= prev) {
+        if (entry[0] <= prev) {
           if (prev < catchLoc) {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
@@ -395,16 +376,14 @@ export default function /* @no-mangle */ _regenerator() {
           }
         }
       }
+      state = GenState.Completed;
+      throw exception;
     }
 
     function Context_abrupt(type: CompletionType, arg: any) {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
-        if (
-          entry[0] > TryLoc.Root &&
-          entry[0] <= ctx.prev &&
-          ctx.prev < entry[2]!
-        ) {
+        if (entry[0] <= ctx.prev && ctx.prev < entry[2]!) {
           var finallyEntry: TryEntry | null = entry;
           break;
         }
