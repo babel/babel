@@ -2,11 +2,11 @@
 /* @mangleFns */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
 import define from "./regeneratorDefine.ts";
 import defineIteratorMethods from "./regeneratorDefineIM.ts";
 import values from "./regeneratorValues.ts";
-import tryCatch from "./tryCatch.ts";
 
 const enum CompletionType {
   Normal,
@@ -215,25 +215,33 @@ export default function /* @no-mangle */ _regenerator() {
       arg = _arg;
 
       while (true) {
-        if (delegateIterator) {
-          // Call delegate.iterator[context.method](context.arg) and handle the result
+        if (!delegateIterator) {
+          if (method === ContextMethod.Next) {
+            ctx.sent = arg;
+          } else if (method === ContextMethod.Throw) {
+            if (state === GenState.SuspendedStart) {
+              state = GenState.Completed;
+              throw arg;
+            }
 
-          if ((_ = delegateIterator[ContextMethodStrings[method]])) {
-            var record = tryCatch(_, delegateIterator, arg);
+            Context_dispatchException(arg);
+          } else if (method === ContextMethod.Return) {
+            Context_abrupt(CompletionType.Return, arg);
+          }
+        }
+        try {
+          if (delegateIterator) {
+            // Call delegate.iterator[context.method](context.arg) and handle the result
 
-            if (/* error */ record.e) {
-              method = ContextMethod.Throw;
-              arg = record.v;
-            } else {
-              var info = record.v;
-
-              if (!info) {
-                method = ContextMethod.Throw;
-                arg = new TypeError("iterator result is not an object");
-              } else {
-                if (!info.done) {
+            if ((_ = delegateIterator[ContextMethodStrings[method]])) {
+              if ((_ = _.call(delegateIterator, arg))) {
+                if (!_) {
+                  method = ContextMethod.Throw;
+                  arg = new TypeError("iterator result is not an object");
+                }
+                if (!_.done) {
                   // Re-yield the result returned by the delegate method.
-                  return info;
+                  return _;
                 }
 
                 // If context.method was "throw" but the delegate handled the
@@ -244,86 +252,60 @@ export default function /* @no-mangle */ _regenerator() {
                 // outer generator.
                 if (method !== ContextMethod.Return) {
                   method = ContextMethod.Next;
-                  arg = info.value;
+                  arg = _.value;
                 }
+              }
+            } else {
+              // Note: ["return"] must be used for ES3 parsing compatibility.
+              if (
+                method === ContextMethod.Throw &&
+                (_ = delegateIterator["return"])
+              ) {
+                // If the delegate iterator has a return method, give it a
+                // chance to clean up.
+                _.call(delegateIterator);
+              }
+
+              if (method !== ContextMethod.Return) {
+                method = ContextMethod.Throw;
+                arg = new TypeError(
+                  "The iterator does not provide a '" +
+                    ContextMethodStrings[method] +
+                    "' method",
+                );
               }
             }
 
             // The delegate iterator is finished, so forget it and continue with
             // the outer generator.
+            // &
+            // A .throw or .return when the delegate iterator has no .throw
+            // method, or a missing .next method, always terminate the
+            // yield* loop.
             delegateIterator = undefined;
-            continue;
-          }
-          if (method !== ContextMethod.Return) {
-            method = ContextMethod.Throw;
-            arg = new TypeError(
-              "The iterator does not provide a '" +
-                ContextMethodStrings[method] +
-                "' method",
+          } else {
+            state = GenState.Executing;
+
+            _ = (ctx.next === ContextNext.End ? Context_stop : innerFn).call(
+              self,
+              ctx,
             );
-          }
+            // If an exception is thrown from innerFn, we leave state ===
+            // GenStateExecuting and loop back for another invocation.
+            state = done ? GenState.Completed : GenState.SuspendedYield;
 
-          // Note: ["return"] must be used for ES3 parsing compatibility.
-          if (
-            method === ContextMethod.Throw &&
-            (_ = delegateIterator["return"])
-          ) {
-            // If the delegate iterator has a return method, give it a
-            // chance to clean up.
-            var record = tryCatch(_, delegateIterator);
-
-            if (/* error */ record.e) {
-              arg = record.v;
+            if (_ !== ContinueSentinel) {
+              return {
+                value: _,
+                done: done,
+              };
             }
           }
-
-          // A .throw or .return when the delegate iterator has no .throw
-          // method, or a missing .next method, always terminate the
-          // yield* loop.
-          delegateIterator = undefined;
-          continue;
-        }
-
-        if (method === ContextMethod.Next) {
-          ctx.sent = arg;
-        } else if (method === ContextMethod.Throw) {
-          if (state === GenState.SuspendedStart) {
-            state = GenState.Completed;
-            throw arg;
-          }
-
-          Context_dispatchException(arg);
-        } else if (method === ContextMethod.Return) {
-          Context_abrupt(CompletionType.Return, arg);
-        }
-
-        state = GenState.Executing;
-
-        var record = tryCatch(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-          ctx.next === ContextNext.End ? Context_stop : innerFn,
-          self,
-          ctx,
-        );
-        if (/* error */ record.e) {
+        } catch (e) {
           state = GenState.Completed;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
+          delegateIterator = undefined;
           method = ContextMethod.Throw;
-          arg = record.v;
-        } else {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = done ? GenState.Completed : GenState.SuspendedYield;
-
-          if (record.v === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.v,
-            done: done,
-          };
+          arg = e;
         }
       }
     }
@@ -392,16 +374,13 @@ export default function /* @no-mangle */ _regenerator() {
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         if (entry[0] === TryLoc.Root) {
           // Exception thrown outside of any try block that could handle
           // it, so set the completion value of the entire function to
           // throw the exception.
           handle(ContextNext.End);
-          return false;
-        }
-
-        if (entry[0] != null && entry[0] <= prev) {
+          return;
+        } else if (entry[0] != null && entry[0] <= prev) {
           if (prev < catchLoc) {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
@@ -409,10 +388,10 @@ export default function /* @no-mangle */ _regenerator() {
             arg = undefined;
 
             handle(catchLoc);
-            return true;
+            return;
           } else if (prev < finallyLoc) {
             handle(finallyLoc);
-            return false;
+            return;
           }
         }
       }
@@ -422,7 +401,6 @@ export default function /* @no-mangle */ _regenerator() {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           entry[0] > TryLoc.Root &&
           entry[0] <= ctx.prev &&
           ctx.prev < entry[2]!
