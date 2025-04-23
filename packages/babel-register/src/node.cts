@@ -6,8 +6,8 @@ const hook = require("./hook.cjs");
 const { LocalClient } = require("./worker-client.cjs");
 
 const client = new LocalClient();
-function register(opts = {}) {
-  return hook.register(client, { ...opts });
+function register(opts = {}, regOpts = {}) {
+  return hook.register(client, { ...opts }, { ...regOpts });
 }
 
 module.exports = Object.assign(register, {
