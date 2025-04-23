@@ -200,7 +200,7 @@ describe("try-catch generator", function () {
           break;
         case 11:
           _context7.prev = 11;
-          _t3 = _context7["catch"](2);
+          _t3 = _context7.sent;
           _context7.next = 15;
           return _t3;
         case 15:
@@ -231,7 +231,7 @@ describe("try-catch generator", function () {
           break;
         case 10:
           _context8.prev = 10;
-          _t4 = _context8["catch"](2);
+          _t4 = _context8.sent;
           _context8.next = 14;
           return _t4;
         case 14:
@@ -264,7 +264,7 @@ describe("nested generators in try-catch", function () {
           break;
         case 4:
           _context0.prev = 4;
-          _t5 = _context0["catch"](0);
+          _t5 = _context0.sent;
           _context0.next = 8;
           return /*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
             return babelHelpers.regenerator().w(function (_context9) {
@@ -541,7 +541,7 @@ describe("try-finally generator", function () {
             break;
           case 11:
             _context13.prev = 11;
-            _t6 = _context13["catch"](7);
+            _t6 = _context13.sent;
             assert.strictEqual(_t6, wrong);
             _context13.next = 16;
             return 2;
@@ -794,7 +794,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 11:
           _context18.prev = 11;
-          _t7 = _context18["catch"](3);
+          _t7 = _context18.sent;
           _context18.next = 15;
           return _t7;
         case 15:
@@ -810,7 +810,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 22:
           _context18.prev = 22;
-          _t8 = _context18["catch"](2);
+          _t8 = _context18.sent;
           _context18.next = 26;
           return _t8;
         case 26:
@@ -842,7 +842,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 11:
           _context19.prev = 11;
-          _t9 = _context19["catch"](3);
+          _t9 = _context19.sent;
           _context19.next = 15;
           return _t9;
         case 15:
@@ -858,7 +858,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 22:
           _context19.prev = 22;
-          _t0 = _context19["catch"](2);
+          _t0 = _context19.sent;
           _context19.next = 26;
           return _t0;
         case 26:
@@ -898,7 +898,7 @@ describe("try-catch-finally generator", function () {
             throw error;
           case 11:
             _context20.prev = 11;
-            _t10 = _context20["catch"](0);
+            _t10 = _context20.sent;
             assert.strictEqual(_t10, error);
             _context20.next = 16;
             return "b";
@@ -1031,7 +1031,7 @@ describe("try-catch-finally generator", function () {
             break;
           case 8:
             _context22.prev = 8;
-            _t11 = _context22["catch"](2);
+            _t11 = _context22.sent;
             assert.strictEqual(_t11, error);
             markers.push("catch");
             return _context22.abrupt(3, 1);
@@ -1080,7 +1080,7 @@ describe("dynamic exception", function () {
           return _context23.abrupt(4, fns[fname](x));
         case 4:
           _context23.prev = 4;
-          _t12 = _context23["catch"](0);
+          _t12 = _context23.sent;
           _context23.next = 8;
           return _t12;
         case 8:
@@ -1124,7 +1124,7 @@ describe("nested finally blocks", function () {
           break;
         case 10:
           _context24.prev = 10;
-          _t13 = _context24["catch"](1);
+          _t13 = _context24.sent;
           _context24.next = 14;
           return _t13;
         case 14:
@@ -1164,7 +1164,7 @@ describe("nested finally blocks", function () {
           break;
         case 10:
           _context25.prev = 10;
-          _t14 = _context25["catch"](1);
+          _t14 = _context25.sent;
           _context25.next = 14;
           return _t14;
         case 14:
@@ -1905,7 +1905,7 @@ describe("generator reentry attempt", function () {
           break;
         case 6:
           _context44.prev = 6;
-          _t64 = _context44["catch"](0);
+          _t64 = _context44.sent;
           _context44.next = 10;
           return _t64;
         case 10:
@@ -2117,7 +2117,7 @@ describe("delegated yield", function () {
             break;
           case 8:
             _context52.prev = 8;
-            _t65 = _context52["catch"](0);
+            _t65 = _context52.sent;
             _context52.next = 12;
             return _t65.message;
           case 12:
@@ -2175,7 +2175,7 @@ describe("delegated yield", function () {
             break;
           case 5:
             _context54.prev = 5;
-            _t66 = _context54["catch"](1);
+            _t66 = _context54.sent;
           case 7:
             return _context54.delegateYield(inner(), 8);
           case 8:
@@ -2232,7 +2232,7 @@ describe("delegated yield", function () {
             return _context56.abrupt(4, _context56.sent);
           case 5:
             _context56.prev = 5;
-            _t67 = _context56["catch"](0);
+            _t67 = _context56.sent;
             return _context56.abrupt(4, _t67);
           case 8:
             return _context56.stop();
@@ -2684,7 +2684,7 @@ describe("delegated yield", function () {
             break;
           case 5:
             _context70.prev = 5;
-            _t69 = _context70["catch"](0);
+            _t69 = _context70.sent;
             assert.ok(false, "should not have executed the catch handler");
           case 8:
             _context70.prev = 8;
@@ -3239,7 +3239,7 @@ describe("catch parameter shadowing", function () {
             throw x + 2;
           case 5:
             _context90.prev = 5;
-            _t70 = _context90["catch"](1);
+            _t70 = _context90.sent;
             _context90.next = 9;
             return _t70;
           case 9:
@@ -3254,7 +3254,7 @@ describe("catch parameter shadowing", function () {
             throw x + 3;
           case 18:
             _context90.prev = 18;
-            _t71 = _context90["catch"](14);
+            _t71 = _context90.sent;
             _context90.next = 22;
             return _t71;
           case 22:
@@ -3285,7 +3285,7 @@ describe("catch parameter shadowing", function () {
             throw x;
           case 4:
             _context91.prev = 4;
-            _t72 = _context91["catch"](0);
+            _t72 = _context91.sent;
             _context91.next = 8;
             return _t72;
           case 8:
@@ -3335,7 +3335,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 4:
             _context92.prev = 4;
-            _t73 = _context92["catch"](0);
+            _t73 = _context92.sent;
             _context92.next = 8;
             return _t73;
           case 8:
@@ -3345,7 +3345,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 12:
             _context92.prev = 12;
-            _t74 = _context92["catch"](8);
+            _t74 = _context92.sent;
             _context92.next = 16;
             return _t74;
           case 16:
@@ -3377,7 +3377,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 8:
             _context93.prev = 8;
-            _t75 = _context93["catch"](0);
+            _t75 = _context93.sent;
             _context93.next = 12;
             return 3;
           case 12:
@@ -3563,7 +3563,7 @@ describe("generator .throw method", function () {
             break;
           case 4:
             _context98.prev = 4;
-            _t85 = _context98["catch"](0);
+            _t85 = _context98.sent;
             return _context98.abrupt(4, -1);
           case 7:
             return _context98.abrupt(4, 1);
@@ -3585,7 +3585,7 @@ describe("generator .throw method", function () {
             break;
           case 5:
             _context99.prev = 5;
-            _t86 = _context99["catch"](0);
+            _t86 = _context99.sent;
             return _context99.abrupt(4);
           case 8:
             return _context99.stop();
@@ -3611,7 +3611,7 @@ describe("generator .throw method", function () {
             break;
           case 4:
             _context100.prev = 4;
-            _t87 = _context100["catch"](0);
+            _t87 = _context100.sent;
             return _context100.abrupt(4, -1);
           case 7:
             return _context100.abrupt(4, 1);
@@ -4565,7 +4565,7 @@ describe("for-of loops", function () {
             break;
           case 26:
             _context126.prev = 26;
-            _t98 = _context126["catch"](8);
+            _t98 = _context126.sent;
             _iterator3.e(_t98);
           case 29:
             _context126.prev = 29;

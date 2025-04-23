@@ -728,7 +728,7 @@ export class Emitter {
 
             const bodyPath = path.get("handler.body");
             const safeParam = self.makeTempVar();
-            self.clearPendingException(tryEntry.firstLoc, safeParam);
+            this.emitAssign(safeParam, self.contextProperty("sent"));
 
             bodyPath.traverse(catchParamVisitor, {
               getSafeParam: () => t.cloneNode(safeParam),

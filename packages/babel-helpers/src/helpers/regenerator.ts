@@ -334,7 +334,6 @@ export default function /* @no-mangle */ _regenerator() {
       stop: Context_stop,
       abrupt: Context_abrupt,
       finish: Context_finish,
-      catch: Context_catch,
       delegateYield: Context_delegateYield,
     };
 
@@ -344,17 +343,7 @@ export default function /* @no-mangle */ _regenerator() {
     }
 
     function Context_dispatchException(exception: any) {
-      if (done) {
-        throw exception;
-      }
-
-      function handle(loc: number) {
-        record.type = CompletionType.Throw;
-        record.arg = exception;
-        ctx.next = loc;
-      }
-
-      for (var i = tryEntries.length - 1; i >= 0; --i) {
+      for (var i = tryEntries.length - 1; !done && i >= 0; --i) {
         var entry = tryEntries[i];
         var record = entry[4]!;
         var prev = ctx.prev;
@@ -366,12 +355,14 @@ export default function /* @no-mangle */ _regenerator() {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
             method = ContextMethod.Next;
-            arg = undefined;
+            ctx.sent = exception;
 
-            handle(catchLoc);
+            ctx.next = catchLoc;
             return;
           } else if (prev < finallyLoc) {
-            handle(finallyLoc);
+            record.type = CompletionType.Throw;
+            record.arg = exception;
+            ctx.next = finallyLoc;
             return;
           }
         }
@@ -441,20 +432,6 @@ export default function /* @no-mangle */ _regenerator() {
           Context_complete(entry[4]!, entry[3]);
           resetTryEntry(entry);
           return ContinueSentinel;
-        }
-      }
-    }
-
-    function Context_catch(tryLoc: number) {
-      for (var i = tryEntries.length - 1; i >= 0; --i) {
-        var entry = tryEntries[i];
-        if (entry[0] === tryLoc) {
-          var record = entry[4]!;
-          if (record.type === CompletionType.Throw) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
         }
       }
     }
