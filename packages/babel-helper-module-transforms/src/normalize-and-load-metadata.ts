@@ -495,13 +495,10 @@ function getLocalExportMetadata(
     let metadata = localMetadata.get(localName);
 
     if (!metadata) {
-      const kind = bindingKindLookup.get(localName);
-
-      if (kind === undefined) {
-        throw idPath.buildCodeFrameError(
-          `Exporting local "${localName}", which is not declared.`,
-        );
-      }
+      // If localName is not found in the bindingKindLookup generated
+      // from top level declarations, it must be a reference to a var
+      // declaration defined within block statement or switch case
+      const kind = bindingKindLookup.get(localName) ?? "var";
 
       metadata = {
         names: [],
