@@ -16,11 +16,6 @@ const enum CompletionType {
   Return,
 }
 
-type Completion = {
-  type: CompletionType;
-  arg?: any;
-};
-
 const enum ContextNext {
   End = -1,
 }
@@ -38,7 +33,7 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, completion?: Completion];
+type TryEntry = [...TryLocs, recordType?: CompletionType, recordArg?: any];
 
 type Context = {
   prev: number;
@@ -48,7 +43,7 @@ type Context = {
   stop?(): any;
   dispatchException?(exception: any): boolean | undefined;
   abrupt?(type: CompletionType, arg: any): any;
-  complete?(record: Completion, afterLoc?: number): any;
+  complete?(recordType: CompletionType, recordArg: any, afterLoc?: number): any;
   finish?(finallyLoc: number): any;
   catch?(tryLoc: number): any;
   delegateYield?(iterable: any, nextLoc: number): any;
@@ -306,13 +301,6 @@ export default function /* @no-mangle */ _regenerator() {
       }
     }
 
-    function resetTryEntry(entry: TryEntry) {
-      var record = entry[4] || ({} as Completion);
-      record.type = CompletionType.Normal;
-      record.arg = undefined;
-      entry[4] = record;
-    }
-
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
@@ -322,8 +310,6 @@ export default function /* @no-mangle */ _regenerator() {
     var delegateIterator: Iterator<any> | undefined;
     var method = ContextMethod.Next;
     var arg: any = undefined;
-
-    tryEntries.forEach(resetTryEntry);
 
     var ctx: Context = {
       prev: 0,
@@ -345,7 +331,6 @@ export default function /* @no-mangle */ _regenerator() {
     function Context_dispatchException(exception: any) {
       for (var i = tryEntries.length - 1; !done && i >= 0; --i) {
         var entry = tryEntries[i];
-        var record = entry[4]!;
         var prev = ctx.prev;
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
@@ -360,8 +345,8 @@ export default function /* @no-mangle */ _regenerator() {
             ctx.next = catchLoc;
             return;
           } else if (prev < finallyLoc) {
-            record.type = CompletionType.Throw;
-            record.arg = exception;
+            entry[4] = CompletionType.Throw;
+            entry[5] = exception;
             ctx.next = finallyLoc;
             return;
           }
@@ -374,51 +359,53 @@ export default function /* @no-mangle */ _regenerator() {
     function Context_abrupt(type: CompletionType, arg: any) {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
-        if (entry[0] <= ctx.prev && ctx.prev < entry[2]!) {
-          var finallyEntry: TryEntry | null = entry;
+        if (
+          entry[0] <= ctx.prev &&
+          ctx.prev < entry[2]! &&
+          // Ignore the finally entry if control is not jumping to a
+          // location outside the try/catch block.
+          !(
+            (type === CompletionType.Break ||
+              type === CompletionType.Continue) &&
+            entry[0] <= arg &&
+            arg <= entry[2]!
+          )
+        ) {
+          var finallyEntry: TryEntry = entry;
           break;
         }
       }
 
-      if (
-        finallyEntry! &&
-        (type === CompletionType.Break || type === CompletionType.Continue) &&
-        finallyEntry[0] <= arg &&
-        arg <= finallyEntry[2]!
-      ) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry! ? finallyEntry[4]! : ({} as Completion);
-      record.type = type;
-      record.arg = arg;
-
       if (finallyEntry!) {
+        finallyEntry[4] = type;
+        finallyEntry[5] = arg;
         method = ContextMethod.Next;
         ctx.next = finallyEntry[2]!;
         return ContinueSentinel;
       }
 
-      return Context_complete(record);
+      return Context_complete(type, arg);
     }
 
-    function Context_complete(record: Completion, afterLoc?: number) {
-      if (record.type === CompletionType.Throw) {
-        throw record.arg;
+    function Context_complete(
+      recordType: CompletionType,
+      recordArg: any,
+      afterLoc?: number,
+    ) {
+      if (recordType === CompletionType.Throw) {
+        throw recordArg;
       }
 
       if (
-        record.type === CompletionType.Break ||
-        record.type === CompletionType.Continue
+        recordType === CompletionType.Break ||
+        recordType === CompletionType.Continue
       ) {
-        ctx.next = record.arg;
-      } else if (record.type === CompletionType.Return) {
-        rval = arg = record.arg;
+        ctx.next = recordArg;
+      } else if (recordType === CompletionType.Return) {
+        rval = arg = recordArg;
         method = ContextMethod.Return;
         ctx.next = ContextNext.End;
-      } else if (record.type === CompletionType.Normal && afterLoc) {
+      } else if (afterLoc) {
         ctx.next = afterLoc;
       }
 
@@ -429,8 +416,8 @@ export default function /* @no-mangle */ _regenerator() {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (entry[2] === finallyLoc) {
-          Context_complete(entry[4]!, entry[3]);
-          resetTryEntry(entry);
+          Context_complete(entry[4]!, entry[5], entry[3]);
+          entry[4] = CompletionType.Normal;
           return ContinueSentinel;
         }
       }
