@@ -9,6 +9,10 @@ import {
   isRestElement,
   returnStatement,
   isCallExpression,
+  memberExpression,
+  identifier,
+  thisExpression,
+  isPattern,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -63,29 +67,69 @@ const buildDeclarationWrapper = template.statements(`
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
   callId: t.Expression,
+  ignoreFunctionLength: boolean,
 ) {
   const node = path.node;
   const body = node.body;
 
+  let params: Array<t.Identifier | t.Pattern | t.RestElement> = [];
+
+  // Errors thrown during argument evaluation must reject the resulting promise
+  const shoudlForwardParams = node.params.some(p => isPattern(p));
+
+  if (shoudlForwardParams) {
+    params = node.params as typeof params;
+    node.params = [];
+    if (!ignoreFunctionLength) {
+      for (const param of params) {
+        if (isAssignmentPattern(param) || isRestElement(param)) {
+          break;
+        }
+        node.params.push(path.scope.generateUidIdentifier("x"));
+      }
+    }
+  }
+
   const container = functionExpression(
     null,
-    [],
+    params,
     blockStatement(body.body),
     true,
   );
-  body.body = [
-    returnStatement(callExpression(callExpression(callId, [container]), [])),
-  ];
+
+  if (shoudlForwardParams) {
+    // return asyncToGenerator(function*() { ... }).apply(this, arguments);
+    body.body = [
+      returnStatement(
+        callExpression(
+          memberExpression(
+            callExpression(callId, [container]),
+            identifier("apply"),
+          ),
+          [thisExpression(), identifier("arguments")],
+        ),
+      ),
+    ];
+
+    (
+      path.get("body.body.0.argument.callee.object.arguments.0") as NodePath
+    ).unwrapFunctionEnvironment();
+  } else {
+    // return asyncToGenerator(function*() { ... })();
+    body.body = [
+      returnStatement(callExpression(callExpression(callId, [container]), [])),
+    ];
+
+    // Unwrap the wrapper IIFE's environment so super and this and such still work.
+    (
+      path.get("body.body.0.argument.callee.arguments.0") as NodePath
+    ).unwrapFunctionEnvironment();
+  }
 
   // Regardless of whether or not the wrapped function is a an async method
   // or generator the outer function should not be
   node.async = false;
   node.generator = false;
-
-  // Unwrap the wrapper IIFE's environment so super and this and such still work.
-  (
-    path.get("body.body.0.argument.callee.arguments.0") as NodePath
-  ).unwrapFunctionEnvironment();
 }
 
 function plainFunction(
@@ -178,7 +222,7 @@ export default function wrapFunction(
   ignoreFunctionLength: boolean = false,
 ) {
   if (path.isMethod()) {
-    classOrObjectMethod(path, callId);
+    classOrObjectMethod(path, callId, ignoreFunctionLength);
   } else {
     const hadName = "id" in path.node && !!path.node.id;
     if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
