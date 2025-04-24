@@ -14,7 +14,7 @@ function _callee() {
         return 5;
       case 2:
         x = _context.sent;
-        return _context.abrupt(4, 5);
+        return _context.abrupt(2, 5);
       case 4:
         return _context.stop();
     }

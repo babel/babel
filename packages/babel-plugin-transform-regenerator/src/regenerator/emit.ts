@@ -8,21 +8,21 @@ import type { NodePath, PluginPass, Visitor, Scope } from "@babel/core";
 import { types as t } from "@babel/core";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
-const enum CompletionType {
-  Normal = 0,
-  Throw = 1,
-  Break = 2,
-  Continue = 3,
-  Return = 4,
+const enum OperatorType {
+  Next,
+  Throw,
+  Return,
+  Break,
+  Continue,
 }
 
 type AbruptCompletion =
   | {
-      type: CompletionType.Break | CompletionType.Continue;
+      type: OperatorType.Break | OperatorType.Continue;
       target: t.NumericLiteral;
     }
   | {
-      type: CompletionType.Return | CompletionType.Throw;
+      type: OperatorType.Return | OperatorType.Throw;
       value: t.Expression | null;
     };
 
@@ -588,7 +588,7 @@ export class Emitter {
 
       case "BreakStatement":
         self.emitAbruptCompletion({
-          type: CompletionType.Break,
+          type: OperatorType.Break,
           target: self.leapManager.getBreakLoc(path.node.label),
         });
 
@@ -596,7 +596,7 @@ export class Emitter {
 
       case "ContinueStatement":
         self.emitAbruptCompletion({
-          type: CompletionType.Continue,
+          type: OperatorType.Continue,
           target: self.leapManager.getContinueLoc(path.node.label),
         });
 
@@ -678,7 +678,7 @@ export class Emitter {
 
       case "ReturnStatement":
         self.emitAbruptCompletion({
-          type: CompletionType.Return,
+          type: OperatorType.Return,
           value: self.explodeExpression(path.get("argument")),
         });
 
@@ -793,15 +793,15 @@ export class Emitter {
     ];
 
     if (
-      record.type === CompletionType.Break ||
-      record.type === CompletionType.Continue
+      record.type === OperatorType.Break ||
+      record.type === OperatorType.Continue
     ) {
       abruptArgs[1] = this.insertedLocs.has(record.target)
         ? record.target
         : t.cloneNode(record.target);
     } else if (
-      record.type === CompletionType.Return ||
-      record.type === CompletionType.Throw
+      record.type === OperatorType.Return ||
+      record.type === OperatorType.Throw
     ) {
       if (record.value) {
         abruptArgs[1] = t.cloneNode(record.value);

@@ -11,7 +11,7 @@ function foo() {
         return _context.delegateYield(bar(), 3);
       case 3:
         _t2 = _context.sent;
-        return _context.abrupt(4, _t + _t2);
+        return _context.abrupt(2, _t + _t2);
       case 5:
         return _context.stop();
     }
@@ -30,7 +30,7 @@ function bar() {
         return 3;
       case 5:
         _t4 = _context2.sent;
-        return _context2.abrupt(4, _t3 + _t4);
+        return _context2.abrupt(2, _t3 + _t4);
       case 7:
         return _context2.stop();
     }

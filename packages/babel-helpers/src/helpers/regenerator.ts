@@ -8,22 +8,23 @@ import define from "./regeneratorDefine.ts";
 import defineIteratorMethods from "./regeneratorDefineIM.ts";
 import values from "./regeneratorValues.ts";
 
-const enum CompletionType {
-  Normal,
+const enum GenState {
+  SuspendedStart = 1,
+  SuspendedYield = 2,
+  Executing = 3,
+  Completed = 4,
+}
+
+const enum OperatorType {
+  Next,
   Throw,
+  Return,
   Break,
   Continue,
-  Return,
 }
 
 const enum ContextNext {
   End = -1,
-}
-
-const enum ContextMethod {
-  Next,
-  Throw,
-  Return,
 }
 
 type TryLocs = [
@@ -33,7 +34,7 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, recordType?: CompletionType, recordArg?: any];
+type TryEntry = [...TryLocs, recordType?: OperatorType, recordArg?: any];
 
 type Context = {
   prev: number;
@@ -42,19 +43,12 @@ type Context = {
 
   stop?(): any;
   dispatchException?(exception: any): boolean | undefined;
-  abrupt?(type: CompletionType, arg: any): any;
-  complete?(recordType: CompletionType, recordArg: any, afterLoc?: number): any;
+  abrupt?(type: OperatorType, arg: any): any;
+  complete?(recordType: OperatorType, recordArg: any, afterLoc?: number): any;
   finish?(finallyLoc: number): any;
   catch?(tryLoc: number): any;
   delegateYield?(iterable: any, nextLoc: number): any;
 };
-
-const enum GenState {
-  SuspendedStart = 1,
-  SuspendedYield = 2,
-  Executing = 3,
-  Completed = 4,
-}
 
 export default function /* @no-mangle */ _regenerator() {
   "use strict";
@@ -68,7 +62,7 @@ export default function /* @no-mangle */ _regenerator() {
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  var ContextMethodStrings = ["next", "throw", "return"] as const;
+  var OperatorTypeStrings = ["next", "throw", "return"] as const;
   var _: any;
 
   function wrap(
@@ -180,19 +174,19 @@ export default function /* @no-mangle */ _regenerator() {
     var state = GenState.SuspendedStart;
 
     function invoke(
-      _method: ContextMethod | "next" | "throw" | "return",
+      _method: OperatorType | "next" | "throw" | "return",
       _arg: any,
     ) {
-      _method = ContextMethodStrings.indexOf(
+      _method = OperatorTypeStrings.indexOf(
         _method as "next" | "throw" | "return",
-      ) as ContextMethod;
+      ) as OperatorType;
 
       if (state === GenState.Executing) {
         throw new Error("Generator is already running");
       }
 
       if (state === GenState.Completed) {
-        if (_method === ContextMethod.Throw) {
+        if (_method === OperatorType.Throw) {
           throw _arg;
         }
 
@@ -207,27 +201,29 @@ export default function /* @no-mangle */ _regenerator() {
 
       while (true) {
         if (!delegateIterator) {
-          if (method === ContextMethod.Next) {
+          if (method === OperatorType.Next) {
             ctx.sent = arg;
-          } else if (method === ContextMethod.Throw) {
+          } else if (method === OperatorType.Throw) {
             if (state === GenState.SuspendedStart) {
               state = GenState.Completed;
               throw arg;
             }
 
             Context_dispatchException(arg);
-          } else if (method === ContextMethod.Return) {
-            Context_abrupt(CompletionType.Return, arg);
+          } else if (method === OperatorType.Return) {
+            Context_abrupt(OperatorType.Return, arg);
           }
         }
         try {
           if (delegateIterator) {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
-            if ((_ = delegateIterator[ContextMethodStrings[method]])) {
+            if (
+              (_ = delegateIterator[OperatorTypeStrings[method as 0 | 1 | 2]])
+            ) {
               if ((_ = _.call(delegateIterator, arg))) {
                 if (!_) {
-                  method = ContextMethod.Throw;
+                  method = OperatorType.Throw;
                   arg = new TypeError("iterator result is not an object");
                 }
                 if (!_.done) {
@@ -241,15 +237,15 @@ export default function /* @no-mangle */ _regenerator() {
                 // "consumed" by the delegate iterator. If context.method was
                 // "return", allow the original .return call to continue in the
                 // outer generator.
-                if (method !== ContextMethod.Return) {
-                  method = ContextMethod.Next;
+                if (method !== OperatorType.Return) {
+                  method = OperatorType.Next;
                   arg = _.value;
                 }
               }
             } else {
               // Note: ["return"] must be used for ES3 parsing compatibility.
               if (
-                method === ContextMethod.Throw &&
+                method === OperatorType.Throw &&
                 (_ = delegateIterator["return"])
               ) {
                 // If the delegate iterator has a return method, give it a
@@ -257,11 +253,11 @@ export default function /* @no-mangle */ _regenerator() {
                 _.call(delegateIterator);
               }
 
-              if (method !== ContextMethod.Return) {
-                method = ContextMethod.Throw;
+              if (method !== OperatorType.Return) {
+                method = OperatorType.Throw;
                 arg = new TypeError(
                   "The iterator does not provide a '" +
-                    ContextMethodStrings[method] +
+                    OperatorTypeStrings[method] +
                     "' method",
                 );
               }
@@ -295,7 +291,7 @@ export default function /* @no-mangle */ _regenerator() {
         } catch (e) {
           state = GenState.Completed;
           delegateIterator = undefined;
-          method = ContextMethod.Throw;
+          method = OperatorType.Throw;
           arg = e;
         }
       }
@@ -308,7 +304,7 @@ export default function /* @no-mangle */ _regenerator() {
     var rval: any;
     var done = false;
     var delegateIterator: Iterator<any> | undefined;
-    var method = ContextMethod.Next;
+    var method = OperatorType.Next;
     var arg: any = undefined;
 
     var ctx: Context = {
@@ -339,13 +335,13 @@ export default function /* @no-mangle */ _regenerator() {
           if (prev < catchLoc) {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
-            method = ContextMethod.Next;
+            method = OperatorType.Next;
             ctx.sent = exception;
 
             ctx.next = catchLoc;
             return;
           } else if (prev < finallyLoc) {
-            entry[4] = CompletionType.Throw;
+            entry[4] = OperatorType.Throw;
             entry[5] = exception;
             ctx.next = finallyLoc;
             return;
@@ -356,7 +352,7 @@ export default function /* @no-mangle */ _regenerator() {
       throw exception;
     }
 
-    function Context_abrupt(type: CompletionType, arg: any) {
+    function Context_abrupt(type: OperatorType, arg: any) {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (
@@ -365,8 +361,7 @@ export default function /* @no-mangle */ _regenerator() {
           // Ignore the finally entry if control is not jumping to a
           // location outside the try/catch block.
           !(
-            (type === CompletionType.Break ||
-              type === CompletionType.Continue) &&
+            (type === OperatorType.Break || type === OperatorType.Continue) &&
             entry[0] <= arg &&
             arg <= entry[2]!
           )
@@ -379,7 +374,7 @@ export default function /* @no-mangle */ _regenerator() {
       if (finallyEntry!) {
         finallyEntry[4] = type;
         finallyEntry[5] = arg;
-        method = ContextMethod.Next;
+        method = OperatorType.Next;
         ctx.next = finallyEntry[2]!;
         return ContinueSentinel;
       }
@@ -388,22 +383,23 @@ export default function /* @no-mangle */ _regenerator() {
     }
 
     function Context_complete(
-      recordType: CompletionType,
+      recordType: OperatorType,
       recordArg: any,
       afterLoc?: number,
     ) {
-      if (recordType === CompletionType.Throw) {
-        throw recordArg;
+      if (recordType === OperatorType.Throw) {
+        method = OperatorType.Throw;
+        arg = recordArg;
       }
 
       if (
-        recordType === CompletionType.Break ||
-        recordType === CompletionType.Continue
+        recordType === OperatorType.Break ||
+        recordType === OperatorType.Continue
       ) {
         ctx.next = recordArg;
-      } else if (recordType === CompletionType.Return) {
+      } else if (recordType === OperatorType.Return) {
         rval = arg = recordArg;
-        method = ContextMethod.Return;
+        method = OperatorType.Return;
         ctx.next = ContextNext.End;
       } else if (afterLoc) {
         ctx.next = afterLoc;
@@ -417,7 +413,7 @@ export default function /* @no-mangle */ _regenerator() {
         var entry = tryEntries[i];
         if (entry[2] === finallyLoc) {
           Context_complete(entry[4]!, entry[5], entry[3]);
-          entry[4] = CompletionType.Normal;
+          entry[4] = OperatorType.Next;
           return ContinueSentinel;
         }
       }

@@ -66,7 +66,7 @@ describe("simple argument yielder", function () {
             return 0;
           case 5:
             _t2 = _context4.sent;
-            return _context4.abrupt(4, _t + _t2);
+            return _context4.abrupt(2, _t + _t2);
           case 7:
             return _context4.stop();
         }
@@ -140,7 +140,7 @@ describe("collatz generator", function () {
           _context6.next = 3;
           break;
         case 14:
-          return _context6.abrupt(4, count);
+          return _context6.abrupt(2, count);
         case 15:
           return _context6.stop();
       }
@@ -318,12 +318,12 @@ describe("try-finally generator", function () {
           _context1.next = 12;
           return 4;
         case 12:
-          return _context1.abrupt(4, 5);
+          return _context1.abrupt(2, 5);
         case 13:
           _context1.next = 15;
           return 6;
         case 15:
-          return _context1.abrupt(4, 7);
+          return _context1.abrupt(2, 7);
         case 17:
           return _context1.stop();
       }
@@ -352,12 +352,12 @@ describe("try-finally generator", function () {
           _context10.next = 12;
           return 4;
         case 12:
-          return _context10.abrupt(4, 5);
+          return _context10.abrupt(2, 5);
         case 13:
           _context10.next = 15;
           return 6;
         case 15:
-          return _context10.abrupt(4, 7);
+          return _context10.abrupt(2, 7);
         case 17:
           return _context10.stop();
       }
@@ -378,20 +378,20 @@ describe("try-finally generator", function () {
             _context11.next = 9;
             break;
           }
-          return _context11.abrupt(4, 2);
+          return _context11.abrupt(2, 2);
         case 9:
           if (!(abruptType === "break")) {
             _context11.next = 13;
             break;
           }
-          return _context11.abrupt(2, 33);
+          return _context11.abrupt(3, 33);
         case 13:
           if (!(abruptType === "continue")) {
             _context11.next = 16;
             break;
           }
           abruptType = "return";
-          return _context11.abrupt(3, 31);
+          return _context11.abrupt(4, 31);
         case 16:
           _context11.prev = 16;
           _context11.next = 19;
@@ -401,27 +401,27 @@ describe("try-finally generator", function () {
             _context11.next = 23;
             break;
           }
-          return _context11.abrupt(4, 4);
+          return _context11.abrupt(2, 4);
         case 23:
           if (!(finallyAbruptType === "break")) {
             _context11.next = 27;
             break;
           }
-          return _context11.abrupt(2, 33);
+          return _context11.abrupt(3, 33);
         case 27:
           if (!(finallyAbruptType === "continue")) {
             _context11.next = 30;
             break;
           }
           finallyAbruptType = null;
-          return _context11.abrupt(3, 31);
+          return _context11.abrupt(4, 31);
         case 30:
           return _context11.finish(16);
         case 31:
           _context11.next = 2;
           break;
         case 33:
-          return _context11.abrupt(4, 5);
+          return _context11.abrupt(2, 5);
         case 34:
           return _context11.stop();
       }
@@ -589,7 +589,7 @@ describe("try-finally generator", function () {
             _context14.next = 6;
             return 1;
           case 6:
-            return _context14.abrupt(2, 9);
+            return _context14.abrupt(3, 9);
           case 9:
             _context14.prev = 9;
             _context14.next = 12;
@@ -616,10 +616,10 @@ describe("try-finally generator", function () {
             _context15.next = 3;
             return 1;
           case 3:
-            return _context15.abrupt(4, _context15.sent);
+            return _context15.abrupt(2, _context15.sent);
           case 4:
             _context15.prev = 4;
-            return _context15.abrupt(4, 3);
+            return _context15.abrupt(2, 3);
           case 7:
             return _context15.stop();
         }
@@ -653,21 +653,21 @@ describe("try-finally generator", function () {
             _context16.next = 4;
             return 1;
           case 4:
-            return _context16.abrupt(4, _context16.sent);
+            return _context16.abrupt(2, _context16.sent);
           case 5:
             _context16.prev = 5;
-            return _context16.abrupt(4, 2);
+            return _context16.abrupt(2, 2);
           case 8:
             _context16.prev = 8;
             _context16.prev = 9;
-            return _context16.abrupt(4, 3);
+            return _context16.abrupt(2, 3);
           case 11:
             _context16.prev = 11;
             if (!condition) {
               _context16.next = 14;
               break;
             }
-            return _context16.abrupt(4, 4);
+            return _context16.abrupt(2, 4);
           case 14:
             return _context16.finish(11);
           case 15:
@@ -712,24 +712,24 @@ describe("try-finally generator", function () {
             _context17.next = 4;
             return 1;
           case 4:
-            return _context17.abrupt(4, _context17.sent);
+            return _context17.abrupt(2, _context17.sent);
           case 5:
             _context17.prev = 5;
-            return _context17.abrupt(4, 2);
+            return _context17.abrupt(2, 2);
           case 8:
             _context17.prev = 8;
             _context17.prev = 9;
             _context17.next = 12;
             return "oyez";
           case 12:
-            return _context17.abrupt(4, _context17.sent);
+            return _context17.abrupt(2, _context17.sent);
           case 13:
             _context17.prev = 13;
             if (!condition) {
               _context17.next = 16;
               break;
             }
-            return _context17.abrupt(4, 4);
+            return _context17.abrupt(2, 4);
           case 16:
             return _context17.finish(13);
           case 17:
@@ -891,9 +891,9 @@ describe("try-catch-finally generator", function () {
             _context20.next = 6;
             return "a";
           case 6:
-            return _context20.abrupt(2, 8);
+            return _context20.abrupt(3, 8);
           case 7:
-            return _context20.abrupt(2, 8);
+            return _context20.abrupt(3, 8);
           case 8:
             throw error;
           case 11:
@@ -906,7 +906,7 @@ describe("try-catch-finally generator", function () {
             _context20.next = 18;
             return "c";
           case 18:
-            return _context20.abrupt(2, 20);
+            return _context20.abrupt(3, 20);
           case 19:
             if (false) {
               _context20.next = 16;
@@ -916,7 +916,7 @@ describe("try-catch-finally generator", function () {
             _context20.next = 22;
             return "d";
           case 22:
-            return _context20.abrupt(2, 24);
+            return _context20.abrupt(3, 24);
           case 23:
             if (false) {
               _context20.next = 16;
@@ -971,12 +971,12 @@ describe("try-catch-finally generator", function () {
             _context21.next = 12;
             return 2;
           case 12:
-            return _context21.abrupt(3, 1);
+            return _context21.abrupt(4, 1);
           case 15:
             _context21.next = 17;
             return 3;
           case 17:
-            return _context21.abrupt(2, 20);
+            return _context21.abrupt(3, 20);
           case 18:
             _context21.next = 5;
             break;
@@ -984,7 +984,7 @@ describe("try-catch-finally generator", function () {
             _context21.next = 22;
             return 4;
           case 22:
-            return _context21.abrupt(2, 31);
+            return _context21.abrupt(3, 31);
           case 23:
             _context21.prev = 23;
             _context21.next = 26;
@@ -1034,7 +1034,7 @@ describe("try-catch-finally generator", function () {
             _t11 = _context22.sent;
             assert.strictEqual(_t11, error);
             markers.push("catch");
-            return _context22.abrupt(3, 1);
+            return _context22.abrupt(4, 1);
           case 13:
             _context22.prev = 13;
             markers.push("finally");
@@ -1077,7 +1077,7 @@ describe("dynamic exception", function () {
       while (1) switch (_context23.prev = _context23.next) {
         case 0:
           _context23.prev = 0;
-          return _context23.abrupt(4, fns[fname](x));
+          return _context23.abrupt(2, fns[fname](x));
         case 4:
           _context23.prev = 4;
           _t12 = _context23.sent;
@@ -1219,7 +1219,7 @@ describe("for-in loop generator", function () {
             _context26.next = 3;
             break;
           case 11:
-            return _context26.abrupt(4, count);
+            return _context26.abrupt(2, count);
           case 12:
             return _context26.stop();
         }
@@ -1253,7 +1253,7 @@ describe("for-in loop generator", function () {
               _context27.next = 9;
               break;
             }
-            return _context27.abrupt(2, 14);
+            return _context27.abrupt(3, 14);
           case 9:
             count += 1;
             _context27.next = 12;
@@ -1262,7 +1262,7 @@ describe("for-in loop generator", function () {
             _context27.next = 4;
             break;
           case 14:
-            return _context27.abrupt(4, count);
+            return _context27.abrupt(2, count);
           case 15:
             return _context27.stop();
         }
@@ -1303,7 +1303,7 @@ describe("for-in loop generator", function () {
             _context28.next = 3;
             break;
           case 12:
-            return _context28.abrupt(4, count);
+            return _context28.abrupt(2, count);
           case 13:
             return _context28.stop();
         }
@@ -1338,7 +1338,7 @@ describe("for-in loop generator", function () {
             _context29.next = 5;
             break;
           case 12:
-            return _context29.abrupt(4, count);
+            return _context29.abrupt(2, count);
           case 13:
             return _context29.stop();
         }
@@ -1501,7 +1501,7 @@ describe("yield chain", function () {
           _context33.next = 8;
           return _context33.sent;
         case 8:
-          return _context33.abrupt(4, _context33.sent);
+          return _context33.abrupt(2, _context33.sent);
         case 9:
           return _context33.stop();
       }
@@ -1532,7 +1532,7 @@ describe("call expression ordering", function test() {
             return 3;
           case 9:
             _t40 = _context34.sent;
-            return _context34.abrupt(4, _t39(_t40));
+            return _context34.abrupt(2, _t39(_t40));
           case 11:
             return _context34.stop();
         }
@@ -1764,9 +1764,9 @@ describe("switch statement generator", function () {
           _context40.next = _t58;
           break;
         case 27:
-          return _context40.abrupt(4, "first case");
+          return _context40.abrupt(2, "first case");
         case 28:
-          return _context40.abrupt(4, "second case");
+          return _context40.abrupt(2, "second case");
         case 29:
           return _context40.stop();
       }
@@ -1815,7 +1815,7 @@ describe("infinite sequence generator", function () {
             _context42.next = 6;
             break;
           }
-          return _context42.abrupt(4);
+          return _context42.abrupt(2);
         case 6:
           if (!(info.value < stop)) {
             _context42.next = 11;
@@ -1827,7 +1827,7 @@ describe("infinite sequence generator", function () {
           _context42.next = 12;
           break;
         case 11:
-          return _context42.abrupt(4);
+          return _context42.abrupt(2);
         case 12:
           _context42.next = 0;
           break;
@@ -1881,7 +1881,7 @@ describe("generator function expression", function () {
             _context43.next = 6;
             return x + y;
           case 6:
-            return _context43.abrupt(4, x * y);
+            return _context43.abrupt(2, x * y);
           case 7:
             return _context43.stop();
         }
@@ -1909,7 +1909,7 @@ describe("generator reentry attempt", function () {
           _context44.next = 10;
           return _t64;
         case 10:
-          return _context44.abrupt(4, x + 1);
+          return _context44.abrupt(2, x + 1);
         case 11:
           return _context44.stop();
       }
@@ -2067,7 +2067,7 @@ describe("delegated yield", function () {
             _context51.next = 6;
             return _context51.sent;
           case 6:
-            return _context51.abrupt(4, _context51.sent);
+            return _context51.abrupt(2, _context51.sent);
           case 7:
             return _context51.stop();
         }
@@ -2179,7 +2179,7 @@ describe("delegated yield", function () {
           case 7:
             return _context54.delegateYield(inner(), 8);
           case 8:
-            return _context54.abrupt(4, _context54.sent);
+            return _context54.abrupt(2, _context54.sent);
           case 9:
             return _context54.stop();
         }
@@ -2192,7 +2192,7 @@ describe("delegated yield", function () {
             _context55.next = 2;
             return count++;
           case 2:
-            return _context55.abrupt(4, _context55.sent);
+            return _context55.abrupt(2, _context55.sent);
           case 3:
             return _context55.stop();
         }
@@ -2229,11 +2229,11 @@ describe("delegated yield", function () {
             _context56.prev = 0;
             return _context56.delegateYield(delegate, 2);
           case 2:
-            return _context56.abrupt(4, _context56.sent);
+            return _context56.abrupt(2, _context56.sent);
           case 5:
             _context56.prev = 5;
             _t67 = _context56.sent;
-            return _context56.abrupt(4, _t67);
+            return _context56.abrupt(2, _t67);
           case 8:
             return _context56.stop();
         }
@@ -2361,7 +2361,7 @@ describe("delegated yield", function () {
           case 0:
             return _context57.delegateYield(delegate, 1);
           case 1:
-            return _context57.abrupt(4, _context57.sent);
+            return _context57.abrupt(2, _context57.sent);
           case 2:
             return _context57.stop();
         }
@@ -2412,7 +2412,7 @@ describe("delegated yield", function () {
             _context58.prev = 0;
             return _context58.delegateYield(child(), 2);
           case 2:
-            return _context58.abrupt(4, _context58.sent);
+            return _context58.abrupt(2, _context58.sent);
           case 3:
             _context58.prev = 3;
             markers.push("parent");
@@ -2430,7 +2430,7 @@ describe("delegated yield", function () {
             _context59.next = 3;
             return 1;
           case 3:
-            return _context59.abrupt(4, _context59.sent);
+            return _context59.abrupt(2, _context59.sent);
           case 4:
             _context59.prev = 4;
             _context59.next = 7;
@@ -2472,7 +2472,7 @@ describe("delegated yield", function () {
             _context60.next = 2;
             return 1;
           case 2:
-            return _context60.abrupt(4, 2);
+            return _context60.abrupt(2, 2);
           case 3:
             return _context60.stop();
         }
@@ -2484,7 +2484,7 @@ describe("delegated yield", function () {
           case 0:
             return _context61.delegateYield(delegate, 1);
           case 1:
-            return _context61.abrupt(4, _context61.sent);
+            return _context61.abrupt(2, _context61.sent);
           case 2:
             return _context61.stop();
         }
@@ -2522,7 +2522,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context62) {
         while (1) switch (_context62.prev = _context62.next) {
           case 0:
-            return _context62.abrupt(4, arg);
+            return _context62.abrupt(2, arg);
           case 1:
             return _context62.stop();
         }
@@ -2536,7 +2536,7 @@ describe("delegated yield", function () {
             return _context63.delegateYield(delegate, 1);
           case 1:
             _t68 = _context63.sent;
-            return _context63.abrupt(4, 1 + _t68);
+            return _context63.abrupt(2, 1 + _t68);
           case 3:
             return _context63.stop();
         }
@@ -2856,7 +2856,7 @@ describe("function declaration hoisting", function () {
                     _context74.next = 6;
                     return n + 1;
                   case 6:
-                    return _context74.abrupt(4, _context74.sent);
+                    return _context74.abrupt(2, _context74.sent);
                   case 7:
                     return _context74.stop();
                 }
@@ -2869,7 +2869,7 @@ describe("function declaration hoisting", function () {
             assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
             return _context75.delegateYield(inner(n), 6);
           case 6:
-            return _context75.abrupt(4, _context75.sent);
+            return _context75.abrupt(2, _context75.sent);
           case 7:
             return _context75.stop();
         }
@@ -2981,7 +2981,7 @@ describe("the arguments object", function () {
             _context79.next = 2;
             break;
           case 8:
-            return _context79.abrupt(4, result);
+            return _context79.abrupt(2, result);
           case 9:
             return _context79.stop();
         }
@@ -3140,7 +3140,7 @@ describe("the this object", function () {
             _context85.next = 2;
             return this;
           case 2:
-            return _context85.abrupt(4, this);
+            return _context85.abrupt(2, this);
           case 3:
             return _context85.stop();
         }
@@ -3159,7 +3159,7 @@ describe("the this object", function () {
             _context86.next = 2;
             return this;
           case 2:
-            return _context86.abrupt(4, this);
+            return _context86.abrupt(2, this);
           case 3:
             return _context86.stop();
         }
@@ -3178,7 +3178,7 @@ describe("the this object", function () {
       return babelHelpers.regenerator().w(function (_context87) {
         while (1) switch (_context87.prev = _context87.next) {
           case 0:
-            return _context87.abrupt(4, 0);
+            return _context87.abrupt(2, 0);
           case 1:
             return _context87.stop();
         }
@@ -3383,7 +3383,7 @@ describe("catch parameter shadowing", function () {
           case 12:
             _t75.e = "e.e";
             _t75[_t75.message] = "e.oyez";
-            return _context93.abrupt(4, {
+            return _context93.abrupt(2, {
               e: _t75,
               identity: function (x) {
                 var e = x;
@@ -3428,7 +3428,7 @@ describe("empty while loops", function () {
             do {
               // empty do-while loop
             } while (x);
-            return _context94.abrupt(4, gen.toString());
+            return _context94.abrupt(2, gen.toString());
           case 3:
             return _context94.stop();
         }
@@ -3475,7 +3475,7 @@ describe("object literals with multiple yields", function () {
           case 19:
             _t83 = _context95.sent;
             _t84 = [_t82, _t83];
-            return _context95.abrupt(4, {
+            return _context95.abrupt(2, {
               a: _t76,
               b: _t77,
               c: _t81,
@@ -3564,9 +3564,9 @@ describe("generator .throw method", function () {
           case 4:
             _context98.prev = 4;
             _t85 = _context98.sent;
-            return _context98.abrupt(4, -1);
+            return _context98.abrupt(2, -1);
           case 7:
-            return _context98.abrupt(4, 1);
+            return _context98.abrupt(2, 1);
           case 8:
             return _context98.stop();
         }
@@ -3586,7 +3586,7 @@ describe("generator .throw method", function () {
           case 5:
             _context99.prev = 5;
             _t86 = _context99.sent;
-            return _context99.abrupt(4);
+            return _context99.abrupt(2);
           case 8:
             return _context99.stop();
         }
@@ -3612,9 +3612,9 @@ describe("generator .throw method", function () {
           case 4:
             _context100.prev = 4;
             _t87 = _context100.sent;
-            return _context100.abrupt(4, -1);
+            return _context100.abrupt(2, -1);
           case 7:
-            return _context100.abrupt(4, 1);
+            return _context100.abrupt(2, 1);
           case 8:
             return _context100.stop();
         }
@@ -3655,7 +3655,7 @@ describe("unqualified function calls", function () {
             return "dummy";
           case 2:
             _t88 = _context102.sent;
-            return _context102.abrupt(4, _t88());
+            return _context102.abrupt(2, _t88());
           case 4:
             return _context102.stop();
         }
@@ -3688,7 +3688,7 @@ describe("yield* expression results", function () {
           case 2:
             return _context103.delegateYield(bar(), 3);
           case 3:
-            return _context103.abrupt(4, _context103.sent);
+            return _context103.abrupt(2, _context103.sent);
           case 4:
             return _context103.stop();
         }
@@ -3701,7 +3701,7 @@ describe("yield* expression results", function () {
             _context104.next = 2;
             return 1;
           case 2:
-            return _context104.abrupt(4, 2);
+            return _context104.abrupt(2, 2);
           case 3:
             return _context104.stop();
         }
@@ -3733,7 +3733,7 @@ describe("yield* expression results", function () {
             return _context105.delegateYield(bar(), 3);
           case 3:
             _t90 = _context105.sent;
-            return _context105.abrupt(4, _t89 + _t90);
+            return _context105.abrupt(2, _t89 + _t90);
           case 5:
             return _context105.stop();
         }
@@ -3752,7 +3752,7 @@ describe("yield* expression results", function () {
             return 3;
           case 5:
             _t92 = _context106.sent;
-            return _context106.abrupt(4, _t91 + _t92);
+            return _context106.abrupt(2, _t91 + _t92);
           case 7:
             return _context106.stop();
         }
@@ -3828,7 +3828,7 @@ describe("new expressions", function () {
             _context109.next = 11;
             return new _t93(_t94, _t95);
           case 11:
-            return _context109.abrupt(4, _context109.sent);
+            return _context109.abrupt(2, _context109.sent);
           case 12:
             return _context109.stop();
         }
@@ -3961,7 +3961,7 @@ describe("newborn generators", function () {
             return 2;
           case 5:
             _t97 = _context112.sent;
-            return _context112.abrupt(4, [_t96, _t97]);
+            return _context112.abrupt(2, [_t96, _t97]);
           case 7:
             return _context112.stop();
         }
@@ -3973,7 +3973,7 @@ describe("newborn generators", function () {
           case 0:
             return _context113.delegateYield(delegate, 1);
           case 1:
-            return _context113.abrupt(4, _context113.sent);
+            return _context113.abrupt(2, _context113.sent);
           case 2:
             return _context113.stop();
         }
@@ -4017,7 +4017,7 @@ describe("newborn generators", function () {
           case 7:
             sent2 = _context114.sent;
             markers.push(3);
-            return _context114.abrupt(4, [sent1, sent2]);
+            return _context114.abrupt(2, [sent1, sent2]);
           case 10:
             return _context114.stop();
         }
@@ -4047,7 +4047,7 @@ describe("newborn generators", function () {
               break;
             case 10:
               markers.push(4);
-              return _context115.abrupt(4, info.value);
+              return _context115.abrupt(2, info.value);
             case 12:
               return _context115.stop();
           }
@@ -4134,7 +4134,7 @@ describe("newborn generators", function () {
             _context118.next = 6;
             return _context118.sent;
           case 6:
-            return _context118.abrupt(4, _context118.sent);
+            return _context118.abrupt(2, _context118.sent);
           case 7:
             return _context118.stop();
         }
@@ -4159,7 +4159,7 @@ describe("newborn generators", function () {
             _context119.next = 10;
             return _context119.sent;
           case 10:
-            return _context119.abrupt(4, _context119.sent);
+            return _context119.abrupt(2, _context119.sent);
           case 11:
             return _context119.stop();
         }
@@ -4239,7 +4239,7 @@ describe("labeled break and continue statements", function () {
             _context120.next = 29;
             return "breaking";
           case 29:
-            return _context120.abrupt(2, 42);
+            return _context120.abrupt(3, 42);
           case 30:
             if (!(which === "continue")) {
               _context120.next = 34;
@@ -4248,7 +4248,7 @@ describe("labeled break and continue statements", function () {
             _context120.next = 33;
             return "continuing";
           case 33:
-            return _context120.abrupt(3, 39);
+            return _context120.abrupt(4, 39);
           case 34:
             _context120.next = 36;
             return 5;
@@ -4314,7 +4314,7 @@ describe("labeled break and continue statements", function () {
             _context121.next = 8;
             return 2;
           case 8:
-            return _context121.abrupt(2, 11);
+            return _context121.abrupt(3, 11);
           case 11:
             if (!(limit === 3)) {
               _context121.next = 26;
@@ -4327,7 +4327,7 @@ describe("labeled break and continue statements", function () {
               _context121.next = 16;
               break;
             }
-            return _context121.abrupt(2, 26);
+            return _context121.abrupt(3, 26);
           case 16:
             _context121.next = 18;
             return 5;
@@ -4336,7 +4336,7 @@ describe("labeled break and continue statements", function () {
               _context121.next = 20;
               break;
             }
-            return _context121.abrupt(2, 26);
+            return _context121.abrupt(3, 26);
           case 20:
             _context121.next = 22;
             return 6;
@@ -4345,12 +4345,12 @@ describe("labeled break and continue statements", function () {
               _context121.next = 24;
               break;
             }
-            return _context121.abrupt(2, 32);
+            return _context121.abrupt(3, 32);
           case 24:
             _context121.next = 26;
             return 7;
           case 26:
-            return _context121.abrupt(2, 27);
+            return _context121.abrupt(3, 27);
           case 27:
             _context121.next = 29;
             return 8;
@@ -4527,7 +4527,7 @@ describe("for-of loops", function () {
             _context126.next = 3;
             return list;
           case 3:
-            return _context126.abrupt(4, 1);
+            return _context126.abrupt(2, 1);
           case 4:
             count = 0;
             first = list.slice(0, 1);
@@ -4572,7 +4572,7 @@ describe("for-of loops", function () {
             _iterator3.f();
             return _context126.finish(29);
           case 32:
-            return _context126.abrupt(4, count);
+            return _context126.abrupt(2, count);
           case 33:
             return _context126.stop();
         }
@@ -4613,7 +4613,7 @@ describe("expressions containing yield subexpressions", function () {
             };
           case 3:
             _t100 = _context127.sent;
-            return _context127.abrupt(4, _t99 * _t100);
+            return _context127.abrupt(2, _t99 * _t100);
           case 5:
             return _context127.stop();
         }
@@ -4640,7 +4640,7 @@ describe("expressions containing yield subexpressions", function () {
             return "asdf";
           case 3:
             _t102 = _context128.sent;
-            return _context128.abrupt(4, _t101 + _t102);
+            return _context128.abrupt(2, _t101 + _t102);
           case 5:
             return _context128.stop();
         }
@@ -4678,7 +4678,7 @@ describe("expressions containing yield subexpressions", function () {
           case 3:
             _t104 = _context129.sent;
             _t105 = a;
-            return _context129.abrupt(4, [_t103, _t104, _t105]);
+            return _context129.abrupt(2, [_t103, _t104, _t105]);
           case 6:
             return _context129.stop();
         }
@@ -4709,7 +4709,7 @@ describe("expressions containing yield subexpressions", function () {
           case 3:
             _t107 = _context130.sent;
             a = _t106.concat.call(_t106, _t107);
-            return _context130.abrupt(4, a);
+            return _context130.abrupt(2, a);
           case 6:
             return _context130.stop();
         }
@@ -4739,7 +4739,7 @@ describe("expressions containing yield subexpressions", function () {
             return "asdf";
           case 3:
             _t109 = _context131.sent;
-            return _context131.abrupt(4, _t108 + _t109);
+            return _context131.abrupt(2, _t108 + _t109);
           case 5:
             return _context131.stop();
         }
@@ -4768,7 +4768,7 @@ describe("expressions containing yield subexpressions", function () {
             return "foo";
           case 2:
             _t110 = _context132.sent;
-            return _context132.abrupt(4, [0, ..._t110, 3]);
+            return _context132.abrupt(2, [0, ..._t110, 3]);
           case 4:
             return _context132.stop();
         }
@@ -4795,7 +4795,7 @@ describe("expressions containing yield subexpressions", function () {
             return "foo";
           case 2:
             _t111 = _context133.sent;
-            return _context133.abrupt(4, [0, _t111,, 3]);
+            return _context133.abrupt(2, [0, _t111,, 3]);
           case 4:
             return _context133.stop();
         }
