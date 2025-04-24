@@ -21,7 +21,7 @@ Using plugins:
   transform-optional-chaining { firefox < 74 }
   transform-json-strings { firefox < 62 }
   transform-optional-catch-binding { firefox < 58 }
-  transform-parameters { firefox < 53 }
+  transform-parameters { firefox < 52 }
   transform-async-generator-functions { firefox < 57 }
   transform-object-rest-spread { firefox < 55 }
   transform-dotall-regex { firefox < 78 }

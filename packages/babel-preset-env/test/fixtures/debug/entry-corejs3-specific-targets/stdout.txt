@@ -26,7 +26,7 @@ Using plugins:
   transform-optional-chaining { chrome < 80, edge < 80, firefox < 74, ie, ios < 13.4, safari < 13.1 }
   transform-json-strings { chrome < 66, edge < 79, firefox < 62, ie, ios < 12, safari < 12 }
   transform-optional-catch-binding { chrome < 66, edge < 79, firefox < 58, ie, ios < 11.3, safari < 11.1 }
-  transform-parameters { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-parameters { edge < 15, firefox < 52, ie, ios < 10, safari < 10 }
   transform-async-generator-functions { chrome < 63, edge < 79, firefox < 57, ie, ios < 12, safari < 12 }
   transform-object-rest-spread { chrome < 60, edge < 79, firefox < 55, ie, ios < 11.3, safari < 11.1 }
   transform-dotall-regex { chrome < 62, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }

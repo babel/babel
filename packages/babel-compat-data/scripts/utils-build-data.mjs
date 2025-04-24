@@ -100,15 +100,28 @@ const getLowestImplementedVersion = (
 const expandFeatures = features =>
   features.flatMap(feat => {
     if (feat.includes("/")) return [feat];
+    let excludedTests = [];
+    if (Array.isArray(feat)) {
+      [feat, { exclude: excludedTests }] = feat;
+    }
     return compatibilityTests
-      .map(test => test.name)
-      .filter(name => name === feat || name.startsWith(feat + " / "));
+      .filter(
+        test =>
+          test.name === feat ||
+          (test.group === feat &&
+            !excludedTests.includes(test.name.split(" / ")[1]))
+      )
+      .map(test => test.name);
   });
 
 export function generateData(environments, features) {
   const data = {};
 
-  const normalized = {};
+  /**
+   * @type Map<string, string[]>
+   * Normalized map from plugin name to a list of feature names
+   */
+  const normalized = new Map();
   for (const [key, options] of Object.entries(features)) {
     if (options.overwrite) {
       if (!options.replaces || options.features) {
@@ -119,35 +132,34 @@ export function generateData(environments, features) {
       options.features = features[options.replaces].features;
     }
     if (!options.features) {
-      normalized[key] = {
+      normalized.set(key, {
         features: expandFeatures([options]),
-      };
+      });
     } else {
-      normalized[key] = {
+      normalized.set(key, {
         ...options,
         features: expandFeatures(options.features),
-      };
+      });
     }
   }
 
   const overlapping = {};
 
   // Apply bugfixes
-  for (const [key, { features, replaces, overwrite }] of Object.entries(
-    normalized
-  )) {
+  for (const [key, { features, replaces, overwrite }] of normalized.entries()) {
     if (replaces) {
-      if (normalized[replaces].replaces) {
+      const replaceValue = normalized.get(replaces);
+      if (replaceValue.replaces) {
         throw new Error(`Transitive replacement is not supported (${key})`);
       }
 
       if (overwrite) {
-        normalized[key] = {
-          features: normalized[replaces].features,
+        normalized.set(key, {
+          features: replaceValue.features,
           overwrite,
-        };
+        });
       } else {
-        normalized[replaces].features = normalized[replaces].features.filter(
+        replaceValue.features = replaceValue.features.filter(
           feat => !features.includes(feat)
         );
       }
@@ -157,7 +169,7 @@ export function generateData(environments, features) {
     }
   }
 
-  for (const [key, options] of Object.entries(normalized)) {
+  for (const [key, options] of normalized.entries()) {
     const plugin = {};
 
     environments.forEach(env => {
