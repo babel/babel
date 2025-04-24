@@ -1,7 +1,7 @@
-export class A { static self = A }
+export class A { static get self() { return A } }
 
 using x = null;
 
-export class B { static self = B }
+export class B { static get self() { return B } }
 
 A = B = null;

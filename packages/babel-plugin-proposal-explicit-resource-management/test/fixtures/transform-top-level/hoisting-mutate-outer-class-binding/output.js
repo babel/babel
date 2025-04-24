@@ -7,11 +7,15 @@ exports.B = exports.A = void 0;
 try {
   var _usingCtx = babelHelpers.usingCtx();
   var A = class A {
-    static self = A;
+    static get self() {
+      return A;
+    }
   };
   var x = _usingCtx.u(null);
   var B = class B {
-    static self = B;
+    static get self() {
+      return B;
+    }
   };
   exports.A = A = exports.B = B = null;
 } catch (_) {
