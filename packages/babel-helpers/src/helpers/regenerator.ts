@@ -72,7 +72,7 @@ export default function /* @no-mangle */ _regenerator() {
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  var OperatorTypeStrings = ["next", "throw", "return"] as const;
+  var FunctionNameStrings = ["next", "throw", "return"] as const;
   var _: any;
 
   function wrap(
@@ -184,15 +184,12 @@ export default function /* @no-mangle */ _regenerator() {
     var state = GenState.SuspendedStart;
 
     function invoke(
-      _method: OperatorType | "next" | "throw" | "return",
+      _methodName: "next" | "throw" | "return",
+      _method: OperatorType,
       _arg: any,
     ) {
-      _method = OperatorTypeStrings.indexOf(
-        _method as "next" | "throw" | "return",
-      ) as OperatorType;
-
       if (state === GenState.Executing) {
-        throw new Error("Generator is already running");
+        throw Error("Generator is already running");
       } else if (state === GenState.Completed) {
         if (_method === OperatorType.Throw) {
           throw _arg;
@@ -212,11 +209,6 @@ export default function /* @no-mangle */ _regenerator() {
           if (method === OperatorType.Next) {
             ctx.sent = arg;
           } else if (method === OperatorType.Throw) {
-            if (state === GenState.SuspendedStart) {
-              state = GenState.Completed;
-              throw arg;
-            }
-
             Context_dispatchException(arg);
           } else if (method === OperatorType.Return) {
             rval = arg;
@@ -232,11 +224,11 @@ export default function /* @no-mangle */ _regenerator() {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
             if (
-              (_ = delegateIterator[OperatorTypeStrings[method as 0 | 1 | 2]])
+              (_ = delegateIterator[FunctionNameStrings[method as 0 | 1 | 2]])
             ) {
               if ((_ = _.call(delegateIterator, arg))) {
                 if (!_) {
-                  throw new TypeError("iterator result is not an object");
+                  throw TypeError("iterator result is not an object");
                 }
                 if (!_.done) {
                   // Re-yield the result returned by the delegate method.
@@ -267,9 +259,9 @@ export default function /* @no-mangle */ _regenerator() {
 
               if (method !== OperatorType.Return) {
                 method = OperatorType.Throw;
-                arg = new TypeError(
+                arg = TypeError(
                   "The iterator does not provide a '" +
-                    OperatorTypeStrings[method] +
+                    FunctionNameStrings[method] +
                     "' method",
                 );
               }
@@ -337,7 +329,11 @@ export default function /* @no-mangle */ _regenerator() {
     }
 
     function Context_dispatchException(exception: any) {
-      for (var i = tryEntries.length - 1; !done && i >= 0; --i) {
+      for (
+        var i = tryEntries.length - 1;
+        !done && state !== GenState.SuspendedStart && i >= 0;
+        --i
+      ) {
         var entry = tryEntries[i];
         var prev = ctx.prev;
         var catchLoc = entry[1]!;
@@ -372,6 +368,8 @@ export default function /* @no-mangle */ _regenerator() {
         | OperatorType.Return,
       _arg: any,
     ) {
+      method = type;
+      arg = _arg;
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (
@@ -386,19 +384,14 @@ export default function /* @no-mangle */ _regenerator() {
           )
         ) {
           var finallyEntry: TryEntry = entry;
+          finallyEntry[4] = type;
+          finallyEntry[5] = _arg;
+          method = OperatorType.Next;
+          ctx.next = finallyEntry[2]!;
           break;
         }
       }
 
-      if (finallyEntry!) {
-        finallyEntry[4] = type;
-        finallyEntry[5] = _arg;
-        method = OperatorType.Next;
-        ctx.next = finallyEntry[2]!;
-        return ContinueSentinel;
-      }
-      method = type;
-      arg = _arg;
       return ContinueSentinel;
     }
 
