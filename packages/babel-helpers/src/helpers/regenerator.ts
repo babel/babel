@@ -21,6 +21,7 @@ const enum OperatorType {
   Return,
   Break,
   Continue,
+  Noop = 9,
 }
 
 const enum ContextNext {
@@ -34,7 +35,16 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, recordType?: OperatorType, recordArg?: any];
+type TryEntry = [
+  ...TryLocs,
+  recordType?:
+    | OperatorType.Throw
+    | OperatorType.Break
+    | OperatorType.Continue
+    | OperatorType.Return
+    | OperatorType.Noop,
+  recordArg?: any,
+];
 
 type Context = {
   prev: number;
@@ -183,9 +193,7 @@ export default function /* @no-mangle */ _regenerator() {
 
       if (state === GenState.Executing) {
         throw new Error("Generator is already running");
-      }
-
-      if (state === GenState.Completed) {
+      } else if (state === GenState.Completed) {
         if (_method === OperatorType.Throw) {
           throw _arg;
         }
@@ -211,7 +219,12 @@ export default function /* @no-mangle */ _regenerator() {
 
             Context_dispatchException(arg);
           } else if (method === OperatorType.Return) {
+            rval = arg;
+            ctx.next = ContextNext.End;
             Context_abrupt(OperatorType.Return, arg);
+          } else {
+            // OperatorType.Break | OperatorType.Continue | OperatorType.Noop
+            ctx.next = arg;
           }
         }
         try {
@@ -223,8 +236,7 @@ export default function /* @no-mangle */ _regenerator() {
             ) {
               if ((_ = _.call(delegateIterator, arg))) {
                 if (!_) {
-                  method = OperatorType.Throw;
-                  arg = new TypeError("iterator result is not an object");
+                  throw new TypeError("iterator result is not an object");
                 }
                 if (!_.done) {
                   // Re-yield the result returned by the delegate method.
@@ -305,7 +317,7 @@ export default function /* @no-mangle */ _regenerator() {
     var done = false;
     var delegateIterator: Iterator<any> | undefined;
     var method = OperatorType.Next;
-    var arg: any = undefined;
+    var arg: any;
 
     var ctx: Context = {
       prev: 0,
@@ -352,7 +364,14 @@ export default function /* @no-mangle */ _regenerator() {
       throw exception;
     }
 
-    function Context_abrupt(type: OperatorType, arg: any) {
+    function Context_abrupt(
+      type:
+        | OperatorType.Throw
+        | OperatorType.Break
+        | OperatorType.Continue
+        | OperatorType.Return,
+      _arg: any,
+    ) {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (
@@ -362,8 +381,8 @@ export default function /* @no-mangle */ _regenerator() {
           // location outside the try/catch block.
           !(
             (type === OperatorType.Break || type === OperatorType.Continue) &&
-            entry[0] <= arg &&
-            arg <= entry[2]!
+            entry[0] <= _arg &&
+            _arg <= entry[2]!
           )
         ) {
           var finallyEntry: TryEntry = entry;
@@ -373,38 +392,13 @@ export default function /* @no-mangle */ _regenerator() {
 
       if (finallyEntry!) {
         finallyEntry[4] = type;
-        finallyEntry[5] = arg;
+        finallyEntry[5] = _arg;
         method = OperatorType.Next;
         ctx.next = finallyEntry[2]!;
         return ContinueSentinel;
       }
-
-      return Context_complete(type, arg);
-    }
-
-    function Context_complete(
-      recordType: OperatorType,
-      recordArg: any,
-      afterLoc?: number,
-    ) {
-      if (recordType === OperatorType.Throw) {
-        method = OperatorType.Throw;
-        arg = recordArg;
-      }
-
-      if (
-        recordType === OperatorType.Break ||
-        recordType === OperatorType.Continue
-      ) {
-        ctx.next = recordArg;
-      } else if (recordType === OperatorType.Return) {
-        rval = arg = recordArg;
-        method = OperatorType.Return;
-        ctx.next = ContextNext.End;
-      } else if (afterLoc) {
-        ctx.next = afterLoc;
-      }
-
+      method = type;
+      arg = _arg;
       return ContinueSentinel;
     }
 
@@ -412,8 +406,9 @@ export default function /* @no-mangle */ _regenerator() {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (entry[2] === finallyLoc) {
-          Context_complete(entry[4]!, entry[5], entry[3]);
-          entry[4] = OperatorType.Next;
+          method = entry[4]! || OperatorType.Noop;
+          arg = method === OperatorType.Noop ? entry[3]! : entry[5];
+          entry[4] = OperatorType.Noop;
           return ContinueSentinel;
         }
       }

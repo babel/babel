@@ -9,8 +9,7 @@ import { types as t } from "@babel/core";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
 const enum OperatorType {
-  Next,
-  Throw,
+  Throw = 1,
   Return,
   Break,
   Continue,
