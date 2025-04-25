@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 import type { Handler } from "gensync";
 
 import type {
