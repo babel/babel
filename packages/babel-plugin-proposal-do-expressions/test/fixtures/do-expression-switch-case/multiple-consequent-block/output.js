@@ -1,30 +1,36 @@
-const x = n => function () {
-  switch (n) {
-    case 0:
-      {
-        get();
-        return 'a';
-      }
-    case 1:
-      {
-        return 'b';
-        'c';
-        break;
-        'd';
-      }
-    case 2:
-      {
-        'e';
-        const a = 'e';
-        return void 0;
-      }
-    case 3:
-      {
-        const a = 'f';
-        return void 0;
-        'f';
-      }
-    default:
-      return 'g';
+const x = n => {
+  {
+    var _do;
+    switch (n) {
+      case 0:
+        {
+          get();
+          _do = 'a';
+          break;
+        }
+      case 1:
+        {
+          _do = 'b';
+          break;
+          'c';
+          break;
+          'd';
+        }
+      case 2:
+        {
+          'e';
+          const a = 'e';
+          break;
+        }
+      case 3:
+        {
+          const a = 'f';
+          break;
+          'f';
+        }
+      default:
+        _do = 'g';
+    }
   }
-}();
+  return _do;
+};

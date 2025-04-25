@@ -1,9 +1,14 @@
-const x = () => function () {
-  switch (new Date().getDay()) {
-    case 0:
-      get();
-      return 1 + 1;
-    default:
-      return "weekday 🚴";
+const x = () => {
+  {
+    var _do;
+    switch (new Date().getDay()) {
+      case 0:
+        get();
+        _do = 1 + 1;
+        break;
+      default:
+        _do = "weekday 🚴";
+    }
   }
-}();
+  return _do;
+};

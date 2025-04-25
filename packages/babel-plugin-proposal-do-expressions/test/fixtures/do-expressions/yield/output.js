@@ -1,7 +1,9 @@
 function* g() {
-  const y = yield* function* () {
+  {
+    var _do;
     let z;
-    return yield 1;
-  }();
+    _do = yield 1;
+  }
+  const y = _do;
   return y;
 }
