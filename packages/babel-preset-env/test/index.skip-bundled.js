@@ -1,7 +1,3 @@
-// eslint-disable-next-line import/extensions
-import compatData from "@babel/compat-data/plugins" with { type: "json" };
-// eslint-disable-next-line import/extensions
-import bugfixesData from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
 import * as babel from "@babel/core";
 
 import { USE_ESM, itBabel7, itBabel8, describeBabel7NoESM } from "$repo-utils";
@@ -33,6 +29,13 @@ if (!process.env.BABEL_8_BREAKING) {
     legacyBabelPolyfillPlugin,
   } = require("../lib/polyfills/babel-7-plugins.cjs");
 }
+
+// TODO(Babel 8): Once we only run tests in modern Node.js versions, we can
+// use import with { type: "json" } to load the compat data.
+// eslint-disable-next-line import/extensions
+const compatData = require("@babel/compat-data/plugins");
+// eslint-disable-next-line import/extensions
+const bugfixesData = require("@babel/compat-data/plugin-bugfixes");
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {
