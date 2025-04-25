@@ -78,12 +78,7 @@ function getTsPkgs(subRoot) {
             return [["", "/src"]];
           }
           if (name === "@babel/compat-data") {
-            // map ./plugins to ./data/plugins.json
-            const subExport = _export.slice(1);
-            const subExportPath = exportPath
-              .replace("./", "/data/")
-              .replace(/\.js$/, ".json");
-            return [[subExport, subExportPath]];
+            return [[_export.slice(1), exportPath.slice(1)]];
           }
           // [{esm, default}, "./lib/index.js"]
           if (Array.isArray(exportPath)) {
