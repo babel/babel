@@ -9,19 +9,17 @@ import { types as t } from "@babel/core";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
 const enum OperatorType {
-  Throw = 1,
-  Return,
-  Break,
-  Continue,
+  Return = 2,
+  Jump,
 }
 
 type AbruptCompletion =
   | {
-      type: OperatorType.Break | OperatorType.Continue;
+      type: OperatorType.Jump;
       target: t.NumericLiteral;
     }
   | {
-      type: OperatorType.Return | OperatorType.Throw;
+      type: OperatorType.Return;
       value: t.Expression | null;
     };
 
@@ -587,7 +585,7 @@ export class Emitter {
 
       case "BreakStatement":
         self.emitAbruptCompletion({
-          type: OperatorType.Break,
+          type: OperatorType.Jump,
           target: self.leapManager.getBreakLoc(path.node.label),
         });
 
@@ -595,7 +593,7 @@ export class Emitter {
 
       case "ContinueStatement":
         self.emitAbruptCompletion({
-          type: OperatorType.Continue,
+          type: OperatorType.Jump,
           target: self.leapManager.getContinueLoc(path.node.label),
         });
 
@@ -791,17 +789,11 @@ export class Emitter {
       t.numericLiteral(record.type),
     ];
 
-    if (
-      record.type === OperatorType.Break ||
-      record.type === OperatorType.Continue
-    ) {
+    if (record.type === OperatorType.Jump) {
       abruptArgs[1] = this.insertedLocs.has(record.target)
         ? record.target
         : t.cloneNode(record.target);
-    } else if (
-      record.type === OperatorType.Return ||
-      record.type === OperatorType.Throw
-    ) {
+    } else if (record.type === OperatorType.Return) {
       if (record.value) {
         abruptArgs[1] = t.cloneNode(record.value);
       }

@@ -19,9 +19,7 @@ const enum OperatorType {
   Next,
   Throw,
   Return,
-  Break,
-  Continue,
-  Noop = 9,
+  Jump,
 }
 
 const enum ContextNext {
@@ -37,12 +35,7 @@ type TryLocs = [
 
 type TryEntry = [
   ...TryLocs,
-  recordType?:
-    | OperatorType.Throw
-    | OperatorType.Break
-    | OperatorType.Continue
-    | OperatorType.Return
-    | OperatorType.Noop,
+  recordType?: OperatorType.Throw | OperatorType.Jump | OperatorType.Return,
   recordArg?: any,
 ];
 
@@ -215,7 +208,6 @@ export default function /* @no-mangle */ _regenerator() {
             ctx.next = ContextNext.End;
             Context_abrupt(OperatorType.Return, arg);
           } else {
-            // OperatorType.Break | OperatorType.Continue | OperatorType.Noop
             ctx.next = arg;
           }
         }
@@ -361,11 +353,7 @@ export default function /* @no-mangle */ _regenerator() {
     }
 
     function Context_abrupt(
-      type:
-        | OperatorType.Throw
-        | OperatorType.Break
-        | OperatorType.Continue
-        | OperatorType.Return,
+      type: OperatorType.Jump | OperatorType.Return,
       _arg: any,
     ) {
       method = type;
@@ -377,11 +365,7 @@ export default function /* @no-mangle */ _regenerator() {
           ctx.prev < entry[2]! &&
           // Ignore the finally entry if control is not jumping to a
           // location outside the try/catch block.
-          !(
-            (type === OperatorType.Break || type === OperatorType.Continue) &&
-            entry[0] <= _arg &&
-            _arg <= entry[2]!
-          )
+          !(type === OperatorType.Jump && entry[0] <= _arg && _arg <= entry[2]!)
         ) {
           var finallyEntry: TryEntry = entry;
           finallyEntry[4] = type;
@@ -399,9 +383,10 @@ export default function /* @no-mangle */ _regenerator() {
       for (var i = tryEntries.length - 1; i >= 0; --i) {
         var entry = tryEntries[i];
         if (entry[2] === finallyLoc) {
-          method = entry[4]! || OperatorType.Noop;
-          arg = method === OperatorType.Noop ? entry[3]! : entry[5];
-          entry[4] = OperatorType.Noop;
+          method = entry[4]! || OperatorType.Jump;
+          arg = entry[5] === undefined ? entry[3]! : entry[5];
+          entry[4] = OperatorType.Jump;
+          entry[5] = undefined;
           return ContinueSentinel;
         }
       }

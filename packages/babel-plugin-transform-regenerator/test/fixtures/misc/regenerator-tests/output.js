@@ -391,7 +391,7 @@ describe("try-finally generator", function () {
             break;
           }
           abruptType = "return";
-          return _context11.abrupt(4, 31);
+          return _context11.abrupt(3, 31);
         case 16:
           _context11.prev = 16;
           _context11.next = 19;
@@ -414,7 +414,7 @@ describe("try-finally generator", function () {
             break;
           }
           finallyAbruptType = null;
-          return _context11.abrupt(4, 31);
+          return _context11.abrupt(3, 31);
         case 30:
           return _context11.finish(16);
         case 31:
@@ -971,7 +971,7 @@ describe("try-catch-finally generator", function () {
             _context21.next = 12;
             return 2;
           case 12:
-            return _context21.abrupt(4, 1);
+            return _context21.abrupt(3, 1);
           case 15:
             _context21.next = 17;
             return 3;
@@ -1034,7 +1034,7 @@ describe("try-catch-finally generator", function () {
             _t11 = _context22.sent;
             assert.strictEqual(_t11, error);
             markers.push("catch");
-            return _context22.abrupt(4, 1);
+            return _context22.abrupt(3, 1);
           case 13:
             _context22.prev = 13;
             markers.push("finally");
@@ -4248,7 +4248,7 @@ describe("labeled break and continue statements", function () {
             _context120.next = 33;
             return "continuing";
           case 33:
-            return _context120.abrupt(4, 39);
+            return _context120.abrupt(3, 39);
           case 34:
             _context120.next = 36;
             return 5;
