@@ -3952,7 +3952,6 @@ __metadata:
   resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
   dependencies:
     core-js: "npm:^2.6.12"
-    regenerator-runtime: "npm:^0.14.0"
   languageName: unknown
   linkType: soft
 
@@ -3961,7 +3960,6 @@ __metadata:
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
     core-js-pure: "npm:^3.30.2"
-    regenerator-runtime: "npm:^0.14.0"
   languageName: unknown
   linkType: soft
 
@@ -3986,8 +3984,6 @@ __metadata:
 "@babel/runtime@workspace:^, @babel/runtime@workspace:packages/babel-runtime":
   version: 0.0.0-use.local
   resolution: "@babel/runtime@workspace:packages/babel-runtime"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
   languageName: unknown
   linkType: soft
 
