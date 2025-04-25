@@ -1,4 +1,4 @@
-const babel = require("../../../cjs-proxy.cjs");
+const babel = require("../../../lib/index.js");
 
 babel
   .transformAsync("REPLACE_ME;", {

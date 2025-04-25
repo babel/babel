@@ -3,4 +3,3 @@ test
 *.log
 tsconfig.json
 tsconfig.tsbuildinfo
-cjs-proxy-dev.cjs

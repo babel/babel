@@ -1,4 +1,4 @@
-const { types: t } = require("../../../../cjs-proxy.cjs");
+const { types: t } = require("../../../../lib/index.js");
 
 module.exports = function () {
   return {

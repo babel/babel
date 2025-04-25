@@ -1039,7 +1039,7 @@ if (IS_BABEL_8() && USE_ESM) {
     it("error should be caught", () => {
       let err;
       try {
-        const cjs = require("../cjs-proxy.cjs");
+        const cjs = require("../lib/index.js");
         cjs.parse("foo");
       } catch (error) {
         err = error;
