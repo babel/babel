@@ -1234,45 +1234,6 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 516, gzip size: 295
-  regeneratorRuntime: helper(
-    "7.18.0",
-    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function o(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}return(_regeneratorRuntime=function(){return{wrap:r.w,isGeneratorFunction:o,mark:r.m,awrap:OverloadYield,AsyncIterator:AsyncIterator,async:function(r,e,t,n,a){return(o(e)?asyncGen:async)(r,e,t,n,a)},keys:keys,values:values}})()}',
-    {
-      globals: ["Object"],
-      locals: {
-        _regeneratorRuntime: [
-          "body.0.id",
-          "body.0.body.body.0.declarations.1.init.arguments.0",
-          "body.0.body.body.2.argument.callee.left",
-        ],
-      },
-      exportBindingAssignments: ["body.0.body.body.2.argument.callee"],
-      exportName: "_regeneratorRuntime",
-      dependencies: {
-        OverloadYield: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.3.value",
-        ],
-        regenerator: ["body.0.body.body.0.declarations.0.init.callee"],
-        regeneratorAsync: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
-        ],
-        regeneratorAsyncGen: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
-        ],
-        regeneratorAsyncIterator: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.4.value",
-        ],
-        regeneratorKeys: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.6.value",
-        ],
-        regeneratorValues: [
-          "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.7.value",
-        ],
-      },
-      internal: false,
-    },
-  ),
   // size: 396, gzip size: 264
   regeneratorValues: helper(
     "7.18.0",
@@ -2283,6 +2244,45 @@ if (!process.env.BABEL_8_BREAKING) {
         dependencies: {
           defineProperty: [
             "body.0.body.body.0.body.body.1.expression.expressions.1.arguments.0.body.body.0.expression.callee",
+          ],
+        },
+        internal: false,
+      },
+    ),
+    // size: 516, gzip size: 295
+    regeneratorRuntime: helper(
+      "7.18.0",
+      'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function o(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}return(_regeneratorRuntime=function(){return{wrap:r.w,isGeneratorFunction:o,mark:r.m,awrap:OverloadYield,AsyncIterator:AsyncIterator,async:function(r,e,t,n,a){return(o(e)?asyncGen:async)(r,e,t,n,a)},keys:keys,values:values}})()}',
+      {
+        globals: ["Object"],
+        locals: {
+          _regeneratorRuntime: [
+            "body.0.id",
+            "body.0.body.body.0.declarations.1.init.arguments.0",
+            "body.0.body.body.2.argument.callee.left",
+          ],
+        },
+        exportBindingAssignments: ["body.0.body.body.2.argument.callee"],
+        exportName: "_regeneratorRuntime",
+        dependencies: {
+          OverloadYield: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.3.value",
+          ],
+          regenerator: ["body.0.body.body.0.declarations.0.init.callee"],
+          regeneratorAsync: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
+          ],
+          regeneratorAsyncGen: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
+          ],
+          regeneratorAsyncIterator: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.4.value",
+          ],
+          regeneratorKeys: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.6.value",
+          ],
+          regeneratorValues: [
+            "body.0.body.body.2.argument.callee.right.body.body.0.argument.properties.7.value",
           ],
         },
         internal: false,

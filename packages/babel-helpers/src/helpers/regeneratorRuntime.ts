@@ -1,5 +1,6 @@
 /* @minVersion 7.18.0 */
 /* @mangleFns */
+/* @onlyBabel7 */
 
 import OverloadYield from "./OverloadYield.ts";
 import regenerator from "./regenerator.ts";
