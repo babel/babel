@@ -347,16 +347,18 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   allowsForUsing(): boolean {
-    const { type, containsEsc, start } = this.lookahead();
+    const { type, containsEsc, end } = this.lookahead();
     if (type === tt._of && !containsEsc) {
       // `for( using of` must start either a for-lhs-of statement
       // or a for lexical declaration
       const nextCharAfterOf = this.input.charCodeAt(
-        this.nextTokenStartSince(start + 2),
+        this.nextTokenStartSince(end),
       );
       if (
         nextCharAfterOf !== charCodes.equalsTo &&
-        nextCharAfterOf !== charCodes.colon
+        nextCharAfterOf !== charCodes.colon &&
+        // recover from `for(using of;...);`
+        nextCharAfterOf !== charCodes.semicolon
       ) {
         return false;
       }
