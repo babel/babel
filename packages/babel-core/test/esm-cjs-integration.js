@@ -52,7 +52,13 @@ describeESM("usage from cjs", () => {
   });
 
   it("eager plugin required", async () => {
-    await expect(run("eager-plugin-required.cjs")).resolves.not.toThrow();
+    expect(await run("eager-plugin-required.cjs")).toMatchInlineSnapshot(`
+      Object {
+        "stderr": "",
+        "stdout": "\\"Replaced!\\";
+      ",
+      }
+    `);
   });
 
   it("eager plugin required after dynamic esm import", async () => {
@@ -88,7 +94,13 @@ describeESM("usage from cjs", () => {
   });
 
   it("transformSync", async () => {
-    await expect(run("transform-sync.cjs")).resolves.not.toThrow();
+    expect(await run("transform-sync.cjs")).toMatchInlineSnapshot(`
+      Object {
+        "stderr": "",
+        "stdout": "REPLACE_ME;
+      ",
+      }
+    `);
   });
 
   it("transformSync after dynamic esm import", async () => {
@@ -135,9 +147,9 @@ describeESM("sync loading of ESM plugins", () => {
           "--experimental-require-module",
         );
         expect(stdout).toMatchInlineSnapshot(`
-        "\\"Replaced!\\";
-        "
-      `);
+            "\\"Replaced!\\";
+            "
+        `);
       });
 
       it("top-level await", async () => {
@@ -163,9 +175,9 @@ describeESM("sync loading of ESM plugins", () => {
           "--experimental-require-module",
         );
         expect(stdout).toMatchInlineSnapshot(`
-        "\\"Replaced!\\";
-        "
-      `);
+            "\\"Replaced!\\";
+            "
+        `);
       });
 
       it("top-level await with --experimental-require-module flag", async () => {
