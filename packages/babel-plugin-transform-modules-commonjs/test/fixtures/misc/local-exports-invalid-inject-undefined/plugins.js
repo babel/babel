@@ -18,7 +18,7 @@ module.exports = function(api) {
           t.exportNamedDeclaration(
             null,
             [t.exportSpecifier(t.identifier("invalid"), t.identifier("invalid"))]
-          ),
+          )
         );
       }
     }
