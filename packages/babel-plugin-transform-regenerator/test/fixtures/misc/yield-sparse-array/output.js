@@ -10,7 +10,7 @@
         _t = _context.sent;
         return _context.abrupt(2, [_t,,]);
       case 4:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, null, null, null, Promise);
 };

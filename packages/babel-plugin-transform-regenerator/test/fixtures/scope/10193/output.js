@@ -9,7 +9,7 @@ function foo() {
       case 0:
         someAction = bar;
       case 1:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }

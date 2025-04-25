@@ -200,15 +200,15 @@ export default function /* @no-mangle */ _regenerator() {
 
       while (true) {
         if (!delegateIterator) {
-          if (method === OperatorType.Next) {
+          if (!method /* Return */) {
             ctx.sent = arg;
-          } else if (method === OperatorType.Throw) {
+          } else if (method < 2 /* Throw */) {
             Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Throw, arg);
-          } else if (method === OperatorType.Return) {
-            rval = arg;
+          } else if (method < 3 /* Return */) {
             ctx.next = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Return, arg);
           } else {
+            // Jump
             ctx.next = arg;
           }
         }
@@ -235,7 +235,8 @@ export default function /* @no-mangle */ _regenerator() {
                 // "consumed" by the delegate iterator. If context.method was
                 // "return", allow the original .return call to continue in the
                 // outer generator.
-                if (method !== OperatorType.Return) {
+                // method !== OperatorType.Return
+                if (method < 2 /* Throw */) {
                   method = OperatorType.Next;
                 }
               }
@@ -250,7 +251,7 @@ export default function /* @no-mangle */ _regenerator() {
                 _.call(delegateIterator);
               }
 
-              if (method !== OperatorType.Return) {
+              if (method < 2 /* Next | Throw */) {
                 arg = TypeError(
                   "The iterator does not provide a '" +
                     FunctionNameStrings[
@@ -272,10 +273,13 @@ export default function /* @no-mangle */ _regenerator() {
           } else {
             state = GenState.Executing;
 
-            _ = (ctx.next === ContextNext.End ? Context_stop : innerFn).call(
-              self,
-              ctx,
-            );
+            if (ctx.next < 0 /* End */) {
+              done = true;
+              _ = arg;
+            } else {
+              _ = innerFn.call(self, ctx);
+            }
+
             // If an exception is thrown from innerFn, we leave state ===
             // GenStateExecuting and loop back for another invocation.
             state = done ? GenState.Completed : GenState.SuspendedYield;
@@ -300,10 +304,9 @@ export default function /* @no-mangle */ _regenerator() {
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
     var tryEntries: TryEntry[] = tryLocsList || [];
-    var rval: any;
     var done = false;
     var delegateIterator: Iterator<any> | undefined;
-    var method = OperatorType.Next;
+    var method: OperatorType;
     var arg: any;
 
     var ctx: Context = {
@@ -312,7 +315,6 @@ export default function /* @no-mangle */ _regenerator() {
 
       sent: undefined,
 
-      stop: Context_stop,
       abrupt: Context_dispatchExceptionOrFinishOrAbrupt,
       finish: Context_dispatchExceptionOrFinishOrAbrupt.bind(
         undefined,
@@ -320,11 +322,6 @@ export default function /* @no-mangle */ _regenerator() {
       ),
       delegateYield: Context_delegateYield,
     };
-
-    function Context_stop() {
-      done = true;
-      return rval;
-    }
 
     function Context_dispatchExceptionOrFinishOrAbrupt(
       _type: OperatorType,
@@ -344,7 +341,7 @@ export default function /* @no-mangle */ _regenerator() {
         var finallyLoc = entry[2]!;
         var shouldReturn;
 
-        if (_type === OperatorType.Finish) {
+        if (_type > 3 /* Finish */) {
           if ((shouldReturn = finallyLoc === _arg)) {
             method = entry[4]! || OperatorType.Jump;
             arg = entry[5] === undefined ? entry[3]! : entry[5];
@@ -353,9 +350,7 @@ export default function /* @no-mangle */ _regenerator() {
           }
         } else {
           if (tryLoc <= prev) {
-            if (
-              (shouldReturn = _type === OperatorType.Throw && prev < catchLoc)
-            ) {
+            if ((shouldReturn = _type < 2 /* Throw */ && prev < catchLoc)) {
               // If the dispatched exception was caught by a catch block,
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
@@ -364,11 +359,11 @@ export default function /* @no-mangle */ _regenerator() {
             } else if (prev < finallyLoc) {
               if (
                 (shouldReturn =
-                  _type === OperatorType.Throw ||
+                  _type < 2 /* Throw */ ||
                   // Ignore the finally entry if control is not jumping to a
                   // location outside the try/catch block.
                   !(
-                    _type === OperatorType.Jump &&
+                    _type > 2 /* Jump */ &&
                     tryLoc <= _arg &&
                     _arg <= finallyLoc
                   ))
@@ -386,7 +381,9 @@ export default function /* @no-mangle */ _regenerator() {
         }
         if (shouldReturn) break;
       }
-      if (shouldReturn || _type !== OperatorType.Throw) return ContinueSentinel;
+      if (shouldReturn || _type > 1 /* _type !== Throw */) {
+        return ContinueSentinel;
+      }
       state = GenState.Completed;
       throw _arg;
     }

@@ -16,7 +16,7 @@ function _callee() {
         x = _context.sent;
         return _context.abrupt(2, 5);
       case 4:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }

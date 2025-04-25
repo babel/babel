@@ -6,7 +6,7 @@ var o = {
           case 0:
             return _context.abrupt(2, "foo");
           case 1:
-            return _context.stop();
+            return _context.abrupt(2);
         }
       }, _callee);
     })();

@@ -10,7 +10,7 @@ function foo() {
         }, bar = _bar.bar;
         return _context.abrupt(2, bar);
       case 2:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }
@@ -25,7 +25,7 @@ function foo2(_ref) {
         case 0:
           return _context2.abrupt(2, bar);
         case 1:
-          return _context2.stop();
+          return _context2.abrupt(2);
       }
     }, _callee);
   })();
@@ -78,7 +78,7 @@ function foo3() {
               case 18:
                 return _context3.abrupt(2, 0);
               case 20:
-                return _context3.stop();
+                return _context3.abrupt(2);
             }
           }, _callee2);
         });
@@ -99,7 +99,7 @@ function foo3() {
         _context4.next = 1;
         break;
       case 8:
-        return _context4.stop();
+        return _context4.abrupt(2);
     }
   }, _marked2);
 }

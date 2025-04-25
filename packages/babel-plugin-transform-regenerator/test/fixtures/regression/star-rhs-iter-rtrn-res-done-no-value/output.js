@@ -85,7 +85,7 @@ function g() {
         delegationComplete = true;
         return _context.finish(8);
       case 11:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked, null, [[0, 5, 8, 11]]);
 }

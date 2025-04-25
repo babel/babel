@@ -10,7 +10,7 @@ function f() {
         }
         ;
       case 2:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }

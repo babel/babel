@@ -19,7 +19,7 @@ function values() {
         _context.next = 4;
         return 1;
       case 4:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }
@@ -65,7 +65,7 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 22:
         l++;
       case 23:
-        return _context2.stop();
+        return _context2.abrupt(2);
     }
   }, _callee, null, [[1, 16, 19, 22], [5,, 6, 11]]);
 })();

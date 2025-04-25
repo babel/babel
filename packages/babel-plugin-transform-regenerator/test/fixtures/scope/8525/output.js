@@ -9,7 +9,7 @@
         case 2:
           newSessionId = _context.sent;
         case 3:
-          return _context.stop();
+          return _context.abrupt(2);
       }
     }, null, null, null, Promise);
   };

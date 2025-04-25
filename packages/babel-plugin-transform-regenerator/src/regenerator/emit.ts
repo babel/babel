@@ -302,8 +302,11 @@ export class Emitter {
     ) {
       cases.push(
         t.switchCase(this.finalLoc, [
-          // This will check/clear both context.thrown and context.rval.
-          t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
+          t.returnStatement(
+            t.callExpression(this.contextProperty("abrupt"), [
+              t.numericLiteral(OperatorType.Return),
+            ]),
+          ),
         ]),
       );
     } else {

@@ -17,7 +17,7 @@ function fn() {
         _context.next = 1;
         break;
       case 7:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }

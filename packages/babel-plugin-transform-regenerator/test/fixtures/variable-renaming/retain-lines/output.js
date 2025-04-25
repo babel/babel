@@ -3,4 +3,4 @@ var func = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {var act
         method().
         method2();case 2:
 
-        actual = true;case 3:return _context.stop();}}, _callee);});
+        actual = true;case 3:return _context.abrupt(2);}}, _callee);});
