@@ -336,11 +336,6 @@ jobs:
           BABEL_ENV: test-legacy
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
-      - name: Lint
-        run: make -j lint-ci check-compat-data
-        env:
-          BABEL_ENV: test
-          BABEL_8_BREAKING: true
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
@@ -349,6 +344,32 @@ jobs:
           name: babel8-artifact
           path: babel-artifact.tar
           retention-days: 5
+
+  lint-babel8:
+    name: Lint (Babel 8)
+    needs: build-babel8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Lint
+        run: make -j lint-ci check-compat-data
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
 
   test-babel8-coverage:
     name: Test Babel 8 changes (with coverage)
