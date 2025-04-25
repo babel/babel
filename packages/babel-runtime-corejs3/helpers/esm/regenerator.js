@@ -72,7 +72,7 @@ function _regenerator() {
                 if (t = t.call(a, c)) {
                   if (!t) throw TypeError("iterator result is not an object");
                   if (!t.done) return t;
-                  2 !== d && (d = 0, c = t.value);
+                  c = t.value, 2 !== d && (d = 0);
                 }
               } else 1 === d && (t = a["return"]) && t.call(a), 2 !== d && (c = TypeError("The iterator does not provide a '" + u[d] + "' method"), d = 1);
               a = e;

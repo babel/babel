@@ -228,6 +228,7 @@ export default function /* @no-mangle */ _regenerator() {
                   return _;
                 }
 
+                arg = _.value;
                 // If context.method was "throw" but the delegate handled the
                 // exception, let the outer generator proceed normally. If
                 // context.method was "next", forget context.arg since it has been
@@ -236,7 +237,6 @@ export default function /* @no-mangle */ _regenerator() {
                 // outer generator.
                 if (method !== OperatorType.Return) {
                   method = OperatorType.Next;
-                  arg = _.value;
                 }
               }
             } else {
