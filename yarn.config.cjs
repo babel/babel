@@ -333,7 +333,6 @@ function enforceExports({ Yarn }) {
         "@babel/compat-data",
         "@babel/helper-plugin-test-runner", // TODO: Remove in Babel 8
         "@babel/core", // TODO: Remove in Babel 8
-        "@babel/parser",
         "@babel/plugin-transform-react-jsx", // TODO: Remove in Babel 8
         "@babel/standalone",
         "@babel/types", // @babel/types has types exports

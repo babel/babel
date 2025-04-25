@@ -59,26 +59,18 @@
       }
     ],
     "USE_ESM": [
-      {
-        "exports": {
-          ".": {
-            "require": "./lib/index.cjs",
-            "default": "./lib/index.js"
-          },
-          "./package.json": "./package.json"
-        }
-      },
+      null,
       {
         "type": "commonjs"
       }
     ]
   },
+  "type": "module",
   "exports": {
     ".": {
-      "require": "./index.cjs",
+      "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "type": "module"
+  }
 }
