@@ -215,7 +215,7 @@ jobs:
           BABEL_ENV: test
           BABEL_COVERAGE: true
       - name: Upload coverage report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -403,7 +403,7 @@ jobs:
           BABEL_COVERAGE: true
           BABEL_8_BREAKING: true
       - name: Upload coverage report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
 
   test-babel8-windows-mac:
     name: Test Babel 8 changes
