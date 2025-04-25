@@ -58,12 +58,32 @@ describe("misc helpers", function () {
       expect(t.matchesPattern(ast, "import.meta")).toBe(false);
       expect(t.matchesPattern(ast, "import.meta.uri")).toBe(false);
       expect(t.matchesPattern(ast, "import.meta.url.toString")).toBe(false);
+      expect(t.matchesPattern(ast, "Import.meta")).toBe(false);
+      expect(t.matchesPattern(ast, "import.wrongProperty")).toBe(false);
+      expect(t.matchesPattern(ast, "import.wrongProperty.url")).toBe(false);
+    });
+
+    it("matches meta properties: import.meta.url, partially", function () {
+      const ast = parseCode("import.meta.url");
+      expect(t.matchesPattern(ast, "import.meta.url", true)).toBeTruthy();
+      expect(t.matchesPattern(ast, "import.meta", true)).toBeTruthy();
+      expect(t.matchesPattern(ast, "meta.url", true)).toBe(false);
+      expect(t.matchesPattern(ast, "import.meta.url.toString", true)).toBe(
+        false,
+      );
     });
 
     it("matches meta properties: import.meta", function () {
       const ast = parseCode("import.meta");
       expect(t.matchesPattern(ast, "import.meta")).toBeTruthy();
       expect(t.matchesPattern(ast, "import.meta.uri")).toBe(false);
+    });
+
+    it("matches meta properties: import.meta, partially", function () {
+      const ast = parseCode("import.meta");
+      expect(t.matchesPattern(ast, "import.meta", true)).toBeTruthy();
+      expect(t.matchesPattern(ast, "import", true)).toBeTruthy();
+      expect(t.matchesPattern(ast, "meta", true)).toBe(false);
     });
 
     it("matches meta properties: new.target", function () {
