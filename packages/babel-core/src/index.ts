@@ -92,14 +92,6 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
   ".cjs",
 ] as const);
 
-import Module from "node:module" with { if: "USE_ESM && !IS_STANDALONE" };
-import * as thisFile from "./index.ts" with { if: "USE_ESM && !IS_STANDALONE" };
-if (USE_ESM && !IS_STANDALONE) {
-  // Pass this module to the CJS proxy, so that it can be synchronously accessed.
-  const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");
-  cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
-}
-
 if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
   // eslint-disable-next-line no-restricted-globals

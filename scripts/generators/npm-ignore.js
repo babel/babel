@@ -12,7 +12,6 @@ const commonIgnore = [
 ];
 
 const extraIgnore = {
-  "babel-core": ["cjs-proxy-dev.cjs"],
   "babel-plugin-proposal-decorators": ["CONTRIB.md"],
   "babel-compat-data": ["build"],
 };
