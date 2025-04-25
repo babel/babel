@@ -20,6 +20,7 @@ const enum OperatorType {
   Throw,
   Return,
   Jump,
+  Finish,
 }
 
 const enum ContextNext {
@@ -202,11 +203,11 @@ export default function /* @no-mangle */ _regenerator() {
           if (method === OperatorType.Next) {
             ctx.sent = arg;
           } else if (method === OperatorType.Throw) {
-            Context_dispatchExceptionOrFinish(arg);
+            Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Throw, arg);
           } else if (method === OperatorType.Return) {
             rval = arg;
             ctx.next = ContextNext.End;
-            Context_abrupt(OperatorType.Return, arg);
+            Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Return, arg);
           } else {
             ctx.next = arg;
           }
@@ -310,8 +311,11 @@ export default function /* @no-mangle */ _regenerator() {
       sent: undefined,
 
       stop: Context_stop,
-      abrupt: Context_abrupt,
-      finish: Context_dispatchExceptionOrFinish,
+      abrupt: Context_dispatchExceptionOrFinishOrAbrupt,
+      finish: Context_dispatchExceptionOrFinishOrAbrupt.bind(
+        undefined,
+        OperatorType.Finish,
+      ),
       delegateYield: Context_delegateYield,
     };
 
@@ -320,10 +324,12 @@ export default function /* @no-mangle */ _regenerator() {
       return rval;
     }
 
-    function Context_dispatchExceptionOrFinish(
-      this: Context | void,
+    function Context_dispatchExceptionOrFinishOrAbrupt(
+      _type: OperatorType,
       _arg: any,
     ) {
+      method = _type;
+      arg = _arg;
       for (
         var i = tryEntries.length - 1;
         !done && state !== GenState.SuspendedStart && i >= 0;
@@ -331,62 +337,56 @@ export default function /* @no-mangle */ _regenerator() {
       ) {
         var entry = tryEntries[i];
         var prev = ctx.prev;
+        var tryLoc = entry[0];
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
+        var shouldReturn;
 
-        if (this && finallyLoc === _arg) {
-          method = entry[4]! || OperatorType.Jump;
-          arg = entry[5] === undefined ? entry[3]! : entry[5];
-          entry[4] = OperatorType.Jump;
-          entry[5] = undefined;
-          return ContinueSentinel;
-        }
-        if (entry[0] <= prev) {
-          if (prev < catchLoc) {
-            // If the dispatched exception was caught by a catch block,
-            // then let that catch block handle the exception normally.
-            method = OperatorType.Next;
-            ctx.sent = _arg;
-
-            ctx.next = catchLoc;
-            return undefined;
-          } else if (prev < finallyLoc) {
-            entry[4] = OperatorType.Throw;
-            entry[5] = _arg;
-            ctx.next = finallyLoc;
-            return undefined;
+        if (_type === OperatorType.Finish) {
+          if ((shouldReturn = finallyLoc === _arg)) {
+            method = entry[4]! || OperatorType.Jump;
+            arg = entry[5] === undefined ? entry[3]! : entry[5];
+            entry[4] = OperatorType.Jump;
+            entry[5] = undefined;
+          }
+        } else {
+          if (tryLoc <= prev) {
+            if (
+              (shouldReturn = _type === OperatorType.Throw && prev < catchLoc)
+            ) {
+              // If the dispatched exception was caught by a catch block,
+              // then let that catch block handle the exception normally.
+              method = OperatorType.Next;
+              ctx.sent = _arg;
+              ctx.next = catchLoc;
+            } else if (prev < finallyLoc) {
+              if (
+                (shouldReturn =
+                  _type === OperatorType.Throw ||
+                  // Ignore the finally entry if control is not jumping to a
+                  // location outside the try/catch block.
+                  !(
+                    _type === OperatorType.Jump &&
+                    tryLoc <= _arg &&
+                    _arg <= finallyLoc
+                  ))
+              ) {
+                entry[4] = _type as
+                  | OperatorType.Return
+                  | OperatorType.Jump
+                  | OperatorType.Throw;
+                entry[5] = _arg;
+                ctx.next = finallyLoc;
+                method = OperatorType.Next;
+              }
+            }
           }
         }
+        if (shouldReturn) break;
       }
+      if (shouldReturn || _type !== OperatorType.Throw) return ContinueSentinel;
       state = GenState.Completed;
       throw _arg;
-    }
-
-    function Context_abrupt(
-      type: OperatorType.Jump | OperatorType.Return,
-      _arg: any,
-    ) {
-      method = type;
-      arg = _arg;
-      for (var i = tryEntries.length - 1; i >= 0; --i) {
-        var entry = tryEntries[i];
-        if (
-          entry[0] <= ctx.prev &&
-          ctx.prev < entry[2]! &&
-          // Ignore the finally entry if control is not jumping to a
-          // location outside the try/catch block.
-          !(type === OperatorType.Jump && entry[0] <= _arg && _arg <= entry[2]!)
-        ) {
-          var finallyEntry: TryEntry = entry;
-          finallyEntry[4] = type;
-          finallyEntry[5] = _arg;
-          method = OperatorType.Next;
-          ctx.next = finallyEntry[2]!;
-          break;
-        }
-      }
-
-      return ContinueSentinel;
     }
 
     function Context_delegateYield(iterable: any, nextLoc: number) {
