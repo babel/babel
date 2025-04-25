@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 // duplicated from transform-file so we do not have to import anything here
 type TransformFile = {
   (filename: string, callback: (error: Error, file: null) => void): void;

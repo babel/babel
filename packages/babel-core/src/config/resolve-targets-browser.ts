@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 import type { ValidatedOptions } from "./validation/options.ts";
 import getTargets, {
   type InputTargets,
