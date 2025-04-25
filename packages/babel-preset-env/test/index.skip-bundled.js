@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/extensions
-import compatData from "@babel/compat-data/plugins";
+import compatData from "@babel/compat-data/plugins" with { type: "json" };
 // eslint-disable-next-line import/extensions
-import bugfixesData from "@babel/compat-data/plugin-bugfixes";
+import bugfixesData from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
 import * as babel from "@babel/core";
 
 import { USE_ESM, itBabel7, itBabel8, describeBabel7NoESM } from "$repo-utils";
