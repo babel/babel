@@ -59,26 +59,6 @@ jobs:
           yarn
           yarn release-tool check-cycles
 
-  test-coverage:
-    name: Test on Node.js Latest
-    needs: prepare-yarn-cache
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-          cache: "yarn"
-      - name: Generate coverage report
-        run: |
-          make -j test-ci-coverage
-          yarn test:esm
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-
   test-esm:
     name: Test ESM version
     needs: prepare-yarn-cache
@@ -206,6 +186,37 @@ jobs:
         run: |
           node ./scripts/assert-dir-git-clean.js "lint-ci check-compat-data"
 
+  test-coverage:
+    name: Test on Node.js Latest (with coverage)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Run tests
+        run: |
+          yarn c8 jest --ci
+          yarn c8 yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_COVERAGE: true
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
     needs: build
@@ -271,6 +282,35 @@ jobs:
         with:
           node-version: latest
 
+  test-windows-mac:
+    name: Test on
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Test
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+
   build-babel8:
     name: Build Babel 8 Artifacts
     needs: prepare-yarn-cache
@@ -310,13 +350,47 @@ jobs:
           path: babel-artifact.tar
           retention-days: 5
 
-  test-babel-8-breaking:
-    name: Test Babel 8 breaking changes on
+  test-babel8-coverage:
+    name: Test Babel 8 changes (with coverage)
+    needs: build-babel8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
+      - name: Run tests
+        run: |
+          yarn c8 jest --ci
+          yarn c8 yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_COVERAGE: true
+          BABEL_8_BREAKING: true
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+
+  test-babel8-windows-mac:
+    name: Test Babel 8 changes
     needs: build-babel8
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -345,35 +419,6 @@ jobs:
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
-
-  test-windows-mac:
-    name: Test on
-    needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-          cache: "yarn"
-      - name: Install
-        run: yarn install
-      - uses: actions/download-artifact@v4
-        with:
-          name: babel-artifact
-      - name: Extract artifacts
-        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
-      - name: Test
-        run: yarn jest --ci
-        env:
-          BABEL_ENV: test
 
   external-parser-tests:
     name: Third-party Parser Tests
