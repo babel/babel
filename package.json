@@ -19,7 +19,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
-  "packageManager": "yarn@4.3.1",
+  "packageManager": "yarn@4.9.1",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
     "@babel/cli": "8.0.0-alpha.16",
