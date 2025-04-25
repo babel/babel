@@ -11,8 +11,6 @@ var shared = require("./shared.js");
 var Symbol = shared.Symbol;
 var check = shared.check;
 var assertAlreadyFinished = shared.assertAlreadyFinished;
-var fullCompatibility =
-  runningInTranslation || require("semver").gte(process.version, "7.0.0");
 
 assert(
   function* () {}.toString().indexOf("regenerator") !== -1,
@@ -164,7 +162,9 @@ describe("nested generators in try-catch", function () {
 
   it("should get a reference to the caught error", function () {
     var genFun2 = gen().next().value;
-    assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
+    if (!process.env.BABEL_8_BREAKING) {
+      assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
+    }
     var gen2 = genFun2();
     var res = gen2.next();
     assert.ok(res.value instanceof ReferenceError);
@@ -1307,15 +1307,8 @@ describe("delegated yield", function () {
     var checkResult = check(undefined, function () {
       throw thrownFromReturn;
     });
-    if (fullCompatibility) {
-      // BUG: Nodes <v6 neglect to call .return here.
-      assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
-      assert.strictEqual(checkResult.returnCalled, true);
-    } else {
-      // This is the Error that results from trying to call the undefined
-      // .throw method of the iterator.
-      assert.ok(checkResult.throwResult.value instanceof Error);
-    }
+    assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
+    assert.strictEqual(checkResult.returnCalled, true);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
 
@@ -1328,10 +1321,7 @@ describe("delegated yield", function () {
     assert.ok(checkResult.throwResult.value instanceof TypeError);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    if (fullCompatibility) {
-      // BUG: Nodes <v6 neglect to call .return here.
-      assert.strictEqual(checkResult.returnCalled, true);
-    }
+    assert.strictEqual(checkResult.returnCalled, true);
 
     var checkResult = check(
       function (thrown) {
@@ -1360,13 +1350,11 @@ describe("delegated yield", function () {
     assert.strictEqual(checkResult.returnCalled, false);
 
     var checkResult = check(undefined, undefined);
-    if (fullCompatibility) {
-      assert.notStrictEqual(checkResult.throwResult.value, throwee);
-      // This is the TypeError that results from trying to call the
-      // undefined .throw method of the iterator.
-      assert.ok(checkResult.throwResult.value instanceof Error);
-      assert.strictEqual(checkResult.throwResult.done, true);
-    }
+    assert.notStrictEqual(checkResult.throwResult.value, throwee);
+    // This is the TypeError that results from trying to call the
+    // undefined .throw method of the iterator.
+    assert.ok(checkResult.throwResult.value instanceof Error);
+    assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
     assert.strictEqual(checkResult.returnCalled, false);
   });
@@ -1389,9 +1377,7 @@ describe("delegated yield", function () {
 
     if (typeof g.return === "function") {
       var returnResult = g.return(-1);
-      if (fullCompatibility) {
-        assert.deepEqual(returnResult, { value: -1, done: true });
-      }
+      assert.deepEqual(returnResult, { value: -1, done: true });
       assert.deepEqual(g.next(), { value: void 0, done: true });
     }
   });
@@ -1452,16 +1438,7 @@ describe("delegated yield", function () {
     check(outer(inner()), [1], 2);
 
     var arrayDelegate = [3, 4];
-    if (!fullCompatibility) {
-      // Node v0.11 doesn't know how to turn arrays into iterators over
-      // their elements without a little help.
-      arrayDelegate = regeneratorRuntime.values(arrayDelegate);
-    }
     check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
-
-    if (!fullCompatibility) {
-      return;
-    }
 
     var iterator = {
       next: function () {
@@ -1488,10 +1465,6 @@ describe("delegated yield", function () {
 
     check(gen(inner(2)), [], 3);
     check(gen(inner(3)), [], 4);
-
-    if (!fullCompatibility) {
-      return;
-    }
 
     var iterator = {
       next: function () {
@@ -1556,10 +1529,7 @@ describe("delegated yield", function () {
   });
 });
 
-(fullCompatibility
-  ? describe // run these tests
-  : xdescribe)(
-  // skip running these tests
+describe(
   "generator return method",
   function () {
     it("should work with newborn generators", function () {
@@ -1695,7 +1665,9 @@ describe("function declaration hoisting", function () {
   it("should work for nested generator function declarations", function () {
     function* outer(n) {
       yield 0;
-      assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
+      if (!process.env.BABEL_8_BREAKING) {
+        assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
+      }
       return yield* inner(n);
 
       // Note that this function declaration comes after everything else
@@ -1937,8 +1909,7 @@ describe("catch parameter shadowing", function () {
     check(gen(2), [4, 5, 2, 5, 10, 3]);
   });
 
-  // This test will be fixed by https://github.com/babel/babel/pull/4880.
-  (fullCompatibility ? xit : it)(
+  it(
     "should not replace variables defined in inner scopes",
     function () {
       function* gen(x) {
@@ -2227,7 +2198,7 @@ describe("yield* expression results", function () {
   });
 });
 
-describe("isGeneratorFunction", function () {
+(process.env.BABEL_8_BREAKING ? xdescribe : describe)("isGeneratorFunction", function () {
   it("should work for function declarations", function () {
     // Do the assertions up here to make sure the generator function is
     // marked at the beginning of the block the function is declared in.
@@ -2720,7 +2691,7 @@ describe("for-of loops", function () {
   var arraysAreIterable =
     typeof Array.prototype[Symbol.iterator] === "function";
 
-  (fullCompatibility && arraysAreIterable ? it : xit)(
+  (arraysAreIterable ? it : xit)(
     "should work for Arrays",
     function () {
       var sum = 0;

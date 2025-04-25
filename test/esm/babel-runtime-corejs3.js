@@ -54,7 +54,7 @@ export default {
           Error
         ),
     ],*/
-    [
+    !bool(process.env.BABEL_8_BREAKING) && [
       "it should not throw on importing regenerator helpers",
       () =>
         assert.doesNotReject(
@@ -62,7 +62,7 @@ export default {
           Error
         ),
     ],
-    [
+    !bool(process.env.BABEL_8_BREAKING) && [
       "it should not throw on importing regenerator helpers with explicit extension",
       () =>
         assert.doesNotReject(
