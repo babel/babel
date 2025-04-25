@@ -59,26 +59,6 @@ jobs:
           yarn
           yarn release-tool check-cycles
 
-  test-coverage:
-    name: Test on Node.js Latest
-    needs: prepare-yarn-cache
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-          cache: "yarn"
-      - name: Generate coverage report
-        run: |
-          make -j test-ci-coverage
-          yarn test:esm
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-
   test-esm:
     name: Test ESM version
     needs: prepare-yarn-cache
@@ -206,6 +186,40 @@ jobs:
         run: |
           node ./scripts/assert-dir-git-clean.js "lint-ci check-compat-data"
 
+  test-coverage:
+    name: Test on Node.js Latest (with coverage)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Run tests
+        run: |
+          yarn c8 jest --ci
+          yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_COVERAGE: true
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: babel-7
+
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
     needs: build
@@ -271,81 +285,6 @@ jobs:
         with:
           node-version: latest
 
-  build-babel8:
-    name: Build Babel 8 Artifacts
-    needs: prepare-yarn-cache
-    runs-on: ubuntu-latest
-    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
-    # env:
-    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-          cache: "yarn"
-      - name: Use ESM
-        run: node scripts/set-module-type.js module
-      - name: Build babel artifacts
-        run: |
-          make -j build-standalone-ci
-        env:
-          BABEL_ENV: test-legacy
-          BABEL_8_BREAKING: true
-          STRIP_BABEL_8_FLAG: true
-      - name: Lint
-        run: make -j lint-ci check-compat-data
-        env:
-          BABEL_ENV: test
-          BABEL_8_BREAKING: true
-      - name: Prepare artifacts
-        run: |
-          ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: babel8-artifact
-          path: babel-artifact.tar
-          retention-days: 5
-
-  test-babel-8-breaking:
-    name: Test Babel 8 breaking changes on
-    needs: build-babel8
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js 20.19.0
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.19.0" # Node.js 20.19.0 is the first LTS supported by Babel 8
-          cache: "yarn"
-      - name: Install
-        run: yarn install
-      - uses: actions/download-artifact@v4
-        with:
-          name: babel8-artifact
-      - name: Extract artifacts
-        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
-      - name: Use ESM
-        run: node scripts/set-module-type.js module
-      - name: Test
-        run: yarn jest --ci
-        env:
-          BABEL_ENV: test
-          BABEL_8_BREAKING: true
-      - name: Test ESM
-        run: yarn test:esm
-        env:
-          BABEL_ENV: test
-          BABEL_8_BREAKING: true
-
   test-windows-mac:
     name: Test on
     needs: build
@@ -374,6 +313,139 @@ jobs:
         run: yarn jest --ci
         env:
           BABEL_ENV: test
+
+  build-babel8:
+    name: Build Babel 8 Artifacts
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
+    # env:
+    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
+      - name: Build babel artifacts
+        run: |
+          make -j build-standalone-ci
+        env:
+          BABEL_ENV: test-legacy
+          BABEL_8_BREAKING: true
+          STRIP_BABEL_8_FLAG: true
+      - name: Prepare artifacts
+        run: |
+          ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: babel8-artifact
+          path: babel-artifact.tar
+          retention-days: 5
+
+  lint-babel8:
+    name: Lint (Babel 8)
+    needs: build-babel8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Lint
+        run: make -j lint-ci check-compat-data
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+
+  test-babel8-coverage:
+    name: Test Babel 8 changes (with coverage)
+    needs: build-babel8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
+      - name: Run tests
+        run: |
+          yarn c8 jest --ci
+          yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_COVERAGE: true
+          BABEL_8_BREAKING: true
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: babel-8
+
+  test-babel8-windows-mac:
+    name: Test Babel 8 changes
+    needs: build-babel8
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 20.19.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.0" # Node.js 20.19.0 is the first LTS supported by Babel 8
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
+      - name: Test
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+      - name: Test ESM
+        run: yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
 
   external-parser-tests:
     name: Third-party Parser Tests
