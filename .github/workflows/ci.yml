@@ -210,12 +210,15 @@ jobs:
       - name: Run tests
         run: |
           yarn c8 jest --ci
-          yarn c8 yarn test:esm
+          yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_COVERAGE: true
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: babel-7
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -397,13 +400,16 @@ jobs:
       - name: Run tests
         run: |
           yarn c8 jest --ci
-          yarn c8 yarn test:esm
+          yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_COVERAGE: true
           BABEL_8_BREAKING: true
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: babel-8
 
   test-babel8-windows-mac:
     name: Test Babel 8 changes
