@@ -296,12 +296,30 @@ export class Emitter {
     // we can finally resolve this.finalLoc.value.
     this.finalLoc.value = this.listing.length;
 
-    cases.push(
-      t.switchCase(this.finalLoc, [
-        // This will check/clear both context.thrown and context.rval.
-        t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
-      ]),
-    );
+    if (
+      process.env.BABEL_8_BREAKING ||
+      util.newHelpersAvailable(this.pluginPass)
+    ) {
+      cases.push(
+        t.switchCase(this.finalLoc, [
+          // This will check/clear both context.thrown and context.rval.
+          t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
+        ]),
+      );
+    } else {
+      cases.push(
+        t.switchCase(this.finalLoc, [
+          // Intentionally fall through to the "end" case...
+        ]),
+
+        // So that the runtime can jump to the final location without having
+        // to know its offset, we provide the "end" case as a synonym.
+        t.switchCase(t.stringLiteral("end"), [
+          // This will check/clear both context.thrown and context.rval.
+          t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
+        ]),
+      );
+    }
 
     return t.whileStatement(
       t.numericLiteral(1),
@@ -725,7 +743,14 @@ export class Emitter {
 
             const bodyPath = path.get("handler.body");
             const safeParam = self.makeTempVar();
-            this.emitAssign(safeParam, self.contextProperty("sent"));
+            if (
+              process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+            ) {
+              this.emitAssign(safeParam, self.contextProperty("sent"));
+            } else {
+              self.clearPendingException(tryEntry.firstLoc, safeParam);
+            }
 
             bodyPath.traverse(catchParamVisitor, {
               getSafeParam: () => t.cloneNode(safeParam),
@@ -785,8 +810,12 @@ export class Emitter {
       "normal completions are not abrupt",
     );
 
-    const abruptArgs: [t.NumericLiteral, t.Expression?] = [
-      t.numericLiteral(record.type),
+    const abruptArgs: [t.NumericLiteral | t.StringLiteral, t.Expression?] = [
+      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this.pluginPass)
+        ? t.numericLiteral(record.type)
+        : t.stringLiteral(
+            record.type === OperatorType.Jump ? "continue" : "return",
+          ),
     ];
 
     if (record.type === OperatorType.Jump) {
@@ -1260,20 +1289,39 @@ export class Emitter {
           path.node.argument && self.explodeExpression(path.get("argument"));
 
         if (arg && path.node.delegate) {
-          const result = self.contextProperty("sent");
+          if (
+            process.env.BABEL_8_BREAKING ||
+            util.newHelpersAvailable(this.pluginPass)
+          ) {
+            const ret = t.returnStatement(
+              t.callExpression(self.contextProperty("delegateYield"), [
+                arg,
+                after,
+              ]),
+            );
+            ret.loc = expr.loc;
 
-          const ret = t.returnStatement(
-            t.callExpression(self.contextProperty("delegateYield"), [
-              arg,
-              after,
-            ]),
-          );
-          ret.loc = expr.loc;
+            self.emit(ret);
+            self.mark(after);
 
-          self.emit(ret);
-          self.mark(after);
+            return self.contextProperty("sent");
+          } else {
+            const result = self.makeContextTempVar();
 
-          return result;
+            const ret = t.returnStatement(
+              t.callExpression(self.contextProperty("delegateYield"), [
+                arg,
+                t.stringLiteral((result.property as t.Identifier).name),
+                after,
+              ]),
+            );
+            ret.loc = expr.loc;
+
+            self.emit(ret);
+            self.mark(after);
+
+            return result;
+          }
         }
 
         self.emitAssign(self.contextProperty("next"), after);

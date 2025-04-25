@@ -251,12 +251,14 @@ export default function /* @no-mangle */ _regenerator() {
               }
 
               if (method !== OperatorType.Return) {
-                method = OperatorType.Throw;
                 arg = TypeError(
                   "The iterator does not provide a '" +
-                    FunctionNameStrings[method] +
+                    FunctionNameStrings[
+                      method as OperatorType.Next | OperatorType.Throw
+                    ] +
                     "' method",
                 );
+                method = OperatorType.Throw;
               }
             }
 
@@ -394,6 +396,7 @@ export default function /* @no-mangle */ _regenerator() {
 
       // Deliberately forget the last sent value so that we don't
       // accidentally pass it on to the delegate.
+      method = OperatorType.Next;
       arg = undefined;
       ctx.next = nextLoc;
 

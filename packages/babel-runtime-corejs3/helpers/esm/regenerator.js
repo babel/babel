@@ -35,7 +35,7 @@ function _regenerator() {
           abrupt: v,
           finish: _bindInstanceProperty(v).call(v, e, 4),
           delegateYield: function delegateYield(t, r) {
-            return a = regeneratorValues(t), c = e, l.next = r, f;
+            return a = regeneratorValues(t), d = 0, c = e, l.next = r, f;
           }
         };
       function G() {
@@ -74,7 +74,7 @@ function _regenerator() {
                   if (!t.done) return t;
                   2 !== d && (d = 0, c = t.value);
                 }
-              } else 1 === d && (t = a["return"]) && t.call(a), 2 !== d && (c = TypeError("The iterator does not provide a '" + u[d = 1] + "' method"));
+              } else 1 === d && (t = a["return"]) && t.call(a), 2 !== d && (c = TypeError("The iterator does not provide a '" + u[d] + "' method"), d = 1);
               a = e;
             } else if (p = 3, t = (-1 === l.next ? G : r).call(n, l), p = y ? 4 : 2, t !== f) return {
               value: t,
