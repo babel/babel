@@ -14,8 +14,7 @@
   "homepage": "https://babel.dev/docs/en/next/babel-runtime-corejs2",
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "core-js": "^2.6.12",
-    "regenerator-runtime": "^0.14.0"
+    "core-js": "^2.6.12"
   },
   "exports": {
     "./helpers/OverloadYield": [

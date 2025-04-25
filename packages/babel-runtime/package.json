@@ -13,9 +13,6 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-runtime",
   "author": "The Babel Team (https://babel.dev/team)",
-  "dependencies": {
-    "regenerator-runtime": "^0.14.0"
-  },
   "exports": {
     "./helpers/OverloadYield": [
       {
