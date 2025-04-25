@@ -17,7 +17,7 @@ module.exports = function(api) {
         path.node.body.push(
           t.exportNamedDeclaration(
             null,
-            [t.exportSpecifier(t.identifier("invalid"), t.identifier("invalid"))],
+            [t.exportSpecifier(t.identifier("invalid"), t.identifier("invalid"))]
           ),
         );
       }

@@ -15,11 +15,11 @@ module.exports = function(api) {
         path.node.body.push(
           t.exportNamedDeclaration(
             null,
-            [t.exportSpecifier(t.identifier("injected"), t.identifier("injected"))],
+            [t.exportSpecifier(t.identifier("injected"), t.identifier("injected"))]
           ),
           t.variableDeclaration(
             "var",
-            [t.variableDeclarator(t.identifier("injected"))],
+            [t.variableDeclarator(t.identifier("injected"))]
           )
         );
       }
