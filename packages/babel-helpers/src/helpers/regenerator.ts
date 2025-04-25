@@ -202,7 +202,7 @@ export default function /* @no-mangle */ _regenerator() {
           if (method === OperatorType.Next) {
             ctx.sent = arg;
           } else if (method === OperatorType.Throw) {
-            Context_dispatchException(arg);
+            Context_dispatchExceptionOrFinish(arg);
           } else if (method === OperatorType.Return) {
             rval = arg;
             ctx.next = ContextNext.End;
@@ -311,7 +311,7 @@ export default function /* @no-mangle */ _regenerator() {
 
       stop: Context_stop,
       abrupt: Context_abrupt,
-      finish: Context_finish,
+      finish: Context_dispatchExceptionOrFinish,
       delegateYield: Context_delegateYield,
     };
 
@@ -320,7 +320,10 @@ export default function /* @no-mangle */ _regenerator() {
       return rval;
     }
 
-    function Context_dispatchException(exception: any) {
+    function Context_dispatchExceptionOrFinish(
+      this: Context | void,
+      _arg: any,
+    ) {
       for (
         var i = tryEntries.length - 1;
         !done && state !== GenState.SuspendedStart && i >= 0;
@@ -331,25 +334,32 @@ export default function /* @no-mangle */ _regenerator() {
         var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
 
+        if (this && finallyLoc === _arg) {
+          method = entry[4]! || OperatorType.Jump;
+          arg = entry[5] === undefined ? entry[3]! : entry[5];
+          entry[4] = OperatorType.Jump;
+          entry[5] = undefined;
+          return ContinueSentinel;
+        }
         if (entry[0] <= prev) {
           if (prev < catchLoc) {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
             method = OperatorType.Next;
-            ctx.sent = exception;
+            ctx.sent = _arg;
 
             ctx.next = catchLoc;
-            return;
+            return undefined;
           } else if (prev < finallyLoc) {
             entry[4] = OperatorType.Throw;
-            entry[5] = exception;
+            entry[5] = _arg;
             ctx.next = finallyLoc;
-            return;
+            return undefined;
           }
         }
       }
       state = GenState.Completed;
-      throw exception;
+      throw _arg;
     }
 
     function Context_abrupt(
@@ -377,19 +387,6 @@ export default function /* @no-mangle */ _regenerator() {
       }
 
       return ContinueSentinel;
-    }
-
-    function Context_finish(finallyLoc: number) {
-      for (var i = tryEntries.length - 1; i >= 0; --i) {
-        var entry = tryEntries[i];
-        if (entry[2] === finallyLoc) {
-          method = entry[4]! || OperatorType.Jump;
-          arg = entry[5] === undefined ? entry[3]! : entry[5];
-          entry[4] = OperatorType.Jump;
-          entry[5] = undefined;
-          return ContinueSentinel;
-        }
-      }
     }
 
     function Context_delegateYield(iterable: any, nextLoc: number) {
