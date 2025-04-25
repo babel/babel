@@ -1,5 +1,6 @@
 /* @minVersion 7.18.0 */
 /* @mangleFns */
+/* @onlyBabel7 */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
