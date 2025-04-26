@@ -55,8 +55,6 @@ type Context = {
 };
 
 export default function /* @no-mangle */ _regenerator() {
-  "use strict";
-
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
 
   var Op = Object.prototype;
@@ -236,7 +234,7 @@ export default function /* @no-mangle */ _regenerator() {
             } else {
               // Note: ["return"] must be used for ES3 parsing compatibility.
               if (
-                method === OperatorType.Throw &&
+                method /* Throw | Return */ &&
                 (_ = delegateIterator[FunctionNameStrings[OperatorType.Return]])
               ) {
                 // If the delegate iterator has a return method, give it a
@@ -244,6 +242,7 @@ export default function /* @no-mangle */ _regenerator() {
                 _.call(delegateIterator);
               }
 
+              // method === OperatorType.Throw
               if (method < 2 /* Next | Throw */) {
                 arg = TypeError(
                   "The iterator does not provide a '" +
@@ -316,7 +315,17 @@ export default function /* @no-mangle */ _regenerator() {
         undefined,
         OperatorType.Finish,
       ),
-      delegateYield: Context_delegateYield,
+      delegateYield(iterable: any, nextLoc: number) {
+        delegateIterator = values(iterable);
+
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        method = OperatorType.Next;
+        arg = undefined;
+        ctx.next = nextLoc;
+
+        return ContinueSentinel;
+      },
     };
 
     function Context_dispatchExceptionOrFinishOrAbrupt(
@@ -325,8 +334,12 @@ export default function /* @no-mangle */ _regenerator() {
     ) {
       method = _type;
       arg = _arg;
-      for (var i = tryEntries.length - 1; !done && state && i >= 0; --i) {
-        var entry = tryEntries[i];
+      for (
+        _ = 0;
+        !done && state && !shouldReturn && _ < tryEntries.length;
+        _++
+      ) {
+        var entry = tryEntries[_];
         var prev = ctx.prev;
         var finallyLoc = entry[2]!;
         var shouldReturn;
@@ -366,25 +379,12 @@ export default function /* @no-mangle */ _regenerator() {
             }
           }
         }
-        if (shouldReturn) break;
       }
       if (shouldReturn || _type > 1 /* _type !== Throw */) {
         return ContinueSentinel;
       }
       done = true;
       throw _arg;
-    }
-
-    function Context_delegateYield(iterable: any, nextLoc: number) {
-      delegateIterator = values(iterable);
-
-      // Deliberately forget the last sent value so that we don't
-      // accidentally pass it on to the delegate.
-      method = OperatorType.Next;
-      arg = undefined;
-      ctx.next = nextLoc;
-
-      return ContinueSentinel;
     }
 
     return invoke;

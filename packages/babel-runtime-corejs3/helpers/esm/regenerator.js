@@ -7,7 +7,7 @@ import regeneratorDefine from "./regeneratorDefine.js";
 import regeneratorDefineIM from "./regeneratorDefineIM.js";
 import regeneratorValues from "./regeneratorValues.js";
 function _regenerator() {
-  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
   var e,
     t,
     r = Object.prototype,
@@ -24,34 +24,33 @@ function _regenerator() {
         a,
         c,
         p = 0,
-        s = o || [],
-        y = !1,
-        d = {
+        y = o || [],
+        d = !1,
+        l = {
           prev: 0,
           next: 0,
           sent: e,
-          abrupt: l,
-          finish: _bindInstanceProperty(l).call(l, e, 4),
+          abrupt: s,
+          finish: _bindInstanceProperty(s).call(s, e, 4),
           delegateYield: function delegateYield(t, r) {
-            return i = regeneratorValues(t), a = 0, c = e, d.next = r, f;
+            return i = regeneratorValues(t), a = 0, c = e, l.next = r, f;
           }
         };
-      function l(t, r) {
-        a = t, c = r;
-        for (var n = s.length - 1; !y && p && n >= 0; --n) {
+      function s(r, n) {
+        for (a = r, c = n, t = 0; !d && p && !o && t < y.length; t++) {
           var o,
-            i = s[n],
-            u = d.prev,
-            l = i[2];
-          if (t > 3 ? (o = l === r) && (a = i[4] || 3, c = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : i[0] <= u && ((o = t < 2 && u < i[1]) ? (a = 0, d.sent = r, d.next = i[1]) : u < l && (o = t < 3 || i[0] > r || r > l) && (i[4] = t, i[5] = r, d.next = l, a = 0)), o) break;
+            i = y[t],
+            u = l.prev,
+            s = i[2];
+          r > 3 ? (o = s === n) && (a = i[4] || 3, c = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : i[0] <= u && ((o = r < 2 && u < i[1]) ? (a = 0, l.sent = n, l.next = i[1]) : u < s && (o = r < 3 || i[0] > n || n > s) && (i[4] = r, i[5] = n, l.next = s, a = 0));
         }
-        if (o || t > 1) return f;
-        throw y = !0, r;
+        if (o || r > 1) return f;
+        throw d = !0, n;
       }
-      return function (o, s, G) {
+      return function (o, y, G) {
         if (2 === p) throw Error("Generator is already running");
-        for (y && 1 === s && l(s, G), a = s, c = G; !y || (t = e);) {
-          i || (a ? a < 3 ? (a > 1 && (d.next = -1), l(a, c)) : d.next = c : d.sent = c);
+        for (d && 1 === y && s(y, G), a = y, c = G; !d || (t = e);) {
+          i || (a ? a < 3 ? (a > 1 && (l.next = -1), s(a, c)) : l.next = c : l.sent = c);
           try {
             if (i) {
               if (t = i[u[a]]) {
@@ -60,16 +59,16 @@ function _regenerator() {
                   if (!t.done) return t;
                   c = t.value, a < 2 && (a = 0);
                 }
-              } else 1 === a && (t = i[u[2]]) && t.call(i), a < 2 && (c = TypeError("The iterator does not provide a '" + u[a] + "' method"), a = 1);
+              } else a && (t = i[u[2]]) && t.call(i), a < 2 && (c = TypeError("The iterator does not provide a '" + u[a] + "' method"), a = 1);
               i = e;
-            } else if (p = 2, t = (y = d.next < 0) ? c : r.call(n, d), p = y ? 3 : 1, t !== f) break;
+            } else if (p = 2, t = (d = l.next < 0) ? c : r.call(n, l), p = d ? 3 : 1, t !== f) break;
           } catch (t) {
             p = 3, i = e, a = 1, c = t;
           }
         }
         return {
           value: t,
-          done: y
+          done: d
         };
       };
     }(r, o, i), !0), c;
@@ -82,21 +81,21 @@ function _regenerator() {
   regeneratorDefine(p, i, function () {
     return this;
   });
-  var s = _Object$getPrototypeOf,
-    y = s && s(s(regeneratorValues([])));
-  y && y !== r && n.call(y, i) && (p = y);
-  var d = GeneratorFunctionPrototype.prototype = Generator.prototype = _Object$create(p);
-  function l(e) {
-    return _Object$setPrototypeOf ? _Object$setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, regeneratorDefine(e, a, "GeneratorFunction")), e.prototype = _Object$create(d), e;
+  var y = _Object$getPrototypeOf,
+    d = y && y(y(regeneratorValues([])));
+  d && d !== r && n.call(d, i) && (p = d);
+  var l = GeneratorFunctionPrototype.prototype = Generator.prototype = _Object$create(p);
+  function s(e) {
+    return _Object$setPrototypeOf ? _Object$setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, regeneratorDefine(e, a, "GeneratorFunction")), e.prototype = _Object$create(l), e;
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(d, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = regeneratorDefine(GeneratorFunctionPrototype, a, "GeneratorFunction"), regeneratorDefineIM(d), regeneratorDefine(d, a, "Generator"), regeneratorDefine(d, i, function () {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(l, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = regeneratorDefine(GeneratorFunctionPrototype, a, "GeneratorFunction"), regeneratorDefineIM(l), regeneratorDefine(l, a, "Generator"), regeneratorDefine(l, i, function () {
     return this;
-  }), regeneratorDefine(d, "toString", function () {
+  }), regeneratorDefine(l, "toString", function () {
     return "[object Generator]";
   }), (_regenerator = function _regenerator() {
     return {
       w: c,
-      m: l
+      m: s
     };
   })();
 }

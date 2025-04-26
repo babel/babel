@@ -347,27 +347,29 @@ export class Emitter {
     let lastLocValue = 0;
 
     return t.arrayExpression(
-      this.tryEntries.map(function (tryEntry) {
-        const thisLocValue = tryEntry.firstLoc.value;
-        assert.ok(thisLocValue >= lastLocValue, "try entries out of order");
-        lastLocValue = thisLocValue;
+      this.tryEntries
+        .map(function (tryEntry) {
+          const thisLocValue = tryEntry.firstLoc.value;
+          assert.ok(thisLocValue >= lastLocValue, "try entries out of order");
+          lastLocValue = thisLocValue;
 
-        const ce = tryEntry.catchEntry;
-        const fe = tryEntry.finallyEntry;
+          const ce = tryEntry.catchEntry;
+          const fe = tryEntry.finallyEntry;
 
-        const locs = [
-          tryEntry.firstLoc,
-          // The null here makes a hole in the array.
-          ce ? ce.firstLoc : null,
-        ];
+          const locs = [
+            tryEntry.firstLoc,
+            // The null here makes a hole in the array.
+            ce ? ce.firstLoc : null,
+          ];
 
-        if (fe) {
-          locs[2] = fe.firstLoc;
-          locs[3] = fe.afterLoc;
-        }
+          if (fe) {
+            locs[2] = fe.firstLoc;
+            locs[3] = fe.afterLoc;
+          }
 
-        return t.arrayExpression(locs.map(loc => loc && t.cloneNode(loc)));
-      }),
+          return t.arrayExpression(locs.map(loc => loc && t.cloneNode(loc)));
+        })
+        .reverse(),
     );
   }
 

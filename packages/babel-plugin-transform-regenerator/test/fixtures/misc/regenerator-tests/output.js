@@ -550,7 +550,7 @@ describe("try-finally generator", function () {
           case 17:
             return _context13.abrupt(2);
         }
-      }, _marked10, null, [[0,, 4, 17], [7, 11]]);
+      }, _marked10, null, [[7, 11], [0,, 4, 17]]);
     }
     var g = gen();
     assert.deepEqual(g.next(), {
@@ -675,7 +675,7 @@ describe("try-finally generator", function () {
           case 16:
             return _context16.abrupt(2);
         }
-      }, _marked13, null, [[0,, 8, 16], [1,, 5, 8], [9,, 11, 15]]);
+      }, _marked13, null, [[9,, 11, 15], [1,, 5, 8], [0,, 8, 16]]);
     }
     var g1 = gen(true);
     assert.deepEqual(g1.next(), {
@@ -737,7 +737,7 @@ describe("try-finally generator", function () {
           case 18:
             return _context17.abrupt(2);
         }
-      }, _marked14, null, [[0,, 8, 18], [1,, 5, 8], [9,, 13, 17]]);
+      }, _marked14, null, [[9,, 13, 17], [1,, 5, 8], [0,, 8, 18]]);
     }
     var g1 = gen(true);
     assert.deepEqual(g1.next(), {
@@ -819,7 +819,7 @@ describe("try-catch-finally generator", function () {
         case 28:
           return _context18.abrupt(2);
       }
-    }, _marked15, null, [[2, 22], [3, 11, 16, 20]]);
+    }, _marked15, null, [[3, 11, 16, 20], [2, 22]]);
   }
   function usingRaise() {
     var _t9, _t0;
@@ -867,7 +867,7 @@ describe("try-catch-finally generator", function () {
         case 28:
           return _context19.abrupt(2);
       }
-    }, _marked16, null, [[2, 22], [3, 11, 16, 20]]);
+    }, _marked16, null, [[3, 11, 16, 20], [2, 22]]);
   }
   it("should statically catch and then finalize", function () {
     check(usingThrow(), [0, 1, 2, 5, 3, 6]);
@@ -1142,7 +1142,7 @@ describe("nested finally blocks", function () {
         case 22:
           return _context24.abrupt(2);
       }
-    }, _marked21, null, [[0,, 18, 22], [1, 10, 14, 18], [2,, 4, 8]]);
+    }, _marked21, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
   }
   function usingRaise() {
     var _t14;
@@ -1182,7 +1182,7 @@ describe("nested finally blocks", function () {
         case 22:
           return _context25.abrupt(2);
       }
-    }, _marked22, null, [[0,, 18, 22], [1, 10, 14, 18], [2,, 4, 8]]);
+    }, _marked22, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
   }
   it("should statically execute in order", function () {
     check(usingThrow(), [1, "thrown", 2, 3]);
@@ -3267,7 +3267,7 @@ describe("catch parameter shadowing", function () {
           case 27:
             return _context90.abrupt(2);
         }
-      }, _marked78, null, [[1, 5], [14, 18]]);
+      }, _marked78, null, [[14, 18], [1, 5]]);
     }
     check(gen(1), [3, 4, 1, 4, 8, 2]);
     check(gen(2), [4, 5, 2, 5, 10, 3]);
@@ -3354,7 +3354,7 @@ describe("catch parameter shadowing", function () {
           case 18:
             return _context92.abrupt(2);
         }
-      }, _marked80, null, [[0, 4], [8, 12]]);
+      }, _marked80, null, [[8, 12], [0, 4]]);
     }
     check(gen(), ["e1", "e2", "e1"]);
   });
@@ -4270,7 +4270,7 @@ describe("labeled break and continue statements", function () {
           case 45:
             return _context120.abrupt(2);
         }
-      }, _marked106, null, [[0,, 4, 45], [11,, 13, 39], [16,, 18, 38], [21,, 23, 37]]);
+      }, _marked106, null, [[21,, 23, 37], [16,, 18, 38], [11,, 13, 39], [0,, 4, 45]]);
     }
     try {
       check(gen(1, "break"), [0, 1, 0, 2, 3, 4, "breaking", 6]);

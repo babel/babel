@@ -67,7 +67,7 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 23:
         return _context2.abrupt(2);
     }
-  }, _callee, null, [[1, 16, 19, 22], [5,, 6, 11]]);
+  }, _callee, null, [[5,, 6, 11], [1, 16, 19, 22]]);
 })();
 var i = 0;
 var j = 0;
