@@ -23,67 +23,54 @@ function _regenerator() {
       var i,
         a,
         c,
-        p = 1,
+        p = 0,
         s = o || [],
         y = !1,
-        d = 0,
-        l = {
+        d = {
           prev: 0,
           next: 0,
           sent: e,
-          stop: G,
-          abrupt: v,
-          finish: _bindInstanceProperty(v).call(v, e, 4),
+          abrupt: l,
+          finish: _bindInstanceProperty(l).call(l, e, 4),
           delegateYield: function delegateYield(t, r) {
-            return a = regeneratorValues(t), d = 0, c = e, l.next = r, f;
+            return i = regeneratorValues(t), a = 0, c = e, d.next = r, f;
           }
         };
-      function G() {
-        return y = !0, i;
-      }
-      function v(t, r) {
-        d = t, c = r;
-        for (var n = s.length - 1; !y && 1 !== p && n >= 0; --n) {
+      function l(t, r) {
+        a = t, c = r;
+        for (var n = s.length - 1; !y && p && n >= 0; --n) {
           var o,
             i = s[n],
-            a = l.prev,
-            u = i[0],
-            G = i[1],
-            v = i[2];
-          if (4 === t ? (o = v === r) && (d = i[4] || 3, c = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : u <= a && ((o = 1 === t && a < G) ? (d = 0, l.sent = r, l.next = G) : a < v && (o = 1 === t || !(3 === t && u <= r && r <= v)) && (i[4] = t, i[5] = r, l.next = v, d = 0)), o) break;
+            u = d.prev,
+            l = i[2];
+          if (t > 3 ? (o = l === r) && (a = i[4] || 3, c = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : i[0] <= u && ((o = t < 2 && u < i[1]) ? (a = 0, d.sent = r, d.next = i[1]) : u < l && (o = t < 3 || i[0] > r || r > l) && (i[4] = t, i[5] = r, d.next = l, a = 0)), o) break;
         }
-        if (o || 1 !== t) return f;
-        throw p = 4, r;
+        if (o || t > 1) return f;
+        throw y = !0, r;
       }
-      return function (o, s, h) {
-        if (3 === p) throw Error("Generator is already running");
-        if (4 === p) {
-          if (1 === s) throw h;
-          return {
-            value: e,
-            done: !0
-          };
-        }
-        for (d = s, c = h;;) {
-          a || (0 === d ? l.sent = c : 1 === d ? v(1, c) : 2 === d ? (i = c, l.next = -1, v(2, c)) : l.next = c);
+      return function (o, s, G) {
+        if (2 === p) throw Error("Generator is already running");
+        for (y && 1 === s && l(s, G), a = s, c = G; !y || (t = e);) {
+          i || (a ? a < 3 ? (a > 1 && (d.next = -1), l(a, c)) : d.next = c : d.sent = c);
           try {
-            if (a) {
-              if (t = a[u[d]]) {
-                if (t = t.call(a, c)) {
+            if (i) {
+              if (t = i[u[a]]) {
+                if (t = t.call(i, c)) {
                   if (!t) throw TypeError("iterator result is not an object");
                   if (!t.done) return t;
-                  c = t.value, 2 !== d && (d = 0);
+                  c = t.value, a < 2 && (a = 0);
                 }
-              } else 1 === d && (t = a["return"]) && t.call(a), 2 !== d && (c = TypeError("The iterator does not provide a '" + u[d] + "' method"), d = 1);
-              a = e;
-            } else if (p = 3, t = (-1 === l.next ? G : r).call(n, l), p = y ? 4 : 2, t !== f) return {
-              value: t,
-              done: y
-            };
+              } else 1 === a && (t = i[u[2]]) && t.call(i), a < 2 && (c = TypeError("The iterator does not provide a '" + u[a] + "' method"), a = 1);
+              i = e;
+            } else if (p = 2, t = (y = d.next < 0) ? c : r.call(n, d), p = y ? 3 : 1, t !== f) break;
           } catch (t) {
-            p = 4, a = e, d = 1, c = t;
+            p = 3, i = e, a = 1, c = t;
           }
         }
+        return {
+          value: t,
+          done: y
+        };
       };
     }(r, o, i), !0), c;
   }

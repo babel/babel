@@ -14,7 +14,7 @@ function _foo() {
                   case 0:
                     tmp = number;
                   case 1:
-                    return _context.stop();
+                    return _context.abrupt(2);
                 }
               }, _callee);
             }));
@@ -23,7 +23,7 @@ function _foo() {
             };
           })();
         case 1:
-          return _context2.stop();
+          return _context2.abrupt(2);
       }
     }, _callee2);
   }));

@@ -15,7 +15,7 @@ x = /*#__PURE__*/function (_x) {
           babelHelpers.newArrowCheck(this, _this);
           return _context.abrupt(2, 0);
         case 2:
-          return _context.stop();
+          return _context.abrupt(2);
       }
     }, _callee, this);
   }));

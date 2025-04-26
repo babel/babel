@@ -9,7 +9,7 @@ export function giveWord() {
         _context.next = 2;
         return myWord;
       case 2:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _marked);
 }

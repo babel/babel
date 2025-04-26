@@ -5,7 +5,7 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context.next = 2;
         return 'ok';
       case 2:
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, _callee);
 }))();
@@ -16,7 +16,7 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context2.next = 2;
         return 'ok';
       case 2:
-        return _context2.stop();
+        return _context2.abrupt(2);
     }
   }, _callee2);
 }))();
@@ -28,7 +28,7 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
           _context3.next = 2;
           return 'ok';
         case 2:
-          return _context3.stop();
+          return _context3.abrupt(2);
       }
     }, _callee3);
   }));
@@ -44,7 +44,7 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
         _context4.next = 2;
         return 'not iife';
       case 2:
-        return _context4.stop();
+        return _context4.abrupt(2);
     }
   }, _callee4);
 }));

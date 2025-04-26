@@ -18,7 +18,7 @@ var Foo = exports["default"] = /*#__PURE__*/function () {
             case 0:
               baz = 0;
             case 1:
-              return _context.stop();
+              return _context.abrupt(2);
           }
         }, _callee);
       }));
@@ -46,7 +46,7 @@ function _foo() {
                   case 0:
                     baz = {};
                   case 1:
-                    return _context2.stop();
+                    return _context2.abrupt(2);
                 }
               }, _callee2);
             }));
@@ -56,7 +56,7 @@ function _foo() {
             return _bar2.apply(this, arguments);
           };
         case 2:
-          return _context3.stop();
+          return _context3.abrupt(2);
       }
     }, _callee3);
   }));

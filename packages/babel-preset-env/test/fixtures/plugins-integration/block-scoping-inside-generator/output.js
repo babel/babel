@@ -16,7 +16,7 @@ function _test() {
                   ch = _arr[_i];
                   obj[ch] = () => ch;
                 case 2:
-                  return _context.stop();
+                  return _context.abrupt(2);
               }
             }, _loop);
           });
@@ -32,7 +32,7 @@ function _test() {
           _context2.next = 3;
           break;
         case 8:
-          return _context2.stop();
+          return _context2.abrupt(2);
       }
     }, _callee);
   }));
