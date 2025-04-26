@@ -9,10 +9,10 @@ import defineIteratorMethods from "./regeneratorDefineIM.ts";
 import values from "./regeneratorValues.ts";
 
 const enum GenState {
-  SuspendedStart = 1,
-  SuspendedYield = 2,
-  Executing = 3,
-  Completed = 4,
+  SuspendedStart,
+  SuspendedYield,
+  Executing,
+  Completed,
 }
 
 const enum OperatorType {
@@ -179,34 +179,27 @@ export default function /* @no-mangle */ _regenerator() {
 
     function invoke(
       _methodName: "next" | "throw" | "return",
-      _method: OperatorType,
+      _method: OperatorType.Next | OperatorType.Throw | OperatorType.Return,
       _arg: any,
     ) {
       if (state === GenState.Executing) {
         throw Error("Generator is already running");
-      } else if (state === GenState.Completed) {
+      } else if (done) {
         if (_method === OperatorType.Throw) {
-          throw _arg;
+          Context_dispatchExceptionOrFinishOrAbrupt(_method, _arg);
         }
-
-        // Be forgiving, per GeneratorResume behavior specified since ES2015:
-        // ES2015 spec, step 3: https://262.ecma-international.org/6.0/#sec-generatorresume
-        // Latest spec, step 2: https://tc39.es/ecma262/#sec-generatorresume
-        return { value: undefined, done: true };
       }
 
       method = _method;
       arg = _arg;
 
-      while (true) {
+      while (!done || (_ = undefined)) {
         if (!delegateIterator) {
           if (!method /* Return */) {
             ctx.sent = arg;
-          } else if (method < 2 /* Throw */) {
-            Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Throw, arg);
-          } else if (method < 3 /* Return */) {
-            ctx.next = ContextNext.End;
-            Context_dispatchExceptionOrFinishOrAbrupt(OperatorType.Return, arg);
+          } else if (method < 3 /* Throw | Return */) {
+            if (method > 1 /* Return */) ctx.next = ContextNext.End;
+            Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
             // Jump
             ctx.next = arg;
@@ -244,7 +237,7 @@ export default function /* @no-mangle */ _regenerator() {
               // Note: ["return"] must be used for ES3 parsing compatibility.
               if (
                 method === OperatorType.Throw &&
-                (_ = delegateIterator["return"])
+                (_ = delegateIterator[FunctionNameStrings[OperatorType.Return]])
               ) {
                 // If the delegate iterator has a return method, give it a
                 // chance to clean up.
@@ -273,8 +266,7 @@ export default function /* @no-mangle */ _regenerator() {
           } else {
             state = GenState.Executing;
 
-            if (ctx.next < 0 /* End */) {
-              done = true;
+            if ((done = ctx.next < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
@@ -285,10 +277,7 @@ export default function /* @no-mangle */ _regenerator() {
             state = done ? GenState.Completed : GenState.SuspendedYield;
 
             if (_ !== ContinueSentinel) {
-              return {
-                value: _,
-                done: done,
-              };
+              break;
             }
           }
         } catch (e) {
@@ -298,6 +287,13 @@ export default function /* @no-mangle */ _regenerator() {
           arg = e;
         }
       }
+      // Be forgiving, per GeneratorResume behavior specified since ES2015:
+      // ES2015 spec, step 3: https://262.ecma-international.org/6.0/#sec-generatorresume
+      // Latest spec, step 2: https://tc39.es/ecma262/#sec-generatorresume
+      return {
+        value: _,
+        done: done,
+      };
     }
 
     // The root entry object (effectively a try statement without a catch
@@ -329,15 +325,9 @@ export default function /* @no-mangle */ _regenerator() {
     ) {
       method = _type;
       arg = _arg;
-      for (
-        var i = tryEntries.length - 1;
-        !done && state !== GenState.SuspendedStart && i >= 0;
-        --i
-      ) {
+      for (var i = tryEntries.length - 1; !done && state && i >= 0; --i) {
         var entry = tryEntries[i];
         var prev = ctx.prev;
-        var tryLoc = entry[0];
-        var catchLoc = entry[1]!;
         var finallyLoc = entry[2]!;
         var shouldReturn;
 
@@ -349,24 +339,21 @@ export default function /* @no-mangle */ _regenerator() {
             entry[5] = undefined;
           }
         } else {
-          if (tryLoc <= prev) {
-            if ((shouldReturn = _type < 2 /* Throw */ && prev < catchLoc)) {
+          if (entry[0] <= prev) {
+            if ((shouldReturn = _type < 2 /* Throw */ && prev < entry[1]!)) {
               // If the dispatched exception was caught by a catch block,
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
               ctx.sent = _arg;
-              ctx.next = catchLoc;
+              ctx.next = entry[1]!;
             } else if (prev < finallyLoc) {
               if (
                 (shouldReturn =
-                  _type < 2 /* Throw */ ||
                   // Ignore the finally entry if control is not jumping to a
                   // location outside the try/catch block.
-                  !(
-                    _type > 2 /* Jump */ &&
-                    tryLoc <= _arg &&
-                    _arg <= finallyLoc
-                  ))
+                  _type < 3 /* Throw | Return */ ||
+                  entry[0] > _arg ||
+                  _arg > finallyLoc)
               ) {
                 entry[4] = _type as
                   | OperatorType.Return
@@ -384,7 +371,7 @@ export default function /* @no-mangle */ _regenerator() {
       if (shouldReturn || _type > 1 /* _type !== Throw */) {
         return ContinueSentinel;
       }
-      state = GenState.Completed;
+      done = true;
       throw _arg;
     }
 
