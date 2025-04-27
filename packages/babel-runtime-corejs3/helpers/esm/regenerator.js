@@ -59,7 +59,7 @@ function _regenerator() {
                   if (!t.done) return t;
                   c = t.value, a < 2 && (a = 0);
                 }
-              } else a && (t = i[u[2]]) && t.call(i), a < 2 && (c = TypeError("The iterator does not provide a '" + u[a] + "' method"), a = 1);
+              } else 1 === a && (t = i[u[2]]) && t.call(i), a < 2 && (c = TypeError("The iterator does not provide a '" + u[a] + "' method"), a = 1);
               i = e;
             } else if (p = 2, t = (d = l.next < 0) ? c : r.call(n, l), p = d ? 3 : 1, t !== f) break;
           } catch (t) {

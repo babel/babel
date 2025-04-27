@@ -234,7 +234,7 @@ export default function /* @no-mangle */ _regenerator() {
             } else {
               // Note: ["return"] must be used for ES3 parsing compatibility.
               if (
-                method /* Throw | Return */ &&
+                method === OperatorType.Throw &&
                 (_ = delegateIterator[FunctionNameStrings[OperatorType.Return]])
               ) {
                 // If the delegate iterator has a return method, give it a
@@ -242,7 +242,6 @@ export default function /* @no-mangle */ _regenerator() {
                 _.call(delegateIterator);
               }
 
-              // method === OperatorType.Throw
               if (method < 2 /* Next | Throw */) {
                 arg = TypeError(
                   "The iterator does not provide a '" +
