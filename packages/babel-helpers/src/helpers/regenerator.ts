@@ -310,7 +310,7 @@ export default function /* @no-mangle */ _regenerator() {
         undefined,
         OperatorType.Finish,
       ),
-      delegateYield(iterable: any, nextLoc: number) {
+      delegateYield: function (iterable: any, nextLoc: number) {
         delegateIterator = values(iterable);
 
         // Deliberately forget the last sent value so that we don't
