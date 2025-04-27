@@ -64,7 +64,6 @@ export default function /* @no-mangle */ _regenerator() {
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  var FunctionNameStrings = ["next", "throw", "return"] as const;
   var _: any;
 
   function wrap(
@@ -207,9 +206,8 @@ export default function /* @no-mangle */ _regenerator() {
           if (delegateIterator) {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
-            if (
-              (_ = delegateIterator[FunctionNameStrings[method as 0 | 1 | 2]])
-            ) {
+            if (!method /* Next */) _methodName = "next";
+            if ((_ = delegateIterator[_methodName])) {
               if ((_ = _.call(delegateIterator, arg))) {
                 if (!_) {
                   throw TypeError("iterator result is not an object");
@@ -235,7 +233,7 @@ export default function /* @no-mangle */ _regenerator() {
               // Note: ["return"] must be used for ES3 parsing compatibility.
               if (
                 method === OperatorType.Throw &&
-                (_ = delegateIterator[FunctionNameStrings[OperatorType.Return]])
+                (_ = delegateIterator["return"])
               ) {
                 // If the delegate iterator has a return method, give it a
                 // chance to clean up.
@@ -245,9 +243,7 @@ export default function /* @no-mangle */ _regenerator() {
               if (method < 2 /* Next | Throw */) {
                 arg = TypeError(
                   "The iterator does not provide a '" +
-                    FunctionNameStrings[
-                      method as OperatorType.Next | OperatorType.Throw
-                    ] +
+                    _methodName +
                     "' method",
                 );
                 method = OperatorType.Throw;
