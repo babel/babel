@@ -20,7 +20,6 @@ type Plugin$1 =
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "deprecatedImportAssert"
-  | "discardBinding"
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
   | "explicitResourceManagement"
@@ -55,6 +54,7 @@ type Plugin$1 =
 
 type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
+  | ["discardBinding", { syntaxType: "void" }]
   | ["estree", { classFeatures?: boolean }]
   | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
