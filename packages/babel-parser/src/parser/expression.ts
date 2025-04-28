@@ -3266,8 +3266,17 @@ export default abstract class ExpressionParser extends LValParser {
     afterLeftParse?: Function,
   ) {
     if (refExpressionErrors != null && this.match(tt._void)) {
-      const nextType = this.lookahead().type;
-      if (nextType === tt.comma || nextType === close || nextType === tt.eq) {
+      const nextCode = this.lookaheadCharCode();
+      if (
+        nextCode === charCodes.comma ||
+        nextCode ===
+          (close === tt.bracketR
+            ? charCodes.rightSquareBracket
+            : close === tt.braceR
+              ? charCodes.rightCurlyBrace
+              : charCodes.rightParenthesis) ||
+        nextCode === charCodes.equalsTo
+      ) {
         // `void = Initializer` is not allowed, here we parse the production as an assignment pattern
         // so that we can recover from this error
         return this.parseMaybeDefault(
