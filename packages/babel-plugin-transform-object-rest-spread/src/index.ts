@@ -6,7 +6,6 @@ import { isRequired } from "@babel/helper-compilation-targets";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";
 import compatData from "./compat-data.ts";
 
-const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
 if (!process.env.BABEL_8_BREAKING) {
@@ -18,7 +17,6 @@ if (!process.env.BABEL_8_BREAKING) {
   var ZERO_REFS = t.isReferenced(node, property, pattern) ? 1 : 0;
 }
 
-type Param = NodePath<t.Function["params"][number]>;
 export interface Options {
   useBuiltIns?: boolean;
   loose?: boolean;
@@ -51,42 +49,50 @@ export default declare((api, opts: Options) => {
       : file.addHelper("extends");
   }
 
-  function hasRestElement(path: Param) {
-    let foundRestElement = false;
-    visitRestElements(path, restElement => {
-      foundRestElement = true;
-      restElement.stop();
-    });
-    return foundRestElement;
-  }
-
-  function hasObjectPatternRestElement(path: NodePath): boolean {
-    let foundRestElement = false;
-    visitRestElements(path, restElement => {
-      if (restElement.parentPath.isObjectPattern()) {
-        foundRestElement = true;
-        restElement.stop();
-      }
-    });
-    return foundRestElement;
-  }
-
-  function visitRestElements(
-    path: NodePath,
-    visitor: (path: NodePath<t.RestElement>) => any,
-  ) {
-    path.traverse({
-      Expression(path) {
-        const { parent, key } = path;
-        if (
-          (isAssignmentPattern(parent) && key === "right") ||
-          (isObjectProperty(parent) && parent.computed && key === "key")
-        ) {
-          path.skip();
+  function* iterateObjectRestElement(
+    path: NodePath<t.LVal>,
+  ): Generator<NodePath<t.RestElement>> {
+    switch (path.type) {
+      case "ArrayPattern":
+        for (const elementPath of path.get("elements")) {
+          if (elementPath.isRestElement()) {
+            yield* iterateObjectRestElement(elementPath.get("argument"));
+          } else {
+            yield* iterateObjectRestElement(elementPath);
+          }
         }
-      },
-      RestElement: visitor,
-    });
+        break;
+      case "ObjectPattern":
+        for (const propertyPath of path.get("properties")) {
+          if (propertyPath.isRestElement()) {
+            yield propertyPath;
+          } else {
+            yield* iterateObjectRestElement(
+              propertyPath.get("value") as NodePath<t.Pattern>,
+            );
+          }
+        }
+        break;
+      case "AssignmentPattern":
+        yield* iterateObjectRestElement(path.get("left"));
+        break;
+      default:
+        break;
+    }
+  }
+
+  function hasObjectRestElement(path: NodePath<t.LVal>): boolean {
+    const objectRestPatternIterator = iterateObjectRestElement(path);
+    return !objectRestPatternIterator.next().done;
+  }
+
+  function visitObjectRestElements(
+    path: NodePath<t.LVal>,
+    visitor: (path: NodePath<t.RestElement>) => void,
+  ) {
+    for (const restElementPath of iterateObjectRestElement(path)) {
+      visitor(restElementPath);
+    }
   }
 
   function hasSpread(node: t.ObjectExpression): boolean {
@@ -273,7 +279,7 @@ export default declare((api, opts: Options) => {
       return;
     }
 
-    if (paramPath.isArrayPattern() && hasRestElement(paramPath)) {
+    if (paramPath.isArrayPattern() && hasObjectRestElement(paramPath)) {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
@@ -281,7 +287,7 @@ export default declare((api, opts: Options) => {
       }
     }
 
-    if (paramPath.isObjectPattern() && hasRestElement(paramPath)) {
+    if (paramPath.isObjectPattern() && hasObjectRestElement(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
       const declar = t.variableDeclaration("let", [
@@ -315,7 +321,7 @@ export default declare((api, opts: Options) => {
         const idsInRestParams = new Set();
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
-          if (hasRestElement(param)) {
+          if (hasObjectRestElement(param)) {
             paramsWithRestElement.add(i);
             for (const name of Object.keys(param.getBindingIdentifiers())) {
               idsInRestParams.add(name);
@@ -389,14 +395,7 @@ export default declare((api, opts: Options) => {
         let insertionPath = path;
         const originalPath = path;
 
-        visitRestElements(path.get("id"), path => {
-          if (!path.parentPath.isObjectPattern()) {
-            // Return early if the parent is not an ObjectPattern, but
-            // (for example) an ArrayPattern or Function, because that
-            // means this RestElement is an not an object property.
-            return;
-          }
-
+        visitObjectRestElements(path.get("id"), path => {
           if (
             // skip single-property case, e.g.
             // const { ...x } = foo();
@@ -450,10 +449,8 @@ export default declare((api, opts: Options) => {
             );
           });
 
-          //@ts-expect-error: findParent can not apply assertions on result shape
-          const objectPatternPath: NodePath<t.ObjectPattern> = path.findParent(
-            path => path.isObjectPattern(),
-          );
+          const objectPatternPath =
+            path.parentPath as NodePath<t.ObjectPattern>;
 
           const [impureComputedPropertyDeclarators, argument, callExpression] =
             createObjectRest(
@@ -496,7 +493,7 @@ export default declare((api, opts: Options) => {
 
         const hasRest = declaration
           .get("declarations")
-          .some(path => hasObjectPatternRestElement(path.get("id")));
+          .some(path => hasObjectRestElement(path.get("id")));
         if (!hasRest) return;
 
         const specifiers = [];
@@ -523,7 +520,7 @@ export default declare((api, opts: Options) => {
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         const leftPath = path.get("left");
-        if (leftPath.isObjectPattern() && hasRestElement(leftPath)) {
+        if (leftPath.isObjectPattern() && hasObjectRestElement(leftPath)) {
           const nodes = [];
 
           const refName = path.scope.generateUidBasedOnNode(
@@ -564,13 +561,11 @@ export default declare((api, opts: Options) => {
       ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const leftPath = path.get("left");
-        const left = node.left;
 
-        if (!hasObjectPatternRestElement(leftPath)) {
-          return;
-        }
-
-        if (!t.isVariableDeclaration(left)) {
+        if (!leftPath.isVariableDeclaration()) {
+          if (!hasObjectRestElement(leftPath)) {
+            return;
+          }
           // for ({a, ...b} of []) {}
           const temp = scope.generateUidIdentifier("ref");
 
@@ -589,12 +584,17 @@ export default declare((api, opts: Options) => {
 
           body.body.unshift(
             t.expressionStatement(
-              t.assignmentExpression("=", left, t.cloneNode(temp)),
+              t.assignmentExpression("=", leftPath.node, t.cloneNode(temp)),
             ),
           );
         } else {
           // for (var {a, ...b} of []) {}
-          const pattern = left.declarations[0].id;
+          const patternPath = leftPath.get("declarations")[0].get("id");
+          if (!hasObjectRestElement(patternPath)) {
+            return;
+          }
+          const left = leftPath.node;
+          const pattern = patternPath.node;
 
           const key = scope.generateUidIdentifier("ref");
           node.left = t.variableDeclaration(left.kind, [
@@ -616,15 +616,8 @@ export default declare((api, opts: Options) => {
       ArrayPattern(path) {
         const objectPatterns: t.VariableDeclarator[] = [];
 
-        visitRestElements(path, path => {
-          if (!path.parentPath.isObjectPattern()) {
-            // Return early if the parent is not an ObjectPattern, but
-            // (for example) an ArrayPattern or Function, because that
-            // means this RestElement is an not an object property.
-            return;
-          }
-
-          const objectPattern = path.parentPath;
+        visitObjectRestElements(path, path => {
+          const objectPattern = path.parentPath as NodePath<t.ObjectPattern>;
 
           const uid = path.scope.generateUidIdentifier("ref");
           objectPatterns.push(t.variableDeclarator(objectPattern.node, uid));
