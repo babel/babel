@@ -881,7 +881,7 @@ gulp.task(
 );
 
 function watch() {
-  gulp.watch(defaultSourcesGlob, "build-no-bundle-watch");
+  gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
   gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
