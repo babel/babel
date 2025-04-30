@@ -194,7 +194,11 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   lookaheadCharCode(): number {
-    return this.input.charCodeAt(this.nextTokenStart());
+    return this.lookaheadCharCodeSince(this.state.pos);
+  }
+
+  lookaheadCharCodeSince(pos: number): number {
+    return this.input.charCodeAt(this.nextTokenStartSince(pos));
   }
 
   /**
