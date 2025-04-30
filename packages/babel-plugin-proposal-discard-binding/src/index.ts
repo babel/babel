@@ -20,7 +20,8 @@ export default declare(function ({ assertVersion }) {
         if (!hasVoidPatternInVariableDeclaration(declarationPath)) return;
 
         // Split the declaration and export list into two declarations so that the variable
-        // declaration can be transformed and we don't accidentally
+        // declaration can be split up later without needing to worry about not being a
+        // top-level statement.
         splitNamedDeclarationAsVarAndExport(path, declarationPath);
       },
 
