@@ -5,7 +5,9 @@ let rest1, rest2;
   q: 2,
   r: 3
 }];
-var {
-    p: _
-  } = _ref,
-  rest1 = babelHelpers.objectWithoutProperties(_ref, ["p"]);
+var _ref2 = _ref;
+({
+  p: _
+} = _ref2);
+rest1 = babelHelpers.objectWithoutProperties(_ref2, ["p"]);
+_ref2;
