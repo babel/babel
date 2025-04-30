@@ -623,7 +623,7 @@ export default declare((api, opts: Options) => {
 
       // [{a, ...b}] = c;
       ArrayPattern(path) {
-        type LhsAndRhs = { left: t.Pattern; right: t.Identifier };
+        type LhsAndRhs = { left: t.ObjectPattern; right: t.Identifier };
         const objectPatterns: LhsAndRhs[] = [];
 
         visitObjectRestElements(path, path => {
