@@ -165,7 +165,8 @@ export type Pattern =
   | ObjectPattern
   | ArrayPattern
   | RestElement
-  | AssignmentPattern;
+  | AssignmentPattern
+  | VoidPattern;
 //| Placeholder<"Pattern">;
 export type Declaration =
   | VariableDeclaration
@@ -877,6 +878,10 @@ export interface AssignmentPattern extends PatternBase {
   right: Expression;
 }
 
+export interface VoidPattern extends PatternBase {
+  type: "VoidPattern";
+}
+
 // Classes
 
 export type Class = ClassDeclaration | ClassExpression;
@@ -1536,10 +1541,14 @@ export type TsSignatureDeclaration =
 
 export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
-  params: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
+  params: Array<
+    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
+  >;
   returnType: TsTypeAnnotation | undefined | null;
   // TODO(Babel 8): Remove
-  parameters: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
+  parameters: Array<
+    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
+  >;
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }
 
@@ -2242,6 +2251,7 @@ export type Node =
   | UpdateExpression
   | VariableDeclaration
   | VariableDeclarator
+  | VoidPattern
   | V8IntrinsicIdentifier
   | WhileStatement
   | WithStatement

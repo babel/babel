@@ -1214,7 +1214,11 @@ defineType("VariableDeclaration", {
             "ObjectPattern",
             "Placeholder",
           );
-          const usingOrAwaitUsing = withoutInit;
+          const usingOrAwaitUsing = assertNodeType(
+            "Identifier",
+            "VoidPattern",
+            "Placeholder",
+          );
 
           return function (parent, key, node: t.VariableDeclaration) {
             const { kind, declarations } = node;
@@ -1249,7 +1253,12 @@ defineType("VariableDeclarator", {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
           ? assertNodeType("LVal")
-          : assertNodeType("Identifier", "ArrayPattern", "ObjectPattern"),
+          : assertNodeType(
+              "Identifier",
+              "ArrayPattern",
+              "ObjectPattern",
+              "VoidPattern",
+            ),
     },
     definite: {
       optional: true,
