@@ -5,8 +5,8 @@ for (const _ref of [[0, {
   q: 2,
   r: 3
 }]]) {
-  const [, _ref2, ...rest2_] = _ref;
-  const {
+  const [, _ref2, ...rest2_] = _ref,
+    {
       p: _
     } = _ref2,
     rest1_ = babelHelpers.objectWithoutProperties(_ref2, _excluded);
