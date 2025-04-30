@@ -18,7 +18,7 @@
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^",
     "js-tokens": "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0",
-    "picocolors": "^1.0.0"
+    "picocolors": "^1.1.1"
   },
   "devDependencies": {
     "import-meta-resolve": "^4.1.0",

@@ -288,7 +288,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     import-meta-resolve: "npm:^4.1.0"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
-    picocolors: "npm:^1.0.0"
+    picocolors: "npm:^1.1.1"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
