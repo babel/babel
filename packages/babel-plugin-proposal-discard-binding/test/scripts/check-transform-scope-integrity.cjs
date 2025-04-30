@@ -11,15 +11,15 @@ module.exports = function checkTransformScopeIntegrity() {
   const plugin = {
     name: "check-discard-binding-transform-scope-integrity",
     visitor: {
-      Identifier: {
+      BindingIdentifier: {
         exit(path) {
-          if (path.scope.hasUid(path.node.name)) {
-            const blockParent = path.scope.getBlockParent();
-            assert.ok(
-              blockParent.hasOwnBinding(path.node.name),
-              `'${path.node.name}' is not defined in the ${blockParent.path.type}'s scope`,
-            );
-          }
+          let { scope } = path;
+          if (scope.path.isPattern()) scope = scope.getBlockParent();
+          const binding = scope.getBinding(path.node.name);
+          assert.ok(
+            binding !== undefined,
+            `'${path.node.name}' is not defined in the ${path.scope.path.type}'s scope`,
+          );
         },
       },
     },
