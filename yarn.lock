@@ -1477,6 +1477,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-discard-binding@workspace:packages/babel-plugin-proposal-discard-binding":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-discard-binding@workspace:packages/babel-plugin-proposal-discard-binding"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.17.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-do-expressions@workspace:^, @babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions"
