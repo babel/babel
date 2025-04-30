@@ -5,6 +5,7 @@ import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";
 import compatData from "./compat-data.ts";
+import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
@@ -574,19 +575,26 @@ export default declare((api, opts: Options) => {
           ]);
 
           path.ensureBlock();
-          const body = path.node.body as t.BlockStatement;
 
-          if (body.body.length === 0 && path.isCompletionRecord()) {
-            body.body.unshift(
-              t.expressionStatement(scope.buildUndefinedNode()),
-            );
+          const statementBody = (path.node.body as t.BlockStatement).body;
+          const nodes = [];
+          // todo: the completion of a for statement can only be observed from
+          // a do block (or eval that we don't support),
+          // but the new do-expression proposal plans to ban iteration ends in the
+          // do block, maybe we can get rid of this
+          if (statementBody.length === 0 && path.isCompletionRecord()) {
+            nodes.unshift(t.expressionStatement(scope.buildUndefinedNode()));
           }
 
-          body.body.unshift(
+          nodes.unshift(
             t.expressionStatement(
               t.assignmentExpression("=", leftPath.node, t.cloneNode(temp)),
             ),
           );
+
+          unshiftForXStatementBody(path, nodes);
+          scope.crawl();
+          return;
         } else {
           // for (var {a, ...b} of []) {}
           const patternPath = leftPath.get("declarations")[0].get("id");
@@ -602,13 +610,14 @@ export default declare((api, opts: Options) => {
           ]);
 
           path.ensureBlock();
-          const body = node.body as t.BlockStatement;
 
-          body.body.unshift(
+          unshiftForXStatementBody(path, [
             t.variableDeclaration(node.left.kind, [
               t.variableDeclarator(pattern, t.cloneNode(key)),
             ]),
-          );
+          ]);
+          scope.crawl();
+          return;
         }
       },
 
