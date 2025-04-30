@@ -24,6 +24,71 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.1 (2025-04-30)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17254](https://github.com/babel/babel/pull/17254) Allow `using of` as lexical declaration within for ([@JLHwung](https://github.com/JLHwung))
+  * [#17230](https://github.com/babel/babel/pull/17230) Disallow get/set in TSPropertySignature ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-types`
+  * [#17193](https://github.com/babel/babel/pull/17193) Stricter TSImportType options parsing ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-traverse`
+  * [#17137](https://github.com/babel/babel/pull/17137) fix: do expressions should allow early exit ([@kermanx](https://github.com/kermanx))
+* `babel-helper-wrap-function`, `babel-plugin-transform-async-to-generator`
+  * [#17251](https://github.com/babel/babel/pull/17251) Fix: propagate argument evaluation errors through async promise chain ([@magic-akari](https://github.com/magic-akari))
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-to-generator`
+  * [#17231](https://github.com/babel/babel/pull/17231) fix apply()/call() annotated as pure ([@Lacsw](https://github.com/Lacsw))
+* `babel-helper-fixtures`, `babel-parser`
+  * [#17233](https://github.com/babel/babel/pull/17233) Create ChainExpression within TSInstantiationExpression ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`
+  * [#17226](https://github.com/babel/babel/pull/17226) Fill optional AST properties when both estree and typescript parser plugin are enabled (Part 2) ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#17224](https://github.com/babel/babel/pull/17224) Fill optional AST properties when both estree and typescript parser plugin are enabled (Part 1) ([@JLHwung](https://github.com/JLHwung))
+  * [#17080](https://github.com/babel/babel/pull/17080) Fix start of TSParameterProperty ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-preset-env`
+  * [#17228](https://github.com/babel/babel/pull/17228) Update firefox bugfix compat data ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17156](https://github.com/babel/babel/pull/17156) fix: Objects and arrays with multiple references should not be evaluated ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#17216](https://github.com/babel/babel/pull/17216) Fix: support const type parameter in generator ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#17221](https://github.com/babel/babel/pull/17221) Reduce generated names size for the 10th-11th ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17263](https://github.com/babel/babel/pull/17263) Remove unused `regenerator-runtime` dep in `@babel/runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-preset-env`
+  * [#17256](https://github.com/babel/babel/pull/17256) Tune plugin compat data ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-standalone`
+  * [#17236](https://github.com/babel/babel/pull/17236) migrate babel-compat-data build script to mjs ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#17232](https://github.com/babel/babel/pull/17232) Bump typescript-eslint to 8.29.1 ([@JLHwung](https://github.com/JLHwung))
+  * [#17219](https://github.com/babel/babel/pull/17219) test: add basic typescript-eslint integration tests ([@JLHwung](https://github.com/JLHwung))
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-register`
+  * [#16844](https://github.com/babel/babel/pull/16844) Migrate `@babel/register` to cts ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-cli`, `babel-compat-data`, `babel-core`, `babel-generator`, `babel-helper-compilation-targets`, `babel-helper-fixtures`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-plugin-test-runner`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-node`, `babel-parser`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-preset-env`, `babel-register`, `babel-standalone`, `babel-types`
+  * [#17207](https://github.com/babel/babel/pull/17207) Enforce node protocol import ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-regenerator`
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`
+  * [#17205](https://github.com/babel/babel/pull/17205) Inline regenerator in the relevant packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs3`
+  * [#16538](https://github.com/babel/babel/pull/16538) Reduce `interopRequireWildcard` size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17213](https://github.com/babel/babel/pull/17213) Reduce `regeneratorRuntime` size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.27.0 (2025-03-24)
 
 #### :eyeglasses: Spec Compliance
