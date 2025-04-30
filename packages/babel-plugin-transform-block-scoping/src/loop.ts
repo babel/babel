@@ -241,7 +241,15 @@ export function wrapLoopBody(
     for (const decl of varPath.node.declarations) {
       varNames.push(...Object.keys(t.getBindingIdentifiers(decl.id)));
       if (decl.init) {
-        assign.push(t.assignmentExpression("=", decl.id, decl.init));
+        assign.push(
+          t.assignmentExpression(
+            "=",
+            // using/await using should be handled by the explicit-resource-management plugin
+            // so decl.id must not be a void pattern
+            decl.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+            decl.init,
+          ),
+        );
       } else if (t.isForXStatement(varPath.parent, { left: varPath.node })) {
         assign.push(decl.id as t.Identifier);
       }
