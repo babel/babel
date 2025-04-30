@@ -267,7 +267,10 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
-type LHS = Exclude<t.LVal, t.RestElement | t.TSParameterProperty>;
+type LHS = Exclude<
+  t.LVal,
+  t.RestElement | t.TSParameterProperty | t.VoidPattern
+>;
 
 type ExcludingKey = {
   key: t.ObjectProperty["key"];

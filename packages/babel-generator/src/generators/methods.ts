@@ -54,6 +54,7 @@ export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
 ) {
+  // @ts-expect-error decorators is not in VoidPattern
   this.printJoin(parameter.decorators);
   this.print(parameter);
   if (
