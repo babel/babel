@@ -129,6 +129,8 @@ export default {
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",
   InvalidCodePoint: "Code point out of bounds.",
+  InvalidCoverDiscardElement:
+    "'void' must be followed by an expression when not used in a binding position.",
   InvalidCoverInitializedName: "Invalid shorthand property initializer.",
   InvalidDecimal: "Invalid decimal.",
   InvalidDigit: ({ radix }: { radix: number }) =>
@@ -280,6 +282,7 @@ export default {
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnexpectedUsingDeclaration:
     "Using declaration cannot appear in the top level when source type is `script` or in the bare case statement.",
+  UnexpectedVoidPattern: "Unexpected void binding.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
@@ -310,6 +313,9 @@ export default {
     "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>
     `Identifier '${identifierName}' has already been declared.`,
+  VoidPatternCatchClauseParam:
+    "A void binding can not be the catch clause parameter. Use `try { ... } catch { ... }` if you want to discard the caught error.",
+  VoidPatternInitializer: "A void binding may not have an initializer.",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator.",
   YieldInParameter: "Yield expression is not allowed in formal parameters.",

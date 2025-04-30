@@ -281,7 +281,7 @@ export function* privateKeyPathIterator(pattern: t.LVal | t.PatternLike) {
 }
 
 type LHS =
-  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty>
+  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty | t.VoidPattern>
   | t.AssignmentPattern;
 
 type ExcludingKey = {

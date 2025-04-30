@@ -301,6 +301,7 @@ export type Node =
   | VariableDeclaration
   | VariableDeclarator
   | Variance
+  | VoidPattern
   | VoidTypeAnnotation
   | WhileStatement
   | WithStatement
@@ -1685,6 +1686,10 @@ export interface PipelinePrimaryTopicReference extends BaseNode {
   type: "PipelinePrimaryTopicReference";
 }
 
+export interface VoidPattern extends BaseNode {
+  type: "VoidPattern";
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
@@ -2427,6 +2432,7 @@ export type PatternLike =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
+  | VoidPattern
   | TSAsExpression
   | TSSatisfiesExpression
   | TSTypeAssertion
@@ -2438,6 +2444,7 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
+  | VoidPattern
   | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
@@ -2486,7 +2493,11 @@ export type Property =
   | ClassAccessorProperty
   | ClassPrivateProperty;
 export type UnaryLike = UnaryExpression | SpreadElement;
-export type Pattern = AssignmentPattern | ArrayPattern | ObjectPattern;
+export type Pattern =
+  | AssignmentPattern
+  | ArrayPattern
+  | ObjectPattern
+  | VoidPattern;
 export type Class = ClassExpression | ClassDeclaration;
 export type ImportOrExportDeclaration =
   | ExportAllDeclaration
@@ -8831,6 +8842,22 @@ export interface ParentMaps {
     | ObjectTypeIndexer
     | ObjectTypeProperty
     | TypeParameter;
+  VoidPattern:
+    | ArrayPattern
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | ClassMethod
+    | ClassPrivateMethod
+    | ForInStatement
+    | ForOfStatement
+    | FunctionDeclaration
+    | FunctionExpression
+    | ObjectMethod
+    | ObjectProperty
+    | RestElement
+    | TSDeclareFunction
+    | TSDeclareMethod
+    | VariableDeclarator;
   VoidTypeAnnotation:
     | ArrayTypeAnnotation
     | DeclareExportDeclaration

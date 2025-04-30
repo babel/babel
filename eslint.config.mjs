@@ -293,7 +293,7 @@ export default [
             "nodeGte23_6",
             "nodeGte12NoESM",
             "testFn",
-          ],
+          ].flatMap(testFnName => [testFnName, testFnName + ".each"]),
         },
       ],
       "jest/no-test-callback": "off",

@@ -6,8 +6,10 @@ const shouldStoreRHSInTemporaryVariable =
   _shouldStoreRHSInTemporaryVariable;
 
 function getFistObjectPattern(program) {
-  return parse(program, { sourceType: "module" }).program.body[0]
-    .declarations[0].id;
+  return parse(program, {
+    sourceType: "module",
+    plugins: [["discardBinding", { syntaxType: "void" }]],
+  }).program.body[0].declarations[0].id;
 }
 describe("shouldStoreRHSInTemporaryVariable", function () {
   it.each([
@@ -39,6 +41,7 @@ describe("shouldStoreRHSInTemporaryVariable", function () {
     ["const { x32: { }, w32: { ...y32 } } = z();", true],
     ["const [,,{}, {...q32}] = z();", true],
     ["const { ...y33 } = z();", true],
+    ["const [void, { x34: void, ...y34 }] = z();", true],
     ["const { x16: [] } = z();", false],
     ["const {} = {};", false],
     ["const [,,x27] = z();", false],
