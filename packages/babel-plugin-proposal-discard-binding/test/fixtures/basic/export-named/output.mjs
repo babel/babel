@@ -1,6 +1,6 @@
-var _2;
+var _;
 const [, {
-  p: _,
+  p: _2,
   ...shouldSplit
 }] = [0, {
   p: 1,
@@ -9,7 +9,7 @@ const [, {
 }];
 export { shouldSplit };
 export const shouldNotSplit = [, {
-  p: _2,
+  p: _,
   ...q
 }] = [0, {
   p: 1,
