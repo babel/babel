@@ -59,7 +59,14 @@ export default function gatherSequenceExpressions(
         }
 
         if (declar.init) {
-          exprs.push(assignmentExpression("=", declar.id, declar.init));
+          exprs.push(
+            assignmentExpression(
+              "=",
+              // var declarator must not be a void pattern
+              declar.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+              declar.init,
+            ),
+          );
         }
       }
 
