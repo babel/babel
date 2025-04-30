@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-class-properties",
-  "version": "7.25.9",
+  "version": "7.27.1",
   "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": {
     "type": "git",

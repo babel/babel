@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-sticky-regex",
-  "version": "7.25.9",
+  "version": "7.27.1",
   "description": "Compile ES2015 sticky regex to an ES5 RegExp constructor",
   "repository": {
     "type": "git",

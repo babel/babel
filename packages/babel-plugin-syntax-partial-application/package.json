@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-partial-application",
-  "version": "7.25.9",
+  "version": "7.27.1",
   "description": "Allow parsing of partial application syntax",
   "repository": {
     "type": "git",

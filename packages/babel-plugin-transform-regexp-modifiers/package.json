@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-regexp-modifiers",
-  "version": "7.26.0",
+  "version": "7.27.1",
   "description": "Compile inline regular expression modifiers",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regexp-modifiers",
   "license": "MIT",

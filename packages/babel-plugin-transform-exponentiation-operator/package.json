@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-exponentiation-operator",
-  "version": "7.26.3",
+  "version": "7.27.1",
   "description": "Compile exponentiation operator to ES5",
   "repository": {
     "type": "git",
