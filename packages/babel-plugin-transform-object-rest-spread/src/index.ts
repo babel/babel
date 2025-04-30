@@ -623,28 +623,44 @@ export default declare((api, opts: Options) => {
 
       // [{a, ...b}] = c;
       ArrayPattern(path) {
-        const objectPatterns: t.VariableDeclarator[] = [];
+        type LhsAndRhs = { left: t.Pattern; right: t.Identifier };
+        const objectPatterns: LhsAndRhs[] = [];
 
         visitObjectRestElements(path, path => {
           const objectPattern = path.parentPath as NodePath<t.ObjectPattern>;
 
           const uid = path.scope.generateUidIdentifier("ref");
-          objectPatterns.push(t.variableDeclarator(objectPattern.node, uid));
+          objectPatterns.push({ left: objectPattern.node, right: uid });
 
           objectPattern.replaceWith(t.cloneNode(uid));
           path.skip();
         });
 
         if (objectPatterns.length > 0) {
-          const statementPath = path.getStatementParent();
-          const statementNode = statementPath.node;
-          const kind =
-            statementNode.type === "VariableDeclaration"
-              ? statementNode.kind
-              : "var";
-          statementPath.insertAfter(
-            t.variableDeclaration(kind, objectPatterns),
+          const patternParentPath = path.findParent(
+            path => !(path.isPattern() || path.isObjectProperty()),
           );
+          const patternParent = patternParentPath.node;
+          switch (patternParent.type) {
+            case "VariableDeclarator":
+              patternParentPath.insertAfter(
+                objectPatterns.map(({ left, right }) =>
+                  t.variableDeclarator(left, right),
+                ),
+              );
+              break;
+            case "AssignmentExpression":
+              patternParentPath.insertAfter(
+                objectPatterns.map(({ left, right }) =>
+                  t.assignmentExpression("=", left, right),
+                ),
+              );
+              break;
+            default:
+              throw new Error(
+                `Unexpected pattern parent type: ${patternParent.type}`,
+              );
+          }
         }
       },
 

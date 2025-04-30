@@ -98,10 +98,10 @@ const {
   x16: []
 } = z();
 const [...[...y17]] = z();
-const [..._ref] = z();
-const y18 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref), _ref));
-const [..._ref2] = z();
-const {
+const [..._ref] = z(),
+  y18 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref), _ref));
+const [..._ref2] = z(),
+  {
     a19
   } = _ref2,
   y19 = babelHelpers.objectWithoutProperties(_ref2, ["a19"]);
@@ -116,8 +116,8 @@ const _z12 = z(),
   } = _z12,
   y22 = babelHelpers.objectWithoutProperties(_z12.x22, ["q22"]);
 const [[...y23] = []] = z();
-const [_ref3 = []] = z();
-const y24 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref3), _ref3));
+const [_ref3 = []] = z(),
+  y24 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref3), _ref3));
 const {
   x25: [...y25] = []
 } = z();
@@ -136,19 +136,19 @@ const _z14 = z(),
     }]
   } = _z14,
   y29 = babelHelpers.objectWithoutProperties(_z14.x29, ["q29"]);
-const [,, _ref4] = z();
-const {
+const [,, _ref4] = z(),
+  {
     y30
   } = _ref4,
   x30 = babelHelpers.objectWithoutProperties(_ref4, ["y30"]);
-const [,, _ref5] = z();
-const x31 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref5), _ref5));
+const [,, _ref5] = z(),
+  x31 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref5), _ref5));
 const _z15 = z(),
   {
     x32: {}
   } = _z15,
   y32 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_z15.w32), _z15.w32));
-const [,, {}, _ref6] = z();
-const q32 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref6), _ref6));
+const [,, {}, _ref6] = z(),
+  q32 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref6), _ref6));
 const _z16 = z(),
   y33 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_z16), _z16));
