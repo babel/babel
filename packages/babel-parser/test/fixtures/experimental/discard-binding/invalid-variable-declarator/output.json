@@ -1,0 +1,152 @@
+{
+  "type": "File",
+  "start":0,"end":88,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":88}},
+  "errors": [
+    "SyntaxError: Unexpected void binding. (2:6)",
+    "SyntaxError: Unexpected void binding. (5:6)",
+    "SyntaxError: Unexpected void binding. (5:18)",
+    "SyntaxError: Unexpected void binding. (8:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":88,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":88}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":21}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":4,"end":19,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":17,"index":19}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":8,"end":18,"loc":{"start":{"line":2,"column":6,"index":8},"end":{"line":2,"column":16,"index":18}},
+                "id": {
+                  "type": "VoidPattern",
+                  "start":8,"end":12,"loc":{"start":{"line":2,"column":6,"index":8},"end":{"line":2,"column":10,"index":12}}
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":15,"end":18,"loc":{"start":{"line":2,"column":13,"index":15},"end":{"line":2,"column":16,"index":18}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":15,"end":16,"loc":{"start":{"line":2,"column":13,"index":15},"end":{"line":2,"column":14,"index":16},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "var"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":22,"end":55,"loc":{"start":{"line":4,"column":0,"index":22},"end":{"line":6,"column":1,"index":55}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":26,"end":53,"loc":{"start":{"line":5,"column":2,"index":26},"end":{"line":5,"column":29,"index":53}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":30,"end":40,"loc":{"start":{"line":5,"column":6,"index":30},"end":{"line":5,"column":16,"index":40}},
+                "id": {
+                  "type": "VoidPattern",
+                  "start":30,"end":34,"loc":{"start":{"line":5,"column":6,"index":30},"end":{"line":5,"column":10,"index":34}}
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":37,"end":40,"loc":{"start":{"line":5,"column":13,"index":37},"end":{"line":5,"column":16,"index":40}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":37,"end":38,"loc":{"start":{"line":5,"column":13,"index":37},"end":{"line":5,"column":14,"index":38},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "type": "VariableDeclarator",
+                "start":42,"end":52,"loc":{"start":{"line":5,"column":18,"index":42},"end":{"line":5,"column":28,"index":52}},
+                "id": {
+                  "type": "VoidPattern",
+                  "start":42,"end":46,"loc":{"start":{"line":5,"column":18,"index":42},"end":{"line":5,"column":22,"index":46}}
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":49,"end":52,"loc":{"start":{"line":5,"column":25,"index":49},"end":{"line":5,"column":28,"index":52}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":49,"end":50,"loc":{"start":{"line":5,"column":25,"index":49},"end":{"line":5,"column":26,"index":50},"identifierName":"g"},
+                    "name": "g"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "let"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":56,"end":88,"loc":{"start":{"line":7,"column":0,"index":56},"end":{"line":9,"column":1,"index":88}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":60,"end":86,"loc":{"start":{"line":8,"column":2,"index":60},"end":{"line":8,"column":28,"index":86}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":66,"end":76,"loc":{"start":{"line":8,"column":8,"index":66},"end":{"line":8,"column":18,"index":76}},
+                "id": {
+                  "type": "VoidPattern",
+                  "start":66,"end":70,"loc":{"start":{"line":8,"column":8,"index":66},"end":{"line":8,"column":12,"index":70}}
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":73,"end":76,"loc":{"start":{"line":8,"column":15,"index":73},"end":{"line":8,"column":18,"index":76}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":73,"end":74,"loc":{"start":{"line":8,"column":15,"index":73},"end":{"line":8,"column":16,"index":74},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "type": "VariableDeclarator",
+                "start":78,"end":85,"loc":{"start":{"line":8,"column":20,"index":78},"end":{"line":8,"column":27,"index":85}},
+                "id": {
+                  "type": "Identifier",
+                  "start":78,"end":79,"loc":{"start":{"line":8,"column":20,"index":78},"end":{"line":8,"column":21,"index":79},"identifierName":"x"},
+                  "name": "x"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":82,"end":85,"loc":{"start":{"line":8,"column":24,"index":82},"end":{"line":8,"column":27,"index":85}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":82,"end":83,"loc":{"start":{"line":8,"column":24,"index":82},"end":{"line":8,"column":25,"index":83},"identifierName":"g"},
+                    "name": "g"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "const"
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

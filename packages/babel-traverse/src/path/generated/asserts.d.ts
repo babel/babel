@@ -863,6 +863,9 @@ export interface NodePathAssertions {
     opts?: Opts<t.VariableDeclarator>,
   ): asserts this is NodePath<t.VariableDeclarator>;
   assertVariance(opts?: Opts<t.Variance>): asserts this is NodePath<t.Variance>;
+  assertVoidPattern(
+    opts?: Opts<t.VoidPattern>,
+  ): asserts this is NodePath<t.VoidPattern>;
   assertVoidTypeAnnotation(
     opts?: Opts<t.VoidTypeAnnotation>,
   ): asserts this is NodePath<t.VoidTypeAnnotation>;

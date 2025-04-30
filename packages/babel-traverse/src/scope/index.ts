@@ -1333,7 +1333,14 @@ class Scope {
       for (const decl of parent.declarations) {
         firstId ??= decl.id;
         if (decl.init) {
-          init.push(assignmentExpression("=", decl.id, decl.init));
+          init.push(
+            assignmentExpression(
+              "=",
+              // var declarator must not be a void pattern
+              decl.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+              decl.init,
+            ),
+          );
         }
 
         const ids = Object.keys(getBindingIdentifiers(decl, false, true, true));

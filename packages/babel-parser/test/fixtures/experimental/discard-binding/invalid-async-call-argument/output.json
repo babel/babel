@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":22,"index":56}},
+  "errors": [
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (1:6)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (3:9)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (5:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":22,"index":56}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": [
+            {
+              "type": "VoidPattern",
+              "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10}}
+            },
+            {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"x"},
+              "name": "x"
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":17,"end":32,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":15,"index":32}},
+        "expression": {
+          "type": "CallExpression",
+          "start":17,"end":31,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":14,"index":31}},
+          "callee": {
+            "type": "Identifier",
+            "start":17,"end":22,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":5,"index":22},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":23,"end":24,"loc":{"start":{"line":3,"column":6,"index":23},"end":{"line":3,"column":7,"index":24},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "VoidPattern",
+              "start":26,"end":30,"loc":{"start":{"line":3,"column":9,"index":26},"end":{"line":3,"column":13,"index":30}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":34,"end":56,"loc":{"start":{"line":5,"column":0,"index":34},"end":{"line":5,"column":22,"index":56}},
+        "expression": {
+          "type": "CallExpression",
+          "start":34,"end":55,"loc":{"start":{"line":5,"column":0,"index":34},"end":{"line":5,"column":21,"index":55}},
+          "callee": {
+            "type": "Identifier",
+            "start":34,"end":39,"loc":{"start":{"line":5,"column":0,"index":34},"end":{"line":5,"column":5,"index":39},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": [
+            {
+              "type": "VoidPattern",
+              "start":40,"end":44,"loc":{"start":{"line":5,"column":6,"index":40},"end":{"line":5,"column":10,"index":44}}
+            },
+            {
+              "type": "ArrowFunctionExpression",
+              "start":46,"end":54,"loc":{"start":{"line":5,"column":12,"index":46},"end":{"line":5,"column":20,"index":54}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":52,"end":54,"loc":{"start":{"line":5,"column":18,"index":52},"end":{"line":5,"column":20,"index":54}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
