@@ -131,6 +131,9 @@
       "@babel/plugin-proposal-destructuring-private": [
         "./packages/babel-plugin-proposal-destructuring-private/src"
       ],
+      "@babel/plugin-proposal-discard-binding": [
+        "./packages/babel-plugin-proposal-discard-binding/src"
+      ],
       "@babel/plugin-proposal-do-expressions": [
         "./packages/babel-plugin-proposal-do-expressions/src"
       ],
