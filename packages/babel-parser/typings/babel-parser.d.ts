@@ -54,6 +54,7 @@ type Plugin$1 =
 
 type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
+  | ["discardBinding", { syntaxType: "void" }]
   | ["estree", { classFeatures?: boolean }]
   | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>

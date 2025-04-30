@@ -2735,10 +2735,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return param;
     }
 
-    parseMaybeDefault(
+    parseMaybeDefault<P extends N.Pattern>(
       startLoc?: Position | null,
-      left?: N.Pattern | null,
-    ): N.Pattern {
+      left?: P | null,
+    ): P | N.AssignmentPattern {
       const node = super.parseMaybeDefault(startLoc, left);
 
       if (
@@ -3212,7 +3212,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         const node = this.startNodeAt<N.CallExpression>(startLoc);
         node.callee = base;
-        node.arguments = super.parseCallExpressionArguments(tt.parenR);
+        node.arguments = super.parseCallExpressionArguments();
         base = this.finishNode(node, "CallExpression");
       } else if (
         base.type === "Identifier" &&
@@ -3272,7 +3272,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.typeArguments =
           this.flowParseTypeParameterInstantiationInExpression();
         this.expect(tt.parenL);
-        node.arguments = this.parseCallExpressionArguments(tt.parenR);
+        node.arguments = this.parseCallExpressionArguments();
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);
       } else if (
@@ -3291,7 +3291,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.typeArguments =
             this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
-          node.arguments = super.parseCallExpressionArguments(tt.parenR);
+          node.arguments = super.parseCallExpressionArguments();
           if (subscriptState.optionalChainMember) {
             (node as Undone<N.OptionalCallExpression>).optional = false;
           }

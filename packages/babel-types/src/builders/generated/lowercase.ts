@@ -2530,6 +2530,11 @@ export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference
     type: "PipelinePrimaryTopicReference",
   };
 }
+export function voidPattern(): t.VoidPattern {
+  return {
+    type: "VoidPattern",
+  };
+}
 export function tsParameterProperty(
   parameter: t.Identifier | t.AssignmentPattern,
 ): t.TSParameterProperty {
