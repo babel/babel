@@ -1390,8 +1390,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (nextToken.type !== tt.num && nextToken.type !== tt.bigint) {
               this.unexpected();
             }
-            // @ts-expect-error: parseMaybeUnary must returns unary expression
-            node.literal = this.parseMaybeUnary();
+            node.literal = this.parseMaybeUnary() as N.UnaryExpression;
             return this.finishNode(node, "TSLiteralType");
           }
           break;

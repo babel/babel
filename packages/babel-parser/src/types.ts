@@ -1825,7 +1825,12 @@ export interface TsTemplateLiteralType extends TsTypeBase {
 
 export interface TsLiteralType extends TsTypeBase {
   type: "TSLiteralType";
-  literal: NumericLiteral | StringLiteral | BooleanLiteral | TemplateLiteral;
+  literal:
+    | NumericLiteral
+    | StringLiteral
+    | BooleanLiteral
+    | TemplateLiteral
+    | UnaryExpression;
 }
 
 export interface TsImportType extends TsTypeBase {
