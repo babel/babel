@@ -8,6 +8,7 @@ const [, {
   r: 3
 }];
 export { shouldSplit };
+let q;
 export const shouldNotSplit = [, {
   p: _,
   ...q
