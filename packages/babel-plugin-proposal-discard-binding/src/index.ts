@@ -42,7 +42,6 @@ export default declare(function ({ assertVersion }) {
       },
 
       VariableDeclaration(path) {
-        if (path.parentPath.isForXStatement()) return;
         for (const declarationPath of path.get("declarations")) {
           transformVoidPatternInLVal(declarationPath.get("id"));
         }
