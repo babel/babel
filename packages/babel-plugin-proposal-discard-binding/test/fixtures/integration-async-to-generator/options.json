@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-discard-binding", "transform-async-to-generator"]
+}
