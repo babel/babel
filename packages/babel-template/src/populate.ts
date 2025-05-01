@@ -50,7 +50,7 @@ export default function populatePlaceholders(
         applyReplacement(
           placeholder,
           ast,
-          (replacements && replacements[placeholder.name]) || null,
+          (replacements && replacements[placeholder.name]) ?? null,
         );
       } catch (e) {
         e.message = `@babel/template placeholder "${placeholder.name}": ${e.message}`;
