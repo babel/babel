@@ -28,6 +28,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel-baseline/cli@npm:@babel/cli@7.27.1":
+  version: 7.27.1
+  resolution: "@babel/cli@npm:7.27.1"
+  dependencies:
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    "@nicolo-ribaudo/chokidar-2": "npm:2.1.8-no-fsevents.3"
+    chokidar: "npm:^3.6.0"
+    commander: "npm:^6.2.0"
+    convert-source-map: "npm:^2.0.0"
+    fs-readdir-recursive: "npm:^1.1.0"
+    glob: "npm:^7.2.0"
+    make-dir: "npm:^2.1.0"
+    slash: "npm:^2.0.0"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  dependenciesMeta:
+    "@nicolo-ribaudo/chokidar-2":
+      optional: true
+    chokidar:
+      optional: true
+  bin:
+    babel: ./bin/babel.js
+    babel-external-helpers: ./bin/babel-external-helpers.js
+  checksum: 10/b16dc3c4242da3e23ef98e68af89b86740bef9cc2a47678e344a6b84a6f40b29d0ee0915bb89067d610c7db2efec1c5d6973f4303f3c762a44dfc87f393c3634
+  languageName: node
+  linkType: hard
+
 "@babel-baseline/core@npm:@babel/core@7.24.4, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3":
   version: 7.24.4
   resolution: "@babel/core@npm:7.24.4"
@@ -174,6 +201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/benchmark@workspace:benchmark"
   dependencies:
+    "@babel-baseline/cli": "npm:@babel/cli@7.27.1"
     "@babel-baseline/core": "npm:@babel/core@7.24.4"
     "@babel-baseline/generator": "npm:@babel/generator@7.24.4"
     "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.23.6"
@@ -181,6 +209,7 @@ __metadata:
     "@babel-baseline/parser": "npm:@babel/parser@7.24.4"
     "@babel-baseline/traverse": "npm:@babel/traverse@7.24.1"
     "@babel-baseline/types": "npm:@babel/types@7.24.0"
+    "@babel/cli": "workspace:^"
     "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
@@ -219,7 +248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/cli@workspace:packages/babel-cli":
+"@babel/cli@workspace:^, @babel/cli@workspace:packages/babel-cli":
   version: 0.0.0-use.local
   resolution: "@babel/cli@workspace:packages/babel-cli"
   dependencies:
@@ -4786,7 +4815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
+"@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3, @nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3":
   version: 2.1.8-no-fsevents.3
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3"
   checksum: 10/c6e83af3b5051a3f6562649ff8fe37de9934a4cc02138678ed1badbd13ed3334f7ae5f63f2bbc3432210f6b245f082ac97e9b2afe0c13730c9838b295658c185
@@ -7830,7 +7859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander-BABEL_8_BREAKING-false@npm:commander@^6.2.0":
+"commander-BABEL_8_BREAKING-false@npm:commander@^6.2.0, commander@npm:^6.2.0":
   version: 6.2.1
   resolution: "commander@npm:6.2.1"
   checksum: 10/25b88c2efd0380c84f7844b39cf18510da7bfc5013692d68cdc65f764a1c34e6c8a36ea6d72b6620e3710a930cf8fab2695bdec2bf7107a0f4fa30a3ef3b7d0e
@@ -12690,7 +12719,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0":
+"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0, make-dir@npm:^2.1.0":
   version: 2.1.0
   resolution: "make-dir@npm:2.1.0"
   dependencies:
@@ -15264,7 +15293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slash-BABEL_8_BREAKING-false@npm:slash@^2.0.0":
+"slash-BABEL_8_BREAKING-false@npm:slash@^2.0.0, slash@npm:^2.0.0":
   version: 2.0.0
   resolution: "slash@npm:2.0.0"
   checksum: 10/512d4350735375bd11647233cb0e2f93beca6f53441015eea241fe784d8068281c3987fbaa93e7ef1c38df68d9c60013045c92837423c69115297d6169aa85e6
