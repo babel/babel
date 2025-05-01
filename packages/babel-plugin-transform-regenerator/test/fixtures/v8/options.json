@@ -3,5 +3,5 @@
     "transform-regenerator",
     "transform-block-scoping"
   ],
-  "externalHelpers": false
+  "minNodeVersion": "12.0.0"
 }
