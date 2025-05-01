@@ -1,0 +1,6 @@
+{
+  "assumptions": {
+    "pureGetters": true
+  },
+  "plugins": ["proposal-discard-binding", "transform-object-rest-spread"]
+}
