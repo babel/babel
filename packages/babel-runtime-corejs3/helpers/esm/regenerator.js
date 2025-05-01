@@ -47,17 +47,15 @@ function _regenerator() {
         throw y = !0, n;
       }
       return function (o, p, s) {
-        if (2 === f) throw Error("Generator is already running");
+        if (2 === f) throw TypeError("Generator is already running");
         for (y && 1 === p && l(p, s), a = p, u = s; !y || (t = e);) {
           i || (a ? a < 3 ? (a > 1 && (d.next = -1), l(a, u)) : d.next = u : d.sent = u);
           try {
             if (i) {
               if (a || (o = "next"), t = i[o]) {
-                if (t = t.call(i, u)) {
-                  if (!t) throw TypeError("iterator result is not an object");
-                  if (!t.done) return t;
-                  u = t.value, a < 2 && (a = 0);
-                }
+                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
+                if (!t.done) return t;
+                u = t.value, a < 2 && (a = 0);
               } else 1 === a && (t = i["return"]) && t.call(i), a < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), a = 1);
               i = e;
             } else if (f = 2, t = (y = d.next < 0) ? u : r.call(n, d), f = y ? 3 : 1, t !== c) break;

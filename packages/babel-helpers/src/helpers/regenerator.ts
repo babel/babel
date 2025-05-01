@@ -180,7 +180,7 @@ export default function /* @no-mangle */ _regenerator() {
       _arg: any,
     ) {
       if (state === GenState.Executing) {
-        throw Error("Generator is already running");
+        throw TypeError("Generator is already running");
       } else if (done) {
         if (_method === OperatorType.Throw) {
           Context_dispatchExceptionOrFinishOrAbrupt(_method, _arg);
@@ -208,26 +208,24 @@ export default function /* @no-mangle */ _regenerator() {
 
             if (!method /* Next */) _methodName = "next";
             if ((_ = delegateIterator[_methodName])) {
-              if ((_ = _.call(delegateIterator, arg))) {
-                if (!_) {
-                  throw TypeError("iterator result is not an object");
-                }
-                if (!_.done) {
-                  // Re-yield the result returned by the delegate method.
-                  return _;
-                }
+              if (!(_ = _.call(delegateIterator, arg))) {
+                throw TypeError("iterator result is not an object");
+              }
+              if (!_.done) {
+                // Re-yield the result returned by the delegate method.
+                return _;
+              }
 
-                arg = _.value;
-                // If context.method was "throw" but the delegate handled the
-                // exception, let the outer generator proceed normally. If
-                // context.method was "next", forget context.arg since it has been
-                // "consumed" by the delegate iterator. If context.method was
-                // "return", allow the original .return call to continue in the
-                // outer generator.
-                // method !== OperatorType.Return
-                if (method < 2 /* Throw */) {
-                  method = OperatorType.Next;
-                }
+              arg = _.value;
+              // If context.method was "throw" but the delegate handled the
+              // exception, let the outer generator proceed normally. If
+              // context.method was "next", forget context.arg since it has been
+              // "consumed" by the delegate iterator. If context.method was
+              // "return", allow the original .return call to continue in the
+              // outer generator.
+              // method !== OperatorType.Return
+              if (method < 2 /* Throw */) {
+                method = OperatorType.Next;
               }
             } else {
               // Note: ["return"] must be used for ES3 parsing compatibility.
