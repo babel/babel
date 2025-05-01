@@ -244,6 +244,11 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should correctly handle empty string as computed property key", () => {
+      const result = template.ast`obj["${""}"] = 1`;
+      expect(result.type).toBe("ExpressionStatement");
+    });
+
     it("should return assertions in ImportDeclaration when using .ast", () => {
       const result = template.ast(
         `import json from "./foo.json" with { type: "json" };`,
