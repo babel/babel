@@ -85,7 +85,7 @@ function _regenerator() {
   function l(e) {
     return _Object$setPrototypeOf ? _Object$setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, regeneratorDefine(e, a, "GeneratorFunction")), e.prototype = _Object$create(d), e;
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(d, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = regeneratorDefine(GeneratorFunctionPrototype, a, "GeneratorFunction"), regeneratorDefineIM(d), regeneratorDefine(d, a, "Generator"), regeneratorDefine(d, i, function () {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(d, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", regeneratorDefine(GeneratorFunctionPrototype, a, "GeneratorFunction"), regeneratorDefineIM(d), regeneratorDefine(d, a, "Generator"), regeneratorDefine(d, i, function () {
     return this;
   }), regeneratorDefine(d, "toString", function () {
     return "[object Generator]";

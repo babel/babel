@@ -130,11 +130,8 @@ export default function /* @no-mangle */ _regenerator() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction",
-  );
+  GeneratorFunction.displayName = "GeneratorFunction";
+  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
 
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.

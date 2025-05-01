@@ -100,7 +100,7 @@ function _regeneratorRuntime() {
     var r = "function" == typeof t && t.constructor;
     return !!r && (r === GeneratorFunction || "GeneratorFunction" === (r.displayName || r.name));
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(f, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = regeneratorDefine(GeneratorFunctionPrototype, i, "GeneratorFunction"), regeneratorDefineIM(f), regeneratorDefine(f, i, "Generator"), regeneratorDefine(f, o, function () {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, regeneratorDefine(f, "constructor", GeneratorFunctionPrototype), regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", regeneratorDefine(GeneratorFunctionPrototype, i, "GeneratorFunction"), regeneratorDefineIM(f), regeneratorDefine(f, i, "Generator"), regeneratorDefine(f, o, function () {
     return this;
   }), regeneratorDefine(f, "toString", function () {
     return "[object Generator]";

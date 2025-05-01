@@ -149,11 +149,8 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction",
-  );
+  GeneratorFunction.displayName = "GeneratorFunction";
+  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
 
   function mark(genFun: Function) {
     if (Object.setPrototypeOf) {
