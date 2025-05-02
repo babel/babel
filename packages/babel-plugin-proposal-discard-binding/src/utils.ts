@@ -144,3 +144,17 @@ export function transformVoidPatternInLVal(path: NodePath<t.LVal>) {
     transformVoidPattern(voidPatternPath);
   }
 }
+
+export function removeTrailingVoidPatternsFromParams(
+  path: NodePath<t.Function>,
+) {
+  const paramPaths = path.get("params");
+  for (let i = paramPaths.length - 1; i >= 0; i--) {
+    const paramPath = paramPaths[i];
+    if (paramPath.isVoidPattern()) {
+      paramPath.remove();
+    } else {
+      break;
+    }
+  }
+}

@@ -2,12 +2,14 @@ import { declare } from "@babel/helper-plugin-utils";
 import {
   hasVoidPatternInVariableDeclaration,
   splitNamedDeclarationAsVarAndExport,
+  removeTrailingVoidPatternsFromParams,
   transformVoidPattern,
   transformVoidPatternInLVal,
 } from "./utils.ts";
 
-export default declare(function ({ assertVersion }) {
+export default declare(function ({ assertVersion, assumption }) {
   assertVersion(REQUIRED_VERSION("^7.27.0"));
+  const ignoreFunctionLength = assumption("ignoreFunctionLength");
   return {
     name: "proposal-discard-binding",
     manipulateOptions: (_, p) =>
@@ -27,6 +29,12 @@ export default declare(function ({ assertVersion }) {
 
       VoidPattern(path) {
         transformVoidPattern(path);
+      },
+
+      Function(path) {
+        if (ignoreFunctionLength) {
+          removeTrailingVoidPatternsFromParams(path);
+        }
       },
 
       // The following visitors are introduced such that the
