@@ -1,8 +1,9 @@
+/* eslint-disable unicorn/prefer-node-protocol */
 /**
  * A plugin to check the scope info integrity after VoidPattern is transformed
  * @param {import("@babel/core").PluginAPI} api
  */
-const assert = require("node:assert");
+const assert = require("assert");
 
 module.exports = function checkTransformScopeIntegrity() {
   /**
@@ -18,11 +19,11 @@ module.exports = function checkTransformScopeIntegrity() {
           const binding = scope.getBinding(path.node.name);
           assert.ok(
             binding !== undefined,
-            `'${path.node.name}' is not defined in the ${path.scope.path.type}'s scope`,
+            `'${path.node.name}' is not defined in the ${path.scope.path.type}'s scope`
           );
-        },
-      },
-    },
+        }
+      }
+    }
   };
   return plugin;
 };
