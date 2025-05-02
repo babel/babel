@@ -1,0 +1,6 @@
+{
+  "assumptions": {
+    "ignoreFunctionLength": true
+  },
+  "plugins": ["proposal-discard-binding", "../../scripts/check-transform-scope-integrity.cjs"]
+}
