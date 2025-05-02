@@ -15,12 +15,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-plugin-transform-destructuring"
-    },
-    {
-      "path": "../../packages/babel-plugin-transform-parameters"
-    },
-    {
       "path": "../../packages/babel-core"
     }
   ]
