@@ -63,7 +63,7 @@ function syncScopeForReplacedVoidPattern(path: NodePath<t.Identifier>) {
     }
     childPath = parentPath;
   }
-
+  /* c8 ignore next */
   throw new Error("@babel/plugin-proposal-discard-binding: Internal Error");
 }
 
