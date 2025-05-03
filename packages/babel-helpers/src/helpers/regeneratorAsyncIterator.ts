@@ -66,7 +66,7 @@ export default /* @no-mangle */ function AsyncIterator(
 
   var previousPromise: Promise<any>;
 
-  function enqueue(method: "next" | "throw" | "return", arg: any) {
+  function enqueue(method: "next" | "throw" | "return", i: number, arg: any) {
     function callInvokeWithMethodAndArg() {
       return new PromiseImpl(function (resolve, reject) {
         invoke(method, arg, resolve, reject);

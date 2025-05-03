@@ -4,7 +4,7 @@ function test() {
 }
 function _test() {
   _test = _asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return regeneratorRuntime.wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           console.log('test');
@@ -21,15 +21,16 @@ function main() {
 }
 function _main() {
   _main = _asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    var _t, _t2;
+    return regeneratorRuntime.wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          _context2.t0 = console;
+          _t = console;
           _context2.next = 3;
           return test();
         case 3:
-          _context2.t1 = _context2.sent;
-          _context2.t0.log.call(_context2.t0, _context2.t1);
+          _t2 = _context2.sent;
+          _t.log.call(_t, _t2);
         case 5:
         case "end":
           return _context2.stop();

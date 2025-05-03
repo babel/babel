@@ -13,13 +13,12 @@ var Foo = exports["default"] = /*#__PURE__*/function () {
     value: function () {
       var _bar = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
         var baz;
-        return babelHelpers.regenerator().w(function _callee$(_context) {
+        return babelHelpers.regenerator().w(function (_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               baz = 0;
             case 1:
-            case "end":
-              return _context.stop();
+              return _context.abrupt(2);
           }
         }, _callee);
       }));
@@ -36,19 +35,18 @@ function foo() {
 function _foo() {
   _foo = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
     var bar, _bar2;
-    return babelHelpers.regenerator().w(function _callee3$(_context3) {
+    return babelHelpers.regenerator().w(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _bar2 = function _bar4() {
             _bar2 = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
               var baz;
-              return babelHelpers.regenerator().w(function _callee2$(_context2) {
+              return babelHelpers.regenerator().w(function (_context2) {
                 while (1) switch (_context2.prev = _context2.next) {
                   case 0:
                     baz = {};
                   case 1:
-                  case "end":
-                    return _context2.stop();
+                    return _context2.abrupt(2);
                 }
               }, _callee2);
             }));
@@ -58,8 +56,7 @@ function _foo() {
             return _bar2.apply(this, arguments);
           };
         case 2:
-        case "end":
-          return _context3.stop();
+          return _context3.abrupt(2);
       }
     }, _callee3);
   }));

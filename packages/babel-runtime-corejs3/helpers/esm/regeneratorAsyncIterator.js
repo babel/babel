@@ -25,13 +25,13 @@ function AsyncIterator(t, e) {
   var n;
   this.next || (regeneratorDefineIM(AsyncIterator.prototype), regeneratorDefine(AsyncIterator.prototype, "function" == typeof _Symbol && _Symbol$asyncIterator || "@asyncIterator", function () {
     return this;
-  })), regeneratorDefine(this, "_invoke", function (t, o) {
-    function i() {
+  })), regeneratorDefine(this, "_invoke", function (t, o, i) {
+    function f() {
       return new e(function (e, n) {
-        r(t, o, e, n);
+        r(t, i, e, n);
       });
     }
-    return n = n ? n.then(i, i) : i();
+    return n = n ? n.then(f, f) : f();
   }, !0);
 }
 export { AsyncIterator as default };

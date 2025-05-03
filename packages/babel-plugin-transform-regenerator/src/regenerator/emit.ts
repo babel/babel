@@ -4,16 +4,22 @@ import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
 import * as util from "./util.ts";
 
-import type { NodePath, PluginPass, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Visitor, Scope } from "@babel/core";
 import { types as t } from "@babel/core";
+
+// From packages/babel-helpers/src/helpers/regenerator.ts
+const enum OperatorType {
+  Return = 2,
+  Jump,
+}
 
 type AbruptCompletion =
   | {
-      type: "break" | "continue";
+      type: OperatorType.Jump;
       target: t.NumericLiteral;
     }
   | {
-      type: "return" | "throw";
+      type: OperatorType.Return;
       value: t.Expression | null;
     };
 
@@ -61,11 +67,20 @@ export class Emitter {
   finalLoc: t.NumericLiteral;
   tryEntries: leap.TryEntry[];
   leapManager: leap.LeapManager;
+  scope: Scope;
+  vars: t.VariableDeclarator[];
 
   pluginPass: PluginPass;
 
-  constructor(contextId: t.Identifier, pluginPass: PluginPass) {
+  constructor(
+    contextId: t.Identifier,
+    scope: Scope,
+    vars: t.VariableDeclarator[],
+    pluginPass: PluginPass,
+  ) {
     this.pluginPass = pluginPass;
+    this.scope = scope;
+    this.vars = vars;
 
     // Used to generate unique temporary names.
     this.nextTempId = 0;
@@ -155,7 +170,8 @@ export class Emitter {
 
   // Convenience function for generating expressions like context.next,
   // context.sent, and context.rval.
-  contextProperty(name: string, computed?: boolean) {
+  contextProperty(name: string) {
+    const computed = name === "catch";
     return t.memberExpression(
       this.getContextId(),
       computed ? t.stringLiteral(name) : t.identifier(name),
@@ -167,7 +183,7 @@ export class Emitter {
     tryLoc: t.NumericLiteral,
     assignee: t.AssignmentExpression["left"],
   ) {
-    const catchCall = t.callExpression(this.contextProperty("catch", true), [
+    const catchCall = t.callExpression(this.contextProperty("catch"), [
       t.cloneNode(tryLoc),
     ]);
 
@@ -224,13 +240,19 @@ export class Emitter {
   // the context object, which is presumed to coexist peacefully with all
   // other local variables, and since we just increment `nextTempId`
   // monotonically, uniqueness is assured.
-  makeTempVar() {
+  makeContextTempVar() {
     return this.contextProperty("t" + this.nextTempId++);
   }
 
-  getContextFunction(id: t.Identifier) {
+  makeTempVar() {
+    const id = this.scope.generateUidIdentifier("t");
+    this.vars.push(t.variableDeclarator(id));
+    return t.cloneNode(id);
+  }
+
+  getContextFunction() {
     return t.functionExpression(
-      id || null /*Anonymous*/,
+      null /*Anonymous*/,
       [this.getContextId()],
       t.blockStatement([this.getDispatchLoop()]),
       false, // Not a generator anymore!
@@ -259,8 +281,7 @@ export class Emitter {
     let alreadyEnded = false;
 
     self.listing.forEach(function (stmt, i) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (self.marked.hasOwnProperty(i)) {
+      if (self.marked[i]) {
         cases.push(t.switchCase(t.numericLiteral(i), (current = [])));
         alreadyEnded = false;
       }
@@ -275,18 +296,33 @@ export class Emitter {
     // we can finally resolve this.finalLoc.value.
     this.finalLoc.value = this.listing.length;
 
-    cases.push(
-      t.switchCase(this.finalLoc, [
-        // Intentionally fall through to the "end" case...
-      ]),
+    if (
+      process.env.BABEL_8_BREAKING ||
+      util.newHelpersAvailable(this.pluginPass)
+    ) {
+      cases.push(
+        t.switchCase(this.finalLoc, [
+          t.returnStatement(
+            t.callExpression(this.contextProperty("abrupt"), [
+              t.numericLiteral(OperatorType.Return),
+            ]),
+          ),
+        ]),
+      );
+    } else {
+      cases.push(
+        t.switchCase(this.finalLoc, [
+          // Intentionally fall through to the "end" case...
+        ]),
 
-      // So that the runtime can jump to the final location without having
-      // to know its offset, we provide the "end" case as a synonym.
-      t.switchCase(t.stringLiteral("end"), [
-        // This will check/clear both context.thrown and context.rval.
-        t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
-      ]),
-    );
+        // So that the runtime can jump to the final location without having
+        // to know its offset, we provide the "end" case as a synonym.
+        t.switchCase(t.stringLiteral("end"), [
+          // This will check/clear both context.thrown and context.rval.
+          t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
+        ]),
+      );
+    }
 
     return t.whileStatement(
       t.numericLiteral(1),
@@ -310,7 +346,7 @@ export class Emitter {
 
     let lastLocValue = 0;
 
-    return t.arrayExpression(
+    const arrayExpression = t.arrayExpression(
       this.tryEntries.map(function (tryEntry) {
         const thisLocValue = tryEntry.firstLoc.value;
         assert.ok(thisLocValue >= lastLocValue, "try entries out of order");
@@ -333,6 +369,13 @@ export class Emitter {
         return t.arrayExpression(locs.map(loc => loc && t.cloneNode(loc)));
       }),
     );
+    if (
+      process.env.BABEL_8_BREAKING ||
+      util.newHelpersAvailable(this.pluginPass)
+    ) {
+      arrayExpression.elements.reverse();
+    }
+    return arrayExpression;
   }
 
   // All side effects must be realized in order.
@@ -570,7 +613,7 @@ export class Emitter {
 
       case "BreakStatement":
         self.emitAbruptCompletion({
-          type: "break",
+          type: OperatorType.Jump,
           target: self.leapManager.getBreakLoc(path.node.label),
         });
 
@@ -578,7 +621,7 @@ export class Emitter {
 
       case "ContinueStatement":
         self.emitAbruptCompletion({
-          type: "continue",
+          type: OperatorType.Jump,
           target: self.leapManager.getContinueLoc(path.node.label),
         });
 
@@ -660,7 +703,7 @@ export class Emitter {
 
       case "ReturnStatement":
         self.emitAbruptCompletion({
-          type: "return",
+          type: OperatorType.Return,
           value: self.explodeExpression(path.get("argument")),
         });
 
@@ -691,7 +734,7 @@ export class Emitter {
         self.tryEntries.push(tryEntry);
         self.updateContextPrevLoc(tryEntry.firstLoc);
 
-        self.leapManager.withEntry(tryEntry, function () {
+        self.leapManager.withEntry(tryEntry, () => {
           self.explodeStatement(path.get("block"));
 
           if (catchLoc) {
@@ -710,7 +753,14 @@ export class Emitter {
 
             const bodyPath = path.get("handler.body");
             const safeParam = self.makeTempVar();
-            self.clearPendingException(tryEntry.firstLoc, safeParam);
+            if (
+              process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+            ) {
+              this.emitAssign(safeParam, self.contextProperty("sent"));
+            } else {
+              self.clearPendingException(tryEntry.firstLoc, safeParam);
+            }
 
             bodyPath.traverse(catchParamVisitor, {
               getSafeParam: () => t.cloneNode(safeParam),
@@ -770,15 +820,19 @@ export class Emitter {
       "normal completions are not abrupt",
     );
 
-    const abruptArgs: [t.StringLiteral, t.Expression?] = [
-      t.stringLiteral(record.type),
+    const abruptArgs: [t.NumericLiteral | t.StringLiteral, t.Expression?] = [
+      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this.pluginPass)
+        ? t.numericLiteral(record.type)
+        : t.stringLiteral(
+            record.type === OperatorType.Jump ? "continue" : "return",
+          ),
     ];
 
-    if (record.type === "break" || record.type === "continue") {
+    if (record.type === OperatorType.Jump) {
       abruptArgs[1] = this.insertedLocs.has(record.target)
         ? record.target
         : t.cloneNode(record.target);
-    } else if (record.type === "return" || record.type === "throw") {
+    } else if (record.type === OperatorType.Return) {
       if (record.value) {
         abruptArgs[1] = t.cloneNode(record.value);
       }
@@ -844,7 +898,7 @@ export class Emitter {
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
   explodeViaTempVar(
-    tempVar: t.MemberExpression,
+    tempVar: t.MemberExpression | t.Identifier,
     childPath: NodePath<t.Expression>,
     hasLeapingChildren: boolean,
     ignoreChildResult?: boolean,
@@ -1245,21 +1299,39 @@ export class Emitter {
           path.node.argument && self.explodeExpression(path.get("argument"));
 
         if (arg && path.node.delegate) {
-          const result = self.makeTempVar();
+          if (
+            process.env.BABEL_8_BREAKING ||
+            util.newHelpersAvailable(this.pluginPass)
+          ) {
+            const ret = t.returnStatement(
+              t.callExpression(self.contextProperty("delegateYield"), [
+                arg,
+                after,
+              ]),
+            );
+            ret.loc = expr.loc;
 
-          const ret = t.returnStatement(
-            t.callExpression(self.contextProperty("delegateYield"), [
-              arg,
-              t.stringLiteral((result.property as t.Identifier).name),
-              after,
-            ]),
-          );
-          ret.loc = expr.loc;
+            self.emit(ret);
+            self.mark(after);
 
-          self.emit(ret);
-          self.mark(after);
+            return self.contextProperty("sent");
+          } else {
+            const result = self.makeContextTempVar();
 
-          return result;
+            const ret = t.returnStatement(
+              t.callExpression(self.contextProperty("delegateYield"), [
+                arg,
+                t.stringLiteral((result.property as t.Identifier).name),
+                after,
+              ]),
+            );
+            ret.loc = expr.loc;
+
+            self.emit(ret);
+            self.mark(after);
+
+            return result;
+          }
         }
 
         self.emitAssign(self.contextProperty("next"), after);

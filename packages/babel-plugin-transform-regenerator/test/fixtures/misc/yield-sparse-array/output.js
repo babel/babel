@@ -1,16 +1,16 @@
 // #15142
 () => {
-  return babelHelpers.regeneratorAsync(function _callee$(_context) {
+  var _t;
+  return babelHelpers.regeneratorAsync(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.next = 2;
         return babelHelpers.awaitAsyncGenerator(0);
       case 2:
-        _context.t0 = _context.sent;
-        return _context.abrupt("return", [_context.t0,,]);
+        _t = _context.sent;
+        return _context.abrupt(2, [_t,,]);
       case 4:
-      case "end":
-        return _context.stop();
+        return _context.abrupt(2);
     }
   }, null, null, null, Promise);
 };
