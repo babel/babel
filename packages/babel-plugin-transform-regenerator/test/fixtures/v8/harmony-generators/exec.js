@@ -84,14 +84,14 @@ function Throw(generator, ...args) {
     assertEquals({value: 666, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x, 42));
     assertThrowsEquals(() => Throw(x, 43), 43);
-    // assertEquals({value: 42, done: true}, Return(x, 42));
+    assertEquals({value: 42, done: true}, Return(x, 42));
   }
 
   { // "throw" closes at suspendedStart
     let x = g();
     assertThrowsEquals(() => Throw(x, 666), 666);
     assertEquals({value: undefined, done: true}, Next(x, 42));
-    // assertEquals({value: 43, done: true}, Return(x, 43));
+    assertEquals({value: 43, done: true}, Return(x, 43));
     assertThrowsEquals(() => Throw(x, 44), 44);
   }
 
@@ -108,7 +108,7 @@ function Throw(generator, ...args) {
     assertEquals({value: 42, done: false}, Next(x));
     assertEquals({value: 13, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x, 666));
-    // assertEquals({value: 666, done: true}, Return(x, 666));
+    assertEquals({value: 666, done: true}, Return(x, 666));
   }
 
   { // "throw" closes at suspendedYield
@@ -130,14 +130,14 @@ function Throw(generator, ...args) {
     assertEquals({value: 666, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x, 42));
     assertThrowsEquals(() => Throw(x, 43), 43);
-    // assertEquals({value: 42, done: true}, Return(x, 42));
+    assertEquals({value: 42, done: true}, Return(x, 42));
   }
 
   { // "throw" closes at suspendedStart
     let x = g();
     assertThrowsEquals(() => Throw(x, 666), 666);
     assertEquals({value: undefined, done: true}, Next(x, 42));
-    // assertEquals({value: 43, done: true}, Return(x, 43));
+    assertEquals({value: 43, done: true}, Return(x, 43));
     assertThrowsEquals(() => Throw(x, 44), 44);
   }
 
@@ -147,7 +147,7 @@ function Throw(generator, ...args) {
     assertEquals({value: undefined, done: true}, Next(x, 666));
     assertEquals({value: undefined, done: true}, Next(x, 666));
     assertThrowsEquals(() => Throw(x, 666), 666);
-    // assertEquals({value: 42, done: true}, Return(x, 42));
+    assertEquals({value: 42, done: true}, Return(x, 42));
   }
 
   { // "return" closes at suspendedYield
@@ -156,7 +156,7 @@ function Throw(generator, ...args) {
     assertEquals({value: 666, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x, 666));
     assertThrowsEquals(() => Throw(x, 44), 44);
-    // assertEquals({value: 42, done: true}, Return(x, 42));
+    assertEquals({value: 42, done: true}, Return(x, 42));
   }
 
   { // "throw" closes at suspendedYield
@@ -165,7 +165,7 @@ function Throw(generator, ...args) {
     assertThrowsEquals(() => Throw(x, 666), 666);
     assertEquals({value: undefined, done: true}, Next(x, 666));
     assertThrowsEquals(() => Throw(x, 666), 666);
-    // assertEquals({value: 42, done: true}, Return(x, 42));
+    assertEquals({value: 42, done: true}, Return(x, 42));
   }
 }
 
@@ -179,14 +179,14 @@ function Throw(generator, ...args) {
     assertEquals({value: 42, done: false}, Next(x));
     assertEquals({value: 43, done: false}, Return(x, 666));
     assertEquals({value: 13, done: true}, Next(x));
-    // assertEquals({value: 666, done: true}, Return(x, 666));
+    assertEquals({value: 666, done: true}, Return(x, 666));
   }
 
   {
     let x = g();
     assertEquals({value: 666, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x));
-    // assertEquals({value: 666, done: true}, Return(x, 666));
+    assertEquals({value: 666, done: true}, Return(x, 666));
   }
 }
 
@@ -200,14 +200,14 @@ function Throw(generator, ...args) {
     assertEquals({value: 42, done: false}, Next(x));
     assertEquals({value: 43, done: false}, Return(x, 666));
     assertEquals({value: 666, done: true}, Next(x));
-    // assertEquals({value: 5, done: true}, Return(x, 5));
+    assertEquals({value: 5, done: true}, Return(x, 5));
   }
 
   {
     let x = g();
     assertEquals({value: 666, done: true}, Return(x, 666));
     assertEquals({value: undefined, done: true}, Next(x));
-    // assertEquals({value: 666, done: true}, Return(x, 666));
+    assertEquals({value: 666, done: true}, Return(x, 666));
   }
 }
 
