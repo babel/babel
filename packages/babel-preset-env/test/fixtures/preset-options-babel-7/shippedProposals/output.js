@@ -16,7 +16,7 @@ function agf() {
 }
 function _agf() {
   _agf = babelHelpers.wrapAsyncGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
-    return babelHelpers.regenerator().w(function _callee$(_context) {
+    return babelHelpers.regenerator().w(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
@@ -25,8 +25,7 @@ function _agf() {
           _context.next = 4;
           return 2;
         case 4:
-        case "end":
-          return _context.stop();
+          return _context.abrupt(2);
       }
     }, _callee);
   }));
