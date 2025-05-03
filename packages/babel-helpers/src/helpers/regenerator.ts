@@ -10,9 +10,8 @@ import values from "./regeneratorValues.ts";
 
 const enum GenState {
   SuspendedStart,
-  SuspendedYield,
+  SuspendedYieldOrCompleted,
   Executing,
-  Completed,
 }
 
 const enum OperatorType {
@@ -176,7 +175,7 @@ export default function /* @no-mangle */ _regenerator() {
       _method: OperatorType.Next | OperatorType.Throw | OperatorType.Return,
       _arg: any,
     ) {
-      if (state === GenState.Executing) {
+      if (state > 1 /* Executing */) {
         throw TypeError("Generator is already running");
       } else if (done) {
         if (_method === OperatorType.Throw) {
@@ -187,19 +186,20 @@ export default function /* @no-mangle */ _regenerator() {
       method = _method;
       arg = _arg;
 
-      while (!done || (_ = undefined)) {
+      while ((_ = method < 2 /* Next | Throw */ ? undefined : arg) || !done) {
         if (!delegateIterator) {
-          if (!method /* Return */) {
+          if (!method /* Next */) {
             ctx.sent = arg;
           } else if (method < 3 /* Throw | Return */) {
             if (method > 1 /* Return */) ctx.next = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
-            // Jump
+            /* Jump */
             ctx.next = arg;
           }
         }
         try {
+          state = GenState.Executing;
           if (delegateIterator) {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
@@ -253,27 +253,22 @@ export default function /* @no-mangle */ _regenerator() {
             // yield* loop.
             delegateIterator = undefined;
           } else {
-            state = GenState.Executing;
-
             if ((done = ctx.next < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
             }
 
-            // If an exception is thrown from innerFn, we leave state ===
-            // GenStateExecuting and loop back for another invocation.
-            state = done ? GenState.Completed : GenState.SuspendedYield;
-
             if (_ !== ContinueSentinel) {
               break;
             }
           }
         } catch (e) {
-          state = GenState.Completed;
           delegateIterator = undefined;
           method = OperatorType.Throw;
           arg = e;
+        } finally {
+          state = GenState.SuspendedYieldOrCompleted;
         }
       }
       // Be forgiving, per GeneratorResume behavior specified since ES2015:
@@ -326,7 +321,10 @@ export default function /* @no-mangle */ _regenerator() {
       arg = _arg;
       for (
         _ = 0;
-        !done && state && !shouldReturn && _ < tryEntries.length;
+        !done &&
+        state /* state !== SuspendedStart */ &&
+        !shouldReturn &&
+        _ < tryEntries.length;
         _++
       ) {
         var entry = tryEntries[_];
