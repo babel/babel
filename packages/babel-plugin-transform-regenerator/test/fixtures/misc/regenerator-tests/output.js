@@ -1,0 +1,4814 @@
+var _marked3 = /*#__PURE__*/babelHelpers.regenerator().m(range);
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var assert = require("assert");
+var runningInTranslation = /\.wrap\(/.test(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+  return babelHelpers.regenerator().w(function (_context) {
+    while (1) switch (_context.prev = _context.next) {
+      case 0:
+        return _context.abrupt(2);
+    }
+  }, _callee);
+}));
+var shared = require("./shared.js");
+var Symbol = shared.Symbol;
+var check = shared.check;
+var assertAlreadyFinished = shared.assertAlreadyFinished;
+var fullCompatibility = runningInTranslation || require("semver").gte(process.version, "7.0.0");
+assert(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
+  return babelHelpers.regenerator().w(function (_context2) {
+    while (1) switch (_context2.prev = _context2.next) {
+      case 0:
+        return _context2.abrupt(2);
+    }
+  }, _callee2);
+}).toString().indexOf("regenerator") !== -1, "regenerator-transform should be enabled");
+
+// A version of `throw` whose behavior can't be statically analyzed.
+// Useful for testing dynamic exception dispatching.
+function raise(argument) {
+  throw argument;
+}
+describe("simple argument yielder", function () {
+  it("should yield only its first argument", function () {
+    var _marked = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x) {
+      return babelHelpers.regenerator().w(function (_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return x;
+          case 2:
+            return _context3.abrupt(2);
+        }
+      }, _marked);
+    }
+    check(gen("oyez"), ["oyez"]);
+    check(gen("foo", "bar"), ["foo"]);
+  });
+  it("should support multiple yields in expression", function () {
+    var _marked2 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t, _t2;
+      return babelHelpers.regenerator().w(function (_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.next = 2;
+            return 0;
+          case 2:
+            _t = _context4.sent;
+            _context4.next = 5;
+            return 0;
+          case 5:
+            _t2 = _context4.sent;
+            return _context4.abrupt(2, _t + _t2);
+          case 7:
+            return _context4.abrupt(2);
+        }
+      }, _marked2);
+    }
+    var itr = gen();
+    itr.next();
+    itr.next(1);
+    assert.equal(itr.next(2).value, 3);
+  });
+});
+function range(n) {
+  var i;
+  return babelHelpers.regenerator().w(function (_context5) {
+    while (1) switch (_context5.prev = _context5.next) {
+      case 0:
+        i = 0;
+      case 1:
+        if (!(i < n)) {
+          _context5.next = 7;
+          break;
+        }
+        _context5.next = 4;
+        return i;
+      case 4:
+        ++i;
+        _context5.next = 1;
+        break;
+      case 7:
+        return _context5.abrupt(2);
+    }
+  }, _marked3);
+}
+describe("range generator", function () {
+  it("should yield the empty range", function () {
+    check(range(0), []);
+  });
+  it("should yield the range 0..n-1", function () {
+    check(range(5), [0, 1, 2, 3, 4]);
+  });
+});
+describe("collatz generator", function () {
+  var _marked4 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(n) {
+    var count;
+    return babelHelpers.regenerator().w(function (_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          count = 0;
+          _context6.next = 3;
+          return n;
+        case 3:
+          if (!(n !== 1)) {
+            _context6.next = 14;
+            break;
+          }
+          count += 1;
+          if (!(n % 2)) {
+            _context6.next = 10;
+            break;
+          }
+          _context6.next = 8;
+          return n = n * 3 + 1;
+        case 8:
+          _context6.next = 12;
+          break;
+        case 10:
+          _context6.next = 12;
+          return n >>= 1;
+        case 12:
+          _context6.next = 3;
+          break;
+        case 14:
+          return _context6.abrupt(2, count);
+        case 15:
+          return _context6.abrupt(2);
+      }
+    }, _marked4);
+  }
+  function collatz(n) {
+    var result = [n];
+    while (n !== 1) {
+      if (n % 2) {
+        n *= 3;
+        n += 1;
+      } else {
+        n >>= 1;
+      }
+      result.push(n);
+    }
+    return result;
+  }
+  var seven = collatz(7);
+  var fiftyTwo = seven.slice(seven.indexOf(52));
+  var eightyTwo = collatz(82);
+  it("seven", function () {
+    check(gen(7), seven, 16);
+  });
+  it("fifty two", function () {
+    check(gen(52), fiftyTwo, 11);
+  });
+  it("eighty two", function () {
+    check(gen(82), eightyTwo, 110);
+  });
+});
+describe("try-catch generator", function () {
+  var _marked5 = /*#__PURE__*/babelHelpers.regenerator().m(usingThrow),
+    _marked6 = /*#__PURE__*/babelHelpers.regenerator().m(usingRaise);
+  function usingThrow(x) {
+    var _t3;
+    return babelHelpers.regenerator().w(function (_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          _context7.next = 2;
+          return 0;
+        case 2:
+          _context7.prev = 2;
+          _context7.next = 5;
+          return 1;
+        case 5:
+          if (!(x % 2 === 0)) {
+            _context7.next = 7;
+            break;
+          }
+          throw 2;
+        case 7:
+          _context7.next = 9;
+          return x;
+        case 9:
+          _context7.next = 15;
+          break;
+        case 11:
+          _context7.prev = 11;
+          _t3 = _context7.sent;
+          _context7.next = 15;
+          return _t3;
+        case 15:
+          _context7.next = 17;
+          return 3;
+        case 17:
+          return _context7.abrupt(2);
+      }
+    }, _marked5, null, [[2, 11]]);
+  }
+  function usingRaise(x) {
+    var _t4;
+    return babelHelpers.regenerator().w(function (_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          _context8.next = 2;
+          return 0;
+        case 2:
+          _context8.prev = 2;
+          _context8.next = 5;
+          return 1;
+        case 5:
+          if (x % 2 === 0) raise(2);
+          _context8.next = 8;
+          return x;
+        case 8:
+          _context8.next = 14;
+          break;
+        case 10:
+          _context8.prev = 10;
+          _t4 = _context8.sent;
+          _context8.next = 14;
+          return _t4;
+        case 14:
+          _context8.next = 16;
+          return 3;
+        case 16:
+          return _context8.abrupt(2);
+      }
+    }, _marked6, null, [[2, 10]]);
+  }
+  it("should catch static exceptions properly", function () {
+    check(usingThrow(4), [0, 1, 2, 3]);
+    check(usingThrow(5), [0, 1, 5, 3]);
+  });
+  it("should catch dynamic exceptions properly", function () {
+    check(usingRaise(4), [0, 1, 2, 3]);
+    check(usingRaise(5), [0, 1, 5, 3]);
+  });
+});
+describe("nested generators in try-catch", function () {
+  var _marked7 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen() {
+    var _t5;
+    return babelHelpers.regenerator().w(function (_context0) {
+      while (1) switch (_context0.prev = _context0.next) {
+        case 0:
+          _context0.prev = 0;
+          nonExistent;
+          _context0.next = 8;
+          break;
+        case 4:
+          _context0.prev = 4;
+          _t5 = _context0.sent;
+          _context0.next = 8;
+          return /*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
+            return babelHelpers.regenerator().w(function (_context9) {
+              while (1) switch (_context9.prev = _context9.next) {
+                case 0:
+                  _context9.next = 2;
+                  return _t5;
+                case 2:
+                  return _context9.abrupt(2);
+              }
+            }, _callee3);
+          });
+        case 8:
+          return _context0.abrupt(2);
+      }
+    }, _marked7, null, [[0, 4]]);
+  }
+  it("should get a reference to the caught error", function () {
+    var genFun2 = gen().next().value;
+    assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(genFun2));
+    var gen2 = genFun2();
+    var res = gen2.next();
+    assert.ok(res.value instanceof ReferenceError);
+    // Note that we don't do strict equality over the message because it varies
+    // across browsers (if we ever want to run tests in browsers).
+    assert.ok(res.value.message.match(/nonExistent/));
+  });
+});
+describe("try-finally generator", function () {
+  var _marked8 = /*#__PURE__*/babelHelpers.regenerator().m(usingThrow),
+    _marked9 = /*#__PURE__*/babelHelpers.regenerator().m(usingRaise),
+    _marked0 = /*#__PURE__*/babelHelpers.regenerator().m(usingAbrupt);
+  function usingThrow(condition) {
+    return babelHelpers.regenerator().w(function (_context1) {
+      while (1) switch (_context1.prev = _context1.next) {
+        case 0:
+          _context1.next = 2;
+          return 0;
+        case 2:
+          _context1.prev = 2;
+          _context1.next = 5;
+          return 1;
+        case 5:
+          throw 2;
+        case 8:
+          _context1.prev = 8;
+          if (!condition) {
+            _context1.next = 13;
+            break;
+          }
+          _context1.next = 12;
+          return 4;
+        case 12:
+          return _context1.abrupt(2, 5);
+        case 13:
+          _context1.next = 15;
+          return 6;
+        case 15:
+          return _context1.abrupt(2, 7);
+        case 17:
+          return _context1.abrupt(2);
+      }
+    }, _marked8, null, [[2,, 8, 17]]);
+  }
+  function usingRaise(condition) {
+    return babelHelpers.regenerator().w(function (_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          _context10.next = 2;
+          return 0;
+        case 2:
+          _context10.prev = 2;
+          _context10.next = 5;
+          return 1;
+        case 5:
+          raise(2);
+          _context10.next = 8;
+          return 3;
+        case 8:
+          _context10.prev = 8;
+          if (!condition) {
+            _context10.next = 13;
+            break;
+          }
+          _context10.next = 12;
+          return 4;
+        case 12:
+          return _context10.abrupt(2, 5);
+        case 13:
+          _context10.next = 15;
+          return 6;
+        case 15:
+          return _context10.abrupt(2, 7);
+        case 17:
+          return _context10.abrupt(2);
+      }
+    }, _marked9, null, [[2,, 8, 17]]);
+  }
+  function usingAbrupt(abruptType, finallyAbruptType) {
+    return babelHelpers.regenerator().w(function (_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.next = 2;
+          return 0;
+        case 2:
+          _context11.prev = 2;
+          _context11.next = 5;
+          return 1;
+        case 5:
+          if (!(abruptType === "return")) {
+            _context11.next = 9;
+            break;
+          }
+          return _context11.abrupt(2, 2);
+        case 9:
+          if (!(abruptType === "break")) {
+            _context11.next = 13;
+            break;
+          }
+          return _context11.abrupt(3, 33);
+        case 13:
+          if (!(abruptType === "continue")) {
+            _context11.next = 16;
+            break;
+          }
+          abruptType = "return";
+          return _context11.abrupt(3, 31);
+        case 16:
+          _context11.prev = 16;
+          _context11.next = 19;
+          return 3;
+        case 19:
+          if (!(finallyAbruptType === "return")) {
+            _context11.next = 23;
+            break;
+          }
+          return _context11.abrupt(2, 4);
+        case 23:
+          if (!(finallyAbruptType === "break")) {
+            _context11.next = 27;
+            break;
+          }
+          return _context11.abrupt(3, 33);
+        case 27:
+          if (!(finallyAbruptType === "continue")) {
+            _context11.next = 30;
+            break;
+          }
+          finallyAbruptType = null;
+          return _context11.abrupt(3, 31);
+        case 30:
+          return _context11.finish(16);
+        case 31:
+          _context11.next = 2;
+          break;
+        case 33:
+          return _context11.abrupt(2, 5);
+        case 34:
+          return _context11.abrupt(2);
+      }
+    }, _marked0, null, [[2,, 16, 31]]);
+  }
+  it("should honor return", function () {
+    check(usingAbrupt("return", null), [0, 1, 3], 2);
+  });
+  it("should honor break", function () {
+    check(usingAbrupt("break", null), [0, 1, 3], 5);
+  });
+  it("should honor continue", function () {
+    check(usingAbrupt("continue", null), [0, 1, 3, 1, 3], 2);
+  });
+  it("should override abrupt with return", function () {
+    check(usingAbrupt("return", "return"), [0, 1, 3], 4);
+    check(usingAbrupt("break", "return"), [0, 1, 3], 4);
+    check(usingAbrupt("continue", "return"), [0, 1, 3], 4);
+  });
+  it("should override abrupt with break", function () {
+    check(usingAbrupt("return", "break"), [0, 1, 3], 5);
+    check(usingAbrupt("break", "break"), [0, 1, 3], 5);
+    check(usingAbrupt("continue", "break"), [0, 1, 3], 5);
+  });
+  it("should override abrupt with continue", function () {
+    check(usingAbrupt("return", "continue"), [0, 1, 3, 1, 3], 2);
+    check(usingAbrupt("break", "continue"), [0, 1, 3, 1, 3], 5);
+    check(usingAbrupt("continue", "continue"), [0, 1, 3, 1, 3], 2);
+  });
+  it("should execute finally blocks statically", function () {
+    check(usingThrow(true), [0, 1, 4], 5);
+    check(usingThrow(false), [0, 1, 6], 7);
+  });
+  it("should execute finally blocks dynamically", function () {
+    check(usingRaise(true), [0, 1, 4], 5);
+    check(usingRaise(false), [0, 1, 6], 7);
+  });
+  it("should execute finally blocks before throwing", function () {
+    var _marked1 = /*#__PURE__*/babelHelpers.regenerator().m(uncaught);
+    var uncaughtError = new Error("uncaught");
+    function uncaught(condition) {
+      return babelHelpers.regenerator().w(function (_context12) {
+        while (1) switch (_context12.prev = _context12.next) {
+          case 0:
+            _context12.prev = 0;
+            _context12.next = 3;
+            return 0;
+          case 3:
+            if (!condition) {
+              _context12.next = 7;
+              break;
+            }
+            _context12.next = 6;
+            return 1;
+          case 6:
+            raise(uncaughtError);
+          case 7:
+            _context12.next = 9;
+            return 2;
+          case 9:
+            _context12.prev = 9;
+            _context12.next = 12;
+            return 3;
+          case 12:
+            return _context12.finish(9);
+          case 13:
+            _context12.next = 15;
+            return 4;
+          case 15:
+            return _context12.abrupt(2);
+        }
+      }, _marked1, null, [[0,, 9, 13]]);
+    }
+    check(uncaught(false), [0, 2, 3, 4]);
+    var u = uncaught(true);
+    assert.deepEqual(u.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(u.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(u.next(), {
+      value: 3,
+      done: false
+    });
+    try {
+      u.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, uncaughtError);
+    }
+  });
+  it("should throw correct error when finally contains catch", function () {
+    var _marked10 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var right = new Error("right");
+    var wrong = new Error("wrong");
+    function gen() {
+      var _t6;
+      return babelHelpers.regenerator().w(function (_context13) {
+        while (1) switch (_context13.prev = _context13.next) {
+          case 0:
+            _context13.prev = 0;
+            _context13.next = 3;
+            return 0;
+          case 3:
+            raise(right);
+          case 4:
+            _context13.prev = 4;
+            _context13.next = 7;
+            return 1;
+          case 7:
+            _context13.prev = 7;
+            raise(wrong);
+            _context13.next = 16;
+            break;
+          case 11:
+            _context13.prev = 11;
+            _t6 = _context13.sent;
+            assert.strictEqual(_t6, wrong);
+            _context13.next = 16;
+            return 2;
+          case 16:
+            return _context13.finish(4);
+          case 17:
+            return _context13.abrupt(2);
+        }
+      }, _marked10, null, [[7, 11], [0,, 4, 17]]);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+    try {
+      g.next();
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, right);
+    }
+  });
+  it("should run finally after break within try", function () {
+    var _marked11 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context14) {
+        while (1) switch (_context14.prev = _context14.next) {
+          case 0:
+            _context14.prev = 0;
+            _context14.next = 3;
+            return 0;
+          case 3:
+            if (!true) {
+              _context14.next = 9;
+              break;
+            }
+            _context14.next = 6;
+            return 1;
+          case 6:
+            return _context14.abrupt(3, 9);
+          case 9:
+            _context14.prev = 9;
+            _context14.next = 12;
+            return 2;
+          case 12:
+            return _context14.finish(9);
+          case 13:
+            _context14.next = 15;
+            return 3;
+          case 15:
+            return _context14.abrupt(2);
+        }
+      }, _marked11, null, [[0,, 9, 13]]);
+    }
+    check(gen(), [0, 1, 2, 3]);
+  });
+  it("should return the correct value when overridden by finally", function () {
+    var _marked12 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context15) {
+        while (1) switch (_context15.prev = _context15.next) {
+          case 0:
+            _context15.prev = 0;
+            _context15.next = 3;
+            return 1;
+          case 3:
+            return _context15.abrupt(2, _context15.sent);
+          case 4:
+            _context15.prev = 4;
+            return _context15.abrupt(2, 3);
+          case 7:
+            return _context15.abrupt(2);
+        }
+      }, _marked12, null, [[0,, 4, 7]]);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    if (typeof g.return === "function") {
+      assert.deepEqual(g.return(5), {
+        value: 3,
+        done: true
+      });
+    } else {
+      assert.deepEqual(g.next(5), {
+        value: 3,
+        done: true
+      });
+    }
+  });
+  it("should let the last finally block override all others", function () {
+    var _marked13 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(condition) {
+      return babelHelpers.regenerator().w(function (_context16) {
+        while (1) switch (_context16.prev = _context16.next) {
+          case 0:
+            _context16.prev = 0;
+            _context16.prev = 1;
+            _context16.next = 4;
+            return 1;
+          case 4:
+            return _context16.abrupt(2, _context16.sent);
+          case 5:
+            _context16.prev = 5;
+            return _context16.abrupt(2, 2);
+          case 8:
+            _context16.prev = 8;
+            _context16.prev = 9;
+            return _context16.abrupt(2, 3);
+          case 11:
+            _context16.prev = 11;
+            if (!condition) {
+              _context16.next = 14;
+              break;
+            }
+            return _context16.abrupt(2, 4);
+          case 14:
+            return _context16.finish(11);
+          case 15:
+            return _context16.finish(8);
+          case 16:
+            return _context16.abrupt(2);
+        }
+      }, _marked13, null, [[9,, 11, 15], [1,, 5, 8], [0,, 8, 16]]);
+    }
+    var g1 = gen(true);
+    assert.deepEqual(g1.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    var method = g1.return || g1.next;
+    assert.deepEqual(method.call(g1, 5), {
+      value: 4,
+      done: true
+    });
+    var g2 = gen(false);
+    assert.deepEqual(g2.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(method.call(g2, 5), {
+      value: 3,
+      done: true
+    });
+  });
+  it("should allow additional yields during finally propagation", function () {
+    var _marked14 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(condition) {
+      return babelHelpers.regenerator().w(function (_context17) {
+        while (1) switch (_context17.prev = _context17.next) {
+          case 0:
+            _context17.prev = 0;
+            _context17.prev = 1;
+            _context17.next = 4;
+            return 1;
+          case 4:
+            return _context17.abrupt(2, _context17.sent);
+          case 5:
+            _context17.prev = 5;
+            return _context17.abrupt(2, 2);
+          case 8:
+            _context17.prev = 8;
+            _context17.prev = 9;
+            _context17.next = 12;
+            return "oyez";
+          case 12:
+            return _context17.abrupt(2, _context17.sent);
+          case 13:
+            _context17.prev = 13;
+            if (!condition) {
+              _context17.next = 16;
+              break;
+            }
+            return _context17.abrupt(2, 4);
+          case 16:
+            return _context17.finish(13);
+          case 17:
+            return _context17.finish(8);
+          case 18:
+            return _context17.abrupt(2);
+        }
+      }, _marked14, null, [[9,, 13, 17], [1,, 5, 8], [0,, 8, 18]]);
+    }
+    var g1 = gen(true);
+    assert.deepEqual(g1.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    var method = g1.return || g1.next;
+    assert.deepEqual(method.call(g1, 5), {
+      value: "oyez",
+      done: false
+    });
+    assert.deepEqual(method.call(g1, 5), {
+      value: 4,
+      done: true
+    });
+    var g2 = gen(false);
+    assert.deepEqual(g2.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(method.call(g2, 5), {
+      value: "oyez",
+      done: false
+    });
+    assert.deepEqual(method.call(g2, 5), {
+      value: 5,
+      done: true
+    });
+  });
+});
+describe("try-catch-finally generator", function () {
+  var _marked15 = /*#__PURE__*/babelHelpers.regenerator().m(usingThrow),
+    _marked16 = /*#__PURE__*/babelHelpers.regenerator().m(usingRaise);
+  function usingThrow() {
+    var _t7, _t8;
+    return babelHelpers.regenerator().w(function (_context18) {
+      while (1) switch (_context18.prev = _context18.next) {
+        case 0:
+          _context18.next = 2;
+          return 0;
+        case 2:
+          _context18.prev = 2;
+          _context18.prev = 3;
+          _context18.next = 6;
+          return 1;
+        case 6:
+          throw 2;
+        case 9:
+          _context18.next = 16;
+          break;
+        case 11:
+          _context18.prev = 11;
+          _t7 = _context18.sent;
+          _context18.next = 15;
+          return _t7;
+        case 15:
+          throw _context18.sent;
+        case 16:
+          _context18.prev = 16;
+          _context18.next = 19;
+          return 5;
+        case 19:
+          return _context18.finish(16);
+        case 20:
+          _context18.next = 26;
+          break;
+        case 22:
+          _context18.prev = 22;
+          _t8 = _context18.sent;
+          _context18.next = 26;
+          return _t8;
+        case 26:
+          _context18.next = 28;
+          return 6;
+        case 28:
+          return _context18.abrupt(2);
+      }
+    }, _marked15, null, [[3, 11, 16, 20], [2, 22]]);
+  }
+  function usingRaise() {
+    var _t9, _t0;
+    return babelHelpers.regenerator().w(function (_context19) {
+      while (1) switch (_context19.prev = _context19.next) {
+        case 0:
+          _context19.next = 2;
+          return 0;
+        case 2:
+          _context19.prev = 2;
+          _context19.prev = 3;
+          _context19.next = 6;
+          return 1;
+        case 6:
+          raise(2);
+          _context19.next = 9;
+          return 3;
+        case 9:
+          _context19.next = 16;
+          break;
+        case 11:
+          _context19.prev = 11;
+          _t9 = _context19.sent;
+          _context19.next = 15;
+          return _t9;
+        case 15:
+          throw _context19.sent;
+        case 16:
+          _context19.prev = 16;
+          _context19.next = 19;
+          return 5;
+        case 19:
+          return _context19.finish(16);
+        case 20:
+          _context19.next = 26;
+          break;
+        case 22:
+          _context19.prev = 22;
+          _t0 = _context19.sent;
+          _context19.next = 26;
+          return _t0;
+        case 26:
+          _context19.next = 28;
+          return 6;
+        case 28:
+          return _context19.abrupt(2);
+      }
+    }, _marked16, null, [[3, 11, 16, 20], [2, 22]]);
+  }
+  it("should statically catch and then finalize", function () {
+    check(usingThrow(), [0, 1, 2, 5, 3, 6]);
+  });
+  it("should dynamically catch and then finalize", function () {
+    check(usingRaise(), [0, 1, 2, 5, 3, 6]);
+  });
+  it("should execute catch and finally blocks at most once", function () {
+    var _marked17 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var error = new Error();
+    function gen() {
+      var _t1, _t10;
+      return babelHelpers.regenerator().w(function (_context20) {
+        while (1) switch (_context20.prev = _context20.next) {
+          case 0:
+            _context20.prev = 0;
+            _t1 = 1;
+            _context20.next = _t1 === 1 ? 4 : 7;
+            break;
+          case 4:
+            _context20.next = 6;
+            return "a";
+          case 6:
+            return _context20.abrupt(3, 8);
+          case 7:
+            return _context20.abrupt(3, 8);
+          case 8:
+            throw error;
+          case 11:
+            _context20.prev = 11;
+            _t10 = _context20.sent;
+            assert.strictEqual(_t10, error);
+            _context20.next = 16;
+            return "b";
+          case 16:
+            _context20.next = 18;
+            return "c";
+          case 18:
+            return _context20.abrupt(3, 20);
+          case 19:
+            if (false) {
+              _context20.next = 16;
+              break;
+            }
+          case 20:
+            _context20.next = 22;
+            return "d";
+          case 22:
+            return _context20.abrupt(3, 24);
+          case 23:
+            if (false) {
+              _context20.next = 16;
+              break;
+            }
+          case 24:
+            _context20.next = 26;
+            return "e";
+          case 26:
+            _context20.prev = 26;
+            _context20.next = 29;
+            return "f";
+          case 29:
+            return _context20.finish(26);
+          case 30:
+            return _context20.abrupt(2);
+        }
+      }, _marked17, null, [[0, 11, 26, 30]]);
+    }
+    check(gen(), ["a", "b", "c", "d", "e", "f"]);
+  });
+  it("should handle backwards jumps in labeled loops", function () {
+    var _marked18 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var firstTime;
+      return babelHelpers.regenerator().w(function (_context21) {
+        while (1) switch (_context21.prev = _context21.next) {
+          case 0:
+            firstTime = true;
+          case 1:
+            if (!true) {
+              _context21.next = 31;
+              break;
+            }
+            _context21.next = 4;
+            return 0;
+          case 4:
+            _context21.prev = 4;
+          case 5:
+            if (!true) {
+              _context21.next = 20;
+              break;
+            }
+            _context21.next = 8;
+            return 1;
+          case 8:
+            if (!firstTime) {
+              _context21.next = 15;
+              break;
+            }
+            firstTime = false;
+            _context21.next = 12;
+            return 2;
+          case 12:
+            return _context21.abrupt(3, 1);
+          case 15:
+            _context21.next = 17;
+            return 3;
+          case 17:
+            return _context21.abrupt(3, 20);
+          case 18:
+            _context21.next = 5;
+            break;
+          case 20:
+            _context21.next = 22;
+            return 4;
+          case 22:
+            return _context21.abrupt(3, 31);
+          case 23:
+            _context21.prev = 23;
+            _context21.next = 26;
+            return 5;
+          case 26:
+            return _context21.finish(23);
+          case 27:
+            _context21.next = 29;
+            return 6;
+          case 29:
+            _context21.next = 1;
+            break;
+          case 31:
+            _context21.next = 33;
+            return 7;
+          case 33:
+            return _context21.abrupt(2);
+        }
+      }, _marked18, null, [[4,, 23, 27]]);
+    }
+    check(gen(), [0, 1, 2, 5, 0, 1, 3, 4, 5, 7]);
+  });
+  it("should handle loop continue statements properly", function () {
+    var _marked19 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var error = new Error("thrown");
+    var markers = [];
+    function gen() {
+      var c, _t11;
+      return babelHelpers.regenerator().w(function (_context22) {
+        while (1) switch (_context22.prev = _context22.next) {
+          case 0:
+            c = 2;
+          case 1:
+            if (!(c > 0)) {
+              _context22.next = 20;
+              break;
+            }
+            _context22.prev = 2;
+            markers.push("try");
+            _context22.next = 6;
+            return c;
+          case 6:
+            _context22.next = 13;
+            break;
+          case 8:
+            _context22.prev = 8;
+            _t11 = _context22.sent;
+            assert.strictEqual(_t11, error);
+            markers.push("catch");
+            return _context22.abrupt(3, 1);
+          case 13:
+            _context22.prev = 13;
+            markers.push("finally");
+            return _context22.finish(13);
+          case 16:
+            markers.push("decrement");
+            --c;
+            _context22.next = 1;
+            break;
+          case 20:
+            return _context22.abrupt(2);
+        }
+      }, _marked19, null, [[2, 8, 13, 16]]);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.throw(error), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: void 0,
+      done: true
+    });
+    assert.deepEqual(markers, ["try", "catch", "finally", "try", "finally", "decrement", "try", "finally", "decrement"]);
+  });
+});
+describe("dynamic exception", function () {
+  var _marked20 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(x, fname) {
+    var _t12;
+    return babelHelpers.regenerator().w(function (_context23) {
+      while (1) switch (_context23.prev = _context23.next) {
+        case 0:
+          _context23.prev = 0;
+          return _context23.abrupt(2, fns[fname](x));
+        case 4:
+          _context23.prev = 4;
+          _t12 = _context23.sent;
+          _context23.next = 8;
+          return _t12;
+        case 8:
+          return _context23.abrupt(2);
+      }
+    }, _marked20, null, [[0, 4]]);
+  }
+  var fns = {
+    f: function (x) {
+      throw x;
+    },
+    g: function (x) {
+      return x;
+    }
+  };
+  it("should be dispatched correctly", function () {
+    check(gen("asdf", "f"), ["asdf"]);
+    check(gen("asdf", "g"), [], "asdf");
+  });
+});
+describe("nested finally blocks", function () {
+  var _marked21 = /*#__PURE__*/babelHelpers.regenerator().m(usingThrow),
+    _marked22 = /*#__PURE__*/babelHelpers.regenerator().m(usingRaise);
+  function usingThrow() {
+    var _t13;
+    return babelHelpers.regenerator().w(function (_context24) {
+      while (1) switch (_context24.prev = _context24.next) {
+        case 0:
+          _context24.prev = 0;
+          _context24.prev = 1;
+          _context24.prev = 2;
+          throw "thrown";
+        case 4:
+          _context24.prev = 4;
+          _context24.next = 7;
+          return 1;
+        case 7:
+          return _context24.finish(4);
+        case 8:
+          _context24.next = 14;
+          break;
+        case 10:
+          _context24.prev = 10;
+          _t13 = _context24.sent;
+          _context24.next = 14;
+          return _t13;
+        case 14:
+          _context24.prev = 14;
+          _context24.next = 17;
+          return 2;
+        case 17:
+          return _context24.finish(14);
+        case 18:
+          _context24.prev = 18;
+          _context24.next = 21;
+          return 3;
+        case 21:
+          return _context24.finish(18);
+        case 22:
+          return _context24.abrupt(2);
+      }
+    }, _marked21, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
+  }
+  function usingRaise() {
+    var _t14;
+    return babelHelpers.regenerator().w(function (_context25) {
+      while (1) switch (_context25.prev = _context25.next) {
+        case 0:
+          _context25.prev = 0;
+          _context25.prev = 1;
+          _context25.prev = 2;
+          raise("thrown");
+        case 4:
+          _context25.prev = 4;
+          _context25.next = 7;
+          return 1;
+        case 7:
+          return _context25.finish(4);
+        case 8:
+          _context25.next = 14;
+          break;
+        case 10:
+          _context25.prev = 10;
+          _t14 = _context25.sent;
+          _context25.next = 14;
+          return _t14;
+        case 14:
+          _context25.prev = 14;
+          _context25.next = 17;
+          return 2;
+        case 17:
+          return _context25.finish(14);
+        case 18:
+          _context25.prev = 18;
+          _context25.next = 21;
+          return 3;
+        case 21:
+          return _context25.finish(18);
+        case 22:
+          return _context25.abrupt(2);
+      }
+    }, _marked22, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
+  }
+  it("should statically execute in order", function () {
+    check(usingThrow(), [1, "thrown", 2, 3]);
+  });
+  it("should dynamically execute in order", function () {
+    check(usingRaise(), [1, "thrown", 2, 3]);
+  });
+});
+describe("for-in loop generator", function () {
+  it("should handle the simple case", function () {
+    var _marked23 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var count, obj, key, _t15, _t16;
+      return babelHelpers.regenerator().w(function (_context26) {
+        while (1) switch (_context26.prev = _context26.next) {
+          case 0:
+            count = 0;
+            obj = {
+              foo: 1,
+              bar: 2
+            };
+            _t15 = babelHelpers.regeneratorKeys(obj);
+          case 3:
+            if ((_t16 = _t15()).done) {
+              _context26.next = 11;
+              break;
+            }
+            key = _t16.value;
+            assert(obj.hasOwnProperty(key), key + " must be own property");
+            _context26.next = 8;
+            return [key, obj[key]];
+          case 8:
+            count += 1;
+            _context26.next = 3;
+            break;
+          case 11:
+            return _context26.abrupt(2, count);
+          case 12:
+            return _context26.abrupt(2);
+        }
+      }, _marked23);
+    }
+    check(gen(), [["foo", 1], ["bar", 2]], 2);
+  });
+  it("should handle break in loop", function () {
+    var _marked24 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(obj) {
+      var count, key, _t17, _t18;
+      return babelHelpers.regenerator().w(function (_context27) {
+        while (1) switch (_context27.prev = _context27.next) {
+          case 0:
+            count = 0;
+            _context27.next = 3;
+            return "why not";
+          case 3:
+            _t17 = babelHelpers.regeneratorKeys(obj);
+          case 4:
+            if ((_t18 = _t17()).done) {
+              _context27.next = 14;
+              break;
+            }
+            key = _t18.value;
+            if (!obj.hasOwnProperty(key)) {
+              _context27.next = 12;
+              break;
+            }
+            if (!(key === "skip")) {
+              _context27.next = 9;
+              break;
+            }
+            return _context27.abrupt(3, 14);
+          case 9:
+            count += 1;
+            _context27.next = 12;
+            return [key, obj[key]];
+          case 12:
+            _context27.next = 4;
+            break;
+          case 14:
+            return _context27.abrupt(2, count);
+          case 15:
+            return _context27.abrupt(2);
+        }
+      }, _marked24);
+    }
+    check(gen({
+      a: 1,
+      b: 2,
+      skip: 3,
+      c: 4
+    }), ["why not", ["a", 1], ["b", 2]], 2);
+  });
+  it("should handle property deletion in loop", function () {
+    var _marked25 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var count, obj, key, _t19, _t20;
+      return babelHelpers.regenerator().w(function (_context28) {
+        while (1) switch (_context28.prev = _context28.next) {
+          case 0:
+            count = 0;
+            obj = {
+              foo: 1,
+              bar: 2
+            };
+            _t19 = babelHelpers.regeneratorKeys(obj);
+          case 3:
+            if ((_t20 = _t19()).done) {
+              _context28.next = 12;
+              break;
+            }
+            key = _t20.value;
+            assert(obj.hasOwnProperty(key), key + " must be own property");
+            _context28.next = 8;
+            return [key, obj[key]];
+          case 8:
+            delete obj.bar;
+            count += 1;
+            _context28.next = 3;
+            break;
+          case 12:
+            return _context28.abrupt(2, count);
+          case 13:
+            return _context28.abrupt(2);
+        }
+      }, _marked25);
+    }
+    check(gen(), [["foo", 1]], 1);
+  });
+  it("should loop over inherited properties", function () {
+    var _marked26 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var count, Foo, foo, key, _t21, _t22;
+      return babelHelpers.regenerator().w(function (_context29) {
+        while (1) switch (_context29.prev = _context29.next) {
+          case 0:
+            Foo = function _Foo() {
+              this.baz = 1;
+            };
+            count = 0;
+            Foo.prototype.bar = 2;
+            foo = new Foo();
+            _t21 = babelHelpers.regeneratorKeys(foo);
+          case 5:
+            if ((_t22 = _t21()).done) {
+              _context29.next = 12;
+              break;
+            }
+            key = _t22.value;
+            _context29.next = 9;
+            return [key, foo[key]];
+          case 9:
+            count += 1;
+            _context29.next = 5;
+            break;
+          case 12:
+            return _context29.abrupt(2, count);
+          case 13:
+            return _context29.abrupt(2);
+        }
+      }, _marked26);
+    }
+    check(gen(), [["baz", 1], ["bar", 2]], 2);
+  });
+  it("should handle risky object expressions", function () {
+    var _marked27 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function a(sent) {
+      assert.strictEqual(sent, 1);
+      a.called = true;
+    }
+    function b(sent) {
+      assert.strictEqual(sent, 2);
+      b.called = true;
+      return {
+        callee: b
+      };
+    }
+    function gen() {
+      var key, _t23, _t24, _t25, _t26, _t27, _t28, _t29, _t30, _t31, _t32;
+      return babelHelpers.regenerator().w(function (_context30) {
+        while (1) switch (_context30.prev = _context30.next) {
+          case 0:
+            assert.ok(!a.called);
+            assert.ok(!b.called);
+            _t24 = a;
+            _context30.next = 5;
+            return 0;
+          case 5:
+            _t25 = _context30.sent;
+            _t24(_t25);
+            _t26 = b;
+            _context30.next = 10;
+            return 1;
+          case 10:
+            _t27 = _context30.sent;
+            _t23 = babelHelpers.regeneratorKeys(_t26(_t27));
+          case 12:
+            if ((_t28 = _t23()).done) {
+              _context30.next = 23;
+              break;
+            }
+            key = _t28.value;
+            assert.ok(a.called);
+            assert.ok(b.called);
+            _t29 = assert;
+            _context30.next = 19;
+            return key;
+          case 19:
+            _t30 = _context30.sent;
+            _t29.strictEqual.call(_t29, _t30, 3);
+            _context30.next = 12;
+            break;
+          case 23:
+            _t31 = babelHelpers.regeneratorKeys((a(1), {
+              foo: "foo",
+              bar: "bar"
+            }));
+          case 24:
+            if ((_t32 = _t31()).done) {
+              _context30.next = 30;
+              break;
+            }
+            key = _t32.value;
+            _context30.next = 28;
+            return key;
+          case 28:
+            _context30.next = 24;
+            break;
+          case 30:
+            return _context30.abrupt(2);
+        }
+      }, _marked27);
+    }
+    check(gen(), [0, 1, "callee", "foo", "bar"]);
+  });
+  it("should allow non-Identifier left-hand expressions", function () {
+    var _marked28 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var obj = {};
+    var baz = {
+      a: 1,
+      b: 2,
+      c: 3
+    };
+    var markers = [];
+    function foo() {
+      markers.push("called foo");
+      return obj;
+    }
+    function gen() {
+      var _t33, _t34;
+      return babelHelpers.regenerator().w(function (_context31) {
+        while (1) switch (_context31.prev = _context31.next) {
+          case 0:
+            _t33 = babelHelpers.regeneratorKeys(baz);
+          case 1:
+            if ((_t34 = _t33()).done) {
+              _context31.next = 8;
+              break;
+            }
+            foo().bar = _t34.value;
+            markers.push(obj.bar);
+            _context31.next = 6;
+            return obj.bar;
+          case 6:
+            _context31.next = 1;
+            break;
+          case 8:
+            return _context31.abrupt(2);
+        }
+      }, _marked28);
+    }
+    check(gen(), ["a", "b", "c"]);
+    assert.deepEqual(markers, ["called foo", "a", "called foo", "b", "called foo", "c"]);
+  });
+  it("should work with primitives", function () {
+    var _marked29 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var key, _t35, _t36;
+      return babelHelpers.regenerator().w(function (_context32) {
+        while (1) switch (_context32.prev = _context32.next) {
+          case 0:
+            _t35 = babelHelpers.regeneratorKeys("abc");
+          case 1:
+            if ((_t36 = _t35()).done) {
+              _context32.next = 7;
+              break;
+            }
+            key = _t36.value;
+            _context32.next = 5;
+            return key;
+          case 5:
+            _context32.next = 1;
+            break;
+          case 7:
+            return _context32.abrupt(2);
+        }
+      }, _marked29);
+    }
+    check(gen(), [0, 1, 2]);
+  });
+});
+describe("yield chain", function () {
+  var _marked30 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(n) {
+    return babelHelpers.regenerator().w(function (_context33) {
+      while (1) switch (_context33.prev = _context33.next) {
+        case 0:
+          _context33.next = 2;
+          return n;
+        case 2:
+          _context33.next = 4;
+          return _context33.sent;
+        case 4:
+          _context33.next = 6;
+          return _context33.sent;
+        case 6:
+          _context33.next = 8;
+          return _context33.sent;
+        case 8:
+          return _context33.abrupt(2, _context33.sent);
+        case 9:
+          return _context33.abrupt(2);
+      }
+    }, _marked30);
+  }
+  it("should have correct associativity", function () {
+    check(gen(5), [5, 1, 2, 3], 4);
+    check(gen("asdf"), ["asdf", 1, 2, 3], 4);
+  });
+});
+describe("call expression ordering", function test() {
+  it("should be correct with chained calls (#244)", function () {
+    var g = /*#__PURE__*/babelHelpers.regenerator().m(function gen() {
+      var _t37, _t38, _t39, _t40;
+      return babelHelpers.regenerator().w(function (_context34) {
+        while (1) switch (_context34.prev = _context34.next) {
+          case 0:
+            _context34.next = 2;
+            return 1;
+          case 2:
+            _t37 = _context34.sent;
+            _context34.next = 5;
+            return 2;
+          case 5:
+            _t38 = _context34.sent;
+            _t39 = _t37(_t38);
+            _context34.next = 9;
+            return 3;
+          case 9:
+            _t40 = _context34.sent;
+            return _context34.abrupt(2, _t39(_t40));
+          case 11:
+            return _context34.abrupt(2);
+        }
+      }, gen);
+    })();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(function (sent2) {
+      assert.strictEqual(sent2, "sent 2");
+      return function (sent3) {
+        assert.strictEqual(sent3, "sent 3");
+        return "done";
+      };
+    }), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next("sent 2"), {
+      value: 3,
+      done: false
+    });
+    assert.deepEqual(g.next("sent 3"), {
+      value: "done",
+      done: true
+    });
+  });
+  describe("when the callee is a member expression", function () {
+    it("should allow vars assigned in the callee to be used in the args (#379)", function () {
+      var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
+        var _ref;
+        return babelHelpers.regenerator().w(function (_context35) {
+          while (1) switch (_context35.prev = _context35.next) {
+            case 0:
+              _context35.next = 2;
+              return;
+            case 2:
+              (_ref = _context35.sent).method(_ref);
+            case 3:
+              return _context35.abrupt(2);
+          }
+        }, fn);
+      })();
+      var res;
+      var obj = {
+        method(arg) {
+          res = arg;
+        }
+      };
+      g.next();
+      g.next(obj);
+      assert.strictEqual(obj, res);
+    });
+    it("should be correct when only the callee contains yield", function () {
+      var order = [];
+      function step(n) {
+        order.push(n);
+        return {
+          method() {}
+        };
+      }
+      var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
+        return babelHelpers.regenerator().w(function (_context36) {
+          while (1) switch (_context36.prev = _context36.next) {
+            case 0:
+              _context36.next = 2;
+              return;
+            case 2:
+              step(1).method(step(2));
+            case 3:
+              return _context36.abrupt(2);
+          }
+        }, fn);
+      })();
+      g.next();
+      g.next();
+      assert.deepStrictEqual(order, [1, 2]);
+    });
+    it("should be correct when only the arguments contains yield", function () {
+      var order = [];
+      function step(n) {
+        order.push(n);
+        return {
+          method() {}
+        };
+      }
+      var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
+        var _t41, _t42, _t43, _t44;
+        return babelHelpers.regenerator().w(function (_context37) {
+          while (1) switch (_context37.prev = _context37.next) {
+            case 0:
+              _t41 = step(1);
+              _t42 = step(2);
+              _context37.next = 4;
+              return;
+            case 4:
+              _t43 = _context37.sent;
+              _t44 = step(3);
+              _t41.method.call(_t41, _t42, _t43, _t44);
+            case 7:
+              return _context37.abrupt(2);
+          }
+        }, fn);
+      })();
+      g.next();
+      g.next();
+      assert.deepStrictEqual(order, [1, 2, 3]);
+    });
+    it("should be correct when the callee and the arguments contain yield", function () {
+      var order = [];
+      function step(n) {
+        order.push(n);
+        return {
+          method() {}
+        };
+      }
+      var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
+        var _t45, _t46, _t47, _t48;
+        return babelHelpers.regenerator().w(function (_context38) {
+          while (1) switch (_context38.prev = _context38.next) {
+            case 0:
+              _context38.next = 2;
+              return;
+            case 2:
+              _t45 = step(1);
+              _t46 = step(2);
+              _context38.next = 6;
+              return;
+            case 6:
+              _t47 = _context38.sent;
+              _t48 = step(3);
+              _t45.method.call(_t45, _t46, _t47, _t48);
+            case 9:
+              return _context38.abrupt(2);
+          }
+        }, fn);
+      })();
+      g.next();
+      g.next();
+      g.next();
+      assert.deepStrictEqual(order, [1, 2, 3]);
+    });
+  });
+});
+describe("object literal generator", function () {
+  var _marked31 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(a, b) {
+    var _t49, _t50, _t51, _t52;
+    return babelHelpers.regenerator().w(function (_context39) {
+      while (1) switch (_context39.prev = _context39.next) {
+        case 0:
+          _t49 = a;
+          _context39.next = 3;
+          return a;
+        case 3:
+          _t50 = _context39.sent;
+          _t51 = _t49 - _t50;
+          _context39.next = 7;
+          return b;
+        case 7:
+          _t52 = _context39.sent;
+          _context39.next = 10;
+          return {
+            a: _t51,
+            b: _t52
+          };
+        case 10:
+          return _context39.abrupt(2);
+      }
+    }, _marked31);
+  }
+  it("should yield the correct object", function () {
+    check(gen(1, 2), [1, 2, {
+      a: 0,
+      b: 2
+    }]);
+    check(gen(4, 2), [4, 2, {
+      a: 3,
+      b: 2
+    }]);
+  });
+});
+describe("switch statement generator", function () {
+  var _marked32 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(a) {
+    var _t53, _t54, _t55, _t56, _t57, _t58, _t59, _t60, _t61, _t62, _t63;
+    return babelHelpers.regenerator().w(function (_context40) {
+      while (1) switch (_context40.prev = _context40.next) {
+        case 0:
+          _context40.next = 2;
+          return a;
+        case 2:
+          _t53 = _context40.sent;
+          _t54 = _t53;
+          _context40.next = 6;
+          return "x";
+        case 6:
+          _t55 = _context40.sent;
+          _t56 = a;
+          _t57 = _t55 - _t56;
+          if (!(_t54 === _t57)) {
+            _context40.next = 13;
+            break;
+          }
+          _t58 = 27;
+          _context40.next = 25;
+          break;
+        case 13:
+          _t59 = _t53;
+          _context40.next = 16;
+          return "y";
+        case 16:
+          _t60 = _context40.sent;
+          _t61 = a;
+          _t62 = _t60 - _t61;
+          if (!(_t59 === _t62)) {
+            _context40.next = 23;
+            break;
+          }
+          _t63 = 28;
+          _context40.next = 24;
+          break;
+        case 23:
+          _t63 = 29;
+        case 24:
+          _t58 = _t63;
+        case 25:
+          _context40.next = _t58;
+          break;
+        case 27:
+          return _context40.abrupt(2, "first case");
+        case 28:
+          return _context40.abrupt(2, "second case");
+        case 29:
+          return _context40.abrupt(2);
+      }
+    }, _marked32);
+  }
+  it("should jump to the correct cases", function () {
+    check(gen(1), [1, "x"], "first case");
+    check(gen(2), [2, "x", "y"], "second case");
+  });
+});
+describe("infinite sequence generator", function () {
+  var _marked33 = /*#__PURE__*/babelHelpers.regenerator().m(gen),
+    _marked34 = /*#__PURE__*/babelHelpers.regenerator().m(limit);
+  function gen(start, step) {
+    return babelHelpers.regenerator().w(function (_context41) {
+      while (1) switch (_context41.prev = _context41.next) {
+        case 0:
+          step = step || 1;
+        case 1:
+          if (!true) {
+            _context41.next = 7;
+            break;
+          }
+          _context41.next = 4;
+          return start;
+        case 4:
+          start += step;
+          _context41.next = 1;
+          break;
+        case 7:
+          return _context41.abrupt(2);
+      }
+    }, _marked33);
+  }
+  function limit(g, stop) {
+    var info;
+    return babelHelpers.regenerator().w(function (_context42) {
+      while (1) switch (_context42.prev = _context42.next) {
+        case 0:
+          if (!true) {
+            _context42.next = 14;
+            break;
+          }
+          info = g.next();
+          if (!info.done) {
+            _context42.next = 6;
+            break;
+          }
+          return _context42.abrupt(2);
+        case 6:
+          if (!(info.value < stop)) {
+            _context42.next = 11;
+            break;
+          }
+          _context42.next = 9;
+          return info.value;
+        case 9:
+          _context42.next = 12;
+          break;
+        case 11:
+          return _context42.abrupt(2);
+        case 12:
+          _context42.next = 0;
+          break;
+        case 14:
+          return _context42.abrupt(2);
+      }
+    }, _marked34);
+  }
+  it("should generate a lot of plausible values", function () {
+    var g = gen(10, 2);
+    assert.deepEqual(g.next(), {
+      value: 10,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 12,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 14,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 16,
+      done: false
+    });
+    var sum = 10 + 12 + 14 + 16;
+    for (var n = 0; n < 1000; ++n) {
+      var info = g.next();
+      sum += info.value;
+      assert.strictEqual(info.done, false);
+    }
+    assert.strictEqual(sum, 1017052);
+  });
+  it("should allow limiting", function () {
+    check(limit(gen(10, 3), 20), [10, 13, 16, 19]);
+  });
+});
+describe("generator function expression", function () {
+  it("should behave just like a declared generator", function () {
+    check(/*#__PURE__*/babelHelpers.regenerator().m(function _callee4(x, y) {
+      return babelHelpers.regenerator().w(function (_context43) {
+        while (1) switch (_context43.prev = _context43.next) {
+          case 0:
+            _context43.next = 2;
+            return x;
+          case 2:
+            _context43.next = 4;
+            return y;
+          case 4:
+            _context43.next = 6;
+            return x + y;
+          case 6:
+            return _context43.abrupt(2, x * y);
+          case 7:
+            return _context43.abrupt(2);
+        }
+      }, _callee4);
+    })(3, 7), [3, 7, 10], 21);
+  });
+});
+describe("generator reentry attempt", function () {
+  var _marked35 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+  function gen(x) {
+    var _t64;
+    return babelHelpers.regenerator().w(function (_context44) {
+      while (1) switch (_context44.prev = _context44.next) {
+        case 0:
+          _context44.prev = 0;
+          _context44.next = 3;
+          return x;
+        case 3:
+          _context44.sent.next(x);
+          _context44.next = 10;
+          break;
+        case 6:
+          _context44.prev = 6;
+          _t64 = _context44.sent;
+          _context44.next = 10;
+          return _t64;
+        case 10:
+          return _context44.abrupt(2, x + 1);
+        case 11:
+          return _context44.abrupt(2);
+      }
+    }, _marked35, null, [[0, 6]]);
+  }
+  it("should complain with a TypeError", function () {
+    var g = gen(3);
+    assert.deepEqual(g.next(), {
+      value: 3,
+      done: false
+    });
+    var complaint = g.next(g); // Sending the generator to itself.
+    assert.ok(complaint.value instanceof Error);
+    assert.strictEqual(complaint.value.message, "Generator is already running");
+    assert.deepEqual(g.next(), {
+      value: 4,
+      done: true
+    });
+  });
+});
+describe("delegated yield", function () {
+  it("should delegate correctly", function () {
+    var _marked36 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(condition) {
+      return babelHelpers.regenerator().w(function (_context45) {
+        while (1) switch (_context45.prev = _context45.next) {
+          case 0:
+            _context45.next = 2;
+            return 0;
+          case 2:
+            if (!condition) {
+              _context45.next = 8;
+              break;
+            }
+            _context45.next = 5;
+            return 1;
+          case 5:
+            return _context45.delegateYield(gen(false), 6);
+          case 6:
+            _context45.next = 8;
+            return 2;
+          case 8:
+            _context45.next = 10;
+            return 3;
+          case 10:
+            return _context45.abrupt(2);
+        }
+      }, _marked36);
+    }
+    check(gen(true), [0, 1, 0, 3, 2, 3]);
+    check(gen(false), [0, 3]);
+  });
+  it("should cope with empty delegatees", function () {
+    var _marked37 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(condition) {
+      return babelHelpers.regenerator().w(function (_context46) {
+        while (1) switch (_context46.prev = _context46.next) {
+          case 0:
+            if (!condition) {
+              _context46.next = 6;
+              break;
+            }
+            _context46.next = 3;
+            return 0;
+          case 3:
+            return _context46.delegateYield(gen(false), 4);
+          case 4:
+            _context46.next = 6;
+            return 1;
+          case 6:
+            return _context46.abrupt(2);
+        }
+      }, _marked37);
+    }
+    check(gen(true), [0, 1]);
+    check(gen(false), []);
+  });
+  it("should support deeper nesting", function () {
+    var _marked38 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
+      _marked39 = /*#__PURE__*/babelHelpers.regenerator().m(middle),
+      _marked40 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    function outer(n) {
+      return babelHelpers.regenerator().w(function (_context47) {
+        while (1) switch (_context47.prev = _context47.next) {
+          case 0:
+            _context47.next = 2;
+            return n;
+          case 2:
+            return _context47.delegateYield(middle(n - 1, inner(n + 10)), 3);
+          case 3:
+            _context47.next = 5;
+            return n + 1;
+          case 5:
+            return _context47.abrupt(2);
+        }
+      }, _marked38);
+    }
+    function middle(n, plusTen) {
+      return babelHelpers.regenerator().w(function (_context48) {
+        while (1) switch (_context48.prev = _context48.next) {
+          case 0:
+            _context48.next = 2;
+            return n;
+          case 2:
+            return _context48.delegateYield(inner(n - 1), 3);
+          case 3:
+            _context48.next = 5;
+            return n + 1;
+          case 5:
+            return _context48.delegateYield(plusTen, 6);
+          case 6:
+            return _context48.abrupt(2);
+        }
+      }, _marked39);
+    }
+    function inner(n) {
+      return babelHelpers.regenerator().w(function (_context49) {
+        while (1) switch (_context49.prev = _context49.next) {
+          case 0:
+            _context49.next = 2;
+            return n;
+          case 2:
+            return _context49.abrupt(2);
+        }
+      }, _marked40);
+    }
+    check(outer(5), [5, 4, 3, 5, 15, 6]);
+  });
+  it("should pass sent values through", function () {
+    var _marked41 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
+      _marked42 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    function outer(n) {
+      return babelHelpers.regenerator().w(function (_context50) {
+        while (1) switch (_context50.prev = _context50.next) {
+          case 0:
+            return _context50.delegateYield(inner(n << 1), 1);
+          case 1:
+            _context50.next = 3;
+            return "zxcv";
+          case 3:
+            return _context50.abrupt(2);
+        }
+      }, _marked41);
+    }
+    function inner(n) {
+      return babelHelpers.regenerator().w(function (_context51) {
+        while (1) switch (_context51.prev = _context51.next) {
+          case 0:
+            _context51.next = 2;
+            return n;
+          case 2:
+            _context51.next = 4;
+            return _context51.sent;
+          case 4:
+            _context51.next = 6;
+            return _context51.sent;
+          case 6:
+            return _context51.abrupt(2, _context51.sent);
+          case 7:
+            return _context51.abrupt(2);
+        }
+      }, _marked42);
+    }
+    var g = outer(3);
+    assert.deepEqual(g.next(), {
+      value: 6,
+      done: false
+    });
+    assert.deepEqual(g.next(1), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(2), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(4), {
+      value: "zxcv",
+      done: false
+    });
+    assert.deepEqual(g.next(5), {
+      value: void 0,
+      done: true
+    });
+  });
+  it("should be governed by enclosing try statements", function () {
+    var _marked43 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
+      _marked44 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    var error = new Error("thrown");
+    function outer(n) {
+      var _t65;
+      return babelHelpers.regenerator().w(function (_context52) {
+        while (1) switch (_context52.prev = _context52.next) {
+          case 0:
+            _context52.prev = 0;
+            _context52.next = 3;
+            return 0;
+          case 3:
+            return _context52.delegateYield(inner(n), 4);
+          case 4:
+            _context52.next = 6;
+            return 1;
+          case 6:
+            _context52.next = 12;
+            break;
+          case 8:
+            _context52.prev = 8;
+            _t65 = _context52.sent;
+            _context52.next = 12;
+            return _t65.message;
+          case 12:
+            _context52.next = 14;
+            return 4;
+          case 14:
+            return _context52.abrupt(2);
+        }
+      }, _marked43, null, [[0, 8]]);
+    }
+    function inner(n) {
+      return babelHelpers.regenerator().w(function (_context53) {
+        while (1) switch (_context53.prev = _context53.next) {
+          case 0:
+            if (!(n-- > 0)) {
+              _context53.next = 9;
+              break;
+            }
+            _context53.prev = 1;
+            if (n === 3) {
+              raise(error);
+            }
+          case 3:
+            _context53.prev = 3;
+            _context53.next = 6;
+            return n;
+          case 6:
+            return _context53.finish(3);
+          case 7:
+            _context53.next = 0;
+            break;
+          case 9:
+            return _context53.abrupt(2);
+        }
+      }, _marked44, null, [[1,, 3, 7]]);
+    }
+    check(outer(3), [0, 2, 1, 0, 1, 4]);
+    check(outer(5), [0, 4, 3, "thrown", 4]);
+  });
+  it("should dispatch .thrown exceptions correctly", function () {
+    var _marked45 = /*#__PURE__*/babelHelpers.regenerator().m(gen),
+      _marked46 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    var count = 0;
+    function gen() {
+      var _t66;
+      return babelHelpers.regenerator().w(function (_context54) {
+        while (1) switch (_context54.prev = _context54.next) {
+          case 0:
+            return _context54.delegateYield(inner(), 1);
+          case 1:
+            _context54.prev = 1;
+            return _context54.delegateYield(inner(), 3);
+          case 3:
+            _context54.next = 7;
+            break;
+          case 5:
+            _context54.prev = 5;
+            _t66 = _context54.sent;
+          case 7:
+            return _context54.delegateYield(inner(), 8);
+          case 8:
+            return _context54.abrupt(2, _context54.sent);
+          case 9:
+            return _context54.abrupt(2);
+        }
+      }, _marked45, null, [[1, 5]]);
+    }
+    function inner() {
+      return babelHelpers.regenerator().w(function (_context55) {
+        while (1) switch (_context55.prev = _context55.next) {
+          case 0:
+            _context55.next = 2;
+            return count++;
+          case 2:
+            return _context55.abrupt(2, _context55.sent);
+          case 3:
+            return _context55.abrupt(2);
+        }
+      }, _marked46);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.throw(new Error("lol")), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next("sent"), {
+      value: "sent",
+      done: true
+    });
+  });
+  it("should call .return methods of delegate iterators", function () {
+    var _marked47 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var throwee = new Error("argument to gen.throw");
+    var thrownFromThrow = new Error("thrown from throw method");
+    var thrownFromReturn = new Error("thrown from return method");
+    function gen(delegate) {
+      var _t67;
+      return babelHelpers.regenerator().w(function (_context56) {
+        while (1) switch (_context56.prev = _context56.next) {
+          case 0:
+            _context56.prev = 0;
+            return _context56.delegateYield(delegate, 2);
+          case 2:
+            return _context56.abrupt(2, _context56.sent);
+          case 5:
+            _context56.prev = 5;
+            _t67 = _context56.sent;
+            return _context56.abrupt(2, _t67);
+          case 8:
+            return _context56.abrupt(2);
+        }
+      }, _marked47, null, [[0, 5]]);
+    }
+    function check(throwMethod, returnMethod) {
+      var throwCalled = false;
+      var returnCalled = false;
+      var count = 0;
+      var iterator = {
+        next: function () {
+          return {
+            value: count++,
+            done: false
+          };
+        }
+      };
+      iterator[Symbol.iterator] = function () {
+        return this;
+      };
+      if (throwMethod) {
+        iterator["throw"] = function () {
+          throwCalled = true;
+          return throwMethod.apply(this, arguments);
+        };
+      }
+      if (returnMethod) {
+        iterator["return"] = function () {
+          returnCalled = true;
+          return returnMethod.apply(this, arguments);
+        };
+      }
+      var g = gen(iterator);
+      assert.deepEqual(g.next(), {
+        value: 0,
+        done: false
+      });
+      assert.deepEqual(g.next(), {
+        value: 1,
+        done: false
+      });
+      assert.deepEqual(g.next(), {
+        value: 2,
+        done: false
+      });
+      assert.deepEqual(g.next(), {
+        value: 3,
+        done: false
+      });
+      assert.strictEqual(throwCalled, false);
+      assert.strictEqual(returnCalled, false);
+      var result = {};
+      result.throwResult = g.throw(throwee);
+      result.throwCalled = throwCalled;
+      result.returnCalled = returnCalled;
+      return result;
+    }
+    var checkResult = check(undefined, function () {
+      throw thrownFromReturn;
+    });
+    if (fullCompatibility) {
+      // BUG: Nodes <v6 neglect to call .return here.
+      assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
+      assert.strictEqual(checkResult.returnCalled, true);
+    } else {
+      // This is the Error that results from trying to call the undefined
+      // .throw method of the iterator.
+      assert.ok(checkResult.throwResult.value instanceof Error);
+    }
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, false);
+    checkResult = check(undefined, function () {
+      return {
+        value: "from return",
+        done: true
+      };
+    });
+    assert.notStrictEqual(checkResult.throwResult.value, throwee);
+    // This is the TypeError that results from trying to call the
+    // undefined .throw method of the iterator.
+    assert.ok(checkResult.throwResult.value instanceof TypeError);
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, false);
+    if (fullCompatibility) {
+      // BUG: Nodes <v6 neglect to call .return here.
+      assert.strictEqual(checkResult.returnCalled, true);
+    }
+    var checkResult = check(function (thrown) {
+      return {
+        value: "from throw",
+        done: true
+      };
+    }, function () {
+      throw thrownFromReturn;
+    });
+    assert.strictEqual(checkResult.throwResult.value, "from throw");
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, true);
+    assert.strictEqual(checkResult.returnCalled, false);
+    var checkResult = check(function (thrown) {
+      throw thrownFromThrow;
+    }, function () {
+      throw thrownFromReturn;
+    });
+    assert.strictEqual(checkResult.throwResult.value, thrownFromThrow);
+    assert.strictEqual(checkResult.throwResult.done, true);
+    assert.strictEqual(checkResult.throwCalled, true);
+    assert.strictEqual(checkResult.returnCalled, false);
+    var checkResult = check(undefined, undefined);
+    if (fullCompatibility) {
+      assert.notStrictEqual(checkResult.throwResult.value, throwee);
+      // This is the TypeError that results from trying to call the
+      // undefined .throw method of the iterator.
+      assert.ok(checkResult.throwResult.value instanceof Error);
+      assert.strictEqual(checkResult.throwResult.done, true);
+    }
+    assert.strictEqual(checkResult.throwCalled, false);
+    assert.strictEqual(checkResult.returnCalled, false);
+  });
+  it("should not be required to have a .return method", function () {
+    var _marked48 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(delegate) {
+      return babelHelpers.regenerator().w(function (_context57) {
+        while (1) switch (_context57.prev = _context57.next) {
+          case 0:
+            return _context57.delegateYield(delegate, 1);
+          case 1:
+            return _context57.abrupt(2, _context57.sent);
+          case 2:
+            return _context57.abrupt(2);
+        }
+      }, _marked48);
+    }
+    var inner = range(5);
+    var iterator = {
+      next: inner.next.bind(inner)
+    };
+    iterator[Symbol.iterator] = function () {
+      return this;
+    };
+    var g = gen(iterator);
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+    if (typeof g.return === "function") {
+      var returnResult = g.return(-1);
+      if (fullCompatibility) {
+        assert.deepEqual(returnResult, {
+          value: -1,
+          done: true
+        });
+      }
+      assert.deepEqual(g.next(), {
+        value: void 0,
+        done: true
+      });
+    }
+  });
+  it("should execute finally blocks of delegate generators", function () {
+    var _marked49 = /*#__PURE__*/babelHelpers.regenerator().m(parent),
+      _marked50 = /*#__PURE__*/babelHelpers.regenerator().m(child);
+    var markers = [];
+    function parent() {
+      return babelHelpers.regenerator().w(function (_context58) {
+        while (1) switch (_context58.prev = _context58.next) {
+          case 0:
+            _context58.prev = 0;
+            return _context58.delegateYield(child(), 2);
+          case 2:
+            return _context58.abrupt(2, _context58.sent);
+          case 3:
+            _context58.prev = 3;
+            markers.push("parent");
+            return _context58.finish(3);
+          case 6:
+            return _context58.abrupt(2);
+        }
+      }, _marked49, null, [[0,, 3, 6]]);
+    }
+    function child() {
+      return babelHelpers.regenerator().w(function (_context59) {
+        while (1) switch (_context59.prev = _context59.next) {
+          case 0:
+            _context59.prev = 0;
+            _context59.next = 3;
+            return 1;
+          case 3:
+            return _context59.abrupt(2, _context59.sent);
+          case 4:
+            _context59.prev = 4;
+            _context59.next = 7;
+            return 2;
+          case 7:
+            markers.push("child");
+            return _context59.finish(4);
+          case 9:
+            return _context59.abrupt(2);
+        }
+      }, _marked50, null, [[0,, 4, 9]]);
+    }
+    var g = parent();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    assert.deepEqual((g.return || g.next).call(g, 3), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 3,
+      done: true
+    });
+    assert.deepEqual(markers, ["child", "parent"]);
+  });
+  it("should evaluate to the return value of the delegate", function () {
+    var _marked51 = /*#__PURE__*/babelHelpers.regenerator().m(inner),
+      _marked52 = /*#__PURE__*/babelHelpers.regenerator().m(outer);
+    function inner() {
+      return babelHelpers.regenerator().w(function (_context60) {
+        while (1) switch (_context60.prev = _context60.next) {
+          case 0:
+            _context60.next = 2;
+            return 1;
+          case 2:
+            return _context60.abrupt(2, 2);
+          case 3:
+            return _context60.abrupt(2);
+        }
+      }, _marked51);
+    }
+    function outer(delegate) {
+      return babelHelpers.regenerator().w(function (_context61) {
+        while (1) switch (_context61.prev = _context61.next) {
+          case 0:
+            return _context61.delegateYield(delegate, 1);
+          case 1:
+            return _context61.abrupt(2, _context61.sent);
+          case 2:
+            return _context61.abrupt(2);
+        }
+      }, _marked52);
+    }
+    check(outer(inner()), [1], 2);
+    var arrayDelegate = [3, 4];
+    if (!fullCompatibility) {
+      // Node v0.11 doesn't know how to turn arrays into iterators over
+      // their elements without a little help.
+      arrayDelegate = babelHelpers.regeneratorRuntime().values(arrayDelegate);
+    }
+    check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
+
+    if (!fullCompatibility) {
+      return;
+    }
+    var iterator = {
+      next: function () {
+        return {
+          value: "oyez",
+          done: true
+        };
+      }
+    };
+    iterator[Symbol.iterator] = function () {
+      return this;
+    };
+    check(outer(iterator), [], "oyez");
+  });
+  it("should work as a subexpression", function () {
+    var _marked53 = /*#__PURE__*/babelHelpers.regenerator().m(inner),
+      _marked54 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function inner(arg) {
+      return babelHelpers.regenerator().w(function (_context62) {
+        while (1) switch (_context62.prev = _context62.next) {
+          case 0:
+            return _context62.abrupt(2, arg);
+          case 1:
+            return _context62.abrupt(2);
+        }
+      }, _marked53);
+    }
+    function gen(delegate) {
+      var _t68;
+      return babelHelpers.regenerator().w(function (_context63) {
+        while (1) switch (_context63.prev = _context63.next) {
+          case 0:
+            return _context63.delegateYield(delegate, 1);
+          case 1:
+            _t68 = _context63.sent;
+            return _context63.abrupt(2, 1 + _t68);
+          case 3:
+            return _context63.abrupt(2);
+        }
+      }, _marked54);
+    }
+    check(gen(inner(2)), [], 3);
+    check(gen(inner(3)), [], 4);
+    if (!fullCompatibility) {
+      return;
+    }
+    var iterator = {
+      next: function () {
+        return {
+          value: "foo",
+          done: true
+        };
+      }
+    };
+    iterator[Symbol.iterator] = function () {
+      return this;
+    };
+    check(gen(iterator), [], "1foo");
+  });
+  it("should work with empty string", function () {
+    var _marked55 = /*#__PURE__*/babelHelpers.regenerator().m(f);
+    function f() {
+      return babelHelpers.regenerator().w(function (_context64) {
+        while (1) switch (_context64.prev = _context64.next) {
+          case 0:
+            return _context64.delegateYield("", 1);
+          case 1:
+            return _context64.abrupt(2);
+        }
+      }, _marked55);
+    }
+    assert.deepEqual(f().next(), {
+      value: undefined,
+      done: true
+    });
+  });
+  it("should throw if not iterable", function () {
+    var _marked56 = /*#__PURE__*/babelHelpers.regenerator().m(f);
+    function f(x) {
+      return babelHelpers.regenerator().w(function (_context65) {
+        while (1) switch (_context65.prev = _context65.next) {
+          case 0:
+            return _context65.delegateYield(x, 1);
+          case 1:
+            return _context65.abrupt(2);
+        }
+      }, _marked56);
+    }
+    assert.throws(() => f(undefined).next(), TypeError);
+    assert.throws(() => f(null).next(), TypeError);
+    assert.throws(() => f(false).next(), TypeError);
+    assert.throws(() => f(true).next(), TypeError);
+    assert.throws(() => f(0).next(), TypeError);
+    assert.throws(() => f(1).next(), TypeError);
+    assert.throws(() => f({}).next(), TypeError);
+  });
+  it("should throw if the delegated iterable's iterator doesn't have .next", function () {
+    var it = /*#__PURE__*/babelHelpers.regenerator().m(function _callee5() {
+      return babelHelpers.regenerator().w(function (_context66) {
+        while (1) switch (_context66.prev = _context66.next) {
+          case 0:
+            return _context66.delegateYield({
+              [Symbol.iterator]: x => []
+            }, 1);
+          case 1:
+            return _context66.abrupt(2);
+        }
+      }, _callee5);
+    })();
+    assert.throws(() => {
+      it.next();
+    }, TypeError);
+  });
+  it("should work with falsy values", function () {
+    try {
+      var _marked57 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+      Boolean.prototype[Symbol.iterator] = /*#__PURE__*/babelHelpers.regenerator().m(function _callee6() {
+        return babelHelpers.regenerator().w(function (_context67) {
+          while (1) switch (_context67.prev = _context67.next) {
+            case 0:
+              _context67.next = 2;
+              return "Hello";
+            case 2:
+              return _context67.abrupt(2);
+          }
+        }, _callee6);
+      });
+      function gen() {
+        return babelHelpers.regenerator().w(function (_context68) {
+          while (1) switch (_context68.prev = _context68.next) {
+            case 0:
+              return _context68.delegateYield(false, 1);
+            case 1:
+              return _context68.abrupt(2);
+          }
+        }, _marked57);
+      }
+      check(gen(), ["Hello"]);
+    } finally {
+      delete Boolean.prototype[Symbol.iterator];
+    }
+  });
+});
+(fullCompatibility ? describe // run these tests
+: xdescribe)(
+// skip running these tests
+"generator return method", function () {
+  it("should work with newborn generators", function () {
+    var _marked58 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context69) {
+        while (1) switch (_context69.prev = _context69.next) {
+          case 0:
+            _context69.next = 2;
+            return 0;
+          case 2:
+            return _context69.abrupt(2);
+        }
+      }, _marked58);
+    }
+    var g = gen();
+    assert.deepEqual(g.return("argument"), {
+      value: "argument",
+      done: true
+    });
+    assertAlreadyFinished(g);
+  });
+  it("should behave as if generator actually returned", function () {
+    var _marked59 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var executedFinally = false;
+    function gen() {
+      var _t69;
+      return babelHelpers.regenerator().w(function (_context70) {
+        while (1) switch (_context70.prev = _context70.next) {
+          case 0:
+            _context70.prev = 0;
+            _context70.next = 3;
+            return 0;
+          case 3:
+            _context70.next = 8;
+            break;
+          case 5:
+            _context70.prev = 5;
+            _t69 = _context70.sent;
+            assert.ok(false, "should not have executed the catch handler");
+          case 8:
+            _context70.prev = 8;
+            executedFinally = true;
+            return _context70.finish(8);
+          case 11:
+            return _context70.abrupt(2);
+        }
+      }, _marked59, null, [[0, 5, 8, 11]]);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g.return("argument"), {
+      value: "argument",
+      done: true
+    });
+    assert.strictEqual(executedFinally, true);
+    assertAlreadyFinished(g);
+  });
+  it("should return both delegate and delegator", function () {
+    var _marked60 = /*#__PURE__*/babelHelpers.regenerator().m(callee),
+      _marked61 = /*#__PURE__*/babelHelpers.regenerator().m(caller);
+    var checkpoints = [];
+    function callee(errorToThrow) {
+      return babelHelpers.regenerator().w(function (_context71) {
+        while (1) switch (_context71.prev = _context71.next) {
+          case 0:
+            _context71.prev = 0;
+            _context71.next = 3;
+            return 1;
+          case 3:
+            _context71.next = 5;
+            return 2;
+          case 5:
+            _context71.prev = 5;
+            checkpoints.push("callee finally");
+            if (!errorToThrow) {
+              _context71.next = 9;
+              break;
+            }
+            throw errorToThrow;
+          case 9:
+            return _context71.finish(5);
+          case 10:
+            return _context71.abrupt(2);
+        }
+      }, _marked60, null, [[0,, 5, 10]]);
+    }
+    function caller(errorToThrow) {
+      return babelHelpers.regenerator().w(function (_context72) {
+        while (1) switch (_context72.prev = _context72.next) {
+          case 0:
+            _context72.prev = 0;
+            _context72.next = 3;
+            return 0;
+          case 3:
+            return _context72.delegateYield(callee(errorToThrow), 4);
+          case 4:
+            _context72.next = 6;
+            return 3;
+          case 6:
+            _context72.prev = 6;
+            checkpoints.push("caller finally");
+            return _context72.finish(6);
+          case 9:
+            return _context72.abrupt(2);
+        }
+      }, _marked61, null, [[0,, 6, 9]]);
+    }
+    var g1 = caller();
+    assert.deepEqual(g1.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g1.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g1.return(-1), {
+      value: -1,
+      done: true
+    });
+    assert.deepEqual(checkpoints, ["callee finally", "caller finally"]);
+    var error = new Error("thrown from callee");
+    var g2 = caller(error);
+    assert.deepEqual(g2.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g2.next(), {
+      value: 1,
+      done: false
+    });
+    try {
+      g2.return(-1);
+      assert.ok(false, "should have thrown an exception");
+    } catch (thrown) {
+      assert.strictEqual(thrown, error);
+    }
+    assert.deepEqual(checkpoints, ["callee finally", "caller finally", "callee finally", "caller finally"]);
+  });
+});
+describe("function declaration hoisting", function () {
+  it("should work even if the declarations are out of order", function () {
+    var _marked62 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(n) {
+      var increment, halve, decrement;
+      return babelHelpers.regenerator().w(function (_context73) {
+        while (1) switch (_context73.prev = _context73.next) {
+          case 0:
+            increment = function _increment(x) {
+              return x + 1;
+            };
+            _context73.next = 3;
+            return increment(n);
+          case 3:
+            if (!(n % 2)) {
+              _context73.next = 10;
+              break;
+            }
+            decrement = function _decrement(x) {
+              return x - 1;
+            };
+            halve = function _halve(x) {
+              return x >> 1;
+            };
+            _context73.next = 8;
+            return halve(decrement(n));
+          case 8:
+            _context73.next = 11;
+            break;
+          case 10:
+            // The behavior of function declarations nested inside conditional
+            // blocks is notoriously underspecified, and in V8 it appears the
+            // halve function is still defined when we take this branch, so
+            // "undefine" it for consistency with regenerator semantics.
+            halve = void 0;
+          case 11:
+            _context73.next = 13;
+            return increment(increment(n));
+          case 13:
+            return _context73.abrupt(2);
+        }
+      }, _marked62);
+    }
+    check(gen(3), [4, 1, 5]);
+    check(gen(4), [5, 6]);
+  });
+  it("should work for nested generator function declarations", function () {
+    var _marked64 = /*#__PURE__*/babelHelpers.regenerator().m(outer);
+    function outer(n) {
+      var _marked63, inner;
+      return babelHelpers.regenerator().w(function (_context75) {
+        while (1) switch (_context75.prev = _context75.next) {
+          case 0:
+            inner = function _inner(n) {
+              return babelHelpers.regenerator().w(function (_context74) {
+                while (1) switch (_context74.prev = _context74.next) {
+                  case 0:
+                    _context74.next = 2;
+                    return n - 1;
+                  case 2:
+                    _context74.next = 4;
+                    return n;
+                  case 4:
+                    _context74.next = 6;
+                    return n + 1;
+                  case 6:
+                    return _context74.abrupt(2, _context74.sent);
+                  case 7:
+                    return _context74.abrupt(2);
+                }
+              }, _marked63);
+            };
+            _marked63 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+            _context75.next = 4;
+            return 0;
+          case 4:
+            assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
+            return _context75.delegateYield(inner(n), 6);
+          case 6:
+            return _context75.abrupt(2, _context75.sent);
+          case 7:
+            return _context75.abrupt(2);
+        }
+      }, _marked64);
+    }
+    check(outer(2), [0, 1, 2, 3], 4);
+  });
+  it("should not interfere with function rebinding", function () {
+    var _marked65 = /*#__PURE__*/babelHelpers.regenerator().m(toBeRebound);
+    function rebindTo(value) {
+      var oldValue = toBeRebound;
+      toBeRebound = value;
+      return oldValue;
+    }
+    function toBeRebound() {
+      var originalValue;
+      return babelHelpers.regenerator().w(function (_context76) {
+        while (1) switch (_context76.prev = _context76.next) {
+          case 0:
+            originalValue = toBeRebound;
+            _context76.next = 3;
+            return toBeRebound;
+          case 3:
+            assert.strictEqual(rebindTo(42), originalValue);
+            _context76.next = 6;
+            return toBeRebound;
+          case 6:
+            assert.strictEqual(rebindTo("asdf"), 42);
+            _context76.next = 9;
+            return toBeRebound;
+          case 9:
+            return _context76.abrupt(2);
+        }
+      }, _marked65);
+    }
+    var original = toBeRebound;
+    check(toBeRebound(), [original, 42, "asdf"]);
+    function attemptToRebind(value) {
+      var oldValue = safe;
+      safe = value;
+      return oldValue;
+    }
+    var safe = /*#__PURE__*/babelHelpers.regenerator().m(function safe() {
+      var originalValue;
+      return babelHelpers.regenerator().w(function (_context77) {
+        while (1) switch (_context77.prev = _context77.next) {
+          case 0:
+            originalValue = safe;
+            _context77.next = 3;
+            return safe;
+          case 3:
+            assert.strictEqual(attemptToRebind(42), originalValue);
+            _context77.next = 6;
+            return safe;
+          case 6:
+            assert.strictEqual(attemptToRebind("asdf"), 42);
+            _context77.next = 9;
+            return safe;
+          case 9:
+            return _context77.abrupt(2);
+        }
+      }, safe);
+    });
+    original = safe;
+    check(safe(), [safe, safe, safe]);
+  });
+  it("should not interfere with nested function rebinding itself", function () {
+    var _marked66 = /*#__PURE__*/babelHelpers.regenerator().m(parent);
+    function parent() {
+      var toBeRebound;
+      return babelHelpers.regenerator().w(function (_context78) {
+        while (1) switch (_context78.prev = _context78.next) {
+          case 0:
+            toBeRebound = function _toBeRebound() {
+              toBeRebound = 42;
+            };
+            toBeRebound();
+            _context78.next = 4;
+            return toBeRebound;
+          case 4:
+            return _context78.abrupt(2);
+        }
+      }, _marked66);
+    }
+    check(parent(), [42]);
+  });
+});
+describe("the arguments object", function () {
+  it("should work in simple variadic functions", function () {
+    var _marked67 = /*#__PURE__*/babelHelpers.regenerator().m(sum);
+    function sum() {
+      var result,
+        i,
+        _args79 = arguments;
+      return babelHelpers.regenerator().w(function (_context79) {
+        while (1) switch (_context79.prev = _context79.next) {
+          case 0:
+            result = 0;
+            i = 0;
+          case 2:
+            if (!(i < _args79.length)) {
+              _context79.next = 8;
+              break;
+            }
+            _context79.next = 5;
+            return result += _args79[i];
+          case 5:
+            ++i;
+            _context79.next = 2;
+            break;
+          case 8:
+            return _context79.abrupt(2, result);
+          case 9:
+            return _context79.abrupt(2);
+        }
+      }, _marked67);
+    }
+    check(sum(1, 2, 3), [1, 3, 6], 6);
+    check(sum(9, -5, 3, 0, 2), [9, 4, 7, 7, 9], 9);
+  });
+  it("should alias function parameters", function () {
+    var _marked68 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x, y) {
+      var temp,
+        _args80 = arguments;
+      return babelHelpers.regenerator().w(function (_context80) {
+        while (1) switch (_context80.prev = _context80.next) {
+          case 0:
+            _context80.next = 2;
+            return x;
+          case 2:
+            ++_args80[0];
+            _context80.next = 5;
+            return x;
+          case 5:
+            _context80.next = 7;
+            return y;
+          case 7:
+            --_args80[1];
+            _context80.next = 10;
+            return y;
+          case 10:
+            temp = y;
+            y = x;
+            x = temp;
+            _context80.next = 15;
+            return x;
+          case 15:
+            _context80.next = 17;
+            return y;
+          case 17:
+            return _context80.abrupt(2);
+        }
+      }, _marked68);
+    }
+    check(gen(3, 7), [3, 4, 7, 6, 6, 4]);
+    check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
+  });
+  it("should be shadowable by explicit declarations (sloppy)", function () {
+    var _marked69 = /*#__PURE__*/babelHelpers.regenerator().m(asParameter),
+      _marked70 = /*#__PURE__*/babelHelpers.regenerator().m(asVariable);
+    function asParameter(x, arguments) {
+      var _args81 = arguments;
+      return babelHelpers.regenerator().w(function (_context81) {
+        while (1) switch (_context81.prev = _context81.next) {
+          case 0:
+            _args81 = _args81 + 1;
+            _context81.next = 3;
+            return x + _args81;
+          case 3:
+            return _context81.abrupt(2);
+        }
+      }, _marked69);
+    }
+    check(asParameter(4, 5), [10]);
+    check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
+    function asVariable(x) {
+      var arguments,
+        _args82 = arguments;
+      return babelHelpers.regenerator().w(function (_context82) {
+        while (1) switch (_context82.prev = _context82.next) {
+          case 0:
+            // TODO References to arguments before the variable declaration
+            // seem to see the object instead of the undefined value.
+            _args82 = x + 1;
+            _context82.next = 3;
+            return _args82;
+          case 3:
+            return _context82.abrupt(2);
+        }
+      }, _marked70);
+    }
+    check(asVariable(4), [5]);
+    check(asVariable("asdf"), ["asdf1"]);
+  });
+  it("should not get confused by properties", function () {
+    var _marked71 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(args) {
+      var obj;
+      return babelHelpers.regenerator().w(function (_context83) {
+        while (1) switch (_context83.prev = _context83.next) {
+          case 0:
+            obj = {
+              arguments: args
+            };
+            _context83.next = 3;
+            return obj.arguments;
+          case 3:
+            obj.arguments = "oyez";
+            _context83.next = 6;
+            return obj;
+          case 6:
+            return _context83.abrupt(2);
+        }
+      }, _marked71);
+    }
+    check(gen(42), [42, {
+      arguments: "oyez"
+    }]);
+  });
+  it("supports .callee", function () {
+    var _marked72 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(doYield) {
+      var _args84 = arguments;
+      return babelHelpers.regenerator().w(function (_context84) {
+        while (1) switch (_context84.prev = _context84.next) {
+          case 0:
+            _context84.next = 2;
+            return 1;
+          case 2:
+            if (!doYield) {
+              _context84.next = 7;
+              break;
+            }
+            _context84.next = 5;
+            return 2;
+          case 5:
+            _context84.next = 12;
+            break;
+          case 7:
+            _context84.next = 9;
+            return 3;
+          case 9:
+            return _context84.delegateYield(_args84.callee(true), 10);
+          case 10:
+            _context84.next = 12;
+            return 4;
+          case 12:
+            _context84.next = 14;
+            return 5;
+          case 14:
+            return _context84.abrupt(2);
+        }
+      }, _marked72);
+    }
+    check(gen(false), [1, 3, 1, 2, 5, 4, 5]);
+  });
+});
+describe("the this object", function () {
+  it("should default to undefined (strict)", function () {
+    var _marked73 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      "use strict";
+
+      return babelHelpers.regenerator().w(function (_context85) {
+        while (1) switch (_context85.prev = _context85.next) {
+          case 0:
+            _context85.next = 2;
+            return this;
+          case 2:
+            return _context85.abrupt(2, this);
+          case 3:
+            return _context85.abrupt(2);
+        }
+      }, _marked73, this);
+    }
+    var it = gen();
+    assert.strictEqual(it.next().value, undefined);
+    assert.strictEqual(it.next().value, undefined);
+  });
+  it("should respect .call's this", function () {
+    var _marked74 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context86) {
+        while (1) switch (_context86.prev = _context86.next) {
+          case 0:
+            _context86.next = 2;
+            return this;
+          case 2:
+            return _context86.abrupt(2, this);
+          case 3:
+            return _context86.abrupt(2);
+        }
+      }, _marked74, this);
+    }
+    var self = {};
+    var it = gen.call(self);
+    assert.strictEqual(it.next().value, self);
+    assert.strictEqual(it.next().value, self);
+  });
+  it("shouldn't capture this when not needed", function () {
+    var _marked75 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    // https://github.com/babel/babel/issues/4056
+
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context87) {
+        while (1) switch (_context87.prev = _context87.next) {
+          case 0:
+            return _context87.abrupt(2, 0);
+          case 1:
+            return _context87.abrupt(2);
+        }
+      }, _marked75);
+    }
+    var source = String(gen);
+    assert.strictEqual(source.indexOf("this"), -1);
+  });
+});
+describe("directive strings", function () {
+  var _marked76 = /*#__PURE__*/babelHelpers.regenerator().m(strict),
+    _marked77 = /*#__PURE__*/babelHelpers.regenerator().m(sloppy);
+  function strict() {
+    "use strict";
+
+    return babelHelpers.regenerator().w(function (_context88) {
+      while (1) switch (_context88.prev = _context88.next) {
+        case 0:
+          _context88.next = 2;
+          return !this;
+        case 2:
+          return _context88.abrupt(2);
+      }
+    }, _marked76, this);
+  }
+  function sloppy() {
+    return babelHelpers.regenerator().w(function (_context89) {
+      while (1) switch (_context89.prev = _context89.next) {
+        case 0:
+          _context89.next = 2;
+          return !this;
+        case 2:
+          return _context89.abrupt(2);
+      }
+    }, _marked77, this);
+  }
+  it("should be kept at top of outer function", function () {
+    var strictCode = String(strict);
+    var useStrictIndex = strictCode.indexOf("use strict");
+    var thisIndex = strictCode.indexOf("this");
+    assert.notStrictEqual(useStrictIndex, -1);
+    assert.ok(thisIndex > useStrictIndex);
+    assert.strictEqual(String(sloppy).indexOf("use strict"), -1);
+    check(strict(), [true]);
+    check(sloppy(), [false]);
+  });
+});
+describe("catch parameter shadowing", function () {
+  it("should leave outer variables unmodified", function () {
+    var _marked78 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x) {
+      var y, _t70, _t71;
+      return babelHelpers.regenerator().w(function (_context90) {
+        while (1) switch (_context90.prev = _context90.next) {
+          case 0:
+            y = x + 1;
+            _context90.prev = 1;
+            throw x + 2;
+          case 5:
+            _context90.prev = 5;
+            _t70 = _context90.sent;
+            _context90.next = 9;
+            return _t70;
+          case 9:
+            _t70 += 1;
+            _context90.next = 12;
+            return _t70;
+          case 12:
+            _context90.next = 14;
+            return x;
+          case 14:
+            _context90.prev = 14;
+            throw x + 3;
+          case 18:
+            _context90.prev = 18;
+            _t71 = _context90.sent;
+            _context90.next = 22;
+            return _t71;
+          case 22:
+            _t71 *= 2;
+            _context90.next = 25;
+            return _t71;
+          case 25:
+            _context90.next = 27;
+            return y;
+          case 27:
+            return _context90.abrupt(2);
+        }
+      }, _marked78, null, [[14, 18], [1, 5]]);
+    }
+    check(gen(1), [3, 4, 1, 4, 8, 2]);
+    check(gen(2), [4, 5, 2, 5, 10, 3]);
+  });
+
+  // This test will be fixed by https://github.com/babel/babel/pull/4880.
+  (fullCompatibility ? xit : it)("should not replace variables defined in inner scopes", function () {
+    var _marked79 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x) {
+      var _t72;
+      return babelHelpers.regenerator().w(function (_context91) {
+        while (1) switch (_context91.prev = _context91.next) {
+          case 0:
+            _context91.prev = 0;
+            throw x;
+          case 4:
+            _context91.prev = 4;
+            _t72 = _context91.sent;
+            _context91.next = 8;
+            return _t72;
+          case 8:
+            _context91.next = 10;
+            return function (x) {
+              return x += 1;
+            }(_t72 + 1);
+          case 10:
+            _context91.next = 12;
+            return function () {
+              var x = arguments[0];
+              return x * 2;
+            }(_t72 + 2);
+          case 12:
+            _context91.next = 14;
+            return function () {
+              function notCalled(x) {
+                throw x;
+              }
+              _t72 >>= 1;
+              return _t72;
+            }();
+          case 14:
+            _context91.next = 16;
+            return _t72 -= 1;
+          case 16:
+            _context91.next = 18;
+            return x;
+          case 18:
+            return _context91.abrupt(2);
+        }
+      }, _marked79, null, [[0, 4]]);
+    }
+    check(gen(10), [10, 12, 24, 5, 4, 10]);
+    check(gen(11), [11, 13, 26, 5, 4, 11]);
+  });
+  it("should allow nested catch parameters of the same name", function () {
+    var _marked80 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t73, _t74;
+      return babelHelpers.regenerator().w(function (_context92) {
+        while (1) switch (_context92.prev = _context92.next) {
+          case 0:
+            _context92.prev = 0;
+            raise("e1");
+            _context92.next = 18;
+            break;
+          case 4:
+            _context92.prev = 4;
+            _t73 = _context92.sent;
+            _context92.next = 8;
+            return _t73;
+          case 8:
+            _context92.prev = 8;
+            raise("e2");
+            _context92.next = 16;
+            break;
+          case 12:
+            _context92.prev = 12;
+            _t74 = _context92.sent;
+            _context92.next = 16;
+            return _t74;
+          case 16:
+            _context92.next = 18;
+            return _t73;
+          case 18:
+            return _context92.abrupt(2);
+        }
+      }, _marked80, null, [[8, 12], [0, 4]]);
+    }
+    check(gen(), ["e1", "e2", "e1"]);
+  });
+  it("should not interfere with non-referential identifiers", function () {
+    var _marked81 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t75;
+      return babelHelpers.regenerator().w(function (_context93) {
+        while (1) switch (_context93.prev = _context93.next) {
+          case 0:
+            _context93.prev = 0;
+            _context93.next = 3;
+            return 1;
+          case 3:
+            raise(new Error("oyez"));
+            _context93.next = 6;
+            return 2;
+          case 6:
+            _context93.next = 15;
+            break;
+          case 8:
+            _context93.prev = 8;
+            _t75 = _context93.sent;
+            _context93.next = 12;
+            return 3;
+          case 12:
+            _t75.e = "e.e";
+            _t75[_t75.message] = "e.oyez";
+            return _context93.abrupt(2, {
+              e: _t75,
+              identity: function (x) {
+                var e = x;
+                return e;
+              }
+            });
+          case 15:
+            _context93.next = 17;
+            return 4;
+          case 17:
+            return _context93.abrupt(2);
+        }
+      }, _marked81, null, [[0, 8]]);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 3,
+      done: false
+    });
+    var info = g.next();
+    assert.strictEqual(info.done, true);
+    assert.strictEqual(info.value.e.message, "oyez");
+    assert.strictEqual(info.value.e.e, "e.e");
+    assert.strictEqual(info.value.e.oyez, "e.oyez");
+    assert.strictEqual(info.value.identity("same"), "same");
+  });
+});
+describe("empty while loops", function () {
+  it("should be preserved in generated code", function () {
+    var _marked82 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x) {
+      return babelHelpers.regenerator().w(function (_context94) {
+        while (1) switch (_context94.prev = _context94.next) {
+          case 0:
+            while (x) {
+              // empty while loop
+            }
+            do {
+              // empty do-while loop
+            } while (x);
+            return _context94.abrupt(2, gen.toString());
+          case 3:
+            return _context94.abrupt(2);
+        }
+      }, _marked82);
+    }
+    var info = gen(false).next();
+    assert.strictEqual(info.done, true);
+    assert.ok(/empty while loop/.test(info.value));
+    assert.ok(/empty do-while loop/.test(info.value));
+  });
+});
+describe("object literals with multiple yields", function () {
+  it("should receive different sent values", function () {
+    var _marked83 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(fn) {
+      var _t76, _t77, _t78, _t79, _t80, _t81, _t82, _t83, _t84;
+      return babelHelpers.regenerator().w(function (_context95) {
+        while (1) switch (_context95.prev = _context95.next) {
+          case 0:
+            _context95.next = 2;
+            return "a";
+          case 2:
+            _t76 = _context95.sent;
+            _context95.next = 5;
+            return "b";
+          case 5:
+            _t77 = _context95.sent;
+            _t78 = fn;
+            _context95.next = 9;
+            return "c";
+          case 9:
+            _t79 = _context95.sent;
+            _context95.next = 12;
+            return "d";
+          case 12:
+            _t80 = _context95.sent;
+            _t81 = _t78(_t79, _t80);
+            _context95.next = 16;
+            return "e";
+          case 16:
+            _t82 = _context95.sent;
+            _context95.next = 19;
+            return "f";
+          case 19:
+            _t83 = _context95.sent;
+            _t84 = [_t82, _t83];
+            return _context95.abrupt(2, {
+              a: _t76,
+              b: _t77,
+              c: _t81,
+              d: _t84
+            });
+          case 22:
+            return _context95.abrupt(2);
+        }
+      }, _marked83);
+    }
+    check(gen(function sum(x, y) {
+      return x + y;
+    }), ["a", "b", "c", "d", "e", "f"], {
+      a: 1,
+      b: 2,
+      c: 3 + 4,
+      d: [5, 6]
+    });
+  });
+});
+describe("generator .throw method", function () {
+  it("should work after the final call to .next", function () {
+    var _marked84 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context96) {
+        while (1) switch (_context96.prev = _context96.next) {
+          case 0:
+            _context96.next = 2;
+            return 1;
+          case 2:
+            return _context96.abrupt(2);
+        }
+      }, _marked84);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    var exception = new Error("unhandled exception");
+    try {
+      g.throw(exception);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, exception);
+    }
+  });
+  it("should immediately complete a new-born generator", function () {
+    var _marked85 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var began = false;
+    function gen() {
+      return babelHelpers.regenerator().w(function (_context97) {
+        while (1) switch (_context97.prev = _context97.next) {
+          case 0:
+            began = true;
+            _context97.next = 3;
+            return 1;
+          case 3:
+            return _context97.abrupt(2);
+        }
+      }, _marked85);
+    }
+    var g = gen();
+    var exception = new Error("unhandled exception");
+    try {
+      g.throw(exception);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, exception);
+      assert.strictEqual(began, false);
+    }
+  });
+  it("should not propagate errors handled inside a delegate", function () {
+    var _marked86 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
+      _marked87 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    function outer() {
+      var _t85;
+      return babelHelpers.regenerator().w(function (_context98) {
+        while (1) switch (_context98.prev = _context98.next) {
+          case 0:
+            _context98.prev = 0;
+            return _context98.delegateYield(inner(), 2);
+          case 2:
+            _context98.next = 7;
+            break;
+          case 4:
+            _context98.prev = 4;
+            _t85 = _context98.sent;
+            return _context98.abrupt(2, -1);
+          case 7:
+            return _context98.abrupt(2, 1);
+          case 8:
+            return _context98.abrupt(2);
+        }
+      }, _marked86, null, [[0, 4]]);
+    }
+    function inner() {
+      var _t86;
+      return babelHelpers.regenerator().w(function (_context99) {
+        while (1) switch (_context99.prev = _context99.next) {
+          case 0:
+            _context99.prev = 0;
+            _context99.next = 3;
+            return void 0;
+          case 3:
+            _context99.next = 8;
+            break;
+          case 5:
+            _context99.prev = 5;
+            _t86 = _context99.sent;
+            return _context99.abrupt(2);
+          case 8:
+            return _context99.abrupt(2);
+        }
+      }, _marked87, null, [[0, 5]]);
+    }
+    var g = outer();
+    g.next();
+    assert.equal(g.throw(new Error("foo")).value, 1);
+  });
+  it("should propagate errors unhandled inside a delegate", function () {
+    var _marked88 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
+      _marked89 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    function outer() {
+      var _t87;
+      return babelHelpers.regenerator().w(function (_context100) {
+        while (1) switch (_context100.prev = _context100.next) {
+          case 0:
+            _context100.prev = 0;
+            return _context100.delegateYield(inner(), 2);
+          case 2:
+            _context100.next = 7;
+            break;
+          case 4:
+            _context100.prev = 4;
+            _t87 = _context100.sent;
+            return _context100.abrupt(2, -1);
+          case 7:
+            return _context100.abrupt(2, 1);
+          case 8:
+            return _context100.abrupt(2);
+        }
+      }, _marked88, null, [[0, 4]]);
+    }
+    function inner() {
+      return babelHelpers.regenerator().w(function (_context101) {
+        while (1) switch (_context101.prev = _context101.next) {
+          case 0:
+            _context101.next = 2;
+            return void 0;
+          case 2:
+            return _context101.abrupt(2);
+        }
+      }, _marked89);
+    }
+    var g = outer();
+    g.next();
+    assert.equal(g.throw(new Error("foo")).value, -1);
+  });
+});
+describe("unqualified function calls", function () {
+  it("should have a global `this` object", function () {
+    var _marked90 = /*#__PURE__*/babelHelpers.regenerator().m(invoke);
+    function getThis() {
+      return this;
+    }
+
+    // This is almost certainly the global object, but there's a chance it
+    // might be null or undefined (in strict mode).
+    var unqualifiedThis = getThis();
+    function invoke() {
+      var _t88;
+      return babelHelpers.regenerator().w(function (_context102) {
+        while (1) switch (_context102.prev = _context102.next) {
+          case 0:
+            _context102.next = 2;
+            return "dummy";
+          case 2:
+            _t88 = _context102.sent;
+            return _context102.abrupt(2, _t88());
+          case 4:
+            return _context102.abrupt(2);
+        }
+      }, _marked90);
+    }
+    var g = invoke();
+    var info = g.next();
+    assert.deepEqual(info, {
+      value: "dummy",
+      done: false
+    });
+    info = g.next(getThis);
+
+    // Avoid using assert.strictEqual when the arguments might equal the
+    // global object, since JSON.stringify chokes on circular structures.
+    assert.ok(info.value === unqualifiedThis);
+    assert.strictEqual(info.done, true);
+  });
+});
+describe("yield* expression results", function () {
+  it("have correct values", function () {
+    var _marked91 = /*#__PURE__*/babelHelpers.regenerator().m(foo),
+      _marked92 = /*#__PURE__*/babelHelpers.regenerator().m(bar);
+    function foo() {
+      return babelHelpers.regenerator().w(function (_context103) {
+        while (1) switch (_context103.prev = _context103.next) {
+          case 0:
+            _context103.next = 2;
+            return 0;
+          case 2:
+            return _context103.delegateYield(bar(), 3);
+          case 3:
+            return _context103.abrupt(2, _context103.sent);
+          case 4:
+            return _context103.abrupt(2);
+        }
+      }, _marked91);
+    }
+    function bar() {
+      return babelHelpers.regenerator().w(function (_context104) {
+        while (1) switch (_context104.prev = _context104.next) {
+          case 0:
+            _context104.next = 2;
+            return 1;
+          case 2:
+            return _context104.abrupt(2, 2);
+          case 3:
+            return _context104.abrupt(2);
+        }
+      }, _marked92);
+    }
+    check(foo(), [0, 1], 2);
+  });
+  it("can be used in complex expressions", function () {
+    var _marked93 = /*#__PURE__*/babelHelpers.regenerator().m(foo),
+      _marked94 = /*#__PURE__*/babelHelpers.regenerator().m(bar);
+    function pumpNumber(gen) {
+      var n = 0;
+      while (true) {
+        var res = n > 0 ? gen.next(n) : gen.next();
+        n = res.value;
+        if (res.done) {
+          return n;
+        }
+      }
+    }
+    function foo() {
+      var _t89, _t90;
+      return babelHelpers.regenerator().w(function (_context105) {
+        while (1) switch (_context105.prev = _context105.next) {
+          case 0:
+            return _context105.delegateYield(bar(), 1);
+          case 1:
+            _t89 = _context105.sent;
+            return _context105.delegateYield(bar(), 3);
+          case 3:
+            _t90 = _context105.sent;
+            return _context105.abrupt(2, _t89 + _t90);
+          case 5:
+            return _context105.abrupt(2);
+        }
+      }, _marked93);
+    }
+    function bar() {
+      var _t91, _t92;
+      return babelHelpers.regenerator().w(function (_context106) {
+        while (1) switch (_context106.prev = _context106.next) {
+          case 0:
+            _context106.next = 2;
+            return 2;
+          case 2:
+            _t91 = _context106.sent;
+            _context106.next = 5;
+            return 3;
+          case 5:
+            _t92 = _context106.sent;
+            return _context106.abrupt(2, _t91 + _t92);
+          case 7:
+            return _context106.abrupt(2);
+        }
+      }, _marked94);
+    }
+    assert.strictEqual(pumpNumber(bar()), 5);
+    assert.strictEqual(pumpNumber(foo()), 10);
+  });
+});
+describe("isGeneratorFunction", function () {
+  it("should work for function declarations", function () {
+    var _marked95 = /*#__PURE__*/babelHelpers.regenerator().m(genFun);
+    // Do the assertions up here to make sure the generator function is
+    // marked at the beginning of the block the function is declared in.
+    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(genFun), true);
+    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(normalFun), false);
+    function normalFun() {
+      return 0;
+    }
+    function genFun() {
+      return babelHelpers.regenerator().w(function (_context107) {
+        while (1) switch (_context107.prev = _context107.next) {
+          case 0:
+            _context107.next = 2;
+            return 0;
+          case 2:
+            return _context107.abrupt(2);
+        }
+      }, _marked95);
+    }
+  });
+  it("should work for function expressions", function () {
+    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(/*#__PURE__*/babelHelpers.regenerator().m(function genFun() {
+      return babelHelpers.regenerator().w(function (_context108) {
+        while (1) switch (_context108.prev = _context108.next) {
+          case 0:
+            _context108.next = 2;
+            return 0;
+          case 2:
+            return _context108.abrupt(2);
+        }
+      }, genFun);
+    })), true);
+    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(function normalFun() {
+      return 0;
+    }), false);
+  });
+});
+describe("new expressions", function () {
+  it("should be able to contain yield sub-expressions", function () {
+    var _marked96 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function A(first, second) {
+      this.first = first;
+      this.second = second;
+    }
+    function gen() {
+      var _t93, _t94, _t95;
+      return babelHelpers.regenerator().w(function (_context109) {
+        while (1) switch (_context109.prev = _context109.next) {
+          case 0:
+            _context109.next = 2;
+            return 0;
+          case 2:
+            _t93 = _context109.sent;
+            _context109.next = 5;
+            return 1;
+          case 5:
+            _t94 = _context109.sent;
+            _context109.next = 8;
+            return 2;
+          case 8:
+            _t95 = _context109.sent;
+            _context109.next = 11;
+            return new _t93(_t94, _t95);
+          case 11:
+            return _context109.abrupt(2, _context109.sent);
+          case 12:
+            return _context109.abrupt(2);
+        }
+      }, _marked96);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 0,
+      done: false
+    });
+    assert.deepEqual(g.next(A), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next("asdf"), {
+      value: 2,
+      done: false
+    });
+    var info = g.next("zxcv");
+    assert.strictEqual(info.done, false);
+    assert.ok(info.value instanceof A);
+    assert.strictEqual(info.value.first, "asdf");
+    assert.strictEqual(info.value.second, "zxcv");
+    assert.deepEqual(g.next("qwer"), {
+      value: "qwer",
+      done: true
+    });
+  });
+});
+describe("block binding", function () {
+  it("should translate block binding correctly", function () {
+    "use strict";
+
+    var _marked97 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var a$0, a$1, a;
+      return babelHelpers.regenerator().w(function (_context110) {
+        while (1) switch (_context110.prev = _context110.next) {
+          case 0:
+            a$0 = 0, a$1 = 1;
+            a = 3;
+            a = 1;
+            _context110.next = 5;
+            return a + a$0;
+          case 5:
+            a = 2;
+            _context110.next = 8;
+            return a - 1 + a$1;
+          case 8:
+            _context110.next = 10;
+            return a;
+          case 10:
+            return _context110.abrupt(2);
+        }
+      }, _marked97);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: 3,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: void 0,
+      done: true
+    });
+  });
+  it("should translate block binding with iife correctly", function () {
+    "use strict";
+
+    var _marked98 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var arr, x, y;
+      return babelHelpers.regenerator().w(function (_context111) {
+        while (1) switch (_context111.prev = _context111.next) {
+          case 0:
+            arr = [];
+            for (x = 0; x < 3; x++) {
+              y = x;
+              arr.push(function () {
+                return y;
+              });
+            }
+          case 2:
+            if (!(x = arr.pop())) {
+              _context111.next = 7;
+              break;
+            }
+            _context111.next = 5;
+            return x;
+          case 5:
+            _context111.next = 2;
+            break;
+          case 7:
+            return _context111.abrupt(2);
+        }
+      }, _marked98);
+    }
+    var g = gen();
+    assert.equal(g.next().value(), 2);
+    assert.equal(g.next().value(), 1);
+    assert.equal(g.next().value(), 0);
+    assert.deepEqual(g.next(), {
+      value: void 0,
+      done: true
+    });
+  });
+});
+describe("newborn generators", function () {
+  it("should be able to yield* non-newborn generators", function () {
+    var _marked99 = /*#__PURE__*/babelHelpers.regenerator().m(inner),
+      _marked100 = /*#__PURE__*/babelHelpers.regenerator().m(outer);
+    function inner() {
+      var _t96, _t97;
+      return babelHelpers.regenerator().w(function (_context112) {
+        while (1) switch (_context112.prev = _context112.next) {
+          case 0:
+            _context112.next = 2;
+            return 1;
+          case 2:
+            _t96 = _context112.sent;
+            _context112.next = 5;
+            return 2;
+          case 5:
+            _t97 = _context112.sent;
+            return _context112.abrupt(2, [_t96, _t97]);
+          case 7:
+            return _context112.abrupt(2);
+        }
+      }, _marked99);
+    }
+    function outer(delegate) {
+      return babelHelpers.regenerator().w(function (_context113) {
+        while (1) switch (_context113.prev = _context113.next) {
+          case 0:
+            return _context113.delegateYield(delegate, 1);
+          case 1:
+            return _context113.abrupt(2, _context113.sent);
+          case 2:
+            return _context113.abrupt(2);
+        }
+      }, _marked100);
+    }
+    var n = inner();
+    assert.deepEqual(n.next(), {
+      value: 1,
+      done: false
+    });
+    var g = outer(n);
+
+    // I would really like to be able to pass 3 to g.next here, but V8
+    // ignores values sent to newborn generators, and SpiderMonkey throws
+    // a TypeError.
+    assert.deepEqual(g.next(), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(4), {
+      value: [void 0, 4],
+      done: true
+    });
+  });
+  it("should support the ignore-initial-yield wrapper idiom", function () {
+    var _marked101 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
+    var markers = [];
+    function inner() {
+      var sent1, sent2;
+      return babelHelpers.regenerator().w(function (_context114) {
+        while (1) switch (_context114.prev = _context114.next) {
+          case 0:
+            markers.push(0);
+            _context114.next = 3;
+            return 1;
+          case 3:
+            sent1 = _context114.sent;
+            markers.push(2);
+            _context114.next = 7;
+            return 2;
+          case 7:
+            sent2 = _context114.sent;
+            markers.push(3);
+            return _context114.abrupt(2, [sent1, sent2]);
+          case 10:
+            return _context114.abrupt(2);
+        }
+      }, _marked101);
+    }
+    function wrapper(delegate) {
+      var gen = /*#__PURE__*/babelHelpers.regenerator().m(function _callee7() {
+        var sent, info;
+        return babelHelpers.regenerator().w(function (_context115) {
+          while (1) switch (_context115.prev = _context115.next) {
+            case 0:
+              _context115.next = 2;
+              return "ignored";
+            case 2:
+              sent = _context115.sent;
+              markers.push(1);
+            case 4:
+              if ((info = delegate.next(sent)).done) {
+                _context115.next = 10;
+                break;
+              }
+              _context115.next = 7;
+              return info.value;
+            case 7:
+              sent = _context115.sent;
+              _context115.next = 4;
+              break;
+            case 10:
+              markers.push(4);
+              return _context115.abrupt(2, info.value);
+            case 12:
+              return _context115.abrupt(2);
+          }
+        }, _callee7);
+      })();
+
+      // Ensure that gen is not newborn and that the next invocation of
+      // gen.next(value) can send value to the initial yield expression.
+      gen.next();
+      return gen;
+    }
+    var n = inner();
+    assert.deepEqual(n.next(), {
+      value: 1,
+      done: false
+    });
+    var g = wrapper(n);
+
+    // Unlike in the previous spec, it's fine to pass 3 to g.next here,
+    // because g is not newborn, because g.next was already called once
+    // before g was returned from the wrapper function.
+    assert.deepEqual(g.next(3), {
+      value: 2,
+      done: false
+    });
+    assert.deepEqual(g.next(4), {
+      value: [3, 4],
+      done: true
+    });
+
+    // Ensure we encountered the marker points in the expected order.
+    assert.deepEqual(markers, [0, 1, 2, 3, 4]);
+  });
+  it("should allow chaining newborn and non-newborn generators", function () {
+    var _marked102 = /*#__PURE__*/babelHelpers.regenerator().m(range),
+      _marked103 = /*#__PURE__*/babelHelpers.regenerator().m(chain),
+      _marked104 = /*#__PURE__*/babelHelpers.regenerator().m(y3),
+      _marked105 = /*#__PURE__*/babelHelpers.regenerator().m(y5);
+    function range(n) {
+      var i;
+      return babelHelpers.regenerator().w(function (_context116) {
+        while (1) switch (_context116.prev = _context116.next) {
+          case 0:
+            i = 0;
+          case 1:
+            if (!(i < n)) {
+              _context116.next = 7;
+              break;
+            }
+            _context116.next = 4;
+            return i;
+          case 4:
+            ++i;
+            _context116.next = 1;
+            break;
+          case 7:
+            return _context116.abrupt(2);
+        }
+      }, _marked102);
+    }
+    function chain(a, b) {
+      return babelHelpers.regenerator().w(function (_context117) {
+        while (1) switch (_context117.prev = _context117.next) {
+          case 0:
+            return _context117.delegateYield(a, 1);
+          case 1:
+            return _context117.delegateYield(b, 2);
+          case 2:
+            return _context117.abrupt(2);
+        }
+      }, _marked103);
+    }
+    check(chain(range(3), range(5)), [0, 1, 2, 0, 1, 2, 3, 4]);
+    function y3(x) {
+      return babelHelpers.regenerator().w(function (_context118) {
+        while (1) switch (_context118.prev = _context118.next) {
+          case 0:
+            _context118.next = 2;
+            return x;
+          case 2:
+            _context118.next = 4;
+            return _context118.sent;
+          case 4:
+            _context118.next = 6;
+            return _context118.sent;
+          case 6:
+            return _context118.abrupt(2, _context118.sent);
+          case 7:
+            return _context118.abrupt(2);
+        }
+      }, _marked104);
+    }
+    function y5(x) {
+      return babelHelpers.regenerator().w(function (_context119) {
+        while (1) switch (_context119.prev = _context119.next) {
+          case 0:
+            _context119.next = 2;
+            return x;
+          case 2:
+            _context119.next = 4;
+            return _context119.sent;
+          case 4:
+            _context119.next = 6;
+            return _context119.sent;
+          case 6:
+            _context119.next = 8;
+            return _context119.sent;
+          case 8:
+            _context119.next = 10;
+            return _context119.sent;
+          case 10:
+            return _context119.abrupt(2, _context119.sent);
+          case 11:
+            return _context119.abrupt(2);
+        }
+      }, _marked105);
+    }
+    check(chain(y3("foo"), y5("bar")), ["foo", 1, 2, "bar", 4, 5, 6, 7]);
+    var g3 = y3("three");
+    assert.deepEqual(g3.next(), {
+      value: "three",
+      done: false
+    });
+    var g5 = y5("five");
+    assert.deepEqual(g5.next(), {
+      value: "five",
+      done: false
+    });
+    var undef; // A little easier to read than void 0.
+    check(chain(g3, g5), [undef, 1, undef, 3, 4, 5]);
+  });
+});
+describe("labeled break and continue statements", function () {
+  it("should be able to exit multiple try statements", function () {
+    var _marked106 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    var e1 = "first";
+    var e2 = "second";
+    var e3 = "third";
+    var e4 = "fourth";
+    function gen(n, which) {
+      var i;
+      return babelHelpers.regenerator().w(function (_context120) {
+        while (1) switch (_context120.prev = _context120.next) {
+          case 0:
+            _context120.prev = 0;
+            _context120.next = 3;
+            return 0;
+          case 3:
+            raise(e1);
+          case 4:
+            _context120.prev = 4;
+            _context120.next = 7;
+            return 1;
+          case 7:
+            i = 0;
+          case 8:
+            if (!(i < n)) {
+              _context120.next = 42;
+              break;
+            }
+            _context120.next = 11;
+            return i;
+          case 11:
+            _context120.prev = 11;
+            raise(e2);
+          case 13:
+            _context120.prev = 13;
+            _context120.next = 16;
+            return 2;
+          case 16:
+            _context120.prev = 16;
+            raise(e3);
+          case 18:
+            _context120.prev = 18;
+            _context120.next = 21;
+            return 3;
+          case 21:
+            _context120.prev = 21;
+            raise(e4);
+          case 23:
+            _context120.prev = 23;
+            _context120.next = 26;
+            return 4;
+          case 26:
+            if (!(which === "break")) {
+              _context120.next = 30;
+              break;
+            }
+            _context120.next = 29;
+            return "breaking";
+          case 29:
+            return _context120.abrupt(3, 42);
+          case 30:
+            if (!(which === "continue")) {
+              _context120.next = 34;
+              break;
+            }
+            _context120.next = 33;
+            return "continuing";
+          case 33:
+            return _context120.abrupt(3, 39);
+          case 34:
+            _context120.next = 36;
+            return 5;
+          case 36:
+            return _context120.finish(23);
+          case 37:
+            return _context120.finish(18);
+          case 38:
+            return _context120.finish(13);
+          case 39:
+            ++i;
+            _context120.next = 8;
+            break;
+          case 42:
+            _context120.next = 44;
+            return 6;
+          case 44:
+            return _context120.finish(4);
+          case 45:
+            return _context120.abrupt(2);
+        }
+      }, _marked106, null, [[21,, 23, 37], [16,, 18, 38], [11,, 13, 39], [0,, 4, 45]]);
+    }
+    try {
+      check(gen(1, "break"), [0, 1, 0, 2, 3, 4, "breaking", 6]);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, e1);
+    }
+    try {
+      check(gen(3, "continue"), [0, 1, 0, 2, 3, 4, "continuing", 1, 2, 3, 4, "continuing", 2, 2, 3, 4, "continuing", 6 // Loop finished naturally.
+      ]);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, e1);
+    }
+    try {
+      check(gen(3, "neither"), [0, 1, 0, 2, 3, 4, 5]);
+      assert.ok(false, "should have thrown an exception");
+    } catch (err) {
+      assert.strictEqual(err, e4);
+    }
+  });
+  it("should allow breaking from any labeled statement", function () {
+    var _marked107 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(limit) {
+      var i;
+      return babelHelpers.regenerator().w(function (_context121) {
+        while (1) switch (_context121.prev = _context121.next) {
+          case 0:
+            _context121.next = 2;
+            return 0;
+          case 2:
+            i = 0;
+          case 3:
+            if (!(i < limit)) {
+              _context121.next = 32;
+              break;
+            }
+            _context121.next = 6;
+            return 1;
+          case 6:
+            _context121.next = 8;
+            return 2;
+          case 8:
+            return _context121.abrupt(3, 11);
+          case 11:
+            if (!(limit === 3)) {
+              _context121.next = 26;
+              break;
+            }
+            _context121.next = 14;
+            return 4;
+          case 14:
+            if (!(i === 0)) {
+              _context121.next = 16;
+              break;
+            }
+            return _context121.abrupt(3, 26);
+          case 16:
+            _context121.next = 18;
+            return 5;
+          case 18:
+            if (!(i === 1)) {
+              _context121.next = 20;
+              break;
+            }
+            return _context121.abrupt(3, 26);
+          case 20:
+            _context121.next = 22;
+            return 6;
+          case 22:
+            if (!(i === 2)) {
+              _context121.next = 24;
+              break;
+            }
+            return _context121.abrupt(3, 32);
+          case 24:
+            _context121.next = 26;
+            return 7;
+          case 26:
+            return _context121.abrupt(3, 27);
+          case 27:
+            _context121.next = 29;
+            return 8;
+          case 29:
+            ++i;
+            _context121.next = 3;
+            break;
+          case 32:
+            _context121.next = 34;
+            return 9;
+          case 34:
+            return _context121.abrupt(2);
+        }
+      }, _marked107);
+    }
+    check(gen(0), [0, 9]);
+    check(gen(1), [0, 1, 2, 8, 9]);
+    check(gen(2), [0, 1, 2, 8, 1, 2, 8, 9]);
+    check(gen(3), [0, 1, 2, 4, 8, 1, 2, 4, 5, 8, 1, 2, 4, 5, 6, 9]);
+  });
+});
+describe("for loop with var decl and no update expression", function () {
+  var _marked108 = /*#__PURE__*/babelHelpers.regenerator().m(range);
+  // https://github.com/facebook/regenerator/issues/103
+  function range() {
+    var i;
+    return babelHelpers.regenerator().w(function (_context122) {
+      while (1) switch (_context122.prev = _context122.next) {
+        case 0:
+          for (i = 0; false;) {}
+        case 1:
+          return _context122.abrupt(2);
+      }
+    }, _marked108);
+  }
+  it("should compile and run", function () {
+    check(range(), []);
+  });
+});
+describe("generator function prototype", function () {
+  function getProto(obj) {
+    return Object.getPrototypeOf ? Object.getPrototypeOf(obj) : obj.__proto__;
+  }
+  it("should follow the expected object model", function () {
+    var _marked109 = /*#__PURE__*/babelHelpers.regenerator().m(f2),
+      _marked110 = /*#__PURE__*/babelHelpers.regenerator().m(f),
+      _marked111 = /*#__PURE__*/babelHelpers.regenerator().m(f);
+    var GeneratorFunctionPrototype = getProto(f);
+    var GeneratorFunction = GeneratorFunctionPrototype.constructor;
+    assert.strictEqual(GeneratorFunction.name, "GeneratorFunction");
+    assert.strictEqual(GeneratorFunction.prototype, GeneratorFunctionPrototype);
+    assert.strictEqual(GeneratorFunctionPrototype.prototype.constructor, GeneratorFunctionPrototype);
+    assert.strictEqual(GeneratorFunctionPrototype.prototype, getProto(f.prototype));
+    assert.strictEqual(getProto(GeneratorFunctionPrototype), Function.prototype);
+    if (typeof process === "undefined" || process.version.slice(1, 3) === "0.") {
+      // Node version strings start with 0.
+      assert.strictEqual(GeneratorFunctionPrototype.name, "GeneratorFunctionPrototype");
+    } else if (process.version.slice(1, 3) === "1.") {
+      // iojs version strings start with 1., and iojs gets this .name
+      // property wrong. TODO report this?
+      assert.strictEqual(GeneratorFunctionPrototype.name, "");
+    }
+    assert.strictEqual(typeof f2, "function");
+    assert.strictEqual(f2.constructor, GeneratorFunction);
+    assert.ok(f2 instanceof GeneratorFunction);
+    assert.strictEqual(f2.name, "f2");
+    var g = f();
+    assert.ok(g instanceof f);
+    assert.strictEqual(getProto(g), f.prototype);
+    assert.deepEqual([], Object.getOwnPropertyNames(f.prototype));
+    // assert.deepEqual([], Object.getOwnPropertyNames(g));
+
+    f.prototype.x = 42;
+    var g2 = f();
+    assert.strictEqual(g2.x, 42);
+    function f2() {
+      return babelHelpers.regenerator().w(function (_context123) {
+        while (1) switch (_context123.prev = _context123.next) {
+          case 0:
+            _context123.next = 2;
+            return 1;
+          case 2:
+            return _context123.abrupt(2);
+        }
+      }, _marked109);
+    }
+    assert.strictEqual(getProto(f), getProto(f2));
+    assert.strictEqual(f.hasOwnProperty("constructor"), false);
+    assert.strictEqual(getProto(f).constructor.name, "GeneratorFunction");
+
+    // Intentionally at the end to test hoisting.
+    function f() {
+      return babelHelpers.regenerator().w(function (_context124) {
+        while (1) switch (_context124.prev = _context124.next) {
+          case 0:
+            _context124.next = 2;
+            return this;
+          case 2:
+            return _context124.abrupt(2);
+        }
+      }, _marked110, this);
+    }
+    function f() {
+      return babelHelpers.regenerator().w(function (_context125) {
+        while (1) switch (_context125.prev = _context125.next) {
+          case 0:
+            _context125.next = 2;
+            return 1;
+          case 2:
+            return _context125.abrupt(2);
+        }
+      }, _marked111);
+    }
+    var f2 = f;
+    f = 42;
+    var g = f2();
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+    assert.deepEqual(g.next(), {
+      value: void 0,
+      done: true
+    });
+    assert.ok(g instanceof f2);
+  });
+});
+describe("for-of loops", function () {
+  var arraysAreIterable = typeof Array.prototype[Symbol.iterator] === "function";
+  (fullCompatibility && arraysAreIterable ? it : xit)("should work for Arrays", function () {
+    var sum = 0;
+    var _iterator = babelHelpers.createForOfIteratorHelper([1, 2].concat(3)),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var x = _step.value;
+        sum += x;
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+    assert.strictEqual(sum, 6);
+  });
+  it("should work for generators", function () {
+    var value,
+      values = [];
+    var _iterator2 = babelHelpers.createForOfIteratorHelper(range(3)),
+      _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        value = _step2.value;
+        values.push(value);
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+    assert.deepEqual(values, [0, 1, 2]);
+  });
+  it("should work inside of generators", function () {
+    var _marked112 = /*#__PURE__*/babelHelpers.regenerator().m(yieldPermutations);
+    function yieldPermutations(list) {
+      var count, first, genRest, _iterator3, _step3, perm, i, prefix, suffix, _t98;
+      return babelHelpers.regenerator().w(function (_context126) {
+        while (1) switch (_context126.prev = _context126.next) {
+          case 0:
+            if (!(list.length < 2)) {
+              _context126.next = 4;
+              break;
+            }
+            _context126.next = 3;
+            return list;
+          case 3:
+            return _context126.abrupt(2, 1);
+          case 4:
+            count = 0;
+            first = list.slice(0, 1);
+            genRest = yieldPermutations(list.slice(1));
+            _iterator3 = babelHelpers.createForOfIteratorHelper(genRest);
+            _context126.prev = 8;
+            _iterator3.s();
+          case 10:
+            if ((_step3 = _iterator3.n()).done) {
+              _context126.next = 24;
+              break;
+            }
+            perm = _step3.value;
+            i = 0;
+          case 13:
+            if (!(i < list.length)) {
+              _context126.next = 21;
+              break;
+            }
+            prefix = perm.slice(0, i);
+            suffix = perm.slice(i);
+            _context126.next = 18;
+            return prefix.concat(first, suffix);
+          case 18:
+            ++i;
+            _context126.next = 13;
+            break;
+          case 21:
+            count += i;
+          case 22:
+            _context126.next = 10;
+            break;
+          case 24:
+            _context126.next = 29;
+            break;
+          case 26:
+            _context126.prev = 26;
+            _t98 = _context126.sent;
+            _iterator3.e(_t98);
+          case 29:
+            _context126.prev = 29;
+            _iterator3.f();
+            return _context126.finish(29);
+          case 32:
+            return _context126.abrupt(2, count);
+          case 33:
+            return _context126.abrupt(2);
+        }
+      }, _marked112, null, [[8, 26, 29, 32]]);
+    }
+    var count = 0;
+    var _iterator4 = babelHelpers.createForOfIteratorHelper(yieldPermutations([])),
+      _step4;
+    try {
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var perm = _step4.value;
+        assert.deepEqual(perm, []);
+        ++count;
+      }
+    } catch (err) {
+      _iterator4.e(err);
+    } finally {
+      _iterator4.f();
+    }
+    assert.strictEqual(count, 1);
+    check(yieldPermutations([1]), [[1]], 1);
+    check(yieldPermutations([2, 1]), [[2, 1], [1, 2]], 2);
+    check(yieldPermutations([1, 3, 2]), [[1, 3, 2], [3, 1, 2], [3, 2, 1], [1, 2, 3], [2, 1, 3], [2, 3, 1]], 6);
+  });
+});
+describe("expressions containing yield subexpressions", function () {
+  it("should evaluate all subexpressions before yielding", function () {
+    var _marked113 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen(x) {
+      var _t99, _t100;
+      return babelHelpers.regenerator().w(function (_context127) {
+        while (1) switch (_context127.prev = _context127.next) {
+          case 0:
+            _t99 = x;
+            _context127.next = 3;
+            return function (y) {
+              x = y;
+            };
+          case 3:
+            _t100 = _context127.sent;
+            return _context127.abrupt(2, _t99 * _t100);
+          case 5:
+            return _context127.abrupt(2);
+        }
+      }, _marked113);
+    }
+    var g = gen(2);
+    var result = g.next();
+    assert.strictEqual(result.done, false);
+    result.value(5);
+    assert.deepEqual(g.next(5), {
+      value: 10,
+      done: true
+    });
+  });
+  it("should work even with getter member expressions", function () {
+    var _marked114 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t101, _t102;
+      return babelHelpers.regenerator().w(function (_context128) {
+        while (1) switch (_context128.prev = _context128.next) {
+          case 0:
+            _t101 = a.b;
+            _context128.next = 3;
+            return "asdf";
+          case 3:
+            _t102 = _context128.sent;
+            return _context128.abrupt(2, _t101 + _t102);
+          case 5:
+            return _context128.abrupt(2);
+        }
+      }, _marked114);
+    }
+    var a = {};
+    var b = 0;
+    Object.defineProperty(a, "b", {
+      get: function () {
+        return ++b;
+      }
+    });
+    var g = gen();
+    assert.strictEqual(a.b, 1);
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+    assert.strictEqual(a.b, 3);
+    assert.deepEqual(g.next(2), {
+      value: 4,
+      done: true
+    });
+  });
+  it("should evaluate all array elements before yielding", function () {
+    var _marked115 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t103, _t104, _t105;
+      return babelHelpers.regenerator().w(function (_context129) {
+        while (1) switch (_context129.prev = _context129.next) {
+          case 0:
+            _t103 = a;
+            _context129.next = 3;
+            return "asdf";
+          case 3:
+            _t104 = _context129.sent;
+            _t105 = a;
+            return _context129.abrupt(2, [_t103, _t104, _t105]);
+          case 6:
+            return _context129.abrupt(2);
+        }
+      }, _marked115);
+    }
+    var a = 1;
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+    a = 3;
+    assert.deepEqual(g.next(2), {
+      value: [1, 2, 3],
+      done: true
+    });
+  });
+  it("should handle callee member expressions correctly", function () {
+    var _marked116 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t106, _t107;
+      return babelHelpers.regenerator().w(function (_context130) {
+        while (1) switch (_context130.prev = _context130.next) {
+          case 0:
+            _t106 = a.slice(0);
+            _context130.next = 3;
+            return "asdf";
+          case 3:
+            _t107 = _context130.sent;
+            a = _t106.concat.call(_t106, _t107);
+            return _context130.abrupt(2, a);
+          case 6:
+            return _context130.abrupt(2);
+        }
+      }, _marked116);
+    }
+    var a = [];
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+    a.push(1);
+    assert.deepEqual(g.next(2), {
+      value: [2],
+      done: true
+    });
+  });
+  it("should handle implicit stringification correctly", function () {
+    var _marked117 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t108, _t109;
+      return babelHelpers.regenerator().w(function (_context131) {
+        while (1) switch (_context131.prev = _context131.next) {
+          case 0:
+            _t108 = a;
+            _context131.next = 3;
+            return "asdf";
+          case 3:
+            _t109 = _context131.sent;
+            return _context131.abrupt(2, _t108 + _t109);
+          case 5:
+            return _context131.abrupt(2);
+        }
+      }, _marked117);
+    }
+    var a = [1, 2];
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: "asdf",
+      done: false
+    });
+    a = [4, 5];
+    assert.deepEqual(g.next(",3"), {
+      value: "1,2,3",
+      done: true
+    });
+  });
+  it("should work when yield is in an array spread", function () {
+    var _marked118 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t110;
+      return babelHelpers.regenerator().w(function (_context132) {
+        while (1) switch (_context132.prev = _context132.next) {
+          case 0:
+            _context132.next = 2;
+            return "foo";
+          case 2:
+            _t110 = _context132.sent;
+            return _context132.abrupt(2, [0, ..._t110, 3]);
+          case 4:
+            return _context132.abrupt(2);
+        }
+      }, _marked118);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: "foo",
+      done: false
+    });
+    assert.deepEqual(g.next([1, 2]), {
+      value: [0, 1, 2, 3],
+      done: true
+    });
+  });
+  it("should work when yield is in a sparse array", function () {
+    var _marked119 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
+    function gen() {
+      var _t111;
+      return babelHelpers.regenerator().w(function (_context133) {
+        while (1) switch (_context133.prev = _context133.next) {
+          case 0:
+            _context133.next = 2;
+            return "foo";
+          case 2:
+            _t111 = _context133.sent;
+            return _context133.abrupt(2, [0, _t111,, 3]);
+          case 4:
+            return _context133.abrupt(2);
+        }
+      }, _marked119);
+    }
+    var g = gen();
+    assert.deepEqual(g.next(), {
+      value: "foo",
+      done: false
+    });
+    assert.deepEqual(g.next(1), {
+      value: [0, 1,, 3],
+      done: true
+    });
+  });
+});

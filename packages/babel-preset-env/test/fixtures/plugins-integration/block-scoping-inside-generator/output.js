@@ -4,20 +4,19 @@ function test() {
 function _test() {
   _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     var obj, _loop, _i, _arr;
-    return babelHelpers.regenerator().w(function _callee$(_context2) {
+    return babelHelpers.regenerator().w(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           obj = {};
           _loop = /*#__PURE__*/babelHelpers.regenerator().m(function _loop() {
             var ch;
-            return babelHelpers.regenerator().w(function _loop$(_context) {
+            return babelHelpers.regenerator().w(function (_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
                   ch = _arr[_i];
                   obj[ch] = () => ch;
                 case 2:
-                case "end":
-                  return _context.stop();
+                  return _context.abrupt(2);
               }
             }, _loop);
           });
@@ -27,14 +26,13 @@ function _test() {
             _context2.next = 8;
             break;
           }
-          return _context2.delegateYield(_loop(), "t0", 5);
+          return _context2.delegateYield(_loop(), 5);
         case 5:
           _i++;
           _context2.next = 3;
           break;
         case 8:
-        case "end":
-          return _context2.stop();
+          return _context2.abrupt(2);
       }
     }, _callee);
   }));

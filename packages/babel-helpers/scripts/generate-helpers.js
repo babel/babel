@@ -177,7 +177,8 @@ const helpers: Record<string, Helper> = {
         mangle: {
           keep_fnames: mangleFns
             ? noMangleFns.length
-              ? new RegExp(noMangleFns.join("|"))
+              ? // eslint-disable-next-line regexp/no-empty-capturing-group, regexp/no-empty-group
+                new RegExp("^(" + noMangleFns.join("|") + ")$")
               : false
             : true,
         },
