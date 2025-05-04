@@ -1,6 +1,6 @@
-import originalPlugins from "@babel/compat-data/plugins";
-import originalPluginsBugfixes from "@babel/compat-data/plugin-bugfixes";
-import originalOverlappingPlugins from "@babel/compat-data/overlapping-plugins";
+import originalPlugins from "@babel/compat-data/plugins" with { type: "json" };
+import originalPluginsBugfixes from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
+import originalOverlappingPlugins from "@babel/compat-data/overlapping-plugins" with { type: "json" };
 import availablePlugins from "./available-plugins.ts";
 
 const keys: <O extends object>(o: O) => (keyof O)[] = Object.keys;
