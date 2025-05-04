@@ -20,7 +20,7 @@ import type {
   Browsers,
   BrowserslistBrowserName,
   TargetsTuple,
-} from "./types.ts";
+} from "./types.d.ts";
 
 export type { Target, Targets, InputTargets };
 
