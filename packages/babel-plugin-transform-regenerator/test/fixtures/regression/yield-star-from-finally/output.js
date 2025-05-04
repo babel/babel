@@ -13,12 +13,12 @@ function values() {
   return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
+        _context.next = 1;
+        return 1;
+      case 1:
         _context.next = 2;
         return 1;
       case 2:
-        _context.next = 4;
-        return 1;
-      case 4:
         return _context.abrupt(2);
     }
   }, _marked);
@@ -32,42 +32,42 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
         _iterator = babelHelpers.createForOfIteratorHelper(dataIterator);
         _context2.prev = 1;
         _iterator.s();
-      case 3:
+      case 2:
         if ((_step = _iterator.n()).done) {
-          _context2.next = 14;
+          _context2.next = 8;
           break;
         }
         x = _step.value;
-        _context2.prev = 5;
-      case 6:
-        _context2.prev = 6;
+        _context2.prev = 3;
+      case 4:
+        _context2.prev = 4;
         i++;
-        return _context2.delegateYield(values(), 9);
-      case 9:
+        return _context2.delegateYield(values(), 5);
+      case 5:
         j++;
-        return _context2.finish(6);
-      case 11:
+        return _context2.finish(4);
+      case 6:
         k++;
-      case 12:
-        _context2.next = 3;
+      case 7:
+        _context2.next = 2;
         break;
-      case 14:
-        _context2.next = 19;
+      case 8:
+        _context2.next = 10;
         break;
-      case 16:
-        _context2.prev = 16;
+      case 9:
+        _context2.prev = 9;
         _t = _context2.sent;
         _iterator.e(_t);
-      case 19:
-        _context2.prev = 19;
+      case 10:
+        _context2.prev = 10;
         _iterator.f();
-        return _context2.finish(19);
-      case 22:
+        return _context2.finish(10);
+      case 11:
         l++;
-      case 23:
+      case 12:
         return _context2.abrupt(2);
     }
-  }, _callee, null, [[5,, 6, 11], [1, 16, 19, 22]]);
+  }, _callee, null, [[3,, 4, 6], [1, 9, 10, 11]]);
 })();
 var i = 0;
 var j = 0;

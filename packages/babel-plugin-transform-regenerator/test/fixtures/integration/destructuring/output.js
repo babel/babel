@@ -9,7 +9,7 @@ function foo() {
           bar: "bar"
         }, bar = _bar.bar;
         return _context.abrupt(2, bar);
-      case 2:
+      case 1:
         return _context.abrupt(2);
     }
   }, _marked);
@@ -46,59 +46,59 @@ function foo3() {
           return babelHelpers.regenerator().w(function (_context3) {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                _context3.next = 1;
                 return "iteration";
-              case 2:
+              case 1:
                 _yield$iteration = _context3.sent;
                 what = _yield$iteration.what;
                 value = _yield$iteration.value;
                 _t = what;
-                _context3.next = _t === "one" ? 8 : _t === "two" ? 15 : _t === "three" ? 18 : 20;
+                _context3.next = _t === "one" ? 2 : _t === "two" ? 5 : _t === "three" ? 6 : 7;
                 break;
-              case 8:
+              case 2:
                 if (!(value === 1)) {
-                  _context3.next = 12;
+                  _context3.next = 3;
                   break;
                 }
                 return _context3.abrupt(2, 0);
-              case 12:
+              case 3:
                 if (!(value === 2)) {
-                  _context3.next = 14;
+                  _context3.next = 4;
                   break;
                 }
                 return _context3.abrupt(2, 0);
-              case 14:
-                return _context3.abrupt(3, 20);
-              case 15:
+              case 4:
+                return _context3.abrupt(3, 7);
+              case 5:
                 // Removing these 3 lines makes the tests pass.
                 ["a", "b"].map(function (v) {
                   return value + v;
                 });
                 return _context3.abrupt(2, 0);
-              case 18:
+              case 6:
                 return _context3.abrupt(2, 0);
-              case 20:
+              case 7:
                 return _context3.abrupt(2);
             }
           }, _callee2);
         });
       case 1:
         if (!true) {
-          _context4.next = 8;
+          _context4.next = 4;
           break;
         }
-        return _context4.delegateYield(_loop(), 3);
-      case 3:
+        return _context4.delegateYield(_loop(), 2);
+      case 2:
         _ret = _context4.sent;
         if (!(_ret === 0)) {
-          _context4.next = 6;
+          _context4.next = 3;
           break;
         }
-        return _context4.abrupt(3, 8);
-      case 6:
+        return _context4.abrupt(3, 4);
+      case 3:
         _context4.next = 1;
         break;
-      case 8:
+      case 4:
         return _context4.abrupt(2);
     }
   }, _marked2);

@@ -58,23 +58,23 @@ function g() {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.prev = 0;
-        return _context.delegateYield(badIter, 2);
-      case 2:
+        return _context.delegateYield(badIter, 1);
+      case 1:
         hitNextStatement = true;
-        _context.next = 8;
+        _context.next = 3;
         break;
-      case 5:
-        _context.prev = 5;
+      case 2:
+        _context.prev = 2;
         _t = _context.sent;
         hitCatch = true;
-      case 8:
-        _context.prev = 8;
+      case 3:
+        _context.prev = 3;
         hitFinally = true;
-        return _context.finish(8);
-      case 11:
+        return _context.finish(3);
+      case 4:
         return _context.abrupt(2);
     }
-  }, _marked, null, [[0, 5, 8, 11]]);
+  }, _marked, null, [[0, 2, 3, 4]]);
 }
 var iter = g();
 iter.next();

@@ -8,11 +8,11 @@ function foo() {
         return _context.delegateYield(bar(), 1);
       case 1:
         _t = _context.sent;
-        return _context.delegateYield(bar(), 3);
-      case 3:
+        return _context.delegateYield(bar(), 2);
+      case 2:
         _t2 = _context.sent;
         return _context.abrupt(2, _t + _t2);
-      case 5:
+      case 3:
         return _context.abrupt(2);
     }
   }, _marked);
@@ -22,16 +22,16 @@ function bar() {
   return babelHelpers.regenerator().w(function (_context2) {
     while (1) switch (_context2.prev = _context2.next) {
       case 0:
-        _context2.next = 2;
+        _context2.next = 1;
         return 2;
-      case 2:
+      case 1:
         _t3 = _context2.sent;
-        _context2.next = 5;
+        _context2.next = 2;
         return 3;
-      case 5:
+      case 2:
         _t4 = _context2.sent;
         return _context2.abrupt(2, _t3 + _t4);
-      case 7:
+      case 3:
         return _context2.abrupt(2);
     }
   }, _marked2);

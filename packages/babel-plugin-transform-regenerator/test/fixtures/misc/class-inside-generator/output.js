@@ -9,7 +9,7 @@ function f() {
           }
         }
         ;
-      case 2:
+      case 1:
         return _context.abrupt(2);
     }
   }, _marked);

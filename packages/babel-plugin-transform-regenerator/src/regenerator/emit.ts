@@ -61,6 +61,8 @@ const catchParamVisitor: Visitor = {
 export class Emitter {
   nextTempId: number;
   contextId: t.Identifier;
+  index: number;
+  indexMap: Map<number, number>;
   listing: t.Statement[];
   marked: boolean[];
   insertedLocs: Set<t.NumericLiteral>;
@@ -95,6 +97,9 @@ export class Emitter {
     // called.
     this.listing = [];
 
+    this.index = 0;
+    this.indexMap = new Map([[0, 0]]);
+
     // A sparse array whose keys correspond to locations in this.listing
     // that have been marked as branch/jump targets.
     this.marked = [true];
@@ -128,18 +133,24 @@ export class Emitter {
     return t.cloneNode(this.contextId);
   }
 
+  getIndex() {
+    if (!this.indexMap.has(this.listing.length)) {
+      this.indexMap.set(this.listing.length, ++this.index);
+    }
+    return this.index;
+  }
+
   // Sets the exact value of the given location to the offset of the next
   // Statement emitted.
   mark(loc: t.NumericLiteral) {
-    const index = this.listing.length;
     if (loc.value === PENDING_LOCATION) {
-      loc.value = index;
+      loc.value = this.getIndex();
     } else {
       // Locations can be marked redundantly, but their values cannot change
       // once set the first time.
-      assert.strictEqual(loc.value, index);
+      assert.strictEqual(loc.value, this.index);
     }
-    this.marked[index] = true;
+    this.marked[this.listing.length] = true;
     return loc;
   }
 
@@ -282,7 +293,9 @@ export class Emitter {
 
     self.listing.forEach(function (stmt, i) {
       if (self.marked[i]) {
-        cases.push(t.switchCase(t.numericLiteral(i), (current = [])));
+        cases.push(
+          t.switchCase(t.numericLiteral(self.indexMap.get(i)), (current = [])),
+        );
         alreadyEnded = false;
       }
 
@@ -294,7 +307,7 @@ export class Emitter {
 
     // Now that we know how many statements there will be in this.listing,
     // we can finally resolve this.finalLoc.value.
-    this.finalLoc.value = this.listing.length;
+    this.finalLoc.value = this.getIndex();
 
     if (
       process.env.BABEL_8_BREAKING ||
@@ -855,7 +868,7 @@ export class Emitter {
   // targets, but minimizing the number of switch cases keeps the generated
   // code shorter.
   getUnmarkedCurrentLoc() {
-    return t.numericLiteral(this.listing.length);
+    return t.numericLiteral(this.getIndex());
   }
 
   // The context.prev property takes the value of context.next whenever we
@@ -873,10 +886,10 @@ export class Emitter {
       if (loc.value === PENDING_LOCATION) {
         // If an uninitialized location literal was passed in, set its value
         // to the current this.listing.length.
-        loc.value = this.listing.length;
+        loc.value = this.getIndex();
       } else {
         // Otherwise assert that the location matches the current offset.
-        assert.strictEqual(loc.value, this.listing.length);
+        assert.strictEqual(loc.value, this.index);
       }
     } else {
       loc = this.getUnmarkedCurrentLoc();

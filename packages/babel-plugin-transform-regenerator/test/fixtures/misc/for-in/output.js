@@ -7,16 +7,16 @@ function fn() {
         _t = babelHelpers.regeneratorKeys(y);
       case 1:
         if ((_t2 = _t()).done) {
-          _context.next = 7;
+          _context.next = 3;
           break;
         }
         x = _t2.value;
-        _context.next = 5;
+        _context.next = 2;
         return x;
-      case 5:
+      case 2:
         _context.next = 1;
         break;
-      case 7:
+      case 3:
         return _context.abrupt(2);
     }
   }, _marked);
