@@ -5,7 +5,7 @@ function _regeneratorDefine(e, r, n, t) { _regeneratorDefine = function (e, r, n
 var _marked = /*#__PURE__*/_regenerator().m(f);
 function f() {
   return _regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.next) {
       case 0:
         return _context.abrupt(2);
     }

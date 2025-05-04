@@ -340,11 +340,14 @@ export class Emitter {
     return t.whileStatement(
       t.numericLiteral(1),
       t.switchStatement(
-        t.assignmentExpression(
-          "=",
-          this.contextProperty("prev"),
-          this.contextProperty("next"),
-        ),
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? this.contextProperty("next")
+          : t.assignmentExpression(
+              "=",
+              this.contextProperty("prev"),
+              this.contextProperty("next"),
+            ),
         cases,
       ),
     );

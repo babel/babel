@@ -11,7 +11,7 @@ features: [generators]
 
 function values() {
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.next) {
       case 0:
         _context.next = 1;
         return 1;
@@ -27,7 +27,7 @@ var dataIterator = values();
 var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
   var _iterator, _step, x, _t;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+    while (1) switch (_context2.next) {
       case 0:
         _iterator = babelHelpers.createForOfIteratorHelper(dataIterator);
         _context2.prev = 1;

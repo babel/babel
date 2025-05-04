@@ -3,7 +3,7 @@ var _marked = /*#__PURE__*/babelHelpers.regenerator().m(foo),
 function foo() {
   var _bar, bar;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.next) {
       case 0:
         _bar = {
           bar: "bar"
@@ -21,7 +21,7 @@ function foo2(_ref) {
     bar = _ref$bar === void 0 ? 0 : _ref$bar;
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     return babelHelpers.regenerator().w(function (_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+      while (1) switch (_context2.next) {
         case 0:
           return _context2.abrupt(2, bar);
         case 1:
@@ -39,12 +39,12 @@ expect(foo2({
 function foo3() {
   var _loop, _ret;
   return babelHelpers.regenerator().w(function (_context4) {
-    while (1) switch (_context4.prev = _context4.next) {
+    while (1) switch (_context4.next) {
       case 0:
         _loop = /*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
           var _yield$iteration, what, value, _t;
           return babelHelpers.regenerator().w(function (_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+            while (1) switch (_context3.next) {
               case 0:
                 _context3.next = 1;
                 return "iteration";

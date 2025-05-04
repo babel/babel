@@ -2,7 +2,7 @@ var _marked = /*#__PURE__*/babelHelpers.regenerator().m(fn);
 function fn() {
   var _t, _t2;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.next) {
       case 0:
         _t = babelHelpers.regeneratorKeys(y);
       case 1:
