@@ -6,6 +6,7 @@ import {
   transformVoidPattern,
   transformVoidPatternInLVal,
 } from "./utils.ts";
+import type { types as t, NodePath } from "@babel/core";
 
 export default declare(function ({ assertVersion, assumption }) {
   assertVersion(REQUIRED_VERSION("^7.27.0"));
@@ -52,6 +53,25 @@ export default declare(function ({ assertVersion, assumption }) {
       VariableDeclaration(path) {
         for (const declarationPath of path.get("declarations")) {
           transformVoidPatternInLVal(declarationPath.get("id"));
+        }
+      },
+
+      // The following visitors are introduced such that the
+      // void pattern transform can run before explicit-resource-management
+      // If void pattern reaches stage 4, consider export `transformVoidPattern`
+      // and call `transformVoidPattern` in explicit-resource-management
+      "BlockStatement|StaticBlock"(
+        path: NodePath<t.BlockStatement | t.StaticBlock>,
+      ) {
+        for (const statementPath of path.get("body")) {
+          if (statementPath.isVariableDeclaration()) {
+            const kind = statementPath.node.kind;
+            if (kind === "using" || kind === "await using") {
+              for (const declarationPath of statementPath.get("declarations")) {
+                transformVoidPatternInLVal(declarationPath.get("id"));
+              }
+            }
+          }
         }
       },
     },
