@@ -16,7 +16,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.17.0"

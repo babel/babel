@@ -2,5 +2,5 @@
   "assumptions": {
     "pureGetters": true
   },
-  "plugins": ["proposal-discard-binding", "transform-object-rest-spread"]
+  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "transform-object-rest-spread"]
 }

@@ -1484,6 +1484,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.17.0
   languageName: unknown

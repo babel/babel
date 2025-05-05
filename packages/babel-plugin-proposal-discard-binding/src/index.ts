@@ -1,3 +1,4 @@
+import { OptionValidator } from "@babel/helper-validator-option";
 import { declare } from "@babel/helper-plugin-utils";
 import {
   hasVoidPatternInVariableDeclaration,
@@ -8,13 +9,33 @@ import {
 } from "./utils.ts";
 import type { types as t, NodePath } from "@babel/core";
 
-export default declare(function ({ assertVersion, assumption }) {
+export type Options = {
+  syntaxType: "void";
+};
+
+const v = new OptionValidator(PACKAGE_JSON.name);
+
+function validatePluginOptions(options: Options) {
+  v.validateTopLevelOptions(options, { syntaxType: "syntaxType" });
+  const { syntaxType } = options;
+  v.invariant(
+    syntaxType === "void",
+    "'.syntaxType' option required, representing the discard binding. " +
+      "Currently, the only supported value is 'void'.",
+  );
+  return options;
+}
+
+export default declare(function (
+  { assertVersion, assumption },
+  options: Options,
+) {
   assertVersion(REQUIRED_VERSION("^7.27.0"));
+  options = validatePluginOptions(options);
   const ignoreFunctionLength = assumption("ignoreFunctionLength");
   return {
     name: "proposal-discard-binding",
-    manipulateOptions: (_, p) =>
-      p.plugins.push(["discardBinding", { syntaxType: "void" }]),
+    manipulateOptions: (_, p) => p.plugins.push(["discardBinding", options]),
     visitor: {
       ExportNamedDeclaration(path) {
         const declarationPath = path.get("declaration");

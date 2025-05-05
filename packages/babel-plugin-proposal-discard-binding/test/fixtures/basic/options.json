@@ -1,3 +1,3 @@
 {
-  "plugins": ["proposal-discard-binding", "../../scripts/check-transform-scope-integrity.cjs"]
+  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "../../scripts/check-transform-scope-integrity.cjs"]
 }
