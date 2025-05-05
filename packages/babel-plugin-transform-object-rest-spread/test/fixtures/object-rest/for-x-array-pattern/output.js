@@ -13,6 +13,7 @@ const _excluded = ["a"],
       b = babelHelpers.objectWithoutProperties(_ref2, _excluded);
   }
   for (var _ref3 of []) {
+    var _ref4;
     [_ref4] = _ref3;
     var _ref5 = _ref4;
     ({
@@ -23,6 +24,7 @@ const _excluded = ["a"],
   }
   async function f() {
     for await (var _ref6 of []) {
+      var _ref7;
       [_ref7] = _ref6;
       var _ref8 = _ref7;
       ({

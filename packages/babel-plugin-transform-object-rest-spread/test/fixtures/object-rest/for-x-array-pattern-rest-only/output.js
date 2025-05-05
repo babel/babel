@@ -6,6 +6,7 @@
       a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref2), _ref2));
   }
   for (var _ref3 of []) {
+    var _ref4;
     [_ref4] = _ref3;
     var _ref5 = _ref4;
     ({} = _ref5);
@@ -14,6 +15,7 @@
   }
   async function f() {
     for await (var _ref6 of []) {
+      var _ref7;
       [_ref7] = _ref6;
       var _ref8 = _ref7;
       ({} = _ref8);

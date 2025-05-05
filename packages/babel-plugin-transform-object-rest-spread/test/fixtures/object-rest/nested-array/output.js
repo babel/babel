@@ -1,3 +1,4 @@
+var _ref3;
 const [a, _ref] = x,
   {
     b

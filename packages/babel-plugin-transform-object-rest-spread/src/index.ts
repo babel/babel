@@ -625,12 +625,15 @@ export default declare((api, opts: Options) => {
       ArrayPattern(path) {
         type LhsAndRhs = { left: t.ObjectPattern; right: t.Identifier };
         const objectPatterns: LhsAndRhs[] = [];
+        const { scope } = path;
+        const uidIdentifiers: t.Identifier[] = [];
 
         visitObjectRestElements(path, path => {
           const objectPattern = path.parentPath as NodePath<t.ObjectPattern>;
 
-          const uid = path.scope.generateUidIdentifier("ref");
+          const uid = scope.generateUidIdentifier("ref");
           objectPatterns.push({ left: objectPattern.node, right: uid });
+          uidIdentifiers.push(uid);
 
           objectPattern.replaceWith(t.cloneNode(uid));
           path.skip();
@@ -650,11 +653,16 @@ export default declare((api, opts: Options) => {
               );
               break;
             case "AssignmentExpression":
-              patternParentPath.insertAfter(
-                objectPatterns.map(({ left, right }) =>
-                  t.assignmentExpression("=", left, right),
-                ),
-              );
+              {
+                for (const uidIdentifier of uidIdentifiers) {
+                  scope.push({ id: t.cloneNode(uidIdentifier) });
+                }
+                patternParentPath.insertAfter(
+                  objectPatterns.map(({ left, right }) =>
+                    t.assignmentExpression("=", left, right),
+                  ),
+                );
+              }
               break;
             default:
               throw new Error(
