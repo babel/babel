@@ -46,8 +46,6 @@ function buildPresetChain(arg, context) {
           }),
           files: new Set()
         });
-      case 3:
-        return _context.abrupt(2);
     }
   }, _marked);
 }
@@ -234,8 +232,6 @@ function buildRootChain(opts, context) {
           config: configFile || undefined,
           files: chain.files
         });
-      case 19:
-        return _context2.abrupt(2);
     }
   }, _marked2);
 }
@@ -343,8 +339,6 @@ function loadFileChain(input, context, files, baseLogger) {
         chain = _context3.sent;
         chain === null || chain === void 0 || chain.files.add(input.filepath);
         return _context3.abrupt(2, chain);
-      case 2:
-        return _context3.abrupt(2);
     }
   }, _marked3);
 }
@@ -504,8 +498,6 @@ function makeChainWalker(_ref5) {
             break;
           case 6:
             return _context4.abrupt(2, chain);
-          case 7:
-            return _context4.abrupt(2);
         }
       }, _callee);
     })();
@@ -546,8 +538,6 @@ function mergeExtendsChain(chain, opts, dirname, context, files, baseLogger) {
       case 5:
         mergeChain(chain, fileChain);
         return _context5.abrupt(2, true);
-      case 6:
-        return _context5.abrupt(2);
     }
   }, _marked4);
 }
@@ -597,8 +587,6 @@ function mergeChainOpts(target, _ref7) {
           _t0 = _t8.toConsumableArray.call(_t8, _t9);
           _t6.apply.call(_t6, _t7, _t0);
           return _context6.abrupt(2, target);
-        case 3:
-          return _context6.abrupt(2);
       }
     }, _callee2);
   })();

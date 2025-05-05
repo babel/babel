@@ -64,6 +64,8 @@ export class Emitter {
   index: number;
   indexMap: Map<number, number>;
   listing: t.Statement[];
+  returns: Set<number>;
+  lastDefaultIndex: number;
   marked: boolean[];
   insertedLocs: Set<t.NumericLiteral>;
   finalLoc: t.NumericLiteral;
@@ -99,6 +101,7 @@ export class Emitter {
 
     this.index = 0;
     this.indexMap = new Map([[0, 0]]);
+    this.returns = new Set();
 
     // A sparse array whose keys correspond to locations in this.listing
     // that have been marked as branch/jump targets.
@@ -284,7 +287,7 @@ export class Emitter {
   // case statement.
   getDispatchLoop() {
     const self = this;
-    const cases = [];
+    const cases: t.SwitchCase[] = [];
     let current;
 
     // If we encounter a break, continue, or return statement in a switch
@@ -313,15 +316,20 @@ export class Emitter {
       process.env.BABEL_8_BREAKING ||
       util.newHelpersAvailable(this.pluginPass)
     ) {
-      cases.push(
-        t.switchCase(this.finalLoc, [
-          t.returnStatement(
-            t.callExpression(this.contextProperty("abrupt"), [
-              t.numericLiteral(OperatorType.Return),
-            ]),
-          ),
-        ]),
-      );
+      if (
+        this.lastDefaultIndex === this.index ||
+        !this.returns.has(this.listing.length)
+      ) {
+        cases.push(
+          t.switchCase(this.finalLoc, [
+            t.returnStatement(
+              t.callExpression(this.contextProperty("abrupt"), [
+                t.numericLiteral(OperatorType.Return),
+              ]),
+            ),
+          ]),
+        );
+      }
     } else {
       cases.push(
         t.switchCase(this.finalLoc, [
@@ -692,6 +700,8 @@ export class Emitter {
         if (defaultLoc.value === PENDING_LOCATION) {
           self.mark(defaultLoc);
           assert.strictEqual(after.value, defaultLoc.value);
+
+          this.lastDefaultIndex = this.index;
         }
 
         break;
@@ -830,12 +840,6 @@ export class Emitter {
   }
 
   emitAbruptCompletion(record: AbruptCompletion) {
-    assert.notStrictEqual(
-      record.type,
-      "normal",
-      "normal completions are not abrupt",
-    );
-
     const abruptArgs: [t.NumericLiteral | t.StringLiteral, t.Expression?] = [
       process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this.pluginPass)
         ? t.numericLiteral(record.type)
@@ -859,6 +863,7 @@ export class Emitter {
         t.callExpression(this.contextProperty("abrupt"), abruptArgs),
       ),
     );
+    this.returns.add(this.listing.length);
   }
 
   // Not all offsets into emitter.listing are potential jump targets. For

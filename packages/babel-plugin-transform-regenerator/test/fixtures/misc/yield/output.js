@@ -12,8 +12,6 @@ function foo() {
       case 2:
         _t2 = _context.sent;
         return _context.abrupt(2, _t + _t2);
-      case 3:
-        return _context.abrupt(2);
     }
   }, _marked);
 }
@@ -31,8 +29,6 @@ function bar() {
       case 2:
         _t4 = _context2.sent;
         return _context2.abrupt(2, _t3 + _t4);
-      case 3:
-        return _context2.abrupt(2);
     }
   }, _marked2);
 }

@@ -9,8 +9,6 @@ function foo() {
           bar: "bar"
         }, bar = _bar.bar;
         return _context.abrupt(2, bar);
-      case 1:
-        return _context.abrupt(2);
     }
   }, _marked);
 }
@@ -24,8 +22,6 @@ function foo2(_ref) {
       while (1) switch (_context2.next) {
         case 0:
           return _context2.abrupt(2, bar);
-        case 1:
-          return _context2.abrupt(2);
       }
     }, _callee);
   })();

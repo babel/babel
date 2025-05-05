@@ -9,8 +9,6 @@
       case 1:
         _t = _context.sent;
         return _context.abrupt(2, [_t,,]);
-      case 2:
-        return _context.abrupt(2);
     }
   }, null, null, null, Promise);
 };

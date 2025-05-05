@@ -5,8 +5,6 @@ var o = {
         while (1) switch (_context.next) {
           case 0:
             return _context.abrupt(2, "foo");
-          case 1:
-            return _context.abrupt(2);
         }
       }, _callee);
     })();
