@@ -124,7 +124,7 @@ function buildAssignmentsFromPatternList(
   const newElements: (t.Identifier | t.RestElement)[] = [],
     transformed: Transformed[] = [];
   for (let element of elements) {
-    if (element === null) {
+    if (element === null || element.type === "VoidPattern") {
       newElements.push(null);
       transformed.push(null);
       continue;
@@ -433,6 +433,13 @@ export function* transformPrivateKeyDestructuring(
             }
             // An object rest element must not contain a private key
             const property = properties[index] as t.ObjectProperty;
+            if (property.value.type === "VoidPattern") {
+              const tempId = scope.generateUidIdentifier("_");
+              if (isAssignment) {
+                scope.push({ id: cloneNode(tempId) });
+              }
+              property.value = tempId;
+            }
             // The value of ObjectProperty under ObjectPattern must be an LHS
             left = property.value as LHS;
             const { key } = property;
