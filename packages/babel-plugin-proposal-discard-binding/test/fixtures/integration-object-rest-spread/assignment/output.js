@@ -1,4 +1,4 @@
-var _;
+var _, _ref;
 let rest1, rest2;
 [, _ref, ...rest2] = [0, {
   p: 1,
