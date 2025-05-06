@@ -5,8 +5,8 @@ const { cloneNode, exportNamedDeclaration, exportSpecifier, identifier } = t;
 
 // replace [void, e] with [,e]
 function transformVoidPatternIntoNull(path: NodePath<t.VoidPattern>): null {
-  const parent = path.parentPath.node as t.ArrayPattern;
-  takeVoidPatternComments(path, parent);
+  const parent = path.parent as t.ArrayPattern;
+  takeVoidPatternComments(path.node, parent);
   parent.elements[path.key as number] = null;
   return null;
 }
@@ -19,11 +19,8 @@ function transformVoidPatternIntoUidIdentifier(path: NodePath<t.VoidPattern>) {
   return replacedUidPath;
 }
 
-function takeVoidPatternComments(
-  path: NodePath<t.VoidPattern>,
-  parent: t.ArrayPattern,
-) {
-  const { leadingComments, trailingComments } = path.node;
+function takeVoidPatternComments(node: t.VoidPattern, parent: t.ArrayPattern) {
+  const { leadingComments, trailingComments } = node;
   if (leadingComments != null || trailingComments != null) {
     const { innerComments = [] } = parent;
     const parentHasInnerComments = innerComments.length > 0;
