@@ -3553,7 +3553,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ) {
       if (node.type === "TSDeclareMethod") return;
       // This happens when using the "estree" plugin.
-      if ((node as N.Node).type === "MethodDefinition" && node.body == null) {
+      if (
+        (node as N.Node).type === "MethodDefinition" &&
+        (node as unknown as N.EstreeMethodDefinition).value.body == null
+      ) {
         return;
       }
 
