@@ -24,6 +24,20 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.2 (2025-05-06)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#17289](https://github.com/babel/babel/pull/17289) fix: `@babel/parser/bin/index.js` contains `node:` protocol require ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#17291](https://github.com/babel/babel/pull/17291) fix: Private class method not found when TS and estree ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-object-rest-spread`
+  * [#17281](https://github.com/babel/babel/pull/17281) Fix: improve object rest handling in array pattern ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-modules-commonjs`, `babel-template`
+  * [#17284](https://github.com/babel/babel/pull/17284) fix(babel-template): Properly handle empty string replacements ([@magic-akari](https://github.com/magic-akari))
+
+#### :running_woman: Performance
+* `babel-cli`
+  * [#17285](https://github.com/babel/babel/pull/17285) Enable Node compile cache for `@babel/cli` ([@JLHwung](https://github.com/JLHwung))
 ## v7.27.1 (2025-04-30)
 
 #### :eyeglasses: Spec Compliance
