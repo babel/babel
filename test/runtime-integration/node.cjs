@@ -27,9 +27,9 @@ if (
 }
 
 const expectedCjs =
-  major === 10 || (major === 12 && minor < 17)
+  major === 10 || (major === 12 && minor < 12)
     ? "expected-cjs-10.txt"
-    : major === 13 && minor <= 1
+    : (major === 13 && minor <= 1) || (major === 12 && minor < 16)
       ? "expected-cjs-13.0.txt"
       : major === 13 && minor <= 3
         ? "expected-cjs-13.2.txt"
@@ -44,9 +44,9 @@ const expectedCjs =
 test("CJS", "./src/main-cjs.cjs", expectedCjs);
 
 const expectedCjsAbsolute =
-  major === 10 || (major === 12 && minor < 17)
+  major === 10 || (major === 12 && minor < 12)
     ? "expected-cjs-absolute-10.txt"
-    : major === 13 && minor <= 1
+    : (major === 13 && minor <= 1) || (major === 12 && minor < 16)
       ? "expected-cjs-absolute-13.0.txt"
       : major === 13 && minor <= 3
         ? "expected-cjs-absolute-13.2.txt"
