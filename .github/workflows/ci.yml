@@ -538,13 +538,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 12.16
-      - name: Test Node.js  12.16
+      - name: Test Node.js 12.16
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.17
         uses: actions/setup-node@v4
         with:
           node-version: 12.17
-      - name: Test Node.js  12.17
+      - name: Test Node.js 12.17
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.0
         uses: actions/setup-node@v4
