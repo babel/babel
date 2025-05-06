@@ -3555,7 +3555,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // This happens when using the "estree" plugin.
       if (
         (node as N.Node).type === "MethodDefinition" &&
-        (node as unknown as N.EstreeMethodDefinition).value == null
+        (node as unknown as N.EstreeMethodDefinition).value.body == null
       ) {
         return;
       }
