@@ -72,7 +72,7 @@ function test(title, command, expectedName) {
   const out = normalize(
     cp.execSync(
       `node ${
-        (major > 22 && major < 24) || (major === 22 && minor >= 12)
+        major === 23 || (major === 22 && minor >= 12)
           ? "--disable-warning=ExperimentalWarning "
           : ""
       }${command}`,
