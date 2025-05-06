@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/* eslint no-var: 0 */
+/* eslint-disable no-var, unicorn/prefer-node-protocol */
 
 var parser = require("..");
-var fs = require("node:fs");
+var fs = require("fs");
 
 var filename = process.argv[2];
 if (!filename) {

@@ -410,6 +410,9 @@ function buildRollup(packages, buildStandalone) {
               getBabelOutputPlugin({
                 configFile: false,
                 babelrc: false,
+                generatorOpts: {
+                  compact: false,
+                },
                 plugins: [
                   function babelPluginInlineConstNumericObjects({ types: t }) {
                     return {
