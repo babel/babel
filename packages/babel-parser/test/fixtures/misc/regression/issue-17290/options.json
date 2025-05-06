@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "estree",
+      {
+        "classFeatures": true
+      }
+    ],
+    "typescript"
+  ]
+}
