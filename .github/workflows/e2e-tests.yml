@@ -65,9 +65,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          # pin node to 22 because buffer-equal-constant-time, a deep dependency of @verdaccio/signature,
-          # accessed SlowBuffer from buffer. SlowBuffer has been removed in Node.js 24.
-          node-version: "22"
+          node-version: "*"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
