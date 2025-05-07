@@ -68,10 +68,14 @@ jobs:
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js latest
+        # Pin node to 22 for create-react-app project.
+        # The create-react-app e2e breaking test throws
+        # http fetch GET https://localhost:4873/zwitch/-/zwitch-1.0.5.tgz attempt 3 failed with ERR_SSL_WRONG_VERSION_NUMBER
+        # when installing on Node.js 24. It might be an npm issue.
+      - name: Use Node.js ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
