@@ -2,15 +2,13 @@ import { declare } from "@babel/helper-plugin-utils";
 import { isRequired } from "@babel/helper-compilation-targets";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { types as t } from "@babel/core";
-import globals from "globals";
+import globalsBrowserUpper from "@babel/helper-globals/data/browser-upper.json" with { type: "json" };
+import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
 import transformClass from "./transformClass.ts";
 
-const getBuiltinClasses = (category: keyof typeof globals) =>
-  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
-
 const builtinClasses = new Set([
-  ...getBuiltinClasses("builtin"),
-  ...getBuiltinClasses("browser"),
+  ...globalsBrowserUpper,
+  ...globalsBuiltinUpper,
 ]);
 
 export interface Options {

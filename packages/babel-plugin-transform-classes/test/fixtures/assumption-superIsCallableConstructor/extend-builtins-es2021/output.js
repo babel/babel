@@ -7,4 +7,4 @@ var MergedError = /*#__PURE__*/function (_AggregateError) {
   }
   babelHelpers.inherits(MergedError, _AggregateError);
   return babelHelpers.createClass(MergedError);
-}(AggregateError);
+}(/*#__PURE__*/babelHelpers.wrapNativeSuper(AggregateError));

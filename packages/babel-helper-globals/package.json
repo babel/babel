@@ -1,0 +1,48 @@
+{
+  "name": "@babel/helper-globals",
+  "version": "7.27.2",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "license": "MIT",
+  "description": "A collection of JavaScript globals for Babel internal usage",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-globals"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./data/browser-upper.json": "./data/browser-upper.json",
+    "./data/builtin-lower.json": "./data/builtin-lower.json",
+    "./data/builtin-upper.json": "./data/builtin-upper.json",
+    "./package.json": "./package.json"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^20.19.0 || >=22.12.0"
+        }
+      },
+      {}
+    ],
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
+      }
+    ]
+  },
+  "keywords": [
+    "babel",
+    "globals"
+  ],
+  "devDependencies": {
+    "globals": "^16.1.0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "type": "module"
+}

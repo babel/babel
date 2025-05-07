@@ -7,4 +7,4 @@ var RangeIterator = /*#__PURE__*/function (_Iterator) {
   }
   babelHelpers.inherits(RangeIterator, _Iterator);
   return babelHelpers.createClass(RangeIterator);
-}(Iterator);
+}(/*#__PURE__*/babelHelpers.wrapNativeSuper(Iterator));
