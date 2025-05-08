@@ -23,12 +23,11 @@ node "$root/utils/bump-babel-dependencies.js"
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # Based on https://github.com/prettier/prettier/pull/15157
-  sed -i 's/const getChalk = () => chalk/default (code) => code/' scripts/build/shims/babel-highlight.js
   sed -i 's/const generate = babelGenerator.default/const generate = babelGenerator/' scripts/build/transform/index.js
   rm tests/unit/__snapshots__/visitor-keys.js.snap
   # https://github.com/babel/babel/pull/16733
   rm -r tests/format/flow/mapped-types
-  rm tests/format/typescript/conditional-types/conditonal-types.ts
+  rm tests/format/typescript/conditional-types/conditional-types.ts
   rm tests/format/typescript/conditional-types/new-ternary-spec.ts
   rm -r tests/format/typescript/key-remapping-in-mapped-types
   rm -r tests/format/typescript/conformance/types/mappedType
@@ -52,15 +51,11 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/declare/format.test.js
   rm tests/format/typescript/const/format.test.js
   # https://github.com/babel/babel/pull/17066
-  rm tests/format/typescript/typeparams/consistent/format.test.js
+  rm tests/format/typescript/type-params/consistent/format.test.js
   rm tests/format/typescript/template-literal-types/format.test.js
   rm tests/format/typescript/method/format.test.js
   rm tests/format/typescript/argument-expansion/format.test.js
 fi
-
-# Re-enable this test once prettier updated the snapshot
-# https://github.com/babel/babel/pull/17028
-rm -r tests/format/flow/jsx/format.test.js
 
 #==============================================================================#
 #                                 ENVIRONMENT                                  #
@@ -83,9 +78,9 @@ yarn lint:typecheck
 echo "export default () => () => {}" > src/main/create-print-pre-check-function.js
 
 # https://github.com/babel/babel/pull/15400#issuecomment-1414539133
-# Temporarily ignore tests, use `rm -f path/to/jsfmt.spec.js`
-# rm -f path/to/jsfmt.spec.js
+# Temporarily ignore tests, use `rm -f path/to/format.test.js`
+# rm -f path/to/format.test.js
 
-yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
+yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot
 
 cleanup
