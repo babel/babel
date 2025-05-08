@@ -1286,17 +1286,15 @@ describe("scope", () => {
       let scope;
       beforeAll(() => ({ scope } = getPath(``)));
       it.each([
-        ...Object.entries({
-          es3: "Array",
-          es5: "JSON",
-          es2015: "Reflect",
-          es2017: "Atomics",
-          es2020: "BigInt",
-          es2021: "AggregateError",
-          es2025: "Iterator",
-          // To add new global builtins, see https://github.com/sindresorhus/globals/tree/main/data
-        }),
-      ])(`support %s: scope.hasBinding(%s) should be true`, (_, name) => {
+        ["es3", "Array"],
+        ["es5", "JSON"],
+        ["es2015", "Reflect"],
+        ["es2017", "Atomics"],
+        ["es2020", "BigInt"],
+        ["es2021", "AggregateError"],
+        ["es2025", "Iterator"],
+        // To add new global builtins, see https://github.com/sindresorhus/globals/tree/main/data
+      ])(`supports %s: scope.hasBinding(%s) should be true`, (_, name) => {
         expect(scope.hasBinding(name)).toBe(true);
       });
     });
