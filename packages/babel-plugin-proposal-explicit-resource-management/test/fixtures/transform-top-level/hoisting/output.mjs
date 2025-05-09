@@ -22,8 +22,8 @@ try {
     b
   } = {};
   var c = 2;
-  var A = class {};
-  var B = class {};
+  var A = class A {};
+  var B = class B {};
   var x = _usingCtx.u(null);
 } catch (_) {
   _usingCtx.e = _;
