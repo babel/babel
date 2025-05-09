@@ -1,0 +1,3 @@
+{
+  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "../../../scripts/check-transform-scope-integrity.cjs", "syntax-explicit-resource-management"]
+}
