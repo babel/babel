@@ -141,5 +141,6 @@
   "top-level-await",
   "u180e",
   "uint8array-base64",
+  "upsert",
   "well-formed-json-stringify"
 ]
