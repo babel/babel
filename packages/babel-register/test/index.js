@@ -70,7 +70,7 @@ describe("@babel/register", function () {
 
   let originalRequireCacheDescriptor;
   if (OLD_JEST_MOCKS) {
-    jest.doMock("pirates", () => mocks["pirates"]);
+    jest.doMock("pirates", () => mocks.pirates);
     jest.doMock("source-map-support", () => mocks["source-map-support"]);
     jest.doMock(
       "@cspotcode/source-map-support",
@@ -117,7 +117,7 @@ describe("@babel/register", function () {
                 configurable: originalRequireCacheDescriptor.configurable,
                 writable: originalRequireCacheDescriptor.writable,
               });
-              value[piratesPath] = { exports: mocks["pirates"] };
+              value[piratesPath] = { exports: mocks.pirates };
               value[smsPath] = { exports: mocks["source-map-support"] };
             },
             enumerable: originalRequireCacheDescriptor.enumerable,
@@ -177,7 +177,7 @@ describe("@babel/register", function () {
         Object.defineProperty(Module, "_cache", {
           ...originalRequireCacheDescriptor,
           value: {
-            [piratesPath]: { exports: mocks["pirates"] },
+            [piratesPath]: { exports: mocks.pirates },
             [smsPath]: { exports: mocks["source-map-support"] },
             [sms2Path]: {
               exports: mocks["source-map-support"],

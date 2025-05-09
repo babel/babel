@@ -65,6 +65,7 @@ export default [
       "test/runtime-integration/*/output.js",
       "test/runtime-integration/*/output-absolute.js",
       "Makefile.mjs",
+      "packages/babel-types/src/constants/generated/index.ts",
       ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
   },
@@ -93,6 +94,7 @@ export default [
     },
     rules: {
       curly: ["error", "multi-line"],
+      "dot-notation": "error",
       eqeqeq: ["error", "smart"],
       "linebreak-style": ["error", "unix"],
       "no-case-declarations": "error",
@@ -201,7 +203,6 @@ export default [
       "@typescript-eslint/consistent-generic-constructors": "off",
       "@typescript-eslint/consistent-indexed-object-style": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/dot-notation": "off",
       "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",
       "@typescript-eslint/no-empty-function": "off",

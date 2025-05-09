@@ -35,7 +35,9 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
     iteratorError = err;
   } finally {
     try {
+      // eslint-disable-next-line @typescript-eslint/dot-notation
       if (!iteratorNormalCompletion && iterator["return"] != null) {
+        // eslint-disable-next-line @typescript-eslint/dot-notation
         _return = iterator["return"]();
         // eslint-disable-next-line no-unsafe-finally
         if (Object(_return) !== _return) return;
