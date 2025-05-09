@@ -110,6 +110,7 @@ export interface HelperMetadata {
   dependencies: { [name: string]: string[] };
   exportBindingAssignments: string[];
   exportName: string;
+  internal: boolean;
 }
 
 function helper(minVersion: string, source: string, metadata: HelperMetadata): Helper {
@@ -150,6 +151,7 @@ const helpers: Record<string, Helper> = {
     }
     const { minVersion } = minVersionMatch.groups;
 
+    const internal = code.includes("@internal");
     const onlyBabel7 = code.includes("@onlyBabel7");
     const mangleFns = code.includes("@mangleFns");
     const noMangleFns = [];
@@ -175,7 +177,8 @@ const helpers: Record<string, Helper> = {
         mangle: {
           keep_fnames: mangleFns
             ? noMangleFns.length
-              ? new RegExp(noMangleFns.join("|"))
+              ? // eslint-disable-next-line regexp/no-empty-capturing-group, regexp/no-empty-group
+                new RegExp("^(" + noMangleFns.join("|") + ")$")
               : false
             : true,
         },
@@ -191,7 +194,7 @@ const helpers: Record<string, Helper> = {
 
     let metadata;
     // eslint-disable-next-line prefer-const
-    [code, metadata] = getHelperMetadata(babel, code, helperName);
+    [code, metadata] = getHelperMetadata(babel, code, helperName, internal);
 
     const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}

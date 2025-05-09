@@ -3,6 +3,16 @@
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import OverloadYield from "./OverloadYield.ts";
+import async from "./regeneratorAsync.ts";
+import asyncGen from "./regeneratorAsyncGen.ts";
+import AsyncIterator from "./regeneratorAsyncIterator.ts";
+import keys from "./regeneratorKeys.ts";
+import values from "./regeneratorValues.ts";
+import define from "./regeneratorDefine.ts";
+import tryCatch from "./tryCatch.ts";
+import defineIteratorMethods from "./regeneratorDefineIM.ts";
+
 type Completion = {
   type: "normal" | "throw" | "break" | "continue" | "return";
   arg?: any;
@@ -19,7 +29,7 @@ type TryLocs = [
   afterLoc?: number,
 ];
 
-type TryEntry = [...TryLocs, completion?: Completion];
+type TryEntry = TryLocs | [...TryLocs, completion?: Completion];
 
 type Delegate = {
   // iterator
@@ -63,39 +73,15 @@ const enum GenState {
 
 export default function /* @no-mangle */ _regeneratorRuntime() {
   "use strict";
-
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
-  // @ts-expect-error explicit function reassign
-  _regeneratorRuntime = function () {
-    return exports;
-  };
-  var exports: any = {};
+
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
   var undefined: undefined; // More compressible than void 0.
   var $Symbol =
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj: any, key: PropertyKey, value?: unknown, noFlags?: true) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !noFlags,
-      configurable: !noFlags,
-      writable: !noFlags,
-    });
-  }
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (_) {
-    // @ts-expect-error explicit function reassign
-    define = function (obj, key, value) {
-      return (obj[key] = value);
-    };
-  }
 
   function wrap(
     innerFn: Function,
@@ -120,25 +106,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     );
 
     return generator;
-  }
-  exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn: Function, obj: unknown, arg: unknown) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
   }
 
   // Returning this object from the innerFn has the same effect as
@@ -182,33 +149,10 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction",
-  );
+  GeneratorFunction.displayName = "GeneratorFunction";
+  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
 
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype: any) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (this: any, arg: any) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  exports.isGeneratorFunction = function (genFun: any) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-          // For the native GeneratorFunction constructor, the best we can
-          // do is to check its .name property.
-          (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  exports.mark = function (genFun: Function) {
+  function mark(genFun: Function) {
     if (Object.setPrototypeOf) {
       Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
     } else {
@@ -218,133 +162,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     }
     genFun.prototype = Object.create(Gp);
     return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  exports.awrap = function (arg: any) {
-    return { __await: arg };
-  };
-
-  /* @no-mangle */
-  function AsyncIterator(
-    this: any,
-    generator: Generator,
-    PromiseImpl: PromiseConstructor,
-  ) {
-    function invoke(
-      method: "next" | "throw" | "return",
-      arg: any,
-      resolve: (value: any) => void,
-      reject: (error: any) => void,
-    ): any {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (
-          value &&
-          typeof value === "object" &&
-          hasOwn.call(value, "__await")
-        ) {
-          return PromiseImpl.resolve(value.__await).then(
-            function (value) {
-              invoke("next", value, resolve, reject);
-            },
-            function (err) {
-              invoke("throw", err, resolve, reject);
-            },
-          );
-        }
-
-        return PromiseImpl.resolve(value).then(
-          function (unwrapped) {
-            // When a yielded Promise is resolved, its final value becomes
-            // the .value of the Promise<{value,done}> result for the
-            // current iteration.
-            result.value = unwrapped;
-            resolve(result);
-          },
-          function (error) {
-            // If a rejected Promise was yielded, throw the rejection back
-            // into the async generator function so it can be handled there.
-            return invoke("throw", error, resolve, reject);
-          },
-        );
-      }
-    }
-
-    var previousPromise: Promise<any>;
-
-    function enqueue(method: "next" | "throw" | "return", arg: any) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return (previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise
-          ? previousPromise.then(
-              callInvokeWithMethodAndArg,
-              // Avoid propagating failures to Promises returned by later
-              // invocations of the iterator.
-              callInvokeWithMethodAndArg,
-            )
-          : callInvokeWithMethodAndArg());
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    define(this, "_invoke", enqueue, true);
   }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  define(AsyncIterator.prototype, asyncIteratorSymbol, function (this: any) {
-    return this;
-  });
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function (
-    innerFn: Function,
-    outerFn: Function,
-    self: any,
-    tryLocsList: TryLocs[],
-    PromiseImpl: PromiseConstructor,
-  ) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    // @ts-expect-error target lacks a construct signature
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl,
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function (result: IteratorResult<any>) {
-          return result.done ? result.value : iter.next();
-        });
-  };
 
   function makeInvokeMethod(
     innerFn: Function,
@@ -400,25 +218,25 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         state = GenState.Executing;
 
         var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done ? GenState.Completed : GenState.SuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done,
-          };
-        } else if (record.type === "throw") {
+        if (/* error */ record.e) {
           state = GenState.Completed;
           // Dispatch the exception by looping back around to the
           // context.dispatchException(context.arg) call above.
           context.method = "throw";
-          context.arg = record.arg;
+          context.arg = record.v;
+        } else {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done ? GenState.Completed : GenState.SuspendedYield;
+
+          if (record.v === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.v,
+            done: context.done,
+          };
         }
       }
     };
@@ -464,14 +282,14 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
 
     var record = tryCatch(method, delegate.i, context.arg);
 
-    if (record.type === "throw") {
+    if (/* error */ record.e) {
       context.method = "throw";
-      context.arg = record.arg;
+      context.arg = record.v;
       context.delegate = null;
       return ContinueSentinel;
     }
 
-    var info = record.arg;
+    var info = record.v;
 
     if (!info) {
       context.method = "throw";
@@ -528,10 +346,6 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     return "[object Generator]";
   });
 
-  function pushTryEntry(this: Context, locs: TryLocs) {
-    this.tryEntries!.push(locs);
-  }
-
   function resetTryEntry(entry: TryEntry) {
     var record = entry[4] || ({} as Completion);
     record.type = "normal";
@@ -544,83 +358,9 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     // The root entry object (effectively a try statement without a catch
     // or a finally block) gives us a place to store values thrown from
     // locations where there is no enclosing try statement.
-    this.tryEntries = [[TryLoc.Root]];
-    tryLocsList.forEach(pushTryEntry, this);
+    this.tryEntries = [[TryLoc.Root] as TryLocs].concat(tryLocsList);
     this.reset(true);
   }
-
-  exports.keys = function (val: unknown) {
-    var object = Object(val);
-    var keys: string[] = [];
-    var key: string;
-    // eslint-disable-next-line guard-for-in
-    for (var key in object) {
-      keys.unshift(key);
-    }
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        key = keys.pop()!;
-        if (key in object) {
-          // @ts-expect-error assign to () => ...
-          next.value = key;
-          // @ts-expect-error assign to () => ...
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      // @ts-expect-error assign to () => ...
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable: any) {
-    if (iterable != null) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-          next = function next() {
-            while (++i < iterable.length) {
-              if (hasOwn.call(iterable, i)) {
-                // @ts-expect-error assign to () => ...
-                next.value = iterable[i];
-                // @ts-expect-error assign to () => ...
-                next.done = false;
-                return next;
-              }
-            }
-
-            // @ts-expect-error assign to () => ...
-            next.value = undefined;
-            // @ts-expect-error assign to () => ...
-            next.done = true;
-
-            return next;
-          };
-
-        // @ts-expect-error assign to () => ...
-        return (next.next = next);
-      }
-    }
-
-    throw new TypeError(typeof iterable + " is not iterable");
-  }
-  exports.values = values;
 
   Context.prototype = {
     constructor: Context,
@@ -811,5 +551,41 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     },
   } as Context;
 
-  return exports;
+  function isGeneratorFunction(genFun: any) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+          // For the native GeneratorFunction constructor, the best we can
+          // do is to check its .name property.
+          (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  }
+
+  // @ts-expect-error explicit function assignment
+  return (_regeneratorRuntime = function () {
+    return {
+      wrap: wrap,
+      isGeneratorFunction: isGeneratorFunction,
+      mark: mark,
+      awrap: OverloadYield,
+      AsyncIterator: AsyncIterator,
+      async: function (
+        innerFn: Function,
+        outerFn: Function,
+        self: any,
+        tryLocsList: any[],
+        PromiseImpl?: PromiseConstructor,
+      ) {
+        return (isGeneratorFunction(outerFn) ? asyncGen : async)(
+          innerFn,
+          outerFn,
+          self,
+          tryLocsList,
+          PromiseImpl,
+        );
+      },
+      keys: keys,
+      values: values,
+    };
+  })();
 }
