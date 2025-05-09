@@ -1,6 +1,6 @@
 class A extends B {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     babelHelpers.defineProperty(this, "foo", super.bar);
   }
 }

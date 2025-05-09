@@ -9,8 +9,8 @@ class Base {
 }
 let _Foo;
 new (_Class_brand = /*#__PURE__*/new WeakSet(), _Foo2 = (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Foo3_brand = /*#__PURE__*/new WeakSet(), _B = /*#__PURE__*/new WeakMap(), _Foo3 = class Foo extends Base {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     babelHelpers.classPrivateMethodInitSpec(this, _Foo3_brand);
     babelHelpers.classPrivateFieldInitSpec(this, _x, void 0);
     babelHelpers.classPrivateFieldInitSpec(this, _A, void 0);

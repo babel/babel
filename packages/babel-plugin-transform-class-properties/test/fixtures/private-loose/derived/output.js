@@ -12,10 +12,10 @@ var _prop2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
 var Bar = /*#__PURE__*/function (_Foo2) {
   "use strict";
 
-  function Bar(...args) {
+  function Bar() {
     var _this;
     babelHelpers.classCallCheck(this, Bar);
-    _this = babelHelpers.callSuper(this, Bar, [...args]);
+    _this = babelHelpers.callSuper(this, Bar, arguments);
     Object.defineProperty(_this, _prop2, {
       writable: true,
       value: "bar"

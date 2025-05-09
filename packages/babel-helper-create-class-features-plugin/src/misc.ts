@@ -82,8 +82,9 @@ export function injectInitialization(
     );
 
     if (isDerived) {
-      newConstructor.params = [t.restElement(t.identifier("args"))];
-      newConstructor.body.body.push(template.statement.ast`super(...args)`);
+      newConstructor.body.body.push(
+        template.statement.ast`super(...arguments)`,
+      );
     }
 
     [constructor] = path
