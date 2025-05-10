@@ -36,8 +36,8 @@ export default function _asyncGeneratorDelegate<T>(inner: Generator<T>) {
     return pump("next", value);
   };
 
-  if (typeof inner.throw === "function") {
-    iter.throw = function (value: any) {
+  if (typeof inner["throw"] === "function") {
+    iter["throw"] = function (value: any) {
       if (waiting) {
         waiting = false;
         throw value;
@@ -46,8 +46,8 @@ export default function _asyncGeneratorDelegate<T>(inner: Generator<T>) {
     };
   }
 
-  if (typeof inner.return === "function") {
-    iter.return = function (value: any) {
+  if (typeof inner["return"] === "function") {
+    iter["return"] = function (value: any) {
       if (waiting) {
         waiting = false;
         return value;

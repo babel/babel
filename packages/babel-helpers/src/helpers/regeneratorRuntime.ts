@@ -438,7 +438,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       context.delegate = null;
 
       // Note: ["return"] must be used for ES3 parsing compatibility.
-      // eslint-disable-next-line @typescript-eslint/dot-notation
+
       if (methodName === "throw" && delegate.i["return"]) {
         // If the delegate iterator has a return method, give it a
         // chance to clean up.

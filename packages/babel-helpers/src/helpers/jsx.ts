@@ -37,9 +37,7 @@ export default function _createRawReactElement(
     REACT_ELEMENT_TYPE =
       (typeof Symbol === "function" &&
         // "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
-        // eslint-disable-next-line @typescript-eslint/dot-notation
         Symbol["for"] &&
-        // eslint-disable-next-line @typescript-eslint/dot-notation
         Symbol["for"]("react.element")) ||
       0xeac7;
   }
