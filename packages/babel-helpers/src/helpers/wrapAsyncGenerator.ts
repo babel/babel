@@ -139,9 +139,9 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
   this._invoke = send;
 
   // Hide "return" method if generator return is not supported
-  if (typeof gen.return !== "function") {
+  if (typeof gen["return"] !== "function") {
     // @ts-expect-error -- intentionally remove "return" when not supported
-    this.return = undefined;
+    this["return"] = undefined;
   }
 }
 
@@ -155,9 +155,9 @@ AsyncGenerator.prototype[
 AsyncGenerator.prototype.next = function (arg: IteratorResult<any>) {
   return this._invoke("next", arg);
 };
-AsyncGenerator.prototype.throw = function (arg: IteratorResult<any>) {
+AsyncGenerator.prototype["throw"] = function (arg: IteratorResult<any>) {
   return this._invoke("throw", arg);
 };
-AsyncGenerator.prototype.return = function (arg: IteratorResult<any>) {
+AsyncGenerator.prototype["return"] = function (arg: IteratorResult<any>) {
   return this._invoke("return", arg);
 };

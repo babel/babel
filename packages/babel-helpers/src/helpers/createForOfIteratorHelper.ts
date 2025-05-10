@@ -78,8 +78,8 @@ export default function _createForOfIteratorHelper<T>(
     },
     f: function () {
       try {
-        if (!normalCompletion && (it as Iterator<T>).return != null) {
-          (it as Iterator<T>).return!();
+        if (!normalCompletion && (it as Iterator<T>)["return"] != null) {
+          (it as Iterator<T>)["return"]!();
         }
       } finally {
         // eslint-disable-next-line no-unsafe-finally

@@ -142,7 +142,7 @@ function buildConfigFileObject(
 
 const packageToBabelConfig = makeWeakCacheSync(
   (file: ConfigFile): ConfigFile | null => {
-    const babel: unknown = file.options["babel"];
+    const babel: unknown = file.options.babel;
 
     if (babel === undefined) return null;
 
@@ -178,7 +178,7 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
     throw new ConfigError(`Expected config object but found array`, filepath);
   }
 
-  delete options["$schema"];
+  delete options.$schema;
 
   return {
     filepath,
