@@ -92,7 +92,7 @@ target["clean-all"] = function () {
     shell.rm("-rf", `${source}/*/package-lock.json`);
   });
 
-  target.clean();
+  target["clean"]();
   target["clean-lib"]();
   target["clean-node-modules"]();
 };
@@ -104,7 +104,7 @@ target["clean-node-modules"] = function () {
   });
 };
 
-target.clean = function () {
+target["clean"] = function () {
   target["test-clean"]();
 
   shell.rm("-rf", [
@@ -153,13 +153,13 @@ target["clean-runtime-helpers"] = function () {
 target["use-cjs"] = function () {
   node(["scripts/set-module-type.js", "commonjs"]);
 
-  target.bootstrap();
+  target["bootstrap"]();
 };
 
 target["use-esm"] = function () {
   node(["scripts/set-module-type.js", "module"]);
 
-  target.bootstrap();
+  target["bootstrap"]();
 };
 
 target["bootstrap-only"] = function () {
@@ -168,14 +168,14 @@ target["bootstrap-only"] = function () {
   yarn(["install"]);
 };
 
-target.bootstrap = function () {
+target["bootstrap"] = function () {
   target["bootstrap-only"]();
 
   target["generate-tsconfig"]();
-  target.build();
+  target["build"]();
 };
 
-target.build = function () {
+target["build"] = function () {
   target["build-no-bundle"]();
 
   if (process.env.BABEL_COVERAGE !== "true") {
@@ -188,7 +188,7 @@ target["build-standalone"] = function () {
 };
 
 target["build-bundle"] = function () {
-  target.clean();
+  target["clean"]();
   target["clean-lib"]();
 
   node(["scripts/set-module-type.js"]);
@@ -199,7 +199,7 @@ target["build-bundle"] = function () {
 };
 
 target["build-no-bundle"] = function () {
-  target.clean();
+  target["clean"]();
   target["clean-lib"]();
 
   node(["scripts/set-module-type.js"]);
@@ -229,7 +229,7 @@ target["build-plugin-transform-runtime-dist"] = function () {
   node(["scripts/build-dist.js"], "packages/babel-plugin-transform-runtime");
 };
 
-target.prepublish = function () {
+target["prepublish"] = function () {
   if (process.env.BABEL_8_BREAKING) {
     node(["scripts/set-module-type.js", "module"]);
   } else {
@@ -241,7 +241,7 @@ target.prepublish = function () {
   env(
     () => {
       target["prepublish-build"]();
-      target.test();
+      target["test"]();
     },
     {
       IS_PUBLISH: "true",
@@ -296,7 +296,7 @@ target["prepublish-build-standalone"] = function () {
 
 target["prepublish-prepare-dts"] = function () {
   target["clean-ts"]();
-  target.tscheck();
+  target["tscheck"]();
   target["prepublish-prepare-dts-no-clean"]();
 };
 
@@ -306,7 +306,7 @@ target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
 };
 
-target.tscheck = function () {
+target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.js", "."]);
   target["tscheck-helpers"]();
@@ -408,14 +408,14 @@ function eslint(...extraArgs) {
   }
 }
 
-target.lint = function () {
-  env(() => target.tscheck(), { TSCHECK_SILENT: "true" });
+target["lint"] = function () {
+  env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
   eslint();
   target["lint-prettier"]();
 };
 
 target["lint-ci"] = function () {
-  target.tscheck();
+  target["tscheck"]();
   eslint();
   target["lint-prettier"]();
   target["prepublish-prepare-dts-no-clean"]();
@@ -425,13 +425,13 @@ target["lint-prettier"] = function () {
   yarn(["prettier", ".", "--check"]);
 };
 
-target.fix = function () {
+target["fix"] = function () {
   target["fix-js"]();
   target["fix-prettier"]();
 };
 
 target["fix-js"] = function () {
-  env(() => target.tscheck(), { TSCHECK_SILENT: "true" });
+  env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
   eslint("--fix");
 };
 
@@ -439,7 +439,7 @@ target["fix-prettier"] = function () {
   yarn(["prettier", ".", "--write"]);
 };
 
-target.watch = function () {
+target["watch"] = function () {
   target["build-no-bundle"]();
 
   env(
@@ -453,8 +453,8 @@ target.watch = function () {
   );
 };
 
-target.test = function () {
-  target.lint();
+target["test"] = function () {
+  target["lint"]();
   target["test-only"]();
 };
 
@@ -463,7 +463,7 @@ target["test-only"] = function (args = []) {
 };
 
 target["test-cov"] = function () {
-  target.build();
+  target["build"]();
 
   env(
     () => {
@@ -583,7 +583,7 @@ function bumpVersionsToBabel8Pre() {
         if (pkg.peerDependencies?.["@babel/core"]) {
           pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
         }
-        const babel8Condition = pkg.conditions?.BABEL_8_BREAKING[0];
+        const babel8Condition = pkg.conditions?.["BABEL_8_BREAKING"][0];
         if (babel8Condition?.peerDependencies?.["@babel/core"]) {
           babel8Condition.peerDependencies["@babel/core"] = `^${nextVersion}`;
         }

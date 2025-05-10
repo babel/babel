@@ -401,4 +401,16 @@ export default [
       reportUnusedDisableDirectives: "off",
     },
   },
+  {
+    files: ["Makefile.source.mjs"],
+    rules: {
+      "dot-notation": "off",
+    },
+  },
+  {
+    files: ["packages/babel-helpers/src/**/*.ts"],
+    rules: {
+      "@typescript-eslint/dot-notation": ["error", { allowKeywords: false }],
+    },
+  },
 ];
