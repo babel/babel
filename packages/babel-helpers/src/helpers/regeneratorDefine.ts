@@ -14,7 +14,7 @@ export default function regeneratorDefine(
     value?: unknown,
     noFlags?: true,
   ) {
-    return Object.defineProperty(obj, key, {
+    Object.defineProperty(obj, key, {
       value: value,
       enumerable: !noFlags,
       configurable: !noFlags,
@@ -27,8 +27,8 @@ export default function regeneratorDefine(
   } catch (_) {
     // @ts-expect-error explicit function reassign
     regeneratorDefine = function (obj, key, value) {
-      return (obj[key] = value);
+      obj[key] = value;
     };
   }
-  return regeneratorDefine(obj, key, value, noFlags);
+  regeneratorDefine(obj, key, value, noFlags);
 }

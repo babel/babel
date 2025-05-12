@@ -56,8 +56,6 @@ type Context = {
 export default function /* @no-mangle */ _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
 
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
   var undefined: undefined; // More compressible than void 0.
   var $Symbol =
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
@@ -103,24 +101,16 @@ export default function /* @no-mangle */ _regenerator() {
   /* @no-mangle */
   function GeneratorFunctionPrototype() {}
 
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function (this: unknown) {
+  define((_ = {}), iteratorSymbol, function (this: unknown) {
     return this;
   });
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (
-    NativeIteratorPrototype &&
-    NativeIteratorPrototype !== Op &&
-    hasOwn.call(NativeIteratorPrototype, iteratorSymbol)
-  ) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
+  var IteratorPrototype = [][iteratorSymbol as typeof Symbol.iterator]
+    ? // This environment has a native %IteratorPrototype%; use it instead
+      // of the polyfill.
+      Iterator.prototype
+    : // This is a polyfill for %IteratorPrototype% for environments that
+      // don't natively support it.
+      _;
 
   var Gp =
     (GeneratorFunctionPrototype.prototype =

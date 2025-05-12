@@ -1075,40 +1075,39 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 2468, gzip size: 1164
+  // size: 2374, gzip size: 1118
   regenerator: helper(
     "7.27.0",
-    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar e,t,r=Object.prototype,n=r.hasOwnProperty,o="function"==typeof Symbol?Symbol:{},i=o.iterator||"@@iterator",a=o.toStringTag||"@@toStringTag";function u(r,n,o,i){var a=n&&n.prototype instanceof Generator?n:Generator,u=Object.create(a.prototype);return define(u,"_invoke",function(r,n,o){var i,a,u,f=0,p=o||[],y=!1,l={prev:0,next:0,sent:e,abrupt:d,finish:d.bind(e,4),delegateYield:function(t,r){return i=values(t),a=0,u=e,l.next=r,c}};function d(r,n){for(a=r,u=n,t=0;!y&&f&&!o&&t<p.length;t++){var o,i=p[t],d=l.prev,s=i[2];r>3?(o=s===n)&&(a=i[4]||3,u=i[5]===e?i[3]:i[5],i[4]=3,i[5]=e):i[0]<=d&&((o=r<2&&d<i[1])?(a=0,l.sent=n,l.next=i[1]):d<s&&(o=r<3||i[0]>n||n>s)&&(i[4]=r,i[5]=n,l.next=s,a=0))}if(o||r>1)return c;throw y=!0,n}return function(o,p,s){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&d(p,s),a=p,u=s;(t=a<2?e:u)||!y;){i||(a?a<3?(a>1&&(l.next=-1),d(a,u)):l.next=u:l.sent=u);try{if(f=2,i){if(a||(o="next"),t=i[o]){if(!(t=t.call(i,u)))throw TypeError("iterator result is not an object");if(!t.done)return t;u=t.value,a<2&&(a=0)}else 1===a&&(t=i.return)&&t.call(i),a<2&&(u=TypeError("The iterator does not provide a \'"+o+"\' method"),a=1);i=e}else if((t=(y=l.next<0)?u:r.call(n,l))!==c)break}catch(t){i=e,a=1,u=t}finally{f=1}}return{value:t,done:y}}}(r,o,i),!0),u}var c={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}var f={};define(f,i,(function(){return this}));var p=Object.getPrototypeOf,y=p&&p(p(values([])));y&&y!==r&&n.call(y,i)&&(f=y);var l=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(f);function d(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,GeneratorFunctionPrototype):(e.__proto__=GeneratorFunctionPrototype,define(e,a,"GeneratorFunction")),e.prototype=Object.create(l),e}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(l,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",define(GeneratorFunctionPrototype,a,"GeneratorFunction"),defineIteratorMethods(l),define(l,a,"Generator"),define(l,i,(function(){return this})),define(l,"toString",(function(){return"[object Generator]"})),(_regenerator=function(){return{w:u,m:d}})()}',
+    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar e,t,r="function"==typeof Symbol?Symbol:{},n=r.iterator||"@@iterator",o=r.toStringTag||"@@toStringTag";function i(r,n,o,i){var u=n&&n.prototype instanceof Generator?n:Generator,c=Object.create(u.prototype);return define(c,"_invoke",function(r,n,o){var i,u,c,f=0,p=o||[],y=!1,d={prev:0,next:0,sent:e,abrupt:l,finish:l.bind(e,4),delegateYield:function(t,r){return i=values(t),u=0,c=e,d.next=r,a}};function l(r,n){for(u=r,c=n,t=0;!y&&f&&!o&&t<p.length;t++){var o,i=p[t],l=d.prev,s=i[2];r>3?(o=s===n)&&(u=i[4]||3,c=i[5]===e?i[3]:i[5],i[4]=3,i[5]=e):i[0]<=l&&((o=r<2&&l<i[1])?(u=0,d.sent=n,d.next=i[1]):l<s&&(o=r<3||i[0]>n||n>s)&&(i[4]=r,i[5]=n,d.next=s,u=0))}if(o||r>1)return a;throw y=!0,n}return function(o,p,s){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&l(p,s),u=p,c=s;(t=u<2?e:c)||!y;){i||(u?u<3?(u>1&&(d.next=-1),l(u,c)):d.next=c:d.sent=c);try{if(f=2,i){if(u||(o="next"),t=i[o]){if(!(t=t.call(i,c)))throw TypeError("iterator result is not an object");if(!t.done)return t;c=t.value,u<2&&(u=0)}else 1===u&&(t=i.return)&&t.call(i),u<2&&(c=TypeError("The iterator does not provide a \'"+o+"\' method"),u=1);i=e}else if((t=(y=d.next<0)?c:r.call(n,d))!==a)break}catch(t){i=e,u=1,c=t}finally{f=1}}return{value:t,done:y}}}(r,o,i),!0),c}var a={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}define(t={},n,(function(){return this}));var u=[][n]?Iterator.prototype:t,c=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(u);function f(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,GeneratorFunctionPrototype):(e.__proto__=GeneratorFunctionPrototype,define(e,o,"GeneratorFunction")),e.prototype=Object.create(c),e}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(c,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",define(GeneratorFunctionPrototype,o,"GeneratorFunction"),defineIteratorMethods(c),define(c,o,"Generator"),define(c,n,(function(){return this})),define(c,"toString",(function(){return"[object Generator]"})),(_regenerator=function(){return{w:i,m:f}})()}',
     {
-      globals: ["Object", "Symbol", "TypeError"],
+      globals: ["Symbol", "Object", "TypeError", "Iterator"],
       locals: {
         _regenerator: [
           "body.0.id",
-          "body.0.body.body.12.argument.expressions.9.callee.left",
+          "body.0.body.body.9.argument.expressions.9.callee.left",
         ],
       },
       exportBindingAssignments: [
-        "body.0.body.body.12.argument.expressions.9.callee",
+        "body.0.body.body.9.argument.expressions.9.callee",
       ],
       exportName: "_regenerator",
       dependencies: {
         regeneratorDefine: [
           "body.0.body.body.1.body.body.1.argument.expressions.0.callee",
-          "body.0.body.body.7.expression.callee",
-          "body.0.body.body.11.body.body.0.argument.expressions.0.alternate.expressions.1.callee",
-          "body.0.body.body.12.argument.expressions.1.callee",
-          "body.0.body.body.12.argument.expressions.2.callee",
-          "body.0.body.body.12.argument.expressions.4.callee",
-          "body.0.body.body.12.argument.expressions.6.callee",
-          "body.0.body.body.12.argument.expressions.7.callee",
-          "body.0.body.body.12.argument.expressions.8.callee",
+          "body.0.body.body.6.expression.callee",
+          "body.0.body.body.8.body.body.0.argument.expressions.0.alternate.expressions.1.callee",
+          "body.0.body.body.9.argument.expressions.1.callee",
+          "body.0.body.body.9.argument.expressions.2.callee",
+          "body.0.body.body.9.argument.expressions.4.callee",
+          "body.0.body.body.9.argument.expressions.6.callee",
+          "body.0.body.body.9.argument.expressions.7.callee",
+          "body.0.body.body.9.argument.expressions.8.callee",
         ],
         regeneratorDefineIM: [
-          "body.0.body.body.12.argument.expressions.5.callee",
+          "body.0.body.body.9.argument.expressions.5.callee",
         ],
         regeneratorValues: [
           "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.0.declarations.6.init.properties.5.value.body.body.0.argument.expressions.0.right.callee",
-          "body.0.body.body.8.declarations.1.init.right.arguments.0.arguments.0.callee",
         ],
       },
       internal: false,
@@ -1178,17 +1177,17 @@ const helpers: Record<string, Helper> = {
       internal: true,
     },
   ),
-  // size: 280, gzip size: 159
+  // size: 259, gzip size: 153
   regeneratorDefine: helper(
     "7.27.0",
-    'function regeneratorDefine(e,r,n,t){regeneratorDefine=function(e,r,n,t){return Object.defineProperty(e,r,{value:n,enumerable:!t,configurable:!t,writable:!t})};try{regeneratorDefine({},"")}catch(e){regeneratorDefine=function(e,r,n){return e[r]=n}}return regeneratorDefine(e,r,n,t)}',
+    'function regeneratorDefine(e,r,n,t){regeneratorDefine=function(e,r,n,t){Object.defineProperty(e,r,{value:n,enumerable:!t,configurable:!t,writable:!t})};try{regeneratorDefine({},"")}catch(e){regeneratorDefine=function(e,r,n){e[r]=n}}regeneratorDefine(e,r,n,t)}',
     {
       globals: ["Object"],
       locals: {
         regeneratorDefine: [
           "body.0.id",
           "body.0.body.body.1.block.body.0.expression.callee",
-          "body.0.body.body.2.argument.callee",
+          "body.0.body.body.2.expression.callee",
           "body.0.body.body.0.expression.left",
           "body.0.body.body.1.handler.body.body.0.expression.left",
         ],
@@ -1289,10 +1288,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 396, gzip size: 264
+  // size: 321, gzip size: 229
   regeneratorValues: helper(
     "7.18.0",
-    'function _regeneratorValues(e){if(null!=e){var r=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var t=-1,n=function r(){for(;++t<e.length;)if({}.hasOwnProperty.call(e,t))return r.value=e[t],r.done=!1,r;return r.value=void 0,r.done=!0,r};return n.next=n}}throw new TypeError(typeof e+" is not iterable")}',
+    'function _regeneratorValues(e){if(null!=e){var t=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"],r=0;if(t)return t.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length))return{next:function(){return e&&r>=e.length&&(e=0),{value:e&&e[r++],done:!e}}}}throw new TypeError(typeof e+" is not iterable")}',
     {
       globals: ["Symbol", "isNaN", "TypeError"],
       locals: { _regeneratorValues: ["body.0.id"] },

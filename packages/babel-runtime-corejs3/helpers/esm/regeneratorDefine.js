@@ -1,7 +1,7 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 function regeneratorDefine(e, r, n, t) {
   regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    return _Object$defineProperty(e, r, {
+    _Object$defineProperty(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
@@ -12,9 +12,9 @@ function regeneratorDefine(e, r, n, t) {
     regeneratorDefine({}, "");
   } catch (e) {
     regeneratorDefine = function regeneratorDefine(e, r, n) {
-      return e[r] = n;
+      e[r] = n;
     };
   }
-  return regeneratorDefine(e, r, n, t);
+  regeneratorDefine(e, r, n, t);
 }
 export { regeneratorDefine as default };
