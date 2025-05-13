@@ -1643,15 +1643,6 @@ export default abstract class ExpressionParser extends LValParser {
       this.expectPlugin(
         isSource ? "sourcePhaseImports" : "deferredImportEvaluation",
       );
-      if (!(this.optionFlags & OptionFlags.CreateImportExpressions)) {
-        throw this.raise(
-          Errors.DynamicImportPhaseRequiresImportExpressions,
-          this.state.startLoc,
-          {
-            phase: this.state.value,
-          },
-        );
-      }
       this.next();
       (node as Undone<N.ImportExpression>).phase = isSource
         ? "source"
