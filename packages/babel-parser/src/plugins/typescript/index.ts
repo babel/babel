@@ -331,6 +331,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseModifier<T extends TsModifier>(
       allowedModifiers: T[],
       stopOnStartOfClassStaticBlock?: boolean,
+      hasSeenStaticModifier?: boolean,
     ): T | undefined | null {
       if (
         !tokenIsIdentifier(this.state.type) &&
@@ -342,6 +343,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const modifier = this.state.value;
       if (allowedModifiers.includes(modifier)) {
+        if (hasSeenStaticModifier && this.match(tt._static)) {
+          return undefined;
+        }
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }
@@ -404,6 +408,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const modifier: TsModifier | undefined | null = this.tsParseModifier(
           allowedModifiers.concat(disallowedModifiers ?? []),
           stopOnStartOfClassStaticBlock,
+          modified.static,
         );
 
         if (!modifier) break;
