@@ -3030,7 +3030,8 @@ export default abstract class StatementParser extends ExpressionParser {
       return null;
     }
 
-    const phaseIdentifier = this.parseIdentifier(true);
+    const phaseIdentifier = this.startNode<N.Identifier>();
+    const phaseIdentifierName = this.parseIdentifierName(true);
 
     const { type } = this.state;
     const isImportPhase = tokenIsKeywordOrIdentifier(type)
@@ -3051,11 +3052,10 @@ export default abstract class StatementParser extends ExpressionParser {
         type !== tt.comma;
 
     if (isImportPhase) {
-      this.resetPreviousIdentifierLeadingComments(phaseIdentifier);
       this.applyImportPhase(
         node as Undone<N.ImportDeclaration>,
         isExport,
-        phaseIdentifier.name,
+        phaseIdentifierName,
         phaseIdentifier.loc.start,
       );
       return null;
@@ -3066,7 +3066,7 @@ export default abstract class StatementParser extends ExpressionParser {
         null,
       );
       // `<phase>` is a default binding, return it to the main import declaration parser
-      return phaseIdentifier;
+      return this.createIdentifier(phaseIdentifier, phaseIdentifierName);
     }
   }
 

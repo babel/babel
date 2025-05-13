@@ -1,7 +1,7 @@
 /*:: declare var invariant; */
 
 import BaseParser from "./base.ts";
-import type { Comment, Node, Identifier } from "../types.ts";
+import type { Comment, Node } from "../types.ts";
 import * as charCodes from "charcodes";
 import type { Undone } from "./node.ts";
 
@@ -268,38 +268,6 @@ export default class CommentsParser extends BaseParser {
     const commentWS = commentStack[length - 1];
     if (commentWS.leadingNode === node) {
       commentWS.leadingNode = null;
-    }
-  }
-
-  /* eslint-disable no-irregular-whitespace */
-  /**
-   * Reset previous node leading comments, assuming that `node` is a
-   * single-token node. Used in import phase modifiers parsing. We parse
-   * `module` in `import module foo from ...` as an identifier but may
-   * reinterpret it into a phase modifier later. In this case the identifier is
-   * not part of the AST and we should sync the knowledge to commentStacks
-   *
-   * For example, when parsing
-   * ```
-   * import /* 1 *​/ module a from "a";
-   * ```
-   * the comment whitespace `/* 1 *​/` has trailing node Identifier(module). When
-   * we see that `module` is not a default import binding, we mark `/* 1 *​/` as
-   * inner comments of the ImportDeclaration. So `/* 1 *​/` should be detached from
-   * the Identifier node.
-   *
-   * @param node the last finished AST node _before_ current token
-   */
-  /* eslint-enable no-irregular-whitespace */
-  resetPreviousIdentifierLeadingComments(node: Identifier) {
-    const { commentStack } = this.state;
-    const { length } = commentStack;
-    if (length === 0) return;
-
-    if (commentStack[length - 1].trailingNode === node) {
-      commentStack[length - 1].trailingNode = null;
-    } else if (length >= 2 && commentStack[length - 2].trailingNode === node) {
-      commentStack[length - 2].trailingNode = null;
     }
   }
 
