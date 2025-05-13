@@ -14,6 +14,10 @@ const { __dirname } = commonJS(import.meta.url);
 const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
 
 const FAILURES = [
+  // Todo: support trailing comments spanned across trailing comma
+  "import-phases/source-expression-comments/input.js",
+  "import-phases/source-expression-options-comments/input.js",
+
   // These tests are either explicitly about re-formatting the decorators position,
   // or about an old decorators version
   "comments/decorators-after-export-to-before/input.js",

@@ -341,11 +341,15 @@ export function ImportExpression(this: Printer, node: t.ImportExpression) {
     this.word(node.phase);
   }
   this.token("(");
+  const shouldPrintTrailingComma = this.shouldPrintTrailingComma(")");
   this.print(node.source);
   if (node.options != null) {
     this.token(",");
     this.space();
     this.print(node.options);
   }
-  this.token(")");
+  if (shouldPrintTrailingComma) {
+    this.token(",");
+  }
+  this.rightParens(node);
 }
