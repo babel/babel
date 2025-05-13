@@ -447,6 +447,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             modifier,
           });
         }
+
+        if (this.hasPrecedingLineBreak()) {
+          break;
+        }
       }
     }
 
