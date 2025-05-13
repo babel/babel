@@ -1095,7 +1095,9 @@ export default abstract class ExpressionParser extends LValParser {
         this.next();
 
         if (this.match(tt.dot)) {
-          return this.parseImportMetaProperty(node as Undone<N.MetaProperty>);
+          return this.parseImportMetaPropertyOrPhaseCall(
+            node as Undone<N.MetaProperty | N.ImportExpression>,
+          );
         }
 
         if (this.match(tt.parenL)) {
@@ -1622,22 +1624,14 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   // https://tc39.es/ecma262/#prod-ImportMeta
-  parseImportMetaProperty(
+  // https://tc39.es/proposal-source-phase-imports/
+  parseImportMetaPropertyOrPhaseCall(
     this: Parser,
     node: Undone<N.MetaProperty | N.ImportExpression>,
   ): N.MetaProperty | N.ImportExpression {
-    const id = this.createIdentifier(
-      this.startNodeAtNode<N.Identifier>(node),
-      "import",
-    );
     this.next(); // eat `.`
 
-    if (this.isContextual(tt._meta)) {
-      if (!this.inModule) {
-        this.raise(Errors.ImportMetaOutsideModule, id);
-      }
-      this.sawUnambiguousESM = true;
-    } else if (this.isContextual(tt._source) || this.isContextual(tt._defer)) {
+    if (this.isContextual(tt._source) || this.isContextual(tt._defer)) {
       const isSource = this.isContextual(tt._source);
 
       this.expectPlugin(
@@ -1648,9 +1642,20 @@ export default abstract class ExpressionParser extends LValParser {
         ? "source"
         : "defer";
       return this.parseImportCall(node as Undone<N.ImportExpression>);
+    } else {
+      const id = this.createIdentifierAt(
+        this.startNodeAtNode<N.Identifier>(node),
+        "import",
+        this.state.lastTokStartLoc,
+      );
+      if (this.isContextual(tt._meta)) {
+        if (!this.inModule) {
+          this.raise(Errors.ImportMetaOutsideModule, id);
+        }
+        this.sawUnambiguousESM = true;
+      }
+      return this.parseMetaProperty(node as Undone<N.MetaProperty>, id, "meta");
     }
-
-    return this.parseMetaProperty(node as Undone<N.MetaProperty>, id, "meta");
   }
 
   parseLiteralAtNode<T extends N.Node>(
@@ -2751,14 +2756,22 @@ export default abstract class ExpressionParser extends LValParser {
     return this.createIdentifier(node, name);
   }
 
-  createIdentifier(
-    node: Omit<N.Identifier, "type">,
-    name: string,
-  ): N.Identifier {
+  createIdentifier(node: Undone<N.Identifier>, name: string): N.Identifier {
     node.name = name;
     node.loc.identifierName = name;
 
     return this.finishNode(node, "Identifier");
+  }
+
+  createIdentifierAt(
+    node: Undone<N.Identifier>,
+    name: string,
+    endLoc: Position,
+  ): N.Identifier {
+    node.name = name;
+    node.loc.identifierName = name;
+
+    return this.finishNodeAt(node, "Identifier", endLoc);
   }
 
   parseIdentifierName(liberal?: boolean): string {
@@ -2964,16 +2977,20 @@ export default abstract class ExpressionParser extends LValParser {
     if (this.eat(tt.comma)) {
       if (!this.match(tt.parenR)) {
         node.options = this.parseMaybeAssignAllowIn();
+        if (this.eat(tt.comma)) {
+          this.addTrailingCommaExtraToNode(node.options);
+          if (!this.match(tt.parenR)) {
+            // keep consuming arguments, to then throw ImportCallArity
+            // instead of "expected )"
+            do {
+              this.parseMaybeAssignAllowIn();
+            } while (this.eat(tt.comma) && !this.match(tt.parenR));
 
-        if (this.eat(tt.comma) && !this.match(tt.parenR)) {
-          // keep consuming arguments, to then throw ImportCallArity
-          // instead of "expected )"
-          do {
-            this.parseMaybeAssignAllowIn();
-          } while (this.eat(tt.comma) && !this.match(tt.parenR));
-
-          this.raise(Errors.ImportCallArity, node);
+            this.raise(Errors.ImportCallArity, node);
+          }
         }
+      } else {
+        this.addTrailingCommaExtraToNode(node.source);
       }
     }
     this.expect(tt.parenR);

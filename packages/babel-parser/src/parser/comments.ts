@@ -184,6 +184,13 @@ export default class CommentsParser extends BaseParser {
           case "OptionalCallExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
+          case "ImportExpression":
+            adjustInnerComments(
+              node,
+              [node.source, node.options ?? null],
+              commentWS,
+            );
+            break;
           case "FunctionDeclaration":
           case "FunctionExpression":
           case "ArrowFunctionExpression":
