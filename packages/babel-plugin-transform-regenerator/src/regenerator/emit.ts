@@ -185,6 +185,18 @@ export class Emitter {
   // Convenience function for generating expressions like context.next,
   // context.sent, and context.rval.
   contextProperty(name: string) {
+    if (
+      process.env.BABEL_8_BREAKING ||
+      util.newHelpersAvailable(this.pluginPass)
+    ) {
+      if (name === "sent") name = "v";
+      if (
+        ["prev", "next", "abrupt", "finish", "delegateYield"].includes(name)
+      ) {
+        name = name.slice(0, 1);
+      }
+    }
+
     const computed = name === "catch";
     return t.memberExpression(
       this.getContextId(),

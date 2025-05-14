@@ -27,18 +27,18 @@ var debug = (0, _debug.default)("babel:config:config-chain");
 function buildPresetChain(arg, context) {
   var chain;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.next) {
+    while (1) switch (_context.n) {
       case 0:
-        return _context.delegateYield(buildPresetChainWalker(arg, context), 1);
+        return _context.d(buildPresetChainWalker(arg, context), 1);
       case 1:
-        chain = _context.sent;
+        chain = _context.v;
         if (chain) {
-          _context.next = 2;
+          _context.n = 2;
           break;
         }
-        return _context.abrupt(2, null);
+        return _context.a(2, null);
       case 2:
-        return _context.abrupt(2, {
+        return _context.a(2, {
           plugins: dedupDescriptors(chain.plugins),
           presets: dedupDescriptors(chain.presets),
           options: chain.options.map(function (o) {
@@ -92,63 +92,63 @@ var loadPresetOverridesEnvDescriptors = (0, _caching.makeWeakCacheSync)(function
 function buildRootChain(opts, context) {
   var configReport, babelRcReport, programmaticLogger, programmaticChain, programmaticReport, configFile, babelrc, babelrcRoots, babelrcRootsDirectory, configFileChain, configFileLogger, validatedFile, result, ignoreFile, babelrcFile, isIgnored, fileChain, pkgData, _yield$findRelativeCo, _validatedFile, babelrcLogger, _result, chain;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.next) {
+    while (1) switch (_context2.n) {
       case 0:
         programmaticLogger = new _printer.ConfigPrinter();
-        return _context2.delegateYield(loadProgrammaticChain({
+        return _context2.d(loadProgrammaticChain({
           options: opts,
           dirname: context.cwd
         }, context, undefined, programmaticLogger), 1);
       case 1:
-        programmaticChain = _context2.sent;
+        programmaticChain = _context2.v;
         if (programmaticChain) {
-          _context2.next = 2;
+          _context2.n = 2;
           break;
         }
-        return _context2.abrupt(2, null);
+        return _context2.a(2, null);
       case 2:
-        return _context2.delegateYield(programmaticLogger.output(), 3);
+        return _context2.d(programmaticLogger.output(), 3);
       case 3:
-        programmaticReport = _context2.sent;
+        programmaticReport = _context2.v;
         if (!(typeof opts.configFile === "string")) {
-          _context2.next = 5;
+          _context2.n = 5;
           break;
         }
-        return _context2.delegateYield((0, _index.loadConfig)(opts.configFile, context.cwd, context.envName, context.caller), 4);
+        return _context2.d((0, _index.loadConfig)(opts.configFile, context.cwd, context.envName, context.caller), 4);
       case 4:
-        configFile = _context2.sent;
-        _context2.next = 7;
+        configFile = _context2.v;
+        _context2.n = 7;
         break;
       case 5:
         if (!(opts.configFile !== false)) {
-          _context2.next = 7;
+          _context2.n = 7;
           break;
         }
-        return _context2.delegateYield((0, _index.findRootConfig)(context.root, context.envName, context.caller), 6);
+        return _context2.d((0, _index.findRootConfig)(context.root, context.envName, context.caller), 6);
       case 6:
-        configFile = _context2.sent;
+        configFile = _context2.v;
       case 7:
         babelrc = opts.babelrc, babelrcRoots = opts.babelrcRoots;
         babelrcRootsDirectory = context.cwd;
         configFileChain = emptyChain();
         configFileLogger = new _printer.ConfigPrinter();
         if (!configFile) {
-          _context2.next = 11;
+          _context2.n = 11;
           break;
         }
         validatedFile = validateConfigFile(configFile);
-        return _context2.delegateYield(loadFileChain(validatedFile, context, undefined, configFileLogger), 8);
+        return _context2.d(loadFileChain(validatedFile, context, undefined, configFileLogger), 8);
       case 8:
-        result = _context2.sent;
+        result = _context2.v;
         if (result) {
-          _context2.next = 9;
+          _context2.n = 9;
           break;
         }
-        return _context2.abrupt(2, null);
+        return _context2.a(2, null);
       case 9:
-        return _context2.delegateYield(configFileLogger.output(), 10);
+        return _context2.d(configFileLogger.output(), 10);
       case 10:
-        configReport = _context2.sent;
+        configReport = _context2.v;
         // Allow config files to toggle `.babelrc` resolution on and off and
         // specify where the roots are.
         if (babelrc === undefined) {
@@ -163,19 +163,19 @@ function buildRootChain(opts, context) {
         isIgnored = false;
         fileChain = emptyChain(); // resolve all .babelrc files
         if (!((babelrc === true || babelrc === undefined) && typeof context.filename === "string")) {
-          _context2.next = 18;
+          _context2.n = 18;
           break;
         }
-        return _context2.delegateYield((0, _index.findPackageData)(context.filename), 12);
+        return _context2.d((0, _index.findPackageData)(context.filename), 12);
       case 12:
-        pkgData = _context2.sent;
+        pkgData = _context2.v;
         if (!(pkgData && babelrcLoadEnabled(context, pkgData, babelrcRoots, babelrcRootsDirectory))) {
-          _context2.next = 18;
+          _context2.n = 18;
           break;
         }
-        return _context2.delegateYield((0, _index.findRelativeConfig)(pkgData, context.envName, context.caller), 13);
+        return _context2.d((0, _index.findRelativeConfig)(pkgData, context.envName, context.caller), 13);
       case 13:
-        _yield$findRelativeCo = _context2.sent;
+        _yield$findRelativeCo = _context2.v;
         ignoreFile = _yield$findRelativeCo.ignore;
         babelrcFile = _yield$findRelativeCo.config;
         if (ignoreFile) {
@@ -185,25 +185,25 @@ function buildRootChain(opts, context) {
           isIgnored = true;
         }
         if (!(babelrcFile && !isIgnored)) {
-          _context2.next = 17;
+          _context2.n = 17;
           break;
         }
         _validatedFile = validateBabelrcFile(babelrcFile);
         babelrcLogger = new _printer.ConfigPrinter();
-        return _context2.delegateYield(loadFileChain(_validatedFile, context, undefined, babelrcLogger), 14);
+        return _context2.d(loadFileChain(_validatedFile, context, undefined, babelrcLogger), 14);
       case 14:
-        _result = _context2.sent;
+        _result = _context2.v;
         if (_result) {
-          _context2.next = 15;
+          _context2.n = 15;
           break;
         }
         isIgnored = true;
-        _context2.next = 17;
+        _context2.n = 17;
         break;
       case 15:
-        return _context2.delegateYield(babelrcLogger.output(), 16);
+        return _context2.d(babelrcLogger.output(), 16);
       case 16:
-        babelRcReport = _context2.sent;
+        babelRcReport = _context2.v;
         mergeChain(fileChain, _result);
       case 17:
         if (babelrcFile && isIgnored) {
@@ -220,7 +220,7 @@ function buildRootChain(opts, context) {
         // Insert file chain in front so programmatic options have priority
         // over configuration file chain items.
         chain = mergeChain(mergeChain(mergeChain(emptyChain(), configFileChain), fileChain), programmaticChain);
-        return _context2.abrupt(2, {
+        return _context2.a(2, {
           plugins: isIgnored ? [] : dedupDescriptors(chain.plugins),
           presets: isIgnored ? [] : dedupDescriptors(chain.presets),
           options: isIgnored ? [] : chain.options.map(function (o) {
@@ -332,13 +332,13 @@ var loadFileChainWalker = makeChainWalker({
 function loadFileChain(input, context, files, baseLogger) {
   var chain;
   return babelHelpers.regenerator().w(function (_context3) {
-    while (1) switch (_context3.next) {
+    while (1) switch (_context3.n) {
       case 0:
-        return _context3.delegateYield(loadFileChainWalker(input, context, files, baseLogger), 1);
+        return _context3.d(loadFileChainWalker(input, context, files, baseLogger), 1);
       case 1:
-        chain = _context3.sent;
+        chain = _context3.v;
         chain === null || chain === void 0 || chain.files.add(input.filepath);
-        return _context3.abrupt(2, chain);
+        return _context3.a(2, chain);
     }
   }, _marked3);
 }
@@ -420,7 +420,7 @@ function makeChainWalker(_ref5) {
     return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
       var dirname, flattenedConfigs, rootOpts, envOpts, chain, logger, _i, _flattenedConfigs, _flattenedConfigs$_i, config, index, envName;
       return babelHelpers.regenerator().w(function (_context4) {
-        while (1) switch (_context4.next) {
+        while (1) switch (_context4.n) {
           case 0:
             dirname = input.dirname;
             flattenedConfigs = [];
@@ -468,36 +468,36 @@ function makeChainWalker(_ref5) {
                 only = _ref6$config$options.only;
               return shouldIgnore(context, ignore, only, dirname);
             })) {
-              _context4.next = 1;
+              _context4.n = 1;
               break;
             }
-            return _context4.abrupt(2, null);
+            return _context4.a(2, null);
           case 1:
             chain = emptyChain();
             logger = createLogger(input, context, baseLogger);
             _i = 0, _flattenedConfigs = flattenedConfigs;
           case 2:
             if (!(_i < _flattenedConfigs.length)) {
-              _context4.next = 6;
+              _context4.n = 6;
               break;
             }
             _flattenedConfigs$_i = _flattenedConfigs[_i], config = _flattenedConfigs$_i.config, index = _flattenedConfigs$_i.index, envName = _flattenedConfigs$_i.envName;
-            return _context4.delegateYield(mergeExtendsChain(chain, config.options, dirname, context, files, baseLogger), 3);
+            return _context4.d(mergeExtendsChain(chain, config.options, dirname, context, files, baseLogger), 3);
           case 3:
-            if (_context4.sent) {
-              _context4.next = 4;
+            if (_context4.v) {
+              _context4.n = 4;
               break;
             }
-            return _context4.abrupt(2, null);
+            return _context4.a(2, null);
           case 4:
             logger(config, index, envName);
-            return _context4.delegateYield(mergeChainOpts(chain, config), 5);
+            return _context4.d(mergeChainOpts(chain, config), 5);
           case 5:
             _i++;
-            _context4.next = 2;
+            _context4.n = 2;
             break;
           case 6:
-            return _context4.abrupt(2, chain);
+            return _context4.a(2, chain);
         }
       }, _callee);
     })();
@@ -506,19 +506,19 @@ function makeChainWalker(_ref5) {
 function mergeExtendsChain(chain, opts, dirname, context, files, baseLogger) {
   var file, fileChain;
   return babelHelpers.regenerator().w(function (_context5) {
-    while (1) switch (_context5.next) {
+    while (1) switch (_context5.n) {
       case 0:
         if (!(opts.extends === undefined)) {
-          _context5.next = 1;
+          _context5.n = 1;
           break;
         }
-        return _context5.abrupt(2, true);
+        return _context5.a(2, true);
       case 1:
-        return _context5.delegateYield((0, _index.loadConfig)(opts.extends, dirname, context.envName, context.caller), 2);
+        return _context5.d((0, _index.loadConfig)(opts.extends, dirname, context.envName, context.caller), 2);
       case 2:
-        file = _context5.sent;
+        file = _context5.v;
         if (!files.has(file)) {
-          _context5.next = 3;
+          _context5.n = 3;
           break;
         }
         throw new Error(`Configuration cycle detected loading ${file.filepath}.\n` + `File already loaded following the config chain:\n` + Array.from(files, function (file) {
@@ -526,18 +526,18 @@ function mergeExtendsChain(chain, opts, dirname, context, files, baseLogger) {
         }).join("\n"));
       case 3:
         files.add(file);
-        return _context5.delegateYield(loadFileChain(validateExtendFile(file), context, files, baseLogger), 4);
+        return _context5.d(loadFileChain(validateExtendFile(file), context, files, baseLogger), 4);
       case 4:
-        fileChain = _context5.sent;
+        fileChain = _context5.v;
         files.delete(file);
         if (fileChain) {
-          _context5.next = 5;
+          _context5.n = 5;
           break;
         }
-        return _context5.abrupt(2, false);
+        return _context5.a(2, false);
       case 5:
         mergeChain(chain, fileChain);
-        return _context5.abrupt(2, true);
+        return _context5.a(2, true);
     }
   }, _marked4);
 }
@@ -567,26 +567,26 @@ function mergeChainOpts(target, _ref7) {
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee2(_target$plugins2, _target$presets2) {
     var _t, _t2, _t3, _t4, _t5, _t6, _t7, _t8, _t9, _t0;
     return babelHelpers.regenerator().w(function (_context6) {
-      while (1) switch (_context6.next) {
+      while (1) switch (_context6.n) {
         case 0:
           target.options.push(options);
           _t = (_target$plugins2 = target.plugins).push;
           _t2 = _target$plugins2;
           _t3 = babelHelpers;
-          return _context6.delegateYield(plugins(), 1);
+          return _context6.d(plugins(), 1);
         case 1:
-          _t4 = _context6.sent;
+          _t4 = _context6.v;
           _t5 = _t3.toConsumableArray.call(_t3, _t4);
           _t.apply.call(_t, _t2, _t5);
           _t6 = (_target$presets2 = target.presets).push;
           _t7 = _target$presets2;
           _t8 = babelHelpers;
-          return _context6.delegateYield(presets(), 2);
+          return _context6.d(presets(), 2);
         case 2:
-          _t9 = _context6.sent;
+          _t9 = _context6.v;
           _t0 = _t8.toConsumableArray.call(_t8, _t9);
           _t6.apply.call(_t6, _t7, _t0);
-          return _context6.abrupt(2, target);
+          return _context6.a(2, target);
       }
     }, _callee2);
   })();
