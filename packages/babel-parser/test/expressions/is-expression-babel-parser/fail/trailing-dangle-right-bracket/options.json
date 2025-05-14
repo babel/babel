@@ -1,3 +1,3 @@
 {
-  "throws": "Unexpected parseExpression() input: The input should contain exactly one expression, but `}` is seen. (2:2)"
+  "throws": "Unexpected parseExpression() input: The input should contain exactly one expression, but the first expression is followed by the unexpected character `}`. (2:2)"
 }

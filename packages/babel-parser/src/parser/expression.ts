@@ -170,13 +170,9 @@ export default abstract class ExpressionParser extends LValParser {
     }
     const expr = this.parseExpression() as N.Expression & N.ParserOutput;
     if (!this.match(tt.eof)) {
-      throw this.raise(
-        Errors.ParseExpressionExpectsEOF,
-        this.state.startLoc,
-        // state.value already handle non-BMP characters. If state.value is nullish,
-        // the input must be a syntax character in ASCII
-        { unexpected: this.state.value ?? this.input[this.state.start] },
-      );
+      throw this.raise(Errors.ParseExpressionExpectsEOF, this.state.startLoc, {
+        unexpected: this.input.codePointAt(this.state.start),
+      });
     }
     // Unlike parseTopLevel, we need to drain remaining commentStacks
     // because the top level node is _not_ Program.
