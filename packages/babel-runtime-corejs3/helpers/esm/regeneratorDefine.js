@@ -1,20 +1,25 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
-function regeneratorDefine(e, r, n, t) {
-  regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    _Object$defineProperty(e, r, {
+function _regeneratorDefine(e, r, n, t) {
+  var i = _Object$defineProperty;
+  try {
+    i({}, "", {});
+  } catch (e) {
+    i = 0;
+  }
+  _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
+    if (r) i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    });
-  };
-  try {
-    regeneratorDefine({}, "");
-  } catch (e) {
-    regeneratorDefine = function regeneratorDefine(e, r, n) {
-      e[r] = n;
-    };
-  }
-  regeneratorDefine(e, r, n, t);
+    }) : e[r] = n;else {
+      var o = function o(r, n) {
+        _regeneratorDefine(e, r, function (e) {
+          return this._invoke(r, n, e);
+        });
+      };
+      o("next", 0), o("throw", 1), o("return", 2);
+    }
+  }, _regeneratorDefine(e, r, n, t);
 }
-export { regeneratorDefine as default };
+export { _regeneratorDefine as default };

@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
 import define from "./regeneratorDefine.ts";
-import defineIteratorMethods from "./regeneratorDefineIM.ts";
 import values from "./regeneratorValues.ts";
 
 const enum GenState {
@@ -124,7 +123,7 @@ export default function /* @no-mangle */ _regenerator() {
 
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
+  define(Gp);
 
   define(Gp, toStringTagSymbol, "Generator");
 
