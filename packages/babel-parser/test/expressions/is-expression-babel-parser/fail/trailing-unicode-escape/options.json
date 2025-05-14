@@ -1,0 +1,3 @@
+{
+  "throws": "Unexpected parseExpression() input: The input should contain exactly one expression, but `𖼀` is seen. (2:2)"
+}
