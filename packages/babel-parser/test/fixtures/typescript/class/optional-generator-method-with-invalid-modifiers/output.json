@@ -1,0 +1,235 @@
+{
+  "type": "File",
+  "start":0,"end":163,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":1,"index":163}},
+  "errors": [
+    "SyntaxError: Abstract methods can only appear within an abstract class. (2:2)",
+    "SyntaxError: Method 'd' cannot have an implementation because it is marked abstract. (2:2)",
+    "SyntaxError: Class methods cannot have the 'readonly' modifier. (3:2)",
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (4:2)",
+    "SyntaxError: Abstract methods can only appear within an abstract class. (8:2)",
+    "SyntaxError: Method '[d?.d]' cannot have an implementation because it is marked abstract. (8:2)",
+    "SyntaxError: Class methods cannot have the 'readonly' modifier. (9:2)",
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (10:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":163,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":1,"index":163}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":73}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":73,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":73}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":30,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":20,"index":30}},
+              "abstract": true,
+              "static": false,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":23,"loc":{"start":{"line":2,"column":12,"index":22},"end":{"line":2,"column":13,"index":23},"identifierName":"d"},
+                "name": "d"
+              },
+              "computed": false,
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":27,"end":30,"loc":{"start":{"line":2,"column":17,"index":27},"end":{"line":2,"column":20,"index":30}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":33,"end":51,"loc":{"start":{"line":3,"column":2,"index":33},"end":{"line":3,"column":20,"index":51}},
+              "readonly": true,
+              "static": false,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start":43,"end":44,"loc":{"start":{"line":3,"column":12,"index":43},"end":{"line":3,"column":13,"index":44},"identifierName":"e"},
+                "name": "e"
+              },
+              "computed": false,
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":48,"end":51,"loc":{"start":{"line":3,"column":17,"index":48},"end":{"line":3,"column":20,"index":51}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":54,"end":71,"loc":{"start":{"line":4,"column":2,"index":54},"end":{"line":4,"column":19,"index":71}},
+              "declare": true,
+              "static": false,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start":63,"end":64,"loc":{"start":{"line":4,"column":11,"index":63},"end":{"line":4,"column":12,"index":64},"identifierName":"f"},
+                "name": "f"
+              },
+              "computed": false,
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":68,"end":71,"loc":{"start":{"line":4,"column":16,"index":68},"end":{"line":4,"column":19,"index":71}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":75,"end":163,"loc":{"start":{"line":7,"column":0,"index":75},"end":{"line":11,"column":1,"index":163}},
+        "id": {
+          "type": "Identifier",
+          "start":81,"end":82,"loc":{"start":{"line":7,"column":6,"index":81},"end":{"line":7,"column":7,"index":82},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":83,"end":163,"loc":{"start":{"line":7,"column":8,"index":83},"end":{"line":11,"column":1,"index":163}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":87,"end":110,"loc":{"start":{"line":8,"column":2,"index":87},"end":{"line":8,"column":25,"index":110}},
+              "abstract": true,
+              "static": false,
+              "kind": "method",
+              "computed": true,
+              "key": {
+                "type": "OptionalMemberExpression",
+                "start":98,"end":102,"loc":{"start":{"line":8,"column":13,"index":98},"end":{"line":8,"column":17,"index":102}},
+                "object": {
+                  "type": "Identifier",
+                  "start":98,"end":99,"loc":{"start":{"line":8,"column":13,"index":98},"end":{"line":8,"column":14,"index":99},"identifierName":"d"},
+                  "name": "d"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":101,"end":102,"loc":{"start":{"line":8,"column":16,"index":101},"end":{"line":8,"column":17,"index":102},"identifierName":"d"},
+                  "name": "d"
+                },
+                "optional": true
+              },
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":107,"end":110,"loc":{"start":{"line":8,"column":22,"index":107},"end":{"line":8,"column":25,"index":110}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":113,"end":136,"loc":{"start":{"line":9,"column":2,"index":113},"end":{"line":9,"column":25,"index":136}},
+              "readonly": true,
+              "static": false,
+              "kind": "method",
+              "computed": true,
+              "key": {
+                "type": "OptionalMemberExpression",
+                "start":124,"end":128,"loc":{"start":{"line":9,"column":13,"index":124},"end":{"line":9,"column":17,"index":128}},
+                "object": {
+                  "type": "Identifier",
+                  "start":124,"end":125,"loc":{"start":{"line":9,"column":13,"index":124},"end":{"line":9,"column":14,"index":125},"identifierName":"e"},
+                  "name": "e"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":127,"end":128,"loc":{"start":{"line":9,"column":16,"index":127},"end":{"line":9,"column":17,"index":128},"identifierName":"e"},
+                  "name": "e"
+                },
+                "optional": true
+              },
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":133,"end":136,"loc":{"start":{"line":9,"column":22,"index":133},"end":{"line":9,"column":25,"index":136}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":139,"end":161,"loc":{"start":{"line":10,"column":2,"index":139},"end":{"line":10,"column":24,"index":161}},
+              "declare": true,
+              "static": false,
+              "kind": "method",
+              "computed": true,
+              "key": {
+                "type": "OptionalMemberExpression",
+                "start":149,"end":153,"loc":{"start":{"line":10,"column":12,"index":149},"end":{"line":10,"column":16,"index":153}},
+                "object": {
+                  "type": "Identifier",
+                  "start":149,"end":150,"loc":{"start":{"line":10,"column":12,"index":149},"end":{"line":10,"column":13,"index":150},"identifierName":"f"},
+                  "name": "f"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":152,"end":153,"loc":{"start":{"line":10,"column":15,"index":152},"end":{"line":10,"column":16,"index":153},"identifierName":"f"},
+                  "name": "f"
+                },
+                "optional": true
+              },
+              "optional": true,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":158,"end":161,"loc":{"start":{"line":10,"column":21,"index":158},"end":{"line":10,"column":24,"index":161}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1929,6 +1929,7 @@ export default abstract class StatementParser extends ExpressionParser {
       method.kind = "method";
       const isPrivateName = this.match(tt.privateName);
       this.parseClassElementName(method);
+      this.parsePostMemberNameModifiers(method);
 
       if (isPrivateName) {
         // Private generator method

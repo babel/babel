@@ -3,7 +3,9 @@
   "start":0,"end":139,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":139}},
   "errors": [
     "SyntaxError: Abstract methods can only appear within an abstract class. (5:2)",
-    "SyntaxError: Method 'd' cannot have an implementation because it is marked abstract. (5:2)"
+    "SyntaxError: Method 'd' cannot have an implementation because it is marked abstract. (5:2)",
+    "SyntaxError: Class methods cannot have the 'readonly' modifier. (6:2)",
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (7:2)"
   ],
   "program": {
     "type": "Program",
