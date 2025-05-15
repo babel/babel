@@ -359,7 +359,7 @@ const functionSentVisitor = {
           t.identifier(
             process.env.BABEL_8_BREAKING ||
               util.newHelpersAvailable(state.pluginPass)
-              ? "sent"
+              ? "v"
               : "_sent",
           ),
         ),

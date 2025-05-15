@@ -5,14 +5,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
 import define from "./regeneratorDefine.ts";
-import defineIteratorMethods from "./regeneratorDefineIM.ts";
 import values from "./regeneratorValues.ts";
 
 const enum GenState {
   SuspendedStart,
-  SuspendedYield,
+  SuspendedYieldOrCompleted,
   Executing,
-  Completed,
 }
 
 const enum OperatorType {
@@ -41,9 +39,19 @@ type TryEntry = [
 ];
 
 type Context = {
-  prev: number;
-  next: number;
-  sent: any;
+  // prev
+  p: number;
+  // next
+  n: number;
+  // value
+  v: any;
+
+  // abrupt
+  a: (type: OperatorType, arg: any) => any;
+  // finish
+  f: (finallyLoc: number) => any;
+  // delegateYield
+  d: (iterable: any, nextLoc: number) => any;
 
   stop?(): any;
   dispatchException?(exception: any): boolean | undefined;
@@ -57,8 +65,6 @@ type Context = {
 export default function /* @no-mangle */ _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
 
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
   var undefined: undefined; // More compressible than void 0.
   var $Symbol =
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
@@ -104,24 +110,17 @@ export default function /* @no-mangle */ _regenerator() {
   /* @no-mangle */
   function GeneratorFunctionPrototype() {}
 
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function (this: unknown) {
+  define((_ = {}), iteratorSymbol, function (this: unknown) {
     return this;
   });
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (
-    NativeIteratorPrototype &&
-    NativeIteratorPrototype !== Op &&
-    hasOwn.call(NativeIteratorPrototype, iteratorSymbol)
-  ) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
+  _ = Object.getPrototypeOf;
+  var IteratorPrototype = [][iteratorSymbol as typeof Symbol.iterator]
+    ? // This environment has a native %IteratorPrototype%; use it instead
+      // of the polyfill.
+      _(_([][iteratorSymbol as typeof Symbol.iterator]()))
+    : // This is a polyfill for %IteratorPrototype% for environments that
+      // don't natively support it.
+      _;
 
   var Gp =
     (GeneratorFunctionPrototype.prototype =
@@ -135,7 +134,7 @@ export default function /* @no-mangle */ _regenerator() {
 
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
+  define(Gp);
 
   define(Gp, toStringTagSymbol, "Generator");
 
@@ -176,7 +175,7 @@ export default function /* @no-mangle */ _regenerator() {
       _method: OperatorType.Next | OperatorType.Throw | OperatorType.Return,
       _arg: any,
     ) {
-      if (state === GenState.Executing) {
+      if (state > 1 /* Executing */) {
         throw TypeError("Generator is already running");
       } else if (done) {
         if (_method === OperatorType.Throw) {
@@ -187,19 +186,20 @@ export default function /* @no-mangle */ _regenerator() {
       method = _method;
       arg = _arg;
 
-      while (!done || (_ = undefined)) {
+      while ((_ = method < 2 /* Next | Throw */ ? undefined : arg) || !done) {
         if (!delegateIterator) {
-          if (!method /* Return */) {
-            ctx.sent = arg;
+          if (!method /* Next */) {
+            ctx.v = arg;
           } else if (method < 3 /* Throw | Return */) {
-            if (method > 1 /* Return */) ctx.next = ContextNext.End;
+            if (method > 1 /* Return */) ctx.n = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
-            // Jump
-            ctx.next = arg;
+            /* Jump */
+            ctx.n = arg;
           }
         }
         try {
+          state = GenState.Executing;
           if (delegateIterator) {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
@@ -253,27 +253,22 @@ export default function /* @no-mangle */ _regenerator() {
             // yield* loop.
             delegateIterator = undefined;
           } else {
-            state = GenState.Executing;
-
-            if ((done = ctx.next < 0) /* End */) {
+            if ((done = ctx.n < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
             }
-
-            // If an exception is thrown from innerFn, we leave state ===
-            // GenStateExecuting and loop back for another invocation.
-            state = done ? GenState.Completed : GenState.SuspendedYield;
 
             if (_ !== ContinueSentinel) {
               break;
             }
           }
         } catch (e) {
-          state = GenState.Completed;
           delegateIterator = undefined;
           method = OperatorType.Throw;
           arg = e;
+        } finally {
+          state = GenState.SuspendedYieldOrCompleted;
         }
       }
       // Be forgiving, per GeneratorResume behavior specified since ES2015:
@@ -295,24 +290,27 @@ export default function /* @no-mangle */ _regenerator() {
     var arg: any;
 
     var ctx: Context = {
-      prev: 0,
-      next: 0,
+      p: 0,
+      n: 0,
 
-      sent: undefined,
+      v: undefined,
 
-      abrupt: Context_dispatchExceptionOrFinishOrAbrupt,
-      finish: Context_dispatchExceptionOrFinishOrAbrupt.bind(
+      // abrupt
+      a: Context_dispatchExceptionOrFinishOrAbrupt,
+      // finish
+      f: Context_dispatchExceptionOrFinishOrAbrupt.bind(
         undefined,
         OperatorType.Finish,
       ),
-      delegateYield: function (iterable: any, nextLoc: number) {
+      // delegateYield
+      d: function (iterable: any, nextLoc: number) {
         delegateIterator = values(iterable);
 
         // Deliberately forget the last sent value so that we don't
         // accidentally pass it on to the delegate.
         method = OperatorType.Next;
         arg = undefined;
-        ctx.next = nextLoc;
+        ctx.n = nextLoc;
 
         return ContinueSentinel;
       },
@@ -326,11 +324,14 @@ export default function /* @no-mangle */ _regenerator() {
       arg = _arg;
       for (
         _ = 0;
-        !done && state && !shouldReturn && _ < tryEntries.length;
+        !done &&
+        state /* state !== SuspendedStart */ &&
+        !shouldReturn &&
+        _ < tryEntries.length;
         _++
       ) {
         var entry = tryEntries[_];
-        var prev = ctx.prev;
+        var prev = ctx.p;
         var finallyLoc = entry[2]!;
         var shouldReturn;
 
@@ -347,8 +348,8 @@ export default function /* @no-mangle */ _regenerator() {
               // If the dispatched exception was caught by a catch block,
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
-              ctx.sent = _arg;
-              ctx.next = entry[1]!;
+              ctx.v = _arg;
+              ctx.n = entry[1]!;
             } else if (prev < finallyLoc) {
               if (
                 (shouldReturn =
@@ -363,7 +364,7 @@ export default function /* @no-mangle */ _regenerator() {
                   | OperatorType.Jump
                   | OperatorType.Throw;
                 entry[5] = _arg;
-                ctx.next = finallyLoc;
+                ctx.n = finallyLoc;
                 method = OperatorType.Next;
               }
             }

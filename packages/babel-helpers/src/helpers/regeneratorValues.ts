@@ -5,9 +5,11 @@
 export default function _regeneratorValues(iterable: any) {
   if (iterable != null) {
     var iteratorMethod =
-      iterable[
-        (typeof Symbol === "function" && Symbol.iterator) || "@iterator"
-      ];
+        iterable[
+          (typeof Symbol === "function" && Symbol.iterator) || "@iterator"
+        ],
+      i = 0;
+
     if (iteratorMethod) {
       return iteratorMethod.call(iterable);
     }
@@ -17,28 +19,12 @@ export default function _regeneratorValues(iterable: any) {
     }
 
     if (!isNaN(iterable.length)) {
-      var i = -1,
-        next = function next() {
-          while (++i < iterable.length) {
-            if ({}.hasOwnProperty.call(iterable, i)) {
-              // @ts-expect-error assign to () => ...
-              next.value = iterable[i];
-              // @ts-expect-error assign to () => ...
-              next.done = false;
-              return next;
-            }
-          }
-
-          // @ts-expect-error assign to () => ...
-          next.value = undefined;
-          // @ts-expect-error assign to () => ...
-          next.done = true;
-
-          return next;
-        };
-
-      // @ts-expect-error assign to () => ...
-      return (next.next = next);
+      return {
+        next: function () {
+          if (iterable && i >= iterable.length) iterable = 0;
+          return { value: iterable && iterable[i++], done: !iterable };
+        },
+      };
     }
   }
 

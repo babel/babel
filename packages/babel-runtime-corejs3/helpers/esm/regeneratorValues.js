@@ -3,17 +3,18 @@ import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$iterator from "core-js-pure/features/symbol/iterator.js";
 function _regeneratorValues(e) {
   if (null != e) {
-    var r = e["function" == typeof _Symbol && _Symbol$iterator || "@iterator"];
-    if (r) return r.call(e);
+    var t = e["function" == typeof _Symbol && _Symbol$iterator || "@iterator"],
+      r = 0;
+    if (t) return t.call(e);
     if ("function" == typeof e.next) return e;
-    if (!isNaN(e.length)) {
-      var t = -1,
-        n = function r() {
-          for (; ++t < e.length;) if ({}.hasOwnProperty.call(e, t)) return r.value = e[t], r.done = !1, r;
-          return r.value = void 0, r.done = !0, r;
+    if (!isNaN(e.length)) return {
+      next: function next() {
+        return e && r >= e.length && (e = 0), {
+          value: e && e[r++],
+          done: !e
         };
-      return n.next = n;
-    }
+      }
+    };
   }
   throw new TypeError(_typeof(e) + " is not iterable");
 }

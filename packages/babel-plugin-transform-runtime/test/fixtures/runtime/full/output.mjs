@@ -4,12 +4,12 @@ import foo, * as bar from "someModule";
 export const myWord = Symbol("abc");
 export function giveWord() {
   return _regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.n) {
       case 0:
-        _context.next = 2;
+        _context.n = 1;
         return myWord;
-      case 2:
-        return _context.abrupt(2);
+      case 1:
+        return _context.a(2);
     }
   }, _marked);
 }

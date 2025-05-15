@@ -26,12 +26,12 @@ function _main() {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           _t = console;
-          _context2.next = 3;
+          _context2.next = 1;
           return test();
-        case 3:
+        case 1:
           _t2 = _context2.sent;
           _t.log.call(_t, _t2);
-        case 5:
+        case 2:
         case "end":
           return _context2.stop();
       }

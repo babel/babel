@@ -61,7 +61,11 @@ const catchParamVisitor: Visitor = {
 export class Emitter {
   nextTempId: number;
   contextId: t.Identifier;
+  index: number;
+  indexMap: Map<number, number>;
   listing: t.Statement[];
+  returns: Set<number>;
+  lastDefaultIndex: number;
   marked: boolean[];
   insertedLocs: Set<t.NumericLiteral>;
   finalLoc: t.NumericLiteral;
@@ -94,6 +98,10 @@ export class Emitter {
     // An append-only list of Statements that grows each time this.emit is
     // called.
     this.listing = [];
+
+    this.index = 0;
+    this.indexMap = new Map([[0, 0]]);
+    this.returns = new Set();
 
     // A sparse array whose keys correspond to locations in this.listing
     // that have been marked as branch/jump targets.
@@ -128,18 +136,24 @@ export class Emitter {
     return t.cloneNode(this.contextId);
   }
 
+  getIndex() {
+    if (!this.indexMap.has(this.listing.length)) {
+      this.indexMap.set(this.listing.length, ++this.index);
+    }
+    return this.index;
+  }
+
   // Sets the exact value of the given location to the offset of the next
   // Statement emitted.
   mark(loc: t.NumericLiteral) {
-    const index = this.listing.length;
     if (loc.value === PENDING_LOCATION) {
-      loc.value = index;
+      loc.value = this.getIndex();
     } else {
       // Locations can be marked redundantly, but their values cannot change
       // once set the first time.
-      assert.strictEqual(loc.value, index);
+      assert.strictEqual(loc.value, this.index);
     }
-    this.marked[index] = true;
+    this.marked[this.listing.length] = true;
     return loc;
   }
 
@@ -171,6 +185,18 @@ export class Emitter {
   // Convenience function for generating expressions like context.next,
   // context.sent, and context.rval.
   contextProperty(name: string) {
+    if (
+      process.env.BABEL_8_BREAKING ||
+      util.newHelpersAvailable(this.pluginPass)
+    ) {
+      if (name === "sent") name = "v";
+      if (
+        ["prev", "next", "abrupt", "finish", "delegateYield"].includes(name)
+      ) {
+        name = name.slice(0, 1);
+      }
+    }
+
     const computed = name === "catch";
     return t.memberExpression(
       this.getContextId(),
@@ -273,7 +299,7 @@ export class Emitter {
   // case statement.
   getDispatchLoop() {
     const self = this;
-    const cases = [];
+    const cases: t.SwitchCase[] = [];
     let current;
 
     // If we encounter a break, continue, or return statement in a switch
@@ -282,7 +308,9 @@ export class Emitter {
 
     self.listing.forEach(function (stmt, i) {
       if (self.marked[i]) {
-        cases.push(t.switchCase(t.numericLiteral(i), (current = [])));
+        cases.push(
+          t.switchCase(t.numericLiteral(self.indexMap.get(i)), (current = [])),
+        );
         alreadyEnded = false;
       }
 
@@ -294,21 +322,26 @@ export class Emitter {
 
     // Now that we know how many statements there will be in this.listing,
     // we can finally resolve this.finalLoc.value.
-    this.finalLoc.value = this.listing.length;
+    this.finalLoc.value = this.getIndex();
 
     if (
       process.env.BABEL_8_BREAKING ||
       util.newHelpersAvailable(this.pluginPass)
     ) {
-      cases.push(
-        t.switchCase(this.finalLoc, [
-          t.returnStatement(
-            t.callExpression(this.contextProperty("abrupt"), [
-              t.numericLiteral(OperatorType.Return),
-            ]),
-          ),
-        ]),
-      );
+      if (
+        this.lastDefaultIndex === this.index ||
+        !this.returns.has(this.listing.length)
+      ) {
+        cases.push(
+          t.switchCase(this.finalLoc, [
+            t.returnStatement(
+              t.callExpression(this.contextProperty("abrupt"), [
+                t.numericLiteral(OperatorType.Return),
+              ]),
+            ),
+          ]),
+        );
+      }
     } else {
       cases.push(
         t.switchCase(this.finalLoc, [
@@ -327,11 +360,14 @@ export class Emitter {
     return t.whileStatement(
       t.numericLiteral(1),
       t.switchStatement(
-        t.assignmentExpression(
-          "=",
-          this.contextProperty("prev"),
-          this.contextProperty("next"),
-        ),
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? this.contextProperty("next")
+          : t.assignmentExpression(
+              "=",
+              this.contextProperty("prev"),
+              this.contextProperty("next"),
+            ),
         cases,
       ),
     );
@@ -676,6 +712,8 @@ export class Emitter {
         if (defaultLoc.value === PENDING_LOCATION) {
           self.mark(defaultLoc);
           assert.strictEqual(after.value, defaultLoc.value);
+
+          this.lastDefaultIndex = this.index;
         }
 
         break;
@@ -814,12 +852,6 @@ export class Emitter {
   }
 
   emitAbruptCompletion(record: AbruptCompletion) {
-    assert.notStrictEqual(
-      record.type,
-      "normal",
-      "normal completions are not abrupt",
-    );
-
     const abruptArgs: [t.NumericLiteral | t.StringLiteral, t.Expression?] = [
       process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this.pluginPass)
         ? t.numericLiteral(record.type)
@@ -843,6 +875,10 @@ export class Emitter {
         t.callExpression(this.contextProperty("abrupt"), abruptArgs),
       ),
     );
+
+    if (record.type === OperatorType.Return) {
+      this.returns.add(this.listing.length);
+    }
   }
 
   // Not all offsets into emitter.listing are potential jump targets. For
@@ -855,7 +891,7 @@ export class Emitter {
   // targets, but minimizing the number of switch cases keeps the generated
   // code shorter.
   getUnmarkedCurrentLoc() {
-    return t.numericLiteral(this.listing.length);
+    return t.numericLiteral(this.getIndex());
   }
 
   // The context.prev property takes the value of context.next whenever we
@@ -873,10 +909,10 @@ export class Emitter {
       if (loc.value === PENDING_LOCATION) {
         // If an uninitialized location literal was passed in, set its value
         // to the current this.listing.length.
-        loc.value = this.listing.length;
+        loc.value = this.getIndex();
       } else {
         // Otherwise assert that the location matches the current offset.
-        assert.strictEqual(loc.value, this.listing.length);
+        assert.strictEqual(loc.value, this.index);
       }
     } else {
       loc = this.getUnmarkedCurrentLoc();
