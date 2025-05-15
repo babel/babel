@@ -1,7 +1,7 @@
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Object$create from "core-js-pure/features/object/create.js";
 import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
-import _Iterator from "core-js-pure/features/iterator/index.js";
+import _Object$getPrototypeOf from "core-js-pure/features/object/get-prototype-of.js";
 import _Object$setPrototypeOf from "core-js-pure/features/object/set-prototype-of.js";
 import regeneratorDefine from "./regeneratorDefine.js";
 import regeneratorValues from "./regeneratorValues.js";
@@ -75,8 +75,8 @@ function _regenerator() {
   function GeneratorFunctionPrototype() {}
   regeneratorDefine(t = {}, n, function () {
     return this;
-  });
-  var u = [][n] ? _Iterator.prototype : t,
+  }), t = _Object$getPrototypeOf;
+  var u = [][n] ? t(t([][n]())) : t,
     c = GeneratorFunctionPrototype.prototype = Generator.prototype = _Object$create(u);
   function f(e) {
     return _Object$setPrototypeOf ? _Object$setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = _Object$create(c), e;
