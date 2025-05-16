@@ -689,7 +689,7 @@ export default declare((api, opts: Options) => {
               // TODO: This is needed to workaround https://github.com/babel/babel/issues/10187
               // and https://github.com/babel/babel/issues/10179 for older @babel/core versions
               // where #10187 isn't fixed.
-              this.file.declarations["objectSpread2"] = null;
+              this.file.declarations.objectSpread2 = null;
 
               // objectSpread2 has been introduced in v7.5.0
               // We have to maintain backward compatibility.

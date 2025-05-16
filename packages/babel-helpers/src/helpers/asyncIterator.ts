@@ -75,7 +75,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
       );
     },
     return: function (value) {
-      var ret = this.s.return;
+      var ret = this.s["return"];
       if (ret === undefined) {
         return Promise.resolve<IteratorReturnResult<TReturn>>({
           // "TReturn | PromiseLike<TReturn>" should have been unwrapped by Awaited<T>,
@@ -94,7 +94,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
       );
     },
     throw: function (maybeError?: any) {
-      var thr = this.s.return;
+      var thr = this.s["return"];
       if (thr === undefined) {
         // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         return Promise.reject(maybeError);

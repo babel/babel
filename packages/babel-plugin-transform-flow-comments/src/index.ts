@@ -308,7 +308,7 @@ export default declare(api => {
             impls
               .map(impl => generateComment(impl).replace(/^:: /, ""))
               .join(", ");
-          delete node["implements"];
+          delete node.implements;
 
           if (comments.length === 1) {
             comments[0] += ` ${comment}`;

@@ -203,7 +203,7 @@ export default /* @no-mangle */ function applyDecs2311(
   instanceBrand: Function,
   parentClass: any,
 ) {
-  var symbolMetadata = Symbol.metadata || Symbol.for("Symbol.metadata");
+  var symbolMetadata = Symbol.metadata || Symbol["for"]("Symbol.metadata");
   var defineProperty = Object.defineProperty;
   var create = Object.create;
   var metadata: any;
@@ -392,8 +392,8 @@ export default /* @no-mangle */ function applyDecs2311(
           newValue = _;
         }
       } else {
-        ctx.static = isStatic;
-        ctx.private = isPrivate;
+        ctx["static"] = isStatic;
+        ctx["private"] = isPrivate;
 
         _ = ctx.access = {
           has: isPrivate

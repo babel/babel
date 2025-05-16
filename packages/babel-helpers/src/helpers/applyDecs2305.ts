@@ -347,8 +347,8 @@ export default /* @no-mangle */ function applyDecs2305(
             newValue = _;
           }
         } else {
-          ctx.static = isStatic;
-          ctx.private = isPrivate;
+          ctx["static"] = isStatic;
+          ctx["private"] = isPrivate;
 
           var get, set;
           if (!isPrivate) {
@@ -542,14 +542,14 @@ export default /* @no-mangle */ function applyDecs2305(
   function defineMetadata(Class: any, metadata: any) {
     return Object.defineProperty(
       Class,
-      Symbol.metadata || Symbol.for("Symbol.metadata"),
+      Symbol.metadata || Symbol["for"]("Symbol.metadata"),
       { configurable: true, enumerable: true, value: metadata },
     );
   }
 
   if (arguments.length >= 6) {
     var parentMetadata =
-      parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
+      parentClass[Symbol.metadata || Symbol["for"]("Symbol.metadata")];
   }
   var metadata = Object.create(parentMetadata == null ? null : parentMetadata);
   var e = applyMemberDecs(targetClass, memberDecs, instanceBrand, metadata);
