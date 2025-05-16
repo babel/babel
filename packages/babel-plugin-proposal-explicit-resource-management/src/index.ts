@@ -7,6 +7,25 @@ const enum USING_KIND {
   AWAIT,
 }
 
+// https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+// We don't test anonymous function / arrow function because they must not be disposable
+function isAnonymousFunctionDefinition(
+  node: t.Node,
+): node is t.ClassExpression {
+  return t.isClassExpression(node) && !node.id;
+}
+
+function emitSetFunctionNameCall(
+  state: PluginPass,
+  expression: t.Expression,
+  name: string,
+) {
+  return t.callExpression(state.addHelper("setFunctionName"), [
+    expression,
+    t.stringLiteral(name),
+  ]);
+}
+
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.22.0"));
 
@@ -45,10 +64,11 @@ export default declare(api => {
       if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
         let ctx: t.Identifier | null = null;
         let needsAwait = false;
+        const scope = path.scope;
 
         for (const node of path.node.body) {
           if (!isUsingDeclaration(node)) continue;
-          ctx ??= path.scope.generateUidIdentifier("usingCtx");
+          ctx ??= scope.generateUidIdentifier("usingCtx");
           const isAwaitUsing =
             node.kind === "await using" ||
             TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
@@ -58,12 +78,18 @@ export default declare(api => {
             node.kind = "const";
           }
           for (const decl of node.declarations) {
+            const currentInit = decl.init;
             decl.init = t.callExpression(
               t.memberExpression(
                 t.cloneNode(ctx),
                 isAwaitUsing ? t.identifier("a") : t.identifier("u"),
               ),
-              [decl.init],
+              [
+                isAnonymousFunctionDefinition(currentInit) &&
+                t.isIdentifier(decl.id)
+                  ? emitSetFunctionNameCall(state, currentInit, decl.id.name)
+                  : currentInit,
+              ],
             );
           }
         }
