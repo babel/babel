@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
@@ -51,11 +52,11 @@ export default declare(api => {
       left.kind = "const";
 
       path.ensureBlock();
-      path.node.body.body.unshift(
+      unshiftForXStatementBody(path, [
         t.variableDeclaration("using", [
           t.variableDeclarator(id, t.cloneNode(tmpId)),
         ]),
-      );
+      ]);
     },
     "BlockStatement|StaticBlock"(
       path: NodePath<t.BlockStatement | t.StaticBlock>,
