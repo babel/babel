@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template, traverse } from "@babel/core";
-import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
+import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,
@@ -17,17 +17,12 @@ function isAnonymousFunctionDefinition(
 
 function emitSetFunctionNameCall(
   state: PluginPass,
-  scope: Scope,
   expression: t.Expression,
   name: string,
 ) {
-  const memoiserId = scope.generateDeclaredUidIdentifier("m");
-  return t.sequenceExpression([
-    t.assignmentExpression("=", t.cloneNode(memoiserId), expression),
-    t.callExpression(state.addHelper("setFunctionName"), [
-      t.cloneNode(memoiserId),
-      t.stringLiteral(name),
-    ]),
+  return t.callExpression(state.addHelper("setFunctionName"), [
+    expression,
+    t.stringLiteral(name),
   ]);
 }
 
@@ -92,12 +87,7 @@ export default declare(api => {
               [
                 isAnonymousFunctionDefinition(currentInit) &&
                 t.isIdentifier(decl.id)
-                  ? emitSetFunctionNameCall(
-                      state,
-                      scope,
-                      currentInit,
-                      decl.id.name,
-                    )
+                  ? emitSetFunctionNameCall(state, currentInit, decl.id.name)
                   : currentInit,
               ],
             );
