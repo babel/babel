@@ -292,3 +292,8 @@ export function PipelineBareFunction(
 export function PipelinePrimaryTopicReference(this: Printer) {
   this.token("#");
 }
+
+// discard binding
+export function VoidPattern(this: Printer) {
+  this.word("void");
+}

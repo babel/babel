@@ -1177,6 +1177,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.Variance>,
   ): this is NodePath<t.Variance>;
+  isVoidPattern(
+    this: NodePath,
+    opts?: Opts<t.VoidPattern>,
+  ): this is NodePath<t.VoidPattern>;
   isVoidTypeAnnotation(
     this: NodePath,
     opts?: Opts<t.VoidTypeAnnotation>,
