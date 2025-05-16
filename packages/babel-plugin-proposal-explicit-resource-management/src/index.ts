@@ -1,10 +1,34 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template, traverse } from "@babel/core";
-import type { NodePath, Visitor, PluginPass } from "@babel/core";
+import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,
   AWAIT,
+}
+
+// https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+// We don't test anonymous function / arrow function because they must not be disposable
+function isAnonymousFunctionDefinition(
+  node: t.Node,
+): node is t.ClassExpression {
+  return t.isClassExpression(node) && !node.id;
+}
+
+function emitSetFunctionNameCall(
+  state: PluginPass,
+  scope: Scope,
+  expression: t.Expression,
+  name: string,
+) {
+  const memoiserId = scope.generateDeclaredUidIdentifier("m");
+  return t.sequenceExpression([
+    t.assignmentExpression("=", t.cloneNode(memoiserId), expression),
+    t.callExpression(state.addHelper("setFunctionName"), [
+      t.cloneNode(memoiserId),
+      t.stringLiteral(name),
+    ]),
+  ]);
 }
 
 export default declare(api => {
@@ -45,10 +69,11 @@ export default declare(api => {
       if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
         let ctx: t.Identifier | null = null;
         let needsAwait = false;
+        const scope = path.scope;
 
         for (const node of path.node.body) {
           if (!isUsingDeclaration(node)) continue;
-          ctx ??= path.scope.generateUidIdentifier("usingCtx");
+          ctx ??= scope.generateUidIdentifier("usingCtx");
           const isAwaitUsing =
             node.kind === "await using" ||
             TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
@@ -58,12 +83,23 @@ export default declare(api => {
             node.kind = "const";
           }
           for (const decl of node.declarations) {
+            const currentInit = decl.init;
             decl.init = t.callExpression(
               t.memberExpression(
                 t.cloneNode(ctx),
                 isAwaitUsing ? t.identifier("a") : t.identifier("u"),
               ),
-              [decl.init],
+              [
+                isAnonymousFunctionDefinition(currentInit) &&
+                t.isIdentifier(decl.id)
+                  ? emitSetFunctionNameCall(
+                      state,
+                      scope,
+                      currentInit,
+                      decl.id.name,
+                    )
+                  : currentInit,
+              ],
             );
           }
         }
