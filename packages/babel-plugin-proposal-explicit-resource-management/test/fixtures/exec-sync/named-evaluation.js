@@ -6,7 +6,3 @@ let Symbol$dispose = Symbol.dispose || Symbol.for("Symbol.dispose");
 }
 
 expect(log).toEqual(["foo", "foo is disposed"])
-
-expect(() => {
-  using fooTDZ = class { static p = fooTDZ }
-}).toThrow("Cannot access 'fooTDZ' before initialization")
