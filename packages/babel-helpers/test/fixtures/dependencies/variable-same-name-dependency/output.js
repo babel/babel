@@ -7,5 +7,6 @@ _$_variableSameNameDependency_main;
       exportBindingAssignments: [],
       exportName: "helper",
       dependencies: {"_$_variable-same-name-dependency_dependency":["body.0.body.body.0.declarations.0.init"]},
+      internal: false,
     }
   */

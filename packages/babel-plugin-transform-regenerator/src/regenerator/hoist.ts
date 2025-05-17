@@ -142,9 +142,5 @@ export function hoist(funPath: any) {
     }
   });
 
-  if (declarations.length === 0) {
-    return null; // Be sure to handle this case!
-  }
-
-  return t.variableDeclaration("var", declarations);
+  return declarations;
 }

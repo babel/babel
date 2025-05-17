@@ -584,6 +584,42 @@
       "./helpers/readOnlyError.js"
     ],
     "./helpers/esm/readOnlyError": "./helpers/esm/readOnlyError.js",
+    "./helpers/regenerator": [
+      {
+        "node": "./helpers/regenerator.js",
+        "import": "./helpers/esm/regenerator.js",
+        "default": "./helpers/regenerator.js"
+      },
+      "./helpers/regenerator.js"
+    ],
+    "./helpers/esm/regenerator": "./helpers/esm/regenerator.js",
+    "./helpers/regeneratorAsync": [
+      {
+        "node": "./helpers/regeneratorAsync.js",
+        "import": "./helpers/esm/regeneratorAsync.js",
+        "default": "./helpers/regeneratorAsync.js"
+      },
+      "./helpers/regeneratorAsync.js"
+    ],
+    "./helpers/esm/regeneratorAsync": "./helpers/esm/regeneratorAsync.js",
+    "./helpers/regeneratorAsyncGen": [
+      {
+        "node": "./helpers/regeneratorAsyncGen.js",
+        "import": "./helpers/esm/regeneratorAsyncGen.js",
+        "default": "./helpers/regeneratorAsyncGen.js"
+      },
+      "./helpers/regeneratorAsyncGen.js"
+    ],
+    "./helpers/esm/regeneratorAsyncGen": "./helpers/esm/regeneratorAsyncGen.js",
+    "./helpers/regeneratorKeys": [
+      {
+        "node": "./helpers/regeneratorKeys.js",
+        "import": "./helpers/esm/regeneratorKeys.js",
+        "default": "./helpers/regeneratorKeys.js"
+      },
+      "./helpers/regeneratorKeys.js"
+    ],
+    "./helpers/esm/regeneratorKeys": "./helpers/esm/regeneratorKeys.js",
     "./helpers/regeneratorRuntime": [
       {
         "node": "./helpers/regeneratorRuntime.js",
