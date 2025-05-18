@@ -2,7 +2,7 @@ export { C as default };
 try {
   var _usingCtx = babelHelpers.usingCtx();
   var x = _usingCtx.u(null);
-  var C = class {};
+  var C = class C {};
 } catch (_) {
   _usingCtx.e = _;
 } finally {

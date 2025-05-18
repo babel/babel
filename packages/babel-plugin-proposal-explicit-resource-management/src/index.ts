@@ -290,7 +290,10 @@ export default declare(api => {
               let varId;
               if (t.isClassDeclaration(declaration)) {
                 varId = declaration.id;
-                declaration.id = null;
+                // Move the class id to the var binding such that the scope binding
+                // info is correct. Then we clone one to ensure inner class reference
+                // will stay same if the outer binding is mutated.
+                declaration.id = t.cloneNode(varId);
                 declaration = t.toExpression(declaration);
               } else if (!t.isExpression(declaration)) {
                 continue;
@@ -332,7 +335,7 @@ export default declare(api => {
 
             if (t.isClassDeclaration(node)) {
               const { id } = node;
-              node.id = null;
+              node.id = t.cloneNode(id);
               innerBlockBody.push(
                 t.variableDeclaration("var", [
                   t.variableDeclarator(id, t.toExpression(node)),
