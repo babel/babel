@@ -5158,7 +5158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codspeed/tinybench-plugin@npm:^4.0.0":
+"@codspeed/tinybench-plugin@npm:4.0.1":
   version: 4.0.1
   resolution: "@codspeed/tinybench-plugin@npm:4.0.1"
   dependencies:
@@ -5167,6 +5167,18 @@ __metadata:
   peerDependencies:
     tinybench: ^2.3.0
   checksum: 10/a37d5ea661e81b6631ba8c295c4cc4e0c4ff307f0c1c5f447c0fad2051abf2a6fd967bee9883c346deabad52bfcca4da9004a36b8cf8224138e2452067efb36c
+  languageName: node
+  linkType: hard
+
+"@codspeed/tinybench-plugin@patch:@codspeed/tinybench-plugin@npm%3A4.0.1#~/.yarn/patches/@codspeed-tinybench-plugin-npm-4.0.1-a79378f455.patch":
+  version: 4.0.1
+  resolution: "@codspeed/tinybench-plugin@patch:@codspeed/tinybench-plugin@npm%3A4.0.1#~/.yarn/patches/@codspeed-tinybench-plugin-npm-4.0.1-a79378f455.patch::version=4.0.1&hash=e470e1"
+  dependencies:
+    "@codspeed/core": "npm:^4.0.1"
+    stack-trace: "npm:1.0.0-pre2"
+  peerDependencies:
+    tinybench: ^2.3.0
+  checksum: 10/b719b1aa31dc1606908c1e2fe461e7a79665a5e647ed8472c8b0cd88c47103c2aea4f641838093ceede4fa07304434adbe78d0984f5eef805913d01658288c14
   languageName: node
   linkType: hard
 
@@ -7840,7 +7852,7 @@ __metadata:
     "@babel/preset-env": "npm:8.0.0-alpha.16"
     "@babel/preset-typescript": "npm:8.0.0-alpha.16"
     "@babel/runtime": "npm:8.0.0-alpha.16"
-    "@codspeed/tinybench-plugin": "npm:^4.0.0"
+    "@codspeed/tinybench-plugin": "patch:@codspeed/tinybench-plugin@npm%3A4.0.1#~/.yarn/patches/@codspeed-tinybench-plugin-npm-4.0.1-a79378f455.patch"
     "@cspotcode/source-map-support": "npm:^0.8.1"
     "@eslint/js": "npm:^9.22.0"
     "@rollup/plugin-babel": "npm:^6.0.4"

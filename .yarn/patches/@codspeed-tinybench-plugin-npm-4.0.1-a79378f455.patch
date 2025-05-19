@@ -1,0 +1,18 @@
+diff --git a/dist/index.es5.js b/dist/index.es5.js
+index 12687b0ba0fb8add3fe67108e44418628d00d20b..3631e2e034a3d019969fc7c66b7fb689aceff5f2 100644
+--- a/dist/index.es5.js
++++ b/dist/index.es5.js
+@@ -89,12 +89,8 @@ function withCodSpeed(bench) {
+     for (const task of bench.tasks) {
+       const uri = isCodSpeedBenchOptions(task.opts) ? task.opts.uri : `${rootCallingFile}::${task.name}`;
+       await task.opts.beforeAll?.call(task);
+-      await optimizeFunction(async () => {
+-        await task.opts.beforeEach?.call(task);
+-        await task.fn();
+-        await task.opts.afterEach?.call(task);
+-      });
+       await task.opts.beforeEach?.call(task);
++      await task.fn();
+       await mongoMeasurement.start(uri);
+       global.gc?.();
+       await async function __codspeed_root_frame__() {
