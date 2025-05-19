@@ -20,11 +20,10 @@ import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-com
 import { USE_ESM } from "$repo-utils";
 import { Bench } from "tinybench";
 import { withCodSpeed } from "@codspeed/tinybench-plugin";
-import { globSync } from "glob";
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
-import assert from "assert";
+import { readFileSync, globSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import assert from "node:assert";
 
 const currentGenerator = USE_ESM
   ? _currentGenerator
