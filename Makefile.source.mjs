@@ -265,6 +265,7 @@ target["prepublish-build"] = function () {
       NODE_ENV: "production",
       BABEL_ENV: "production",
       STRIP_BABEL_8_FLAG: "true",
+      IS_PUBLISH: "true",
     }
   );
 
