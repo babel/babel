@@ -1851,13 +1851,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         "HeritageClauseElement",
         () => {
           if (process.env.BABEL_8_BREAKING) {
+            this.setLoc(this.state.startLoc);
             const expression = super.parseExprSubscripts();
             if (!tsIsEntityName(expression)) {
-              this.raise(
-                TSErrors.InvalidHeritageClauseType,
-                expression.loc.start,
-                { token },
-              );
+              this.raise(TSErrors.InvalidHeritageClauseType, expression, {
+                token,
+              });
             }
             const nodeType =
               token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements";
