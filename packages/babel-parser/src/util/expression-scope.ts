@@ -1,7 +1,6 @@
 import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import type { Node } from "../types.ts";
 import type Tokenizer from "../tokenizer/index.ts";
-import type { Undone } from "../parser/node.ts";
 
 /**
  * @module util/expression-scope
