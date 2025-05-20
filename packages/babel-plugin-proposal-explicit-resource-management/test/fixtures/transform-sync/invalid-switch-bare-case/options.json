@@ -1,0 +1,3 @@
+{
+  "throws": "Using declaration cannot appear in the top level when source type is `script` or in the bare case statement."
+}

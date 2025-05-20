@@ -2,23 +2,24 @@
   "version": 3,
   "names": [
     "f",
+    "v",
     "_usingCtx",
     "babelHelpers",
     "usingCtx",
-    "v",
     "x",
     "u",
-    "y",
     "_",
     "e",
-    "d"
+    "d",
+    "_usingCtx2",
+    "y"
   ],
   "sources": [
     "source-maps/switch/input.js"
   ],
   "sourcesContent": [
-    "function f() {\n  switch (v) {\n    case 0:\n      using x = 0;\n      break;\n    default:\n      using y = 1;\n      break;\n  };\n}"
+    "function f() {\n  switch (v) {\n    case 0:\n      {\n        using x = 0;\n      }\n      break;\n    default:\n      {\n        using y = 1;\n      }\n      break;\n  };\n}"
   ],
-  "mappings": "AAAA,SAASA,CAACA,CAAA,EAAG;EACX;IAAA,IAAAC,SAAA,GAAAC,YAAA,CAAAC,QAAA;IAAA,QAAQC,CAAC;MACP,KAAK,CAAC;QACJ,MAAMC,CAAC,GAAAJ,SAAA,CAAAK,CAAA,CAAG,CAAC;QACX;MACF;QACE,MAAMC,CAAC,GAAAN,SAAA,CAAAK,CAAA,CAAG,CAAC;QACX;IACJ;EAAC,SAAAE,CAAA;IAAAP,SAAA,CAAAQ,CAAA,GAAAD,CAAA;EAAA;IAAAP,SAAA,CAAAS,CAAA;EAAA;EAAA;AACH",
+  "mappings": "AAAA,SAASA,CAACA,CAAA,EAAG;EACX,QAAQC,CAAC;IACP,KAAK,CAAC;MACJ;QAAA,IAAAC,SAAA,GAAAC,YAAA,CAAAC,QAAA;QACE,MAAMC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAG,CAAC;MAAC,SAAAC,CAAA;QAAAL,SAAA,CAAAM,CAAA,GAAAD,CAAA;MAAA;QAAAL,SAAA,CAAAO,CAAA;MAAA;MAEd;IACF;MACE;QAAA,IAAAC,UAAA,GAAAP,YAAA,CAAAC,QAAA;QACE,MAAMO,CAAC,GAAAD,UAAA,CAAAJ,CAAA,CAAG,CAAC;MAAC,SAAAC,CAAA;QAAAG,UAAA,CAAAF,CAAA,GAAAD,CAAA;MAAA;QAAAG,UAAA,CAAAD,CAAA;MAAA;MAEd;EACJ;EAAC;AACH",
   "ignoreList": []
 }
