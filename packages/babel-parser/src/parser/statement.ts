@@ -368,6 +368,13 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
+  allowsUsing(): boolean {
+    return (
+      (this.scope.inModule || !this.scope.inTopLevel) &&
+      !this.scope.inBareCaseStatement
+    );
+  }
+
   startsAwaitUsing(): boolean {
     let next = this.nextTokenInLineStart();
     if (this.isUnparsedContextual(next, "using")) {
@@ -518,7 +525,9 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._await:
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
         if (!this.state.containsEsc && this.startsAwaitUsing()) {
-          if (!this.recordAwaitIfAllowed()) {
+          if (!this.allowsUsing()) {
+            this.raise(Errors.UnexpectedUsingDeclaration, node);
+          } else if (!this.recordAwaitIfAllowed()) {
             this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           } else if (!allowDeclaration) {
             this.raise(Errors.UnexpectedLexicalDeclaration, node);
@@ -539,7 +548,7 @@ export default abstract class StatementParser extends ExpressionParser {
           break;
         }
         this.expectPlugin("explicitResourceManagement");
-        if (!this.scope.inModule && this.scope.inTopLevel) {
+        if (!this.allowsUsing()) {
           this.raise(Errors.UnexpectedUsingDeclaration, this.state.startLoc);
         } else if (!allowDeclaration) {
           this.raise(Errors.UnexpectedLexicalDeclaration, this.state.startLoc);
@@ -1097,7 +1106,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const cases: N.SwitchStatement["cases"] = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
-    this.scope.enter(ScopeFlag.OTHER);
+    this.scope.enter(ScopeFlag.SWITCH);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
@@ -1156,7 +1165,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.scope.enter(
       this.options.annexB && param.type === "Identifier"
         ? ScopeFlag.SIMPLE_CATCH
-        : 0,
+        : ScopeFlag.OTHER,
     );
     this.checkLVal(
       param,
