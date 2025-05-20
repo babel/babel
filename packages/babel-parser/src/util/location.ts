@@ -6,12 +6,16 @@ export type Pos = {
 // `startLoc` and `endLoc` properties.
 
 export class Position {
-  // If `declare` is used here, the `jquery` benchmark will drop by 10%. :)
-  line: number;
-  column: number;
+  declare line: number;
+  declare column: number;
   declare index: number;
 
   constructor(line: number, col: number, index?: number) {
+    // The following three lines will give a huge performance boost.
+    this.line = void 0;
+    this.column = void 0;
+    if (index !== undefined) this.index = void 0;
+
     this.line = line;
     this.column = col;
     if (index !== undefined) this.index = index;
