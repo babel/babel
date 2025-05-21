@@ -241,5 +241,12 @@ describe("converters", function () {
       }).toThrow(Error);
       t.assertProgram(node);
     });
+    it("strip class abstract", function () {
+      const node = t.classDeclaration(t.identifier("A"), null, t.classBody([]));
+      node.abstract = true;
+      t.toExpression(node);
+      t.assertClassExpression(node);
+      expect(node.abstract).toBe(false);
+    });
   });
 });
