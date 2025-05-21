@@ -527,10 +527,10 @@ export default abstract class StatementParser extends ExpressionParser {
         if (!this.state.containsEsc && this.startsAwaitUsing()) {
           if (!this.allowsUsing()) {
             this.raise(Errors.UnexpectedUsingDeclaration, node);
-          } else if (!this.recordAwaitIfAllowed()) {
-            this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           } else if (!allowDeclaration) {
             this.raise(Errors.UnexpectedLexicalDeclaration, node);
+          } else if (!this.recordAwaitIfAllowed()) {
+            this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           }
           this.next(); // eat 'await'
           return this.parseVarStatement(
