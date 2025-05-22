@@ -236,20 +236,20 @@ export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
 }
 
 export function YieldExpression(this: Printer, node: t.YieldExpression) {
-  this.word("yield", true);
-
   if (node.delegate) {
+    this.word("yield", true);
     this.token("*");
     if (node.argument) {
       this.space();
       // line terminators are allowed after yield*
       this.print(node.argument);
     }
+  } else if (node.argument) {
+    this.word("yield", true);
+    this.space();
+    this.print(node.argument);
   } else {
-    if (node.argument) {
-      this.space();
-      this.printTerminatorless(node.argument);
-    }
+    this.word("yield");
   }
 }
 
