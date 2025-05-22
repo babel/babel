@@ -158,7 +158,7 @@ const TSErrors = ParseErrorEnum`typescript`({
     "'interface' declarations must be followed by an identifier.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
-  NonClassMethodPropertyHasAbstractModifer:
+  NonClassMethodPropertyHasAbstractModifier:
     "'abstract' modifier can only appear on a class, method, or property declaration.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
@@ -4205,7 +4205,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         //   Foo {}
         if (!this.hasFollowingLineBreak()) {
           node.abstract = true;
-          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifer, node);
+          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifier, node);
           return this.tsParseInterfaceDeclaration(
             node as N.TsInterfaceDeclaration,
           );
