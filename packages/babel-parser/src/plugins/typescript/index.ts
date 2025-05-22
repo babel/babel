@@ -91,11 +91,11 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
-  DuplicateAccessibilityModifier:
-    // `Accessibility modifier already seen: ${modifier}` would be more helpful.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ modifier }: { modifier: N.Accessibility }) =>
-      `Accessibility modifier already seen.`,
+  DuplicateAccessibilityModifier: ({
+    modifier,
+  }: {
+    modifier: N.Accessibility;
+  }) => `Accessibility modifier already seen: '${modifier}'.`,
   DuplicateModifier: ({ modifier }: { modifier: TsModifier }) =>
     `Duplicate modifier: '${modifier}'.`,
   // `token` matches the terminology used by typescript:
