@@ -228,11 +228,8 @@ export function Import(this: Printer) {
 
 export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
   this.word("await");
-
-  if (node.argument) {
-    this.space();
-    this.printTerminatorless(node.argument);
-  }
+  this.space();
+  this.print(node.argument);
 }
 
 export function YieldExpression(this: Printer, node: t.YieldExpression) {
