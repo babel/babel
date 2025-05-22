@@ -3091,7 +3091,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseVarStatement(
       node: N.VariableDeclaration,
-      kind: "var" | "let" | "const" | "using",
+      kind: "var" | "let" | "const" | "using" | "await using",
       allowMissingInitializer: boolean = false,
     ) {
       const { isAmbientContext } = this.state;
@@ -3108,7 +3108,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (!init) continue;
 
         // var and let aren't ever allowed initializers.
-        if (kind !== "const" || !!id.typeAnnotation) {
+        if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
           this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
         } else if (
           !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
@@ -3620,7 +3620,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // `let x: number;`
     parseVarId(
       decl: N.VariableDeclarator,
-      kind: "var" | "let" | "const" | "using",
+      kind: "var" | "let" | "const" | "using" | "await using",
     ): void {
       super.parseVarId(decl, kind);
       if (
