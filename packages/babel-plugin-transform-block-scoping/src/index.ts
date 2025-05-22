@@ -68,7 +68,7 @@ export default declare((api, opts: Options) => {
           const updatedBindingsUsages: Map<string, NodePath<t.Identifier>[]> =
             new Map();
 
-          if (headPath && isBlockScoped(headPath.node)) {
+          if (headPath && isBlockScoped(headPath)) {
             const names = Object.keys(headPath.getBindingIdentifiers());
             const headScope = headPath.scope;
 
@@ -180,7 +180,7 @@ function transformBlockScopedVariable(
   state: PluginPass,
   tdzEnabled: boolean,
 ) {
-  if (!isBlockScoped(path.node)) return;
+  if (!isBlockScoped(path)) return;
 
   const dynamicTDZNames = validateUsage(path, state, tdzEnabled);
 
@@ -241,7 +241,9 @@ function transformBlockScopedVariable(
   }
 }
 
-function isLetOrConst(kind: string): kind is "let" | "const" {
+function isLetOrConst(
+  kind: t.VariableDeclaration["kind"],
+): kind is "let" | "const" {
   return kind === "let" || kind === "const";
 }
 
@@ -252,10 +254,17 @@ function isInLoop(path: NodePath<t.Node>): boolean {
   return isInLoop(path.parentPath);
 }
 
-function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
+function isBlockScoped(
+  path: NodePath<t.Node>,
+): path is NodePath<t.VariableDeclaration> {
+  const { node } = path;
   if (!t.isVariableDeclaration(node)) return false;
-
-  if (!isLetOrConst(node.kind) && node.kind !== "using") {
+  const { kind } = node;
+  if (kind === "using" || kind === "await using") {
+    throw path.buildCodeFrameError(
+      `The ${kind} declaration should be first transformed by \`@babel/plugin-proposal-explicit-resource-management\`.`,
+    );
+  } else if (!isLetOrConst(kind)) {
     return false;
   }
 
