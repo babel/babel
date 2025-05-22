@@ -572,7 +572,7 @@ A function declaration. Note that unlike in the parent interface `Function`, the
 interface VariableDeclaration <: Declaration {
   type: "VariableDeclaration";
   declarations: [ VariableDeclarator ];
-  kind: "var" | "let" | "const" | "using";
+  kind: "var" | "let" | "const" | "using" | "await using";
 }
 ```
 
