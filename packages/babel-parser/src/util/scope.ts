@@ -71,6 +71,9 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   get inNonArrowFunction() {
     return (this.currentThisScopeFlags() & ScopeFlag.FUNCTION) > 0;
   }
+  get inBareCaseStatement() {
+    return (this.currentScope().flags & ScopeFlag.SWITCH) > 0;
+  }
   get treatFunctionsAsVar() {
     return this.treatFunctionsAsVarInScope(this.currentScope());
   }

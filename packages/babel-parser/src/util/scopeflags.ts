@@ -1,16 +1,17 @@
 // Each scope gets a bitset that may contain these flags
 /* prettier-ignore */
 export const enum ScopeFlag {
-  OTHER        = 0b000000000,
-  PROGRAM      = 0b000000001,
-  FUNCTION     = 0b000000010,
-  ARROW        = 0b000000100,
-  SIMPLE_CATCH = 0b000001000,
-  SUPER        = 0b000010000,
-  DIRECT_SUPER = 0b000100000,
-  CLASS        = 0b001000000,
-  STATIC_BLOCK = 0b010000000,
-  TS_MODULE    = 0b100000000,
+  OTHER        = 0b0000000000,
+  PROGRAM      = 0b0000000001,
+  FUNCTION     = 0b0000000010,
+  ARROW        = 0b0000000100,
+  SIMPLE_CATCH = 0b0000001000,
+  SUPER        = 0b0000010000,
+  DIRECT_SUPER = 0b0000100000,
+  CLASS        = 0b0001000000,
+  STATIC_BLOCK = 0b0010000000,
+  SWITCH       = 0b0100000000,
+  TS_MODULE    = 0b1000000000,
   VAR          = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE,
 }
 
