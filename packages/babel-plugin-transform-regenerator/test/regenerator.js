@@ -72,6 +72,40 @@ function convert(es6File, es5File, callback) {
   });
 }
 
+function convertOldHelper(es6File, es5File, callback) {
+  const transformOptions = {
+    plugins: regeneratorPreset,
+    parserOpts: {
+      strictMode: false,
+    },
+    ast: true,
+    configFile: false,
+  };
+
+  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
+    if (err) {
+      return callback(err);
+    }
+
+    let es5, ast;
+    process.env.FORCE_OLD_REGENERATOR = true;
+    try {
+      ({ code: es5, ast } = transformSync(es6, transformOptions));
+    } finally {
+      delete process.env.FORCE_OLD_REGENERATOR;
+    }
+    writeFileSync(join(__dirname, es5File), es5);
+    try {
+      checkDuplicatedNodes(ast);
+    } catch (err) {
+      err.message =
+        "Occurred while transforming: " + es6File + "\n" + err.message;
+      throw err;
+    }
+    callback();
+  });
+}
+
 function enqueue(cmd, args = []) {
   describe("regenerator", () => {
     if (typeof cmd === "function") {
@@ -152,6 +186,11 @@ enqueue(convert, [
   "./regenerator-fixtures/tmp/tests.es5.js",
 ]);
 
+enqueue(convertOldHelper, [
+  "./regenerator-fixtures/tests.es6.js",
+  "./regenerator-fixtures/tmp/tests.es5-old.js",
+]);
+
 enqueue(convert, [
   "./regenerator-fixtures/tests-node4.es6.js",
   "./regenerator-fixtures/tmp/tests-node4.es5.js",
@@ -165,6 +204,11 @@ enqueue(convert, [
 enqueue(convert, [
   "./regenerator-fixtures/async.js",
   "./regenerator-fixtures/tmp/async.es5.js",
+]);
+
+enqueue(convertOldHelper, [
+  "./regenerator-fixtures/async.js",
+  "./regenerator-fixtures/tmp/async.es5-old.js",
 ]);
 
 enqueue(convert, [
@@ -323,9 +367,11 @@ enqueue(convert, [
 ]);
 
 enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5.js"]);
+enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tmp/regression.es5.js"]);
 enqueue("mocha", ["./regenerator-fixtures/tests.transform.js"]);
