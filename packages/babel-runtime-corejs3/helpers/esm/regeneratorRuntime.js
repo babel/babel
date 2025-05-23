@@ -25,7 +25,7 @@ function _regeneratorRuntime() {
   function a(r, e, n, o) {
     var i = e && e.prototype instanceof Generator ? e : Generator,
       a = _Object$create(i.prototype),
-      u = new Context(o || []);
+      s = new Context(o || []);
     return regeneratorDefine(a, "_invoke", function (r, e, n) {
       var o = 1;
       return function (i, a) {
@@ -38,11 +38,11 @@ function _regeneratorRuntime() {
           };
         }
         for (n.method = i, n.arg = a;;) {
-          var u = n.delegate;
-          if (u) {
-            var c = y(u, n);
+          var s = n.delegate;
+          if (s) {
+            var c = y(s, n);
             if (c) {
-              if (c === s) continue;
+              if (c === u) continue;
               return c;
             }
           }
@@ -53,7 +53,7 @@ function _regeneratorRuntime() {
           o = 3;
           var h = tryCatch(r, e, n);
           if (!h.e) {
-            if (o = n.done ? 4 : 2, h.v === s) continue;
+            if (o = n.done ? 4 : 2, h.v === u) continue;
             return {
               value: h.v,
               done: n.done
@@ -62,31 +62,31 @@ function _regeneratorRuntime() {
           o = 4, n.method = "throw", n.arg = h.v;
         }
       };
-    }(r, n, u), !0), a;
+    }(r, n, s), !0), a;
   }
-  var s = {};
+  var u = {};
   function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
-  var u = {};
-  regeneratorDefine(u, o, function () {
+  var s = {};
+  regeneratorDefine(s, o, function () {
     return this;
   });
   var c = _Object$getPrototypeOf,
     h = c && c(c(regeneratorValues([])));
-  h && h !== r && e.call(h, o) && (u = h);
-  var f = GeneratorFunctionPrototype.prototype = Generator.prototype = _Object$create(u);
+  h && h !== r && e.call(h, o) && (s = h);
+  var f = GeneratorFunctionPrototype.prototype = Generator.prototype = _Object$create(s);
   function p(t) {
     return _Object$setPrototypeOf ? _Object$setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, regeneratorDefine(t, i, "GeneratorFunction")), t.prototype = _Object$create(f), t;
   }
   function y(r, e) {
     var n = e.method,
       o = r.i[n];
-    if (o === t) return e.delegate = null, "throw" === n && r.i["return"] && (e.method = "return", e.arg = t, y(r, e), "throw" === e.method) || "return" !== n && (e.method = "throw", e.arg = new TypeError("The iterator does not provide a '" + n + "' method")), s;
+    if (o === t) return e.delegate = null, "throw" === n && r.i["return"] && (e.method = "return", e.arg = t, y(r, e), "throw" === e.method) || "return" !== n && (e.method = "throw", e.arg = new TypeError("The iterator does not provide a '" + n + "' method")), u;
     var i = tryCatch(o, r.i, e.arg);
-    if (i.e) return e.method = "throw", e.arg = i.v, e.delegate = null, s;
+    if (i.e) return e.method = "throw", e.arg = i.v, e.delegate = null, u;
     var a = i.v;
-    return a ? a.done ? (e[r.r] = a.value, e.next = r.n, "return" !== e.method && (e.method = "next", e.arg = t), e.delegate = null, s) : a : (e.method = "throw", e.arg = new TypeError("iterator result is not an object"), e.delegate = null, s);
+    return a ? a.done ? (e[r.r] = a.value, e.next = r.n, "return" !== e.method && (e.method = "next", e.arg = t), e.delegate = null, u) : a : (e.method = "throw", e.arg = new TypeError("iterator result is not an object"), e.delegate = null, u);
   }
   function l(r) {
     var e = r[4] || {};
@@ -125,14 +125,14 @@ function _regeneratorRuntime() {
       for (var o = e.tryEntries.length - 1; o >= 0; --o) {
         var i = this.tryEntries[o],
           a = i[4],
-          s = this.prev,
-          u = i[1],
+          u = this.prev,
+          s = i[1],
           c = i[2];
         if (-1 === i[0]) return n("end"), !1;
-        if (!u && !c) throw Error("try statement without catch or finally");
-        if (null != i[0] && i[0] <= s) {
-          if (s < u) return this.method = "next", this.arg = t, n(u), !0;
-          if (s < c) return n(c), !1;
+        if (!s && !c) throw Error("try statement without catch or finally");
+        if (null != i[0] && i[0] <= u) {
+          if (u < s) return this.method = "next", this.arg = t, n(s), !0;
+          if (u < c) return n(c), !1;
         }
       }
     },
@@ -146,16 +146,16 @@ function _regeneratorRuntime() {
       }
       o && ("break" === t || "continue" === t) && o[0] <= r && r <= o[2] && (o = null);
       var i = o ? o[4] : {};
-      return i.type = t, i.arg = r, o ? (this.method = "next", this.next = o[2], s) : this.complete(i);
+      return i.type = t, i.arg = r, o ? (this.method = "next", this.next = o[2], u) : this.complete(i);
     },
     complete: function complete(t, r) {
       if ("throw" === t.type) throw t.arg;
-      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && r && (this.next = r), s;
+      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && r && (this.next = r), u;
     },
     finish: function finish(t) {
       for (var r = this.tryEntries.length - 1; r >= 0; --r) {
         var e = this.tryEntries[r];
-        if (e[2] === t) return this.complete(e[4], e[3]), l(e), s;
+        if (e[2] === t) return this.complete(e[4], e[3]), l(e), u;
       }
     },
     "catch": function _catch(t) {
@@ -177,14 +177,16 @@ function _regeneratorRuntime() {
         i: regeneratorValues(r),
         r: e,
         n: n
-      }, "next" === this.method && (this.arg = t), s;
+      }, "next" === this.method && (this.arg = t), u;
     }
   }, (_regeneratorRuntime = function _regeneratorRuntime() {
     return {
       wrap: a,
       isGeneratorFunction: d,
       mark: p,
-      awrap: OverloadYield,
+      awrap: function awrap(t, r) {
+        return new OverloadYield(t, r);
+      },
       AsyncIterator: regeneratorAsyncIterator,
       async: function async(t, r, e, n, o) {
         return (d(r) ? regeneratorAsyncGen : regeneratorAsync)(t, r, e, n, o);

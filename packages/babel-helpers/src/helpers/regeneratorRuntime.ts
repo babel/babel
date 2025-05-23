@@ -567,7 +567,9 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       wrap: wrap,
       isGeneratorFunction: isGeneratorFunction,
       mark: mark,
-      awrap: OverloadYield,
+      awrap: function (value: any, kind: any) {
+        return new OverloadYield(value, kind);
+      },
       AsyncIterator: AsyncIterator,
       async: function (
         innerFn: Function,
