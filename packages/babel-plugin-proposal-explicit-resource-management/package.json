@@ -17,7 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-transform-destructuring": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
