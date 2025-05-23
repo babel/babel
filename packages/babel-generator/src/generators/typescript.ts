@@ -40,7 +40,7 @@ export function TSTypeParameterInstantiation(
     printTrailingSeparator &&= !!this.tokenMap.find(node, t =>
       this.tokenMap.matchesOriginal(t, ","),
     );
-    // Preseve the trailing comma if it was there before
+    // Preserve the trailing comma if it was there before
     printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
   }
 
