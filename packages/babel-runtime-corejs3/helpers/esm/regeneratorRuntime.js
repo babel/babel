@@ -23,7 +23,7 @@ function _regeneratorRuntime() {
     a = o.asyncIterator || "@@asyncIterator",
     u = o.toStringTag || "@@toStringTag";
   function c(t, r, e, n) {
-    return _Object$defineProperty(t, r, {
+    _Object$defineProperty(t, r, {
       value: e,
       enumerable: !n,
       configurable: !n,
@@ -176,7 +176,7 @@ function _regeneratorRuntime() {
     }
     throw new TypeError(_typeof(r) + " is not iterable");
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = c(GeneratorFunctionPrototype, u, "GeneratorFunction"), r.isGeneratorFunction = function (t) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), c(GeneratorFunctionPrototype, u, GeneratorFunction.displayName = "GeneratorFunction"), r.isGeneratorFunction = function (t) {
     var r = "function" == typeof t && t.constructor;
     return !!r && (r === GeneratorFunction || "GeneratorFunction" === (r.displayName || r.name));
   }, r.mark = function (t) {

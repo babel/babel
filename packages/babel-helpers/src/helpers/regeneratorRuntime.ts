@@ -80,7 +80,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
   function define(obj: any, key: PropertyKey, value?: unknown, noFlags?: true) {
-    return Object.defineProperty(obj, key, {
+    Object.defineProperty(obj, key, {
       value: value,
       enumerable: !noFlags,
       configurable: !noFlags,
@@ -182,10 +182,10 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
   define(Gp, "constructor", GeneratorFunctionPrototype);
   define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(
+  define(
     GeneratorFunctionPrototype,
     toStringTagSymbol,
-    "GeneratorFunction",
+    (GeneratorFunction.displayName = "GeneratorFunction"),
   );
 
   // Helper for defining the .next, .throw, and .return methods of the
