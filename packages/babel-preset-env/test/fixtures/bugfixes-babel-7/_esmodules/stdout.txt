@@ -35,7 +35,6 @@ Using plugins:
   transform-dotall-regex { android, chrome < 62, edge < 79, firefox < 78, ios < 11.3, opera < 49, safari < 11.1 }
   transform-unicode-property-regex { android, chrome < 64, edge < 79, firefox < 78, ios < 11.3, opera < 51, safari < 11.1, samsung < 9 }
   transform-named-capturing-groups-regex { android, chrome < 64, edge < 79, firefox < 78, ios < 11.3, opera < 51, safari < 11.1, samsung < 9 }
-  transform-template-literals { android, chrome < 62, edge < 79, ios < 11, opera < 49, safari < 11 }
   transform-unicode-regex { ios < 12, safari < 12 }
   transform-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios < 14.5, opera < 60, safari < 14.1, samsung < 11.0 }
   bugfix/transform-async-arrows-in-class { ios < 11, safari < 11 }
@@ -44,6 +43,7 @@ Using plugins:
   bugfix/transform-safari-block-shadowing { ios < 11, safari < 11 }
   bugfix/transform-safari-for-shadowing { ios < 11, safari < 11 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3, safari < 16.3 }
+  bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   transform-modules-commonjs
   transform-dynamic-import
   syntax-top-level-await
