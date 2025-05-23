@@ -87,5 +87,31 @@ describe("validate", () => {
         moduleDeclaration.declare = true;
       }).not.toThrow();
     });
+
+    itBabel8.each(["var", "let", "const"])(
+      "%s void pattern should throw",
+      kind => {
+        expect(() =>
+          t.blockStatement([
+            t.variableDeclaration(kind, [
+              t.variableDeclarator(t.voidPattern(), t.identifier("x")),
+            ]),
+          ]),
+        ).toThrow();
+      },
+    );
+
+    itBabel8.each(["using", "await using"])(
+      "%s void pattern should throw",
+      kind => {
+        expect(() =>
+          t.blockStatement([
+            t.variableDeclaration(kind, [
+              t.variableDeclarator(t.voidPattern(), t.identifier("x")),
+            ]),
+          ]),
+        ).not.toThrow();
+      },
+    );
   });
 });

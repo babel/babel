@@ -785,6 +785,7 @@ export default declare((api, opts: Options) => {
   function visitPattern({
     node,
   }: NodePath<t.Identifier | t.Pattern | t.RestElement>) {
+    // @ts-expect-error typeAnnotation does not exist in VoidPattern
     if (node.typeAnnotation) node.typeAnnotation = null;
     if (t.isIdentifier(node) && node.optional) node.optional = null;
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.

@@ -197,6 +197,15 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     );
   }
 
+  if (
+    pluginsMap.has("discardBinding") &&
+    pluginsMap.get("discardBinding").syntaxType !== "void"
+  ) {
+    throw new Error(
+      "The 'discardBinding' plugin requires a 'syntaxType' option. Currently the only supported value is 'void'.",
+    );
+  }
+
   if (process.env.BABEL_8_BREAKING) {
     if (pluginsMap.has("decimal")) {
       throw new Error(
