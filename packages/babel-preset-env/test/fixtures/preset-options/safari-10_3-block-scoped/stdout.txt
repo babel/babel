@@ -28,12 +28,12 @@ Using plugins:
   transform-named-capturing-groups-regex { safari < 11.1 }
   transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
+  transform-template-literals { safari < 11 }
   transform-unicode-regex { safari < 12 }
   transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-safari-block-shadowing { safari < 11 }
   bugfix/transform-safari-for-shadowing { safari < 11 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
-  bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   transform-dynamic-import
 

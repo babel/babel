@@ -1,3 +1,4 @@
+var _templateObject, _templateObject2, _templateObject3;
 // This should print "true true true"
 function test() {
   return _test.apply(this, arguments);
@@ -17,14 +18,14 @@ function _test() {
         super(...args);
         _this = this;
         babelHelpers.defineProperty(this, "a", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
-          return _superprop_getFoo().bind(_this)``;
+          return _superprop_getFoo().bind(_this)(_templateObject || (_templateObject = babelHelpers.taggedTemplateLiteral([""])));
         }));
         babelHelpers.defineProperty(this, "b", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
-          return _superprop_get('foo').bind(_this)``;
+          return _superprop_get('foo').bind(_this)(_templateObject2 || (_templateObject2 = babelHelpers.taggedTemplateLiteral([""])));
         }));
         babelHelpers.defineProperty(this, "c", /*#__PURE__*/function () {
           var _ref3 = babelHelpers.asyncToGenerator(function* (foo) {
-            return _superprop_get(foo).bind(_this)``;
+            return _superprop_get(foo).bind(_this)(_templateObject3 || (_templateObject3 = babelHelpers.taggedTemplateLiteral([""])));
           });
           return function (_x) {
             return _ref3.apply(this, arguments);

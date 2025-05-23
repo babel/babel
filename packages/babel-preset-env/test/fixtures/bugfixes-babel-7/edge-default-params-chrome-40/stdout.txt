@@ -29,7 +29,7 @@ Using plugins:
   transform-named-capturing-groups-regex { chrome < 64 }
   transform-async-to-generator { chrome < 55 }
   transform-exponentiation-operator { chrome < 52 }
-  transform-template-literals { chrome < 41 }
+  transform-template-literals { chrome < 62 }
   transform-literals { chrome < 44 }
   transform-function-name { chrome < 51 }
   transform-block-scoped-functions { chrome < 41 }

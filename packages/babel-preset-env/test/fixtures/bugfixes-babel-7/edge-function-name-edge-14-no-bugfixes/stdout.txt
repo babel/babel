@@ -28,6 +28,7 @@ Using plugins:
   transform-unicode-property-regex { edge < 79 }
   transform-named-capturing-groups-regex { edge < 79 }
   transform-async-to-generator { edge < 15 }
+  transform-template-literals { edge < 79 }
   transform-function-name { edge < 79 }
   transform-for-of { edge < 15 }
   transform-destructuring { edge < 15 }

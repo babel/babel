@@ -26,6 +26,7 @@ Using plugins:
   transform-dotall-regex { chrome < 62 }
   transform-unicode-property-regex { chrome < 64 }
   transform-named-capturing-groups-regex { chrome < 64 }
+  transform-template-literals { chrome < 62 }
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import

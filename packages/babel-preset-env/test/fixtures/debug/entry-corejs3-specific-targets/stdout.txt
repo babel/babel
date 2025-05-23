@@ -34,7 +34,7 @@ Using plugins:
   transform-named-capturing-groups-regex { chrome < 64, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }
   transform-async-to-generator { chrome < 55, edge < 15, firefox < 52, ie, ios < 10.3, safari < 10.1 }
   transform-exponentiation-operator { edge < 14, firefox < 52, ie, ios < 10.3, safari < 10.1 }
-  transform-template-literals { ie, safari < 9 }
+  transform-template-literals { chrome < 62, edge < 79, firefox < 53, ie, ios < 11, safari < 11 }
   transform-literals { firefox < 53, ie, safari < 9 }
   transform-function-name { edge < 14, firefox < 53, ie, ios < 10, safari < 10 }
   transform-arrow-functions { ie, ios < 10, safari < 10 }

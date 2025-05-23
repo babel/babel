@@ -26,12 +26,11 @@ Using plugins:
   transform-dotall-regex { edge < 79 }
   transform-unicode-property-regex { edge < 79 }
   transform-named-capturing-groups-regex { edge < 79 }
+  transform-template-literals { edge < 79 }
   transform-export-namespace-from { edge < 79 }
   bugfix/transform-edge-default-parameters { edge < 18 }
   bugfix/transform-edge-function-name { edge < 79 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-top-level-await
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

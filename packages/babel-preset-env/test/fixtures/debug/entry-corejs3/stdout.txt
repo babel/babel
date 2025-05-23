@@ -31,7 +31,7 @@ Using plugins:
   transform-named-capturing-groups-regex { chrome < 64, ie, node < 10 }
   transform-async-to-generator { chrome < 55, ie, node < 7.6 }
   transform-exponentiation-operator { ie, node < 7 }
-  transform-template-literals { ie }
+  transform-template-literals { chrome < 62, ie, node < 8.10 }
   transform-literals { ie }
   transform-function-name { ie, node < 6.5 }
   transform-arrow-functions { ie }

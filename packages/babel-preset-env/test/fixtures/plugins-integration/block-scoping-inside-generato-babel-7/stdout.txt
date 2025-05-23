@@ -28,6 +28,7 @@ Using plugins:
   transform-named-capturing-groups-regex { chrome < 64 }
   transform-async-to-generator { chrome < 55 }
   transform-exponentiation-operator { chrome < 52 }
+  transform-template-literals { chrome < 62 }
   transform-function-name { chrome < 51 }
   transform-for-of { chrome < 51 }
   transform-unicode-regex { chrome < 50 }

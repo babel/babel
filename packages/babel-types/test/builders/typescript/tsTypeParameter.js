@@ -14,19 +14,19 @@ describe("builders", function () {
           Object {
             "constraint": Object {
               "type": "TSTypeReference",
-              "typeArguments": null,
               "typeName": Object {
                 "name": "bar",
                 "type": "Identifier",
               },
+              "typeParameters": null,
             },
             "default": Object {
               "type": "TSTypeReference",
-              "typeArguments": null,
               "typeName": Object {
                 "name": "baz",
                 "type": "Identifier",
               },
+              "typeParameters": null,
             },
             "name": Object {
               "name": "foo",

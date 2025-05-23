@@ -29,6 +29,7 @@ Using plugins:
   transform-named-capturing-groups-regex { safari < 11.1 }
   transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
+  transform-template-literals { safari < 11 }
   transform-function-name { safari < 10 }
   transform-block-scoped-functions { safari < 10 }
   transform-classes { safari < 10 }
@@ -41,10 +42,7 @@ Using plugins:
   transform-new-target { safari < 10 }
   transform-regenerator { safari < 10 }
   transform-export-namespace-from { safari < 14.1 }
-  bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-top-level-await
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

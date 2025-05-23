@@ -29,6 +29,7 @@ Using plugins:
   transform-named-capturing-groups-regex { firefox < 78 }
   transform-async-to-generator { firefox < 52 }
   transform-exponentiation-operator { firefox < 52 }
+  transform-template-literals { firefox < 53 }
   transform-literals { firefox < 53 }
   transform-function-name { firefox < 53 }
   transform-for-of { firefox < 53 }

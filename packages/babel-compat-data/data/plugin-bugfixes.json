@@ -117,6 +117,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -130,6 +131,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -160,17 +162,17 @@
     "electron": "1.6"
   },
   "transform-template-literals": {
-    "chrome": "41",
-    "opera": "28",
-    "edge": "13",
-    "firefox": "34",
-    "safari": "9",
-    "node": "4",
+    "chrome": "62",
+    "opera": "49",
+    "edge": "79",
+    "firefox": "53",
+    "safari": "11",
+    "node": "8.10",
     "deno": "1",
-    "ios": "9",
-    "samsung": "3.4",
-    "opera_mobile": "28",
-    "electron": "0.21"
+    "ios": "11",
+    "samsung": "8",
+    "opera_mobile": "46",
+    "electron": "3.0"
   },
   "transform-function-name": {
     "chrome": "51",

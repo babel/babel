@@ -27,6 +27,7 @@ Using plugins:
   transform-dotall-regex { firefox < 78, node < 8.10 }
   transform-unicode-property-regex { firefox < 78, node < 10 }
   transform-named-capturing-groups-regex { firefox < 78, node < 10 }
+  transform-template-literals { firefox < 53, node < 8.10 }
   transform-literals { firefox < 53 }
   transform-function-name { firefox < 53 }
   transform-for-of { firefox < 53 }
