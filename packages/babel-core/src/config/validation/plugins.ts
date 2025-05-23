@@ -11,7 +11,7 @@ import type {
   OptionPath,
   RootPath,
 } from "./option-assertions.ts";
-import type { ParserOptions } from "@babel/parser";
+import type { parse, ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
 import type { ValidatedOptions } from "./options.ts";
 import type { File, PluginAPI, PluginPass } from "../../index.ts";
@@ -93,7 +93,9 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
     dirname: string,
   ) => PluginObject;
   visitor?: Visitor<S>;
-  parserOverride?: Function;
+  parserOverride?: (
+    ...args: [...Parameters<typeof parse>, typeof parse]
+  ) => ReturnType<typeof parse>;
   generatorOverride?: Function;
 };
 

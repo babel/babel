@@ -9,7 +9,7 @@ export default class Plugin {
   pre?: PluginObject["pre"];
   visitor: PluginObject["visitor"];
 
-  parserOverride?: Function;
+  parserOverride?: PluginObject["parserOverride"];
   generatorOverride?: Function;
 
   options: object;
