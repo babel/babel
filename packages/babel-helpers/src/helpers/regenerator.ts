@@ -45,13 +45,9 @@ type Context = {
   next: number;
   sent: any;
 
-  stop?(): any;
-  dispatchException?(exception: any): boolean | undefined;
-  abrupt?(type: OperatorType, arg: any): any;
-  complete?(recordType: OperatorType, recordArg: any, afterLoc?: number): any;
-  finish?(finallyLoc: number): any;
-  catch?(tryLoc: number): any;
-  delegateYield?(iterable: any, nextLoc: number): any;
+  abrupt(type: OperatorType, arg?: any): any;
+  finish(finallyLoc: number): any;
+  delegateYield(iterable: any, nextLoc: number): any;
 };
 
 export default function /* @no-mangle */ _regenerator() {
@@ -67,7 +63,7 @@ export default function /* @no-mangle */ _regenerator() {
   var _: any;
 
   function wrap(
-    innerFn: Function,
+    innerFn: (this: unknown, context: Context) => unknown,
     outerFn: Function,
     self: unknown,
     tryLocsList: TryLocs[],
