@@ -83,11 +83,17 @@ export type DestructuringTransformerNode =
   | t.ExpressionStatement
   | t.ReturnStatement;
 
+// using/await using declaration must not contain pattern as its id.
+export type VariableDeclarationKindAllowsPattern = Exclude<
+  t.VariableDeclaration["kind"],
+  "using" | "await using"
+>;
+
 interface DestructuringTransformerOption {
   blockHoist?: number;
   operator?: t.AssignmentExpression["operator"];
   nodes?: DestructuringTransformerNode[];
-  kind?: t.VariableDeclaration["kind"];
+  kind?: VariableDeclarationKindAllowsPattern;
   scope: Scope;
   arrayLikeIsIterable: boolean;
   iterableIsArray: boolean;
@@ -101,7 +107,7 @@ export class DestructuringTransformer {
   arrayRefSet: Set<string>;
   private nodes: DestructuringTransformerNode[];
   private scope: Scope;
-  private kind: t.VariableDeclaration["kind"];
+  private kind: VariableDeclarationKindAllowsPattern;
   private iterableIsArray: boolean;
   private arrayLikeIsIterable: boolean;
   private objectRestNoSymbols: boolean;
@@ -147,7 +153,7 @@ export class DestructuringTransformer {
     } else {
       let nodeInit: t.Expression;
 
-      if ((this.kind === "const" || this.kind === "using") && init === null) {
+      if (this.kind === "const" && init === null) {
         nodeInit = this.scope.buildUndefinedNode();
       } else {
         nodeInit = t.cloneNode(init);
@@ -275,11 +281,7 @@ export class DestructuringTransformer {
       let patternId;
       let node;
 
-      if (
-        this.kind === "const" ||
-        this.kind === "let" ||
-        this.kind === "using"
-      ) {
+      if (this.kind === "const" || this.kind === "let") {
         patternId = this.scope.generateUidIdentifier(tempId.name);
         node = this.buildVariableDeclaration(patternId, tempConditional);
       } else {
@@ -658,7 +660,7 @@ export function convertVariableDeclaration(
         blockHoist: node._blockHoist,
         nodes: nodes,
         scope: scope,
-        kind: node.kind,
+        kind: node.kind as VariableDeclarationKindAllowsPattern,
         iterableIsArray,
         arrayLikeIsIterable,
         useBuiltIns,

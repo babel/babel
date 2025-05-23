@@ -1,0 +1,126 @@
+{
+  "type": "File",
+  "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":97}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":97}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":97}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":37,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":37,"index":37},"identifierName":"valid_namespace_var"},
+          "name": "valid_namespace_var"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":38,"end":97,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":7,"column":1,"index":97}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":42,"end":48,"loc":{"start":{"line":2,"column":2,"index":42},"end":{"line":2,"column":8,"index":48}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":46,"end":47,"loc":{"start":{"line":2,"column":6,"index":46},"end":{"line":2,"column":7,"index":47}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":46,"end":47,"loc":{"start":{"line":2,"column":6,"index":46},"end":{"line":2,"column":7,"index":47},"identifierName":"A"},
+                    "name": "A"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "var"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":51,"end":57,"loc":{"start":{"line":3,"column":2,"index":51},"end":{"line":3,"column":8,"index":57}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":55,"end":56,"loc":{"start":{"line":3,"column":6,"index":55},"end":{"line":3,"column":7,"index":56}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":55,"end":56,"loc":{"start":{"line":3,"column":6,"index":55},"end":{"line":3,"column":7,"index":56},"identifierName":"B"},
+                    "name": "B"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":60,"end":68,"loc":{"start":{"line":4,"column":2,"index":60},"end":{"line":4,"column":10,"index":68}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":66,"end":67,"loc":{"start":{"line":4,"column":8,"index":66},"end":{"line":4,"column":9,"index":67}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":66,"end":67,"loc":{"start":{"line":4,"column":8,"index":66},"end":{"line":4,"column":9,"index":67},"identifierName":"C"},
+                    "name": "C"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "const"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":71,"end":84,"loc":{"start":{"line":5,"column":2,"index":71},"end":{"line":5,"column":15,"index":84}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":77,"end":83,"loc":{"start":{"line":5,"column":8,"index":77},"end":{"line":5,"column":14,"index":83}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":77,"end":79,"loc":{"start":{"line":5,"column":8,"index":77},"end":{"line":5,"column":10,"index":79},"identifierName":"C1"},
+                    "name": "C1"
+                  },
+                  "init": {
+                    "type": "NumericLiteral",
+                    "start":82,"end":83,"loc":{"start":{"line":5,"column":13,"index":82},"end":{"line":5,"column":14,"index":83}},
+                    "extra": {
+                      "rawValue": 0,
+                      "raw": "0"
+                    },
+                    "value": 0
+                  }
+                }
+              ],
+              "kind": "const"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":87,"end":95,"loc":{"start":{"line":6,"column":2,"index":87},"end":{"line":6,"column":10,"index":95}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":93,"end":94,"loc":{"start":{"line":6,"column":8,"index":93},"end":{"line":6,"column":9,"index":94}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":93,"end":94,"loc":{"start":{"line":6,"column":8,"index":93},"end":{"line":6,"column":9,"index":94},"identifierName":"D"},
+                    "name": "D"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "using"
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

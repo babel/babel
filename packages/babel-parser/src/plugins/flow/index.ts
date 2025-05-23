@@ -2927,7 +2927,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // parse flow type annotations on variable declarator heads - let foo: string = bar
     parseVarId(
       decl: N.VariableDeclarator,
-      kind: "var" | "let" | "const",
+      kind: "var" | "let" | "const" | "using" | "await using",
     ): void {
       super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
