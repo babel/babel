@@ -117,6 +117,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -130,6 +131,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },

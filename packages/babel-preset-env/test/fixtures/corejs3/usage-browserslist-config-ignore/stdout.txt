@@ -17,8 +17,8 @@ Using modules transform: false
 
 Using plugins:
   transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, ios < 17.4, opera_mobile, samsung }
-  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari, samsung }
-  transform-unicode-sets-regex { chrome < 112, ios < 17, samsung }
+  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari, samsung < 27 }
+  transform-unicode-sets-regex { chrome < 112, ios < 17 }
   bugfix/transform-firefox-class-in-computed-class-key { ios < 16 }
   bugfix/transform-safari-class-field-initializer-scope { ios < 16 }
   transform-class-static-block { ios < 16.4 }

@@ -33,7 +33,15 @@ const es2015Parameter = {
 
 const es2015 = {
   "transform-template-literals": {
-    features: ["template literals"],
+    features: [
+      [
+        "template literals",
+        {
+          // Todo: decide if we should apply the transform conditionally
+          exclude: "arbitrary escape sequences in tagged template literals",
+        },
+      ],
+    ],
   },
   "transform-literals": {
     features: ["Unicode code point escapes"],
