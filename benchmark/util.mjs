@@ -2,8 +2,6 @@
 
 import * as currentTypes from "@babel/types";
 import baselineTypes from "@babel-baseline/types";
-import * as currentParser from "@babel/parser";
-import baselineParser from "@babel-baseline/parser";
 import _currentGenerator from "@babel/generator";
 import _baselineGenerator from "@babel-baseline/generator";
 import * as currentCore from "@babel/core";
@@ -19,11 +17,13 @@ import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-com
 
 import { USE_ESM } from "$repo-utils";
 import { Bench } from "tinybench";
+import { globSync } from "glob";
 import { withCodSpeed } from "@codspeed/tinybench-plugin";
-import { readFileSync, globSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { readFileSync, copyFileSync, mkdirSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import assert from "node:assert";
+import { tmpdir } from "node:os";
 
 const currentGenerator = USE_ESM
   ? _currentGenerator
@@ -32,13 +32,29 @@ const currentTraverse = USE_ESM ? _currentTraverse : _currentTraverse.default;
 const baselineTraverse = _baselineTraverse.default;
 const baselineGenerator = _baselineGenerator.default;
 
+const currentParser = await copyPkg("@babel/parser");
+const baselineParser = await copyPkg("@babel-baseline/parser");
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const onlyCurrent = process.argv.includes("--only-current");
+const onlyBaseline = process.argv.includes("--only-baseline");
 
 if (!globalThis.gc) {
   console.warn("Recommend running with --expose-gc.");
+}
+
+async function copyPkg(name) {
+  const src = fileURLToPath(import.meta.resolve(name));
+  const dst = path.join(
+    tmpdir(),
+    "babel-benchmark",
+    name.replace("/", "-") + ".js"
+  );
+  mkdirSync(path.dirname(dst), { recursive: true });
+  copyFileSync(src, dst);
+  return await import(pathToFileURL(dst));
 }
 
 export function report(event) {
@@ -74,6 +90,7 @@ function generateCaseName(url) {
   const filename = fileURLToPath(url);
   return path.relative(__dirname, filename).replace(/\\/g, "/");
 }
+
 class Benchmark {
   constructor() {
     this.bench = withCodSpeed(
@@ -136,16 +153,20 @@ function addBenchCase(name, baseline, current, args) {
 }
 
 setTimeout(async () => {
-  if (!onlyCurrent) {
+  if (onlyCurrent) {
+    currentCases.forEach(({ name, fn }) => {
+      bench.add(name, fn);
+    });
+  } else if (onlyBaseline) {
+    baselineCases.forEach(({ name, fn }) => {
+      bench.add(name, fn);
+    });
+  } else {
     assert.strictEqual(baselineCases.length, currentCases.length);
     for (let i = 0; i < baselineCases.length; i++) {
       bench.add(currentCases[i].name, currentCases[i].fn);
       bench.add(baselineCases[i].name, baselineCases[i].fn);
     }
-  } else {
-    currentCases.forEach(({ name, fn }) => {
-      bench.add(name, fn);
-    });
   }
 
   await bench.run();

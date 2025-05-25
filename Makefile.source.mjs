@@ -265,6 +265,7 @@ target["prepublish-build"] = function () {
       NODE_ENV: "production",
       BABEL_ENV: "production",
       STRIP_BABEL_8_FLAG: "true",
+      IS_PUBLISH: "true",
     }
   );
 
@@ -278,6 +279,7 @@ target["prepublish-build"] = function () {
     {
       NODE_ENV: "production",
       STRIP_BABEL_8_FLAG: "true",
+      IS_PUBLISH: "true",
     }
   );
 };
@@ -304,6 +306,20 @@ target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
   yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
+};
+
+target["watch-perf"] = function () {
+  env(
+    () => {
+      yarn(["gulp", "watch-perf"]);
+    },
+    {
+      NODE_ENV: "production",
+      BABEL_ENV: "production",
+      STRIP_BABEL_8_FLAG: "true",
+      IS_PUBLISH: "true",
+    }
+  );
 };
 
 target["tscheck"] = function () {
