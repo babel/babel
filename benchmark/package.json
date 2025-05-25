@@ -28,6 +28,7 @@
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
     "benchmark": "^2.1.4",
+    "glob": "^10.3.10",
     "tinybench": "^2.9.0"
   },
   "version": "7.28.4"
