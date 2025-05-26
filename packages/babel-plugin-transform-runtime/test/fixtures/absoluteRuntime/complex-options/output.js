@@ -10,7 +10,7 @@ function _test() {
         case 0:
           console.log('test');
         case 1:
-          return _context.abrupt(2);
+          return _context.a(2);
       }
     }, _callee);
   }));
@@ -32,7 +32,7 @@ function _main() {
           _t2 = _context2.sent;
           _t.log.call(_t, _t2);
         case 5:
-          return _context2.abrupt(2);
+          return _context2.a(2);
       }
     }, _callee2);
   }));

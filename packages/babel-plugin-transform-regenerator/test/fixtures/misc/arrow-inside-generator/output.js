@@ -8,7 +8,7 @@ function gen() {
           return 1;
         };
       case 1:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _marked);
 }

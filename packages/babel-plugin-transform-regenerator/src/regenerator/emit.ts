@@ -303,7 +303,7 @@ export class Emitter {
       cases.push(
         t.switchCase(this.finalLoc, [
           t.returnStatement(
-            t.callExpression(this.contextProperty("abrupt"), [
+            t.callExpression(this.contextProperty("a"), [
               t.numericLiteral(OperatorType.Return),
             ]),
           ),
@@ -783,9 +783,15 @@ export class Emitter {
 
             self.emit(
               t.returnStatement(
-                t.callExpression(self.contextProperty("finish"), [
-                  finallyEntry.firstLoc,
-                ]),
+                t.callExpression(
+                  self.contextProperty(
+                    process.env.BABEL_8_BREAKING ||
+                      util.newHelpersAvailable(this.pluginPass)
+                      ? "f"
+                      : "finish",
+                  ),
+                  [finallyEntry.firstLoc],
+                ),
               ),
             );
           }
@@ -840,7 +846,15 @@ export class Emitter {
 
     this.emit(
       t.returnStatement(
-        t.callExpression(this.contextProperty("abrupt"), abruptArgs),
+        t.callExpression(
+          this.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "a"
+              : "abrupt",
+          ),
+          abruptArgs,
+        ),
       ),
     );
   }
@@ -1304,10 +1318,7 @@ export class Emitter {
             util.newHelpersAvailable(this.pluginPass)
           ) {
             const ret = t.returnStatement(
-              t.callExpression(self.contextProperty("delegateYield"), [
-                arg,
-                after,
-              ]),
+              t.callExpression(self.contextProperty("d"), [arg, after]),
             );
             ret.loc = expr.loc;
 

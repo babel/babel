@@ -16,7 +16,7 @@ function _test() {
                   ch = _arr[_i];
                   obj[ch] = () => ch;
                 case 2:
-                  return _context.abrupt(2);
+                  return _context.a(2);
               }
             }, _loop);
           });
@@ -26,13 +26,13 @@ function _test() {
             _context2.next = 8;
             break;
           }
-          return _context2.delegateYield(_loop(), 5);
+          return _context2.d(_loop(), 5);
         case 5:
           _i++;
           _context2.next = 3;
           break;
         case 8:
-          return _context2.abrupt(2);
+          return _context2.a(2);
       }
     }, _callee);
   }));

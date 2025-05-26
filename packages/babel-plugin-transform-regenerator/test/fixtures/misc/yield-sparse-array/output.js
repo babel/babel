@@ -8,9 +8,9 @@
         return babelHelpers.awaitAsyncGenerator(0);
       case 2:
         _t = _context.sent;
-        return _context.abrupt(2, [_t,,]);
+        return _context.a(2, [_t,,]);
       case 4:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, null, null, null, Promise);
 };

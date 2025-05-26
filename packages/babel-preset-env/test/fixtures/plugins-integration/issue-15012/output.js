@@ -4,7 +4,7 @@ function f(_ref) {
     return babelHelpers.regenerator().w(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          return _context.abrupt(2);
+          return _context.a(2);
       }
     }, _callee);
   })();
@@ -15,7 +15,7 @@ function g() {
     return babelHelpers.regenerator().w(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          return _context2.abrupt(2);
+          return _context2.a(2);
       }
     }, _callee2);
   })();

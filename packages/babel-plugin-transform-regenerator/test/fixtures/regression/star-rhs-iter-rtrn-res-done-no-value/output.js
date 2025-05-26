@@ -71,7 +71,7 @@ function g() {
     while (1) switch (_context.prev = _context.next) {
       case 0:
         _context.prev = 0;
-        return _context.delegateYield(badIter, 2);
+        return _context.d(badIter, 2);
       case 2:
         normalCompletion = true;
         _context.next = 8;
@@ -83,9 +83,9 @@ function g() {
       case 8:
         _context.prev = 8;
         delegationComplete = true;
-        return _context.finish(8);
+        return _context.f(8);
       case 11:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _marked, null, [[0, 5, 8, 11]]);
 }

@@ -30,6 +30,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   var r = regenerator();
 
   type InnerFn = Parameters<typeof r.w>[0];
+  type NewContext = Parameters<InnerFn>[0];
 
   var gen = r.m(_regeneratorRuntime);
   var GeneratorFunctionPrototype = Object.getPrototypeOf
@@ -55,38 +56,30 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   };
 
   function wrapInnerFn(innerFn: InnerFn): InnerFn {
-    return function (context) {
-      if (!(context as unknown as Context).stop) {
+    return function (context: Context & NewContext) {
+      if (!context.stop) {
         // Shim the old context shape on top of the new one.
-        var oldDelegateYield = context.delegateYield;
-        var oldAbrupt = context.abrupt;
-        (context as unknown as Context).stop = function () {
-          return oldAbrupt(2);
+        context.stop = function () {
+          return context.a(2);
         };
-        (context as unknown as Context)["catch"] = function () {
+        context["catch"] = function () {
           return context.sent;
         };
-        (context as unknown as Context).abrupt = function (type, arg) {
-          return oldAbrupt(abruptMap[type], arg);
+        context.abrupt = function (type, arg) {
+          return context.a(abruptMap[type], arg);
         };
-        (context as unknown as Context).delegateYield = function (
-          iterable,
-          resultName,
-          nextLoc,
-        ) {
-          (context as unknown as Context).resultName = resultName;
-          var res = oldDelegateYield(iterable, nextLoc);
-          return res;
+        context.delegateYield = function (iterable, resultName, nextLoc) {
+          context.resultName = resultName;
+          return context.d(iterable, nextLoc);
         };
+        context.finish = context.f;
       }
-      if ((context as unknown as Context).resultName) {
-        (context as unknown as Context)[
-          (context as unknown as Context).resultName!
-        ] = context.sent;
-        (context as unknown as Context).resultName = undefined;
+      if (context.resultName) {
+        context[context.resultName] = context.sent;
+        context.resultName = undefined;
       }
       return innerFn.call(this, context);
-    };
+    } as (this: unknown, context: NewContext) => unknown;
   }
 
   // @ts-expect-error explicit function assignment

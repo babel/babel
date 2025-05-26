@@ -11,7 +11,7 @@ var runningInTranslation = /\.wrap\(/.test(/*#__PURE__*/babelHelpers.regenerator
   return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _callee);
 }));
@@ -24,7 +24,7 @@ assert(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
   return babelHelpers.regenerator().w(function (_context2) {
     while (1) switch (_context2.prev = _context2.next) {
       case 0:
-        return _context2.abrupt(2);
+        return _context2.a(2);
     }
   }, _callee2);
 }).toString().indexOf("regenerator") !== -1, "regenerator-transform should be enabled");
@@ -44,7 +44,7 @@ describe("simple argument yielder", function () {
             _context3.next = 2;
             return x;
           case 2:
-            return _context3.abrupt(2);
+            return _context3.a(2);
         }
       }, _marked);
     }
@@ -66,9 +66,9 @@ describe("simple argument yielder", function () {
             return 0;
           case 5:
             _t2 = _context4.sent;
-            return _context4.abrupt(2, _t + _t2);
+            return _context4.a(2, _t + _t2);
           case 7:
-            return _context4.abrupt(2);
+            return _context4.a(2);
         }
       }, _marked2);
     }
@@ -96,7 +96,7 @@ function range(n) {
         _context5.next = 1;
         break;
       case 7:
-        return _context5.abrupt(2);
+        return _context5.a(2);
     }
   }, _marked3);
 }
@@ -140,9 +140,9 @@ describe("collatz generator", function () {
           _context6.next = 3;
           break;
         case 14:
-          return _context6.abrupt(2, count);
+          return _context6.a(2, count);
         case 15:
-          return _context6.abrupt(2);
+          return _context6.a(2);
       }
     }, _marked4);
   }
@@ -207,7 +207,7 @@ describe("try-catch generator", function () {
           _context7.next = 17;
           return 3;
         case 17:
-          return _context7.abrupt(2);
+          return _context7.a(2);
       }
     }, _marked5, null, [[2, 11]]);
   }
@@ -238,7 +238,7 @@ describe("try-catch generator", function () {
           _context8.next = 16;
           return 3;
         case 16:
-          return _context8.abrupt(2);
+          return _context8.a(2);
       }
     }, _marked6, null, [[2, 10]]);
   }
@@ -273,12 +273,12 @@ describe("nested generators in try-catch", function () {
                   _context9.next = 2;
                   return _t5;
                 case 2:
-                  return _context9.abrupt(2);
+                  return _context9.a(2);
               }
             }, _callee3);
           });
         case 8:
-          return _context0.abrupt(2);
+          return _context0.a(2);
       }
     }, _marked7, null, [[0, 4]]);
   }
@@ -318,14 +318,14 @@ describe("try-finally generator", function () {
           _context1.next = 12;
           return 4;
         case 12:
-          return _context1.abrupt(2, 5);
+          return _context1.a(2, 5);
         case 13:
           _context1.next = 15;
           return 6;
         case 15:
-          return _context1.abrupt(2, 7);
+          return _context1.a(2, 7);
         case 17:
-          return _context1.abrupt(2);
+          return _context1.a(2);
       }
     }, _marked8, null, [[2,, 8, 17]]);
   }
@@ -352,14 +352,14 @@ describe("try-finally generator", function () {
           _context10.next = 12;
           return 4;
         case 12:
-          return _context10.abrupt(2, 5);
+          return _context10.a(2, 5);
         case 13:
           _context10.next = 15;
           return 6;
         case 15:
-          return _context10.abrupt(2, 7);
+          return _context10.a(2, 7);
         case 17:
-          return _context10.abrupt(2);
+          return _context10.a(2);
       }
     }, _marked9, null, [[2,, 8, 17]]);
   }
@@ -378,20 +378,20 @@ describe("try-finally generator", function () {
             _context11.next = 9;
             break;
           }
-          return _context11.abrupt(2, 2);
+          return _context11.a(2, 2);
         case 9:
           if (!(abruptType === "break")) {
             _context11.next = 13;
             break;
           }
-          return _context11.abrupt(3, 33);
+          return _context11.a(3, 33);
         case 13:
           if (!(abruptType === "continue")) {
             _context11.next = 16;
             break;
           }
           abruptType = "return";
-          return _context11.abrupt(3, 31);
+          return _context11.a(3, 31);
         case 16:
           _context11.prev = 16;
           _context11.next = 19;
@@ -401,29 +401,29 @@ describe("try-finally generator", function () {
             _context11.next = 23;
             break;
           }
-          return _context11.abrupt(2, 4);
+          return _context11.a(2, 4);
         case 23:
           if (!(finallyAbruptType === "break")) {
             _context11.next = 27;
             break;
           }
-          return _context11.abrupt(3, 33);
+          return _context11.a(3, 33);
         case 27:
           if (!(finallyAbruptType === "continue")) {
             _context11.next = 30;
             break;
           }
           finallyAbruptType = null;
-          return _context11.abrupt(3, 31);
+          return _context11.a(3, 31);
         case 30:
-          return _context11.finish(16);
+          return _context11.f(16);
         case 31:
           _context11.next = 2;
           break;
         case 33:
-          return _context11.abrupt(2, 5);
+          return _context11.a(2, 5);
         case 34:
-          return _context11.abrupt(2);
+          return _context11.a(2);
       }
     }, _marked0, null, [[2,, 16, 31]]);
   }
@@ -486,12 +486,12 @@ describe("try-finally generator", function () {
             _context12.next = 12;
             return 3;
           case 12:
-            return _context12.finish(9);
+            return _context12.f(9);
           case 13:
             _context12.next = 15;
             return 4;
           case 15:
-            return _context12.abrupt(2);
+            return _context12.a(2);
         }
       }, _marked1, null, [[0,, 9, 13]]);
     }
@@ -546,9 +546,9 @@ describe("try-finally generator", function () {
             _context13.next = 16;
             return 2;
           case 16:
-            return _context13.finish(4);
+            return _context13.f(4);
           case 17:
-            return _context13.abrupt(2);
+            return _context13.a(2);
         }
       }, _marked10, null, [[7, 11], [0,, 4, 17]]);
     }
@@ -589,18 +589,18 @@ describe("try-finally generator", function () {
             _context14.next = 6;
             return 1;
           case 6:
-            return _context14.abrupt(3, 9);
+            return _context14.a(3, 9);
           case 9:
             _context14.prev = 9;
             _context14.next = 12;
             return 2;
           case 12:
-            return _context14.finish(9);
+            return _context14.f(9);
           case 13:
             _context14.next = 15;
             return 3;
           case 15:
-            return _context14.abrupt(2);
+            return _context14.a(2);
         }
       }, _marked11, null, [[0,, 9, 13]]);
     }
@@ -616,12 +616,12 @@ describe("try-finally generator", function () {
             _context15.next = 3;
             return 1;
           case 3:
-            return _context15.abrupt(2, _context15.sent);
+            return _context15.a(2, _context15.sent);
           case 4:
             _context15.prev = 4;
-            return _context15.abrupt(2, 3);
+            return _context15.a(2, 3);
           case 7:
-            return _context15.abrupt(2);
+            return _context15.a(2);
         }
       }, _marked12, null, [[0,, 4, 7]]);
     }
@@ -653,27 +653,27 @@ describe("try-finally generator", function () {
             _context16.next = 4;
             return 1;
           case 4:
-            return _context16.abrupt(2, _context16.sent);
+            return _context16.a(2, _context16.sent);
           case 5:
             _context16.prev = 5;
-            return _context16.abrupt(2, 2);
+            return _context16.a(2, 2);
           case 8:
             _context16.prev = 8;
             _context16.prev = 9;
-            return _context16.abrupt(2, 3);
+            return _context16.a(2, 3);
           case 11:
             _context16.prev = 11;
             if (!condition) {
               _context16.next = 14;
               break;
             }
-            return _context16.abrupt(2, 4);
+            return _context16.a(2, 4);
           case 14:
-            return _context16.finish(11);
+            return _context16.f(11);
           case 15:
-            return _context16.finish(8);
+            return _context16.f(8);
           case 16:
-            return _context16.abrupt(2);
+            return _context16.a(2);
         }
       }, _marked13, null, [[9,, 11, 15], [1,, 5, 8], [0,, 8, 16]]);
     }
@@ -712,30 +712,30 @@ describe("try-finally generator", function () {
             _context17.next = 4;
             return 1;
           case 4:
-            return _context17.abrupt(2, _context17.sent);
+            return _context17.a(2, _context17.sent);
           case 5:
             _context17.prev = 5;
-            return _context17.abrupt(2, 2);
+            return _context17.a(2, 2);
           case 8:
             _context17.prev = 8;
             _context17.prev = 9;
             _context17.next = 12;
             return "oyez";
           case 12:
-            return _context17.abrupt(2, _context17.sent);
+            return _context17.a(2, _context17.sent);
           case 13:
             _context17.prev = 13;
             if (!condition) {
               _context17.next = 16;
               break;
             }
-            return _context17.abrupt(2, 4);
+            return _context17.a(2, 4);
           case 16:
-            return _context17.finish(13);
+            return _context17.f(13);
           case 17:
-            return _context17.finish(8);
+            return _context17.f(8);
           case 18:
-            return _context17.abrupt(2);
+            return _context17.a(2);
         }
       }, _marked14, null, [[9,, 13, 17], [1,, 5, 8], [0,, 8, 18]]);
     }
@@ -804,7 +804,7 @@ describe("try-catch-finally generator", function () {
           _context18.next = 19;
           return 5;
         case 19:
-          return _context18.finish(16);
+          return _context18.f(16);
         case 20:
           _context18.next = 26;
           break;
@@ -817,7 +817,7 @@ describe("try-catch-finally generator", function () {
           _context18.next = 28;
           return 6;
         case 28:
-          return _context18.abrupt(2);
+          return _context18.a(2);
       }
     }, _marked15, null, [[3, 11, 16, 20], [2, 22]]);
   }
@@ -852,7 +852,7 @@ describe("try-catch-finally generator", function () {
           _context19.next = 19;
           return 5;
         case 19:
-          return _context19.finish(16);
+          return _context19.f(16);
         case 20:
           _context19.next = 26;
           break;
@@ -865,7 +865,7 @@ describe("try-catch-finally generator", function () {
           _context19.next = 28;
           return 6;
         case 28:
-          return _context19.abrupt(2);
+          return _context19.a(2);
       }
     }, _marked16, null, [[3, 11, 16, 20], [2, 22]]);
   }
@@ -891,9 +891,9 @@ describe("try-catch-finally generator", function () {
             _context20.next = 6;
             return "a";
           case 6:
-            return _context20.abrupt(3, 8);
+            return _context20.a(3, 8);
           case 7:
-            return _context20.abrupt(3, 8);
+            return _context20.a(3, 8);
           case 8:
             throw error;
           case 11:
@@ -906,7 +906,7 @@ describe("try-catch-finally generator", function () {
             _context20.next = 18;
             return "c";
           case 18:
-            return _context20.abrupt(3, 20);
+            return _context20.a(3, 20);
           case 19:
             if (false) {
               _context20.next = 16;
@@ -916,7 +916,7 @@ describe("try-catch-finally generator", function () {
             _context20.next = 22;
             return "d";
           case 22:
-            return _context20.abrupt(3, 24);
+            return _context20.a(3, 24);
           case 23:
             if (false) {
               _context20.next = 16;
@@ -930,9 +930,9 @@ describe("try-catch-finally generator", function () {
             _context20.next = 29;
             return "f";
           case 29:
-            return _context20.finish(26);
+            return _context20.f(26);
           case 30:
-            return _context20.abrupt(2);
+            return _context20.a(2);
         }
       }, _marked17, null, [[0, 11, 26, 30]]);
     }
@@ -971,12 +971,12 @@ describe("try-catch-finally generator", function () {
             _context21.next = 12;
             return 2;
           case 12:
-            return _context21.abrupt(3, 1);
+            return _context21.a(3, 1);
           case 15:
             _context21.next = 17;
             return 3;
           case 17:
-            return _context21.abrupt(3, 20);
+            return _context21.a(3, 20);
           case 18:
             _context21.next = 5;
             break;
@@ -984,13 +984,13 @@ describe("try-catch-finally generator", function () {
             _context21.next = 22;
             return 4;
           case 22:
-            return _context21.abrupt(3, 31);
+            return _context21.a(3, 31);
           case 23:
             _context21.prev = 23;
             _context21.next = 26;
             return 5;
           case 26:
-            return _context21.finish(23);
+            return _context21.f(23);
           case 27:
             _context21.next = 29;
             return 6;
@@ -1001,7 +1001,7 @@ describe("try-catch-finally generator", function () {
             _context21.next = 33;
             return 7;
           case 33:
-            return _context21.abrupt(2);
+            return _context21.a(2);
         }
       }, _marked18, null, [[4,, 23, 27]]);
     }
@@ -1034,18 +1034,18 @@ describe("try-catch-finally generator", function () {
             _t11 = _context22.sent;
             assert.strictEqual(_t11, error);
             markers.push("catch");
-            return _context22.abrupt(3, 1);
+            return _context22.a(3, 1);
           case 13:
             _context22.prev = 13;
             markers.push("finally");
-            return _context22.finish(13);
+            return _context22.f(13);
           case 16:
             markers.push("decrement");
             --c;
             _context22.next = 1;
             break;
           case 20:
-            return _context22.abrupt(2);
+            return _context22.a(2);
         }
       }, _marked19, null, [[2, 8, 13, 16]]);
     }
@@ -1077,14 +1077,14 @@ describe("dynamic exception", function () {
       while (1) switch (_context23.prev = _context23.next) {
         case 0:
           _context23.prev = 0;
-          return _context23.abrupt(2, fns[fname](x));
+          return _context23.a(2, fns[fname](x));
         case 4:
           _context23.prev = 4;
           _t12 = _context23.sent;
           _context23.next = 8;
           return _t12;
         case 8:
-          return _context23.abrupt(2);
+          return _context23.a(2);
       }
     }, _marked20, null, [[0, 4]]);
   }
@@ -1118,7 +1118,7 @@ describe("nested finally blocks", function () {
           _context24.next = 7;
           return 1;
         case 7:
-          return _context24.finish(4);
+          return _context24.f(4);
         case 8:
           _context24.next = 14;
           break;
@@ -1132,15 +1132,15 @@ describe("nested finally blocks", function () {
           _context24.next = 17;
           return 2;
         case 17:
-          return _context24.finish(14);
+          return _context24.f(14);
         case 18:
           _context24.prev = 18;
           _context24.next = 21;
           return 3;
         case 21:
-          return _context24.finish(18);
+          return _context24.f(18);
         case 22:
-          return _context24.abrupt(2);
+          return _context24.a(2);
       }
     }, _marked21, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
   }
@@ -1158,7 +1158,7 @@ describe("nested finally blocks", function () {
           _context25.next = 7;
           return 1;
         case 7:
-          return _context25.finish(4);
+          return _context25.f(4);
         case 8:
           _context25.next = 14;
           break;
@@ -1172,15 +1172,15 @@ describe("nested finally blocks", function () {
           _context25.next = 17;
           return 2;
         case 17:
-          return _context25.finish(14);
+          return _context25.f(14);
         case 18:
           _context25.prev = 18;
           _context25.next = 21;
           return 3;
         case 21:
-          return _context25.finish(18);
+          return _context25.f(18);
         case 22:
-          return _context25.abrupt(2);
+          return _context25.a(2);
       }
     }, _marked22, null, [[2,, 4, 8], [1, 10, 14, 18], [0,, 18, 22]]);
   }
@@ -1219,9 +1219,9 @@ describe("for-in loop generator", function () {
             _context26.next = 3;
             break;
           case 11:
-            return _context26.abrupt(2, count);
+            return _context26.a(2, count);
           case 12:
-            return _context26.abrupt(2);
+            return _context26.a(2);
         }
       }, _marked23);
     }
@@ -1253,7 +1253,7 @@ describe("for-in loop generator", function () {
               _context27.next = 9;
               break;
             }
-            return _context27.abrupt(3, 14);
+            return _context27.a(3, 14);
           case 9:
             count += 1;
             _context27.next = 12;
@@ -1262,9 +1262,9 @@ describe("for-in loop generator", function () {
             _context27.next = 4;
             break;
           case 14:
-            return _context27.abrupt(2, count);
+            return _context27.a(2, count);
           case 15:
-            return _context27.abrupt(2);
+            return _context27.a(2);
         }
       }, _marked24);
     }
@@ -1303,9 +1303,9 @@ describe("for-in loop generator", function () {
             _context28.next = 3;
             break;
           case 12:
-            return _context28.abrupt(2, count);
+            return _context28.a(2, count);
           case 13:
-            return _context28.abrupt(2);
+            return _context28.a(2);
         }
       }, _marked25);
     }
@@ -1338,9 +1338,9 @@ describe("for-in loop generator", function () {
             _context29.next = 5;
             break;
           case 12:
-            return _context29.abrupt(2, count);
+            return _context29.a(2, count);
           case 13:
-            return _context29.abrupt(2);
+            return _context29.a(2);
         }
       }, _marked26);
     }
@@ -1411,7 +1411,7 @@ describe("for-in loop generator", function () {
             _context30.next = 24;
             break;
           case 30:
-            return _context30.abrupt(2);
+            return _context30.a(2);
         }
       }, _marked27);
     }
@@ -1449,7 +1449,7 @@ describe("for-in loop generator", function () {
             _context31.next = 1;
             break;
           case 8:
-            return _context31.abrupt(2);
+            return _context31.a(2);
         }
       }, _marked28);
     }
@@ -1476,7 +1476,7 @@ describe("for-in loop generator", function () {
             _context32.next = 1;
             break;
           case 7:
-            return _context32.abrupt(2);
+            return _context32.a(2);
         }
       }, _marked29);
     }
@@ -1501,9 +1501,9 @@ describe("yield chain", function () {
           _context33.next = 8;
           return _context33.sent;
         case 8:
-          return _context33.abrupt(2, _context33.sent);
+          return _context33.a(2, _context33.sent);
         case 9:
-          return _context33.abrupt(2);
+          return _context33.a(2);
       }
     }, _marked30);
   }
@@ -1532,9 +1532,9 @@ describe("call expression ordering", function test() {
             return 3;
           case 9:
             _t40 = _context34.sent;
-            return _context34.abrupt(2, _t39(_t40));
+            return _context34.a(2, _t39(_t40));
           case 11:
-            return _context34.abrupt(2);
+            return _context34.a(2);
         }
       }, gen);
     })();
@@ -1573,7 +1573,7 @@ describe("call expression ordering", function test() {
             case 2:
               (_ref = _context35.sent).method(_ref);
             case 3:
-              return _context35.abrupt(2);
+              return _context35.a(2);
           }
         }, fn);
       })();
@@ -1604,7 +1604,7 @@ describe("call expression ordering", function test() {
             case 2:
               step(1).method(step(2));
             case 3:
-              return _context36.abrupt(2);
+              return _context36.a(2);
           }
         }, fn);
       })();
@@ -1634,7 +1634,7 @@ describe("call expression ordering", function test() {
               _t44 = step(3);
               _t41.method.call(_t41, _t42, _t43, _t44);
             case 7:
-              return _context37.abrupt(2);
+              return _context37.a(2);
           }
         }, fn);
       })();
@@ -1667,7 +1667,7 @@ describe("call expression ordering", function test() {
               _t48 = step(3);
               _t45.method.call(_t45, _t46, _t47, _t48);
             case 9:
-              return _context38.abrupt(2);
+              return _context38.a(2);
           }
         }, fn);
       })();
@@ -1701,7 +1701,7 @@ describe("object literal generator", function () {
             b: _t52
           };
         case 10:
-          return _context39.abrupt(2);
+          return _context39.a(2);
       }
     }, _marked31);
   }
@@ -1764,11 +1764,11 @@ describe("switch statement generator", function () {
           _context40.next = _t58;
           break;
         case 27:
-          return _context40.abrupt(2, "first case");
+          return _context40.a(2, "first case");
         case 28:
-          return _context40.abrupt(2, "second case");
+          return _context40.a(2, "second case");
         case 29:
-          return _context40.abrupt(2);
+          return _context40.a(2);
       }
     }, _marked32);
   }
@@ -1797,7 +1797,7 @@ describe("infinite sequence generator", function () {
           _context41.next = 1;
           break;
         case 7:
-          return _context41.abrupt(2);
+          return _context41.a(2);
       }
     }, _marked33);
   }
@@ -1815,7 +1815,7 @@ describe("infinite sequence generator", function () {
             _context42.next = 6;
             break;
           }
-          return _context42.abrupt(2);
+          return _context42.a(2);
         case 6:
           if (!(info.value < stop)) {
             _context42.next = 11;
@@ -1827,12 +1827,12 @@ describe("infinite sequence generator", function () {
           _context42.next = 12;
           break;
         case 11:
-          return _context42.abrupt(2);
+          return _context42.a(2);
         case 12:
           _context42.next = 0;
           break;
         case 14:
-          return _context42.abrupt(2);
+          return _context42.a(2);
       }
     }, _marked34);
   }
@@ -1881,9 +1881,9 @@ describe("generator function expression", function () {
             _context43.next = 6;
             return x + y;
           case 6:
-            return _context43.abrupt(2, x * y);
+            return _context43.a(2, x * y);
           case 7:
-            return _context43.abrupt(2);
+            return _context43.a(2);
         }
       }, _callee4);
     })(3, 7), [3, 7, 10], 21);
@@ -1909,9 +1909,9 @@ describe("generator reentry attempt", function () {
           _context44.next = 10;
           return _t64;
         case 10:
-          return _context44.abrupt(2, x + 1);
+          return _context44.a(2, x + 1);
         case 11:
-          return _context44.abrupt(2);
+          return _context44.a(2);
       }
     }, _marked35, null, [[0, 6]]);
   }
@@ -1947,7 +1947,7 @@ describe("delegated yield", function () {
             _context45.next = 5;
             return 1;
           case 5:
-            return _context45.delegateYield(gen(false), 6);
+            return _context45.d(gen(false), 6);
           case 6:
             _context45.next = 8;
             return 2;
@@ -1955,7 +1955,7 @@ describe("delegated yield", function () {
             _context45.next = 10;
             return 3;
           case 10:
-            return _context45.abrupt(2);
+            return _context45.a(2);
         }
       }, _marked36);
     }
@@ -1975,12 +1975,12 @@ describe("delegated yield", function () {
             _context46.next = 3;
             return 0;
           case 3:
-            return _context46.delegateYield(gen(false), 4);
+            return _context46.d(gen(false), 4);
           case 4:
             _context46.next = 6;
             return 1;
           case 6:
-            return _context46.abrupt(2);
+            return _context46.a(2);
         }
       }, _marked37);
     }
@@ -1998,12 +1998,12 @@ describe("delegated yield", function () {
             _context47.next = 2;
             return n;
           case 2:
-            return _context47.delegateYield(middle(n - 1, inner(n + 10)), 3);
+            return _context47.d(middle(n - 1, inner(n + 10)), 3);
           case 3:
             _context47.next = 5;
             return n + 1;
           case 5:
-            return _context47.abrupt(2);
+            return _context47.a(2);
         }
       }, _marked38);
     }
@@ -2014,14 +2014,14 @@ describe("delegated yield", function () {
             _context48.next = 2;
             return n;
           case 2:
-            return _context48.delegateYield(inner(n - 1), 3);
+            return _context48.d(inner(n - 1), 3);
           case 3:
             _context48.next = 5;
             return n + 1;
           case 5:
-            return _context48.delegateYield(plusTen, 6);
+            return _context48.d(plusTen, 6);
           case 6:
-            return _context48.abrupt(2);
+            return _context48.a(2);
         }
       }, _marked39);
     }
@@ -2032,7 +2032,7 @@ describe("delegated yield", function () {
             _context49.next = 2;
             return n;
           case 2:
-            return _context49.abrupt(2);
+            return _context49.a(2);
         }
       }, _marked40);
     }
@@ -2045,12 +2045,12 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context50) {
         while (1) switch (_context50.prev = _context50.next) {
           case 0:
-            return _context50.delegateYield(inner(n << 1), 1);
+            return _context50.d(inner(n << 1), 1);
           case 1:
             _context50.next = 3;
             return "zxcv";
           case 3:
-            return _context50.abrupt(2);
+            return _context50.a(2);
         }
       }, _marked41);
     }
@@ -2067,9 +2067,9 @@ describe("delegated yield", function () {
             _context51.next = 6;
             return _context51.sent;
           case 6:
-            return _context51.abrupt(2, _context51.sent);
+            return _context51.a(2, _context51.sent);
           case 7:
-            return _context51.abrupt(2);
+            return _context51.a(2);
         }
       }, _marked42);
     }
@@ -2108,7 +2108,7 @@ describe("delegated yield", function () {
             _context52.next = 3;
             return 0;
           case 3:
-            return _context52.delegateYield(inner(n), 4);
+            return _context52.d(inner(n), 4);
           case 4:
             _context52.next = 6;
             return 1;
@@ -2124,7 +2124,7 @@ describe("delegated yield", function () {
             _context52.next = 14;
             return 4;
           case 14:
-            return _context52.abrupt(2);
+            return _context52.a(2);
         }
       }, _marked43, null, [[0, 8]]);
     }
@@ -2145,12 +2145,12 @@ describe("delegated yield", function () {
             _context53.next = 6;
             return n;
           case 6:
-            return _context53.finish(3);
+            return _context53.f(3);
           case 7:
             _context53.next = 0;
             break;
           case 9:
-            return _context53.abrupt(2);
+            return _context53.a(2);
         }
       }, _marked44, null, [[1,, 3, 7]]);
     }
@@ -2166,10 +2166,10 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context54) {
         while (1) switch (_context54.prev = _context54.next) {
           case 0:
-            return _context54.delegateYield(inner(), 1);
+            return _context54.d(inner(), 1);
           case 1:
             _context54.prev = 1;
-            return _context54.delegateYield(inner(), 3);
+            return _context54.d(inner(), 3);
           case 3:
             _context54.next = 7;
             break;
@@ -2177,11 +2177,11 @@ describe("delegated yield", function () {
             _context54.prev = 5;
             _t66 = _context54.sent;
           case 7:
-            return _context54.delegateYield(inner(), 8);
+            return _context54.d(inner(), 8);
           case 8:
-            return _context54.abrupt(2, _context54.sent);
+            return _context54.a(2, _context54.sent);
           case 9:
-            return _context54.abrupt(2);
+            return _context54.a(2);
         }
       }, _marked45, null, [[1, 5]]);
     }
@@ -2192,9 +2192,9 @@ describe("delegated yield", function () {
             _context55.next = 2;
             return count++;
           case 2:
-            return _context55.abrupt(2, _context55.sent);
+            return _context55.a(2, _context55.sent);
           case 3:
-            return _context55.abrupt(2);
+            return _context55.a(2);
         }
       }, _marked46);
     }
@@ -2227,15 +2227,15 @@ describe("delegated yield", function () {
         while (1) switch (_context56.prev = _context56.next) {
           case 0:
             _context56.prev = 0;
-            return _context56.delegateYield(delegate, 2);
+            return _context56.d(delegate, 2);
           case 2:
-            return _context56.abrupt(2, _context56.sent);
+            return _context56.a(2, _context56.sent);
           case 5:
             _context56.prev = 5;
             _t67 = _context56.sent;
-            return _context56.abrupt(2, _t67);
+            return _context56.a(2, _t67);
           case 8:
-            return _context56.abrupt(2);
+            return _context56.a(2);
         }
       }, _marked47, null, [[0, 5]]);
     }
@@ -2359,11 +2359,11 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context57) {
         while (1) switch (_context57.prev = _context57.next) {
           case 0:
-            return _context57.delegateYield(delegate, 1);
+            return _context57.d(delegate, 1);
           case 1:
-            return _context57.abrupt(2, _context57.sent);
+            return _context57.a(2, _context57.sent);
           case 2:
-            return _context57.abrupt(2);
+            return _context57.a(2);
         }
       }, _marked48);
     }
@@ -2410,15 +2410,15 @@ describe("delegated yield", function () {
         while (1) switch (_context58.prev = _context58.next) {
           case 0:
             _context58.prev = 0;
-            return _context58.delegateYield(child(), 2);
+            return _context58.d(child(), 2);
           case 2:
-            return _context58.abrupt(2, _context58.sent);
+            return _context58.a(2, _context58.sent);
           case 3:
             _context58.prev = 3;
             markers.push("parent");
-            return _context58.finish(3);
+            return _context58.f(3);
           case 6:
-            return _context58.abrupt(2);
+            return _context58.a(2);
         }
       }, _marked49, null, [[0,, 3, 6]]);
     }
@@ -2430,16 +2430,16 @@ describe("delegated yield", function () {
             _context59.next = 3;
             return 1;
           case 3:
-            return _context59.abrupt(2, _context59.sent);
+            return _context59.a(2, _context59.sent);
           case 4:
             _context59.prev = 4;
             _context59.next = 7;
             return 2;
           case 7:
             markers.push("child");
-            return _context59.finish(4);
+            return _context59.f(4);
           case 9:
-            return _context59.abrupt(2);
+            return _context59.a(2);
         }
       }, _marked50, null, [[0,, 4, 9]]);
     }
@@ -2472,9 +2472,9 @@ describe("delegated yield", function () {
             _context60.next = 2;
             return 1;
           case 2:
-            return _context60.abrupt(2, 2);
+            return _context60.a(2, 2);
           case 3:
-            return _context60.abrupt(2);
+            return _context60.a(2);
         }
       }, _marked51);
     }
@@ -2482,11 +2482,11 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context61) {
         while (1) switch (_context61.prev = _context61.next) {
           case 0:
-            return _context61.delegateYield(delegate, 1);
+            return _context61.d(delegate, 1);
           case 1:
-            return _context61.abrupt(2, _context61.sent);
+            return _context61.a(2, _context61.sent);
           case 2:
-            return _context61.abrupt(2);
+            return _context61.a(2);
         }
       }, _marked52);
     }
@@ -2522,9 +2522,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context62) {
         while (1) switch (_context62.prev = _context62.next) {
           case 0:
-            return _context62.abrupt(2, arg);
+            return _context62.a(2, arg);
           case 1:
-            return _context62.abrupt(2);
+            return _context62.a(2);
         }
       }, _marked53);
     }
@@ -2533,12 +2533,12 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context63) {
         while (1) switch (_context63.prev = _context63.next) {
           case 0:
-            return _context63.delegateYield(delegate, 1);
+            return _context63.d(delegate, 1);
           case 1:
             _t68 = _context63.sent;
-            return _context63.abrupt(2, 1 + _t68);
+            return _context63.a(2, 1 + _t68);
           case 3:
-            return _context63.abrupt(2);
+            return _context63.a(2);
         }
       }, _marked54);
     }
@@ -2566,9 +2566,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context64) {
         while (1) switch (_context64.prev = _context64.next) {
           case 0:
-            return _context64.delegateYield("", 1);
+            return _context64.d("", 1);
           case 1:
-            return _context64.abrupt(2);
+            return _context64.a(2);
         }
       }, _marked55);
     }
@@ -2583,9 +2583,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context65) {
         while (1) switch (_context65.prev = _context65.next) {
           case 0:
-            return _context65.delegateYield(x, 1);
+            return _context65.d(x, 1);
           case 1:
-            return _context65.abrupt(2);
+            return _context65.a(2);
         }
       }, _marked56);
     }
@@ -2602,11 +2602,11 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context66) {
         while (1) switch (_context66.prev = _context66.next) {
           case 0:
-            return _context66.delegateYield({
+            return _context66.d({
               [Symbol.iterator]: x => []
             }, 1);
           case 1:
-            return _context66.abrupt(2);
+            return _context66.a(2);
         }
       }, _callee5);
     })();
@@ -2624,7 +2624,7 @@ describe("delegated yield", function () {
               _context67.next = 2;
               return "Hello";
             case 2:
-              return _context67.abrupt(2);
+              return _context67.a(2);
           }
         }, _callee6);
       });
@@ -2632,9 +2632,9 @@ describe("delegated yield", function () {
         return babelHelpers.regenerator().w(function (_context68) {
           while (1) switch (_context68.prev = _context68.next) {
             case 0:
-              return _context68.delegateYield(false, 1);
+              return _context68.d(false, 1);
             case 1:
-              return _context68.abrupt(2);
+              return _context68.a(2);
           }
         }, _marked57);
       }
@@ -2657,7 +2657,7 @@ describe("delegated yield", function () {
             _context69.next = 2;
             return 0;
           case 2:
-            return _context69.abrupt(2);
+            return _context69.a(2);
         }
       }, _marked58);
     }
@@ -2689,9 +2689,9 @@ describe("delegated yield", function () {
           case 8:
             _context70.prev = 8;
             executedFinally = true;
-            return _context70.finish(8);
+            return _context70.f(8);
           case 11:
-            return _context70.abrupt(2);
+            return _context70.a(2);
         }
       }, _marked59, null, [[0, 5, 8, 11]]);
     }
@@ -2730,9 +2730,9 @@ describe("delegated yield", function () {
             }
             throw errorToThrow;
           case 9:
-            return _context71.finish(5);
+            return _context71.f(5);
           case 10:
-            return _context71.abrupt(2);
+            return _context71.a(2);
         }
       }, _marked60, null, [[0,, 5, 10]]);
     }
@@ -2744,16 +2744,16 @@ describe("delegated yield", function () {
             _context72.next = 3;
             return 0;
           case 3:
-            return _context72.delegateYield(callee(errorToThrow), 4);
+            return _context72.d(callee(errorToThrow), 4);
           case 4:
             _context72.next = 6;
             return 3;
           case 6:
             _context72.prev = 6;
             checkpoints.push("caller finally");
-            return _context72.finish(6);
+            return _context72.f(6);
           case 9:
-            return _context72.abrupt(2);
+            return _context72.a(2);
         }
       }, _marked61, null, [[0,, 6, 9]]);
     }
@@ -2829,7 +2829,7 @@ describe("function declaration hoisting", function () {
             _context73.next = 13;
             return increment(increment(n));
           case 13:
-            return _context73.abrupt(2);
+            return _context73.a(2);
         }
       }, _marked62);
     }
@@ -2856,9 +2856,9 @@ describe("function declaration hoisting", function () {
                     _context74.next = 6;
                     return n + 1;
                   case 6:
-                    return _context74.abrupt(2, _context74.sent);
+                    return _context74.a(2, _context74.sent);
                   case 7:
-                    return _context74.abrupt(2);
+                    return _context74.a(2);
                 }
               }, _marked63);
             };
@@ -2867,11 +2867,11 @@ describe("function declaration hoisting", function () {
             return 0;
           case 4:
             assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
-            return _context75.delegateYield(inner(n), 6);
+            return _context75.d(inner(n), 6);
           case 6:
-            return _context75.abrupt(2, _context75.sent);
+            return _context75.a(2, _context75.sent);
           case 7:
-            return _context75.abrupt(2);
+            return _context75.a(2);
         }
       }, _marked64);
     }
@@ -2901,7 +2901,7 @@ describe("function declaration hoisting", function () {
             _context76.next = 9;
             return toBeRebound;
           case 9:
-            return _context76.abrupt(2);
+            return _context76.a(2);
         }
       }, _marked65);
     }
@@ -2929,7 +2929,7 @@ describe("function declaration hoisting", function () {
             _context77.next = 9;
             return safe;
           case 9:
-            return _context77.abrupt(2);
+            return _context77.a(2);
         }
       }, safe);
     });
@@ -2950,7 +2950,7 @@ describe("function declaration hoisting", function () {
             _context78.next = 4;
             return toBeRebound;
           case 4:
-            return _context78.abrupt(2);
+            return _context78.a(2);
         }
       }, _marked66);
     }
@@ -2981,9 +2981,9 @@ describe("the arguments object", function () {
             _context79.next = 2;
             break;
           case 8:
-            return _context79.abrupt(2, result);
+            return _context79.a(2, result);
           case 9:
-            return _context79.abrupt(2);
+            return _context79.a(2);
         }
       }, _marked67);
     }
@@ -3021,7 +3021,7 @@ describe("the arguments object", function () {
             _context80.next = 17;
             return y;
           case 17:
-            return _context80.abrupt(2);
+            return _context80.a(2);
         }
       }, _marked68);
     }
@@ -3040,7 +3040,7 @@ describe("the arguments object", function () {
             _context81.next = 3;
             return x + _args81;
           case 3:
-            return _context81.abrupt(2);
+            return _context81.a(2);
         }
       }, _marked69);
     }
@@ -3058,7 +3058,7 @@ describe("the arguments object", function () {
             _context82.next = 3;
             return _args82;
           case 3:
-            return _context82.abrupt(2);
+            return _context82.a(2);
         }
       }, _marked70);
     }
@@ -3082,7 +3082,7 @@ describe("the arguments object", function () {
             _context83.next = 6;
             return obj;
           case 6:
-            return _context83.abrupt(2);
+            return _context83.a(2);
         }
       }, _marked71);
     }
@@ -3113,7 +3113,7 @@ describe("the arguments object", function () {
             _context84.next = 9;
             return 3;
           case 9:
-            return _context84.delegateYield(_args84.callee(true), 10);
+            return _context84.d(_args84.callee(true), 10);
           case 10:
             _context84.next = 12;
             return 4;
@@ -3121,7 +3121,7 @@ describe("the arguments object", function () {
             _context84.next = 14;
             return 5;
           case 14:
-            return _context84.abrupt(2);
+            return _context84.a(2);
         }
       }, _marked72);
     }
@@ -3140,9 +3140,9 @@ describe("the this object", function () {
             _context85.next = 2;
             return this;
           case 2:
-            return _context85.abrupt(2, this);
+            return _context85.a(2, this);
           case 3:
-            return _context85.abrupt(2);
+            return _context85.a(2);
         }
       }, _marked73, this);
     }
@@ -3159,9 +3159,9 @@ describe("the this object", function () {
             _context86.next = 2;
             return this;
           case 2:
-            return _context86.abrupt(2, this);
+            return _context86.a(2, this);
           case 3:
-            return _context86.abrupt(2);
+            return _context86.a(2);
         }
       }, _marked74, this);
     }
@@ -3178,9 +3178,9 @@ describe("the this object", function () {
       return babelHelpers.regenerator().w(function (_context87) {
         while (1) switch (_context87.prev = _context87.next) {
           case 0:
-            return _context87.abrupt(2, 0);
+            return _context87.a(2, 0);
           case 1:
-            return _context87.abrupt(2);
+            return _context87.a(2);
         }
       }, _marked75);
     }
@@ -3200,7 +3200,7 @@ describe("directive strings", function () {
           _context88.next = 2;
           return !this;
         case 2:
-          return _context88.abrupt(2);
+          return _context88.a(2);
       }
     }, _marked76, this);
   }
@@ -3211,7 +3211,7 @@ describe("directive strings", function () {
           _context89.next = 2;
           return !this;
         case 2:
-          return _context89.abrupt(2);
+          return _context89.a(2);
       }
     }, _marked77, this);
   }
@@ -3265,7 +3265,7 @@ describe("catch parameter shadowing", function () {
             _context90.next = 27;
             return y;
           case 27:
-            return _context90.abrupt(2);
+            return _context90.a(2);
         }
       }, _marked78, null, [[14, 18], [1, 5]]);
     }
@@ -3315,7 +3315,7 @@ describe("catch parameter shadowing", function () {
             _context91.next = 18;
             return x;
           case 18:
-            return _context91.abrupt(2);
+            return _context91.a(2);
         }
       }, _marked79, null, [[0, 4]]);
     }
@@ -3352,7 +3352,7 @@ describe("catch parameter shadowing", function () {
             _context92.next = 18;
             return _t73;
           case 18:
-            return _context92.abrupt(2);
+            return _context92.a(2);
         }
       }, _marked80, null, [[8, 12], [0, 4]]);
     }
@@ -3383,7 +3383,7 @@ describe("catch parameter shadowing", function () {
           case 12:
             _t75.e = "e.e";
             _t75[_t75.message] = "e.oyez";
-            return _context93.abrupt(2, {
+            return _context93.a(2, {
               e: _t75,
               identity: function (x) {
                 var e = x;
@@ -3394,7 +3394,7 @@ describe("catch parameter shadowing", function () {
             _context93.next = 17;
             return 4;
           case 17:
-            return _context93.abrupt(2);
+            return _context93.a(2);
         }
       }, _marked81, null, [[0, 8]]);
     }
@@ -3428,9 +3428,9 @@ describe("empty while loops", function () {
             do {
               // empty do-while loop
             } while (x);
-            return _context94.abrupt(2, gen.toString());
+            return _context94.a(2, gen.toString());
           case 3:
-            return _context94.abrupt(2);
+            return _context94.a(2);
         }
       }, _marked82);
     }
@@ -3475,14 +3475,14 @@ describe("object literals with multiple yields", function () {
           case 19:
             _t83 = _context95.sent;
             _t84 = [_t82, _t83];
-            return _context95.abrupt(2, {
+            return _context95.a(2, {
               a: _t76,
               b: _t77,
               c: _t81,
               d: _t84
             });
           case 22:
-            return _context95.abrupt(2);
+            return _context95.a(2);
         }
       }, _marked83);
     }
@@ -3506,7 +3506,7 @@ describe("generator .throw method", function () {
             _context96.next = 2;
             return 1;
           case 2:
-            return _context96.abrupt(2);
+            return _context96.a(2);
         }
       }, _marked84);
     }
@@ -3534,7 +3534,7 @@ describe("generator .throw method", function () {
             _context97.next = 3;
             return 1;
           case 3:
-            return _context97.abrupt(2);
+            return _context97.a(2);
         }
       }, _marked85);
     }
@@ -3557,18 +3557,18 @@ describe("generator .throw method", function () {
         while (1) switch (_context98.prev = _context98.next) {
           case 0:
             _context98.prev = 0;
-            return _context98.delegateYield(inner(), 2);
+            return _context98.d(inner(), 2);
           case 2:
             _context98.next = 7;
             break;
           case 4:
             _context98.prev = 4;
             _t85 = _context98.sent;
-            return _context98.abrupt(2, -1);
+            return _context98.a(2, -1);
           case 7:
-            return _context98.abrupt(2, 1);
+            return _context98.a(2, 1);
           case 8:
-            return _context98.abrupt(2);
+            return _context98.a(2);
         }
       }, _marked86, null, [[0, 4]]);
     }
@@ -3586,9 +3586,9 @@ describe("generator .throw method", function () {
           case 5:
             _context99.prev = 5;
             _t86 = _context99.sent;
-            return _context99.abrupt(2);
+            return _context99.a(2);
           case 8:
-            return _context99.abrupt(2);
+            return _context99.a(2);
         }
       }, _marked87, null, [[0, 5]]);
     }
@@ -3605,18 +3605,18 @@ describe("generator .throw method", function () {
         while (1) switch (_context100.prev = _context100.next) {
           case 0:
             _context100.prev = 0;
-            return _context100.delegateYield(inner(), 2);
+            return _context100.d(inner(), 2);
           case 2:
             _context100.next = 7;
             break;
           case 4:
             _context100.prev = 4;
             _t87 = _context100.sent;
-            return _context100.abrupt(2, -1);
+            return _context100.a(2, -1);
           case 7:
-            return _context100.abrupt(2, 1);
+            return _context100.a(2, 1);
           case 8:
-            return _context100.abrupt(2);
+            return _context100.a(2);
         }
       }, _marked88, null, [[0, 4]]);
     }
@@ -3627,7 +3627,7 @@ describe("generator .throw method", function () {
             _context101.next = 2;
             return void 0;
           case 2:
-            return _context101.abrupt(2);
+            return _context101.a(2);
         }
       }, _marked89);
     }
@@ -3655,9 +3655,9 @@ describe("unqualified function calls", function () {
             return "dummy";
           case 2:
             _t88 = _context102.sent;
-            return _context102.abrupt(2, _t88());
+            return _context102.a(2, _t88());
           case 4:
-            return _context102.abrupt(2);
+            return _context102.a(2);
         }
       }, _marked90);
     }
@@ -3686,11 +3686,11 @@ describe("yield* expression results", function () {
             _context103.next = 2;
             return 0;
           case 2:
-            return _context103.delegateYield(bar(), 3);
+            return _context103.d(bar(), 3);
           case 3:
-            return _context103.abrupt(2, _context103.sent);
+            return _context103.a(2, _context103.sent);
           case 4:
-            return _context103.abrupt(2);
+            return _context103.a(2);
         }
       }, _marked91);
     }
@@ -3701,9 +3701,9 @@ describe("yield* expression results", function () {
             _context104.next = 2;
             return 1;
           case 2:
-            return _context104.abrupt(2, 2);
+            return _context104.a(2, 2);
           case 3:
-            return _context104.abrupt(2);
+            return _context104.a(2);
         }
       }, _marked92);
     }
@@ -3727,15 +3727,15 @@ describe("yield* expression results", function () {
       return babelHelpers.regenerator().w(function (_context105) {
         while (1) switch (_context105.prev = _context105.next) {
           case 0:
-            return _context105.delegateYield(bar(), 1);
+            return _context105.d(bar(), 1);
           case 1:
             _t89 = _context105.sent;
-            return _context105.delegateYield(bar(), 3);
+            return _context105.d(bar(), 3);
           case 3:
             _t90 = _context105.sent;
-            return _context105.abrupt(2, _t89 + _t90);
+            return _context105.a(2, _t89 + _t90);
           case 5:
-            return _context105.abrupt(2);
+            return _context105.a(2);
         }
       }, _marked93);
     }
@@ -3752,9 +3752,9 @@ describe("yield* expression results", function () {
             return 3;
           case 5:
             _t92 = _context106.sent;
-            return _context106.abrupt(2, _t91 + _t92);
+            return _context106.a(2, _t91 + _t92);
           case 7:
-            return _context106.abrupt(2);
+            return _context106.a(2);
         }
       }, _marked94);
     }
@@ -3779,7 +3779,7 @@ describe("isGeneratorFunction", function () {
             _context107.next = 2;
             return 0;
           case 2:
-            return _context107.abrupt(2);
+            return _context107.a(2);
         }
       }, _marked95);
     }
@@ -3792,7 +3792,7 @@ describe("isGeneratorFunction", function () {
             _context108.next = 2;
             return 0;
           case 2:
-            return _context108.abrupt(2);
+            return _context108.a(2);
         }
       }, genFun);
     })), true);
@@ -3828,9 +3828,9 @@ describe("new expressions", function () {
             _context109.next = 11;
             return new _t93(_t94, _t95);
           case 11:
-            return _context109.abrupt(2, _context109.sent);
+            return _context109.a(2, _context109.sent);
           case 12:
-            return _context109.abrupt(2);
+            return _context109.a(2);
         }
       }, _marked96);
     }
@@ -3881,7 +3881,7 @@ describe("block binding", function () {
             _context110.next = 10;
             return a;
           case 10:
-            return _context110.abrupt(2);
+            return _context110.a(2);
         }
       }, _marked97);
     }
@@ -3930,7 +3930,7 @@ describe("block binding", function () {
             _context111.next = 2;
             break;
           case 7:
-            return _context111.abrupt(2);
+            return _context111.a(2);
         }
       }, _marked98);
     }
@@ -3961,9 +3961,9 @@ describe("newborn generators", function () {
             return 2;
           case 5:
             _t97 = _context112.sent;
-            return _context112.abrupt(2, [_t96, _t97]);
+            return _context112.a(2, [_t96, _t97]);
           case 7:
-            return _context112.abrupt(2);
+            return _context112.a(2);
         }
       }, _marked99);
     }
@@ -3971,11 +3971,11 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context113) {
         while (1) switch (_context113.prev = _context113.next) {
           case 0:
-            return _context113.delegateYield(delegate, 1);
+            return _context113.d(delegate, 1);
           case 1:
-            return _context113.abrupt(2, _context113.sent);
+            return _context113.a(2, _context113.sent);
           case 2:
-            return _context113.abrupt(2);
+            return _context113.a(2);
         }
       }, _marked100);
     }
@@ -4017,9 +4017,9 @@ describe("newborn generators", function () {
           case 7:
             sent2 = _context114.sent;
             markers.push(3);
-            return _context114.abrupt(2, [sent1, sent2]);
+            return _context114.a(2, [sent1, sent2]);
           case 10:
-            return _context114.abrupt(2);
+            return _context114.a(2);
         }
       }, _marked101);
     }
@@ -4047,9 +4047,9 @@ describe("newborn generators", function () {
               break;
             case 10:
               markers.push(4);
-              return _context115.abrupt(2, info.value);
+              return _context115.a(2, info.value);
             case 12:
-              return _context115.abrupt(2);
+              return _context115.a(2);
           }
         }, _callee7);
       })();
@@ -4104,7 +4104,7 @@ describe("newborn generators", function () {
             _context116.next = 1;
             break;
           case 7:
-            return _context116.abrupt(2);
+            return _context116.a(2);
         }
       }, _marked102);
     }
@@ -4112,11 +4112,11 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context117) {
         while (1) switch (_context117.prev = _context117.next) {
           case 0:
-            return _context117.delegateYield(a, 1);
+            return _context117.d(a, 1);
           case 1:
-            return _context117.delegateYield(b, 2);
+            return _context117.d(b, 2);
           case 2:
-            return _context117.abrupt(2);
+            return _context117.a(2);
         }
       }, _marked103);
     }
@@ -4134,9 +4134,9 @@ describe("newborn generators", function () {
             _context118.next = 6;
             return _context118.sent;
           case 6:
-            return _context118.abrupt(2, _context118.sent);
+            return _context118.a(2, _context118.sent);
           case 7:
-            return _context118.abrupt(2);
+            return _context118.a(2);
         }
       }, _marked104);
     }
@@ -4159,9 +4159,9 @@ describe("newborn generators", function () {
             _context119.next = 10;
             return _context119.sent;
           case 10:
-            return _context119.abrupt(2, _context119.sent);
+            return _context119.a(2, _context119.sent);
           case 11:
-            return _context119.abrupt(2);
+            return _context119.a(2);
         }
       }, _marked105);
     }
@@ -4239,7 +4239,7 @@ describe("labeled break and continue statements", function () {
             _context120.next = 29;
             return "breaking";
           case 29:
-            return _context120.abrupt(3, 42);
+            return _context120.a(3, 42);
           case 30:
             if (!(which === "continue")) {
               _context120.next = 34;
@@ -4248,16 +4248,16 @@ describe("labeled break and continue statements", function () {
             _context120.next = 33;
             return "continuing";
           case 33:
-            return _context120.abrupt(3, 39);
+            return _context120.a(3, 39);
           case 34:
             _context120.next = 36;
             return 5;
           case 36:
-            return _context120.finish(23);
+            return _context120.f(23);
           case 37:
-            return _context120.finish(18);
+            return _context120.f(18);
           case 38:
-            return _context120.finish(13);
+            return _context120.f(13);
           case 39:
             ++i;
             _context120.next = 8;
@@ -4266,9 +4266,9 @@ describe("labeled break and continue statements", function () {
             _context120.next = 44;
             return 6;
           case 44:
-            return _context120.finish(4);
+            return _context120.f(4);
           case 45:
-            return _context120.abrupt(2);
+            return _context120.a(2);
         }
       }, _marked106, null, [[21,, 23, 37], [16,, 18, 38], [11,, 13, 39], [0,, 4, 45]]);
     }
@@ -4314,7 +4314,7 @@ describe("labeled break and continue statements", function () {
             _context121.next = 8;
             return 2;
           case 8:
-            return _context121.abrupt(3, 11);
+            return _context121.a(3, 11);
           case 11:
             if (!(limit === 3)) {
               _context121.next = 26;
@@ -4327,7 +4327,7 @@ describe("labeled break and continue statements", function () {
               _context121.next = 16;
               break;
             }
-            return _context121.abrupt(3, 26);
+            return _context121.a(3, 26);
           case 16:
             _context121.next = 18;
             return 5;
@@ -4336,7 +4336,7 @@ describe("labeled break and continue statements", function () {
               _context121.next = 20;
               break;
             }
-            return _context121.abrupt(3, 26);
+            return _context121.a(3, 26);
           case 20:
             _context121.next = 22;
             return 6;
@@ -4345,12 +4345,12 @@ describe("labeled break and continue statements", function () {
               _context121.next = 24;
               break;
             }
-            return _context121.abrupt(3, 32);
+            return _context121.a(3, 32);
           case 24:
             _context121.next = 26;
             return 7;
           case 26:
-            return _context121.abrupt(3, 27);
+            return _context121.a(3, 27);
           case 27:
             _context121.next = 29;
             return 8;
@@ -4362,7 +4362,7 @@ describe("labeled break and continue statements", function () {
             _context121.next = 34;
             return 9;
           case 34:
-            return _context121.abrupt(2);
+            return _context121.a(2);
         }
       }, _marked107);
     }
@@ -4382,7 +4382,7 @@ describe("for loop with var decl and no update expression", function () {
         case 0:
           for (i = 0; false;) {}
         case 1:
-          return _context122.abrupt(2);
+          return _context122.a(2);
       }
     }, _marked108);
   }
@@ -4433,7 +4433,7 @@ describe("generator function prototype", function () {
             _context123.next = 2;
             return 1;
           case 2:
-            return _context123.abrupt(2);
+            return _context123.a(2);
         }
       }, _marked109);
     }
@@ -4449,7 +4449,7 @@ describe("generator function prototype", function () {
             _context124.next = 2;
             return this;
           case 2:
-            return _context124.abrupt(2);
+            return _context124.a(2);
         }
       }, _marked110, this);
     }
@@ -4460,7 +4460,7 @@ describe("generator function prototype", function () {
             _context125.next = 2;
             return 1;
           case 2:
-            return _context125.abrupt(2);
+            return _context125.a(2);
         }
       }, _marked111);
     }
@@ -4527,7 +4527,7 @@ describe("for-of loops", function () {
             _context126.next = 3;
             return list;
           case 3:
-            return _context126.abrupt(2, 1);
+            return _context126.a(2, 1);
           case 4:
             count = 0;
             first = list.slice(0, 1);
@@ -4570,11 +4570,11 @@ describe("for-of loops", function () {
           case 29:
             _context126.prev = 29;
             _iterator3.f();
-            return _context126.finish(29);
+            return _context126.f(29);
           case 32:
-            return _context126.abrupt(2, count);
+            return _context126.a(2, count);
           case 33:
-            return _context126.abrupt(2);
+            return _context126.a(2);
         }
       }, _marked112, null, [[8, 26, 29, 32]]);
     }
@@ -4613,9 +4613,9 @@ describe("expressions containing yield subexpressions", function () {
             };
           case 3:
             _t100 = _context127.sent;
-            return _context127.abrupt(2, _t99 * _t100);
+            return _context127.a(2, _t99 * _t100);
           case 5:
-            return _context127.abrupt(2);
+            return _context127.a(2);
         }
       }, _marked113);
     }
@@ -4640,9 +4640,9 @@ describe("expressions containing yield subexpressions", function () {
             return "asdf";
           case 3:
             _t102 = _context128.sent;
-            return _context128.abrupt(2, _t101 + _t102);
+            return _context128.a(2, _t101 + _t102);
           case 5:
-            return _context128.abrupt(2);
+            return _context128.a(2);
         }
       }, _marked114);
     }
@@ -4678,9 +4678,9 @@ describe("expressions containing yield subexpressions", function () {
           case 3:
             _t104 = _context129.sent;
             _t105 = a;
-            return _context129.abrupt(2, [_t103, _t104, _t105]);
+            return _context129.a(2, [_t103, _t104, _t105]);
           case 6:
-            return _context129.abrupt(2);
+            return _context129.a(2);
         }
       }, _marked115);
     }
@@ -4709,9 +4709,9 @@ describe("expressions containing yield subexpressions", function () {
           case 3:
             _t107 = _context130.sent;
             a = _t106.concat.call(_t106, _t107);
-            return _context130.abrupt(2, a);
+            return _context130.a(2, a);
           case 6:
-            return _context130.abrupt(2);
+            return _context130.a(2);
         }
       }, _marked116);
     }
@@ -4739,9 +4739,9 @@ describe("expressions containing yield subexpressions", function () {
             return "asdf";
           case 3:
             _t109 = _context131.sent;
-            return _context131.abrupt(2, _t108 + _t109);
+            return _context131.a(2, _t108 + _t109);
           case 5:
-            return _context131.abrupt(2);
+            return _context131.a(2);
         }
       }, _marked117);
     }
@@ -4768,9 +4768,9 @@ describe("expressions containing yield subexpressions", function () {
             return "foo";
           case 2:
             _t110 = _context132.sent;
-            return _context132.abrupt(2, [0, ..._t110, 3]);
+            return _context132.a(2, [0, ..._t110, 3]);
           case 4:
-            return _context132.abrupt(2);
+            return _context132.a(2);
         }
       }, _marked118);
     }
@@ -4795,9 +4795,9 @@ describe("expressions containing yield subexpressions", function () {
             return "foo";
           case 2:
             _t111 = _context133.sent;
-            return _context133.abrupt(2, [0, _t111,, 3]);
+            return _context133.a(2, [0, _t111,, 3]);
           case 4:
-            return _context133.abrupt(2);
+            return _context133.a(2);
         }
       }, _marked119);
     }

@@ -8,9 +8,9 @@ function foo() {
         _bar = {
           bar: "bar"
         }, bar = _bar.bar;
-        return _context.abrupt(2, bar);
+        return _context.a(2, bar);
       case 2:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _marked);
 }
@@ -23,9 +23,9 @@ function foo2(_ref) {
     return babelHelpers.regenerator().w(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          return _context2.abrupt(2, bar);
+          return _context2.a(2, bar);
         case 1:
-          return _context2.abrupt(2);
+          return _context2.a(2);
       }
     }, _callee);
   })();
@@ -60,25 +60,25 @@ function foo3() {
                   _context3.next = 12;
                   break;
                 }
-                return _context3.abrupt(2, 0);
+                return _context3.a(2, 0);
               case 12:
                 if (!(value === 2)) {
                   _context3.next = 14;
                   break;
                 }
-                return _context3.abrupt(2, 0);
+                return _context3.a(2, 0);
               case 14:
-                return _context3.abrupt(3, 20);
+                return _context3.a(3, 20);
               case 15:
                 // Removing these 3 lines makes the tests pass.
                 ["a", "b"].map(function (v) {
                   return value + v;
                 });
-                return _context3.abrupt(2, 0);
+                return _context3.a(2, 0);
               case 18:
-                return _context3.abrupt(2, 0);
+                return _context3.a(2, 0);
               case 20:
-                return _context3.abrupt(2);
+                return _context3.a(2);
             }
           }, _callee2);
         });
@@ -87,19 +87,19 @@ function foo3() {
           _context4.next = 8;
           break;
         }
-        return _context4.delegateYield(_loop(), 3);
+        return _context4.d(_loop(), 3);
       case 3:
         _ret = _context4.sent;
         if (!(_ret === 0)) {
           _context4.next = 6;
           break;
         }
-        return _context4.abrupt(3, 8);
+        return _context4.a(3, 8);
       case 6:
         _context4.next = 1;
         break;
       case 8:
-        return _context4.abrupt(2);
+        return _context4.a(2);
     }
   }, _marked2);
 }

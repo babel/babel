@@ -45,9 +45,9 @@ type Context = {
   next: number;
   sent: any;
 
-  abrupt(type: OperatorType, arg?: any): any;
-  finish(finallyLoc: number): any;
-  delegateYield(iterable: any, nextLoc: number): any;
+  a(type: OperatorType, arg?: any): any;
+  f(finallyLoc: number): any;
+  d(iterable: any, nextLoc: number): any;
 };
 
 export default function /* @no-mangle */ _regenerator() {
@@ -296,12 +296,12 @@ export default function /* @no-mangle */ _regenerator() {
 
       sent: undefined,
 
-      abrupt: Context_dispatchExceptionOrFinishOrAbrupt,
-      finish: Context_dispatchExceptionOrFinishOrAbrupt.bind(
+      a: Context_dispatchExceptionOrFinishOrAbrupt,
+      f: Context_dispatchExceptionOrFinishOrAbrupt.bind(
         undefined,
         OperatorType.Finish,
       ),
-      delegateYield: function (iterable: any, nextLoc: number) {
+      d: function (iterable: any, nextLoc: number) {
         delegateIterator = values(iterable);
 
         // Deliberately forget the last sent value so that we don't

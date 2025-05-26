@@ -19,7 +19,7 @@ function values() {
         _context.next = 4;
         return 1;
       case 4:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _marked);
 }
@@ -42,10 +42,10 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 6:
         _context2.prev = 6;
         i++;
-        return _context2.delegateYield(values(), 9);
+        return _context2.d(values(), 9);
       case 9:
         j++;
-        return _context2.finish(6);
+        return _context2.f(6);
       case 11:
         k++;
       case 12:
@@ -61,11 +61,11 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 19:
         _context2.prev = 19;
         _iterator.f();
-        return _context2.finish(19);
+        return _context2.f(19);
       case 22:
         l++;
       case 23:
-        return _context2.abrupt(2);
+        return _context2.a(2);
     }
   }, _callee, null, [[5,, 6, 11], [1, 16, 19, 22]]);
 })();
