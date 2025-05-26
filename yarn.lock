@@ -7560,6 +7560,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-optimization-class-to-function-d736fa@workspace:codemods/babel-plugin-optimization-class-to-function":
+  version: 0.0.0-use.local
+  resolution: "babel-plugin-optimization-class-to-function-d736fa@workspace:codemods/babel-plugin-optimization-class-to-function"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "babel-plugin-polyfill-corejs2-BABEL_8_BREAKING-false@npm:babel-plugin-polyfill-corejs2@^0.4.10":
   version: 0.4.10
   resolution: "babel-plugin-polyfill-corejs2@npm:0.4.10"
