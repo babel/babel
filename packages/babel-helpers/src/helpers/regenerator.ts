@@ -41,12 +41,18 @@ type TryEntry = [
 ];
 
 type Context = {
+  // prev
   p: number;
+  // next
   n: number;
+  // value
   v: any;
 
+  // abrupt
   a(type: OperatorType, arg?: any): any;
+  // finish
   f(finallyLoc: number): any;
+  // delegateYield
   d(iterable: any, nextLoc: number): any;
 };
 
