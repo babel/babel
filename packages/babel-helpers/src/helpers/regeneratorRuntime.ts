@@ -55,29 +55,40 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     continue: 3,
   };
 
+  function callSyncState<A1, A2, R>(
+    context: Context & NewContext,
+    fn: (a: A1, b: A2) => R,
+    a1: A1,
+    a2?: A2,
+  ): R {
+    context.p = context.prev!;
+    context.n = context.next === "end" ? -1 : context.next!;
+    try {
+      return fn(a1, a2!);
+    } finally {
+      context.next = context.n === -1 ? "end" : context.n;
+    }
+  }
+
   function wrapInnerFn(innerFn: InnerFn): InnerFn {
     return function (context: Context & NewContext) {
       if (!context.stop) {
         // Shim the old context shape on top of the new one.
         context.stop = function () {
-          context.p = context.prev!;
-          return context.a(2);
+          return callSyncState(context, context.a, 2);
         };
         context["catch"] = function () {
           return context.v;
         };
         context.abrupt = function (type, arg) {
-          context.p = context.prev!;
-          return context.a(abruptMap[type], arg);
+          return callSyncState(context, context.a, abruptMap[type], arg);
         };
         context.delegateYield = function (iterable, resultName, nextLoc) {
           context.resultName = resultName;
-          context.p = context.prev!;
-          return context.d(iterable, nextLoc);
+          return callSyncState(context, context.d, iterable, nextLoc);
         };
         context.finish = function (finallyLoc) {
-          context.p = context.prev!;
-          return context.f(finallyLoc);
+          return callSyncState(context, context.f, finallyLoc);
         };
       }
       if (context.resultName) {
@@ -85,10 +96,12 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         context.resultName = undefined;
       }
       context.sent = context.v;
+      context.next = context.n === -1 ? "end" : context.n;
       try {
         return innerFn.call(this, context);
       } finally {
         context.p = context.prev!;
+        context.n = context.next === "end" ? -1 : context.next;
       }
     } as (this: unknown, context: NewContext) => unknown;
   }

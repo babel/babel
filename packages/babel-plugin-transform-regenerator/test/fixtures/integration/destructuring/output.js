@@ -3,7 +3,7 @@ var _marked = /*#__PURE__*/babelHelpers.regenerator().m(foo),
 function foo() {
   var _bar, bar;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
         _bar = {
           bar: "bar"
@@ -21,7 +21,7 @@ function foo2(_ref) {
     bar = _ref$bar === void 0 ? 0 : _ref$bar;
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     return babelHelpers.regenerator().w(function (_context2) {
-      while (1) switch (_context2.p = _context2.next) {
+      while (1) switch (_context2.p = _context2.n) {
         case 0:
           return _context2.a(2, bar);
         case 1:
@@ -39,31 +39,31 @@ expect(foo2({
 function foo3() {
   var _loop, _ret;
   return babelHelpers.regenerator().w(function (_context4) {
-    while (1) switch (_context4.p = _context4.next) {
+    while (1) switch (_context4.p = _context4.n) {
       case 0:
         _loop = /*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
           var _yield$iteration, what, value, _t;
           return babelHelpers.regenerator().w(function (_context3) {
-            while (1) switch (_context3.p = _context3.next) {
+            while (1) switch (_context3.p = _context3.n) {
               case 0:
-                _context3.next = 2;
+                _context3.n = 2;
                 return "iteration";
               case 2:
                 _yield$iteration = _context3.v;
                 what = _yield$iteration.what;
                 value = _yield$iteration.value;
                 _t = what;
-                _context3.next = _t === "one" ? 8 : _t === "two" ? 15 : _t === "three" ? 18 : 20;
+                _context3.n = _t === "one" ? 8 : _t === "two" ? 15 : _t === "three" ? 18 : 20;
                 break;
               case 8:
                 if (!(value === 1)) {
-                  _context3.next = 12;
+                  _context3.n = 12;
                   break;
                 }
                 return _context3.a(2, 0);
               case 12:
                 if (!(value === 2)) {
-                  _context3.next = 14;
+                  _context3.n = 14;
                   break;
                 }
                 return _context3.a(2, 0);
@@ -84,19 +84,19 @@ function foo3() {
         });
       case 1:
         if (!true) {
-          _context4.next = 8;
+          _context4.n = 8;
           break;
         }
         return _context4.d(_loop(), 3);
       case 3:
         _ret = _context4.v;
         if (!(_ret === 0)) {
-          _context4.next = 6;
+          _context4.n = 6;
           break;
         }
         return _context4.a(3, 8);
       case 6:
-        _context4.next = 1;
+        _context4.n = 1;
         break;
       case 8:
         return _context4.a(2);

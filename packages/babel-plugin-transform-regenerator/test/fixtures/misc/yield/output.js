@@ -3,7 +3,7 @@ var _marked = /*#__PURE__*/babelHelpers.regenerator().m(foo),
 function foo() {
   var _t, _t2;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
         return _context.d(bar(), 1);
       case 1:
@@ -20,13 +20,13 @@ function foo() {
 function bar() {
   var _t3, _t4;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.p = _context2.next) {
+    while (1) switch (_context2.p = _context2.n) {
       case 0:
-        _context2.next = 2;
+        _context2.n = 2;
         return 2;
       case 2:
         _t3 = _context2.v;
-        _context2.next = 5;
+        _context2.n = 5;
         return 3;
       case 5:
         _t4 = _context2.v;

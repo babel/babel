@@ -8,9 +8,9 @@ var _marked = /*#__PURE__*/babelHelpers.regenerator().m(_callee);
 function _callee() {
   var x;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
-        _context.next = 2;
+        _context.n = 2;
         return 5;
       case 2:
         x = _context.v;

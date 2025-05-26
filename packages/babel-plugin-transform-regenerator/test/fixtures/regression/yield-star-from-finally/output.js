@@ -11,12 +11,12 @@ features: [generators]
 
 function values() {
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
-        _context.next = 2;
+        _context.n = 2;
         return 1;
       case 2:
-        _context.next = 4;
+        _context.n = 4;
         return 1;
       case 4:
         return _context.a(2);
@@ -27,14 +27,14 @@ var dataIterator = values();
 var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
   var _iterator, _step, x, _t;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.p = _context2.next) {
+    while (1) switch (_context2.p = _context2.n) {
       case 0:
         _iterator = babelHelpers.createForOfIteratorHelper(dataIterator);
         _context2.p = 1;
         _iterator.s();
       case 3:
         if ((_step = _iterator.n()).done) {
-          _context2.next = 14;
+          _context2.n = 14;
           break;
         }
         x = _step.value;
@@ -49,10 +49,10 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 11:
         k++;
       case 12:
-        _context2.next = 3;
+        _context2.n = 3;
         break;
       case 14:
-        _context2.next = 19;
+        _context2.n = 19;
         break;
       case 16:
         _context2.p = 16;

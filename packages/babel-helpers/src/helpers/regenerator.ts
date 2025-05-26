@@ -42,7 +42,7 @@ type TryEntry = [
 
 type Context = {
   p: number;
-  next: number;
+  n: number;
   v: any;
 
   a(type: OperatorType, arg?: any): any;
@@ -188,11 +188,11 @@ export default function /* @no-mangle */ _regenerator() {
           if (!method /* Return */) {
             ctx.v = arg;
           } else if (method < 3 /* Throw | Return */) {
-            if (method > 1 /* Return */) ctx.next = ContextNext.End;
+            if (method > 1 /* Return */) ctx.n = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
             // Jump
-            ctx.next = arg;
+            ctx.n = arg;
           }
         }
         try {
@@ -251,7 +251,7 @@ export default function /* @no-mangle */ _regenerator() {
           } else {
             state = GenState.Executing;
 
-            if ((done = ctx.next < 0) /* End */) {
+            if ((done = ctx.n < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
@@ -292,7 +292,7 @@ export default function /* @no-mangle */ _regenerator() {
 
     var ctx: Context = {
       p: 0,
-      next: 0,
+      n: 0,
 
       v: undefined,
 
@@ -308,7 +308,7 @@ export default function /* @no-mangle */ _regenerator() {
         // accidentally pass it on to the delegate.
         method = OperatorType.Next;
         arg = undefined;
-        ctx.next = nextLoc;
+        ctx.n = nextLoc;
 
         return ContinueSentinel;
       },
@@ -344,7 +344,7 @@ export default function /* @no-mangle */ _regenerator() {
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
               ctx.v = _arg;
-              ctx.next = entry[1]!;
+              ctx.n = entry[1]!;
             } else if (prev < finallyLoc) {
               if (
                 (shouldReturn =
@@ -359,7 +359,7 @@ export default function /* @no-mangle */ _regenerator() {
                   | OperatorType.Jump
                   | OperatorType.Throw;
                 entry[5] = _arg;
-                ctx.next = finallyLoc;
+                ctx.n = finallyLoc;
                 method = OperatorType.Next;
               }
             }

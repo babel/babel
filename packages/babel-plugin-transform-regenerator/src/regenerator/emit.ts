@@ -197,7 +197,15 @@ export class Emitter {
   // Emits code for an unconditional jump to the given location, even if the
   // exact value of the location is not yet known.
   jump(toLoc: t.Expression) {
-    this.emitAssign(this.contextProperty("next"), toLoc);
+    this.emitAssign(
+      this.contextProperty(
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? "n"
+          : "next",
+      ),
+      toLoc,
+    );
     this.emit(t.breakStatement());
   }
 
@@ -207,7 +215,15 @@ export class Emitter {
       t.ifStatement(
         test,
         t.blockStatement([
-          this.assign(this.contextProperty("next"), toLoc),
+          this.assign(
+            this.contextProperty(
+              process.env.BABEL_8_BREAKING ||
+                util.newHelpersAvailable(this.pluginPass)
+                ? "n"
+                : "next",
+            ),
+            toLoc,
+          ),
           t.breakStatement(),
         ]),
       ),
@@ -228,7 +244,15 @@ export class Emitter {
       t.ifStatement(
         negatedTest,
         t.blockStatement([
-          this.assign(this.contextProperty("next"), toLoc),
+          this.assign(
+            this.contextProperty(
+              process.env.BABEL_8_BREAKING ||
+                util.newHelpersAvailable(this.pluginPass)
+                ? "n"
+                : "next",
+            ),
+            toLoc,
+          ),
           t.breakStatement(),
         ]),
       ),
@@ -335,7 +359,12 @@ export class Emitter {
               ? "p"
               : "prev",
           ),
-          this.contextProperty("next"),
+          this.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "n"
+              : "next",
+          ),
         ),
         cases,
       ),
@@ -1358,7 +1387,15 @@ export class Emitter {
           }
         }
 
-        self.emitAssign(self.contextProperty("next"), after);
+        self.emitAssign(
+          self.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "n"
+              : "next",
+          ),
+          after,
+        );
 
         const ret = t.returnStatement(t.cloneNode(arg) || null);
         // Preserve the `yield` location so that source mappings for the statements

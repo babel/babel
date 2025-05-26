@@ -68,13 +68,13 @@ var delegationComplete = false;
 function g() {
   var _t;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
         _context.p = 0;
         return _context.d(badIter, 2);
       case 2:
         normalCompletion = true;
-        _context.next = 8;
+        _context.n = 8;
         break;
       case 5:
         _context.p = 5;
