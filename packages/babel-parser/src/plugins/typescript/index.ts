@@ -133,6 +133,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Initializers are not allowed in ambient contexts.",
   InvalidHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
     `'${token}' list can only include identifiers or qualified-names with optional type arguments.`,
+  InvalidModifierOnAwaitUsingDeclaration: (modifier: TsModifier) =>
+    `'${modifier}' modifier cannot appear on an await using declaration.`,
   InvalidModifierOnTypeMember: ({ modifier }: { modifier: TsModifier }) =>
     `'${modifier}' modifier cannot appear on a type member.`,
   InvalidModifierOnTypeParameter: ({ modifier }: { modifier: TsModifier }) =>
@@ -143,6 +145,9 @@ const TSErrors = ParseErrorEnum`typescript`({
     modifier: TsModifier;
   }) =>
     `'${modifier}' modifier can only appear on a type parameter of a class, interface or type alias.`,
+
+  InvalidModifierOnUsingDeclaration: (modifier: TsModifier) =>
+    `'${modifier}' modifier cannot appear on a using declaration.`,
   InvalidModifiersOrder: ({
     orderedModifiers,
   }: {
@@ -2242,59 +2247,84 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.state = state;
     }
 
-    tsTryParseDeclare(nany: any) {
+    tsTryParseDeclare(node: any) {
       if (this.isLineTerminator()) {
         return;
       }
-      let startType = this.state.type;
-      let kind: "let" | null;
-
-      if (this.isContextual(tt._let)) {
-        startType = tt._var;
-        kind = "let";
-      }
-
+      const startType = this.state.type;
       return this.tsInAmbientContext(() => {
         switch (startType) {
           case tt._function:
-            nany.declare = true;
+            node.declare = true;
             return super.parseFunctionStatement(
-              nany,
+              node,
               /* async */ false,
               /* isHangingDeclaration */ false,
             );
           case tt._class:
             // While this is also set by tsParseExpressionStatement, we need to set it
             // before parsing the class declaration to know how to register it in the scope.
-            nany.declare = true;
+            node.declare = true;
             return this.parseClass(
-              nany as Undone<N.ClassDeclaration>,
+              node as Undone<N.ClassDeclaration>,
               /* isStatement */ true,
               /* optionalId */ false,
             );
           case tt._enum:
-            return this.tsParseEnumDeclaration(nany, { declare: true });
+            return this.tsParseEnumDeclaration(node, { declare: true });
           case tt._global:
-            return this.tsParseAmbientExternalModuleDeclaration(nany);
+            return this.tsParseAmbientExternalModuleDeclaration(node);
+          case tt._let:
+            if (this.state.containsEsc) {
+              return;
+            }
+          // fallthrough
           case tt._const:
           case tt._var:
             if (!this.match(tt._const) || !this.isLookaheadContextual("enum")) {
-              nany.declare = true;
-              return this.parseVarStatement(
-                nany,
-                kind || this.state.value,
-                true,
-              );
+              node.declare = true;
+              return this.parseVarStatement(node, this.state.value, true);
             }
 
             // `const enum = 0;` not allowed because "enum" is a strict mode reserved word.
             this.expect(tt._const);
-            return this.tsParseEnumDeclaration(nany, {
+            return this.tsParseEnumDeclaration(node, {
               const: true,
               declare: true,
             });
+          case tt._using:
+            if (
+              this.hasPlugin("explicitResourceManagement") &&
+              !this.state.containsEsc &&
+              this.startsUsing()
+            ) {
+              this.raise(
+                TSErrors.InvalidModifierOnUsingDeclaration,
+                this.state.startLoc,
+                "declare",
+              );
+              node.declare = true;
+              return this.parseVarStatement(node, "using", true);
+            }
+            break;
+          case tt._await:
+            if (
+              this.hasPlugin("explicitResourceManagement") &&
+              !this.state.containsEsc &&
+              this.startsAwaitUsing()
+            ) {
+              this.raise(
+                TSErrors.InvalidModifierOnAwaitUsingDeclaration,
+                this.state.startLoc,
+                "declare",
+              );
+              node.declare = true;
+              this.next(); // eat 'await'
+              return this.parseVarStatement(node, "await using", true);
+            }
+            break;
           case tt._interface: {
-            const result = this.tsParseInterfaceDeclaration(nany, {
+            const result = this.tsParseInterfaceDeclaration(node, {
               declare: true,
             });
             if (result) return result;
@@ -2303,7 +2333,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           default:
             if (tokenIsIdentifier(startType)) {
               return this.tsParseDeclaration(
-                nany,
+                node,
                 this.state.value,
                 /* next */ true,
                 /* decorators */ null,
