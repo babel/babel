@@ -54,7 +54,12 @@ async function copyPkg(name) {
   );
   mkdirSync(path.dirname(dst), { recursive: true });
   copyFileSync(src, dst);
-  return await import(pathToFileURL(dst));
+  try {
+    return await import(pathToFileURL(dst));
+  } catch (error) {
+    console.error("Please run with `make prepublish-build`");
+    return {};
+  }
 }
 
 export function report(event) {
