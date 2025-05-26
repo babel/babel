@@ -12,10 +12,10 @@ function _regeneratorRuntime() {
 
   var r = regenerator(),
     e = r.m(_regeneratorRuntime),
-    t = (_Object$getPrototypeOf ? _Object$getPrototypeOf(e) : e.__proto__).constructor;
-  function n(r) {
+    n = (_Object$getPrototypeOf ? _Object$getPrototypeOf(e) : e.__proto__).constructor;
+  function t(r) {
     var e = "function" == typeof r && r.constructor;
-    return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name));
+    return !!e && (e === n || "GeneratorFunction" === (e.displayName || e.name));
   }
   var o = {
     "throw": 1,
@@ -24,36 +24,52 @@ function _regeneratorRuntime() {
     "continue": 3
   };
   function a(r) {
-    return function (e) {
-      if (!e.stop) {
-        var t = e.delegateYield,
-          n = e.abrupt;
-        e.stop = function () {
-          return n(2);
-        }, e["catch"] = function () {
-          return e.sent;
-        }, e.abrupt = function (r, e) {
-          return n(o[r], e);
-        }, e.delegateYield = function (r, n, o) {
-          return e.resultName = n, t(r, o);
-        };
+    var e, n;
+    return function (t) {
+      e || (e = {
+        stop: function stop() {
+          return n(t.a, 2);
+        },
+        "catch": function _catch() {
+          return t.v;
+        },
+        abrupt: function abrupt(r, e) {
+          return n(t.a, o[r], e);
+        },
+        delegateYield: function delegateYield(r, o, a) {
+          return e.resultName = o, n(t.d, r, a);
+        },
+        finish: function finish(r) {
+          return n(t.f, r);
+        }
+      }, n = function n(r, _n, o) {
+        t.p = e.prev, t.n = "end" === e.next ? -1 : e.next;
+        try {
+          return r(_n, o);
+        } finally {
+          e.next = -1 === t.n ? "end" : t.n;
+        }
+      }), e.resultName && (e[e.resultName] = t.v, e.resultName = void 0), e.sent = t.v, e.next = -1 === t.n ? "end" : t.n;
+      try {
+        return r.call(this, e);
+      } finally {
+        t.p = e.prev, t.n = "end" === e.next ? -1 : e.next;
       }
-      return e.resultName && (e[e.resultName] = e.sent, e.resultName = void 0), r.call(this, e);
     };
   }
   return (_regeneratorRuntime = function _regeneratorRuntime() {
     return {
-      wrap: function wrap(e, t, n, o) {
-        return r.w(a(e), t, n, o && _reverseInstanceProperty(o).call(o));
+      wrap: function wrap(e, n, t, o) {
+        return r.w(a(e), n, t, o && _reverseInstanceProperty(o).call(o));
       },
-      isGeneratorFunction: n,
+      isGeneratorFunction: t,
       mark: r.m,
       awrap: function awrap(r, e) {
         return new OverloadYield(r, e);
       },
       AsyncIterator: regeneratorAsyncIterator,
-      async: function async(r, e, t, o, u) {
-        return (n(e) ? regeneratorAsyncGen : regeneratorAsync)(a(r), e, t, o, u);
+      async: function async(r, e, n, o, u) {
+        return (t(e) ? regeneratorAsyncGen : regeneratorAsync)(a(r), e, n, o, u);
       },
       keys: regeneratorKeys,
       values: regeneratorValues
