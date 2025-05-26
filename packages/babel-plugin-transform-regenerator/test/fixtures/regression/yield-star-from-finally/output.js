@@ -11,15 +11,15 @@ features: [generators]
 
 function values() {
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
-        _context.next = 2;
+        _context.n = 2;
         return 1;
       case 2:
-        _context.next = 4;
+        _context.n = 4;
         return 1;
       case 4:
-        return _context.abrupt(2);
+        return _context.a(2);
     }
   }, _marked);
 }
@@ -27,45 +27,45 @@ var dataIterator = values();
 var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
   var _iterator, _step, x, _t;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+    while (1) switch (_context2.p = _context2.n) {
       case 0:
         _iterator = babelHelpers.createForOfIteratorHelper(dataIterator);
-        _context2.prev = 1;
+        _context2.p = 1;
         _iterator.s();
       case 3:
         if ((_step = _iterator.n()).done) {
-          _context2.next = 14;
+          _context2.n = 14;
           break;
         }
         x = _step.value;
-        _context2.prev = 5;
+        _context2.p = 5;
       case 6:
-        _context2.prev = 6;
+        _context2.p = 6;
         i++;
-        return _context2.delegateYield(values(), 9);
+        return _context2.d(values(), 9);
       case 9:
         j++;
-        return _context2.finish(6);
+        return _context2.f(6);
       case 11:
         k++;
       case 12:
-        _context2.next = 3;
+        _context2.n = 3;
         break;
       case 14:
-        _context2.next = 19;
+        _context2.n = 19;
         break;
       case 16:
-        _context2.prev = 16;
-        _t = _context2.sent;
+        _context2.p = 16;
+        _t = _context2.v;
         _iterator.e(_t);
       case 19:
-        _context2.prev = 19;
+        _context2.p = 19;
         _iterator.f();
-        return _context2.finish(19);
+        return _context2.f(19);
       case 22:
         l++;
       case 23:
-        return _context2.abrupt(2);
+        return _context2.a(2);
     }
   }, _callee, null, [[5,, 6, 11], [1, 16, 19, 22]]);
 })();

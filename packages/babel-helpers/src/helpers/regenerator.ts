@@ -41,13 +41,19 @@ type TryEntry = [
 ];
 
 type Context = {
-  prev: number;
-  next: number;
-  sent: any;
+  // prev
+  p: number;
+  // next
+  n: number;
+  // value
+  v: any;
 
-  abrupt(type: OperatorType, arg?: any): any;
-  finish(finallyLoc: number): any;
-  delegateYield(iterable: any, nextLoc: number): any;
+  // abrupt
+  a(type: OperatorType, arg?: any): any;
+  // finish
+  f(finallyLoc: number): any;
+  // delegateYield
+  d(iterable: any, nextLoc: number): any;
 };
 
 export default function /* @no-mangle */ _regenerator() {
@@ -186,13 +192,13 @@ export default function /* @no-mangle */ _regenerator() {
       while (!done || (_ = undefined)) {
         if (!delegateIterator) {
           if (!method /* Return */) {
-            ctx.sent = arg;
+            ctx.v = arg;
           } else if (method < 3 /* Throw | Return */) {
-            if (method > 1 /* Return */) ctx.next = ContextNext.End;
+            if (method > 1 /* Return */) ctx.n = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
             // Jump
-            ctx.next = arg;
+            ctx.n = arg;
           }
         }
         try {
@@ -251,7 +257,7 @@ export default function /* @no-mangle */ _regenerator() {
           } else {
             state = GenState.Executing;
 
-            if ((done = ctx.next < 0) /* End */) {
+            if ((done = ctx.n < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
@@ -291,24 +297,24 @@ export default function /* @no-mangle */ _regenerator() {
     var arg: any;
 
     var ctx: Context = {
-      prev: 0,
-      next: 0,
+      p: 0,
+      n: 0,
 
-      sent: undefined,
+      v: undefined,
 
-      abrupt: Context_dispatchExceptionOrFinishOrAbrupt,
-      finish: Context_dispatchExceptionOrFinishOrAbrupt.bind(
+      a: Context_dispatchExceptionOrFinishOrAbrupt,
+      f: Context_dispatchExceptionOrFinishOrAbrupt.bind(
         undefined,
         OperatorType.Finish,
       ),
-      delegateYield: function (iterable: any, nextLoc: number) {
+      d: function (iterable: any, nextLoc: number) {
         delegateIterator = values(iterable);
 
         // Deliberately forget the last sent value so that we don't
         // accidentally pass it on to the delegate.
         method = OperatorType.Next;
         arg = undefined;
-        ctx.next = nextLoc;
+        ctx.n = nextLoc;
 
         return ContinueSentinel;
       },
@@ -326,7 +332,7 @@ export default function /* @no-mangle */ _regenerator() {
         _++
       ) {
         var entry = tryEntries[_];
-        var prev = ctx.prev;
+        var prev = ctx.p;
         var finallyLoc = entry[2]!;
         var shouldReturn;
 
@@ -343,8 +349,8 @@ export default function /* @no-mangle */ _regenerator() {
               // If the dispatched exception was caught by a catch block,
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
-              ctx.sent = _arg;
-              ctx.next = entry[1]!;
+              ctx.v = _arg;
+              ctx.n = entry[1]!;
             } else if (prev < finallyLoc) {
               if (
                 (shouldReturn =
@@ -359,7 +365,7 @@ export default function /* @no-mangle */ _regenerator() {
                   | OperatorType.Jump
                   | OperatorType.Throw;
                 entry[5] = _arg;
-                ctx.next = finallyLoc;
+                ctx.n = finallyLoc;
                 method = OperatorType.Next;
               }
             }

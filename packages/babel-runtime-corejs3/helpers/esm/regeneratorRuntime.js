@@ -24,21 +24,37 @@ function _regeneratorRuntime() {
     "continue": 3
   };
   function a(r) {
-    return function (e) {
-      if (!e.stop) {
-        var t = e.delegateYield,
-          n = e.abrupt;
-        e.stop = function () {
-          return n(2);
-        }, e["catch"] = function () {
-          return e.sent;
-        }, e.abrupt = function (r, e) {
-          return n(o[r], e);
-        }, e.delegateYield = function (r, n, o) {
-          return e.resultName = n, t(r, o);
-        };
+    var e, t;
+    return function (n) {
+      e || (e = {
+        stop: function stop() {
+          return t(n.a, 2);
+        },
+        "catch": function _catch() {
+          return n.v;
+        },
+        abrupt: function abrupt(r, e) {
+          return t(n.a, o[r], e);
+        },
+        delegateYield: function delegateYield(r, o, a) {
+          return e.resultName = o, t(n.d, r, a);
+        },
+        finish: function finish(r) {
+          return t(n.f, r);
+        }
+      }, t = function t(r, _t, o) {
+        n.p = e.prev, n.n = e.next;
+        try {
+          return r(_t, o);
+        } finally {
+          e.next = n.n;
+        }
+      }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n;
+      try {
+        return r.call(this, e);
+      } finally {
+        n.p = e.prev, n.n = e.next;
       }
-      return e.resultName && (e[e.resultName] = e.sent, e.resultName = void 0), r.call(this, e);
     };
   }
   return (_regeneratorRuntime = function _regeneratorRuntime() {
