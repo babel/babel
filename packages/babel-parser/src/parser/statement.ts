@@ -375,6 +375,12 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
+  startsUsing(): boolean {
+    const next = this.nextTokenInLineStart();
+    const nextCh = this.codePointAtPos(next);
+    return this.chStartsBindingIdentifier(nextCh, next);
+  }
+
   startsAwaitUsing(): boolean {
     let next = this.nextTokenInLineStart();
     if (this.isUnparsedContextual(next, "using")) {
@@ -2579,7 +2585,14 @@ export default abstract class StatementParser extends ExpressionParser {
       );
     }
 
-    if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
+    if (
+      this.match(tt._const) ||
+      this.match(tt._var) ||
+      this.isLet() ||
+      (this.hasPlugin("explicitResourceManagement") &&
+        ((this.isContextual(tt._using) && this.startsUsing()) ||
+          (this.isContextual(tt._await) && this.startsAwaitUsing())))
+    ) {
       throw this.raise(Errors.UnsupportedDefaultExport, this.state.startLoc);
     }
 
@@ -2685,14 +2698,16 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
 
-    if (this.isContextual(tt._using)) {
-      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
-      return true;
-    }
+    if (this.hasPlugin("explicitResourceManagement")) {
+      if (this.isContextual(tt._using) && this.startsUsing()) {
+        this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+        return true;
+      }
 
-    if (this.isContextual(tt._await) && this.startsAwaitUsing()) {
-      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
-      return true;
+      if (this.isContextual(tt._await) && this.startsAwaitUsing()) {
+        this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+        return true;
+      }
     }
 
     return (
