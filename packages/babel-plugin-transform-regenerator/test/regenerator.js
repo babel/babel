@@ -221,6 +221,11 @@ enqueue(convertWithRegeneratorPluginOnly, [
   "./regenerator-fixtures/tmp/class.regenerator.js",
 ]);
 
+enqueue(convertWithRegeneratorPluginOnly, [
+  "./regenerator-fixtures/tests.no-symbol.js",
+  "./regenerator-fixtures/tmp/no-symbol.es5.js",
+]);
+
 Error.stackTraceLimit = 1000;
 
 /**
@@ -384,3 +389,5 @@ enqueue("mocha", [
 ]);
 
 enqueue("mocha", ["./regenerator-fixtures/frozen-intrinsics.js"]);
+
+enqueue("mocha", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);

@@ -3,7 +3,7 @@ import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$iterator from "core-js-pure/features/symbol/iterator.js";
 function _regeneratorValues(e) {
   if (null != e) {
-    var r = e["function" == typeof _Symbol && _Symbol$iterator || "@iterator"];
+    var r = e["function" == typeof _Symbol && _Symbol$iterator || "@@iterator"];
     if (r) return r.call(e);
     if ("function" == typeof e.next) return e;
     if (!isNaN(e.length)) {
