@@ -2,14 +2,14 @@
   const saveSession = () => {
     var newSessionId;
     return babelHelpers.regeneratorAsync(function (_context) {
-      while (1) switch (_context.prev = _context.next) {
+      while (1) switch (_context.p = _context.n) {
         case 0:
-          _context.next = 2;
+          _context.n = 2;
           return babelHelpers.awaitAsyncGenerator(someAsyncFunc());
         case 2:
-          newSessionId = _context.sent;
+          newSessionId = _context.v;
         case 3:
-          return _context.abrupt(2);
+          return _context.a(2);
       }
     }, null, null, null, Promise);
   };

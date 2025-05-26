@@ -4,17 +4,17 @@ function foo() {
 function _foo() {
   _foo = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
     return babelHelpers.regenerator().w(function (_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+      while (1) switch (_context2.p = _context2.n) {
         case 0:
           /*#__PURE__*/(function () {
             var _ref = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee(number) {
               var tmp;
               return babelHelpers.regenerator().w(function (_context) {
-                while (1) switch (_context.prev = _context.next) {
+                while (1) switch (_context.p = _context.n) {
                   case 0:
                     tmp = number;
                   case 1:
-                    return _context.abrupt(2);
+                    return _context.a(2);
                 }
               }, _callee);
             }));
@@ -23,7 +23,7 @@ function _foo() {
             };
           })();
         case 1:
-          return _context2.abrupt(2);
+          return _context2.a(2);
       }
     }, _callee2);
   }));
