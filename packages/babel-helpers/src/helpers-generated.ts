@@ -1230,40 +1230,40 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 1193, gzip size: 569
+  // size: 1181, gzip size: 557
   regeneratorRuntime: helper(
     "7.18.0",
-    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),n=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function t(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===n||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r,e,n,t){r.p=r.prev,r.n="end"===r.next?-1:r.next;try{return e(n,t)}finally{r.next=-1===r.n?"end":r.n}}function u(r){return function(e){e.stop||(e.stop=function(){return a(e,e.a,2)},e.catch=function(){return e.v},e.abrupt=function(r,n){return a(e,e.a,o[r],n)},e.delegateYield=function(r,n,t){return e.resultName=n,a(e,e.d,r,t)},e.finish=function(r){return a(e,e.f,r)}),e.resultName&&(e[e.resultName]=e.v,e.resultName=void 0),e.sent=e.v,e.next=-1===e.n?"end":e.n;try{return r.call(this,e)}finally{e.p=e.prev,e.n="end"===e.next?-1:e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,n,t,o){return r.w(u(e),n,t,o&&o.reverse())},isGeneratorFunction:t,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,n,o,a){return(t(e)?asyncGen:async)(u(r),e,n,o,a)},keys:keys,values:values}})()}',
+    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),n=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function t(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===n||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r){var e,n;return function(t){e||(e={stop:function(){return n(t.a,2)},catch:function(){return t.v},abrupt:function(r,e){return n(t.a,o[r],e)},delegateYield:function(r,o,a){return e.resultName=o,n(t.d,r,a)},finish:function(r){return n(t.f,r)}},n=function(r,n,o){t.p=e.prev,t.n="end"===e.next?-1:e.next;try{return r(n,o)}finally{e.next=-1===t.n?"end":t.n}}),e.resultName&&(e[e.resultName]=t.v,e.resultName=void 0),e.sent=t.v,e.next=-1===t.n?"end":t.n;try{return r.call(this,e)}finally{t.p=e.prev,t.n="end"===e.next?-1:e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,n,t,o){return r.w(a(e),n,t,o&&o.reverse())},isGeneratorFunction:t,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,n,o,u){return(t(e)?asyncGen:async)(a(r),e,n,o,u)},keys:keys,values:values}})()}',
     {
       globals: ["Object"],
       locals: {
         _regeneratorRuntime: [
           "body.0.id",
           "body.0.body.body.0.declarations.1.init.arguments.0",
-          "body.0.body.body.5.argument.callee.left",
+          "body.0.body.body.4.argument.callee.left",
         ],
       },
-      exportBindingAssignments: ["body.0.body.body.5.argument.callee"],
+      exportBindingAssignments: ["body.0.body.body.4.argument.callee"],
       exportName: "_regeneratorRuntime",
       dependencies: {
         OverloadYield: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.3.value.body.body.0.argument.callee",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.3.value.body.body.0.argument.callee",
         ],
         regenerator: ["body.0.body.body.0.declarations.0.init.callee"],
         regeneratorAsync: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
         ],
         regeneratorAsyncGen: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
         ],
         regeneratorAsyncIterator: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.4.value",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.4.value",
         ],
         regeneratorKeys: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.6.value",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.6.value",
         ],
         regeneratorValues: [
-          "body.0.body.body.5.argument.callee.right.body.body.0.argument.properties.7.value",
+          "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.7.value",
         ],
       },
       internal: false,

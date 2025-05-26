@@ -9,20 +9,22 @@ import AsyncIterator from "./regeneratorAsyncIterator.ts";
 import keys from "./regeneratorKeys.ts";
 import values from "./regeneratorValues.ts";
 
-type Context = {
+type CompatContext = {
   prev?: number;
   next?: number | "end";
   sent?: any;
+
   stop(): any;
-  dispatchException(exception: any): boolean;
   abrupt(type: "throw" | "break" | "continue" | "return", arg: any): any;
   finish(finallyLoc: number): any;
   catch(tryLoc: number): any;
   delegateYield(iterable: any, resultName: `t${number}`, nextLoc: number): any;
-  resultName: `t${number}` | undefined;
+
+  resultName?: `t${number}` | undefined;
 
   [key: `t${number}`]: any;
 };
+type CompatInnerFn = (this: unknown, context: CompatContext) => unknown;
 
 export default function /* @no-mangle */ _regeneratorRuntime() {
   "use strict";
@@ -30,7 +32,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
   var r = regenerator();
 
   type InnerFn = Parameters<typeof r.w>[0];
-  type NewContext = Parameters<InnerFn>[0];
+  type Context = Parameters<InnerFn>[0];
 
   var gen = r.m(_regeneratorRuntime);
   var GeneratorFunctionPrototype = Object.getPrototypeOf
@@ -55,68 +57,75 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
     continue: 3,
   };
 
-  function callSyncState<A1, A2, R>(
-    context: Context & NewContext,
-    fn: (a: A1, b: A2) => R,
-    a1: A1,
-    a2?: A2,
-  ): R {
-    context.p = context.prev!;
-    context.n = context.next === "end" ? -1 : context.next!;
-    try {
-      return fn(a1, a2!);
-    } finally {
-      context.next = context.n === -1 ? "end" : context.n;
-    }
-  }
-
-  function wrapInnerFn(innerFn: InnerFn): InnerFn {
-    return function (context: Context & NewContext) {
-      if (!context.stop) {
+  function wrapInnerFn(innerFn: CompatInnerFn): InnerFn {
+    var compatContext: CompatContext;
+    var callSyncState: <A1, A2, R>(
+      fn: (a: A1, b: A2) => R,
+      a1: A1,
+      a2?: A2,
+    ) => R;
+    return function (context: Context) {
+      if (!compatContext) {
         // Shim the old context shape on top of the new one.
-        context.stop = function () {
-          return callSyncState(context, context.a, 2);
+        compatContext = {
+          stop: function () {
+            return callSyncState(context.a, 2);
+          },
+          catch: function () {
+            return context.v;
+          },
+          abrupt: function (type, arg) {
+            return callSyncState(context.a, abruptMap[type], arg);
+          },
+          delegateYield: function (iterable, resultName, nextLoc) {
+            compatContext.resultName = resultName;
+            return callSyncState(context.d, iterable, nextLoc);
+          },
+          finish: function (finallyLoc) {
+            return callSyncState(context.f, finallyLoc);
+          },
         };
-        context["catch"] = function () {
-          return context.v;
-        };
-        context.abrupt = function (type, arg) {
-          return callSyncState(context, context.a, abruptMap[type], arg);
-        };
-        context.delegateYield = function (iterable, resultName, nextLoc) {
-          context.resultName = resultName;
-          return callSyncState(context, context.d, iterable, nextLoc);
-        };
-        context.finish = function (finallyLoc) {
-          return callSyncState(context, context.f, finallyLoc);
+        callSyncState = function (fn, a1, a2) {
+          context.p = compatContext.prev!;
+          context.n = compatContext.next === "end" ? -1 : compatContext.next!;
+          try {
+            return fn(a1, a2!);
+          } finally {
+            compatContext.next = context.n === -1 ? "end" : context.n;
+          }
         };
       }
-      if (context.resultName) {
-        context[context.resultName] = context.v;
-        context.resultName = undefined;
+      if (compatContext.resultName) {
+        compatContext[compatContext.resultName] = context.v;
+        compatContext.resultName = undefined;
       }
-      context.sent = context.v;
-      context.next = context.n === -1 ? "end" : context.n;
+      compatContext.sent = context.v;
+      compatContext.next = context.n === -1 ? "end" : context.n;
       try {
-        return innerFn.call(this, context);
+        return innerFn.call(this, compatContext);
       } finally {
-        context.p = context.prev!;
-        context.n = context.next === "end" ? -1 : context.next;
+        context.p = compatContext.prev!;
+        context.n = compatContext.next === "end" ? -1 : compatContext.next;
       }
-    } as (this: unknown, context: NewContext) => unknown;
+    };
   }
 
   // @ts-expect-error explicit function assignment
   return (_regeneratorRuntime = function () {
     return {
-      wrap: function (innerFn: InnerFn, outerFn, self, tryLocsList) {
+      wrap: function (
+        innerFn: CompatInnerFn,
+        outerFn: Parameters<typeof r.w>[1],
+        self: Parameters<typeof r.w>[2],
+        tryLocsList: Parameters<typeof r.w>[3],
+      ) {
         return r.w(
           wrapInnerFn(innerFn),
           outerFn,
           self,
           tryLocsList && tryLocsList.reverse(),
         );
-      } satisfies typeof r.w,
+      },
       isGeneratorFunction: isGeneratorFunction,
       mark: r.m,
       awrap: function (value: any, kind: any) {
@@ -124,7 +133,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       },
       AsyncIterator: AsyncIterator,
       async: function (
-        innerFn: InnerFn,
+        innerFn: CompatInnerFn,
         outerFn: Function,
         self: any,
         tryLocsList: any[],
