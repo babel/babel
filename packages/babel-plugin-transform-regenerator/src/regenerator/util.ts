@@ -24,6 +24,10 @@ export function getTypes() {
 export let newHelpersAvailable: (file: PluginPass) => boolean;
 if (!process.env.BABEL_8_BREAKING) {
   newHelpersAvailable = (file: PluginPass) => {
+    if (!process.env.IS_PUBLISH && process.env.FORCE_OLD_REGENERATOR) {
+      // Only for testing purposes.
+      return false;
+    }
     return (
       file.availableHelper("regenerator") &&
       // At this point, we can safely try to inject the `regenerator` helper.
