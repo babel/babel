@@ -56,7 +56,7 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
         break;
       case 16:
         _context2.prev = 16;
-        _t = _context2.sent;
+        _t = _context2.v;
         _iterator.e(_t);
       case 19:
         _context2.prev = 19;

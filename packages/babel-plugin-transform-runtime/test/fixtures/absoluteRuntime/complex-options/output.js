@@ -29,7 +29,7 @@ function _main() {
           _context2.next = 3;
           return test();
         case 3:
-          _t2 = _context2.sent;
+          _t2 = _context2.v;
           _t.log.call(_t, _t2);
         case 5:
           return _context2.a(2);

@@ -7,7 +7,7 @@
         _context.next = 2;
         return babelHelpers.awaitAsyncGenerator(0);
       case 2:
-        _t = _context.sent;
+        _t = _context.v;
         return _context.a(2, [_t,,]);
       case 4:
         return _context.a(2);

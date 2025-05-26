@@ -757,7 +757,7 @@ export class Emitter {
               process.env.BABEL_8_BREAKING ||
               util.newHelpersAvailable(this.pluginPass)
             ) {
-              this.emitAssign(safeParam, self.contextProperty("sent"));
+              this.emitAssign(safeParam, self.contextProperty("v"));
             } else {
               self.clearPendingException(tryEntry.firstLoc, safeParam);
             }
@@ -1325,7 +1325,7 @@ export class Emitter {
             self.emit(ret);
             self.mark(after);
 
-            return self.contextProperty("sent");
+            return self.contextProperty("v");
           } else {
             const result = self.makeContextTempVar();
 
@@ -1354,7 +1354,12 @@ export class Emitter {
         self.emit(ret);
         self.mark(after);
 
-        return self.contextProperty("sent");
+        return self.contextProperty(
+          process.env.BABEL_8_BREAKING ||
+            util.newHelpersAvailable(self.pluginPass)
+            ? "v"
+            : "sent",
+        );
 
       case "ClassExpression":
         return finish(self.explodeClass(path));

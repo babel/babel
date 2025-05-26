@@ -63,7 +63,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
           return context.a(2);
         };
         context["catch"] = function () {
-          return context.sent;
+          return context.v;
         };
         context.abrupt = function (type, arg) {
           return context.a(abruptMap[type], arg);
@@ -75,9 +75,10 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         context.finish = context.f;
       }
       if (context.resultName) {
-        context[context.resultName] = context.sent;
+        context[context.resultName] = context.v;
         context.resultName = undefined;
       }
+      context.sent = context.v;
       return innerFn.call(this, context);
     } as (this: unknown, context: NewContext) => unknown;
   }

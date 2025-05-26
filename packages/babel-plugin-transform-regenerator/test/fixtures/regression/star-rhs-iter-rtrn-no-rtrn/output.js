@@ -65,7 +65,7 @@ function g() {
         break;
       case 5:
         _context.prev = 5;
-        _t = _context.sent;
+        _t = _context.v;
         hitCatch = true;
       case 8:
         _context.prev = 8;

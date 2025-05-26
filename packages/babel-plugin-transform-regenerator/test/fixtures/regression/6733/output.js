@@ -13,7 +13,7 @@ function _callee() {
         _context.next = 2;
         return 5;
       case 2:
-        x = _context.sent;
+        x = _context.v;
         return _context.a(2, 5);
       case 4:
         return _context.a(2);

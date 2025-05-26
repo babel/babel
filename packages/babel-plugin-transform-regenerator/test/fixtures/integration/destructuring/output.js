@@ -49,7 +49,7 @@ function foo3() {
                 _context3.next = 2;
                 return "iteration";
               case 2:
-                _yield$iteration = _context3.sent;
+                _yield$iteration = _context3.v;
                 what = _yield$iteration.what;
                 value = _yield$iteration.value;
                 _t = what;
@@ -89,7 +89,7 @@ function foo3() {
         }
         return _context4.d(_loop(), 3);
       case 3:
-        _ret = _context4.sent;
+        _ret = _context4.v;
         if (!(_ret === 0)) {
           _context4.next = 6;
           break;

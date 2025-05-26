@@ -7,10 +7,10 @@ function foo() {
       case 0:
         return _context.d(bar(), 1);
       case 1:
-        _t = _context.sent;
+        _t = _context.v;
         return _context.d(bar(), 3);
       case 3:
-        _t2 = _context.sent;
+        _t2 = _context.v;
         return _context.a(2, _t + _t2);
       case 5:
         return _context.a(2);
@@ -25,11 +25,11 @@ function bar() {
         _context2.next = 2;
         return 2;
       case 2:
-        _t3 = _context2.sent;
+        _t3 = _context2.v;
         _context2.next = 5;
         return 3;
       case 5:
-        _t4 = _context2.sent;
+        _t4 = _context2.v;
         return _context2.a(2, _t3 + _t4);
       case 7:
         return _context2.a(2);

@@ -61,11 +61,11 @@ describe("simple argument yielder", function () {
             _context4.next = 2;
             return 0;
           case 2:
-            _t = _context4.sent;
+            _t = _context4.v;
             _context4.next = 5;
             return 0;
           case 5:
-            _t2 = _context4.sent;
+            _t2 = _context4.v;
             return _context4.a(2, _t + _t2);
           case 7:
             return _context4.a(2);
@@ -200,7 +200,7 @@ describe("try-catch generator", function () {
           break;
         case 11:
           _context7.prev = 11;
-          _t3 = _context7.sent;
+          _t3 = _context7.v;
           _context7.next = 15;
           return _t3;
         case 15:
@@ -231,7 +231,7 @@ describe("try-catch generator", function () {
           break;
         case 10:
           _context8.prev = 10;
-          _t4 = _context8.sent;
+          _t4 = _context8.v;
           _context8.next = 14;
           return _t4;
         case 14:
@@ -264,7 +264,7 @@ describe("nested generators in try-catch", function () {
           break;
         case 4:
           _context0.prev = 4;
-          _t5 = _context0.sent;
+          _t5 = _context0.v;
           _context0.next = 8;
           return /*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
             return babelHelpers.regenerator().w(function (_context9) {
@@ -541,7 +541,7 @@ describe("try-finally generator", function () {
             break;
           case 11:
             _context13.prev = 11;
-            _t6 = _context13.sent;
+            _t6 = _context13.v;
             assert.strictEqual(_t6, wrong);
             _context13.next = 16;
             return 2;
@@ -616,7 +616,7 @@ describe("try-finally generator", function () {
             _context15.next = 3;
             return 1;
           case 3:
-            return _context15.a(2, _context15.sent);
+            return _context15.a(2, _context15.v);
           case 4:
             _context15.prev = 4;
             return _context15.a(2, 3);
@@ -653,7 +653,7 @@ describe("try-finally generator", function () {
             _context16.next = 4;
             return 1;
           case 4:
-            return _context16.a(2, _context16.sent);
+            return _context16.a(2, _context16.v);
           case 5:
             _context16.prev = 5;
             return _context16.a(2, 2);
@@ -712,7 +712,7 @@ describe("try-finally generator", function () {
             _context17.next = 4;
             return 1;
           case 4:
-            return _context17.a(2, _context17.sent);
+            return _context17.a(2, _context17.v);
           case 5:
             _context17.prev = 5;
             return _context17.a(2, 2);
@@ -722,7 +722,7 @@ describe("try-finally generator", function () {
             _context17.next = 12;
             return "oyez";
           case 12:
-            return _context17.a(2, _context17.sent);
+            return _context17.a(2, _context17.v);
           case 13:
             _context17.prev = 13;
             if (!condition) {
@@ -794,11 +794,11 @@ describe("try-catch-finally generator", function () {
           break;
         case 11:
           _context18.prev = 11;
-          _t7 = _context18.sent;
+          _t7 = _context18.v;
           _context18.next = 15;
           return _t7;
         case 15:
-          throw _context18.sent;
+          throw _context18.v;
         case 16:
           _context18.prev = 16;
           _context18.next = 19;
@@ -810,7 +810,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 22:
           _context18.prev = 22;
-          _t8 = _context18.sent;
+          _t8 = _context18.v;
           _context18.next = 26;
           return _t8;
         case 26:
@@ -842,11 +842,11 @@ describe("try-catch-finally generator", function () {
           break;
         case 11:
           _context19.prev = 11;
-          _t9 = _context19.sent;
+          _t9 = _context19.v;
           _context19.next = 15;
           return _t9;
         case 15:
-          throw _context19.sent;
+          throw _context19.v;
         case 16:
           _context19.prev = 16;
           _context19.next = 19;
@@ -858,7 +858,7 @@ describe("try-catch-finally generator", function () {
           break;
         case 22:
           _context19.prev = 22;
-          _t0 = _context19.sent;
+          _t0 = _context19.v;
           _context19.next = 26;
           return _t0;
         case 26:
@@ -898,7 +898,7 @@ describe("try-catch-finally generator", function () {
             throw error;
           case 11:
             _context20.prev = 11;
-            _t10 = _context20.sent;
+            _t10 = _context20.v;
             assert.strictEqual(_t10, error);
             _context20.next = 16;
             return "b";
@@ -1031,7 +1031,7 @@ describe("try-catch-finally generator", function () {
             break;
           case 8:
             _context22.prev = 8;
-            _t11 = _context22.sent;
+            _t11 = _context22.v;
             assert.strictEqual(_t11, error);
             markers.push("catch");
             return _context22.a(3, 1);
@@ -1080,7 +1080,7 @@ describe("dynamic exception", function () {
           return _context23.a(2, fns[fname](x));
         case 4:
           _context23.prev = 4;
-          _t12 = _context23.sent;
+          _t12 = _context23.v;
           _context23.next = 8;
           return _t12;
         case 8:
@@ -1124,7 +1124,7 @@ describe("nested finally blocks", function () {
           break;
         case 10:
           _context24.prev = 10;
-          _t13 = _context24.sent;
+          _t13 = _context24.v;
           _context24.next = 14;
           return _t13;
         case 14:
@@ -1164,7 +1164,7 @@ describe("nested finally blocks", function () {
           break;
         case 10:
           _context25.prev = 10;
-          _t14 = _context25.sent;
+          _t14 = _context25.v;
           _context25.next = 14;
           return _t14;
         case 14:
@@ -1370,13 +1370,13 @@ describe("for-in loop generator", function () {
             _context30.next = 5;
             return 0;
           case 5:
-            _t25 = _context30.sent;
+            _t25 = _context30.v;
             _t24(_t25);
             _t26 = b;
             _context30.next = 10;
             return 1;
           case 10:
-            _t27 = _context30.sent;
+            _t27 = _context30.v;
             _t23 = babelHelpers.regeneratorKeys(_t26(_t27));
           case 12:
             if ((_t28 = _t23()).done) {
@@ -1390,7 +1390,7 @@ describe("for-in loop generator", function () {
             _context30.next = 19;
             return key;
           case 19:
-            _t30 = _context30.sent;
+            _t30 = _context30.v;
             _t29.strictEqual.call(_t29, _t30, 3);
             _context30.next = 12;
             break;
@@ -1493,15 +1493,15 @@ describe("yield chain", function () {
           return n;
         case 2:
           _context33.next = 4;
-          return _context33.sent;
+          return _context33.v;
         case 4:
           _context33.next = 6;
-          return _context33.sent;
+          return _context33.v;
         case 6:
           _context33.next = 8;
-          return _context33.sent;
+          return _context33.v;
         case 8:
-          return _context33.a(2, _context33.sent);
+          return _context33.a(2, _context33.v);
         case 9:
           return _context33.a(2);
       }
@@ -1522,16 +1522,16 @@ describe("call expression ordering", function test() {
             _context34.next = 2;
             return 1;
           case 2:
-            _t37 = _context34.sent;
+            _t37 = _context34.v;
             _context34.next = 5;
             return 2;
           case 5:
-            _t38 = _context34.sent;
+            _t38 = _context34.v;
             _t39 = _t37(_t38);
             _context34.next = 9;
             return 3;
           case 9:
-            _t40 = _context34.sent;
+            _t40 = _context34.v;
             return _context34.a(2, _t39(_t40));
           case 11:
             return _context34.a(2);
@@ -1571,7 +1571,7 @@ describe("call expression ordering", function test() {
               _context35.next = 2;
               return;
             case 2:
-              (_ref = _context35.sent).method(_ref);
+              (_ref = _context35.v).method(_ref);
             case 3:
               return _context35.a(2);
           }
@@ -1630,7 +1630,7 @@ describe("call expression ordering", function test() {
               _context37.next = 4;
               return;
             case 4:
-              _t43 = _context37.sent;
+              _t43 = _context37.v;
               _t44 = step(3);
               _t41.method.call(_t41, _t42, _t43, _t44);
             case 7:
@@ -1663,7 +1663,7 @@ describe("call expression ordering", function test() {
               _context38.next = 6;
               return;
             case 6:
-              _t47 = _context38.sent;
+              _t47 = _context38.v;
               _t48 = step(3);
               _t45.method.call(_t45, _t46, _t47, _t48);
             case 9:
@@ -1689,12 +1689,12 @@ describe("object literal generator", function () {
           _context39.next = 3;
           return a;
         case 3:
-          _t50 = _context39.sent;
+          _t50 = _context39.v;
           _t51 = _t49 - _t50;
           _context39.next = 7;
           return b;
         case 7:
-          _t52 = _context39.sent;
+          _t52 = _context39.v;
           _context39.next = 10;
           return {
             a: _t51,
@@ -1726,12 +1726,12 @@ describe("switch statement generator", function () {
           _context40.next = 2;
           return a;
         case 2:
-          _t53 = _context40.sent;
+          _t53 = _context40.v;
           _t54 = _t53;
           _context40.next = 6;
           return "x";
         case 6:
-          _t55 = _context40.sent;
+          _t55 = _context40.v;
           _t56 = a;
           _t57 = _t55 - _t56;
           if (!(_t54 === _t57)) {
@@ -1746,7 +1746,7 @@ describe("switch statement generator", function () {
           _context40.next = 16;
           return "y";
         case 16:
-          _t60 = _context40.sent;
+          _t60 = _context40.v;
           _t61 = a;
           _t62 = _t60 - _t61;
           if (!(_t59 === _t62)) {
@@ -1900,12 +1900,12 @@ describe("generator reentry attempt", function () {
           _context44.next = 3;
           return x;
         case 3:
-          _context44.sent.next(x);
+          _context44.v.next(x);
           _context44.next = 10;
           break;
         case 6:
           _context44.prev = 6;
-          _t64 = _context44.sent;
+          _t64 = _context44.v;
           _context44.next = 10;
           return _t64;
         case 10:
@@ -2062,12 +2062,12 @@ describe("delegated yield", function () {
             return n;
           case 2:
             _context51.next = 4;
-            return _context51.sent;
+            return _context51.v;
           case 4:
             _context51.next = 6;
-            return _context51.sent;
+            return _context51.v;
           case 6:
-            return _context51.a(2, _context51.sent);
+            return _context51.a(2, _context51.v);
           case 7:
             return _context51.a(2);
         }
@@ -2117,7 +2117,7 @@ describe("delegated yield", function () {
             break;
           case 8:
             _context52.prev = 8;
-            _t65 = _context52.sent;
+            _t65 = _context52.v;
             _context52.next = 12;
             return _t65.message;
           case 12:
@@ -2175,11 +2175,11 @@ describe("delegated yield", function () {
             break;
           case 5:
             _context54.prev = 5;
-            _t66 = _context54.sent;
+            _t66 = _context54.v;
           case 7:
             return _context54.d(inner(), 8);
           case 8:
-            return _context54.a(2, _context54.sent);
+            return _context54.a(2, _context54.v);
           case 9:
             return _context54.a(2);
         }
@@ -2192,7 +2192,7 @@ describe("delegated yield", function () {
             _context55.next = 2;
             return count++;
           case 2:
-            return _context55.a(2, _context55.sent);
+            return _context55.a(2, _context55.v);
           case 3:
             return _context55.a(2);
         }
@@ -2229,10 +2229,10 @@ describe("delegated yield", function () {
             _context56.prev = 0;
             return _context56.d(delegate, 2);
           case 2:
-            return _context56.a(2, _context56.sent);
+            return _context56.a(2, _context56.v);
           case 5:
             _context56.prev = 5;
-            _t67 = _context56.sent;
+            _t67 = _context56.v;
             return _context56.a(2, _t67);
           case 8:
             return _context56.a(2);
@@ -2361,7 +2361,7 @@ describe("delegated yield", function () {
           case 0:
             return _context57.d(delegate, 1);
           case 1:
-            return _context57.a(2, _context57.sent);
+            return _context57.a(2, _context57.v);
           case 2:
             return _context57.a(2);
         }
@@ -2412,7 +2412,7 @@ describe("delegated yield", function () {
             _context58.prev = 0;
             return _context58.d(child(), 2);
           case 2:
-            return _context58.a(2, _context58.sent);
+            return _context58.a(2, _context58.v);
           case 3:
             _context58.prev = 3;
             markers.push("parent");
@@ -2430,7 +2430,7 @@ describe("delegated yield", function () {
             _context59.next = 3;
             return 1;
           case 3:
-            return _context59.a(2, _context59.sent);
+            return _context59.a(2, _context59.v);
           case 4:
             _context59.prev = 4;
             _context59.next = 7;
@@ -2484,7 +2484,7 @@ describe("delegated yield", function () {
           case 0:
             return _context61.d(delegate, 1);
           case 1:
-            return _context61.a(2, _context61.sent);
+            return _context61.a(2, _context61.v);
           case 2:
             return _context61.a(2);
         }
@@ -2535,7 +2535,7 @@ describe("delegated yield", function () {
           case 0:
             return _context63.d(delegate, 1);
           case 1:
-            _t68 = _context63.sent;
+            _t68 = _context63.v;
             return _context63.a(2, 1 + _t68);
           case 3:
             return _context63.a(2);
@@ -2684,7 +2684,7 @@ describe("delegated yield", function () {
             break;
           case 5:
             _context70.prev = 5;
-            _t69 = _context70.sent;
+            _t69 = _context70.v;
             assert.ok(false, "should not have executed the catch handler");
           case 8:
             _context70.prev = 8;
@@ -2856,7 +2856,7 @@ describe("function declaration hoisting", function () {
                     _context74.next = 6;
                     return n + 1;
                   case 6:
-                    return _context74.a(2, _context74.sent);
+                    return _context74.a(2, _context74.v);
                   case 7:
                     return _context74.a(2);
                 }
@@ -2869,7 +2869,7 @@ describe("function declaration hoisting", function () {
             assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
             return _context75.d(inner(n), 6);
           case 6:
-            return _context75.a(2, _context75.sent);
+            return _context75.a(2, _context75.v);
           case 7:
             return _context75.a(2);
         }
@@ -3239,7 +3239,7 @@ describe("catch parameter shadowing", function () {
             throw x + 2;
           case 5:
             _context90.prev = 5;
-            _t70 = _context90.sent;
+            _t70 = _context90.v;
             _context90.next = 9;
             return _t70;
           case 9:
@@ -3254,7 +3254,7 @@ describe("catch parameter shadowing", function () {
             throw x + 3;
           case 18:
             _context90.prev = 18;
-            _t71 = _context90.sent;
+            _t71 = _context90.v;
             _context90.next = 22;
             return _t71;
           case 22:
@@ -3285,7 +3285,7 @@ describe("catch parameter shadowing", function () {
             throw x;
           case 4:
             _context91.prev = 4;
-            _t72 = _context91.sent;
+            _t72 = _context91.v;
             _context91.next = 8;
             return _t72;
           case 8:
@@ -3335,7 +3335,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 4:
             _context92.prev = 4;
-            _t73 = _context92.sent;
+            _t73 = _context92.v;
             _context92.next = 8;
             return _t73;
           case 8:
@@ -3345,7 +3345,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 12:
             _context92.prev = 12;
-            _t74 = _context92.sent;
+            _t74 = _context92.v;
             _context92.next = 16;
             return _t74;
           case 16:
@@ -3377,7 +3377,7 @@ describe("catch parameter shadowing", function () {
             break;
           case 8:
             _context93.prev = 8;
-            _t75 = _context93.sent;
+            _t75 = _context93.v;
             _context93.next = 12;
             return 3;
           case 12:
@@ -3451,29 +3451,29 @@ describe("object literals with multiple yields", function () {
             _context95.next = 2;
             return "a";
           case 2:
-            _t76 = _context95.sent;
+            _t76 = _context95.v;
             _context95.next = 5;
             return "b";
           case 5:
-            _t77 = _context95.sent;
+            _t77 = _context95.v;
             _t78 = fn;
             _context95.next = 9;
             return "c";
           case 9:
-            _t79 = _context95.sent;
+            _t79 = _context95.v;
             _context95.next = 12;
             return "d";
           case 12:
-            _t80 = _context95.sent;
+            _t80 = _context95.v;
             _t81 = _t78(_t79, _t80);
             _context95.next = 16;
             return "e";
           case 16:
-            _t82 = _context95.sent;
+            _t82 = _context95.v;
             _context95.next = 19;
             return "f";
           case 19:
-            _t83 = _context95.sent;
+            _t83 = _context95.v;
             _t84 = [_t82, _t83];
             return _context95.a(2, {
               a: _t76,
@@ -3563,7 +3563,7 @@ describe("generator .throw method", function () {
             break;
           case 4:
             _context98.prev = 4;
-            _t85 = _context98.sent;
+            _t85 = _context98.v;
             return _context98.a(2, -1);
           case 7:
             return _context98.a(2, 1);
@@ -3585,7 +3585,7 @@ describe("generator .throw method", function () {
             break;
           case 5:
             _context99.prev = 5;
-            _t86 = _context99.sent;
+            _t86 = _context99.v;
             return _context99.a(2);
           case 8:
             return _context99.a(2);
@@ -3611,7 +3611,7 @@ describe("generator .throw method", function () {
             break;
           case 4:
             _context100.prev = 4;
-            _t87 = _context100.sent;
+            _t87 = _context100.v;
             return _context100.a(2, -1);
           case 7:
             return _context100.a(2, 1);
@@ -3654,7 +3654,7 @@ describe("unqualified function calls", function () {
             _context102.next = 2;
             return "dummy";
           case 2:
-            _t88 = _context102.sent;
+            _t88 = _context102.v;
             return _context102.a(2, _t88());
           case 4:
             return _context102.a(2);
@@ -3688,7 +3688,7 @@ describe("yield* expression results", function () {
           case 2:
             return _context103.d(bar(), 3);
           case 3:
-            return _context103.a(2, _context103.sent);
+            return _context103.a(2, _context103.v);
           case 4:
             return _context103.a(2);
         }
@@ -3729,10 +3729,10 @@ describe("yield* expression results", function () {
           case 0:
             return _context105.d(bar(), 1);
           case 1:
-            _t89 = _context105.sent;
+            _t89 = _context105.v;
             return _context105.d(bar(), 3);
           case 3:
-            _t90 = _context105.sent;
+            _t90 = _context105.v;
             return _context105.a(2, _t89 + _t90);
           case 5:
             return _context105.a(2);
@@ -3747,11 +3747,11 @@ describe("yield* expression results", function () {
             _context106.next = 2;
             return 2;
           case 2:
-            _t91 = _context106.sent;
+            _t91 = _context106.v;
             _context106.next = 5;
             return 3;
           case 5:
-            _t92 = _context106.sent;
+            _t92 = _context106.v;
             return _context106.a(2, _t91 + _t92);
           case 7:
             return _context106.a(2);
@@ -3816,19 +3816,19 @@ describe("new expressions", function () {
             _context109.next = 2;
             return 0;
           case 2:
-            _t93 = _context109.sent;
+            _t93 = _context109.v;
             _context109.next = 5;
             return 1;
           case 5:
-            _t94 = _context109.sent;
+            _t94 = _context109.v;
             _context109.next = 8;
             return 2;
           case 8:
-            _t95 = _context109.sent;
+            _t95 = _context109.v;
             _context109.next = 11;
             return new _t93(_t94, _t95);
           case 11:
-            return _context109.a(2, _context109.sent);
+            return _context109.a(2, _context109.v);
           case 12:
             return _context109.a(2);
         }
@@ -3956,11 +3956,11 @@ describe("newborn generators", function () {
             _context112.next = 2;
             return 1;
           case 2:
-            _t96 = _context112.sent;
+            _t96 = _context112.v;
             _context112.next = 5;
             return 2;
           case 5:
-            _t97 = _context112.sent;
+            _t97 = _context112.v;
             return _context112.a(2, [_t96, _t97]);
           case 7:
             return _context112.a(2);
@@ -3973,7 +3973,7 @@ describe("newborn generators", function () {
           case 0:
             return _context113.d(delegate, 1);
           case 1:
-            return _context113.a(2, _context113.sent);
+            return _context113.a(2, _context113.v);
           case 2:
             return _context113.a(2);
         }
@@ -4010,12 +4010,12 @@ describe("newborn generators", function () {
             _context114.next = 3;
             return 1;
           case 3:
-            sent1 = _context114.sent;
+            sent1 = _context114.v;
             markers.push(2);
             _context114.next = 7;
             return 2;
           case 7:
-            sent2 = _context114.sent;
+            sent2 = _context114.v;
             markers.push(3);
             return _context114.a(2, [sent1, sent2]);
           case 10:
@@ -4032,7 +4032,7 @@ describe("newborn generators", function () {
               _context115.next = 2;
               return "ignored";
             case 2:
-              sent = _context115.sent;
+              sent = _context115.v;
               markers.push(1);
             case 4:
               if ((info = delegate.next(sent)).done) {
@@ -4042,7 +4042,7 @@ describe("newborn generators", function () {
               _context115.next = 7;
               return info.value;
             case 7:
-              sent = _context115.sent;
+              sent = _context115.v;
               _context115.next = 4;
               break;
             case 10:
@@ -4129,12 +4129,12 @@ describe("newborn generators", function () {
             return x;
           case 2:
             _context118.next = 4;
-            return _context118.sent;
+            return _context118.v;
           case 4:
             _context118.next = 6;
-            return _context118.sent;
+            return _context118.v;
           case 6:
-            return _context118.a(2, _context118.sent);
+            return _context118.a(2, _context118.v);
           case 7:
             return _context118.a(2);
         }
@@ -4148,18 +4148,18 @@ describe("newborn generators", function () {
             return x;
           case 2:
             _context119.next = 4;
-            return _context119.sent;
+            return _context119.v;
           case 4:
             _context119.next = 6;
-            return _context119.sent;
+            return _context119.v;
           case 6:
             _context119.next = 8;
-            return _context119.sent;
+            return _context119.v;
           case 8:
             _context119.next = 10;
-            return _context119.sent;
+            return _context119.v;
           case 10:
-            return _context119.a(2, _context119.sent);
+            return _context119.a(2, _context119.v);
           case 11:
             return _context119.a(2);
         }
@@ -4565,7 +4565,7 @@ describe("for-of loops", function () {
             break;
           case 26:
             _context126.prev = 26;
-            _t98 = _context126.sent;
+            _t98 = _context126.v;
             _iterator3.e(_t98);
           case 29:
             _context126.prev = 29;
@@ -4612,7 +4612,7 @@ describe("expressions containing yield subexpressions", function () {
               x = y;
             };
           case 3:
-            _t100 = _context127.sent;
+            _t100 = _context127.v;
             return _context127.a(2, _t99 * _t100);
           case 5:
             return _context127.a(2);
@@ -4639,7 +4639,7 @@ describe("expressions containing yield subexpressions", function () {
             _context128.next = 3;
             return "asdf";
           case 3:
-            _t102 = _context128.sent;
+            _t102 = _context128.v;
             return _context128.a(2, _t101 + _t102);
           case 5:
             return _context128.a(2);
@@ -4676,7 +4676,7 @@ describe("expressions containing yield subexpressions", function () {
             _context129.next = 3;
             return "asdf";
           case 3:
-            _t104 = _context129.sent;
+            _t104 = _context129.v;
             _t105 = a;
             return _context129.a(2, [_t103, _t104, _t105]);
           case 6:
@@ -4707,7 +4707,7 @@ describe("expressions containing yield subexpressions", function () {
             _context130.next = 3;
             return "asdf";
           case 3:
-            _t107 = _context130.sent;
+            _t107 = _context130.v;
             a = _t106.concat.call(_t106, _t107);
             return _context130.a(2, a);
           case 6:
@@ -4738,7 +4738,7 @@ describe("expressions containing yield subexpressions", function () {
             _context131.next = 3;
             return "asdf";
           case 3:
-            _t109 = _context131.sent;
+            _t109 = _context131.v;
             return _context131.a(2, _t108 + _t109);
           case 5:
             return _context131.a(2);
@@ -4767,7 +4767,7 @@ describe("expressions containing yield subexpressions", function () {
             _context132.next = 2;
             return "foo";
           case 2:
-            _t110 = _context132.sent;
+            _t110 = _context132.v;
             return _context132.a(2, [0, ..._t110, 3]);
           case 4:
             return _context132.a(2);
@@ -4794,7 +4794,7 @@ describe("expressions containing yield subexpressions", function () {
             _context133.next = 2;
             return "foo";
           case 2:
-            _t111 = _context133.sent;
+            _t111 = _context133.v;
             return _context133.a(2, [0, _t111,, 3]);
           case 4:
             return _context133.a(2);

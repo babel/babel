@@ -43,7 +43,7 @@ type TryEntry = [
 type Context = {
   prev: number;
   next: number;
-  sent: any;
+  v: any;
 
   a(type: OperatorType, arg?: any): any;
   f(finallyLoc: number): any;
@@ -186,7 +186,7 @@ export default function /* @no-mangle */ _regenerator() {
       while (!done || (_ = undefined)) {
         if (!delegateIterator) {
           if (!method /* Return */) {
-            ctx.sent = arg;
+            ctx.v = arg;
           } else if (method < 3 /* Throw | Return */) {
             if (method > 1 /* Return */) ctx.next = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
@@ -294,7 +294,7 @@ export default function /* @no-mangle */ _regenerator() {
       prev: 0,
       next: 0,
 
-      sent: undefined,
+      v: undefined,
 
       a: Context_dispatchExceptionOrFinishOrAbrupt,
       f: Context_dispatchExceptionOrFinishOrAbrupt.bind(
@@ -343,7 +343,7 @@ export default function /* @no-mangle */ _regenerator() {
               // If the dispatched exception was caught by a catch block,
               // then let that catch block handle the exception normally.
               method = OperatorType.Next;
-              ctx.sent = _arg;
+              ctx.v = _arg;
               ctx.next = entry[1]!;
             } else if (prev < finallyLoc) {
               if (

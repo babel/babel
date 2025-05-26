@@ -7,7 +7,7 @@
           _context.next = 2;
           return babelHelpers.awaitAsyncGenerator(someAsyncFunc());
         case 2:
-          newSessionId = _context.sent;
+          newSessionId = _context.v;
         case 3:
           return _context.a(2);
       }
