@@ -6,7 +6,7 @@ export default function _regeneratorValues(iterable: any) {
   if (iterable != null) {
     var iteratorMethod =
       iterable[
-        (typeof Symbol === "function" && Symbol.iterator) || "@iterator"
+        (typeof Symbol === "function" && Symbol.iterator) || "@@iterator"
       ];
     if (iteratorMethod) {
       return iteratorMethod.call(iterable);
