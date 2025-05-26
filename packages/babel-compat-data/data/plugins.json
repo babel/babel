@@ -15,6 +15,7 @@
     "edge": "125",
     "firefox": "132",
     "node": "23",
+    "samsung": "27",
     "electron": "31.0"
   },
   "transform-unicode-sets-regex": {
@@ -26,6 +27,7 @@
     "node": "20",
     "deno": "1.32",
     "ios": "17",
+    "samsung": "23",
     "opera_mobile": "75",
     "electron": "24.0"
   },
@@ -236,6 +238,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -249,6 +252,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -608,6 +612,7 @@
     "deno": "1",
     "ios": "8",
     "samsung": "4",
+    "rhino": "1.8",
     "opera_mobile": "32",
     "electron": "0.30"
   },
@@ -714,6 +719,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "5",
+    "rhino": "1.8",
     "opera_mobile": "35",
     "electron": "0.37"
   },
