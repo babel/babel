@@ -1230,10 +1230,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 1181, gzip size: 557
+  // size: 1115, gzip size: 534
   regeneratorRuntime: helper(
     "7.18.0",
-    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),n=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function t(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===n||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r){var e,n;return function(t){e||(e={stop:function(){return n(t.a,2)},catch:function(){return t.v},abrupt:function(r,e){return n(t.a,o[r],e)},delegateYield:function(r,o,a){return e.resultName=o,n(t.d,r,a)},finish:function(r){return n(t.f,r)}},n=function(r,n,o){t.p=e.prev,t.n="end"===e.next?-1:e.next;try{return r(n,o)}finally{e.next=-1===t.n?"end":t.n}}),e.resultName&&(e[e.resultName]=t.v,e.resultName=void 0),e.sent=t.v,e.next=-1===t.n?"end":t.n;try{return r.call(this,e)}finally{t.p=e.prev,t.n="end"===e.next?-1:e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,n,t,o){return r.w(a(e),n,t,o&&o.reverse())},isGeneratorFunction:t,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,n,o,u){return(t(e)?asyncGen:async)(a(r),e,n,o,u)},keys:keys,values:values}})()}',
+    'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function n(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r){var e,t;return function(n){e||(e={stop:function(){return t(n.a,2)},catch:function(){return n.v},abrupt:function(r,e){return t(n.a,o[r],e)},delegateYield:function(r,o,a){return e.resultName=o,t(n.d,r,a)},finish:function(r){return t(n.f,r)}},t=function(r,t,o){n.p=e.prev,n.n=e.next;try{return r(t,o)}finally{e.next=n.n}}),e.resultName&&(e[e.resultName]=n.v,e.resultName=void 0),e.sent=n.v,e.next=n.n;try{return r.call(this,e)}finally{n.p=e.prev,n.n=e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,t,n,o){return r.w(a(e),t,n,o&&o.reverse())},isGeneratorFunction:n,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,t,o,u){return(n(e)?asyncGen:async)(a(r),e,t,o,u)},keys:keys,values:values}})()}',
     {
       globals: ["Object"],
       locals: {

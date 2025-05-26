@@ -11,7 +11,7 @@ import values from "./regeneratorValues.ts";
 
 type CompatContext = {
   prev?: number;
-  next?: number | "end";
+  next?: number;
   sent?: any;
 
   stop(): any;
@@ -87,11 +87,11 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         };
         callSyncState = function (fn, a1, a2) {
           context.p = compatContext.prev!;
-          context.n = compatContext.next === "end" ? -1 : compatContext.next!;
+          context.n = compatContext.next!;
           try {
             return fn(a1, a2!);
           } finally {
-            compatContext.next = context.n === -1 ? "end" : context.n;
+            compatContext.next = context.n;
           }
         };
       }
@@ -100,12 +100,12 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
         compatContext.resultName = undefined;
       }
       compatContext.sent = context.v;
-      compatContext.next = context.n === -1 ? "end" : context.n;
+      compatContext.next = context.n;
       try {
         return innerFn.call(this, compatContext);
       } finally {
         context.p = compatContext.prev!;
-        context.n = compatContext.next === "end" ? -1 : compatContext.next;
+        context.n = compatContext.next;
       }
     };
   }
