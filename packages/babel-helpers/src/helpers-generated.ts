@@ -1269,10 +1269,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 396, gzip size: 264
+  // size: 397, gzip size: 264
   regeneratorValues: helper(
     "7.18.0",
-    'function _regeneratorValues(e){if(null!=e){var r=e["function"==typeof Symbol&&Symbol.iterator||"@iterator"];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var t=-1,n=function r(){for(;++t<e.length;)if({}.hasOwnProperty.call(e,t))return r.value=e[t],r.done=!1,r;return r.value=void 0,r.done=!0,r};return n.next=n}}throw new TypeError(typeof e+" is not iterable")}',
+    'function _regeneratorValues(e){if(null!=e){var r=e["function"==typeof Symbol&&Symbol.iterator||"@@iterator"];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var t=-1,n=function r(){for(;++t<e.length;)if({}.hasOwnProperty.call(e,t))return r.value=e[t],r.done=!1,r;return r.value=void 0,r.done=!0,r};return n.next=n}}throw new TypeError(typeof e+" is not iterable")}',
     {
       globals: ["Symbol", "isNaN", "TypeError"],
       locals: { _regeneratorValues: ["body.0.id"] },
