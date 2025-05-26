@@ -329,7 +329,12 @@ export class Emitter {
       t.switchStatement(
         t.assignmentExpression(
           "=",
-          this.contextProperty("prev"),
+          this.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "p"
+              : "prev",
+          ),
           this.contextProperty("next"),
         ),
         cases,
@@ -899,7 +904,15 @@ export class Emitter {
     // Make sure context.prev is up to date in case we fell into this try
     // statement without jumping to it. TODO Consider avoiding this
     // assignment when we know control must have jumped here.
-    this.emitAssign(this.contextProperty("prev"), loc);
+    this.emitAssign(
+      this.contextProperty(
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? "p"
+          : "prev",
+      ),
+      loc,
+    );
   }
 
   // In order to save the rest of explodeExpression from a combinatorial

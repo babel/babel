@@ -41,7 +41,7 @@ type TryEntry = [
 ];
 
 type Context = {
-  prev: number;
+  p: number;
   next: number;
   v: any;
 
@@ -291,7 +291,7 @@ export default function /* @no-mangle */ _regenerator() {
     var arg: any;
 
     var ctx: Context = {
-      prev: 0,
+      p: 0,
       next: 0,
 
       v: undefined,
@@ -326,7 +326,7 @@ export default function /* @no-mangle */ _regenerator() {
         _++
       ) {
         var entry = tryEntries[_];
-        var prev = ctx.prev;
+        var prev = ctx.p;
         var finallyLoc = entry[2]!;
         var shouldReturn;
 

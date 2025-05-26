@@ -6,7 +6,7 @@ function test() {
 function _test() {
   _test = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
     return _regenerator().w(function (_context) {
-      while (1) switch (_context.prev = _context.next) {
+      while (1) switch (_context.p = _context.next) {
         case 0:
           console.log('test');
         case 1:
@@ -23,7 +23,7 @@ function _main() {
   _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
     var _t, _t2;
     return _regenerator().w(function (_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+      while (1) switch (_context2.p = _context2.next) {
         case 0:
           _t = console;
           _context2.next = 3;

@@ -1,11 +1,11 @@
 function foo() {
   return babelHelpers.regeneratorAsync(function (_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+    while (1) switch (_context2.p = _context2.next) {
       case 0:
         (function _callee(number) {
           var tmp;
           return babelHelpers.regeneratorAsync(function (_context) {
-            while (1) switch (_context.prev = _context.next) {
+            while (1) switch (_context.p = _context.next) {
               case 0:
                 tmp = number;
               case 1:

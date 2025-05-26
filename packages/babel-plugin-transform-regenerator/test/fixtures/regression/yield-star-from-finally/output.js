@@ -11,7 +11,7 @@ features: [generators]
 
 function values() {
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.prev = _context.next) {
+    while (1) switch (_context.p = _context.next) {
       case 0:
         _context.next = 2;
         return 1;
@@ -27,10 +27,10 @@ var dataIterator = values();
 var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
   var _iterator, _step, x, _t;
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+    while (1) switch (_context2.p = _context2.next) {
       case 0:
         _iterator = babelHelpers.createForOfIteratorHelper(dataIterator);
-        _context2.prev = 1;
+        _context2.p = 1;
         _iterator.s();
       case 3:
         if ((_step = _iterator.n()).done) {
@@ -38,9 +38,9 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
           break;
         }
         x = _step.value;
-        _context2.prev = 5;
+        _context2.p = 5;
       case 6:
-        _context2.prev = 6;
+        _context2.p = 6;
         i++;
         return _context2.d(values(), 9);
       case 9:
@@ -55,11 +55,11 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
         _context2.next = 19;
         break;
       case 16:
-        _context2.prev = 16;
+        _context2.p = 16;
         _t = _context2.v;
         _iterator.e(_t);
       case 19:
-        _context2.prev = 19;
+        _context2.p = 19;
         _iterator.f();
         return _context2.f(19);
       case 22:

@@ -6,7 +6,7 @@ var Example = /*#__PURE__*/function () {
   _proto.test1 = /*#__PURE__*/function () {
     var _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
       return babelHelpers.regenerator().w(function (_context) {
-        while (1) switch (_context.prev = _context.next) {
+        while (1) switch (_context.p = _context.next) {
           case 0:
             _context.next = 2;
             return Promise.resolve(2);
@@ -22,7 +22,7 @@ var Example = /*#__PURE__*/function () {
   }();
   _proto.test2 = /*#__PURE__*/babelHelpers.regenerator().m(function test2() {
     return babelHelpers.regenerator().w(function (_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+      while (1) switch (_context2.p = _context2.next) {
         case 0:
           _context2.next = 2;
           return 3;

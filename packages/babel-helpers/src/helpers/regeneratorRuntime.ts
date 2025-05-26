@@ -60,26 +60,36 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
       if (!context.stop) {
         // Shim the old context shape on top of the new one.
         context.stop = function () {
+          context.p = context.prev!;
           return context.a(2);
         };
         context["catch"] = function () {
           return context.v;
         };
         context.abrupt = function (type, arg) {
+          context.p = context.prev!;
           return context.a(abruptMap[type], arg);
         };
         context.delegateYield = function (iterable, resultName, nextLoc) {
           context.resultName = resultName;
+          context.p = context.prev!;
           return context.d(iterable, nextLoc);
         };
-        context.finish = context.f;
+        context.finish = function (finallyLoc) {
+          context.p = context.prev!;
+          return context.f(finallyLoc);
+        };
       }
       if (context.resultName) {
         context[context.resultName] = context.v;
         context.resultName = undefined;
       }
       context.sent = context.v;
-      return innerFn.call(this, context);
+      try {
+        return innerFn.call(this, context);
+      } finally {
+        context.p = context.prev!;
+      }
     } as (this: unknown, context: NewContext) => unknown;
   }
 
