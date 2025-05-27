@@ -1,5 +1,6 @@
+/* eslint-disable unicorn/prefer-node-protocol */
 /* eslint-disable import/extensions */
-import assert from "node:assert";
+import assert from "assert";
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {

@@ -1,4 +1,4 @@
-eval("Symbol = undefined");
+eval("[][Symbol.iterator] = undefined; Symbol = undefined;");
 
 var assert = require("assert");
 var shared = require("./shared.js");

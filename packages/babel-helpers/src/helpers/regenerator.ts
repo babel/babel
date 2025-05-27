@@ -102,9 +102,6 @@ export default function /* @no-mangle */ _regenerator() {
   /* @no-mangle */
   function GeneratorFunctionPrototype() {}
 
-  define((_ = {}), iteratorSymbol, function (this: unknown) {
-    return this;
-  });
   _ = Object.getPrototypeOf;
   var IteratorPrototype = [][iteratorSymbol as typeof Symbol.iterator]
     ? // This environment has a native %IteratorPrototype%; use it instead
@@ -112,7 +109,10 @@ export default function /* @no-mangle */ _regenerator() {
       _(_([][iteratorSymbol as typeof Symbol.iterator]()))
     : // This is a polyfill for %IteratorPrototype% for environments that
       // don't natively support it.
-      _;
+      (define((_ = {}), iteratorSymbol, function (this: unknown) {
+        return this;
+      }),
+      _);
 
   var Gp =
     (GeneratorFunctionPrototype.prototype =
