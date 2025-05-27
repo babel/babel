@@ -24,6 +24,25 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.3 (2025-05-27)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#17324](https://github.com/babel/babel/pull/17324) Improve multiline comments handling in yield/await expression ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17328](https://github.com/babel/babel/pull/17328) Correctly set `.displayName` on `GeneratorFunction` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-explicit-resource-management`
+  * [#17319](https://github.com/babel/babel/pull/17319) fix: handle shadowed binding in `for using of` body ([@JLHwung](https://github.com/JLHwung))
+  * [#17317](https://github.com/babel/babel/pull/17317) fix: support named evaluation for using declaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-decorators`, `babel-types`
+  * [#17321](https://github.com/babel/babel/pull/17321) fix(converter): Remove `abstract` modifiers in class declaration to expression conversion ([@magic-akari](https://github.com/magic-akari))
+* `babel-helper-module-transforms`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#17257](https://github.com/babel/babel/pull/17257) Preserve class id when transforming using declarations with exported class ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#17312](https://github.com/babel/babel/pull/17312) fix(parser): properly handle optional markers in generator class methods ([@magic-akari](https://github.com/magic-akari))
+  * [#17307](https://github.com/babel/babel/pull/17307) fix(parser): Terminate modifier parsing at newline ([@magic-akari](https://github.com/magic-akari))
+* `babel-generator`, `babel-parser`
+  * [#17308](https://github.com/babel/babel/pull/17308) Improve import phase parsing ([@JLHwung](https://github.com/JLHwung))
 ## v7.27.2 (2025-05-06)
 
 #### :bug: Bug Fix
