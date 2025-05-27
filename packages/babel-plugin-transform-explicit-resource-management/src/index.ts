@@ -13,7 +13,7 @@ const enum USING_KIND {
 function isAnonymousFunctionDefinition(
   node: t.Node,
 ): node is t.ClassExpression {
-  return t.isClassExpression(node) && !node.id && !node.extra?.parenthesized;
+  return t.isClassExpression(node) && !node.id;
 }
 
 function emitSetFunctionNameCall(
