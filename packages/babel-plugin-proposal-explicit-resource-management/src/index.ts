@@ -1,10 +1,30 @@
 import { declare } from "@babel/helper-plugin-utils";
+import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,
   AWAIT,
+}
+
+// https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+// We don't test anonymous function / arrow function because they must not be disposable
+function isAnonymousFunctionDefinition(
+  node: t.Node,
+): node is t.ClassExpression {
+  return t.isClassExpression(node) && !node.id;
+}
+
+function emitSetFunctionNameCall(
+  state: PluginPass,
+  expression: t.Expression,
+  name: string,
+) {
+  return t.callExpression(state.addHelper("setFunctionName"), [
+    expression,
+    t.stringLiteral(name),
+  ]);
 }
 
 export default declare(api => {
@@ -32,11 +52,11 @@ export default declare(api => {
       left.kind = "const";
 
       path.ensureBlock();
-      path.node.body.body.unshift(
+      unshiftForXStatementBody(path, [
         t.variableDeclaration("using", [
           t.variableDeclarator(id, t.cloneNode(tmpId)),
         ]),
-      );
+      ]);
     },
     "BlockStatement|StaticBlock"(
       path: NodePath<t.BlockStatement | t.StaticBlock>,
@@ -45,10 +65,11 @@ export default declare(api => {
       if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
         let ctx: t.Identifier | null = null;
         let needsAwait = false;
+        const scope = path.scope;
 
         for (const node of path.node.body) {
           if (!isUsingDeclaration(node)) continue;
-          ctx ??= path.scope.generateUidIdentifier("usingCtx");
+          ctx ??= scope.generateUidIdentifier("usingCtx");
           const isAwaitUsing =
             node.kind === "await using" ||
             TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
@@ -58,12 +79,18 @@ export default declare(api => {
             node.kind = "const";
           }
           for (const decl of node.declarations) {
+            const currentInit = decl.init;
             decl.init = t.callExpression(
               t.memberExpression(
                 t.cloneNode(ctx),
                 isAwaitUsing ? t.identifier("a") : t.identifier("u"),
               ),
-              [decl.init],
+              [
+                isAnonymousFunctionDefinition(currentInit) &&
+                t.isIdentifier(decl.id)
+                  ? emitSetFunctionNameCall(state, currentInit, decl.id.name)
+                  : currentInit,
+              ],
             );
           }
         }
@@ -264,7 +291,10 @@ export default declare(api => {
               let varId;
               if (t.isClassDeclaration(declaration)) {
                 varId = declaration.id;
-                declaration.id = null;
+                // Move the class id to the var binding such that the scope binding
+                // info is correct. Then we clone one to ensure inner class reference
+                // will stay same if the outer binding is mutated.
+                declaration.id = t.cloneNode(varId);
                 declaration = t.toExpression(declaration);
               } else if (!t.isExpression(declaration)) {
                 continue;
@@ -306,7 +336,7 @@ export default declare(api => {
 
             if (t.isClassDeclaration(node)) {
               const { id } = node;
-              node.id = null;
+              node.id = t.cloneNode(id);
               innerBlockBody.push(
                 t.variableDeclaration("var", [
                   t.variableDeclarator(id, t.toExpression(node)),

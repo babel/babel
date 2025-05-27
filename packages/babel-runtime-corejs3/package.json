@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs3",
-  "version": "7.27.1",
+  "version": "7.27.3",
   "description": "babel's modular runtime helpers with core-js@3 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -619,15 +619,6 @@
       "./helpers/regeneratorKeys.js"
     ],
     "./helpers/esm/regeneratorKeys": "./helpers/esm/regeneratorKeys.js",
-    "./helpers/regeneratorRuntime": [
-      {
-        "node": "./helpers/regeneratorRuntime.js",
-        "import": "./helpers/esm/regeneratorRuntime.js",
-        "default": "./helpers/regeneratorRuntime.js"
-      },
-      "./helpers/regeneratorRuntime.js"
-    ],
-    "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
     "./helpers/set": [
       {
         "node": "./helpers/set.js",
@@ -1078,6 +1069,15 @@
       "./helpers/objectSpread.js"
     ],
     "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
+    "./helpers/regeneratorRuntime": [
+      {
+        "node": "./helpers/regeneratorRuntime.js",
+        "import": "./helpers/esm/regeneratorRuntime.js",
+        "default": "./helpers/regeneratorRuntime.js"
+      },
+      "./helpers/regeneratorRuntime.js"
+    ],
+    "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
     "./helpers/using": [
       {
         "node": "./helpers/using.js",

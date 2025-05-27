@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-explicit-resource-management",
-  "version": "7.27.1",
+  "version": "7.27.3",
   "description": "Compile `using` declarations to ES2015",
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-transform-destructuring": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

@@ -1,5 +1,6 @@
 {
   "BABEL_8_BREAKING": false,
-  "plugins": ["sourcePhaseImports"],
-  "throws": "'import.source(...)' can only be parsed when using the 'createImportExpressions' option. (1:7)"
+  "plugins": [
+    "sourcePhaseImports"
+  ]
 }

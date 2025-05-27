@@ -7,4 +7,4 @@ function fn() {
     }
   }, _marked);
 }
-babelHelpers.regeneratorRuntime().isGeneratorFunction(fn);
+regeneratorRuntime.isGeneratorFunction(fn);

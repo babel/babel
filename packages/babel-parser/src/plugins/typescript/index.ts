@@ -91,11 +91,11 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
-  DuplicateAccessibilityModifier:
-    // `Accessibility modifier already seen: ${modifier}` would be more helpful.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ modifier }: { modifier: N.Accessibility }) =>
-      `Accessibility modifier already seen.`,
+  DuplicateAccessibilityModifier: ({
+    modifier,
+  }: {
+    modifier: N.Accessibility;
+  }) => `Accessibility modifier already seen: '${modifier}'.`,
   DuplicateModifier: ({ modifier }: { modifier: TsModifier }) =>
     `Duplicate modifier: '${modifier}'.`,
   // `token` matches the terminology used by typescript:
@@ -158,7 +158,7 @@ const TSErrors = ParseErrorEnum`typescript`({
     "'interface' declarations must be followed by an identifier.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
-  NonClassMethodPropertyHasAbstractModifer:
+  NonClassMethodPropertyHasAbstractModifier:
     "'abstract' modifier can only appear on a class, method, or property declaration.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
@@ -3091,7 +3091,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseVarStatement(
       node: N.VariableDeclaration,
-      kind: "var" | "let" | "const" | "using",
+      kind: "var" | "let" | "const" | "using" | "await using",
       allowMissingInitializer: boolean = false,
     ) {
       const { isAmbientContext } = this.state;
@@ -3108,7 +3108,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (!init) continue;
 
         // var and let aren't ever allowed initializers.
-        if (kind !== "const" || !!id.typeAnnotation) {
+        if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
           this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
         } else if (
           !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
@@ -3620,7 +3620,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // `let x: number;`
     parseVarId(
       decl: N.VariableDeclarator,
-      kind: "var" | "let" | "const" | "using",
+      kind: "var" | "let" | "const" | "using" | "await using",
     ): void {
       super.parseVarId(decl, kind);
       if (
@@ -4205,7 +4205,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         //   Foo {}
         if (!this.hasFollowingLineBreak()) {
           node.abstract = true;
-          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifer, node);
+          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifier, node);
           return this.tsParseInterfaceDeclaration(
             node as N.TsInterfaceDeclaration,
           );

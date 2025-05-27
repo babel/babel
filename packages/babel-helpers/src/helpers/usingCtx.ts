@@ -65,11 +65,11 @@ export default function _usingCtx(): UsingCtxReturn {
         // Try AsyncDisposable first
         var dispose: DisposeLike | null | undefined = (
           value as AsyncDisposable
-        )[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
+        )[Symbol.asyncDispose || Symbol["for"]("Symbol.asyncDispose")];
       }
       if (dispose === undefined) {
         dispose = (value as Disposable)[
-          Symbol.dispose || Symbol.for("Symbol.dispose")
+          Symbol.dispose || Symbol["for"]("Symbol.dispose")
         ];
         if (isAwait) {
           var inner = dispose;

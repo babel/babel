@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.27.2",
+  "version": "7.27.3",
   "version_babel8": "8.0.0-alpha.17",
   "private": true,
   "type": "commonjs",
@@ -82,7 +82,7 @@
     "semver": "^6.3.1",
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
-    "typescript": "5.8.2",
+    "typescript": "5.8.3",
     "typescript-eslint": "8.29.1"
   },
   "workspaces": [

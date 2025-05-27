@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "plugins": ["transform-modules-commonjs", "transform-export-namespace-from", "proposal-explicit-resource-management"]
+}

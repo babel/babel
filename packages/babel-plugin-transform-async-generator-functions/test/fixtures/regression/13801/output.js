@@ -1,11 +1,9 @@
 function _regeneratorAsync(n, e, r, t, o) { var a = _regeneratorAsyncGen(n, e, r, t, o); return a.next().then(function (n) { return n.done ? n.value : a.next(); }); }
 function _regeneratorAsyncGen(r, e, t, o, n) { return new _regeneratorAsyncIterator(_regenerator().w(r, e, t, o), n || Promise); }
-function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = Object.prototype, n = r.hasOwnProperty, o = "function" == typeof Symbol ? Symbol : {}, i = o.iterator || "@@iterator", a = o.toStringTag || "@@toStringTag"; function u(r, n, o, i) { var a = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(a.prototype); return _regeneratorDefine(u, "_invoke", function (r, n, o) { var i, a, u, f = 0, p = o || [], y = !1, l = { prev: 0, next: 0, sent: e, abrupt: d, finish: d.bind(e, 4), delegateYield: function (t, r) { return i = _regeneratorValues(t), a = 0, u = e, l.next = r, c; } }; function d(r, n) { for (a = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = l.prev, s = i[2]; r > 3 ? (o = s === n) && (a = i[4] || 3, u = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (a = 0, l.sent = n, l.next = i[1]) : d < s && (o = r < 3 || i[0] > n || n > s) && (i[4] = r, i[5] = n, l.next = s, a = 0)); } if (o || r > 1) return c; throw y = !0, n; } return function (o, p, s) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, s), a = p, u = s; (t = a < 2 ? e : u) || !y;) { i || (a ? a < 3 ? (a > 1 && (l.next = -1), d(a, u)) : l.next = u : l.sent = u); try { if (f = 2, i) { if (a || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, a < 2 && (a = 0); } else 1 === a && (t = i.return) && t.call(i), a < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), a = 1); i = e; } else if ((t = (y = l.next < 0) ? u : r.call(n, l)) !== c) break; } catch (t) { i = e, a = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var c = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var f = {}; _regeneratorDefine(f, i, function () { return this; }); var p = Object.getPrototypeOf, y = p && p(p(_regeneratorValues([]))); y && y !== r && n.call(y, i) && (f = y); var l = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(f); function d(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine(e, a, "GeneratorFunction")), e.prototype = Object.create(l), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(l, "constructor", GeneratorFunctionPrototype), _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, a, "GeneratorFunction"), _regeneratorDefineIM(l), _regeneratorDefine(l, a, "Generator"), _regeneratorDefine(l, i, function () { return this; }), _regeneratorDefine(l, "toString", function () { return "[object Generator]"; }), (_regenerator = function () { return { w: u, m: d }; })(); }
-function _regeneratorValues(e) { if (null != e) { var r = e["function" == typeof Symbol && Symbol.iterator || "@iterator"]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var t = -1, n = function r() { for (; ++t < e.length;) if ({}.hasOwnProperty.call(e, t)) return r.value = e[t], r.done = !1, r; return r.value = void 0, r.done = !0, r; }; return n.next = n; } } throw new TypeError(typeof e + " is not iterable"); }
-function _regeneratorAsyncIterator(t, e) { function r(n, o, i, f) { var a = _tryCatch(t[n], t, o); if (!a.e) { var c = a.v, u = c.value; return u && u instanceof _OverloadYield ? e.resolve(u.v).then(function (t) { r("next", t, i, f); }, function (t) { r("throw", t, i, f); }) : e.resolve(u).then(function (t) { c.value = t, i(c); }, function (t) { return r("throw", t, i, f); }); } f(a.v); } var n; this.next || (_regeneratorDefineIM(_regeneratorAsyncIterator.prototype), _regeneratorDefine(_regeneratorAsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () { return this; })), _regeneratorDefine(this, "_invoke", function (t, o, i) { function f() { return new e(function (e, n) { r(t, i, e, n); }); } return n = n ? n.then(f, f) : f(); }, !0); }
-function _regeneratorDefineIM(e) { function n(n, t) { _regeneratorDefine(e, n, function (e) { return this._invoke(n, t, e); }); } n("next", 0), n("throw", 1), n("return", 2); }
-function _tryCatch(t, r, e) { try { return { e: 0, v: t.call(r, e) }; } catch (t) { return { e: 1, v: t }; } }
-function _regeneratorDefine(e, r, n, t) { _regeneratorDefine = function (e, r, n, t) { return Object.defineProperty(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }); }; try { _regeneratorDefine({}, ""); } catch (e) { _regeneratorDefine = function (e, r, n) { return e[r] = n; }; } return _regeneratorDefine(e, r, n, t); }
+function _regeneratorAsyncIterator(t, e) { function n(r, o, i, f) { try { var c = t[r](o), u = c.value; return u instanceof _OverloadYield ? e.resolve(u.v).then(function (t) { n("next", t, i, f); }, function (t) { n("throw", t, i, f); }) : e.resolve(u).then(function (t) { c.value = t, i(c); }, function (t) { return n("throw", t, i, f); }); } catch (t) { f(t); } } var r; this.next || (_regeneratorDefine(_regeneratorAsyncIterator.prototype), _regeneratorDefine(_regeneratorAsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () { return this; })), _regeneratorDefine(this, "_invoke", function (t, o, i) { function f() { return new e(function (e, r) { n(t, i, e, r); }); } return r = r ? r.then(f, f) : f(); }, !0); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var u = n && n.prototype instanceof Generator ? n : Generator, c = Object.create(u.prototype); return _regeneratorDefine(c, "_invoke", function (r, n, o) { var i, u, c, f = 0, p = o || [], y = !1, l = { p: 0, n: 0, v: e, a: G, f: G.bind(e, 4), d: function (t, r) { return i = _regeneratorValues(t), u = 0, c = e, l.n = r, a; } }; function G(r, n) { for (u = r, c = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], G = l.p, d = i[2]; r > 3 ? (o = d === n) && (u = i[4] || 3, c = i[5] === e ? i[3] : i[5], i[4] = 3, i[5] = e) : i[0] <= G && ((o = r < 2 && G < i[1]) ? (u = 0, l.v = n, l.n = i[1]) : G < d && (o = r < 3 || i[0] > n || n > d) && (i[4] = r, i[5] = n, l.n = d, u = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, d) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && G(p, d), u = p, c = d; (t = u < 2 ? e : c) || !y;) { i || (u ? u < 3 ? (u > 1 && (l.n = -1), G(u, c)) : l.n = c : l.v = c); try { if (f = 2, i) { if (u || (o = "next"), t = i[o]) { if (!(t = t.call(i, c))) throw TypeError("iterator result is not an object"); if (!t.done) return t; c = t.value, u < 2 && (u = 0); } else 1 === u && (t = i.return) && t.call(i), u < 2 && (c = TypeError("The iterator does not provide a '" + o + "' method"), u = 1); i = e; } else if ((t = (y = l.n < 0) ? c : r.call(n, l)) !== a) break; } catch (t) { i = e, u = 1, c = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), c; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} _regeneratorDefine(t = {}, n, function () { return this; }), t = Object.getPrototypeOf; var u = [][n] ? t(t([][n]())) : t, c = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(u); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = Object.create(c), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(c, "constructor", GeneratorFunctionPrototype), _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine(c), _regeneratorDefine(c, o, "Generator"), _regeneratorDefine(c, n, function () { return this; }), _regeneratorDefine(c, "toString", function () { return "[object Generator]"; }), (_regenerator = function () { return { w: i, m: f }; })(); }
+function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function () { return e && r >= e.length && (e = 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(typeof e + " is not iterable"); }
+function _regeneratorDefine(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine = function (e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { function o(r, n) { _regeneratorDefine(e, r, function (e) { return this._invoke(r, n, e); }); } o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine(e, r, n, t); }
 function _awaitAsyncGenerator(e) { return new _OverloadYield(e, 0); }
 function _OverloadYield(e, d) { this.v = e, this.k = d; }
 function _asyncIterator(r) { var n, t, o, e = 2; for ("undefined" != typeof Symbol && (t = Symbol.asyncIterator, o = Symbol.iterator); e--;) { if (t && null != (n = r[t])) return n.call(r); if (o && null != (n = r[o])) return new AsyncFromSyncIterator(n.call(r)); t = "@@asyncIterator", o = "@@iterator"; } throw new TypeError("Object is not async iterable"); }
@@ -13,69 +11,69 @@ function AsyncFromSyncIterator(r) { function AsyncFromSyncIteratorContinuation(r
 function main() {
   var one;
   return _regeneratorAsync(function (_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+    while (1) switch (_context2.n) {
       case 0:
         () => {
           var _iteratorAbruptCompletion, _didIteratorError, _iteratorError, _iterator, _step, string, _t;
           return _regeneratorAsync(function (_context) {
-            while (1) switch (_context.prev = _context.next) {
+            while (1) switch (_context.n) {
               case 0:
                 // IIFE: required for babel to crash
                 _iteratorAbruptCompletion = false;
                 _didIteratorError = false;
-                _context.prev = 2;
+                _context.p = 1;
                 _iterator = _asyncIterator(async_iterable);
-              case 4:
-                _context.next = 6;
+              case 2:
+                _context.n = 3;
                 return _awaitAsyncGenerator(_iterator.next());
-              case 6:
-                if (!(_iteratorAbruptCompletion = !(_step = _context.sent).done)) {
-                  _context.next = 12;
+              case 3:
+                if (!(_iteratorAbruptCompletion = !(_step = _context.v).done)) {
+                  _context.n = 5;
                   break;
                 }
                 string = _step.value;
                 // for await: required for babel to crash
                 console.log(string);
-              case 9:
+              case 4:
                 _iteratorAbruptCompletion = false;
-                _context.next = 4;
+                _context.n = 2;
                 break;
-              case 12:
-                _context.next = 18;
+              case 5:
+                _context.n = 7;
                 break;
-              case 14:
-                _context.prev = 14;
-                _t = _context.sent;
+              case 6:
+                _context.p = 6;
+                _t = _context.v;
                 _didIteratorError = true;
                 _iteratorError = _t;
-              case 18:
-                _context.prev = 18;
-                _context.prev = 19;
+              case 7:
+                _context.p = 7;
+                _context.p = 8;
                 if (!(_iteratorAbruptCompletion && _iterator.return != null)) {
-                  _context.next = 23;
+                  _context.n = 9;
                   break;
                 }
-                _context.next = 23;
+                _context.n = 9;
                 return _awaitAsyncGenerator(_iterator.return());
-              case 23:
-                _context.prev = 23;
+              case 9:
+                _context.p = 9;
                 if (!_didIteratorError) {
-                  _context.next = 26;
+                  _context.n = 10;
                   break;
                 }
                 throw _iteratorError;
-              case 26:
-                return _context.finish(23);
-              case 27:
-                return _context.finish(18);
-              case 28:
-                return _context.abrupt(2);
+              case 10:
+                return _context.f(9);
+              case 11:
+                return _context.f(7);
+              case 12:
+                return _context.a(2);
             }
-          }, null, null, [[19,, 23, 27], [2, 14, 18, 28]], Promise);
+          }, null, null, [[8,, 9, 11], [1, 6, 7, 12]], Promise);
         };
         one = 1; // array destructuring: required for babel to crash
-      case 2:
-        return _context2.abrupt(2);
+      case 1:
+        return _context2.a(2);
     }
   }, null, null, null, Promise);
 }

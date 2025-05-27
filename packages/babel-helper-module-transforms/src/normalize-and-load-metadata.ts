@@ -447,7 +447,10 @@ function getLocalExportMetadata(
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
-  programPath.get("body").forEach((child: NodePath) => {
+  const programScope = programPath.scope;
+  const programChildren = programPath.get("body");
+
+  programChildren.forEach((child: NodePath) => {
     let kind: ModuleBindingKind;
     if (child.isImportDeclaration()) {
       kind = "import";
@@ -495,7 +498,12 @@ function getLocalExportMetadata(
     let metadata = localMetadata.get(localName);
 
     if (!metadata) {
-      const kind = bindingKindLookup.get(localName);
+      // If localName is not found in the bindingKindLookup generated
+      // from top level declarations, it could be a reference to a var
+      // declaration defined within block statement or switch case
+      const kind: ModuleBindingKind =
+        bindingKindLookup.get(localName) ??
+        (programScope.getBinding(localName)?.kind as "var" | undefined);
 
       if (kind === undefined) {
         throw idPath.buildCodeFrameError(
@@ -512,7 +520,7 @@ function getLocalExportMetadata(
     return metadata;
   };
 
-  programPath.get("body").forEach(child => {
+  programChildren.forEach(child => {
     if (
       child.isExportNamedDeclaration() &&
       (initializeReexports || !child.node.source)

@@ -167,15 +167,15 @@ function agf() {
 function _agf() {
   _agf = babelHelpers.wrapAsyncGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     return babelHelpers.regenerator().w(function (_context) {
-      while (1) switch (_context.prev = _context.next) {
+      while (1) switch (_context.n) {
         case 0:
-          _context.next = 2;
+          _context.n = 1;
           return babelHelpers.awaitAsyncGenerator(1);
-        case 2:
-          _context.next = 4;
+        case 1:
+          _context.n = 2;
           return 2;
-        case 4:
-          return _context.abrupt(2);
+        case 2:
+          return _context.a(2);
       }
     }, _callee);
   }));

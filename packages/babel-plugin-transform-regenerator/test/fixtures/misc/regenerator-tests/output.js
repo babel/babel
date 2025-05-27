@@ -280,7 +280,7 @@ describe("nested generators in try-catch", function () {
   }
   it("should get a reference to the caught error", function () {
     var genFun2 = gen().next().value;
-    assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(genFun2));
+    assert.ok(regeneratorRuntime.isGeneratorFunction(genFun2));
     var gen2 = genFun2();
     var res = gen2.next();
     assert.ok(res.value instanceof ReferenceError);
@@ -2459,7 +2459,7 @@ describe("delegated yield", function () {
     if (!fullCompatibility) {
       // Node v0.11 doesn't know how to turn arrays into iterators over
       // their elements without a little help.
-      arrayDelegate = babelHelpers.regeneratorRuntime().values(arrayDelegate);
+      arrayDelegate = regeneratorRuntime.values(arrayDelegate);
     }
     check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
 
@@ -2824,7 +2824,7 @@ describe("function declaration hoisting", function () {
             _context75.n = 1;
             return 0;
           case 1:
-            assert.ok(babelHelpers.regeneratorRuntime().isGeneratorFunction(inner));
+            assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
             return _context75.d(inner(n), 2);
           case 2:
             return _context75.a(2, _context75.v);
@@ -3695,8 +3695,8 @@ describe("isGeneratorFunction", function () {
     var _marked95 = /*#__PURE__*/babelHelpers.regenerator().m(genFun);
     // Do the assertions up here to make sure the generator function is
     // marked at the beginning of the block the function is declared in.
-    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(genFun), true);
-    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(normalFun), false);
+    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(genFun), true);
+    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(normalFun), false);
     function normalFun() {
       return 0;
     }
@@ -3713,7 +3713,7 @@ describe("isGeneratorFunction", function () {
     }
   });
   it("should work for function expressions", function () {
-    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(/*#__PURE__*/babelHelpers.regenerator().m(function genFun() {
+    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(/*#__PURE__*/babelHelpers.regenerator().m(function genFun() {
       return babelHelpers.regenerator().w(function (_context108) {
         while (1) switch (_context108.n) {
           case 0:
@@ -3724,7 +3724,7 @@ describe("isGeneratorFunction", function () {
         }
       }, genFun);
     })), true);
-    assert.strictEqual(babelHelpers.regeneratorRuntime().isGeneratorFunction(function normalFun() {
+    assert.strictEqual(regeneratorRuntime.isGeneratorFunction(function normalFun() {
       return 0;
     }), false);
   });

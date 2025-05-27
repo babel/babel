@@ -24,12 +24,9 @@ export default function () {
         const packageFolder = path.join(monorepoRoot, "packages", matches[1]);
         const packageJson = require(path.join(packageFolder, "package.json"));
 
-        if (
-          packageJson["browser"] &&
-          typeof packageJson["browser"] === "object"
-        ) {
-          for (const nodeFile in packageJson["browser"]) {
-            const browserFileAsJs = packageJson["browser"][nodeFile].replace(
+        if (packageJson.browser && typeof packageJson.browser === "object") {
+          for (const nodeFile in packageJson.browser) {
+            const browserFileAsJs = packageJson.browser[nodeFile].replace(
               /^(\.\/)?lib\//,
               "src/"
             );
@@ -95,9 +92,9 @@ export default function () {
 
       const filename = internal
         ? `src/${internal}`
-        : typeof packageJson["browser"] === "string"
-          ? packageJson["browser"]
-          : packageJson["main"];
+        : typeof packageJson.browser === "string"
+          ? packageJson.browser
+          : packageJson.main;
 
       let asJS = path.normalize(
         path.join(

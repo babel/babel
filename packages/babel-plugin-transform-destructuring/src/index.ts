@@ -6,6 +6,7 @@ import {
   convertAssignmentExpression,
   unshiftForXStatementBody,
   type DestructuringTransformerNode,
+  type VariableDeclarationKindAllowsPattern,
 } from "./util.ts";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
 
@@ -113,7 +114,7 @@ export default declare((api, options: Options) => {
         const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
-          kind: left.kind,
+          kind: left.kind as VariableDeclarationKindAllowsPattern,
           scope: scope,
           nodes: nodes,
           arrayLikeIsIterable,

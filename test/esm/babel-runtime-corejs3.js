@@ -1,4 +1,5 @@
-import assert from "assert";
+/* eslint-disable import/extensions */
+import assert from "node:assert";
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
@@ -54,7 +55,7 @@ export default {
           Error
         ),
     ],*/
-    [
+    !bool(process.env.BABEL_8_BREAKING) && [
       "it should not throw on importing regenerator helpers",
       () =>
         assert.doesNotReject(
@@ -62,7 +63,7 @@ export default {
           Error
         ),
     ],
-    [
+    !bool(process.env.BABEL_8_BREAKING) && [
       "it should not throw on importing regenerator helpers with explicit extension",
       () =>
         assert.doesNotReject(

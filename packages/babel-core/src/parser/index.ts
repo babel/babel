@@ -29,7 +29,7 @@ export default function* parser(
     } else if (results.length === 1) {
       // If we want to allow async parsers
       yield* [];
-      if (typeof results[0].then === "function") {
+      if (typeof (results[0] as any).then === "function") {
         throw new Error(
           `You appear to be using an async parser plugin, ` +
             `which your current version of Babel does not support. ` +

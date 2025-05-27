@@ -185,18 +185,6 @@ export class Emitter {
   // Convenience function for generating expressions like context.next,
   // context.sent, and context.rval.
   contextProperty(name: string) {
-    if (
-      process.env.BABEL_8_BREAKING ||
-      util.newHelpersAvailable(this.pluginPass)
-    ) {
-      if (name === "sent") name = "v";
-      if (
-        ["prev", "next", "abrupt", "finish", "delegateYield"].includes(name)
-      ) {
-        name = name.slice(0, 1);
-      }
-    }
-
     const computed = name === "catch";
     return t.memberExpression(
       this.getContextId(),
@@ -223,7 +211,15 @@ export class Emitter {
   // Emits code for an unconditional jump to the given location, even if the
   // exact value of the location is not yet known.
   jump(toLoc: t.Expression) {
-    this.emitAssign(this.contextProperty("next"), toLoc);
+    this.emitAssign(
+      this.contextProperty(
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? "n"
+          : "next",
+      ),
+      toLoc,
+    );
     this.emit(t.breakStatement());
   }
 
@@ -233,7 +229,15 @@ export class Emitter {
       t.ifStatement(
         test,
         t.blockStatement([
-          this.assign(this.contextProperty("next"), toLoc),
+          this.assign(
+            this.contextProperty(
+              process.env.BABEL_8_BREAKING ||
+                util.newHelpersAvailable(this.pluginPass)
+                ? "n"
+                : "next",
+            ),
+            toLoc,
+          ),
           t.breakStatement(),
         ]),
       ),
@@ -254,7 +258,15 @@ export class Emitter {
       t.ifStatement(
         negatedTest,
         t.blockStatement([
-          this.assign(this.contextProperty("next"), toLoc),
+          this.assign(
+            this.contextProperty(
+              process.env.BABEL_8_BREAKING ||
+                util.newHelpersAvailable(this.pluginPass)
+                ? "n"
+                : "next",
+            ),
+            toLoc,
+          ),
           t.breakStatement(),
         ]),
       ),
@@ -335,7 +347,7 @@ export class Emitter {
         cases.push(
           t.switchCase(this.finalLoc, [
             t.returnStatement(
-              t.callExpression(this.contextProperty("abrupt"), [
+              t.callExpression(this.contextProperty("a"), [
                 t.numericLiteral(OperatorType.Return),
               ]),
             ),
@@ -362,7 +374,7 @@ export class Emitter {
       t.switchStatement(
         process.env.BABEL_8_BREAKING ||
           util.newHelpersAvailable(this.pluginPass)
-          ? this.contextProperty("next")
+          ? this.contextProperty("n")
           : t.assignmentExpression(
               "=",
               this.contextProperty("prev"),
@@ -795,7 +807,7 @@ export class Emitter {
               process.env.BABEL_8_BREAKING ||
               util.newHelpersAvailable(this.pluginPass)
             ) {
-              this.emitAssign(safeParam, self.contextProperty("sent"));
+              this.emitAssign(safeParam, self.contextProperty("v"));
             } else {
               self.clearPendingException(tryEntry.firstLoc, safeParam);
             }
@@ -821,9 +833,15 @@ export class Emitter {
 
             self.emit(
               t.returnStatement(
-                t.callExpression(self.contextProperty("finish"), [
-                  finallyEntry.firstLoc,
-                ]),
+                t.callExpression(
+                  self.contextProperty(
+                    process.env.BABEL_8_BREAKING ||
+                      util.newHelpersAvailable(this.pluginPass)
+                      ? "f"
+                      : "finish",
+                  ),
+                  [finallyEntry.firstLoc],
+                ),
               ),
             );
           }
@@ -872,7 +890,15 @@ export class Emitter {
 
     this.emit(
       t.returnStatement(
-        t.callExpression(this.contextProperty("abrupt"), abruptArgs),
+        t.callExpression(
+          this.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "a"
+              : "abrupt",
+          ),
+          abruptArgs,
+        ),
       ),
     );
 
@@ -921,7 +947,15 @@ export class Emitter {
     // Make sure context.prev is up to date in case we fell into this try
     // statement without jumping to it. TODO Consider avoiding this
     // assignment when we know control must have jumped here.
-    this.emitAssign(this.contextProperty("prev"), loc);
+    this.emitAssign(
+      this.contextProperty(
+        process.env.BABEL_8_BREAKING ||
+          util.newHelpersAvailable(this.pluginPass)
+          ? "p"
+          : "prev",
+      ),
+      loc,
+    );
   }
 
   // In order to save the rest of explodeExpression from a combinatorial
@@ -1340,17 +1374,14 @@ export class Emitter {
             util.newHelpersAvailable(this.pluginPass)
           ) {
             const ret = t.returnStatement(
-              t.callExpression(self.contextProperty("delegateYield"), [
-                arg,
-                after,
-              ]),
+              t.callExpression(self.contextProperty("d"), [arg, after]),
             );
             ret.loc = expr.loc;
 
             self.emit(ret);
             self.mark(after);
 
-            return self.contextProperty("sent");
+            return self.contextProperty("v");
           } else {
             const result = self.makeContextTempVar();
 
@@ -1370,7 +1401,15 @@ export class Emitter {
           }
         }
 
-        self.emitAssign(self.contextProperty("next"), after);
+        self.emitAssign(
+          self.contextProperty(
+            process.env.BABEL_8_BREAKING ||
+              util.newHelpersAvailable(this.pluginPass)
+              ? "n"
+              : "next",
+          ),
+          after,
+        );
 
         const ret = t.returnStatement(t.cloneNode(arg) || null);
         // Preserve the `yield` location so that source mappings for the statements
@@ -1379,7 +1418,12 @@ export class Emitter {
         self.emit(ret);
         self.mark(after);
 
-        return self.contextProperty("sent");
+        return self.contextProperty(
+          process.env.BABEL_8_BREAKING ||
+            util.newHelpersAvailable(self.pluginPass)
+            ? "v"
+            : "sent",
+        );
 
       case "ClassExpression":
         return finish(self.explodeClass(path));
