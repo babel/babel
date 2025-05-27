@@ -1925,7 +1925,7 @@ describe("delegated yield", function () {
             _context45.n = 2;
             return 1;
           case 2:
-            return _context45.d(gen(false), 3);
+            return _context45.d(babelHelpers.regeneratorValues(gen(false)), 3);
           case 3:
             _context45.n = 4;
             return 2;
@@ -1953,7 +1953,7 @@ describe("delegated yield", function () {
             _context46.n = 1;
             return 0;
           case 1:
-            return _context46.d(gen(false), 2);
+            return _context46.d(babelHelpers.regeneratorValues(gen(false)), 2);
           case 2:
             _context46.n = 3;
             return 1;
@@ -1976,7 +1976,7 @@ describe("delegated yield", function () {
             _context47.n = 1;
             return n;
           case 1:
-            return _context47.d(middle(n - 1, inner(n + 10)), 2);
+            return _context47.d(babelHelpers.regeneratorValues(middle(n - 1, inner(n + 10))), 2);
           case 2:
             _context47.n = 3;
             return n + 1;
@@ -1992,12 +1992,12 @@ describe("delegated yield", function () {
             _context48.n = 1;
             return n;
           case 1:
-            return _context48.d(inner(n - 1), 2);
+            return _context48.d(babelHelpers.regeneratorValues(inner(n - 1)), 2);
           case 2:
             _context48.n = 3;
             return n + 1;
           case 3:
-            return _context48.d(plusTen, 4);
+            return _context48.d(babelHelpers.regeneratorValues(plusTen), 4);
           case 4:
             return _context48.a(2);
         }
@@ -2023,7 +2023,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context50) {
         while (1) switch (_context50.n) {
           case 0:
-            return _context50.d(inner(n << 1), 1);
+            return _context50.d(babelHelpers.regeneratorValues(inner(n << 1)), 1);
           case 1:
             _context50.n = 2;
             return "zxcv";
@@ -2084,7 +2084,7 @@ describe("delegated yield", function () {
             _context52.n = 1;
             return 0;
           case 1:
-            return _context52.d(inner(n), 2);
+            return _context52.d(babelHelpers.regeneratorValues(inner(n)), 2);
           case 2:
             _context52.n = 3;
             return 1;
@@ -2142,10 +2142,10 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context54) {
         while (1) switch (_context54.n) {
           case 0:
-            return _context54.d(inner(), 1);
+            return _context54.d(babelHelpers.regeneratorValues(inner()), 1);
           case 1:
             _context54.p = 1;
-            return _context54.d(inner(), 2);
+            return _context54.d(babelHelpers.regeneratorValues(inner()), 2);
           case 2:
             _context54.n = 4;
             break;
@@ -2153,7 +2153,7 @@ describe("delegated yield", function () {
             _context54.p = 3;
             _t66 = _context54.v;
           case 4:
-            return _context54.d(inner(), 5);
+            return _context54.d(babelHelpers.regeneratorValues(inner()), 5);
           case 5:
             return _context54.a(2, _context54.v);
         }
@@ -2199,7 +2199,7 @@ describe("delegated yield", function () {
         while (1) switch (_context56.n) {
           case 0:
             _context56.p = 0;
-            return _context56.d(delegate, 1);
+            return _context56.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
             return _context56.a(2, _context56.v);
           case 2:
@@ -2329,7 +2329,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context57) {
         while (1) switch (_context57.n) {
           case 0:
-            return _context57.d(delegate, 1);
+            return _context57.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
             return _context57.a(2, _context57.v);
         }
@@ -2378,7 +2378,7 @@ describe("delegated yield", function () {
         while (1) switch (_context58.n) {
           case 0:
             _context58.p = 0;
-            return _context58.d(child(), 1);
+            return _context58.d(babelHelpers.regeneratorValues(child()), 1);
           case 1:
             return _context58.a(2, _context58.v);
           case 2:
@@ -2448,7 +2448,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context61) {
         while (1) switch (_context61.n) {
           case 0:
-            return _context61.d(delegate, 1);
+            return _context61.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
             return _context61.a(2, _context61.v);
         }
@@ -2495,7 +2495,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context63) {
         while (1) switch (_context63.n) {
           case 0:
-            return _context63.d(delegate, 1);
+            return _context63.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
             _t68 = _context63.v;
             return _context63.a(2, 1 + _t68);
@@ -2526,7 +2526,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context64) {
         while (1) switch (_context64.n) {
           case 0:
-            return _context64.d("", 1);
+            return _context64.d(babelHelpers.regeneratorValues(""), 1);
           case 1:
             return _context64.a(2);
         }
@@ -2543,7 +2543,7 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context65) {
         while (1) switch (_context65.n) {
           case 0:
-            return _context65.d(x, 1);
+            return _context65.d(babelHelpers.regeneratorValues(x), 1);
           case 1:
             return _context65.a(2);
         }
@@ -2562,9 +2562,9 @@ describe("delegated yield", function () {
       return babelHelpers.regenerator().w(function (_context66) {
         while (1) switch (_context66.n) {
           case 0:
-            return _context66.d({
+            return _context66.d(babelHelpers.regeneratorValues({
               [Symbol.iterator]: x => []
-            }, 1);
+            }), 1);
           case 1:
             return _context66.a(2);
         }
@@ -2592,7 +2592,7 @@ describe("delegated yield", function () {
         return babelHelpers.regenerator().w(function (_context68) {
           while (1) switch (_context68.n) {
             case 0:
-              return _context68.d(false, 1);
+              return _context68.d(babelHelpers.regeneratorValues(false), 1);
             case 1:
               return _context68.a(2);
           }
@@ -2704,7 +2704,7 @@ describe("delegated yield", function () {
             _context72.n = 1;
             return 0;
           case 1:
-            return _context72.d(callee(errorToThrow), 2);
+            return _context72.d(babelHelpers.regeneratorValues(callee(errorToThrow)), 2);
           case 2:
             _context72.n = 3;
             return 3;
@@ -2825,7 +2825,7 @@ describe("function declaration hoisting", function () {
             return 0;
           case 1:
             assert.ok(regeneratorRuntime.isGeneratorFunction(inner));
-            return _context75.d(inner(n), 2);
+            return _context75.d(babelHelpers.regeneratorValues(inner(n)), 2);
           case 2:
             return _context75.a(2, _context75.v);
         }
@@ -3067,7 +3067,7 @@ describe("the arguments object", function () {
             _context84.n = 4;
             return 3;
           case 4:
-            return _context84.d(_args84.callee(true), 5);
+            return _context84.d(babelHelpers.regeneratorValues(_args84.callee(true)), 5);
           case 5:
             _context84.n = 6;
             return 4;
@@ -3501,7 +3501,7 @@ describe("generator .throw method", function () {
         while (1) switch (_context98.n) {
           case 0:
             _context98.p = 0;
-            return _context98.d(inner(), 1);
+            return _context98.d(babelHelpers.regeneratorValues(inner()), 1);
           case 1:
             _context98.n = 3;
             break;
@@ -3545,7 +3545,7 @@ describe("generator .throw method", function () {
         while (1) switch (_context100.n) {
           case 0:
             _context100.p = 0;
-            return _context100.d(inner(), 1);
+            return _context100.d(babelHelpers.regeneratorValues(inner()), 1);
           case 1:
             _context100.n = 3;
             break;
@@ -3622,7 +3622,7 @@ describe("yield* expression results", function () {
             _context103.n = 1;
             return 0;
           case 1:
-            return _context103.d(bar(), 2);
+            return _context103.d(babelHelpers.regeneratorValues(bar()), 2);
           case 2:
             return _context103.a(2, _context103.v);
         }
@@ -3659,10 +3659,10 @@ describe("yield* expression results", function () {
       return babelHelpers.regenerator().w(function (_context105) {
         while (1) switch (_context105.n) {
           case 0:
-            return _context105.d(bar(), 1);
+            return _context105.d(babelHelpers.regeneratorValues(bar()), 1);
           case 1:
             _t89 = _context105.v;
-            return _context105.d(bar(), 2);
+            return _context105.d(babelHelpers.regeneratorValues(bar()), 2);
           case 2:
             _t90 = _context105.v;
             return _context105.a(2, _t89 + _t90);
@@ -3895,7 +3895,7 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context113) {
         while (1) switch (_context113.n) {
           case 0:
-            return _context113.d(delegate, 1);
+            return _context113.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
             return _context113.a(2, _context113.v);
         }
@@ -4030,9 +4030,9 @@ describe("newborn generators", function () {
       return babelHelpers.regenerator().w(function (_context117) {
         while (1) switch (_context117.n) {
           case 0:
-            return _context117.d(a, 1);
+            return _context117.d(babelHelpers.regeneratorValues(a), 1);
           case 1:
-            return _context117.d(b, 2);
+            return _context117.d(babelHelpers.regeneratorValues(b), 2);
           case 2:
             return _context117.a(2);
         }

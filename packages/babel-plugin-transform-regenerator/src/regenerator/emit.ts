@@ -1374,7 +1374,13 @@ export class Emitter {
             util.newHelpersAvailable(this.pluginPass)
           ) {
             const ret = t.returnStatement(
-              t.callExpression(self.contextProperty("d"), [arg, after]),
+              t.callExpression(self.contextProperty("d"), [
+                t.callExpression(
+                  this.pluginPass.addHelper("regeneratorValues"),
+                  [arg],
+                ),
+                after,
+              ]),
             );
             ret.loc = expr.loc;
 

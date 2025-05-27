@@ -1075,10 +1075,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 2322, gzip size: 1097
+  // size: 2314, gzip size: 1093
   regenerator: helper(
     "7.27.0",
-    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar e,t,r="function"==typeof Symbol?Symbol:{},n=r.iterator||"@@iterator",o=r.toStringTag||"@@toStringTag";function i(r,n,o,i){var u=n&&n.prototype instanceof Generator?n:Generator,c=Object.create(u.prototype);return define(c,"_invoke",function(r,n,o){var i,u,c,f=0,p=o||[],y=!1,l={p:0,n:0,v:e,a:G,f:G.bind(e,4),d:function(t,r){return i=values(t),u=0,c=e,l.n=r,a}};function G(r,n){for(u=r,c=n,t=0;!y&&f&&!o&&t<p.length;t++){var o,i=p[t],G=l.p,d=i[2];r>3?(o=d===n)&&(u=i[4]||3,c=i[5]===e?i[3]:i[5],i[4]=3,i[5]=e):i[0]<=G&&((o=r<2&&G<i[1])?(u=0,l.v=n,l.n=i[1]):G<d&&(o=r<3||i[0]>n||n>d)&&(i[4]=r,i[5]=n,l.n=d,u=0))}if(o||r>1)return a;throw y=!0,n}return function(o,p,d){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&G(p,d),u=p,c=d;(t=u<2?e:c)||!y;){i||(u?u<3?(u>1&&(l.n=-1),G(u,c)):l.n=c:l.v=c);try{if(f=2,i){if(u||(o="next"),t=i[o]){if(!(t=t.call(i,c)))throw TypeError("iterator result is not an object");if(!t.done)return t;c=t.value,u<2&&(u=0)}else 1===u&&(t=i.return)&&t.call(i),u<2&&(c=TypeError("The iterator does not provide a \'"+o+"\' method"),u=1);i=e}else if((t=(y=l.n<0)?c:r.call(n,l))!==a)break}catch(t){i=e,u=1,c=t}finally{f=1}}return{value:t,done:y}}}(r,o,i),!0),c}var a={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}t=Object.getPrototypeOf;var u=[][n]?t(t([][n]())):(define(t={},n,(function(){return this})),t),c=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(u);function f(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,GeneratorFunctionPrototype):(e.__proto__=GeneratorFunctionPrototype,define(e,o,"GeneratorFunction")),e.prototype=Object.create(c),e}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(c,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",define(GeneratorFunctionPrototype,o,"GeneratorFunction"),define(c),define(c,o,"Generator"),define(c,n,(function(){return this})),define(c,"toString",(function(){return"[object Generator]"})),(_regenerator=function(){return{w:i,m:f}})()}',
+    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar e,t,r="function"==typeof Symbol?Symbol:{},n=r.iterator||"@@iterator",o=r.toStringTag||"@@toStringTag";function i(r,n,o,i){var c=n&&n.prototype instanceof Generator?n:Generator,u=Object.create(c.prototype);return define(u,"_invoke",function(r,n,o){var i,c,u,f=0,p=o||[],y=!1,G={p:0,n:0,v:e,a:d,f:d.bind(e,4),d:function(t,r){return i=t,c=0,u=e,G.n=r,a}};function d(r,n){for(c=r,u=n,t=0;!y&&f&&!o&&t<p.length;t++){var o,i=p[t],d=G.p,l=i[2];r>3?(o=l===n)&&(c=i[4]||3,u=i[5]===e?i[3]:i[5],i[4]=3,i[5]=e):i[0]<=d&&((o=r<2&&d<i[1])?(c=0,G.v=n,G.n=i[1]):d<l&&(o=r<3||i[0]>n||n>l)&&(i[4]=r,i[5]=n,G.n=l,c=0))}if(o||r>1)return a;throw y=!0,n}return function(o,p,l){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&d(p,l),c=p,u=l;(t=c<2?e:u)||!y;){i||(c?c<3?(c>1&&(G.n=-1),d(c,u)):G.n=u:G.v=u);try{if(f=2,i){if(c||(o="next"),t=i[o]){if(!(t=t.call(i,u)))throw TypeError("iterator result is not an object");if(!t.done)return t;u=t.value,c<2&&(c=0)}else 1===c&&(t=i.return)&&t.call(i),c<2&&(u=TypeError("The iterator does not provide a \'"+o+"\' method"),c=1);i=e}else if((t=(y=G.n<0)?u:r.call(n,G))!==a)break}catch(t){i=e,c=1,u=t}finally{f=1}}return{value:t,done:y}}}(r,o,i),!0),u}var a={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}t=Object.getPrototypeOf;var c=[][n]?t(t([][n]())):(define(t={},n,(function(){return this})),t),u=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(c);function f(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,GeneratorFunctionPrototype):(e.__proto__=GeneratorFunctionPrototype,define(e,o,"GeneratorFunction")),e.prototype=Object.create(u),e}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(u,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",define(GeneratorFunctionPrototype,o,"GeneratorFunction"),define(u),define(u,o,"Generator"),define(u,n,(function(){return this})),define(u,"toString",(function(){return"[object Generator]"})),(_regenerator=function(){return{w:i,m:f}})()}',
     {
       globals: ["Symbol", "Object", "TypeError"],
       locals: {
@@ -1103,9 +1103,6 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.9.argument.expressions.6.callee",
           "body.0.body.body.9.argument.expressions.7.callee",
           "body.0.body.body.9.argument.expressions.8.callee",
-        ],
-        regeneratorValues: [
-          "body.0.body.body.1.body.body.1.argument.expressions.0.arguments.2.callee.body.body.0.declarations.6.init.properties.5.value.body.body.0.argument.expressions.0.right.callee",
         ],
       },
       internal: false,
@@ -1215,7 +1212,7 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: [],
       exportName: "_regeneratorValues",
       dependencies: {},
-      internal: true,
+      internal: false,
     },
   ),
   // size: 494, gzip size: 274
@@ -2207,10 +2204,10 @@ if (!process.env.BABEL_8_BREAKING) {
         internal: false,
       },
     ),
-    // size: 1115, gzip size: 534
+    // size: 1123, gzip size: 536
     regeneratorRuntime: helper(
       "7.18.0",
-      'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function n(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r){var e,t;return function(n){e||(e={stop:function(){return t(n.a,2)},catch:function(){return n.v},abrupt:function(r,e){return t(n.a,o[r],e)},delegateYield:function(r,o,a){return e.resultName=o,t(n.d,r,a)},finish:function(r){return t(n.f,r)}},t=function(r,t,o){n.p=e.prev,n.n=e.next;try{return r(t,o)}finally{e.next=n.n}}),e.resultName&&(e[e.resultName]=n.v,e.resultName=void 0),e.sent=n.v,e.next=n.n;try{return r.call(this,e)}finally{n.p=e.prev,n.n=e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,t,n,o){return r.w(a(e),t,n,o&&o.reverse())},isGeneratorFunction:n,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,t,o,u){return(n(e)?asyncGen:async)(a(r),e,t,o,u)},keys:keys,values:values}})()}',
+      'function _regeneratorRuntime(){"use strict";var r=regenerator(),e=r.m(_regeneratorRuntime),t=(Object.getPrototypeOf?Object.getPrototypeOf(e):e.__proto__).constructor;function n(r){var e="function"==typeof r&&r.constructor;return!!e&&(e===t||"GeneratorFunction"===(e.displayName||e.name))}var o={throw:1,return:2,break:3,continue:3};function a(r){var e,t;return function(n){e||(e={stop:function(){return t(n.a,2)},catch:function(){return n.v},abrupt:function(r,e){return t(n.a,o[r],e)},delegateYield:function(r,o,a){return e.resultName=o,t(n.d,values(r),a)},finish:function(r){return t(n.f,r)}},t=function(r,t,o){n.p=e.prev,n.n=e.next;try{return r(t,o)}finally{e.next=n.n}}),e.resultName&&(e[e.resultName]=n.v,e.resultName=void 0),e.sent=n.v,e.next=n.n;try{return r.call(this,e)}finally{n.p=e.prev,n.n=e.next}}}return(_regeneratorRuntime=function(){return{wrap:function(e,t,n,o){return r.w(a(e),t,n,o&&o.reverse())},isGeneratorFunction:n,mark:r.m,awrap:function(r,e){return new OverloadYield(r,e)},AsyncIterator:AsyncIterator,async:function(r,e,t,o,u){return(n(e)?asyncGen:async)(a(r),e,t,o,u)},keys:keys,values:values}})()}',
       {
         globals: ["Object"],
         locals: {
@@ -2240,6 +2237,7 @@ if (!process.env.BABEL_8_BREAKING) {
             "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.6.value",
           ],
           regeneratorValues: [
+            "body.0.body.body.3.body.body.1.argument.body.body.0.expression.expressions.0.right.expressions.0.right.properties.3.value.body.body.0.argument.expressions.1.arguments.1.callee",
             "body.0.body.body.4.argument.callee.right.body.body.0.argument.properties.7.value",
           ],
         },

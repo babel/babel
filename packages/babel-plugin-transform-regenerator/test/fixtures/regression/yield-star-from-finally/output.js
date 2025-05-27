@@ -42,7 +42,7 @@ var controlIterator = /*#__PURE__*/babelHelpers.regenerator().m(function _callee
       case 4:
         _context2.p = 4;
         i++;
-        return _context2.d(values(), 5);
+        return _context2.d(babelHelpers.regeneratorValues(values()), 5);
       case 5:
         j++;
         return _context2.f(4);

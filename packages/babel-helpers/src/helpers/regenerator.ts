@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
 import define from "./regeneratorDefine.ts";
-import values from "./regeneratorValues.ts";
 
 const enum GenState {
   SuspendedStart,
@@ -296,7 +295,7 @@ export default function /* @no-mangle */ _regenerator() {
       ),
       // delegateYield
       d: function (iterable: any, nextLoc: number) {
-        delegateIterator = values(iterable);
+        delegateIterator = iterable;
 
         // Deliberately forget the last sent value so that we don't
         // accidentally pass it on to the delegate.

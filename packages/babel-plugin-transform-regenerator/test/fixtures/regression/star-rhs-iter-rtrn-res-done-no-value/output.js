@@ -71,7 +71,7 @@ function g() {
     while (1) switch (_context.n) {
       case 0:
         _context.p = 0;
-        return _context.d(badIter, 1);
+        return _context.d(babelHelpers.regeneratorValues(badIter), 1);
       case 1:
         normalCompletion = true;
         _context.n = 3;

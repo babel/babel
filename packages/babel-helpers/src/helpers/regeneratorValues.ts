@@ -1,6 +1,5 @@
 /* @minVersion 7.18.0 */
 /* @mangleFns */
-/* @internal */
 
 export default function _regeneratorValues(iterable: any) {
   if (iterable != null) {

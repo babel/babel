@@ -26,7 +26,7 @@ function _test() {
             _context2.n = 3;
             break;
           }
-          return _context2.d(_loop(), 2);
+          return _context2.d(babelHelpers.regeneratorValues(_loop()), 2);
         case 2:
           _i++;
           _context2.n = 1;

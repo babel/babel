@@ -83,7 +83,7 @@ function foo3() {
           _context4.n = 4;
           break;
         }
-        return _context4.d(_loop(), 2);
+        return _context4.d(babelHelpers.regeneratorValues(_loop()), 2);
       case 2:
         _ret = _context4.v;
         if (!(_ret === 0)) {

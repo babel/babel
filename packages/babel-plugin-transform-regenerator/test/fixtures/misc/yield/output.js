@@ -5,10 +5,10 @@ function foo() {
   return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.n) {
       case 0:
-        return _context.d(bar(), 1);
+        return _context.d(babelHelpers.regeneratorValues(bar()), 1);
       case 1:
         _t = _context.v;
-        return _context.d(bar(), 2);
+        return _context.d(babelHelpers.regeneratorValues(bar()), 2);
       case 2:
         _t2 = _context.v;
         return _context.a(2, _t + _t2);
