@@ -161,20 +161,18 @@ export function removeTrailingVoidPatternsFromParams(
 export function isAnonymousFunctionDefinition(
   node: t.Node,
 ): node is t.ClassExpression {
-  return t.isClassExpression(node) && !node.id && !node.extra?.parenthesized;
+  return t.isClassExpression(node) && !node.id;
 }
 
 /**
  * Handle using named evaluation, e.g. `using void = class { ... }`.
- * Here we parenthesize the rhs to disable the named evaluation,
+ * Here we prefix the rhs with `0,` to disable the named evaluation,
  * such that the `name` of the class in rhs is always an empty string
  * @param path The init of the variable declarator
  * @param state The plugin pass object
  */
 export function handleUsingNamedEvaluation(path: NodePath<t.Expression>) {
   if (isAnonymousFunctionDefinition(path.node)) {
-    const { extra = {} } = path.node;
-    extra.parenthesized = true;
-    path.node.extra = extra;
+    path.replaceWith(t.sequenceExpression([t.numericLiteral(0), path.node]));
   }
 }

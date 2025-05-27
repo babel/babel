@@ -1,0 +1,4 @@
+{
+  "minNodeVersion": "24.0.0",
+  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "syntax-explicit-resource-management"]
+}
