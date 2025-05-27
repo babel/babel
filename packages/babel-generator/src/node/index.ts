@@ -15,13 +15,18 @@ import type * as t from "@babel/types";
 import type { WhitespaceFlag } from "./whitespace.ts";
 
 export const enum TokenContext {
+  normal = 0,
   expressionStatement = 1 << 0,
   arrowBody = 1 << 1,
   exportDefault = 1 << 2,
-  forHead = 1 << 3,
-  forInHead = 1 << 4,
-  forOfHead = 1 << 5,
-  arrowFlowReturnType = 1 << 6,
+  arrowFlowReturnType = 1 << 3,
+  forInitHead = 1 << 4,
+  forInHead = 1 << 5,
+  forOfHead = 1 << 6,
+  // This flag lives across the token boundary, and will
+  // be reset after forIn or forInit head is printed
+  forInOrInitHeadAccumulate = 1 << 7,
+  forInOrInitHeadAccumulatePassThroughMask = 0x80,
 }
 
 type NodeHandler<R> = (
@@ -32,7 +37,6 @@ type NodeHandler<R> = (
   //   : t.Node,
   parent: t.Node,
   tokenContext?: number,
-  inForStatementInit?: boolean,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R;
 
@@ -48,10 +52,10 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     map.set(
       type,
       fn
-        ? function (node, parent, stack, inForInit, getRawIdentifier) {
+        ? function (node, parent, stack, getRawIdentifier) {
             return (
-              fn(node, parent, stack, inForInit, getRawIdentifier) ??
-              func(node, parent, stack, inForInit, getRawIdentifier)
+              fn(node, parent, stack, getRawIdentifier) ??
+              func(node, parent, stack, getRawIdentifier)
             );
           }
         : func,
@@ -117,7 +121,6 @@ export function needsParens(
   node: t.Node,
   parent: t.Node,
   tokenContext?: number,
-  inForInit?: boolean,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) {
   if (!parent) return false;
@@ -138,7 +141,6 @@ export function needsParens(
     node,
     parent,
     tokenContext,
-    inForInit,
     getRawIdentifier,
   );
 }

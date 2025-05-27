@@ -367,12 +367,14 @@ export { TSFunctionType as TSConstructorType };
 export function BinaryExpression(
   node: t.BinaryExpression,
   parent: t.Node,
-  tokenContext: unknown,
-  inForStatementInit: boolean,
+  tokenContext: number,
 ): boolean {
   // for ((1 in []);;);
   // for (var x = (1 in []) in 2);
-  return node.operator === "in" && inForStatementInit;
+  return (
+    node.operator === "in" &&
+    Boolean(tokenContext & TokenContext.forInOrInitHeadAccumulate)
+  );
 }
 
 export function SequenceExpression(
@@ -535,7 +537,6 @@ export function Identifier(
   node: t.Identifier,
   parent: t.Node,
   tokenContext: number,
-  _inForInit: boolean,
   getRawIdentifier: (node: t.Identifier) => string,
 ): boolean {
   const parentType = parent.type;
@@ -578,7 +579,7 @@ export function Identifier(
       isFollowedByBracket &&
       tokenContext &
         (TokenContext.expressionStatement |
-          TokenContext.forHead |
+          TokenContext.forInitHead |
           TokenContext.forInHead)
     ) {
       return true;

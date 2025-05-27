@@ -10,7 +10,6 @@ import type * as t from "@babel/types";
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
-import { TokenContext } from "../node/index.ts";
 
 export function WithStatement(this: Printer, node: t.WithStatement) {
   this.word("with");
@@ -71,7 +70,6 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
 
   {
     const exit = this.enterForStatementInit();
-    this.tokenContext |= TokenContext.forHead;
     this.print(node.init);
     exit();
   }
@@ -113,10 +111,7 @@ function ForXStatement(this: Printer, node: t.ForXStatement) {
   this.noIndentInnerCommentsHere();
   this.token("(");
   {
-    const exit = isForOf ? null : this.enterForStatementInit();
-    this.tokenContext |= isForOf
-      ? TokenContext.forOfHead
-      : TokenContext.forInHead;
+    const exit = this.enterForXStatementInit(isForOf);
     this.print(node.left);
     exit?.();
   }
