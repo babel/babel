@@ -875,7 +875,10 @@ export class Emitter {
         t.callExpression(this.contextProperty("abrupt"), abruptArgs),
       ),
     );
-    this.returns.add(this.listing.length);
+
+    if (record.type === OperatorType.Return) {
+      this.returns.add(this.listing.length);
+    }
   }
 
   // Not all offsets into emitter.listing are potential jump targets. For
