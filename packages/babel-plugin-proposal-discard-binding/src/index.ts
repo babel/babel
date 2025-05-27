@@ -2,6 +2,7 @@ import { OptionValidator } from "@babel/helper-validator-option";
 import { declare } from "@babel/helper-plugin-utils";
 import {
   hasVoidPatternInVariableDeclaration,
+  handleUsingNamedEvaluation,
   splitNamedDeclarationAsVarAndExport,
   removeTrailingVoidPatternsFromParams,
   transformVoidPattern,
@@ -89,7 +90,11 @@ export default declare(function (
             const kind = statementPath.node.kind;
             if (kind === "using" || kind === "await using") {
               for (const declarationPath of statementPath.get("declarations")) {
-                transformVoidPatternInLVal(declarationPath.get("id"));
+                const idPath = declarationPath.get("id");
+                if (idPath.isVoidPattern()) {
+                  transformVoidPattern(idPath);
+                  handleUsingNamedEvaluation(declarationPath.get("init"));
+                }
               }
             }
           }

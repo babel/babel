@@ -155,3 +155,26 @@ export function removeTrailingVoidPatternsFromParams(
     }
   }
 }
+
+// https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+// We don't test anonymous function / arrow function because they must not be disposable
+export function isAnonymousFunctionDefinition(
+  node: t.Node,
+): node is t.ClassExpression {
+  return t.isClassExpression(node) && !node.id && !node.extra?.parenthesized;
+}
+
+/**
+ * Handle using named evaluation, e.g. `using void = class { ... }`.
+ * Here we parenthesize the rhs to disable the named evaluation,
+ * such that the `name` of the class in rhs is always an empty string
+ * @param path The init of the variable declarator
+ * @param state The plugin pass object
+ */
+export function handleUsingNamedEvaluation(path: NodePath<t.Expression>) {
+  if (isAnonymousFunctionDefinition(path.node)) {
+    const { extra = {} } = path.node;
+    extra.parenthesized = true;
+    path.node.extra = extra;
+  }
+}
