@@ -2295,8 +2295,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           case tt._using:
             if (
               this.hasPlugin("explicitResourceManagement") &&
-              !this.state.containsEsc &&
-              this.startsUsing()
+              this.isUsing()
             ) {
               this.raise(
                 TSErrors.InvalidModifierOnUsingDeclaration,
@@ -2310,8 +2309,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           case tt._await:
             if (
               this.hasPlugin("explicitResourceManagement") &&
-              !this.state.containsEsc &&
-              this.startsAwaitUsing()
+              this.isAwaitUsing()
             ) {
               this.raise(
                 TSErrors.InvalidModifierOnAwaitUsingDeclaration,

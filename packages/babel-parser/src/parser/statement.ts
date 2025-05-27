@@ -294,6 +294,31 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.hasFollowingBindingAtom();
   }
 
+  isUsing(): boolean {
+    if (!this.isContextual(tt._using)) {
+      return false;
+    }
+    const next = this.nextTokenInLineStart();
+    const nextCh = this.codePointAtPos(next);
+    return this.chStartsBindingIdentifier(nextCh, next);
+  }
+
+  isAwaitUsing(): boolean {
+    if (!this.isContextual(tt._await)) {
+      return false;
+    }
+    let next = this.nextTokenInLineStart();
+    if (this.isUnparsedContextual(next, "using")) {
+      next = this.nextTokenInLineStartSince(next + 5);
+      const nextCh = this.codePointAtPos(next);
+      if (this.chStartsBindingIdentifier(nextCh, next)) {
+        this.expectPlugin("explicitResourceManagement");
+        return true;
+      }
+    }
+    return false;
+  }
+
   chStartsBindingIdentifier(ch: number, pos: number) {
     if (isIdentifierStart(ch)) {
       keywordRelationalOperator.lastIndex = pos;
@@ -530,7 +555,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       case tt._await:
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
-        if (!this.state.containsEsc && this.startsAwaitUsing()) {
+        if (this.isAwaitUsing()) {
           if (!this.allowsUsing()) {
             this.raise(Errors.UnexpectedUsingDeclaration, node);
           } else if (!allowDeclaration) {
@@ -964,8 +989,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     const startsWithLet = this.isContextual(tt._let);
     {
-      const startsWithAwaitUsing =
-        this.isContextual(tt._await) && this.startsAwaitUsing();
+      const startsWithAwaitUsing = this.isAwaitUsing();
       const starsWithUsingDeclaration =
         startsWithAwaitUsing ||
         (this.isContextual(tt._using) && this.allowsForUsing());
@@ -2590,8 +2614,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.match(tt._var) ||
       this.isLet() ||
       (this.hasPlugin("explicitResourceManagement") &&
-        ((this.isContextual(tt._using) && this.startsUsing()) ||
-          (this.isContextual(tt._await) && this.startsAwaitUsing())))
+        (this.isUsing() || this.isAwaitUsing()))
     ) {
       throw this.raise(Errors.UnsupportedDefaultExport, this.state.startLoc);
     }
@@ -2699,12 +2722,12 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (this.hasPlugin("explicitResourceManagement")) {
-      if (this.isContextual(tt._using) && this.startsUsing()) {
+      if (this.isUsing()) {
         this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
         return true;
       }
 
-      if (this.isContextual(tt._await) && this.startsAwaitUsing()) {
+      if (this.isAwaitUsing()) {
         this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
         return true;
       }
