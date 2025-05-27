@@ -37,7 +37,7 @@ function _regeneratorRuntime() {
           return t(n.a, o[r], e);
         },
         delegateYield: function delegateYield(r, o, a) {
-          return e.resultName = o, t(n.d, r, a);
+          return e.resultName = o, t(n.d, regeneratorValues(r), a);
         },
         finish: function finish(r) {
           return t(n.f, r);
