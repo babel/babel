@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.27.1",
+  "version": "7.27.3",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
