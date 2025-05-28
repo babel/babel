@@ -22,14 +22,18 @@ function transformVoidPatternIntoUidIdentifier(path: NodePath<t.VoidPattern>) {
 function takeVoidPatternComments(node: t.VoidPattern, parent: t.ArrayPattern) {
   const { leadingComments, trailingComments } = node;
   if (leadingComments != null || trailingComments != null) {
-    const { innerComments = [] } = parent;
-    const parentHasInnerComments = innerComments.length > 0;
-    innerComments.push(...(leadingComments ?? []), ...(trailingComments ?? []));
-    if (parentHasInnerComments) {
-      innerComments.sort((a, b) => a.end - b.end);
-    } else {
-      parent.innerComments = innerComments;
-    }
+    parent.innerComments ??= [];
+    const { innerComments } = parent;
+    const nodeStart = node.start ?? 0;
+    const insertedIndex = innerComments.findIndex(
+      comment => comment.end != null && comment.end > nodeStart,
+    );
+    innerComments.splice(
+      insertedIndex === -1 ? innerComments.length : insertedIndex - 1,
+      0,
+      ...(leadingComments ?? []),
+      ...(trailingComments ?? []),
+    );
   }
 }
 
