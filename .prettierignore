@@ -8,6 +8,7 @@ packages/babel-standalone/examples/**
 packages/babel-parser/test/expressions/**
 scripts/integration-tests/fixtures/**
 packages/babel-parser/test/schema.json
+packages/babel-plugin-proposal-discard-binding/test/scripts/check-transform-scope-integrity.cjs
 packages/babel-plugin-transform-regenerator/test/regenerator-fixtures/**
 
 CHANGELOG.md
