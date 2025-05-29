@@ -55,26 +55,26 @@ badIter[Symbol.iterator] = function () {
 function g() {
   var _t;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.n) {
+    while (1) switch (_context.n) {
       case 0:
         _context.p = 0;
-        return _context.d(badIter, 2);
-      case 2:
+        return _context.d(babelHelpers.regeneratorValues(badIter), 1);
+      case 1:
         hitNextStatement = true;
-        _context.n = 8;
+        _context.n = 3;
         break;
-      case 5:
-        _context.p = 5;
+      case 2:
+        _context.p = 2;
         _t = _context.v;
         hitCatch = true;
-      case 8:
-        _context.p = 8;
+      case 3:
+        _context.p = 3;
         hitFinally = true;
-        return _context.f(8);
-      case 11:
+        return _context.f(3);
+      case 4:
         return _context.a(2);
     }
-  }, _marked, null, [[0, 5, 8, 11]]);
+  }, _marked, null, [[0, 2, 3, 4]]);
 }
 var iter = g();
 iter.next();

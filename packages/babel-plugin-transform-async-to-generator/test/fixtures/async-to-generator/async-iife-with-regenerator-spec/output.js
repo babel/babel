@@ -1,23 +1,23 @@
 var _this = this;
 babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.p = _context.n) {
+    while (1) switch (_context.n) {
       case 0:
-        _context.n = 2;
+        _context.n = 1;
         return 'ok';
-      case 2:
+      case 1:
         return _context.a(2);
     }
   }, _callee);
 }))();
 babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
   return babelHelpers.regenerator().w(function (_context2) {
-    while (1) switch (_context2.p = _context2.n) {
+    while (1) switch (_context2.n) {
       case 0:
         babelHelpers.newArrowCheck(this, _this);
-        _context2.n = 3;
+        _context2.n = 1;
         return 'ok';
-      case 3:
+      case 1:
         return _context2.a(2);
     }
   }, _callee2, this);
@@ -25,11 +25,11 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
 /*#__PURE__*/(function () {
   var _notIIFE = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
     return babelHelpers.regenerator().w(function (_context3) {
-      while (1) switch (_context3.p = _context3.n) {
+      while (1) switch (_context3.n) {
         case 0:
-          _context3.n = 2;
+          _context3.n = 1;
           return 'ok';
-        case 2:
+        case 1:
           return _context3.a(2);
       }
     }, _callee3);
@@ -41,12 +41,12 @@ babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function
 })();
 /*#__PURE__*/babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee4() {
   return babelHelpers.regenerator().w(function (_context4) {
-    while (1) switch (_context4.p = _context4.n) {
+    while (1) switch (_context4.n) {
       case 0:
         babelHelpers.newArrowCheck(this, _this);
-        _context4.n = 3;
+        _context4.n = 1;
         return 'not iife';
-      case 3:
+      case 1:
         return _context4.a(2);
     }
   }, _callee4, this);

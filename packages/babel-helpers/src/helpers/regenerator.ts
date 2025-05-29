@@ -5,14 +5,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
 import define from "./regeneratorDefine.ts";
-import defineIteratorMethods from "./regeneratorDefineIM.ts";
-import values from "./regeneratorValues.ts";
 
 const enum GenState {
   SuspendedStart,
-  SuspendedYield,
+  SuspendedYieldOrCompleted,
   Executing,
-  Completed,
 }
 
 const enum OperatorType {
@@ -59,8 +56,6 @@ type Context = {
 export default function /* @no-mangle */ _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
 
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
   var undefined: undefined; // More compressible than void 0.
   var $Symbol =
     typeof Symbol === "function" ? Symbol : ({} as SymbolConstructor);
@@ -106,24 +101,17 @@ export default function /* @no-mangle */ _regenerator() {
   /* @no-mangle */
   function GeneratorFunctionPrototype() {}
 
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function (this: unknown) {
-    return this;
-  });
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (
-    NativeIteratorPrototype &&
-    NativeIteratorPrototype !== Op &&
-    hasOwn.call(NativeIteratorPrototype, iteratorSymbol)
-  ) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
+  _ = Object.getPrototypeOf;
+  var IteratorPrototype = [][iteratorSymbol as typeof Symbol.iterator]
+    ? // This environment has a native %IteratorPrototype%; use it instead
+      // of the polyfill.
+      _(_([][iteratorSymbol as typeof Symbol.iterator]()))
+    : // This is a polyfill for %IteratorPrototype% for environments that
+      // don't natively support it.
+      (define((_ = {}), iteratorSymbol, function (this: unknown) {
+        return this;
+      }),
+      _);
 
   var Gp =
     (GeneratorFunctionPrototype.prototype =
@@ -137,7 +125,7 @@ export default function /* @no-mangle */ _regenerator() {
 
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
+  define(Gp);
 
   define(Gp, toStringTagSymbol, "Generator");
 
@@ -178,7 +166,7 @@ export default function /* @no-mangle */ _regenerator() {
       _method: OperatorType.Next | OperatorType.Throw | OperatorType.Return,
       _arg: any,
     ) {
-      if (state === GenState.Executing) {
+      if (state > 1 /* Executing */) {
         throw TypeError("Generator is already running");
       } else if (done) {
         if (_method === OperatorType.Throw) {
@@ -189,19 +177,20 @@ export default function /* @no-mangle */ _regenerator() {
       method = _method;
       arg = _arg;
 
-      while (!done || (_ = undefined)) {
+      while ((_ = method < 2 /* Next | Throw */ ? undefined : arg) || !done) {
         if (!delegateIterator) {
-          if (!method /* Return */) {
+          if (!method /* Next */) {
             ctx.v = arg;
           } else if (method < 3 /* Throw | Return */) {
             if (method > 1 /* Return */) ctx.n = ContextNext.End;
             Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
-            // Jump
+            /* Jump */
             ctx.n = arg;
           }
         }
         try {
+          state = GenState.Executing;
           if (delegateIterator) {
             // Call delegate.iterator[context.method](context.arg) and handle the result
 
@@ -255,27 +244,22 @@ export default function /* @no-mangle */ _regenerator() {
             // yield* loop.
             delegateIterator = undefined;
           } else {
-            state = GenState.Executing;
-
             if ((done = ctx.n < 0) /* End */) {
               _ = arg;
             } else {
               _ = innerFn.call(self, ctx);
             }
 
-            // If an exception is thrown from innerFn, we leave state ===
-            // GenStateExecuting and loop back for another invocation.
-            state = done ? GenState.Completed : GenState.SuspendedYield;
-
             if (_ !== ContinueSentinel) {
               break;
             }
           }
         } catch (e) {
-          state = GenState.Completed;
           delegateIterator = undefined;
           method = OperatorType.Throw;
           arg = e;
+        } finally {
+          state = GenState.SuspendedYieldOrCompleted;
         }
       }
       // Be forgiving, per GeneratorResume behavior specified since ES2015:
@@ -302,13 +286,16 @@ export default function /* @no-mangle */ _regenerator() {
 
       v: undefined,
 
+      // abrupt
       a: Context_dispatchExceptionOrFinishOrAbrupt,
+      // finish
       f: Context_dispatchExceptionOrFinishOrAbrupt.bind(
         undefined,
         OperatorType.Finish,
       ),
+      // delegateYield
       d: function (iterable: any, nextLoc: number) {
-        delegateIterator = values(iterable);
+        delegateIterator = iterable;
 
         // Deliberately forget the last sent value so that we don't
         // accidentally pass it on to the delegate.
@@ -328,7 +315,10 @@ export default function /* @no-mangle */ _regenerator() {
       arg = _arg;
       for (
         _ = 0;
-        !done && state && !shouldReturn && _ < tryEntries.length;
+        !done &&
+        state /* state !== SuspendedStart */ &&
+        !shouldReturn &&
+        _ < tryEntries.length;
         _++
       ) {
         var entry = tryEntries[_];
