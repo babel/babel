@@ -813,3 +813,72 @@ jobs:
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
+
+  test262-babel8:
+    name: test262-babel8
+    runs-on: ubuntu-latest
+    if: github.repository == 'babel/babel'
+    needs: [build-babel8]
+    steps:
+      - name: Checkout Babel
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Checkout test runner
+        uses: actions/checkout@v4
+        with:
+          repository: babel/babel-test262-runner
+          path: babel-test262-runner
+          ref: cache
+      - name: Install test runner
+        run: |
+          cd babel-test262-runner
+          npm ci
+          node lib/download-node
+      - name: Download test262
+        run: make bootstrap-test262
+      - name: Cache test262 results
+        uses: actions/cache@v4
+        with:
+          key: test262-babel8
+          path: babel-test262-runner/cache.lmdb
+      - name: Run test262
+        run: |
+          cd babel-test262-runner
+          node lib/run-tests I_AM_SURE | tee ~/test262.tap
+        # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash
+        env:
+          BABEL_PATH: ".."
+          TEST262_PATH: ../build/test262
+          THREADS: 4
+      - name: Create artifact with report results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test262-result-babel8
+          path: ~/test262.tap
+          retention-days: 3
+      - name: Download previous results
+        run: |
+          cd babel-test262-runner
+          node lib/download-main-artifact/index.mjs ~/test262-main.tap test262-result-babel8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compare previous main branch & current results
+        run: |
+          cd babel-test262-runner
+          node lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap
+        # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash
