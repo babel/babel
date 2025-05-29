@@ -815,7 +815,7 @@ jobs:
         shell: bash
 
   test262-babel8:
-    name: test262-babel8
+    name: test262 - Babel 8
     runs-on: ubuntu-latest
     if: github.repository == 'babel/babel'
     needs: [build-babel8]
@@ -839,7 +839,7 @@ jobs:
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
-          ref: cache
+          ref: main
       - name: Install test runner
         run: |
           cd babel-test262-runner
