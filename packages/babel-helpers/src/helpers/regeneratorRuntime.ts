@@ -80,7 +80,7 @@ export default function /* @no-mangle */ _regeneratorRuntime() {
           },
           delegateYield: function (iterable, resultName, nextLoc) {
             compatContext.resultName = resultName;
-            return callSyncState(context.d, iterable, nextLoc);
+            return callSyncState(context.d, values(iterable), nextLoc);
           },
           finish: function (finallyLoc) {
             return callSyncState(context.f, finallyLoc);

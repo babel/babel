@@ -13,7 +13,7 @@ var _foo = "foo",
   _foo2 = babelHelpers.slicedToArray(_foo, 0);
 var _ref7 = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     return babelHelpers.regenerator().w(function (_context) {
-      while (1) switch (_context.p = _context.n) {
+      while (1) switch (_context.n) {
         case 0:
           throw new Error("Should not throw");
         case 1:
@@ -33,7 +33,7 @@ var _Symbol$iterator5 = {
 var _Symbol$iterator7 = {
     [Symbol.iterator]: /*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
       return babelHelpers.regeneratorAsyncGen(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
+        while (1) switch (_context2.n) {
           case 0:
             return _context2.a(2);
         }
@@ -66,7 +66,7 @@ var _Symbol$iterator1 = {
 var _Symbol$iterator11 = {
     [Symbol.iterator]: () => /*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
       return babelHelpers.regeneratorAsyncGen(function (_context3) {
-        while (1) switch (_context3.p = _context3.n) {
+        while (1) switch (_context3.n) {
           case 0:
             return _context3.a(2);
         }

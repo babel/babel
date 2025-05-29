@@ -1,16 +1,17 @@
 /* @minVersion 7.27.0 */
+/* @mangleFns */
 
-import AsyncIterator from "./regeneratorAsyncIterator.ts";
 import regenerator from "./regenerator.ts";
+import regeneratorAsyncIterator from "./regeneratorAsyncIterator.ts";
 
-export default function _regeneratorAsyncGen(
+export default /* @no-mangle */ function _regeneratorAsyncGen(
   innerFn: Function,
   outerFn: Function,
   self: any,
   tryLocsList: any[],
   PromiseImpl: PromiseConstructor | undefined,
 ) {
-  return new (AsyncIterator as any)(
+  return new (regeneratorAsyncIterator as any)(
     regenerator().w(innerFn as any, outerFn, self, tryLocsList),
     PromiseImpl || Promise,
   );

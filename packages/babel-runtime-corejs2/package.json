@@ -620,6 +620,15 @@
       "./helpers/regeneratorKeys.js"
     ],
     "./helpers/esm/regeneratorKeys": "./helpers/esm/regeneratorKeys.js",
+    "./helpers/regeneratorValues": [
+      {
+        "node": "./helpers/regeneratorValues.js",
+        "import": "./helpers/esm/regeneratorValues.js",
+        "default": "./helpers/regeneratorValues.js"
+      },
+      "./helpers/regeneratorValues.js"
+    ],
+    "./helpers/esm/regeneratorValues": "./helpers/esm/regeneratorValues.js",
     "./helpers/set": [
       {
         "node": "./helpers/set.js",

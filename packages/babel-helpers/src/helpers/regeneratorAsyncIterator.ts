@@ -4,8 +4,6 @@
 
 import OverloadYield from "./OverloadYield.ts";
 import define from "./regeneratorDefine.ts";
-import tryCatch from "./tryCatch.ts";
-import defineIteratorMethods from "./regeneratorDefineIM.ts";
 
 export default /* @no-mangle */ function AsyncIterator(
   this: any,
@@ -13,7 +11,7 @@ export default /* @no-mangle */ function AsyncIterator(
   PromiseImpl: PromiseConstructor,
 ) {
   if (!this.next) {
-    defineIteratorMethods(AsyncIterator.prototype);
+    define(AsyncIterator.prototype);
     define(
       AsyncIterator.prototype,
       (typeof Symbol === "function" && Symbol.asyncIterator) ||
@@ -30,13 +28,10 @@ export default /* @no-mangle */ function AsyncIterator(
     resolve: (value: any) => void,
     reject: (error: any) => void,
   ): any {
-    var record = tryCatch(generator[method], generator, arg);
-    if (/* error */ record.e) {
-      reject(record.v);
-    } else {
-      var result = record.v;
+    try {
+      var result = generator[method](arg);
       var value = result.value;
-      if (value && value instanceof OverloadYield) {
+      if (value instanceof OverloadYield) {
         return PromiseImpl.resolve(value.v).then(
           function (value) {
             invoke("next", value, resolve, reject);
@@ -61,6 +56,8 @@ export default /* @no-mangle */ function AsyncIterator(
           return invoke("throw", error, resolve, reject);
         },
       );
+    } catch (error) {
+      reject(error);
     }
   }
 

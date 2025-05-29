@@ -4,13 +4,13 @@ function foo() {
 function _foo() {
   _foo = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
     return babelHelpers.regenerator().w(function (_context2) {
-      while (1) switch (_context2.p = _context2.n) {
+      while (1) switch (_context2.n) {
         case 0:
           /*#__PURE__*/(function () {
             var _ref = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee(number) {
               var tmp;
               return babelHelpers.regenerator().w(function (_context) {
-                while (1) switch (_context.p = _context.n) {
+                while (1) switch (_context.n) {
                   case 0:
                     tmp = number;
                   case 1:

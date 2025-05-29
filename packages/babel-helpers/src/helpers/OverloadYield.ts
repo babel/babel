@@ -1,26 +1,22 @@
 /* @minVersion 7.18.14 */
 
-/*
- * 'kind' is an enum:
- *   0 => This yield was an await expression
- *   1 => This yield comes from yield*
- */
+const enum Kind {
+  // This yield was an await expression
+  Await = 0,
+  // This yield comes from yield*
+  Delegate = 1,
+}
 
 // _OverloadYield is actually a class
 declare class _OverloadYield<T = any> {
   constructor(value: T, /** 0: await 1: delegate */ kind: 0 | 1);
 
   v: T;
-  /** 0: await 1: delegate */
-  k: 0 | 1;
+  k: Kind;
 }
 
 // The actual implementation of _OverloadYield starts here
-function _OverloadYield<T>(
-  this: _OverloadYield<T>,
-  value: T,
-  /** 0: await 1: delegate */ kind: 0 | 1,
-) {
+function _OverloadYield<T>(this: _OverloadYield<T>, value: T, kind: Kind) {
   this.v = value;
   this.k = kind;
 }
