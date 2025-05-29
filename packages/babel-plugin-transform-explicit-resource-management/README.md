@@ -1,6 +1,6 @@
 # @babel/plugin-transform-explicit-resource-management
 
-> Compile `using` declarations to ES2015
+> Compile `using` and `await using` declarations to ES2015
 
 See our website [@babel/plugin-transform-explicit-resource-management](https://babeljs.io/docs/babel-plugin-transform-explicit-resource-management) for more information.
 
