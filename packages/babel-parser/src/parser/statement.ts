@@ -400,12 +400,6 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  startsUsing(): boolean {
-    const next = this.nextTokenInLineStart();
-    const nextCh = this.codePointAtPos(next);
-    return this.chStartsBindingIdentifier(nextCh, next);
-  }
-
   startsAwaitUsing(): boolean {
     let next = this.nextTokenInLineStart();
     if (this.isUnparsedContextual(next, "using")) {
