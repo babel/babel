@@ -279,7 +279,7 @@ export default {
   UnexpectedTokenUnaryExponentiation:
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnexpectedUsingDeclaration:
-    "Using declaration cannot appear in the top level when source type is `script`.",
+    "Using declaration cannot appear in the top level when source type is `script` or in the bare case statement.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
