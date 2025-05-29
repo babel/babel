@@ -28,7 +28,8 @@ function emitSetFunctionNameCall(
 }
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.22.0"));
+  // The first Babel 7 version with usingCtx helper support.
+  api.assertVersion(REQUIRED_VERSION("^7.23.9"));
 
   const TOP_LEVEL_USING = new Map<t.Node, USING_KIND>();
 
@@ -62,46 +63,45 @@ export default declare(api => {
       path: NodePath<t.BlockStatement | t.StaticBlock>,
       state,
     ) {
-      if (process.env.BABEL_8_BREAKING || state.availableHelper("usingCtx")) {
-        let ctx: t.Identifier | null = null;
-        let needsAwait = false;
-        const scope = path.scope;
+      let ctx: t.Identifier | null = null;
+      let needsAwait = false;
+      const scope = path.scope;
 
-        for (const node of path.node.body) {
-          if (!isUsingDeclaration(node)) continue;
-          ctx ??= scope.generateUidIdentifier("usingCtx");
-          const isAwaitUsing =
-            node.kind === "await using" ||
-            TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
-          needsAwait ||= isAwaitUsing;
+      for (const node of path.node.body) {
+        if (!isUsingDeclaration(node)) continue;
+        ctx ??= scope.generateUidIdentifier("usingCtx");
+        const isAwaitUsing =
+          node.kind === "await using" ||
+          TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
+        needsAwait ||= isAwaitUsing;
 
-          if (!TOP_LEVEL_USING.delete(node)) {
-            node.kind = "const";
-          }
-          for (const decl of node.declarations) {
-            const currentInit = decl.init;
-            decl.init = t.callExpression(
-              t.memberExpression(
-                t.cloneNode(ctx),
-                isAwaitUsing ? t.identifier("a") : t.identifier("u"),
-              ),
-              [
-                isAnonymousFunctionDefinition(currentInit) &&
-                t.isIdentifier(decl.id)
-                  ? emitSetFunctionNameCall(state, currentInit, decl.id.name)
-                  : currentInit,
-              ],
-            );
-          }
+        if (!TOP_LEVEL_USING.delete(node)) {
+          node.kind = "const";
         }
-        if (!ctx) return;
+        for (const decl of node.declarations) {
+          const currentInit = decl.init;
+          decl.init = t.callExpression(
+            t.memberExpression(
+              t.cloneNode(ctx),
+              isAwaitUsing ? t.identifier("a") : t.identifier("u"),
+            ),
+            [
+              isAnonymousFunctionDefinition(currentInit) &&
+              t.isIdentifier(decl.id)
+                ? emitSetFunctionNameCall(state, currentInit, decl.id.name)
+                : currentInit,
+            ],
+          );
+        }
+      }
+      if (!ctx) return;
 
-        const disposeCall = t.callExpression(
-          t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
-          [],
-        );
+      const disposeCall = t.callExpression(
+        t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
+        [],
+      );
 
-        const replacement = template.statement.ast`
+      const replacement = template.statement.ast`
         try {
           var ${t.cloneNode(ctx)} = ${state.addHelper("usingCtx")}();
           ${path.node.body}
@@ -112,78 +112,19 @@ export default declare(api => {
         }
       ` as t.TryStatement;
 
-        t.inherits(replacement, path.node);
+      t.inherits(replacement, path.node);
 
-        const { parentPath } = path;
-        if (
-          parentPath.isFunction() ||
-          parentPath.isTryStatement() ||
-          parentPath.isCatchClause()
-        ) {
-          path.replaceWith(t.blockStatement([replacement]));
-        } else if (path.isStaticBlock()) {
-          path.node.body = [replacement];
-        } else {
-          path.replaceWith(replacement);
-        }
+      const { parentPath } = path;
+      if (
+        parentPath.isFunction() ||
+        parentPath.isTryStatement() ||
+        parentPath.isCatchClause()
+      ) {
+        path.replaceWith(t.blockStatement([replacement]));
+      } else if (path.isStaticBlock()) {
+        path.node.body = [replacement];
       } else {
-        let stackId: t.Identifier | null = null;
-        let needsAwait = false;
-
-        for (const node of path.node.body) {
-          if (!isUsingDeclaration(node)) continue;
-          stackId ??= path.scope.generateUidIdentifier("stack");
-          const isAwaitUsing =
-            node.kind === "await using" ||
-            TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
-          needsAwait ||= isAwaitUsing;
-
-          if (!TOP_LEVEL_USING.delete(node)) {
-            node.kind = "const";
-          }
-          node.declarations.forEach(decl => {
-            const args = [t.cloneNode(stackId), decl.init];
-            if (isAwaitUsing) args.push(t.booleanLiteral(true));
-            decl.init = t.callExpression(state.addHelper("using"), args);
-          });
-        }
-        if (!stackId) return;
-
-        const errorId = path.scope.generateUidIdentifier("error");
-        const hasErrorId = path.scope.generateUidIdentifier("hasError");
-
-        let disposeCall: t.Expression = t.callExpression(
-          state.addHelper("dispose"),
-          [t.cloneNode(stackId), t.cloneNode(errorId), t.cloneNode(hasErrorId)],
-        );
-        if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
-
-        const replacement = template.statement.ast`
-        try {
-          var ${stackId} = [];
-          ${path.node.body}
-        } catch (_) {
-          var ${errorId} = _;
-          var ${hasErrorId} = true;
-        } finally {
-          ${disposeCall}
-        }
-      ` as t.TryStatement;
-
-        t.inherits(replacement.block, path.node);
-
-        const { parentPath } = path;
-        if (
-          parentPath.isFunction() ||
-          parentPath.isTryStatement() ||
-          parentPath.isCatchClause()
-        ) {
-          path.replaceWith(t.blockStatement([replacement]));
-        } else if (path.isStaticBlock()) {
-          path.node.body = [replacement];
-        } else {
-          path.replaceWith(replacement);
-        }
+        path.replaceWith(replacement);
       }
     },
   };
