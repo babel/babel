@@ -239,12 +239,14 @@ export function ParseErrorEnum(
 import ModuleErrors from "./parse-error/module-errors.ts";
 import StandardErrors from "./parse-error/standard-errors.ts";
 import StrictModeErrors from "./parse-error/strict-mode-errors.ts";
+import ParseExpressionErrors from "./parse-error/parse-expression-errors.ts";
 import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors.ts";
 
 export const Errors = {
   ...ParseErrorEnum(ModuleErrors),
   ...ParseErrorEnum(StandardErrors),
   ...ParseErrorEnum(StrictModeErrors),
+  ...ParseErrorEnum(ParseExpressionErrors),
   ...ParseErrorEnum`pipelineOperator`(PipelineOperatorErrors),
 };
 
