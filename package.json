@@ -36,6 +36,7 @@
     "@babel/preset-env": "8.0.0-alpha.16",
     "@babel/preset-typescript": "8.0.0-alpha.16",
     "@babel/runtime": "8.0.0-alpha.16",
+    "@codspeed/tinybench-plugin": "patch:@codspeed/tinybench-plugin@npm%3A4.0.1#~/.yarn/patches/@codspeed-tinybench-plugin-npm-4.0.1-a79378f455.patch",
     "@cspotcode/source-map-support": "^0.8.1",
     "@eslint/js": "^9.22.0",
     "@rollup/plugin-babel": "^6.0.4",

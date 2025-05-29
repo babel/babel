@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "optimization-class-to-function"
+  ],
+  "generatorOpts": {
+    "compact": false
+  }
+}

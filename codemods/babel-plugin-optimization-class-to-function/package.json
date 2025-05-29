@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "main": "./lib/index.js",
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  }
+}

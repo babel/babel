@@ -897,3 +897,23 @@ gulp.task(
   "watch",
   process.env.WATCH_SKIP_BUILD ? watch : gulp.series("build-dev", watch)
 );
+
+gulp.task("build-perf", function () {
+  const pkgs = ["packages/babel-parser"].map(src => ({
+    src,
+    format: USE_ESM ? "esm" : "cjs",
+    dest: "lib",
+    input: getIndexFromPackage(src),
+  }));
+  return buildRollup(pkgs);
+});
+
+gulp.task(
+  "watch-perf",
+  gulp.series("build-perf", function watchPerf() {
+    if (!process.env.IS_PUBLISH) {
+      throw new Error("This task must be run with `process.env.IS_PUBLISH`");
+    }
+    gulp.watch(defaultSourcesGlob, gulp.task("build-perf"));
+  })
+);
