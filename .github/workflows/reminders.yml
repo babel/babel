@@ -22,4 +22,5 @@ jobs:
             npm deprecate @babel/plugin-proposal-duplicate-named-capturing-groups-regex "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-duplicate-named-capturing-groups-regex instead."
             npm deprecate @babel/plugin-proposal-regexp-modifiers "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-regexp-modifiers instead."
             npm deprecate @babel/plugin-proposal-json-modules "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-json-modules instead."
+            npm deprecate @babel/plugin-proposal-explicit-resource-management "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-explicit-resource-management instead."
             ```
