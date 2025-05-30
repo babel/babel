@@ -60,7 +60,6 @@ jobs:
         if: steps.updated.outputs.updated == 'true'
         continue-on-error: true
         run: |
-          make build
           yarn jest -u
           git commit -am "chore: update test fixtures for Babel 8"
         env:
