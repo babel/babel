@@ -22,7 +22,7 @@ export = async function asyncMaybeParse(
   parserOptions: ParseResult | null;
 }> {
   if (!extractParserOptionsConfigItem) {
-    extractParserOptionsConfigItem = await babel.createConfigItemAsync(
+    extractParserOptionsConfigItem = babel.createConfigItemSync(
       [extractParserOptionsPlugin, ref],
       { dirname: __dirname, type: "plugin" },
     );
