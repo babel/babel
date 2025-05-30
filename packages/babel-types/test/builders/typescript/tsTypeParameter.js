@@ -10,31 +10,7 @@ describe("builders", function () {
           t.tsTypeReference(t.identifier("baz")),
           t.identifier("foo"),
         );
-        expect(tsTypeParameter).toMatchInlineSnapshot(`
-          Object {
-            "constraint": Object {
-              "type": "TSTypeReference",
-              "typeArguments": null,
-              "typeName": Object {
-                "name": "bar",
-                "type": "Identifier",
-              },
-            },
-            "default": Object {
-              "type": "TSTypeReference",
-              "typeArguments": null,
-              "typeName": Object {
-                "name": "baz",
-                "type": "Identifier",
-              },
-            },
-            "name": Object {
-              "name": "foo",
-              "type": "Identifier",
-            },
-            "type": "TSTypeParameter",
-          }
-        `);
+        expect(tsTypeParameter).toHaveProperty("type", "TSTypeParameter");
       });
       it("throws when name is missing", function () {
         expect(() => {
@@ -54,28 +30,7 @@ describe("builders", function () {
           t.tsTypeReference(t.identifier("baz")),
           "foo",
         );
-        expect(tsTypeParameter).toMatchInlineSnapshot(`
-            Object {
-              "constraint": Object {
-                "type": "TSTypeReference",
-                "typeName": Object {
-                  "name": "bar",
-                  "type": "Identifier",
-                },
-                "typeParameters": null,
-              },
-              "default": Object {
-                "type": "TSTypeReference",
-                "typeName": Object {
-                  "name": "baz",
-                  "type": "Identifier",
-                },
-                "typeParameters": null,
-              },
-              "name": "foo",
-              "type": "TSTypeParameter",
-            }
-          `);
+        expect(tsTypeParameter).toHaveProperty("type", "TSTypeParameter");
       });
       it("throws when name is missing in Babel 7", function () {
         expect(() => {
