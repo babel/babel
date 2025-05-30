@@ -13,13 +13,13 @@ let extractParserOptionsConfigItem: ConfigItem<any>;
 
 const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
-export = function maybeParse(
+export = async function asyncMaybeParse(
   code: string,
   options: InputOptions,
-): {
+): Promise<{
   ast: AST.Program | null;
   parserOptions: ParseResult | null;
-} {
+}> {
   if (!extractParserOptionsConfigItem) {
     extractParserOptionsConfigItem = babel.createConfigItemSync(
       [extractParserOptionsPlugin, ref],
@@ -33,7 +33,7 @@ export = function maybeParse(
 
   try {
     return {
-      parserOptions: babel.parseSync(code, options),
+      parserOptions: await babel.parseAsync(code, options),
       ast: null,
     };
   } catch (err) {
@@ -46,7 +46,7 @@ export = function maybeParse(
   options.plugins = plugins;
 
   try {
-    ast = babel.parseSync(code, options);
+    ast = await babel.parseAsync(code, options);
   } catch (err) {
     throw convert.convertError(err);
   }

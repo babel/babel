@@ -9,6 +9,7 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.types = babel.types;
   exports.tokTypes = babel.tokTypes;
   exports.parseSync = babel.parseSync;
+  exports.parseAsync = babel.parseAsync;
   exports.loadPartialConfigSync = babel.loadPartialConfigSync;
   exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
   if (process.env.BABEL_8_BREAKING) {
