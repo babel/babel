@@ -8,6 +8,9 @@
     "interpreter": null,
     "body": [],
     "directives": [],
+    "extra": {
+      "forAwait": false
+    },
     "innerComments": [
       {
         "type": "CommentBlock",

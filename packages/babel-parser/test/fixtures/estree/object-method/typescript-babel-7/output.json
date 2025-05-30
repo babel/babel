@@ -128,6 +128,9 @@
         "kind": "var",
         "declare": false
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

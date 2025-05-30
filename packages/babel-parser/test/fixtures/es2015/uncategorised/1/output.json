@@ -22,6 +22,9 @@
           "value": "\\u{714E}\\u{8336}"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

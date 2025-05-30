@@ -37,6 +37,9 @@
         "kind": "await using"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

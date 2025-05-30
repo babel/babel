@@ -52,6 +52,9 @@
         "start":32,"end":33,"loc":{"start":{"line":2,"column":18,"index":32},"end":{"line":2,"column":19,"index":33}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

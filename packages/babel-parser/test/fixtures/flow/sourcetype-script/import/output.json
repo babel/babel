@@ -66,6 +66,9 @@
         "attributes": []
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

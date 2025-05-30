@@ -51,6 +51,9 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

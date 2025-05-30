@@ -86,6 +86,9 @@
           "value": "use strict"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
