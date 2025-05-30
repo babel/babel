@@ -20,6 +20,9 @@
         "declare": true,
         "global": false
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

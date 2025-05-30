@@ -38,10 +38,6 @@
           },
           "value": "foo.json"
         },
-        "declaration": null,
-        "extra": {
-          "deprecatedAssertSyntax": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",
@@ -79,12 +75,17 @@
               "value": "html"
             }
           }
-        ]
+        ],
+        "declaration": null,
+        "extra": {
+          "deprecatedAssertSyntax": true
+        }
       }
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

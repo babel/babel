@@ -21,7 +21,8 @@
             "body": [],
             "directives": [],
             "extra": {
-              "topLevelAwait": false
+              "topLevelAwait": false,
+              "forAwait": false
             },
             "innerComments": [
               {
@@ -36,7 +37,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   },
   "comments": [

@@ -39,7 +39,10 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   },
   "tokens": [
     {

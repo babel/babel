@@ -22,6 +22,9 @@
           "value": "Hello\\0World"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

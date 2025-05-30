@@ -56,8 +56,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExpressionStatement",
@@ -104,7 +104,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

@@ -59,6 +59,9 @@
         "directives": []
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
