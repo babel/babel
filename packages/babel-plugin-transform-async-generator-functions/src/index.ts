@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
-import type { NodePath, Visitor, PluginPass } from "@babel/core";
+import type { NodePath, PluginPass } from "@babel/core";
 import { types as t } from "@babel/core";
 import { visitors } from "@babel/traverse";
 import rewriteForAwait from "./for-await.ts";
@@ -67,30 +67,6 @@ export default declare(api => {
     },
   });
 
-  const visitor: Visitor<PluginPass> = {
-    Function(path, state) {
-      if (!path.node.async) return;
-
-      path.traverse(forAwaitVisitor, state);
-
-      if (!path.node.generator) return;
-
-      path.traverse(yieldStarVisitor, state);
-
-      path.setData(
-        "@babel/plugin-transform-async-generator-functions/async_generator_function",
-        true,
-      );
-
-      // We don't need to pass the noNewArrows assumption, since
-      // async generators are never arrow functions.
-      remapAsyncToGenerator(path, {
-        wrapAsync: state.addHelper("wrapAsyncGenerator"),
-        wrapAwait: state.addHelper("awaitAsyncGenerator"),
-      });
-    },
-  };
-
   return {
     name: "transform-async-generator-functions",
 
@@ -99,8 +75,25 @@ export default declare(api => {
       : (_, parser) => parser.plugins.push("asyncGenerators"),
 
     visitor: {
+      Function(path, state) {
+        if (path.node.async && path.node.generator) {
+          path.traverse(yieldStarVisitor, state);
+
+          path.setData(
+            "@babel/plugin-transform-async-generator-functions/async_generator_function",
+            true,
+          );
+
+          // We don't need to pass the noNewArrows assumption, since
+          // async generators are never arrow functions.
+          remapAsyncToGenerator(path, {
+            wrapAsync: state.addHelper("wrapAsyncGenerator"),
+            wrapAwait: state.addHelper("awaitAsyncGenerator"),
+          });
+        }
+      },
       Program(path, state) {
-        if (process.env.BABEL_8_BREAKING && !path.node.extra.forAwait) {
+        if (path.node.extra?.forAwait === false) {
           return;
         }
 
@@ -111,7 +104,16 @@ export default declare(api => {
         //
         // This is bad for performance, but plugin ordering will allow as to
         // directly visit Function in the top level visitor.
-        path.traverse(visitor, state);
+        path.traverse(
+          {
+            Function(path, state) {
+              if (!path.node.async) return;
+
+              path.traverse(forAwaitVisitor, state);
+            },
+          },
+          state,
+        );
       },
     },
   };
