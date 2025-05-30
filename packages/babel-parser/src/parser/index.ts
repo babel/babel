@@ -86,8 +86,8 @@ export default class Parser extends StatementParser {
 
   parse(): N.File {
     this.enterInitialScopes();
-    const file = this.startNode<N.File>();
-    const program = this.startNode<N.Program>();
+    const file = this.startNode<N.File>("File");
+    const program = this.startNode<N.Program>("Program");
     this.nextToken();
     file.errors = null;
     this.parseTopLevel(file, program);

@@ -1,5 +1,6 @@
 import UtilParser from "./util.ts";
-import { SourceLocation, type Position } from "../util/location.ts";
+import { SourceLocation } from "../util/location.ts";
+import type { Position } from "../util/location.ts";
 import type {
   Comment,
   Node as NodeType,
@@ -14,7 +15,8 @@ import { OptionFlags } from "../options.ts";
 // Start an AST node, attaching a start offset.
 
 class Node implements NodeBase {
-  constructor(parser: UtilParser, pos: number, loc: Position) {
+  constructor(parser: UtilParser, pos: number, loc: Position, type: string) {
+    this.type = type ?? "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
@@ -22,7 +24,7 @@ class Node implements NodeBase {
     if (parser?.filename) this.loc.filename = parser.filename;
   }
 
-  type: string = "";
+  declare type: string;
   declare start: number;
   declare end: number;
   declare loc: SourceLocation;
@@ -39,7 +41,7 @@ const NodePrototype = Node.prototype;
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error __clone is not defined in Node prototype
   NodePrototype.__clone = function (): Node {
-    const newNode = new Node(undefined, this.start, this.loc.start);
+    const newNode = new Node(undefined, this.start, this.loc.start, "");
     const keys = Object.keys(this) as (keyof Node)[];
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];
@@ -61,34 +63,42 @@ if (!process.env.BABEL_8_BREAKING) {
 export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {
-  startNode<T extends NodeType = never>(): Undone<T> {
+  startNode<N extends NodeType = never>(type?: N["type"]): Undone<N>;
+  startNode<N extends NodeType, T extends string = N["type"]>(
+    type?: T,
+  ): Undone<Extract<NodeType, { type: T }>>;
+  startNode<T extends NodeType = never>(type?: T["type"]): Undone<T> {
     const loc = this.state.startLoc;
-    return new Node(this, loc.index, loc) as unknown as Undone<T>;
+    return new Node(this, loc.index, loc, type) as unknown as Undone<T>;
   }
 
-  startNodeAt<T extends NodeType = never>(loc: Position): Undone<T> {
-    return new Node(this, loc.index, loc) as unknown as Undone<T>;
-  }
-
-  /** Start a new node with a previous node's location. */
-  startNodeAtNode<T extends NodeType = never>(
-    type: Undone<NodeType>,
+  startNodeAt<T extends NodeType = never>(
+    loc: Position,
+    type?: T["type"],
   ): Undone<T> {
-    return this.startNodeAt(type.loc.start);
+    return new Node(this, loc.index, loc, type) as unknown as Undone<T>;
+  }
+
+  /** Start a newNode with a previous node's location. */
+  startNodeAtNode<T extends NodeType = never>(
+    node: Undone<NodeType>,
+    type?: T["type"],
+  ): Undone<T> {
+    return this.startNodeAt(node.loc.start, type);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
 
-  finishNode<T extends NodeType>(node: Undone<T>, type: T["type"]): T {
-    return this.finishNodeAt(node, type, this.state.lastTokEndLoc);
+  finishNode<T extends NodeType>(node: Undone<T>, type?: T["type"]): T {
+    return this.finishNodeAt(node, this.state.lastTokEndLoc, type);
   }
 
   // Finish node at given position
 
   finishNodeAt<T extends NodeType>(
     node: Omit<T, "type">,
-    type: T["type"],
     endLoc: Position,
+    type?: T["type"],
   ): T {
     if (process.env.NODE_ENV !== "production" && node.end > 0) {
       throw new Error(
@@ -96,7 +106,7 @@ export abstract class NodeUtils extends UtilParser {
           " Instead use resetEndLocation() or change type directly.",
       );
     }
-    (node as T).type = type;
+    if (type !== undefined) (node as T).type = type;
     node.end = endLoc.index;
     node.loc.end = endLoc;
     if (this.optionFlags & OptionFlags.Ranges) node.range[1] = endLoc.index;
@@ -129,10 +139,10 @@ export abstract class NodeUtils extends UtilParser {
   }
 
   castNodeTo<T extends NodeType["type"]>(
-    node: NodeType,
+    node: NodeType | Undone<NodeType>,
     type: T,
   ): Extract<NodeType, { type: T }> {
-    node.type = type;
+    (node as NodeType).type = type;
     return node as Extract<NodeType, { type: T }>;
   }
 

@@ -9,7 +9,7 @@ export default (superClass: typeof Parser) =>
       if (this.match(tt.modulo)) {
         const v8IntrinsicStartLoc = this.state.startLoc;
         // let the `loc` of Identifier starts from `%`
-        const node = this.startNode<N.Identifier>();
+        const node = this.startNode<N.Identifier>("Identifier");
         this.next(); // eat '%'
         if (tokenIsIdentifier(this.state.type)) {
           const name = this.parseIdentifierName();

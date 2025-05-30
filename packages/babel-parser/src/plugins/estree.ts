@@ -78,7 +78,7 @@ export default (superClass: typeof Parser) =>
 
     estreeParseLiteral<T extends N.EstreeLiteral>(value: any) {
       // @ts-expect-error ESTree plugin changes node types
-      return this.parseLiteral<T>(value, "Literal");
+      return this.parseLiteral<T>(value, this.startNode("Literal"));
     }
 
     // @ts-expect-error ESTree plugin changes node types
@@ -105,9 +105,12 @@ export default (superClass: typeof Parser) =>
       node: N.Expression,
       endLoc: Position,
     ): N.EstreeChainExpression {
-      const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
+      const chain = this.startNodeAtNode<N.EstreeChainExpression>(
+        node,
+        "ChainExpression",
+      );
       chain.expression = node;
-      return this.finishNodeAt(chain, "ChainExpression", endLoc);
+      return this.finishNodeAt(chain, endLoc);
     }
 
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
@@ -249,13 +252,13 @@ export default (superClass: typeof Parser) =>
     }
 
     // @ts-expect-error plugin may override interfaces
-    parseLiteral<T extends N.Literal>(value: any, type: T["type"]): T {
-      const node = super.parseLiteral<T>(value, type);
+    parseLiteral<T extends N.Literal>(value: any, node: Undone<T>): T {
+      node = super.parseLiteral<T>(value, node);
       // @ts-expect-error mutating AST types
       node.raw = node.extra.raw;
       delete node.extra;
 
-      return node;
+      return node as T;
     }
 
     parseFunctionBody(
@@ -493,9 +496,8 @@ export default (superClass: typeof Parser) =>
 
     finishCallExpression<T extends N.CallExpression | N.OptionalCallExpression>(
       unfinished: Undone<T>,
-      optional: boolean,
     ): T {
-      const node = super.finishCallExpression(unfinished, optional);
+      const node = super.finishCallExpression(unfinished);
 
       if (node.callee.type === "Import") {
         this.castNodeTo(node, "ImportExpression");
@@ -667,10 +669,10 @@ export default (superClass: typeof Parser) =>
 
     finishNodeAt<T extends NodeType>(
       node: Undone<T>,
-      type: T["type"],
       endLoc: Position,
+      type?: T["type"],
     ): T {
-      return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
+      return toESTreeLocation(super.finishNodeAt(node, endLoc, type));
     }
 
     // Override for TS-ESLint that does not allow optional AST properties

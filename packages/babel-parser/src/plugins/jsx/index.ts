@@ -269,7 +269,7 @@ export default (superClass: typeof Parser) =>
     // Parse next token as JSX identifier
 
     jsxParseIdentifier(): N.JSXIdentifier {
-      const node = this.startNode<N.JSXIdentifier>();
+      const node = this.startNode<N.JSXIdentifier>("JSXIdentifier");
       if (this.match(tt.jsxName)) {
         node.name = this.state.value;
       } else if (tokenIsKeyword(this.state.type)) {
@@ -278,7 +278,7 @@ export default (superClass: typeof Parser) =>
         this.unexpected();
       }
       this.next();
-      return this.finishNode(node, "JSXIdentifier");
+      return this.finishNode(node);
     }
 
     // Parse namespaced identifier.
@@ -288,10 +288,13 @@ export default (superClass: typeof Parser) =>
       const name = this.jsxParseIdentifier();
       if (!this.eat(tt.colon)) return name;
 
-      const node = this.startNodeAt<N.JSXNamespacedName>(startLoc);
+      const node = this.startNodeAt<N.JSXNamespacedName>(
+        startLoc,
+        "JSXNamespacedName",
+      );
       node.namespace = name;
       node.name = this.jsxParseIdentifier();
-      return this.finishNode(node, "JSXNamespacedName");
+      return this.finishNode(node);
     }
 
     // Parses element name in any form - namespaced, member
@@ -308,10 +311,13 @@ export default (superClass: typeof Parser) =>
         return node;
       }
       while (this.eat(tt.dot)) {
-        const newNode = this.startNodeAt<N.JSXMemberExpression>(startLoc);
+        const newNode = this.startNodeAt<N.JSXMemberExpression>(
+          startLoc,
+          "JSXMemberExpression",
+        );
         newNode.object = node;
         newNode.property = this.jsxParseIdentifier();
-        node = this.finishNode(newNode, "JSXMemberExpression");
+        node = this.finishNode(newNode);
       }
       return node;
     }
@@ -348,8 +354,11 @@ export default (superClass: typeof Parser) =>
     // at the beginning of the next one (right brace).
 
     jsxParseEmptyExpression(): N.JSXEmptyExpression {
-      const node = this.startNodeAt(this.state.lastTokEndLoc);
-      return this.finishNodeAt(node, "JSXEmptyExpression", this.state.startLoc);
+      const node = this.startNodeAt<N.JSXEmptyExpression>(
+        this.state.lastTokEndLoc,
+        "JSXEmptyExpression",
+      );
+      return this.finishNodeAt(node, this.state.startLoc);
     }
 
     // Parse JSX spread child
@@ -399,8 +408,8 @@ export default (superClass: typeof Parser) =>
     // Parses following JSX attribute name-value pair.
 
     jsxParseAttribute(): N.JSXAttribute | N.JSXSpreadAttribute {
-      const node = this.startNode<N.JSXAttribute | N.JSXSpreadAttribute>();
       if (this.match(tt.braceL)) {
+        const node = this.startNode("JSXSpreadAttribute");
         this.setContext(tc.brace);
         this.next();
         this.expect(tt.ellipsis);
@@ -408,11 +417,12 @@ export default (superClass: typeof Parser) =>
         this.setContext(tc.j_oTag);
         this.state.canStartJSXElement = true;
         this.expect(tt.braceR);
-        return this.finishNode(node, "JSXSpreadAttribute");
+        return this.finishNode(node);
       }
+      const node = this.startNode("JSXAttribute");
       node.name = this.jsxParseNamespacedName();
       node.value = this.eat(tt.eq) ? this.jsxParseAttributeValue() : null;
-      return this.finishNode(node, "JSXAttribute");
+      return this.finishNode(node);
     }
 
     // Parses JSX opening tag starting after "<".
@@ -420,16 +430,19 @@ export default (superClass: typeof Parser) =>
     jsxParseOpeningElementAt(
       startLoc: Position,
     ): N.JSXOpeningElement | N.JSXOpeningFragment {
-      const node = this.startNodeAt<N.JSXOpeningElement | N.JSXOpeningFragment>(
-        startLoc,
-      );
       if (this.eat(tt.jsxTagEnd)) {
-        return this.finishNode(node, "JSXOpeningFragment");
+        const node = this.startNodeAt<N.JSXOpeningFragment>(
+          startLoc,
+          "JSXOpeningFragment",
+        );
+        return this.finishNode(node);
       }
-      node.name = this.jsxParseElementName();
-      return this.jsxParseOpeningElementAfterName(
-        node as Undone<N.JSXOpeningElement>,
+      const node = this.startNodeAt<N.JSXOpeningElement>(
+        startLoc,
+        "JSXOpeningElement",
       );
+      node.name = this.jsxParseElementName();
+      return this.jsxParseOpeningElementAfterName(node);
     }
 
     jsxParseOpeningElementAfterName(
@@ -442,7 +455,7 @@ export default (superClass: typeof Parser) =>
       node.attributes = attributes;
       node.selfClosing = this.eat(tt.slash);
       this.expect(tt.jsxTagEnd);
-      return this.finishNode(node, "JSXOpeningElement");
+      return this.finishNode(node);
     }
 
     // Parses JSX closing tag starting after "</".
@@ -450,12 +463,18 @@ export default (superClass: typeof Parser) =>
     jsxParseClosingElementAt(
       startLoc: Position,
     ): N.JSXClosingElement | N.JSXClosingFragment {
-      const node = this.startNodeAt<N.JSXClosingFragment | N.JSXClosingElement>(
-        startLoc,
-      );
       if (this.eat(tt.jsxTagEnd)) {
-        return this.finishNode(node, "JSXClosingFragment");
+        return this.finishNode(
+          this.startNodeAt<N.JSXClosingFragment>(
+            startLoc,
+            "JSXClosingFragment",
+          ),
+        );
       }
+      const node = this.startNodeAt<N.JSXClosingElement>(
+        startLoc,
+        "JSXClosingElement",
+      );
       node.name = this.jsxParseElementName();
       this.expect(tt.jsxTagEnd);
       return this.finishNode(node, "JSXClosingElement");
@@ -465,10 +484,16 @@ export default (superClass: typeof Parser) =>
     // (starting after "<"), attributes, contents and closing tag.
 
     jsxParseElementAt(startLoc: Position): N.JSXElement | N.JSXFragment {
-      const node = this.startNodeAt<N.JSXElement | N.JSXFragment>(startLoc);
       const children = [];
       const openingElement = this.jsxParseOpeningElementAt(startLoc);
       let closingElement = null;
+
+      const isFragmentForOpeningElement = isFragment(openingElement);
+
+      const node = this.startNodeAt<N.JSXElement | N.JSXFragment>(
+        startLoc,
+        isFragmentForOpeningElement ? "JSXFragment" : "JSXElement",
+      );
 
       if (!openingElement.selfClosing) {
         contents: for (;;) {
@@ -484,7 +509,9 @@ export default (superClass: typeof Parser) =>
               break;
 
             case tt.jsxText:
-              children.push(this.parseLiteral(this.state.value, "JSXText"));
+              children.push(
+                this.parseLiteral(this.state.value, this.startNode("JSXText")),
+              );
               break;
 
             case tt.braceL: {
@@ -510,16 +537,19 @@ export default (superClass: typeof Parser) =>
         }
 
         if (
-          isFragment(openingElement) &&
+          isFragmentForOpeningElement &&
           !isFragment(closingElement) &&
           closingElement !== null
         ) {
           this.raise(JsxErrors.MissingClosingTagFragment, closingElement);
-        } else if (!isFragment(openingElement) && isFragment(closingElement)) {
+        } else if (!isFragmentForOpeningElement && isFragment(closingElement)) {
           this.raise(JsxErrors.MissingClosingTagElement, closingElement, {
             openingTagName: getQualifiedJSXName(openingElement.name),
           });
-        } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
+        } else if (
+          !isFragmentForOpeningElement &&
+          !isFragment(closingElement)
+        ) {
           if (
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
@@ -531,7 +561,7 @@ export default (superClass: typeof Parser) =>
         }
       }
 
-      if (isFragment(openingElement)) {
+      if (isFragmentForOpeningElement) {
         node.openingFragment = openingElement;
         node.closingFragment = closingElement;
       } else {
@@ -546,9 +576,7 @@ export default (superClass: typeof Parser) =>
         );
       }
 
-      return isFragment(openingElement)
-        ? this.finishNode(node, "JSXFragment")
-        : this.finishNode(node, "JSXElement");
+      return this.finishNode(node);
     }
 
     // Parses entire JSX element from current position.
