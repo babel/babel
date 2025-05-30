@@ -1,4 +1,5 @@
 import babel = require("./babel-core.cts");
+import asyncMaybeParse = require("./asyncMaybeParse.cts");
 import maybeParse = require("./maybeParse.cts");
 import astInfo = require("./ast-info.cts");
 import config = require("./configuration.cts");
@@ -22,7 +23,7 @@ export = function handleMessage(action: ACTIONS, payload: any) {
     case ACTIONS.MAYBE_PARSE:
       return config
         .normalizeBabelParseConfig(payload.options)
-        .then(options => maybeParse(payload.code, options));
+        .then(options => asyncMaybeParse(payload.code, options));
     case ACTIONS.MAYBE_PARSE_SYNC:
       if (!USE_ESM) {
         return maybeParse(
