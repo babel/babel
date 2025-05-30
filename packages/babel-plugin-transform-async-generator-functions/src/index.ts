@@ -100,6 +100,10 @@ export default declare(api => {
 
     visitor: {
       Program(path, state) {
+        if (process.env.BABEL_8_BREAKING && !path.node.extra.forAwait) {
+          return;
+        }
+
         // We need to traverse the ast here (instead of just vising Function
         // in the top level visitor) because for-await needs to run before the
         // async-to-generator plugin. This is because for-await is transpiled
