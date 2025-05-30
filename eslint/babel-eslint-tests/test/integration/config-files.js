@@ -38,4 +38,26 @@ describe("Babel config files", () => {
       ).toMatchObject([{ errorCount: 0, messages: [] }]);
     }
   });
+
+  it("works with async-requiring ESM plugins", async () => {
+    if (parseInt(ESLint.version, 10) >= 9) {
+      const engine = new ESLint({
+        ignore: false,
+        overrideConfigFile: fileURLToPath(
+          new URL(
+            "../fixtures/mjs-babel-plugin/eslint.config.js",
+            import.meta.url,
+          ),
+        ),
+      });
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(
+        await engine.lintFiles([
+          fileURLToPath(
+            new URL("../fixtures/mjs-babel-plugin/a.js", import.meta.url),
+          ),
+        ]),
+      ).toMatchObject([{ errorCount: 0, messages: [] }]);
+    }
+  });
 });
