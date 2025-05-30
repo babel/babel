@@ -400,19 +400,6 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  startsAwaitUsing(): boolean {
-    let next = this.nextTokenInLineStart();
-    if (this.isUnparsedContextual(next, "using")) {
-      next = this.nextTokenInLineStartSince(next + 5);
-      const nextCh = this.codePointAtPos(next);
-      if (this.chStartsBindingIdentifier(nextCh, next)) {
-        this.expectPlugin("explicitResourceManagement");
-        return true;
-      }
-    }
-    return false;
-  }
-
   // https://tc39.es/ecma262/#prod-ModuleItem
   parseModuleItem(this: Parser) {
     return this.parseStatementLike(
