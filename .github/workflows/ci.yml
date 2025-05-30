@@ -847,7 +847,8 @@ jobs:
           node lib/download-node
       - name: Download test262
         run: make bootstrap-test262
-      - name: Cache test262 results
+      - name: Download test262 results cache
+        id: results-cache-restore
         uses: actions/cache@v4
         with:
           key: test262-babel8
@@ -882,3 +883,9 @@ jobs:
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
+      - name: Upload test262 results cache
+        if: success() || github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ steps.results-cache-restore.outputs.cache-primary-key }}
+          path: babel-test262-runner/cache.lmdb
