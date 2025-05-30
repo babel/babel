@@ -11,6 +11,7 @@ describe("builders", function () {
           t.identifier("foo"),
         );
         expect(tsTypeParameter).toHaveProperty("type", "TSTypeParameter");
+        expect(tsTypeParameter).toHaveProperty("name.name", "foo");
       });
       it("throws when name is missing", function () {
         expect(() => {
@@ -31,6 +32,7 @@ describe("builders", function () {
           "foo",
         );
         expect(tsTypeParameter).toHaveProperty("type", "TSTypeParameter");
+        expect(tsTypeParameter).toHaveProperty("name", "foo");
       });
       it("throws when name is missing in Babel 7", function () {
         expect(() => {
