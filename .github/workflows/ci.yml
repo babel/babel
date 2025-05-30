@@ -878,7 +878,7 @@ jobs:
       - name: Compare previous main branch & current results
         run: |
           cd babel-test262-runner
-          node lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap
+          node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
