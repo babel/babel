@@ -24,6 +24,24 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.4 (2025-05-30)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-plugin-proposal-explicit-resource-management`
+  * [#17323](https://github.com/babel/babel/pull/17323) Disallow using in bare case statement ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#17311](https://github.com/babel/babel/pull/17311) Improve parseExpression error messages ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17287](https://github.com/babel/babel/pull/17287) Reduce `regenerator` size more ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17334](https://github.com/babel/babel/pull/17334) Use shorter method names for regenerator context ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#17268](https://github.com/babel/babel/pull/17268) Reduce `regenerator` helper size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#17238](https://github.com/babel/babel/pull/17238) Split `regeneratorRuntime` into multiple helpers ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.27.3 (2025-05-27)
 
 #### :bug: Bug Fix
