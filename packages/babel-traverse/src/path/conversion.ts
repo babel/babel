@@ -992,7 +992,7 @@ export function ensureFunctionName<
   if (!state.needsRename) {
     this.node.id = id;
     if (process.env.BABEL_8_BREAKING) {
-      scope.getProgramParent().references.add(id.name);
+      scope.getProgramParent().referencesSet.add(id.name);
     } else {
       // @ts-expect-error Babel 7
       scope.getProgramParent().references[id.name] = true;
@@ -1005,7 +1005,7 @@ export function ensureFunctionName<
     scope.rename(id.name);
     this.node.id = id;
     if (process.env.BABEL_8_BREAKING) {
-      scope.getProgramParent().references.add(id.name);
+      scope.getProgramParent().referencesSet.add(id.name);
     } else {
       // @ts-expect-error Babel 7
       scope.getProgramParent().references[id.name] = true;

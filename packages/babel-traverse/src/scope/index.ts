@@ -1148,11 +1148,17 @@ class Scope {
    * Walk up to the top of the scope tree and get the `Program`.
    */
 
-  getProgramParent() {
+  getProgramParent(): Scope & {
+    referencesSet: Set<string>;
+    uidsSet: Set<string>;
+  } {
     let scope: Scope = this;
     do {
       if (scope.path.isProgram()) {
-        return scope;
+        return scope as Scope & {
+          referencesSet: Set<string>;
+          uidsSet: Set<string>;
+        };
       }
     } while ((scope = scope.parent));
     throw new Error("Couldn't find a Program");
