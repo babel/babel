@@ -5,11 +5,14 @@ class C {
   }
 }
 function _g() {
-  var _this = this;
-  return babelHelpers.wrapAsyncGenerator(function* () {
-    _this;
+  return _g2.apply(this, arguments);
+}
+function _g2() {
+  _g2 = babelHelpers.wrapAsyncGenerator(function* () {
+    this;
     yield babelHelpers.awaitAsyncGenerator(1);
     yield 2;
     return 3;
-  })();
+  });
+  return _g2.apply(this, arguments);
 }
