@@ -197,7 +197,6 @@
               "destructuringPrivate",
               "doExpressions",
               "estree",
-              "explicitResourceManagement",
               "exportDefaultFrom",
               "flow",
               "flowComments",
