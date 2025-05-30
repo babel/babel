@@ -38,6 +38,8 @@ function commentIsNewline(c: t.Comment) {
 
 const { needsParens } = n;
 
+import { TokenContext } from "./node/index.ts";
+
 const enum COMMENT_TYPE {
   LEADING,
   INNER,
@@ -141,33 +143,41 @@ class Printer {
 
   declare format: Format;
 
-  inForStatementInit: boolean = false;
   enterForStatementInit() {
-    if (this.inForStatementInit) return () => {};
-    this.inForStatementInit = true;
-    return () => {
-      this.inForStatementInit = false;
-    };
+    this.tokenContext |=
+      TokenContext.forInitHead | TokenContext.forInOrInitHeadAccumulate;
+    return () => (this.tokenContext = TokenContext.normal);
+  }
+
+  enterForXStatementInit(isForOf: boolean) {
+    if (isForOf) {
+      this.tokenContext |= TokenContext.forOfHead;
+      return null;
+    } else {
+      this.tokenContext |=
+        TokenContext.forInHead | TokenContext.forInOrInitHeadAccumulate;
+      return () => (this.tokenContext = TokenContext.normal);
+    }
   }
 
   enterDelimited() {
-    const oldInForStatementInit = this.inForStatementInit;
+    const oldTokenContext = this.tokenContext;
     const oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
     if (
-      oldInForStatementInit === false &&
+      !(oldTokenContext & TokenContext.forInOrInitHeadAccumulate) &&
       oldNoLineTerminatorAfterNode === null
     ) {
       return () => {};
     }
-    this.inForStatementInit = false;
     this._noLineTerminatorAfterNode = null;
+    this.tokenContext = TokenContext.normal;
     return () => {
-      this.inForStatementInit = oldInForStatementInit;
       this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
+      this.tokenContext = oldTokenContext;
     };
   }
 
-  tokenContext: number = 0;
+  tokenContext: number = TokenContext.normal;
 
   _tokens: Token[] = null;
   _originalCode: string | null = null;
@@ -307,7 +317,7 @@ class Printer {
    */
 
   word(str: string, noLineTerminatorAfter: boolean = false): void {
-    this.tokenContext = 0;
+    this.tokenContext &= TokenContext.forInOrInitHeadAccumulatePassThroughMask;
 
     this._maybePrintInnerComments(str);
 
@@ -369,7 +379,7 @@ class Printer {
    *    commas in an array literal).
    */
   token(str: string, maybeNewline = false, occurrenceCount = 0): void {
-    this.tokenContext = 0;
+    this.tokenContext &= TokenContext.forInOrInitHeadAccumulatePassThroughMask;
 
     this._maybePrintInnerComments(str, occurrenceCount);
 
@@ -399,7 +409,7 @@ class Printer {
   }
 
   tokenChar(char: number): void {
-    this.tokenContext = 0;
+    this.tokenContext &= TokenContext.forInOrInitHeadAccumulatePassThroughMask;
 
     const str = String.fromCharCode(char);
     this._maybePrintInnerComments(str);
@@ -728,7 +738,6 @@ class Printer {
         node,
         parent,
         this.tokenContext,
-        this.inForStatementInit,
         format.preserveFormat ? this._boundGetRawIdentifier : undefined,
       );
 
@@ -769,7 +778,7 @@ class Printer {
     }
 
     let oldNoLineTerminatorAfterNode;
-    let oldInForStatementInitWasTrue;
+    let oldTokenContext;
     if (!shouldPrintParens) {
       noLineTerminatorAfter ||=
         parent &&
@@ -789,9 +798,9 @@ class Printer {
       this.token("(");
       if (indentParenthesized) this.indent();
       this._endsWithInnerRaw = false;
-      if (this.inForStatementInit) {
-        oldInForStatementInitWasTrue = true;
-        this.inForStatementInit = false;
+      if (this.tokenContext & TokenContext.forInOrInitHeadAccumulate) {
+        oldTokenContext = this.tokenContext;
+        this.tokenContext = TokenContext.normal;
       }
       oldNoLineTerminatorAfterNode = this._noLineTerminatorAfterNode;
       this._noLineTerminatorAfterNode = null;
@@ -817,7 +826,7 @@ class Printer {
       }
       this.token(")");
       this._noLineTerminator = noLineTerminatorAfter;
-      if (oldInForStatementInitWasTrue) this.inForStatementInit = true;
+      if (oldTokenContext) this.tokenContext = oldTokenContext;
     } else if (noLineTerminatorAfter && !this._noLineTerminator) {
       this._noLineTerminator = true;
       this._printTrailingComments(node, parent);
