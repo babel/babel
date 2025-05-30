@@ -16,6 +16,44 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-beta.1 (2025-05-30)
+
+#### :boom: Breaking Change
+* `babel-helpers`, `babel-plugin-transform-regenerator`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17237](https://github.com/babel/babel/pull/17237) [babel 8] Do not replace global `regeneratorRuntime` references in regenerator transform ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#17267](https://github.com/babel/babel/pull/17267) [Babel 8] Directly export the JSON files from `@babel/compat-data` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#17265](https://github.com/babel/babel/pull/17265) [babel 8] Drop CJS support from `@babel/parser` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-record-and-tuple`, `babel-standalone`, `babel-traverse`
+  * [#17242](https://github.com/babel/babel/pull/17242) [Babel 8]: Remove record and tuple syntax support ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`, `babel-types`
+  * [#17217](https://github.com/babel/babel/pull/17217) Harden variable declarator validations ([@JLHwung](https://github.com/JLHwung))
+* _All packages_
+  * [#17204](https://github.com/babel/babel/pull/17204) [Babel 8] Bump nodejs requirements to `^20.19.0 || >= 22.12.0` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#17188](https://github.com/babel/babel/pull/17188) [Babel 8] Align esmodules: true behaviour to intersect ([@JLHwung](https://github.com/JLHwung))
+
+#### :loudspeaker: Deprecation
+* `babel-types`
+  * [#17133](https://github.com/babel/babel/pull/17133) [babel 8] Deprecate uppercase builders ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-traverse`
+  * [#16624](https://github.com/babel/babel/pull/16624) [Babel 8] Change `scope.{references,uids}` to `Set` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#17261](https://github.com/babel/babel/pull/17261) [babel 8] Remove unnecessary CJS ESM wrapper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-react-jsx`, `babel-preset-env`
+  * [#17211](https://github.com/babel/babel/pull/17211) Babel 8 cleanup ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`, `babel-types`
+  * [#17148](https://github.com/babel/babel/pull/17148) [Babel 8] Remove `BLOCK_SCOPED_SYMBOL` and `NOT_LOCAL_BINDING` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-regenerator`, `babel-plugin-transform-typeof-symbol`
+  * [#17186](https://github.com/babel/babel/pull/17186) Cleanup babel 8 todo item ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-traverse`
+  * [#16965](https://github.com/babel/babel/pull/16965) [Babel 8] perf: Improve traverse performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
 ## v8.0.0-alpha.17 (2025-03-11)
 
 #### :boom: Breaking Change
