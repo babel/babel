@@ -3,11 +3,9 @@
 
 
 
-# 6 valid programs produced a parsing error
+# 4 valid programs produced a parsing error
 
 staging/explicit-resource-management/await-using-in-switch-case-block.js(default)
 staging/explicit-resource-management/await-using-in-switch-case-block.js(strict mode)
 staging/explicit-resource-management/call-dispose-methods.js(default)
 staging/explicit-resource-management/call-dispose-methods.js(strict mode)
-staging/sm/String/make-normalize-generateddata-input.py(default)
-staging/sm/String/make-normalize-generateddata-input.py(strict mode)
