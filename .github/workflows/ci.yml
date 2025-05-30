@@ -849,7 +849,7 @@ jobs:
         run: make bootstrap-test262
       - name: Download test262 results cache
         id: results-cache-restore
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           key: test262-babel8
           path: babel-test262-runner/cache.lmdb
