@@ -12,6 +12,8 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.parseAsync = babel.parseAsync;
   exports.loadPartialConfigSync = babel.loadPartialConfigSync;
   exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
+  exports.createConfigItemAsync = babel.createConfigItemAsync;
+
   if (process.env.BABEL_8_BREAKING) {
     exports.createConfigItemSync = babel.createConfigItemSync;
   } else {
