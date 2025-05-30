@@ -1,5 +1,3 @@
-import parser from "@babel/parser";
-
 export default async function () {
   await Promise.resolve();
 
