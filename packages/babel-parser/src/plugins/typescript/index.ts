@@ -2293,10 +2293,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               declare: true,
             });
           case tt._using:
-            if (
-              this.hasPlugin("explicitResourceManagement") &&
-              this.isUsing()
-            ) {
+            if (this.isUsing()) {
               this.raise(
                 TSErrors.InvalidModifierOnUsingDeclaration,
                 this.state.startLoc,
@@ -2307,10 +2304,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             }
             break;
           case tt._await:
-            if (
-              this.hasPlugin("explicitResourceManagement") &&
-              this.isAwaitUsing()
-            ) {
+            if (this.isAwaitUsing()) {
               this.raise(
                 TSErrors.InvalidModifierOnAwaitUsingDeclaration,
                 this.state.startLoc,
