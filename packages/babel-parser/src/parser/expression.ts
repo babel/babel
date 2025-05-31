@@ -2866,7 +2866,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
   }
 
-  // Returns wether `await` is allowed or not in this context, and if it is
+  // Returns whether `await` is allowed or not in this context, and if it is
   // keeps track of it to determine whether a module uses top-level await.
   recordAwaitIfAllowed(): boolean {
     const isAwaitAllowed =
