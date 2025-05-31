@@ -73,9 +73,8 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   isUnparsedContextual(nameStart: number, name: string): boolean {
-    const nameEnd = nameStart + name.length;
-    if (this.input.slice(nameStart, nameEnd) === name) {
-      const nextCh = this.input.charCodeAt(nameEnd);
+    if (this.input.startsWith(name, nameStart)) {
+      const nextCh = this.input.charCodeAt(nameStart + name.length);
       return !(
         isIdentifierChar(nextCh) ||
         // check if `nextCh is between 0xd800 - 0xdbff,
