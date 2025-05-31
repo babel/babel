@@ -175,7 +175,7 @@ export default function convertFunctionParams(
 
     node.generator = false;
     node.async = false;
-    if (async) {
+    if (async && !generator) {
       // If the default value of a parameter throws, it must reject asynchronously.
       path2.node.body = template.statement.ast`{
         try {
