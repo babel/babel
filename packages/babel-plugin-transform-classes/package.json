@@ -16,10 +16,10 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
+    "@babel/helper-globals": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "globals": "condition:BABEL_8_BREAKING ? ^15.9.0 : ^11.1.0"
+    "@babel/traverse": "workspace:^"
   },
   "keywords": [
     "babel-plugin"

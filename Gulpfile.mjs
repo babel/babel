@@ -113,7 +113,7 @@ async function generateHelpers(generator, dest, filename, message) {
  * @param {TypesHelperKind} helperKind
  * @param {string} filename
  */
-async function generateTypeHelpers(helperKind, filename = "index.ts") {
+function generateTypeHelpers(helperKind, filename = "index.ts") {
   return generateHelpers(
     `./packages/babel-types/scripts/generators/${helperKind}.js`,
     `./packages/babel-types/src/${helperKind}/generated/`,
@@ -133,6 +133,15 @@ function generateTraverseHelpers(helperKind, outBase = "") {
     `./packages/babel-traverse/src/${outBase}/generated/`,
     `${helperKind}.d.ts`,
     `@babel/traverse -> ${helperKind}`
+  );
+}
+
+function generateHelperGlobalsData(filename) {
+  return generateHelpers(
+    `./packages/babel-helper-globals/scripts/generate.mjs`,
+    `./packages/babel-helper-globals/data/`,
+    filename,
+    `@babel/helper-globals -> ${filename}`
   );
 }
 
@@ -732,6 +741,7 @@ const dtsBundles = bool(process.env.BABEL_8_BREAKING)
           "packages/babel-node",
           // This will be just JSON
           "packages/babel-compat-data",
+          "packages/babel-helper-globals",
           // Not meant to be consumed manually
           "packages/babel-runtime",
           "packages/babel-runtime-corejs2",
@@ -755,6 +765,16 @@ const standaloneBundle = [
     input: getIndexFromPackage("packages/babel-standalone"),
   },
 ];
+
+gulp.task("generate-helper-globals-data", () => {
+  log("Generating @babel/helper-globals data");
+
+  return Promise.all([
+    generateHelperGlobalsData("browser-upper.json"),
+    generateHelperGlobalsData("builtin-lower.json"),
+    generateHelperGlobalsData("builtin-upper.json"),
+  ]);
+});
 
 gulp.task("generate-type-helpers", () => {
   log("Generating @babel/types and @babel/traverse dynamic functions");
@@ -851,7 +871,11 @@ gulp.task(
   gulp.series(
     "build-vendor",
     gulp.parallel("build-rollup", "build-babel"),
-    gulp.parallel("generate-type-helpers", "generate-runtime-helpers"),
+    gulp.parallel(
+      "generate-type-helpers",
+      "generate-runtime-helpers",
+      "generate-helper-globals-data"
+    ),
     // rebuild @babel/types and @babel/helpers since
     // type-helpers and generated helpers may be changed
     gulp.parallel("build-rollup", "build-babel"),
@@ -874,6 +898,7 @@ gulp.task(
     gulp.parallel(
       "generate-standalone",
       "generate-runtime-helpers",
+      "generate-helper-globals-data",
       gulp.series(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed

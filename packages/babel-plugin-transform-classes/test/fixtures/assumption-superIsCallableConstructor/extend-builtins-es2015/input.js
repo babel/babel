@@ -1,0 +1,1 @@
+class ListBuffer extends ArrayBuffer {}
