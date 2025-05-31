@@ -1,7 +1,7 @@
 name: Open issue to remind doing something
 on:
   schedule:
-    - cron: 0 0 30 11 *
+    - cron: 0 0 15 07 *
 
 permissions:
   issues: write
