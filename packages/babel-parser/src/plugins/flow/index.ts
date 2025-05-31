@@ -1691,7 +1691,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case tt.string:
           return this.parseLiteral<N.StringLiteralTypeAnnotation>(
             this.state.value,
-            "StringLiteralTypeAnnotation",
+            this.startNode("StringLiteralTypeAnnotation"),
           );
 
         case tt._true:
@@ -1707,18 +1707,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (this.state.value === "-") {
             this.next();
             if (this.match(tt.num)) {
-              return this.parseLiteralAtNode<N.NumberLiteralTypeAnnotation>(
+              return this.parseLiteral<N.NumberLiteralTypeAnnotation>(
                 -this.state.value,
-                "NumberLiteralTypeAnnotation",
-                node,
+                this.castNodeTo(node, "NumberLiteralTypeAnnotation"),
               );
             }
 
             if (this.match(tt.bigint)) {
-              return this.parseLiteralAtNode<N.BigIntLiteralTypeAnnotation>(
+              return this.parseLiteral<N.BigIntLiteralTypeAnnotation>(
                 -this.state.value,
-                "BigIntLiteralTypeAnnotation",
-                node,
+                this.castNodeTo(node, "BigIntLiteralTypeAnnotation"),
               );
             }
 
@@ -1732,13 +1730,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case tt.num:
           return this.parseLiteral(
             this.state.value,
-            "NumberLiteralTypeAnnotation",
+            this.startNode("NumberLiteralTypeAnnotation"),
           );
 
         case tt.bigint:
           return this.parseLiteral(
             this.state.value,
-            "BigIntLiteralTypeAnnotation",
+            this.startNode("BigIntLiteralTypeAnnotation"),
           );
 
         case tt._void:
@@ -1763,8 +1761,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         default:
           if (tokenIsKeyword(this.state.type)) {
             const label = tokenLabelName(this.state.type);
+            const node = this.startNode<N.Identifier>("Identifier");
             this.next();
-            return super.createIdentifier(node as Undone<N.Identifier>, label);
+            return super.createIdentifier(node, label);
           } else if (tokenIsIdentifier(this.state.type)) {
             if (this.isContextual(tt._interface)) {
               return this.flowParseInterfaceType();
@@ -3267,14 +3266,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return base;
         }
         this.next();
-        const node = this.startNodeAt<N.OptionalCallExpression>(startLoc);
+        const node = this.startNodeAt<N.OptionalCallExpression>(
+          startLoc,
+          "OptionalCallExpression",
+        );
         node.callee = base;
         node.typeArguments =
           this.flowParseTypeParameterInstantiationInExpression();
         this.expect(tt.parenL);
         node.arguments = this.parseCallExpressionArguments(tt.parenR);
         node.optional = true;
-        return this.finishCallExpression(node, /* optional */ true);
+        return this.finishCallExpression(node);
       } else if (
         !noCalls &&
         this.shouldParseTypes() &&
@@ -3284,7 +3286,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       ) {
         const node = this.startNodeAt<
           N.OptionalCallExpression | N.CallExpression
-        >(startLoc);
+        >(
+          startLoc,
+          subscriptState.optionalChainMember
+            ? "OptionalCallExpression"
+            : "CallExpression",
+        );
         node.callee = base;
 
         const result = this.tryParse(() => {
@@ -3295,10 +3302,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (subscriptState.optionalChainMember) {
             (node as Undone<N.OptionalCallExpression>).optional = false;
           }
-          return this.finishCallExpression(
-            node,
-            subscriptState.optionalChainMember,
-          );
+          return this.finishCallExpression(node);
         });
 
         if (result.node) {
@@ -3331,7 +3335,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseAsyncArrowWithTypeParameters(
       startLoc: Position,
     ): N.ArrowFunctionExpression | undefined | null {
-      const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
+      const node = this.startNodeAt<N.ArrowFunctionExpression>(
+        startLoc,
+        "ArrowFunctionExpression",
+      );
       this.parseFunctionParams(node, false);
       if (!this.parseArrow(node)) return;
       return super.parseArrowExpression(

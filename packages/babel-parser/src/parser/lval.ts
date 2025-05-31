@@ -349,22 +349,22 @@ export default abstract class LValParser extends NodeUtils {
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
   ): SpreadElement {
-    const node = this.startNode<SpreadElement>();
+    const node = this.startNode<SpreadElement>("SpreadElement");
     this.next();
     node.argument = this.parseMaybeAssignAllowIn(
       refExpressionErrors,
       undefined,
     );
-    return this.finishNode(node, "SpreadElement");
+    return this.finishNode(node);
   }
 
   // https://tc39.es/ecma262/#prod-BindingRestProperty
   // https://tc39.es/ecma262/#prod-BindingRestElement
   parseRestBinding(this: Parser): RestElement {
-    const node = this.startNode<RestElement>();
+    const node = this.startNode<RestElement>("RestElement");
     this.next(); // eat `...`
     node.argument = this.parseBindingAtom();
-    return this.finishNode(node, "RestElement");
+    return this.finishNode(node);
   }
 
   // Parses lvalue (assignable) atom.
@@ -372,7 +372,7 @@ export default abstract class LValParser extends NodeUtils {
     // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
-        const node = this.startNode<ArrayPattern>();
+        const node = this.startNode<ArrayPattern>("ArrayPattern");
         this.next();
         // @ts-expect-error: Fixme: TSParameterProperty can not be assigned to node.elements
         node.elements = this.parseBindingList(
@@ -380,7 +380,7 @@ export default abstract class LValParser extends NodeUtils {
           charCodes.rightSquareBracket,
           ParseBindingListFlags.ALLOW_EMPTY,
         );
-        return this.finishNode(node, "ArrayPattern");
+        return this.finishNode(node);
       }
 
       case tt.braceL:
@@ -464,7 +464,7 @@ export default abstract class LValParser extends NodeUtils {
       return this.parseBindingRestProperty(this.startNode());
     }
 
-    const prop = this.startNode<AssignmentProperty>();
+    const prop = this.startNode<AssignmentProperty>("ObjectProperty");
     if (type === tt.privateName) {
       this.expectPlugin("destructuringPrivate", startLoc);
       this.classScope.usePrivateName(this.state.value, startLoc);
@@ -520,10 +520,13 @@ export default abstract class LValParser extends NodeUtils {
     left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
-    const node = this.startNodeAt<AssignmentPattern>(startLoc);
+    const node = this.startNodeAt<AssignmentPattern>(
+      startLoc,
+      "AssignmentPattern",
+    );
     node.left = left;
     node.right = this.parseMaybeAssignAllowIn();
-    return this.finishNode(node, "AssignmentPattern");
+    return this.finishNode(node);
   }
   /**
    * Return information use in determining whether a Node of a given type is an LVal,

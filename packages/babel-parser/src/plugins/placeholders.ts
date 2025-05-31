@@ -41,7 +41,7 @@ export default (superClass: typeof Parser) =>
       expectedNode: T,
     ): /*?N.Placeholder<T>*/ MaybePlaceholder<T> | undefined {
       if (this.match(tt.placeholder)) {
-        const node = this.startNode<N.Placeholder<T>>();
+        const node = this.startNode<N.Placeholder<T>>("Placeholder");
         this.next();
         this.assertNoSpace();
 
@@ -64,7 +64,6 @@ export default (superClass: typeof Parser) =>
       if (!placeholder.expectedNode || !placeholder.type) {
         placeholder = this.finishNode(
           placeholder,
-          "Placeholder",
         ) as unknown as N.Placeholder<T>;
       }
 
@@ -221,7 +220,10 @@ export default (superClass: typeof Parser) =>
       }
 
       this.semicolon();
-      const stmtPlaceholder = node as unknown as N.Placeholder<"Statement">;
+      const stmtPlaceholder = this.castNodeTo(
+        node,
+        "Placeholder",
+      ) as N.Placeholder<"Statement">;
       stmtPlaceholder.name = (expr as N.Placeholder).name;
       return this.finishPlaceholder(stmtPlaceholder, "Statement");
     }

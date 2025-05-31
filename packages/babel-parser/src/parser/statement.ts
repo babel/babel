@@ -211,7 +211,7 @@ export default abstract class StatementParser extends ExpressionParser {
       );
     }
 
-    return this.finishNode(file, "File");
+    return this.finishNode(file);
   }
 
   parseProgram(
@@ -237,12 +237,11 @@ export default abstract class StatementParser extends ExpressionParser {
     let finishedProgram: N.Program;
     if (end === tt.eof) {
       // finish at eof for top level program
-      finishedProgram = this.finishNode(program, "Program");
+      finishedProgram = this.finishNode(program);
     } else {
       // finish immediately before the end token
       finishedProgram = this.finishNodeAt(
         program,
-        "Program",
         createPositionWithColumnOffset(this.state.startLoc, -1),
       );
     }
@@ -281,10 +280,10 @@ export default abstract class StatementParser extends ExpressionParser {
       return null;
     }
 
-    const node = this.startNode<N.InterpreterDirective>();
+    const node = this.startNode<N.InterpreterDirective>("InterpreterDirective");
     node.value = this.state.value;
     this.next();
-    return this.finishNode(node, "InterpreterDirective");
+    return this.finishNode(node);
   }
 
   isLet(): boolean {
@@ -462,7 +461,6 @@ export default abstract class StatementParser extends ExpressionParser {
     decorators?: N.Decorator[] | null,
   ): N.Statement {
     const startType = this.state.type;
-    const node = this.startNode();
     const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
     const allowFunctionDeclaration = !!(
       flags & ParseStatementFlag.AllowFunctionDeclaration
@@ -475,15 +473,21 @@ export default abstract class StatementParser extends ExpressionParser {
 
     switch (startType) {
       case tt._break:
-        return this.parseBreakContinueStatement(node, /* isBreak */ true);
+        return this.parseBreakContinueStatement(
+          this.startNode("BreakStatement"),
+          /* isBreak */ true,
+        );
       case tt._continue:
-        return this.parseBreakContinueStatement(node, /* isBreak */ false);
+        return this.parseBreakContinueStatement(
+          this.startNode("ContinueStatement"),
+          /* isBreak */ false,
+        );
       case tt._debugger:
-        return this.parseDebuggerStatement(node as Undone<N.DebuggerStatement>);
+        return this.parseDebuggerStatement(this.startNode("DebuggerStatement"));
       case tt._do:
-        return this.parseDoWhileStatement(node as Undone<N.DoWhileStatement>);
+        return this.parseDoWhileStatement(this.startNode("DoWhileStatement"));
       case tt._for:
-        return this.parseForStatement(node as Undone<N.ForStatement>);
+        return this.parseForStatement(this.startNode("ForStatement"));
       case tt._function:
         if (this.lookaheadCharCode() === charCodes.dot) break;
         if (!allowFunctionDeclaration) {
@@ -497,32 +501,35 @@ export default abstract class StatementParser extends ExpressionParser {
           );
         }
         return this.parseFunctionStatement(
-          node as Undone<N.FunctionDeclaration>,
+          this.startNode("FunctionDeclaration"),
           false,
           !allowDeclaration && allowFunctionDeclaration,
         );
       case tt._class:
         if (!allowDeclaration) this.unexpected();
-        return this.parseClass(
+        return this.parseClass<N.ClassDeclaration>(
           this.maybeTakeDecorators(
             decorators,
-            node as Undone<N.ClassDeclaration>,
+            this.startNode("ClassDeclaration"),
           ),
           true,
         );
 
       case tt._if:
-        return this.parseIfStatement(node as Undone<N.IfStatement>);
+        return this.parseIfStatement(this.startNode("IfStatement"));
       case tt._return:
-        return this.parseReturnStatement(node as Undone<N.ReturnStatement>);
+        return this.parseReturnStatement(this.startNode("ReturnStatement"));
       case tt._switch:
-        return this.parseSwitchStatement(node as Undone<N.SwitchStatement>);
+        return this.parseSwitchStatement(this.startNode("SwitchStatement"));
       case tt._throw:
-        return this.parseThrowStatement(node as Undone<N.ThrowStatement>);
+        return this.parseThrowStatement(this.startNode("ThrowStatement"));
       case tt._try:
-        return this.parseTryStatement(node as Undone<N.TryStatement>);
+        return this.parseTryStatement(this.startNode("TryStatement"));
 
-      case tt._await:
+      case tt._await: {
+        const node = this.startNode<N.VariableDeclaration>(
+          "VariableDeclaration",
+        );
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
         if (!this.state.containsEsc && this.startsAwaitUsing()) {
           if (!this.allowsUsing()) {
@@ -533,12 +540,10 @@ export default abstract class StatementParser extends ExpressionParser {
             this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           }
           this.next(); // eat 'await'
-          return this.parseVarStatement(
-            node as Undone<N.VariableDeclaration>,
-            "await using",
-          );
+          return this.parseVarStatement(node, "await using");
         }
         break;
+      }
       case tt._using:
         // using [no LineTerminator here] BindingList[+Using]
         if (
@@ -554,7 +559,7 @@ export default abstract class StatementParser extends ExpressionParser {
           this.raise(Errors.UnexpectedLexicalDeclaration, this.state.startLoc);
         }
         return this.parseVarStatement(
-          node as Undone<N.VariableDeclaration>,
+          this.startNode("VariableDeclaration"),
           "using",
         );
       case tt._let: {
@@ -585,18 +590,18 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._var: {
         const kind = this.state.value;
         return this.parseVarStatement(
-          node as Undone<N.VariableDeclaration>,
+          this.startNode("VariableDeclaration"),
           kind,
         );
       }
       case tt._while:
-        return this.parseWhileStatement(node as Undone<N.WhileStatement>);
+        return this.parseWhileStatement(this.startNode("WhileStatement"));
       case tt._with:
-        return this.parseWithStatement(node as Undone<N.WithStatement>);
+        return this.parseWithStatement(this.startNode("WithStatement"));
       case tt.braceL:
         return this.parseBlock();
       case tt.semi:
-        return this.parseEmptyStatement(node as Undone<N.EmptyStatement>);
+        return this.parseEmptyStatement(this.startNode("EmptyStatement"));
       case tt._import: {
         const nextTokenCharCode = this.lookaheadCharCode();
         if (
@@ -615,20 +620,15 @@ export default abstract class StatementParser extends ExpressionParser {
           this.raise(Errors.UnexpectedImportExport, this.state.startLoc);
         }
 
+        const node = this.startNode();
+
         this.next(); // eat `import`/`export`
 
         let result;
         if (startType === tt._import) {
-          result = this.parseImport(node as Undone<N.ImportDeclaration>);
+          result = this.parseImport(node);
         } else {
-          result = this.parseExport(
-            node as Undone<
-              | N.ExportAllDeclaration
-              | N.ExportDefaultDeclaration
-              | N.ExportNamedDeclaration
-            >,
-            decorators,
-          );
+          result = this.parseExport(node, decorators);
         }
 
         this.assertModuleNodeAllowed(result);
@@ -644,15 +644,18 @@ export default abstract class StatementParser extends ExpressionParser {
               this.state.startLoc,
             );
           }
+          const node = this.startNode("FunctionDeclaration");
           this.next(); // eat 'async'
           return this.parseFunctionStatement(
-            node as Undone<N.FunctionDeclaration>,
+            node,
             true,
             !allowDeclaration && allowFunctionDeclaration,
           );
         }
       }
     }
+
+    const startLoc = this.state.startLoc;
 
     // If the statement does not start with a statement keyword or a
     // brace, it's an ExpressionStatement or LabeledStatement. We
@@ -668,14 +671,14 @@ export default abstract class StatementParser extends ExpressionParser {
       this.eat(tt.colon)
     ) {
       return this.parseLabeledStatement(
-        node as Undone<N.LabeledStatement>,
+        this.startNodeAt(startLoc, "LabeledStatement"),
         maybeName,
         expr,
         flags,
       );
     } else {
       return this.parseExpressionStatement(
-        node as Undone<N.ExpressionStatement>,
+        this.startNodeAt(startLoc, "ExpressionStatement"),
         expr,
         decorators,
       );
@@ -766,7 +769,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseDecorator(this: Parser): N.Decorator {
     this.expectOnePlugin(["decorators", "decorators-legacy"]);
 
-    const node = this.startNode<N.Decorator>();
+    const node = this.startNode<N.Decorator>("Decorator");
     this.next();
 
     if (this.hasPlugin("decorators")) {
@@ -796,7 +799,10 @@ export default abstract class StatementParser extends ExpressionParser {
         expr = this.parseIdentifier(false);
 
         while (this.eat(tt.dot)) {
-          const node = this.startNodeAt<N.MemberExpression>(startLoc);
+          const node = this.startNodeAt<N.MemberExpression>(
+            startLoc,
+            "MemberExpression",
+          );
           node.object = expr;
           if (this.match(tt.privateName)) {
             this.classScope.usePrivateName(
@@ -808,7 +814,7 @@ export default abstract class StatementParser extends ExpressionParser {
             node.property = this.parseIdentifier(true);
           }
           node.computed = false;
-          expr = this.finishNode(node, "MemberExpression");
+          expr = this.finishNode(node);
         }
 
         node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
@@ -816,7 +822,7 @@ export default abstract class StatementParser extends ExpressionParser {
     } else {
       node.expression = this.parseExprSubscripts();
     }
-    return this.finishNode(node, "Decorator");
+    return this.finishNode(node);
   }
 
   parseMaybeDecoratorArguments(
@@ -825,11 +831,14 @@ export default abstract class StatementParser extends ExpressionParser {
     startLoc: Position,
   ): N.Expression {
     if (this.eat(tt.parenL)) {
-      const node = this.startNodeAt<N.CallExpression>(startLoc);
+      const node = this.startNodeAt<N.CallExpression>(
+        startLoc,
+        "CallExpression",
+      );
       node.callee = expr;
       node.arguments = this.parseCallExpressionArguments(tt.parenR);
       this.toReferencedList(node.arguments);
-      return this.finishNode(node, "CallExpression");
+      return this.finishNode(node);
     }
 
     return expr;
@@ -858,10 +867,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.verifyBreakContinue(node, isBreak);
 
-    return this.finishNode(
-      node,
-      isBreak ? "BreakStatement" : "ContinueStatement",
-    );
+    return this.finishNode(node);
   }
 
   verifyBreakContinue(
@@ -889,7 +895,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): N.DebuggerStatement {
     this.next();
     this.semicolon();
-    return this.finishNode(node, "DebuggerStatement");
+    return this.finishNode(node);
   }
 
   parseHeaderExpression(this: Parser): N.Expression {
@@ -968,7 +974,9 @@ export default abstract class StatementParser extends ExpressionParser {
         starsWithUsingDeclaration;
 
       if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
-        const initNode = this.startNode<N.VariableDeclaration>();
+        const initNode = this.startNode<N.VariableDeclaration>(
+          "VariableDeclaration",
+        );
         let kind;
         if (startsWithAwaitUsing) {
           kind = "await using";
@@ -981,7 +989,7 @@ export default abstract class StatementParser extends ExpressionParser {
         }
         this.next();
         this.parseVar(initNode, true, kind);
-        const init = this.finishNode(initNode, "VariableDeclaration");
+        const init = this.finishNode(initNode);
 
         const isForIn = this.match(tt._in);
         if (isForIn && starsWithUsingDeclaration) {
@@ -1072,7 +1080,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node.alternate = this.eat(tt._else)
       ? this.parseStatementOrSloppyAnnexBFunctionDeclaration()
       : null;
-    return this.finishNode(node, "IfStatement");
+    return this.finishNode(node);
   }
 
   parseReturnStatement(this: Parser, node: Undone<N.ReturnStatement>) {
@@ -1096,7 +1104,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.semicolon();
     }
 
-    return this.finishNode(node, "ReturnStatement");
+    return this.finishNode(node);
   }
 
   // https://tc39.es/ecma262/#prod-SwitchStatement
@@ -1116,9 +1124,9 @@ export default abstract class StatementParser extends ExpressionParser {
     for (let sawDefault; !this.match(tt.braceR); ) {
       if (this.match(tt._case) || this.match(tt._default)) {
         const isCase = this.match(tt._case);
-        if (cur) this.finishNode(cur, "SwitchCase");
+        if (cur) this.finishNode(cur);
         // @ts-expect-error Fixme
-        cases.push((cur = this.startNode<N.SwitchCase>()));
+        cases.push((cur = this.startNode<N.SwitchCase>("SwitchCase")));
         cur.consequent = [];
         this.next();
         if (isCase) {
@@ -1143,10 +1151,10 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
     this.scope.exit();
-    if (cur) this.finishNode(cur, "SwitchCase");
+    if (cur) this.finishNode(cur);
     this.next(); // Closing brace
     this.state.labels.pop();
-    return this.finishNode(node, "SwitchStatement");
+    return this.finishNode(node);
   }
 
   parseThrowStatement(this: Parser, node: Undone<N.ThrowStatement>) {
@@ -1186,7 +1194,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node.handler = null;
 
     if (this.match(tt._catch)) {
-      const clause = this.startNode<N.CatchClause>();
+      const clause = this.startNode<N.CatchClause>("CatchClause");
       this.next();
       if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
@@ -1207,7 +1215,7 @@ export default abstract class StatementParser extends ExpressionParser {
         );
 
       this.scope.exit();
-      node.handler = this.finishNode(clause, "CatchClause");
+      node.handler = this.finishNode(clause);
     }
 
     node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
@@ -1230,7 +1238,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.next();
     this.parseVar(node, false, kind, allowMissingInitializer);
     this.semicolon();
-    return this.finishNode(node, "VariableDeclaration");
+    return this.finishNode(node);
   }
 
   // https://tc39.es/ecma262/#prod-WhileStatement
@@ -1254,7 +1262,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.state.labels.pop();
 
-    return this.finishNode(node, "WhileStatement");
+    return this.finishNode(node);
   }
 
   parseWithStatement(
@@ -1278,12 +1286,12 @@ export default abstract class StatementParser extends ExpressionParser {
         this.parseStatement(),
       );
 
-    return this.finishNode(node, "WithStatement");
+    return this.finishNode(node);
   }
 
   parseEmptyStatement(node: Undone<N.EmptyStatement>): N.EmptyStatement {
     this.next();
-    return this.finishNode(node, "EmptyStatement");
+    return this.finishNode(node);
   }
 
   // https://tc39.es/ecma262/#prod-LabelledStatement
@@ -1330,7 +1338,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.state.labels.pop();
     node.label = expr;
-    return this.finishNode(node, "LabeledStatement");
+    return this.finishNode(node);
   }
 
   parseExpressionStatement(
@@ -1341,7 +1349,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ) {
     node.expression = expr;
     this.semicolon();
-    return this.finishNode(node, "ExpressionStatement");
+    return this.finishNode(node);
   }
 
   // Parse a semicolon-enclosed block of statements, handling `"use
@@ -1354,7 +1362,7 @@ export default abstract class StatementParser extends ExpressionParser {
     createNewLexicalScope: boolean = true,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): N.BlockStatement {
-    const node = this.startNode<N.BlockStatement>();
+    const node = this.startNode<N.BlockStatement>("BlockStatement");
     if (allowDirectives) {
       this.state.strictErrors.clear();
     }
@@ -1372,7 +1380,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (createNewLexicalScope) {
       this.scope.exit();
     }
-    return this.finishNode(node, "BlockStatement");
+    return this.finishNode(node);
   }
 
   isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
@@ -1558,7 +1566,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const declarations: N.VariableDeclarator[] = (node.declarations = []);
     node.kind = kind;
     for (;;) {
-      const decl = this.startNode<N.VariableDeclarator>();
+      const decl = this.startNode<N.VariableDeclarator>("VariableDeclarator");
       this.parseVarId(decl, kind);
       decl.init = !this.eat(tt.eq)
         ? null
@@ -1589,7 +1597,7 @@ export default abstract class StatementParser extends ExpressionParser {
           );
         }
       }
-      declarations.push(this.finishNode(decl, "VariableDeclarator"));
+      declarations.push(this.finishNode(decl));
       if (!this.eat(tt.comma)) break;
     }
     return node;
@@ -1789,7 +1797,7 @@ export default abstract class StatementParser extends ExpressionParser {
       hadSuperClass,
     };
     let decorators: N.Decorator[] = [];
-    const classBody = this.startNode<N.ClassBody>();
+    const classBody = this.startNode<N.ClassBody>("ClassBody");
     classBody.body = [];
 
     this.expect(tt.braceL);
@@ -1849,7 +1857,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.classScope.exit();
 
-    return this.finishNode(classBody, "ClassBody");
+    return this.finishNode(classBody);
   }
 
   // returns true if the current identifier is a method/field name,
@@ -2478,13 +2486,14 @@ export default abstract class StatementParser extends ExpressionParser {
 
       const specifier = this.startNodeAt<N.ExportNamespaceSpecifier>(
         this.state.lastTokStartLoc,
+        "ExportNamespaceSpecifier",
       );
 
       this.next();
 
       specifier.exported = this.parseModuleExportName();
       (node as Undone<N.ExportNamedDeclaration>).specifiers.push(
-        this.finishNode(specifier, "ExportNamespaceSpecifier"),
+        this.finishNode(specifier),
       );
       return true;
     }
@@ -2539,19 +2548,19 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExportDefaultExpression(
     this: Parser,
   ): N.ExportDefaultDeclaration["declaration"] {
-    const expr = this.startNode();
-
     if (this.match(tt._function)) {
+      const node = this.startNode("FunctionDeclaration");
       this.next();
       return this.parseFunction(
-        expr as Undone<N.FunctionDeclaration>,
+        node,
         ParseFunctionFlag.Declaration | ParseFunctionFlag.NullableId,
       );
     } else if (this.isAsyncFunction()) {
+      const node = this.startNode("FunctionDeclaration");
       this.next(); // eat 'async'
       this.next(); // eat 'function'
       return this.parseFunction(
-        expr as Undone<N.FunctionDeclaration>,
+        node,
         ParseFunctionFlag.Declaration |
           ParseFunctionFlag.NullableId |
           ParseFunctionFlag.Async,
@@ -2559,7 +2568,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (this.match(tt._class)) {
-      return this.parseClass(expr as Undone<N.ClassExpression>, true, true);
+      return this.parseClass(this.startNode("ClassDeclaration"), true, true);
     }
 
     if (this.match(tt.at)) {
@@ -2572,7 +2581,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.parseClass(
         this.maybeTakeDecorators(
           this.parseDecorators(false),
-          this.startNode<N.ClassDeclaration>(),
+          this.startNode<N.ClassDeclaration>("ClassDeclaration"),
         ),
         true,
         true,
@@ -2596,7 +2605,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): N.Declaration | undefined | null {
     if (this.match(tt._class)) {
       const node = this.parseClass(
-        this.startNode<N.ClassDeclaration>(),
+        this.startNode<N.ClassDeclaration>("ClassDeclaration"),
         true,
         false,
       );
@@ -2837,7 +2846,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
-      const node = this.startNode<N.ExportSpecifier>();
+      const node = this.startNode<N.ExportSpecifier>("ExportSpecifier");
       node.local = this.parseModuleExportName() as N.Identifier;
       nodes.push(
         this.parseExportSpecifier(
@@ -2867,7 +2876,7 @@ export default abstract class StatementParser extends ExpressionParser {
     } else if (!node.exported) {
       node.exported = this.cloneIdentifier(node.local);
     }
-    return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
+    return this.finishNode<N.ExportSpecifier>(node);
   }
 
   // https://tc39.es/ecma262/#prod-ModuleExportName
@@ -3040,7 +3049,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return null;
     }
 
-    const phaseIdentifier = this.startNode<N.Identifier>();
+    const phaseIdentifier = this.startNode<N.Identifier>("Identifier");
     const phaseIdentifierName = this.parseIdentifierName(true);
 
     const { type } = this.state;
@@ -3177,7 +3186,7 @@ export default abstract class StatementParser extends ExpressionParser {
   >(
     node: Undone<N.ImportDeclaration>,
     specifier: Undone<T>,
-    type: T["type"],
+    type?: T["type"],
   ): void {
     specifier.local = this.parseIdentifier();
     node.specifiers.push(this.finishImportSpecifier(specifier, type));
@@ -3190,7 +3199,7 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportNamespaceSpecifier,
   >(
     specifier: Undone<T>,
-    type: T["type"],
+    type?: T["type"],
     bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
   ) {
     this.checkLVal(specifier.local, { type }, bindingType);
@@ -3213,7 +3222,7 @@ export default abstract class StatementParser extends ExpressionParser {
         break;
       }
 
-      const node = this.startNode<N.ImportAttribute>();
+      const node = this.startNode<N.ImportAttribute>("ImportAttribute");
 
       // parse AssertionKey : IdentifierName, StringLiteral
       const keyName = this.state.value;
@@ -3244,7 +3253,7 @@ export default abstract class StatementParser extends ExpressionParser {
         );
       }
       node.value = this.parseStringLiteral(this.state.value);
-      attrs.push(this.finishNode(node, "ImportAttribute"));
+      attrs.push(this.finishNode(node));
     } while (this.eat(tt.comma));
 
     this.expect(tt.braceR);
@@ -3260,7 +3269,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const attrs: N.ImportAttribute[] = [];
     const attributes = new Set();
     do {
-      const node = this.startNode<N.ImportAttribute>();
+      const node = this.startNode<N.ImportAttribute>("ImportAttribute");
       node.key = this.parseIdentifier(true);
 
       if (node.key.name !== "type") {
@@ -3281,7 +3290,7 @@ export default abstract class StatementParser extends ExpressionParser {
         );
       }
       node.value = this.parseStringLiteral(this.state.value);
-      attrs.push(this.finishNode(node, "ImportAttribute"));
+      attrs.push(this.finishNode(node));
     } while (this.eat(tt.comma));
 
     return attrs;
@@ -3355,11 +3364,10 @@ export default abstract class StatementParser extends ExpressionParser {
     if (maybeDefaultIdentifier) {
       const specifier = this.startNodeAtNode<N.ImportDefaultSpecifier>(
         maybeDefaultIdentifier,
+        "ImportDefaultSpecifier",
       );
       specifier.local = maybeDefaultIdentifier;
-      node.specifiers.push(
-        this.finishImportSpecifier(specifier, "ImportDefaultSpecifier"),
-      );
+      node.specifiers.push(this.finishImportSpecifier(specifier));
       return true;
     } else if (
       // We allow keywords, and parseImportSpecifierLocal will report a recoverable error
@@ -3367,8 +3375,7 @@ export default abstract class StatementParser extends ExpressionParser {
     ) {
       this.parseImportSpecifierLocal(
         node,
-        this.startNode<N.ImportDefaultSpecifier>(),
-        "ImportDefaultSpecifier",
+        this.startNode<N.ImportDefaultSpecifier>("ImportDefaultSpecifier"),
       );
       return true;
     }
@@ -3377,15 +3384,13 @@ export default abstract class StatementParser extends ExpressionParser {
 
   maybeParseStarImportSpecifier(node: Undone<N.ImportDeclaration>): boolean {
     if (this.match(tt.star)) {
-      const specifier = this.startNode<N.ImportNamespaceSpecifier>();
+      const specifier = this.startNode<N.ImportNamespaceSpecifier>(
+        "ImportNamespaceSpecifier",
+      );
       this.next();
       this.expectContextual(tt._as);
 
-      this.parseImportSpecifierLocal(
-        node,
-        specifier,
-        "ImportNamespaceSpecifier",
-      );
+      this.parseImportSpecifierLocal(node, specifier);
       return true;
     }
     return false;
@@ -3407,7 +3412,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (this.eat(tt.braceR)) break;
       }
 
-      const specifier = this.startNode<N.ImportSpecifier>();
+      const specifier = this.startNode<N.ImportSpecifier>("ImportSpecifier");
       const importedIsString = this.match(tt.string);
       const isMaybeTypeOnly = this.isContextual(tt._type);
       specifier.imported = this.parseModuleExportName();
@@ -3450,11 +3455,7 @@ export default abstract class StatementParser extends ExpressionParser {
         specifier.local = this.cloneIdentifier(imported as N.Identifier);
       }
     }
-    return this.finishImportSpecifier(
-      specifier,
-      "ImportSpecifier",
-      bindingType,
-    );
+    return this.finishImportSpecifier(specifier, undefined, bindingType);
   }
 
   // This is used in flow and typescript plugin

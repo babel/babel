@@ -322,7 +322,7 @@ export interface ExpressionStatement extends NodeBase {
 
 export interface BlockStatement extends NodeBase {
   type: "BlockStatement";
-  body: Array<Statement>; // TODO: $ReadOnlyArray,
+  body: Array<Statement>;
   directives: Directive[];
 }
 // | Placeholder<"BlockStatement">;
@@ -1150,7 +1150,7 @@ export type JSXAttribute = NodeAny<"JSXAttribute">;
 export type JSXSpreadAttribute = NodeAny<"JSXSpreadAttribute">;
 export interface JSXOpeningElement extends NodeBase {
   type: "JSXOpeningElement";
-  name: JSXNamespacedName | JSXMemberExpression;
+  name: JSXNamespacedName | JSXMemberExpression | JSXIdentifier;
   typeArguments?: TypeParameterInstantiationBase | null; // TODO: Not in spec,
   /**
    * @deprecated
