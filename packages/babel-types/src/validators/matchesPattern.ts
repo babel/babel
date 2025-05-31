@@ -1,10 +1,19 @@
 import {
   isIdentifier,
+  isMetaProperty,
   isMemberExpression,
+  isPrivateName,
   isStringLiteral,
+  isSuper,
   isThisExpression,
 } from "./generated/index.ts";
 import type * as t from "../index.ts";
+
+function isMemberExpressionLike(
+  node: t.Node,
+): node is t.MemberExpression | t.MetaProperty {
+  return isMemberExpression(node) || isMetaProperty(node);
+}
 
 /**
  * Determines whether or not the input node `member` matches the
@@ -19,13 +28,17 @@ export default function matchesPattern(
   allowPartial?: boolean,
 ): boolean {
   // not a member expression
-  if (!isMemberExpression(member)) return false;
+  if (!isMemberExpressionLike(member)) return false;
 
   const parts = Array.isArray(match) ? match : match.split(".");
   const nodes = [];
 
   let node;
-  for (node = member; isMemberExpression(node); node = node.object) {
+  for (
+    node = member;
+    isMemberExpressionLike(node);
+    node = (node as t.MemberExpression).object ?? (node as t.MetaProperty).meta
+  ) {
     nodes.push(node.property);
   }
   nodes.push(node);
@@ -42,6 +55,10 @@ export default function matchesPattern(
       value = node.value;
     } else if (isThisExpression(node)) {
       value = "this";
+    } else if (isSuper(node)) {
+      value = "super";
+    } else if (isPrivateName(node)) {
+      value = "#" + node.id.name;
     } else {
       return false;
     }
