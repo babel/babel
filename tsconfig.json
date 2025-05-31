@@ -145,9 +145,6 @@
       "path": "./packages/babel-plugin-proposal-do-expressions"
     },
     {
-      "path": "./packages/babel-plugin-proposal-explicit-resource-management"
-    },
-    {
       "path": "./packages/babel-plugin-proposal-export-default-from"
     },
     {
@@ -284,6 +281,9 @@
     },
     {
       "path": "./packages/babel-plugin-transform-dynamic-import"
+    },
+    {
+      "path": "./packages/babel-plugin-transform-explicit-resource-management"
     },
     {
       "path": "./packages/babel-plugin-transform-exponentiation-operator"

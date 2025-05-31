@@ -12,6 +12,6 @@ module.exports = {
     ["@babel/plugin-proposal-decorators", { version: "2023-05" }],
     "@babel/plugin-transform-private-methods",
     "@babel/plugin-proposal-do-expressions",
-    "@babel/plugin-proposal-explicit-resource-management",
+    "@babel/plugin-transform-explicit-resource-management",
   ],
 };

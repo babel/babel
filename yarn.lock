@@ -496,10 +496,10 @@ __metadata:
     "@babel/eslint-parser": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-explicit-resource-management": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
+    "@babel/plugin-transform-explicit-resource-management": "workspace:^"
     "@babel/plugin-transform-private-methods": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
@@ -1458,19 +1458,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
-"@babel/plugin-proposal-explicit-resource-management@workspace:^, @babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2489,6 +2476,19 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-transform-explicit-resource-management@workspace:^, @babel/plugin-transform-explicit-resource-management@workspace:packages/babel-plugin-transform-explicit-resource-management":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-explicit-resource-management@workspace:packages/babel-plugin-transform-explicit-resource-management"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -4030,7 +4030,6 @@ __metadata:
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-destructuring-private": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-explicit-resource-management": "workspace:^"
     "@babel/plugin-proposal-export-default-from": "workspace:^"
     "@babel/plugin-proposal-function-bind": "workspace:^"
     "@babel/plugin-proposal-function-sent": "workspace:^"
@@ -4071,6 +4070,7 @@ __metadata:
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
     "@babel/plugin-transform-duplicate-named-capturing-groups-regex": "workspace:^"
     "@babel/plugin-transform-dynamic-import": "workspace:^"
+    "@babel/plugin-transform-explicit-resource-management": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
     "@babel/plugin-transform-flow-comments": "workspace:^"

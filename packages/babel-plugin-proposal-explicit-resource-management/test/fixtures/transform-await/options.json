@@ -1,4 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": ["proposal-explicit-resource-management"]
-}

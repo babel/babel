@@ -16,7 +16,7 @@ export default (_: any, opts: any = {}) => {
         decoratorsBeforeExport,
       },
     ],
-    babelPlugins.proposalExplicitResourceManagement,
+    babelPlugins.transformExplicitResourceManagement,
     // These are Stage 4
     ...(process.env.BABEL_8_BREAKING
       ? []

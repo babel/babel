@@ -262,7 +262,7 @@ function isBlockScoped(
   const { kind } = node;
   if (kind === "using" || kind === "await using") {
     throw path.buildCodeFrameError(
-      `The ${kind} declaration should be first transformed by \`@babel/plugin-proposal-explicit-resource-management\`.`,
+      `The ${kind} declaration should be first transformed by \`@babel/plugin-transform-explicit-resource-management\`.`,
     );
   } else if (!isLetOrConst(kind)) {
     return false;

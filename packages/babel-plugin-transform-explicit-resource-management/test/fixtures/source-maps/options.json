@@ -1,0 +1,4 @@
+{
+  "sourceMaps": true,
+  "plugins": ["transform-explicit-resource-management"]
+}

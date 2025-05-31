@@ -1,4 +1,4 @@
 {
   "plugins": ["transform-block-scoping", "syntax-explicit-resource-management"],
-  "throws": "The using declaration should be first transformed by `@babel/plugin-proposal-explicit-resource-management`."
+  "throws": "The using declaration should be first transformed by `@babel/plugin-transform-explicit-resource-management`."
 }

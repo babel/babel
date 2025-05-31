@@ -1,13 +1,13 @@
 {
-  "name": "@babel/plugin-proposal-explicit-resource-management",
+  "name": "@babel/plugin-transform-explicit-resource-management",
   "version": "7.27.4",
-  "description": "Compile `using` declarations to ES2015",
+  "description": "Compile `using` and `await using` declarations to ES2015",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-proposal-explicit-resource-management"
+    "directory": "packages/babel-plugin-transform-explicit-resource-management"
   },
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-explicit-resource-management",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-explicit-resource-management",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

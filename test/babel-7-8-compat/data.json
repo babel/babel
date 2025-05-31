@@ -7,7 +7,7 @@
         "excludeFixtures": ["2021-12-*", "2022-03-*", "2023-01-*", "2023-05-*"]
       }
     ],
-    "babel-plugin-proposal-explicit-resource-management",
+    "babel-plugin-transform-explicit-resource-management",
     "babel-plugin-proposal-import-attributes-to-assertions",
     "babel-plugin-proposal-import-wasm-source",
     "babel-plugin-transform-json-modules",
