@@ -183,8 +183,11 @@ export default (superClass: typeof Parser) =>
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the
       // placeholder were an identifier.
-      const nextToken = this.lookahead();
-      if (nextToken.type === tt.placeholder) {
+      const next = this.nextTokenStart();
+      if (
+        this.input.charCodeAt(next) === charCodes.percentSign &&
+        this.input.charCodeAt(next + 1) === charCodes.percentSign
+      ) {
         return true;
       }
 
