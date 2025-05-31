@@ -13,7 +13,9 @@ export = function normalizeESLintConfig(options: any) {
   return {
     babelOptions: { cwd: process.cwd(), ...babelOptions },
     ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
-    sourceType,
+    // https://eslint.org/docs/latest/use/configure/language-options#specifying-javascript-options
+    // ESLint supports "commonjs" but Babel parser does not.
+    sourceType: sourceType === "commonjs" ? "script" : sourceType,
     requireConfigFile,
     ...otherOptions,
   } as Options;

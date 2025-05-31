@@ -20,4 +20,19 @@ describe("ESLint config", () => {
       },
     );
   });
+
+  it('should allow sourceType to be "commonjs"', () => {
+    // sourceType "commonjs" allows require() calls.
+    verifyAndAssertMessages(
+      'require("greetings").hello',
+      {},
+      undefined,
+      undefined,
+      {
+        parserOptions: {
+          sourceType: "commonjs",
+        },
+      },
+    );
+  });
 });
