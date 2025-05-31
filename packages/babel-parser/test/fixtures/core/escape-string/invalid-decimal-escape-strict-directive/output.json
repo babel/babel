@@ -118,6 +118,9 @@
           "value": "\\04 foo \\05 bar \\06"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

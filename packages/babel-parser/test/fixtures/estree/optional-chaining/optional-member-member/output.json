@@ -46,6 +46,9 @@
           "optional": false
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

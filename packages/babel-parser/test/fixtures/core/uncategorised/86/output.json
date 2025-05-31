@@ -22,6 +22,9 @@
           "value": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

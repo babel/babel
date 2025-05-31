@@ -25,6 +25,9 @@
           "value": "\\u{1F_639}"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

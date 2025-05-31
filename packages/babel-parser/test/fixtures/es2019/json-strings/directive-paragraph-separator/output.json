@@ -29,7 +29,10 @@
           }
         ]
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   },
   "comments": [
     {

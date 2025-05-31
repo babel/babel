@@ -51,8 +51,8 @@
                 },
                 "value": "bar"
               },
-              "declaration": null,
               "attributes": [],
+              "declaration": null,
               "default": false
             }
           ]
@@ -62,7 +62,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

@@ -50,6 +50,9 @@
           "raw": "\"use strict\""
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

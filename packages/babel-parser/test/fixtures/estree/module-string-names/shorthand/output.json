@@ -35,12 +35,13 @@
           "value": "module-a",
           "raw": "\"module-a\""
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       }
     ],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

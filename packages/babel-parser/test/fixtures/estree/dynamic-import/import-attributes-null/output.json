@@ -23,6 +23,9 @@
           "attributes": null
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

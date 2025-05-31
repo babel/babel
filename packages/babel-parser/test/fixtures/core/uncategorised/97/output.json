@@ -22,6 +22,9 @@
           "value": "Hello\\812World"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
