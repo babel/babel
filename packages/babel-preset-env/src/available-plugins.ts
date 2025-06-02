@@ -178,6 +178,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "syntax-class-properties": syntax("classProperties"),
     "syntax-class-static-block": syntax("classStaticBlock"),
     "syntax-dynamic-import": syntax("dynamicImport"),
+    "syntax-explicit-resource-management": syntax("explicitResourceManagement"),
     "syntax-export-namespace-from": syntax("exportNamespaceFrom"),
     "syntax-import-meta": syntax("importMeta"),
     "syntax-json-strings": syntax("jsonStrings"),
