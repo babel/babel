@@ -2206,8 +2206,6 @@ describe("delegated yield", function () {
             _context56.p = 2;
             _t67 = _context56.v;
             return _context56.a(2, _t67);
-          case 3:
-            return _context56.a(2);
         }
       }, _marked47, null, [[0, 2]]);
     }

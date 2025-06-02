@@ -790,11 +790,17 @@ export class Emitter {
           self.explodeStatement(path.get("block"));
 
           if (catchLoc) {
+            const body = path.node.block.body;
             if (finallyLoc) {
               // If we have both a catch block and a finally block, then
               // because we emit the catch block first, we need to jump over
               // it to the finally block.
               self.jump(finallyLoc);
+            } else if (
+              body.length &&
+              body[body.length - 1].type === "ReturnStatement"
+            ) {
+              after = null;
             } else {
               // If there is no finally block, then we need to jump over the
               // catch block to the fall-through location.
@@ -849,7 +855,7 @@ export class Emitter {
           }
         });
 
-        self.mark(after);
+        if (after) self.mark(after);
 
         break;
 
