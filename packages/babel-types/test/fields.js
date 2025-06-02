@@ -134,15 +134,35 @@ describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, 
       }
 
       const keys = VISITOR_KEYS[type];
+      const isNullOrEmptyArray = node => {
+        return node == null || (Array.isArray(node) && node.length === 0);
+      };
+      const getNodeStart = node => {
+        return Array.isArray(node) ? node[0].start : node.start;
+      };
+
       for (let prev, i = 0; i < keys.length; i++) {
-        if (!node[prev]) {
+        if (isNullOrEmptyArray(node[prev])) {
           prev = keys[i];
           continue;
         }
         const curr = keys[i];
-        if (!node[curr]) continue;
+        if (isNullOrEmptyArray(node[curr])) continue;
 
-        if (node[prev].start > node[curr].start) {
+        const prevStart = getNodeStart(node[prev]);
+        const currStart = getNodeStart(node[curr]);
+        if (prevStart == null) {
+          throw new Error(
+            `Invalid AST: can not get start of ${prev} in ${type}`,
+          );
+        }
+        if (currStart == null) {
+          throw new Error(
+            `Invalid AST: can not get start of ${curr} in ${type}`,
+          );
+        }
+
+        if (prevStart > currStart) {
           const errorKey = `${type}-${prev}-${curr}`;
           if (!reportedVisitorOrders.has(errorKey)) {
             reportedVisitorOrders.add(errorKey);
