@@ -123,13 +123,22 @@ describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, 
         );
       }
 
-      if (type === "ObjectTypeInternalSlot" || type === "ObjectTypeProperty") {
+      if (
+        type === "ObjectTypeInternalSlot" ||
+        type === "ObjectTypeProperty" ||
+        type === "ObjectTypeAnnotation"
+      ) {
         // We don't validate the visitor order of ObjectTypeInternalSlot and
         // ObjectTypeProperty because their fields' locations intersect. In
         //    interface { [[foo]](): X }
         // there is a field "key" covering `foo`, and a field "value" covering
         // `[[foo]](): X`. Same for `interface { get foo(): X }`.
         // The defined visitor order is that they key is visited first.
+
+        // We don't validate the visitor order of ObjectTypeAnnotation because `indexers` and `properties` locations can intersect. In
+        // var a: { [key: string]: number; foo: string; [bar: number]: number; };
+        // the `indexers` field covers `[key: string]: number;` and `[bar: number]: number;`, and the `properties` field covers `foo: string;`.
+        // The defined visitor order is "properties", "indexers" and "callProperties"
         return;
       }
 

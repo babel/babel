@@ -177,8 +177,8 @@ defineType("BreakStatement", {
 
 defineType("CallExpression", {
   visitor: process.env.BABEL_8_BREAKING
-    ? ["callee", "arguments", "typeArguments"]
-    : ["callee", "arguments", "typeParameters", "typeArguments"],
+    ? ["callee", "typeArguments", "arguments"]
+    : ["callee", "typeParameters", "typeArguments", "arguments"],
   builder: ["callee", "arguments"],
   aliases: ["Expression"],
   fields: {
@@ -974,7 +974,7 @@ defineType("ObjectProperty", {
       optional: true,
     },
   },
-  visitor: ["key", "value", "decorators"],
+  visitor: ["decorators", "key", "value"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
   validate:
     !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
@@ -1982,9 +1982,9 @@ defineType("ClassMethod", {
 
 defineType("ObjectPattern", {
   visitor: [
+    "decorators" /* for legacy param decorators */,
     "properties",
     "typeAnnotation",
-    "decorators" /* for legacy param decorators */,
   ],
   builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
@@ -2228,8 +2228,8 @@ defineType("OptionalMemberExpression", {
 
 defineType("OptionalCallExpression", {
   visitor: process.env.BABEL_8_BREAKING
-    ? ["callee", "arguments", "typeArguments"]
-    : ["callee", "arguments", "typeParameters", "typeArguments"],
+    ? ["callee", "typeArguments", "arguments"]
+    : ["callee", "typeParameters", "typeArguments", "arguments"],
   builder: ["callee", "arguments", "optional"],
   aliases: ["Expression"],
   fields: {
