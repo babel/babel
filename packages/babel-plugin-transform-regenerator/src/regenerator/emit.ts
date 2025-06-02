@@ -65,7 +65,7 @@ export class Emitter {
   indexMap: Map<number, number>;
   listing: t.Statement[];
   returns: Set<number>;
-  lastDefaultIndex: number;
+  lastReferenceIndex: number = 0;
   marked: boolean[];
   insertedLocs: Set<t.NumericLiteral>;
   finalLoc: t.NumericLiteral;
@@ -102,6 +102,7 @@ export class Emitter {
     this.index = 0;
     this.indexMap = new Map([[0, 0]]);
     this.returns = new Set();
+    this.lastReferenceIndex = 0;
 
     // A sparse array whose keys correspond to locations in this.listing
     // that have been marked as branch/jump targets.
@@ -154,6 +155,9 @@ export class Emitter {
       assert.strictEqual(loc.value, this.index);
     }
     this.marked[this.listing.length] = true;
+    if (loc.value > this.lastReferenceIndex) {
+      this.lastReferenceIndex = loc.value;
+    }
     return loc;
   }
 
@@ -341,7 +345,7 @@ export class Emitter {
       util.newHelpersAvailable(this.pluginPass)
     ) {
       if (
-        this.lastDefaultIndex === this.index ||
+        this.lastReferenceIndex === this.index ||
         !this.returns.has(this.listing.length)
       ) {
         cases.push(
@@ -724,8 +728,6 @@ export class Emitter {
         if (defaultLoc.value === PENDING_LOCATION) {
           self.mark(defaultLoc);
           assert.strictEqual(after.value, defaultLoc.value);
-
-          this.lastDefaultIndex = this.index;
         }
 
         break;

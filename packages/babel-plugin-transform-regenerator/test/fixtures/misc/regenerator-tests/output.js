@@ -2206,6 +2206,8 @@ describe("delegated yield", function () {
             _context56.p = 2;
             _t67 = _context56.v;
             return _context56.a(2, _t67);
+          case 3:
+            return _context56.a(2);
         }
       }, _marked47, null, [[0, 2]]);
     }
@@ -3528,6 +3530,8 @@ describe("generator .throw method", function () {
           case 2:
             _context99.p = 2;
             _t86 = _context99.v;
+            return _context99.a(2);
+          case 3:
             return _context99.a(2);
         }
       }, _marked87, null, [[0, 2]]);
