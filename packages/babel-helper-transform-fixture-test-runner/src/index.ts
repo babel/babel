@@ -385,15 +385,7 @@ async function run(task: Test) {
       validateFile(
         normalizeOutput(actualLogs.stdout, normalizationOpts),
         stdout.loc,
-        process.env.BABEL_8_BREAKING
-          ? // In Babel 8, preset-env does not enable all the unnecessary syntax
-            // plugins. For simplicity, just strip them fro the expected output
-            // so that we do not need to separate tests for every fixture.
-            stdout.code.replace(
-              /\n\s*syntax-(?!import-attributes|import-assertions).*/g,
-              "",
-            )
-          : stdout.code,
+        stdout.code,
       );
       validateFile(
         normalizeOutput(actualLogs.stderr, normalizationOpts),
