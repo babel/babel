@@ -16,7 +16,7 @@ function getUnstagedModifiedOutputJSON() {
   try {
     // Get the status and filter for unstaged files
     const output = execSync(
-      "git status --porcelain=v1 -z -- './packages/*/test/fixtures/**/output.*'",
+      "git status --porcelain=v1 -z -- './packages/*/test/fixtures/**/output.*' './packages/*/test/fixtures/**/stdout.txt' './packages/*/test/fixtures/**/stderr.txt'",
       { encoding: "utf-8" }
     );
 

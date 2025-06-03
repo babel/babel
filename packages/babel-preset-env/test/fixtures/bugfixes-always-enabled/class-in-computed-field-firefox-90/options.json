@@ -1,5 +1,15 @@
 {
   "validateLogs": true,
-  "targets": { "firefox": 90 },
-  "presets": [["env", { "debug": true }]]
+  "targets": {
+    "firefox": 90
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true
+      }
+    ]
+  ],
+  "BABEL_8_BREAKING": true
 }

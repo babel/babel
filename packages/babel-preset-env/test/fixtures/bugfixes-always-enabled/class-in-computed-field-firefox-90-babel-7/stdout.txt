@@ -13,8 +13,19 @@ Using plugins:
   transform-unicode-sets-regex { firefox < 116 }
   bugfix/transform-firefox-class-in-computed-class-key { firefox < 126 }
   transform-class-static-block { firefox < 93 }
+  syntax-private-property-in-object
+  syntax-class-properties
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
   transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
