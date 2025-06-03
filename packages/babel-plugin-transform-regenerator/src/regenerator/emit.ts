@@ -65,7 +65,7 @@ export class Emitter {
   indexMap: Map<number, number>;
   listing: t.Statement[];
   returns: Set<number>;
-  lastDefaultIndex: number;
+  lastReferenceIndex: number = 0;
   marked: boolean[];
   insertedLocs: Set<t.NumericLiteral>;
   finalLoc: t.NumericLiteral;
@@ -102,6 +102,7 @@ export class Emitter {
     this.index = 0;
     this.indexMap = new Map([[0, 0]]);
     this.returns = new Set();
+    this.lastReferenceIndex = 0;
 
     // A sparse array whose keys correspond to locations in this.listing
     // that have been marked as branch/jump targets.
@@ -154,6 +155,9 @@ export class Emitter {
       assert.strictEqual(loc.value, this.index);
     }
     this.marked[this.listing.length] = true;
+    if (loc.value > this.lastReferenceIndex) {
+      this.lastReferenceIndex = loc.value;
+    }
     return loc;
   }
 
@@ -341,7 +345,7 @@ export class Emitter {
       util.newHelpersAvailable(this.pluginPass)
     ) {
       if (
-        this.lastDefaultIndex === this.index ||
+        this.lastReferenceIndex === this.index ||
         !this.returns.has(this.listing.length)
       ) {
         cases.push(
@@ -724,8 +728,6 @@ export class Emitter {
         if (defaultLoc.value === PENDING_LOCATION) {
           self.mark(defaultLoc);
           assert.strictEqual(after.value, defaultLoc.value);
-
-          this.lastDefaultIndex = this.index;
         }
 
         break;
@@ -788,11 +790,17 @@ export class Emitter {
           self.explodeStatement(path.get("block"));
 
           if (catchLoc) {
+            const body = path.node.block.body;
             if (finallyLoc) {
               // If we have both a catch block and a finally block, then
               // because we emit the catch block first, we need to jump over
               // it to the finally block.
               self.jump(finallyLoc);
+            } else if (
+              body.length &&
+              body[body.length - 1].type === "ReturnStatement"
+            ) {
+              after = null;
             } else {
               // If there is no finally block, then we need to jump over the
               // catch block to the fall-through location.
@@ -847,7 +855,7 @@ export class Emitter {
           }
         });
 
-        self.mark(after);
+        if (after) self.mark(after);
 
         break;
 

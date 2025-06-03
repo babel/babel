@@ -3529,6 +3529,8 @@ describe("generator .throw method", function () {
             _context99.p = 2;
             _t86 = _context99.v;
             return _context99.a(2);
+          case 3:
+            return _context99.a(2);
         }
       }, _marked87, null, [[0, 2]]);
     }
