@@ -78,6 +78,9 @@
         "kind": "let"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

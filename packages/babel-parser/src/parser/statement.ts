@@ -234,6 +234,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.addExtra(program, "topLevelAwait", this.state.hasTopLevelAwait);
     }
+    this.addExtra(program, "forAwait", this.state.hasForAwait);
     let finishedProgram: N.Program;
     if (end === tt.eof) {
       // finish at eof for top level program
@@ -955,6 +956,7 @@ export default abstract class StatementParser extends ExpressionParser {
     let awaitAt = null;
 
     if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
+      this.state.hasForAwait = true;
       awaitAt = this.state.startLoc;
       this.next();
     }

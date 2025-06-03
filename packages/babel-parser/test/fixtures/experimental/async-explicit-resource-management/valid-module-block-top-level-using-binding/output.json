@@ -57,7 +57,8 @@
                 ],
                 "directives": [],
                 "extra": {
-                  "topLevelAwait": true
+                  "topLevelAwait": true,
+                  "forAwait": false
                 }
               }
             }
@@ -66,6 +67,9 @@
         "kind": "const"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

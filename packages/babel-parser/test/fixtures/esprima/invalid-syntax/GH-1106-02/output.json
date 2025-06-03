@@ -25,6 +25,9 @@
           "value": "\\xx"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

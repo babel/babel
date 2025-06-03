@@ -43,7 +43,10 @@
           }
         ]
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   },
   "comments": [
     {

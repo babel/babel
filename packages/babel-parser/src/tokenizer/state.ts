@@ -154,6 +154,7 @@ export default class State {
   firstInvalidTemplateEscapePos: null | Position = null;
 
   @bit accessor hasTopLevelAwait = false;
+  @bit accessor hasForAwait = false;
 
   // This property is used to track the following errors
   // - StrictNumericEscape

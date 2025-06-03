@@ -31,6 +31,9 @@
           }
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

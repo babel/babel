@@ -79,6 +79,9 @@
         "decorators": [],
         "implements": []
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
