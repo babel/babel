@@ -24,6 +24,17 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.5 (2025-06-03)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-regenerator`
+  * [#17359](https://github.com/babel/babel/pull/17359) fix: Unexpected infinite loop with `regenerator` for `try` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* Other
+  * [#17349](https://github.com/babel/babel/pull/17349) Map ESLint's `sourceType: commonjs` to script ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#17333](https://github.com/babel/babel/pull/17333) Improve using declaration errors ([@JLHwung](https://github.com/JLHwung))
 ## v7.27.4 (2025-05-30)
 
 #### :eyeglasses: Spec Compliance
