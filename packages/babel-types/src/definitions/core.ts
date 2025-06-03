@@ -66,7 +66,7 @@ defineType("AssignmentExpression", {
                   validator(node, key, val);
                 } as Validator;
               })(),
-              { type: "string" },
+              { oneOf: ASSIGNMENT_OPERATORS },
             ),
     },
     left: {
