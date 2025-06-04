@@ -14,5 +14,5 @@
       }
     ]
   ],
-  "BABEL_8_BREAKING": true
+  "BABEL_8_BREAKING": false
 }
