@@ -328,6 +328,7 @@ export default function /* @no-mangle */ _regenerator() {
 
         if (_type > 3 /* Finish */) {
           if ((shouldReturn = finallyLoc === _arg)) {
+            // The following code logic is equivalent to the commented code.
             // if ((method = entry[4]!)) {
             //   arg = entry[5];
             // } else {
