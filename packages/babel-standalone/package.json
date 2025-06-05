@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.27.5",
+  "version": "7.27.6",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
