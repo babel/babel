@@ -328,10 +328,19 @@ export default function /* @no-mangle */ _regenerator() {
 
         if (_type > 3 /* Finish */) {
           if ((shouldReturn = finallyLoc === _arg)) {
-            method = entry[4]! || OperatorType.Jump;
-            arg = entry[5] === undefined ? entry[3]! : entry[5];
-            entry[4] = OperatorType.Jump;
-            entry[5] = undefined;
+            // The following code logic is equivalent to the commented code.
+            // if ((method = entry[4]!)) {
+            //   arg = entry[5];
+            // } else {
+            //   method = OperatorType.Jump;
+            //   arg = entry[3];
+            // }
+            arg =
+              entry[
+                // eslint-disable-next-line no-cond-assign
+                (method = entry[4]!) ? 5 : ((method = OperatorType.Jump), 3)
+              ];
+            entry[4] = entry[5] = undefined;
           }
         } else {
           if (entry[0] <= prev) {
