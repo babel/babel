@@ -24,6 +24,13 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.6 (2025-06-05)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17366](https://github.com/babel/babel/pull/17366) fix: `finally` causes unexpected return value ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#17357](https://github.com/babel/babel/pull/17357) Ensure syntactic ordering when visiting array-type AST nodes ([@JLHwung](https://github.com/JLHwung))
 ## v7.27.5 (2025-06-03)
 
 #### :bug: Bug Fix
