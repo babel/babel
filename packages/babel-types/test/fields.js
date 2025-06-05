@@ -123,26 +123,55 @@ describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, 
         );
       }
 
-      if (type === "ObjectTypeInternalSlot" || type === "ObjectTypeProperty") {
+      if (
+        type === "ObjectTypeInternalSlot" ||
+        type === "ObjectTypeProperty" ||
+        type === "ObjectTypeAnnotation"
+      ) {
         // We don't validate the visitor order of ObjectTypeInternalSlot and
         // ObjectTypeProperty because their fields' locations intersect. In
         //    interface { [[foo]](): X }
         // there is a field "key" covering `foo`, and a field "value" covering
         // `[[foo]](): X`. Same for `interface { get foo(): X }`.
         // The defined visitor order is that they key is visited first.
+
+        // We don't validate the visitor order of ObjectTypeAnnotation because `indexers` and `properties` locations can intersect. In
+        // var a: { [key: string]: number; foo: string; [bar: number]: number; };
+        // the `indexers` field covers `[key: string]: number;` and `[bar: number]: number;`, and the `properties` field covers `foo: string;`.
+        // The defined visitor order is "properties", "indexers" and "callProperties"
         return;
       }
 
       const keys = VISITOR_KEYS[type];
+      const isNullOrEmptyArray = node => {
+        return node == null || (Array.isArray(node) && node.length === 0);
+      };
+      const getNodeStart = node => {
+        return Array.isArray(node) ? node[0].start : node.start;
+      };
+
       for (let prev, i = 0; i < keys.length; i++) {
-        if (!node[prev]) {
+        if (isNullOrEmptyArray(node[prev])) {
           prev = keys[i];
           continue;
         }
         const curr = keys[i];
-        if (!node[curr]) continue;
+        if (isNullOrEmptyArray(node[curr])) continue;
 
-        if (node[prev].start > node[curr].start) {
+        const prevStart = getNodeStart(node[prev]);
+        const currStart = getNodeStart(node[curr]);
+        if (prevStart == null) {
+          throw new Error(
+            `Invalid AST: can not get start of ${prev} in ${type}`,
+          );
+        }
+        if (currStart == null) {
+          throw new Error(
+            `Invalid AST: can not get start of ${curr} in ${type}`,
+          );
+        }
+
+        if (prevStart > currStart) {
           const errorKey = `${type}-${prev}-${curr}`;
           if (!reportedVisitorOrders.has(errorKey)) {
             reportedVisitorOrders.add(errorKey);
