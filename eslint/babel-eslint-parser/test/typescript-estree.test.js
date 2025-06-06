@@ -338,9 +338,6 @@ function deeplyRemoveProperties(obj, props) {
       );
       const fixtures = getFixtures(parserTestFixtureRoot);
       const FAILURES = new Set([
-        // Todo: Remove when https://github.com/typescript-eslint/typescript-eslint/issues/11244 is resolved
-        "typescript/declare/valid-namespace-var/input.ts",
-
         // ts-eslint/tsc does not support arrow generic in tsx mode
         "typescript/arrow-function/async-await-null/input.ts",
         "typescript/arrow-function/async-generic-after-await/input.ts",
