@@ -1,23 +1,22 @@
 {
   "type": "File",
-  "start":0,"end":159,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":159}},
+  "start":0,"end":136,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":136}},
   "errors": [
     "SyntaxError: Initializers are not allowed in ambient contexts. (2:10)",
     "SyntaxError: Initializers are not allowed in ambient contexts. (3:19)",
     "SyntaxError: Initializers are not allowed in ambient contexts. (4:10)",
     "SyntaxError: Initializers are not allowed in ambient contexts. (5:19)",
-    "SyntaxError: Initializers are not allowed in ambient contexts. (6:20)",
-    "SyntaxError: Initializers are not allowed in ambient contexts. (7:20)"
+    "SyntaxError: Initializers are not allowed in ambient contexts. (6:20)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":159,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":159}},
+    "start":0,"end":136,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":136}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSModuleDeclaration",
-        "start":0,"end":159,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":159}},
+        "start":0,"end":136,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":136}},
         "kind": "namespace",
         "id": {
           "type": "Identifier",
@@ -26,7 +25,7 @@
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":40,"end":159,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":8,"column":1,"index":159}},
+          "start":40,"end":136,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":7,"column":1,"index":136}},
           "body": [
             {
               "type": "VariableDeclaration",
@@ -176,39 +175,6 @@
                 }
               ],
               "kind": "const"
-            },
-            {
-              "type": "VariableDeclaration",
-              "start":137,"end":157,"loc":{"start":{"line":7,"column":2,"index":137},"end":{"line":7,"column":22,"index":157}},
-              "declarations": [
-                {
-                  "type": "VariableDeclarator",
-                  "start":143,"end":156,"loc":{"start":{"line":7,"column":8,"index":143},"end":{"line":7,"column":21,"index":156}},
-                  "id": {
-                    "type": "Identifier",
-                    "start":143,"end":152,"loc":{"start":{"line":7,"column":8,"index":143},"end":{"line":7,"column":17,"index":152},"identifierName":"D"},
-                    "name": "D",
-                    "typeAnnotation": {
-                      "type": "TSTypeAnnotation",
-                      "start":144,"end":152,"loc":{"start":{"line":7,"column":9,"index":144},"end":{"line":7,"column":17,"index":152}},
-                      "typeAnnotation": {
-                        "type": "TSNumberKeyword",
-                        "start":146,"end":152,"loc":{"start":{"line":7,"column":11,"index":146},"end":{"line":7,"column":17,"index":152}}
-                      }
-                    }
-                  },
-                  "init": {
-                    "type": "NumericLiteral",
-                    "start":155,"end":156,"loc":{"start":{"line":7,"column":20,"index":155},"end":{"line":7,"column":21,"index":156}},
-                    "extra": {
-                      "rawValue": 0,
-                      "raw": "0"
-                    },
-                    "value": 0
-                  }
-                }
-              ],
-              "kind": "using"
             }
           ]
         },

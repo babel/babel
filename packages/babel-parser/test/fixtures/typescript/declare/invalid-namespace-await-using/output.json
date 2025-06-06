@@ -1,0 +1,141 @@
+{
+  "type": "File",
+  "start":0,"end":132,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":132}},
+  "errors": [
+    "SyntaxError: 'await using' declarations are not allowed in ambient contexts. (2:2)",
+    "SyntaxError: 'await using' declarations are not allowed in ambient contexts. (3:2)",
+    "SyntaxError: 'await using' declarations are not allowed in ambient contexts. (4:2)",
+    "SyntaxError: 'await using' declarations are not allowed in ambient contexts. (5:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":132,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":132}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":132,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":132}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":39,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":39,"index":39},"identifierName":"invalid_namespace_var"},
+          "name": "invalid_namespace_var"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":40,"end":132,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":6,"column":1,"index":132}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":44,"end":58,"loc":{"start":{"line":2,"column":2,"index":44},"end":{"line":2,"column":16,"index":58}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":56,"end":57,"loc":{"start":{"line":2,"column":14,"index":56},"end":{"line":2,"column":15,"index":57}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":56,"end":57,"loc":{"start":{"line":2,"column":14,"index":56},"end":{"line":2,"column":15,"index":57},"identifierName":"A"},
+                    "name": "A"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "await using"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":61,"end":80,"loc":{"start":{"line":3,"column":2,"index":61},"end":{"line":3,"column":21,"index":80}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":73,"end":79,"loc":{"start":{"line":3,"column":14,"index":73},"end":{"line":3,"column":20,"index":79}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":73,"end":75,"loc":{"start":{"line":3,"column":14,"index":73},"end":{"line":3,"column":16,"index":75},"identifierName":"A1"},
+                    "name": "A1"
+                  },
+                  "init": {
+                    "type": "NumericLiteral",
+                    "start":78,"end":79,"loc":{"start":{"line":3,"column":19,"index":78},"end":{"line":3,"column":20,"index":79}},
+                    "extra": {
+                      "rawValue": 0,
+                      "raw": "0"
+                    },
+                    "value": 0
+                  }
+                }
+              ],
+              "kind": "await using"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":83,"end":110,"loc":{"start":{"line":4,"column":2,"index":83},"end":{"line":4,"column":29,"index":110}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":95,"end":109,"loc":{"start":{"line":4,"column":14,"index":95},"end":{"line":4,"column":28,"index":109}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":95,"end":105,"loc":{"start":{"line":4,"column":14,"index":95},"end":{"line":4,"column":24,"index":105},"identifierName":"A2"},
+                    "name": "A2",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":97,"end":105,"loc":{"start":{"line":4,"column":16,"index":97},"end":{"line":4,"column":24,"index":105}},
+                      "typeAnnotation": {
+                        "type": "TSNumberKeyword",
+                        "start":99,"end":105,"loc":{"start":{"line":4,"column":18,"index":99},"end":{"line":4,"column":24,"index":105}}
+                      }
+                    }
+                  },
+                  "init": {
+                    "type": "NumericLiteral",
+                    "start":108,"end":109,"loc":{"start":{"line":4,"column":27,"index":108},"end":{"line":4,"column":28,"index":109}},
+                    "extra": {
+                      "rawValue": 0,
+                      "raw": "0"
+                    },
+                    "value": 0
+                  }
+                }
+              ],
+              "kind": "await using"
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":113,"end":130,"loc":{"start":{"line":5,"column":2,"index":113},"end":{"line":5,"column":19,"index":130}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":125,"end":126,"loc":{"start":{"line":5,"column":14,"index":125},"end":{"line":5,"column":15,"index":126}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":125,"end":126,"loc":{"start":{"line":5,"column":14,"index":125},"end":{"line":5,"column":15,"index":126},"identifierName":"B"},
+                    "name": "B"
+                  },
+                  "init": null
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "start":128,"end":129,"loc":{"start":{"line":5,"column":17,"index":128},"end":{"line":5,"column":18,"index":129}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":128,"end":129,"loc":{"start":{"line":5,"column":17,"index":128},"end":{"line":5,"column":18,"index":129},"identifierName":"C"},
+                    "name": "C"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "await using"
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": true
+    }
+  }
+}
