@@ -3,5 +3,4 @@ declare namespace valid_namespace_var {
   let B;
   const C;
   const C1 = 0;
-  using D;
 }

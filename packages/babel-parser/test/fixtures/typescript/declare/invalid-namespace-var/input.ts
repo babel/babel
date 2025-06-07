@@ -4,5 +4,4 @@ declare namespace invalid_namespace_var {
   let B = 0;
   let B1: number = 0;
   const C: number = 0;
-  using D: number = 0;
 }

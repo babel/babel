@@ -1,0 +1,5 @@
+{
+  "plugins": ["explicitResourceManagement", "typescript"],
+  "allowAwaitOutsideFunction": true,
+  "sourceType": "module"
+}
