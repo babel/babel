@@ -303,6 +303,32 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.chStartsBindingIdentifier(nextCh, next);
   }
 
+  isForUsing(): boolean {
+    if (!this.isContextual(tt._using)) {
+      return false;
+    }
+    const next = this.nextTokenInLineStart();
+    const nextCh = this.codePointAtPos(next);
+    if (this.isUnparsedContextual(next, "of")) {
+      const nextCharAfterOf = this.lookaheadCharCodeSince(next + 2);
+      // `for( using of` must start either a for-lhs-of statement
+      // or a for lexical declaration
+      if (
+        nextCharAfterOf !== charCodes.equalsTo &&
+        nextCharAfterOf !== charCodes.colon &&
+        // recover from `for(using of;...);`
+        nextCharAfterOf !== charCodes.semicolon
+      ) {
+        return false;
+      }
+    }
+    if (this.chStartsBindingIdentifier(nextCh, next)) {
+      this.expectPlugin("explicitResourceManagement");
+      return true;
+    }
+    return false;
+  }
+
   isAwaitUsing(): boolean {
     if (!this.isContextual(tt._await)) {
       return false;
@@ -369,28 +395,6 @@ export default abstract class StatementParser extends ExpressionParser {
       nextCh === charCodes.leftCurlyBrace ||
       this.chStartsBindingIdentifier(nextCh, next)
     );
-  }
-
-  allowsForUsing(): boolean {
-    const { type, containsEsc, end } = this.lookahead();
-    if (type === tt._of && !containsEsc) {
-      // `for( using of` must start either a for-lhs-of statement
-      // or a for lexical declaration
-      const nextCharAfterOf = this.lookaheadCharCodeSince(end);
-      if (
-        nextCharAfterOf !== charCodes.equalsTo &&
-        nextCharAfterOf !== charCodes.colon &&
-        // recover from `for(using of;...);`
-        nextCharAfterOf !== charCodes.semicolon
-      ) {
-        return false;
-      }
-    }
-    if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
-      this.expectPlugin("explicitResourceManagement");
-      return true;
-    }
-    return false;
   }
 
   allowsUsing(): boolean {
@@ -972,8 +976,7 @@ export default abstract class StatementParser extends ExpressionParser {
     {
       const startsWithAwaitUsing = this.isAwaitUsing();
       const starsWithUsingDeclaration =
-        startsWithAwaitUsing ||
-        (this.isContextual(tt._using) && this.allowsForUsing());
+        startsWithAwaitUsing || this.isForUsing();
       const isLetOrUsing =
         (startsWithLet && this.hasFollowingBindingAtom()) ||
         starsWithUsingDeclaration;
@@ -2632,14 +2635,16 @@ export default abstract class StatementParser extends ExpressionParser {
         (type === tt._type || type === tt._interface) &&
         !this.state.containsEsc
       ) {
-        const { type: nextType } = this.lookahead();
         // If we see any variable name other than `from` after `type` keyword,
         // we consider it as flow/typescript type exports
         // note that this approach may fail on some pedantic cases
         // export type from = number
+        const next = this.nextTokenStart();
+        const nextChar = this.input.charCodeAt(next);
         if (
-          (tokenIsIdentifier(nextType) && nextType !== tt._from) ||
-          nextType === tt.braceL
+          nextChar === charCodes.leftCurlyBrace ||
+          (this.chStartsBindingIdentifier(nextChar, next) &&
+            !this.input.startsWith("from", next))
         ) {
           this.expectOnePlugin(["flow", "typescript"]);
           return false;

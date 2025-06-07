@@ -1800,7 +1800,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     isAbstractConstructorSignature(): boolean {
       return (
-        this.isContextual(tt._abstract) && this.lookahead().type === tt._new
+        this.isContextual(tt._abstract) && this.isLookaheadContextual("new")
       );
     }
 
@@ -1952,7 +1952,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (
           this.isContextual(tt._intrinsic) &&
-          this.lookahead().type !== tt.dot
+          this.lookaheadCharCode() !== charCodes.dot
         ) {
           const node = this.startNode<N.TsKeywordType>();
           this.next();
@@ -3095,7 +3095,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     isAbstractClass(): boolean {
       return (
-        this.isContextual(tt._abstract) && this.lookahead().type === tt._class
+        this.isContextual(tt._abstract) && this.isLookaheadContextual("class")
       );
     }
 
