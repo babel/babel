@@ -3826,6 +3826,7 @@ __metadata:
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
     "@babel/plugin-transform-duplicate-named-capturing-groups-regex": "workspace:^"
     "@babel/plugin-transform-dynamic-import": "workspace:^"
+    "@babel/plugin-transform-explicit-resource-management": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
     "@babel/plugin-transform-for-of": "workspace:^"

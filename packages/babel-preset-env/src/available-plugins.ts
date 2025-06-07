@@ -17,6 +17,7 @@ import transformDotallRegex from "@babel/plugin-transform-dotall-regex";
 import transformDuplicateKeys from "@babel/plugin-transform-duplicate-keys";
 import transformDuplicateNamedCapturingGroupsRegex from "@babel/plugin-transform-duplicate-named-capturing-groups-regex";
 import transformDynamicImport from "@babel/plugin-transform-dynamic-import";
+import transformExplicitResourceManagement from "@babel/plugin-transform-explicit-resource-management";
 import transformExponentialOperator from "@babel/plugin-transform-exponentiation-operator";
 import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 import transformForOf from "@babel/plugin-transform-for-of";
@@ -99,6 +100,8 @@ const availablePlugins = {
   "transform-duplicate-named-capturing-groups-regex": () =>
     transformDuplicateNamedCapturingGroupsRegex,
   "transform-dynamic-import": () => transformDynamicImport,
+  "transform-explicit-resource-management": () =>
+    transformExplicitResourceManagement,
   "transform-exponentiation-operator": () => transformExponentialOperator,
   "transform-export-namespace-from": () => transformExportNamespaceFrom,
   "transform-for-of": () => transformForOf,
@@ -156,6 +159,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "syntax-import-attributes": "7.22.0",
     "transform-class-static-block": "7.12.0",
     "transform-duplicate-named-capturing-groups-regex": "7.19.0",
+    "transform-explicit-resource-management": "7.23.9",
     "transform-private-property-in-object": "7.10.0",
     "transform-regexp-modifiers": "7.19.0",
   });
@@ -174,6 +178,7 @@ if (!process.env.BABEL_8_BREAKING) {
     "syntax-class-properties": syntax("classProperties"),
     "syntax-class-static-block": syntax("classStaticBlock"),
     "syntax-dynamic-import": syntax("dynamicImport"),
+    "syntax-explicit-resource-management": syntax("explicitResourceManagement"),
     "syntax-export-namespace-from": syntax("exportNamespaceFrom"),
     "syntax-import-meta": syntax("importMeta"),
     "syntax-json-strings": syntax("jsonStrings"),

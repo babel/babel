@@ -227,12 +227,17 @@ const es2025 = {
   "transform-regexp-modifiers": "RegExp Pattern Modifiers",
 };
 
+const es2026 = {
+  "transform-explicit-resource-management": "Explicit Resource Management",
+};
+
 const shippedProposal = {};
 
 // Run plugins for modern features first
 export default Object.assign(
   {},
   shippedProposal,
+  es2026,
   es2025,
   es2024,
   es2022,

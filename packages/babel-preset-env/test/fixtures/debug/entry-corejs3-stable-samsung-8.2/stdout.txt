@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-explicit-resource-management { samsung }
   transform-duplicate-named-capturing-groups-regex { samsung }
   transform-regexp-modifiers { samsung < 27 }
   transform-unicode-sets-regex { samsung < 23 }
