@@ -1,151 +1,16 @@
 {
-  "name": "babel",
-  "version": "7.27.6",
-  "version_babel8": "8.0.0-beta.0",
+  "name": "btcetf-token-deployment",
   "private": true,
-  "type": "commonjs",
   "scripts": {
-    "postinstall": "node scripts/postinstall.js",
-    "bootstrap": "make bootstrap",
-    "codesandbox:build": "make build-no-bundle",
-    "build": "make build",
-    "fix": "make fix",
-    "lint": "make lint",
-    "test": "make test",
-    "test-only": "make test-only",
-    "version": "yarn --immutable-cache && git add yarn.lock",
-    "test:esm": "node test/esm/index.js",
-    "test:runtime:generate-absolute-runtime": "node test/runtime-integration/generate-absolute-runtime.cjs",
-    "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
-    "test:runtime:node": "node test/runtime-integration/node.cjs"
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network bsc",
+    "test": "hardhat test"
   },
-  "packageManager": "yarn@4.9.1",
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
   "devDependencies": {
-    "$repo-utils": "link:./scripts/repo-utils",
-    "@babel/cli": "8.0.0-alpha.16",
-    "@babel/core": "8.0.0-alpha.16",
-    "@babel/eslint-parser": "workspace:^",
-    "@babel/eslint-plugin-development": "workspace:^",
-    "@babel/eslint-plugin-development-internal": "workspace:^",
-    "@babel/plugin-transform-dynamic-import": "8.0.0-alpha.16",
-    "@babel/plugin-transform-export-namespace-from": "8.0.0-alpha.16",
-    "@babel/plugin-transform-json-modules": "8.0.0-alpha.16",
-    "@babel/plugin-transform-modules-commonjs": "8.0.0-alpha.16",
-    "@babel/plugin-transform-object-rest-spread": "8.0.0-alpha.16",
-    "@babel/plugin-transform-runtime": "8.0.0-alpha.16",
-    "@babel/preset-env": "8.0.0-alpha.16",
-    "@babel/preset-typescript": "8.0.0-alpha.16",
-    "@babel/runtime": "8.0.0-alpha.16",
-    "@cspotcode/source-map-support": "^0.8.1",
-    "@eslint/js": "^9.22.0",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@types/jest": "^29.5.11",
-    "@types/node": "^22.10.5",
-    "@yarnpkg/types": "^4.0.0",
-    "babel-plugin-transform-charcodes": "^0.2.0",
-    "c8": "^10.0.0",
-    "charcodes": "^0.2.0",
-    "core-js": "^3.36.1",
-    "eslint": "^9.22.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-formatter-codeframe": "^7.32.1",
-    "eslint-import-resolver-node": "^0.3.9",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^27.9.0",
-    "eslint-plugin-n": "^17.10.3",
-    "eslint-plugin-regexp": "^2.6.0",
-    "eslint-plugin-unicorn": "^56.0.0",
-    "execa": "^9.0.0",
-    "glob": "^10.3.10",
-    "globals": "^15.9.0",
-    "gulp": "^5.0.0",
-    "husky": "^9.0.11",
-    "import-meta-resolve": "^4.1.0",
-    "is-ci": "^3.0.1",
-    "jest": "^30.0.0-alpha.2",
-    "jest-light-runner": "^0.7.0",
-    "jest-worker": "^30.0.0-alpha.2",
-    "json5": "^2.2.3",
-    "lint-staged": "^15.2.7",
-    "mergeiterator": "^1.4.4",
-    "picocolors": "^1.0.0",
-    "prettier": "^3.5.2",
-    "rollup": "^4.18.0",
-    "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
-    "rollup-plugin-dts-5": "npm:rollup-plugin-dts@^5.3.1",
-    "rollup-plugin-polyfill-node": "^0.13.0",
-    "semver": "^6.3.1",
-    "shelljs": "^0.8.5",
-    "test262-stream": "^1.4.0",
-    "typescript": "5.8.3",
-    "typescript-eslint": "8.29.1"
-  },
-  "workspaces": [
-    "codemods/*",
-    "eslint/*",
-    "packages/*",
-    "test/esm",
-    "test/runtime-integration/*",
-    "benchmark"
-  ],
-  "resolutions": {
-    "browserslist": "npm:4.24.4",
-    "caniuse-lite": "npm:1.0.30001705",
-    "core-js-compat": "npm:3.41.0",
-    "electron-to-chromium": "npm:1.5.140",
-    "@types/babel__core": "link:./nope",
-    "@types/babel__traverse": "link:./nope",
-    "@babel/parser/@babel/types": "workspace:*",
-    "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
-  },
-  "engines": {
-    "yarn": ">=1.4.0"
-  },
-  "lint-staged": {
-    "./Makefile.source.mjs": [
-      "node ./scripts/pack-script.js --auto",
-      "git add Makefile.mjs"
-    ],
-    "*.{js,cjs,mjs,ts,cts,mts}": [
-      "eslint --format=codeframe --cache --cache-strategy=content"
-    ],
-    "*": [
-      "prettier --write --ignore-unknown"
-    ]
-  },
-  "changelog": {
-    "repo": "babel/babel",
-    "cacheDir": ".changelog",
-    "labels": {
-      "PR: Spec Compliance :eyeglasses:": ":eyeglasses: Spec Compliance",
-      "PR: Deprecation :loudspeaker:": ":loudspeaker: Deprecation",
-      "PR: New Feature :rocket:": ":rocket: New Feature",
-      "PR: Bug Fix :bug:": ":bug: Bug Fix",
-      "PR: Polish :nail_care:": ":nail_care: Polish",
-      "PR: Docs :memo:": ":memo: Documentation",
-      "PR: Internal :house:": ":house: Internal",
-      "PR: Performance :running_woman:": ":running_woman: Performance",
-      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
-      "PR: Output optimization :microscope:": ":microscope: Output optimization"
-    },
-    "labels_breaking": {
-      "PR: Spec Compliance (next major) :eyeglasses:": ":eyeglasses: Spec Compliance",
-      "PR: Breaking Change :boom:": ":boom: Breaking Change",
-      "PR: Deprecation (next major) :loudspeaker:": ":loudspeaker: Deprecation",
-      "PR: New Feature (next major) :rocket:": ":rocket: New Feature",
-      "PR: Bug Fix (next major) :bug:": ":bug: Bug Fix",
-      "PR: Polish (next major) :nail_care:": ":nail_care: Polish",
-      "PR: Docs (next major) :memo:": ":memo: Documentation",
-      "PR: Internal (next major) :house:": ":house: Internal",
-      "PR: Performance (next major) :running_woman:": ":running_woman: Performance",
-      "PR: Revert (next major)": ":leftwards_arrow_with_hook: Revert",
-      "PR: Output optimization (next major) :microscope:": ":microscope: Output optimization"
-    }
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.4"
   }
 }
