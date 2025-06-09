@@ -1,5 +1,5 @@
 import * as t from "../../lib/index.js";
-import { itBabel8 } from "$repo-utils";
+import { itBabel7, itBabel8 } from "$repo-utils";
 import cp from "node:child_process";
 
 describe("builders", function () {
@@ -11,8 +11,13 @@ describe("builders", function () {
     expect(() => t.numericLiteral(NaN)).toThrow();
   });
 
-  it("t.bigIntLiteral expects a string value", () => {
+  itBabel7("t.bigIntLiteral expects a string value", () => {
     expect(t.bigIntLiteral("1")).toHaveProperty("value", "1");
+  });
+
+  itBabel8("t.bigIntLiteral expects a bigint value", () => {
+    const bigIntLiteral = t.bigIntLiteral(1n);
+    expect(bigIntLiteral).toHaveProperty("value", 1n);
   });
 
   it("uppercase builders", () => {
