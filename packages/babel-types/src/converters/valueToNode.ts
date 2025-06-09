@@ -105,7 +105,11 @@ function valueToNode(value: unknown): t.Expression {
 
   // bigints
   if (typeof value === "bigint") {
-    return bigIntLiteral(value.toString());
+    if (value < 0) {
+      return unaryExpression("-", bigIntLiteral((-value).toString()));
+    } else {
+      return bigIntLiteral(value.toString());
+    }
   }
 
   // regexes
