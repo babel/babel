@@ -17,10 +17,10 @@
           "type": "BigIntLiteral",
           "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
           "extra": {
-            "rawValue": null,
-            "raw": "1.0n"
+            "rawValue": "2e9",
+            "raw": "2e9n"
           },
-          "value": null
+          "value": "2e9"
         }
       }
     ],
