@@ -293,6 +293,9 @@
       "@babel/plugin-transform-function-name": [
         "./packages/babel-plugin-transform-function-name/src"
       ],
+      "@babel/plugin-transform-import-meta": [
+        "./packages/babel-plugin-transform-import-meta/src"
+      ],
       "@babel/plugin-transform-instanceof": [
         "./packages/babel-plugin-transform-instanceof/src"
       ],
