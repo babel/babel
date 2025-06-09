@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
-  "errors": [
-    "SyntaxError: Invalid BigIntLiteral. (1:0)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
@@ -17,10 +14,16 @@
           "type": "BigIntLiteral",
           "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
           "extra": {
-            "rawValue": null,
-            "raw": "1.0n"
+            "rawValue": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "100"
+            },
+            "raw": "100n"
           },
-          "value": null
+          "value": {
+            "$$ babel internal serialized type": "bigint",
+            "value": "100"
+          }
         }
       }
     ],

@@ -142,10 +142,16 @@
                       "type": "BigIntLiteral",
                       "start":127,"end":129,"loc":{"start":{"line":8,"column":24,"index":127},"end":{"line":8,"column":26,"index":129}},
                       "extra": {
-                        "rawValue": "0",
+                        "rawValue": {
+                          "$$ babel internal serialized type": "bigint",
+                          "value": "0"
+                        },
                         "raw": "0n"
                       },
-                      "value": "0"
+                      "value": {
+                        "$$ babel internal serialized type": "bigint",
+                        "value": "0"
+                      }
                     }
                   }
                 ],
@@ -180,10 +186,16 @@
                         "type": "BigIntLiteral",
                         "start":165,"end":167,"loc":{"start":{"line":9,"column":34,"index":165},"end":{"line":9,"column":36,"index":167}},
                         "extra": {
-                          "rawValue": "0",
+                          "rawValue": {
+                            "$$ babel internal serialized type": "bigint",
+                            "value": "0"
+                          },
                           "raw": "0n"
                         },
-                        "value": "0"
+                        "value": {
+                          "$$ babel internal serialized type": "bigint",
+                          "value": "0"
+                        }
                       }
                     }
                   }

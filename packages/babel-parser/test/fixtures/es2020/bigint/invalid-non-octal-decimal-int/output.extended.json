@@ -17,10 +17,16 @@
           "type": "BigIntLiteral",
           "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
           "extra": {
-            "rawValue": null,
-            "raw": "1.0n"
+            "rawValue": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "89"
+            },
+            "raw": "089n"
           },
-          "value": null
+          "value": {
+            "$$ babel internal serialized type": "bigint",
+            "value": "89"
+          }
         }
       }
     ],
