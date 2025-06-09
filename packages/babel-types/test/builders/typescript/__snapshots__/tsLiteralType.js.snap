@@ -15,12 +15,12 @@ Object {
 }
 `;
 
-exports[`builders typescript tsLiteralType accept unary expression 2`] = `
+exports[`builders typescript tsLiteralType accepts unary expression with bigint literal 1`] = `
 Object {
   "literal": Object {
     "argument": Object {
       "type": "BigIntLiteral",
-      "value": "123456789",
+      "value": 123456789n,
     },
     "operator": "-",
     "prefix": true,

@@ -1,4 +1,5 @@
 import * as t from "../../../lib/index.js";
+import { itBabel7, itBabel8 } from "$repo-utils";
 
 describe("builders", function () {
   describe("typescript", function () {
@@ -7,8 +8,20 @@ describe("builders", function () {
         expect(
           t.tsLiteralType(t.unaryExpression("-", t.numericLiteral(1))),
         ).toMatchSnapshot();
+      });
+      itBabel7(
+        "accepts unary expression with bigint literal - babel 7",
+        function () {
+          expect(
+            t.tsLiteralType(
+              t.unaryExpression("-", t.bigIntLiteral("123456789")),
+            ),
+          ).toMatchSnapshot();
+        },
+      );
+      itBabel8("accepts unary expression with bigint literal", function () {
         expect(
-          t.tsLiteralType(t.unaryExpression("-", t.bigIntLiteral("123456789"))),
+          t.tsLiteralType(t.unaryExpression("-", t.bigIntLiteral(123456789n))),
         ).toMatchSnapshot();
       });
       it("throws with non-numeric argument", function () {
