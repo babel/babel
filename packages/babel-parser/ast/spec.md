@@ -251,11 +251,9 @@ interface NumericLiteral <: Literal {
 ```js
 interface BigIntLiteral <: Literal {
   type: "BigIntLiteral";
-  value: string;
+  value: bigint;
 }
 ```
-
-The `value` property is the string representation of the `BigInt` value. It doesn't include the suffix `n`.
 
 ## DecimalLiteral
 

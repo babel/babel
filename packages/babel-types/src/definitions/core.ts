@@ -2174,7 +2174,9 @@ defineType("BigIntLiteral", {
   builder: ["value"],
   fields: {
     value: {
-      validate: assertValueType("string"),
+      validate: process.env.BABEL_8_BREAKING
+        ? assertValueType("bigint")
+        : assertValueType("string"),
     },
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],

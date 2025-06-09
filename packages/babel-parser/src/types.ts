@@ -254,7 +254,7 @@ export interface NumericLiteral extends NodeBase {
 
 export interface BigIntLiteral extends NodeBase {
   type: "BigIntLiteral";
-  value: number;
+  value: bigint;
 }
 
 export interface DecimalLiteral extends NodeBase {
