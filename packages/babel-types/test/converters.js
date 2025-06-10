@@ -41,6 +41,29 @@ describe("converters", function () {
     const nodeGte10 = itGte("10.4.0");
     nodeGte10("bigint", function () {
       expect(t.valueToNode(BigInt(123))).toEqual(t.bigIntLiteral("123"));
+      expect(t.valueToNode(BigInt(-123))).toEqual(
+        t.unaryExpression("-", t.bigIntLiteral("123")),
+      );
+      expect(t.valueToNode(BigInt(0))).toEqual(t.bigIntLiteral("0"));
+      expect(t.valueToNode(BigInt(-0))).toEqual(t.bigIntLiteral("0"));
+      expect(t.valueToNode(BigInt(0x1fffffffffffff))).toEqual(
+        t.bigIntLiteral("9007199254740991"),
+      );
+      expect(t.valueToNode(BigInt("9007199254740992"))).toEqual(
+        t.bigIntLiteral("9007199254740992"),
+      );
+      expect(t.valueToNode(BigInt("-9007199254740992"))).toEqual(
+        t.unaryExpression("-", t.bigIntLiteral("9007199254740992")),
+      );
+      expect(t.valueToNode(BigInt("123456789012345678901234567890"))).toEqual(
+        t.bigIntLiteral("123456789012345678901234567890"),
+      );
+      expect(t.valueToNode(BigInt("-123456789012345678901234567890"))).toEqual(
+        t.unaryExpression(
+          "-",
+          t.bigIntLiteral("123456789012345678901234567890"),
+        ),
+      );
     });
     it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(

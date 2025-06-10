@@ -20,8 +20,8 @@ describe("builders", function () {
   });
 
   itBabel8("uppercase builders are deprecated", async () => {
-    // Spawn a separate process, because the warnig only happens once for all builders
-    // and it relies on globa state to du the deduplication
+    // Spawn a separate process, because the warning only happens once for all builders
+    // and it relies on global state due to the deduplication
 
     const { stderr } = cp.spawn(process.execPath, [
       "-p",
