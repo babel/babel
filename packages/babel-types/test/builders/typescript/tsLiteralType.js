@@ -34,7 +34,9 @@ describe("builders", function () {
       );
       itBabel8("accepts unary expression with bigint literal", function () {
         expect(
-          t.tsLiteralType(t.unaryExpression("-", t.bigIntLiteral(123456789n))),
+          t.tsLiteralType(
+            t.unaryExpression("-", t.bigIntLiteral(BigInt("123456789"))),
+          ),
         ).toMatchInlineSnapshot(`
           Object {
             "literal": Object {

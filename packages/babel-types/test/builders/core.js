@@ -16,8 +16,8 @@ describe("builders", function () {
   });
 
   itBabel8("t.bigIntLiteral expects a bigint value", () => {
-    const bigIntLiteral = t.bigIntLiteral(1n);
-    expect(bigIntLiteral).toHaveProperty("value", 1n);
+    const bigIntLiteral = t.bigIntLiteral(BigInt(1));
+    expect(bigIntLiteral).toHaveProperty("value", BigInt(1));
   });
 
   it("uppercase builders", () => {
