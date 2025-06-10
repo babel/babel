@@ -108,9 +108,37 @@ const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
 `;
+  if (!IS_BABEL_8()) {
+    // eslint-disable-next-line no-var
+    var builderOverrideType = "BigIntLiteral";
+    const builderOverrides = `
+const isBigIntSupported = typeof BigInt === "function";
+export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
+  if (isBigIntSupported) {
+    if (typeof value === "string") {
+      deprecationWarning("bigIntLiteral(string)", "bigIntLiteral(bigint)", "The node builder ");
+    } else {
+      value = value.toString();
+    }
+  }
+  const node: t.BigIntLiteral = {
+    type: "BigIntLiteral",
+    value: value as string,
+  };
+  const defs = NODE_FIELDS.BigIntLiteral;
+  validate(defs.value, node, "value", value);
+  return node;
+}
+`;
+    output += builderOverrides;
+  }
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
+    if (type === builderOverrideType) {
+      // Skip the BigIntLiteral builder override, which is handled above.
+      return;
+    }
     const defArgs = generateBuilderArgs(type);
     const formattedBuilderName = formatBuilderName(type);
     const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)

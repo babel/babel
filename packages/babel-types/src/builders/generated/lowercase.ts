@@ -10,6 +10,27 @@ import * as utils from "../../definitions/utils.ts";
 const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
+const isBigIntSupported = typeof BigInt === "function";
+export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
+  if (isBigIntSupported) {
+    if (typeof value === "string") {
+      deprecationWarning(
+        "bigIntLiteral(string)",
+        "bigIntLiteral(bigint)",
+        "The node builder ",
+      );
+    } else {
+      value = value.toString();
+    }
+  }
+  const node: t.BigIntLiteral = {
+    type: "BigIntLiteral",
+    value: value as string,
+  };
+  const defs = NODE_FIELDS.BigIntLiteral;
+  validate(defs.value, node, "value", value);
+  return node;
+}
 export function arrayExpression(
   elements: Array<null | t.Expression | t.SpreadElement> = [],
 ): t.ArrayExpression {
@@ -1155,15 +1176,6 @@ function _import(): t.Import {
   };
 }
 export { _import as import };
-export function bigIntLiteral(value: string): t.BigIntLiteral {
-  const node: t.BigIntLiteral = {
-    type: "BigIntLiteral",
-    value,
-  };
-  const defs = NODE_FIELDS.BigIntLiteral;
-  validate(defs.value, node, "value", value);
-  return node;
-}
 export function exportNamespaceSpecifier(
   exported: t.Identifier,
 ): t.ExportNamespaceSpecifier {
