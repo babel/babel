@@ -851,7 +851,9 @@ jobs:
         id: results-cache-restore
         uses: actions/cache/restore@v4
         with:
-          key: test262-babel8
+          key: test262-babel8-${{ hashFiles('Makefile') }}
+          restore-keys: |
+            test262-babel8-
           path: babel-test262-runner/cache.lmdb
       - name: Run test262
         run: |
