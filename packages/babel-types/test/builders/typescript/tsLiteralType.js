@@ -16,13 +16,39 @@ describe("builders", function () {
             t.tsLiteralType(
               t.unaryExpression("-", t.bigIntLiteral("123456789")),
             ),
-          ).toMatchSnapshot();
+          ).toMatchInlineSnapshot(`
+            Object {
+              "literal": Object {
+                "argument": Object {
+                  "type": "BigIntLiteral",
+                  "value": "123456789",
+                },
+                "operator": "-",
+                "prefix": true,
+                "type": "UnaryExpression",
+              },
+              "type": "TSLiteralType",
+            }
+          `);
         },
       );
       itBabel8("accepts unary expression with bigint literal", function () {
         expect(
           t.tsLiteralType(t.unaryExpression("-", t.bigIntLiteral(123456789n))),
-        ).toMatchSnapshot();
+        ).toMatchInlineSnapshot(`
+          Object {
+            "literal": Object {
+              "argument": Object {
+                "type": "BigIntLiteral",
+                "value": 123456789n,
+              },
+              "operator": "-",
+              "prefix": true,
+              "type": "UnaryExpression",
+            },
+            "type": "TSLiteralType",
+          }
+        `);
       });
       it("throws with non-numeric argument", function () {
         expect(() => {
