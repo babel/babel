@@ -326,7 +326,6 @@ export default abstract class StatementParser extends ExpressionParser {
       this.chStartsBindingIdentifier(nextCh, next) ||
       this.isUnparsedContextual(next, "void")
     ) {
-      this.expectPlugin("explicitResourceManagement");
       return true;
     }
     return false;
