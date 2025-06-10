@@ -323,7 +323,6 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
     if (this.chStartsBindingIdentifier(nextCh, next)) {
-      this.expectPlugin("explicitResourceManagement");
       return true;
     }
     return false;
