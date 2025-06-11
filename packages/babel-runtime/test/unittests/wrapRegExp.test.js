@@ -1,7 +1,9 @@
 import wrapRegExp from "../../helpers/wrapRegExp.js";
+import { describeNoCITGM } from "$repo-utils";
 
 describe("wrapRegExp", () => {
-  describe("should handle maliciously crafted substitutions", () => {
+  // CITGM's machines are slow.
+  describeNoCITGM("should handle maliciously crafted substitutions", () => {
     it("$<$<...$<group", () => {
       const pattern = "(foo)";
       const groups = { group: 1 };

@@ -10,7 +10,6 @@ var recast = require("recast");
 var v8 = require("v8");
 var types = recast.types;
 var n = types.namedTypes;
-var expect = require("expect");
 
 function transform(ast) {
   return require("@babel/core")
