@@ -70,6 +70,9 @@ if (typeof jest !== "undefined") {
       ? describe
       : describe.skip;
   };
+  exports.describeNoCITGM = __dirname.includes("citgm_tmp")
+    ? describe.skip
+    : describe;
 }
 
 exports.commonJS = function (metaUrl) {

@@ -130,6 +130,9 @@ function enqueue(cmd, args = []) {
               process.execPath,
               [
                 join(mochaDir, "bin", "mocha.js"),
+                // https://github.com/nodejs/node/pull/58588#issuecomment-2961692890
+                "--timeout",
+                "10000",
                 "--reporter",
                 "spec",
                 ...args,
