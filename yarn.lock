@@ -1091,7 +1091,7 @@ __metadata:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     fs-readdir-recursive: "npm:^1.1.0"
-    jest-diff: "npm:^29.6.4"
+    jest-diff: "npm:^30.0.0"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
   languageName: unknown
@@ -11922,7 +11922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:30.0.0":
+"jest-diff@npm:30.0.0, jest-diff@npm:^30.0.0":
   version: 30.0.0
   resolution: "jest-diff@npm:30.0.0"
   dependencies:
@@ -11934,7 +11934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^29.6.4, jest-diff@npm:^29.7.0":
+"jest-diff@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-diff@npm:29.7.0"
   dependencies:
