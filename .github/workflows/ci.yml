@@ -265,7 +265,7 @@ jobs:
         run: |
           yarn up jest@29
           cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@28 && cd ../..
-          yarn up jest-light-runner@0.7.0
+          yarn up jest-light-runner@0.5.1
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
