@@ -260,6 +260,15 @@ jobs:
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
+      - name: Downgrade Jest and jest-light-runner for node 14 and 16
+        if: matrix.node-version == '14' || matrix.node-version == '16'
+        run: |
+          yarn up jest@29
+          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@28 && cd ../..
+          yarn up jest-light-runner@0.7.0
+          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
+          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
+          yarn dedupe
       - uses: actions/download-artifact@v4
         with:
           name: babel-artifact
