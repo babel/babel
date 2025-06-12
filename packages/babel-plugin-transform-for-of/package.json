@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "7.11.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
