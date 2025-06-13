@@ -1,0 +1,18 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "sourceType": "module",
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": 133
+        },
+        "useBuiltIns": "usage",
+        "corejs": { "version": "3.40", "proposals": true }
+      }
+    ]
+  ]
+}
