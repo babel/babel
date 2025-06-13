@@ -152,6 +152,7 @@ function gatherNodeParts(node: t.Node, parts: NodePart[]) {
       break;
 
     case "Import":
+    case "ImportExpression":
       parts.push("import");
       break;
 
