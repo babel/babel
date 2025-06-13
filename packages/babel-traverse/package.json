@@ -18,11 +18,11 @@
   "dependencies": {
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
+    "@babel/helper-globals": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/types": "workspace:^",
-    "debug": "^4.3.1",
-    "globals": "condition:BABEL_8_BREAKING ? ^15.9.0 : ^11.1.0"
+    "debug": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

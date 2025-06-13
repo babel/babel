@@ -1281,5 +1281,22 @@ describe("scope", () => {
         scope.hasBinding("Symbol", { upToScope: scope, noGlobals: true }),
       ).toBe(false);
     });
+
+    describe("global builtins", () => {
+      let scope;
+      beforeAll(() => ({ scope } = getPath(``)));
+      it.each([
+        ["es3", "Array"],
+        ["es5", "JSON"],
+        ["es2015", "Reflect"],
+        ["es2017", "Atomics"],
+        ["es2020", "BigInt"],
+        ["es2021", "AggregateError"],
+        ["es2025", "Iterator"],
+        // To add new global builtins, see https://github.com/sindresorhus/globals/tree/main/data
+      ])(`supports %s: scope.hasBinding(%s) should be true`, (_, name) => {
+        expect(scope.hasBinding(name)).toBe(true);
+      });
+    });
   });
 });
