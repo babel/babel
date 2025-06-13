@@ -10,11 +10,11 @@ function _test() {
       }
     }
     class Bar extends Foo {
-      constructor(...args) {
+      constructor() {
         var _superprop_getFoo = () => super.foo,
           _this,
           _superprop_get = _prop => super[_prop];
-        super(...args);
+        super(...arguments);
         _this = this;
         babelHelpers.defineProperty(this, "a", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
           return _superprop_getFoo().bind(_this)``;

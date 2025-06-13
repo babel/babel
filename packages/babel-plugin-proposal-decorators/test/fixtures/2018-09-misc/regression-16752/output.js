@@ -2,8 +2,8 @@ let HaStateLabelBadge = babelHelpers.decorate([customElement("ha-state-label-bad
   "use strict";
 
   class HaStateLabelBadge extends _LitElement {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
       _initialize(this);
     }
   }
