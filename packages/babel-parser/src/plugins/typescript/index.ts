@@ -3135,7 +3135,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       // If node.declare is true, the error has already been raised in tsTryParseDeclare.
       if (!node.declare && (kind === "using" || kind === "await using")) {
-        this.raise(TSErrors.UsingDeclarationInAmbientContext, node, kind);
+        this.raiseOverwrite(
+          TSErrors.UsingDeclarationInAmbientContext,
+          node,
+          kind,
+        );
         return declaration;
       }
 
