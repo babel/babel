@@ -25,6 +25,9 @@
           "value": "\\u{FFZ}"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

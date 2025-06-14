@@ -101,8 +101,8 @@
             }
           ]
         },
-        "declaration": null,
         "attributes": [],
+        "declaration": null,
         "innerComments": [
           {
             "type": "CommentBlock",
@@ -174,7 +174,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   },
   "comments": [

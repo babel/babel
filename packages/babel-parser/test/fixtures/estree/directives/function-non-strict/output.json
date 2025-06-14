@@ -58,6 +58,9 @@
           ]
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

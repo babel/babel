@@ -22,6 +22,9 @@
           "value": "\\u0061"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

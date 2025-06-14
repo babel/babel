@@ -106,8 +106,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -131,8 +131,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -164,8 +164,8 @@
           },
           "value": "baz"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -197,8 +197,8 @@
           },
           "value": "baz"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -230,8 +230,8 @@
           },
           "value": "baz"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -263,8 +263,8 @@
           },
           "value": "baz"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -296,8 +296,8 @@
           },
           "value": "baz"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "VariableDeclaration",
@@ -368,8 +368,8 @@
                 }
               ],
               "source": null,
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -393,8 +393,8 @@
                 }
               ],
               "source": null,
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -426,8 +426,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -459,8 +459,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -492,8 +492,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -525,8 +525,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -558,8 +558,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "VariableDeclaration",
@@ -698,8 +698,8 @@
                 }
               ],
               "source": null,
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -723,8 +723,8 @@
                 }
               ],
               "source": null,
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -756,8 +756,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -789,8 +789,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -822,8 +822,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -855,8 +855,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "ExportNamedDeclaration",
@@ -888,8 +888,8 @@
                 },
                 "value": "baz"
               },
-              "declaration": null,
-              "attributes": []
+              "attributes": [],
+              "declaration": null
             },
             {
               "type": "VariableDeclaration",
@@ -928,7 +928,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

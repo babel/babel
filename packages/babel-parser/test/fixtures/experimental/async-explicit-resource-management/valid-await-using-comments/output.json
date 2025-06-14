@@ -420,7 +420,10 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": true
+    }
   },
   "comments": [
     {

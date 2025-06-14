@@ -22,6 +22,9 @@
           "value": "\\x61"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
