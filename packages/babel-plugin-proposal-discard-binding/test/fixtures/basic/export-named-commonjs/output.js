@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.shouldNotSplit = void 0;
 exports.shouldNotTransform = shouldNotTransform;
 exports.shouldSplit = void 0;
-var _;
+var _2;
 const [, {
-  p: _2,
+  p: _,
   ...shouldSplit
 }] = [0, {
   p: 1,
@@ -18,7 +18,7 @@ const [, {
 exports.shouldSplit = shouldSplit;
 let q;
 const shouldNotSplit = exports.shouldNotSplit = [, {
-  p: _,
+  p: _2,
   ...q
 }] = [0, {
   p: 1,
