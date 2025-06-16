@@ -108,22 +108,19 @@ const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
 `;
+  const builderOverrideTypes = new Set();
   if (!IS_BABEL_8()) {
-    // eslint-disable-next-line no-var
-    var builderOverrideType = "BigIntLiteral";
+    builderOverrideTypes.add("BigIntLiteral");
     const builderOverrides = `
-const isBigIntSupported = typeof BigInt === "function";
+/** @deprecated */ export function bigIntLiteral(value: string): t.BigIntLiteral;
+export function bigIntLiteral(value: bigint): t.BigIntLiteral;
 export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
-  if (isBigIntSupported) {
-    if (typeof value === "string") {
-      deprecationWarning("bigIntLiteral(string)", "bigIntLiteral(bigint)", "The node builder ");
-    } else {
-      value = value.toString();
-    }
+  if (typeof value === "bigint") {
+    value = value.toString();
   }
   const node: t.BigIntLiteral = {
     type: "BigIntLiteral",
-    value: value as string,
+    value,
   };
   const defs = NODE_FIELDS.BigIntLiteral;
   validate(defs.value, node, "value", value);
@@ -135,7 +132,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
-    if (type === builderOverrideType) {
+    if (builderOverrideTypes.has(type)) {
       // Skip the BigIntLiteral builder override, which is handled above.
       return;
     }
