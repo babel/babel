@@ -362,8 +362,13 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
       paramFlags |= ParamKind.PARAM_YIELD;
     }
-    this.scope.enter(ScopeFlag.PROGRAM);
+    const isCommonJS = this.options.sourceType === "commonjs";
+    if (isCommonJS) {
+      paramFlags |= ParamKind.PARAM_RETURN;
+    }
     this.prodParam.enter(paramFlags);
+    const scopeFlags = isCommonJS ? ScopeFlag.FUNCTION : ScopeFlag.PROGRAM;
+    this.scope.enter(scopeFlags);
   }
 
   checkDestructuringPrivate(refExpressionErrors: ExpressionErrors) {
