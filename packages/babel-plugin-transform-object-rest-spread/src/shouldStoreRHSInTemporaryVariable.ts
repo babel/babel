@@ -12,7 +12,10 @@ export default function shouldStoreRHSInTemporaryVariable(
 ): boolean {
   if (!node) return false;
   if (node.type === "ArrayPattern") {
-    const nonNullElements = node.elements.filter(element => element !== null);
+    const nonNullElements = node.elements.filter(
+      (element): element is Exclude<(typeof node.elements)[0], t.VoidPattern> =>
+        element !== null && element.type !== "VoidPattern",
+    );
     if (nonNullElements.length > 1) return true;
     else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]);
   } else if (node.type === "ObjectPattern") {
