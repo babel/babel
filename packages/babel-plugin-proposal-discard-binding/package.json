@@ -1,0 +1,58 @@
+{
+  "name": "@babel/plugin-proposal-discard-binding",
+  "version": "7.26.0",
+  "description": "Transform discard binding proposal",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-discard-binding"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.17.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-discard-binding",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module",
+  "conditions": {
+    "USE_ESM": [
+      null,
+      {
+        "type": "commonjs"
+      }
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^20.19.0 || >=22.12.0"
+        }
+      },
+      {}
+    ]
+  }
+}
