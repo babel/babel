@@ -1,7 +1,7 @@
 import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/core";
 
-const { cloneNode, exportNamedDeclaration, exportSpecifier, identifier } = t;
+const { cloneNode } = t;
 
 // replace [void, e] with [,e]
 function transformVoidPatternIntoNull(path: NodePath<t.VoidPattern>): null {
@@ -79,7 +79,7 @@ export function transformVoidPattern(
 }
 
 function* iterateVoidPatternsInLVal(
-  path: NodePath<t.LVal>,
+  path: NodePath<t.LVal | t.PatternLike>,
 ): Generator<NodePath<t.VoidPattern>> {
   switch (path.type) {
     case "ArrayPattern":
@@ -119,25 +119,6 @@ export function hasVoidPatternInVariableDeclaration(
   path: NodePath<t.VariableDeclaration>,
 ): boolean {
   return !iterateVoidPatternInVariableDeclaration(path).next().done;
-}
-
-export function splitNamedDeclarationAsVarAndExport(
-  path: NodePath<t.ExportNamedDeclaration>,
-  declarationPath: NodePath<t.VariableDeclaration>,
-) {
-  const specifiers = [];
-
-  for (const name of Object.keys(path.getOuterBindingIdentifiers())) {
-    specifiers.push(exportSpecifier(identifier(name), identifier(name)));
-  }
-  const programScope = path.scope;
-  const replacedPaths = path.replaceWithMultiple([
-    declarationPath.node,
-    exportNamedDeclaration(null, specifiers),
-  ]) as [NodePath<t.VariableDeclaration>, NodePath<t.ExportNamedDeclaration>];
-  programScope.crawl();
-
-  return replacedPaths;
 }
 
 export function transformVoidPatternInLVal(path: NodePath<t.LVal>) {
