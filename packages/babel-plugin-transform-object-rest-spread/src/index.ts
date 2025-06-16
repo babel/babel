@@ -497,19 +497,16 @@ export default declare((api, opts: Options) => {
           .some(path => hasObjectRestElement(path.get("id")));
         if (!hasRest) return;
 
-        const specifiers = [];
-
-        for (const name of Object.keys(path.getOuterBindingIdentifiers(true))) {
-          specifiers.push(
-            t.exportSpecifier(t.identifier(name), t.identifier(name)),
-          );
-        }
-
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
         // top-level statement.
-        path.replaceWith(declaration.node);
-        path.insertAfter(t.exportNamedDeclaration(null, specifiers));
+        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+          // polyfill when being run by an older Babel version
+          path.splitExportDeclaration ??=
+            // eslint-disable-next-line no-restricted-globals
+            require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
+        }
+        path.splitExportDeclaration();
       },
 
       // try {} catch ({a, ...b}) {}
