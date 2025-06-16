@@ -1,36 +1,33 @@
-var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(f0),
-  _marked2 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(f1),
-  _marked3 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(f2);
+var _marked = /*#__PURE__*/babelHelpers.regenerator().m(f0),
+  _marked2 = /*#__PURE__*/babelHelpers.regenerator().m(f1),
+  _marked3 = /*#__PURE__*/babelHelpers.regenerator().m(f2);
 function f0(x, _) {
   "f0";
 
-  return babelHelpers.regeneratorRuntime().wrap(function f0$(_context) {
-    while (1) switch (_context.prev = _context.next) {
+  return babelHelpers.regenerator().w(function (_context) {
+    while (1) switch (_context.n) {
       case 0:
-      case "end":
-        return _context.stop();
+        return _context.a(2);
     }
   }, _marked);
 }
 function f1(_2, x) {
   "f1";
 
-  return babelHelpers.regeneratorRuntime().wrap(function f1$(_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
+  return babelHelpers.regenerator().w(function (_context2) {
+    while (1) switch (_context2.n) {
       case 0:
-      case "end":
-        return _context2.stop();
+        return _context2.a(2);
     }
   }, _marked2);
 }
 function f2(_3) {
   "f2";
 
-  return babelHelpers.regeneratorRuntime().wrap(function f2$(_context3) {
-    while (1) switch (_context3.prev = _context3.next) {
+  return babelHelpers.regenerator().w(function (_context3) {
+    while (1) switch (_context3.n) {
       case 0:
-      case "end":
-        return _context3.stop();
+        return _context3.a(2);
     }
   }, _marked3);
 }
@@ -42,40 +39,37 @@ let C = /*#__PURE__*/function () {
   }
   return babelHelpers.createClass(C, null, [{
     key: "m0",
-    value: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function m0(x, _4) {
+    value: /*#__PURE__*/babelHelpers.regenerator().m(function m0(x, _4) {
       "m0";
 
-      return babelHelpers.regeneratorRuntime().wrap(function m0$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return babelHelpers.regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
           case 0:
-          case "end":
-            return _context4.stop();
+            return _context4.a(2);
         }
       }, m0);
     })
   }, {
     key: "m1",
-    value: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function m1(_5, x) {
+    value: /*#__PURE__*/babelHelpers.regenerator().m(function m1(_5, x) {
       "m1";
 
-      return babelHelpers.regeneratorRuntime().wrap(function m1$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return babelHelpers.regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
           case 0:
-          case "end":
-            return _context5.stop();
+            return _context5.a(2);
         }
       }, m1);
     })
   }, {
     key: "m2",
-    value: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function m2(_6) {
+    value: /*#__PURE__*/babelHelpers.regenerator().m(function m2(_6) {
       "m2";
 
-      return babelHelpers.regeneratorRuntime().wrap(function m2$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
+      return babelHelpers.regenerator().w(function (_context6) {
+        while (1) switch (_context6.n) {
           case 0:
-          case "end":
-            return _context6.stop();
+            return _context6.a(2);
         }
       }, m2);
     })
