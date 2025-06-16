@@ -3,7 +3,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import {
   hasVoidPatternInVariableDeclaration,
   handleUsingNamedEvaluation,
-  splitNamedDeclarationAsVarAndExport,
   removeTrailingVoidPatternsFromParams,
   transformVoidPattern,
   transformVoidPatternInLVal,
@@ -47,7 +46,7 @@ export default declare(function (
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
         // top-level statement.
-        splitNamedDeclarationAsVarAndExport(path, declarationPath);
+        path.splitExportDeclaration();
       },
 
       VoidPattern(path) {
