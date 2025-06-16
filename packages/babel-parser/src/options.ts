@@ -3,7 +3,7 @@ import type { Plugin } from "./plugin-utils.ts";
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
 
-export type SourceType = "script" | "module" | "unambiguous";
+export type SourceType = "script" | "commonjs" | "module" | "unambiguous";
 
 export interface Options {
   /**
@@ -71,12 +71,14 @@ export interface Options {
 
   /**
    * Indicate the mode the code should be parsed in.
-   * Can be one of "script", "module", or "unambiguous". Defaults to "script".
+   * Can be one of "script", "commonjs", "module", or "unambiguous". Defaults to "script".
    * "unambiguous" will make @babel/parser attempt to guess, based on the presence
    * of ES6 import or export statements.
    * Files with ES6 imports and exports are considered "module" and are otherwise "script".
+   *
+   * Use "commonjs" to parse code that is intended to be run in a CommonJS environment such as Node.js.
    */
-  sourceType?: "script" | "module" | "unambiguous";
+  sourceType?: SourceType;
 
   /**
    * Correlate output AST nodes with their source filename.

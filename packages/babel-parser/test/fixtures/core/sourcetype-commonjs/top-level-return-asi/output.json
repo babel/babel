@@ -4,7 +4,7 @@
   "program": {
     "type": "Program",
     "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":5,"index":15}},
-    "sourceType": "script",
+    "sourceType": "commonjs",
     "interpreter": null,
     "body": [
       {
