@@ -44,7 +44,7 @@ export default declare(api => {
 
         // Do expression within function parameter lists
         let foundDoExpression = false;
-        const deferredPatterns: t.LVal[] = [];
+        const deferredPatterns: (t.LVal | t.PatternLike)[] = [];
         const deferredTemps: t.Identifier[] = [];
         for (const param of path.get("params")) {
           const actualParam = param.isRestElement()
@@ -451,7 +451,7 @@ export default declare(api => {
     }
 
     function flattenLVal(
-      path: NodePath<t.LVal | t.OptionalMemberExpression>,
+      path: NodePath<t.LVal | t.PatternLike | t.OptionalMemberExpression>,
       init: t.Expression | null | undefined,
       declare: "var" | "let" | "const" | "using" | "await using" | null,
     ): t.Statement[] {

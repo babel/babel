@@ -51,7 +51,7 @@ export default declare((api, opts: Options) => {
   }
 
   function* iterateObjectRestElement(
-    path: NodePath<t.LVal>,
+    path: NodePath<t.LVal | t.PatternLike>,
   ): Generator<NodePath<t.RestElement>> {
     switch (path.type) {
       case "ArrayPattern":
@@ -82,13 +82,15 @@ export default declare((api, opts: Options) => {
     }
   }
 
-  function hasObjectRestElement(path: NodePath<t.LVal>): boolean {
+  function hasObjectRestElement(
+    path: NodePath<t.LVal | t.PatternLike>,
+  ): boolean {
     const objectRestPatternIterator = iterateObjectRestElement(path);
     return !objectRestPatternIterator.next().done;
   }
 
   function visitObjectRestElements(
-    path: NodePath<t.LVal>,
+    path: NodePath<t.LVal | t.PatternLike>,
     visitor: (path: NodePath<t.RestElement>) => void,
   ) {
     for (const restElementPath of iterateObjectRestElement(path)) {

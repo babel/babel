@@ -182,7 +182,7 @@ export class DestructuringTransformer {
     return declar;
   }
 
-  push(id: t.LVal, _init: t.Expression | null) {
+  push(id: t.LVal | t.PatternLike, _init: t.Expression | null) {
     const init = t.cloneNode(_init);
     if (t.isObjectPattern(id)) {
       this.pushObjectPattern(id, init);
