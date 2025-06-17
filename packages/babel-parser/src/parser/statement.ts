@@ -200,7 +200,11 @@ export default abstract class StatementParser extends ExpressionParser {
     file: Undone<N.File>,
     program: Undone<N.Program>,
   ): N.File {
-    file.program = this.parseProgram(program);
+    file.program = this.parseProgram(
+      program,
+      tt.eof,
+      this.options.sourceType === "module" ? "module" : "script",
+    );
     file.comments = this.comments;
 
     if (this.optionFlags & OptionFlags.Tokens) {
@@ -217,8 +221,8 @@ export default abstract class StatementParser extends ExpressionParser {
   parseProgram(
     this: Parser,
     program: Undone<N.Program>,
-    end: TokenType = tt.eof,
-    sourceType: SourceType = this.options.sourceType,
+    end: TokenType,
+    sourceType: SourceType,
   ): N.Program {
     program.sourceType = sourceType;
     program.interpreter = this.parseInterpreterDirective();
