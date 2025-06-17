@@ -371,7 +371,9 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
       paramFlags |= ParamKind.PARAM_YIELD;
     }
-    const isCommonJS = this.options.sourceType === "commonjs";
+    // The inModule flag ensures that the module block within a CommonJS source
+    // will be treated as an ES module.
+    const isCommonJS = !this.inModule && this.options.sourceType === "commonjs";
     if (
       isCommonJS ||
       this.optionFlags & OptionFlags.AllowReturnOutsideFunction

@@ -1,0 +1,4 @@
+{
+  "allowAwaitOutsideFunction": false,
+  "throws": "`sourceType: 'commonjs'` implies `allowAwaitOutsideFunction: true`, please remove the `allowAwaitOutsideFunction` option or use `sourceType: 'script'`."
+}

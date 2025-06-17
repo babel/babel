@@ -263,5 +263,23 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     }
   }
 
+  if (options.sourceType === "commonjs") {
+    if (opts.allowAwaitOutsideFunction != null) {
+      throw new Error(
+        "The `allowAwaitOutsideFunction` option cannot be used with `sourceType: 'commonjs'`.",
+      );
+    }
+    if (opts.allowReturnOutsideFunction != null) {
+      throw new Error(
+        "`sourceType: 'commonjs'` implies `allowNewTargetOutsideFunction: true`, please remove the `allowNewTargetOutsideFunction` option or use `sourceType: 'script'`.",
+      );
+    }
+    if (opts.allowNewTargetOutsideFunction != null) {
+      throw new Error(
+        "`sourceType: 'commonjs'` implies `allowNewTargetOutsideFunction: true`, please remove the `allowNewTargetOutsideFunction` option or use `sourceType: 'script'`.",
+      );
+    }
+  }
+
   return options;
 }
