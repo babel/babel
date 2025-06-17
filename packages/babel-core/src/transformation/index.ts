@@ -28,7 +28,7 @@ export type FileResult = {
   ast: t.File | null;
   code: string | null;
   map: GeneratorResult["map"] | null;
-  sourceType: "script" | "commonjs" | "module";
+  sourceType: "script" | "module";
   externalDependencies: Set<string>;
 };
 
