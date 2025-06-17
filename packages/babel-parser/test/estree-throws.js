@@ -40,5 +40,6 @@ runFixtureTests(
 
     return ast;
   },
+  /* filter */ undefined,
   true,
 );
