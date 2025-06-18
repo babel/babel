@@ -72,7 +72,7 @@ defineType("AssignmentExpression", {
     left: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal", "OptionalMemberExpression")
+          ? assertNodeType("LVal")
           : assertNodeType(
               "Identifier",
               "MemberExpression",
@@ -731,7 +731,7 @@ defineType("MemberExpression", {
       : []),
   ],
   visitor: ["object", "property"],
-  aliases: ["Expression", "LVal"],
+  aliases: ["Expression", "LVal", "PatternLike"],
   fields: {
     object: {
       validate: assertNodeType("Expression", "Super"),
@@ -1011,7 +1011,7 @@ defineType("RestElement", {
     argument: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal")
+          ? assertNodeType("PatternLike")
           : assertNodeType(
               "Identifier",
               "ArrayPattern",
@@ -1331,7 +1331,7 @@ defineType("ArrayPattern", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeOrValueType("null", "PatternLike", "LVal")),
+        assertEach(assertNodeOrValueType("null", "PatternLike")),
       ),
     },
   },
@@ -2197,7 +2197,7 @@ defineType("ExportNamespaceSpecifier", {
 defineType("OptionalMemberExpression", {
   builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal"],
   fields: {
     object: {
       validate: assertNodeType("Expression"),

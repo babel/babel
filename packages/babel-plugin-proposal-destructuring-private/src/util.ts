@@ -156,12 +156,7 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node:
-    | t.LVal
-    | t.PatternLike
-    | t.OptionalMemberExpression
-    | t.ObjectProperty
-    | null;
+  node: t.LVal | t.PatternLike | t.ObjectProperty | null;
   index: number;
   depth: number;
 };
@@ -179,13 +174,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal | t.PatternLike | t.OptionalMemberExpression,
+  root: t.LVal | t.PatternLike,
   visitor: (
-    node:
-      | t.LVal
-      | t.PatternLike
-      | t.OptionalMemberExpression
-      | t.ObjectProperty,
+    node: t.LVal | t.PatternLike | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -235,9 +226,7 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(
-  pattern: t.LVal | t.PatternLike | t.OptionalMemberExpression,
-) {
+export function hasPrivateKeys(pattern: t.LVal | t.PatternLike) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {

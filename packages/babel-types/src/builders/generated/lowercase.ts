@@ -23,7 +23,7 @@ export function arrayExpression(
 }
 export function assignmentExpression(
   operator: string,
-  left: t.LVal | t.OptionalMemberExpression,
+  left: t.LVal,
   right: t.Expression,
 ): t.AssignmentExpression {
   const node: t.AssignmentExpression = {
@@ -558,7 +558,7 @@ export function objectProperty(
   validate(defs.decorators, node, "decorators", decorators, 1);
   return node;
 }
-export function restElement(argument: t.LVal): t.RestElement {
+export function restElement(argument: t.PatternLike): t.RestElement {
   const node: t.RestElement = {
     type: "RestElement",
     argument,
@@ -772,7 +772,7 @@ export function assignmentPattern(
   return node;
 }
 export function arrayPattern(
-  elements: Array<null | t.PatternLike | t.LVal>,
+  elements: Array<null | t.PatternLike>,
 ): t.ArrayPattern {
   const node: t.ArrayPattern = {
     type: "ArrayPattern",
@@ -3436,7 +3436,7 @@ function RegexLiteral(pattern: string, flags: string = "") {
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(argument: t.LVal) {
+function RestProperty(argument: t.PatternLike) {
   deprecationWarning("RestProperty", "RestElement", "The node type ");
   return restElement(argument);
 }

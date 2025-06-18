@@ -314,7 +314,7 @@ export interface ArrayExpression extends BaseNode {
 export interface AssignmentExpression extends BaseNode {
   type: "AssignmentExpression";
   operator: string;
-  left: LVal | OptionalMemberExpression;
+  left: LVal;
   right: Expression;
 }
 
@@ -611,7 +611,7 @@ export interface ObjectProperty extends BaseNode {
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
-  argument: LVal;
+  argument: PatternLike;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -622,7 +622,7 @@ export interface RestElement extends BaseNode {
  */
 export interface RestProperty extends BaseNode {
   type: "RestProperty";
-  argument: LVal;
+  argument: PatternLike;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -730,7 +730,7 @@ export interface AssignmentPattern extends BaseNode {
 
 export interface ArrayPattern extends BaseNode {
   type: "ArrayPattern";
-  elements: Array<null | PatternLike | LVal>;
+  elements: Array<null | PatternLike>;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -2423,6 +2423,7 @@ export type Declaration =
   | TSImportEqualsDeclaration;
 export type PatternLike =
   | Identifier
+  | MemberExpression
   | RestElement
   | AssignmentPattern
   | ArrayPattern
@@ -2438,6 +2439,7 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
+  | OptionalMemberExpression
   | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
@@ -7501,13 +7503,11 @@ export interface ParentMaps {
     | TSUnionType
     | TemplateLiteral;
   TSParameterProperty:
-    | ArrayPattern
     | AssignmentExpression
     | ClassMethod
     | ClassPrivateMethod
     | ForInStatement
     | ForOfStatement
-    | RestElement
     | TSDeclareMethod
     | VariableDeclarator;
   TSParenthesizedType:

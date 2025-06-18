@@ -3159,6 +3159,7 @@ export function isPatternLike(
 
   switch (node.type) {
     case "Identifier":
+    case "MemberExpression":
     case "RestElement":
     case "AssignmentPattern":
     case "ArrayPattern":
@@ -3196,6 +3197,7 @@ export function isLVal(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "OptionalMemberExpression":
     case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
