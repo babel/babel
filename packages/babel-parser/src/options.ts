@@ -271,7 +271,7 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
     }
     if (opts.allowReturnOutsideFunction != null) {
       throw new Error(
-        "`sourceType: 'commonjs'` implies `allowNewTargetOutsideFunction: true`, please remove the `allowNewTargetOutsideFunction` option or use `sourceType: 'script'`.",
+        "`sourceType: 'commonjs'` implies `allowReturnOutsideFunction: true`, please remove the `allowReturnOutsideFunction` option or use `sourceType: 'script'`.",
       );
     }
     if (opts.allowNewTargetOutsideFunction != null) {
