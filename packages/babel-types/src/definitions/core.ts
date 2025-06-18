@@ -1002,7 +1002,9 @@ defineType("ObjectProperty", {
 defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
-  aliases: ["LVal", "PatternLike"],
+  aliases: process.env.BABEL_8_BREAKING
+    ? ["PatternLike"]
+    : ["PatternLike", "LVal"],
   deprecatedAlias: "RestProperty",
   fields: {
     ...patternLikeCommon(),
@@ -1292,7 +1294,9 @@ defineType("WithStatement", {
 defineType("AssignmentPattern", {
   visitor: ["left", "right", "decorators" /* for legacy param decorators */],
   builder: ["left", "right"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: process.env.BABEL_8_BREAKING
+    ? ["Pattern", "PatternLike"]
+    : ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     left: {

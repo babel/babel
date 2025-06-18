@@ -32,7 +32,9 @@ function transformAssignmentPattern(
   );
 }
 
-function initRestExcludingKeys(pattern: t.LVal): ExcludingKey[] | null {
+function initRestExcludingKeys(
+  pattern: t.LVal | t.PatternLike,
+): ExcludingKey[] | null {
   if (pattern.type === "ObjectPattern") {
     const { properties } = pattern;
     if (properties[properties.length - 1].type === "RestElement") {
@@ -112,7 +114,7 @@ interface Transformed {
 }
 
 function buildAssignmentsFromPatternList(
-  elements: (t.LVal | null)[],
+  elements: (t.LVal | t.PatternLike | null)[],
   scope: Scope,
   isAssignment: boolean,
 ): {
@@ -154,7 +156,12 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.LVal | t.OptionalMemberExpression | t.ObjectProperty | null;
+  node:
+    | t.LVal
+    | t.PatternLike
+    | t.OptionalMemberExpression
+    | t.ObjectProperty
+    | null;
   index: number;
   depth: number;
 };
@@ -172,9 +179,13 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal | t.OptionalMemberExpression,
+  root: t.LVal | t.PatternLike | t.OptionalMemberExpression,
   visitor: (
-    node: t.LVal | t.OptionalMemberExpression | t.ObjectProperty,
+    node:
+      | t.LVal
+      | t.PatternLike
+      | t.OptionalMemberExpression
+      | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -224,7 +235,9 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.LVal | t.OptionalMemberExpression) {
+export function hasPrivateKeys(
+  pattern: t.LVal | t.PatternLike | t.OptionalMemberExpression,
+) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
@@ -254,7 +267,7 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
  * @export
  * @param {t.LVal} pattern
  */
-export function* privateKeyPathIterator(pattern: t.LVal) {
+export function* privateKeyPathIterator(pattern: t.LVal | t.PatternLike) {
   const indexPath: number[] = [];
   yield* traversePattern(pattern, function* (node, index, depth) {
     indexPath[depth] = index;
@@ -267,7 +280,9 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
-type LHS = Exclude<t.LVal, t.RestElement | t.TSParameterProperty>;
+type LHS =
+  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty>
+  | t.AssignmentPattern;
 
 type ExcludingKey = {
   key: t.ObjectProperty["key"];

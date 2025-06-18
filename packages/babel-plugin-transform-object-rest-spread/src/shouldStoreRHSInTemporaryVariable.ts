@@ -8,7 +8,7 @@ import type { types as t } from "@babel/core";
  * on further optimizations.
  */
 export default function shouldStoreRHSInTemporaryVariable(
-  node: t.LVal,
+  node: t.LVal | t.PatternLike,
 ): boolean {
   if (!node) return false;
   if (node.type === "ArrayPattern") {
