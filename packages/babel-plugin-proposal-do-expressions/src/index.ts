@@ -49,7 +49,9 @@ export default declare(api => {
         for (const param of path.get("params")) {
           const actualParam = param.isRestElement()
             ? param.get("argument")
-            : param;
+            : param.isTSParameterProperty()
+              ? param.get("parameter")
+              : param;
           foundDoExpression ||= doAncestors.has(actualParam.node);
           if (foundDoExpression && !isLValSideEffectFree(actualParam)) {
             const pattern = actualParam.node;
