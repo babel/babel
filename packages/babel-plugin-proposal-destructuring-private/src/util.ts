@@ -114,7 +114,7 @@ interface Transformed {
 }
 
 function buildAssignmentsFromPatternList(
-  elements: (t.LVal | t.PatternLike | null)[],
+  elements: (t.LVal | t.PatternLike | t.TSParameterProperty | null)[],
   scope: Scope,
   isAssignment: boolean,
 ): {
@@ -156,7 +156,12 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.LVal | t.PatternLike | t.ObjectProperty | null;
+  node:
+    | t.LVal
+    | t.PatternLike
+    | t.ObjectProperty
+    | t.TSParameterProperty
+    | null;
   index: number;
   depth: number;
 };
@@ -174,9 +179,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal | t.PatternLike,
+  root: t.LVal | t.PatternLike | t.TSParameterProperty,
   visitor: (
-    node: t.LVal | t.PatternLike | t.ObjectProperty,
+    node: t.LVal | t.PatternLike | t.TSParameterProperty | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
