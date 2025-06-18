@@ -105,11 +105,11 @@
           },
           "value": "foo"
         },
+        "attributes": [],
         "declaration": null,
         "extra": {
           "deprecatedAssertSyntax": true
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ExportNamedDeclaration",
@@ -142,7 +142,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

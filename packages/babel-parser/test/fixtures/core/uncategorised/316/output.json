@@ -7,6 +7,9 @@
     "sourceType": "script",
     "interpreter": null,
     "body": [],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

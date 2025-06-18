@@ -48,12 +48,16 @@
             ],
             "directives": [],
             "extra": {
-              "topLevelAwait": false
+              "topLevelAwait": false,
+              "forAwait": false
             }
           }
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

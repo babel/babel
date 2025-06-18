@@ -49,13 +49,14 @@
           },
           "value": "foo"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       }
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

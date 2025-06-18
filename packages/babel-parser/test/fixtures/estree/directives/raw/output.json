@@ -18,6 +18,9 @@
         },
         "directive": "use\\x20strict"
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

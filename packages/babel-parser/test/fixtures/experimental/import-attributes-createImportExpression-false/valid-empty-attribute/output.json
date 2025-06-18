@@ -99,8 +99,8 @@
           },
           "value": "foo"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       },
       {
         "type": "ExportNamedDeclaration",
@@ -130,7 +130,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

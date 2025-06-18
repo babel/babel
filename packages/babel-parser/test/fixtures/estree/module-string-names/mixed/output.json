@@ -98,12 +98,13 @@
           "value": "module-b",
           "raw": "\"module-b\""
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       }
     ],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

@@ -77,8 +77,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
         "attributes": [],
+        "declaration": null,
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -111,8 +111,8 @@
           }
         ],
         "source": null,
-        "declaration": null,
         "attributes": [],
+        "declaration": null,
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -131,7 +131,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   },
   "comments": [
