@@ -282,7 +282,7 @@ export function forStatement(
 }
 export function functionDeclaration(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -305,7 +305,7 @@ export function functionDeclaration(
 }
 export function functionExpression(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -502,7 +502,7 @@ export function objectMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   computed: boolean = false,
   generator: boolean = false,
@@ -783,7 +783,7 @@ export function arrayPattern(
   return node;
 }
 export function arrowFunctionExpression(
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement | t.Expression,
   async: boolean = false,
 ): t.ArrowFunctionExpression {
@@ -1027,9 +1027,7 @@ export function classMethod(
     | t.NumericLiteral
     | t.BigIntLiteral
     | t.Expression,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   body: t.BlockStatement,
   computed: boolean = false,
   _static: boolean = false,
@@ -1298,9 +1296,7 @@ export function classPrivateProperty(
 export function classPrivateMethod(
   kind: "get" | "set" | "method" | undefined = "method",
   key: t.PrivateName,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   body: t.BlockStatement,
   _static: boolean = false,
 ): t.ClassPrivateMethod {
@@ -2549,7 +2545,7 @@ export function tsDeclareFunction(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareFunction {
   const node: t.TSDeclareFunction = {
@@ -2580,9 +2576,7 @@ export function tsDeclareMethod(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
   const node: t.TSDeclareMethod = {

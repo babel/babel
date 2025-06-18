@@ -378,7 +378,7 @@ defineType("ForStatement", {
 });
 
 export const functionCommon = () => ({
-  params: validateArrayOfType("Identifier", "Pattern", "RestElement"),
+  params: validateArrayOfType("FunctionParameter"),
   generator: {
     default: false,
   },
@@ -520,7 +520,13 @@ export const patternLikeCommon = () => ({
 defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation", "decorators" /* for legacy param decorators */],
-  aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
+  aliases: [
+    "Expression",
+    "FunctionParameter",
+    "PatternLike",
+    "LVal",
+    "TSEntityName",
+  ],
   fields: {
     ...patternLikeCommon(),
     name: {
@@ -1003,8 +1009,8 @@ defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
   aliases: process.env.BABEL_8_BREAKING
-    ? ["PatternLike"]
-    : ["PatternLike", "LVal"],
+    ? ["FunctionParameter", "PatternLike"]
+    : ["FunctionParameter", "PatternLike", "LVal"],
   deprecatedAlias: "RestProperty",
   fields: {
     ...patternLikeCommon(),
@@ -1295,8 +1301,8 @@ defineType("AssignmentPattern", {
   visitor: ["left", "right", "decorators" /* for legacy param decorators */],
   builder: ["left", "right"],
   aliases: process.env.BABEL_8_BREAKING
-    ? ["Pattern", "PatternLike"]
-    : ["Pattern", "PatternLike", "LVal"],
+    ? ["FunctionParameter", "Pattern", "PatternLike"]
+    : ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     left: {
@@ -1325,7 +1331,7 @@ defineType("AssignmentPattern", {
 defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
   builder: ["elements"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     elements: {
@@ -1932,12 +1938,7 @@ export const classMethodOrPropertyCommon = () => ({
 export const classMethodOrDeclareMethodCommon = () => ({
   ...functionCommon(),
   ...classMethodOrPropertyCommon(),
-  params: validateArrayOfType(
-    "Identifier",
-    "Pattern",
-    "RestElement",
-    "TSParameterProperty",
-  ),
+  params: validateArrayOfType("FunctionParameter", "TSParameterProperty"),
   kind: {
     validate: assertOneOf("get", "set", "method", "constructor"),
     default: "method",
@@ -1991,7 +1992,7 @@ defineType("ObjectPattern", {
     "typeAnnotation",
   ],
   builder: ["properties"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     properties: validateArrayOfType("RestElement", "ObjectProperty"),

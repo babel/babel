@@ -445,7 +445,7 @@ export interface ForStatement extends BaseNode {
 export interface FunctionDeclaration extends BaseNode {
   type: "FunctionDeclaration";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   generator: boolean;
   async: boolean;
@@ -462,7 +462,7 @@ export interface FunctionDeclaration extends BaseNode {
 export interface FunctionExpression extends BaseNode {
   type: "FunctionExpression";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   generator: boolean;
   async: boolean;
@@ -579,7 +579,7 @@ export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
   key: Expression | Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   computed: boolean;
   generator: boolean;
@@ -738,7 +738,7 @@ export interface ArrayPattern extends BaseNode {
 
 export interface ArrowFunctionExpression extends BaseNode {
   type: "ArrowFunctionExpression";
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement | Expression;
   async: boolean;
   expression: boolean;
@@ -901,7 +901,7 @@ export interface ClassMethod extends BaseNode {
   type: "ClassMethod";
   kind: "get" | "set" | "method" | "constructor";
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   body: BlockStatement;
   computed: boolean;
   static: boolean;
@@ -1069,7 +1069,7 @@ export interface ClassPrivateMethod extends BaseNode {
   type: "ClassPrivateMethod";
   kind: "get" | "set" | "method";
   key: PrivateName;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   body: BlockStatement;
   static: boolean;
   abstract?: boolean | null;
@@ -1698,7 +1698,7 @@ export interface TSDeclareFunction extends BaseNode {
   type: "TSDeclareFunction";
   id?: Identifier | null;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   returnType?: TSTypeAnnotation | Noop | null;
   async?: boolean;
   declare?: boolean | null;
@@ -1710,7 +1710,7 @@ export interface TSDeclareMethod extends BaseNode {
   decorators?: Array<Decorator> | null;
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   returnType?: TSTypeAnnotation | Noop | null;
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
@@ -2421,6 +2421,12 @@ export type Declaration =
   | TSEnumDeclaration
   | TSModuleDeclaration
   | TSImportEqualsDeclaration;
+export type FunctionParameter =
+  | Identifier
+  | RestElement
+  | AssignmentPattern
+  | ArrayPattern
+  | ObjectPattern;
 export type PatternLike =
   | Identifier
   | MemberExpression
@@ -2808,6 +2814,7 @@ export interface Aliases {
   FunctionParent: FunctionParent;
   Pureish: Pureish;
   Declaration: Declaration;
+  FunctionParameter: FunctionParameter;
   PatternLike: PatternLike;
   LVal: LVal;
   TSEntityName: TSEntityName;
