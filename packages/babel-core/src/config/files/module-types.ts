@@ -92,7 +92,7 @@ const tsNotSupportedError = (ext: string) => `\
 You are using a ${ext} config file, but Babel only supports transpiling .cts configs. Either:
 - Use a .cts config file
 - Update to Node.js 23.6.0, which has native TypeScript support
-- Install ts-node to transpile ${ext} files on the fly\
+- Install tsx to transpile ${ext} files on the fly\
 `;
 
 const SUPPORTED_EXTENSIONS = {
