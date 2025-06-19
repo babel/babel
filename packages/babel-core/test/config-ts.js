@@ -1,7 +1,14 @@
 import { loadPartialConfigSync, loadPartialConfigAsync } from "../lib/index.js";
 import path from "node:path";
 import semver from "semver";
-import { commonJS, itGte, itLt, USE_ESM } from "$repo-utils";
+import {
+  commonJS,
+  itGte,
+  itLt,
+  USE_ESM,
+  itBabel7,
+  describeGte,
+} from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -14,6 +21,7 @@ const shouldSkip = semver.lt(process.version, "14.0.0");
 const nodeLt23_6 = itLt("23.6.0");
 const nodeGte23_6 = itGte("23.6.0");
 const versionHasRequireESM = "^20.19.0 || >=22.12.0";
+const describeNodeGte18 = describeGte("18.0.0");
 
 const nodeLt23_6_andRequireBabelPackages =
   semver.lt(process.version, "23.6.0") &&
@@ -100,7 +108,7 @@ const nodeLt23_6_andRequireBabelPackages =
     );
   });
 
-  it("should work with ts-node", async () => {
+  itBabel7("should work with ts-node", async () => {
     const service = require("ts-node").register({
       experimentalResolver: true,
       compilerOptions: {
@@ -134,6 +142,43 @@ const nodeLt23_6_andRequireBabelPackages =
     } finally {
       service.enabled(false);
     }
+  });
+
+  describeNodeGte18("tsx integration", () => {
+    let tsx, unregister;
+    beforeAll(() => {
+      // tsx/cjs/api is a defined sub-export
+      // eslint-disable-next-line import/extensions
+      tsx = require("tsx/cjs/api");
+      unregister = tsx.register();
+    });
+    afterAll(() => {
+      unregister();
+    });
+
+    it("should work with tsx", async () => {
+      require(
+        path.join(
+          __dirname,
+          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+        ),
+      );
+
+      const config = loadPartialConfigSync({
+        configFile: path.join(
+          __dirname,
+          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+        ),
+      });
+
+      expect(config.options.targets).toMatchInlineSnapshot(`
+        Object {
+          "node": "12.0.0",
+        }
+      `);
+
+      expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+    });
   });
 
   nodeGte23_6("should search for .cts config files", () => {

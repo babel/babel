@@ -76,7 +76,8 @@
     "@types/resolve": "^1.3.2",
     "@types/semver": "^5.4.0",
     "rimraf": "^3.0.0",
-    "ts-node": "^11.0.0-beta.1"
+    "ts-node": "^11.0.0-beta.1",
+    "tsx": "^4.20.3"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
