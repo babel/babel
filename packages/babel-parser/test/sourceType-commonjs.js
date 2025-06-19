@@ -39,7 +39,9 @@ runFixtureTests(
         "allowReturnsOutsideFunction",
         "allowNewTargetOutsideFunction",
       ].some(key => key in options) &&
-      !blockList.has(path.relative(fixtures, test.actual.loc))
+      !blockList.has(
+        path.relative(fixtures, test.actual.loc).replace(/\\/g, "/"),
+      )
     );
   },
 );
