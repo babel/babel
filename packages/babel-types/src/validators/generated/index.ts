@@ -3151,6 +3151,27 @@ export function isDeclaration(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isFunctionParameter(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.FunctionParameter> | null,
+): node is t.FunctionParameter {
+  if (!node) return false;
+
+  switch (node.type) {
+    case "Identifier":
+    case "RestElement":
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ObjectPattern":
+      break;
+    case "Placeholder":
+      if (node.expectedNode === "Identifier") break;
+    default:
+      return false;
+  }
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isPatternLike(
   node: t.Node | null | undefined,
   opts?: Opts<t.PatternLike> | null,
@@ -3159,6 +3180,7 @@ export function isPatternLike(
 
   switch (node.type) {
     case "Identifier":
+    case "MemberExpression":
     case "RestElement":
     case "AssignmentPattern":
     case "ArrayPattern":
@@ -3196,6 +3218,7 @@ export function isLVal(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "OptionalMemberExpression":
     case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":

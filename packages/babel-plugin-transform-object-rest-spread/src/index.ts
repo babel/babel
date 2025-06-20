@@ -51,7 +51,7 @@ export default declare((api, opts: Options) => {
   }
 
   function* iterateObjectRestElement(
-    path: NodePath<t.LVal | t.PatternLike>,
+    path: NodePath<t.LVal | t.PatternLike | t.TSParameterProperty>,
   ): Generator<NodePath<t.RestElement>> {
     switch (path.type) {
       case "ArrayPattern":
@@ -83,7 +83,7 @@ export default declare((api, opts: Options) => {
   }
 
   function hasObjectRestElement(
-    path: NodePath<t.LVal | t.PatternLike>,
+    path: NodePath<t.LVal | t.PatternLike | t.TSParameterProperty>,
   ): boolean {
     const objectRestPatternIterator = iterateObjectRestElement(path);
     return !objectRestPatternIterator.next().done;

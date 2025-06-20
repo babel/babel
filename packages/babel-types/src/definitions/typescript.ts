@@ -42,7 +42,7 @@ const tSFunctionTypeAnnotationCommon = () => ({
 });
 
 defineType("TSParameterProperty", {
-  aliases: ["LVal"], // TODO: This isn't usable in general as an LVal. Should have a "Parameter" alias.
+  aliases: process.env.BABEL_8_BREAKING ? [] : ["LVal"],
   visitor: ["parameter"],
   fields: {
     accessibility: {

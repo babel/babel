@@ -373,6 +373,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.FunctionExpression>,
   ): this is NodePath<t.FunctionExpression>;
+  isFunctionParameter(
+    this: NodePath,
+    opts?: Opts<t.FunctionParameter>,
+  ): this is NodePath<t.FunctionParameter>;
   isFunctionParent(
     this: NodePath,
     opts?: Opts<t.FunctionParent>,

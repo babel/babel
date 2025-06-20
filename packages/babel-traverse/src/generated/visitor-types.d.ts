@@ -567,6 +567,7 @@ export interface VisitorBaseAliases<S> {
   For?: VisitNode<S, t.For>;
   ForXStatement?: VisitNode<S, t.ForXStatement>;
   Function?: VisitNode<S, t.Function>;
+  FunctionParameter?: VisitNode<S, t.FunctionParameter>;
   FunctionParent?: VisitNode<S, t.FunctionParent>;
   Immutable?: VisitNode<S, t.Immutable>;
   ImportOrExportDeclaration?: VisitNode<S, t.ImportOrExportDeclaration>;

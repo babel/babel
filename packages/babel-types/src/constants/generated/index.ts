@@ -24,6 +24,7 @@ export const FUNCTION_TYPES = FLIPPED_ALIAS_KEYS["Function"];
 export const FUNCTIONPARENT_TYPES = FLIPPED_ALIAS_KEYS["FunctionParent"];
 export const PUREISH_TYPES = FLIPPED_ALIAS_KEYS["Pureish"];
 export const DECLARATION_TYPES = FLIPPED_ALIAS_KEYS["Declaration"];
+export const FUNCTIONPARAMETER_TYPES = FLIPPED_ALIAS_KEYS["FunctionParameter"];
 export const PATTERNLIKE_TYPES = FLIPPED_ALIAS_KEYS["PatternLike"];
 export const LVAL_TYPES = FLIPPED_ALIAS_KEYS["LVal"];
 export const TSENTITYNAME_TYPES = FLIPPED_ALIAS_KEYS["TSEntityName"];
