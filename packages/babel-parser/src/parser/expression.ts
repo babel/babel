@@ -1893,11 +1893,7 @@ export default abstract class ExpressionParser extends LValParser {
         "target",
       );
 
-      if (
-        !this.scope.inNonArrowFunction &&
-        !this.scope.inClass &&
-        !(this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction)
-      ) {
+      if (!this.scope.allowNewTarget) {
         this.raise(Errors.UnexpectedNewTarget, metaProp);
       }
 
@@ -2869,10 +2865,7 @@ export default abstract class ExpressionParser extends LValParser {
   // Returns whether `await` is allowed or not in this context, and if it is
   // keeps track of it to determine whether a module uses top-level await.
   recordAwaitIfAllowed(): boolean {
-    const isAwaitAllowed =
-      this.prodParam.hasAwait ||
-      (this.optionFlags & OptionFlags.AllowAwaitOutsideFunction &&
-        !this.scope.inFunction);
+    const isAwaitAllowed = this.prodParam.hasAwait;
 
     if (isAwaitAllowed && !this.scope.inFunction) {
       this.state.hasTopLevelAwait = true;

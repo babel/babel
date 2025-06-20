@@ -135,7 +135,7 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": true
+      "topLevelAwait": false
     }
   }
 }
