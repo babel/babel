@@ -1693,7 +1693,21 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseBigIntLiteral(value: any) {
-    return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+    if (process.env.BABEL_8_BREAKING) {
+      let bigInt: bigint | null;
+      try {
+        bigInt = BigInt(value);
+      } catch {
+        // parser supports invalid bigints like `1.0n` or `1e1n` such that it
+        // can throw a recoverable error, but BigInt constructor does not
+        // support them.
+        bigInt = null;
+      }
+      const node = this.parseLiteral<N.BigIntLiteral>(bigInt, "BigIntLiteral");
+      return node;
+    } else {
+      return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+    }
   }
 
   // TODO: Remove this in Babel 8
