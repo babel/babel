@@ -30,6 +30,8 @@ export const ROOT_CONFIG_FILENAMES = [
   "babel.config.mjs",
   "babel.config.json",
   "babel.config.cts",
+  "babel.config.ts",
+  "babel.config.mts",
 ];
 const RELATIVE_CONFIG_FILENAMES = [
   ".babelrc",
