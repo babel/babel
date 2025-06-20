@@ -28,8 +28,7 @@ function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
   return {
-    // https://github.com/eslint/js/issues/519
-    sourceType: options.sourceType as "module" | "script",
+    sourceType: options.sourceType,
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
@@ -40,9 +39,13 @@ function normalizeParserOptions(options: Options): InputOptions & {
               options.allowImportExportEverywhere ?? false,
             allowSuperOutsideMethod: true,
           }),
-      allowReturnOutsideFunction:
-        options.ecmaFeatures?.globalReturn ??
-        (process.env.BABEL_8_BREAKING ? false : true),
+      ...(options.sourceType !== "commonjs"
+        ? {
+            allowReturnOutsideFunction:
+              options.ecmaFeatures?.globalReturn ??
+              (process.env.BABEL_8_BREAKING ? false : true),
+          }
+        : {}),
       ...options.babelOptions.parserOpts,
       plugins: getParserPlugins(options.babelOptions),
       // skip comment attaching for parsing performance

@@ -22,9 +22,9 @@ describe("ESLint config", () => {
   });
 
   it('should allow sourceType to be "commonjs"', () => {
-    // sourceType "commonjs" allows require() calls.
+    // sourceType "commonjs" allows require() calls and global returns
     verifyAndAssertMessages(
-      'require("greetings").hello',
+      'return require("greetings").hello',
       {},
       undefined,
       undefined,

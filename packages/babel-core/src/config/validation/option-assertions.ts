@@ -125,11 +125,12 @@ export function assertSourceType(
   if (
     value !== undefined &&
     value !== "module" &&
+    value !== "commonjs" &&
     value !== "script" &&
     value !== "unambiguous"
   ) {
     throw new Error(
-      `${msg(loc)} must be "module", "script", "unambiguous", or undefined`,
+      `${msg(loc)} must be "module", "commonjs", "script", "unambiguous", or undefined`,
     );
   }
   // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
