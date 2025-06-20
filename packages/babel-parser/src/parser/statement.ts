@@ -323,7 +323,6 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
     if (this.chStartsBindingIdentifier(nextCh, next)) {
-      this.expectPlugin("explicitResourceManagement");
       return true;
     }
     return false;
@@ -338,7 +337,6 @@ export default abstract class StatementParser extends ExpressionParser {
       next = this.nextTokenInLineStartSince(next + 5);
       const nextCh = this.codePointAtPos(next);
       if (this.chStartsBindingIdentifier(nextCh, next)) {
-        this.expectPlugin("explicitResourceManagement");
         return true;
       }
     }
@@ -563,7 +561,6 @@ export default abstract class StatementParser extends ExpressionParser {
         ) {
           break;
         }
-        this.expectPlugin("explicitResourceManagement");
         if (!this.allowsUsing()) {
           this.raise(Errors.UnexpectedUsingDeclaration, this.state.startLoc);
         } else if (!allowDeclaration) {
@@ -2597,8 +2594,8 @@ export default abstract class StatementParser extends ExpressionParser {
       this.match(tt._const) ||
       this.match(tt._var) ||
       this.isLet() ||
-      (this.hasPlugin("explicitResourceManagement") &&
-        (this.isUsing() || this.isAwaitUsing()))
+      this.isUsing() ||
+      this.isAwaitUsing()
     ) {
       throw this.raise(Errors.UnsupportedDefaultExport, this.state.startLoc);
     }
@@ -2707,16 +2704,14 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
 
-    if (this.hasPlugin("explicitResourceManagement")) {
-      if (this.isUsing()) {
-        this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
-        return true;
-      }
+    if (this.isUsing()) {
+      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+      return true;
+    }
 
-      if (this.isAwaitUsing()) {
-        this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
-        return true;
-      }
+    if (this.isAwaitUsing()) {
+      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+      return true;
     }
 
     return (
