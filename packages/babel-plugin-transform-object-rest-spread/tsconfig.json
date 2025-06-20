@@ -24,6 +24,9 @@
       "path": "../../packages/babel-plugin-transform-parameters"
     },
     {
+      "path": "../../packages/babel-traverse"
+    },
+    {
       "path": "../../packages/babel-core"
     }
   ]

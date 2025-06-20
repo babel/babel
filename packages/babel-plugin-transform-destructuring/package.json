@@ -17,15 +17,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
