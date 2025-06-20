@@ -2,9 +2,6 @@ import { loadPartialConfigSync } from "../lib/index.js";
 import path from "node:path";
 import semver from "semver";
 import { commonJS } from "$repo-utils";
-// tsx/cjs/api is a defined sub-export
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import { register } from "tsx/esm/api";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -28,27 +25,35 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
   "@babel/core config tsx integration",
   () => {
     let unregister;
-    beforeAll(() => {
-      // Disable tsconfig loading to avoid tsx resolving @babel/* from the `src` directory, where
+    beforeAll(async () => {
+      // tsx/cjs/api is a defined sub-export
+      // eslint-disable-next-line import/no-unresolved, import/extensions
+      const tsx = require("tsx/cjs/api");
+      // Provide a dummy tsconfig.json to avoid tsx resolving @babel/* from the `src` directory, where
       // undeclared globals such as the PACKAGE_JSON macro will break
-      unregister = register({ tsconfig: false });
+      process.env.TSX_TSCONFIG_PATH = path.join(
+        __dirname,
+        "fixtures/config-ts/simple-cts-with-tsx/tsconfig.json",
+      );
+      unregister = tsx.register();
     });
     afterAll(() => {
       unregister();
+      delete process.env.TSX_TSCONFIG_PATH;
     });
 
     it("should work with tsx", () => {
       require(
         path.join(
           __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+          "fixtures/config-ts/simple-cts-with-tsx/babel.config.cts",
         ),
       );
 
       const config = loadPartialConfigSync({
         configFile: path.join(
           __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+          "fixtures/config-ts/simple-cts-with-tsx/babel.config.cts",
         ),
       });
 
