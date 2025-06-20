@@ -2,6 +2,9 @@ import { loadPartialConfigSync } from "../lib/index.js";
 import path from "node:path";
 import semver from "semver";
 import { commonJS } from "$repo-utils";
+// tsx/cjs/api is a defined sub-export
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { register } from "tsx/esm/api";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -24,18 +27,17 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
 (shouldSkip ? describe.skip : describe)(
   "@babel/core config tsx integration",
   () => {
-    let tsx, unregister;
+    let unregister;
     beforeAll(() => {
-      // tsx/cjs/api is a defined sub-export
-      // eslint-disable-next-line import/extensions
-      tsx = require("tsx/cjs/api");
-      unregister = tsx.register();
+      // Disable tsconfig loading to avoid tsx resolving @babel/* from the `src` directory, where
+      // undeclared globals such as the PACKAGE_JSON macro will break
+      unregister = register({ tsconfig: false });
     });
     afterAll(() => {
       unregister();
     });
 
-    it("should work with tsx", async () => {
+    it("should work with tsx", () => {
       require(
         path.join(
           __dirname,
