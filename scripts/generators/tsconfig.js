@@ -77,7 +77,10 @@ function getTsPkgs(subRoot) {
           if (name === "@babel/standalone") {
             return [["", "/src"]];
           }
-          if (name === "@babel/compat-data") {
+          if (
+            name === "@babel/compat-data" ||
+            name === "@babel/helper-globals"
+          ) {
             return [[_export.slice(1), exportPath.slice(1)]];
           }
           // [{esm, default}, "./lib/index.js"]
