@@ -3064,6 +3064,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
