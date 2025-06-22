@@ -204,7 +204,19 @@ export default gensync(function* loadFullConfig(
     }
   })();
 
-  opts.plugins = passes[0];
+  const newPlugins = passes[0];
+
+  const len = newPlugins.length;
+  newPlugins.slice().forEach(plugin => {
+    plugin.sort?.(newPlugins);
+  });
+  if (len !== newPlugins.length) {
+    throw new Error(
+      "A plugin changed the length of the plugins array, which is not allowed.",
+    );
+  }
+
+  opts.plugins = newPlugins;
   opts.presets = passes
     .slice(1)
     .filter(plugins => plugins.length > 0)
