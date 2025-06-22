@@ -22,12 +22,12 @@ negative:
 expect(() => {
   switch (0) {
     default:
-      var _x2 = function () {
-        return _x3.apply(this, arguments);
+      var x = function () {
+        return _x.apply(this, arguments);
       };
-      var _x3 = function () {
-        _x3 = babelHelpers.wrapAsyncGenerator(function* () {});
-        return _x3.apply(this, arguments);
+      var _x = function () {
+        _x = babelHelpers.wrapAsyncGenerator(function* () {});
+        return _x.apply(this, arguments);
       };
   }
   x;
