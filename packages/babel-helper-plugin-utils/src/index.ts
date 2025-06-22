@@ -5,6 +5,7 @@ import type {
   PresetAPI,
   PresetObject,
 } from "@babel/core";
+import sortPlugins from "./sort-plugins.ts";
 
 type APIPolyfillFactory<T extends keyof PluginAPI> = (
   api: PluginAPI,
@@ -37,6 +38,8 @@ if (!process.env.BABEL_8_BREAKING) {
   });
 }
 
+const PluginSortSymbol = Symbol.for("Babel-internal/plugin.sort");
+
 export function declare<State = object, Option = object>(
   builder: (
     api: PluginAPI,
@@ -60,8 +63,14 @@ export function declare<State = object, Option = object>(
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
-    // @ts-expect-error options || {} may not be assigned to Options
-    return builder(clonedApi ?? api, options || {}, dirname);
+    const pluginObject = builder(
+      clonedApi ?? api,
+      // @ts-expect-error options || {} may not be assigned to Options
+      options || {},
+      dirname,
+    );
+    (pluginObject as any)[PluginSortSymbol] = sortPlugins;
+    return pluginObject;
   };
 }
 
