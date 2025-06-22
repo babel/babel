@@ -335,7 +335,7 @@ export const tt = {
   name: createToken("name", { startsExpr }),
 
   // placeholder plugin
-  placeholder: createToken("%%", { startsExpr: true }),
+  placeholder: createToken("%%", { startsExpr }),
   // end: isIdentifier
 
   string: createToken("string", { startsExpr }),
@@ -350,8 +350,8 @@ export const tt = {
 
   // jsx plugin
   jsxName: createToken("jsxName"),
-  jsxText: createToken("jsxText", { beforeExpr: true }),
-  jsxTagStart: createToken("jsxTagStart", { startsExpr: true }),
+  jsxText: createToken("jsxText", { beforeExpr }),
+  jsxTagStart: createToken("jsxTagStart", { startsExpr }),
   jsxTagEnd: createToken("jsxTagEnd"),
 } as const;
 
