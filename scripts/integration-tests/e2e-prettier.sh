@@ -57,6 +57,9 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/argument-expansion/format.test.js
 fi
 
+# https://github.com/babel/babel/pull/17203
+rm tests/format/js/async-do-expressions/format.test.js
+
 #==============================================================================#
 #                                 ENVIRONMENT                                  #
 #==============================================================================#
