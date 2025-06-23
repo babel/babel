@@ -203,6 +203,7 @@ function ensureTsSupport<T>(
   callback: () => T,
 ): T {
   if (
+    process.features.typescript ||
     require.extensions[".ts"] ||
     require.extensions[".cts"] ||
     require.extensions[".mts"]
