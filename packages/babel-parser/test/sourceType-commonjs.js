@@ -36,7 +36,7 @@ runFixtureTests(
       (!options.sourceType || options.sourceType === "script") &&
       ![
         "allowAwaitOutsideFunction",
-        "allowReturnsOutsideFunction",
+        "allowReturnOutsideFunction",
         "allowNewTargetOutsideFunction",
       ].some(key => key in options) &&
       !blockList.has(
