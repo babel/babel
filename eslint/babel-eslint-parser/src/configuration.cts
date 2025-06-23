@@ -4,7 +4,7 @@ export = function normalizeESLintConfig(options: any) {
   const {
     babelOptions = {},
     // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
-    ecmaVersion = 2020,
+    ecmaVersion = "latest",
     sourceType = "module",
     requireConfigFile = true,
     ...otherOptions
