@@ -88,6 +88,13 @@ const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
   }
 });
 
+const tsNotSupportedError = (ext: string) => `\
+You are using a ${ext} config file, but Babel only supports transpiling .cts configs. Either:
+- Use a .cts config file
+- Update to Node.js 23.6.0, which has native TypeScript support
+- Install tsx to transpile ${ext} files on the fly\
+`;
+
 const SUPPORTED_EXTENSIONS = {
   ".js": "unknown",
   ".mjs": "esm",
@@ -180,7 +187,11 @@ export default function* loadCodeDefault(
 
         return (yield* waitFor(promise)).default;
       }
-      throw new ConfigError(esmError, filepath);
+      if (isTS) {
+        throw new ConfigError(tsNotSupportedError(ext), filepath);
+      } else {
+        throw new ConfigError(esmError, filepath);
+      }
     default:
       throw new Error("Internal Babel error: unreachable code.");
   }
@@ -192,6 +203,7 @@ function ensureTsSupport<T>(
   callback: () => T,
 ): T {
   if (
+    process.features.typescript ||
     require.extensions[".ts"] ||
     require.extensions[".cts"] ||
     require.extensions[".mts"]
@@ -200,15 +212,7 @@ function ensureTsSupport<T>(
   }
 
   if (ext !== ".cts") {
-    throw new ConfigError(
-      `\
-You are using a ${ext} config file, but Babel only supports transpiling .cts configs. Either:
-- Use a .cts config file
-- Update to Node.js 23.6.0, which has native TypeScript support
-- Install ts-node to transpile ${ext} files on the fly\
-`,
-      filepath,
-    );
+    throw new ConfigError(tsNotSupportedError(ext), filepath);
   }
 
   const opts: InputOptions = {

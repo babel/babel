@@ -6,7 +6,7 @@ import { commonJS, itGte, itLt, USE_ESM } from "$repo-utils";
 const { __dirname, require } = commonJS(import.meta.url);
 
 // We skip older versions of node testing for two reasons.
-// 1. ts-node and ts don't support the old version of node.
+// 1. ts don't support the old version of node.
 // 2. In the old version of node, jest has been registered in `require.extensions`, which will cause babel to disable the transforming as expected.
 const shouldSkip = semver.lt(process.version, "14.0.0");
 
@@ -77,7 +77,7 @@ const nodeLt23_6_andRequireBabelPackages =
   // This isn't by design, but reflects the status quo when running in Node.js
   // versions that don't have native support for .ts files.
   // It can be changed if needed.
-  nodeLt23_6("show not support .ts config file", () => {
+  nodeLt23_6("should not support .ts config file", () => {
     expect(() => {
       loadPartialConfigSync({
         configFile: path.join(
@@ -90,40 +90,28 @@ const nodeLt23_6_andRequireBabelPackages =
     );
   });
 
-  it("should work with ts-node", async () => {
-    const service = require("ts-node").register({
-      experimentalResolver: true,
-      compilerOptions: {
-        module: "CommonJS",
-      },
-    });
-    service.enabled(true);
-
-    try {
-      require(
-        path.join(
-          __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-        ),
-      );
-
-      const config = loadPartialConfigSync({
-        configFile: path.join(
-          __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-        ),
+  nodeLt23_6("should search .ts config file and throw", () => {
+    expect(() => {
+      loadPartialConfigSync({
+        root: path.join(__dirname, "fixtures/config-ts/simple-ts-cjs"),
       });
+    }).toThrow(
+      /You are using a .ts config file, but Babel only supports transpiling .cts configs/,
+    );
+  });
 
-      expect(config.options.targets).toMatchInlineSnapshot(`
+  nodeGte23_6("should search for .cts config files", () => {
+    const config = loadPartialConfigSync({
+      root: path.join(__dirname, "fixtures/config-ts/simple-cts-no-modules"),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
         Object {
           "node": "12.0.0",
         }
       `);
 
-      expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
-    } finally {
-      service.enabled(false);
-    }
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 
   nodeGte23_6("should support .cts when available natively", () => {
@@ -152,6 +140,20 @@ const nodeLt23_6_andRequireBabelPackages =
         ),
       });
     }).toThrow(/import equals declaration is not supported in strip-only mode/);
+  });
+
+  nodeGte23_6("should search for .ts config files", () => {
+    const config = loadPartialConfigSync({
+      root: path.join(__dirname, "fixtures/config-ts/simple-ts-cjs"),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+        Object {
+          "node": "12.0.0",
+        }
+      `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 
   nodeGte23_6(
@@ -193,4 +195,45 @@ const nodeLt23_6_andRequireBabelPackages =
       expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
     },
   );
+
+  nodeLt23_6("should search .mts config file and throw", () => {
+    expect(() => {
+      loadPartialConfigSync({
+        root: path.join(__dirname, "fixtures/config-ts/simple-mts-modules"),
+      });
+    }).toThrow(
+      /You are using a .mts config file, but Babel only supports transpiling .cts configs/,
+    );
+  });
+
+  nodeGte23_6("should use native TS support for .mts when available", () => {
+    const config = loadPartialConfigSync({
+      configFile: path.join(
+        __dirname,
+        "fixtures/config-ts/simple-mts-modules/babel.config.mts",
+      ),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+        Object {
+          "node": "12.0.0",
+        }
+      `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
+
+  nodeGte23_6("should search for .mts config files", () => {
+    const config = loadPartialConfigSync({
+      root: path.join(__dirname, "fixtures/config-ts/simple-mts-modules"),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+        Object {
+          "node": "12.0.0",
+        }
+      `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
 });
