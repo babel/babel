@@ -1282,4 +1282,130 @@ describe("scope", () => {
       ).toBe(false);
     });
   });
+
+  describe("generateUidBasedOnNode", () => {
+    let scope;
+    beforeEach(() => {
+      scope = getPath("var a").scope;
+    });
+    it("returns _ref for undefined input", () => {
+      expect(scope.generateUidBasedOnNode(undefined)).toBe("_ref");
+    });
+    it("returns _ref for null input", () => {
+      expect(scope.generateUidBasedOnNode(null)).toBe("_ref");
+    });
+    it("returns _ref for empty object", () => {
+      expect(scope.generateUidBasedOnNode({})).toBe("_ref");
+    });
+    it("auto increments _ref for multiple calls", () => {
+      expect(scope.generateUidBasedOnNode(null)).toBe("_ref");
+      expect(scope.generateUidBasedOnNode(null)).toBe("_ref2");
+      expect(scope.generateUidBasedOnNode(null)).toBe("_ref3");
+    });
+    // Expressions
+    it.each([
+      ["a.b", "_a$b"],
+      ["a[0]", "_a$"],
+      ["a[0].b", "_a$0$b"],
+      ["a[0][1]", "_a$0$"],
+      ["a[0][1].b", "_a$0$1$b"],
+      ["a[0].b.c", "_a$0$b$c"],
+      ["a.b.c", "_a$b$c"],
+      ["a?.[0]", "_a$"],
+      ["a?.[0].b", "_a$0$b"],
+      ["a?.b.c", "_a$b$c"],
+      ["a?.b?.c", "_a$b$c"],
+      ["a?.b?.c?.d", "_a$b$c$d"],
+      ["a().b", "_a$b"],
+      ["a(0).b", "_a$b"],
+      ["a(0, 1)?.b", "_a$b"],
+      ["a[0n]", "_a$"],
+      ["a[0n].b", "_a$0$b"],
+
+      ["a.b = 1", "_a$b"],
+      ["([a.b] = 1)", "_ref"],
+      ["({ a: b } = {})", "_a"],
+      ["({ a: b, c: d } = {})", "_a$c"],
+      ["({ a: b, c: d, ...e } = {})", "_a$c$e"],
+
+      ["({ a: b })", "_a"],
+      ["({ a: b, c: d })", "_a$c"],
+      ["({ a: b, c: d, ...e })", "_a$c$e"],
+      ["({ a() {}, [0]: 1, [b]() {},  })", "_a$0$b"],
+
+      ["(a.b = 1)", "_a$b"],
+      ["(a[0] = 1)", "_a$"],
+      ["(a[0].b = 1)", "_a$0$b"],
+      ["(a[0][1] = 1)", "_a$0$"],
+      ["(a[0][1].b = 1)", "_a$0$1$b"],
+      ["(a[0].b.c = 1)", "_a$0$b$c"],
+      ["(a.b.c = 1)", "_a$b$c"],
+
+      ["await a.b", "_await$a$b"],
+      ["(function f() { return a.b; })", "_f"],
+      ["(class C { m() { return a.b; } })", "_C"],
+
+      ["this.a.b", "_this$a$b"],
+      ["import.meta", "_import$meta"],
+
+      ["void a.b", "_a$b"],
+      ["a.b++", "_a$b"],
+      ["a.b ??= 1", "_a$b"],
+      ["a.b ||= 1", "_a$b"],
+      ["a.b &&= 1", "_a$b"],
+
+      ["<div>{a.b}</div>", "_div"],
+      ["<a.b>foo</a.b>", "_a$b"],
+      ["<a.b />", "_a$b"],
+      ["<>{a.b}</>", "_Fragment"],
+
+      ["_", "_ref"],
+      ["() => { return a.b; }", "_ref"],
+
+      ["(do {})", "_do"],
+      ["import('foo', { with: { type: 'json' } })", "_import"],
+      // cut off at 20 characters
+      ["aLongIdentifierThatIsMoreThan20Characters", "_aLongIdentifierThatI"],
+    ])("should generate uid based on the input `%s`", (input, expected) => {
+      const ast = getPath(input, {
+        sourceType: "module",
+        plugins: ["doExpressions", "jsx"],
+      }).get("body.0.expression").node;
+      expect(ast).toBeTruthy();
+      expect(scope.generateUidBasedOnNode(ast)).toBe(expected);
+    });
+    // Statements
+    it.each([
+      [";", "_ref"],
+      ["import 'foo';", "_foo"],
+      ["import { foo } from 'bar';", "_bar"],
+      ["import { foo as bar } from 'baz';", "_baz"],
+      ["import * as foo from 'bar';", "_bar"],
+      ["export { foo } from 'bar';", "_bar"],
+      ["export * from 'bar';", "_bar"],
+      ["export { foo as bar } from 'baz';", "_baz"],
+      ["import foo from 'bar';", "_bar"],
+
+      ["export default foo;", "_foo"],
+      ["export { foo, bar };var foo, bar;", "_foo$bar"],
+      ["export { foo as bar, baz as qux };var foo, baz;", "_foo$baz"],
+
+      ["function f() { return a.b; }", "_f"],
+      ["class C { m() { return a.b; } }", "_C"],
+
+      ["var a = 1;", "_ref"],
+    ])("should generate uid based on the input `%s`", (input, expected) => {
+      const ast = getPath(input, {
+        sourceType: "module",
+        plugins: ["doExpressions"],
+      }).get("body.0").node;
+      expect(ast).toBeTruthy();
+      expect(scope.generateUidBasedOnNode(ast)).toBe(expected);
+    });
+    it("should support default name", () => {
+      const ast = getPath(";", { sourceType: "module" }).get("body.0").node;
+      expect(ast).toBeTruthy();
+      expect(scope.generateUidBasedOnNode(ast, "default")).toBe("_default");
+    });
+  });
 });
