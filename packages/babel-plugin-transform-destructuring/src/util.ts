@@ -669,7 +669,8 @@ export function convertVariableDeclaration(
       });
 
     if (t.isPattern(pattern)) {
-      destructuring.init(pattern, patternId);
+      // variableDeclarationHasDestructuringPattern ensures that the pattern is not a VoidPattern
+      destructuring.init(pattern as Exclude<t.LVal, t.VoidPattern>, patternId);
 
       if (+i !== node.declarations.length - 1) {
         // we aren't the last declarator so let's just make the
