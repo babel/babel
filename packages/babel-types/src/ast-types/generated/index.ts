@@ -695,7 +695,7 @@ export interface VariableDeclaration extends BaseNode {
 
 export interface VariableDeclarator extends BaseNode {
   type: "VariableDeclarator";
-  id: LVal;
+  id: LVal | VoidPattern;
   init?: Expression | null;
   definite?: boolean | null;
 }
@@ -2444,7 +2444,6 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
-  | VoidPattern
   | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
@@ -8845,16 +8844,12 @@ export interface ParentMaps {
   VoidPattern:
     | ArrayPattern
     | ArrowFunctionExpression
-    | AssignmentExpression
     | ClassMethod
     | ClassPrivateMethod
-    | ForInStatement
-    | ForOfStatement
     | FunctionDeclaration
     | FunctionExpression
     | ObjectMethod
     | ObjectProperty
-    | RestElement
     | TSDeclareFunction
     | TSDeclareMethod
     | VariableDeclarator;
