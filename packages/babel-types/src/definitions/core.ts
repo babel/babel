@@ -199,7 +199,7 @@ defineType("CallExpression", {
         : assertNodeType("TypeParameterInstantiation"),
       optional: true,
     },
-    ...(process.env.BABEL_8_BREAKING
+    ...(process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
       ? {}
       : {
           optional: {
@@ -208,14 +208,6 @@ defineType("CallExpression", {
           },
           typeParameters: {
             validate: assertNodeType("TSTypeParameterInstantiation"),
-            optional: true,
-          },
-        }),
-    ...(process.env.BABEL_TYPES_8_BREAKING
-      ? {}
-      : {
-          optional: {
-            validate: assertValueType("boolean"),
             optional: true,
           },
         }),
@@ -1581,7 +1573,7 @@ defineType("ExportDefaultDeclaration", {
 
 defineType("ExportNamedDeclaration", {
   builder: ["declaration", "specifiers", "source"],
-  visitor: process.env
+  visitor: process.env.BABEL_8_BREAKING
     ? ["declaration", "specifiers", "source", "attributes"]
     : ["declaration", "specifiers", "source", "attributes", "assertions"],
   aliases: [
