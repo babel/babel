@@ -89,9 +89,10 @@ export function validateArrayOfType(...typeNames: NodeTypes[]) {
 }
 
 export function assertEach(callback: Validator): Validator {
-  const childValidator = process.env.BABEL_TYPES_8_BREAKING
-    ? validateChild
-    : () => {};
+  const childValidator =
+    process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
+      ? validateChild
+      : () => {};
 
   function validator(node: t.Node, key: string, val: any) {
     if (!Array.isArray(val)) return;
