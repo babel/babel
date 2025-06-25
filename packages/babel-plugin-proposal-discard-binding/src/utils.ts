@@ -121,7 +121,9 @@ export function hasVoidPatternInVariableDeclaration(
   return !iterateVoidPatternInVariableDeclaration(path).next().done;
 }
 
-export function transformVoidPatternInLVal(path: NodePath<t.LVal>) {
+export function transformVoidPatternInLVal(
+  path: NodePath<t.LVal | t.PatternLike>,
+) {
   for (const voidPatternPath of iterateVoidPatternsInLVal(path)) {
     transformVoidPattern(voidPatternPath);
   }
