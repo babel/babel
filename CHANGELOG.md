@@ -24,6 +24,25 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.27.7 (2025-06-26)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-plugin-transform-classes`
+  * [#17203](https://github.com/babel/babel/pull/17203) Interepret parser `allow*` options as top level only ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#17371](https://github.com/babel/babel/pull/17371) fix: disable using in ambient context ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#17392](https://github.com/babel/babel/pull/17392) Improve TS babel config loading ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#17376](https://github.com/babel/babel/pull/17376) fix: support negative bigint in valueToNode ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-parameters`
+  * [#17352](https://github.com/babel/babel/pull/17352) fix: Params of `async function*` should throw synchronously ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-plugin-transform-destructuring`, `babel-plugin-transform-object-rest-spread`
+  * [#17389](https://github.com/babel/babel/pull/17389) Use `NodePath#splitExportDeclaration` in destructuring transforms ([@JLHwung](https://github.com/JLHwung))
 ## v7.27.6 (2025-06-05)
 
 #### :bug: Bug Fix
