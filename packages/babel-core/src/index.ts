@@ -53,6 +53,7 @@ export { loadOptionsSync };
 
 export type {
   CallerMetadata,
+  ConfigAPI,
   ConfigItem,
   InputOptions,
   PluginAPI,
