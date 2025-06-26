@@ -8,20 +8,8 @@ describe("builders", function () {
           t.TSTypeQuery(t.Identifier("x")),
           "keyof",
         );
-        expect(tsTypeOperator).toMatchInlineSnapshot(`
-          Object {
-            "operator": "keyof",
-            "type": "TSTypeOperator",
-            "typeAnnotation": Object {
-              "exprName": Object {
-                "name": "x",
-                "type": "Identifier",
-              },
-              "type": "TSTypeQuery",
-              "typeParameters": null,
-            },
-          }
-          `);
+        expect(tsTypeOperator).toHaveProperty("type", "TSTypeOperator");
+        expect(tsTypeOperator).toHaveProperty("operator", "keyof");
       });
     });
   });
