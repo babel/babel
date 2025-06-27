@@ -35,6 +35,9 @@
         "kind": "var"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

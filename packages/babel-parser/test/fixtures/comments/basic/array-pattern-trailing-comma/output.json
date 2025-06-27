@@ -61,7 +61,10 @@
         "kind": "const"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   },
   "comments": [
     {

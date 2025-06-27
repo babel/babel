@@ -38,7 +38,6 @@
           },
           "value": "foo.json"
         },
-        "declaration": null,
         "attributes": [
           {
             "type": "ImportAttribute",
@@ -76,12 +75,14 @@
               "value": "html"
             }
           }
-        ]
+        ],
+        "declaration": null
       }
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

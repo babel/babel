@@ -25,6 +25,9 @@
           "value": "\\u12_34"
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

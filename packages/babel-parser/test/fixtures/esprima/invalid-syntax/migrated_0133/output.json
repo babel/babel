@@ -23,6 +23,9 @@
         "finalizer": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

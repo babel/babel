@@ -39,10 +39,6 @@
           },
           "value": "foo"
         },
-        "declaration": null,
-        "extra": {
-          "deprecatedAssertSyntax": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",
@@ -62,7 +58,11 @@
               "value": "json"
             }
           }
-        ]
+        ],
+        "declaration": null,
+        "extra": {
+          "deprecatedAssertSyntax": true
+        }
       },
       {
         "type": "ExpressionStatement",
@@ -86,7 +86,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": false
+      "topLevelAwait": false,
+      "forAwait": false
     }
   }
 }

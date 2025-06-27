@@ -105,6 +105,9 @@
           ]
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

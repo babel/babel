@@ -33,6 +33,9 @@
         ],
         "kind": "const"
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

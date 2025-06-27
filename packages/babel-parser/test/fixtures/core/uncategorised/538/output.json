@@ -19,7 +19,10 @@
         ]
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   },
   "comments": [
     {

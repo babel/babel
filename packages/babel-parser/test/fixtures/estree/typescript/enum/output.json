@@ -49,6 +49,9 @@
         "const": false,
         "declare": false
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

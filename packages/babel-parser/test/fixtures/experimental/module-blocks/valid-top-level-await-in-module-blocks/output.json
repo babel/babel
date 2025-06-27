@@ -39,7 +39,8 @@
             ],
             "directives": [],
             "extra": {
-              "topLevelAwait": true
+              "topLevelAwait": true,
+              "forAwait": false
             }
           }
         }
@@ -47,7 +48,8 @@
     ],
     "directives": [],
     "extra": {
-      "topLevelAwait": true
+      "topLevelAwait": true,
+      "forAwait": false
     }
   }
 }

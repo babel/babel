@@ -99,6 +99,9 @@
           ]
         }
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

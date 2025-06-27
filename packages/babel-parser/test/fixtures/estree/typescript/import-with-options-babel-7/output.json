@@ -302,6 +302,9 @@
         "kind": "let",
         "declare": false
       }
-    ]
+    ],
+    "extra": {
+      "forAwait": false
+    }
   }
 }

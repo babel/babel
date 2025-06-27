@@ -49,20 +49,20 @@
                 "start":32,"end":38,"loc":{"start":{"line":2,"column":0,"index":32},"end":{"line":2,"column":6,"index":38}}
               },
               "arguments": [
-                      {
+                {
                   "type": "Identifier",
                   "start":39,"end":51,"loc":{"start":{"line":2,"column":7,"index":39},"end":{"line":2,"column":19,"index":51},"identifierName":"testVariable"},
                   "name": "testVariable"
-              }
-            ]
-          },
+                }
+              ]
+            },
             "computed": false,
             "property": {
               "type": "Identifier",
               "start":53,"end":57,"loc":{"start":{"line":2,"column":21,"index":53},"end":{"line":2,"column":25,"index":57},"identifierName":"then"},
               "name": "then"
-          }
-        },
+            }
+          },
           "arguments": [
             {
               "type": "ArrowFunctionExpression",
@@ -82,6 +82,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "forAwait": false
+    }
   }
 }
