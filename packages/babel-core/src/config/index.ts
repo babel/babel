@@ -17,11 +17,7 @@ export type { PluginObject } from "./validation/plugins.ts";
 type PluginAPI = basePluginAPI & typeof import("..");
 type PresetAPI = basePresetAPI & typeof import("..");
 export type { PluginAPI, PresetAPI };
-// todo: may need to refine PresetObject to be a subset of ValidatedOptions
-export type {
-  CallerMetadata,
-  ValidatedOptions as PresetObject,
-} from "./validation/options.ts";
+export type { CallerMetadata } from "./validation/options.ts";
 
 import loadFullConfig, { type ResolvedConfig } from "./full.ts";
 import {
