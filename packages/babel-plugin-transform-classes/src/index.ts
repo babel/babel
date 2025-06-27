@@ -11,6 +11,13 @@ const builtinClasses = new Set([
   ...globalsBuiltinUpper,
 ]);
 
+// The "Iterator" global is removed because the Babel construct helper
+// packages/babel-helpers/src/helpers/construct.ts, emitted from the wrapNativeSuper helper,
+// // will invoke it with `new Iterator()` when native Reflect.construct is not available.
+// However, the abstract class Iterator can not be invoked with new. Since the `builtinClasses`
+// is used for the superIsCallableConstructor assumption, we should prioritize the spec mode
+builtinClasses.delete("Iterator");
+
 export interface Options {
   loose?: boolean;
 }
