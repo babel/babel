@@ -13,10 +13,10 @@ import {
 import type { CacheConfigurator } from "./caching.ts";
 
 import type {
-  ValidatedOptions,
-  PluginList,
   PluginItem,
   PluginOptions,
+  InputOptions,
+  PresetItem,
 } from "./validation/options.ts";
 
 import { resolveBrowserslistConfigFile } from "./resolve-targets.ts";
@@ -26,7 +26,7 @@ import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 // for the plugins and presets so we don't load the plugins/presets unless
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
-  options: ValidatedOptions;
+  options: InputOptions;
   plugins: () => Handler<Array<UnloadedDescriptor<PluginAPI>>>;
   presets: () => Handler<Array<UnloadedDescriptor<PresetAPI>>>;
 };
@@ -34,9 +34,9 @@ export type OptionsAndDescriptors = {
 // Represents a plugin or presets at a given location in a config object.
 // At this point these have been resolved to a specific object or function,
 // but have not yet been executed to call functions with options.
-export interface UnloadedDescriptor<API, Options = object | undefined | false> {
+export interface UnloadedDescriptor<API, Options = object | undefined> {
   name: string | undefined;
-  value: object | ((api: API, options: Options, dirname: string) => unknown);
+  value: (api: API, options: Options, dirname: string) => unknown;
   options: Options;
   dirname: string;
   alias: string;
@@ -66,7 +66,7 @@ function isEqualDescriptor<API>(
 export type ValidatedFile = {
   filepath: string;
   dirname: string;
-  options: ValidatedOptions;
+  options: InputOptions;
 };
 
 // eslint-disable-next-line require-yield
@@ -75,9 +75,9 @@ function* handlerOf<T>(value: T): Handler<T> {
 }
 
 function optionsWithResolvedBrowserslistConfigFile(
-  options: ValidatedOptions,
+  options: InputOptions,
   dirname: string,
-): ValidatedOptions {
+): InputOptions {
   if (typeof options.browserslistConfigFile === "string") {
     options.browserslistConfigFile = resolveBrowserslistConfigFile(
       options.browserslistConfigFile,
@@ -94,7 +94,7 @@ function optionsWithResolvedBrowserslistConfigFile(
  */
 export function createCachedDescriptors(
   dirname: string,
-  options: ValidatedOptions,
+  options: InputOptions,
   alias: string,
 ): OptionsAndDescriptors {
   const { plugins, presets, passPerPreset } = options;
@@ -123,7 +123,7 @@ export function createCachedDescriptors(
  */
 export function createUncachedDescriptors(
   dirname: string,
-  options: ValidatedOptions,
+  options: InputOptions,
   alias: string,
 ): OptionsAndDescriptors {
   return {
@@ -147,7 +147,7 @@ export function createUncachedDescriptors(
 
 const PRESET_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPresetDescriptors = makeWeakCacheSync(
-  (items: PluginList, cache: CacheConfigurator<string>) => {
+  (items: PluginItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
@@ -172,7 +172,7 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
 
 const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPluginDescriptors = makeWeakCacheSync(
-  (items: PluginList, cache: CacheConfigurator<string>) => {
+  (items: PluginItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
@@ -236,7 +236,7 @@ function loadCachedDescriptor<API>(
 }
 
 function* createPresetDescriptors(
-  items: PluginList,
+  items: PluginItem[],
   dirname: string,
   alias: string,
   passPerPreset: boolean,
@@ -251,7 +251,7 @@ function* createPresetDescriptors(
 }
 
 function* createPluginDescriptors(
-  items: PluginList,
+  items: PluginItem[],
   dirname: string,
   alias: string,
 ): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
@@ -260,7 +260,7 @@ function* createPluginDescriptors(
 
 function* createDescriptors<API>(
   type: "plugin" | "preset",
-  items: PluginList,
+  items: PluginItem[] | PresetItem[],
   dirname: string,
   alias: string,
   ownPass?: boolean,
@@ -284,7 +284,7 @@ function* createDescriptors<API>(
  * Given a plugin/preset item, resolve it into a standard format.
  */
 export function* createDescriptor<API>(
-  pair: PluginItem,
+  pair: PluginItem | PresetItem,
   dirname: string,
   {
     type,
