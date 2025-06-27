@@ -70,8 +70,8 @@ const Formatter = {
 
 function descriptorToConfig<API>(
   d: UnloadedDescriptor<API>,
-): object | string | [string, unknown] | [string, unknown, string] {
-  let name: object | string = d.file?.request;
+): string | [string, object] | [string, object, string] {
+  let name: string = d.file?.request;
   if (name == null) {
     if (typeof d.value === "object") {
       name = d.value;

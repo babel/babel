@@ -5,12 +5,12 @@ import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { validate } from "./validation/options.ts";
 import type {
-  ValidatedOptions,
-  IgnoreList,
   ConfigApplicableTest,
   BabelrcSearch,
   CallerMetadata,
-  IgnoreItem,
+  MatchItem,
+  InputOptions,
+  NormalizedOptions,
 } from "./validation/options.ts";
 import pathPatternToRegex from "./pattern-to-regex.ts";
 import { ConfigPrinter, ChainFormatter } from "./printer.ts";
@@ -45,12 +45,12 @@ import type {
 export type ConfigChain = {
   plugins: Array<UnloadedDescriptor<PluginAPI>>;
   presets: Array<UnloadedDescriptor<PresetAPI>>;
-  options: Array<ValidatedOptions>;
+  options: Array<InputOptions>;
   files: Set<string>;
 };
 
 export type PresetInstance = {
-  options: ValidatedOptions;
+  options: InputOptions;
   alias: string;
   dirname: string;
   externalDependencies: ReadonlyDeepArray<string>;
@@ -143,7 +143,7 @@ export type RootConfigChain = ConfigChain & {
  * Build a config chain for Babel's full root configuration.
  */
 export function* buildRootChain(
-  opts: ValidatedOptions,
+  opts: InputOptions,
   context: ConfigContext,
 ): Handler<RootConfigChain | null> {
   let configReport, babelRcReport;
@@ -306,7 +306,7 @@ function babelrcLoadEnabled(
 
   let babelrcPatterns = babelrcRoots;
   if (!Array.isArray(babelrcPatterns)) {
-    babelrcPatterns = [babelrcPatterns as IgnoreItem];
+    babelrcPatterns = [babelrcPatterns];
   }
   babelrcPatterns = babelrcPatterns.map(pat => {
     return typeof pat === "string"
@@ -457,7 +457,7 @@ function buildRootDescriptors(
   alias: string,
   descriptors: (
     dirname: string,
-    options: ValidatedOptions,
+    options: InputOptions,
     alias: string,
   ) => OptionsAndDescriptors,
 ) {
@@ -482,7 +482,7 @@ function buildEnvDescriptors(
   alias: string,
   descriptors: (
     dirname: string,
-    options: ValidatedOptions,
+    options: InputOptions,
     alias: string,
   ) => OptionsAndDescriptors,
   envName: string,
@@ -496,7 +496,7 @@ function buildOverrideDescriptors(
   alias: string,
   descriptors: (
     dirname: string,
-    options: ValidatedOptions,
+    options: InputOptions,
     alias: string,
   ) => OptionsAndDescriptors,
   index: number,
@@ -512,7 +512,7 @@ function buildOverrideEnvDescriptors(
   alias: string,
   descriptors: (
     dirname: string,
-    options: ValidatedOptions,
+    options: InputOptions,
     alias: string,
   ) => OptionsAndDescriptors,
   index: number,
@@ -533,7 +533,7 @@ function buildOverrideEnvDescriptors(
 
 function makeChainWalker<
   ArgT extends {
-    options: ValidatedOptions;
+    options: InputOptions;
     dirname: string;
     filepath?: string;
   },
@@ -666,7 +666,7 @@ function makeChainWalker<
 
 function* mergeExtendsChain(
   chain: ConfigChain,
-  opts: ValidatedOptions,
+  opts: InputOptions,
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
@@ -736,7 +736,7 @@ function emptyChain(): ConfigChain {
   };
 }
 
-function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
+function normalizeOptions(opts: InputOptions): NormalizedOptions {
   const options = {
     ...opts,
   };
@@ -758,7 +758,7 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
     options.sourceMaps = options.sourceMap;
     delete options.sourceMap;
   }
-  return options;
+  return options as NormalizedOptions;
 }
 
 function dedupDescriptors<API>(
@@ -833,8 +833,8 @@ function configFieldIsApplicable(
  */
 function ignoreListReplacer(
   _key: string,
-  value: IgnoreList | IgnoreItem,
-): IgnoreList | IgnoreItem | string {
+  value: MatchItem[] | MatchItem,
+): MatchItem[] | MatchItem | string {
   if (value instanceof RegExp) {
     return String(value);
   }
@@ -847,8 +847,8 @@ function ignoreListReplacer(
  */
 function shouldIgnore(
   context: ConfigContext,
-  ignore: IgnoreList | undefined | null,
-  only: IgnoreList | undefined | null,
+  ignore: MatchItem[] | undefined | null,
+  only: MatchItem[] | undefined | null,
   dirname: string,
 ): boolean {
   if (ignore && matchesPatterns(context, ignore, dirname)) {
@@ -888,7 +888,7 @@ function shouldIgnore(
  */
 function matchesPatterns(
   context: ConfigContext,
-  patterns: IgnoreList,
+  patterns: MatchItem[],
   dirname: string,
   configName?: string,
 ): boolean {
@@ -898,7 +898,7 @@ function matchesPatterns(
 }
 
 function matchPattern(
-  pattern: IgnoreItem,
+  pattern: MatchItem,
   dirname: string,
   pathToTest: string | undefined,
   context: ConfigContext,

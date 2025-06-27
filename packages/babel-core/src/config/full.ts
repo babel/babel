@@ -25,11 +25,7 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
-import type {
-  InputOptions,
-  NormalizedOptions,
-  PluginItem,
-} from "./validation/options.ts";
+import type { InputOptions, PluginItem } from "./validation/options.ts";
 import { validatePluginObject } from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
@@ -51,7 +47,7 @@ type LoadedDescriptor = {
 export type { InputOptions } from "./validation/options.ts";
 
 export type ResolvedConfig = {
-  options: NormalizedOptions;
+  options: ValidatedOptions;
   passes: PluginPasses;
   externalDependencies: ReadonlyDeepArray<string>;
 };
@@ -117,6 +113,7 @@ export default gensync(function* loadFullConfig(
 
       for (let i = 0; i < rawPresets.length; i++) {
         const descriptor = rawPresets[i];
+        // @ts-expect-error TODO: disallow false
         if (descriptor.options !== false) {
           try {
             // eslint-disable-next-line no-var
@@ -172,9 +169,7 @@ export default gensync(function* loadFullConfig(
 
   if (ignored) return null;
 
-  // Cast the `optionDefaults` to NormalizedOptions,
-  // since we will merge the normalized `options` to `optionDefaults`
-  const opts = optionDefaults as NormalizedOptions;
+  const opts = optionDefaults;
   mergeOptions(opts, options);
 
   const pluginContext: Context.FullPlugin = {
@@ -191,6 +186,7 @@ export default gensync(function* loadFullConfig(
 
       for (let i = 0; i < descs.length; i++) {
         const descriptor = descs[i];
+        // @ts-expect-error TODO: disallow false
         if (descriptor.options !== false) {
           try {
             // eslint-disable-next-line no-var
@@ -256,6 +252,7 @@ const makeDescriptorLoader = <Context, API>(
     cache: CacheConfigurator<Context>,
   ): Handler<LoadedDescriptor> {
     // Disabled presets should already have been filtered out
+    // @ts-expect-error expected
     if (options === false) throw new Error("Assertion failure");
 
     options = options || {};
@@ -421,7 +418,7 @@ function* loadPluginDescriptor(
 const needsFilename = (val: unknown) => val && typeof val !== "function";
 
 const validateIfOptionNeedsFilename = (
-  options: ValidatedOptions,
+  options: InputOptions,
   descriptor: UnloadedDescriptor<PresetAPI>,
 ): void => {
   if (

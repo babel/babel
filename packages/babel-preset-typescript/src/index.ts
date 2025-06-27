@@ -5,6 +5,7 @@ import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
 import normalizeOptions from "./normalize-options.ts";
 import type { Options } from "./normalize-options.ts";
 import pluginRewriteTSImports from "./plugin-rewrite-ts-imports.ts";
+import type { PluginItem } from "../../babel-core/src/config/validation/options.ts";
 
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
@@ -43,7 +44,7 @@ export default declarePreset((api, opts: Options) => {
 
   const getPlugins = (isTSX: boolean, disallowAmbiguousJSXLike: boolean) => {
     if (process.env.BABEL_8_BREAKING) {
-      const tsPlugin = [
+      const tsPlugin: PluginItem = [
         transformTypeScript,
         pluginOptions(disallowAmbiguousJSXLike),
       ];
@@ -53,7 +54,7 @@ export default declarePreset((api, opts: Options) => {
         [
           transformTypeScript,
           { isTSX, ...pluginOptions(disallowAmbiguousJSXLike) },
-        ],
+        ] satisfies PluginItem,
       ];
     }
   };
