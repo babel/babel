@@ -1,3 +1,6 @@
+// Iterator can not be invoked with new, so this example does not
+// satisfy the superIsCallableConstructor assumption, it will throw
+// a runtime error
 var RangeIterator = /*#__PURE__*/function (_Iterator) {
   "use strict";
 
@@ -7,4 +10,4 @@ var RangeIterator = /*#__PURE__*/function (_Iterator) {
   }
   babelHelpers.inherits(RangeIterator, _Iterator);
   return babelHelpers.createClass(RangeIterator);
-}(/*#__PURE__*/babelHelpers.wrapNativeSuper(Iterator));
+}(Iterator);
