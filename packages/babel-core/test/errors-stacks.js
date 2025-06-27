@@ -134,6 +134,8 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Error inside config!
           at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file/babel.config.js:_:_
+          at Module._compile (... internal node frames ...)
+          at node:internal/modules/cjs/loader:_:_
           at require (... internal node frames ...)
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -153,6 +155,8 @@ describe("@babel/core errors", function () {
           at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_
+          at Module._compile (... internal node frames ...)
+          at node:internal/modules/cjs/loader:_:_
           at require (... internal node frames ...)
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
