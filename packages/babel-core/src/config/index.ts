@@ -8,7 +8,7 @@ export type {
 } from "./full.ts";
 
 import type { InputOptions, PluginTarget } from "./validation/options.ts";
-
+export type { ConfigAPI } from "./helpers/config-api.ts";
 import type {
   PluginAPI as basePluginAPI,
   PresetAPI as basePresetAPI,
