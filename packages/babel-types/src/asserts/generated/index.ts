@@ -1647,6 +1647,12 @@ export function assertDeclaration(
 ): asserts node is t.Declaration {
   assert("Declaration", node, opts);
 }
+export function assertFunctionParameter(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.FunctionParameter {
+  assert("FunctionParameter", node, opts);
+}
 export function assertPatternLike(
   node: object | null | undefined,
   opts?: object | null,

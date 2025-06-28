@@ -165,7 +165,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         (!isExpressionStatement(parent) && !isSequenceExpression(parent)) ||
         path.isCompletionRecord();
       for (const { left, right } of transformPrivateKeyDestructuring(
-        // @ts-expect-error The left of an assignment expression must not be a RestElement
+        // @ts-ignore(Babel 7 vs Babel 8) The left of an assignment expression must not be a RestElement
         node.left,
         node.right,
         scope,

@@ -72,7 +72,7 @@ defineType("AssignmentExpression", {
     left: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal", "OptionalMemberExpression")
+          ? assertNodeType("LVal")
           : assertNodeType(
               "Identifier",
               "MemberExpression",
@@ -370,7 +370,7 @@ defineType("ForStatement", {
 });
 
 export const functionCommon = () => ({
-  params: validateArrayOfType("Identifier", "Pattern", "RestElement"),
+  params: validateArrayOfType("FunctionParameter"),
   generator: {
     default: false,
   },
@@ -512,7 +512,13 @@ export const patternLikeCommon = () => ({
 defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation", "decorators" /* for legacy param decorators */],
-  aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
+  aliases: [
+    "Expression",
+    "FunctionParameter",
+    "PatternLike",
+    "LVal",
+    "TSEntityName",
+  ],
   fields: {
     ...patternLikeCommon(),
     name: {
@@ -723,7 +729,7 @@ defineType("MemberExpression", {
       : []),
   ],
   visitor: ["object", "property"],
-  aliases: ["Expression", "LVal"],
+  aliases: ["Expression", "LVal", "PatternLike"],
   fields: {
     object: {
       validate: assertNodeType("Expression", "Super"),
@@ -995,15 +1001,15 @@ defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
   aliases: process.env.BABEL_8_BREAKING
-    ? ["PatternLike"]
-    : ["PatternLike", "LVal"],
+    ? ["FunctionParameter", "PatternLike"]
+    : ["FunctionParameter", "PatternLike", "LVal"],
   deprecatedAlias: "RestProperty",
   fields: {
     ...patternLikeCommon(),
     argument: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal")
+          ? assertNodeType("PatternLike")
           : assertNodeType(
               "Identifier",
               "ArrayPattern",
@@ -1296,8 +1302,8 @@ defineType("AssignmentPattern", {
   visitor: ["left", "right", "decorators" /* for legacy param decorators */],
   builder: ["left", "right"],
   aliases: process.env.BABEL_8_BREAKING
-    ? ["Pattern", "PatternLike"]
-    : ["Pattern", "PatternLike", "LVal"],
+    ? ["FunctionParameter", "Pattern", "PatternLike"]
+    : ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     left: {
@@ -1326,13 +1332,13 @@ defineType("AssignmentPattern", {
 defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
   builder: ["elements"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeOrValueType("null", "PatternLike", "LVal")),
+        assertEach(assertNodeOrValueType("null", "PatternLike")),
       ),
     },
   },
@@ -1933,12 +1939,7 @@ export const classMethodOrPropertyCommon = () => ({
 export const classMethodOrDeclareMethodCommon = () => ({
   ...functionCommon(),
   ...classMethodOrPropertyCommon(),
-  params: validateArrayOfType(
-    "Identifier",
-    "Pattern",
-    "RestElement",
-    "TSParameterProperty",
-  ),
+  params: validateArrayOfType("FunctionParameter", "TSParameterProperty"),
   kind: {
     validate: assertOneOf("get", "set", "method", "constructor"),
     default: "method",
@@ -1992,7 +1993,7 @@ defineType("ObjectPattern", {
     "typeAnnotation",
   ],
   builder: ["properties"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: ["FunctionParameter", "Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon(),
     properties: validateArrayOfType("RestElement", "ObjectProperty"),
@@ -2200,7 +2201,7 @@ defineType("ExportNamespaceSpecifier", {
 defineType("OptionalMemberExpression", {
   builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal"],
   fields: {
     object: {
       validate: assertNodeType("Expression"),

@@ -315,7 +315,7 @@ export interface ArrayExpression extends BaseNode {
 export interface AssignmentExpression extends BaseNode {
   type: "AssignmentExpression";
   operator: string;
-  left: LVal | OptionalMemberExpression;
+  left: LVal;
   right: Expression;
 }
 
@@ -446,7 +446,7 @@ export interface ForStatement extends BaseNode {
 export interface FunctionDeclaration extends BaseNode {
   type: "FunctionDeclaration";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   generator: boolean;
   async: boolean;
@@ -463,7 +463,7 @@ export interface FunctionDeclaration extends BaseNode {
 export interface FunctionExpression extends BaseNode {
   type: "FunctionExpression";
   id?: Identifier | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   generator: boolean;
   async: boolean;
@@ -580,7 +580,7 @@ export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
   key: Expression | Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement;
   computed: boolean;
   generator: boolean;
@@ -612,7 +612,7 @@ export interface ObjectProperty extends BaseNode {
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
-  argument: LVal;
+  argument: PatternLike;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -623,7 +623,7 @@ export interface RestElement extends BaseNode {
  */
 export interface RestProperty extends BaseNode {
   type: "RestProperty";
-  argument: LVal;
+  argument: PatternLike;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -731,7 +731,7 @@ export interface AssignmentPattern extends BaseNode {
 
 export interface ArrayPattern extends BaseNode {
   type: "ArrayPattern";
-  elements: Array<null | PatternLike | LVal>;
+  elements: Array<null | PatternLike>;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -739,7 +739,7 @@ export interface ArrayPattern extends BaseNode {
 
 export interface ArrowFunctionExpression extends BaseNode {
   type: "ArrowFunctionExpression";
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   body: BlockStatement | Expression;
   async: boolean;
   expression: boolean;
@@ -902,7 +902,7 @@ export interface ClassMethod extends BaseNode {
   type: "ClassMethod";
   kind: "get" | "set" | "method" | "constructor";
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   body: BlockStatement;
   computed: boolean;
   static: boolean;
@@ -1070,7 +1070,7 @@ export interface ClassPrivateMethod extends BaseNode {
   type: "ClassPrivateMethod";
   kind: "get" | "set" | "method";
   key: PrivateName;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   body: BlockStatement;
   static: boolean;
   abstract?: boolean | null;
@@ -1703,7 +1703,7 @@ export interface TSDeclareFunction extends BaseNode {
   type: "TSDeclareFunction";
   id?: Identifier | null;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement>;
+  params: Array<FunctionParameter>;
   returnType?: TSTypeAnnotation | Noop | null;
   async?: boolean;
   declare?: boolean | null;
@@ -1715,7 +1715,7 @@ export interface TSDeclareMethod extends BaseNode {
   decorators?: Array<Decorator> | null;
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
+  params: Array<FunctionParameter | TSParameterProperty>;
   returnType?: TSTypeAnnotation | Noop | null;
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
@@ -2426,8 +2426,15 @@ export type Declaration =
   | TSEnumDeclaration
   | TSModuleDeclaration
   | TSImportEqualsDeclaration;
+export type FunctionParameter =
+  | Identifier
+  | RestElement
+  | AssignmentPattern
+  | ArrayPattern
+  | ObjectPattern;
 export type PatternLike =
   | Identifier
+  | MemberExpression
   | RestElement
   | AssignmentPattern
   | ArrayPattern
@@ -2444,6 +2451,7 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
+  | OptionalMemberExpression
   | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
@@ -2816,6 +2824,7 @@ export interface Aliases {
   FunctionParent: FunctionParent;
   Pureish: Pureish;
   Declaration: Declaration;
+  FunctionParameter: FunctionParameter;
   PatternLike: PatternLike;
   LVal: LVal;
   TSEntityName: TSEntityName;
@@ -7511,13 +7520,11 @@ export interface ParentMaps {
     | TSUnionType
     | TemplateLiteral;
   TSParameterProperty:
-    | ArrayPattern
     | AssignmentExpression
     | ClassMethod
     | ClassPrivateMethod
     | ForInStatement
     | ForOfStatement
-    | RestElement
     | TSDeclareMethod
     | VariableDeclarator;
   TSParenthesizedType:
