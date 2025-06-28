@@ -108,9 +108,34 @@ const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
 `;
+  const builderOverrideTypes = new Set();
+  if (!IS_BABEL_8()) {
+    builderOverrideTypes.add("BigIntLiteral");
+    const builderOverrides = `
+/** @deprecated */ export function bigIntLiteral(value: string): t.BigIntLiteral;
+export function bigIntLiteral(value: bigint): t.BigIntLiteral;
+export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
+  if (typeof value === "bigint") {
+    value = value.toString();
+  }
+  const node: t.BigIntLiteral = {
+    type: "BigIntLiteral",
+    value,
+  };
+  const defs = NODE_FIELDS.BigIntLiteral;
+  validate(defs.value, node, "value", value);
+  return node;
+}
+`;
+    output += builderOverrides;
+  }
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
+    if (builderOverrideTypes.has(type)) {
+      // Skip the BigIntLiteral builder override, which is handled above.
+      return;
+    }
     const defArgs = generateBuilderArgs(type);
     const formattedBuilderName = formatBuilderName(type);
     const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)
