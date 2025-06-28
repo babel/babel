@@ -82,7 +82,7 @@ export default declare(api => {
         const { node } = path;
         if (!isCreateClass(node)) return;
 
-        let id: t.LVal | t.Expression | t.PrivateName | null;
+        let id: t.LVal | t.Expression | t.PrivateName | t.VoidPattern | null;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
         path.find(function (path) {

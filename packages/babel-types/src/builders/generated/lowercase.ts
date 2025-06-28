@@ -708,7 +708,7 @@ export function variableDeclaration(
   return node;
 }
 export function variableDeclarator(
-  id: t.LVal,
+  id: t.LVal | t.VoidPattern,
   init: t.Expression | null = null,
 ): t.VariableDeclarator {
   const node: t.VariableDeclarator = {

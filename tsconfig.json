@@ -142,6 +142,9 @@
       "path": "./packages/babel-plugin-proposal-destructuring-private"
     },
     {
+      "path": "./packages/babel-plugin-proposal-discard-binding"
+    },
+    {
       "path": "./packages/babel-plugin-proposal-do-expressions"
     },
     {

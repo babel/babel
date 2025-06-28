@@ -255,7 +255,7 @@ function _getFuncIdName(
   idNode: t.Expression | t.PrivateName,
   parent: ParentsOf<t.Function | t.TSDeclareMethod | t.TSDeclareFunction>,
 ) {
-  let id: t.Expression | t.PrivateName | t.LVal = idNode;
+  let id: t.Expression | t.PrivateName | t.LVal | t.VoidPattern = idNode;
 
   if (!id && parent) {
     const parentType = parent.type;
