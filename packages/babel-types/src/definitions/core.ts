@@ -1246,7 +1246,7 @@ defineType("VariableDeclarator", {
     id: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal")
+          ? assertNodeType("LVal", "VoidPattern")
           : assertNodeType(
               "Identifier",
               "ArrayPattern",
