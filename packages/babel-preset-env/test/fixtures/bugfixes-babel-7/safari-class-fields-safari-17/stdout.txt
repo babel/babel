@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: false
 
 Using plugins:
+  transform-explicit-resource-management { safari }
   transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
   transform-regexp-modifiers { safari }
   syntax-class-static-block

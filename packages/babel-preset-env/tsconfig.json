@@ -87,6 +87,9 @@
       "path": "../../packages/babel-plugin-transform-dynamic-import"
     },
     {
+      "path": "../../packages/babel-plugin-transform-explicit-resource-management"
+    },
+    {
       "path": "../../packages/babel-plugin-transform-exponentiation-operator"
     },
     {
