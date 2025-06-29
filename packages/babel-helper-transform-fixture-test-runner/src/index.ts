@@ -74,6 +74,7 @@ const contextModuleCache = new WeakMap();
 // to re-enable config loading.
 function transformWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformSync(code, {
+    browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
     ...opts,
@@ -81,6 +82,7 @@ function transformWithoutConfigFile(code: string, opts: InputOptions) {
 }
 function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformAsync(code, {
+    browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
     ...opts,
@@ -210,6 +212,7 @@ export function runCodeInTestContext(
   code: string,
   opts: {
     filename: string;
+    timeout?: number;
   },
   context = (sharedTestContext ??= createTestContext()),
 ) {
@@ -231,13 +234,16 @@ export function runCodeInTestContext(
     // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
-    const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
+    const src = `((function(exports, require, module, __filename, __dirname, opts) {\n${code}\n})).apply(global, global.__callArgs);`;
+    context.__callArgs = [module.exports, req, module, filename, dirname, opts];
     return vm.runInContext(src, context, {
       filename,
       displayErrors: true,
       lineOffset: -1,
-    })(module.exports, req, module, filename, dirname, opts);
+      timeout: opts.timeout ?? 10000,
+    });
   } finally {
+    context.__callArgs = undefined;
     process.chdir(oldCwd);
   }
 }

@@ -38,17 +38,26 @@ describe("helper-transform-fixture-test-runner", function () {
       );
     }
   });
+
   it("should print correct trace position when error is thrown in the first line", () => {
     const opts = {
       filename: `${filename}.fake4`,
     };
-    runCodeInTestContext(
-      `try { throw new Error() } catch (e) {
-          opts.stack = e.stack
-        }
-      `,
-      opts,
-    );
-    expect(opts.stack).toContain(opts.filename + ":1:13");
+    let err;
+    try {
+      runCodeInTestContext(`throw new Error()`, opts);
+    } catch (error) {
+      err = error;
+    }
+    expect(err.stack).toContain(opts.filename + ":1:7");
+  });
+
+  it("should stop when infinite loop", () => {
+    expect(() => {
+      runCodeInTestContext(`while (true) {}`, {
+        filename: `${filename}.fake5`,
+        timeout: 500,
+      });
+    }).toThrow("Script execution timed out");
   });
 });
