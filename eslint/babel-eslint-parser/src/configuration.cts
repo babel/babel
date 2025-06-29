@@ -4,7 +4,7 @@ export = function normalizeESLintConfig(options: any) {
   const {
     babelOptions = {},
     // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
-    ecmaVersion = 2020,
+    ecmaVersion = "latest",
     sourceType = "module",
     requireConfigFile = true,
     ...otherOptions
@@ -13,9 +13,7 @@ export = function normalizeESLintConfig(options: any) {
   return {
     babelOptions: { cwd: process.cwd(), ...babelOptions },
     ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
-    // https://eslint.org/docs/latest/use/configure/language-options#specifying-javascript-options
-    // ESLint supports "commonjs" but Babel parser does not.
-    sourceType: sourceType === "commonjs" ? "script" : sourceType,
+    sourceType,
     requireConfigFile,
     ...otherOptions,
   } as Options;

@@ -1,4 +1,5 @@
 import babel = require("./babel-core.cts");
+import semver = require("semver");
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
 import type { InputOptions } from "@babel/core";
 import type { Options } from "../types.cts";
@@ -24,12 +25,26 @@ function getParserPlugins(
   return [["estree", estreeOptions], ...babelParserPlugins];
 }
 
-function normalizeParserOptions(options: Options): InputOptions & {
+function normalizeParserOptions(
+  options: Options,
+  version: string,
+): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
+  // Babel <= 7.28.0 does not support `sourceType: "commonjs"`.
+  if (
+    !process.env.BABEL_8_BREAKING &&
+    options.sourceType === "commonjs" &&
+    !semver.satisfies(version, REQUIRED_VERSION(">=7.28.0"))
+  ) {
+    options.sourceType = "script";
+    options.ecmaFeatures = {
+      ...(options.ecmaFeatures ?? {}),
+      globalReturn: true,
+    };
+  }
   return {
-    // https://github.com/eslint/js/issues/519
-    sourceType: options.sourceType as "module" | "script",
+    sourceType: options.sourceType,
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
@@ -40,9 +55,13 @@ function normalizeParserOptions(options: Options): InputOptions & {
               options.allowImportExportEverywhere ?? false,
             allowSuperOutsideMethod: true,
           }),
-      allowReturnOutsideFunction:
-        options.ecmaFeatures?.globalReturn ??
-        (process.env.BABEL_8_BREAKING ? false : true),
+      ...(options.sourceType !== "commonjs"
+        ? {
+            allowReturnOutsideFunction:
+              options.ecmaFeatures?.globalReturn ??
+              (process.env.BABEL_8_BREAKING ? false : true),
+          }
+        : {}),
       ...options.babelOptions.parserOpts,
       plugins: getParserPlugins(options.babelOptions),
       // skip comment attaching for parsing performance
@@ -95,13 +114,13 @@ function getDefaultParserOptions(options: InputOptions): InputOptions {
 export async function normalizeBabelParseConfig(
   options: Options,
 ): Promise<InputOptions> {
-  const parseOptions = normalizeParserOptions(options);
+  const parseOptions = normalizeParserOptions(options, babel.version);
   const config = await babel.loadPartialConfigAsync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }
 
 export function normalizeBabelParseConfigSync(options: Options): InputOptions {
-  const parseOptions = normalizeParserOptions(options);
+  const parseOptions = normalizeParserOptions(options, babel.version);
   const config = babel.loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }
