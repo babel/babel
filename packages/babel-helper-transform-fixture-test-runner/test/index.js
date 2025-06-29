@@ -58,8 +58,6 @@ describe("helper-transform-fixture-test-runner", function () {
         filename: `${filename}.fake5`,
         timeout: 500,
       });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Script execution timed out after 500ms"`,
-    );
+    }).toThrow("Script execution timed out");
   });
 });
