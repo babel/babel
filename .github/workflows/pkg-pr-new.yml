@@ -27,5 +27,5 @@ jobs:
       - name: Build
         run: make prepublish
       - name: Publish
-        run: yarn pkg-pr-new publish --compact --only-templates --yarn './packages/*'
+        run: yarn pkg-pr-new publish --only-templates --yarn './packages/*'
 
