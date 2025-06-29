@@ -612,7 +612,17 @@ export interface ObjectProperty extends BaseNode {
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
-  argument: PatternLike;
+  argument:
+    | Identifier
+    | ArrayPattern
+    | ObjectPattern
+    | MemberExpression
+    | TSAsExpression
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TSNonNullExpression
+    | RestElement
+    | AssignmentPattern;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -623,7 +633,17 @@ export interface RestElement extends BaseNode {
  */
 export interface RestProperty extends BaseNode {
   type: "RestProperty";
-  argument: PatternLike;
+  argument:
+    | Identifier
+    | ArrayPattern
+    | ObjectPattern
+    | MemberExpression
+    | TSAsExpression
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TSNonNullExpression
+    | RestElement
+    | AssignmentPattern;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -2431,7 +2451,8 @@ export type FunctionParameter =
   | RestElement
   | AssignmentPattern
   | ArrayPattern
-  | ObjectPattern;
+  | ObjectPattern
+  | VoidPattern;
 export type PatternLike =
   | Identifier
   | MemberExpression
