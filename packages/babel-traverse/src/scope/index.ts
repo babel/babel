@@ -3,7 +3,8 @@ import type NodePath from "../path/index.ts";
 import traverse from "../index.ts";
 import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
-import globals from "globals";
+import globalsBuiltinLower from "@babel/helper-globals/data/builtin-lower.json" with { type: "json" };
+import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
 import {
   assignmentExpression,
   callExpression,
@@ -482,7 +483,7 @@ class Scope {
    * Globals.
    */
 
-  static globals = Object.keys(globals.builtin);
+  static globals = [...globalsBuiltinLower, ...globalsBuiltinUpper];
 
   /**
    * Variables available in current context.
