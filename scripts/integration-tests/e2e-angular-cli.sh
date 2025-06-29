@@ -29,8 +29,6 @@ node "$dir"/utils/bump-babel-dependencies.js resolutions
 touch yarn.lock
 yarn set version stable
 YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
-# Remove this when https://github.com/fb55/css-select/issues/1591 is fixed
-yarn add css-select@5.1.0
 yarn run build
 yarn run ng test --watch=false --browsers ChromeHeadless
 
