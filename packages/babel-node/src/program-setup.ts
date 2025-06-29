@@ -1,8 +1,11 @@
 import * as commander from "commander";
 
-export const program = process.env.BABEL_8_BREAKING
-  ? commander.program
-  : commander.default.program;
+export const program = (
+  process.env.BABEL_8_BREAKING
+    ? // @ts-expect-error no types for commander.program
+      commander.program
+    : commander.default.program
+) as commander.Command;
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
