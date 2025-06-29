@@ -74,6 +74,7 @@
     "lint-staged": "^15.2.7",
     "mergeiterator": "^1.4.4",
     "picocolors": "^1.0.0",
+    "pkg-pr-new": "^0.0.54",
     "prettier": "^3.5.2",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
