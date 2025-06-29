@@ -165,7 +165,8 @@ export type Pattern =
   | ObjectPattern
   | ArrayPattern
   | RestElement
-  | AssignmentPattern;
+  | AssignmentPattern
+  | VoidPattern;
 //| Placeholder<"Pattern">;
 export type Declaration =
   | VariableDeclaration
@@ -254,7 +255,7 @@ export interface NumericLiteral extends NodeBase {
 
 export interface BigIntLiteral extends NodeBase {
   type: "BigIntLiteral";
-  value: number;
+  value: bigint;
 }
 
 export interface DecimalLiteral extends NodeBase {
@@ -875,6 +876,10 @@ export interface AssignmentPattern extends PatternBase {
   type: "AssignmentPattern";
   left: Pattern;
   right: Expression;
+}
+
+export interface VoidPattern extends PatternBase {
+  type: "VoidPattern";
 }
 
 // Classes
@@ -1536,10 +1541,14 @@ export type TsSignatureDeclaration =
 
 export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
-  params: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
+  params: Array<
+    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
+  >;
   returnType: TsTypeAnnotation | undefined | null;
   // TODO(Babel 8): Remove
-  parameters: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
+  parameters: Array<
+    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
+  >;
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }
 
@@ -1816,7 +1825,12 @@ export interface TsTemplateLiteralType extends TsTypeBase {
 
 export interface TsLiteralType extends TsTypeBase {
   type: "TSLiteralType";
-  literal: NumericLiteral | StringLiteral | BooleanLiteral | TemplateLiteral;
+  literal:
+    | NumericLiteral
+    | StringLiteral
+    | BooleanLiteral
+    | TemplateLiteral
+    | UnaryExpression;
 }
 
 export interface TsImportType extends TsTypeBase {
@@ -2242,6 +2256,7 @@ export type Node =
   | UpdateExpression
   | VariableDeclaration
   | VariableDeclarator
+  | VoidPattern
   | V8IntrinsicIdentifier
   | WhileStatement
   | WithStatement

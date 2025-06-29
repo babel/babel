@@ -42,7 +42,7 @@ const tSFunctionTypeAnnotationCommon = () => ({
 });
 
 defineType("TSParameterProperty", {
-  aliases: ["LVal"], // TODO: This isn't usable in general as an LVal. Should have a "Parameter" alias.
+  aliases: process.env.BABEL_8_BREAKING ? [] : ["LVal"],
   visitor: ["parameter"],
   fields: {
     accessibility: {
@@ -351,8 +351,13 @@ defineType("TSParenthesizedType", {
 defineType("TSTypeOperator", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],
+  builder: ["typeAnnotation", "operator"],
   fields: {
-    operator: validate(assertValueType("string")),
+    operator: {
+      validate: process.env.BABEL_8_BREAKING
+        ? assertOneOf("keyof", "readonly", "unique")
+        : assertValueType("string"),
+    },
     typeAnnotation: validateType("TSType"),
   },
 });

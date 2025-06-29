@@ -230,13 +230,15 @@ export default abstract class UtilParser extends Tokenizer {
       doubleProtoLoc,
       privateKeyLoc,
       optionalParametersLoc,
+      voidPatternLoc,
     } = refExpressionErrors;
 
     const hasErrors =
       !!shorthandAssignLoc ||
       !!doubleProtoLoc ||
       !!optionalParametersLoc ||
-      !!privateKeyLoc;
+      !!privateKeyLoc ||
+      !!voidPatternLoc;
 
     if (!andThrow) {
       return hasErrors;
@@ -256,6 +258,10 @@ export default abstract class UtilParser extends Tokenizer {
 
     if (optionalParametersLoc != null) {
       this.unexpected(optionalParametersLoc);
+    }
+
+    if (voidPatternLoc != null) {
+      this.raise(Errors.InvalidCoverDiscardElement, voidPatternLoc);
     }
   }
 
@@ -402,4 +408,5 @@ export class ExpressionErrors {
   doubleProtoLoc: Position | undefined | null = null;
   privateKeyLoc: Position | undefined | null = null;
   optionalParametersLoc: Position | undefined | null = null;
+  voidPatternLoc: Position | undefined | null = null;
 }

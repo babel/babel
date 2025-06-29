@@ -58,7 +58,7 @@ import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
 import type { ExplodedVisitor, Visitor } from "../types.ts";
 
-type NodePart = string | number | boolean;
+type NodePart = string | number | bigint | boolean;
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: t.Node, parts: NodePart[]) {
   switch (node?.type) {
@@ -1408,7 +1408,14 @@ class Scope {
       for (const decl of parent.declarations) {
         firstId ??= decl.id;
         if (decl.init) {
-          init.push(assignmentExpression("=", decl.id, decl.init));
+          init.push(
+            assignmentExpression(
+              "=",
+              // var declarator must not be a void pattern
+              decl.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+              decl.init,
+            ),
+          );
         }
 
         const ids = Object.keys(getBindingIdentifiers(decl, false, true, true));

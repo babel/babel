@@ -10,6 +10,22 @@ import * as utils from "../../definitions/utils.ts";
 const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
+/** @deprecated */ export function bigIntLiteral(
+  value: string,
+): t.BigIntLiteral;
+export function bigIntLiteral(value: bigint): t.BigIntLiteral;
+export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
+  if (typeof value === "bigint") {
+    value = value.toString();
+  }
+  const node: t.BigIntLiteral = {
+    type: "BigIntLiteral",
+    value,
+  };
+  const defs = NODE_FIELDS.BigIntLiteral;
+  validate(defs.value, node, "value", value);
+  return node;
+}
 export function arrayExpression(
   elements: Array<null | t.Expression | t.SpreadElement> = [],
 ): t.ArrayExpression {
@@ -23,7 +39,7 @@ export function arrayExpression(
 }
 export function assignmentExpression(
   operator: string,
-  left: t.LVal | t.OptionalMemberExpression,
+  left: t.LVal,
   right: t.Expression,
 ): t.AssignmentExpression {
   const node: t.AssignmentExpression = {
@@ -282,7 +298,7 @@ export function forStatement(
 }
 export function functionDeclaration(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -305,7 +321,7 @@ export function functionDeclaration(
 }
 export function functionExpression(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -502,7 +518,7 @@ export function objectMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement,
   computed: boolean = false,
   generator: boolean = false,
@@ -558,7 +574,19 @@ export function objectProperty(
   validate(defs.decorators, node, "decorators", decorators, 1);
   return node;
 }
-export function restElement(argument: t.LVal): t.RestElement {
+export function restElement(
+  argument:
+    | t.Identifier
+    | t.ArrayPattern
+    | t.ObjectPattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSSatisfiesExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression
+    | t.RestElement
+    | t.AssignmentPattern,
+): t.RestElement {
   const node: t.RestElement = {
     type: "RestElement",
     argument,
@@ -708,7 +736,7 @@ export function variableDeclaration(
   return node;
 }
 export function variableDeclarator(
-  id: t.LVal,
+  id: t.LVal | t.VoidPattern,
   init: t.Expression | null = null,
 ): t.VariableDeclarator {
   const node: t.VariableDeclarator = {
@@ -772,7 +800,7 @@ export function assignmentPattern(
   return node;
 }
 export function arrayPattern(
-  elements: Array<null | t.PatternLike | t.LVal>,
+  elements: Array<null | t.PatternLike>,
 ): t.ArrayPattern {
   const node: t.ArrayPattern = {
     type: "ArrayPattern",
@@ -783,7 +811,7 @@ export function arrayPattern(
   return node;
 }
 export function arrowFunctionExpression(
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   body: t.BlockStatement | t.Expression,
   async: boolean = false,
 ): t.ArrowFunctionExpression {
@@ -1027,9 +1055,7 @@ export function classMethod(
     | t.NumericLiteral
     | t.BigIntLiteral
     | t.Expression,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   body: t.BlockStatement,
   computed: boolean = false,
   _static: boolean = false,
@@ -1155,15 +1181,6 @@ function _import(): t.Import {
   };
 }
 export { _import as import };
-export function bigIntLiteral(value: string): t.BigIntLiteral {
-  const node: t.BigIntLiteral = {
-    type: "BigIntLiteral",
-    value,
-  };
-  const defs = NODE_FIELDS.BigIntLiteral;
-  validate(defs.value, node, "value", value);
-  return node;
-}
 export function exportNamespaceSpecifier(
   exported: t.Identifier,
 ): t.ExportNamespaceSpecifier {
@@ -1298,9 +1315,7 @@ export function classPrivateProperty(
 export function classPrivateMethod(
   kind: "get" | "set" | "method" | undefined = "method",
   key: t.PrivateName,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   body: t.BlockStatement,
   _static: boolean = false,
 ): t.ClassPrivateMethod {
@@ -2530,6 +2545,11 @@ export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference
     type: "PipelinePrimaryTopicReference",
   };
 }
+export function voidPattern(): t.VoidPattern {
+  return {
+    type: "VoidPattern",
+  };
+}
 export function tsParameterProperty(
   parameter: t.Identifier | t.AssignmentPattern,
 ): t.TSParameterProperty {
@@ -2549,7 +2569,7 @@ export function tsDeclareFunction(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<t.Identifier | t.Pattern | t.RestElement>,
+  params: Array<t.FunctionParameter>,
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareFunction {
   const node: t.TSDeclareFunction = {
@@ -2580,9 +2600,7 @@ export function tsDeclareMethod(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<
-    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
-  >,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
   const node: t.TSDeclareMethod = {
@@ -3020,14 +3038,18 @@ export function tsParenthesizedType(
   return node;
 }
 export { tsParenthesizedType as tSParenthesizedType };
-export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
+export function tsTypeOperator(
+  typeAnnotation: t.TSType,
+  operator: string,
+): t.TSTypeOperator {
   const node: t.TSTypeOperator = {
     type: "TSTypeOperator",
     typeAnnotation,
-    operator: null,
+    operator,
   };
   const defs = NODE_FIELDS.TSTypeOperator;
   validate(defs.typeAnnotation, node, "typeAnnotation", typeAnnotation, 1);
+  validate(defs.operator, node, "operator", operator);
   return node;
 }
 export { tsTypeOperator as tSTypeOperator };
@@ -3436,7 +3458,19 @@ function RegexLiteral(pattern: string, flags: string = "") {
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(argument: t.LVal) {
+function RestProperty(
+  argument:
+    | t.Identifier
+    | t.ArrayPattern
+    | t.ObjectPattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSSatisfiesExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression
+    | t.RestElement
+    | t.AssignmentPattern,
+) {
   deprecationWarning("RestProperty", "RestElement", "The node type ");
   return restElement(argument);
 }

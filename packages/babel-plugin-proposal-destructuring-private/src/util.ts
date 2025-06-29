@@ -114,7 +114,7 @@ interface Transformed {
 }
 
 function buildAssignmentsFromPatternList(
-  elements: (t.LVal | t.PatternLike | null)[],
+  elements: (t.LVal | t.PatternLike | t.TSParameterProperty | null)[],
   scope: Scope,
   isAssignment: boolean,
 ): {
@@ -124,7 +124,7 @@ function buildAssignmentsFromPatternList(
   const newElements: (t.Identifier | t.RestElement)[] = [],
     transformed: Transformed[] = [];
   for (let element of elements) {
-    if (element === null) {
+    if (element === null || element.type === "VoidPattern") {
       newElements.push(null);
       transformed.push(null);
       continue;
@@ -159,8 +159,8 @@ type StackItem = {
   node:
     | t.LVal
     | t.PatternLike
-    | t.OptionalMemberExpression
     | t.ObjectProperty
+    | t.TSParameterProperty
     | null;
   index: number;
   depth: number;
@@ -179,13 +179,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal | t.PatternLike | t.OptionalMemberExpression,
+  root: t.LVal | t.PatternLike | t.TSParameterProperty,
   visitor: (
-    node:
-      | t.LVal
-      | t.PatternLike
-      | t.OptionalMemberExpression
-      | t.ObjectProperty,
+    node: t.LVal | t.PatternLike | t.TSParameterProperty | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -235,9 +231,7 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(
-  pattern: t.LVal | t.PatternLike | t.OptionalMemberExpression,
-) {
+export function hasPrivateKeys(pattern: t.LVal | t.PatternLike) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
@@ -281,7 +275,7 @@ export function* privateKeyPathIterator(pattern: t.LVal | t.PatternLike) {
 }
 
 type LHS =
-  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty>
+  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty | t.VoidPattern>
   | t.AssignmentPattern;
 
 type ExcludingKey = {
@@ -433,6 +427,13 @@ export function* transformPrivateKeyDestructuring(
             }
             // An object rest element must not contain a private key
             const property = properties[index] as t.ObjectProperty;
+            if (property.value.type === "VoidPattern") {
+              const tempId = scope.generateUidIdentifier("_");
+              if (isAssignment) {
+                scope.push({ id: cloneNode(tempId) });
+              }
+              property.value = tempId;
+            }
             // The value of ObjectProperty under ObjectPattern must be an LHS
             left = property.value as LHS;
             const { key } = property;

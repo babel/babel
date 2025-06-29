@@ -277,6 +277,7 @@ export interface ExplVisitorBase<S> {
   VariableDeclaration?: ExplVisitNode<S, t.VariableDeclaration>;
   VariableDeclarator?: ExplVisitNode<S, t.VariableDeclarator>;
   Variance?: ExplVisitNode<S, t.Variance>;
+  VoidPattern?: ExplVisitNode<S, t.VoidPattern>;
   VoidTypeAnnotation?: ExplVisitNode<S, t.VoidTypeAnnotation>;
   WhileStatement?: ExplVisitNode<S, t.WhileStatement>;
   WithStatement?: ExplVisitNode<S, t.WithStatement>;
@@ -539,6 +540,7 @@ export interface VisitorBaseNodes<S> {
   VariableDeclaration?: VisitNode<S, t.VariableDeclaration>;
   VariableDeclarator?: VisitNode<S, t.VariableDeclarator>;
   Variance?: VisitNode<S, t.Variance>;
+  VoidPattern?: VisitNode<S, t.VoidPattern>;
   VoidTypeAnnotation?: VisitNode<S, t.VoidTypeAnnotation>;
   WhileStatement?: VisitNode<S, t.WhileStatement>;
   WithStatement?: VisitNode<S, t.WithStatement>;
@@ -567,6 +569,7 @@ export interface VisitorBaseAliases<S> {
   For?: VisitNode<S, t.For>;
   ForXStatement?: VisitNode<S, t.ForXStatement>;
   Function?: VisitNode<S, t.Function>;
+  FunctionParameter?: VisitNode<S, t.FunctionParameter>;
   FunctionParent?: VisitNode<S, t.FunctionParent>;
   Immutable?: VisitNode<S, t.Immutable>;
   ImportOrExportDeclaration?: VisitNode<S, t.ImportOrExportDeclaration>;

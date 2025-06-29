@@ -373,6 +373,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.FunctionExpression>,
   ): this is NodePath<t.FunctionExpression>;
+  isFunctionParameter(
+    this: NodePath,
+    opts?: Opts<t.FunctionParameter>,
+  ): this is NodePath<t.FunctionParameter>;
   isFunctionParent(
     this: NodePath,
     opts?: Opts<t.FunctionParent>,
@@ -1177,6 +1181,10 @@ interface BaseNodePathValidators {
     this: NodePath,
     opts?: Opts<t.Variance>,
   ): this is NodePath<t.Variance>;
+  isVoidPattern(
+    this: NodePath,
+    opts?: Opts<t.VoidPattern>,
+  ): this is NodePath<t.VoidPattern>;
   isVoidTypeAnnotation(
     this: NodePath,
     opts?: Opts<t.VoidTypeAnnotation>,

@@ -11,12 +11,14 @@ import {
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
 
 /**
- * Test if a VariableDeclaration's declarations contains any Patterns.
+ * Test if a VariableDeclaration's declarations contains any destructuring patterns.
+ * @param node VariableDeclaration node to test
  */
-
-function variableDeclarationHasPattern(node: t.VariableDeclaration) {
+function variableDeclarationHasDestructuringPattern(
+  node: t.VariableDeclaration,
+) {
   for (const declar of node.declarations) {
-    if (t.isPattern(declar.id)) {
+    if (t.isPattern(declar.id) && declar.id.type !== "VoidPattern") {
       return true;
     }
   }
@@ -48,7 +50,8 @@ export default declare((api, options: Options) => {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
-        if (!variableDeclarationHasPattern(declaration.node)) return;
+        if (!variableDeclarationHasDestructuringPattern(declaration.node))
+          return;
 
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
@@ -100,7 +103,7 @@ export default declare((api, options: Options) => {
         if (!t.isVariableDeclaration(left)) return;
 
         const pattern = left.declarations[0].id;
-        if (!t.isPattern(pattern)) return;
+        if (!t.isPattern(pattern) || pattern.type === "VoidPattern") return;
 
         const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
@@ -167,7 +170,7 @@ export default declare((api, options: Options) => {
         const { node, parent } = path;
         if (t.isForXStatement(parent)) return;
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
-        if (!variableDeclarationHasPattern(node)) return;
+        if (!variableDeclarationHasDestructuringPattern(node)) return;
         convertVariableDeclaration(
           path,
           name => state.addHelper(name),

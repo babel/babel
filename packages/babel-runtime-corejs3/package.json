@@ -13,7 +13,7 @@
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "core-js-pure": "^3.30.2"
+    "core-js-pure": "^3.43.0"
   },
   "exports": {
     "./helpers/OverloadYield": [

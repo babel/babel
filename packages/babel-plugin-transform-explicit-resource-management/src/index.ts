@@ -9,11 +9,16 @@ const enum USING_KIND {
 }
 
 // https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
-// We don't test anonymous function / arrow function because they must not be disposable
 function isAnonymousFunctionDefinition(
   node: t.Node,
-): node is t.ClassExpression {
-  return t.isClassExpression(node) && !node.id;
+): node is
+  | t.ClassExpression
+  | t.ArrowFunctionExpression
+  | t.FunctionExpression {
+  return (
+    t.isArrowFunctionExpression(node) ||
+    ((t.isFunctionExpression(node) || t.isClassExpression(node)) && !node.id)
+  );
 }
 
 function emitSetFunctionNameCall(

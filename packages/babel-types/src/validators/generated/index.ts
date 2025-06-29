@@ -1867,6 +1867,16 @@ export function isPipelinePrimaryTopicReference(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isVoidPattern(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.VoidPattern> | null,
+): node is t.VoidPattern {
+  if (!node) return false;
+
+  if (node.type !== "VoidPattern") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
   opts?: Opts<t.TSParameterProperty> | null,
@@ -3151,10 +3161,10 @@ export function isDeclaration(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isPatternLike(
+export function isFunctionParameter(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PatternLike> | null,
-): node is t.PatternLike {
+  opts?: Opts<t.FunctionParameter> | null,
+): node is t.FunctionParameter {
   if (!node) return false;
 
   switch (node.type) {
@@ -3163,6 +3173,30 @@ export function isPatternLike(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
+      break;
+    case "Placeholder":
+      if (node.expectedNode === "Identifier") break;
+    default:
+      return false;
+  }
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isPatternLike(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.PatternLike> | null,
+): node is t.PatternLike {
+  if (!node) return false;
+
+  switch (node.type) {
+    case "Identifier":
+    case "MemberExpression":
+    case "RestElement":
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ObjectPattern":
+    case "VoidPattern":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
     case "TSTypeAssertion":
@@ -3196,6 +3230,7 @@ export function isLVal(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "OptionalMemberExpression":
     case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
@@ -3389,6 +3424,7 @@ export function isPattern(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
       break;
     case "Placeholder":
       if (node.expectedNode === "Pattern") break;

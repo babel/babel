@@ -14,18 +14,3 @@ Object {
   "type": "TSLiteralType",
 }
 `;
-
-exports[`builders typescript tsLiteralType accept unary expression 2`] = `
-Object {
-  "literal": Object {
-    "argument": Object {
-      "type": "BigIntLiteral",
-      "value": "123456789",
-    },
-    "operator": "-",
-    "prefix": true,
-    "type": "UnaryExpression",
-  },
-  "type": "TSLiteralType",
-}
-`;

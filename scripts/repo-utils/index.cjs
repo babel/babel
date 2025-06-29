@@ -28,6 +28,7 @@ exports.IS_BABEL_8 = () => bool(process.env.BABEL_8_BREAKING);
 if (typeof jest !== "undefined") {
   const dummy = () => {};
   dummy.only = dummy.skip = dummy;
+  dummy.each = () => dummy;
   exports.itDummy = dummy;
   exports.itNoESM = USE_ESM ? dummy : it;
   exports.itESM = USE_ESM ? it : dummy;

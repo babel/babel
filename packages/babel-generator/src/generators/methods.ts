@@ -54,6 +54,7 @@ export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
 ) {
+  // @ts-expect-error decorators is not in VoidPattern
   this.printJoin(parameter.decorators);
   this.print(parameter);
   if (
@@ -254,7 +255,7 @@ function _getFuncIdName(
   idNode: t.Expression | t.PrivateName,
   parent: ParentsOf<t.Function | t.TSDeclareMethod | t.TSDeclareFunction>,
 ) {
-  let id: t.Expression | t.PrivateName | t.LVal = idNode;
+  let id: t.Expression | t.PrivateName | t.LVal | t.VoidPattern = idNode;
 
   if (!id && parent) {
     const parentType = parent.type;

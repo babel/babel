@@ -331,6 +331,12 @@ export default abstract class ExpressionParser extends LValParser {
           this.checkDestructuringPrivate(refExpressionErrors);
           refExpressionErrors.privateKeyLoc = null; // reset because `({ #x: x })` is an assignable pattern
         }
+        if (
+          refExpressionErrors.voidPatternLoc != null &&
+          refExpressionErrors.voidPatternLoc.index >= startIndex
+        ) {
+          refExpressionErrors.voidPatternLoc = null;
+        }
       } else {
         node.left = left as unknown as N.Assignable; // checked a few lines further down
       }
@@ -903,10 +909,9 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (optional) {
-      node.arguments = this.parseCallExpressionArguments(tt.parenR);
+      node.arguments = this.parseCallExpressionArguments();
     } else {
       node.arguments = this.parseCallExpressionArguments(
-        tt.parenR,
         base.type !== "Super",
         node,
         refExpressionErrors,
@@ -1002,7 +1007,6 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseCallExpressionArguments(
     this: Parser,
-    close: TokenType,
     allowPlaceholder?: boolean,
     nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
@@ -1012,12 +1016,12 @@ export default abstract class ExpressionParser extends LValParser {
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
 
-    while (!this.eat(close)) {
+    while (!this.eat(tt.parenR)) {
       if (first) {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.match(close)) {
+        if (this.match(tt.parenR)) {
           if (nodeForExtra) {
             this.addTrailingCommaExtraToNode(nodeForExtra);
           }
@@ -1027,7 +1031,12 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       elts.push(
-        this.parseExprListItem(false, refExpressionErrors, allowPlaceholder),
+        this.parseExprListItem(
+          tt.parenR,
+          false,
+          refExpressionErrors,
+          allowPlaceholder,
+        ),
       );
     }
 
@@ -1693,7 +1702,21 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseBigIntLiteral(value: any) {
-    return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+    if (process.env.BABEL_8_BREAKING) {
+      let bigInt: bigint | null;
+      try {
+        bigInt = BigInt(value);
+      } catch {
+        // parser supports invalid bigints like `1.0n` or `1e1n` such that it
+        // can throw a recoverable error, but BigInt constructor does not
+        // support them.
+        bigInt = null;
+      }
+      const node = this.parseLiteral<N.BigIntLiteral>(bigInt, "BigIntLiteral");
+      return node;
+    } else {
+      return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+    }
   }
 
   // TODO: Remove this in Babel 8
@@ -1748,7 +1771,12 @@ export default abstract class ExpressionParser extends LValParser {
     this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartLoc = this.state.startLoc;
-    const exprList: (N.Expression | N.RestElement)[] = [];
+    const exprList: (
+      | N.Expression
+      | N.RestElement
+      | N.VoidPattern
+      | N.AssignmentPattern
+    )[] = [];
     const refExpressionErrors = new ExpressionErrors();
     let first = true;
     let spreadStartLoc;
@@ -1782,7 +1810,8 @@ export default abstract class ExpressionParser extends LValParser {
         }
       } else {
         exprList.push(
-          this.parseMaybeAssignAllowIn(
+          this.parseMaybeAssignAllowInOrVoidPattern(
+            tt.parenR,
             refExpressionErrors,
             this.parseParenItem,
           ),
@@ -2283,7 +2312,10 @@ export default abstract class ExpressionParser extends LValParser {
     if (this.eat(tt.colon)) {
       prop.value = isPattern
         ? this.parseMaybeDefault(this.state.startLoc)
-        : this.parseMaybeAssignAllowIn(refExpressionErrors);
+        : this.parseMaybeAssignAllowInOrVoidPattern(
+            tt.braceR,
+            refExpressionErrors,
+          );
 
       return this.finishObjectProperty(prop);
     }
@@ -2492,8 +2524,12 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     node: Undone<N.ArrowFunctionExpression>,
     params:
-      | Array<N.Expression | N.SpreadElement>
-      | Array<N.Expression | N.RestElement>,
+      | Array<
+          N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern
+        >
+      | Array<
+          N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern
+        >,
     isAsync: boolean,
     trailingCommaLoc?: Position | null,
   ): N.ArrowFunctionExpression {
@@ -2526,8 +2562,12 @@ export default abstract class ExpressionParser extends LValParser {
   setArrowFunctionParameters(
     node: Undone<N.ArrowFunctionExpression>,
     params:
-      | Array<N.Expression | N.SpreadElement>
-      | Array<N.Expression | N.RestElement>,
+      | Array<
+          N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern
+        >
+      | Array<
+          N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern
+        >,
     trailingCommaLoc?: Position | null,
   ): void {
     this.toAssignableList(params, trailingCommaLoc, false);
@@ -2664,7 +2704,7 @@ export default abstract class ExpressionParser extends LValParser {
   // `allowEmpty` can be turned on to allow subsequent commas with
   // nothing in between them to be parsed as `null` (which is needed
   // for array literals).
-
+  // https://tc39.es/ecma262/#prod-ElementList
   parseExprList(
     this: Parser,
     close: TokenType,
@@ -2689,29 +2729,38 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      elts.push(this.parseExprListItem(allowEmpty, refExpressionErrors));
+      elts.push(this.parseExprListItem(close, allowEmpty, refExpressionErrors));
     }
     return elts;
   }
 
   parseExprListItem(
     this: Parser,
+    close: TokenType,
     allowEmpty?: boolean,
     refExpressionErrors?: ExpressionErrors | null,
     allowPlaceholder?: boolean | null,
   ): N.Expression | null;
   parseExprListItem(
     this: Parser,
+    close: TokenType,
     allowEmpty?: false,
     refExpressionErrors?: ExpressionErrors | null,
     allowPlaceholder?: boolean | null,
   ): N.Expression;
   parseExprListItem(
     this: Parser,
+    close: TokenType,
     allowEmpty?: boolean | null,
     refExpressionErrors?: ExpressionErrors | null,
     allowPlaceholder?: boolean | null,
-  ): N.Expression | N.SpreadElement | N.ArgumentPlaceholder | null {
+  ):
+    | N.Expression
+    | N.SpreadElement
+    | N.ArgumentPlaceholder
+    | N.VoidPattern
+    | N.AssignmentPattern
+    | null {
     let elt;
     if (this.match(tt.comma)) {
       if (!allowEmpty) {
@@ -2736,7 +2785,8 @@ export default abstract class ExpressionParser extends LValParser {
       this.next();
       elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {
-      elt = this.parseMaybeAssignAllowIn(
+      elt = this.parseMaybeAssignAllowInOrVoidPattern(
+        close,
         refExpressionErrors,
         this.parseParenItem,
       );
@@ -3212,6 +3262,48 @@ export default abstract class ExpressionParser extends LValParser {
       revertScopes();
     }
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
+  }
+
+  parseVoidPattern(
+    this: Parser,
+    refExpressionErrors: ExpressionErrors | null,
+  ): N.VoidPattern {
+    this.expectPlugin("discardBinding");
+    const node = this.startNode<N.VoidPattern>();
+    if (refExpressionErrors != null) {
+      refExpressionErrors.voidPatternLoc = this.state.startLoc;
+    }
+    this.next();
+    return this.finishNode(node, "VoidPattern");
+  }
+
+  parseMaybeAssignAllowInOrVoidPattern(
+    this: Parser,
+    close: TokenType,
+    refExpressionErrors: ExpressionErrors | null,
+    afterLeftParse?: Function,
+  ) {
+    if (refExpressionErrors != null && this.match(tt._void)) {
+      const nextCode = this.lookaheadCharCode();
+      if (
+        nextCode === charCodes.comma ||
+        nextCode ===
+          (close === tt.bracketR
+            ? charCodes.rightSquareBracket
+            : close === tt.braceR
+              ? charCodes.rightCurlyBrace
+              : charCodes.rightParenthesis) ||
+        nextCode === charCodes.equalsTo
+      ) {
+        // `void = Initializer` is not allowed, here we parse the production as an assignment pattern
+        // so that we can recover from this error
+        return this.parseMaybeDefault(
+          this.state.startLoc,
+          this.parseVoidPattern(refExpressionErrors),
+        );
+      }
+    }
+    return this.parseMaybeAssignAllowIn(refExpressionErrors, afterLeftParse);
   }
 
   // Used in Flow plugin
