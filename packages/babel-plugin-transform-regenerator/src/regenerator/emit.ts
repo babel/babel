@@ -73,6 +73,7 @@ export class Emitter {
   leapManager: leap.LeapManager;
   scope: Scope;
   vars: t.VariableDeclarator[];
+  awrapNodes: Set<t.Node> | undefined;
 
   pluginPass: PluginPass;
 
@@ -80,11 +81,13 @@ export class Emitter {
     contextId: t.Identifier,
     scope: Scope,
     vars: t.VariableDeclarator[],
+    awrapNodes: Set<t.Node> | undefined,
     pluginPass: PluginPass,
   ) {
     this.pluginPass = pluginPass;
     this.scope = scope;
     this.vars = vars;
+    this.awrapNodes = awrapNodes;
 
     // Used to generate unique temporary names.
     this.nextTempId = 0;
@@ -1075,66 +1078,70 @@ export class Emitter {
 
         let injectFirstArg = null;
 
-        if (t.isMemberExpression(calleePath.node)) {
-          if (hasLeapingArgs) {
-            // If the arguments of the CallExpression contained any yield
-            // expressions, then we need to be sure to evaluate the callee
-            // before evaluating the arguments, but if the callee was a member
-            // expression, then we must be careful that the object of the
-            // member expression still gets bound to `this` for the call.
+        if (this.awrapNodes?.has(path.node)) {
+          newCallee = calleePath.node;
+        } else {
+          if (t.isMemberExpression(calleePath.node)) {
+            if (hasLeapingArgs) {
+              // If the arguments of the CallExpression contained any yield
+              // expressions, then we need to be sure to evaluate the callee
+              // before evaluating the arguments, but if the callee was a member
+              // expression, then we must be careful that the object of the
+              // member expression still gets bound to `this` for the call.
 
-            const newObject = self.explodeViaTempVar(
-              // Assign the exploded callee.object expression to a temporary
-              // variable so that we can use it twice without reevaluating it.
-              self.makeTempVar(),
-              calleePath.get("object") as NodePath<t.Expression>,
+              const newObject = self.explodeViaTempVar(
+                // Assign the exploded callee.object expression to a temporary
+                // variable so that we can use it twice without reevaluating it.
+                self.makeTempVar(),
+                calleePath.get("object") as NodePath<t.Expression>,
+                hasLeapingChildren,
+              );
+
+              const newProperty = calleePath.node.computed
+                ? self.explodeViaTempVar(
+                    null,
+                    calleePath.get("property") as NodePath<t.Expression>,
+                    hasLeapingChildren,
+                  )
+                : calleePath.node.property;
+
+              injectFirstArg = newObject;
+
+              newCallee = t.memberExpression(
+                t.memberExpression(
+                  t.cloneNode(newObject),
+                  newProperty,
+                  calleePath.node.computed,
+                ),
+                t.identifier("call"),
+                false,
+              );
+            } else {
+              newCallee = self.explodeExpression(
+                calleePath as NodePath<t.Expression>,
+              );
+            }
+          } else {
+            newCallee = self.explodeViaTempVar(
+              null,
+              calleePath as NodePath<t.Expression>,
               hasLeapingChildren,
             );
 
-            const newProperty = calleePath.node.computed
-              ? self.explodeViaTempVar(
-                  null,
-                  calleePath.get("property") as NodePath<t.Expression>,
-                  hasLeapingChildren,
-                )
-              : calleePath.node.property;
-
-            injectFirstArg = newObject;
-
-            newCallee = t.memberExpression(
-              t.memberExpression(
-                t.cloneNode(newObject),
-                newProperty,
-                calleePath.node.computed,
-              ),
-              t.identifier("call"),
-              false,
-            );
-          } else {
-            newCallee = self.explodeExpression(
-              calleePath as NodePath<t.Expression>,
-            );
-          }
-        } else {
-          newCallee = self.explodeViaTempVar(
-            null,
-            calleePath as NodePath<t.Expression>,
-            hasLeapingChildren,
-          );
-
-          if (t.isMemberExpression(newCallee)) {
-            // If the callee was not previously a MemberExpression, then the
-            // CallExpression was "unqualified," meaning its `this` object
-            // should be the global object. If the exploded expression has
-            // become a MemberExpression (e.g. a context property, probably a
-            // temporary variable), then we need to force it to be unqualified
-            // by using the (0, object.property)(...) trick; otherwise, it
-            // will receive the object of the MemberExpression as its `this`
-            // object.
-            newCallee = t.sequenceExpression([
-              t.numericLiteral(0),
-              t.cloneNode(newCallee),
-            ]);
+            if (t.isMemberExpression(newCallee)) {
+              // If the callee was not previously a MemberExpression, then the
+              // CallExpression was "unqualified," meaning its `this` object
+              // should be the global object. If the exploded expression has
+              // become a MemberExpression (e.g. a context property, probably a
+              // temporary variable), then we need to force it to be unqualified
+              // by using the (0, object.property)(...) trick; otherwise, it
+              // will receive the object of the MemberExpression as its `this`
+              // object.
+              newCallee = t.sequenceExpression([
+                t.numericLiteral(0),
+                t.cloneNode(newCallee),
+              ]);
+            }
           }
         }
 
