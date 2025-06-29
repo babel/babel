@@ -17,7 +17,7 @@ export type Plugin =
   | "deprecatedImportAssert"
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
-  | "explicitResourceManagement"
+  | IF_BABEL_7<"explicitResourceManagement">
   | "exportDefaultFrom"
   | IF_BABEL_7<"exportNamespaceFrom">
   | "flow"
