@@ -7535,7 +7535,7 @@ __metadata:
     lint-staged: "npm:^15.2.7"
     mergeiterator: "npm:^1.4.4"
     picocolors: "npm:^1.0.0"
-    pkg-pr-new: "npm:^0.0.53"
+    pkg-pr-new: "npm:^0.0.54"
     prettier: "npm:^3.5.2"
     rollup: "npm:^4.18.0"
     rollup-plugin-dts: "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch"
@@ -14779,9 +14779,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg-pr-new@npm:^0.0.53":
-  version: 0.0.53
-  resolution: "pkg-pr-new@npm:0.0.53"
+"pkg-pr-new@npm:^0.0.54":
+  version: 0.0.54
+  resolution: "pkg-pr-new@npm:0.0.54"
   dependencies:
     "@jsdevtools/ez-spawn": "npm:^3.0.4"
     "@octokit/action": "npm:^6.1.0"
@@ -14792,7 +14792,7 @@ __metadata:
     tinyglobby: "npm:^0.2.9"
   bin:
     pkg-pr-new: bin/cli.js
-  checksum: 10/e2e53dce4a26aad59ad0b0fec33607d115423af59086e9c8906f5a170e6027ed0e487cc71b1e74fc9e2bcf26e8dd88cf9073c8eb89fa0cb164c03f02e111d6e8
+  checksum: 10/44457527d036b13589575e70f5241f64dd58f766a8a380dc2c5bf99704fb1f9b0815f3e7ca769d4a3887a6bf79d9dcdafc2a5c2aca3643256ee1fc9c2f2841ac
   languageName: node
   linkType: hard
 

@@ -1,9 +1,6 @@
-name: Release packages for testing
+name: Release for testing
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
 
 permissions:
@@ -30,5 +27,5 @@ jobs:
       - name: Build
         run: make prepublish
       - name: Publish
-        run: yarn pkg-pr-new publish --compact './packages/*'
+        run: yarn pkg-pr-new publish --compact --only-templates --yarn './packages/*'
 
