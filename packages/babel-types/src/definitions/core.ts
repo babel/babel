@@ -1009,7 +1009,19 @@ defineType("RestElement", {
     argument: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("PatternLike")
+          ? assertNodeType(
+              "Identifier",
+              "ArrayPattern",
+              "ObjectPattern",
+              "MemberExpression",
+              "TSAsExpression",
+              "TSSatisfiesExpression",
+              "TSTypeAssertion",
+              "TSNonNullExpression",
+              // These are not valid in RestElement, but we allow them for backwards compatibility.
+              "RestElement",
+              "AssignmentPattern",
+            )
           : assertNodeType(
               "Identifier",
               "ArrayPattern",

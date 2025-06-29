@@ -574,7 +574,19 @@ export function objectProperty(
   validate(defs.decorators, node, "decorators", decorators, 1);
   return node;
 }
-export function restElement(argument: t.PatternLike): t.RestElement {
+export function restElement(
+  argument:
+    | t.Identifier
+    | t.ArrayPattern
+    | t.ObjectPattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSSatisfiesExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression
+    | t.RestElement
+    | t.AssignmentPattern,
+): t.RestElement {
   const node: t.RestElement = {
     type: "RestElement",
     argument,
@@ -3446,7 +3458,19 @@ function RegexLiteral(pattern: string, flags: string = "") {
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
-function RestProperty(argument: t.PatternLike) {
+function RestProperty(
+  argument:
+    | t.Identifier
+    | t.ArrayPattern
+    | t.ObjectPattern
+    | t.MemberExpression
+    | t.TSAsExpression
+    | t.TSSatisfiesExpression
+    | t.TSTypeAssertion
+    | t.TSNonNullExpression
+    | t.RestElement
+    | t.AssignmentPattern,
+) {
   deprecationWarning("RestProperty", "RestElement", "The node type ");
   return restElement(argument);
 }

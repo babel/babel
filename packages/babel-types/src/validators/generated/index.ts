@@ -3173,6 +3173,7 @@ export function isFunctionParameter(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
+    case "VoidPattern":
       break;
     case "Placeholder":
       if (node.expectedNode === "Identifier") break;
