@@ -10,10 +10,10 @@ const fixtures = path.join(
 
 const blockList = new Set([
   // top level using in script
-  "experimental/explicit-resource-management/invalid-script-top-level-using-binding/input.js",
-  "experimental/explicit-resource-management/invalid-script-top-level-labeled-using-binding/input.js",
-  "experimental/async-explicit-resource-management/invalid-script-top-level-using-binding/input.js",
-  "experimental/async-explicit-resource-management/invalid-script-top-level-labeled-using-binding/input.js",
+  "es2026/explicit-resource-management/invalid-script-top-level-using-binding/input.js",
+  "es2026/explicit-resource-management/invalid-script-top-level-labeled-using-binding/input.js",
+  "es2026/async-explicit-resource-management/invalid-script-top-level-using-binding/input.js",
+  "es2026/async-explicit-resource-management/invalid-script-top-level-labeled-using-binding/input.js",
 
   // top level return in script
   "core/uncategorised/454/input.js",
