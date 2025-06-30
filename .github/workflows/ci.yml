@@ -270,7 +270,7 @@ jobs:
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
       - name: Downgrade source map packages for node 6
-        if: matrix.node-version === '6'
+        if: matrix.node-version == '6'
         run: |
           yarn set resolution "@jridgewell/gen-mapping" "npm:0.3.8"
           yarn set resolution "@jridgewell/trace-mapping" "npm:0.3.25"
