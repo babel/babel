@@ -1,3 +1,4 @@
 {
-  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "transform-async-generator-functions"]
+  "plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "transform-async-generator-functions"],
+  "BABEL_8_BREAKING": true
 }

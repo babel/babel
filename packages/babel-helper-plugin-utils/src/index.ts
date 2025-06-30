@@ -69,7 +69,9 @@ export function declare<State = object, Option = object>(
       options || {},
       dirname,
     );
-    (pluginObject as any)[PluginSortSymbol] = sortPlugins;
+    if (process.env.BABEL_8_BREAKING) {
+      (pluginObject as any)[PluginSortSymbol] = sortPlugins;
+    }
     return pluginObject;
   };
 }
