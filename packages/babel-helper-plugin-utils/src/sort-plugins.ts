@@ -4,6 +4,10 @@ const sortedLists = new WeakSet();
 
 const pluginOrders: Record<string, string[]> = {
   "transform-block-scoping": ["transform-block-scoped-functions"],
+  "transform-async-generator-functions": [
+    "transform-async-to-generator",
+    "transform-private-methods",
+  ],
 };
 
 export default function (
