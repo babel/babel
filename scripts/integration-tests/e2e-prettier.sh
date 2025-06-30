@@ -55,6 +55,8 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   rm tests/format/typescript/template-literal-types/format.test.js
   rm tests/format/typescript/method/format.test.js
   rm tests/format/typescript/argument-expansion/format.test.js
+  # https://github.com/babel/babel/pull/17346
+  sed -i 's/"explicitResourceManagement",//g' src/language-js/parse/babel.js
 fi
 
 # https://github.com/babel/babel/pull/17203

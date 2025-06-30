@@ -1,4 +1,10 @@
 {
+  "transform-explicit-resource-management": {
+    "chrome": "134",
+    "edge": "134",
+    "node": "24",
+    "electron": "35.0"
+  },
   "transform-duplicate-named-capturing-groups-regex": {
     "chrome": "126",
     "opera": "112",

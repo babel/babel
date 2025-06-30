@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-explicit-resource-management { ie }
   transform-duplicate-named-capturing-groups-regex { ie }
   transform-regexp-modifiers { ie }
   transform-unicode-sets-regex { ie }

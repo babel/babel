@@ -22,7 +22,7 @@ type Plugin$1 =
   | "deprecatedImportAssert"
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
-  | "explicitResourceManagement"
+  | IF_BABEL_7<"explicitResourceManagement">
   | "exportDefaultFrom"
   | IF_BABEL_7<"exportNamespaceFrom">
   | "flow"
@@ -98,6 +98,7 @@ interface TypeScriptPluginOptions {
 
 type Plugin = PluginConfig;
 
+type SourceType = "script" | "commonjs" | "module" | "unambiguous";
 interface Options {
     /**
      * By default, import and export declarations can only appear at a program's top level.
@@ -153,12 +154,14 @@ interface Options {
     errorRecovery?: boolean;
     /**
      * Indicate the mode the code should be parsed in.
-     * Can be one of "script", "module", or "unambiguous". Defaults to "script".
+     * Can be one of "script", "commonjs", "module", or "unambiguous". Defaults to "script".
      * "unambiguous" will make @babel/parser attempt to guess, based on the presence
      * of ES6 import or export statements.
      * Files with ES6 imports and exports are considered "module" and are otherwise "script".
+     *
+     * Use "commonjs" to parse code that is intended to be run in a CommonJS environment such as Node.js.
      */
-    sourceType?: "script" | "module" | "unambiguous";
+    sourceType?: SourceType;
     /**
      * Correlate output AST nodes with their source filename.
      * Useful when generating code and source maps from the ASTs of multiple input files.

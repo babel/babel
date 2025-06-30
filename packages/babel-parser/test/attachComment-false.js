@@ -9,5 +9,6 @@ runFixtureTests(
     options.attachComment = false;
     return parseExpression(input, options);
   },
+  /* filter */ undefined,
   true,
 );

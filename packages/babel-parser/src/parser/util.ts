@@ -371,15 +371,21 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
       paramFlags |= ParamKind.PARAM_YIELD;
     }
-    if (this.optionFlags & OptionFlags.AllowReturnOutsideFunction) {
+    // The inModule flag ensures that the module block within a CommonJS source
+    // will be treated as an ES module.
+    const isCommonJS = !this.inModule && this.options.sourceType === "commonjs";
+    if (
+      isCommonJS ||
+      this.optionFlags & OptionFlags.AllowReturnOutsideFunction
+    ) {
       paramFlags |= ParamKind.PARAM_RETURN;
     }
-    let scopeFlags = ScopeFlag.PROGRAM;
+    this.prodParam.enter(paramFlags);
+    let scopeFlags = isCommonJS ? ScopeFlag.FUNCTION : ScopeFlag.PROGRAM;
     if (this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction) {
       scopeFlags |= ScopeFlag.NEW_TARGET;
     }
     this.scope.enter(scopeFlags);
-    this.prodParam.enter(paramFlags);
   }
 
   checkDestructuringPrivate(refExpressionErrors: ExpressionErrors) {
