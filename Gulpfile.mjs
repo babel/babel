@@ -397,6 +397,19 @@ function buildRollup(packages, buildStandalone) {
               extensions: [".ts", ".js", ".mjs", ".cjs"],
               ignore: ["packages/babel-runtime/helpers/*.js"],
             }),
+            buildStandalone && {
+              resolveId: {
+                order: "post",
+                // This is needed because @jridgewell's packages always use
+                // the UMD version when trageting browsers, but we need to use
+                // the ESM version so that it can be bundled.
+                handler(importee) {
+                  if (/@jridgewell[\\/].*\.umd\.js$/.test(importee)) {
+                    return importee.slice(0, -".umd.js".length) + ".mjs";
+                  }
+                },
+              },
+            },
             rollupNodeResolve({
               extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
               browser: buildStandalone,
