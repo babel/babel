@@ -331,6 +331,7 @@ function enforceExports({ Yarn }) {
     if (
       [
         "@babel/compat-data",
+        "@babel/helper-globals",
         "@babel/helper-plugin-test-runner", // TODO: Remove in Babel 8
         "@babel/plugin-transform-react-jsx", // TODO: Remove in Babel 8
         "@babel/standalone",
