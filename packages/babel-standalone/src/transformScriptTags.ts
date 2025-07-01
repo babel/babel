@@ -75,14 +75,19 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
     }
   }
 
-  return {
-    filename,
-    presets,
-    plugins: script.plugins || [
+  let plugins = script.plugins;
+  if (!plugins && process.env.BABEL_8_BREAKING) {
+    plugins = [
       "transform-class-properties",
       "transform-object-rest-spread",
       "transform-flow-strip-types",
-    ],
+    ];
+  }
+
+  return {
+    filename,
+    presets,
+    plugins,
     sourceMaps: "inline" as const,
     sourceFileName: filename,
   };
