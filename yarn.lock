@@ -254,7 +254,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
@@ -441,7 +441,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/debug": "npm:^4.1.0"
     "@types/gensync": "condition:BABEL_8_BREAKING ? ^1.0.0 :"
@@ -583,9 +583,9 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.5"
-    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    "@jridgewell/gen-mapping": "npm:^0.3.11"
+    "@jridgewell/sourcemap-codec": "npm:^1.5.3"
+    "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/jsesc": "npm:^2.5.0"
     charcodes: "npm:^0.2.0"
     jsesc: "npm:^3.0.2"
@@ -767,7 +767,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     "@babel/core": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.5"
+    "@jridgewell/gen-mapping": "npm:^0.3.11"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
@@ -1097,7 +1097,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     fs-readdir-recursive: "npm:^1.1.0"
     jest-diff: "npm:^30.0.0"
@@ -5056,6 +5056,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/gen-mapping@npm:^0.3.11":
+  version: 0.3.11
+  resolution: "@jridgewell/gen-mapping@npm:0.3.11"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+    "@jridgewell/trace-mapping": "npm:^0.3.24"
+  checksum: 10/b4d12446d4998d89e6d386151b97fc27333a5959cdc728f8d6b604fd4dcd871b8a4687dc20f3d6d661ed462f9aa914ecd293c2455e284b9d633412ea2226c552
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.3.5":
   version: 0.3.10
   resolution: "@jridgewell/gen-mapping@npm:0.3.10"
@@ -5097,6 +5107,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/sourcemap-codec@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@jridgewell/sourcemap-codec@npm:1.5.3"
+  checksum: 10/1cfa2deeda8c2a1bfcb9bda7016675b540d1f988798f3f3a68643c51e56d057c637c16e2b62b8c72f5b42ffd96d5c3dd7998d6d7c9768f89b9dfaf9acd311e6a
+  languageName: node
+  linkType: hard
+
 "@jridgewell/trace-mapping@npm:0.3.9":
   version: 0.3.9
   resolution: "@jridgewell/trace-mapping@npm:0.3.9"
@@ -5114,6 +5131,16 @@ __metadata:
     "@jridgewell/resolve-uri": "npm:^3.1.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
   checksum: 10/5eb38fe4b395b695fdd9bb751915dd299fcd96740063362573cb0188e69c3de1ff38bb5b6629995c8d65acb9fd2b1bf2e47285a60aea8d6bc354aef5328d6550
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.28":
+  version: 0.3.28
+  resolution: "@jridgewell/trace-mapping@npm:0.3.28"
+  dependencies:
+    "@jridgewell/resolve-uri": "npm:^3.1.0"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.14"
+  checksum: 10/e7f534b9e5218cc7e9cf35f93f6527e7a657218d5ef571a5c752bb4ca22e1f52c2284997d9365abf99b53900215cb71fa1a74fa178e49eb48abead331cd8d553
   languageName: node
   linkType: hard
 
