@@ -269,11 +269,6 @@ jobs:
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
-      - name: Downgrade source map packages for node 6
-        if: matrix.node-version == '6'
-        run: |
-          node -e 'const json = JSON.parse(fs.readFileSync("./package.json", "utf8"));json.resolutions["@jridgewell/gen-mapping@npm:^0.3.5"] = "npm:0.3.8";json.resolutions["@jridgewell/trace-mapping"] = "npm:0.3.25";json.resolutions["@jridgewell/sourcemap-codec"] = "npm:1.5.0";fs.writeFileSync("./package.json", JSON.stringify(json));'
-          yarn dedupe
       - uses: actions/download-artifact@v4
         with:
           name: babel-artifact
