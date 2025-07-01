@@ -21,15 +21,15 @@
   "dependencies": {
     "@babel/parser": "workspace:^",
     "@babel/types": "workspace:^",
-    "@jridgewell/gen-mapping": "^0.3.5",
-    "@jridgewell/trace-mapping": "^0.3.25",
+    "@jridgewell/gen-mapping": "^0.3.11",
+    "@jridgewell/trace-mapping": "^0.3.28",
     "jsesc": "^3.0.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^",
-    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@jridgewell/sourcemap-codec": "^1.5.3",
     "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"
   },
