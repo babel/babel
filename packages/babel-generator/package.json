@@ -21,7 +21,7 @@
   "dependencies": {
     "@babel/parser": "workspace:^",
     "@babel/types": "workspace:^",
-    "@jridgewell/gen-mapping": "^0.3.11",
+    "@jridgewell/gen-mapping": "^0.3.12",
     "@jridgewell/trace-mapping": "^0.3.28",
     "jsesc": "^3.0.2"
   },

@@ -583,7 +583,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.11"
+    "@jridgewell/gen-mapping": "npm:^0.3.12"
     "@jridgewell/sourcemap-codec": "npm:^1.5.3"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/jsesc": "npm:^2.5.0"
@@ -767,7 +767,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     "@babel/core": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.11"
+    "@jridgewell/gen-mapping": "npm:^0.3.12"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
@@ -5056,13 +5056,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/gen-mapping@npm:^0.3.11, @jridgewell/gen-mapping@npm:^0.3.5":
-  version: 0.3.11
-  resolution: "@jridgewell/gen-mapping@npm:0.3.11"
+"@jridgewell/gen-mapping@npm:^0.3.12, @jridgewell/gen-mapping@npm:^0.3.5":
+  version: 0.3.12
+  resolution: "@jridgewell/gen-mapping@npm:0.3.12"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
     "@jridgewell/trace-mapping": "npm:^0.3.24"
-  checksum: 10/b4d12446d4998d89e6d386151b97fc27333a5959cdc728f8d6b604fd4dcd871b8a4687dc20f3d6d661ed462f9aa914ecd293c2455e284b9d633412ea2226c552
+  checksum: 10/151667531566417a940d4dd0a319724979f7a90b9deb9f1617344e1183887d78c835bc1a9209c1ee10fc8a669cdd7ac8120a43a2b6bc8d0d5dd18a173059ff4b
   languageName: node
   linkType: hard
 
