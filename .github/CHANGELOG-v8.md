@@ -16,6 +16,23 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-beta.1 (2025-07-02)
+
+#### :boom: Breaking Change
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-plugin-transform-object-rest-spread`, `babel-traverse`, `babel-types`
+  * [#17391](https://github.com/babel/babel/pull/17391) LVal coverage updates (Part 2) ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-traverse`, `babel-types`
+  * [#17378](https://github.com/babel/babel/pull/17378) Accept bigints in `t.bigIntLiteral` factory ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-object-rest-spread`, `babel-types`
+  * [#17387](https://github.com/babel/babel/pull/17387) [Babel 8]: Fix incorrect LVal coverage ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#17398](https://github.com/babel/babel/pull/17398) fix: `BABEL_TYPES_8_BREAKING` in Babel 8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-types`
+  * [#17361](https://github.com/babel/babel/pull/17361) Set binary operator typings to a more precise union ([@RReverser](https://github.com/RReverser))
 ## v8.0.0-beta.0 (2025-05-30)
 
 #### :boom: Breaking Change
