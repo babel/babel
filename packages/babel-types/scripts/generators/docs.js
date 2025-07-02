@@ -56,7 +56,11 @@ const APIHistory = {
   ModuleDeclaration: [["v7.21.0", "Deprecated"]],
   TSSatisfiesExpression: [["v7.20.0", "Introduced"]],
   TSTypeParameter: [["v7.21.0", "Supports `const`"]],
-  VariableDeclaration: [["v7.20.0", '`kind` can be "using".']],
+  VariableDeclaration: [
+    ["v7.20.0", '`kind` can be "using".'],
+    ["v7.22.0", '`kind` can be "await using".'],
+  ],
+  VoidPattern: [["v7.28.0", "Introduced"]],
 };
 const aliasDescriptions = {
   Accessor: "Deprecated. Will be removed in Babel 8.",
@@ -93,6 +97,8 @@ const aliasDescriptions = {
     "A cover of functions and [method](#method)s, the must have `body` and `params`. Note: `Function` is different to `FunctionParent`. For example, a `StaticBlock` is a `FunctionParent` but not `Function`.",
   FunctionParent:
     "A cover of AST nodes that start an execution context with new [VariableEnvironment](https://tc39.es/ecma262/#table-additional-state-components-for-ecmascript-code-execution-contexts). In other words, they define the scope of `var` declarations. FunctionParent did not include `Program` since Babel 7.",
+  FunctionParameter:
+    "A cover of function parameters. They are the elements of [FormalParameterList](https://tc39.es/ecma262/#prod-FormalParameterList).",
   Immutable:
     "A cover of immutable objects and JSX elements. An object is [immutable](https://tc39.es/ecma262/#immutable-prototype-exotic-object) if no other properties can be defined once created.",
   ImportOrExportDeclaration:
