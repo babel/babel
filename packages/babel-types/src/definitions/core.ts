@@ -1663,7 +1663,7 @@ defineType("ClassDeclaration", {
 
 export const importAttributes = {
   attributes: {
-    optional: true,
+    default: [] as [],
     validate: arrayOfType("ImportAttribute"),
   },
 };
@@ -1677,7 +1677,7 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 
 defineType("ExportAllDeclaration", {
-  builder: ["source"],
+  builder: ["source", "attributes"],
   visitor: ["source", "attributes", "assertions"],
   aliases: [
     "Statement",
@@ -1714,7 +1714,7 @@ defineType("ExportDefaultDeclaration", {
 });
 
 defineType("ExportNamedDeclaration", {
-  builder: ["declaration", "specifiers", "source"],
+  builder: ["declaration", "specifiers", "source", "attributes"],
   visitor: process.env.BABEL_8_BREAKING
     ? ["declaration", "specifiers", "source", "attributes"]
     : ["declaration", "specifiers", "source", "attributes", "assertions"],
@@ -1886,7 +1886,7 @@ defineType("ForOfStatement", {
 });
 
 defineType("ImportDeclaration", {
-  builder: ["specifiers", "source"],
+  builder: ["specifiers", "source", "attributes"],
   visitor: process.env.BABEL_8_BREAKING
     ? ["specifiers", "source", "attributes"]
     : ["specifiers", "source", "attributes", "assertions"],
