@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-discard-binding",
-  "version": "7.26.0",
+  "version": "7.28.0",
   "description": "Transform discard binding proposal",
   "repository": {
     "type": "git",
