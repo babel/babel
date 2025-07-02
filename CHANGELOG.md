@@ -24,6 +24,37 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.0 (2025-07-02)
+
+#### :rocket: New Feature
+* `babel-node`
+  * [#17147](https://github.com/babel/babel/pull/17147) Support top level await in node repl ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#17258](https://github.com/babel/babel/pull/17258) feat(matchesPattern): support super/private/meta ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-preset-env`
+  * [#17355](https://github.com/babel/babel/pull/17355) Add explicit resource management to preset-env ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-parser`
+  * [#17390](https://github.com/babel/babel/pull/17390) Support `sourceType: "commonjs"` ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`
+  * [#17346](https://github.com/babel/babel/pull/17346) Materialize `explicitResourceManagement` parser plugin ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-plugin-transform-object-rest-spread`, `babel-traverse`, `babel-types`
+  * [#17391](https://github.com/babel/babel/pull/17391) LVal coverage updates (Part 2) ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-traverse`, `babel-types`
+  * [#17378](https://github.com/babel/babel/pull/17378) Accept bigints in `t.bigIntLiteral` factory ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-discard-binding`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-explicit-resource-management`, `babel-plugin-transform-react-display-name`, `babel-types`
+  * [#17277](https://github.com/babel/babel/pull/17277) Transform discard binding ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#17163](https://github.com/babel/babel/pull/17163) Parse discard binding ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-helper-globals`, `babel-plugin-transform-classes`, `babel-traverse`
+  * [#17297](https://github.com/babel/babel/pull/17297) Create babel-helper-globals ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#17009](https://github.com/babel/babel/pull/17009) feature: TSTypeOperator: keyof (#16799) ([@coderaiser](https://github.com/coderaiser))
+
+#### :house: Internal
+* `babel-compat-data`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-json-modules`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17403](https://github.com/babel/babel/pull/17403) Update `babel-polyfill` packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.27.7 (2025-06-26)
 
 #### :eyeglasses: Spec Compliance
