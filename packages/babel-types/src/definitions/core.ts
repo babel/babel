@@ -1523,7 +1523,7 @@ defineType("ExportDefaultDeclaration", {
 });
 
 defineType("ExportNamedDeclaration", {
-  builder: ["declaration", "specifiers", "source"],
+  builder: ["declaration", "specifiers", "source", "attributes"],
   visitor: ["declaration", "specifiers", "source", "attributes"],
   aliases: [
     "Statement",
@@ -1675,7 +1675,7 @@ defineType("ForOfStatement", {
 });
 
 defineType("ImportDeclaration", {
-  builder: ["specifiers", "source"],
+  builder: ["specifiers", "source", "attributes"],
   visitor: ["specifiers", "source", "attributes"],
   aliases: ["Statement", "Declaration", "ImportOrExportDeclaration"],
   fields: {
