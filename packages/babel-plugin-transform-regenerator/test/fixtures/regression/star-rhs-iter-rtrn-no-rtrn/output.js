@@ -55,7 +55,7 @@ badIter[Symbol.iterator] = function () {
 function g() {
   var _t;
   return babelHelpers.regenerator().w(function (_context) {
-    while (1) switch (_context.n) {
+    while (1) switch (_context.p = _context.n) {
       case 0:
         _context.p = 0;
         return _context.d(babelHelpers.regeneratorValues(badIter), 1);
