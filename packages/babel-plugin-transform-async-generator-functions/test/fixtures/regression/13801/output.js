@@ -15,7 +15,7 @@ function main() {
         () => {
           var _iteratorAbruptCompletion, _didIteratorError, _iteratorError, _iterator, _step, string, _t;
           return _regeneratorAsync(function (_context) {
-            while (1) switch (_context.n) {
+            while (1) switch (_context.p = _context.n) {
               case 0:
                 // IIFE: required for babel to crash
                 _iteratorAbruptCompletion = false;

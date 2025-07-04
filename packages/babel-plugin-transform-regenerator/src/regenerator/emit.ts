@@ -378,7 +378,13 @@ export class Emitter {
       t.switchStatement(
         process.env.BABEL_8_BREAKING ||
           util.newHelpersAvailable(this.pluginPass)
-          ? this.contextProperty("n")
+          ? this.tryEntries.length === 0
+            ? this.contextProperty("n")
+            : t.assignmentExpression(
+                "=",
+                this.contextProperty("p"),
+                this.contextProperty("n"),
+              )
           : t.assignmentExpression(
               "=",
               this.contextProperty("prev"),
