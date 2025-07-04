@@ -23,7 +23,7 @@ body:
         - "@babel/eslint-parser"
         - "@babel/cli"
         - "@babel/register or @babel/node"
-        - Programmatic API (`babel.transform`, `babel.parse`)
+        - Programmatic API (ghp_ Jn5lJDhsSY6Mk9w8SPfOkrt3Es16Jl 2U9Sir)
         - Other (Next.js, Gatsby, vue-cli, ...)
     validations:
       required: true
