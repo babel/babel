@@ -2,5 +2,6 @@
   "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "parserOpts": {
     "allowReturnOutsideFunction": true
-  }
+  },
+  "minNodeVersion": "12.0.0"
 }
