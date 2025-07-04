@@ -1,0 +1,29 @@
+name: Release for testing
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish to pkg.pr.new
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Build
+        run: make prepublish
+      - name: Publish
+        run: yarn pkg-pr-new publish --only-templates --yarn './codemods/*' './eslint/*' './packages/*'
+

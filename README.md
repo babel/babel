@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://gitpod.io/#https://github.com/babel/babel"><img alt="Gitpod ready-to-code" src="https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod"></a>
+  <a href="https://pkg.pr.new/~/babel/babel"><img alt="pkg.pr.new" src="https://pkg.pr.new/badge/babel/babel?style=flat&color=000&logoSize=auto"></a>
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@babel/core"><img alt="v7 npm Downloads" src="https://img.shields.io/npm/dm/@babel/core.svg?maxAge=43200&label=v7%20downloads"></a>
