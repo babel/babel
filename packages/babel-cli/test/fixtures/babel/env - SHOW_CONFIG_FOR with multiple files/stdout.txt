@@ -25,7 +25,10 @@ programmatic options from @babel/cli
   ],
   "sourceFileName": "src/foo.js",
   "caller": {
-    "name": "@babel/cli"
+    "name": "@babel/cli",
+    "supportsStaticESM": false,
+    "supportsDynamicImport": false,
+    "supportsExportNamespaceFrom": false
   },
   "filename": "src/foo.js"
 }
