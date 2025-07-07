@@ -97,12 +97,10 @@ export function NewExpression(
   if (!process.env.BABEL_8_BREAKING) {
     // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // Legacy TS AST
-  }
-
-  // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-  if (node.optional) {
-    // TODO: This can never happen
-    this.token("?.");
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+    if (node.optional) {
+      this.token("?.");
+    }
   }
 
   if (
