@@ -98,6 +98,9 @@ export function hasDataSourcemap(code: string): boolean {
 
 const CALLER = {
   name: "@babel/cli",
+  supportsStaticESM: false,
+  supportsDynamicImport: false,
+  supportsExportNamespaceFrom: false,
 };
 
 export function transformRepl(filename: string, code: string, opts: any) {
