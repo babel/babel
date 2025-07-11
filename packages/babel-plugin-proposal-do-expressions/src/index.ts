@@ -453,7 +453,7 @@ export default declare(api => {
     }
 
     function flattenLVal(
-      path: NodePath<t.LVal | t.PatternLike>,
+      path: NodePath<t.LVal | t.PatternLike | t.OptionalMemberExpression>,
       init: t.Expression | null | undefined,
       declare: "var" | "let" | "const" | "using" | "await using" | null,
     ): t.Statement[] {
