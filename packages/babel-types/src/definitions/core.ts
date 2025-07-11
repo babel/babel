@@ -72,7 +72,7 @@ defineType("AssignmentExpression", {
     left: {
       validate:
         !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-          ? assertNodeType("LVal")
+          ? assertNodeType("LVal", "OptionalMemberExpression")
           : assertNodeType(
               "Identifier",
               "MemberExpression",
@@ -336,6 +336,7 @@ defineType("ForInStatement", {
               "TSSatisfiesExpression",
               "TSTypeAssertion",
               "TSNonNullExpression",
+              "OptionalMemberExpression",
             ),
     },
     right: {
@@ -2213,7 +2214,8 @@ defineType("ExportNamespaceSpecifier", {
 defineType("OptionalMemberExpression", {
   builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
-  aliases: ["Expression", "LVal"],
+  // todo: Add OptionalMemberExpression to LVal when optional-chaining-assign reaches stage 4
+  aliases: ["Expression"],
   fields: {
     object: {
       validate: assertNodeType("Expression"),
