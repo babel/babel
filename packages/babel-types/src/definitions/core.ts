@@ -336,7 +336,6 @@ defineType("ForInStatement", {
               "TSSatisfiesExpression",
               "TSTypeAssertion",
               "TSNonNullExpression",
-              "OptionalMemberExpression",
             ),
     },
     right: {
