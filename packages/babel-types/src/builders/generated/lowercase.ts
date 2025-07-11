@@ -39,7 +39,7 @@ export function arrayExpression(
 }
 export function assignmentExpression(
   operator: string,
-  left: t.LVal,
+  left: t.LVal | t.OptionalMemberExpression,
   right: t.Expression,
 ): t.AssignmentExpression {
   const node: t.AssignmentExpression = {
