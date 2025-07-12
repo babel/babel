@@ -5,7 +5,7 @@ import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
-import type { PluginPass, Visitor } from "@babel/core";
+import type { PluginPass, Visitor, types as t } from "@babel/core";
 
 export const getVisitor = (t: any): Visitor<PluginPass> => ({
   Method(path: any, state: any) {
@@ -49,9 +49,12 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
       path.ensureBlock();
       const bodyBlockPath = path.get("body");
 
+      let awrapNodes: Set<t.Node> | undefined;
+
       if (node.async) {
+        awrapNodes = new Set();
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        bodyBlockPath.traverse(awaitVisitor, this);
+        bodyBlockPath.traverse(awaitVisitor, { pluginPass: this, awrapNodes });
       }
 
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -69,7 +72,7 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
           t.isExpressionStatement(node) &&
           t.isStringLiteral(node.expression)
         ) {
-          // Babylon represents directives like "use strict" as elements
+          // @babel/parser represents directives like "use strict" as elements
           // of a bodyBlockPath.node.directives array, but they could just
           // as easily be represented (by other parsers) as traditional
           // string-literal-valued expression statements, so we need to
@@ -112,7 +115,13 @@ export const getVisitor = (t: any): Visitor<PluginPass> => ({
         );
       }
 
-      const emitter = new Emitter(contextId, path.scope, vars, this);
+      const emitter = new Emitter(
+        contextId,
+        path.scope,
+        vars,
+        awrapNodes,
+        this,
+      );
       emitter.explode(path.get("body"));
 
       if (vars.length > 0) {
@@ -368,12 +377,15 @@ const functionSentVisitor = {
   },
 };
 
-const awaitVisitor: Visitor<PluginPass> = {
-  Function: function (path: any) {
+const awaitVisitor: Visitor<{
+  pluginPass: PluginPass;
+  awrapNodes: Set<t.Node>;
+}> = {
+  Function: function (path) {
     path.skip(); // Don't descend into nested function scopes.
   },
 
-  AwaitExpression: function (path: any) {
+  AwaitExpression: function (path, { pluginPass, awrapNodes }) {
     const t = util.getTypes();
 
     // Convert await expressions to yield expressions.
@@ -385,16 +397,16 @@ const awaitVisitor: Visitor<PluginPass> = {
       // `regeneratorRuntime().awrap`. There is no direct way to test if we
       // have that part of the helper available, but we know that it has been
       // introduced in the same version as `regeneratorKeys`.
-      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
-        ? this.addHelper("awaitAsyncGenerator")
-        : util.runtimeProperty(this, "awrap");
+      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(pluginPass)
+        ? pluginPass.addHelper("awaitAsyncGenerator")
+        : util.runtimeProperty(pluginPass, "awrap");
 
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
     // causes the argument to be wrapped in such a way that the runtime
     // can distinguish between awaited and merely yielded values.
-    util.replaceWithOrRemove(
-      path,
-      t.yieldExpression(t.callExpression(helper, [argument]), false),
-    );
+    const awrap = t.callExpression(helper, [argument]);
+    util.replaceWithOrRemove(path, t.yieldExpression(awrap, false));
+
+    awrapNodes.add(awrap);
   },
 };
