@@ -3230,7 +3230,6 @@ export function isLVal(
     case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
-    case "OptionalMemberExpression":
     case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":

@@ -161,6 +161,7 @@ type StackItem = {
     | t.PatternLike
     | t.ObjectProperty
     | t.TSParameterProperty
+    | t.OptionalMemberExpression
     | null;
   index: number;
   depth: number;
@@ -179,9 +180,18 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal | t.PatternLike | t.TSParameterProperty,
+  root:
+    | t.LVal
+    | t.PatternLike
+    | t.TSParameterProperty
+    | t.OptionalMemberExpression,
   visitor: (
-    node: t.LVal | t.PatternLike | t.TSParameterProperty | t.ObjectProperty,
+    node:
+      | t.LVal
+      | t.PatternLike
+      | t.TSParameterProperty
+      | t.ObjectProperty
+      | t.OptionalMemberExpression,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -231,7 +241,9 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.LVal | t.PatternLike) {
+export function hasPrivateKeys(
+  pattern: t.LVal | t.PatternLike | t.OptionalMemberExpression,
+) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
