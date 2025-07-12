@@ -24,6 +24,19 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.1 (2025-07-12)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`
+  * [#17426](https://github.com/babel/babel/pull/17426) fix: `regenerator` correctly handles `throw` outside of `try` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :memo: Documentation
+* `babel-types`
+  * [#17422](https://github.com/babel/babel/pull/17422) Add missing FunctionParameter docs ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-types`
+  * [#17432](https://github.com/babel/babel/pull/17432) Do not mark OptionalMemberExpresion as LVal ([@JLHwung](https://github.com/JLHwung))
 ## v7.28.0 (2025-07-02)
 
 #### :rocket: New Feature
