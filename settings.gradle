@@ -1,0 +1,10 @@
+	dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+  }
+dependencies {
+	        implementation 'com.github.Dev-Re2906:babel:snyk-fix-469f76becc8c87a26611cd37b1efe408-SNAPSHOT'
+}
