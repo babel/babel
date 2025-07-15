@@ -485,8 +485,8 @@ jobs:
       - name: Run TypeScript Tests
         run: make test-typescript
 
-  runtime-interop:
-    name: Test @babel/runtime integrations
+  runtime-interop-prepare:
+    name: Prepare runtime integration tests
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -531,101 +531,51 @@ jobs:
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 10
+
+  runtime-interop:
+    name: Test @babel/runtime integrations on Node.js
+    needs: [build, runtime-interop-prepare]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [10, "12.0", 12.12, 12.13, 12.15, 12.16, "13.0", 13.2, 13.6, 13.7, 14.2, 16.5, 16.6, 22.11, 22.12, "23.10"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 10
-      - name: Test Node.js 10
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.0
-        uses: actions/setup-node@v4
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+      # See https://github.com/babel/babel/pull/12906
+      - name: Support self-references on old Node.js
+        run: |
+          echo '{
+            "type": "commonjs",
+            "private": true,
+            "devDependencies": {
+              "@babel/runtime": "workspace:^",
+              "@babel/runtime-corejs3": "workspace:^"
+            }
+          }' > packages/package.json
+          node -e "
+            const pkg = require('./package.json');
+            pkg.workspaces.push('packages');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
+          "
+      - name: Install
+        run: yarn install
+        env:
+          # The "Support self-references on old Node.js" step mutates the
+          # package.json file, causing a yarn.lock update.
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+      - uses: actions/download-artifact@v4
         with:
-          node-version: "12.0" # quoted, otherwise it's just 12
-      - name: Test Node.js 12.0
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.12
-        uses: actions/setup-node@v4
-        with:
-          node-version: 12.12
-      - name: Test Node.js 12.12
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.13
-        uses: actions/setup-node@v4
-        with:
-          node-version: 12.13
-      - name: Test Node.js 12.13
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.15
-        uses: actions/setup-node@v4
-        with:
-          node-version: 12.15
-      - name: Test Node.js 12.15
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.16
-        uses: actions/setup-node@v4
-        with:
-          node-version: 12.16
-      - name: Test Node.js 12.16
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.0
-        uses: actions/setup-node@v4
-        with:
-          node-version: "13.0" # quoted, otherwise it's just 13
-      - name: Test Node.js 13.0
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.2
-        uses: actions/setup-node@v4
-        with:
-          node-version: 13.2
-      - name: Test Node.js 13.2
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.6
-        uses: actions/setup-node@v4
-        with:
-          node-version: 13.6
-      - name: Test Node.js 13.6
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.7
-        uses: actions/setup-node@v4
-        with:
-          node-version: 13.7
-      - name: Test Node.js 13.7
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 14.2
-        uses: actions/setup-node@v4
-        with:
-          node-version: 14.2
-      - name: Test Node.js 14.2
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 16.5
-        uses: actions/setup-node@v4
-        with:
-          node-version: 16.5
-      - name: Test Node.js 16.5
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 16.6
-        uses: actions/setup-node@v4
-        with:
-          node-version: 16.6
-      - name: Test Node.js 16.6
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 22.11
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.11
-      - name: Test Node.js 22.11
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 22.12
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.12
-      - name: Test Node.js 22.12
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 23.10
-        uses: actions/setup-node@v4
-        with:
-          node-version: "23.10"
-      - name: Test Node.js 23.10
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Test Node.js ${{ matrix.node-version }}
         run: node test/runtime-integration/node.cjs
 
   eslint7-test:
