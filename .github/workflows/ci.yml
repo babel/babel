@@ -525,6 +525,8 @@ jobs:
           name: babel-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Generate absoluteRuntime tests
+        run: yarn test:runtime:generate-absolute-runtime
       - name: Test bundlers
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
