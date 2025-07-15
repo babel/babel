@@ -543,10 +543,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
       - name: Support self-references on old Node.js
@@ -575,6 +576,10 @@ jobs:
           name: babel-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Test Node.js ${{ matrix.node-version }}
         run: node test/runtime-integration/node.cjs
 
