@@ -25,12 +25,12 @@ export default function regeneratorDefine(
     value?: unknown,
     noFlags?: true,
   ) {
+    function defineIteratorMethod(method: string, i: number) {
+      regeneratorDefine(obj, method, function (this: any, arg: any) {
+        return this._invoke(method, i, arg);
+      });
+    }
     if (!key) {
-      function defineIteratorMethod(method: string, i: number) {
-        regeneratorDefine(obj, method, function (this: any, arg: any) {
-          return this._invoke(method, i, arg);
-        });
-      }
       defineIteratorMethod("next", 0);
       defineIteratorMethod("throw", 1);
       defineIteratorMethod("return", 2);
