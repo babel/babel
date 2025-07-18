@@ -229,7 +229,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
             // tmp variable to preserve the class as the result value, because
             // the call will already return the class itself.
             classBody.parentPath.replaceExpressionWithStatements([
-              classBody.parent,
+              classBody.parent as t.Node,
               call,
             ]);
           } else {
