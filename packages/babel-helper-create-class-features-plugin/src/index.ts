@@ -11,7 +11,10 @@ import {
   buildCheckInRHS,
 } from "./fields.ts";
 import type { PropPath } from "./fields.ts";
-import createDecoratorTransform, { hasDecorators } from "./decorators.ts";
+import createDecoratorTransform, {
+  hasDecorators,
+  buildNamedEvaluationVisitor,
+} from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
 import { buildDecoratedClass } from "./decorators-2018-09.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import { injectInitialization, extractComputedKeys } from "./misc.ts";
@@ -23,7 +26,13 @@ import {
 } from "./features.ts";
 import { assertFieldTransformed } from "./typescript.ts";
 
-export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
+export {
+  FEATURES,
+  enableFeature,
+  injectInitialization,
+  buildCheckInRHS,
+  buildNamedEvaluationVisitor,
+};
 
 const versionKey = "@babel/plugin-class-features/version";
 

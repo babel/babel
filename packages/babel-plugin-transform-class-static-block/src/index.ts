@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import type { NodePath, Scope, types as t } from "@babel/core";
 
 import {
+  buildNamedEvaluationVisitor,
   enableFeature,
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
@@ -30,8 +31,42 @@ function mapLast<T>(arr: T[], fn: (value: T) => T): T[] {
   return [...arr.slice(0, -1), fn(arr[arr.length - 1])];
 }
 
-export default declare(({ types: t, template, assertVersion }) => {
+export default declare(({ types: t, template, traverse, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.12.0"));
+
+  const namedEvaluationVisitor = traverse.visitors.explode(
+    buildNamedEvaluationVisitor(
+      (path: NodePath) => {
+        if (!path.isClassExpression()) return false;
+        for (let i = path.node.body.body.length - 1; i >= 0; i--) {
+          const el = path.node.body.body[i];
+          if (t.isStaticBlock(el)) {
+            return true;
+          }
+          if (
+            (t.isClassProperty(el) || t.isClassPrivateProperty(el)) &&
+            el.static
+          ) {
+            break;
+          }
+        }
+        return false;
+      },
+      (classPath: NodePath<t.ClassExpression>, state, name) => {
+        const nameNode =
+          typeof name === "string" ? t.stringLiteral(name) : name;
+
+        classPath.get("body").unshiftContainer(
+          "body",
+          t.staticBlock([
+            template.statement.ast`
+            ${state.addHelper("setFunctionName")}(this, ${nameNode});
+          `,
+          ]),
+        );
+      },
+    ),
+  );
 
   const maybeSequenceExpression = (
     expressions: t.Expression[],
@@ -89,11 +124,20 @@ export default declare(({ types: t, template, assertVersion }) => {
       // private fields representation.
       ClassBody(classBody) {
         const { scope } = classBody;
-        const privateNames = new Set<string>();
-        const body = classBody.get("body");
-        for (const path of body) {
-          if (path.isPrivate()) {
-            privateNames.add(path.get("key.id").node.name);
+
+        // If needed, add the name to the class
+        let parentPath: NodePath<t.Node> = classBody.parentPath;
+        if (parentPath.isClassExpression() && !parentPath.node.id) {
+          do ({ parentPath } = parentPath);
+          while (
+            parentPath &&
+            !namedEvaluationVisitor[parentPath.type] &&
+            !parentPath.isStatement()
+          );
+          if (parentPath) {
+            namedEvaluationVisitor[parentPath.type]?.enter.forEach(f =>
+              f.call(this, parentPath, this),
+            );
           }
         }
 
@@ -103,7 +147,7 @@ export default declare(({ types: t, template, assertVersion }) => {
           | NodePath<t.ClassProperty>
           | NodePath<t.ClassPrivateProperty> = null;
 
-        for (const path of body) {
+        for (const path of classBody.get("body")) {
           if (path.isStaticBlock()) {
             pendingStaticBlocks.push(path.node);
             path.remove();
@@ -163,7 +207,7 @@ export default declare(({ types: t, template, assertVersion }) => {
             // non-extensible.
 
             const privateNames = new Set<string>();
-            for (const path of body) {
+            for (const path of classBody.get("body")) {
               if (path.isPrivate()) {
                 privateNames.add(path.get("key.id").node.name);
               }
