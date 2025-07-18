@@ -25,6 +25,11 @@ function generateUid(scope: Scope, denyList: Set<string>) {
   return uid;
 }
 
+function mapLast<T>(arr: T[], fn: (value: T) => T): T[] {
+  if (arr.length === 0) return arr;
+  return [...arr.slice(0, -1), fn(arr[arr.length - 1])];
+}
+
 export default declare(({ types: t, template, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.12.0"));
 
@@ -61,7 +66,9 @@ export default declare(({ types: t, template, assertVersion }) => {
   ) => {
     prop.value = prop.value
       ? t.sequenceExpression([...expressions, prop.value])
-      : t.unaryExpression("void", maybeSequenceExpression(expressions));
+      : maybeSequenceExpression(
+          mapLast(expressions, expr => t.unaryExpression("void", expr)),
+        );
   };
 
   return {
