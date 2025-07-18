@@ -100,18 +100,19 @@
   _classDecs2 = [capture(() => _K2), assertUninitialized(() => _K2)];
   let _K2, _t_K2;
   {
-    var _staticBlock3, _temp;
+    var _staticBlock3;
     let _K2;
     new class extends babelHelpers.identity {
-      static [(_temp = class K {
+      static [(class K {
         static [(_computedKeyDecs3 = capture(() => _K2), _computedKey3 = babelHelpers.toPropertyKey(capture(() => _K2)), "_")] = void (_staticBlock3 = () => {
           delete this._;
           ({
             e: [_init_computedKey3, _init_extra_computedKey3],
             c: [_K2, _initClass2]
           } = babelHelpers.applyDecs2311(this, _classDecs2, [[_computedKeyDecs3, 8, _computedKey3]]));
+          return this;
         });
-      }, _staticBlock3(), _temp)];
+      }, _staticBlock3())];
       //todo: add the assertUninitialized decorator when we properly implement class tdz
       [_computedKey3] = _init_computedKey3();
       constructor() {

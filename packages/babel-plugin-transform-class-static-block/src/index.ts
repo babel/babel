@@ -134,17 +134,25 @@ export default declare(({ types: t, template, assertVersion }) => {
           // static blocks bodies.
 
           const tmp = scope.generateDeclaredUidIdentifier("staticBlock");
-          const init = template.expression.ast`${tmp} = () =>
-            ${
-              pendingStaticBlocks.length > 1 ||
-              (pendingStaticBlocks[0].body.length === 1 &&
-                t.isExpressionStatement(pendingStaticBlocks[0].body[0]))
-                ? maybeSequenceExpression(
-                    blocksToExpressions(pendingStaticBlocks),
-                  )
-                : t.blockStatement(pendingStaticBlocks[0].body)
+          let arrowBody;
+          const needsCompletionValue = classBody.parentPath.isExpression();
+          if (
+            pendingStaticBlocks.length > 1 ||
+            (pendingStaticBlocks[0].body.length === 1 &&
+              t.isExpressionStatement(pendingStaticBlocks[0].body[0]))
+          ) {
+            const expressions = blocksToExpressions(pendingStaticBlocks);
+            if (needsCompletionValue) {
+              expressions.push(t.thisExpression());
             }
-          `;
+            arrowBody = maybeSequenceExpression(expressions);
+          } else {
+            arrowBody = t.blockStatement(pendingStaticBlocks[0].body);
+            if (needsCompletionValue) {
+              arrowBody.body.push(t.returnStatement(t.thisExpression()));
+            }
+          }
+          const init = template.expression.ast`${tmp} = () => ${arrowBody}`;
 
           if (lastStaticProp) {
             prependToInitializer(lastStaticProp.node, [init]);
@@ -169,9 +177,10 @@ export default declare(({ types: t, template, assertVersion }) => {
             ]);
           }
 
-          classBody.parentPath.insertAfter(
+          classBody.parentPath.replaceWithMultiple([
+            classBody.parent,
             t.expressionStatement(t.callExpression(t.cloneNode(tmp), [])),
-          );
+          ]);
         }
       },
     },
