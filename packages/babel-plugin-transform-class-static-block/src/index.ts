@@ -221,10 +221,20 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
             ]);
           }
 
-          classBody.parentPath.replaceWithMultiple([
-            classBody.parent,
-            t.expressionStatement(t.callExpression(t.cloneNode(tmp), [])),
-          ]);
+          const call = t.expressionStatement(
+            t.callExpression(t.cloneNode(tmp), []),
+          );
+          if (classBody.parentPath.isClassExpression()) {
+            // We don't use .insertAfter() because we don't need to insert the
+            // tmp variable to preserve the class as the result value, because
+            // the call will already return the class itself.
+            classBody.parentPath.replaceExpressionWithStatements([
+              classBody.parent,
+              call,
+            ]);
+          } else {
+            classBody.parentPath.insertAfter(call);
+          }
         }
       },
     },
