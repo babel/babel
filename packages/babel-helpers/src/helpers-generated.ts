@@ -1169,16 +1169,16 @@ const helpers: Record<string, Helper> = {
       internal: true,
     },
   ),
-  // size: 356, gzip size: 227
+  // size: 349, gzip size: 222
   regeneratorDefine: helper(
     "7.27.0",
-    'function regeneratorDefine(e,r,n,t){var i=Object.defineProperty;try{i({},"",{})}catch(e){i=0}regeneratorDefine=function(e,r,n,t){if(r)i?i(e,r,{value:n,enumerable:!t,configurable:!t,writable:!t}):e[r]=n;else{function o(r,n){regeneratorDefine(e,r,(function(e){return this._invoke(r,n,e)}))}o("next",0),o("throw",1),o("return",2)}},regeneratorDefine(e,r,n,t)}',
+    'function regeneratorDefine(e,r,n,t){var i=Object.defineProperty;try{i({},"",{})}catch(e){i=0}regeneratorDefine=function(e,r,n,t){function o(r,n){regeneratorDefine(e,r,(function(e){return this._invoke(r,n,e)}))}r?i?i(e,r,{value:n,enumerable:!t,configurable:!t,writable:!t}):e[r]=n:(o("next",0),o("throw",1),o("return",2))},regeneratorDefine(e,r,n,t)}',
     {
       globals: ["Object"],
       locals: {
         regeneratorDefine: [
           "body.0.id",
-          "body.0.body.body.2.expression.expressions.0.right.body.body.0.alternate.body.0.body.body.0.expression.callee",
+          "body.0.body.body.2.expression.expressions.0.right.body.body.0.body.body.0.expression.callee",
           "body.0.body.body.2.expression.expressions.1.callee",
           "body.0.body.body.2.expression.expressions.0.left",
         ],
