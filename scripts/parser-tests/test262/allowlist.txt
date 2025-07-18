@@ -3,8 +3,15 @@
 
 
 
-# 4 valid programs produced a parsing error
+# 11 valid programs produced a parsing error
 
+annexB/language/expressions/assignmenttargettype/callexpression-as-for-in-lhs.js(default)
+annexB/language/expressions/assignmenttargettype/callexpression-as-for-of-lhs.js(default)
+annexB/language/expressions/assignmenttargettype/callexpression-in-compound-assignment.js(default)
+annexB/language/expressions/assignmenttargettype/callexpression-in-postfix-update.js(default)
+annexB/language/expressions/assignmenttargettype/callexpression-in-prefix-update.js(default)
+annexB/language/expressions/assignmenttargettype/callexpression.js(default)
+annexB/language/expressions/assignmenttargettype/cover-callexpression-and-asyncarrowhead.js(default)
 staging/explicit-resource-management/await-using-in-switch-case-block.js(default)
 staging/explicit-resource-management/await-using-in-switch-case-block.js(strict mode)
 staging/explicit-resource-management/call-dispose-methods.js(default)
