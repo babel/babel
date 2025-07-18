@@ -1,8 +1,9 @@
 class Base {
   constructor() {
-    this.Foo = class {
-      static #_ = this.foo = new.target;
-    };
+    var _staticBlock, _temp;
+    this.Foo = (_temp = class {
+      static #_ = _staticBlock = () => this.foo = new.target;
+    }, _staticBlock(), _temp);
   }
 }
 expect(new Base().Foo.foo).toBe(undefined);
