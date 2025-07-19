@@ -203,6 +203,10 @@ export type CallerMetadata = {
   // If 'caller' is specified, require that the name is given for debugging
   // messages.
   name: string;
+  supportsStaticESM?: boolean;
+  supportsDynamicImport?: boolean;
+  supportsTopLevelAwait?: boolean;
+  supportsExportNamespaceFrom?: boolean;
 };
 export type EnvSet<T> = {
   [x: string]: T;
