@@ -1,6 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath } from "@babel/core";
-import { wrapDoExpressionInIIFE } from "./utils.ts";
+import {
+  wrapDoExpressionInIIFE,
+  collectControlFlowStatements,
+} from "./utils.ts";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
@@ -15,16 +18,39 @@ export default declare(api => {
       DoExpression: {
         exit(path) {
           if (path.node.async) {
-            // Async do expressions are not yet supported
+            // Async do expressions are handled by proposal-async-do-expressions
             return;
           }
-          transformDoExpression(path);
+          const controlFlowState = collectControlFlowStatements(path);
+          if (
+            controlFlowState.returnPath ||
+            controlFlowState.break.size ||
+            controlFlowState.continue.size
+          ) {
+            transformDoExpressionWithControlFlowStatements(path);
+          } else {
+            const body = path.node.body.body;
+            if (body.length) {
+              path.replaceExpressionWithStatements(body);
+            } else {
+              path.replaceWith(path.scope.buildUndefinedNode());
+            }
+          }
         },
       },
     },
   };
 
-  function transformDoExpression(doExprPath: NodePath<t.DoExpression>) {
+  /**
+   * Transforms a do expression with control flow statements, e.g. break, continue, return.
+   * To support these statements, we memoize top level expressions in the do block and then
+   * unwrap the block.
+   * @param doExprPath NodePath<t.DoExpression>
+   * @returns
+   */
+  function transformDoExpressionWithControlFlowStatements(
+    doExprPath: NodePath<t.DoExpression>,
+  ) {
     const doAncestors = new WeakSet<t.Node>();
     let path: NodePath = doExprPath;
     while (path) {

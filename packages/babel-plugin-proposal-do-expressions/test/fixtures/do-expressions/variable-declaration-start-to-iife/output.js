@@ -1,7 +1,6 @@
-{
-  var _do;
-  var bar = "foo";
+var bar;
+var x = function () {
+  bar = "foo";
   if (!bar) throw new Error("unreachable");
-  _do = bar;
-}
-var x = _do;
+  return bar;
+}();
