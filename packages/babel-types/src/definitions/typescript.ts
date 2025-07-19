@@ -357,6 +357,10 @@ defineType("TSTypeOperator", {
       validate: process.env.BABEL_8_BREAKING
         ? assertOneOf("keyof", "readonly", "unique")
         : assertValueType("string"),
+      // "keyof" is not a good default, but as this field is required better
+      // pick one. We need it for backwards compatibility with older versions
+      // of Babel 7.
+      default: process.env.BABEL_8_BREAKING ? undefined : "keyof",
     },
     typeAnnotation: validateType("TSType"),
   },
