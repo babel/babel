@@ -2238,9 +2238,8 @@ function shouldTransformClass(node: t.Class) {
   return isDecorated(node) || node.body.body.some(shouldTransformElement);
 }
 
-// Todo: unify name references logic with helper-function-name
-function NamedEvaluationVisitoryFactory(
-  isAnonymous: (path: NodePath) => boolean,
+export function buildNamedEvaluationVisitor(
+  needsName: (path: NodePath) => boolean,
   visitor: (
     path: NodePath,
     state: PluginPass,
@@ -2288,7 +2287,7 @@ function NamedEvaluationVisitoryFactory(
       const id = path.node.id;
       if (id.type === "Identifier") {
         const initializer = skipTransparentExprWrappers(path.get("init"));
-        if (isAnonymous(initializer)) {
+        if (needsName(initializer)) {
           const name = id.name;
           visitor(initializer, state, name);
         }
@@ -2298,7 +2297,7 @@ function NamedEvaluationVisitoryFactory(
       const id = path.node.left;
       if (id.type === "Identifier") {
         const initializer = skipTransparentExprWrappers(path.get("right"));
-        if (isAnonymous(initializer)) {
+        if (needsName(initializer)) {
           switch (path.node.operator) {
             case "=":
             case "&&=":
@@ -2313,7 +2312,7 @@ function NamedEvaluationVisitoryFactory(
       const id = path.node.left;
       if (id.type === "Identifier") {
         const initializer = skipTransparentExprWrappers(path.get("right"));
-        if (isAnonymous(initializer)) {
+        if (needsName(initializer)) {
           const name = id.name;
           visitor(initializer, state, name);
         }
@@ -2329,7 +2328,7 @@ function NamedEvaluationVisitoryFactory(
         const initializer = skipTransparentExprWrappers(
           propertyPath.get("value") as NodePath<t.Expression>,
         );
-        if (isAnonymous(initializer)) {
+        if (needsName(initializer)) {
           if (!node.computed) {
             // 13.2.5.5 RS: PropertyDefinitionEvaluation
             if (!isProtoKey(id as t.StringLiteral | t.Identifier)) {
@@ -2358,7 +2357,7 @@ function NamedEvaluationVisitoryFactory(
     ClassPrivateProperty(path, state) {
       const { node } = path;
       const initializer = skipTransparentExprWrappers(path.get("value"));
-      if (isAnonymous(initializer)) {
+      if (needsName(initializer)) {
         const className = t.stringLiteral("#" + node.key.id.name);
         visitor(initializer, state, className);
       }
@@ -2367,7 +2366,7 @@ function NamedEvaluationVisitoryFactory(
       const { node } = path;
       const id = node.key;
       const initializer = skipTransparentExprWrappers(path.get("value"));
-      if (isAnonymous(initializer)) {
+      if (needsName(initializer)) {
         if (!node.computed) {
           if (id.type === "Identifier") {
             visitor(initializer, state, id.name);
@@ -2396,7 +2395,7 @@ function NamedEvaluationVisitoryFactory(
       const { node } = path;
       const id = node.key;
       const initializer = skipTransparentExprWrappers(path.get("value"));
-      if (isAnonymous(initializer)) {
+      if (needsName(initializer)) {
         if (!node.computed) {
           if (id.type === "Identifier") {
             visitor(initializer, state, id.name);
@@ -2455,7 +2454,7 @@ export default function (
   const ignoreFunctionLength = assumption("ignoreFunctionLength") ?? loose;
 
   const namedEvaluationVisitor: Visitor<PluginPass> =
-    NamedEvaluationVisitoryFactory(
+    buildNamedEvaluationVisitor(
       isDecoratedAnonymousClassExpression,
       visitClass,
     );
