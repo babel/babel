@@ -15,10 +15,10 @@ var _foo = /*#__PURE__*/new WeakMap();
 let B = /*#__PURE__*/function (_A) {
   "use strict";
 
-  function B(...args) {
+  function B() {
     var _this;
     babelHelpers.classCallCheck(this, B);
-    _this = babelHelpers.callSuper(this, B, [...args]);
+    _this = babelHelpers.callSuper(this, B, arguments);
     babelHelpers.classPrivateFieldInitSpec(_this, _foo, babelHelpers.superPropGet((_this, B), "foo", _this, 3)([]));
     return _this;
   }

@@ -3,8 +3,8 @@ function* g() {
     "use strict";
 
     class A extends _yield$B {
-      constructor(...args) {
-        super(...args);
+      constructor() {
+        super(...arguments);
         _initialize(this);
       }
     }
