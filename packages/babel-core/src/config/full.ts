@@ -113,6 +113,7 @@ export default gensync(function* loadFullConfig(
 
       for (let i = 0; i < rawPresets.length; i++) {
         const descriptor = rawPresets[i];
+        // @ts-expect-error TODO: disallow false
         if (descriptor.options !== false) {
           try {
             // eslint-disable-next-line no-var
@@ -185,6 +186,7 @@ export default gensync(function* loadFullConfig(
 
       for (let i = 0; i < descs.length; i++) {
         const descriptor = descs[i];
+        // @ts-expect-error TODO: disallow false
         if (descriptor.options !== false) {
           try {
             // eslint-disable-next-line no-var
@@ -250,6 +252,7 @@ const makeDescriptorLoader = <Context, API>(
     cache: CacheConfigurator<Context>,
   ): Handler<LoadedDescriptor> {
     // Disabled presets should already have been filtered out
+    // @ts-expect-error expected
     if (options === false) throw new Error("Assertion failure");
 
     options = options || {};
@@ -415,7 +418,7 @@ function* loadPluginDescriptor(
 const needsFilename = (val: unknown) => val && typeof val !== "function";
 
 const validateIfOptionNeedsFilename = (
-  options: ValidatedOptions,
+  options: InputOptions,
   descriptor: UnloadedDescriptor<PresetAPI>,
 ): void => {
   if (

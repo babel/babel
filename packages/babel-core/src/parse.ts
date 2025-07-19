@@ -3,7 +3,6 @@ import gensync, { type Handler } from "gensync";
 import loadConfig, { type InputOptions } from "./config/index.ts";
 import parser, { type ParseResult } from "./parser/index.ts";
 import normalizeOptions from "./transformation/normalize-opts.ts";
-import type { ValidatedOptions } from "./config/validation/options.ts";
 
 import { beginHiddenCallStack } from "./errors/rewrite-stack-trace.ts";
 
@@ -42,7 +41,7 @@ export const parse: Parse = function parse(
 ) {
   if (typeof opts === "function") {
     callback = opts;
-    opts = undefined as ValidatedOptions;
+    opts = undefined as InputOptions;
   }
 
   if (callback === undefined) {
