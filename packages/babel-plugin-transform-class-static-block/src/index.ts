@@ -221,19 +221,21 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
             ]);
           }
 
-          const call = t.expressionStatement(
-            t.callExpression(t.cloneNode(tmp), []),
-          );
+          const staticBlockClosureCall = t.callExpression(t.cloneNode(tmp), []);
           if (classBody.parentPath.isClassExpression()) {
             // We don't use .insertAfter() because we don't need to insert the
             // tmp variable to preserve the class as the result value, because
             // the call will already return the class itself.
-            classBody.parentPath.replaceExpressionWithStatements([
-              classBody.parent as t.Node,
-              call,
-            ]);
+            classBody.parentPath.replaceWith(
+              t.sequenceExpression([
+                classBody.parent as t.ClassExpression,
+                staticBlockClosureCall,
+              ]),
+            );
           } else {
-            classBody.parentPath.insertAfter(call);
+            classBody.parentPath.insertAfter(
+              t.expressionStatement(staticBlockClosureCall),
+            );
           }
         }
       },
