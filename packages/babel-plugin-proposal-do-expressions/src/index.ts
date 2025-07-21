@@ -201,11 +201,6 @@ export default declare(api => {
             const uid = body.scope.generateDeclaredUidIdentifier("do");
             if (left.isVariableDeclaration()) {
               const init = left.get("declarations")[0].get("init");
-              if (init.node) {
-                throw init.buildCodeFrameError(
-                  "Complex variable declaration in for-in with do expression is not currently supported",
-                );
-              }
               init.replaceWith(t.cloneNode(uid));
               const [newBody] = body.replaceWith(
                 t.blockStatement([left.node, body.node]),
@@ -316,7 +311,7 @@ export default declare(api => {
           if (doAncestors.has(left.node)) {
             if (path.node.operator !== "=") {
               throw path.buildCodeFrameError(
-                "Do expression inside complex assignment expression is not currently supported",
+                "Do expression inside complex assignment expression is not currently supported.",
               );
             }
             const uid = path.scope.generateDeclaredUidIdentifier("do");
