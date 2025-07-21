@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-do-expressions"],
+  "presets": [["typescript", { "allowDeclareFields": true, "allExtensions": true }]]
+}
