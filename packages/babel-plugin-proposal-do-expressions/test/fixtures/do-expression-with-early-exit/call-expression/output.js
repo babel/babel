@@ -14,7 +14,7 @@ function f1(a) {
   _do(_do2);
 }
 function f2(a) {
-  var _do5, _do6, _do7, _do9;
+  var _do5, _do6, _do7, _do8, _do0;
   {
     var _do4;
     if (effects.push(1), false) return 0;
@@ -22,19 +22,20 @@ function f2(a) {
       key: arg => effects.push(arg)
     };
   }
-  _do7 = _do4;
+  _do8 = _do4;
   {
-    var _do8;
+    var _do9;
     if (effects.push(2), a) return 1;
-    _do8 = 'key';
+    _do9 = 'key';
   }
-  _do9 = _do7[_do8];
-  _do5 = _do9;
+  _do0 = _do8[_do9];
+  _do5 = _do0;
   {
-    var _do0;
-    if (effects.push(3), false) return 2;
-    _do0 = 'arg';
+    var _do1;
+    if (effects.push(3), false) return [2];
+    _do1 = ['arg'];
   }
-  _do6 = _do0;
-  _do5.call(_do4, _do6);
+  _do7 = _do1;
+  _do6 = [..._do7];
+  _do5.call(_do4, ..._do6);
 }
