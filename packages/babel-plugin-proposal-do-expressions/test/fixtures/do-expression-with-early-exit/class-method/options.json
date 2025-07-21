@@ -1,4 +1,5 @@
 {
   "plugins": ["proposal-do-expressions"],
-  "presets": [["typescript", { "allowDeclareFields": true, "allExtensions": true }]]
+  "presets": [["typescript", { "ignoreExtensions": true }]],
+  "minNodeVersion": "8.0.0"
 }
