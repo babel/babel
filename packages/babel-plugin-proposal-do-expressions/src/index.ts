@@ -201,6 +201,13 @@ export default declare(api => {
             const uid = body.scope.generateDeclaredUidIdentifier("do");
             if (left.isVariableDeclaration()) {
               const init = left.get("declarations")[0].get("init");
+              if (init.node) {
+                // Sloppy mode would allow:
+                // for (var x = do { ... } in <iterator>);
+                throw init.buildCodeFrameError(
+                  "Complex variable declaration in for-in with do expression is not currently supported",
+                );
+              }
               init.replaceWith(t.cloneNode(uid));
               const [newBody] = body.replaceWith(
                 t.blockStatement([left.node, body.node]),
