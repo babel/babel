@@ -24,6 +24,13 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.2 (2025-07-24)
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#17445](https://github.com/babel/babel/pull/17445) [babel 7] Make `operator` param in `t.tsTypeOperator` optional ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17441](https://github.com/babel/babel/pull/17441) fix: `regeneratorDefine` compatibility with es5 strict mode ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.28.1 (2025-07-12)
 
 #### :bug: Bug Fix
