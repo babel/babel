@@ -101,7 +101,7 @@ export default class ClassScopeHandler {
 
     if (classScope) {
       classScope.undefinedPrivateNames.set(name, loc);
-    } else {
+    } else if (!this.parser.options.allowPrivateFieldsOutsideClass) {
       // top-level
       this.parser.raise(Errors.InvalidPrivateFieldResolution, loc, {
         identifierName: name,
