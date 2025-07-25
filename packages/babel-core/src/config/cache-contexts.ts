@@ -1,12 +1,13 @@
-import type { Targets } from "@babel/helper-compilation-targets";
-
 import type { ConfigContext } from "./config-chain.ts";
-import type { CallerMetadata } from "./validation/options.ts";
+import type {
+  CallerMetadata,
+  TargetsListOrObject,
+} from "./validation/options.ts";
 
 export type { ConfigContext as FullConfig };
 
 export type FullPreset = {
-  targets: Targets;
+  targets: TargetsListOrObject;
 } & ConfigContext;
 export type FullPlugin = {
   assumptions: { [name: string]: boolean };
@@ -19,7 +20,7 @@ export type SimpleConfig = {
   caller: CallerMetadata | undefined;
 };
 export type SimplePreset = {
-  targets: Targets;
+  targets: TargetsListOrObject;
 } & SimpleConfig;
 export type SimplePlugin = {
   assumptions: {
