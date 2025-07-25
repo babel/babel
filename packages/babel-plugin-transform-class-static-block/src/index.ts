@@ -34,38 +34,44 @@ function mapLast<T>(arr: T[], fn: (value: T) => T): T[] {
 export default declare(({ types: t, template, traverse, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.12.0"));
 
-  const namedEvaluationVisitor = traverse.visitors.explode(
-    buildNamedEvaluationVisitor(
-      (path: NodePath) => {
-        if (!path.isClassExpression()) return false;
-        for (let i = path.node.body.body.length - 1; i >= 0; i--) {
-          const el = path.node.body.body[i];
-          if (t.isStaticBlock(el)) {
-            return true;
-          }
-          if (
-            (t.isClassProperty(el) || t.isClassPrivateProperty(el)) &&
-            el.static
-          ) {
-            break;
-          }
+  const rawNamedEvaluationVisitor = buildNamedEvaluationVisitor(
+    (path: NodePath) => {
+      if (!path.isClassExpression()) return false;
+      for (let i = path.node.body.body.length - 1; i >= 0; i--) {
+        const el = path.node.body.body[i];
+        if (t.isStaticBlock(el)) {
+          return true;
         }
-        return false;
-      },
-      (classPath: NodePath<t.ClassExpression>, state, name) => {
-        const nameNode =
-          typeof name === "string" ? t.stringLiteral(name) : name;
+        if (
+          (t.isClassProperty(el) || t.isClassPrivateProperty(el)) &&
+          el.static
+        ) {
+          break;
+        }
+      }
+      return false;
+    },
+    (classPath: NodePath<t.ClassExpression>, state, name) => {
+      const nameNode = typeof name === "string" ? t.stringLiteral(name) : name;
 
-        classPath.get("body").unshiftContainer(
-          "body",
-          t.staticBlock([
-            template.statement.ast`
+      classPath.get("body").unshiftContainer(
+        "body",
+        t.staticBlock([
+          template.statement.ast`
             ${state.addHelper("setFunctionName")}(this, ${nameNode});
           `,
-          ]),
-        );
-      },
-    ),
+        ]),
+      );
+    },
+  );
+
+  if (!process.env.BABEL_8_BREAKING && !t.classAccessorProperty) {
+    // For old versions of Babel 7, with no ClassAccessorProperty support.
+    delete rawNamedEvaluationVisitor.ClassAccessorProperty;
+  }
+
+  const namedEvaluationVisitor = traverse.visitors.explode(
+    rawNamedEvaluationVisitor,
   );
 
   const maybeSequenceExpression = (
