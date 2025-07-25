@@ -120,7 +120,10 @@ programmatic options from @babel/cli
   "configFile": "./my-config.js",
   "sourceFileName": "./src/index.js",
   "caller": {
-    "name": "@babel/cli"
+    "name": "@babel/cli",
+    "supportsStaticESM": false,
+    "supportsDynamicImport": false,
+    "supportsExportNamespaceFrom": false
   },
   "filename": "./src/index.js"
 }

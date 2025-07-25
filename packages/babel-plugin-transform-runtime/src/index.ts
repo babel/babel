@@ -111,10 +111,7 @@ export default declare((api, options: Options, dirname) => {
     // eslint-disable-next-line no-var
     var esModules =
       useESModules === "auto"
-        ? api.caller(
-            // @ts-expect-error CallerMetadata does not define supportsStaticESM
-            caller => !!caller?.supportsStaticESM,
-          )
+        ? api.caller(caller => !!caller?.supportsStaticESM)
         : useESModules;
   }
 

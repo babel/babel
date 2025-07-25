@@ -77,6 +77,12 @@ function transformWithoutConfigFile(code: string, opts: InputOptions) {
     browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
+    caller: {
+      name: "babel-helper-transform-fixture-test-runner/sync",
+      supportsStaticESM: false,
+      supportsDynamicImport: false,
+      supportsExportNamespaceFrom: false,
+    },
     ...opts,
   });
 }
@@ -85,6 +91,12 @@ function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
     browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
+    caller: {
+      name: "babel-helper-transform-fixture-test-runner/async",
+      supportsStaticESM: false,
+      supportsDynamicImport: false,
+      supportsExportNamespaceFrom: false,
+    },
     ...opts,
   });
 }
