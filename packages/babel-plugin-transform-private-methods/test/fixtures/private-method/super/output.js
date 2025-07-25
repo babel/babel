@@ -6,8 +6,8 @@ class Base {
 }
 var _Sub_brand = /*#__PURE__*/new WeakSet();
 class Sub extends Base {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     babelHelpers.classPrivateMethodInitSpec(this, _Sub_brand);
   }
   superMethod() {
