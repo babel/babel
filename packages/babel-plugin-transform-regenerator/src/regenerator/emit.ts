@@ -1075,9 +1075,13 @@ export class Emitter {
         let newCallee;
         let newArgs;
 
-        const lastLeapingArgIndex = argsPath.findLastIndex(argPath =>
-          meta.containsLeap(argPath.node),
-        );
+        let lastLeapingArgIndex = argsPath.length - 1;
+        while (
+          lastLeapingArgIndex >= 0 &&
+          !meta.containsLeap(argsPath[lastLeapingArgIndex].node)
+        ) {
+          lastLeapingArgIndex--;
+        }
 
         let injectFirstArg = null;
 
