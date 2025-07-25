@@ -1,5 +1,6 @@
+var _staticBlock;
 class Foo {
-  static bar = 42;
-  static #_ = this.foo = this.bar;
+  static bar = (_staticBlock = () => this.foo = this.bar, 42);
 }
+_staticBlock();
 expect(Foo.foo).toBe(42);
