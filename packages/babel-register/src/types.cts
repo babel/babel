@@ -5,6 +5,10 @@ export const enum ACTIONS {
   TRANSFORM_SYNC = "TRANSFORM_SYNC",
 }
 
+export type RegistrationOptions = {
+  revertPreviousHooks?: boolean;
+};
+
 export type Options = {
   extensions?: string[];
 };
