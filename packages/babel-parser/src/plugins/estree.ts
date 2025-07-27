@@ -444,12 +444,18 @@ export default (superClass: typeof Parser) =>
 
     isValidLVal(
       type: string,
+      hasLogicalAssignmentAncestor: boolean,
       isUnparenthesizedInAssign: boolean,
       binding: BindingFlag,
     ) {
       return type === "Property"
         ? "value"
-        : super.isValidLVal(type, isUnparenthesizedInAssign, binding);
+        : super.isValidLVal(
+            type,
+            hasLogicalAssignmentAncestor,
+            isUnparenthesizedInAssign,
+            binding,
+          );
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {

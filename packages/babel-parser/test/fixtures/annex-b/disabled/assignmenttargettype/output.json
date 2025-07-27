@@ -1,17 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":23,"index":118}},
+  "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":14,"index":134}},
   "errors": [
     "SyntaxError: Invalid left-hand side in assignment expression. (3:0)",
     "SyntaxError: Invalid left-hand side in assignment expression. (4:0)",
     "SyntaxError: Invalid left-hand side in postfix operation. (5:0)",
     "SyntaxError: Invalid left-hand side in prefix operation. (6:2)",
     "SyntaxError: Invalid left-hand side in for-in statement. (7:5)",
-    "SyntaxError: Invalid left-hand side in for-of statement. (8:5)"
+    "SyntaxError: Invalid left-hand side in for-of statement. (8:5)",
+    "SyntaxError: Invalid left-hand side in assignment expression. (10:0)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":23,"index":118}},
+    "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":14,"index":134}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -198,6 +199,34 @@
           "start":116,"end":118,"loc":{"start":{"line":8,"column":21,"index":116},"end":{"line":8,"column":23,"index":118}},
           "body": [],
           "directives": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":120,"end":134,"loc":{"start":{"line":10,"column":0,"index":120},"end":{"line":10,"column":14,"index":134}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":120,"end":133,"loc":{"start":{"line":10,"column":0,"index":120},"end":{"line":10,"column":13,"index":133}},
+          "operator": "&&=",
+          "left": {
+            "type": "CallExpression",
+            "start":120,"end":127,"loc":{"start":{"line":10,"column":0,"index":120},"end":{"line":10,"column":7,"index":127}},
+            "callee": {
+              "type": "Identifier",
+              "start":120,"end":125,"loc":{"start":{"line":10,"column":0,"index":120},"end":{"line":10,"column":5,"index":125},"identifierName":"async"},
+              "name": "async"
+            },
+            "arguments": []
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start":132,"end":133,"loc":{"start":{"line":10,"column":12,"index":132},"end":{"line":10,"column":13,"index":133}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
         }
       }
     ],

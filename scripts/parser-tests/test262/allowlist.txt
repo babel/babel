@@ -1,10 +1,6 @@
-# 5 invalid programs did not produce a parsing error
+# 0 invalid programs did not produce a parsing error
 
-language/expressions/assignmenttargettype/direct-callexpression-in-logical-assignment.js(default)
-language/expressions/assignmenttargettype/parenthesized-callexpression-in-logical-assignment.js(default)
-language/expressions/logical-assignment/lgcl-and-assignment-operator-non-simple-lhs.js(default)
-language/expressions/logical-assignment/lgcl-nullish-assignment-operator-non-simple-lhs.js(default)
-language/expressions/logical-assignment/lgcl-or-assignment-operator-non-simple-lhs.js(default)
+
 
 
 # 4 valid programs produced a parsing error
