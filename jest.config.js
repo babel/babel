@@ -1,3 +1,5 @@
+// @ts-check
+
 const semver = require("semver");
 
 const nodeVersion = process.versions.node;
@@ -12,7 +14,8 @@ const supportsESMAndJestLightRunner = semver.satisfies(
 );
 const isPublishBundle = process.env.IS_PUBLISH;
 
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
@@ -89,5 +92,7 @@ module.exports = {
   // We don't need module name mappers here as dependencies of workspace
   // package should be declared explicitly in the package.json
   // Yarn will generate correct file links so that Jest can resolve correctly
-  moduleNameMapper: null,
+  moduleNameMapper: {},
 };
+
+module.exports = config;
