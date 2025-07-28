@@ -7,4 +7,4 @@ class Base {
     }
   }
 }
-expect((new Base).Foo.foo).toBe(undefined);
+expect((new Base).Foo).toHaveProperty('foo', undefined);
