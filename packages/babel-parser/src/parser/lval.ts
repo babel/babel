@@ -618,7 +618,7 @@ export default abstract class LValParser extends NodeUtils {
    */
   isValidLVal(
     type: string,
-    hasLogicalAssignmentAncestor: boolean,
+    disallowCallExpression: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isUnparenthesizedInAssign: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -641,7 +641,7 @@ export default abstract class LValParser extends NodeUtils {
         return true;
       case "CallExpression":
         if (
-          !hasLogicalAssignmentAncestor &&
+          !disallowCallExpression &&
           !this.state.strict &&
           this.optionFlags & OptionFlags.AnnexB
         ) {
@@ -692,7 +692,7 @@ export default abstract class LValParser extends NodeUtils {
     checkClashes: Set<string> | false = false,
     strictModeChanged: boolean = false,
     hasParenthesizedAncestor: boolean = false,
-    hasLogicalAssignmentAncestor: boolean = false,
+    disallowCallExpression: boolean = false,
   ): void {
     const type = expression.type;
 
@@ -740,7 +740,9 @@ export default abstract class LValParser extends NodeUtils {
 
     const validity = this.isValidLVal(
       type,
-      hasLogicalAssignmentAncestor,
+      disallowCallExpression ||
+        (expression.type === "CallExpression" &&
+          expression.callee.type === "Import"),
       !(hasParenthesizedAncestor || expression.extra?.parenthesized) &&
         ancestor.type === "AssignmentExpression",
       binding,

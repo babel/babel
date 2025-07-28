@@ -155,7 +155,7 @@ export default (superClass: typeof Parser) =>
 
     isValidLVal(
       type: string,
-      hasLogicalAssignmentAncestor: boolean,
+      disallowCallExpression: boolean,
       isParenthesized: boolean,
       binding: BindingFlag,
     ) {
@@ -163,7 +163,7 @@ export default (superClass: typeof Parser) =>
         type === "Placeholder" ||
         super.isValidLVal(
           type,
-          hasLogicalAssignmentAncestor,
+          disallowCallExpression,
           isParenthesized,
           binding,
         )

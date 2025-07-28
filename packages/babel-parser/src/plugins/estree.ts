@@ -444,7 +444,7 @@ export default (superClass: typeof Parser) =>
 
     isValidLVal(
       type: string,
-      hasLogicalAssignmentAncestor: boolean,
+      disallowCallExpression: boolean,
       isUnparenthesizedInAssign: boolean,
       binding: BindingFlag,
     ) {
@@ -452,7 +452,7 @@ export default (superClass: typeof Parser) =>
         ? "value"
         : super.isValidLVal(
             type,
-            hasLogicalAssignmentAncestor,
+            disallowCallExpression,
             isUnparenthesizedInAssign,
             binding,
           );

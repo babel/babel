@@ -2517,7 +2517,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     isValidLVal(
       type: string,
-      hasLogicalAssignmentAncestor: boolean,
+      disallowCallExpression: boolean,
       isParenthesized: boolean,
       binding: BindingFlag,
     ) {
@@ -2525,7 +2525,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         type === "TypeCastExpression" ||
         super.isValidLVal(
           type,
-          hasLogicalAssignmentAncestor,
+          disallowCallExpression,
           isParenthesized,
           binding,
         )
