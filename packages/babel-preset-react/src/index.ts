@@ -4,7 +4,7 @@ import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-deve
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 import normalizeOptions from "./normalize-options.ts";
-import type { PluginItem } from "../../babel-core/src/config/validation/options.ts";
+import type { PluginItem } from "@babel/core";
 
 export interface Options {
   development?: boolean;
