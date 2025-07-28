@@ -1075,14 +1075,18 @@ export class Emitter {
         let newCallee;
         let newArgs;
 
-        const hasLeapingArgs = argsPath.some(argPath =>
-          meta.containsLeap(argPath.node),
-        );
+        let lastLeapingArgIndex = argsPath.length - 1;
+        while (
+          lastLeapingArgIndex >= 0 &&
+          !meta.containsLeap(argsPath[lastLeapingArgIndex].node)
+        ) {
+          lastLeapingArgIndex--;
+        }
 
         let injectFirstArg = null;
 
         if (t.isMemberExpression(calleePath.node)) {
-          if (hasLeapingArgs) {
+          if (lastLeapingArgIndex !== -1) {
             // If the arguments of the CallExpression contained any yield
             // expressions, then we need to be sure to evaluate the callee
             // before evaluating the arguments, but if the callee was a member
@@ -1144,13 +1148,15 @@ export class Emitter {
           }
         }
 
-        if (hasLeapingArgs) {
-          newArgs = argsPath.map(argPath =>
-            self.explodeViaTempVar(
-              null,
-              argPath as NodePath<t.Expression>,
-              hasLeapingChildren,
-            ),
+        if (lastLeapingArgIndex !== -1) {
+          newArgs = argsPath.map((argPath, index) =>
+            index >= lastLeapingArgIndex
+              ? self.explodeExpression(argPath as NodePath<t.Expression>) // Don't explode leaping children.
+              : self.explodeViaTempVar(
+                  null,
+                  argPath as NodePath<t.Expression>,
+                  hasLeapingChildren,
+                ),
           );
           if (injectFirstArg) newArgs.unshift(injectFirstArg);
 

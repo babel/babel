@@ -21,7 +21,7 @@ function main() {
 }
 function _main() {
   _main = _asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-    var _t, _t2;
+    var _t;
     return regeneratorRuntime.wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -29,8 +29,7 @@ function _main() {
           _context2.next = 1;
           return test();
         case 1:
-          _t2 = _context2.sent;
-          _t.log.call(_t, _t2);
+          _t.log.call(_t, _context2.sent);
         case 2:
         case "end":
           return _context2.stop();
