@@ -5,7 +5,7 @@ import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
 import normalizeOptions from "./normalize-options.ts";
 import type { Options } from "./normalize-options.ts";
 import pluginRewriteTSImports from "./plugin-rewrite-ts-imports.ts";
-import type { PluginItem } from "../../babel-core/src/config/validation/options.ts";
+import type { PluginItem } from "@babel/core";
 
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));

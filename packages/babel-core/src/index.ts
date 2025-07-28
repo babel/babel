@@ -58,7 +58,7 @@ export { loadOptionsSync };
 export type PresetObject = {
   overrides?: PresetObject[];
   test?: ConfigApplicableTest;
-  plugins?: (PluginItem[] | PluginItem)[];
+  plugins?: PluginItem[];
 };
 
 export type {
