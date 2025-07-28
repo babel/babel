@@ -50,10 +50,15 @@ export {
 } from "./config/index.ts";
 import { loadOptionsSync } from "./config/index.ts";
 import type {
-  PluginItem,
   ConfigApplicableTest,
+  PluginTarget,
 } from "./config/validation/options.ts";
 export { loadOptionsSync };
+
+export type PluginItem =
+  | PluginTarget
+  | [PluginTarget, object]
+  | [PluginTarget, object, string];
 
 export type PresetObject = {
   overrides?: PresetObject[];

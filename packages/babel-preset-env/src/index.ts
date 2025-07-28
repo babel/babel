@@ -18,11 +18,11 @@ import {
   overlappingPlugins,
 } from "./plugins-compat-data.ts";
 
-import type { CallerMetadata, PresetAPI } from "@babel/core";
+import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
 
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 // TODO(Babel 8): Just use the default import
-const pluginCoreJS3 = _pluginCoreJS3.default || _pluginCoreJS3;
+const pluginCoreJS3 = (_pluginCoreJS3.default || _pluginCoreJS3) as any;
 
 import babel7 from "./polyfills/babel-7-plugins.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
 
@@ -198,7 +198,7 @@ if (!process.env.BABEL_8_BREAKING) {
     regenerator: boolean;
     debug: boolean;
   }) => {
-    const polyfillPlugins = [];
+    const polyfillPlugins: PluginItem[] = [];
     if (useBuiltIns === "usage" || useBuiltIns === "entry") {
       const pluginOptions = getCoreJSOptions({
         useBuiltIns,
@@ -440,7 +440,7 @@ option \`forceAllTransforms: true\` instead.
   removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const polyfillPlugins = process.env.BABEL_8_BREAKING
+  const polyfillPlugins: PluginItem[] = process.env.BABEL_8_BREAKING
     ? useBuiltIns
       ? [
           [
@@ -472,7 +472,7 @@ option \`forceAllTransforms: true\` instead.
 
   const pluginUseBuiltIns = useBuiltIns !== false;
   const plugins = Array.from(pluginNames)
-    .map(pluginName => {
+    .map((pluginName): PluginItem => {
       if (
         !process.env.BABEL_8_BREAKING &&
         (pluginName === "transform-class-properties" ||
