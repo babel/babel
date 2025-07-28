@@ -25,7 +25,7 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
-import type { InputOptions, PluginItem } from "./validation/options.ts";
+import type { InputOptions, PluginItemInternal } from "./validation/options.ts";
 import { validatePluginObject } from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
@@ -82,7 +82,7 @@ export default gensync(function* loadFullConfig(
     targets: options.targets,
   };
 
-  const toDescriptor = (item: PluginItem) => {
+  const toDescriptor = (item: PluginItemInternal) => {
     const desc = getItemDescriptor(item);
     if (!desc) {
       throw new Error("Assertion failure - must be config item");

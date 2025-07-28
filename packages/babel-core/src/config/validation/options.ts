@@ -38,6 +38,7 @@ import ConfigError from "../../errors/config-error.ts";
 import type { PluginObject } from "./plugins.ts";
 import type Plugin from "../plugin.ts";
 import type { PresetAPI } from "../index.ts";
+import type { PluginItem } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: assertString as Validator<ValidatedOptions["cwd"]>,
@@ -220,8 +221,8 @@ export type BaseOptions = {
 };
 
 export type InputOptions = BaseOptions & {
-  presets?: PluginItem[];
-  plugins?: PluginItem[];
+  presets?: PluginItemInternal[];
+  plugins?: PluginItemInternal[];
 };
 
 export type ValidatedOptions = BaseOptions & {
@@ -252,11 +253,7 @@ export type MatchItem =
 export type PluginTarget =
   | string
   | ((api: PluginAPI, options?: object, dirname?: string) => PluginObject);
-export type PluginItem =
-  | ConfigItem<PluginAPI>
-  | PluginTarget
-  | [PluginTarget, object]
-  | [PluginTarget, object, string];
+export type PluginItemInternal = ConfigItem<PluginAPI> | PluginItem;
 
 export type PresetTarget =
   | string
