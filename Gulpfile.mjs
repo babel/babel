@@ -1,3 +1,5 @@
+// @ts-check
+
 import path from "node:path";
 import fs from "node:fs";
 import { cpus } from "node:os";
@@ -93,7 +95,7 @@ function getIndexFromPackage(name) {
 
 /**
  * @param {string} generator
- * @param {string} pkg
+ * @param {string} dest
  * @param {string} filename
  * @param {string} message
  */
@@ -109,7 +111,7 @@ async function generateHelpers(generator, dest, filename, message) {
 
 /**
  *
- * @typedef {("asserts" | "builders" | "constants" | "validators")} TypesHelperKind
+ * @typedef {("asserts" | "ast-types" | "builders" | "constants" | "validators")} TypesHelperKind
  * @param {TypesHelperKind} helperKind
  * @param {string} filename
  */
@@ -124,7 +126,7 @@ function generateTypeHelpers(helperKind, filename = "index.ts") {
 
 /**
  *
- * @typedef {("asserts" | "validators")} TraverseHelperKind
+ * @typedef {("asserts" | "validators" | "visitor-types")} TraverseHelperKind
  * @param {TraverseHelperKind} helperKind
  */
 function generateTraverseHelpers(helperKind, outBase = "") {
@@ -319,6 +321,7 @@ function buildRollup(packages, buildStandalone) {
                 // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
                 // We can safely ignore this warning, and let Rollup replace it with undefined.
                 if (
+                  // @ts-expect-error warning.exporter is defined when code is MISSING_EXPORT
                   warning.exporter
                     .replace(/\\/g, "/")
                     .endsWith("packages/babel-core/src/index.ts") &&
@@ -328,6 +331,7 @@ function buildRollup(packages, buildStandalone) {
                     "babel-plugin-polyfill-corejs2",
                     "babel-plugin-polyfill-corejs3",
                     "babel-plugin-polyfill-regenerator",
+                    // @ts-expect-error warning.id is defined when code is MISSING_EXPORT
                   ].some(pkg => warning.id.replace(/\\/g, "/").includes(pkg))
                 ) {
                   return;
@@ -509,6 +513,7 @@ function buildRollup(packages, buildStandalone) {
           sourcemap: sourcemap,
           exports: "named",
           interop(id) {
+            if (!id) return "default";
             // We have manually applied commonjs-esm interop to the source
             // for library not in this monorepo
             // https://github.com/babel/babel/pull/12795
@@ -595,6 +600,7 @@ function buildRollupDts(packages) {
       input,
       plugins: [
         {
+          name: "rollup-babel-internal-define-BABEL_8_BREAKING",
           transform: code =>
             code.replace(
               /type BABEL_8_BREAKING\s*=\s*boolean/g,
@@ -607,7 +613,9 @@ function buildRollupDts(packages) {
       onwarn(warning) {
         if (
           warning.code === "UNUSED_EXTERNAL_IMPORT" &&
+          // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
           warning.names.length === 1 &&
+          // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
           warning.names[0] === "default"
         ) {
           // rollup-plugin-dts doesn't like default imports when they are just re-exported
@@ -691,7 +699,7 @@ function* libBundlesIterator() {
   );
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
-      fs.readFileSync(new URL(`${src}/package.json`, import.meta.url))
+      fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
     if (pkgJSON.main) {
       yield {
@@ -851,6 +859,7 @@ gulp.task("build-vendor", async () => {
       {
         // Remove the node: prefix from imports, so that it works in old Node.js version
         // TODO(Babel 8): This can be removed.
+        name: "rollup-babel-internal-remove-node-import-prefix",
         transform: code => code.replace(/(?<=from ["'])node:/g, ""),
       },
     ],
