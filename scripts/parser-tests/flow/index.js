@@ -65,8 +65,8 @@ async function* loadTests(root) {
 
       const [contents, tree, options] = await Promise.all([
         fs.readFile(noExt + ".js", "utf8"),
-        fs.readFile(noExt + ".tree.json", "utf8").catch(() => ""),
-        fs.readFile(noExt + ".options.json", "utf8").catch(() => ""),
+        fs.readFile(noExt + ".tree.json", "utf8").catch(() => "{}"),
+        fs.readFile(noExt + ".options.json", "utf8").catch(() => "{}"),
       ]);
 
       yield {
