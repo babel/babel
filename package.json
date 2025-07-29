@@ -22,6 +22,7 @@
   "packageManager": "yarn@4.9.1",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
+    "@actions/github": "6.0.1",
     "@babel/cli": "8.0.0-beta.0",
     "@babel/core": "8.0.0-beta.0",
     "@babel/eslint-parser": "workspace:^",

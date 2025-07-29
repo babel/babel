@@ -3,6 +3,13 @@
 const COMMENT_PREFIX =
   "Build successful! You can test your changes in the REPL here: ";
 
+/**
+ * Updates the REPL comment on a pull request with the latest build link.
+ * This function retrieves the CircleCI job ID for the current pull request,
+ * constructs the REPL URL, and either updates an existing comment or creates a new one.
+ * @param {ReturnType<import("@actions/github").getOctokit>} github
+ * @param {import("@actions/github").context} context
+ */
 export default async function (github, context) {
   const { owner, repo } = context.repo;
   const pull_number = context.issue.number;
@@ -15,7 +22,7 @@ export default async function (github, context) {
     issue_number: pull_number,
   });
   for (const comment of comments.data) {
-    if (comment.body.includes(COMMENT_PREFIX)) {
+    if (comment.body?.includes(COMMENT_PREFIX)) {
       commentId = comment.id;
       break;
     }
@@ -24,6 +31,7 @@ export default async function (github, context) {
   // Make sure Circleci is triggered.
   await sleep(60000);
   const circleciId = await getCircleciJobId(
+    // @ts-expect-error the pull_request payload must be defined for pull requests events
     context.payload.pull_request.head.repo.fork
       ? "pull/" + pull_number
       : process.env.GITHUB_HEAD_REF
