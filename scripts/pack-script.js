@@ -1,3 +1,4 @@
+// @ts-check
 import path from "node:path";
 import { readFileSync, writeFileSync } from "node:fs";
 import { rollup } from "rollup";

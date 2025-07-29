@@ -1,3 +1,5 @@
+// @ts-check
+
 import { readFileSync, writeFileSync } from "node:fs";
 import shell from "shelljs";
 import path from "node:path";

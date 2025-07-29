@@ -1,9 +1,20 @@
+// @ts-check
+
+"use strict";
 const { transformAsync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("node:fs");
 const path = require("node:path");
 const { log } = require("./scripts/utils/logger.cjs");
 const colors = require("picocolors");
 
+/** * Check if the source file needs to be compiled based on its modification time
+ * compared to the destination file.
+ * If the destination file does not exist, it will return true to indicate that
+ * compilation is needed.
+ * @param {string} src - The source file path.
+ * @param {string} dest - The destination file path.
+ * @returns {boolean}
+ */
 function needCompile(src, dest) {
   let destStat;
   try {
@@ -31,6 +42,7 @@ exports.transform = async function transform(src, dest, opts = {}) {
     sourceFileName: path.relative(path.dirname(dest), src),
     caller: {
       // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
+      // @ts-expect-error improve caller metadata typings
       supportsDynamicImport: true,
       name: "babel-worker",
     },
@@ -48,6 +60,7 @@ exports.transform = async function transform(src, dest, opts = {}) {
     );
     writeFileSync(dest + ".map", JSON.stringify(map), "utf8");
   } else {
+    // @ts-expect-error code must not be for our project source
     writeFileSync(dest, code, "utf8");
   }
 };

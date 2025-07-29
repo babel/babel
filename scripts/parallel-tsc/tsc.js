@@ -1,3 +1,5 @@
+// @ts-check
+
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
@@ -65,6 +67,7 @@ class Pool {
 
   #onTaskStart;
   #onTaskDone;
+  #onTaskError;
   #showOutput;
 
   #maxWeight;
@@ -80,6 +83,7 @@ class Pool {
     concurrency,
     onTaskStart,
     onTaskDone,
+    onTaskError,
     showOutput,
     maxWeight,
     taskWeight,
@@ -88,6 +92,7 @@ class Pool {
     this.#concurrency = concurrency;
     this.#onTaskStart = onTaskStart;
     this.#onTaskDone = onTaskDone;
+    this.#onTaskError = onTaskError;
     this.#showOutput = showOutput;
     this.#maxWeight = maxWeight;
     this.#getWeight = taskWeight;
@@ -127,6 +132,11 @@ class Pool {
     taskProcess.once("exit", async code => {
       const startTime = this.#running.get(taskProcess);
       const duration = performance.now() - startTime;
+      if (code !== 0) {
+        this.#onTaskError(tasks, code);
+        this.#running.delete(taskProcess);
+        return;
+      }
       await this.#onTaskDone(tasks, code, duration);
       this.#running.delete(taskProcess);
 
@@ -138,6 +148,12 @@ class Pool {
       if (this.#running.size === 0 && this.#pending.length === 0) {
         this.#emptyListeners.forEach(f => f());
       }
+    });
+
+    taskProcess.once("error", err => {
+      console.error("Error in task process:", err);
+      this.#onTaskError(tasks);
+      this.#running.delete(taskProcess);
     });
 
     this.#onTaskStart(tasks, weight);
@@ -212,15 +228,16 @@ const pool = new Pool({
           dependencies.delete(project);
           if (dependencies.size === 0) {
             projectToDependencies.delete(dependent);
+            // @ts-expect-error run is defined on Pool
             if (!projects.includes(dependent)) this.run(dependent);
           }
         }
       }
     }
   },
-  onTaskError(projects) {
+  onTaskError(projects, code = 1) {
     console.error("ERROR", projects);
-    process.exitCode = 1;
+    process.exitCode = code;
   },
 });
 for (const project of ready) pool.run(project);

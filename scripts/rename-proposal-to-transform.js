@@ -1,10 +1,17 @@
 #!/usr/bin/env node
+// @ts-check
 
 import path from "node:path";
 import fs from "node:fs";
 import { Glob } from "glob";
 import { execSync } from "node:child_process";
 
+if (process.argv.length < 3) {
+  throw new Error(
+    "Usage: node ./scripts/rename-proposal-to-transform.js <proposal-name> [new-name]"
+  );
+}
+// @ts-expect-error argv[2] has been checked above
 const oldName = process.argv[2].match(/proposal-[\w-]+/)[0];
 const newName = process.argv[3] || oldName.replace("proposal-", "transform-");
 
@@ -97,6 +104,10 @@ await globRename([
   "packages/babel-standalone/scripts/pluginConfig.json",
 ]);
 
+/**
+ * Rename all occurrences of given pattern(s) in files matching a glob pattern.
+ * @param {string | string[]} pattern - The glob pattern to match files.
+ */
 async function globRename(pattern) {
   for await (const filename of new Glob(pattern, {})) {
     const oldContents = fs.readFileSync(filename, "utf8");

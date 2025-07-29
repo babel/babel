@@ -1,3 +1,4 @@
+// @ts-check
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -14,6 +15,13 @@ const BABEL_SRC_REGEXP =
     ? /packages\/(babel-[^/]+)\/src\//
     : /packages\\(babel-[^\\]+)\\src\\/;
 
+/**
+ * Rollup plugin to load Babel source files directly from the monorepo.
+ * It resolves Babel packages to their `src` directory and handles the `browser`
+ * field in `package.json`.
+ * It also resolves `@babel/runtime/regenerator` to the correct path.
+ * @returns {import("rollup").Plugin} - The Rollup plugin.
+ */
 export default function () {
   return {
     name: "babel-source",
@@ -50,7 +58,7 @@ export default function () {
               }
               return fs.readFileSync(
                 path.join(packageFolder, path.normalize(browserFile)),
-                "UTF-8"
+                "utf8"
               );
             }
           }
@@ -73,6 +81,7 @@ export default function () {
         /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*))?$/
       );
       if (!matches) return null;
+      // @ts-expect-error pkg and internal are the names of capturing groups
       const { pkg, internal } = matches.groups;
 
       // resolve babel package names to their src index file
@@ -81,7 +90,8 @@ export default function () {
       let packageJsonSource;
       try {
         packageJsonSource = fs.readFileSync(
-          path.join(packageFolder, "package.json")
+          path.join(packageFolder, "package.json"),
+          "utf8"
         );
       } catch (e) {
         // Some Babel packages aren't in this repository
