@@ -1,12 +1,18 @@
+// @ts-check
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestRunner from "../utils/parser-test-runner.js";
 import ErrorCodes from "./error-codes.js";
 
+/**
+ * Get the encoding of a file based on its BOM.
+ * @param {string} path
+ * @returns {"utf-8" | "utf-16le" | "utf-16be"}
+ */
 const getEncoding = path =>
   ({ fffe: "utf-16le", feff: "utf-16be" })[
-    fs.readFileSync(path).slice(0, 2).toString("hex")
+    fs.readFileSync(path).subarray(0, 2).toString("hex")
   ] || "utf-8";
 
 const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
@@ -18,7 +24,7 @@ function* loadTests(dir) {
 
   for (const [name, filename] of names) {
     const encoding = getEncoding(filename);
-    if (encoding === "utf-16be" || encoding === "binary") continue;
+    if (encoding === "utf-16be" || encoding === "utf-16le") continue;
     yield {
       name,
       contents: fs.readFileSync(filename, encoding),
@@ -101,10 +107,17 @@ function toFiles(strictMode, contents, name) {
     }));
 }
 
-const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(\n|$)/;
+const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(?:\n|$)/;
 const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*(\S+)\s*(?:\n|$)/i;
 
 // Modified from: https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ts-twoslasher/src/index.ts
+/**
+ * Split a code string into multiple files based on twoslash `//` comments.
+ * @param {string} code
+ * @param {string} defaultFileName
+ * @param {string} root
+ * @returns {Array<[string, string[]]>}
+ */
 function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
   const lines = code.split(/\r\n?|\n/g);
 
@@ -112,11 +125,15 @@ function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
     ? "global.ts"
     : defaultFileName;
   let currentFileContent = [];
+  /**
+   * @type {Array<[string, string[]]>}
+   */
   const fileMap = [];
 
   for (const line of lines) {
     const newFileName = BracketedFileRegExp.test(line)
-      ? line.match(BracketedFileRegExp)[1]
+      ? // @ts-expect-error checked above
+        line.match(BracketedFileRegExp)[1]
       : (line.match(AtFileRegExp)?.[1] ?? false);
     if (newFileName) {
       fileMap.push([root + nameForFile, currentFileContent]);
