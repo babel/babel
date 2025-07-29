@@ -1,3 +1,5 @@
+// @ts-check
+
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
@@ -11,7 +13,7 @@ const ignoredFeaturesJsonPath = new URL(
   import.meta.url
 );
 const ignoredFeatures = (
-  await import(ignoredFeaturesJsonPath, {
+  await import(ignoredFeaturesJsonPath.toString(), {
     with: { type: "json" },
   })
 ).default;
@@ -30,6 +32,7 @@ function featureShouldIgnore(feature) {
 
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
+// @ts-expect-error Map signature is not recognized by TS
 const featuresToPlugins = new Map([
   ["import-assertions", "importAssertions"],
   ["import-attributes", "importAttributes"],

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Usage:
  * # Update AST/output.js for Babel 8
@@ -12,7 +13,11 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync, cpSync } from "node:fs";
 import { dirname, join, basename } from "node:path";
 
-function getUnstagedModifiedOutputJSON() {
+/**
+ * Get a list of unstaged modified test output files.
+ * @returns {string[]} - The list of unstaged modified test output files.
+ */
+function getUnstagedModifiedTestOutput() {
   try {
     // Get the status and filter for unstaged files
     const output = execSync(
@@ -34,6 +39,11 @@ function getUnstagedModifiedOutputJSON() {
   }
 }
 
+/**
+ * Assign properties from input to a JSON file, creating or updating it.
+ * @param {string} jsonFile - The path to the JSON file.
+ * @param {object} inputProperties - The properties to assign.
+ */
 function assignJSONFile(jsonFile, inputProperties) {
   let options = inputProperties;
   const jsonFileExists = existsSync(jsonFile);
@@ -48,15 +58,17 @@ function assignJSONFile(jsonFile, inputProperties) {
     }
   }
   try {
-    writeFileSync(jsonFile, JSON.stringify(options, null, 2) + "\n", {
-      recursive: true,
-    });
+    writeFileSync(jsonFile, JSON.stringify(options, null, 2) + "\n", "utf-8");
     console.log(`${jsonFileExists ? "Updated" : "Created"} ${jsonFile}`);
   } catch (error) {
     console.error(`Error writing ${jsonFile}:`, error.message);
   }
 }
 
+/**
+ * Update the options.json files for Babel 8 breaking changes.
+ * @param {string[]} files - The files to update.
+ */
 function updateBabel8BreakingTrue(files) {
   for (const file of files) {
     const dirPath = dirname(file);
@@ -65,6 +77,10 @@ function updateBabel8BreakingTrue(files) {
   }
 }
 
+/**
+ * Create Babel 7 tests for the given files.
+ * @param {string[]} files - The files to create tests for.
+ */
 function createBabel7Tests(files) {
   for (const file of files) {
     const dirPath = dirname(file);
@@ -86,7 +102,7 @@ function createBabel7Tests(files) {
 }
 
 function main() {
-  const changedFiles = getUnstagedModifiedOutputJSON();
+  const changedFiles = getUnstagedModifiedTestOutput();
   updateBabel8BreakingTrue(changedFiles);
   createBabel7Tests(changedFiles);
 }

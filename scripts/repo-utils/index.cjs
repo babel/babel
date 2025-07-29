@@ -1,6 +1,7 @@
 // NOTE: This file must be runnable on all Node.js version
 /* eslint-disable no-undef */
 /* eslint-disable unicorn/prefer-node-protocol */
+// @ts-check
 
 const path = require("path");
 const { readFileSync } = require("fs");

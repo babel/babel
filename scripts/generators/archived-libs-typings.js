@@ -1,3 +1,4 @@
+// @ts-check
 import fs from "node:fs";
 import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" with { type: "json" };
 const root = new URL("../..", import.meta.url);

@@ -1,3 +1,5 @@
+// @ts-check
+
 const COMMENT_PREFIX =
   "Build successful! You can test your changes in the REPL here: ";
 

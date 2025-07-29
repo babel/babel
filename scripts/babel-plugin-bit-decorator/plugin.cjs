@@ -1,11 +1,19 @@
+// @ts-check
 module.exports = pluginBabelBitDecorator;
 
-/** @param {{ types: import("@babel/types") }} api */
+/**
+ * Babel plugin to transform @bit decorators into class accessors.
+ * It replaces @bit decorators with getter and setter methods that manipulate
+ * a storage field defined with @bit.storage.
+ * @param {import("@babel/core").PluginAPI} api
+ * @returns {import("@babel/core").PluginObject}
+ */
 function pluginBabelBitDecorator({ types: t, template }) {
   const bodyTemplate = template.statement({ allowReturnOutsideFunction: true });
 
   return {
     manipulateOptions({ parserOpts }) {
+      // @ts-expect-error parserOpts.plugins is defined in our Babel config
       parserOpts.plugins.push("decorators", "decoratorAutoAccessors");
     },
     visitor: {
@@ -41,6 +49,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
               element.node.decorators &&
               element
                 .get("decorators")
+                // @ts-expect-error decorators has been checked above
                 .find(
                   ({ node: dec }) =>
                     t.isIdentifier(dec.expression, { name: "bit" }) ||
@@ -96,6 +105,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
                 "get",
                 element.node.key,
                 [],
+                // @ts-expect-error bodyTemplate is block statement
                 bodyTemplate.ast`{
                   return (
                     this.${t.cloneNode(storageName)} & ${t.numericLiteral(nextMask)}
@@ -106,6 +116,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
                 "set",
                 element.node.key,
                 [t.identifier("v")],
+                // @ts-expect-error bodyTemplate is block statement
                 bodyTemplate.ast`{
                   if (v) this.${t.cloneNode(storageName)} |= ${t.numericLiteral(nextMask)};
                   else this.${t.cloneNode(storageName)} &= ${t.valueToNode(~nextMask)};

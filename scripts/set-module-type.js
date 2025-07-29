@@ -1,9 +1,15 @@
 #!/usr/bin/env node
+// @ts-check
 
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
+/**
+ * Convert a relative file path to an absolute path.
+ * @param {string} rel - The relative file path.
+ * @returns {string} - The absolute file path.
+ */
 const root = rel =>
   path.join(path.dirname(fileURLToPath(import.meta.url)), "../", rel);
 

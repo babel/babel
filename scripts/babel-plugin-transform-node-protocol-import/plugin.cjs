@@ -1,9 +1,10 @@
+// @ts-check
 module.exports = pluginBabelTransformNodeProtocolImports;
 
 /**
  * Remove leading `node:` from the input string
  * @param {string} input
- * @returns string
+ * @returns {string}
  */
 function replaceNodeProtocol(input) {
   return input.replace(/^node:/, "");

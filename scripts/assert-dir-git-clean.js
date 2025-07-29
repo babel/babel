@@ -1,3 +1,4 @@
+// @ts-check
 // Must run at a git working dir
 
 import { execSync } from "node:child_process";
