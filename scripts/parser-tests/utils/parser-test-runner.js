@@ -1,8 +1,27 @@
+// @ts-check
+
 import fs from "node:fs/promises";
 import colors from "picocolors";
 import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
 const dot = colors.gray(".");
+
+/**
+ * @typedef {Object} Summary
+ * @property {boolean} passed
+ * @property {Object} allowed
+ * @property {Array} allowed.success
+ * @property {Array} allowed.failure
+ * @property {Array} allowed.falsePositive
+ * @property {Array} allowed.falseNegative
+ * @property {Object} disallowed
+ * @property {Array} disallowed.success
+ * @property {Array} disallowed.failure
+ * @property {Array} disallowed.falsePositive
+ * @property {Array} disallowed.falseNegative
+ * @property {Array} unrecognized
+ * @property {number} count
+ */
 
 class TestRunner {
   constructor({
@@ -78,6 +97,10 @@ class TestRunner {
     return table;
   }
 
+  /**
+   * Update the allowlist based on the test results.
+   * @param {Summary} summary
+   */
   async updateAllowlist(summary) {
     const contents = await fs.readFile(this.allowlist, "utf-8");
 
@@ -145,7 +168,16 @@ class TestRunner {
     await fs.writeFile(this.allowlist, updated.join("") + "\n", "utf8");
   }
 
+  /**
+   * Interpret the results of the tests.
+   * @param {*} results
+   * @param {*} allowlist
+   * @returns {Summary}
+   */
   interpret(results, allowlist) {
+    /**
+     * @type {Summary}
+     */
     const summary = {
       passed: true,
       allowed: {
@@ -160,7 +192,7 @@ class TestRunner {
         falsePositive: [],
         falseNegative: [],
       },
-      unrecognized: null,
+      unrecognized: [],
       count: results.length,
     };
 
@@ -187,7 +219,7 @@ class TestRunner {
         }
       }
 
-      summary.passed &= isAllowed;
+      summary.passed &&= isAllowed;
       summary[isAllowed ? "allowed" : "disallowed"][classification].push(
         result
       );
