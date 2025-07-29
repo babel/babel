@@ -1,25 +1,5 @@
 import type { PluginPass } from "@babel/core";
-
-let currentTypes: any = null;
-
-export function wrapWithTypes<This, Args extends unknown[]>(
-  types: any,
-  fn: (this: This, ...args: Args) => unknown,
-) {
-  return function (this: This, ...args: Args) {
-    const oldTypes = currentTypes;
-    currentTypes = types;
-    try {
-      return fn.apply(this, args);
-    } finally {
-      currentTypes = oldTypes;
-    }
-  };
-}
-
-export function getTypes() {
-  return currentTypes;
-}
+import { types as t } from "@babel/core";
 
 export let newHelpersAvailable: (file: PluginPass) => boolean;
 if (!process.env.BABEL_8_BREAKING) {
@@ -33,7 +13,7 @@ if (!process.env.BABEL_8_BREAKING) {
       // At this point, we can safely try to inject the `regenerator` helper.
       // If this plugin tries to inject any helper, than we are sure that
       // `regenerator` is one of them.
-      !getTypes().isIdentifier(file.addHelper("regenerator"), {
+      !t.isIdentifier(file.addHelper("regenerator"), {
         // This is a special marker returned by transform-runtime, which means
         // "the version of `@babel/runtime` does not have the helper".
         // Normally transform-runtime will fallback to just injecting the
@@ -48,7 +28,6 @@ if (!process.env.BABEL_8_BREAKING) {
 export let runtimeProperty: (file: PluginPass, name: any) => any;
 if (!process.env.BABEL_8_BREAKING) {
   runtimeProperty = function (file, name) {
-    const t = getTypes();
     const helper = file.addHelper("regeneratorRuntime");
     return t.memberExpression(
       // In some cases, `helper` will be (() => regeneratorRuntime).
@@ -68,12 +47,4 @@ export function isReference(path: any) {
     path.isReferenced() ||
     path.parentPath.isAssignmentExpression({ left: path.node })
   );
-}
-
-export function replaceWithOrRemove(path: any, replacement: any) {
-  if (replacement) {
-    path.replaceWith(replacement);
-  } else {
-    path.remove();
-  }
 }
