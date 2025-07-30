@@ -2,6 +2,7 @@ import { cloneNode, identifier } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers-generated.ts";
 import type { HelperMetadata } from "./helpers-generated.ts";
+import { helpersUncompressed } from "./helpers-generated.ts";
 
 type GetDependency = (name: string) => t.Expression;
 
@@ -92,9 +93,14 @@ interface HelperData {
 }
 
 const helperData: Record<string, HelperData> = Object.create(null);
-function loadHelper(name: string) {
-  if (!helperData[name]) {
-    const helper = helpers[name];
+const helperUncompressedData: Record<string, HelperData> = Object.create(null);
+function loadHelper(
+  name: string,
+  data: Record<string, HelperData> = helperData,
+  helpersSource: typeof helpers | typeof helpersUncompressed = helpers,
+) {
+  if (!data[name]) {
+    const helper = helpersSource[name];
     if (!helper) {
       throw Object.assign(new ReferenceError(`Unknown helper ${name}`), {
         code: "BABEL_HELPER_UNKNOWN",
@@ -102,7 +108,7 @@ function loadHelper(name: string) {
       });
     }
 
-    helperData[name] = {
+    data[name] = {
       minVersion: helper.minVersion,
       build(getDependency, bindingName, localBindings, adjustAst) {
         const ast = helper.ast();
@@ -126,7 +132,7 @@ function loadHelper(name: string) {
     };
   }
 
-  return helperData[name];
+  return data[name];
 }
 
 export function get(
@@ -148,6 +154,32 @@ export function get(
     }
   }
   return loadHelper(name).build(
+    getDependency,
+    bindingName,
+    localBindings,
+    adjustAst,
+  );
+}
+
+export function __privateGetUncompressed(
+  name: string,
+  getDependency?: GetDependency,
+  bindingName?: string,
+  localBindings?: string[],
+  adjustAst?: AdjustAst,
+) {
+  if (!process.env.BABEL_8_BREAKING) {
+    // In older versions, bindingName was a t.Identifier | t.MemberExpression
+    if (typeof bindingName === "object") {
+      const id = bindingName as t.Identifier | t.MemberExpression | null;
+      if (id?.type === "Identifier") {
+        bindingName = id.name;
+      } else {
+        bindingName = undefined;
+      }
+    }
+  }
+  return loadHelper(name, helperUncompressedData, helpersUncompressed).build(
     getDependency,
     bindingName,
     localBindings,

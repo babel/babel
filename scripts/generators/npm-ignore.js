@@ -14,6 +14,7 @@ const commonIgnore = [
 const extraIgnore = {
   "babel-plugin-proposal-decorators": ["CONTRIB.md"],
   "babel-compat-data": ["build"],
+  "babel-helpers": ["lib/helpers"],
 };
 
 const packages = glob

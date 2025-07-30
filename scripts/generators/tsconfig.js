@@ -259,6 +259,7 @@ function buildTSConfig(pkgs, allDeps, hasOverrides) {
       "./src/**/*.cts",
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
+      pkgs.some(p => p.name === "@babel/helpers") ? "./scripts/**/*.ts" : null,
     ].filter(Boolean),
     references: Array.from(referencePaths, path => ({ path })),
   };

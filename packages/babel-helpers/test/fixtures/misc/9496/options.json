@@ -1,4 +1,4 @@
 {
-  "minNodeVersionTransform": "12.22.0",
+  "minNodeVersionTransform": "22.0.0",
   "plugins": ["./plugin"]
 }

@@ -1097,6 +1097,8 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helpers": "workspace:^"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     fs-readdir-recursive: "npm:^1.1.0"
