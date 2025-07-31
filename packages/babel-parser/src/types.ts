@@ -201,7 +201,7 @@ export interface Identifier extends PatternBase {
   // @deprecated
   __clone(): Identifier;
   // TypeScript only. Used in case of an optional parameter.
-  optional?: boolean | null;
+  optional?: boolean;
 }
 // | Placeholder<"Identifier">;
 
@@ -1015,7 +1015,7 @@ export interface OptClassDeclaration
     HasDecorators {
   type: "ClassDeclaration";
   // TypeScript only
-  abstract?: boolean | null;
+  abstract?: boolean;
 }
 
 export interface ClassDeclaration extends OptClassDeclaration {
@@ -1502,8 +1502,8 @@ export interface TSParameterProperty extends HasDecorators {
   type: "TSParameterProperty";
   // At least one of `accessibility` or `readonly` must be set.
   accessibility?: Accessibility | null;
-  readonly?: boolean | null;
-  override?: boolean | null;
+  readonly?: boolean;
+  override?: boolean;
   parameter: Identifier | AssignmentPattern;
   // For TS-ESLint
   static?: false;
