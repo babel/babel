@@ -32,7 +32,8 @@ export default function normalizeOptions(config: ResolvedConfig) {
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
 
-      sourceFilename: filename,
+      // @ts-expect-error FIXME: should be sourceFilename
+      sourceFileName: filename,
       plugins: [],
       ...opts.parserOpts,
     },
