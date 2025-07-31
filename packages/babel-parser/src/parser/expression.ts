@@ -65,6 +65,7 @@ import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 
 import { OptionFlags, type SourceType } from "../options.ts";
+import { locDataCache } from "../tokenizer/index.ts";
 
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -181,6 +182,9 @@ export default abstract class ExpressionParser extends LValParser {
     expr.errors = this.state.errors;
     if (this.optionFlags & OptionFlags.Tokens) {
       expr.tokens = this.tokens;
+    }
+    if (this.options.locations === "packed") {
+      expr.locData = locDataCache;
     }
     return expr;
   }
