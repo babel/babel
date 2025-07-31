@@ -3,12 +3,13 @@ import { parse, type ParseResult } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";
+import type { BaseOptions } from "../config/validation/options.ts";
 
 export type { ParseResult };
 
 export default function* parser(
   pluginPasses: PluginPasses,
-  { parserOpts, highlightCode = true, filename = "unknown" }: any,
+  { parserOpts, highlightCode = true, filename = "unknown" }: BaseOptions,
   code: string,
 ): Handler<ParseResult> {
   try {

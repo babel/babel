@@ -81,6 +81,7 @@ function* loadOptionsImpl(
 ): Handler<ValidatedOptions | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
+  // @ts-expect-error FIXME: Does not conform to the type definition.
   return config?.options ?? null;
 }
 const loadOptionsRunner = gensync(loadOptionsImpl);
