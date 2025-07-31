@@ -82,7 +82,7 @@ export class Token {
   declare loc: SourceLocation;
 }
 
-let locDataCache: Uint32Array;
+export let locDataCache: Uint32Array;
 
 // ## Tokenizer
 
@@ -102,11 +102,18 @@ export default abstract class Tokenizer extends CommentsParser {
     this.isLookahead = false;
 
     if (process.env.IS_PUBLISH) {
-      if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
+      if (
+        !locDataCache ||
+        locDataCache.length < (this.length + 1) * 2 ||
+        options.locations === "packed"
+      ) {
         locDataCache = new Uint32Array((this.length + 1) * 2);
       }
     } else {
-      locDataCache = new Uint32Array((this.length + 1) * 2).fill(4294967295);
+      locDataCache = new Uint32Array((this.length + 1) * 2);
+      if (options.locations !== "packed") {
+        locDataCache.fill(4294967295);
+      }
     }
 
     this.locData = locDataCache;
@@ -1546,7 +1553,13 @@ export default abstract class Tokenizer extends CommentsParser {
           : this.optionFlags & OptionFlags.Locations
             ? at.loc.start
             : this.getLoc(at.start);
-    const error = toParseError(loc, details);
+    const pos =
+      at instanceof Position
+        ? loc.index
+        : typeof at === "number"
+          ? at
+          : at.start;
+    const error = toParseError(loc, pos, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
@@ -1562,16 +1575,22 @@ export default abstract class Tokenizer extends CommentsParser {
    */
   raiseOverwrite<ErrorDetails>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
-    loc: Position,
+    at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError<ErrorDetails> | never {
-    const pos = loc.index;
+    const loc =
+      at instanceof Position
+        ? at
+        : this.optionFlags & OptionFlags.Locations
+          ? at.loc.start
+          : this.getLoc(at.start);
+    const pos = at instanceof Position ? loc.index : at.start;
     const errors = this.state.errors;
 
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
       if (error.pos === pos) {
-        return (errors[i] = toParseError(loc, details));
+        return (errors[i] = toParseError(loc, pos, details));
       }
       if (error.pos < pos) break;
     }

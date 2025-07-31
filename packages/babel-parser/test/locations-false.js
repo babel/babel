@@ -12,6 +12,7 @@ runFixtureTests(
     }
     return parse(input, options);
   },
+  undefined,
   // They use `node.loc.end`, we don't save end positions for performance reasons.
   [
     "MissingEqInAssignment",

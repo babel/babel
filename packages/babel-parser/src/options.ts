@@ -127,7 +127,7 @@ export interface Options {
    * Adds a locations property to each node: [node.loc]
    */
 
-  locations?: boolean;
+  locations?: boolean | "packed";
 
   /**
    * Adds all parsed tokens to a tokens property on the File node.

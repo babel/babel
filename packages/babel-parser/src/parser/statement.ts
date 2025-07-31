@@ -1622,7 +1622,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     } else {
       if (id.type === "VoidPattern") {
-        this.raise(Errors.UnexpectedVoidPattern, id.loc.start);
+        this.raise(Errors.UnexpectedVoidPattern, id);
       }
     }
     this.checkLVal(
