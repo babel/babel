@@ -47,7 +47,7 @@ type LoadedDescriptor = {
 export type { InputOptions } from "./validation/options.ts";
 
 export type ResolvedConfig = {
-  options: any;
+  options: ValidatedOptions;
   passes: PluginPasses;
   externalDependencies: ReadonlyDeepArray<string>;
 };

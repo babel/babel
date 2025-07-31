@@ -38,7 +38,7 @@ import ConfigError from "../../errors/config-error.ts";
 import type { PluginObject } from "./plugins.ts";
 import type Plugin from "../plugin.ts";
 import type { PresetAPI } from "../index.ts";
-import type { PluginItem } from "../../index.ts";
+import type { NodePath, PluginItem } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: assertString as Validator<ValidatedOptions["cwd"]>,
@@ -200,14 +200,18 @@ export type BaseOptions = {
   // Options for @babel/generator
   retainLines?: boolean;
   comments?: boolean;
-  shouldPrintComment?: Function;
+  shouldPrintComment?: GeneratorOptions["shouldPrintComment"];
   compact?: CompactOption;
   minified?: boolean;
   auxiliaryCommentBefore?: string;
   auxiliaryCommentAfter?: string;
   // Parser
   sourceType?: SourceTypeOption;
-  wrapPluginVisitorMethod?: Function;
+  wrapPluginVisitorMethod?(
+    stateName: string | undefined,
+    visitorType: "enter" | "exit",
+    callback: (this: any, path: NodePath, state: any) => void,
+  ): (this: any, path: NodePath, state: any) => void;
   highlightCode?: boolean;
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption;

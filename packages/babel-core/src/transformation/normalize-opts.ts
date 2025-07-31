@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { ResolvedConfig } from "../config/index.ts";
+import type { BaseOptions } from "../config/validation/options.ts";
 
 export default function normalizeOptions(config: ResolvedConfig) {
   const {
@@ -13,7 +14,8 @@ export default function normalizeOptions(config: ResolvedConfig) {
     sourceMaps = !!inputSourceMap,
     sourceRoot = process.env.BABEL_8_BREAKING
       ? undefined
-      : config.options.moduleRoot,
+      : // @ts-expect-error no types
+        config.options.moduleRoot,
 
     sourceFileName = path.basename(filenameRelative),
 
@@ -23,14 +25,14 @@ export default function normalizeOptions(config: ResolvedConfig) {
 
   const opts = config.options;
 
-  const options = {
+  const options: BaseOptions = {
     ...opts,
 
     parserOpts: {
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
 
-      sourceFileName: filename,
+      sourceFilename: filename,
       plugins: [],
       ...opts.parserOpts,
     },
@@ -48,7 +50,7 @@ export default function normalizeOptions(config: ResolvedConfig) {
       minified: opts.minified,
 
       // Source-map generation flags.
-      sourceMaps,
+      sourceMaps: sourceMaps as boolean,
 
       sourceRoot,
       sourceFileName,
