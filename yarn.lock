@@ -611,7 +611,7 @@ __metadata:
     "@jridgewell/gen-mapping": "npm:^0.3.12"
     "@jridgewell/sourcemap-codec": "npm:^1.5.3"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
-    "@types/jsesc": "npm:^2.5.0"
+    "@types/jsesc": "condition:BABEL_8_BREAKING ? ^2.5.0 :"
     charcodes: "npm:^0.2.0"
     jsesc: "npm:^3.0.2"
   languageName: unknown
@@ -5896,10 +5896,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsesc@npm:^2.5.0":
+"@types/jsesc-BABEL_8_BREAKING-true@npm:@types/jsesc@^2.5.0":
   version: 2.5.1
   resolution: "@types/jsesc@npm:2.5.1"
   checksum: 10/25407775ed621790d2eec0cc51e194bd0d67a82e39204fd9748899c249ef965e17d9e6560f6c658773714f6d45a259465f3639790bb55750ebb168ee23801596
+  languageName: node
+  linkType: hard
+
+"@types/jsesc@condition:BABEL_8_BREAKING ? ^2.5.0 :":
+  version: 0.0.0-condition-345ae2
+  resolution: "@types/jsesc@condition:BABEL_8_BREAKING?^2.5.0:#345ae2"
+  dependencies:
+    "@types/jsesc-BABEL_8_BREAKING-true": "npm:@types/jsesc@^2.5.0"
+  checksum: 10/dfb6b40a8486458599876d46b3eacfa49a08145369ebac1a9352df73307a9713652af1ea75e1aea7ad7ce43000175e7c967ffc79c983762150f185185470855a
   languageName: node
   linkType: hard
 

@@ -23,6 +23,7 @@
     "@babel/types": "workspace:^",
     "@jridgewell/gen-mapping": "^0.3.12",
     "@jridgewell/trace-mapping": "^0.3.28",
+    "@types/jsesc": "condition:BABEL_8_BREAKING ? ^2.5.0 :",
     "jsesc": "^3.0.2"
   },
   "devDependencies": {
@@ -30,7 +31,6 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^",
     "@jridgewell/sourcemap-codec": "^1.5.3",
-    "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"
   },
   "engines": {
