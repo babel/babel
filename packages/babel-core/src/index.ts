@@ -49,7 +49,22 @@ export {
   loadPartialConfigSync,
 } from "./config/index.ts";
 import { loadOptionsSync } from "./config/index.ts";
+import type {
+  ConfigApplicableTest,
+  PluginTarget,
+} from "./config/validation/options.ts";
 export { loadOptionsSync };
+
+export type PluginItem =
+  | PluginTarget
+  | [PluginTarget, object]
+  | [PluginTarget, object, string];
+
+export type PresetObject = {
+  overrides?: PresetObject[];
+  test?: ConfigApplicableTest;
+  plugins?: PluginItem[];
+};
 
 export type {
   CallerMetadata,
@@ -59,7 +74,6 @@ export type {
   PluginAPI,
   PluginObject,
   PresetAPI,
-  PresetObject,
 } from "./config/index.ts";
 
 export {
