@@ -672,7 +672,10 @@ export type AssignmentOperator =
   | ">>>="
   | "|="
   | "^="
-  | "&=";
+  | "&="
+  | "&&="
+  | "||="
+  | "??=";
 
 export interface LogicalExpression extends NodeBase {
   type: "LogicalExpression";
