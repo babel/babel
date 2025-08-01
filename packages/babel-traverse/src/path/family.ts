@@ -367,10 +367,10 @@ type Trav<
   : never;
 
 type ToNodePath<T> =
-  T extends Array<t.Node | null | undefined>
-    ? Array<NodePath<T[number]>>
-    : T extends t.Node | null | undefined
-      ? NodePath<T>
+  T extends Array<(infer U extends t.Node) | null | undefined>
+    ? Array<NodePath<U> | null | undefined>
+    : T extends (infer U extends t.Node) | null | undefined
+      ? NodePath<U> | null | undefined
       : never;
 
 function get<T extends NodePath, K extends keyof T["node"]>(
@@ -378,10 +378,10 @@ function get<T extends NodePath, K extends keyof T["node"]>(
   key: K,
   context?: boolean | TraversalContext,
 ): T extends any
-  ? T["node"][K] extends Array<t.Node | null | undefined>
-    ? Array<NodePath<T["node"][K][number]>>
-    : T["node"][K] extends t.Node | null | undefined
-      ? NodePath<T["node"][K]>
+  ? T["node"][K] extends Array<(infer U extends t.Node) | null | undefined>
+    ? Array<NodePath<U> | null | undefined>
+    : T["node"][K] extends (infer U extends t.Node) | null | undefined
+      ? NodePath<U> | null | undefined
       : never
   : never;
 

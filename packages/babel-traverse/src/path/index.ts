@@ -63,7 +63,7 @@ const NodePath_Final = class NodePath {
   @bit(SHOULD_SKIP) accessor shouldSkip = false;
 
   skipKeys: Record<string, boolean> | null = null;
-  parentPath: NodePath_Final | null = null;
+  parentPath: NodePath_Final = null;
   container: t.Node | Array<t.Node> | null = null;
   listKey: string | null = null;
   key: string | number | null = null;
@@ -444,10 +444,11 @@ interface NodePath<T extends t.Node>
     NodePathOverwrites {
   type: T["type"] | null;
   node: T;
-  parent: t.ParentMaps[T["type"]];
-  parentPath: t.ParentMaps[T["type"]] extends null
-    ? null
-    : NodePath_Final<t.ParentMaps[T["type"]]> | null;
+  // .parent is only null for File nodes, which are not traversed by @babel/traverse
+  // You can technically create a path that contains one, but it's so rare that
+  // we can ignore it to avoid having non-null assertions everywhere.
+  parent: NonNullable<t.ParentMaps[T["type"]]>;
+  parentPath: NodePath_Final<NonNullable<t.ParentMaps[T["type"]]>>;
 }
 
 // This trick is necessary so that

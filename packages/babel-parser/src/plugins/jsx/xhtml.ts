@@ -1,7 +1,4 @@
-const entities: {
-  __proto__: null;
-  [name: string]: string;
-} = {
+const entities: { [name: string]: string } = {
   __proto__: null,
   quot: "\u0022",
   amp: "&",

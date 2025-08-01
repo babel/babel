@@ -5,7 +5,8 @@
     "./tsconfig.paths.json"
   ],
   "compilerOptions": {
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    "strict": true
   },
   "include": [
     "./lib/libdom-minimal.d.ts",
