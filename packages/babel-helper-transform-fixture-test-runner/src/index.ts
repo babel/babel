@@ -4,6 +4,8 @@ import {
   buildExternalHelpers,
   type InputOptions,
   type FileResult,
+  type PluginAPI,
+  type PluginObject,
 } from "@babel/core";
 import {
   default as getFixtures,
@@ -14,7 +16,8 @@ import {
   type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
-import * as helpers from "./helpers.ts";
+import * as helpers from "@babel/helpers";
+import * as runtimeHelpers from "./helpers.ts";
 import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "node:assert";
 import fs, { readFileSync, realpathSync } from "node:fs";
@@ -91,7 +94,7 @@ function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
 
 export function createTestContext() {
   const context = vm.createContext({
-    ...helpers,
+    ...runtimeHelpers,
     process: process,
     transform: transformWithoutConfigFile,
     transformAsync: transformAsyncWithoutConfigFile,
@@ -582,13 +585,73 @@ export default function (
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
-            if (task.externalHelpers) {
-              (task.options.plugins ??= [])
-                // @ts-expect-error manipulating input options
-                .push([
-                  "external-helpers",
-                  { helperVersion: EXTERNAL_HELPERS_VERSION },
-                ]);
+            task.options.plugins ??= [];
+            if (task.debug) {
+              // @ts-expect-error manipulating input options
+              task.options.plugins.push(({ types: t }: PluginAPI) => {
+                return {
+                  name: "debug-helpers",
+                  pre(file) {
+                    let addHelper: any;
+                    file.set(
+                      "helperGenerator",
+                      (addHelper = (name: string) => {
+                        const declar = file.declarations[name];
+                        if (declar) return t.cloneNode(declar);
+
+                        // make sure that the helper exists
+                        helpers.minVersion(name);
+
+                        const uid = (file.declarations[name] =
+                          file.scope.generateUidIdentifier(name));
+
+                        const dependencies: {
+                          [key: string]: babel.types.Identifier;
+                        } = {};
+                        for (const dep of helpers.getDependencies(name)) {
+                          dependencies[dep] = addHelper(dep);
+                        }
+
+                        const { nodes, globals } =
+                          helpers.__privateGetUncompressed(
+                            name,
+                            dep => dependencies[dep],
+                            uid.name,
+                            Object.keys(file.scope.getAllBindings()),
+                            undefined,
+                          );
+
+                        globals.forEach(name => {
+                          if (
+                            file.path.scope.hasBinding(
+                              name,
+                              true /* noGlobals */,
+                            )
+                          ) {
+                            file.path.scope.rename(name);
+                          }
+                        });
+
+                        const added = file.path.unshiftContainer("body", nodes);
+                        // TODO: NodePath#unshiftContainer should automatically register new
+                        // bindings.
+                        for (const path of added) {
+                          if (path.isVariableDeclaration())
+                            file.scope.registerDeclaration(path);
+                        }
+
+                        return uid;
+                      }),
+                    );
+                  },
+                } satisfies PluginObject;
+              });
+            } else if (task.externalHelpers) {
+              // @ts-expect-error manipulating input options
+              task.options.plugins.push([
+                "external-helpers",
+                { helperVersion: EXTERNAL_HELPERS_VERSION },
+              ]);
             }
 
             const throwMsg = task.options.throws;

@@ -33,7 +33,7 @@ function helper(
   });
 }
 
-export { helpers as default };
+export { helpers as default, helpersUncompressed };
 const helpers: Record<string, Helper> = {
   __proto__: null,
   // size: 47, gzip size: 63
@@ -1663,6 +1663,2214 @@ const helpers: Record<string, Helper> = {
   writeOnlyError: helper(
     "7.12.13",
     "function _writeOnlyError(r){throw new TypeError('\"'+r+'\" is write-only')}",
+    {
+      globals: ["TypeError"],
+      locals: { _writeOnlyError: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_writeOnlyError",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+};
+const helpersUncompressed: Record<string, Helper> = {
+  __proto__: null,
+  AwaitValue: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n/* @onlyBabel7 */\n\nfunction _AwaitValue(value) {\n  this.wrapped = value;\n}",
+    {
+      globals: [],
+      locals: { _AwaitValue: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_AwaitValue",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  OverloadYield: helper(
+    "7.18.14",
+    "/* @minVersion 7.18.14 */\n\n// _OverloadYield is actually a class\n\n// The actual implementation of _OverloadYield starts here\nfunction _OverloadYield(value, kind) {\n  this.v = value;\n  this.k = kind;\n}\n",
+    {
+      globals: [],
+      locals: { _OverloadYield: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_OverloadYield",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  applyDecoratedDescriptor: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {\n  var desc = {};\n  Object.keys(descriptor).forEach(function (key) {\n    desc[key] = descriptor[key];\n  });\n  desc.enumerable = !!desc.enumerable;\n  desc.configurable = !!desc.configurable;\n  if ("value" in desc || desc.initializer) {\n    desc.writable = true;\n  }\n  desc = decorators.slice().reverse().reduce(function (desc, decorator) {\n    return decorator(target, property, desc) || desc;\n  }, desc);\n  if (context && desc.initializer !== void 0) {\n    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;\n    desc.initializer = void 0;\n  }\n  if (desc.initializer === void 0) {\n    Object.defineProperty(target, property, desc);\n    return null;\n  }\n  return desc;\n}',
+    {
+      globals: ["Object"],
+      locals: { _applyDecoratedDescriptor: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_applyDecoratedDescriptor",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  applyDecs: helper(
+    "7.17.8",
+    '/* @minVersion 7.17.8 */\n/* @onlyBabel7 */\n\n\n\n/**\n * NOTE: This is an old version of the helper, used for 2021-12 decorators.\n * Updates should be done in applyDecs2203R.js.\n */\n\n/**\n  Enums are used in this file, but not assigned to vars to avoid non-hoistable values\n\n  CONSTRUCTOR = 0;\n  PUBLIC = 1;\n  PRIVATE = 2;\n\n  FIELD = 0;\n  ACCESSOR = 1;\n  METHOD = 2;\n  GETTER = 3;\n  SETTER = 4;\n\n  STATIC = 5;\n\n  CLASS = 10; // only used in assertValidReturnValue\n*/\n\nfunction old_createMetadataMethodsForProperty(metadataMap, kind, property, decoratorFinishedRef) {\n  return {\n    getMetadata: function (key) {\n      old_assertNotFinished(decoratorFinishedRef, "getMetadata");\n      old_assertMetadataKey(key);\n      var metadataForKey = metadataMap[key];\n      if (metadataForKey === void 0) return void 0;\n      if (kind === 1 /* PUBLIC */) {\n        var pub = metadataForKey.public;\n        if (pub !== void 0) {\n          return pub[property];\n        }\n      } else if (kind === 2 /* PRIVATE */) {\n        var priv = metadataForKey.private;\n        if (priv !== void 0) {\n          return priv.get(property);\n        }\n      } else if (Object.hasOwnProperty.call(metadataForKey, "constructor")) {\n        return metadataForKey.constructor;\n      }\n    },\n    setMetadata: function (key, value) {\n      old_assertNotFinished(decoratorFinishedRef, "setMetadata");\n      old_assertMetadataKey(key);\n      var metadataForKey = metadataMap[key];\n      if (metadataForKey === void 0) {\n        metadataForKey = metadataMap[key] = {};\n      }\n      if (kind === 1 /* PUBLIC */) {\n        var pub = metadataForKey.public;\n        if (pub === void 0) {\n          pub = metadataForKey.public = {};\n        }\n        pub[property] = value;\n      } else if (kind === 2 /* PRIVATE */) {\n        var priv = metadataForKey.priv;\n        if (priv === void 0) {\n          priv = metadataForKey.private = new Map();\n        }\n        priv.set(property, value);\n      } else {\n        metadataForKey.constructor = value;\n      }\n    }\n  };\n}\nfunction old_convertMetadataMapToFinal(obj, metadataMap) {\n  var parentMetadataMap = obj[Symbol.metadata || Symbol.for("Symbol.metadata")];\n  var metadataKeys = Object.getOwnPropertySymbols(metadataMap);\n  if (metadataKeys.length === 0) return;\n  for (var i = 0; i < metadataKeys.length; i++) {\n    var key = metadataKeys[i];\n    var metaForKey = metadataMap[key];\n    var parentMetaForKey = parentMetadataMap ? parentMetadataMap[key] : null;\n    var pub = metaForKey.public;\n    var parentPub = parentMetaForKey ? parentMetaForKey.public : null;\n    if (pub && parentPub) {\n      Object.setPrototypeOf(pub, parentPub);\n    }\n    var priv = metaForKey.private;\n    if (priv) {\n      var privArr = Array.from(priv.values());\n      var parentPriv = parentMetaForKey ? parentMetaForKey.private : null;\n      if (parentPriv) {\n        privArr = privArr.concat(parentPriv);\n      }\n      metaForKey.private = privArr;\n    }\n    if (parentMetaForKey) {\n      Object.setPrototypeOf(metaForKey, parentMetaForKey);\n    }\n  }\n  if (parentMetadataMap) {\n    Object.setPrototypeOf(metadataMap, parentMetadataMap);\n  }\n  obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;\n}\nfunction old_createAddInitializerMethod(initializers, decoratorFinishedRef) {\n  return function addInitializer(initializer) {\n    old_assertNotFinished(decoratorFinishedRef, "addInitializer");\n    old_assertCallable(initializer, "An initializer");\n    initializers.push(initializer);\n  };\n}\nfunction old_memberDec(dec, name, desc, metadataMap, initializers, kind, isStatic, isPrivate, value) {\n  var kindStr;\n  switch (kind) {\n    case 1 /* ACCESSOR */:\n      kindStr = "accessor";\n      break;\n    case 2 /* METHOD */:\n      kindStr = "method";\n      break;\n    case 3 /* GETTER */:\n      kindStr = "getter";\n      break;\n    case 4 /* SETTER */:\n      kindStr = "setter";\n      break;\n    default:\n      kindStr = "field";\n  }\n  var ctx = {\n    kind: kindStr,\n    name: isPrivate ? "#" + name : toPropertyKey(name),\n    isStatic: isStatic,\n    isPrivate: isPrivate\n  };\n  var decoratorFinishedRef = {\n    v: false\n  };\n  if (kind !== 0 /* FIELD */) {\n    ctx.addInitializer = old_createAddInitializerMethod(initializers, decoratorFinishedRef);\n  }\n  var metadataKind, metadataName;\n  if (isPrivate) {\n    metadataKind = 2 /* PRIVATE */;\n    metadataName = Symbol(name);\n    var access = {};\n    if (kind === 0 /* FIELD */) {\n      access.get = desc.get;\n      access.set = desc.set;\n    } else if (kind === 2 /* METHOD */) {\n      access.get = function () {\n        return desc.value;\n      };\n    } else {\n      // replace with values that will go through the final getter and setter\n      if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {\n        access.get = function () {\n          return desc.get.call(this);\n        };\n      }\n      if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {\n        access.set = function (v) {\n          desc.set.call(this, v);\n        };\n      }\n    }\n    ctx.access = access;\n  } else {\n    metadataKind = 1 /* PUBLIC */;\n    metadataName = name;\n  }\n  try {\n    return dec(value, Object.assign(ctx, old_createMetadataMethodsForProperty(metadataMap, metadataKind, metadataName, decoratorFinishedRef)));\n  } finally {\n    decoratorFinishedRef.v = true;\n  }\n}\nfunction old_assertNotFinished(decoratorFinishedRef, fnName) {\n  if (decoratorFinishedRef.v) {\n    throw new Error("attempted to call " + fnName + " after decoration was finished");\n  }\n}\nfunction old_assertMetadataKey(key) {\n  if (typeof key !== "symbol") {\n    throw new TypeError("Metadata keys must be symbols, received: " + key);\n  }\n}\nfunction old_assertCallable(fn, hint) {\n  if (typeof fn !== "function") {\n    throw new TypeError(hint + " must be a function");\n  }\n}\nfunction old_assertValidReturnValue(kind, value) {\n  var type = typeof value;\n  if (kind === 1 /* ACCESSOR */) {\n    if (type !== "object" || value === null) {\n      throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");\n    }\n    if (value.get !== undefined) {\n      old_assertCallable(value.get, "accessor.get");\n    }\n    if (value.set !== undefined) {\n      old_assertCallable(value.set, "accessor.set");\n    }\n    if (value.init !== undefined) {\n      old_assertCallable(value.init, "accessor.init");\n    }\n    if (value.initializer !== undefined) {\n      old_assertCallable(value.initializer, "accessor.initializer");\n    }\n  } else if (type !== "function") {\n    var hint;\n    if (kind === 0 /* FIELD */) {\n      hint = "field";\n    } else if (kind === 10 /* CLASS */) {\n      hint = "class";\n    } else {\n      hint = "method";\n    }\n    throw new TypeError(hint + " decorators must return a function or void 0");\n  }\n}\nfunction old_getInit(desc) {\n  var initializer;\n  if ((initializer = desc.init) == null && (initializer = desc.initializer) && typeof console !== "undefined") {\n    console.warn(".initializer has been renamed to .init as of March 2022");\n  }\n  return initializer;\n}\nfunction old_applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, metadataMap, initializers) {\n  var decs = decInfo[0];\n  var desc, initializer, prefix, value;\n  if (isPrivate) {\n    if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n      desc = {\n        get: decInfo[3],\n        set: decInfo[4]\n      };\n      prefix = "get";\n    } else if (kind === 3 /* GETTER */) {\n      desc = {\n        get: decInfo[3]\n      };\n      prefix = "get";\n    } else if (kind === 4 /* SETTER */) {\n      desc = {\n        set: decInfo[3]\n      };\n      prefix = "set";\n    } else {\n      desc = {\n        value: decInfo[3]\n      };\n    }\n    if (kind !== 0 /* FIELD */) {\n      if (kind === 1 /* ACCESSOR */) {\n        setFunctionName(decInfo[4], "#" + name, "set");\n      }\n      setFunctionName(decInfo[3], "#" + name, prefix);\n    }\n  } else if (kind !== 0 /* FIELD */) {\n    desc = Object.getOwnPropertyDescriptor(base, name);\n  }\n  if (kind === 1 /* ACCESSOR */) {\n    value = {\n      get: desc.get,\n      set: desc.set\n    };\n  } else if (kind === 2 /* METHOD */) {\n    value = desc.value;\n  } else if (kind === 3 /* GETTER */) {\n    value = desc.get;\n  } else if (kind === 4 /* SETTER */) {\n    value = desc.set;\n  }\n  var newValue, get, set;\n  if (typeof decs === "function") {\n    newValue = old_memberDec(decs, name, desc, metadataMap, initializers, kind, isStatic, isPrivate, value);\n    if (newValue !== void 0) {\n      old_assertValidReturnValue(kind, newValue);\n      if (kind === 0 /* FIELD */) {\n        initializer = newValue;\n      } else if (kind === 1 /* ACCESSOR */) {\n        initializer = old_getInit(newValue);\n        get = newValue.get || value.get;\n        set = newValue.set || value.set;\n        value = {\n          get: get,\n          set: set\n        };\n      } else {\n        value = newValue;\n      }\n    }\n  } else {\n    for (var i = decs.length - 1; i >= 0; i--) {\n      var dec = decs[i];\n      newValue = old_memberDec(dec, name, desc, metadataMap, initializers, kind, isStatic, isPrivate, value);\n      if (newValue !== void 0) {\n        old_assertValidReturnValue(kind, newValue);\n        var newInit;\n        if (kind === 0 /* FIELD */) {\n          newInit = newValue;\n        } else if (kind === 1 /* ACCESSOR */) {\n          newInit = old_getInit(newValue);\n          get = newValue.get || value.get;\n          set = newValue.set || value.set;\n          value = {\n            get: get,\n            set: set\n          };\n        } else {\n          value = newValue;\n        }\n        if (newInit !== void 0) {\n          if (initializer === void 0) {\n            initializer = newInit;\n          } else if (typeof initializer === "function") {\n            initializer = [initializer, newInit];\n          } else {\n            initializer.push(newInit);\n          }\n        }\n      }\n    }\n  }\n  if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n    if (initializer === void 0) {\n      // If the initializer was void 0, sub in a dummy initializer\n      initializer = function (instance, init) {\n        return init;\n      };\n    } else if (typeof initializer !== "function") {\n      var ownInitializers = initializer;\n      initializer = function (instance, init) {\n        var value = init;\n        for (var i = 0; i < ownInitializers.length; i++) {\n          value = ownInitializers[i].call(instance, value);\n        }\n        return value;\n      };\n    } else {\n      var originalInitializer = initializer;\n      initializer = function (instance, init) {\n        return originalInitializer.call(instance, init);\n      };\n    }\n    ret.push(initializer);\n  }\n  if (kind !== 0 /* FIELD */) {\n    if (kind === 1 /* ACCESSOR */) {\n      desc.get = value.get;\n      desc.set = value.set;\n    } else if (kind === 2 /* METHOD */) {\n      desc.value = value;\n    } else if (kind === 3 /* GETTER */) {\n      desc.get = value;\n    } else if (kind === 4 /* SETTER */) {\n      desc.set = value;\n    }\n    if (isPrivate) {\n      if (kind === 1 /* ACCESSOR */) {\n        ret.push(function (instance, args) {\n          return value.get.call(instance, args);\n        });\n        ret.push(function (instance, args) {\n          return value.set.call(instance, args);\n        });\n      } else if (kind === 2 /* METHOD */) {\n        ret.push(value);\n      } else {\n        ret.push(function (instance, args) {\n          return value.call(instance, args);\n        });\n      }\n    } else {\n      Object.defineProperty(base, name, desc);\n    }\n  }\n}\nfunction old_applyMemberDecs(ret, Class, protoMetadataMap, staticMetadataMap, decInfos) {\n  var protoInitializers;\n  var staticInitializers;\n  var existingProtoNonFields = new Map();\n  var existingStaticNonFields = new Map();\n  for (var i = 0; i < decInfos.length; i++) {\n    var decInfo = decInfos[i];\n\n    // skip computed property names\n    if (!Array.isArray(decInfo)) continue;\n    var kind = decInfo[1];\n    var name = decInfo[2];\n    var isPrivate = decInfo.length > 3;\n    var isStatic = kind >= 5; /* STATIC */\n    var base;\n    var metadataMap;\n    var initializers;\n    if (isStatic) {\n      base = Class;\n      metadataMap = staticMetadataMap;\n      kind = kind - 5 /* STATIC */;\n      // initialize staticInitializers when we see a non-field static member\n      if (kind !== 0 /* FIELD */) {\n        staticInitializers = staticInitializers || [];\n        initializers = staticInitializers;\n      }\n    } else {\n      base = Class.prototype;\n      metadataMap = protoMetadataMap;\n      // initialize protoInitializers when we see a non-field member\n      if (kind !== 0 /* FIELD */) {\n        protoInitializers = protoInitializers || [];\n        initializers = protoInitializers;\n      }\n    }\n    if (kind !== 0 /* FIELD */ && !isPrivate) {\n      var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;\n      var existingKind = existingNonFields.get(name) || 0;\n      if (existingKind === true || existingKind === 3 /* GETTER */ && kind !== 4 /* SETTER */ || existingKind === 4 /* SETTER */ && kind !== 3 /* GETTER */) {\n        throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);\n      } else if (!existingKind && kind > 2 /* METHOD */) {\n        existingNonFields.set(name, kind);\n      } else {\n        existingNonFields.set(name, true);\n      }\n    }\n    old_applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, metadataMap, initializers);\n  }\n  old_pushInitializers(ret, protoInitializers);\n  old_pushInitializers(ret, staticInitializers);\n}\nfunction old_pushInitializers(ret, initializers) {\n  if (initializers) {\n    ret.push(function (instance) {\n      for (var i = 0; i < initializers.length; i++) {\n        initializers[i].call(instance);\n      }\n      return instance;\n    });\n  }\n}\nfunction old_applyClassDecs(ret, targetClass, metadataMap, classDecs) {\n  if (classDecs.length > 0) {\n    var initializers = [];\n    var newClass = targetClass;\n    var name = targetClass.name;\n    for (var i = classDecs.length - 1; i >= 0; i--) {\n      var decoratorFinishedRef = {\n        v: false\n      };\n      try {\n        var ctx = Object.assign({\n          kind: "class",\n          name: name,\n          addInitializer: old_createAddInitializerMethod(initializers, decoratorFinishedRef)\n        }, old_createMetadataMethodsForProperty(metadataMap, 0 /* CONSTRUCTOR */, name, decoratorFinishedRef));\n        var nextNewClass = classDecs[i](newClass, ctx);\n      } finally {\n        decoratorFinishedRef.v = true;\n      }\n      if (nextNewClass !== undefined) {\n        old_assertValidReturnValue(10 /* CLASS */, nextNewClass);\n        newClass = nextNewClass;\n      }\n    }\n    ret.push(newClass, function () {\n      for (var i = 0; i < initializers.length; i++) {\n        initializers[i].call(newClass);\n      }\n    });\n  }\n}\n\n/**\n  Basic usage:\n\n  applyDecs(\n    Class,\n    [\n      // member decorators\n      [\n        dec,                // dec or array of decs\n        0,                  // kind of value being decorated\n        \'prop\',             // name of public prop on class containing the value being decorated,\n        \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n      ]\n    ],\n    [\n      // class decorators\n      dec1, dec2\n    ]\n  )\n  ```\n\n  Fully transpiled example:\n\n  ```js\n  @dec\n  class Class {\n    @dec\n    a = 123;\n\n    @dec\n    #a = 123;\n\n    @dec\n    @dec2\n    accessor b = 123;\n\n    @dec\n    accessor #b = 123;\n\n    @dec\n    c() { console.log(\'c\'); }\n\n    @dec\n    #c() { console.log(\'privC\'); }\n\n    @dec\n    get d() { console.log(\'d\'); }\n\n    @dec\n    get #d() { console.log(\'privD\'); }\n\n    @dec\n    set e(v) { console.log(\'e\'); }\n\n    @dec\n    set #e(v) { console.log(\'privE\'); }\n  }\n\n\n  // becomes\n  let initializeInstance;\n  let initializeClass;\n\n  let initA;\n  let initPrivA;\n\n  let initB;\n  let initPrivB, getPrivB, setPrivB;\n\n  let privC;\n  let privD;\n  let privE;\n\n  let Class;\n  class _Class {\n    static {\n      let ret = applyDecs(\n        this,\n        [\n          [dec, 0, \'a\'],\n          [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n          [[dec, dec2], 1, \'b\'],\n          [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n          [dec, 2, \'c\'],\n          [dec, 2, \'c\', () => console.log(\'privC\')],\n          [dec, 3, \'d\'],\n          [dec, 3, \'d\', () => console.log(\'privD\')],\n          [dec, 4, \'e\'],\n          [dec, 4, \'e\', () => console.log(\'privE\')],\n        ],\n        [\n          dec\n        ]\n      )\n\n      initA = ret[0];\n\n      initPrivA = ret[1];\n\n      initB = ret[2];\n\n      initPrivB = ret[3];\n      getPrivB = ret[4];\n      setPrivB = ret[5];\n\n      privC = ret[6];\n\n      privD = ret[7];\n\n      privE = ret[8];\n\n      initializeInstance = ret[9];\n\n      Class = ret[10]\n\n      initializeClass = ret[11];\n    }\n\n    a = (initializeInstance(this), initA(this, 123));\n\n    #a = initPrivA(this, 123);\n\n    #bData = initB(this, 123);\n    get b() { return this.#bData }\n    set b(v) { this.#bData = v }\n\n    #privBData = initPrivB(this, 123);\n    get #b() { return getPrivB(this); }\n    set #b(v) { setPrivB(this, v); }\n\n    c() { console.log(\'c\'); }\n\n    #c(...args) { return privC(this, ...args) }\n\n    get d() { console.log(\'d\'); }\n\n    get #d() { return privD(this); }\n\n    set e(v) { console.log(\'e\'); }\n\n    set #e(v) { privE(this, v); }\n  }\n\n  initializeClass(Class);\n */\nfunction applyDecs(targetClass, memberDecs, classDecs) {\n  var ret = [];\n  var staticMetadataMap = {};\n  var protoMetadataMap = {};\n  old_applyMemberDecs(ret, targetClass, protoMetadataMap, staticMetadataMap, memberDecs);\n  old_convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);\n  old_applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);\n  old_convertMetadataMapToFinal(targetClass, staticMetadataMap);\n  return ret;\n}',
+    {
+      globals: [
+        "Object",
+        "Map",
+        "Symbol",
+        "Array",
+        "Error",
+        "TypeError",
+        "undefined",
+        "console",
+      ],
+      locals: {
+        old_createMetadataMethodsForProperty: [
+          "body.0.id",
+          "body.3.body.body.7.block.body.0.argument.arguments.1.arguments.1.callee",
+          "body.12.body.body.0.consequent.body.3.body.body.1.block.body.0.declarations.0.init.arguments.1.callee",
+        ],
+        old_convertMetadataMapToFinal: [
+          "body.1.id",
+          "body.13.body.body.4.expression.callee",
+          "body.13.body.body.6.expression.callee",
+        ],
+        old_createAddInitializerMethod: [
+          "body.2.id",
+          "body.3.body.body.4.consequent.body.0.expression.right.callee",
+          "body.12.body.body.0.consequent.body.3.body.body.1.block.body.0.declarations.0.init.arguments.0.properties.2.value.callee",
+        ],
+        old_memberDec: [
+          "body.3.id",
+          "body.9.body.body.5.consequent.body.0.expression.right.callee",
+          "body.9.body.body.5.alternate.body.0.body.body.1.expression.right.callee",
+        ],
+        old_assertNotFinished: [
+          "body.4.id",
+          "body.0.body.body.0.argument.properties.0.value.body.body.0.expression.callee",
+          "body.0.body.body.0.argument.properties.1.value.body.body.0.expression.callee",
+          "body.2.body.body.0.argument.body.body.0.expression.callee",
+        ],
+        old_assertMetadataKey: [
+          "body.5.id",
+          "body.0.body.body.0.argument.properties.0.value.body.body.1.expression.callee",
+          "body.0.body.body.0.argument.properties.1.value.body.body.1.expression.callee",
+        ],
+        old_assertCallable: [
+          "body.6.id",
+          "body.2.body.body.0.argument.body.body.1.expression.callee",
+          "body.7.body.body.1.consequent.body.1.consequent.body.0.expression.callee",
+          "body.7.body.body.1.consequent.body.2.consequent.body.0.expression.callee",
+          "body.7.body.body.1.consequent.body.3.consequent.body.0.expression.callee",
+          "body.7.body.body.1.consequent.body.4.consequent.body.0.expression.callee",
+        ],
+        old_assertValidReturnValue: [
+          "body.7.id",
+          "body.9.body.body.5.consequent.body.1.consequent.body.0.expression.callee",
+          "body.9.body.body.5.alternate.body.0.body.body.2.consequent.body.0.expression.callee",
+          "body.12.body.body.0.consequent.body.3.body.body.2.consequent.body.0.expression.callee",
+        ],
+        old_getInit: [
+          "body.8.id",
+          "body.9.body.body.5.consequent.body.1.consequent.body.1.alternate.consequent.body.0.expression.right.callee",
+          "body.9.body.body.5.alternate.body.0.body.body.2.consequent.body.2.alternate.consequent.body.0.expression.right.callee",
+        ],
+        old_applyMemberDec: [
+          "body.9.id",
+          "body.10.body.body.4.body.body.11.expression.callee",
+        ],
+        old_applyMemberDecs: [
+          "body.10.id",
+          "body.13.body.body.3.expression.callee",
+        ],
+        old_pushInitializers: [
+          "body.11.id",
+          "body.10.body.body.5.expression.callee",
+          "body.10.body.body.6.expression.callee",
+        ],
+        old_applyClassDecs: [
+          "body.12.id",
+          "body.13.body.body.5.expression.callee",
+        ],
+        applyDecs: ["body.13.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "applyDecs",
+      dependencies: {
+        setFunctionName: [
+          "body.9.body.body.2.consequent.body.1.consequent.body.0.consequent.body.0.expression.callee",
+          "body.9.body.body.2.consequent.body.1.consequent.body.1.expression.callee",
+        ],
+        toPropertyKey: [
+          "body.3.body.body.2.declarations.0.init.properties.1.value.alternate.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  applyDecs2203: helper(
+    "7.19.0",
+    '/* @minVersion 7.19.0 */\n/* @onlyBabel7 */\n\n/**\n * NOTE: This is an old version of the helper, used for 2022-03 decorators.\n * Updates should be done in applyDecs2203R.js.\n */\n\n/**\n  Enums are used in this file, but not assigned to vars to avoid non-hoistable values\n\n  CONSTRUCTOR = 0;\n  PUBLIC = 1;\n  PRIVATE = 2;\n\n  FIELD = 0;\n  ACCESSOR = 1;\n  METHOD = 2;\n  GETTER = 3;\n  SETTER = 4;\n\n  STATIC = 5;\n\n  CLASS = 10; // only used in assertValidReturnValue\n*/\nfunction applyDecs2203Factory() {\n  function createAddInitializerMethod(initializers, decoratorFinishedRef) {\n    return function addInitializer(initializer) {\n      assertNotFinished(decoratorFinishedRef, "addInitializer");\n      assertCallable(initializer, "An initializer");\n      initializers.push(initializer);\n    };\n  }\n  function memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value) {\n    var kindStr;\n    switch (kind) {\n      case 1 /* ACCESSOR */:\n        kindStr = "accessor";\n        break;\n      case 2 /* METHOD */:\n        kindStr = "method";\n        break;\n      case 3 /* GETTER */:\n        kindStr = "getter";\n        break;\n      case 4 /* SETTER */:\n        kindStr = "setter";\n        break;\n      default:\n        kindStr = "field";\n    }\n    var ctx = {\n      kind: kindStr,\n      name: isPrivate ? "#" + name : name,\n      static: isStatic,\n      private: isPrivate\n    };\n    var decoratorFinishedRef = {\n      v: false\n    };\n    if (kind !== 0 /* FIELD */) {\n      ctx.addInitializer = createAddInitializerMethod(initializers, decoratorFinishedRef);\n    }\n    var get, set;\n    if (kind === 0 /* FIELD */) {\n      if (isPrivate) {\n        get = desc.get;\n        set = desc.set;\n      } else {\n        get = function () {\n          return this[name];\n        };\n        set = function (v) {\n          this[name] = v;\n        };\n      }\n    } else if (kind === 2 /* METHOD */) {\n      get = function () {\n        return desc.value;\n      };\n    } else {\n      // replace with values that will go through the final getter and setter\n      if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {\n        get = function () {\n          return desc.get.call(this);\n        };\n      }\n      if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {\n        set = function (v) {\n          desc.set.call(this, v);\n        };\n      }\n    }\n    ctx.access = get && set ? {\n      get: get,\n      set: set\n    } : get ? {\n      get: get\n    } : {\n      set: set\n    };\n    try {\n      return dec(value, ctx);\n    } finally {\n      decoratorFinishedRef.v = true;\n    }\n  }\n  function assertNotFinished(decoratorFinishedRef, fnName) {\n    if (decoratorFinishedRef.v) {\n      throw new Error("attempted to call " + fnName + " after decoration was finished");\n    }\n  }\n  function assertCallable(fn, hint) {\n    if (typeof fn !== "function") {\n      throw new TypeError(hint + " must be a function");\n    }\n  }\n  function assertValidReturnValue(kind, value) {\n    var type = typeof value;\n    if (kind === 1 /* ACCESSOR */) {\n      if (type !== "object" || value === null) {\n        throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");\n      }\n      if (value.get !== undefined) {\n        assertCallable(value.get, "accessor.get");\n      }\n      if (value.set !== undefined) {\n        assertCallable(value.set, "accessor.set");\n      }\n      if (value.init !== undefined) {\n        assertCallable(value.init, "accessor.init");\n      }\n    } else if (type !== "function") {\n      var hint;\n      if (kind === 0 /* FIELD */) {\n        hint = "field";\n      } else if (kind === 10 /* CLASS */) {\n        hint = "class";\n      } else {\n        hint = "method";\n      }\n      throw new TypeError(hint + " decorators must return a function or void 0");\n    }\n  }\n  function applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers) {\n    var decs = decInfo[0];\n    var desc, init, value;\n    if (isPrivate) {\n      if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n        desc = {\n          get: decInfo[3],\n          set: decInfo[4]\n        };\n      } else if (kind === 3 /* GETTER */) {\n        desc = {\n          get: decInfo[3]\n        };\n      } else if (kind === 4 /* SETTER */) {\n        desc = {\n          set: decInfo[3]\n        };\n      } else {\n        desc = {\n          value: decInfo[3]\n        };\n      }\n    } else if (kind !== 0 /* FIELD */) {\n      desc = Object.getOwnPropertyDescriptor(base, name);\n    }\n    if (kind === 1 /* ACCESSOR */) {\n      value = {\n        get: desc.get,\n        set: desc.set\n      };\n    } else if (kind === 2 /* METHOD */) {\n      value = desc.value;\n    } else if (kind === 3 /* GETTER */) {\n      value = desc.get;\n    } else if (kind === 4 /* SETTER */) {\n      value = desc.set;\n    }\n    var newValue, get, set;\n    if (typeof decs === "function") {\n      newValue = memberDec(decs, name, desc, initializers, kind, isStatic, isPrivate, value);\n      if (newValue !== void 0) {\n        assertValidReturnValue(kind, newValue);\n        if (kind === 0 /* FIELD */) {\n          init = newValue;\n        } else if (kind === 1 /* ACCESSOR */) {\n          init = newValue.init;\n          get = newValue.get || value.get;\n          set = newValue.set || value.set;\n          value = {\n            get: get,\n            set: set\n          };\n        } else {\n          value = newValue;\n        }\n      }\n    } else {\n      for (var i = decs.length - 1; i >= 0; i--) {\n        var dec = decs[i];\n        newValue = memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value);\n        if (newValue !== void 0) {\n          assertValidReturnValue(kind, newValue);\n          var newInit;\n          if (kind === 0 /* FIELD */) {\n            newInit = newValue;\n          } else if (kind === 1 /* ACCESSOR */) {\n            newInit = newValue.init;\n            get = newValue.get || value.get;\n            set = newValue.set || value.set;\n            value = {\n              get: get,\n              set: set\n            };\n          } else {\n            value = newValue;\n          }\n          if (newInit !== void 0) {\n            if (init === void 0) {\n              init = newInit;\n            } else if (typeof init === "function") {\n              init = [init, newInit];\n            } else {\n              init.push(newInit);\n            }\n          }\n        }\n      }\n    }\n    if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n      if (init === void 0) {\n        // If the initializer was void 0, sub in a dummy initializer\n        init = function (instance, init) {\n          return init;\n        };\n      } else if (typeof init !== "function") {\n        var ownInitializers = init;\n        init = function (instance, init) {\n          var value = init;\n          for (var i = 0; i < ownInitializers.length; i++) {\n            value = ownInitializers[i].call(instance, value);\n          }\n          return value;\n        };\n      } else {\n        var originalInitializer = init;\n        init = function (instance, init) {\n          return originalInitializer.call(instance, init);\n        };\n      }\n      ret.push(init);\n    }\n    if (kind !== 0 /* FIELD */) {\n      if (kind === 1 /* ACCESSOR */) {\n        desc.get = value.get;\n        desc.set = value.set;\n      } else if (kind === 2 /* METHOD */) {\n        desc.value = value;\n      } else if (kind === 3 /* GETTER */) {\n        desc.get = value;\n      } else if (kind === 4 /* SETTER */) {\n        desc.set = value;\n      }\n      if (isPrivate) {\n        if (kind === 1 /* ACCESSOR */) {\n          ret.push(function (instance, args) {\n            return value.get.call(instance, args);\n          });\n          ret.push(function (instance, args) {\n            return value.set.call(instance, args);\n          });\n        } else if (kind === 2 /* METHOD */) {\n          ret.push(value);\n        } else {\n          ret.push(function (instance, args) {\n            return value.call(instance, args);\n          });\n        }\n      } else {\n        Object.defineProperty(base, name, desc);\n      }\n    }\n  }\n  function applyMemberDecs(ret, Class, decInfos) {\n    var protoInitializers;\n    var staticInitializers;\n    var existingProtoNonFields = new Map();\n    var existingStaticNonFields = new Map();\n    for (var i = 0; i < decInfos.length; i++) {\n      var decInfo = decInfos[i];\n\n      // skip computed property names\n      if (!Array.isArray(decInfo)) continue;\n      var kind = decInfo[1];\n      var name = decInfo[2];\n      var isPrivate = decInfo.length > 3;\n      var isStatic = kind >= 5; /* STATIC */\n      var base;\n      var initializers;\n      if (isStatic) {\n        base = Class;\n        kind = kind - 5 /* STATIC */;\n        // initialize staticInitializers when we see a non-field static member\n        if (kind !== 0 /* FIELD */) {\n          staticInitializers = staticInitializers || [];\n          initializers = staticInitializers;\n        }\n      } else {\n        base = Class.prototype;\n        // initialize protoInitializers when we see a non-field member\n        if (kind !== 0 /* FIELD */) {\n          protoInitializers = protoInitializers || [];\n          initializers = protoInitializers;\n        }\n      }\n      if (kind !== 0 /* FIELD */ && !isPrivate) {\n        var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;\n        var existingKind = existingNonFields.get(name) || 0;\n        if (existingKind === true || existingKind === 3 /* GETTER */ && kind !== 4 /* SETTER */ || existingKind === 4 /* SETTER */ && kind !== 3 /* GETTER */) {\n          throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);\n        } else if (!existingKind && kind > 2 /* METHOD */) {\n          existingNonFields.set(name, kind);\n        } else {\n          existingNonFields.set(name, true);\n        }\n      }\n      applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers);\n    }\n    pushInitializers(ret, protoInitializers);\n    pushInitializers(ret, staticInitializers);\n  }\n  function pushInitializers(ret, initializers) {\n    if (initializers) {\n      ret.push(function (instance) {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(instance);\n        }\n        return instance;\n      });\n    }\n  }\n  function applyClassDecs(ret, targetClass, classDecs) {\n    if (classDecs.length > 0) {\n      var initializers = [];\n      var newClass = targetClass;\n      var name = targetClass.name;\n      for (var i = classDecs.length - 1; i >= 0; i--) {\n        var decoratorFinishedRef = {\n          v: false\n        };\n        try {\n          var nextNewClass = classDecs[i](newClass, {\n            kind: "class",\n            name: name,\n            addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef)\n          });\n        } finally {\n          decoratorFinishedRef.v = true;\n        }\n        if (nextNewClass !== undefined) {\n          assertValidReturnValue(10 /* CLASS */, nextNewClass);\n          newClass = nextNewClass;\n        }\n      }\n      ret.push(newClass, function () {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(newClass);\n        }\n      });\n    }\n  }\n\n  /**\n  Basic usage:\n   applyDecs(\n    Class,\n    [\n      // member decorators\n      [\n        dec,                // dec or array of decs\n        0,                  // kind of value being decorated\n        \'prop\',             // name of public prop on class containing the value being decorated,\n        \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n      ]\n    ],\n    [\n      // class decorators\n      dec1, dec2\n    ]\n  )\n  ```\n   Fully transpiled example:\n   ```js\n  @dec\n  class Class {\n    @dec\n    a = 123;\n     @dec\n    #a = 123;\n     @dec\n    @dec2\n    accessor b = 123;\n     @dec\n    accessor #b = 123;\n     @dec\n    c() { console.log(\'c\'); }\n     @dec\n    #c() { console.log(\'privC\'); }\n     @dec\n    get d() { console.log(\'d\'); }\n     @dec\n    get #d() { console.log(\'privD\'); }\n     @dec\n    set e(v) { console.log(\'e\'); }\n     @dec\n    set #e(v) { console.log(\'privE\'); }\n  }\n    // becomes\n  let initializeInstance;\n  let initializeClass;\n   let initA;\n  let initPrivA;\n   let initB;\n  let initPrivB, getPrivB, setPrivB;\n   let privC;\n  let privD;\n  let privE;\n   let Class;\n  class _Class {\n    static {\n      let ret = applyDecs(\n        this,\n        [\n          [dec, 0, \'a\'],\n          [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n          [[dec, dec2], 1, \'b\'],\n          [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n          [dec, 2, \'c\'],\n          [dec, 2, \'c\', () => console.log(\'privC\')],\n          [dec, 3, \'d\'],\n          [dec, 3, \'d\', () => console.log(\'privD\')],\n          [dec, 4, \'e\'],\n          [dec, 4, \'e\', () => console.log(\'privE\')],\n        ],\n        [\n          dec\n        ]\n      )\n       initA = ret[0];\n       initPrivA = ret[1];\n       initB = ret[2];\n       initPrivB = ret[3];\n      getPrivB = ret[4];\n      setPrivB = ret[5];\n       privC = ret[6];\n       privD = ret[7];\n       privE = ret[8];\n       initializeInstance = ret[9];\n       Class = ret[10]\n       initializeClass = ret[11];\n    }\n     a = (initializeInstance(this), initA(this, 123));\n     #a = initPrivA(this, 123);\n     #bData = initB(this, 123);\n    get b() { return this.#bData }\n    set b(v) { this.#bData = v }\n     #privBData = initPrivB(this, 123);\n    get #b() { return getPrivB(this); }\n    set #b(v) { setPrivB(this, v); }\n     c() { console.log(\'c\'); }\n     #c(...args) { return privC(this, ...args) }\n     get d() { console.log(\'d\'); }\n     get #d() { return privD(this); }\n     set e(v) { console.log(\'e\'); }\n     set #e(v) { privE(this, v); }\n  }\n   initializeClass(Class);\n  */\n\n  return function applyDecs2203Impl(targetClass, memberDecs, classDecs) {\n    var ret = [];\n    applyMemberDecs(ret, targetClass, memberDecs);\n    applyClassDecs(ret, targetClass, classDecs);\n    return ret;\n  };\n}\nvar applyDecs2203Impl;\nfunction applyDecs2203(targetClass, memberDecs, classDecs) {\n  applyDecs2203Impl = applyDecs2203Impl || applyDecs2203Factory();\n  return applyDecs2203Impl(targetClass, memberDecs, classDecs);\n}',
+    {
+      globals: ["Error", "TypeError", "undefined", "Object", "Map", "Array"],
+      locals: {
+        applyDecs2203Factory: [
+          "body.0.id",
+          "body.2.body.body.0.expression.right.right.callee",
+        ],
+        applyDecs2203Impl: [
+          "body.1.declarations.0.id",
+          "body.2.body.body.0.expression.right.left",
+          "body.2.body.body.1.argument.callee",
+          "body.2.body.body.0.expression.left",
+        ],
+        applyDecs2203: ["body.2.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "applyDecs2203",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  applyDecs2203R: helper(
+    "7.20.0",
+    '/* @minVersion 7.20.0 */\n/* @onlyBabel7 */\n\n\n\n\n/**\n  Enums are used in this file, but not assigned to vars to avoid non-hoistable values\n\n  CONSTRUCTOR = 0;\n  PUBLIC = 1;\n  PRIVATE = 2;\n\n  FIELD = 0;\n  ACCESSOR = 1;\n  METHOD = 2;\n  GETTER = 3;\n  SETTER = 4;\n\n  STATIC = 5;\n\n  CLASS = 10; // only used in assertValidReturnValue\n*/\n\nfunction applyDecs2203RFactory() {\n  function createAddInitializerMethod(initializers, decoratorFinishedRef) {\n    return function addInitializer(initializer) {\n      assertNotFinished(decoratorFinishedRef, "addInitializer");\n      assertCallable(initializer, "An initializer");\n      initializers.push(initializer);\n    };\n  }\n  function memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value) {\n    var kindStr;\n    switch (kind) {\n      case 1 /* ACCESSOR */:\n        kindStr = "accessor";\n        break;\n      case 2 /* METHOD */:\n        kindStr = "method";\n        break;\n      case 3 /* GETTER */:\n        kindStr = "getter";\n        break;\n      case 4 /* SETTER */:\n        kindStr = "setter";\n        break;\n      default:\n        kindStr = "field";\n    }\n    var ctx = {\n      kind: kindStr,\n      name: isPrivate ? "#" + name : toPropertyKey(name),\n      static: isStatic,\n      private: isPrivate\n    };\n    var decoratorFinishedRef = {\n      v: false\n    };\n    if (kind !== 0 /* FIELD */) {\n      ctx.addInitializer = createAddInitializerMethod(initializers, decoratorFinishedRef);\n    }\n    var get, set;\n    if (kind === 0 /* FIELD */) {\n      if (isPrivate) {\n        get = desc.get;\n        set = desc.set;\n      } else {\n        get = function () {\n          return this[name];\n        };\n        set = function (v) {\n          this[name] = v;\n        };\n      }\n    } else if (kind === 2 /* METHOD */) {\n      get = function () {\n        return desc.value;\n      };\n    } else {\n      // replace with values that will go through the final getter and setter\n      if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {\n        get = function () {\n          return desc.get.call(this);\n        };\n      }\n      if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {\n        set = function (v) {\n          desc.set.call(this, v);\n        };\n      }\n    }\n    ctx.access = get && set ? {\n      get: get,\n      set: set\n    } : get ? {\n      get: get\n    } : {\n      set: set\n    };\n    try {\n      return dec(value, ctx);\n    } finally {\n      decoratorFinishedRef.v = true;\n    }\n  }\n  function assertNotFinished(decoratorFinishedRef, fnName) {\n    if (decoratorFinishedRef.v) {\n      throw new Error("attempted to call " + fnName + " after decoration was finished");\n    }\n  }\n  function assertCallable(fn, hint) {\n    if (typeof fn !== "function") {\n      throw new TypeError(hint + " must be a function");\n    }\n  }\n  function assertValidReturnValue(kind, value) {\n    var type = typeof value;\n    if (kind === 1 /* ACCESSOR */) {\n      if (type !== "object" || value === null) {\n        throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");\n      }\n      if (value.get !== undefined) {\n        assertCallable(value.get, "accessor.get");\n      }\n      if (value.set !== undefined) {\n        assertCallable(value.set, "accessor.set");\n      }\n      if (value.init !== undefined) {\n        assertCallable(value.init, "accessor.init");\n      }\n    } else if (type !== "function") {\n      var hint;\n      if (kind === 0 /* FIELD */) {\n        hint = "field";\n      } else if (kind === 10 /* CLASS */) {\n        hint = "class";\n      } else {\n        hint = "method";\n      }\n      throw new TypeError(hint + " decorators must return a function or void 0");\n    }\n  }\n  function applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers) {\n    var decs = decInfo[0];\n    var desc, init, prefix, value;\n    if (isPrivate) {\n      if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n        desc = {\n          get: decInfo[3],\n          set: decInfo[4]\n        };\n        prefix = "get";\n      } else if (kind === 3 /* GETTER */) {\n        desc = {\n          get: decInfo[3]\n        };\n        prefix = "get";\n      } else if (kind === 4 /* SETTER */) {\n        desc = {\n          set: decInfo[3]\n        };\n        prefix = "set";\n      } else {\n        desc = {\n          value: decInfo[3]\n        };\n      }\n      if (kind !== 0 /* FIELD */) {\n        if (kind === 1 /* ACCESSOR */) {\n          setFunctionName(decInfo[4], "#" + name, "set");\n        }\n        setFunctionName(decInfo[3], "#" + name, prefix);\n      }\n    } else if (kind !== 0 /* FIELD */) {\n      desc = Object.getOwnPropertyDescriptor(base, name);\n    }\n    if (kind === 1 /* ACCESSOR */) {\n      value = {\n        get: desc.get,\n        set: desc.set\n      };\n    } else if (kind === 2 /* METHOD */) {\n      value = desc.value;\n    } else if (kind === 3 /* GETTER */) {\n      value = desc.get;\n    } else if (kind === 4 /* SETTER */) {\n      value = desc.set;\n    }\n    var newValue, get, set;\n    if (typeof decs === "function") {\n      newValue = memberDec(decs, name, desc, initializers, kind, isStatic, isPrivate, value);\n      if (newValue !== void 0) {\n        assertValidReturnValue(kind, newValue);\n        if (kind === 0 /* FIELD */) {\n          init = newValue;\n        } else if (kind === 1 /* ACCESSOR */) {\n          init = newValue.init;\n          get = newValue.get || value.get;\n          set = newValue.set || value.set;\n          value = {\n            get: get,\n            set: set\n          };\n        } else {\n          value = newValue;\n        }\n      }\n    } else {\n      for (var i = decs.length - 1; i >= 0; i--) {\n        var dec = decs[i];\n        newValue = memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value);\n        if (newValue !== void 0) {\n          assertValidReturnValue(kind, newValue);\n          var newInit;\n          if (kind === 0 /* FIELD */) {\n            newInit = newValue;\n          } else if (kind === 1 /* ACCESSOR */) {\n            newInit = newValue.init;\n            get = newValue.get || value.get;\n            set = newValue.set || value.set;\n            value = {\n              get: get,\n              set: set\n            };\n          } else {\n            value = newValue;\n          }\n          if (newInit !== void 0) {\n            if (init === void 0) {\n              init = newInit;\n            } else if (typeof init === "function") {\n              init = [init, newInit];\n            } else {\n              init.push(newInit);\n            }\n          }\n        }\n      }\n    }\n    if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n      if (init === void 0) {\n        // If the initializer was void 0, sub in a dummy initializer\n        init = function (instance, init) {\n          return init;\n        };\n      } else if (typeof init !== "function") {\n        var ownInitializers = init;\n        init = function (instance, init) {\n          var value = init;\n          for (var i = 0; i < ownInitializers.length; i++) {\n            value = ownInitializers[i].call(instance, value);\n          }\n          return value;\n        };\n      } else {\n        var originalInitializer = init;\n        init = function (instance, init) {\n          return originalInitializer.call(instance, init);\n        };\n      }\n      ret.push(init);\n    }\n    if (kind !== 0 /* FIELD */) {\n      if (kind === 1 /* ACCESSOR */) {\n        desc.get = value.get;\n        desc.set = value.set;\n      } else if (kind === 2 /* METHOD */) {\n        desc.value = value;\n      } else if (kind === 3 /* GETTER */) {\n        desc.get = value;\n      } else if (kind === 4 /* SETTER */) {\n        desc.set = value;\n      }\n      if (isPrivate) {\n        if (kind === 1 /* ACCESSOR */) {\n          ret.push(function (instance, args) {\n            return value.get.call(instance, args);\n          });\n          ret.push(function (instance, args) {\n            return value.set.call(instance, args);\n          });\n        } else if (kind === 2 /* METHOD */) {\n          ret.push(value);\n        } else {\n          ret.push(function (instance, args) {\n            return value.call(instance, args);\n          });\n        }\n      } else {\n        Object.defineProperty(base, name, desc);\n      }\n    }\n  }\n  function applyMemberDecs(Class, decInfos) {\n    var ret = [];\n    var protoInitializers;\n    var staticInitializers;\n    var existingProtoNonFields = new Map();\n    var existingStaticNonFields = new Map();\n    for (var i = 0; i < decInfos.length; i++) {\n      var decInfo = decInfos[i];\n\n      // skip computed property names\n      if (!Array.isArray(decInfo)) continue;\n      var kind = decInfo[1];\n      var name = decInfo[2];\n      var isPrivate = decInfo.length > 3;\n      var isStatic = kind >= 5; /* STATIC */\n      var base;\n      var initializers;\n      if (isStatic) {\n        base = Class;\n        kind = kind - 5 /* STATIC */;\n        // initialize staticInitializers when we see a non-field static member\n        if (kind !== 0 /* FIELD */) {\n          staticInitializers = staticInitializers || [];\n          initializers = staticInitializers;\n        }\n      } else {\n        base = Class.prototype;\n        // initialize protoInitializers when we see a non-field member\n        if (kind !== 0 /* FIELD */) {\n          protoInitializers = protoInitializers || [];\n          initializers = protoInitializers;\n        }\n      }\n      if (kind !== 0 /* FIELD */ && !isPrivate) {\n        var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;\n        var existingKind = existingNonFields.get(name) || 0;\n        if (existingKind === true || existingKind === 3 /* GETTER */ && kind !== 4 /* SETTER */ || existingKind === 4 /* SETTER */ && kind !== 3 /* GETTER */) {\n          throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);\n        } else if (!existingKind && kind > 2 /* METHOD */) {\n          existingNonFields.set(name, kind);\n        } else {\n          existingNonFields.set(name, true);\n        }\n      }\n      applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers);\n    }\n    pushInitializers(ret, protoInitializers);\n    pushInitializers(ret, staticInitializers);\n    return ret;\n  }\n  function pushInitializers(ret, initializers) {\n    if (initializers) {\n      ret.push(function (instance) {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(instance);\n        }\n        return instance;\n      });\n    }\n  }\n  function applyClassDecs(targetClass, classDecs) {\n    if (classDecs.length > 0) {\n      var initializers = [];\n      var newClass = targetClass;\n      var name = targetClass.name;\n      for (var i = classDecs.length - 1; i >= 0; i--) {\n        var decoratorFinishedRef = {\n          v: false\n        };\n        try {\n          var nextNewClass = classDecs[i](newClass, {\n            kind: "class",\n            name: name,\n            addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef)\n          });\n        } finally {\n          decoratorFinishedRef.v = true;\n        }\n        if (nextNewClass !== undefined) {\n          assertValidReturnValue(10 /* CLASS */, nextNewClass);\n          newClass = nextNewClass;\n        }\n      }\n      return [newClass, function () {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(newClass);\n        }\n      }];\n    }\n    // The transformer will not emit assignment when there are no class decorators,\n    // so we don\'t have to return an empty array here.\n  }\n\n  /**\n  Basic usage:\n   applyDecs(\n    Class,\n    [\n      // member decorators\n      [\n        dec,                // dec or array of decs\n        0,                  // kind of value being decorated\n        \'prop\',             // name of public prop on class containing the value being decorated,\n        \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n      ]\n    ],\n    [\n      // class decorators\n      dec1, dec2\n    ]\n  )\n  ```\n   Fully transpiled example:\n   ```js\n  @dec\n  class Class {\n    @dec\n    a = 123;\n     @dec\n    #a = 123;\n     @dec\n    @dec2\n    accessor b = 123;\n     @dec\n    accessor #b = 123;\n     @dec\n    c() { console.log(\'c\'); }\n     @dec\n    #c() { console.log(\'privC\'); }\n     @dec\n    get d() { console.log(\'d\'); }\n     @dec\n    get #d() { console.log(\'privD\'); }\n     @dec\n    set e(v) { console.log(\'e\'); }\n     @dec\n    set #e(v) { console.log(\'privE\'); }\n  }\n    // becomes\n  let initializeInstance;\n  let initializeClass;\n   let initA;\n  let initPrivA;\n   let initB;\n  let initPrivB, getPrivB, setPrivB;\n   let privC;\n  let privD;\n  let privE;\n   let Class;\n  class _Class {\n    static {\n      let ret = applyDecs(\n        this,\n        [\n          [dec, 0, \'a\'],\n          [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n          [[dec, dec2], 1, \'b\'],\n          [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n          [dec, 2, \'c\'],\n          [dec, 2, \'c\', () => console.log(\'privC\')],\n          [dec, 3, \'d\'],\n          [dec, 3, \'d\', () => console.log(\'privD\')],\n          [dec, 4, \'e\'],\n          [dec, 4, \'e\', () => console.log(\'privE\')],\n        ],\n        [\n          dec\n        ]\n      )\n       initA = ret[0];\n       initPrivA = ret[1];\n       initB = ret[2];\n       initPrivB = ret[3];\n      getPrivB = ret[4];\n      setPrivB = ret[5];\n       privC = ret[6];\n       privD = ret[7];\n       privE = ret[8];\n       initializeInstance = ret[9];\n       Class = ret[10]\n       initializeClass = ret[11];\n    }\n     a = (initializeInstance(this), initA(this, 123));\n     #a = initPrivA(this, 123);\n     #bData = initB(this, 123);\n    get b() { return this.#bData }\n    set b(v) { this.#bData = v }\n     #privBData = initPrivB(this, 123);\n    get #b() { return getPrivB(this); }\n    set #b(v) { setPrivB(this, v); }\n     c() { console.log(\'c\'); }\n     #c(...args) { return privC(this, ...args) }\n     get d() { console.log(\'d\'); }\n     get #d() { return privD(this); }\n     set e(v) { console.log(\'e\'); }\n     set #e(v) { privE(this, v); }\n  }\n   initializeClass(Class);\n  */\n\n  return function applyDecs2203R(targetClass, memberDecs, classDecs) {\n    return {\n      e: applyMemberDecs(targetClass, memberDecs),\n      // Lazily apply class decorations so that member init locals can be properly bound.\n      get c() {\n        return applyClassDecs(targetClass, classDecs);\n      }\n    };\n  };\n}\nfunction applyDecs2203R(targetClass, memberDecs, classDecs) {\n  return (applyDecs2203R = applyDecs2203RFactory())(targetClass, memberDecs, classDecs);\n}',
+    {
+      globals: ["Error", "TypeError", "undefined", "Object", "Map", "Array"],
+      locals: {
+        applyDecs2203RFactory: [
+          "body.0.id",
+          "body.1.body.body.0.argument.callee.right.callee",
+        ],
+        applyDecs2203R: [
+          "body.1.id",
+          "body.1.body.body.0.argument.callee.left",
+        ],
+      },
+      exportBindingAssignments: ["body.1.body.body.0.argument.callee"],
+      exportName: "applyDecs2203R",
+      dependencies: {
+        setFunctionName: [
+          "body.0.body.body.5.body.body.2.consequent.body.1.consequent.body.0.consequent.body.0.expression.callee",
+          "body.0.body.body.5.body.body.2.consequent.body.1.consequent.body.1.expression.callee",
+        ],
+        toPropertyKey: [
+          "body.0.body.body.1.body.body.2.declarations.0.init.properties.1.value.alternate.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  applyDecs2301: helper(
+    "7.21.0",
+    '/* @minVersion 7.21.0 */\n/* @onlyBabel7 */\n\n\n\n\n\n/**\n  Enums are used in this file, but not assigned to vars to avoid non-hoistable values\n\n  CONSTRUCTOR = 0;\n  PUBLIC = 1;\n  PRIVATE = 2;\n\n  FIELD = 0;\n  ACCESSOR = 1;\n  METHOD = 2;\n  GETTER = 3;\n  SETTER = 4;\n\n  STATIC = 5;\n\n  CLASS = 10; // only used in assertValidReturnValue\n*/\n\nfunction applyDecs2301Factory() {\n  function createAddInitializerMethod(initializers, decoratorFinishedRef) {\n    return function addInitializer(initializer) {\n      assertNotFinished(decoratorFinishedRef, "addInitializer");\n      assertCallable(initializer, "An initializer");\n      initializers.push(initializer);\n    };\n  }\n  function assertInstanceIfPrivate(has, target) {\n    if (!has(target)) {\n      throw new TypeError("Attempted to access private element on non-instance");\n    }\n  }\n  function memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value, hasPrivateBrand) {\n    var kindStr;\n    switch (kind) {\n      case 1 /* ACCESSOR */:\n        kindStr = "accessor";\n        break;\n      case 2 /* METHOD */:\n        kindStr = "method";\n        break;\n      case 3 /* GETTER */:\n        kindStr = "getter";\n        break;\n      case 4 /* SETTER */:\n        kindStr = "setter";\n        break;\n      default:\n        kindStr = "field";\n    }\n    var ctx = {\n      kind: kindStr,\n      name: isPrivate ? "#" + name : toPropertyKey(name),\n      static: isStatic,\n      private: isPrivate\n    };\n    var decoratorFinishedRef = {\n      v: false\n    };\n    if (kind !== 0 /* FIELD */) {\n      ctx.addInitializer = createAddInitializerMethod(initializers, decoratorFinishedRef);\n    }\n    var get, set;\n    if (!isPrivate && (kind === 0 /* FIELD */ || kind === 2) /* METHOD */) {\n      get = function (target) {\n        return target[name];\n      };\n      if (kind === 0 /* FIELD */) {\n        set = function (target, v) {\n          target[name] = v;\n        };\n      }\n    } else if (kind === 2 /* METHOD */) {\n      // Assert: isPrivate is true.\n      get = function (target) {\n        assertInstanceIfPrivate(hasPrivateBrand, target);\n        return desc.value;\n      };\n    } else {\n      // Assert: If kind === 0, then isPrivate is true.\n      var t = kind === 0 /* FIELD */ || kind === 1; /* ACCESSOR */\n      if (t || kind === 3 /* GETTER */) {\n        if (isPrivate) {\n          get = function (target) {\n            assertInstanceIfPrivate(hasPrivateBrand, target);\n            return desc.get.call(target);\n          };\n        } else {\n          get = function (target) {\n            return desc.get.call(target);\n          };\n        }\n      }\n      if (t || kind === 4 /* SETTER */) {\n        if (isPrivate) {\n          set = function (target, value) {\n            assertInstanceIfPrivate(hasPrivateBrand, target);\n            desc.set.call(target, value);\n          };\n        } else {\n          set = function (target, value) {\n            desc.set.call(target, value);\n          };\n        }\n      }\n    }\n    var has = isPrivate ? hasPrivateBrand.bind() : function (target) {\n      return name in target;\n    };\n    ctx.access = get && set ? {\n      get: get,\n      set: set,\n      has: has\n    } : get ? {\n      get: get,\n      has: has\n    } : {\n      set: set,\n      has: has\n    };\n    try {\n      return dec(value, ctx);\n    } finally {\n      decoratorFinishedRef.v = true;\n    }\n  }\n  function assertNotFinished(decoratorFinishedRef, fnName) {\n    if (decoratorFinishedRef.v) {\n      throw new Error("attempted to call " + fnName + " after decoration was finished");\n    }\n  }\n  function assertCallable(fn, hint) {\n    if (typeof fn !== "function") {\n      throw new TypeError(hint + " must be a function");\n    }\n  }\n  function assertValidReturnValue(kind, value) {\n    var type = typeof value;\n    if (kind === 1 /* ACCESSOR */) {\n      if (type !== "object" || value === null) {\n        throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");\n      }\n      if (value.get !== undefined) {\n        assertCallable(value.get, "accessor.get");\n      }\n      if (value.set !== undefined) {\n        assertCallable(value.set, "accessor.set");\n      }\n      if (value.init !== undefined) {\n        assertCallable(value.init, "accessor.init");\n      }\n    } else if (type !== "function") {\n      var hint;\n      if (kind === 0 /* FIELD */) {\n        hint = "field";\n      } else if (kind === 10 /* CLASS */) {\n        hint = "class";\n      } else {\n        hint = "method";\n      }\n      throw new TypeError(hint + " decorators must return a function or void 0");\n    }\n  }\n  function curryThis1(fn) {\n    return function () {\n      return fn(this);\n    };\n  }\n  function curryThis2(fn) {\n    return function (value) {\n      fn(this, value);\n    };\n  }\n  function applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, hasPrivateBrand) {\n    var decs = decInfo[0];\n    var desc, init, prefix, value;\n    if (isPrivate) {\n      if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n        desc = {\n          get: curryThis1(decInfo[3]),\n          set: curryThis2(decInfo[4])\n        };\n        prefix = "get";\n      } else {\n        if (kind === 3 /* GETTER */) {\n          desc = {\n            get: decInfo[3]\n          };\n          prefix = "get";\n        } else if (kind === 4 /* SETTER */) {\n          desc = {\n            set: decInfo[3]\n          };\n          prefix = "set";\n        } else {\n          desc = {\n            value: decInfo[3]\n          };\n        }\n      }\n      if (kind !== 0 /* FIELD */) {\n        if (kind === 1 /* ACCESSOR */) {\n          setFunctionName(desc.set, "#" + name, "set");\n        }\n        setFunctionName(desc[prefix || "value"], "#" + name, prefix);\n      }\n    } else if (kind !== 0 /* FIELD */) {\n      desc = Object.getOwnPropertyDescriptor(base, name);\n    }\n    if (kind === 1 /* ACCESSOR */) {\n      value = {\n        get: desc.get,\n        set: desc.set\n      };\n    } else if (kind === 2 /* METHOD */) {\n      value = desc.value;\n    } else if (kind === 3 /* GETTER */) {\n      value = desc.get;\n    } else if (kind === 4 /* SETTER */) {\n      value = desc.set;\n    }\n    var newValue, get, set;\n    if (typeof decs === "function") {\n      newValue = memberDec(decs, name, desc, initializers, kind, isStatic, isPrivate, value, hasPrivateBrand);\n      if (newValue !== void 0) {\n        assertValidReturnValue(kind, newValue);\n        if (kind === 0 /* FIELD */) {\n          init = newValue;\n        } else if (kind === 1 /* ACCESSOR */) {\n          init = newValue.init;\n          get = newValue.get || value.get;\n          set = newValue.set || value.set;\n          value = {\n            get: get,\n            set: set\n          };\n        } else {\n          value = newValue;\n        }\n      }\n    } else {\n      for (var i = decs.length - 1; i >= 0; i--) {\n        var dec = decs[i];\n        newValue = memberDec(dec, name, desc, initializers, kind, isStatic, isPrivate, value, hasPrivateBrand);\n        if (newValue !== void 0) {\n          assertValidReturnValue(kind, newValue);\n          var newInit;\n          if (kind === 0 /* FIELD */) {\n            newInit = newValue;\n          } else if (kind === 1 /* ACCESSOR */) {\n            newInit = newValue.init;\n            get = newValue.get || value.get;\n            set = newValue.set || value.set;\n            value = {\n              get: get,\n              set: set\n            };\n          } else {\n            value = newValue;\n          }\n          if (newInit !== void 0) {\n            if (init === void 0) {\n              init = newInit;\n            } else if (typeof init === "function") {\n              init = [init, newInit];\n            } else {\n              init.push(newInit);\n            }\n          }\n        }\n      }\n    }\n    if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {\n      if (init === void 0) {\n        // If the initializer was void 0, sub in a dummy initializer\n        init = function (instance, init) {\n          return init;\n        };\n      } else if (typeof init !== "function") {\n        var ownInitializers = init;\n        init = function (instance, init) {\n          var value = init;\n          for (var i = 0; i < ownInitializers.length; i++) {\n            value = ownInitializers[i].call(instance, value);\n          }\n          return value;\n        };\n      } else {\n        var originalInitializer = init;\n        init = function (instance, init) {\n          return originalInitializer.call(instance, init);\n        };\n      }\n      ret.push(init);\n    }\n    if (kind !== 0 /* FIELD */) {\n      if (kind === 1 /* ACCESSOR */) {\n        desc.get = value.get;\n        desc.set = value.set;\n      } else if (kind === 2 /* METHOD */) {\n        desc.value = value;\n      } else if (kind === 3 /* GETTER */) {\n        desc.get = value;\n      } else if (kind === 4 /* SETTER */) {\n        desc.set = value;\n      }\n      if (isPrivate) {\n        if (kind === 1 /* ACCESSOR */) {\n          ret.push(function (instance, args) {\n            return value.get.call(instance, args);\n          });\n          ret.push(function (instance, args) {\n            return value.set.call(instance, args);\n          });\n        } else if (kind === 2 /* METHOD */) {\n          ret.push(value);\n        } else {\n          ret.push(function (instance, args) {\n            return value.call(instance, args);\n          });\n        }\n      } else {\n        Object.defineProperty(base, name, desc);\n      }\n    }\n  }\n  function applyMemberDecs(Class, decInfos, instanceBrand) {\n    var ret = [];\n    var protoInitializers;\n    var staticInitializers;\n    var staticBrand;\n    var existingProtoNonFields = new Map();\n    var existingStaticNonFields = new Map();\n    for (var i = 0; i < decInfos.length; i++) {\n      var decInfo = decInfos[i];\n\n      // skip computed property names\n      if (!Array.isArray(decInfo)) continue;\n      var kind = decInfo[1];\n      var name = decInfo[2];\n      var isPrivate = decInfo.length > 3;\n      var isStatic = kind >= 5; /* STATIC */\n      var base;\n      var initializers;\n      var hasPrivateBrand = instanceBrand;\n      if (isStatic) {\n        base = Class;\n        kind = kind - 5 /* STATIC */;\n        // initialize staticInitializers when we see a non-field static member\n        if (kind !== 0 /* FIELD */) {\n          staticInitializers = staticInitializers || [];\n          initializers = staticInitializers;\n        }\n        if (isPrivate && !staticBrand) {\n          staticBrand = function (_) {\n            return checkInRHS(_) === Class;\n          };\n        }\n        hasPrivateBrand = staticBrand;\n      } else {\n        base = Class.prototype;\n        // initialize protoInitializers when we see a non-field member\n        if (kind !== 0 /* FIELD */) {\n          protoInitializers = protoInitializers || [];\n          initializers = protoInitializers;\n        }\n      }\n      if (kind !== 0 /* FIELD */ && !isPrivate) {\n        var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;\n        var existingKind = existingNonFields.get(name) || 0;\n        if (existingKind === true || existingKind === 3 /* GETTER */ && kind !== 4 /* SETTER */ || existingKind === 4 /* SETTER */ && kind !== 3 /* GETTER */) {\n          throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);\n        } else if (!existingKind && kind > 2 /* METHOD */) {\n          existingNonFields.set(name, kind);\n        } else {\n          existingNonFields.set(name, true);\n        }\n      }\n      applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, hasPrivateBrand);\n    }\n    pushInitializers(ret, protoInitializers);\n    pushInitializers(ret, staticInitializers);\n    return ret;\n  }\n  function pushInitializers(ret, initializers) {\n    if (initializers) {\n      ret.push(function (instance) {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(instance);\n        }\n        return instance;\n      });\n    }\n  }\n  function applyClassDecs(targetClass, classDecs) {\n    if (classDecs.length > 0) {\n      var initializers = [];\n      var newClass = targetClass;\n      var name = targetClass.name;\n      for (var i = classDecs.length - 1; i >= 0; i--) {\n        var decoratorFinishedRef = {\n          v: false\n        };\n        try {\n          var nextNewClass = classDecs[i](newClass, {\n            kind: "class",\n            name: name,\n            addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef)\n          });\n        } finally {\n          decoratorFinishedRef.v = true;\n        }\n        if (nextNewClass !== undefined) {\n          assertValidReturnValue(10 /* CLASS */, nextNewClass);\n          newClass = nextNewClass;\n        }\n      }\n      return [newClass, function () {\n        for (var i = 0; i < initializers.length; i++) {\n          initializers[i].call(newClass);\n        }\n      }];\n    }\n    // The transformer will not emit assignment when there are no class decorators,\n    // so we don\'t have to return an empty array here.\n  }\n\n  /**\n    Basic usage:\n     applyDecs(\n      Class,\n      [\n        // member decorators\n        [\n          dec,                // dec or array of decs\n          0,                  // kind of value being decorated\n          \'prop\',             // name of public prop on class containing the value being decorated,\n          \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n        ]\n      ],\n      [\n        // class decorators\n        dec1, dec2\n      ]\n    )\n    ```\n     Fully transpiled example:\n     ```js\n    @dec\n    class Class {\n      @dec\n      a = 123;\n       @dec\n      #a = 123;\n       @dec\n      @dec2\n      accessor b = 123;\n       @dec\n      accessor #b = 123;\n       @dec\n      c() { console.log(\'c\'); }\n       @dec\n      #c() { console.log(\'privC\'); }\n       @dec\n      get d() { console.log(\'d\'); }\n       @dec\n      get #d() { console.log(\'privD\'); }\n       @dec\n      set e(v) { console.log(\'e\'); }\n       @dec\n      set #e(v) { console.log(\'privE\'); }\n    }\n      // becomes\n    let initializeInstance;\n    let initializeClass;\n     let initA;\n    let initPrivA;\n     let initB;\n    let initPrivB, getPrivB, setPrivB;\n     let privC;\n    let privD;\n    let privE;\n     let Class;\n    class _Class {\n      static {\n        let ret = applyDecs(\n          this,\n          [\n            [dec, 0, \'a\'],\n            [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n            [[dec, dec2], 1, \'b\'],\n            [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n            [dec, 2, \'c\'],\n            [dec, 2, \'c\', () => console.log(\'privC\')],\n            [dec, 3, \'d\'],\n            [dec, 3, \'d\', () => console.log(\'privD\')],\n            [dec, 4, \'e\'],\n            [dec, 4, \'e\', () => console.log(\'privE\')],\n          ],\n          [\n            dec\n          ]\n        )\n         initA = ret[0];\n         initPrivA = ret[1];\n         initB = ret[2];\n         initPrivB = ret[3];\n        getPrivB = ret[4];\n        setPrivB = ret[5];\n         privC = ret[6];\n         privD = ret[7];\n         privE = ret[8];\n         initializeInstance = ret[9];\n         Class = ret[10]\n         initializeClass = ret[11];\n      }\n       a = (initializeInstance(this), initA(this, 123));\n       #a = initPrivA(this, 123);\n       #bData = initB(this, 123);\n      get b() { return this.#bData }\n      set b(v) { this.#bData = v }\n       #privBData = initPrivB(this, 123);\n      get #b() { return getPrivB(this); }\n      set #b(v) { setPrivB(this, v); }\n       c() { console.log(\'c\'); }\n       #c(...args) { return privC(this, ...args) }\n       get d() { console.log(\'d\'); }\n       get #d() { return privD(this); }\n       set e(v) { console.log(\'e\'); }\n       set #e(v) { privE(this, v); }\n    }\n     initializeClass(Class);\n  */\n  return function applyDecs2301(targetClass, memberDecs, classDecs, instanceBrand) {\n    return {\n      e: applyMemberDecs(targetClass, memberDecs, instanceBrand),\n      // Lazily apply class decorations so that member init locals can be properly bound.\n      get c() {\n        return applyClassDecs(targetClass, classDecs);\n      }\n    };\n  };\n}\nfunction applyDecs2301(targetClass, memberDecs, classDecs, instanceBrand) {\n  return (applyDecs2301 = applyDecs2301Factory())(targetClass, memberDecs, classDecs, instanceBrand);\n}',
+    {
+      globals: ["TypeError", "Error", "undefined", "Object", "Map", "Array"],
+      locals: {
+        applyDecs2301Factory: [
+          "body.0.id",
+          "body.1.body.body.0.argument.callee.right.callee",
+        ],
+        applyDecs2301: ["body.1.id", "body.1.body.body.0.argument.callee.left"],
+      },
+      exportBindingAssignments: ["body.1.body.body.0.argument.callee"],
+      exportName: "applyDecs2301",
+      dependencies: {
+        checkInRHS: [
+          "body.0.body.body.9.body.body.6.body.body.9.consequent.body.3.consequent.body.0.expression.right.body.body.0.argument.left.callee",
+        ],
+        setFunctionName: [
+          "body.0.body.body.8.body.body.2.consequent.body.1.consequent.body.0.consequent.body.0.expression.callee",
+          "body.0.body.body.8.body.body.2.consequent.body.1.consequent.body.1.expression.callee",
+        ],
+        toPropertyKey: [
+          "body.0.body.body.2.body.body.2.declarations.0.init.properties.1.value.alternate.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  applyDecs2305: helper(
+    "7.21.0",
+    '/* @minVersion 7.21.0 */\n/* @mangleFns */\n/* @onlyBabel7 */\n\n\n\n\n/**\n  Basic usage:\n\n  applyDecs(\n    Class,\n    [\n      // member decorators\n      [\n        decs,               // dec, or array of decs, or array of this values and decs\n        0,                  // kind of value being decorated\n        \'prop\',             // name of public prop on class containing the value being decorated,\n        \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n      ]\n    ],\n    [\n      // class decorators\n      dec1, dec2\n    ]\n  )\n  ```\n\n  Fully transpiled example:\n\n  ```js\n  @dec\n  class Class {\n    @dec\n    a = 123;\n\n    @dec\n    #a = 123;\n\n    @dec\n    @dec2\n    accessor b = 123;\n\n    @dec\n    accessor #b = 123;\n\n    @dec\n    c() { console.log(\'c\'); }\n\n    @dec\n    #c() { console.log(\'privC\'); }\n\n    @dec\n    get d() { console.log(\'d\'); }\n\n    @dec\n    get #d() { console.log(\'privD\'); }\n\n    @dec\n    set e(v) { console.log(\'e\'); }\n\n    @dec\n    set #e(v) { console.log(\'privE\'); }\n  }\n\n\n  // becomes\n  let initializeInstance;\n  let initializeClass;\n\n  let initA;\n  let initPrivA;\n\n  let initB;\n  let initPrivB, getPrivB, setPrivB;\n\n  let privC;\n  let privD;\n  let privE;\n\n  let Class;\n  class _Class {\n    static {\n      let ret = applyDecs(\n        this,\n        [\n          [dec, 0, \'a\'],\n          [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n          [[dec, dec2], 1, \'b\'],\n          [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n          [dec, 2, \'c\'],\n          [dec, 2, \'c\', () => console.log(\'privC\')],\n          [dec, 3, \'d\'],\n          [dec, 3, \'d\', () => console.log(\'privD\')],\n          [dec, 4, \'e\'],\n          [dec, 4, \'e\', () => console.log(\'privE\')],\n        ],\n        [\n          dec\n        ]\n      );\n\n      initA = ret[0];\n\n      initPrivA = ret[1];\n\n      initB = ret[2];\n\n      initPrivB = ret[3];\n      getPrivB = ret[4];\n      setPrivB = ret[5];\n\n      privC = ret[6];\n\n      privD = ret[7];\n\n      privE = ret[8];\n\n      initializeInstance = ret[9];\n\n      Class = ret[10]\n\n      initializeClass = ret[11];\n    }\n\n    a = (initializeInstance(this), initA(this, 123));\n\n    #a = initPrivA(this, 123);\n\n    #bData = initB(this, 123);\n    get b() { return this.#bData }\n    set b(v) { this.#bData = v }\n\n    #privBData = initPrivB(this, 123);\n    get #b() { return getPrivB(this); }\n    set #b(v) { setPrivB(this, v); }\n\n    c() { console.log(\'c\'); }\n\n    #c(...args) { return privC(this, ...args) }\n\n    get d() { console.log(\'d\'); }\n\n    get #d() { return privD(this); }\n\n    set e(v) { console.log(\'e\'); }\n\n    set #e(v) { privE(this, v); }\n  }\n\n  initializeClass(Class);\n */\n\nfunction applyDecs2305(targetClass, memberDecs, classDecs, classDecsHaveThis, instanceBrand, parentClass) {\n  function _bindPropCall(obj, name, before) {\n    return function (_this, value) {\n      if (before) {\n        before(_this);\n      }\n      return obj[name].call(_this, value);\n    };\n  }\n  function runInitializers(initializers, value) {\n    for (var i = 0; i < initializers.length; i++) {\n      initializers[i].call(value);\n    }\n    return value;\n  }\n  function assertCallable(fn, hint1, hint2, throwUndefined) {\n    if (typeof fn !== "function") {\n      if (throwUndefined || fn !== void 0) {\n        throw new TypeError(hint1 + " must " + (hint2 || "be") + " a function" + (throwUndefined ? "" : " or undefined"));\n      }\n    }\n    return fn;\n  }\n\n  /* @no-mangle */\n  function applyDec(Class, decInfo, decoratorsHaveThis, name, kind, metadata, initializers, ret, isStatic, isPrivate, isField, isAccessor, hasPrivateBrand) {\n    function assertInstanceIfPrivate(target) {\n      if (!hasPrivateBrand(target)) {\n        throw new TypeError("Attempted to access private element on non-instance");\n      }\n    }\n    var decs = decInfo[0],\n      decVal = decInfo[3],\n      _,\n      isClass = !ret;\n    if (!isClass) {\n      if (!decoratorsHaveThis && !Array.isArray(decs)) {\n        decs = [decs];\n      }\n      var desc = {},\n        init = [],\n        key = kind === 3 ? "get" : kind === 4 || isAccessor ? "set" : "value";\n      if (isPrivate) {\n        if (isField || isAccessor) {\n          desc = {\n            get: setFunctionName(function () {\n              return decVal(this);\n            }, name, "get"),\n            set: function (value) {\n              decInfo[4](this, value);\n            }\n          };\n        } else {\n          desc[key] = decVal;\n        }\n        if (!isField) {\n          setFunctionName(desc[key], name, kind === 2 ? "" : key);\n        }\n      } else if (!isField) {\n        desc = Object.getOwnPropertyDescriptor(Class, name);\n      }\n    }\n    var newValue = Class;\n    for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {\n      var dec = decs[i],\n        decThis = decoratorsHaveThis ? decs[i - 1] : void 0;\n      var decoratorFinishedRef = {};\n      var ctx = {\n        kind: ["field", "accessor", "method", "getter", "setter", "class"][kind],\n        name: name,\n        metadata: metadata,\n        addInitializer: function (decoratorFinishedRef, initializer) {\n          if (decoratorFinishedRef.v) {\n            throw new Error("attempted to call addInitializer after decoration was finished");\n          }\n          assertCallable(initializer, "An initializer", "be", true);\n          initializers.push(initializer);\n        }.bind(null, decoratorFinishedRef)\n      };\n      try {\n        if (isClass) {\n          if (_ = assertCallable(dec.call(decThis, newValue, ctx), "class decorators", "return")) {\n            newValue = _;\n          }\n        } else {\n          ctx["static"] = isStatic;\n          ctx["private"] = isPrivate;\n          var get, set;\n          if (!isPrivate) {\n            get = function (target) {\n              return target[name];\n            };\n            if (kind < 2 || kind === 4) {\n              set = function (target, v) {\n                target[name] = v;\n              };\n            }\n          } else if (kind === 2) {\n            get = function (_this) {\n              assertInstanceIfPrivate(_this);\n              return desc.value;\n            };\n          } else {\n            if (kind < 4) {\n              get = _bindPropCall(desc, "get", assertInstanceIfPrivate);\n            }\n            if (kind !== 3) {\n              set = _bindPropCall(desc, "set", assertInstanceIfPrivate);\n            }\n          }\n          var access = ctx.access = {\n            has: isPrivate ?\n            // @ts-expect-error no thisArg\n            hasPrivateBrand.bind() : function (target) {\n              return name in target;\n            }\n          };\n          if (get) access.get = get;\n          if (set) access.set = set;\n          newValue = dec.call(decThis, isAccessor ? {\n            get: desc.get,\n            set: desc.set\n          } : desc[key], ctx);\n          if (isAccessor) {\n            if (typeof newValue === "object" && newValue) {\n              if (_ = assertCallable(newValue.get, "accessor.get")) {\n                desc.get = _;\n              }\n              if (_ = assertCallable(newValue.set, "accessor.set")) {\n                desc.set = _;\n              }\n              if (_ = assertCallable(newValue.init, "accessor.init")) {\n                init.push(_);\n              }\n            } else if (newValue !== void 0) {\n              throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");\n            }\n          } else if (assertCallable(newValue, (isField ? "field" : "method") + " decorators", "return")) {\n            if (isField) {\n              init.push(newValue);\n            } else {\n              desc[key] = newValue;\n            }\n          }\n        }\n      } finally {\n        decoratorFinishedRef.v = true;\n      }\n    }\n    if (isField || isAccessor) {\n      ret.push(function (instance, value) {\n        for (var i = init.length - 1; i >= 0; i--) {\n          value = init[i].call(instance, value);\n        }\n        return value;\n      });\n    }\n    if (!isField && !isClass) {\n      if (isPrivate) {\n        if (isAccessor) {\n          ret.push(_bindPropCall(desc, "get"), _bindPropCall(desc, "set"));\n        } else {\n          ret.push(kind === 2 ? desc[key] : _bindPropCall.call.bind(desc[key]));\n        }\n      } else {\n        Object.defineProperty(Class, name, desc);\n      }\n    }\n    return newValue;\n  }\n\n  /* @no-mangle */\n  function applyMemberDecs(Class, decInfos, instanceBrand, metadata) {\n    var ret = [];\n    var protoInitializers;\n    var staticInitializers;\n    var staticBrand = function (_) {\n      return checkInRHS(_) === Class;\n    };\n    var existingNonFields = new Map();\n    function pushInitializers(initializers) {\n      if (initializers) {\n        ret.push(runInitializers.bind(null, initializers));\n      }\n    }\n    for (var i = 0; i < decInfos.length; i++) {\n      var decInfo = decInfos[i];\n\n      // skip computed property names\n      if (!Array.isArray(decInfo)) continue;\n      var kind = decInfo[1];\n      var name = decInfo[2];\n      var isPrivate = decInfo.length > 3;\n      var decoratorsHaveThis = kind & 16;\n      var isStatic = !!(kind & 8);\n      kind &= 7; /* 0b111 */\n\n      var isField = kind === 0;\n      var key = name + "/" + isStatic;\n      if (!isField && !isPrivate) {\n        var existingKind = existingNonFields.get(key);\n        if (existingKind === true || existingKind === 3 && kind !== 4 || existingKind === 4 && kind !== 3) {\n          throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);\n        }\n        existingNonFields.set(key, kind > 2 ? kind : true);\n      }\n      applyDec(isStatic ? Class : Class.prototype, decInfo, decoratorsHaveThis, isPrivate ? "#" + name : toPropertyKey(name), kind, metadata, isStatic ? staticInitializers = staticInitializers || [] : protoInitializers = protoInitializers || [], ret, isStatic, isPrivate, isField, kind === 1, isStatic && isPrivate ? staticBrand : instanceBrand);\n    }\n    pushInitializers(protoInitializers);\n    pushInitializers(staticInitializers);\n    return ret;\n  }\n  function defineMetadata(Class, metadata) {\n    return Object.defineProperty(Class, Symbol.metadata || Symbol["for"]("Symbol.metadata"), {\n      configurable: true,\n      enumerable: true,\n      value: metadata\n    });\n  }\n  if (arguments.length >= 6) {\n    var parentMetadata = parentClass[Symbol.metadata || Symbol["for"]("Symbol.metadata")];\n  }\n  var metadata = Object.create(parentMetadata == null ? null : parentMetadata);\n  var e = applyMemberDecs(targetClass, memberDecs, instanceBrand, metadata);\n  if (!classDecs.length) defineMetadata(targetClass, metadata);\n  return {\n    e: e,\n    // Lazily apply class decorations so that member init locals can be properly bound.\n    get c() {\n      // The transformer will not emit assignment when there are no class decorators,\n      // so we don\'t have to return an empty array here.\n      var initializers = [];\n      return classDecs.length && [defineMetadata(applyDec(targetClass, [classDecs], classDecsHaveThis, targetClass.name, 5, metadata, initializers), metadata), runInitializers.bind(null, initializers, targetClass)];\n    }\n  };\n}',
+    {
+      globals: ["TypeError", "Array", "Object", "Error", "Map", "Symbol"],
+      locals: { applyDecs2305: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "applyDecs2305",
+      dependencies: {
+        checkInRHS: [
+          "body.0.body.body.4.body.body.3.declarations.0.init.body.body.0.argument.left.callee",
+        ],
+        setFunctionName: [
+          "body.0.body.body.3.body.body.2.consequent.body.2.consequent.body.0.consequent.body.0.expression.right.properties.0.value.callee",
+          "body.0.body.body.3.body.body.2.consequent.body.2.consequent.body.1.consequent.body.0.expression.callee",
+        ],
+        toPropertyKey: [
+          "body.0.body.body.4.body.body.6.body.body.11.expression.arguments.3.alternate.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  applyDecs2311: helper(
+    "7.24.0",
+    '/* @minVersion 7.24.0 */\n/* @mangleFns */\n\n/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion -- `typescript-eslint` complains when using `!` */\n\n\n\n\n/**\n  Basic usage:\n\n  applyDecs(\n    Class,\n    [\n      // member decorators\n      [\n        decs,               // dec, or array of decs, or array of this values and decs\n        0,                  // kind of value being decorated\n        \'prop\',             // name of public prop on class containing the value being decorated,\n        \'#p\',               // the name of the private property (if is private, void 0 otherwise),\n      ]\n    ],\n    [\n      // class decorators\n      dec1, dec2\n    ]\n  )\n  ```\n\n  Fully transpiled example:\n\n  ```js\n  @dec\n  class Class {\n    @dec\n    a = 123;\n\n    @dec\n    #a = 123;\n\n    @dec\n    @dec2\n    accessor b = 123;\n\n    @dec\n    accessor #b = 123;\n\n    @dec\n    c() { console.log(\'c\'); }\n\n    @dec\n    #c() { console.log(\'privC\'); }\n\n    @dec\n    get d() { console.log(\'d\'); }\n\n    @dec\n    get #d() { console.log(\'privD\'); }\n\n    @dec\n    set e(v) { console.log(\'e\'); }\n\n    @dec\n    set #e(v) { console.log(\'privE\'); }\n  }\n\n\n  // becomes\n  let initializeInstance;\n  let initializeClass;\n\n  let initA;\n  let initPrivA;\n\n  let initB;\n  let initPrivB, getPrivB, setPrivB;\n\n  let privC;\n  let privD;\n  let privE;\n\n  let Class;\n  class _Class {\n    static {\n      let ret = applyDecs(\n        this,\n        [\n          [dec, 0, \'a\'],\n          [dec, 0, \'a\', (i) => i.#a, (i, v) => i.#a = v],\n          [[dec, dec2], 1, \'b\'],\n          [dec, 1, \'b\', (i) => i.#privBData, (i, v) => i.#privBData = v],\n          [dec, 2, \'c\'],\n          [dec, 2, \'c\', () => console.log(\'privC\')],\n          [dec, 3, \'d\'],\n          [dec, 3, \'d\', () => console.log(\'privD\')],\n          [dec, 4, \'e\'],\n          [dec, 4, \'e\', () => console.log(\'privE\')],\n        ],\n        [\n          dec\n        ]\n      );\n\n      initA = ret[0];\n\n      initPrivA = ret[1];\n\n      initB = ret[2];\n\n      initPrivB = ret[3];\n      getPrivB = ret[4];\n      setPrivB = ret[5];\n\n      privC = ret[6];\n\n      privD = ret[7];\n\n      privE = ret[8];\n\n      initializeInstance = ret[9];\n\n      Class = ret[10]\n\n      initializeClass = ret[11];\n    }\n\n    a = (initializeInstance(this), initA(this, 123));\n\n    #a = initPrivA(this, 123);\n\n    #bData = initB(this, 123);\n    get b() { return this.#bData }\n    set b(v) { this.#bData = v }\n\n    #privBData = initPrivB(this, 123);\n    get #b() { return getPrivB(this); }\n    set #b(v) { setPrivB(this, v); }\n\n    c() { console.log(\'c\'); }\n\n    #c(...args) { return privC(this, ...args) }\n\n    get d() { console.log(\'d\'); }\n\n    get #d() { return privD(this); }\n\n    set e(v) { console.log(\'e\'); }\n\n    set #e(v) { privE(this, v); }\n  }\n\n  initializeClass(Class);\n */\n\nfunction applyDecs2311(targetClass, classDecs, memberDecs, classDecsHaveThis, instanceBrand, parentClass) {\n  var symbolMetadata = Symbol.metadata || Symbol["for"]("Symbol.metadata");\n  var defineProperty = Object.defineProperty;\n  var create = Object.create;\n  var metadata;\n  // Use both as and satisfies to ensure that we only use non-zero values\n  var existingNonFields = [create(null), create(null)];\n  var hasClassDecs = classDecs.length;\n  // This is a temporary variable for smaller helper size\n  var _;\n  function createRunInitializers(initializers, useStaticThis, hasValue) {\n    return function (thisArg, value) {\n      if (useStaticThis) {\n        value = thisArg;\n        thisArg = targetClass;\n      }\n      for (var i = 0; i < initializers.length; i++) {\n        value = initializers[i].apply(thisArg, hasValue ? [value] : []);\n      }\n      return hasValue ? value : thisArg;\n    };\n  }\n  function assertCallable(fn, hint1, hint2, throwUndefined) {\n    if (typeof fn !== "function") {\n      if (throwUndefined || fn !== void 0) {\n        throw new TypeError(hint1 + " must " + (hint2 || "be") + " a function" + (throwUndefined ? "" : " or undefined"));\n      }\n    }\n    return fn;\n  }\n\n  /* @no-mangle */\n  function applyDec(Class, decInfo, decoratorsHaveThis, name, kind, initializers, ret, isStatic, isPrivate, isField, hasPrivateBrand) {\n    function assertInstanceIfPrivate(target) {\n      if (!hasPrivateBrand(target)) {\n        throw new TypeError("Attempted to access private element on non-instance");\n      }\n    }\n    var decs = [].concat(decInfo[0]),\n      decVal = decInfo[3],\n      isClass = !ret;\n    var isAccessor = kind === 1;\n    var isGetter = kind === 3;\n    var isSetter = kind === 4;\n    var isMethod = kind === 2;\n    function _bindPropCall(name, useStaticThis, before) {\n      return function (_this, value) {\n        if (useStaticThis) {\n          value = _this;\n          _this = Class;\n        }\n        if (before) {\n          before(_this);\n        }\n        // eslint-disable-next-line @typescript-eslint/no-use-before-define\n        return desc[name].call(_this, value);\n      };\n    }\n    if (!isClass) {\n      var desc = {},\n        init = [],\n        key = isGetter ? "get" : isSetter || isAccessor ? "set" : "value";\n      if (isPrivate) {\n        if (isField || isAccessor) {\n          desc = {\n            get: setFunctionName(function () {\n              return decVal(this);\n            }, name, "get"),\n            set: function (value) {\n              decInfo[4](this, value);\n            }\n          };\n        } else {\n          desc[key] = decVal;\n        }\n        if (!isField) {\n          setFunctionName(desc[key], name, isMethod ? "" : key);\n        }\n      } else if (!isField) {\n        desc = Object.getOwnPropertyDescriptor(Class, name);\n      }\n      if (!isField && !isPrivate) {\n        _ = existingNonFields[+isStatic][name];\n        // flag is 1, 3, or 4; kind is 0, 1, 2, 3, or 4\n        // flag ^ kind is 7 if and only if one of them is 3 and the other one is 4.\n        if (_ && (_ ^ kind) !== 7) {\n          throw new Error("Decorating two elements with the same name (" + desc[key].name + ") is not supported yet");\n        }\n        // We use PROP_KIND.ACCESSOR to mark a name as "fully used":\n        // either a get/set pair, or a non-getter/setter.\n        existingNonFields[+isStatic][name] = kind < 3 ? 1 : kind;\n      }\n    }\n    var newValue = Class;\n    for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {\n      var dec = assertCallable(decs[i], "A decorator", "be", true),\n        decThis = decoratorsHaveThis ? decs[i - 1] : void 0;\n      var decoratorFinishedRef = {};\n      var ctx = {\n        kind: ["field", "accessor", "method", "getter", "setter", "class"][kind],\n        name: name,\n        metadata: metadata,\n        addInitializer: function (decoratorFinishedRef, initializer) {\n          if (decoratorFinishedRef.v) {\n            throw new TypeError("attempted to call addInitializer after decoration was finished");\n          }\n          assertCallable(initializer, "An initializer", "be", true);\n          initializers.push(initializer);\n        }.bind(null, decoratorFinishedRef)\n      };\n      if (isClass) {\n        _ = dec.call(decThis, newValue, ctx);\n        decoratorFinishedRef.v = 1;\n        if (assertCallable(_, "class decorators", "return")) {\n          newValue = _;\n        }\n      } else {\n        ctx["static"] = isStatic;\n        ctx["private"] = isPrivate;\n        _ = ctx.access = {\n          has: isPrivate ?\n          // @ts-expect-error no thisArg\n          hasPrivateBrand.bind() : function (target) {\n            return name in target;\n          }\n        };\n        if (!isSetter) {\n          _.get = isPrivate ? isMethod ? function (_this) {\n            assertInstanceIfPrivate(_this);\n            return desc.value;\n          } : _bindPropCall("get", 0, assertInstanceIfPrivate) : function (target) {\n            return target[name];\n          };\n        }\n        if (!isMethod && !isGetter) {\n          _.set = isPrivate ? _bindPropCall("set", 0, assertInstanceIfPrivate) : function (target, v) {\n            target[name] = v;\n          };\n        }\n        newValue = dec.call(decThis, isAccessor ? {\n          get: desc.get,\n          set: desc.set\n        } : desc[key], ctx);\n        decoratorFinishedRef.v = 1;\n        if (isAccessor) {\n          if (typeof newValue === "object" && newValue) {\n            if (_ = assertCallable(newValue.get, "accessor.get")) {\n              desc.get = _;\n            }\n            if (_ = assertCallable(newValue.set, "accessor.set")) {\n              desc.set = _;\n            }\n            if (_ = assertCallable(newValue.init, "accessor.init")) {\n              init.unshift(_);\n            }\n          } else if (newValue !== void 0) {\n            throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined");\n          }\n        } else if (assertCallable(newValue, (isField ? "field" : "method") + " decorators", "return")) {\n          if (isField) {\n            init.unshift(newValue);\n          } else {\n            desc[key] = newValue;\n          }\n        }\n      }\n    }\n\n    // isField || isAccessor\n    if (kind < 2) {\n      ret.push(\n      // init\n      createRunInitializers(init, isStatic, 1),\n      // init_extra\n      createRunInitializers(initializers, isStatic, 0));\n    }\n    if (!isField && !isClass) {\n      if (isPrivate) {\n        if (isAccessor) {\n          // get and set should be returned before init_extra\n          ret.splice(-1, 0, _bindPropCall("get", isStatic), _bindPropCall("set", isStatic));\n        } else {\n          ret.push(isMethod ? desc[key] :\n          // Equivalent to `Function.call`, just to reduce code size\n          assertCallable.call.bind(desc[key]));\n        }\n      } else {\n        defineProperty(Class, name, desc);\n      }\n    }\n    return newValue;\n  }\n\n  /* @no-mangle */\n  function applyMemberDecs() {\n    var ret = [];\n    var protoInitializers;\n    var staticInitializers;\n    var pushInitializers = function (initializers) {\n      if (initializers) {\n        ret.push(createRunInitializers(initializers));\n      }\n    };\n    var applyMemberDecsOfKind = function (isStatic, isField) {\n      for (var i = 0; i < memberDecs.length; i++) {\n        var decInfo = memberDecs[i];\n        var kind = decInfo[1];\n        var kindOnly = kind & 7;\n        if (\n        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison, eqeqeq\n        (kind & 8) == isStatic &&\n        // @ts-expect-error comparing a boolean with 0 | 1\n        // eslint-disable-next-line eqeqeq\n        !kindOnly == isField) {\n          var name = decInfo[2];\n          var isPrivate = !!decInfo[3];\n          var decoratorsHaveThis = kind & 16;\n          applyDec(isStatic ? targetClass : targetClass.prototype, decInfo, decoratorsHaveThis, isPrivate ? "#" + name : toPropertyKey(name), kindOnly, kindOnly < 2 // isField || isAccessor\n          ? /* fieldInitializers */[] : isStatic ? staticInitializers = staticInitializers || [] : protoInitializers = protoInitializers || [], ret, !!isStatic, isPrivate, isField, isStatic && isPrivate ? function (_) {\n            return checkInRHS(_) === targetClass;\n          } : instanceBrand);\n        }\n      }\n    };\n    applyMemberDecsOfKind(8, 0);\n    applyMemberDecsOfKind(0, 0);\n    applyMemberDecsOfKind(8, 1);\n    applyMemberDecsOfKind(0, 1);\n    pushInitializers(protoInitializers);\n    pushInitializers(staticInitializers);\n    return ret;\n  }\n  function defineMetadata(Class) {\n    return defineProperty(Class, symbolMetadata, {\n      configurable: true,\n      enumerable: true,\n      value: metadata\n    });\n  }\n  if (parentClass !== undefined) {\n    metadata = parentClass[symbolMetadata];\n  }\n  metadata = create(metadata == null ? null : metadata);\n  _ = applyMemberDecs();\n  if (!hasClassDecs) defineMetadata(targetClass);\n  return {\n    e: _,\n    // Lazily apply class decorations so that member init locals can be properly bound.\n    get c() {\n      // The transformer will not emit assignment when there are no class decorators,\n      // so we don\'t have to return an empty array here.\n      var initializers = [];\n      return hasClassDecs && [defineMetadata(targetClass = applyDec(targetClass, [classDecs], classDecsHaveThis, targetClass.name, 5, initializers)), createRunInitializers(initializers, 1)];\n    }\n  };\n}',
+    {
+      globals: ["Symbol", "Object", "TypeError", "Error", "undefined"],
+      locals: { applyDecs2311: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "applyDecs2311",
+      dependencies: {
+        checkInRHS: [
+          "body.0.body.body.10.body.body.4.declarations.0.init.body.body.0.body.body.3.consequent.body.3.expression.arguments.10.consequent.body.body.0.argument.left.callee",
+        ],
+        setFunctionName: [
+          "body.0.body.body.9.body.body.7.consequent.body.1.consequent.body.0.consequent.body.0.expression.right.properties.0.value.callee",
+          "body.0.body.body.9.body.body.7.consequent.body.1.consequent.body.1.consequent.body.0.expression.callee",
+        ],
+        toPropertyKey: [
+          "body.0.body.body.10.body.body.4.declarations.0.init.body.body.0.body.body.3.consequent.body.3.expression.arguments.3.alternate.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  arrayLikeToArray: helper(
+    "7.9.0",
+    "/* @minVersion 7.9.0 */\n\nfunction _arrayLikeToArray(arr, len) {\n  if (len == null || len > arr.length) len = arr.length;\n  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];\n  return arr2;\n}",
+    {
+      globals: ["Array"],
+      locals: { _arrayLikeToArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_arrayLikeToArray",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  arrayWithHoles: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _arrayWithHoles(arr) {\n  if (Array.isArray(arr)) return arr;\n}",
+    {
+      globals: ["Array"],
+      locals: { _arrayWithHoles: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_arrayWithHoles",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  arrayWithoutHoles: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _arrayWithoutHoles(arr) {\n  if (Array.isArray(arr)) return arrayLikeToArray(arr);\n}",
+    {
+      globals: ["Array"],
+      locals: { _arrayWithoutHoles: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_arrayWithoutHoles",
+      dependencies: {
+        arrayLikeToArray: ["body.0.body.body.0.consequent.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  assertClassBrand: helper(
+    "7.24.0",
+    '/* @minVersion 7.24.0 */\n\nfunction _assertClassBrand(brand, receiver, returnValue) {\n  if (typeof brand === "function" ? brand === receiver : brand.has(receiver)) {\n    return arguments.length < 3 ? receiver : returnValue;\n  }\n  throw new TypeError("Private element is not present on this object");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _assertClassBrand: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_assertClassBrand",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  assertThisInitialized: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _assertThisInitialized(self) {\n  if (self === void 0) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }\n  return self;\n}",
+    {
+      globals: ["ReferenceError"],
+      locals: { _assertThisInitialized: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_assertThisInitialized",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  asyncGeneratorDelegate: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _asyncGeneratorDelegate(inner) {\n  var iter = {},\n    // See the comment in AsyncGenerator to understand what this is.\n    waiting = false;\n  function pump(key, value) {\n    waiting = true;\n    value = new Promise(function (resolve) {\n      resolve(inner[key](value));\n    });\n    return {\n      done: false,\n      value: new OverloadYield(value, /* kind: delegate */1)\n    };\n  }\n  iter[typeof Symbol !== "undefined" && Symbol.iterator || "@@iterator"] = function () {\n    return this;\n  };\n  iter.next = function (value) {\n    if (waiting) {\n      waiting = false;\n      return value;\n    }\n    return pump("next", value);\n  };\n  if (typeof inner["throw"] === "function") {\n    iter["throw"] = function (value) {\n      if (waiting) {\n        waiting = false;\n        throw value;\n      }\n      return pump("throw", value);\n    };\n  }\n  if (typeof inner["return"] === "function") {\n    iter["return"] = function (value) {\n      if (waiting) {\n        waiting = false;\n        return value;\n      }\n      return pump("return", value);\n    };\n  }\n  return iter;\n}',
+    {
+      globals: ["Promise", "Symbol"],
+      locals: { _asyncGeneratorDelegate: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_asyncGeneratorDelegate",
+      dependencies: {
+        OverloadYield: [
+          "body.0.body.body.1.body.body.2.argument.properties.1.value.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  asyncIterator: helper(
+    "7.15.9",
+    '/* @minVersion 7.15.9 */\n\nfunction _asyncIterator(iterable) {\n  var method,\n    async,\n    sync,\n    retry = 2;\n  if (typeof Symbol !== "undefined") {\n    async = Symbol.asyncIterator;\n    sync = Symbol.iterator;\n  }\n  while (retry--) {\n    // TypeScript doesn\'t have in-function narrowing, and TypeScript can\'t narrow\n    // AsyncIterable<T> | Iterable<T> down to AsyncIterable<T>. So let\'s use any here.\n    if (async && (method = iterable[async]) != null) {\n      return method.call(iterable);\n    }\n    // Same here, TypeScript can\'t narrow AsyncIterable<T> | Iterable<T> down to Iterable<T>.\n    if (sync && (method = iterable[sync]) != null) {\n      return new AsyncFromSyncIterator(method.call(iterable));\n    }\n    async = "@@asyncIterator";\n    sync = "@@iterator";\n  }\n  throw new TypeError("Object is not async iterable");\n}\n\n// AsyncFromSyncIterator is actually a class that implements AsyncIterator interface\n\n// Actual implementation of AsyncFromSyncIterator starts here\n// class only exists in ES6, so we need to use the old school way\n// This makes ESLint and TypeScript complain a lot, but it\'s the only way\nfunction AsyncFromSyncIterator(s) {\n  // @ts-expect-error - Intentionally overriding the constructor.\n  AsyncFromSyncIterator = function (s) {\n    this.s = s;\n    this.n = s.next;\n  };\n  AsyncFromSyncIterator.prototype = {\n    // Initiating the "s" and "n", use "any" to prevent TS from complaining\n    /* SyncIterator */\n    s: null,\n    /* SyncIterator.[[Next]] */n: null,\n    next: function () {\n      return AsyncFromSyncIteratorContinuation(\n      // Use "arguments" here for better compatibility and smaller bundle size\n      // Itentionally casting "arguments" to an array for the type of func.apply\n      this.n.apply(this.s, arguments));\n    },\n    return: function (value) {\n      var ret = this.s["return"];\n      if (ret === undefined) {\n        return Promise.resolve({\n          // "TReturn | PromiseLike<TReturn>" should have been unwrapped by Awaited<T>,\n          // but TypeScript choked, let\'s just casting it away\n          value: value,\n          done: true\n        });\n      }\n      return AsyncFromSyncIteratorContinuation(ret.apply(this.s,\n      // Use "arguments" here for better compatibility and smaller bundle size\n      // Itentionally casting "arguments" to an array for the type of func.apply\n      arguments));\n    },\n    throw: function (maybeError) {\n      var thr = this.s["return"];\n      if (thr === undefined) {\n        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors\n        return Promise.reject(maybeError);\n      }\n      return AsyncFromSyncIteratorContinuation(\n      // Use "arguments" here for better compatibility and smaller bundle size\n      // Itentionally casting "arguments" to an array for the type of func.apply\n      thr.apply(this.s, arguments));\n    }\n  };\n  function AsyncFromSyncIteratorContinuation(r) {\n    // This step is _before_ calling AsyncFromSyncIteratorContinuation in the spec.\n    if (Object(r) !== r) {\n      return Promise.reject(new TypeError(r + " is not an object."));\n    }\n    var done = r.done;\n    return Promise.resolve(r.value).then(function (value) {\n      return {\n        value: value,\n        done: done\n      };\n    });\n  }\n  return new AsyncFromSyncIterator(s);\n}',
+    {
+      globals: ["Symbol", "TypeError", "undefined", "Promise", "Object"],
+      locals: {
+        _asyncIterator: ["body.0.id"],
+        AsyncFromSyncIterator: [
+          "body.1.id",
+          "body.0.body.body.2.body.body.1.consequent.body.0.argument.callee",
+          "body.1.body.body.1.expression.left.object",
+          "body.1.body.body.3.argument.callee",
+          "body.1.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: [],
+      exportName: "_asyncIterator",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  asyncToGenerator: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {\n  try {\n    var info = gen[key](arg);\n    var value = info.value;\n  } catch (error) {\n    reject(error);\n    return;\n  }\n  if (info.done) {\n    // The "value" variable is defined above before the "info.done" guard\n    // So TypeScript can\'t narrowing "value" to TReturn here\n    // If we use "info.value" here the type is narrowed correctly.\n    // Still requires manual casting for the smaller bundle size.\n    resolve(value);\n  } else {\n    // Same as above, TypeScript can\'t narrow "value" to TYield here\n    Promise.resolve(value).then(_next, _throw);\n  }\n}\nfunction _asyncToGenerator(fn) {\n  return function () {\n    var self = this,\n      args = arguments;\n    return new Promise(function (resolve, reject) {\n      // Casting "args" to "Args" is intentional since we are trying to avoid the spread operator (not ES5)\n      var gen = fn.apply(self, args);\n      function _next(value) {\n        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);\n      }\n      function _throw(err) {\n        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);\n      }\n      _next(undefined);\n    });\n  };\n}',
+    {
+      globals: ["Promise", "undefined"],
+      locals: {
+        asyncGeneratorStep: [
+          "body.0.id",
+          "body.1.body.body.0.argument.body.body.1.argument.arguments.0.body.body.1.body.body.0.expression.callee",
+          "body.1.body.body.0.argument.body.body.1.argument.arguments.0.body.body.2.body.body.0.expression.callee",
+        ],
+        _asyncToGenerator: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_asyncToGenerator",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  awaitAsyncGenerator: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _awaitAsyncGenerator(value) {\n  return new OverloadYield(value, /* kind: await */0);\n}",
+    {
+      globals: [],
+      locals: { _awaitAsyncGenerator: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_awaitAsyncGenerator",
+      dependencies: { OverloadYield: ["body.0.body.body.0.argument.callee"] },
+      internal: false,
+    },
+  ),
+
+  callSuper: helper(
+    "7.23.8",
+    "/* @minVersion 7.23.8 */\n\n// This is duplicated to packages/babel-plugin-transform-classes/src/inline-callSuper-helpers.ts\n\n\n\n\nfunction _callSuper(_this, derived, args) {\n  // Super\n  derived = getPrototypeOf(derived);\n  return possibleConstructorReturn(_this, isNativeReflectConstruct() ?\n  // NOTE: This doesn't work if this.__proto__.constructor has been modified.\n  Reflect.construct(derived, args || [], getPrototypeOf(_this).constructor) : derived.apply(_this, args));\n}",
+    {
+      globals: ["Reflect"],
+      locals: { _callSuper: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_callSuper",
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.body.body.0.expression.right.callee",
+          "body.0.body.body.1.argument.arguments.1.consequent.arguments.2.object.callee",
+        ],
+        isNativeReflectConstruct: [
+          "body.0.body.body.1.argument.arguments.1.test.callee",
+        ],
+        possibleConstructorReturn: ["body.0.body.body.1.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  checkInRHS: helper(
+    "7.20.5",
+    '/* @minVersion 7.20.5 */\n\nfunction _checkInRHS(value) {\n  if (Object(value) !== value) {\n    throw TypeError("right-hand side of \'in\' should be an object, got " + (value !== null ? typeof value : "null"));\n  }\n  return value;\n}',
+    {
+      globals: ["Object", "TypeError"],
+      locals: { _checkInRHS: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_checkInRHS",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  checkPrivateRedeclaration: helper(
+    "7.14.1",
+    '/* @minVersion 7.14.1 */\n\nfunction _checkPrivateRedeclaration(obj, privateCollection) {\n  if (privateCollection.has(obj)) {\n    throw new TypeError("Cannot initialize the same private elements twice on an object");\n  }\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _checkPrivateRedeclaration: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_checkPrivateRedeclaration",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classApplyDescriptorDestructureSet: helper(
+    "7.13.10",
+    '/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\nfunction _classApplyDescriptorDestructureSet(receiver, descriptor) {\n  if (descriptor.set) {\n    if (!("__destrObj" in descriptor)) {\n      descriptor.__destrObj = {\n        set value(v) {\n          descriptor.set.call(receiver, v);\n        }\n      };\n    }\n    return descriptor.__destrObj;\n  } else {\n    if (!descriptor.writable) {\n      // This should only throw in strict mode, but class bodies are\n      // always strict and private fields can only be used inside\n      // class bodies.\n      throw new TypeError("attempted to set read only private field");\n    }\n    return descriptor;\n  }\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _classApplyDescriptorDestructureSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classApplyDescriptorDestructureSet",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classApplyDescriptorGet: helper(
+    "7.13.10",
+    "/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\nfunction _classApplyDescriptorGet(receiver, descriptor) {\n  if (descriptor.get) {\n    return descriptor.get.call(receiver);\n  }\n  return descriptor.value;\n}",
+    {
+      globals: [],
+      locals: { _classApplyDescriptorGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classApplyDescriptorGet",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classApplyDescriptorSet: helper(
+    "7.13.10",
+    '/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\nfunction _classApplyDescriptorSet(receiver, descriptor, value) {\n  if (descriptor.set) {\n    descriptor.set.call(receiver, value);\n  } else {\n    if (!descriptor.writable) {\n      // This should only throw in strict mode, but class bodies are\n      // always strict and private fields can only be used inside\n      // class bodies.\n      throw new TypeError("attempted to set read only private field");\n    }\n    descriptor.value = value;\n  }\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _classApplyDescriptorSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classApplyDescriptorSet",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classCallCheck: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError("Cannot call a class as a function");\n  }\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _classCallCheck: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classCallCheck",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classCheckPrivateStaticAccess: helper(
+    "7.13.10",
+    "/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\n\nfunction _classCheckPrivateStaticAccess(receiver, classConstructor, returnValue) {\n  return assertClassBrand(classConstructor, receiver, returnValue);\n}",
+    {
+      globals: [],
+      locals: { _classCheckPrivateStaticAccess: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classCheckPrivateStaticAccess",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classCheckPrivateStaticFieldDescriptor: helper(
+    "7.13.10",
+    '/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\nfunction _classCheckPrivateStaticFieldDescriptor(descriptor, action) {\n  if (descriptor === undefined) {\n    throw new TypeError("attempted to " + action + " private static field before its declaration");\n  }\n}',
+    {
+      globals: ["undefined", "TypeError"],
+      locals: { _classCheckPrivateStaticFieldDescriptor: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classCheckPrivateStaticFieldDescriptor",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classExtractFieldDescriptor: helper(
+    "7.13.10",
+    "/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\n\nfunction _classExtractFieldDescriptor(receiver, privateMap) {\n  return classPrivateFieldGet2(privateMap, receiver);\n}",
+    {
+      globals: [],
+      locals: { _classExtractFieldDescriptor: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classExtractFieldDescriptor",
+      dependencies: {
+        classPrivateFieldGet2: ["body.0.body.body.0.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classNameTDZError: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _classNameTDZError(name) {\n  throw new ReferenceError('Class \"' + name + '\" cannot be referenced in computed property keys.');\n}",
+    {
+      globals: ["ReferenceError"],
+      locals: { _classNameTDZError: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classNameTDZError",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldDestructureSet: helper(
+    "7.4.4",
+    "/* @minVersion 7.4.4 */\n/* @onlyBabel7 */\n\n\n\nfunction _classPrivateFieldDestructureSet(receiver, privateMap) {\n  var descriptor = classPrivateFieldGet2(privateMap, receiver);\n  return classApplyDescriptorDestructureSet(receiver, descriptor);\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldDestructureSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldDestructureSet",
+      dependencies: {
+        classApplyDescriptorDestructureSet: [
+          "body.0.body.body.1.argument.callee",
+        ],
+        classPrivateFieldGet2: [
+          "body.0.body.body.0.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldGet: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n/* @onlyBabel7 */\n\n\n\nfunction _classPrivateFieldGet(receiver, privateMap) {\n  var descriptor = classPrivateFieldGet2(privateMap, receiver);\n  return classApplyDescriptorGet(receiver, descriptor);\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldGet",
+      dependencies: {
+        classApplyDescriptorGet: ["body.0.body.body.1.argument.callee"],
+        classPrivateFieldGet2: [
+          "body.0.body.body.0.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldGet2: helper(
+    "7.24.0",
+    "/* @minVersion 7.24.0 */\n\n\nfunction _classPrivateFieldGet2(privateMap, receiver) {\n  return privateMap.get(assertClassBrand(privateMap, receiver));\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldGet2: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldGet2",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldInitSpec: helper(
+    "7.14.1",
+    "/* @minVersion 7.14.1 */\n\n\nfunction _classPrivateFieldInitSpec(obj, privateMap, value) {\n  checkPrivateRedeclaration(obj, privateMap);\n  privateMap.set(obj, value);\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldInitSpec: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldInitSpec",
+      dependencies: {
+        checkPrivateRedeclaration: ["body.0.body.body.0.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldLooseBase: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _classPrivateFieldBase(receiver, privateKey) {\n  if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {\n    throw new TypeError("attempted to use private field on non-instance");\n  }\n  return receiver;\n}',
+    {
+      globals: ["Object", "TypeError"],
+      locals: { _classPrivateFieldBase: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldBase",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldLooseKey: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nvar id = 0;\nfunction _classPrivateFieldKey(name) {\n  return "__private_" + id++ + "_" + name;\n}',
+    {
+      globals: [],
+      locals: {
+        id: [
+          "body.0.declarations.0.id",
+          "body.1.body.body.0.argument.left.left.right.argument",
+          "body.1.body.body.0.argument.left.left.right.argument",
+        ],
+        _classPrivateFieldKey: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldKey",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldSet: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n/* @onlyBabel7 */\n\n\n\nfunction _classPrivateFieldSet(receiver, privateMap, value) {\n  var descriptor = classPrivateFieldGet2(privateMap, receiver);\n  classApplyDescriptorSet(receiver, descriptor, value);\n  return value;\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldSet",
+      dependencies: {
+        classApplyDescriptorSet: ["body.0.body.body.1.expression.callee"],
+        classPrivateFieldGet2: [
+          "body.0.body.body.0.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateFieldSet2: helper(
+    "7.24.0",
+    "/* @minVersion 7.24.0 */\n\n\nfunction _classPrivateFieldSet2(privateMap, receiver, value) {\n  privateMap.set(assertClassBrand(privateMap, receiver), value);\n  return value;\n}",
+    {
+      globals: [],
+      locals: { _classPrivateFieldSet2: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateFieldSet2",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.expression.arguments.0.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateGetter: helper(
+    "7.24.0",
+    "/* @minVersion 7.24.0 */\n\n\nfunction _classPrivateGetter(privateMap, receiver, getter) {\n  return getter(assertClassBrand(privateMap, receiver));\n}",
+    {
+      globals: [],
+      locals: { _classPrivateGetter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateGetter",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.argument.arguments.0.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateMethodGet: helper(
+    "7.1.6",
+    "/* @minVersion 7.1.6 */\n/* @onlyBabel7 */\n\n\nfunction _classPrivateMethodGet(receiver, privateSet, fn) {\n  assertClassBrand(privateSet, receiver);\n  return fn;\n}",
+    {
+      globals: [],
+      locals: { _classPrivateMethodGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateMethodGet",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateMethodInitSpec: helper(
+    "7.14.1",
+    "/* @minVersion 7.14.1 */\n\n\nfunction _classPrivateMethodInitSpec(obj, privateSet) {\n  checkPrivateRedeclaration(obj, privateSet);\n  privateSet.add(obj);\n}",
+    {
+      globals: [],
+      locals: { _classPrivateMethodInitSpec: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateMethodInitSpec",
+      dependencies: {
+        checkPrivateRedeclaration: ["body.0.body.body.0.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classPrivateMethodSet: helper(
+    "7.1.6",
+    '/* @minVersion 7.1.6 */\n/* @onlyBabel7 */\n\n// use readOnlyError instead of attemptSet\n\nfunction _classPrivateMethodSet() {\n  throw new TypeError("attempted to reassign private method");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _classPrivateMethodSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateMethodSet",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  classPrivateSetter: helper(
+    "7.24.0",
+    "/* @minVersion 7.24.0 */\n\n\nfunction _classPrivateSetter(privateMap, setter, receiver, value) {\n  setter(assertClassBrand(privateMap, receiver), value);\n  return value;\n}",
+    {
+      globals: [],
+      locals: { _classPrivateSetter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classPrivateSetter",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.expression.arguments.0.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classStaticPrivateFieldDestructureSet: helper(
+    "7.13.10",
+    '/* @minVersion 7.13.10 */\n/* @onlyBabel7 */\n\n\n\n\nfunction _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {\n  assertClassBrand(classConstructor, receiver);\n  classCheckPrivateStaticFieldDescriptor(descriptor, "set");\n  return classApplyDescriptorDestructureSet(receiver, descriptor);\n}',
+    {
+      globals: [],
+      locals: { _classStaticPrivateFieldDestructureSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classStaticPrivateFieldDestructureSet",
+      dependencies: {
+        classApplyDescriptorDestructureSet: [
+          "body.0.body.body.2.argument.callee",
+        ],
+        assertClassBrand: ["body.0.body.body.0.expression.callee"],
+        classCheckPrivateStaticFieldDescriptor: [
+          "body.0.body.body.1.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classStaticPrivateFieldSpecGet: helper(
+    "7.0.2",
+    '/* @minVersion 7.0.2 */\n/* @onlyBabel7 */\n\n\n\n\nfunction _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {\n  assertClassBrand(classConstructor, receiver);\n  classCheckPrivateStaticFieldDescriptor(descriptor, "get");\n  return classApplyDescriptorGet(receiver, descriptor);\n}',
+    {
+      globals: [],
+      locals: { _classStaticPrivateFieldSpecGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classStaticPrivateFieldSpecGet",
+      dependencies: {
+        classApplyDescriptorGet: ["body.0.body.body.2.argument.callee"],
+        assertClassBrand: ["body.0.body.body.0.expression.callee"],
+        classCheckPrivateStaticFieldDescriptor: [
+          "body.0.body.body.1.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classStaticPrivateFieldSpecSet: helper(
+    "7.0.2",
+    '/* @minVersion 7.0.2 */\n/* @onlyBabel7 */\n\n\n\n\nfunction _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {\n  assertClassBrand(classConstructor, receiver);\n  classCheckPrivateStaticFieldDescriptor(descriptor, "set");\n  classApplyDescriptorSet(receiver, descriptor, value);\n  return value;\n}',
+    {
+      globals: [],
+      locals: { _classStaticPrivateFieldSpecSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classStaticPrivateFieldSpecSet",
+      dependencies: {
+        classApplyDescriptorSet: ["body.0.body.body.2.expression.callee"],
+        assertClassBrand: ["body.0.body.body.0.expression.callee"],
+        classCheckPrivateStaticFieldDescriptor: [
+          "body.0.body.body.1.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  classStaticPrivateMethodGet: helper(
+    "7.3.2",
+    "/* @minVersion 7.3.2 */\n\n\nfunction _classStaticPrivateMethodGet(receiver, classConstructor, method) {\n  assertClassBrand(classConstructor, receiver);\n  return method;\n}",
+    {
+      globals: [],
+      locals: { _classStaticPrivateMethodGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classStaticPrivateMethodGet",
+      dependencies: {
+        assertClassBrand: ["body.0.body.body.0.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  classStaticPrivateMethodSet: helper(
+    "7.3.2",
+    '/* @minVersion 7.3.2 */\n/* @onlyBabel7 */\n\nfunction _classStaticPrivateMethodSet() {\n  throw new TypeError("attempted to set read only static private field");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _classStaticPrivateMethodSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_classStaticPrivateMethodSet",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  construct: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\n\nfunction _construct(Parent, args, Class) {\n  if (isNativeReflectConstruct()) {\n    // Avoid issues with Class being present but undefined when it wasn't\n    // present in the original call.\n    return Reflect.construct.apply(null, arguments);\n  }\n  // NOTE: If Parent !== Class, the correct __proto__ is set *after*\n  //       calling the constructor.\n  var a = [null];\n  a.push.apply(a, args);\n  var instance = new (Parent.bind.apply(Parent, a))();\n  if (Class) setPrototypeOf(instance, Class.prototype);\n  return instance;\n}",
+    {
+      globals: ["Reflect"],
+      locals: { _construct: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_construct",
+      dependencies: {
+        isNativeReflectConstruct: ["body.0.body.body.0.test.callee"],
+        setPrototypeOf: ["body.0.body.body.4.consequent.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  createClass: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _defineProperties(target, props) {\n  for (var i = 0; i < props.length; i++) {\n    var descriptor = props[i];\n    descriptor.enumerable = descriptor.enumerable || false;\n    descriptor.configurable = true;\n    if ("value" in descriptor) descriptor.writable = true;\n    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);\n  }\n}\nfunction _createClass(Constructor, protoProps, staticProps) {\n  if (protoProps) _defineProperties(Constructor.prototype, protoProps);\n  if (staticProps) _defineProperties(Constructor, staticProps);\n  Object.defineProperty(Constructor, "prototype", {\n    writable: false\n  });\n  return Constructor;\n}',
+    {
+      globals: ["Object"],
+      locals: {
+        _defineProperties: [
+          "body.0.id",
+          "body.1.body.body.0.consequent.expression.callee",
+          "body.1.body.body.1.consequent.expression.callee",
+        ],
+        _createClass: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_createClass",
+      dependencies: {
+        toPropertyKey: [
+          "body.0.body.body.0.body.body.4.expression.arguments.1.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  createForOfIteratorHelper: helper(
+    "7.9.0",
+    '/* @minVersion 7.9.0 */\n\n\nfunction _createForOfIteratorHelper(o, allowArrayLike) {\n  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];\n  if (!it) {\n    // Fallback for engines without symbol support\n    if (Array.isArray(o) || (\n    // union type doesn\'t work with function overload, have to use "as any".\n    it = unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {\n      if (it) o = it;\n      var i = 0;\n      var F = function () {};\n      return {\n        s: F,\n        n: function () {\n          // After "Array.isArray" check, unsupportedIterableToArray to array, and allow arraylike\n          // o is sure to be an array or arraylike, but TypeScript doesn\'t know that\n          if (i >= o.length) {\n            // explicit missing the "value" (undefined) to reduce the bundle size\n            return {\n              done: true\n            };\n          }\n          return {\n            done: false,\n            value: o[i++]\n          };\n        },\n        e: function (e) {\n          throw e;\n        },\n        f: F\n      };\n    }\n    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");\n  }\n  var normalCompletion = true,\n    didErr = false,\n    err;\n\n  // "it" is being reassigned multiple times to reduce the variables (bundle size)\n  // thus TypeScript can\'t infer the correct type of the "it"\n  return {\n    s: function () {\n      it = it.call(o);\n    },\n    n: function () {\n      var step = it.next();\n      normalCompletion = step.done;\n      return step;\n    },\n    e: function (e) {\n      didErr = true;\n      err = e;\n    },\n    f: function () {\n      try {\n        if (!normalCompletion && it["return"] != null) {\n          it["return"]();\n        }\n      } finally {\n        // eslint-disable-next-line no-unsafe-finally\n        if (didErr) throw err;\n      }\n    }\n  };\n}',
+    {
+      globals: ["Symbol", "Array", "TypeError"],
+      locals: { _createForOfIteratorHelper: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createForOfIteratorHelper",
+      dependencies: {
+        unsupportedIterableToArray: [
+          "body.0.body.body.1.consequent.body.0.test.left.right.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  createForOfIteratorHelperLoose: helper(
+    "7.9.0",
+    '/* @minVersion 7.9.0 */\n\n\nfunction _createForOfIteratorHelperLoose(o, allowArrayLike) {\n  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];\n  if (it) return (it = it.call(o)).next.bind(it);\n\n  // Fallback for engines without symbol support\n  if (Array.isArray(o) || (\n  // union type doesn\'t work with function overload, have to use "as any".\n  it = unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {\n    if (it) o = it;\n    var i = 0;\n    return function () {\n      // After "Array.isArray" check, unsupportedIterableToArray to array, and allow arraylike\n      // o is sure to be an array or arraylike, but TypeScript doesn\'t know that\n      if (i >= o.length) {\n        // explicit missing the "value" (undefined) to reduce the bundle size\n        return {\n          done: true\n        };\n      }\n      return {\n        done: false,\n        value: o[i++]\n      };\n    };\n  }\n  throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");\n}',
+    {
+      globals: ["Symbol", "Array", "TypeError"],
+      locals: { _createForOfIteratorHelperLoose: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createForOfIteratorHelperLoose",
+      dependencies: {
+        unsupportedIterableToArray: [
+          "body.0.body.body.2.test.left.right.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  createSuper: helper(
+    "7.9.0",
+    "/* @minVersion 7.9.0 */\n\n\n\n\nfunction _createSuper(Derived) {\n  var hasNativeReflectConstruct = isNativeReflectConstruct();\n  return function _createSuperInternal() {\n    var Super = getPrototypeOf(Derived),\n      result;\n    if (hasNativeReflectConstruct) {\n      // NOTE: This doesn't work if this.__proto__.constructor has been modified.\n      var NewTarget = getPrototypeOf(this).constructor;\n      result = Reflect.construct(Super, arguments, NewTarget);\n    } else {\n      result = Super.apply(this, arguments);\n    }\n    return possibleConstructorReturn(this, result);\n  };\n}",
+    {
+      globals: ["Reflect"],
+      locals: { _createSuper: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createSuper",
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.body.body.1.argument.body.body.0.declarations.0.init.callee",
+          "body.0.body.body.1.argument.body.body.1.consequent.body.0.declarations.0.init.object.callee",
+        ],
+        isNativeReflectConstruct: [
+          "body.0.body.body.0.declarations.0.init.callee",
+        ],
+        possibleConstructorReturn: [
+          "body.0.body.body.1.argument.body.body.2.argument.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  decorate: helper(
+    "7.1.5",
+    '/* @minVersion 7.1.5 */\n\n// TODO: Only Babel 7\n\n\n\n\n/*::\n  type PropertyDescriptor =\n    | {\n        value: any,\n        writable: boolean,\n        configurable: boolean,\n        enumerable: boolean,\n      }\n    | {\n        get?: () => any,\n        set?: (v: any) => void,\n        configurable: boolean,\n        enumerable: boolean,\n      };\n\n  type FieldDescriptor ={\n    writable: boolean,\n    configurable: boolean,\n    enumerable: boolean,\n  };\n\n  type Placement = "static" | "prototype" | "own";\n  type Key = string | symbol; // PrivateName is not supported yet.\n\n  type ElementDescriptor =\n    | {\n        kind: "method",\n        key: Key,\n        placement: Placement,\n        descriptor: PropertyDescriptor\n      }\n    | {\n        kind: "field",\n        key: Key,\n        placement: Placement,\n        descriptor: FieldDescriptor,\n        initializer?: () => any,\n      };\n\n  // This is exposed to the user code\n  type ElementObjectInput = ElementDescriptor & {\n    [@@toStringTag]?: "Descriptor"\n  };\n\n  // This is exposed to the user code\n  type ElementObjectOutput = ElementDescriptor & {\n    [@@toStringTag]?: "Descriptor"\n    extras?: ElementDescriptor[],\n    finisher?: ClassFinisher,\n  };\n\n  // This is exposed to the user code\n  type ClassObject = {\n    [@@toStringTag]?: "Descriptor",\n    kind: "class",\n    elements: ElementDescriptor[],\n  };\n\n  type ElementDecorator = (descriptor: ElementObjectInput) => ?ElementObjectOutput;\n  type ClassDecorator = (descriptor: ClassObject) => ?ClassObject;\n  type ClassFinisher = <A, B>(cl: Class<A>) => Class<B>;\n\n  // Only used by Babel in the transform output, not part of the spec.\n  type ElementDefinition =\n    | {\n        kind: "method",\n        value: any,\n        key: Key,\n        static?: boolean,\n        decorators?: ElementDecorator[],\n      }\n    | {\n        kind: "field",\n        value: () => any,\n        key: Key,\n        static?: boolean,\n        decorators?: ElementDecorator[],\n    };\n\n  declare function ClassFactory<C>(initialize: (instance: C) => void): {\n    F: Class<C>,\n    d: ElementDefinition[]\n  }\n\n  */\n\n/*::\n  // Various combinations with/without extras and with one or many finishers\n\n  type ElementFinisherExtras = {\n    element: ElementDescriptor,\n    finisher?: ClassFinisher,\n    extras?: ElementDescriptor[],\n  };\n\n  type ElementFinishersExtras = {\n    element: ElementDescriptor,\n    finishers: ClassFinisher[],\n    extras: ElementDescriptor[],\n  };\n\n  type ElementsFinisher = {\n    elements: ElementDescriptor[],\n    finisher?: ClassFinisher,\n  };\n\n  type ElementsFinishers = {\n    elements: ElementDescriptor[],\n    finishers: ClassFinisher[],\n  };\n\n  */\n\n/*::\n\n  type Placements = {\n    static: Key[],\n    prototype: Key[],\n    own: Key[],\n  };\n\n  */\n\n// ClassDefinitionEvaluation (Steps 26-*)\nfunction _decorate(decorators /*: ClassDecorator[] */, factory /*: ClassFactory */, superClass /*: ?Class<*> */, mixins /*: ?Array<Function> */) /*: Class<*> */{\n  var api = _getDecoratorsApi();\n  if (mixins) {\n    for (var i = 0; i < mixins.length; i++) {\n      api = mixins[i](api);\n    }\n  }\n  var r = factory(function initialize(O) {\n    api.initializeInstanceElements(O, decorated.elements);\n  }, superClass);\n  var decorated = api.decorateClass(_coalesceClassElements(r.d.map(_createElementDescriptor)), decorators);\n  api.initializeClassElements(r.F, decorated.elements);\n  return api.runClassFinishers(r.F, decorated.finishers);\n}\nfunction _getDecoratorsApi() {\n  _getDecoratorsApi = function () {\n    return api;\n  };\n  var api = {\n    elementsDefinitionOrder: [["method"], ["field"]],\n    // InitializeInstanceElements\n    initializeInstanceElements: function (/*::<C>*/O /*: C */, elements /*: ElementDescriptor[] */) {\n      ["method", "field"].forEach(function (kind) {\n        elements.forEach(function (element /*: ElementDescriptor */) {\n          if (element.kind === kind && element.placement === "own") {\n            this.defineClassElement(O, element);\n          }\n        }, this);\n      }, this);\n    },\n    // InitializeClassElements\n    initializeClassElements: function (/*::<C>*/F /*: Class<C> */, elements /*: ElementDescriptor[] */) {\n      var proto = F.prototype;\n      ["method", "field"].forEach(function (kind) {\n        elements.forEach(function (element /*: ElementDescriptor */) {\n          var placement = element.placement;\n          if (element.kind === kind && (placement === "static" || placement === "prototype")) {\n            var receiver = placement === "static" ? F : proto;\n            this.defineClassElement(receiver, element);\n          }\n        }, this);\n      }, this);\n    },\n    // DefineClassElement\n    defineClassElement: function (/*::<C>*/receiver /*: C | Class<C> */, element /*: ElementDescriptor */) {\n      var descriptor /*: PropertyDescriptor */ = element.descriptor;\n      if (element.kind === "field") {\n        var initializer = element.initializer;\n        descriptor = {\n          enumerable: descriptor.enumerable,\n          writable: descriptor.writable,\n          configurable: descriptor.configurable,\n          value: initializer === void 0 ? void 0 : initializer.call(receiver)\n        };\n      }\n      Object.defineProperty(receiver, element.key, descriptor);\n    },\n    // DecorateClass\n    decorateClass: function (elements /*: ElementDescriptor[] */, decorators /*: ClassDecorator[] */) /*: ElementsFinishers */{\n      var newElements /*: ElementDescriptor[] */ = [];\n      var finishers /*: ClassFinisher[] */ = [];\n      var placements /*: Placements */ = {\n        static: [],\n        prototype: [],\n        own: []\n      };\n      elements.forEach(function (element /*: ElementDescriptor */) {\n        this.addElementPlacement(element, placements);\n      }, this);\n      elements.forEach(function (element /*: ElementDescriptor */) {\n        if (!_hasDecorators(element)) return newElements.push(element);\n        var elementFinishersExtras /*: ElementFinishersExtras */ = this.decorateElement(element, placements);\n        newElements.push(elementFinishersExtras.element);\n        newElements.push.apply(newElements, elementFinishersExtras.extras);\n        finishers.push.apply(finishers, elementFinishersExtras.finishers);\n      }, this);\n      if (!decorators) {\n        return {\n          elements: newElements,\n          finishers: finishers\n        };\n      }\n      var result /*: ElementsFinishers */ = this.decorateConstructor(newElements, decorators);\n      finishers.push.apply(finishers, result.finishers);\n      result.finishers = finishers;\n      return result;\n    },\n    // AddElementPlacement\n    addElementPlacement: function (element /*: ElementDescriptor */, placements /*: Placements */, silent /*: boolean */) {\n      var keys = placements[element.placement];\n      if (!silent && keys.indexOf(element.key) !== -1) {\n        throw new TypeError("Duplicated element (" + element.key + ")");\n      }\n      keys.push(element.key);\n    },\n    // DecorateElement\n    decorateElement: function (element /*: ElementDescriptor */, placements /*: Placements */) /*: ElementFinishersExtras */{\n      var extras /*: ElementDescriptor[] */ = [];\n      var finishers /*: ClassFinisher[] */ = [];\n      for (var decorators = element.decorators, i = decorators.length - 1; i >= 0; i--) {\n        // (inlined) RemoveElementPlacement\n        var keys = placements[element.placement];\n        keys.splice(keys.indexOf(element.key), 1);\n        var elementObject /*: ElementObjectInput */ = this.fromElementDescriptor(element);\n        var elementFinisherExtras /*: ElementFinisherExtras */ = this.toElementFinisherExtras((0, decorators[i])(elementObject) /*: ElementObjectOutput */ || elementObject);\n        element = elementFinisherExtras.element;\n        this.addElementPlacement(element, placements);\n        if (elementFinisherExtras.finisher) {\n          finishers.push(elementFinisherExtras.finisher);\n        }\n        var newExtras /*: ElementDescriptor[] | void */ = elementFinisherExtras.extras;\n        if (newExtras) {\n          for (var j = 0; j < newExtras.length; j++) {\n            this.addElementPlacement(newExtras[j], placements);\n          }\n          extras.push.apply(extras, newExtras);\n        }\n      }\n      return {\n        element: element,\n        finishers: finishers,\n        extras: extras\n      };\n    },\n    // DecorateConstructor\n    decorateConstructor: function (elements /*: ElementDescriptor[] */, decorators /*: ClassDecorator[] */) /*: ElementsFinishers */{\n      var finishers /*: ClassFinisher[] */ = [];\n      for (var i = decorators.length - 1; i >= 0; i--) {\n        var obj /*: ClassObject */ = this.fromClassDescriptor(elements);\n        var elementsAndFinisher /*: ElementsFinisher */ = this.toClassDescriptor((0, decorators[i])(obj) /*: ClassObject */ || obj);\n        if (elementsAndFinisher.finisher !== undefined) {\n          finishers.push(elementsAndFinisher.finisher);\n        }\n        if (elementsAndFinisher.elements !== undefined) {\n          elements = elementsAndFinisher.elements;\n          for (var j = 0; j < elements.length - 1; j++) {\n            for (var k = j + 1; k < elements.length; k++) {\n              if (elements[j].key === elements[k].key && elements[j].placement === elements[k].placement) {\n                throw new TypeError("Duplicated element (" + elements[j].key + ")");\n              }\n            }\n          }\n        }\n      }\n      return {\n        elements: elements,\n        finishers: finishers\n      };\n    },\n    // FromElementDescriptor\n    fromElementDescriptor: function (element /*: ElementDescriptor */) /*: ElementObject */{\n      var obj /*: ElementObject */ = {\n        kind: element.kind,\n        key: element.key,\n        placement: element.placement,\n        descriptor: element.descriptor\n      };\n      var desc = {\n        value: "Descriptor",\n        configurable: true\n      };\n      Object.defineProperty(obj, Symbol.toStringTag, desc);\n      if (element.kind === "field") obj.initializer = element.initializer;\n      return obj;\n    },\n    // ToElementDescriptors\n    toElementDescriptors: function (elementObjects /*: ElementObject[] */) /*: ElementDescriptor[] */{\n      if (elementObjects === undefined) return;\n      return toArray(elementObjects).map(function (elementObject) {\n        var element = this.toElementDescriptor(elementObject);\n        this.disallowProperty(elementObject, "finisher", "An element descriptor");\n        this.disallowProperty(elementObject, "extras", "An element descriptor");\n        return element;\n      }, this);\n    },\n    // ToElementDescriptor\n    toElementDescriptor: function (elementObject /*: ElementObject */) /*: ElementDescriptor */{\n      var kind = String(elementObject.kind);\n      if (kind !== "method" && kind !== "field") {\n        throw new TypeError(\'An element descriptor\\\'s .kind property must be either "method" or\' + \' "field", but a decorator created an element descriptor with\' + \' .kind "\' + kind + \'"\');\n      }\n      var key = toPropertyKey(elementObject.key);\n      var placement = String(elementObject.placement);\n      if (placement !== "static" && placement !== "prototype" && placement !== "own") {\n        throw new TypeError(\'An element descriptor\\\'s .placement property must be one of "static",\' + \' "prototype" or "own", but a decorator created an element descriptor\' + \' with .placement "\' + placement + \'"\');\n      }\n      var descriptor /*: PropertyDescriptor */ = elementObject.descriptor;\n      this.disallowProperty(elementObject, "elements", "An element descriptor");\n      var element /*: ElementDescriptor */ = {\n        kind: kind,\n        key: key,\n        placement: placement,\n        descriptor: Object.assign({}, descriptor)\n      };\n      if (kind !== "field") {\n        this.disallowProperty(elementObject, "initializer", "A method descriptor");\n      } else {\n        this.disallowProperty(descriptor, "get", "The property descriptor of a field descriptor");\n        this.disallowProperty(descriptor, "set", "The property descriptor of a field descriptor");\n        this.disallowProperty(descriptor, "value", "The property descriptor of a field descriptor");\n        element.initializer = elementObject.initializer;\n      }\n      return element;\n    },\n    toElementFinisherExtras: function (elementObject /*: ElementObject */) /*: ElementFinisherExtras */{\n      var element /*: ElementDescriptor */ = this.toElementDescriptor(elementObject);\n      var finisher /*: ClassFinisher */ = _optionalCallableProperty(elementObject, "finisher");\n      var extras /*: ElementDescriptors[] */ = this.toElementDescriptors(elementObject.extras);\n      return {\n        element: element,\n        finisher: finisher,\n        extras: extras\n      };\n    },\n    // FromClassDescriptor\n    fromClassDescriptor: function (elements /*: ElementDescriptor[] */) /*: ClassObject */{\n      var obj = {\n        kind: "class",\n        elements: elements.map(this.fromElementDescriptor, this)\n      };\n      var desc = {\n        value: "Descriptor",\n        configurable: true\n      };\n      Object.defineProperty(obj, Symbol.toStringTag, desc);\n      return obj;\n    },\n    // ToClassDescriptor\n    toClassDescriptor: function (obj /*: ClassObject */) /*: ElementsFinisher */{\n      var kind = String(obj.kind);\n      if (kind !== "class") {\n        throw new TypeError(\'A class descriptor\\\'s .kind property must be "class", but a decorator\' + \' created a class descriptor with .kind "\' + kind + \'"\');\n      }\n      this.disallowProperty(obj, "key", "A class descriptor");\n      this.disallowProperty(obj, "placement", "A class descriptor");\n      this.disallowProperty(obj, "descriptor", "A class descriptor");\n      this.disallowProperty(obj, "initializer", "A class descriptor");\n      this.disallowProperty(obj, "extras", "A class descriptor");\n      var finisher = _optionalCallableProperty(obj, "finisher");\n      var elements = this.toElementDescriptors(obj.elements);\n      return {\n        elements: elements,\n        finisher: finisher\n      };\n    },\n    // RunClassFinishers\n    runClassFinishers: function (constructor /*: Class<*> */, finishers /*: ClassFinisher[] */) /*: Class<*> */{\n      for (var i = 0; i < finishers.length; i++) {\n        var newConstructor /*: ?Class<*> */ = (0, finishers[i])(constructor);\n        if (newConstructor !== undefined) {\n          // NOTE: This should check if IsConstructor(newConstructor) is false.\n          if (typeof newConstructor !== "function") {\n            throw new TypeError("Finishers must return a constructor.");\n          }\n          constructor = newConstructor;\n        }\n      }\n      return constructor;\n    },\n    disallowProperty: function (obj, name, objectType) {\n      if (obj[name] !== undefined) {\n        throw new TypeError(objectType + " can\'t have a ." + name + " property.");\n      }\n    }\n  };\n  return api;\n}\n\n// ClassElementEvaluation\nfunction _createElementDescriptor(def /*: ElementDefinition */) /*: ElementDescriptor */{\n  var key = toPropertyKey(def.key);\n  var descriptor /*: PropertyDescriptor */;\n  if (def.kind === "method") {\n    descriptor = {\n      value: def.value,\n      writable: true,\n      configurable: true,\n      enumerable: false\n    };\n  } else if (def.kind === "get") {\n    descriptor = {\n      get: def.value,\n      configurable: true,\n      enumerable: false\n    };\n  } else if (def.kind === "set") {\n    descriptor = {\n      set: def.value,\n      configurable: true,\n      enumerable: false\n    };\n  } else if (def.kind === "field") {\n    descriptor = {\n      configurable: true,\n      writable: true,\n      enumerable: true\n    };\n  }\n  var element /*: ElementDescriptor */ = {\n    kind: def.kind === "field" ? "field" : "method",\n    key: key,\n    placement: def.static ? "static" : def.kind === "field" ? "own" : "prototype",\n    descriptor: descriptor\n  };\n  if (def.decorators) element.decorators = def.decorators;\n  if (def.kind === "field") element.initializer = def.value;\n  return element;\n}\n\n// CoalesceGetterSetter\nfunction _coalesceGetterSetter(element /*: ElementDescriptor */, other /*: ElementDescriptor */) {\n  if (element.descriptor.get !== undefined) {\n    other.descriptor.get = element.descriptor.get;\n  } else {\n    other.descriptor.set = element.descriptor.set;\n  }\n}\n\n// CoalesceClassElements\nfunction _coalesceClassElements(elements /*: ElementDescriptor[] */) /*: ElementDescriptor[] */{\n  var newElements /*: ElementDescriptor[] */ = [];\n  var isSameElement = function (other /*: ElementDescriptor */) /*: boolean */{\n    return other.kind === "method" && other.key === element.key && other.placement === element.placement;\n  };\n  for (var i = 0; i < elements.length; i++) {\n    var element /*: ElementDescriptor */ = elements[i];\n    var other /*: ElementDescriptor */;\n    if (element.kind === "method" && (other = newElements.find(isSameElement))) {\n      if (_isDataDescriptor(element.descriptor) || _isDataDescriptor(other.descriptor)) {\n        if (_hasDecorators(element) || _hasDecorators(other)) {\n          throw new ReferenceError("Duplicated methods (" + element.key + ") can\'t be decorated.");\n        }\n        other.descriptor = element.descriptor;\n      } else {\n        if (_hasDecorators(element)) {\n          if (_hasDecorators(other)) {\n            throw new ReferenceError("Decorators can\'t be placed on different accessors with for " + "the same property (" + element.key + ").");\n          }\n          other.decorators = element.decorators;\n        }\n        _coalesceGetterSetter(element, other);\n      }\n    } else {\n      newElements.push(element);\n    }\n  }\n  return newElements;\n}\nfunction _hasDecorators(element /*: ElementDescriptor */) /*: boolean */{\n  return element.decorators && element.decorators.length;\n}\nfunction _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */{\n  return desc !== undefined && !(desc.value === undefined && desc.writable === undefined);\n}\nfunction _optionalCallableProperty /*::<T>*/(obj /*: T */, name /*: $Keys<T> */) /*: ?Function */{\n  var value = obj[name];\n  if (value !== undefined && typeof value !== "function") {\n    throw new TypeError("Expected \'" + name + "\' to be a function");\n  }\n  return value;\n}',
+    {
+      globals: [
+        "Object",
+        "TypeError",
+        "undefined",
+        "Symbol",
+        "String",
+        "ReferenceError",
+      ],
+      locals: {
+        _decorate: ["body.0.id"],
+        _getDecoratorsApi: [
+          "body.1.id",
+          "body.0.body.body.0.declarations.0.init.callee",
+          "body.1.body.body.0.expression.left",
+        ],
+        _createElementDescriptor: [
+          "body.2.id",
+          "body.0.body.body.3.declarations.0.init.arguments.0.arguments.0.arguments.0",
+        ],
+        _coalesceGetterSetter: [
+          "body.3.id",
+          "body.4.body.body.2.body.body.2.consequent.body.0.alternate.body.1.expression.callee",
+        ],
+        _coalesceClassElements: [
+          "body.4.id",
+          "body.0.body.body.3.declarations.0.init.arguments.0.callee",
+        ],
+        _hasDecorators: [
+          "body.5.id",
+          "body.1.body.body.1.declarations.0.init.properties.4.value.body.body.4.expression.arguments.0.body.body.0.test.argument.callee",
+          "body.4.body.body.2.body.body.2.consequent.body.0.consequent.body.0.test.left.callee",
+          "body.4.body.body.2.body.body.2.consequent.body.0.consequent.body.0.test.right.callee",
+          "body.4.body.body.2.body.body.2.consequent.body.0.alternate.body.0.test.callee",
+          "body.4.body.body.2.body.body.2.consequent.body.0.alternate.body.0.consequent.body.0.test.callee",
+        ],
+        _isDataDescriptor: [
+          "body.6.id",
+          "body.4.body.body.2.body.body.2.consequent.body.0.test.left.callee",
+          "body.4.body.body.2.body.body.2.consequent.body.0.test.right.callee",
+        ],
+        _optionalCallableProperty: [
+          "body.7.id",
+          "body.1.body.body.1.declarations.0.init.properties.11.value.body.body.1.declarations.0.init.callee",
+          "body.1.body.body.1.declarations.0.init.properties.13.value.body.body.7.declarations.0.init.callee",
+        ],
+      },
+      exportBindingAssignments: [],
+      exportName: "_decorate",
+      dependencies: {
+        toArray: [
+          "body.1.body.body.1.declarations.0.init.properties.9.value.body.body.1.argument.callee.object.callee",
+        ],
+        toPropertyKey: [
+          "body.1.body.body.1.declarations.0.init.properties.10.value.body.body.2.declarations.0.init.callee",
+          "body.2.body.body.0.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  defaults: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _defaults(obj, defaults) {\n  for (var keys = Object.getOwnPropertyNames(defaults), i = 0; i < keys.length; i++) {\n    var key = keys[i],\n      value = Object.getOwnPropertyDescriptor(defaults, key);\n    if (value && value.configurable && obj[key] === undefined) {\n      Object.defineProperty(obj, key, value);\n    }\n  }\n  return obj;\n}",
+    {
+      globals: ["Object", "undefined"],
+      locals: { _defaults: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_defaults",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  defineAccessor: helper(
+    "7.20.7",
+    "/* @minVersion 7.20.7 */\n\nfunction _defineAccessor(type, obj, key, fn) {\n  var desc = {\n    configurable: true,\n    enumerable: true\n  };\n  desc[type] = fn;\n  return Object.defineProperty(obj, key, desc);\n}",
+    {
+      globals: ["Object"],
+      locals: { _defineAccessor: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_defineAccessor",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  defineEnumerableProperties: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n/* @onlyBabel7 */\nfunction _defineEnumerableProperties(obj, descs) {\n  // eslint-disable-next-line guard-for-in\n  for (var key in descs) {\n    var desc = descs[key];\n    desc.configurable = desc.enumerable = true;\n    if ("value" in desc) desc.writable = true;\n    Object.defineProperty(obj, key, desc);\n  }\n\n  // Symbols are not enumerated over by for-in loops. If native\n  // Symbols are available, fetch all of the descs object\'s own\n  // symbol properties and define them on our target object too.\n  if (Object.getOwnPropertySymbols) {\n    var objectSymbols = Object.getOwnPropertySymbols(descs);\n    for (var i = 0; i < objectSymbols.length; i++) {\n      var sym = objectSymbols[i];\n      desc = descs[sym];\n      desc.configurable = desc.enumerable = true;\n      if ("value" in desc) desc.writable = true;\n      Object.defineProperty(obj, sym, desc);\n    }\n  }\n  return obj;\n}',
+    {
+      globals: ["Object"],
+      locals: { _defineEnumerableProperties: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_defineEnumerableProperties",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  defineProperty: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _defineProperty(obj, key, value) {\n  key = toPropertyKey(key);\n  // Shortcircuit the slow defineProperty path when possible.\n  // We are trying to avoid issues where setters defined on the\n  // prototype cause side effects under the fast path of simple\n  // assignment. By checking for existence of the property with\n  // the in operator, we can optimize most of this overhead away.\n  if (key in obj) {\n    Object.defineProperty(obj, key, {\n      value: value,\n      enumerable: true,\n      configurable: true,\n      writable: true\n    });\n  } else {\n    // @ts-expect-error - Explicitly assigning to generic type key\n    obj[key] = value;\n  }\n  return obj;\n}",
+    {
+      globals: ["Object"],
+      locals: { _defineProperty: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_defineProperty",
+      dependencies: {
+        toPropertyKey: ["body.0.body.body.0.expression.right.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  dispose: helper(
+    "7.22.0",
+    '/* @minVersion 7.22.0 */\n/* @onlyBabel7 */\n\nfunction dispose_SuppressedError(error, suppressed) {\n  if (typeof SuppressedError !== "undefined") {\n    // eslint-disable-next-line no-undef\n    dispose_SuppressedError = SuppressedError;\n  } else {\n    dispose_SuppressedError = function SuppressedError(error, suppressed) {\n      this.suppressed = suppressed;\n      this.error = error;\n      this.stack = new Error().stack;\n    };\n    dispose_SuppressedError.prototype = Object.create(Error.prototype, {\n      constructor: {\n        value: dispose_SuppressedError,\n        writable: true,\n        configurable: true\n      }\n    });\n  }\n  return new dispose_SuppressedError(error, suppressed);\n}\nfunction _dispose(stack, error, hasError) {\n  function next() {\n    while (stack.length > 0) {\n      try {\n        var r = stack.pop();\n        var p = r.d.call(r.v);\n        if (r.a) return Promise.resolve(p).then(next, err);\n      } catch (e) {\n        return err(e);\n      }\n    }\n    if (hasError) throw error;\n  }\n  function err(e) {\n    error = hasError ? new dispose_SuppressedError(error, e) : e;\n    hasError = true;\n    return next();\n  }\n  return next();\n}',
+    {
+      globals: ["SuppressedError", "Error", "Object", "Promise"],
+      locals: {
+        dispose_SuppressedError: [
+          "body.0.id",
+          "body.0.body.body.0.alternate.body.1.expression.left.object",
+          "body.0.body.body.0.alternate.body.1.expression.right.arguments.1.properties.0.value.properties.0.value",
+          "body.0.body.body.1.argument.callee",
+          "body.1.body.body.1.body.body.0.expression.right.consequent.callee",
+          "body.0.body.body.0.consequent.body.0.expression.left",
+          "body.0.body.body.0.alternate.body.0.expression.left",
+        ],
+        _dispose: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_dispose",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  extends: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _extends() {\n  // @ts-expect-error explicitly assign to function\n  _extends = Object.assign ?\n  // need a bind because https://github.com/babel/babel/issues/14527\n  // @ts-expect-error -- intentionally omitting the argument\n  Object.assign.bind(/* undefined */) : function (target) {\n    for (var i = 1; i < arguments.length; i++) {\n      var source = arguments[i];\n      for (var key in source) {\n        if (Object.prototype.hasOwnProperty.call(source, key)) {\n          target[key] = source[key];\n        }\n      }\n    }\n    return target;\n  };\n  return _extends.apply(null, arguments);\n}",
+    {
+      globals: ["Object"],
+      locals: {
+        _extends: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee.object",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.0.expression"],
+      exportName: "_extends",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  get: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\n\n// https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get\n//\n//  28.1ak.5 Reflect.get ( target, propertyKey [ , receiver ] )\n\nfunction _get() {\n  if (typeof Reflect !== "undefined" && Reflect.get) {\n    // need a bind because https://github.com/babel/babel/issues/14527\n    // @ts-expect-error function reassign\n    _get = Reflect.get.bind(/* undefined */);\n  } else {\n    // @ts-expect-error function reassign\n    _get = function _get(target, property, receiver) {\n      var base = superPropBase(target, property);\n      if (!base) return;\n      var desc = Object.getOwnPropertyDescriptor(base, property);\n      if (desc.get) {\n        // STEP 3. If receiver is not present, then set receiver to target.\n        return desc.get.call(arguments.length < 3 ? target : receiver);\n      }\n      return desc.value;\n    };\n  }\n  return _get.apply(null, arguments);\n}',
+    {
+      globals: ["Reflect", "Object"],
+      locals: {
+        _get: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee.object",
+          "body.0.body.body.0.consequent.body.0.expression.left",
+          "body.0.body.body.0.alternate.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: [
+        "body.0.body.body.0.alternate.body.0.expression",
+        "body.0.body.body.0.consequent.body.0.expression",
+      ],
+      exportName: "_get",
+      dependencies: {
+        superPropBase: [
+          "body.0.body.body.0.alternate.body.0.expression.right.body.body.0.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  getPrototypeOf: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _getPrototypeOf(o) {\n  // @ts-expect-error explicitly assign to function\n  _getPrototypeOf = Object.setPrototypeOf ?\n  // @ts-expect-error -- intentionally omitting the argument\n  Object.getPrototypeOf.bind(/* undefined */) : function _getPrototypeOf(o) {\n    return o.__proto__ || Object.getPrototypeOf(o);\n  };\n  return _getPrototypeOf(o);\n}",
+    {
+      globals: ["Object"],
+      locals: {
+        _getPrototypeOf: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.0.expression"],
+      exportName: "_getPrototypeOf",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  identity: helper(
+    "7.17.0",
+    "/* @minVersion 7.17.0 */\n\nfunction _identity(x) {\n  return x;\n}",
+    {
+      globals: [],
+      locals: { _identity: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_identity",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  importDeferProxy: helper(
+    "7.23.0",
+    "/* @minVersion 7.23.0 */\n\nfunction _importDeferProxy(init) {\n  var ns = null;\n  var constValue = function (v) {\n    return function () {\n      return v;\n    };\n  };\n  var proxy = function (run) {\n    return function (_target, p, receiver) {\n      if (ns === null) ns = init();\n      return run(ns, p, receiver);\n    };\n  };\n  return new Proxy({}, {\n    defineProperty: constValue(false),\n    deleteProperty: constValue(false),\n    get: proxy(Reflect.get),\n    getOwnPropertyDescriptor: proxy(Reflect.getOwnPropertyDescriptor),\n    getPrototypeOf: constValue(null),\n    isExtensible: constValue(false),\n    has: proxy(Reflect.has),\n    ownKeys: proxy(Reflect.ownKeys),\n    preventExtensions: constValue(true),\n    set: constValue(false),\n    setPrototypeOf: constValue(false)\n  });\n}",
+    {
+      globals: ["Proxy", "Reflect"],
+      locals: { _importDeferProxy: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_importDeferProxy",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  inherits: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== "function" && superClass !== null) {\n    throw new TypeError("Super expression must either be null or a function");\n  }\n  // We can\'t use defineProperty to set the prototype in a single step because it\n  // doesn\'t work in Chrome <= 36. https://github.com/babel/babel/issues/14056\n  // V8 bug: https://bugs.chromium.org/p/v8/issues/detail?id=3334\n  subClass.prototype = Object.create(superClass && superClass.prototype, {\n    constructor: {\n      value: subClass,\n      writable: true,\n      configurable: true\n    }\n  });\n  Object.defineProperty(subClass, "prototype", {\n    writable: false\n  });\n  if (superClass) setPrototypeOf(subClass, superClass);\n}',
+    {
+      globals: ["TypeError", "Object"],
+      locals: { _inherits: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_inherits",
+      dependencies: {
+        setPrototypeOf: ["body.0.body.body.3.consequent.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  inheritsLoose: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _inheritsLoose(subClass, superClass) {\n  subClass.prototype = Object.create(superClass.prototype);\n  subClass.prototype.constructor = subClass;\n  setPrototypeOf(subClass, superClass);\n}",
+    {
+      globals: ["Object"],
+      locals: { _inheritsLoose: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_inheritsLoose",
+      dependencies: {
+        setPrototypeOf: ["body.0.body.body.2.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  initializerDefineProperty: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _initializerDefineProperty(target, property, descriptor, context) {\n  if (!descriptor) return;\n  Object.defineProperty(target, property, {\n    enumerable: descriptor.enumerable,\n    configurable: descriptor.configurable,\n    writable: descriptor.writable,\n    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0\n  });\n}",
+    {
+      globals: ["Object"],
+      locals: { _initializerDefineProperty: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_initializerDefineProperty",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  initializerWarningHelper: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n/* eslint-disable @typescript-eslint/no-unused-vars */\nfunction _initializerWarningHelper(descriptor, context) {\n  throw new Error("Decorating class property failed. Please ensure that " + "transform-class-properties is enabled and runs after the decorators transform.");\n}',
+    {
+      globals: ["Error"],
+      locals: { _initializerWarningHelper: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_initializerWarningHelper",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  instanceof: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _instanceof(left, right) {\n  if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {\n    return !!right[Symbol.hasInstance](left);\n  } else {\n    return left instanceof right;\n  }\n}',
+    {
+      globals: ["Symbol"],
+      locals: { _instanceof: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_instanceof",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  interopRequireDefault: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : {\n    default: obj\n  };\n}",
+    {
+      globals: [],
+      locals: { _interopRequireDefault: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_interopRequireDefault",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  interopRequireWildcard: helper(
+    "7.14.0",
+    '/* @minVersion 7.14.0 */\n\nfunction _interopRequireWildcard(obj, nodeInterop) {\n  if (typeof WeakMap === "function") {\n    var cacheBabelInterop = new WeakMap();\n    var cacheNodeInterop = new WeakMap();\n  }\n\n  // @ts-expect-error: assign to function\n  return (_interopRequireWildcard = function (obj, nodeInterop) {\n    if (!nodeInterop && obj && obj.__esModule) {\n      return obj;\n    }\n    // Temporary variable for output size\n    var _;\n    var newObj = {\n      __proto__: null,\n      default: obj\n    };\n    var desc;\n    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {\n      return newObj;\n    }\n    _ = nodeInterop ? cacheNodeInterop : cacheBabelInterop;\n    if (_) {\n      if (_.has(obj)) return _.get(obj);\n      _.set(obj, newObj);\n    }\n    for (const key in obj) {\n      if (key !== "default" && {}.hasOwnProperty.call(obj, key)) {\n        desc = (_ = Object.defineProperty) && Object.getOwnPropertyDescriptor(obj, key);\n        if (desc && (desc.get || desc.set)) {\n          _(newObj, key, desc);\n        } else {\n          newObj[key] = obj[key];\n        }\n      }\n    }\n    return newObj;\n  })(obj, nodeInterop);\n}',
+    {
+      globals: ["WeakMap", "Object"],
+      locals: {
+        _interopRequireWildcard: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
+      exportName: "_interopRequireWildcard",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  isNativeFunction: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _isNativeFunction(fn) {\n  // Note: This function returns "true" for core-js functions.\n  try {\n    return Function.toString.call(fn).indexOf("[native code]") !== -1;\n  } catch (_e) {\n    // Firefox 31 throws when "toString" is applied to an HTMLElement\n    return typeof fn === "function";\n  }\n}',
+    {
+      globals: ["Function"],
+      locals: { _isNativeFunction: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_isNativeFunction",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  isNativeReflectConstruct: helper(
+    "7.9.0",
+    "/* @minVersion 7.9.0 */\n\nfunction _isNativeReflectConstruct() {\n  // Since Reflect.construct can't be properly polyfilled, some\n  // implementations (e.g. core-js@2) don't set the correct internal slots.\n  // Those polyfills don't allow us to subclass built-ins, so we need to\n  // use our fallback implementation.\n  try {\n    // If the internal slots aren't set, this throws an error similar to\n    //   TypeError: this is not a Boolean object.\n    var result = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));\n  } catch (_) {}\n  // @ts-expect-error assign to function\n  return (_isNativeReflectConstruct = function () {\n    return !!result;\n  })();\n}",
+    {
+      globals: ["Boolean", "Reflect"],
+      locals: {
+        _isNativeReflectConstruct: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.1.argument.callee"],
+      exportName: "_isNativeReflectConstruct",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  iterableToArray: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _iterableToArray(iter) {\n  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) {\n    return Array.from(iter);\n  }\n}',
+    {
+      globals: ["Symbol", "Array"],
+      locals: { _iterableToArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_iterableToArray",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  iterableToArrayLimit: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _iterableToArrayLimit(arr, i) {\n  // this is an expanded form of \\`for...of\\` that properly supports abrupt completions of\n  // iterators etc.\n\n  var iterator = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];\n  if (iterator == null) return;\n  var _arr = [];\n  var iteratorNormalCompletion = true;\n  var didIteratorError = false;\n  var step, iteratorError, next, _return;\n  try {\n    next = (iterator = iterator.call(arr)).next;\n    if (i === 0) {\n      if (Object(iterator) !== iterator) return;\n      iteratorNormalCompletion = false;\n    } else {\n      for (; !(iteratorNormalCompletion = (step = next.call(iterator)).done); iteratorNormalCompletion = true) {\n        _arr.push(step.value);\n        if (_arr.length === i) break;\n      }\n    }\n  } catch (err) {\n    didIteratorError = true;\n    iteratorError = err;\n  } finally {\n    try {\n      if (!iteratorNormalCompletion && iterator["return"] != null) {\n        _return = iterator["return"]();\n        // eslint-disable-next-line no-unsafe-finally\n        if (Object(_return) !== _return) return;\n      }\n    } finally {\n      // eslint-disable-next-line no-unsafe-finally\n      if (didIteratorError) throw iteratorError;\n    }\n  }\n  return _arr;\n}',
+    {
+      globals: ["Symbol", "Object"],
+      locals: { _iterableToArrayLimit: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_iterableToArrayLimit",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  jsx: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nvar REACT_ELEMENT_TYPE;\nfunction _createRawReactElement(type, props, key, children) {\n  if (!REACT_ELEMENT_TYPE) {\n    REACT_ELEMENT_TYPE = typeof Symbol === "function" &&\n    // "for" is a reserved keyword in ES3 so escaping it here for backward compatibility\n    Symbol["for"] && Symbol["for"]("react.element") || 0xeac7;\n  }\n  var defaultProps = type && type.defaultProps;\n  var childrenLength = arguments.length - 3;\n  if (!props && childrenLength !== 0) {\n    // If we\'re going to assign props.children, we create a new object now\n    // to avoid mutating defaultProps.\n    props = {\n      children: void 0\n    };\n  }\n  if (childrenLength === 1) {\n    props.children = children;\n  } else if (childrenLength > 1) {\n    var childArray = new Array(childrenLength);\n    for (var i = 0; i < childrenLength; i++) {\n      childArray[i] = arguments[i + 3];\n    }\n    props.children = childArray;\n  }\n  if (props && defaultProps) {\n    for (var propName in defaultProps) {\n      if (props[propName] === void 0) {\n        props[propName] = defaultProps[propName];\n      }\n    }\n  } else if (!props) {\n    props = defaultProps || {};\n  }\n  return {\n    $$typeof: REACT_ELEMENT_TYPE,\n    type: type,\n    key: key === undefined ? null : "" + key,\n    ref: null,\n    props: props,\n    _owner: null\n  };\n}',
+    {
+      globals: ["Symbol", "Array", "undefined"],
+      locals: {
+        REACT_ELEMENT_TYPE: [
+          "body.0.declarations.0.id",
+          "body.1.body.body.0.test.argument",
+          "body.1.body.body.6.argument.properties.0.value",
+          "body.1.body.body.0.consequent.body.0.expression.left",
+        ],
+        _createRawReactElement: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_createRawReactElement",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  maybeArrayLike: helper(
+    "7.9.0",
+    '/* @minVersion 7.9.0 */\n\n\nfunction _maybeArrayLike(orElse, arr, i) {\n  if (arr && !Array.isArray(arr) && typeof arr.length === "number") {\n    var len = arr.length;\n    return arrayLikeToArray(arr, i !== void 0 && i < len ? i : len);\n  }\n  return orElse(arr, i);\n}',
+    {
+      globals: ["Array"],
+      locals: { _maybeArrayLike: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_maybeArrayLike",
+      dependencies: {
+        arrayLikeToArray: [
+          "body.0.body.body.0.consequent.body.1.argument.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  newArrowCheck: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _newArrowCheck(innerThis, boundThis) {\n  if (innerThis !== boundThis) {\n    throw new TypeError("Cannot instantiate an arrow function");\n  }\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _newArrowCheck: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_newArrowCheck",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  nonIterableRest: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _nonIterableRest() {\n  throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _nonIterableRest: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_nonIterableRest",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  nonIterableSpread: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _nonIterableSpread() {\n  throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _nonIterableSpread: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_nonIterableSpread",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  nullishReceiverError: helper(
+    "7.22.6",
+    '/* @minVersion 7.22.6 */\n\n// eslint-disable-next-line no-unused-vars\nfunction _nullishReceiverError(r) {\n  throw new TypeError("Cannot set property of null or undefined.");\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _nullishReceiverError: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_nullishReceiverError",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  objectDestructuringEmpty: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _objectDestructuringEmpty(obj) {\n  if (obj == null) throw new TypeError("Cannot destructure " + obj);\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _objectDestructuringEmpty: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_objectDestructuringEmpty",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  objectSpread: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n/* @onlyBabel7 */\n\n\nfunction _objectSpread(target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i] != null ? Object(arguments[i]) : {};\n    var ownKeys = Object.keys(source);\n    if (typeof Object.getOwnPropertySymbols === "function") {\n      ownKeys.push.apply(ownKeys, Object.getOwnPropertySymbols(source).filter(function (sym) {\n        // sym already comes from `Object.getOwnPropertySymbols`, so getOwnPropertyDescriptor should always be defined\n        return Object.getOwnPropertyDescriptor(source, sym).enumerable;\n      }));\n    }\n    ownKeys.forEach(function (key) {\n      defineProperty(target, key, source[key]);\n    });\n  }\n  return target;\n}',
+    {
+      globals: ["Object"],
+      locals: { _objectSpread: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_objectSpread",
+      dependencies: {
+        defineProperty: [
+          "body.0.body.body.0.body.body.3.expression.arguments.0.body.body.0.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  objectSpread2: helper(
+    "7.5.0",
+    '/* @minVersion 7.5.0 */\n\n\n\n// This function is different to "Reflect.ownKeys". The enumerableOnly\n// filters on symbol properties only. Returned string properties are always\n// enumerable. It is good to use in objectSpread.\n\nfunction ownKeys(object, enumerableOnly) {\n  var keys = Object.keys(object);\n  if (Object.getOwnPropertySymbols) {\n    var symbols = Object.getOwnPropertySymbols(object);\n    if (enumerableOnly) {\n      symbols = symbols.filter(function (sym) {\n        // sym already comes from `Object.getOwnPropertySymbols`, so getOwnPropertyDescriptor should always be defined\n        return Object.getOwnPropertyDescriptor(object, sym).enumerable;\n      });\n    }\n    keys.push.apply(keys, symbols);\n  }\n  return keys;\n}\nfunction _objectSpread2(target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i] != null ? arguments[i] : {};\n    if (i % 2) {\n      ownKeys(Object(source), true).forEach(function (key) {\n        defineProperty(target, key, source[key]);\n      });\n    } else if (Object.getOwnPropertyDescriptors) {\n      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));\n    } else {\n      ownKeys(Object(source)).forEach(function (key) {\n        Object.defineProperty(target, key,\n        // key already comes from ownKeys, so getOwnPropertyDescriptor should always be defined\n        Object.getOwnPropertyDescriptor(source, key));\n      });\n    }\n  }\n  return target;\n}',
+    {
+      globals: ["Object"],
+      locals: {
+        ownKeys: [
+          "body.0.id",
+          "body.1.body.body.0.body.body.1.consequent.body.0.expression.callee.object.callee",
+          "body.1.body.body.0.body.body.1.alternate.alternate.body.0.expression.callee.object.callee",
+        ],
+        _objectSpread2: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_objectSpread2",
+      dependencies: {
+        defineProperty: [
+          "body.1.body.body.0.body.body.1.consequent.body.0.expression.arguments.0.body.body.0.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  objectWithoutProperties: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _objectWithoutProperties(source, excluded) {\n  if (source == null) return {};\n  var target = objectWithoutPropertiesLoose(source, excluded);\n  var key, i;\n  if (Object.getOwnPropertySymbols) {\n    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);\n    for (i = 0; i < sourceSymbolKeys.length; i++) {\n      key = sourceSymbolKeys[i];\n      if (excluded.indexOf(key) !== -1) continue;\n      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;\n      target[key] = source[key];\n    }\n  }\n  return target;\n}",
+    {
+      globals: ["Object"],
+      locals: { _objectWithoutProperties: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_objectWithoutProperties",
+      dependencies: {
+        objectWithoutPropertiesLoose: [
+          "body.0.body.body.1.declarations.0.init.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  objectWithoutPropertiesLoose: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _objectWithoutPropertiesLoose(source, excluded) {\n  if (source == null) return {};\n  var target = {};\n  for (var key in source) {\n    if (Object.prototype.hasOwnProperty.call(source, key)) {\n      if (excluded.indexOf(key) !== -1) continue;\n      target[key] = source[key];\n    }\n  }\n  return target;\n}",
+    {
+      globals: ["Object"],
+      locals: { _objectWithoutPropertiesLoose: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_objectWithoutPropertiesLoose",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  possibleConstructorReturn: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _possibleConstructorReturn(self, value) {\n  if (value && (typeof value === "object" || typeof value === "function")) {\n    return value;\n  } else if (value !== void 0) {\n    throw new TypeError("Derived constructors may only return object or undefined");\n  }\n  return assertThisInitialized(self);\n}',
+    {
+      globals: ["TypeError"],
+      locals: { _possibleConstructorReturn: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_possibleConstructorReturn",
+      dependencies: {
+        assertThisInitialized: ["body.0.body.body.1.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  readOnlyError: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _readOnlyError(name) {\n  throw new TypeError('\"' + name + '\" is read-only');\n}",
+    {
+      globals: ["TypeError"],
+      locals: { _readOnlyError: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_readOnlyError",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  regenerator: helper(
+    "7.27.0",
+    '/* @minVersion 7.27.0 */\n/* @mangleFns */\n\n/* eslint-disable @typescript-eslint/no-use-before-define */\n/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */\n\n\nfunction /* @no-mangle */_regenerator() {\n  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\n\n  var undefined; // More compressible than void 0.\n  var $Symbol = typeof Symbol === "function" ? Symbol : {};\n  var iteratorSymbol = $Symbol.iterator || "@@iterator";\n  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";\n  var _;\n  function wrap(innerFn, outerFn, self, tryLocsList) {\n    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.\n    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;\n    var generator = Object.create(protoGenerator.prototype);\n\n    // The ._invoke method unifies the implementations of the .next,\n    // .throw, and .return methods.\n    define(generator, "_invoke", makeInvokeMethod(innerFn, self, tryLocsList), true);\n    return generator;\n  }\n\n  // Returning this object from the innerFn has the same effect as\n  // breaking out of the dispatch switch statement.\n  var ContinueSentinel = {};\n\n  // Dummy constructor functions that we use as the .constructor and\n  // .constructor.prototype properties for functions that return Generator\n  // objects. For full spec compliance, you may wish to configure your\n  // minifier not to mangle the names of these two functions.\n  /* @no-mangle */\n  function Generator() {}\n  /* @no-mangle */\n  function GeneratorFunction() {}\n  /* @no-mangle */\n  function GeneratorFunctionPrototype() {}\n  _ = Object.getPrototypeOf;\n  var IteratorPrototype = [][iteratorSymbol] ?\n  // This environment has a native %IteratorPrototype%; use it instead\n  // of the polyfill.\n  _(_([][iteratorSymbol]())) : (\n  // This is a polyfill for %IteratorPrototype% for environments that\n  // don\'t natively support it.\n  define(_ = {}, iteratorSymbol, function () {\n    return this;\n  }), _);\n  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);\n  GeneratorFunction.prototype = GeneratorFunctionPrototype;\n  define(Gp, "constructor", GeneratorFunctionPrototype);\n  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);\n  GeneratorFunction.displayName = "GeneratorFunction";\n  define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");\n\n  // Define Generator.prototype.{next,throw,return} in terms of the\n  // unified ._invoke helper method.\n  define(Gp);\n  define(Gp, toStringTagSymbol, "Generator");\n\n  // A Generator should always return itself as the iterator object when the\n  // @@iterator function is called on it. Some browsers\' implementations of the\n  // iterator prototype chain incorrectly implement this, causing the Generator\n  // object to not be returned from this call. This ensures that doesn\'t happen.\n  // See https://github.com/facebook/regenerator/issues/274 for more details.\n  define(Gp, iteratorSymbol, function () {\n    return this;\n  });\n  define(Gp, "toString", function () {\n    return "[object Generator]";\n  });\n  function mark(genFun) {\n    if (Object.setPrototypeOf) {\n      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);\n    } else {\n      // @ts-expect-error assign to __proto__\n      genFun.__proto__ = GeneratorFunctionPrototype;\n      define(genFun, toStringTagSymbol, "GeneratorFunction");\n    }\n    genFun.prototype = Object.create(Gp);\n    return genFun;\n  }\n  function makeInvokeMethod(innerFn, self, tryLocsList) {\n    var state = 0;\n    function invoke(_methodName, _method, _arg) {\n      if (state > 1 /* Executing */) {\n        throw TypeError("Generator is already running");\n      } else if (done) {\n        if (_method === 1) {\n          Context_dispatchExceptionOrFinishOrAbrupt(_method, _arg);\n        }\n      }\n      method = _method;\n      arg = _arg;\n      while ((_ = method < 2 /* Next | Throw */ ? undefined : arg) || !done) {\n        if (!delegateIterator) {\n          if (!method /* Next */) {\n            ctx.v = arg;\n          } else if (method < 3 /* Throw | Return */) {\n            if (method > 1 /* Return */) ctx.n = -1;\n            Context_dispatchExceptionOrFinishOrAbrupt(method, arg);\n          } else {\n            /* Jump */\n            ctx.n = arg;\n          }\n        }\n        try {\n          state = 2;\n          if (delegateIterator) {\n            // Call delegate.iterator[context.method](context.arg) and handle the result\n\n            if (!method /* Next */) _methodName = "next";\n            if (_ = delegateIterator[_methodName]) {\n              if (!(_ = _.call(delegateIterator, arg))) {\n                throw TypeError("iterator result is not an object");\n              }\n              if (!_.done) {\n                // Re-yield the result returned by the delegate method.\n                return _;\n              }\n              arg = _.value;\n              // If context.method was "throw" but the delegate handled the\n              // exception, let the outer generator proceed normally. If\n              // context.method was "next", forget context.arg since it has been\n              // "consumed" by the delegate iterator. If context.method was\n              // "return", allow the original .return call to continue in the\n              // outer generator.\n              // method !== OperatorType.Return\n              if (method < 2 /* Throw */) {\n                method = 0;\n              }\n            } else {\n              // Note: ["return"] must be used for ES3 parsing compatibility.\n              if (method === 1 && (_ = delegateIterator["return"])) {\n                // If the delegate iterator has a return method, give it a\n                // chance to clean up.\n                _.call(delegateIterator);\n              }\n              if (method < 2 /* Next | Throw */) {\n                arg = TypeError("The iterator does not provide a \'" + _methodName + "\' method");\n                method = 1;\n              }\n            }\n\n            // The delegate iterator is finished, so forget it and continue with\n            // the outer generator.\n            // &\n            // A .throw or .return when the delegate iterator has no .throw\n            // method, or a missing .next method, always terminate the\n            // yield* loop.\n            delegateIterator = undefined;\n          } else {\n            if (done = ctx.n < 0 /* End */) {\n              _ = arg;\n            } else {\n              _ = innerFn.call(self, ctx);\n            }\n            if (_ !== ContinueSentinel) {\n              break;\n            }\n          }\n        } catch (e) {\n          delegateIterator = undefined;\n          method = 1;\n          arg = e;\n        } finally {\n          state = 1;\n        }\n      }\n      // Be forgiving, per GeneratorResume behavior specified since ES2015:\n      // ES2015 spec, step 3: https://262.ecma-international.org/6.0/#sec-generatorresume\n      // Latest spec, step 2: https://tc39.es/ecma262/#sec-generatorresume\n      return {\n        value: _,\n        done: done\n      };\n    }\n\n    // The root entry object (effectively a try statement without a catch\n    // or a finally block) gives us a place to store values thrown from\n    // locations where there is no enclosing try statement.\n    var tryEntries = tryLocsList || [];\n    var done = false;\n    var delegateIterator;\n    var method;\n    var arg;\n    var ctx = {\n      p: 0,\n      n: 0,\n      v: undefined,\n      // abrupt\n      a: Context_dispatchExceptionOrFinishOrAbrupt,\n      // finish\n      f: Context_dispatchExceptionOrFinishOrAbrupt.bind(undefined, 4),\n      // delegateYield\n      d: function (iterable, nextLoc) {\n        delegateIterator = iterable;\n\n        // Deliberately forget the last sent value so that we don\'t\n        // accidentally pass it on to the delegate.\n        method = 0;\n        arg = undefined;\n        ctx.n = nextLoc;\n        return ContinueSentinel;\n      }\n    };\n    function Context_dispatchExceptionOrFinishOrAbrupt(_type, _arg) {\n      method = _type;\n      arg = _arg;\n      for (_ = 0; !done && state /* state !== SuspendedStart */ && !shouldReturn && _ < tryEntries.length; _++) {\n        var entry = tryEntries[_];\n        var prev = ctx.p;\n        var finallyLoc = entry[2];\n        var shouldReturn;\n        if (_type > 3 /* Finish */) {\n          if (shouldReturn = finallyLoc === _arg) {\n            // The following code logic is equivalent to the commented code.\n            // if ((method = entry[4]!)) {\n            //   arg = entry[5];\n            // } else {\n            //   method = OperatorType.Jump;\n            //   arg = entry[3];\n            // }\n            arg = entry[\n            // eslint-disable-next-line no-cond-assign\n            (method = entry[4]) ? 5 : (method = 3, 3)];\n            entry[4] = entry[5] = undefined;\n          }\n        } else {\n          if (entry[0] <= prev) {\n            if (shouldReturn = _type < 2 /* Throw */ && prev < entry[1]) {\n              // If the dispatched exception was caught by a catch block,\n              // then let that catch block handle the exception normally.\n              method = 0;\n              ctx.v = _arg;\n              ctx.n = entry[1];\n            } else if (prev < finallyLoc) {\n              if (shouldReturn =\n              // Ignore the finally entry if control is not jumping to a\n              // location outside the try/catch block.\n              _type < 3 /* Throw | Return */ || entry[0] > _arg || _arg > finallyLoc) {\n                entry[4] = _type;\n                entry[5] = _arg;\n                ctx.n = finallyLoc;\n                method = 0;\n              }\n            }\n          }\n        }\n      }\n      if (shouldReturn || _type > 1 /* _type !== Throw */) {\n        return ContinueSentinel;\n      }\n      done = true;\n      throw _arg;\n    }\n    return invoke;\n  }\n\n  // @ts-expect-error explicit function assignment\n  return (_regenerator = function () {\n    return {\n      w: wrap,\n      m: mark\n    };\n  })();\n}',
+    {
+      globals: ["Symbol", "Object", "TypeError"],
+      locals: {
+        _regenerator: ["body.0.id", "body.0.body.body.24.argument.callee.left"],
+      },
+      exportBindingAssignments: ["body.0.body.body.24.argument.callee"],
+      exportName: "_regenerator",
+      dependencies: {
+        regeneratorDefine: [
+          "body.0.body.body.5.body.body.2.expression.callee",
+          "body.0.body.body.11.declarations.0.init.alternate.expressions.0.callee",
+          "body.0.body.body.14.expression.callee",
+          "body.0.body.body.15.expression.callee",
+          "body.0.body.body.17.expression.callee",
+          "body.0.body.body.18.expression.callee",
+          "body.0.body.body.19.expression.callee",
+          "body.0.body.body.20.expression.callee",
+          "body.0.body.body.21.expression.callee",
+          "body.0.body.body.22.body.body.0.alternate.body.1.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  regeneratorAsync: helper(
+    "7.27.0",
+    "/* @minVersion 7.27.0 */\n\n\nfunction _regeneratorAsync(innerFn, outerFn, self, tryLocsList, PromiseImpl) {\n  var iter = asyncGen(innerFn, outerFn, self, tryLocsList, PromiseImpl);\n  return iter.next().then(function (result) {\n    return result.done ? result.value : iter.next();\n  });\n}",
+    {
+      globals: [],
+      locals: { _regeneratorAsync: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorAsync",
+      dependencies: {
+        regeneratorAsyncGen: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  regeneratorAsyncGen: helper(
+    "7.27.0",
+    "/* @minVersion 7.27.0 */\n/* @mangleFns */\n\n\n\nfunction _regeneratorAsyncGen(innerFn, outerFn, self, tryLocsList, PromiseImpl) {\n  return new regeneratorAsyncIterator(regenerator().w(innerFn, outerFn, self, tryLocsList), PromiseImpl || Promise);\n}",
+    {
+      globals: ["Promise"],
+      locals: { _regeneratorAsyncGen: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorAsyncGen",
+      dependencies: {
+        regenerator: [
+          "body.0.body.body.0.argument.arguments.0.callee.object.callee",
+        ],
+        regeneratorAsyncIterator: ["body.0.body.body.0.argument.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  regeneratorAsyncIterator: helper(
+    "7.27.0",
+    '/* @minVersion 7.27.0 */\n/* @mangleFns */\n/* @internal */\n\n\n\nfunction AsyncIterator(generator, PromiseImpl) {\n  if (!this.next) {\n    define(AsyncIterator.prototype);\n    define(AsyncIterator.prototype, typeof Symbol === "function" && Symbol.asyncIterator || "@asyncIterator", function () {\n      return this;\n    });\n  }\n  function invoke(method, arg, resolve, reject) {\n    try {\n      var result = generator[method](arg);\n      var value = result.value;\n      if (value instanceof OverloadYield) {\n        return PromiseImpl.resolve(value.v).then(function (value) {\n          invoke("next", value, resolve, reject);\n        }, function (err) {\n          invoke("throw", err, resolve, reject);\n        });\n      }\n      return PromiseImpl.resolve(value).then(function (unwrapped) {\n        // When a yielded Promise is resolved, its final value becomes\n        // the .value of the Promise<{value,done}> result for the\n        // current iteration.\n        result.value = unwrapped;\n        resolve(result);\n      }, function (error) {\n        // If a rejected Promise was yielded, throw the rejection back\n        // into the async generator function so it can be handled there.\n        return invoke("throw", error, resolve, reject);\n      });\n    } catch (error) {\n      reject(error);\n    }\n  }\n  var previousPromise;\n  function enqueue(method, i, arg) {\n    function callInvokeWithMethodAndArg() {\n      return new PromiseImpl(function (resolve, reject) {\n        invoke(method, arg, resolve, reject);\n      });\n    }\n    return previousPromise =\n    // If enqueue has been called before, then we want to wait until\n    // all previous Promises have been resolved before calling invoke,\n    // so that results are always delivered in the correct order. If\n    // enqueue has not been called before, then it is important to\n    // call invoke immediately, without waiting on a callback to fire,\n    // so that the async generator function has the opportunity to do\n    // any necessary setup in a predictable way. This predictability\n    // is why the Promise constructor synchronously invokes its\n    // executor callback, and why async functions synchronously\n    // execute code before the first await. Since we implement simple\n    // async functions in terms of async generators, it is especially\n    // important to get this right, even though it requires care.\n    previousPromise ? previousPromise.then(callInvokeWithMethodAndArg,\n    // Avoid propagating failures to Promises returned by later\n    // invocations of the iterator.\n    callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();\n  }\n\n  // Define the unified helper method that is used to implement .next,\n  // .throw, and .return (see defineIteratorMethods).\n  define(this, "_invoke", enqueue, true);\n}',
+    {
+      globals: ["Symbol"],
+      locals: {
+        AsyncIterator: [
+          "body.0.id",
+          "body.0.body.body.0.consequent.body.0.expression.arguments.0.object",
+          "body.0.body.body.0.consequent.body.1.expression.arguments.0.object",
+        ],
+      },
+      exportBindingAssignments: [],
+      exportName: "AsyncIterator",
+      dependencies: {
+        OverloadYield: [
+          "body.0.body.body.1.body.body.0.block.body.2.test.right",
+        ],
+        regeneratorDefine: [
+          "body.0.body.body.0.consequent.body.0.expression.callee",
+          "body.0.body.body.0.consequent.body.1.expression.callee",
+          "body.0.body.body.4.expression.callee",
+        ],
+      },
+      internal: true,
+    },
+  ),
+
+  regeneratorDefine: helper(
+    "7.27.0",
+    '/* @minVersion 7.27.0 */\n/* @mangleFns */\n/* @internal */\n\n// Also used to define Iterator Methods\n// Defining the .next, .throw, and .return methods of the Iterator interface in terms of a single ._invoke method.\nfunction regeneratorDefine(obj, key, value, noFlags) {\n  var define = Object.defineProperty;\n  try {\n    // IE 8 has a broken Object.defineProperty that only works on DOM objects.\n    define({}, "", {});\n  } catch (_) {\n    define = 0;\n  }\n\n  // @ts-expect-error explicit function reassign\n  regeneratorDefine = function (obj, key, value, noFlags) {\n    function defineIteratorMethod(method, i) {\n      regeneratorDefine(obj, method, function (arg) {\n        return this._invoke(method, i, arg);\n      });\n    }\n    if (!key) {\n      defineIteratorMethod("next", 0);\n      defineIteratorMethod("throw", 1);\n      defineIteratorMethod("return", 2);\n    } else {\n      if (define) {\n        define(obj, key, {\n          value: value,\n          enumerable: !noFlags,\n          configurable: !noFlags,\n          writable: !noFlags\n        });\n      } else {\n        obj[key] = value;\n      }\n    }\n  };\n  regeneratorDefine(obj, key, value, noFlags);\n}',
+    {
+      globals: ["Object"],
+      locals: {
+        regeneratorDefine: [
+          "body.0.id",
+          "body.0.body.body.2.expression.right.body.body.0.body.body.0.expression.callee",
+          "body.0.body.body.3.expression.callee",
+          "body.0.body.body.2.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.2.expression"],
+      exportName: "regeneratorDefine",
+      dependencies: {},
+      internal: true,
+    },
+  ),
+
+  regeneratorKeys: helper(
+    "7.27.0",
+    "/* @minVersion 7.27.0 */\n/* @mangleFns */\n\nfunction _regeneratorKeys(val) {\n  var object = Object(val);\n  var keys = [];\n  var key;\n  // eslint-disable-next-line guard-for-in\n  for (var key in object) {\n    keys.unshift(key);\n  }\n\n  // Rather than returning an object with a next method, we keep\n  // things simple and return the next function itself.\n  return function next() {\n    while (keys.length) {\n      key = keys.pop();\n      if (key in object) {\n        // @ts-expect-error assign to () => ...\n        next.value = key;\n        // @ts-expect-error assign to () => ...\n        next.done = false;\n        return next;\n      }\n    }\n\n    // To avoid creating an additional object, we just hang the .value\n    // and .done properties off the next function object itself. This\n    // also ensures that the minifier will not anonymize the function.\n    // @ts-expect-error assign to () => ...\n    next.done = true;\n    return next;\n  };\n}",
+    {
+      globals: ["Object"],
+      locals: { _regeneratorKeys: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorKeys",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  regeneratorRuntime: helper(
+    "7.18.0",
+    '/* @minVersion 7.18.0 */\n/* @mangleFns */\n/* @onlyBabel7 */\n\n\n\n\n\n\n\n\nfunction /* @no-mangle */_regeneratorRuntime() {\n  "use strict";\n\n  var r = regenerator();\n  var gen = r.m(_regeneratorRuntime);\n  var GeneratorFunctionPrototype = Object.getPrototypeOf ? Object.getPrototypeOf(gen) : gen.__proto__;\n  var GeneratorFunction = GeneratorFunctionPrototype.constructor;\n  function isGeneratorFunction(genFun) {\n    var ctor = typeof genFun === "function" && genFun.constructor;\n    return ctor ? ctor === GeneratorFunction ||\n    // For the native GeneratorFunction constructor, the best we can\n    // do is to check its .name property.\n    (ctor.displayName || ctor.name) === "GeneratorFunction" : false;\n  }\n  var abruptMap = {\n    throw: 1,\n    return: 2,\n    break: 3,\n    continue: 3\n  };\n  function wrapInnerFn(innerFn) {\n    var compatContext;\n    var callSyncState;\n    return function (context) {\n      if (!compatContext) {\n        // Shim the old context shape on top of the new one.\n        compatContext = {\n          stop: function () {\n            return callSyncState(context.a, 2);\n          },\n          catch: function () {\n            return context.v;\n          },\n          abrupt: function (type, arg) {\n            return callSyncState(context.a, abruptMap[type], arg);\n          },\n          delegateYield: function (iterable, resultName, nextLoc) {\n            compatContext.resultName = resultName;\n            return callSyncState(context.d, values(iterable), nextLoc);\n          },\n          finish: function (finallyLoc) {\n            return callSyncState(context.f, finallyLoc);\n          }\n        };\n        callSyncState = function (fn, a1, a2) {\n          context.p = compatContext.prev;\n          context.n = compatContext.next;\n          try {\n            return fn(a1, a2);\n          } finally {\n            compatContext.next = context.n;\n          }\n        };\n      }\n      if (compatContext.resultName) {\n        compatContext[compatContext.resultName] = context.v;\n        compatContext.resultName = undefined;\n      }\n      compatContext.sent = context.v;\n      compatContext.next = context.n;\n      try {\n        return innerFn.call(this, compatContext);\n      } finally {\n        context.p = compatContext.prev;\n        context.n = compatContext.next;\n      }\n    };\n  }\n\n  // @ts-expect-error explicit function assignment\n  return (_regeneratorRuntime = function () {\n    return {\n      wrap: function (innerFn, outerFn, self, tryLocsList) {\n        return r.w(wrapInnerFn(innerFn), outerFn, self, tryLocsList && tryLocsList.reverse());\n      },\n      isGeneratorFunction: isGeneratorFunction,\n      mark: r.m,\n      awrap: function (value, kind) {\n        return new OverloadYield(value, kind);\n      },\n      AsyncIterator: AsyncIterator,\n      async: function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {\n        return (isGeneratorFunction(outerFn) ? asyncGen : async)(wrapInnerFn(innerFn), outerFn, self, tryLocsList, PromiseImpl);\n      },\n      keys: keys,\n      values: values\n    };\n  })();\n}',
+    {
+      globals: ["Object", "undefined"],
+      locals: {
+        _regeneratorRuntime: [
+          "body.0.id",
+          "body.0.body.body.1.declarations.0.init.arguments.0",
+          "body.0.body.body.7.argument.callee.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.7.argument.callee"],
+      exportName: "_regeneratorRuntime",
+      dependencies: {
+        OverloadYield: [
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.3.value.body.body.0.argument.callee",
+        ],
+        regenerator: ["body.0.body.body.0.declarations.0.init.callee"],
+        regeneratorAsync: [
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.alternate",
+        ],
+        regeneratorAsyncGen: [
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.5.value.body.body.0.argument.callee.consequent",
+        ],
+        regeneratorAsyncIterator: [
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.4.value",
+        ],
+        regeneratorKeys: [
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.6.value",
+        ],
+        regeneratorValues: [
+          "body.0.body.body.6.body.body.2.argument.body.body.0.consequent.body.0.expression.right.properties.3.value.body.body.1.argument.arguments.1.callee",
+          "body.0.body.body.7.argument.callee.right.body.body.0.argument.properties.7.value",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  regeneratorValues: helper(
+    "7.18.0",
+    '/* @minVersion 7.18.0 */\n/* @mangleFns */\n\nfunction _regeneratorValues(iterable) {\n  if (iterable != null) {\n    var iteratorMethod = iterable[typeof Symbol === "function" && Symbol.iterator || "@@iterator"],\n      i = 0;\n    if (iteratorMethod) {\n      return iteratorMethod.call(iterable);\n    }\n    if (typeof iterable.next === "function") {\n      return iterable;\n    }\n    if (!isNaN(iterable.length)) {\n      return {\n        next: function () {\n          if (iterable && i >= iterable.length) iterable = undefined;\n          return {\n            value: iterable && iterable[i++],\n            done: !iterable\n          };\n        }\n      };\n    }\n  }\n  throw new TypeError(typeof iterable + " is not iterable");\n}',
+    {
+      globals: ["Symbol", "isNaN", "undefined", "TypeError"],
+      locals: { _regeneratorValues: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_regeneratorValues",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  set: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\n\nfunction set(target, property, value, receiver) {\n  if (typeof Reflect !== "undefined" && Reflect.set) {\n    // @ts-expect-error explicit function reassign\n    set = Reflect.set;\n  } else {\n    // @ts-expect-error explicit function reassign\n    set = function set(target, property, value, receiver) {\n      var base = superPropBase(target, property);\n      var desc;\n      if (base) {\n        desc = Object.getOwnPropertyDescriptor(base, property);\n        if (desc.set) {\n          desc.set.call(receiver, value);\n          return true;\n          // so getOwnPropertyDescriptor should always be defined\n        } else if (!desc.writable) {\n          // Both getter and non-writable fall into this.\n          return false;\n        }\n      }\n\n      // Without a super that defines the property, spec boils down to\n      // "define on receiver" for some reason.\n      desc = Object.getOwnPropertyDescriptor(receiver, property);\n      if (desc) {\n        if (!desc.writable) {\n          // Setter, getter, and non-writable fall into this.\n          return false;\n        }\n        desc.value = value;\n        Object.defineProperty(receiver, property, desc);\n      } else {\n        // Avoid setters that may be defined on Sub\'s prototype, but not on\n        // the instance.\n        defineProperty(receiver, property, value);\n      }\n      return true;\n    };\n  }\n  return set(target, property, value, receiver);\n}\nfunction _set(target, property, value, receiver, isStrict) {\n  var s = set(target, property, value, receiver || target);\n  if (!s && isStrict) {\n    throw new TypeError("failed to set property");\n  }\n  return value;\n}',
+    {
+      globals: ["Reflect", "Object", "TypeError"],
+      locals: {
+        set: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee",
+          "body.1.body.body.0.declarations.0.init.callee",
+          "body.0.body.body.0.consequent.body.0.expression.left",
+          "body.0.body.body.0.alternate.body.0.expression.left",
+        ],
+        _set: ["body.1.id"],
+      },
+      exportBindingAssignments: [],
+      exportName: "_set",
+      dependencies: {
+        superPropBase: [
+          "body.0.body.body.0.alternate.body.0.expression.right.body.body.0.declarations.0.init.callee",
+        ],
+        defineProperty: [
+          "body.0.body.body.0.alternate.body.0.expression.right.body.body.4.alternate.body.0.expression.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  setFunctionName: helper(
+    "7.23.6",
+    '/* @minVersion 7.23.6 */\n\n// https://tc39.es/ecma262/#sec-setfunctionname\nfunction setFunctionName(fn, name, prefix) {\n  if (typeof name === "symbol") {\n    // Here `undefined` is possible, we check for it in the next line.\n    name = name.description;\n    name = name ? "[" + name + "]" : "";\n  }\n  // In some older browsers .name was non-configurable, here we catch any\n  // errors thrown by defineProperty.\n  try {\n    Object.defineProperty(fn, "name", {\n      configurable: true,\n      value: prefix ? prefix + " " + name : name\n    });\n  } catch (_) {}\n  return fn;\n}',
+    {
+      globals: ["Object"],
+      locals: { setFunctionName: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "setFunctionName",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  setPrototypeOf: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _setPrototypeOf(o, p) {\n  // @ts-expect-error - assigning to function\n  _setPrototypeOf = Object.setPrototypeOf ?\n  // @ts-expect-error - intentionally omitted argument\n  Object.setPrototypeOf.bind(/* undefined */) : function _setPrototypeOf(o, p) {\n    o.__proto__ = p;\n    return o;\n  };\n  return _setPrototypeOf(o, p);\n}",
+    {
+      globals: ["Object"],
+      locals: {
+        _setPrototypeOf: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.0.expression"],
+      exportName: "_setPrototypeOf",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  skipFirstGeneratorNext: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _skipFirstGeneratorNext(fn) {\n  return function () {\n    var it = fn.apply(this, arguments);\n    it.next();\n    return it;\n  };\n}",
+    {
+      globals: [],
+      locals: { _skipFirstGeneratorNext: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_skipFirstGeneratorNext",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  slicedToArray: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\n\n\n// @ts-expect-error nonIterableRest is still being converted to TS.\n\nfunction _slicedToArray(arr, i) {\n  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();\n}",
+    {
+      globals: [],
+      locals: { _slicedToArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_slicedToArray",
+      dependencies: {
+        arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
+        iterableToArrayLimit: [
+          "body.0.body.body.0.argument.left.left.right.callee",
+        ],
+        unsupportedIterableToArray: [
+          "body.0.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  superPropBase: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _superPropBase(object, property) {\n  // Yes, this throws if object is null to being with, that's on purpose.\n  while (!Object.prototype.hasOwnProperty.call(object, property)) {\n    object = getPrototypeOf(object);\n    if (object === null) break;\n  }\n  return object;\n}",
+    {
+      globals: ["Object"],
+      locals: { _superPropBase: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_superPropBase",
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.body.body.0.body.body.0.expression.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  superPropGet: helper(
+    "7.25.0",
+    '/* @minVersion 7.25.0 */\n\n\n\nfunction _superPropGet(classArg, property, receiver, flags) {\n  var result = get(getPrototypeOf(\n  // @ts-expect-error flags may be undefined\n  flags & 1 ? classArg.prototype : classArg), property, receiver);\n  // @ts-expect-error flags may be undefined\n  return flags & 2 && typeof result === "function" ? function (args) {\n    return result.apply(receiver, args);\n  } : result;\n}',
+    {
+      globals: [],
+      locals: { _superPropGet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_superPropGet",
+      dependencies: {
+        get: ["body.0.body.body.0.declarations.0.init.callee"],
+        getPrototypeOf: [
+          "body.0.body.body.0.declarations.0.init.arguments.0.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  superPropSet: helper(
+    "7.25.0",
+    "/* @minVersion 7.25.0 */\n\n\n\nfunction _superPropSet(classArg, property, value, receiver, isStrict, prototype) {\n  return set(getPrototypeOf(prototype ? classArg.prototype : classArg), property, value, receiver, isStrict);\n}",
+    {
+      globals: [],
+      locals: { _superPropSet: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_superPropSet",
+      dependencies: {
+        set: ["body.0.body.body.0.argument.callee"],
+        getPrototypeOf: ["body.0.body.body.0.argument.arguments.0.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  taggedTemplateLiteral: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _taggedTemplateLiteral(strings, raw) {\n  if (!raw) {\n    raw = strings.slice(0);\n  }\n  return Object.freeze(Object.defineProperties(strings, {\n    raw: {\n      value: Object.freeze(raw)\n    }\n  }));\n}",
+    {
+      globals: ["Object"],
+      locals: { _taggedTemplateLiteral: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_taggedTemplateLiteral",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  taggedTemplateLiteralLoose: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\nfunction _taggedTemplateLiteralLoose(strings, raw) {\n  if (!raw) {\n    raw = strings.slice(0);\n  }\n  // Loose: TemplateStringsArray['raw'] is readonly, so we have to cast it to any before assigning\n  strings.raw = raw;\n  return strings;\n}",
+    {
+      globals: [],
+      locals: { _taggedTemplateLiteralLoose: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_taggedTemplateLiteralLoose",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  tdz: helper(
+    "7.5.5",
+    '/* @minVersion 7.5.5 */\n\nfunction _tdzError(name) {\n  throw new ReferenceError(name + " is not defined - temporal dead zone");\n}',
+    {
+      globals: ["ReferenceError"],
+      locals: { _tdzError: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_tdzError",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  temporalRef: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\n\nfunction _temporalRef(val, name) {\n  return val === undef ? err(name) : val;\n}",
+    {
+      globals: [],
+      locals: { _temporalRef: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_temporalRef",
+      dependencies: {
+        temporalUndefined: ["body.0.body.body.0.argument.test.right"],
+        tdz: ["body.0.body.body.0.argument.consequent.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  temporalUndefined: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n// This function isn't mean to be called, but to be used as a reference.\n// We can't use a normal object because it isn't hoisted.\nfunction _temporalUndefined() {}",
+    {
+      globals: [],
+      locals: { _temporalUndefined: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_temporalUndefined",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  toArray: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\n\n\n// @ts-expect-error nonIterableRest is still being converted to TS.\n\nfunction _toArray(arr) {\n  return arrayWithHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableRest();\n}",
+    {
+      globals: [],
+      locals: { _toArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_toArray",
+      dependencies: {
+        arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
+        iterableToArray: ["body.0.body.body.0.argument.left.left.right.callee"],
+        unsupportedIterableToArray: [
+          "body.0.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  toConsumableArray: helper(
+    "7.0.0-beta.0",
+    "/* @minVersion 7.0.0-beta.0 */\n\n\n\n\n// @ts-expect-error nonIterableSpread is still being converted to TS.\n\nfunction _toConsumableArray(arr) {\n  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();\n}",
+    {
+      globals: [],
+      locals: { _toConsumableArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_toConsumableArray",
+      dependencies: {
+        arrayWithoutHoles: [
+          "body.0.body.body.0.argument.left.left.left.callee",
+        ],
+        iterableToArray: ["body.0.body.body.0.argument.left.left.right.callee"],
+        unsupportedIterableToArray: [
+          "body.0.body.body.0.argument.left.right.callee",
+        ],
+        nonIterableSpread: ["body.0.body.body.0.argument.right.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  toPrimitive: helper(
+    "7.1.5",
+    '/* @minVersion 7.1.5 */\n\n// https://tc39.es/ecma262/#sec-toprimitive\nfunction toPrimitive(input, hint) {\n  if (typeof input !== "object" || !input) return input;\n  // @ts-expect-error Symbol.toPrimitive might not index {}\n  var prim = input[Symbol.toPrimitive];\n  if (prim !== undefined) {\n    var res = prim.call(input, hint || "default");\n    if (typeof res !== "object") return res;\n    throw new TypeError("@@toPrimitive must return a primitive value.");\n  }\n  return (hint === "string" ? String : Number)(input);\n}',
+    {
+      globals: ["Symbol", "undefined", "TypeError", "String", "Number"],
+      locals: { toPrimitive: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "toPrimitive",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  toPropertyKey: helper(
+    "7.1.5",
+    '/* @minVersion 7.1.5 */\n\n// https://tc39.es/ecma262/#sec-topropertykey\n\n\nfunction toPropertyKey(arg) {\n  var key = toPrimitive(arg, "string");\n  return typeof key === "symbol" ? key : String(key);\n}',
+    {
+      globals: ["String"],
+      locals: { toPropertyKey: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "toPropertyKey",
+      dependencies: {
+        toPrimitive: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  toSetter: helper(
+    "7.24.0",
+    '/* @minVersion 7.24.0 */\n\nfunction _toSetter(fn, args, thisArg) {\n  if (!args) args = [];\n  var l = args.length++;\n  return Object.defineProperty({}, "_", {\n    set: function (v) {\n      args[l] = v;\n      fn.apply(thisArg, args);\n    }\n  });\n}',
+    {
+      globals: ["Object"],
+      locals: { _toSetter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_toSetter",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  tsRewriteRelativeImportExtensions: helper(
+    "7.27.0",
+    '/* @minVersion 7.27.0 */\n\n// https://github.com/microsoft/TypeScript/blob/71716a2868c87248af5020e33a84a2178d41a2d6/src/compiler/factory/emitHelpers.ts#L1451\nfunction tsRewriteRelativeImportExtensions(path, preserveJsx) {\n  if (typeof path === "string" && /^\\.\\.?\\//.test(path)) {\n    return path.replace(/\\.(tsx)$|((?:\\.d)?)((?:\\.[^./]+)?)\\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {\n      return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : d + ext + "." + cm.toLowerCase() + "js";\n    });\n  }\n  return path;\n}',
+    {
+      globals: [],
+      locals: { tsRewriteRelativeImportExtensions: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "tsRewriteRelativeImportExtensions",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  typeof: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\nfunction _typeof(obj) {\n  "@babel/helpers - typeof";\n\n  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {\n    // @ts-expect-error -- deliberate re-defining typeof\n    _typeof = function (obj) {\n      return typeof obj;\n    };\n  } else {\n    // @ts-expect-error -- deliberate re-defining typeof\n    _typeof = function (obj) {\n      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;\n    };\n  }\n  return _typeof(obj);\n}',
+    {
+      globals: ["Symbol"],
+      locals: {
+        _typeof: [
+          "body.0.id",
+          "body.0.body.body.1.argument.callee",
+          "body.0.body.body.0.consequent.body.0.expression.left",
+          "body.0.body.body.0.alternate.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: [
+        "body.0.body.body.0.alternate.body.0.expression",
+        "body.0.body.body.0.consequent.body.0.expression",
+      ],
+      exportName: "_typeof",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  unsupportedIterableToArray: helper(
+    "7.9.0",
+    '/* @minVersion 7.9.0 */\n\n\n\n// This is a specific overload added specifically for createForOfIteratorHelpers.ts\n\nfunction _unsupportedIterableToArray(o, minLen) {\n  if (!o) return;\n  if (typeof o === "string") return arrayLikeToArray(o, minLen);\n  var name = Object.prototype.toString.call(o).slice(8, -1);\n  if (name === "Object" && o.constructor) name = o.constructor.name;\n  if (name === "Map" || name === "Set") return Array.from(o);\n  if (name === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(name)) {\n    return arrayLikeToArray(o, minLen);\n  }\n}',
+    {
+      globals: ["Object", "Array"],
+      locals: { _unsupportedIterableToArray: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_unsupportedIterableToArray",
+      dependencies: {
+        arrayLikeToArray: [
+          "body.0.body.body.1.consequent.argument.callee",
+          "body.0.body.body.5.consequent.body.0.argument.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  using: helper(
+    "7.22.0",
+    '/* @minVersion 7.22.0 */\n/* @onlyBabel7 */\n\nfunction _using(stack, value, isAwait) {\n  if (value === null || value === void 0) return value;\n  if (Object(value) !== value) {\n    throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");\n  }\n  // core-js-pure uses Symbol.for for polyfilling well-known symbols\n  if (isAwait) {\n    var dispose = value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];\n  }\n  if (dispose === null || dispose === void 0) {\n    dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];\n  }\n  if (typeof dispose !== "function") {\n    throw new TypeError(`Property [Symbol.dispose] is not a function.`);\n  }\n  stack.push({\n    v: value,\n    d: dispose,\n    a: isAwait\n  });\n  return value;\n}',
+    {
+      globals: ["Object", "TypeError", "Symbol"],
+      locals: { _using: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_using",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  usingCtx: helper(
+    "7.23.9",
+    '/* @minVersion 7.23.9 */\n\nfunction _usingCtx() {\n  var _disposeSuppressedError = typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed) {\n      var err = new Error();\n      err.name = "SuppressedError";\n      err.error = error;\n      err.suppressed = suppressed;\n      return err;\n    },\n    empty = {},\n    stack = [];\n  function using(isAwait, value) {\n    if (value != null) {\n      if (Object(value) !== value) {\n        throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");\n      }\n      // core-js-pure uses Symbol.for for polyfilling well-known symbols\n      if (isAwait) {\n        // value can either be an AsyncDisposable or a Disposable\n        // Try AsyncDisposable first\n        var dispose = value[Symbol.asyncDispose || Symbol["for"]("Symbol.asyncDispose")];\n      }\n      if (dispose === undefined) {\n        dispose = value[Symbol.dispose || Symbol["for"]("Symbol.dispose")];\n        if (isAwait) {\n          var inner = dispose;\n        }\n      }\n      if (typeof dispose !== "function") {\n        throw new TypeError("Object is not disposable.");\n      }\n      // @ts-expect-error use before assignment\n      if (inner) {\n        dispose = function () {\n          try {\n            inner.call(value);\n          } catch (e) {\n            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors\n            return Promise.reject(e);\n          }\n        };\n      }\n      stack.push({\n        v: value,\n        d: dispose,\n        a: isAwait\n      });\n    } else if (isAwait) {\n      // provide the nullish `value` as `d` for minification gain\n      stack.push({\n        d: value,\n        a: isAwait\n      });\n    }\n    return value;\n  }\n  return {\n    // error\n    e: empty,\n    // using\n    u: using.bind(null, false),\n    // await using\n    // full generic signature to avoid type widening\n    a: using.bind(null, true),\n    // dispose\n    d: function () {\n      var error = this.e,\n        state = 0,\n        resource;\n      function next() {\n        while (resource = stack.pop()) {\n          try {\n            if (!resource.a && state === 1) {\n              state = 0;\n              stack.push(resource);\n              return Promise.resolve().then(next);\n            }\n            if (resource.d) {\n              var disposalResult = resource.d.call(resource.v);\n              if (resource.a) {\n                state |= 2;\n                return Promise.resolve(disposalResult).then(next, err);\n              }\n            } else {\n              state |= 1;\n            }\n          } catch (e) {\n            return err(e);\n          }\n        }\n        if (state === 1) {\n          if (error !== empty) {\n            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors\n            return Promise.reject(error);\n          } else {\n            return Promise.resolve();\n          }\n        }\n        if (error !== empty) throw error;\n      }\n      function err(e) {\n        error = error !== empty ? new _disposeSuppressedError(e, error) : e;\n        return next();\n      }\n      return next();\n    }\n  };\n}',
+    {
+      globals: [
+        "SuppressedError",
+        "Error",
+        "Object",
+        "TypeError",
+        "Symbol",
+        "undefined",
+        "Promise",
+      ],
+      locals: { _usingCtx: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_usingCtx",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+
+  wrapAsyncGenerator: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n\nfunction _wrapAsyncGenerator(fn) {\n  return function () {\n    // Use "arguments" here for better compatibility and smaller bundle size\n    return new AsyncGenerator(fn.apply(this, arguments));\n  };\n}\n\n/* == The implementation of the AsyncGenerator class == */\n\nfunction AsyncGenerator(gen) {\n  var front, back;\n  function send(key, arg) {\n    return new Promise(function (resolve, reject) {\n      var request = {\n        key: key,\n        arg: arg,\n        resolve: resolve,\n        reject: reject,\n        next: null\n      };\n      if (back) {\n        back = back.next = request;\n      } else {\n        front = back = request;\n        resume(key, arg);\n      }\n    });\n  }\n  function resume(key, arg) {\n    try {\n      var result = gen[key](arg);\n      var value = result.value;\n      var overloaded = value instanceof OverloadYield;\n      Promise.resolve(overloaded ? value.v : value).then(function (arg) {\n        if (overloaded) {\n          // Overloaded yield requires calling into the generator twice:\n          //  - first we get the iterator result wrapped in a promise\n          //    (the gen[key](arg) call above)\n          //  - then we await it (the Promise.resolve call above)\n          //  - then we give the result back to the iterator, so that it can:\n          //    * if it was an await, use its result\n          //    * if it was a yield*, possibly return the `done: true` signal\n          //      so that yield* knows that the iterator is finished.\n          //      This needs to happen in the second call, because in the\n          //      first one `done: true` was hidden in the promise and thus\n          //      not visible to the (sync) yield*.\n          //      The other part of this implementation is in asyncGeneratorDelegate.\n          var nextKey = key === "return" ? "return" : "next";\n          if (!value.k || arg.done) {\n            // await or end of yield*\n            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression -- smaller bundle size\n            return resume(nextKey, arg);\n          } else {\n            // yield*, not done\n            arg = gen[nextKey](arg).value;\n          }\n        }\n        settle(result.done ? "return" : "normal", arg);\n      }, function (err) {\n        resume("throw", err);\n      });\n    } catch (err) {\n      settle("throw", err);\n    }\n  }\n  function settle(type, value) {\n    switch (type) {\n      case "return":\n        front.resolve({\n          value: value,\n          done: true\n        });\n        break;\n      case "throw":\n        front.reject(value);\n        break;\n      default:\n        front.resolve({\n          value: value,\n          done: false\n        });\n        break;\n    }\n    front = front.next;\n    if (front) {\n      resume(front.key, front.arg);\n    } else {\n      back = null;\n    }\n  }\n  this._invoke = send;\n\n  // Hide "return" method if generator return is not supported\n  if (typeof gen["return"] !== "function") {\n    // @ts-expect-error -- intentionally remove "return" when not supported\n    this["return"] = undefined;\n  }\n}\nAsyncGenerator.prototype[typeof Symbol === "function" && Symbol.asyncIterator || "@@asyncIterator"] = function () {\n  return this;\n};\nAsyncGenerator.prototype.next = function (arg) {\n  return this._invoke("next", arg);\n};\nAsyncGenerator.prototype["throw"] = function (arg) {\n  return this._invoke("throw", arg);\n};\nAsyncGenerator.prototype["return"] = function (arg) {\n  return this._invoke("return", arg);\n};',
+    {
+      globals: ["Promise", "undefined", "Symbol"],
+      locals: {
+        _wrapAsyncGenerator: ["body.0.id"],
+        AsyncGenerator: [
+          "body.1.id",
+          "body.0.body.body.0.argument.body.body.0.argument.callee",
+          "body.2.expression.left.object.object",
+          "body.3.expression.left.object.object",
+          "body.4.expression.left.object.object",
+          "body.5.expression.left.object.object",
+        ],
+      },
+      exportBindingAssignments: [],
+      exportName: "_wrapAsyncGenerator",
+      dependencies: {
+        OverloadYield: [
+          "body.1.body.body.2.body.body.0.block.body.2.declarations.0.init.right",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  wrapNativeSuper: helper(
+    "7.0.0-beta.0",
+    '/* @minVersion 7.0.0-beta.0 */\n\n// Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes\n\n\n\n\n\nfunction _wrapNativeSuper(Class) {\n  var _cache = typeof Map === "function" ? new Map() : undefined;\n\n  // @ts-expect-error -- reuse function id for helper size\n  _wrapNativeSuper = function _wrapNativeSuper(Class) {\n    if (Class === null || !isNativeFunction(Class)) return Class;\n    if (typeof Class !== "function") {\n      throw new TypeError("Super expression must either be null or a function");\n    }\n    if (_cache !== undefined) {\n      if (_cache.has(Class)) return _cache.get(Class);\n      _cache.set(Class, Wrapper);\n    }\n    function Wrapper() {\n      // @ts-expect-error -- we are sure Class is a function here\n      return construct(Class, arguments, getPrototypeOf(this).constructor);\n    }\n    Wrapper.prototype = Object.create(Class.prototype, {\n      constructor: {\n        value: Wrapper,\n        enumerable: false,\n        writable: true,\n        configurable: true\n      }\n    });\n    return setPrototypeOf(Wrapper, Class);\n  };\n  return _wrapNativeSuper(Class);\n}',
+    {
+      globals: ["Map", "undefined", "TypeError", "Object"],
+      locals: {
+        _wrapNativeSuper: [
+          "body.0.id",
+          "body.0.body.body.2.argument.callee",
+          "body.0.body.body.1.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.1.expression"],
+      exportName: "_wrapNativeSuper",
+      dependencies: {
+        getPrototypeOf: [
+          "body.0.body.body.1.expression.right.body.body.3.body.body.0.argument.arguments.2.object.callee",
+        ],
+        setPrototypeOf: [
+          "body.0.body.body.1.expression.right.body.body.5.argument.callee",
+        ],
+        isNativeFunction: [
+          "body.0.body.body.1.expression.right.body.body.0.test.right.argument.callee",
+        ],
+        construct: [
+          "body.0.body.body.1.expression.right.body.body.3.body.body.0.argument.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+
+  wrapRegExp: helper(
+    "7.19.0",
+    '/* @minVersion 7.19.0 */\n\n\n\n\n// Define interfaces for clarity and type safety\n\nfunction _wrapRegExp() {\n  // @ts-expect-error -- deliberately re-assign\n  _wrapRegExp = function (re, groups) {\n    return new BabelRegExp(re, undefined, groups);\n  };\n  var _super = RegExp.prototype;\n  var _groups = new WeakMap();\n  function BabelRegExp(re, flags, groups) {\n    var _this = new RegExp(re, flags);\n    // if the regex is re-created with \'g\' flag\n    _groups.set(_this, groups || _groups.get(re));\n    return setPrototypeOf(_this, BabelRegExp.prototype);\n  }\n  inherits(BabelRegExp, RegExp);\n  BabelRegExp.prototype.exec = function (str) {\n    var result = _super.exec.call(this, str);\n    if (result) {\n      result.groups = buildGroups(result, this);\n      var indices = result.indices;\n      if (indices) indices.groups = buildGroups(indices, this);\n    }\n    return result;\n  };\n  BabelRegExp.prototype[Symbol.replace] = function (str, substitution) {\n    if (typeof substitution === "string") {\n      var groups = _groups.get(this);\n      return _super[Symbol.replace].call(this, str, substitution.replace(/\\$<([^>]+)(>|$)/g, function (match, name, end) {\n        if (end === "") {\n          // return unterminated group name as-is\n          return match;\n        } else {\n          var group = groups[name];\n          return Array.isArray(group) ? "$" + group.join("$") : typeof group === "number" ? "$" + group : "";\n        }\n      }));\n    } else if (typeof substitution === "function") {\n      var _this = this;\n      return _super[Symbol.replace].call(this, str, function () {\n        var args = arguments;\n        // Modern engines already pass result.groups returned by exec() as the last arg.\n        if (typeof args[args.length - 1] !== "object") {\n          args = [].slice.call(args);\n          args.push(buildGroups(args, _this));\n        }\n        return substitution.apply(this, args);\n      });\n    } else {\n      return _super[Symbol.replace].call(this, str, substitution);\n    }\n  };\n  function buildGroups(result, re) {\n    var g = _groups.get(re);\n    return Object.keys(g).reduce(function (groups, name) {\n      var i = g[name];\n      if (typeof i === "number") groups[name] = result[i];else {\n        var k = 0;\n        while (result[i[k]] === undefined && k + 1 < i.length) {\n          k++;\n        }\n        groups[name] = result[i[k]];\n      }\n      return groups;\n    }, Object.create(null));\n  }\n  return _wrapRegExp.apply(this, arguments);\n}',
+    {
+      globals: ["undefined", "RegExp", "WeakMap", "Symbol", "Array", "Object"],
+      locals: {
+        _wrapRegExp: [
+          "body.0.id",
+          "body.0.body.body.8.argument.callee.object",
+          "body.0.body.body.0.expression.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.0.expression"],
+      exportName: "_wrapRegExp",
+      dependencies: {
+        setPrototypeOf: ["body.0.body.body.3.body.body.2.argument.callee"],
+        inherits: ["body.0.body.body.4.expression.callee"],
+      },
+      internal: false,
+    },
+  ),
+
+  writeOnlyError: helper(
+    "7.12.13",
+    "/* @minVersion 7.12.13 */\n\nfunction _writeOnlyError(name) {\n  throw new TypeError('\"' + name + '\" is write-only');\n}",
     {
       globals: ["TypeError"],
       locals: { _writeOnlyError: ["body.0.id"] },

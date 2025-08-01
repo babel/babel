@@ -8,7 +8,8 @@
     "./src/**/*.ts",
     "./src/**/*.cts",
     "../../lib/globals.d.ts",
-    "../../scripts/repo-utils/*.d.ts"
+    "../../scripts/repo-utils/*.d.ts",
+    "./scripts/**/*.ts"
   ],
   "references": [
     {
