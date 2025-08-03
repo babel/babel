@@ -646,6 +646,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.expect(tt.colon);
       withProperty.value = this.tsParseImportTypeWithPropertyValue();
       node.properties = [this.finishObjectProperty(withProperty)];
+      this.eat(tt.comma);
       this.expect(tt.braceR);
       return this.finishNode(node, "ObjectExpression");
     }
