@@ -188,8 +188,9 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
-      env !== "standalone"
-        ? ["@babel/plugin-transform-json-modules", { uncheckedRequire: true }]
+      env !== "standalone" && !bool(process.env.BABEL_8_BREAKING)
+        ? // Babel 8 requires Node.js 20.19.0+ featured native JSON modules support
+          ["@babel/plugin-transform-json-modules", { uncheckedRequire: true }]
         : null,
 
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),

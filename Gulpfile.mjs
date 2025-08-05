@@ -414,7 +414,7 @@ function buildRollup(packages, buildStandalone) {
               resolveId: {
                 order: "post",
                 // This is needed because @jridgewell's packages always use
-                // the UMD version when trageting browsers, but we need to use
+                // the UMD version when targeting browsers, but we need to use
                 // the ESM version so that it can be bundled.
                 handler(importee) {
                   if (/@jridgewell[\\/].*\.umd\.js$/.test(importee)) {
@@ -509,6 +509,7 @@ function buildRollup(packages, buildStandalone) {
           esModule: true,
           file: outputFile,
           format,
+          importAttributesKey: "with",
           name,
           sourcemap: sourcemap,
           exports: "named",
