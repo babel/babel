@@ -294,6 +294,8 @@ function buildRollup(packages, buildStandalone) {
           ...Object.keys(peerDependencies),
           // @babel/compat-data sub exports
           /@babel\/compat-data\/.*/,
+          // @babel/helper-globals sub exports
+          /@babel\/helper-globals\/.*/,
           // Ideally they should be constructed from package.json exports
           // required by modules-commonjs
           /babel-plugin-dynamic-import-node\/utils/,
