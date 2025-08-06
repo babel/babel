@@ -1,5 +1,6 @@
 import "shelljs/make.js";
 import path from "node:path";
+import mod from "node:module";
 import {
   readFileSync,
   writeFileSync,
@@ -9,6 +10,8 @@ import {
 } from "node:fs";
 import semver from "semver";
 import { execaSync } from "execa";
+
+mod.enableCompileCache?.();
 
 /**
  * @type {import("shelljs")}
