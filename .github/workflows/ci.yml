@@ -70,7 +70,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js latest
+      - name: Use Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v4
         with:
           node-version: ${{matrix.node-version}}
@@ -221,7 +221,7 @@ jobs:
           name: babel-7
 
   test:
-    name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
+    name: Test on Node.js ${{matrix.node-version}}
     needs: build
     runs-on: ubuntu-latest
     strategy:
