@@ -2,23 +2,23 @@
 
 Using targets:
 {
-  "android": "132",
-  "chrome": "132",
-  "edge": "132",
-  "firefox": "134",
-  "ios": "18.2",
-  "opera": "113",
+  "android": "137",
+  "chrome": "137",
+  "edge": "137",
+  "firefox": "140",
+  "ios": "18.4",
+  "opera": "116",
   "opera_mobile": "80",
-  "safari": "18.2",
-  "samsung": "26"
+  "safari": "18.4",
+  "samsung": "27"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { android, chrome < 134, edge < 134, firefox, ios, opera, opera_mobile, safari, samsung }
+  transform-explicit-resource-management { firefox, ios, opera, opera_mobile, safari, samsung }
   transform-duplicate-named-capturing-groups-regex { opera_mobile, samsung }
-  transform-regexp-modifiers { ios, opera_mobile, safari, samsung < 27 }
+  transform-regexp-modifiers { ios, opera_mobile, safari }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
