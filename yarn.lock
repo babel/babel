@@ -7483,15 +7483,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-transform-charcodes@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "babel-plugin-transform-charcodes@npm:0.2.0"
+"babel-plugin-transform-charcodes@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "babel-plugin-transform-charcodes@npm:0.2.1"
   dependencies:
     "@babel/parser": "npm:^7.0.0"
     "@babel/traverse": "npm:^7.0.0"
   peerDependencies:
     charcodes: ^0.2.0
-  checksum: 10/d05343071164a3bb9271998730042b049ada9ed6eac3f4ae43729454a09d0366fca548c64aca69d7b3d45c34a545d001c256379999922567f74e1bb8eab43715
+  checksum: 10/9b977e5fa7be10f91ea5b6e4a6a6efde4b5d9e39e74c014cb0dea6a9713feaefc42658720ceb87a931bfc9ff09263801cb8af3eb0a76b4e61ede9d1d1aa94f0c
   languageName: node
   linkType: hard
 
@@ -7563,7 +7563,7 @@ __metadata:
     "@types/jest": "npm:^29.5.11"
     "@types/node": "npm:^22.10.5"
     "@yarnpkg/types": "npm:^4.0.0"
-    babel-plugin-transform-charcodes: "npm:^0.2.0"
+    babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^10.0.0"
     charcodes: "npm:^0.2.0"
     core-js: "npm:^3.36.1"
