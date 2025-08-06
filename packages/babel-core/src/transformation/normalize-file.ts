@@ -10,6 +10,7 @@ import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file.ts";
 import parser from "../parser/index.ts";
 import cloneDeep from "./util/clone-deep.ts";
+import type { ValidatedOptions } from "../config/validation/options.ts";
 
 const debug = buildDebug("babel:transform:file");
 
@@ -29,7 +30,7 @@ export type NormalizedFile = {
 
 export default function* normalizeFile(
   pluginPasses: PluginPasses,
-  options: { [key: string]: any },
+  options: ValidatedOptions,
   code: string,
   ast?: t.File | t.Program | null,
 ): Handler<File> {
