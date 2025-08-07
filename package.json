@@ -83,6 +83,7 @@
     "rollup-plugin-polyfill-node": "^0.13.0",
     "semver": "^6.3.1",
     "shelljs": "^0.8.5",
+    "terser": "^5.43.1",
     "test262-stream": "^1.4.0",
     "typescript": "5.9.2",
     "typescript-eslint": "8.39.1"

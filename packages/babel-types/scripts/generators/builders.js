@@ -6,7 +6,6 @@ import {
 } from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { IS_BABEL_8 } from "$repo-utils";
 
 if (!IS_BABEL_8()) {

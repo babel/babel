@@ -119,7 +119,7 @@ const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*(\S+)\s*(?:\n|$)/i;
  * @returns {Array<[string, string[]]>}
  */
 function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
-  const lines = code.split(/\r\n?|\n/g);
+  const lines = code.split(/\r\n?|\n/);
 
   let nameForFile = code.includes(`@filename: ${defaultFileName}`)
     ? "global.ts"
