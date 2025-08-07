@@ -11,6 +11,7 @@ import type { NormalizedFile } from "../normalize-file.ts";
 
 // @ts-expect-error This file is `any`
 import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
+import type { NormalizedOptions } from "../../config/index.ts";
 
 const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
   enter(path, state) {
@@ -24,7 +25,7 @@ const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
 
 export default class File {
   _map: Map<unknown, unknown> = new Map();
-  opts: { [key: string]: any };
+  opts: NormalizedOptions;
   declarations: { [key: string]: t.Identifier } = {};
   path: NodePath<t.Program>;
   ast: t.File;
