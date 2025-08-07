@@ -830,9 +830,9 @@ export interface ClassDeclaration extends BaseNode {
 export interface ExportAllDeclaration extends BaseNode {
   type: "ExportAllDeclaration";
   source: StringLiteral;
+  attributes: Array<ImportAttribute>;
   /** @deprecated */
   assertions?: Array<ImportAttribute> | null;
-  attributes?: Array<ImportAttribute> | null;
   exportKind?: "type" | "value" | null;
 }
 
@@ -853,9 +853,9 @@ export interface ExportNamedDeclaration extends BaseNode {
     ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier
   >;
   source?: StringLiteral | null;
+  attributes: Array<ImportAttribute>;
   /** @deprecated */
   assertions?: Array<ImportAttribute> | null;
-  attributes?: Array<ImportAttribute> | null;
   exportKind?: "type" | "value" | null;
 }
 
@@ -880,9 +880,9 @@ export interface ImportDeclaration extends BaseNode {
     ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
   >;
   source: StringLiteral;
+  attributes: Array<ImportAttribute>;
   /** @deprecated */
   assertions?: Array<ImportAttribute> | null;
-  attributes?: Array<ImportAttribute> | null;
   importKind?: "type" | "typeof" | "value" | null;
   module?: boolean | null;
   phase?: "source" | "defer" | null;
@@ -1215,7 +1215,7 @@ export interface DeclareExportDeclaration extends BaseNode {
   declaration?: Flow | null;
   specifiers?: Array<ExportSpecifier | ExportNamespaceSpecifier> | null;
   source?: StringLiteral | null;
-  attributes?: Array<ImportAttribute> | null;
+  attributes: Array<ImportAttribute>;
   /** @deprecated */
   assertions?: Array<ImportAttribute> | null;
   default?: boolean | null;
@@ -1224,7 +1224,7 @@ export interface DeclareExportDeclaration extends BaseNode {
 export interface DeclareExportAllDeclaration extends BaseNode {
   type: "DeclareExportAllDeclaration";
   source: StringLiteral;
-  attributes?: Array<ImportAttribute> | null;
+  attributes: Array<ImportAttribute>;
   /** @deprecated */
   assertions?: Array<ImportAttribute> | null;
   exportKind?: "type" | "value" | null;
