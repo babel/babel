@@ -293,19 +293,16 @@ function getLocalTargets(
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
   // TODO(Babel 8): Fallback to true
-  // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
   // TODO(Babel 8): Fallback to true
-  // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
   // TODO(Babel 8): Fallback to null
-  // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
 

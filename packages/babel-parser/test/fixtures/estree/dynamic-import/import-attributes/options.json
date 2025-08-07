@@ -1,3 +1,6 @@
 {
-  "plugins": ["estree"]
+  "plugins": [
+    "estree"
+  ],
+  "BABEL_8_BREAKING": true
 }

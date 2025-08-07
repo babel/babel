@@ -28,7 +28,8 @@
                 "value": "a",
                 "raw": "\"a\""
               },
-              "options": null
+              "options": null,
+              "attributes": null
             }
           }
         ],

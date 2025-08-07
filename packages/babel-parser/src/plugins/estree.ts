@@ -503,10 +503,11 @@ export default (superClass: typeof Parser) =>
           .arguments[0] as N.Expression;
         (node as N.Node as N.EstreeImportExpression).options =
           (node.arguments[1] as N.Expression) ?? null;
-        // compatibility with previous ESTree AST
-        // TODO(Babel 8): Remove this
-        (node as N.Node as N.EstreeImportExpression).attributes =
-          (node.arguments[1] as N.Expression) ?? null;
+        if (!process.env.BABEL_8_BREAKING) {
+          // compatibility with previous ESTree AST
+          (node as N.Node as N.EstreeImportExpression).attributes =
+            (node.arguments[1] as N.Expression) ?? null;
+        }
         // arguments isn't optional in the type definition
         delete node.arguments;
         // callee isn't optional in the type definition
