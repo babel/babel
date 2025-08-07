@@ -7,7 +7,11 @@ export type {
   Plugin,
 } from "./full.ts";
 
-import type { InputOptions, PluginTarget } from "./validation/options.ts";
+import type {
+  InputOptions,
+  NormalizedOptions,
+  PluginTarget,
+} from "./validation/options.ts";
 export type { ConfigAPI } from "./helpers/config-api.ts";
 import type {
   PluginAPI as basePluginAPI,
@@ -24,7 +28,7 @@ export type {
   ValidatedOptions as PresetObject,
 } from "./validation/options.ts";
 
-import loadFullConfig, { type ResolvedConfig } from "./full.ts";
+import loadFullConfig from "./full.ts";
 import {
   type PartialConfig,
   loadPartialConfig as loadPartialConfigImpl,
@@ -72,7 +76,9 @@ export function loadPartialConfig(
   }
 }
 
-function* loadOptionsImpl(opts: InputOptions): Handler<ResolvedConfig | null> {
+function* loadOptionsImpl(
+  opts: InputOptions,
+): Handler<NormalizedOptions | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
@@ -90,14 +96,14 @@ export function loadOptionsSync(
 }
 export function loadOptions(
   opts: Parameters<typeof loadOptionsImpl>[0],
-  callback?: (err: Error, val: ResolvedConfig | null) => void,
+  callback?: (err: Error, val: NormalizedOptions | null) => void,
 ) {
   if (callback !== undefined) {
     beginHiddenCallStack(loadOptionsRunner.errback)(opts, callback);
   } else if (typeof opts === "function") {
     beginHiddenCallStack(loadOptionsRunner.errback)(
       undefined,
-      opts as (err: Error, val: ResolvedConfig | null) => void,
+      opts as (err: Error, val: NormalizedOptions | null) => void,
     );
   } else {
     if (process.env.BABEL_8_BREAKING) {

@@ -13,12 +13,12 @@ export type { CacheConfigurator };
 
 export type SimpleCacheConfigurator = {
   (forever: boolean): void;
-  <T>(handler: () => T): T;
+  <T extends SimpleType>(handler: () => T): T;
 
   forever: () => void;
   never: () => void;
-  using: <T>(handler: () => T) => T;
-  invalidate: <T>(handler: () => T) => T;
+  using: <T extends SimpleType>(handler: () => T) => T;
+  invalidate: <T extends SimpleType>(handler: () => T) => T;
 };
 
 export type CacheEntry<ResultT, SideChannel> = Array<{

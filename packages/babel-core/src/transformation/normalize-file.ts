@@ -4,7 +4,7 @@ import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
-import type { PluginPasses } from "../config/index.ts";
+import type { NormalizedOptions, PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file.ts";
@@ -29,7 +29,7 @@ export type NormalizedFile = {
 
 export default function* normalizeFile(
   pluginPasses: PluginPasses,
-  options: { [key: string]: any },
+  options: NormalizedOptions,
   code: string,
   ast?: t.File | t.Program | null,
 ): Handler<File> {
