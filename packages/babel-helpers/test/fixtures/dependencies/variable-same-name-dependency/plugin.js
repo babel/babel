@@ -1,4 +1,4 @@
-import { stringifyMetadata } from "../../../../scripts/build-helper-metadata.js";
+import { stringifyMetadata } from "../../../../scripts/build-helper-metadata.ts";
 import defineHelper, {
   defineHelperAndGetMetadata,
 } from "../../../helpers/define-helper.js";

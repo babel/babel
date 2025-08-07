@@ -1,38 +1,41 @@
-// NOTE: This file must be compatible with old Node.js versions, since it runs
-// during testing.
+import type { NodePath, Visitor } from "@babel/traverse";
+import type * as t from "@babel/types";
 
-/**
- * @typedef {Object} HelperMetadata
- * @property {string[]} globals
- * @property {{ [name: string]: string[] }} locals
- * @property {{ [name: string]: string[] }} dependencies
- * @property {string[]} exportBindingAssignments
- * @property {string} exportName
- */
+type HelperMetadata = {
+  globals: string[];
+  locals: Record<string, string[]>;
+  dependencies: Record<string, string[]>;
+  exportBindingAssignments: string[];
+  exportName: string;
+  internal: boolean;
+};
 
 /**
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
- *
- * @param {typeof import("@babel/core")} babel
- *
- * @returns {HelperMetadata}
  */
-export function getHelperMetadata(babel, code, helperName, internal = false) {
-  const globals = new Set();
+export function getHelperMetadata(
+  babel: typeof import("@babel/core"),
+  code: string,
+  helperName: string,
+  internal = false
+) {
+  const globals = new Set<string>();
   // Maps imported identifier name -> helper name
-  const dependenciesBindings = new Map();
+  const dependenciesBindings = new Map<string, string>();
 
-  let exportName;
-  const exportBindingAssignments = [];
+  let exportName: string;
+  const exportBindingAssignments: string[] = [];
   // helper name -> reference paths
-  const dependencies = new Map();
+  const dependencies = new Map<string, string[]>();
   // local variable name -> reference paths
   const locals = new Map();
 
-  const spansToRemove = [];
+  const spansToRemove: [number, number][] = [];
 
-  const validateDefaultExport = decl => {
+  function validateDefaultExport(
+    decl: NodePath
+  ): asserts decl is NodePath<t.FunctionDeclaration> {
     if (exportName) {
       throw new Error(
         `Helpers can have only one default export (in ${helperName})`
@@ -44,10 +47,9 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
         `Helpers can only export named function declarations (in ${helperName})`
       );
     }
-  };
+  }
 
-  /** @type {import("@babel/traverse").Visitor} */
-  const dependencyVisitor = {
+  const dependencyVisitor: Visitor = {
     Program(path) {
       for (const child of path.get("body")) {
         if (child.isImportDeclaration()) {
@@ -81,6 +83,7 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
           child.node.specifiers.length === 1 &&
           child.get("specifiers.0.exported").isIdentifier({ name: "default" })
         ) {
+          // @ts-expect-error checked above
           const { name } = child.node.specifiers[0].local;
 
           validateDefaultExport(child.scope.getBinding(name).path);
@@ -150,7 +153,7 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
 
       const binding = child.scope.getBinding(exportName);
 
-      if (binding && binding.scope.path.isProgram()) {
+      if (binding?.scope.path.isProgram()) {
         exportBindingAssignments.push(makePath(child));
       }
     },
@@ -183,10 +186,10 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
       exportName,
       internal,
     },
-  ];
+  ] satisfies [string, HelperMetadata];
 }
 
-function makePath(path) {
+function makePath(path: NodePath) {
   const parts = [];
 
   for (; path.parentPath; path = path.parentPath) {
@@ -197,7 +200,7 @@ function makePath(path) {
   return parts.reverse().join(".");
 }
 
-export function stringifyMetadata(metadata) {
+export function stringifyMetadata(metadata: HelperMetadata) {
   return `\
     {
       globals: ${JSON.stringify(metadata.globals)},

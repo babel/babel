@@ -1,5 +1,8 @@
 import { runCodeInTestContext } from "../lib/index.js";
+import runner from "@babel/helper-plugin-test-runner";
 import { fileURLToPath } from "node:url";
+
+runner(import.meta.url);
 
 const filename = fileURLToPath(import.meta.url);
 

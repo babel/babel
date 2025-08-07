@@ -821,7 +821,7 @@ gulp.task("generate-runtime-helpers", async () => {
   log("Generating @babel/helpers runtime helpers");
 
   await generateHelpers(
-    `./packages/babel-helpers/scripts/generate-helpers.js`,
+    `./packages/babel-helpers/scripts/generate-helpers.ts`,
     `./packages/babel-helpers/src/`,
     "helpers-generated.ts",
     "@babel/helpers"

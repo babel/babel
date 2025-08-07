@@ -44,6 +44,7 @@ export interface Test {
   sourceMapVisual: TestFile;
   validateSourceMapVisual: boolean;
   validateLogs: boolean;
+  debug: boolean;
 }
 
 export interface TaskOptions extends InputOptions {
@@ -59,6 +60,7 @@ export interface TaskOptions extends InputOptions {
   validateLogs?: boolean;
   throws?: boolean | string;
   SKIP_babel7plugins_babel8core?: string;
+  debug?: boolean;
 }
 
 type Suite = {
@@ -247,6 +249,7 @@ function pushTask(
     validateSourceMapVisual:
       taskOpts.sourceMaps === true || taskOpts.sourceMaps === "both",
     inputSourceMap,
+    debug: taskOpts.debug ?? false,
   };
 
   if (
@@ -362,6 +365,7 @@ function pushTask(
   delete test.options.validateLogs;
   delete test.options.ignoreOutput;
   delete test.options.externalHelpers;
+  delete test.options.debug;
 }
 
 function wrapPackagesArray(
@@ -371,6 +375,7 @@ function wrapPackagesArray(
 ) {
   return names.map(function (val) {
     if (typeof val === "string") val = [val];
+    if (!Array.isArray(val)) return val;
 
     // relative path (outside of monorepo)
     if (val[0][0] === ".") {
@@ -509,15 +514,8 @@ export function multiple(entryLoc: string, ignore?: Array<string>) {
 }
 
 export function readFile(filename: string | undefined) {
-  try {
-    if (filename === undefined) {
-      return "";
-    }
+  if (filename !== undefined && fs.existsSync(filename)) {
     return fs.readFileSync(filename, "utf8").trimRight();
-  } catch (e) {
-    if (e.code === "ENOENT") {
-      return "";
-    }
-    throw e;
   }
+  return "";
 }
