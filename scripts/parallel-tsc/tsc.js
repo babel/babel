@@ -132,11 +132,6 @@ class Pool {
     taskProcess.once("exit", async code => {
       const startTime = this.#running.get(taskProcess);
       const duration = performance.now() - startTime;
-      if (code !== 0) {
-        this.#onTaskError(tasks, code);
-        this.#running.delete(taskProcess);
-        return;
-      }
       await this.#onTaskDone(tasks, code, duration);
       this.#running.delete(taskProcess);
 
