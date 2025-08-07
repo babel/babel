@@ -56,6 +56,8 @@ export type {
   ConfigAPI,
   ConfigItem,
   InputOptions,
+  NormalizedOptions,
+  PartialConfig,
   PluginAPI,
   PluginObject,
   PresetAPI,

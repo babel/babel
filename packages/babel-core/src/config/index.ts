@@ -20,6 +20,7 @@ export type { PluginAPI, PresetAPI };
 // todo: may need to refine PresetObject to be a subset of ValidatedOptions
 export type {
   CallerMetadata,
+  NormalizedOptions,
   ValidatedOptions as PresetObject,
 } from "./validation/options.ts";
 
