@@ -13,8 +13,10 @@ import type {
 } from "./option-assertions.ts";
 import type { parse, ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
-import type { ValidatedOptions } from "./options.ts";
+import type { NormalizedOptions } from "./options.ts";
 import type { File, PluginAPI, PluginPass } from "../../index.ts";
+import type { GeneratorOptions, GeneratorResult } from "@babel/generator";
+import type babelGenerator from "@babel/generator";
 
 // Note: The casts here are just meant to be static assertions to make sure
 // that the assertion functions actually assert that the value's type matches
@@ -82,7 +84,7 @@ type VisitorHandler =
 export type PluginObject<S extends PluginPass = PluginPass> = {
   name?: string;
   manipulateOptions?: (
-    options: ValidatedOptions,
+    options: NormalizedOptions,
     parserOpts: ParserOptions,
   ) => void;
   pre?: (this: S, file: File) => void | Promise<void>;
@@ -96,7 +98,12 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   parserOverride?: (
     ...args: [...Parameters<typeof parse>, typeof parse]
   ) => ReturnType<typeof parse>;
-  generatorOverride?: Function;
+  generatorOverride?: (
+    ast: File["ast"],
+    generatorOpts: GeneratorOptions,
+    code: File["code"],
+    generate: typeof babelGenerator,
+  ) => GeneratorResult;
 };
 
 export function validatePluginObject(obj: {

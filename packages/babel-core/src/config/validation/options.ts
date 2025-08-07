@@ -35,6 +35,7 @@ import type { UnloadedDescriptor } from "../config-descriptors.ts";
 import type { PluginAPI } from "../helpers/config-api.ts";
 import type { ParserOptions } from "@babel/parser";
 import type { GeneratorOptions } from "@babel/generator";
+import type { VisitWrapper } from "@babel/traverse";
 import ConfigError from "../../errors/config-error.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
@@ -168,33 +169,35 @@ export type ValidatedOptions = {
   assumptions?: {
     [name: string]: boolean;
   };
-  // browserslists-related options
+  // browserslist-related options
   targets?: TargetsListOrObject;
   browserslistConfigFile?: ConfigFileSearch;
   browserslistEnv?: string;
   // Options for @babel/generator
-  retainLines?: boolean;
-  comments?: boolean;
-  shouldPrintComment?: Function;
-  compact?: CompactOption;
-  minified?: boolean;
-  auxiliaryCommentBefore?: string;
-  auxiliaryCommentAfter?: string;
+  retainLines?: GeneratorOptions["retainLines"];
+  comments?: GeneratorOptions["comments"];
+  shouldPrintComment?: GeneratorOptions["shouldPrintComment"];
+  compact?: GeneratorOptions["compact"];
+  minified?: GeneratorOptions["minified"];
+  auxiliaryCommentBefore?: GeneratorOptions["auxiliaryCommentBefore"];
+  auxiliaryCommentAfter?: GeneratorOptions["auxiliaryCommentAfter"];
   // Parser
   sourceType?: SourceTypeOption;
-  wrapPluginVisitorMethod?: Function;
+  wrapPluginVisitorMethod?: VisitWrapper | null;
   highlightCode?: boolean;
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption;
   sourceMap?: SourceMapsOption;
   sourceFileName?: string;
   sourceRoot?: string;
-  // Deprecate top level parserOpts
+  // Todo(Babel 9): Deprecate top level parserOpts
   parserOpts?: ParserOptions;
-  // Deprecate top level generatorOpts
+  // Todo(Babel 9): Deprecate top level generatorOpts
   generatorOpts?: GeneratorOptions;
 };
 
+// The `targets` field are resolved in loadPrivPartialConfig, after that the `targets` should be
+// considered readonly since any further changes will be ignored.
 export type NormalizedOptions = {
   readonly targets: Targets;
 } & Omit<ValidatedOptions, "targets">;
@@ -220,7 +223,7 @@ export type IgnoreItem =
     ) => unknown);
 export type IgnoreList = ReadonlyArray<IgnoreItem>;
 
-export type PluginOptions = object | void | false;
+export type PluginOptions = object | false;
 export type PluginTarget = string | object | Function;
 export type PluginItem =
   | ConfigItem<PluginAPI>
@@ -238,7 +241,17 @@ export type BabelrcSearch = boolean | IgnoreItem | IgnoreList;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "commonjs" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
-export type RootInputSourceMapOption = object | boolean;
+// https://github.com/mozilla/source-map/blob/801be934007c3ed0ef66c620641b1668e92c891d/source-map.d.ts#L15C8-L23C2
+interface InputSourceMap {
+  version: number;
+  sources: string[];
+  names: string[];
+  sourceRoot?: string | undefined;
+  sourcesContent?: string[] | undefined;
+  mappings: string;
+  file: string;
+}
+export type RootInputSourceMapOption = InputSourceMap | boolean;
 export type RootMode = "root" | "upward" | "upward-optional";
 
 export type TargetsListOrObject =
