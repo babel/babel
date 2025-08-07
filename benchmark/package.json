@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "$repo-utils": "link:../scripts/repo-utils",
     "@babel-baseline/cli": "npm:@babel/cli@7.27.1",
     "@babel-baseline/core": "npm:@babel/core@7.24.4",
     "@babel-baseline/generator": "npm:@babel/generator@7.24.4",

@@ -390,8 +390,7 @@ function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
     assertPluginTarget(loc, value);
   }
 
-  // @ts-expect-error todo(flow->ts)
-  return value;
+  return value as PluginItem;
 }
 function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   if (

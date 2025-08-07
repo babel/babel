@@ -16,6 +16,7 @@ import type {
   ValidatedOptions,
   PluginList,
   PluginItem,
+  PluginOptions,
 } from "./validation/options.ts";
 
 import { resolveBrowserslistConfigFile } from "./resolve-targets.ts";
@@ -301,9 +302,8 @@ export function* createDescriptor<API>(
   }
 
   let name;
-  let options;
-  // todo(flow->ts) better type annotation
-  let value: any = pair;
+  let options: PluginOptions;
+  let value = pair;
   if (Array.isArray(value)) {
     if (value.length === 3) {
       [value, options, name] = value;
@@ -323,6 +323,7 @@ export function* createDescriptor<API>(
     const resolver = type === "plugin" ? loadPlugin : loadPreset;
     const request = value;
 
+    // @ts-expect-error value must be a PluginItem
     ({ filepath, value } = yield* resolver(value, dirname));
 
     file = {
@@ -335,8 +336,11 @@ export function* createDescriptor<API>(
     throw new Error(`Unexpected falsy value: ${String(value)}`);
   }
 
+  // @ts-expect-error Handle transpiled ES6 modules.
   if (typeof value === "object" && value.__esModule) {
+    // @ts-expect-error Handle transpiled ES6 modules.
     if (value.default) {
+      // @ts-expect-error Handle transpiled ES6 modules.
       value = value.default;
     } else {
       throw new Error("Must export a default export when using ES6 modules.");
