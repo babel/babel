@@ -128,11 +128,11 @@ jobs:
       - name: Build and Test
         run: make prepublish
         env:
-          # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
+          # Hack: use FORCE_COLOR so that supports-color@5 returns true for GitHub CI
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
           # Note: `false` doesn't work here, because env vars are strings and Boolean('false')
-          # is true. Use the empry string instead.
+          # is true. Use the empty string instead.
           BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
       - name: Publish to npm (Babel 7)
