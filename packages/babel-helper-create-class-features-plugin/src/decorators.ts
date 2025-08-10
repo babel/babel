@@ -1292,14 +1292,14 @@ function transformClass(
       ? elemDecsUseFnContext
       : elemDecsUseFnContext || version !== "2023-11");
 
-  let needsDeclaraionForClassBinding = false;
+  let needsDeclarationForClassBinding = false;
   let classDecorationsFlag = 0;
   let classDecorations: t.Expression[] = [];
   let classDecorationsId: t.Identifier;
   let computedKeyAssignments: t.AssignmentExpression[] = [];
   if (classDecorators) {
     classInitLocal = generateLetUidIdentifier(scopeParent, "initClass");
-    needsDeclaraionForClassBinding = path.isClassDeclaration();
+    needsDeclarationForClassBinding = path.isClassDeclaration();
     ({ id: classIdLocal, path } = replaceClassWithVar(path, className));
 
     path.node.decorators = null;
@@ -1996,7 +1996,7 @@ function transformClass(
     } else {
       // When there is no public class elements, we inject a temporary computed
       // field whose key will host the decorator evaluations. The field will be
-      // deleted immediately after it is defiend.
+      // deleted immediately after it is defined.
       originalClass.body.body.unshift(
         t.classProperty(
           t.sequenceExpression([
@@ -2055,7 +2055,7 @@ function transformClass(
   // into a SequenceExpression
   path.insertBefore(classAssignments.map(expr => t.expressionStatement(expr)));
 
-  if (needsDeclaraionForClassBinding) {
+  if (needsDeclarationForClassBinding) {
     const classBindingInfo = scopeParent.getBinding(classIdLocal.name);
     if (!classBindingInfo.constantViolations.length) {
       // optimization: reuse the inner class binding if the outer class binding is not mutated
@@ -2078,7 +2078,7 @@ function transformClass(
           t.variableDeclaration("let", [
             t.variableDeclarator(t.cloneNode(classIdLocal)),
           ]),
-          // needsDeclaraionForClassBinding is true ↔ node is a class declaration
+          // needsDeclarationForClassBinding is true ↔ node is a class declaration
           path.node as t.ClassDeclaration,
           t.expressionStatement(
             t.assignmentExpression(

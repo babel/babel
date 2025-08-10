@@ -106,7 +106,7 @@ type ClassElementWithComputedKeySupport = Extract<
  * To avoid unconditionally compiling every public static field, we track how
  * the class is referenced during definition & static evaluation: any side
  * effect after a reference to the class can potentially define a non-writable
- * conficting property, so subsequent public static fields must be compiled.
+ * conflicting property, so subsequent public static fields must be compiled.
  * The class could be referenced using the class name in computed keys, which
  * run before static fields, or using either the class name or 'this' in static
  * fields (both public and private) and static blocks.

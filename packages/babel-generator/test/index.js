@@ -1013,17 +1013,17 @@ describe("generation", function () {
 describe("programmatic generation", function () {
   it("should add parenthesis when NullishCoalescing is used along with ||", function () {
     // https://github.com/babel/babel/issues/10260
-    const nullishCoalesc = t.logicalExpression(
+    const nullishCoalesce = t.logicalExpression(
       "??",
       t.logicalExpression("||", t.identifier("a"), t.identifier("b")),
       t.identifier("c"),
     );
-    const output = generate(nullishCoalesc).code;
+    const output = generate(nullishCoalesce).code;
     expect(output).toBe(`(a || b) ?? c`);
   });
 
   it("should add parenthesis when NullishCoalesing is used with &&", function () {
-    const nullishCoalesc = t.logicalExpression(
+    const nullishCoalesce = t.logicalExpression(
       "??",
       t.identifier("a"),
       t.logicalExpression(
@@ -1032,7 +1032,7 @@ describe("programmatic generation", function () {
         t.logicalExpression("&&", t.identifier("c"), t.identifier("d")),
       ),
     );
-    const output = generate(nullishCoalesc).code;
+    const output = generate(nullishCoalesce).code;
     expect(output).toBe(`a ?? (b && c && d)`);
   });
 
