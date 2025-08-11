@@ -74,6 +74,7 @@
   "--unhandled-rejections",
   "--use-largepages",
   "--v8-pool-size",
+  "--watch-kill-signal",
   "--watch-path",
   "-C",
   "-e",
