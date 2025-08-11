@@ -667,7 +667,7 @@ jobs:
         with:
           name: test262-chunks
           path: ~/test262-chunks.json
-          retention-days: 3
+          retention-days: 30
 
   test262:
     name: test262
@@ -726,7 +726,7 @@ jobs:
         with:
           name: test262-result-${{ matrix.chunk }}
           path: ~/test262-${{ matrix.chunk }}.tap
-          retention-days: 3
+          retention-days: 30
 
   test262-finish:
     name: test262 - Analyze results
@@ -837,7 +837,7 @@ jobs:
         with:
           name: test262-result-babel8
           path: ~/test262.tap
-          retention-days: 3
+          retention-days: 30
       - name: Download previous results
         run: |
           cd babel-test262-runner
