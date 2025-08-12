@@ -51,7 +51,7 @@
     "@typescript-eslint/scope-manager": "^6.19.0",
     "dedent": "^1.5.3",
     "eslint": "^9.21.0",
-    "typescript-eslint": "8.29.1"
+    "typescript-eslint": "8.39.1"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
