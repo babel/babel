@@ -4,9 +4,9 @@ import type { ACTIONS } from "../types.cts";
 const babel = require("./babel-core.cjs");
 import handleMessage = require("./handle-message.cjs");
 
-import workerTheads = require("worker_threads");
+import workerThreads = require("worker_threads");
 
-workerTheads.parentPort.addListener(
+workerThreads.parentPort.addListener(
   "message",
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async ({

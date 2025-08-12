@@ -75,9 +75,9 @@ function classOrObjectMethod(
   let params: Array<t.Identifier | t.Pattern | t.RestElement> = [];
 
   // Errors thrown during argument evaluation must reject the resulting promise
-  const shoudlForwardParams = node.params.some(p => isPattern(p));
+  const shouldForwardParams = node.params.some(p => isPattern(p));
 
-  if (shoudlForwardParams) {
+  if (shouldForwardParams) {
     params = node.params as typeof params;
     node.params = [];
     if (!ignoreFunctionLength) {
@@ -97,7 +97,7 @@ function classOrObjectMethod(
     true,
   );
 
-  if (shoudlForwardParams) {
+  if (shouldForwardParams) {
     // return asyncToGenerator(function*() { ... }).apply(this, arguments);
     body.body = [
       returnStatement(

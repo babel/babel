@@ -49,7 +49,7 @@ function normalizeOptions(
     }
     if (!Array.isArray((ast as any).tokens)) {
       throw new Error(
-        "`experimental_preserveFormat` requires the AST to have attatched the token of the input code. Make sure to enable the `tokens: true` parser option.",
+        "`experimental_preserveFormat` requires the AST to have attached the token of the input code. Make sure to enable the `tokens: true` parser option.",
       );
     }
   }

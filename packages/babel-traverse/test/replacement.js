@@ -306,7 +306,7 @@ describe("path/replacement", function () {
       expect(path.get("expressions.1").toString()).toBe("true");
     });
     describe("return", function () {
-      // TODO: These tests veryfy wrong behavior. It's not possible to
+      // TODO: These tests verify wrong behavior. It's not possible to
       // replace an expression with `return`, as wrapping it in a IIFE changes
       // semantics.
       // They are here because it's how @babel/traverse currently behaves, but
