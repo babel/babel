@@ -2742,6 +2742,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             const asyncArrowFn =
               this.tsTryParseGenericAsyncArrowFunction(startLoc);
             if (asyncArrowFn) {
+              state.stop = true;
               return asyncArrowFn;
             }
           }
