@@ -4575,6 +4575,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.declare ??= false;
           node.extends ??= [];
           return;
+        case "TSMappedType":
+          node.optional ??= false;
+          node.readonly ??= undefined;
+          return;
         case "TSModuleDeclaration":
           node.declare ??= false;
           node.global ??= node.kind === "global";

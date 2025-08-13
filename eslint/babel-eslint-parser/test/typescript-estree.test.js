@@ -341,7 +341,7 @@ function deeplyRemoveProperties(obj, props) {
         // Pending release https://github.com/microsoft/TypeScript/pull/61764
         "typescript/explicit-resource-management/valid-for-using-declaration-binding-of/input.js",
 
-        // Pending ts-eslint upgrade
+        // Pending https://github.com/typescript-eslint/typescript-eslint/issues/11474
         "typescript/types/import-type-options-with-trailing-comma/input.ts",
 
         // ts-eslint/tsc does not support arrow generic in tsx mode

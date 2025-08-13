@@ -1812,7 +1812,7 @@ export interface TsMappedType extends TsTypeBase {
   key: Identifier;
   constraint: TsType;
   readonly?: true | "+" | "-";
-  optional?: true | "+" | "-";
+  optional?: boolean | "+" | "-";
   typeAnnotation: TsType | undefined | null;
   nameType: TsType | undefined | null;
 }
