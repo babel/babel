@@ -46,7 +46,6 @@
     "./src/transform-file.ts": "./src/transform-file-browser.ts"
   },
   "dependencies": {
-    "@ampproject/remapping": "^2.2.0",
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
@@ -56,6 +55,7 @@
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
+    "@jridgewell/remapping": "^2.3.5",
     "@types/gensync": "condition:BABEL_8_BREAKING ? ^1.0.0 :",
     "convert-source-map": "^2.0.0",
     "debug": "^4.1.0",

@@ -1,5 +1,5 @@
 type SourceMap = any;
-import remapping from "@ampproject/remapping";
+import remapping from "@jridgewell/remapping";
 
 export default function mergeSourceMap(
   inputMap: SourceMap,
