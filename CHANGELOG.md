@@ -24,6 +24,30 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.3 (2025-08-14)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-static-block`, `babel-preset-env`
+  * [#17443](https://github.com/babel/babel/pull/17443) [static blocks] Do not inject new static fields after static code ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#17465](https://github.com/babel/babel/pull/17465) fix(parser/typescript): parse `import("./a", {with:{},})` ([@easrng](https://github.com/easrng))
+  * [#17478](https://github.com/babel/babel/pull/17478) fix(parser): stop subscript parsing on async arrow ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`
+  * [#17363](https://github.com/babel/babel/pull/17363) Do not save last yield in call in temp var ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#17448](https://github.com/babel/babel/pull/17448) move eslint-{parser,plugin} docs to the website ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#17454](https://github.com/babel/babel/pull/17454) Enable type checking for `scripts` and `babel-worker.cjs` ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`
+  * [#17444](https://github.com/babel/babel/pull/17444) Optimize do expression output ([@JLHwung](https://github.com/JLHwung))
 ## v7.28.2 (2025-07-24)
 
 #### :bug: Bug Fix
