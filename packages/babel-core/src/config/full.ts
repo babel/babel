@@ -25,7 +25,11 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
-import type { InputOptions, PluginItem } from "./validation/options.ts";
+import type {
+  InputOptions,
+  NormalizedOptions,
+  PluginItem,
+} from "./validation/options.ts";
 import { validatePluginObject } from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
@@ -47,7 +51,7 @@ type LoadedDescriptor = {
 export type { InputOptions } from "./validation/options.ts";
 
 export type ResolvedConfig = {
-  options: any;
+  options: NormalizedOptions;
   passes: PluginPasses;
   externalDependencies: ReadonlyDeepArray<string>;
 };
@@ -168,7 +172,9 @@ export default gensync(function* loadFullConfig(
 
   if (ignored) return null;
 
-  const opts: ValidatedOptions = optionDefaults;
+  // Cast the `optionDefaults` to NormalizedOptions,
+  // since we will merge the normalized `options` to `optionDefaults`
+  const opts = optionDefaults as NormalizedOptions;
   mergeOptions(opts, options);
 
   const pluginContext: Context.FullPlugin = {

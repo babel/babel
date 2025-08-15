@@ -363,6 +363,15 @@ export default [
     },
   },
   {
+    files: ["packages/babel-helpers/scripts/**.{js,ts}"],
+    rules: {
+      "import/no-extraneous-dependencies": [
+        "error",
+        { packageDir: ["./packages/babel-helpers", "./"] },
+      ],
+    },
+  },
+  {
     files: ["packages/babel-traverse/scripts/**/*.js"],
     rules: {
       "import/no-extraneous-dependencies": [
@@ -390,9 +399,18 @@ export default [
     },
   },
   {
+    files: ["packages/babel-types/scripts/**/*.js"],
+    rules: {
+      "import/no-extraneous-dependencies": [
+        "error",
+        { packageDir: ["./packages/babel-types", "./"] },
+      ],
+    },
+  },
+  {
     files: ["scripts/**/*.{js,cjs,mjs}"],
     rules: {
-      "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
+      "import/no-extraneous-dependencies": ["error", { packageDir: "./" }],
     },
   },
   {

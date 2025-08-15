@@ -9,7 +9,7 @@ import toPropertyKey from "./toPropertyKey.js";
 function applyDecs2203RFactory() {
   function createAddInitializerMethod(e, t) {
     return function (r) {
-      !function (e, t) {
+      !function (e) {
         if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
       }(t), assertCallable(r, "An initializer"), _pushInstanceProperty(e).call(e, r);
     };
