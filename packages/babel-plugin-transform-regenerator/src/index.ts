@@ -9,9 +9,9 @@ export default declare(({ types: t, traverse, assertVersion }) => {
     name: "transform-regenerator",
 
     visitor: process.env.BABEL_8_BREAKING
-      ? getVisitor(t)
+      ? getVisitor()
       : traverse.visitors.merge([
-          getVisitor(t),
+          getVisitor(),
           {
             // We visit CallExpression so that we always transform
             // regeneratorRuntime.*() before babel-plugin-polyfill-regenerator.

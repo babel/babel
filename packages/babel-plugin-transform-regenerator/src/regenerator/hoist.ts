@@ -1,22 +1,28 @@
-import * as util from "./util.ts";
-const hasOwn = Object.prototype.hasOwnProperty;
+import type { NodePath } from "@babel/core";
+import { types as t } from "@babel/core";
 
 // The hoist function takes a FunctionExpression or FunctionDeclaration
 // and replaces any Declaration nodes in its body with assignments, then
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
-export function hoist(funPath: any) {
-  const t = util.getTypes();
+export function hoist(
+  funPath: NodePath<t.FunctionExpression | t.FunctionDeclaration>,
+) {
   t.assertFunction(funPath.node);
 
-  const vars: Record<string, any> = {};
+  const vars: Record<string, t.Identifier> = { __proto__: null };
 
-  function varDeclToExpr({ node: vdec, scope }: any, includeIdentifiers: any) {
+  function varDeclToExpr(
+    { node: vdec, scope }: NodePath,
+    includeIdentifiers: boolean,
+  ) {
     t.assertVariableDeclaration(vdec);
     // TODO assert.equal(vdec.kind, "var");
-    const exprs: any[] = [];
+    const exprs: t.Expression[] = [];
 
-    vdec.declarations.forEach(function (dec: any) {
+    vdec.declarations.forEach(function (
+      dec: t.VariableDeclarator & { id: t.Identifier },
+    ) {
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
       vars[dec.id.name] = t.identifier(dec.id.name);
@@ -41,14 +47,14 @@ export function hoist(funPath: any) {
 
   funPath.get("body").traverse({
     VariableDeclaration: {
-      exit: function (path: any) {
+      exit: function (path) {
         const expr = varDeclToExpr(path, false);
         if (expr === null) {
           path.remove();
         } else {
           // We don't need to traverse this expression any further because
           // there can't be any new declarations inside an expression.
-          util.replaceWithOrRemove(path, t.expressionStatement(expr));
+          path.replaceWith(t.expressionStatement(expr));
         }
 
         // Since the original node has been either removed or replaced,
@@ -57,34 +63,39 @@ export function hoist(funPath: any) {
       },
     },
 
-    ForStatement: function (path: any) {
+    ForStatement: function (path) {
       const init = path.get("init");
       if (init.isVariableDeclaration()) {
-        util.replaceWithOrRemove(init, varDeclToExpr(init, false));
+        const expr = varDeclToExpr(init, false);
+        if (expr) {
+          init.replaceWith(expr);
+        } else {
+          init.remove();
+        }
       }
     },
 
-    ForXStatement: function (path: any) {
+    ForXStatement: function (path) {
       const left = path.get("left");
       if (left.isVariableDeclaration()) {
-        util.replaceWithOrRemove(left, varDeclToExpr(left, true));
+        left.replaceWith(varDeclToExpr(left, true));
       }
     },
 
-    FunctionDeclaration: function (path: any) {
+    FunctionDeclaration: function (path) {
       const node = path.node;
       vars[node.id.name] = node.id;
 
       const assignment = t.expressionStatement(
         t.assignmentExpression(
           "=",
-          t.clone(node.id),
+          t.cloneNode(node.id),
           t.functionExpression(
             path.scope.generateUidIdentifierBasedOnNode(node),
             node.params,
             node.body,
             node.generator,
-            node.expression,
+            node.async,
           ),
         ),
       );
@@ -101,7 +112,7 @@ export function hoist(funPath: any) {
         // If the parent node is not a block statement, then we can just
         // replace the declaration with the equivalent assignment form
         // without worrying about hoisting it.
-        util.replaceWithOrRemove(path, assignment);
+        path.replaceWith(assignment);
       }
 
       // Remove the binding, to avoid "duplicate declaration" errors when it will
@@ -112,19 +123,19 @@ export function hoist(funPath: any) {
       path.skip();
     },
 
-    FunctionExpression: function (path: any) {
+    FunctionExpression: function (path) {
       // Don't descend into nested function expressions.
       path.skip();
     },
 
-    ArrowFunctionExpression: function (path: any) {
+    ArrowFunctionExpression: function (path) {
       // Don't descend into nested function expressions.
       path.skip();
     },
   });
 
-  const paramNames: Record<string, any> = {};
-  funPath.get("params").forEach(function (paramPath: any) {
+  const paramNames: Record<string, t.Identifier> = { __proto__: null };
+  funPath.get("params").forEach(function (paramPath) {
     const param = paramPath.node;
     if (t.isIdentifier(param)) {
       paramNames[param.name] = param;
@@ -134,10 +145,10 @@ export function hoist(funPath: any) {
     }
   });
 
-  const declarations: any[] = [];
+  const declarations: t.VariableDeclarator[] = [];
 
-  Object.keys(vars).forEach(function (name: any) {
-    if (!hasOwn.call(paramNames, name)) {
+  Object.keys(vars).forEach(function (name) {
+    if (!Object.hasOwn(paramNames, name)) {
       declarations.push(t.variableDeclarator(vars[name], null));
     }
   });
