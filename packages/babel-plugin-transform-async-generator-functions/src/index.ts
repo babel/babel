@@ -68,7 +68,40 @@ export default declare(api => {
   });
 
   const visitor: Visitor<PluginPass> = {
-    Function(path, state) {
+    Class(path, state) {
+      path.get("body.body").forEach(childPath => {
+        if (childPath.isClassMethod() || childPath.isClassPrivateMethod()) {
+          if (!childPath.node.async) return;
+
+          childPath.traverse(forAwaitVisitor, state);
+
+          if (!childPath.node.generator) return;
+
+          childPath.traverse(yieldStarVisitor, state);
+
+          childPath.setData(
+            "@babel/plugin-transform-async-generator-functions/async_generator_function",
+            true,
+          );
+
+          // We don't need to pass the noNewArrows assumption, since
+          // async generators are never arrow functions.
+          remapAsyncToGenerator(childPath, {
+            wrapAsync: state.addHelper("wrapAsyncGenerator"),
+            wrapAwait: state.addHelper("awaitAsyncGenerator"),
+          });
+        }
+      });
+    },
+    "FunctionDeclaration|FunctionExpression|ObjectMethod|ArrowFunctionExpression"(
+      path: NodePath<
+        | t.FunctionDeclaration
+        | t.FunctionExpression
+        | t.ObjectMethod
+        | t.ArrowFunctionExpression
+      >,
+      state,
+    ) {
       if (!path.node.async) return;
 
       path.traverse(forAwaitVisitor, state);
@@ -98,17 +131,19 @@ export default declare(api => {
       ? undefined
       : (_, parser) => parser.plugins.push("asyncGenerators"),
 
-    visitor: {
-      Program(path, state) {
-        // We need to traverse the ast here (instead of just vising Function
-        // in the top level visitor) because for-await needs to run before the
-        // async-to-generator plugin. This is because for-await is transpiled
-        // using "await" expressions, which are then converted to "yield".
-        //
-        // This is bad for performance, but plugin ordering will allow as to
-        // directly visit Function in the top level visitor.
-        path.traverse(visitor, state);
-      },
-    },
+    visitor: process.env.BABEL_8_BREAKING
+      ? visitor
+      : {
+          Program(path, state) {
+            // We need to traverse the ast here (instead of just vising Function
+            // in the top level visitor) because for-await needs to run before the
+            // async-to-generator plugin. This is because for-await is transpiled
+            // using "await" expressions, which are then converted to "yield".
+            //
+            // This is bad for performance, but plugin ordering will allow as to
+            // directly visit Function in the top level visitor.
+            path.traverse(visitor, state);
+          },
+        },
   };
 });
