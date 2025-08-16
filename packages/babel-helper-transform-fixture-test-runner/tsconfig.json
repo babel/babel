@@ -22,6 +22,9 @@
     },
     {
       "path": "../../packages/babel-helper-fixtures"
+    },
+    {
+      "path": "../../packages/babel-helpers"
     }
   ]
 }

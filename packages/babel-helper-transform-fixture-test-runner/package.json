@@ -19,6 +19,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
+    "@babel/helpers": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.28",
     "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^30.0.0",
@@ -26,6 +27,7 @@
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "devDependencies": {
+    "@babel/helper-plugin-test-runner": "workspace:^",
     "@types/fs-readdir-recursive": "^1.1.0"
   },
   "engines": {

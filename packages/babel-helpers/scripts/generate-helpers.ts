@@ -10,7 +10,7 @@ import { gzipSync } from "node:zlib";
 import {
   getHelperMetadata,
   stringifyMetadata,
-} from "./build-helper-metadata.js";
+} from "./build-helper-metadata.ts";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
@@ -20,26 +20,21 @@ const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
  * The plugin will
  * - rewrite relative imports to other helpers and remove .ts extension
  * - collect function names to `noMangleFns` if `mangleFns` is `true`.
- * @param {boolean} mangleFns Whether the function names in the helper should be mangled
- * @param {string[]} noMangleFns A list of function names that should not be mangled
- * @returns
+ * @param mangleFns Whether the function names in the helper should be mangled
+ * @param noMangleFns A list of function names that should not be mangled
  */
-function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
-  /**
-   * @param {import("@babel/core").PluginAPI} api
-   * @returns {import("@babel/core").PluginObject}
-   */
-  return function BabelPluginProcessHelpers({ types: t }) {
-    /**
-     * @type {import("@babel/core").PluginObject}
-     */
-    const pluginObj = {
+function BabelPluginProcessHelpersFactory(
+  mangleFns: boolean,
+  noMangleFns: string[]
+) {
+  return function BabelPluginProcessHelpers({ types: t }: babel.PluginAPI) {
+    const pluginObj: babel.PluginObject = {
       pre: undefined,
       post: undefined,
       visitor: {
         ImportDeclaration(path) {
           const source = path.node.source;
-          source.value = source.value.replace(/(^\.\/|\.ts$)/g, "");
+          source.value = source.value.replace(/^\.\/|\.ts$/g, "");
         },
         FunctionDeclaration: mangleFns
           ? path => {
@@ -63,7 +58,10 @@ function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
         file.metadata.exportName = null;
         file.path.traverse({
           ExportSpecifier(path) {
-            if (path.node.exported.name === "default") {
+            if (
+              t.isIdentifier(path.node.exported) &&
+              path.node.exported.name === "default"
+            ) {
               file.metadata.exportName = path.node.local.name;
             }
           },
@@ -121,12 +119,24 @@ function helper(minVersion: string, source: string, metadata: HelperMetadata): H
   })
 }
 
-export { helpers as default };
+export { helpers as default, helpersUncompressed };
 const helpers: Record<string, Helper> = {
   __proto__: null,
 `;
 
   let babel7extraOutput = "";
+
+  const helpersUncompressed: Record<
+    string,
+    {
+      helperName: string;
+      minVersion: string;
+      code: string;
+      metadata: string;
+    }
+  > = {
+    __proto__: null,
+  };
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
     if (IGNORED_FILES.has(file)) continue;
@@ -143,9 +153,8 @@ const helpers: Record<string, Helper> = {
     }
 
     let code = await fs.promises.readFile(filePath, "utf8");
-    const minVersionMatch = code.match(
-      /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m
-    );
+    const minVersionMatch =
+      /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m.exec(code);
     if (!minVersionMatch) {
       throw new Error(`@minVersion number missing in ${filePath}`);
     }
@@ -154,9 +163,9 @@ const helpers: Record<string, Helper> = {
     const internal = code.includes("@internal");
     const onlyBabel7 = code.includes("@onlyBabel7");
     const mangleFns = code.includes("@mangleFns");
-    const noMangleFns = [];
+    const noMangleFns: string[] = [];
 
-    code = babel.transformSync(code, {
+    let codeUncompressed = babel.transformSync(code, {
       configFile: false,
       babelrc: false,
       filename: filePath,
@@ -172,7 +181,7 @@ const helpers: Record<string, Helper> = {
       plugins: [BabelPluginProcessHelpersFactory(mangleFns, noMangleFns)],
     }).code;
     code = (
-      await minify(code, {
+      await minify(codeUncompressed, {
         ecma: 5,
         mangle: {
           keep_fnames: mangleFns
@@ -196,6 +205,22 @@ const helpers: Record<string, Helper> = {
     // eslint-disable-next-line prefer-const
     [code, metadata] = getHelperMetadata(babel, code, helperName, internal);
 
+    let metadataUncompressed;
+    // eslint-disable-next-line prefer-const
+    [codeUncompressed, metadataUncompressed] = getHelperMetadata(
+      babel,
+      codeUncompressed,
+      helperName,
+      internal
+    );
+
+    helpersUncompressed[helperName] = {
+      helperName: JSON.stringify(helperName),
+      minVersion: JSON.stringify(minVersion),
+      code: JSON.stringify(codeUncompressed),
+      metadata: stringifyMetadata(metadataUncompressed),
+    };
+
     const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}
   ${JSON.stringify(helperName)}: helper(
@@ -213,6 +238,19 @@ const helpers: Record<string, Helper> = {
   }
 
   output += "};";
+
+  output += `const helpersUncompressed: Record<string, Helper> = {
+  __proto__: null,${Object.entries(helpersUncompressed)
+    .map(
+      ([helperName, { minVersion, code, metadata }]) => `
+    ${helperName}: helper(
+      ${minVersion},
+      ${code},
+      ${metadata}
+    ),
+  `
+    )
+    .join("")}};`;
 
   if (babel7extraOutput) {
     output += `
