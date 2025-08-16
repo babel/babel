@@ -3973,6 +3973,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         | "TSAsExpression"
         | "TSSatisfiesExpression"
         | "TSTypeAssertion",
+      disallowCallExpression: boolean,
       isUnparenthesizedInAssign: boolean,
       binding: BindingFlag,
     ) {
@@ -3994,7 +3995,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             (["expression", true] as [string, boolean])
           );
         default:
-          return super.isValidLVal(type, isUnparenthesizedInAssign, binding);
+          return super.isValidLVal(
+            type,
+            disallowCallExpression,
+            isUnparenthesizedInAssign,
+            binding,
+          );
       }
     }
 
