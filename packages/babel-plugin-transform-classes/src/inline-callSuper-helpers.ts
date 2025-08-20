@@ -73,8 +73,8 @@ export default function addCallSuperHelper(file: File) {
     POSSIBLE_CONSTRUCTOR_RETURN: file.addHelper("possibleConstructorReturn"),
   });
 
-  file.path.unshiftContainer("body", [fn]);
-  file.scope.registerDeclaration(file.path.get("body.0"));
+  const [fnPath] = file.path.unshiftContainer("body", [fn]);
+  file.scope.registerDeclaration(fnPath);
 
   return t.cloneNode(id);
 }
