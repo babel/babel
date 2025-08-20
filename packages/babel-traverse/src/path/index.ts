@@ -34,7 +34,22 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
-declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<any>;
+declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<
+  NodePath_Final<t.Node>
+>;
+
+export type NodePaths<T extends t.Node | t.Node[]> = T extends t.Node[]
+  ? { [K in keyof T]: NodePath_Final<Extract<T[K], t.Node>> }
+  : T extends t.Node
+    ? [NodePath_Final<T>]
+    : never;
+
+export type NodeListType<N, K extends keyof N> =
+  N[K] extends Array<infer P extends t.Node> ? P : never;
+
+export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
+
+export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
 
 const NodePath_Final = class NodePath {
   constructor(hub: HubInterface, parent: t.Node | null) {
@@ -115,7 +130,7 @@ const NodePath_Final = class NodePath {
     return this.isScope() ? new Scope(this) : scope;
   }
 
-  setData(key: string | symbol, val: any): any {
+  setData<T>(key: string | symbol, val: T): T {
     if (this.data == null) {
       this.data = Object.create(null);
     }

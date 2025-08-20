@@ -262,10 +262,8 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
     this.path.replaceWith(cloneNode(uid));
 
-    // TODO: Should we use `attached.isVariableDeclaration()`?
-    return attachTo.isVariableDeclarator()
-      ? // @ts-expect-error TS cannot refine the type of `attached`
-        attached.get("init")
+    return attached.isVariableDeclarator()
+      ? attached.get("init")
       : attached.get("declarations.0.init");
   }
 }
