@@ -1,10 +1,8 @@
-import {
+import fs, {
   existsSync,
-  mkdirSync,
   readdirSync,
   readFileSync,
   realpathSync,
-  rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -84,12 +82,12 @@ const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
 };
 
 const outputFileSync = function (filePath: string, data: string) {
-  mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   writeFileSync(filePath, data);
 };
 
 function deleteDir(path: string): void {
-  rmSync(path, { force: true, recursive: true });
+  fs.rmSync(path, { force: true, recursive: true });
 }
 
 const pathFilter = function (x: string) {
@@ -296,7 +294,7 @@ export function buildProcessTests(
             createHash("sha1").update(testLoc).digest("hex"),
           );
           deleteDir(tmpLoc);
-          mkdirSync(tmpLoc, { recursive: true });
+          fs.mkdirSync(tmpLoc, { recursive: true });
 
           const { inFiles } = opts;
           for (const filename of Object.keys(inFiles)) {

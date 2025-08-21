@@ -1,6 +1,6 @@
 import * as babel from "@babel/core";
 import { buildExternalHelpers, type InputOptions } from "@babel/core";
-import expect from "expect";
+import expect from "expect-24";
 import * as helpers from "./helpers.ts";
 import vm from "node:vm";
 import LruCache from "lru-cache";

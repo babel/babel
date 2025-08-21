@@ -1124,7 +1124,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
-    expect: "npm:^24.9.0"
+    expect-24: "npm:expect@^24.9.0"
     fs-readdir-recursive: "npm:^1.1.0"
     jest-diff: "npm:^30.0.0"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
@@ -10353,6 +10353,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expect-24@npm:expect@^24.9.0":
+  version: 24.9.0
+  resolution: "expect@npm:24.9.0"
+  dependencies:
+    "@jest/types": "npm:^24.9.0"
+    ansi-styles: "npm:^3.2.0"
+    jest-get-type: "npm:^24.9.0"
+    jest-matcher-utils: "npm:^24.9.0"
+    jest-message-util: "npm:^24.9.0"
+    jest-regex-util: "npm:^24.9.0"
+  checksum: 10/120ede859dad111764fe1213bbf7cd9161f03cfaec3d4d94d61b4176d916d5d6580dea31da62a337597394787eff14515a618a0c28962ad02231e73ada0ec4fd
+  languageName: node
+  linkType: hard
+
 "expect@npm:30.0.0":
   version: 30.0.0
   resolution: "expect@npm:30.0.0"
@@ -10364,20 +10378,6 @@ __metadata:
     jest-mock: "npm:30.0.0"
     jest-util: "npm:30.0.0"
   checksum: 10/2ad7d2a3cdbac38e4bcc946c97beb0c3a6188804b12f3e29d49ae2b98dc8e7e0c3cc26f2489fa852f2e2a9201d1f74ea27163fa188a101087d3c6f226bf96f76
-  languageName: node
-  linkType: hard
-
-"expect@npm:^24.9.0":
-  version: 24.9.0
-  resolution: "expect@npm:24.9.0"
-  dependencies:
-    "@jest/types": "npm:^24.9.0"
-    ansi-styles: "npm:^3.2.0"
-    jest-get-type: "npm:^24.9.0"
-    jest-matcher-utils: "npm:^24.9.0"
-    jest-message-util: "npm:^24.9.0"
-    jest-regex-util: "npm:^24.9.0"
-  checksum: 10/120ede859dad111764fe1213bbf7cd9161f03cfaec3d4d94d61b4176d916d5d6580dea31da62a337597394787eff14515a618a0c28962ad02231e73ada0ec4fd
   languageName: node
   linkType: hard
 
