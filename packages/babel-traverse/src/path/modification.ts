@@ -23,7 +23,12 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Scope from "../scope/index.ts";
-import type { NodeList, NodeOrNodeList, NodeListType, NodePaths } from "./index.ts";
+import type {
+  NodeList,
+  NodeOrNodeList,
+  NodeListType,
+  NodePaths,
+} from "./index.ts";
 
 /**
  * Insert the provided nodes before the current one.
@@ -69,8 +74,13 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
       (!this.isExpressionStatement() ||
         (node as t.ExpressionStatement).expression != null);
 
-    const [blockPath] = this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
-    return blockPath.unshiftContainer("body", nodes as t.Statement[]) as NodePaths<Nodes>;
+    const [blockPath] = this.replaceWith(
+      blockStatement(shouldInsertCurrentNode ? [node] : []),
+    );
+    return blockPath.unshiftContainer(
+      "body",
+      nodes as t.Statement[],
+    ) as NodePaths<Nodes>;
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -118,14 +128,22 @@ export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
   this: NodePath,
   nodes: Nodes,
 ): NodePaths<Nodes> {
-  return _containerInsert.call(this, this.key as number, nodes) as NodePaths<Nodes>;
+  return _containerInsert.call(
+    this,
+    this.key as number,
+    nodes,
+  ) as NodePaths<Nodes>;
 }
 
 export function _containerInsertAfter<Nodes extends NodeList<t.Node>>(
   this: NodePath,
   nodes: Nodes,
 ): NodePaths<Nodes> {
-  return _containerInsert.call(this, (this.key as number) + 1, nodes) as NodePaths<Nodes>;
+  return _containerInsert.call(
+    this,
+    (this.key as number) + 1,
+    nodes,
+  ) as NodePaths<Nodes>;
 }
 
 const last = <T>(arr: T[]) => arr[arr.length - 1];
@@ -256,8 +274,13 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
       (!this.isExpressionStatement() ||
         (node as t.ExpressionStatement).expression != null);
 
-    const [blockPath] = this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
-    return blockPath.pushContainer("body", nodes as t.Statement[]) as NodePaths<Nodes>;
+    const [blockPath] = this.replaceWith(
+      blockStatement(shouldInsertCurrentNode ? [node] : []),
+    );
+    return blockPath.pushContainer(
+      "body",
+      nodes as t.Statement[],
+    ) as NodePaths<Nodes>;
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -329,7 +352,7 @@ export function _verifyNodeList<N extends t.Node | null>(
 }
 
 type NodeKeyOfArrays<N extends t.Node> = {
-    [P in string & keyof N]-?: N[P] extends Array<t.Node | null> ? P : never;
+  [P in string & keyof N]-?: N[P] extends Array<t.Node | null> ? P : never;
 }[string & keyof N];
 
 export function unshiftContainer<
