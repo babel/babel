@@ -47,15 +47,17 @@ import { resync, setScope } from "./context.ts";
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(
+import type { NodeOrNodeList, NodePaths } from "./index.ts";
+
+export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
   this: NodePath,
-  nodes: t.Node | t.Node[],
-): NodePath[] {
+  nodes: Nodes,
+): NodePaths<Nodes> {
   resync.call(this);
 
-  nodes = _verifyNodeList.call(this, nodes);
-  inheritLeadingComments(nodes[0], this.node);
-  inheritTrailingComments(nodes[nodes.length - 1], this.node);
+  const verifiedNodes = _verifyNodeList.call(this, nodes);
+  inheritLeadingComments(verifiedNodes[0], this.node);
+  inheritTrailingComments(verifiedNodes[verifiedNodes.length - 1], this.node);
   getCachedPaths(this)?.delete(this.node);
   this.node =
     // @ts-expect-error this.key must present in this.container

@@ -474,7 +474,7 @@ export default declare((api, opts: Options) => {
 
           insertionPath = insertionPath.insertAfter(
             t.variableDeclarator(argument, callExpression),
-          )[0] as NodePath<t.VariableDeclarator>;
+          )[0];
 
           path.scope.registerBinding(kind, insertionPath);
 

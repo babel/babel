@@ -231,7 +231,7 @@ export function wrapLoopBody(
   // TODO: Consider using a function declaration
   const [varPath] = loopPath.insertBefore(
     t.variableDeclaration("var", [t.variableDeclarator(t.identifier(id), fn)]),
-  ) as [NodePath<t.VariableDeclaration>];
+  );
 
   const bodyStmts: t.Statement[] = [];
 
