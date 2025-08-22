@@ -2,6 +2,7 @@
   "transform-explicit-resource-management": {
     "chrome": "134",
     "edge": "134",
+    "firefox": "141",
     "node": "24",
     "electron": "35.0"
   },
