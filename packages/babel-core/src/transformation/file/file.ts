@@ -1,9 +1,8 @@
 import * as helpers from "@babel/helpers";
 import { NodePath } from "@babel/traverse";
-import type { HubInterface, Visitor, Scope } from "@babel/traverse";
+import type { HubInterface, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
-import traverse from "@babel/traverse";
-import { cloneNode, interpreterDirective } from "@babel/types";
+import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
 import semver from "semver";
 
@@ -12,16 +11,6 @@ import type { NormalizedFile } from "../normalize-file.ts";
 // @ts-expect-error This file is `any`
 import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
 import type { NormalizedOptions } from "../../config/index.ts";
-
-const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
-  enter(path, state) {
-    const loc = path.node.loc;
-    if (loc) {
-      state.loc = loc;
-      path.stop();
-    }
-  },
-};
 
 export default class File {
   _map: Map<unknown, unknown> = new Map();
@@ -217,11 +206,12 @@ export default class File {
     let loc = node?.loc;
 
     if (!loc && node) {
-      const state: { loc?: t.SourceLocation | null } = {
-        loc: null,
-      };
-      traverse(node, errorVisitor, this.scope, state);
-      loc = state.loc;
+      traverseFast(node, function (node) {
+        if (node.loc) {
+          loc = node.loc;
+          return traverseFast.stop;
+        }
+      });
 
       let txt =
         "This is an error on an internal node. Probably an internal error.";
