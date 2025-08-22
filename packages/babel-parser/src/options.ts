@@ -124,6 +124,12 @@ export interface Options {
   ranges?: boolean;
 
   /**
+   * Adds a locations property to each node: [node.loc]
+   */
+
+  locations?: boolean | "packed";
+
+  /**
    * Adds all parsed tokens to a tokens property on the File node.
    */
   tokens?: boolean;
@@ -153,12 +159,13 @@ export const enum OptionFlags {
   AllowYieldOutsideFunction = 1 << 5,
   AllowUndeclaredExports = 1 << 6,
   Ranges = 1 << 7,
-  Tokens = 1 << 8,
-  CreateImportExpressions = 1 << 9,
-  CreateParenthesizedExpressions = 1 << 10,
-  ErrorRecovery = 1 << 11,
-  AttachComment = 1 << 12,
-  AnnexB = 1 << 13,
+  Locations = 1 << 8,
+  Tokens = 1 << 9,
+  CreateImportExpressions = 1 << 10,
+  CreateParenthesizedExpressions = 1 << 11,
+  ErrorRecovery = 1 << 12,
+  AttachComment = 1 << 13,
+  AnnexB = 1 << 14,
 }
 
 type OptionsWithDefaults = Required<Options>;
@@ -208,6 +215,8 @@ function createDefaultOptions(): OptionsWithDefaults {
     //
     // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
     ranges: false,
+    // Nodes have their start and end line/columns recorded in `loc` property.
+    locations: true,
     // Adds all parsed tokens to a `tokens` property on the `File` node
     tokens: false,
     // Whether to create ImportExpression AST nodes (if false
