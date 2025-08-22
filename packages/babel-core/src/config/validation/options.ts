@@ -255,7 +255,6 @@ export type MatchItem =
       context: { dirname: string; caller: CallerMetadata; envName: string },
     ) => unknown);
 
-export type PluginOptions = object | false;
 export type PluginTarget =
   | string
   | ((api: PluginAPI, options?: object, dirname?: string) => PluginObject);

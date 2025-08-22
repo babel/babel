@@ -1,9 +1,10 @@
 import path from "node:path";
-import type { NormalizedOptions, ResolvedConfig } from "../config/index.ts";
+import type { ResolvedConfig } from "../config/index.ts";
+import type { ValidatedOptions } from "../config/validation/options.ts";
 
 export default function normalizeOptions(
   config: ResolvedConfig,
-): NormalizedOptions {
+): ValidatedOptions {
   const {
     filename,
     cwd,
@@ -26,7 +27,7 @@ export default function normalizeOptions(
 
   const opts = config.options;
 
-  const options: NormalizedOptions = {
+  const options: ValidatedOptions = {
     ...opts,
 
     parserOpts: {
