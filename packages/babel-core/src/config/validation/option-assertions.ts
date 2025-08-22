@@ -391,7 +391,7 @@ function assertPluginItem(
     assertPluginTarget(loc, value);
   }
 
-  return value as PluginItem;
+  return value as PluginItemInternal;
 }
 function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   if (

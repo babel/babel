@@ -13,7 +13,6 @@ import {
 import type { CacheConfigurator } from "./caching.ts";
 
 import type {
-  PluginOptions,
   PluginItemInternal,
   InputOptions,
   PresetItem,
@@ -36,7 +35,7 @@ export type OptionsAndDescriptors = {
 // but have not yet been executed to call functions with options.
 export interface UnloadedDescriptor<API, Options = object | undefined> {
   name: string | undefined;
-  value: (api: API, options: Options, dirname: string) => unknown;
+  value: object | ((api: API, options: Options, dirname: string) => unknown);
   options: Options;
   dirname: string;
   alias: string;
@@ -302,7 +301,7 @@ export function* createDescriptor<API>(
   }
 
   let name;
-  let options: PluginOptions;
+  let options;
   let value = pair;
   if (Array.isArray(value)) {
     if (value.length === 3) {
