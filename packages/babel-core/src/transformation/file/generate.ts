@@ -36,6 +36,7 @@ export default function generateCode(
   } else if (results.length === 1) {
     result = results[0];
 
+    // @ts-expect-error check if generatorOverride returned a promise
     if (typeof result.then === "function") {
       throw new Error(
         `You appear to be using an async codegen plugin, ` +
@@ -53,7 +54,7 @@ export default function generateCode(
   // back to the encoded map.
   let { code: outputCode, decodedMap: outputMap = result.map } = result;
 
-  // For backwards compat.
+  // @ts-expect-error For backwards compat.
   if (result.__mergedMap) {
     /**
      * @see mergeSourceMap
@@ -84,5 +85,6 @@ export default function generateCode(
     outputMap = null;
   }
 
+  // @ts-expect-error outputMap must be an EncodedSourceMap or null
   return { outputCode, outputMap };
 }

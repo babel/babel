@@ -1,5 +1,4 @@
 import { copyFileSync, readFileSync, rmSync } from "node:fs";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { commonJS } from "$repo-utils";
 import { Benchmark } from "../../util.mjs";
 

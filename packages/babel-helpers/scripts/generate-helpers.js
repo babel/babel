@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import fs from "node:fs";
 import { join } from "node:path";
 import { URL, fileURLToPath } from "node:url";

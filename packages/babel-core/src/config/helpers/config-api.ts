@@ -9,13 +9,18 @@ import type {
   SimpleType,
 } from "../caching.ts";
 
-import type { AssumptionName, CallerMetadata } from "../validation/options.ts";
+import type {
+  AssumptionName,
+  CallerMetadata,
+  InputOptions,
+} from "../validation/options.ts";
 
 import type * as Context from "../cache-contexts";
 
+type EnvName = NonNullable<InputOptions["envName"]>;
 type EnvFunction = {
   (): string;
-  <T>(extractor: (babelEnv: string) => T): T;
+  <T extends SimpleType>(extractor: (envName: EnvName) => T): T;
   (envVar: string): boolean;
   (envVars: Array<string>): boolean;
 };

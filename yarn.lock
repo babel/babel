@@ -5,6 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"$repo-utils@link:../scripts/repo-utils::locator=%40babel%2Fbenchmark%40workspace%3Abenchmark":
+  version: 0.0.0-use.local
+  resolution: "$repo-utils@link:../scripts/repo-utils::locator=%40babel%2Fbenchmark%40workspace%3Abenchmark"
+  languageName: node
+  linkType: soft
+
 "$repo-utils@link:./scripts/repo-utils::locator=babel%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "$repo-utils@link:./scripts/repo-utils::locator=babel%40workspace%3A."
@@ -226,6 +232,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/benchmark@workspace:benchmark"
   dependencies:
+    $repo-utils: "link:../scripts/repo-utils"
     "@babel-baseline/cli": "npm:@babel/cli@7.27.1"
     "@babel-baseline/core": "npm:@babel/core@7.24.4"
     "@babel-baseline/generator": "npm:@babel/generator@7.24.4"
@@ -6881,7 +6888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.11.3, acorn@npm:^8.14.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.2":
+"acorn@npm:^8.11.3, acorn@npm:^8.14.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1":
   version: 8.14.1
   resolution: "acorn@npm:8.14.1"
   bin:
@@ -7642,6 +7649,7 @@ __metadata:
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     semver: "npm:^6.3.1"
     shelljs: "npm:^0.8.5"
+    terser: "npm:^5.43.1"
     test262-stream: "npm:^1.4.0"
     typescript: "npm:5.9.2"
     typescript-eslint: "npm:8.39.1"
@@ -16965,17 +16973,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser@npm:^5.16.8, terser@npm:^5.17.4":
-  version: 5.19.2
-  resolution: "terser@npm:5.19.2"
+"terser@npm:^5.16.8, terser@npm:^5.17.4, terser@npm:^5.43.1":
+  version: 5.43.1
+  resolution: "terser@npm:5.43.1"
   dependencies:
     "@jridgewell/source-map": "npm:^0.3.3"
-    acorn: "npm:^8.8.2"
+    acorn: "npm:^8.14.0"
     commander: "npm:^2.20.0"
     source-map-support: "npm:~0.5.20"
   bin:
     terser: bin/terser
-  checksum: 10/da441c9e0e630d26ca74d7f9659cc78f4afb698cebdb93cb5142565ba3f625bdf9a7b4f4bd94dabd5a2344732fde850d607e6f7eed04275754578d531f917382
+  checksum: 10/c0a0fd62319e0ce66e800f57ae12ef4ca45f12e9422dac160b866f0d890d01f8b547c96de2557b8443d96953db36be5d900e8006436ef9f628dbd38082e8fe5d
   languageName: node
   linkType: hard
 

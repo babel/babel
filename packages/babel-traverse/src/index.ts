@@ -18,6 +18,7 @@ export { default as NodePath } from "./path/index.ts";
 export { default as Scope } from "./scope/index.ts";
 export { default as Hub } from "./hub.ts";
 export type { HubInterface } from "./hub.ts";
+export type { VisitWrapper } from "./visitors.ts";
 
 export { visitors };
 

@@ -27,7 +27,7 @@ export type FileResult = {
   options: { [key: string]: any };
   ast: t.File | null;
   code: string | null;
-  map: GeneratorResult["map"] | null;
+  map: GeneratorResult["map"];
   sourceType: "script" | "module";
   externalDependencies: Set<string>;
 };
