@@ -6,10 +6,7 @@ import {
 import type {
   ConfigFileSearch,
   BabelrcSearch,
-  IgnoreList,
-  IgnoreItem,
-  PluginList,
-  PluginItem,
+  MatchItem,
   PluginTarget,
   ConfigApplicableTest,
   SourceMapsOption,
@@ -21,6 +18,7 @@ import type {
   RootMode,
   TargetsListOrObject,
   AssumptionName,
+  PluginItemInternal,
 } from "./options.ts";
 
 import { assumptionsNames } from "./options.ts";
@@ -234,7 +232,7 @@ export function assertObject(
 export function assertArray<T>(
   loc: GeneralPath,
   value: Array<T> | undefined | null,
-): ReadonlyArray<T> | undefined | null {
+): Array<T> | undefined | null {
   if (value != null && !Array.isArray(value)) {
     throw new Error(`${msg(loc)} must be an array, or undefined`);
   }
@@ -244,13 +242,13 @@ export function assertArray<T>(
 export function assertIgnoreList(
   loc: OptionPath,
   value: unknown[] | undefined,
-): IgnoreList | void {
+): MatchItem[] | void {
   const arr = assertArray(loc, value);
   arr?.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
   // @ts-expect-error todo(flow->ts)
   return arr;
 }
-function assertIgnoreItem(loc: GeneralPath, value: unknown): IgnoreItem {
+function assertIgnoreItem(loc: GeneralPath, value: unknown): MatchItem {
   if (
     typeof value !== "string" &&
     typeof value !== "function" &&
@@ -262,7 +260,7 @@ function assertIgnoreItem(loc: GeneralPath, value: unknown): IgnoreItem {
       )} must be an array of string/Function/RegExp values, or undefined`,
     );
   }
-  return value as IgnoreItem;
+  return value as MatchItem;
 }
 
 export function assertConfigApplicableTest(
@@ -345,16 +343,19 @@ export function assertBabelrcSearch(
 export function assertPluginList(
   loc: OptionPath,
   value: unknown[] | null | undefined,
-): PluginList | void {
+): PluginItemInternal[] {
   const arr = assertArray(loc, value);
   if (arr) {
     // Loop instead of using `.map` in order to preserve object identity
     // for plugin array for use during config chain processing.
     arr.forEach((item, i) => assertPluginItem(access(loc, i), item));
   }
-  return arr as any;
+  return arr as PluginItemInternal[];
 }
-function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
+function assertPluginItem(
+  loc: GeneralPath,
+  value: unknown,
+): PluginItemInternal {
   if (Array.isArray(value)) {
     if (value.length === 0) {
       throw new Error(`${msg(loc)} must include an object`);
@@ -390,7 +391,7 @@ function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
     assertPluginTarget(loc, value);
   }
 
-  return value as PluginItem;
+  return value as PluginItemInternal;
 }
 function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   if (
@@ -400,7 +401,7 @@ function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   ) {
     throw new Error(`${msg(loc)} must be a string, object, function`);
   }
-  return value;
+  return value as PluginTarget;
 }
 
 export function assertTargets(

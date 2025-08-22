@@ -9,24 +9,24 @@ export type {
 
 import type {
   InputOptions,
-  NormalizedOptions,
   PluginTarget,
+  ValidatedOptions,
 } from "./validation/options.ts";
 export type { ConfigAPI } from "./helpers/config-api.ts";
 import type {
   PluginAPI as basePluginAPI,
   PresetAPI as basePresetAPI,
 } from "./helpers/config-api.ts";
-export type { PluginObject } from "./validation/plugins.ts";
-type PluginAPI = basePluginAPI & typeof import("..");
-type PresetAPI = basePresetAPI & typeof import("..");
-export type { PluginAPI, PresetAPI };
 // todo: may need to refine PresetObject to be a subset of ValidatedOptions
 export type {
   CallerMetadata,
   NormalizedOptions,
   ValidatedOptions as PresetObject,
 } from "./validation/options.ts";
+export type { PluginObject } from "./validation/plugins.ts";
+type PluginAPI = basePluginAPI & typeof import("..");
+type PresetAPI = basePresetAPI & typeof import("..");
+export type { PluginAPI, PresetAPI };
 
 import loadFullConfig from "./full.ts";
 import {
@@ -78,7 +78,7 @@ export function loadPartialConfig(
 
 function* loadOptionsImpl(
   opts: InputOptions,
-): Handler<NormalizedOptions | null> {
+): Handler<ValidatedOptions | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
@@ -96,14 +96,14 @@ export function loadOptionsSync(
 }
 export function loadOptions(
   opts: Parameters<typeof loadOptionsImpl>[0],
-  callback?: (err: Error, val: NormalizedOptions | null) => void,
+  callback?: (err: Error, val: ValidatedOptions | null) => void,
 ) {
   if (callback !== undefined) {
     beginHiddenCallStack(loadOptionsRunner.errback)(opts, callback);
   } else if (typeof opts === "function") {
     beginHiddenCallStack(loadOptionsRunner.errback)(
       undefined,
-      opts as (err: Error, val: NormalizedOptions | null) => void,
+      opts as (err: Error, val: ValidatedOptions | null) => void,
     );
   } else {
     if (process.env.BABEL_8_BREAKING) {
