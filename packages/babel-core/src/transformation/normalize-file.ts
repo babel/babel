@@ -4,7 +4,7 @@ import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
-import type { NormalizedOptions, PluginPasses } from "../config/index.ts";
+import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file.ts";
