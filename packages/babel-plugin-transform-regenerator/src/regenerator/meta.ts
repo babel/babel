@@ -1,19 +1,19 @@
 import assert from "node:assert";
-import { getTypes } from "./util.ts";
+import { types as t } from "@babel/core";
 
 const mMap = new WeakMap();
-function m(node: any) {
+function m(node: t.Node) {
   if (!mMap.has(node)) {
     mMap.set(node, {});
   }
   return mMap.get(node);
 }
 
-const hasOwn = Object.prototype.hasOwnProperty;
-
-function makePredicate(propertyName: any, knownTypes: any) {
-  function onlyChildren(node: any) {
-    const t = getTypes();
+function makePredicate(
+  propertyName: string,
+  knownTypes: Record<string, boolean>,
+) {
+  function onlyChildren(node: t.Node) {
     t.assertNode(node);
 
     // Assume no side effects until we find out otherwise.
@@ -35,7 +35,7 @@ function makePredicate(propertyName: any, knownTypes: any) {
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        const child = node[key];
+        const child = node[key as keyof typeof node];
         check(child);
       }
     }
@@ -43,19 +43,20 @@ function makePredicate(propertyName: any, knownTypes: any) {
     return result;
   }
 
-  function predicate(node: any) {
-    getTypes().assertNode(node);
+  function predicate(node: t.Node) {
+    t.assertNode(node);
 
     const meta = m(node);
-    if (hasOwn.call(meta, propertyName)) return meta[propertyName];
+    if (Object.hasOwn(meta, propertyName)) return meta[propertyName];
 
     // Certain types are "opaque," which means they have no side
     // effects or leaps and we don't care about their subexpressions.
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (hasOwn.call(opaqueTypes, node.type))
+    if (Object.hasOwn(opaqueTypes, node.type))
       return (meta[propertyName] = false);
 
-    if (hasOwn.call(knownTypes, node.type)) return (meta[propertyName] = true);
+    if (Object.hasOwn(knownTypes, node.type))
+      return (meta[propertyName] = true);
 
     return (meta[propertyName] = onlyChildren(node));
   }
@@ -93,7 +94,7 @@ const leapTypes = {
 
 // All leap types are also side effect types.
 for (const type in leapTypes) {
-  if (hasOwn.call(leapTypes, type)) {
+  if (Object.hasOwn(leapTypes, type)) {
     sideEffectTypes[type as keyof typeof sideEffectTypes] =
       leapTypes[type as keyof typeof leapTypes];
   }

@@ -42,14 +42,17 @@ function getDeclError(node: t.Node) {
   );
 }
 
-const catchParamVisitor: Visitor = {
-  Identifier: function (path, state: any) {
+const catchParamVisitor: Visitor<{
+  getSafeParam: () => t.Identifier;
+  catchParamName: string;
+}> = {
+  Identifier: function (path, state) {
     if (path.node.name === state.catchParamName && util.isReference(path)) {
-      util.replaceWithOrRemove(path, state.getSafeParam());
+      path.replaceWith(state.getSafeParam());
     }
   },
 
-  Scope: function (path, state: any) {
+  Scope: function (path, state) {
     if (path.scope.hasOwnBinding(state.catchParamName)) {
       // Don't descend into nested scopes that shadow the catch
       // parameter with their own declarations.
@@ -716,7 +719,7 @@ export class Emitter {
         }
 
         const discriminant = path.get("discriminant");
-        util.replaceWithOrRemove(discriminant, condition);
+        discriminant.replaceWith(condition);
         self.jump(self.explodeExpression(discriminant));
 
         self.leapManager.withEntry(new leap.SwitchEntry(after), function () {
@@ -1475,7 +1478,7 @@ export class Emitter {
     });
 
     const hasLeapingChildren = explodingChildren.some(child =>
-      meta.containsLeap(child),
+      meta.containsLeap(child.node),
     );
 
     for (let i = 0; i < explodingChildren.length; i++) {
