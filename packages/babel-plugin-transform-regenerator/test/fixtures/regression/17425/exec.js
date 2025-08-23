@@ -7,4 +7,4 @@ const replay = async () => {
   throw new Error('@kira throw');
 };
 
-return expect(() => replay()).rejects.toThrow('@kira throw');
+return expect(replay()).rejects.toThrow('@kira throw');
