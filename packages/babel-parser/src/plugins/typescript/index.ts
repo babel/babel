@@ -26,6 +26,9 @@ import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 import { OptionFlags } from "../../options.ts";
+import { isIdentifierChar, isIdentifierStart } from "../../util/identifier.ts";
+
+const keywordAndTSRelationalOperator = /in(?:stanceof)?|as|satisfies/y;
 
 type TsModifier =
   | "readonly"
@@ -1941,7 +1944,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParseTypeAliasDeclaration(
-      node: N.TsTypeAliasDeclaration,
+      node: Undone<N.TsTypeAliasDeclaration>,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
       this.checkIdentifier(node.id, BindingFlag.TYPE_TS_TYPE);
@@ -2142,7 +2145,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParseAmbientExternalModuleDeclaration(
-      node: N.TsModuleDeclaration,
+      node: Undone<N.TsModuleDeclaration>,
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
         node.kind = "global";
@@ -2267,7 +2270,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               /* isHangingDeclaration */ false,
             );
           case tt._class:
-            // While this is also set by tsParseExpressionStatement, we need to set it
+            // While this is also set by tsTryParseDeclare, we need to set it
             // before parsing the class declaration to know how to register it in the scope.
             node.declare = true;
             return this.parseClass(
@@ -2350,49 +2353,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    tsParseExpressionStatement(
-      node: Undone<N.TsModuleDeclaration>,
-      expr: N.Identifier,
-      decorators: N.Decorator[] | null,
-    ): N.Declaration | undefined {
-      switch (expr.name) {
-        case "declare": {
-          const declaration = this.tsTryParseDeclare(node);
-          if (declaration) {
-            declaration.declare = true;
-          }
-          return declaration;
-        }
-        case "global":
-          // `global { }` (with no `declare`) may appear inside an ambient module declaration.
-          // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
-          if (this.match(tt.braceL)) {
-            this.scope.enter(ScopeFlag.TS_MODULE);
-            this.prodParam.enter(ParamKind.PARAM);
-            const mod = node;
-            mod.kind = "global";
-            if (!process.env.BABEL_8_BREAKING) {
-              node.global = true;
-            }
-            mod.id = expr;
-            mod.body = this.tsParseModuleBlock();
-            this.scope.exit();
-            this.prodParam.exit();
-            return this.finishNode(mod, "TSModuleDeclaration");
-          }
-          break;
-
-        default:
-          return this.tsParseDeclaration(
-            node,
-            expr.name,
-            /* next */ false,
-            decorators,
-          );
-      }
-    }
-
-    // Common to tsTryParseDeclare, tsTryParseExportDeclaration, and tsParseExpressionStatement.
+    // Common to tsTryParseDeclare and tsTryParseExportDeclaration.
     tsParseDeclaration(
       node: any,
       value: string,
@@ -3165,21 +3126,93 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       flags: ParseStatementFlag,
       decorators?: N.Decorator[] | null,
     ): N.Statement {
-      if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
-        const node = this.startNode<N.TsEnumDeclaration>();
-        this.expect(tt._const); // eat 'const'
-        return this.tsParseEnumDeclaration(node, { const: true });
-      }
-
-      if (this.isContextual(tt._enum)) {
-        return this.tsParseEnumDeclaration(
-          this.startNode<N.TsEnumDeclaration>(),
-        );
-      }
-
-      if (this.isContextual(tt._interface)) {
-        const result = this.tsParseInterfaceDeclaration(this.startNode());
-        if (result) return result;
+      if (!this.state.containsEsc) {
+        switch (this.state.type) {
+          case tt._const: {
+            if (this.isLookaheadContextual("enum")) {
+              const node = this.startNode<N.TsEnumDeclaration>();
+              this.expect(tt._const); // eat 'const'
+              return this.tsParseEnumDeclaration(node, { const: true });
+            }
+            break;
+          }
+          case tt._abstract:
+          case tt._declare: {
+            if (
+              this.nextTokenIsIdentifierAndNotTSRelationalOperatorOnSameLine()
+            ) {
+              const token = this.state.type;
+              const node = this.startNode<N.ExpressionStatement>();
+              this.next(); // eat 'abstract' or 'declare'
+              const declaration =
+                token === tt._declare
+                  ? this.tsTryParseDeclare(node)
+                  : this.tsParseAbstractDeclaration(node, decorators);
+              if (declaration) {
+                if (token === tt._declare) {
+                  declaration.declare = true;
+                }
+                return declaration;
+              } else {
+                // The production is invalid. Construct AST for error recovery.
+                node.expression = this.createIdentifier(
+                  this.startNodeAt<N.Identifier>(node.loc.start),
+                  token === tt._declare ? "declare" : "abstract",
+                );
+                this.semicolon(false);
+                return this.finishNode(node, "ExpressionStatement");
+              }
+            }
+            break;
+          }
+          case tt._enum:
+            return this.tsParseEnumDeclaration(
+              this.startNode<N.TsEnumDeclaration>(),
+            );
+          case tt._global: {
+            const nextCh = this.lookaheadCharCode();
+            if (nextCh === charCodes.leftCurlyBrace) {
+              const node = this.startNode<N.TsModuleDeclaration>();
+              return this.tsParseAmbientExternalModuleDeclaration(node);
+            }
+            break;
+          }
+          case tt._interface: {
+            const result = this.tsParseInterfaceDeclaration(this.startNode());
+            if (result) return result;
+            break;
+          }
+          case tt._module: {
+            if (this.nextTokenIsIdentifierOrStringLiteralOnSameLine()) {
+              const node = this.startNode<N.TsModuleDeclaration>();
+              this.next(); // eat 'module'
+              return this.tsParseDeclaration(node, "module", false, decorators);
+            }
+            break;
+          }
+          case tt._namespace: {
+            if (this.nextTokenIsIdentifierOnSameLine()) {
+              const node = this.startNode<N.TsModuleDeclaration>();
+              this.next(); // eat 'namespace'
+              return this.tsParseDeclaration(
+                node,
+                "namespace",
+                false,
+                decorators,
+              );
+            }
+            break;
+          }
+          case tt._type: {
+            if (this.nextTokenIsIdentifierOnSameLine()) {
+              const node = this.startNode<N.TsTypeAliasDeclaration>();
+              this.next(); // eat 'type'
+              const result = this.tsParseTypeAliasDeclaration(node);
+              if (result) return result;
+            }
+            break;
+          }
+        }
       }
 
       return super.parseStatementContent(flags, decorators);
@@ -3320,24 +3353,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if ((methodOrProp as any).declare && this.match(tt.parenL)) {
         this.raise(TSErrors.ClassMethodHasDeclare, methodOrProp);
       }
-    }
-
-    // Note: The reason we do this in `parseExpressionStatement` and not `parseStatement`
-    // is that e.g. `type()` is valid JS, so we must try parsing that first.
-    // If it's really a type, we will parse `type` as the statement, and can correct it here
-    // by parsing the rest.
-    // @ts-expect-error plugin overrides interfaces
-    parseExpressionStatement(
-      node: Undone<N.ExpressionStatement>,
-      expr: N.Expression,
-      decorators: N.Decorator[] | null,
-    ): N.Statement {
-      const decl =
-        expr.type === "Identifier"
-          ? // @ts-expect-error refine typings
-            this.tsParseExpressionStatement(node, expr, decorators)
-          : undefined;
-      return decl || super.parseExpressionStatement(node, expr, decorators);
     }
 
     // export type
@@ -4247,6 +4262,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return this.tsParseInterfaceDeclaration(
             node as N.TsInterfaceDeclaration,
           );
+        } else {
+          return null;
         }
       } else {
         this.unexpected(null, tt._class);
@@ -4589,6 +4606,46 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.out ??= false;
           return;
       }
+    }
+
+    chStartsBindingIdentifierAndNotRelationalOperator(ch: number, pos: number) {
+      if (isIdentifierStart(ch)) {
+        keywordAndTSRelationalOperator.lastIndex = pos;
+        if (keywordAndTSRelationalOperator.test(this.input)) {
+          // We have seen as/in/instanceof/satisfies so far, now check if the identifier
+          // ends here
+          const endCh = this.codePointAtPos(
+            keywordAndTSRelationalOperator.lastIndex,
+          );
+          if (!isIdentifierChar(endCh) && endCh !== charCodes.backslash) {
+            return false;
+          }
+        }
+        return true;
+      } else if (ch === charCodes.backslash) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    nextTokenIsIdentifierAndNotTSRelationalOperatorOnSameLine(): boolean {
+      const next = this.nextTokenInLineStart();
+      const nextCh = this.codePointAtPos(next);
+      return this.chStartsBindingIdentifierAndNotRelationalOperator(
+        nextCh,
+        next,
+      );
+    }
+
+    nextTokenIsIdentifierOrStringLiteralOnSameLine(): boolean {
+      const next = this.nextTokenInLineStart();
+      const nextCh = this.codePointAtPos(next);
+      return (
+        this.chStartsBindingIdentifier(nextCh, next) ||
+        nextCh === charCodes.quotationMark ||
+        nextCh === charCodes.apostrophe
+      );
     }
   };
 

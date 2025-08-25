@@ -1,0 +1,2 @@
+module as {}
+module satisfies {}
