@@ -2736,7 +2736,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               N.CallExpression | N.OptionalCallExpression
             >(startLoc);
             node.callee = base;
-            // @ts-expect-error (won't be any undefined arguments)
             node.arguments = this.parseCallExpressionArguments();
 
             // Handles invalid case: `f<T>(a:b)`
