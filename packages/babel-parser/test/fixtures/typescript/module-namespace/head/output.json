@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":59}},
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":13,"index":73}},
   "program": {
     "type": "Program",
-    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":59}},
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":13,"index":73}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -86,6 +86,25 @@
         "body": {
           "type": "TSModuleBlock",
           "start":57,"end":59,"loc":{"start":{"line":4,"column":11,"index":57},"end":{"line":4,"column":13,"index":59}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":60,"end":73,"loc":{"start":{"line":5,"column":0,"index":60},"end":{"line":5,"column":13,"index":73}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":67,"end":70,"loc":{"start":{"line":5,"column":7,"index":67},"end":{"line":5,"column":10,"index":70}},
+          "extra": {
+            "rawValue": "n",
+            "raw": "'n'"
+          },
+          "value": "n"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":71,"end":73,"loc":{"start":{"line":5,"column":11,"index":71},"end":{"line":5,"column":13,"index":73}},
           "body": []
         }
       }

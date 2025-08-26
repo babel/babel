@@ -3206,8 +3206,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (this.nextTokenIsIdentifierOnSameLine()) {
               const node = this.startNode<N.TsTypeAliasDeclaration>();
               this.next(); // eat 'type'
-              const result = this.tsParseTypeAliasDeclaration(node);
-              if (result) return result;
+              return this.tsParseTypeAliasDeclaration(node);
             }
             break;
           }
@@ -4238,7 +4237,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseAbstractDeclaration(
       node: any,
       decorators: N.Decorator[] | null,
-    ): N.ClassDeclaration | N.TsInterfaceDeclaration | undefined | null {
+    ): N.ClassDeclaration | N.TsInterfaceDeclaration | null {
       if (this.match(tt._class)) {
         node.abstract = true;
         return this.maybeTakeDecorators(
