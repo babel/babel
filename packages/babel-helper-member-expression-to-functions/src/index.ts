@@ -606,7 +606,7 @@ export interface HandlerState<State = object> extends Handler<State> {
 // called when the member is a self-referential update.
 export default function memberExpressionToFunctions<CustomState extends object>(
   path: NodePath,
-  visitor: Visitor<HandlerState<CustomState>>,
+  visitor: Visitor<HandlerState<CustomState> & CustomState>,
   state: Handler<CustomState> & CustomState,
 ) {
   path.traverse(visitor, {

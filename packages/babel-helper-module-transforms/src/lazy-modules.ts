@@ -29,7 +29,7 @@ export function toGetWrapperPayload(lazy: Lazy) {
 }
 
 export function wrapReference(
-  ref: t.Identifier,
+  ref: t.Expression,
   payload: unknown,
 ): t.Expression | null {
   if (payload === "lazy") return t.callExpression(ref, []);

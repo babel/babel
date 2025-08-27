@@ -403,14 +403,10 @@ function buildStaticPrivateFieldAccess<N extends t.Expression>(
   return t.memberExpression(expr, t.identifier("_"));
 }
 
-function autoInherits<
-  Member extends { node: t.Node },
-  Result extends t.Node,
-  Fn extends (member: Member, ...args: unknown[]) => Result,
->(fn: Fn): Fn {
-  return function (this: ThisParameterType<Fn>, member) {
+function autoInherits<Fn extends Function>(fn: Fn): Fn {
+  return function (this: any, member: any) {
     return t.inherits(fn.apply(this, arguments as any), member.node);
-  } as Fn;
+  } as unknown as Fn;
 }
 
 const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =

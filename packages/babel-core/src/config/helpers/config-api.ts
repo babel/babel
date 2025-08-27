@@ -29,9 +29,7 @@ type CallerFactory = {
   <T extends SimpleType>(
     extractor: (callerMetadata: CallerMetadata | undefined) => T,
   ): T;
-  (
-    extractor: (callerMetadata: CallerMetadata | undefined) => unknown,
-  ): SimpleType;
+  (extractor: (callerMetadata: CallerMetadata | undefined) => any): SimpleType;
 };
 type TargetsFunction = () => Targets;
 type AssumptionFunction = (name: AssumptionName) => boolean | undefined;

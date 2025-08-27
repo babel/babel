@@ -418,7 +418,7 @@ defineType("TSTemplateLiteralType", {
               } quasis but got ${node.quasis.length}`,
             );
           }
-        } as Validator,
+        } satisfies Validator<t.TSTemplateLiteralType>,
       ),
     },
   },
@@ -443,26 +443,29 @@ defineType("TSLiteralType", {
           "BigIntLiteral",
           "TemplateLiteral",
         );
-        function validator(parent: any, key: string, node: any) {
-          // type A = -1 | 1;
-          if (is("UnaryExpression", node)) {
-            // check operator first
-            unaryOperator(node, "operator", node.operator);
-            unaryExpression(node, "argument", node.argument);
-          } else {
-            // type A = 'foo' | 'bar' | false | 1;
-            literal(parent, key, node);
-          }
-        }
-
-        validator.oneOfNodeTypes = [
-          "NumericLiteral",
-          "StringLiteral",
-          "BooleanLiteral",
-          "BigIntLiteral",
-          "TemplateLiteral",
-          "UnaryExpression",
-        ];
+        const validator = Object.assign(
+          function (parent, key, node) {
+            // type A = -1 | 1;
+            if (is("UnaryExpression", node)) {
+              // check operator first
+              unaryOperator(node, "operator", node.operator);
+              unaryExpression(node, "argument", node.argument);
+            } else {
+              // type A = 'foo' | 'bar' | false | 1;
+              literal(parent, key, node);
+            }
+          } satisfies Validator<t.TSLiteralType>,
+          {
+            oneOfNodeTypes: [
+              "NumericLiteral",
+              "StringLiteral",
+              "BooleanLiteral",
+              "BigIntLiteral",
+              "TemplateLiteral",
+              "UnaryExpression",
+            ],
+          },
+        );
 
         return validator;
       })(),
@@ -471,6 +474,7 @@ defineType("TSLiteralType", {
 });
 
 if (process.env.BABEL_8_BREAKING) {
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 8
   defineType("TSClassImplements", {
     aliases: ["TSType"],
     visitor: ["expression", "typeArguments"],
@@ -479,6 +483,7 @@ if (process.env.BABEL_8_BREAKING) {
       typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
     },
   });
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 8
   defineType("TSInterfaceHeritage", {
     aliases: ["TSType"],
     visitor: ["expression", "typeArguments"],
@@ -488,6 +493,7 @@ if (process.env.BABEL_8_BREAKING) {
     },
   });
 } else {
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 7
   defineType("TSExpressionWithTypeArguments", {
     aliases: ["TSType"],
     visitor: ["expression", "typeParameters"],

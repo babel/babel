@@ -62,12 +62,14 @@ function applyEnsureOrdering(
         ]
       : path.get("properties")
   ).reduce(
-    (
-      acc: t.Decorator[],
-      prop: NodePath<
-        t.ObjectMember | t.ClassExpression | ClassDecoratableElement
-      >,
-    ) => acc.concat(prop.node.decorators || []),
+    (acc: t.Decorator[], prop) =>
+      acc.concat(
+        (
+          prop as NodePath<
+            t.ObjectMember | t.ClassExpression | ClassDecoratableElement
+          >
+        ).node.decorators || [],
+      ),
     [],
   );
 

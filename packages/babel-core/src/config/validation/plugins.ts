@@ -89,11 +89,7 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   ) => void;
   pre?: (this: S, file: File) => void | Promise<void>;
   post?: (this: S, file: File) => void | Promise<void>;
-  inherits?: (
-    api: PluginAPI,
-    options: unknown,
-    dirname: string,
-  ) => PluginObject;
+  inherits?: (api: PluginAPI, options: any, dirname: string) => PluginObject;
   visitor?: Visitor<S>;
   parserOverride?: (
     ...args: [...Parameters<typeof parse>, typeof parse]

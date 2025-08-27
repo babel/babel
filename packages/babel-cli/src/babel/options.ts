@@ -365,8 +365,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: "false" | "0" | ""): false;
-function booleanify(val: "true" | "1"): true;
 function booleanify(val: string): boolean | string {
   if (val === "true" || val === "1") {
     return true;

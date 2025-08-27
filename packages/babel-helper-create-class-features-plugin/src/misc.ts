@@ -20,7 +20,10 @@ const referenceVisitor: Visitor<{ scope: Scope }> = {
     path.skip();
   },
 
-  ReferencedIdentifier(path: NodePath<t.Identifier>, { scope }) {
+  ReferencedIdentifier(
+    path: NodePath<t.Identifier | t.JSXIdentifier>,
+    { scope },
+  ) {
     if (scope.hasOwnBinding(path.node.name)) {
       scope.rename(path.node.name);
       path.skip();
@@ -52,6 +55,7 @@ function handleClassTDZ(
 }
 
 const classFieldDefinitionEvaluationTDZVisitor: Visitor<HandleClassTDZState> = {
+  // @ts-expect-error ignore JSXIdentifier
   ReferencedIdentifier: handleClassTDZ,
   "TSTypeAnnotation|TypeAnnotation"(path) {
     path.skip();

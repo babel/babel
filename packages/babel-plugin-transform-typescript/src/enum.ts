@@ -168,9 +168,12 @@ type EnumSelfReferenceVisitorState = {
 };
 
 function ReferencedIdentifier(
-  expr: NodePath<t.Identifier>,
+  expr: NodePath<t.Identifier | t.JSXIdentifier>,
   state: EnumSelfReferenceVisitorState,
 ) {
+  // Make TS happy
+  if (expr.isJSXIdentifier()) return;
+
   const { seen, path, t } = state;
   const name = expr.node.name;
 

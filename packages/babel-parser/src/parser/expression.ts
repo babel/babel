@@ -2208,7 +2208,7 @@ export default abstract class ExpressionParser extends LValParser {
           isGenerator = true;
           this.raise(Errors.AccessorIsGenerator, this.state.curPosition(), {
             kind: keyName,
-          });
+          } as const);
           this.next();
         }
         this.parsePropertyName(prop);

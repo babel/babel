@@ -37,16 +37,18 @@ export const getVisitor = (): Visitor<PluginPass> => ({
     ).unwrapFunctionEnvironment();
   },
   Function: {
-    exit(
-      path: NodePath<Exclude<t.Function, t.ArrowFunctionExpression>>,
-      state,
-    ) {
+    exit(path, state) {
+      // Make TS happy
+      if (path.isArrowFunctionExpression()) return;
+
       let node = path.node;
 
       if (!shouldRegenerate(node, state)) return;
 
       // if this is an ObjectMethod, we need to convert it to an ObjectProperty
-      path = replaceShorthandObjectMethod(path) as any;
+      path = replaceShorthandObjectMethod(path) as NodePath<
+        Exclude<t.Function, t.ArrowFunctionExpression>
+      >;
       node = path.node;
 
       const contextId = path.scope.generateUidIdentifier("context");

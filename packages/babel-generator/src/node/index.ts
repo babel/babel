@@ -29,25 +29,28 @@ export const enum TokenContext {
   forInOrInitHeadAccumulatePassThroughMask = 0x80,
 }
 
-type NodeHandler<R> = (
-  node: t.Node,
+type NodeHandler<R, N extends t.Node | t.Aliases[keyof t.Aliases]> = (
+  node: N,
   // todo:
   // node: K extends keyof typeof t
   //   ? Extract<typeof t[K], { type: "string" }>
   //   : t.Node,
-  parent: t.Node,
+  parent: t.ParentMaps[N["type"]],
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R;
 
 export type NodeHandlers<R> = {
-  [K in string]?: NodeHandler<R>;
+  [K in t.Node["type"] | keyof t.Aliases]?: NodeHandler<
+    R,
+    Extract<t.Node, { type: K }>
+  >;
 };
 
-function expandAliases<R>(obj: NodeHandlers<R>) {
-  const map = new Map<string, NodeHandler<R>>();
+function expandAliases<R, N extends t.Node>(obj: NodeHandlers<R>) {
+  const map = new Map<string, NodeHandler<R, N>>();
 
-  function add(type: string, func: NodeHandler<R>) {
+  function add(type: string, func: NodeHandler<R, N>) {
     const fn = map.get(type);
     map.set(
       type,
@@ -62,14 +65,14 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     );
   }
 
-  for (const type of Object.keys(obj)) {
+  for (const type of Object.keys(obj) as (keyof typeof obj)[]) {
     const aliases = FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
       for (const alias of aliases) {
-        add(alias, obj[type]);
+        add(alias, obj[type] as NodeHandler<R, N>);
       }
     } else {
-      add(type, obj[type]);
+      add(type, obj[type] as NodeHandler<R, N>);
     }
   }
 
