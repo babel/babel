@@ -2334,7 +2334,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (tokenIsIdentifier(startType)) {
               return this.tsParseDeclaration(
                 node,
-                this.state.value,
+                this.state.type,
                 /* next */ true,
                 /* decorators */ null,
               );
@@ -2347,7 +2347,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsTryParseExportDeclaration(): N.Declaration | undefined {
       return this.tsParseDeclaration(
         this.startNode(),
-        this.state.value,
+        this.state.type,
         /* next */ true,
         /* decorators */ null,
       );
@@ -2356,13 +2356,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Common to tsTryParseDeclare and tsTryParseExportDeclaration.
     tsParseDeclaration(
       node: any,
-      value: string,
+      type: number,
       next: boolean,
       decorators: N.Decorator[] | null,
     ) {
       // no declaration apart from enum can be followed by a line break.
-      switch (value) {
-        case "abstract":
+      switch (type) {
+        case tt._abstract:
           if (
             this.tsCheckLineTerminator(next) &&
             (this.match(tt._class) || tokenIsIdentifier(this.state.type))
@@ -2371,7 +2371,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           break;
 
-        case "module":
+        case tt._module:
           if (this.tsCheckLineTerminator(next)) {
             if (this.match(tt.string)) {
               return this.tsParseAmbientExternalModuleDeclaration(node);
@@ -2382,7 +2382,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           break;
 
-        case "namespace":
+        case tt._namespace:
           if (
             this.tsCheckLineTerminator(next) &&
             tokenIsIdentifier(this.state.type)
@@ -2392,7 +2392,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           break;
 
-        case "type":
+        case tt._type:
           if (
             this.tsCheckLineTerminator(next) &&
             tokenIsIdentifier(this.state.type)
@@ -3185,7 +3185,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (this.nextTokenIsIdentifierOrStringLiteralOnSameLine()) {
               const node = this.startNode<N.TsModuleDeclaration>();
               this.next(); // eat 'module'
-              return this.tsParseDeclaration(node, "module", false, decorators);
+              return this.tsParseDeclaration(
+                node,
+                tt._module,
+                false,
+                decorators,
+              );
             }
             break;
           }
@@ -3195,7 +3200,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               this.next(); // eat 'namespace'
               return this.tsParseDeclaration(
                 node,
-                "namespace",
+                tt._namespace,
                 false,
                 decorators,
               );
