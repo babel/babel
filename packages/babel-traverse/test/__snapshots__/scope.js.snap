@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`scope duplicate bindings catch const 1`] = `"Duplicate declaration \\"e\\""`;
 
