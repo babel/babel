@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`checkDuplicateNodes should throw on duplicate AST nodes within different parent 1`] = `
 "Do not reuse nodes. Use \`t.cloneNode\` (or \`t.clone\`/\`t.cloneDeep\` if using babel@6) to copy them.
