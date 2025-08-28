@@ -8,7 +8,11 @@ import type { ConfigContext, FileHandling } from "./config-chain.ts";
 import { getEnv } from "./helpers/environment.ts";
 import { validate } from "./validation/options.ts";
 
-import type { RootMode, InputOptions } from "./validation/options.ts";
+import type {
+  RootMode,
+  InputOptions,
+  NormalizedOptions,
+} from "./validation/options.ts";
 
 import {
   findConfigUpwards,
@@ -52,11 +56,11 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
 
 export type PrivPartialConfig = {
   showIgnoredFiles?: boolean;
-  options: InputOptions;
+  options: NormalizedOptions;
   context: ConfigContext;
-  babelrc: ConfigFile | void;
-  config: ConfigFile | void;
-  ignore: IgnoreFile | void;
+  babelrc: ConfigFile | undefined;
+  config: ConfigFile | undefined;
+  ignore: IgnoreFile | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 };
@@ -113,7 +117,7 @@ export default function* loadPrivatePartialConfig(
     mergeOptions(merged as any, opts);
   });
 
-  const options: InputOptions = {
+  const options: NormalizedOptions = {
     ...merged,
     targets: resolveTargets(merged, absoluteRootDir),
 
@@ -198,18 +202,18 @@ class PartialConfig {
    * These properties are public, so any changes to them should be considered
    * a breaking change to Babel's API.
    */
-  options: InputOptions;
-  babelrc: string | void;
-  babelignore: string | void;
-  config: string | void;
+  options: NormalizedOptions;
+  babelrc: string | undefined;
+  babelignore: string | undefined;
+  config: string | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 
   constructor(
-    options: InputOptions,
-    babelrc: string | void,
-    ignore: string | void,
-    config: string | void,
+    options: NormalizedOptions,
+    babelrc: string | undefined,
+    ignore: string | undefined,
+    config: string | undefined,
     fileHandling: FileHandling,
     files: Set<string>,
   ) {
