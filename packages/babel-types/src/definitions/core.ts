@@ -912,6 +912,7 @@ defineType("ObjectProperty", {
             );
         const computed = assertNodeType("Expression");
 
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST allows DecimalLiteral
         const validator: ValidatorOneOfNodeTypes = Object.assign(
           function (node: t.ObjectProperty, key, val) {
             const validator = node.computed ? computed : normal;
