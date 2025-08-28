@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`builders experimental classProperty should validate 1`] = `
+exports[`builders core classProperty should validate 1`] = `
 Object {
   "computed": false,
   "decorators": null,
@@ -18,7 +18,7 @@ Object {
 }
 `;
 
-exports[`builders experimental classProperty should validate 2`] = `
+exports[`builders core classProperty should validate 2`] = `
 Object {
   "computed": false,
   "decorators": null,
