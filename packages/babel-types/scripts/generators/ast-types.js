@@ -1,19 +1,37 @@
+// @ts-check
+
 import * as t from "../../lib/index.js";
+import {
+  isNullable,
+  hasDefault,
+  sortFieldNames,
+} from "../utils/fieldHelpers.js";
 import stringifyValidator, {
   isValueType,
 } from "../utils/stringifyValidator.js";
 
 const parentMaps = new Map([["File", new Set(["null"])]]);
 
+/**
+ * Register parent maps for a given parent and an array of nodes.
+ * @param {string} parent
+ * @param {Array<string>} nodes
+ */
 function registerParentMaps(parent, nodes) {
   for (const node of nodes) {
     if (!parentMaps.has(node)) {
       parentMaps.set(node, new Set());
     }
+    // @ts-expect-error parentMaps.get(node) is always defined at this moment
     parentMaps.get(node).add(parent);
   }
 }
 
+/**
+ * Get the node types from a validator.
+ * @param {import("../../src/definitions/utils.ts").Validator | undefined} validator
+ * @returns {Array<string>}
+ */
 function getNodeTypesFromValidator(validator) {
   if (validator === undefined) return [];
   if (validator.each) {
@@ -96,11 +114,14 @@ export type Node = ${t.TYPES.filter(k => !t.FLIPPED_ALIAS_KEYS[k])
   for (const type in t.NODE_FIELDS) {
     const fields = t.NODE_FIELDS[type];
     const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
+    /**
+     * @type {string[]}
+     */
     const struct = [];
 
     fieldNames.forEach(fieldName => {
       /**
-       * @type {import("../../src/definitions/utils").FieldOptions}
+       * @type {import("../../src/index.ts").FieldOptions}
        */
       const field = fields[fieldName];
       // Future / annoying TODO:
@@ -175,29 +196,11 @@ export interface ${deprecatedAlias[type]} extends BaseNode {
 
   const parentMapsKeys = [...parentMaps.keys()].sort();
   for (const type of parentMapsKeys) {
+    // @ts-expect-error parentMaps.get(type) is always defined
     const deduplicated = [...parentMaps.get(type)].sort();
     code += `  ${type}: ${deduplicated.join(" | ")};\n`;
   }
   code += "}\n\n";
 
   return code;
-}
-
-function hasDefault(field) {
-  return field.default != null;
-}
-
-function isNullable(field) {
-  return field.optional || hasDefault(field);
-}
-
-function sortFieldNames(fields, type) {
-  return fields.sort((fieldA, fieldB) => {
-    const indexA = t.BUILDER_KEYS[type].indexOf(fieldA);
-    const indexB = t.BUILDER_KEYS[type].indexOf(fieldB);
-    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
-  });
 }

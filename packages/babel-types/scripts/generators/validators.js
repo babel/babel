@@ -1,3 +1,5 @@
+// @ts-check
+
 import {
   DEPRECATED_ALIASES,
   DEPRECATED_KEYS,

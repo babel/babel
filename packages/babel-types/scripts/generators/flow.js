@@ -1,3 +1,5 @@
+// @ts-check
+
 import * as t from "../../lib/index.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
 import toFunctionName from "../utils/toFunctionName.js";
@@ -65,6 +67,9 @@ for (const type in t.NODE_FIELDS) {
       return indexA - indexB;
     })
     .forEach(fieldName => {
+      /**
+       * @type {import("../../src/index.ts").FieldOptions}
+       */
       const field = fields[fieldName];
 
       let suffix = "";

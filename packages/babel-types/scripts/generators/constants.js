@@ -1,3 +1,4 @@
+// @ts-check
 import { DEPRECATED_ALIASES, FLIPPED_ALIAS_KEYS } from "../../lib/index.js";
 
 export default function generateConstants() {

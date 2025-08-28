@@ -1,3 +1,4 @@
+// @ts-check
 import util from "node:util";
 import stringifyValidator from "../utils/stringifyValidator.js";
 import toFunctionName from "../utils/toFunctionName.js";
@@ -49,6 +50,10 @@ const customTypes = {
     value: "a non-negative finite `number`",
   },
 };
+/**
+ * @typedef {[version: string, description: string]} HistoryItem
+ * @type {Record<string, HistoryItem[]>}
+ */
 const APIHistory = {
   ClassProperty: [["v7.6.0", "Supports `static`"]],
   ImportDeclaration: [["v7.20.0", "Supports `module`"]],
@@ -147,6 +152,11 @@ const aliasDeprecationNotes = {
     "Check out [PR #15266](https://github.com/babel/babel/pull/15266#issue-1492649843) for migration notes.",
 };
 
+/**
+ * Format the history items for display.
+ * @param {Array<HistoryItem>} historyItems
+ * @returns {string[]}
+ */
 function formatHistory(historyItems) {
   const lines = historyItems.map(
     item => "| `" + item[0] + "` | " + item[1] + " |"
@@ -161,12 +171,22 @@ function formatHistory(historyItems) {
     "</details>",
   ];
 }
+/**
+ * Print the API history for a specific node type.
+ * @param {string} key
+ * @param {string[]} readme collection of readme lines
+ */
 function printAPIHistory(key, readme) {
   if (APIHistory[key]) {
     readme.push("");
     readme.push(...formatHistory(APIHistory[key]));
   }
 }
+/**
+ * Print the node fields for a specific node type.
+ * @param {string} key
+ * @param {string[]} readme collection of readme lines
+ */
 function printNodeFields(key, readme) {
   if (Object.keys(t.NODE_FIELDS[key]).length > 0) {
     readme.push("");
@@ -181,9 +201,13 @@ function printNodeFields(key, readme) {
         return indexA - indexB;
       })
       .forEach(function (field) {
-        const defaultValue = t.NODE_FIELDS[key][field].default;
+        /**
+         * @type {import("../../src/index.js").FieldOptions}
+         */
+        const fieldDefinition = t.NODE_FIELDS[key][field];
+        const defaultValue = fieldDefinition.default;
         const fieldDescription = ["`" + field + "`"];
-        const validator = t.NODE_FIELDS[key][field].validate;
+        const validator = fieldDefinition.validate;
         if (customTypes[key] && customTypes[key][field]) {
           fieldDescription.push(`: ${customTypes[key][field]}`);
         } else if (validator) {
@@ -215,7 +239,11 @@ function printNodeFields(key, readme) {
       });
   }
 }
-
+/**
+ * Print the alias keys for a specific node type.
+ * @param {string} key
+ * @param {string[]} readme collection of readme lines
+ */
 function printAliasKeys(key, readme) {
   if (t.ALIAS_KEYS[key] && t.ALIAS_KEYS[key].length) {
     readme.push("");
@@ -260,6 +288,9 @@ Object.keys(t.BUILDER_KEYS)
   });
 
 function generateMapAliasToNodeTypes() {
+  /**
+   * @type {Map<string, string[]>}
+   */
   const result = new Map();
   for (const nodeType of Object.keys(t.ALIAS_KEYS)) {
     const aliases = t.ALIAS_KEYS[nodeType];
@@ -268,11 +299,16 @@ function generateMapAliasToNodeTypes() {
       if (!result.has(alias)) {
         result.set(alias, []);
       }
+      /**
+       * @type {string[]}
+       */
+      // @ts-expect-error nodeTypes is always defined because of the check above
       const nodeTypes = result.get(alias);
       nodeTypes.push(nodeType);
     }
   }
   for (const deprecated of Object.keys(t.DEPRECATED_ALIASES)) {
+    // @ts-expect-error result.get(...) is always defined because of the loop above
     result.set(deprecated, result.get(t.DEPRECATED_ALIASES[deprecated]));
   }
   return result;
@@ -282,6 +318,10 @@ const mapAliasToNodeTypes = generateMapAliasToNodeTypes();
 readme.push("### Aliases");
 readme.push("");
 for (const alias of [...mapAliasToNodeTypes.keys()].sort()) {
+  /**
+   * @type {string[]}
+   */
+  // @ts-expect-error nodeTypes are always defined because of the loop above
   const nodeTypes = mapAliasToNodeTypes.get(alias);
   nodeTypes.sort();
   if (!(alias in aliasDescriptions)) {

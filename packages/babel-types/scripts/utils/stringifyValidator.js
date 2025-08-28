@@ -1,3 +1,10 @@
+// @ts-check
+/**
+ * Stringify a validator to its corresponding TypeScript type.
+ * @param {import("../../src/definitions/utils.ts").Validator | undefined} validator
+ * @param {string} nodePrefix
+ * @returns {string}
+ */
 export default function stringifyValidator(validator, nodePrefix) {
   if (validator === undefined) {
     return "any";

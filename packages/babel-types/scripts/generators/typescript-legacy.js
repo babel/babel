@@ -1,3 +1,5 @@
+// @ts-check
+
 import * as t from "../../lib/index.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
 import toFunctionName from "../utils/toFunctionName.js";
@@ -61,6 +63,9 @@ for (const type in t.NODE_FIELDS) {
   const args = [];
 
   fieldNames.forEach(fieldName => {
+    /**
+     * @type {import("../../src/index.ts").FieldOptions}
+     */
     const field = fields[fieldName];
     // Future / annoying TODO:
     // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:

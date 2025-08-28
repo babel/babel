@@ -1,3 +1,4 @@
+// @ts-check
 import {
   DEPRECATED_KEYS,
   DEPRECATED_ALIASES,
@@ -6,6 +7,11 @@ import {
   VISITOR_KEYS,
 } from "../../lib/index.js";
 
+/**
+ * Generate an assert helper for a given type.
+ * @param {string} type Node type or alias type
+ * @returns string
+ */
 function addAssertHelper(type) {
   const result =
     NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
