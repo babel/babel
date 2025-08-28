@@ -132,9 +132,9 @@ const loadPresetOverridesEnvDescriptors = makeWeakCacheSync(
 
 export type FileHandling = "transpile" | "ignored" | "unsupported";
 export type RootConfigChain = ConfigChain & {
-  babelrc: ConfigFile | void;
-  config: ConfigFile | void;
-  ignore: IgnoreFile | void;
+  babelrc: ConfigFile | undefined;
+  config: ConfigFile | undefined;
+  ignore: IgnoreFile | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 };
