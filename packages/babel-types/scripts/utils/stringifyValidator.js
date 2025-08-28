@@ -15,10 +15,18 @@ export default function stringifyValidator(validator, nodePrefix) {
   }
 
   if ("chainOf" in validator) {
-    const ret = stringifyValidator(validator.chainOf[1], nodePrefix);
-    return Array.isArray(ret) && ret.length === 1 && ret[0] === "any"
-      ? stringifyValidator(validator.chainOf[0], nodePrefix)
-      : ret;
+    let ret = "any";
+    // Iterate from the end to the beginning to find the most narrow type.
+    // For example, we usually place `assertEach(assertNodeOrValueType("null", "PatternLike"))`
+    // after `assertValueType("array")`
+    for (let i = validator.chainOf.length - 1; i >= 0; i--) {
+      const chainValidator = validator.chainOf[i];
+      ret = stringifyValidator(chainValidator, nodePrefix);
+      if (ret !== "any") {
+        break;
+      }
+    }
+    return ret;
   }
 
   if ("oneOf" in validator) {
