@@ -110,7 +110,7 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const merged: InputOptions = {
+  const merged = {
     assumptions: {},
   };
   configChain.options.forEach(opts => {
@@ -176,7 +176,6 @@ export function* loadPartialConfig(
   }
 
   (options.plugins || []).forEach(item => {
-    // @ts-expect-error todo(flow->ts): better type annotation for `item.value`
     if (item.value instanceof Plugin) {
       throw new Error(
         "Passing cached plugin instances is not supported in " +

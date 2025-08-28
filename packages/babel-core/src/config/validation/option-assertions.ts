@@ -18,7 +18,7 @@ import type {
   RootMode,
   TargetsListOrObject,
   AssumptionName,
-  PluginItemInternal,
+  PluginItem,
 } from "./options.ts";
 
 import { assumptionsNames } from "./options.ts";
@@ -343,19 +343,16 @@ export function assertBabelrcSearch(
 export function assertPluginList(
   loc: OptionPath,
   value: unknown[] | null | undefined,
-): PluginItemInternal[] {
+): PluginItem[] {
   const arr = assertArray(loc, value);
   if (arr) {
     // Loop instead of using `.map` in order to preserve object identity
     // for plugin array for use during config chain processing.
     arr.forEach((item, i) => assertPluginItem(access(loc, i), item));
   }
-  return arr as PluginItemInternal[];
+  return arr as PluginItem[];
 }
-function assertPluginItem(
-  loc: GeneralPath,
-  value: unknown,
-): PluginItemInternal {
+function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
   if (Array.isArray(value)) {
     if (value.length === 0) {
       throw new Error(`${msg(loc)} must include an object`);
@@ -391,7 +388,7 @@ function assertPluginItem(
     assertPluginTarget(loc, value);
   }
 
-  return value as PluginItemInternal;
+  return value as PluginItem;
 }
 function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   if (

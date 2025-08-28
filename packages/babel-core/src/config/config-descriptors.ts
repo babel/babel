@@ -13,7 +13,7 @@ import {
 import type { CacheConfigurator } from "./caching.ts";
 
 import type {
-  PluginItemInternal,
+  PluginItem,
   InputOptions,
   PresetItem,
 } from "./validation/options.ts";
@@ -146,7 +146,7 @@ export function createUncachedDescriptors(
 
 const PRESET_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPresetDescriptors = makeWeakCacheSync(
-  (items: PluginItemInternal[], cache: CacheConfigurator<string>) => {
+  (items: PluginItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
@@ -171,7 +171,7 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
 
 const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPluginDescriptors = makeWeakCacheSync(
-  (items: PluginItemInternal[], cache: CacheConfigurator<string>) => {
+  (items: PluginItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
@@ -235,7 +235,7 @@ function loadCachedDescriptor<API>(
 }
 
 function* createPresetDescriptors(
-  items: PluginItemInternal[],
+  items: PluginItem[],
   dirname: string,
   alias: string,
   passPerPreset: boolean,
@@ -250,7 +250,7 @@ function* createPresetDescriptors(
 }
 
 function* createPluginDescriptors(
-  items: PluginItemInternal[],
+  items: PluginItem[],
   dirname: string,
   alias: string,
 ): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
@@ -259,7 +259,7 @@ function* createPluginDescriptors(
 
 function* createDescriptors<API>(
   type: "plugin" | "preset",
-  items: PluginItemInternal[] | PresetItem[],
+  items: PluginItem[] | PresetItem[],
   dirname: string,
   alias: string,
   ownPass?: boolean,
@@ -283,7 +283,7 @@ function* createDescriptors<API>(
  * Given a plugin/preset item, resolve it into a standard format.
  */
 export function* createDescriptor<API>(
-  pair: PluginItemInternal | PresetItem,
+  pair: PluginItem | PresetItem,
   dirname: string,
   {
     type,

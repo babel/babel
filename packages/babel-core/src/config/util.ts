@@ -1,7 +1,7 @@
-import type { InputOptions, ValidatedOptions } from "./validation/options.ts";
+import type { InputOptions, ResolvedOptions } from "./validation/options.ts";
 
 export function mergeOptions(
-  target: InputOptions | ValidatedOptions,
+  target: InputOptions | ResolvedOptions,
   source: InputOptions,
 ): void {
   for (const k of Object.keys(source)) {
