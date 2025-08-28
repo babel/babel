@@ -39,48 +39,39 @@ import ConfigError from "../../errors/config-error.ts";
 import type { PluginObject } from "./plugins.ts";
 import type Plugin from "../plugin.ts";
 import type { PresetAPI } from "../index.ts";
-import type { PluginItem } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
-  cwd: assertString as Validator<ValidatedOptions["cwd"]>,
-  root: assertString as Validator<ValidatedOptions["root"]>,
-  rootMode: assertRootMode as Validator<ValidatedOptions["rootMode"]>,
-  configFile: assertConfigFileSearch as Validator<
-    ValidatedOptions["configFile"]
-  >,
+  cwd: assertString as Validator<InputOptions["cwd"]>,
+  root: assertString as Validator<InputOptions["root"]>,
+  rootMode: assertRootMode as Validator<InputOptions["rootMode"]>,
+  configFile: assertConfigFileSearch as Validator<InputOptions["configFile"]>,
 
-  caller: assertCallerMetadata as Validator<ValidatedOptions["caller"]>,
-  filename: assertString as Validator<ValidatedOptions["filename"]>,
-  filenameRelative: assertString as Validator<
-    ValidatedOptions["filenameRelative"]
-  >,
-  code: assertBoolean as Validator<ValidatedOptions["code"]>,
-  ast: assertBoolean as Validator<ValidatedOptions["ast"]>,
+  caller: assertCallerMetadata as Validator<InputOptions["caller"]>,
+  filename: assertString as Validator<InputOptions["filename"]>,
+  filenameRelative: assertString as Validator<InputOptions["filenameRelative"]>,
+  code: assertBoolean as Validator<InputOptions["code"]>,
+  ast: assertBoolean as Validator<InputOptions["ast"]>,
 
-  cloneInputAst: assertBoolean as Validator<ValidatedOptions["cloneInputAst"]>,
+  cloneInputAst: assertBoolean as Validator<InputOptions["cloneInputAst"]>,
 
-  envName: assertString as Validator<ValidatedOptions["envName"]>,
+  envName: assertString as Validator<InputOptions["envName"]>,
 };
 
 const BABELRC_VALIDATORS: ValidatorSet = {
-  babelrc: assertBoolean as Validator<ValidatedOptions["babelrc"]>,
-  babelrcRoots: assertBabelrcSearch as Validator<
-    ValidatedOptions["babelrcRoots"]
-  >,
+  babelrc: assertBoolean as Validator<InputOptions["babelrc"]>,
+  babelrcRoots: assertBabelrcSearch as Validator<InputOptions["babelrcRoots"]>,
 };
 
 const NONPRESET_VALIDATORS: ValidatorSet = {
-  extends: assertString as Validator<ValidatedOptions["extends"]>,
-  ignore: assertIgnoreList as Validator<ValidatedOptions["ignore"]>,
-  only: assertIgnoreList as Validator<ValidatedOptions["only"]>,
+  extends: assertString as Validator<InputOptions["extends"]>,
+  ignore: assertIgnoreList as Validator<InputOptions["ignore"]>,
+  only: assertIgnoreList as Validator<InputOptions["only"]>,
 
-  targets: assertTargets as Validator<ValidatedOptions["targets"]>,
+  targets: assertTargets as Validator<InputOptions["targets"]>,
   browserslistConfigFile: assertConfigFileSearch as Validator<
-    ValidatedOptions["browserslistConfigFile"]
+    InputOptions["browserslistConfigFile"]
   >,
-  browserslistEnv: assertString as Validator<
-    ValidatedOptions["browserslistEnv"]
-  >,
+  browserslistEnv: assertString as Validator<InputOptions["browserslistEnv"]>,
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -88,7 +79,7 @@ const COMMON_VALIDATORS: ValidatorSet = {
   // We may want a boolean-only version to be a common option, with the
   // object only allowed as a root config argument.
   inputSourceMap: assertInputSourceMap as Validator<
-    ValidatedOptions["inputSourceMap"]
+    InputOptions["inputSourceMap"]
   >,
   presets: assertPluginList as Validator<InputOptions["presets"]>,
   plugins: assertPluginList as Validator<InputOptions["plugins"]>,
@@ -167,7 +158,7 @@ type Assumptions = {
 
 export type AssumptionName = keyof Assumptions;
 
-export type BaseOptions = {
+export type InputOptions = {
   cwd?: string;
   filename?: string;
   filenameRelative?: string;
@@ -192,6 +183,8 @@ export type BaseOptions = {
   test?: ConfigApplicableTest;
   include?: ConfigApplicableTest;
   exclude?: ConfigApplicableTest;
+  presets?: PluginItem[];
+  plugins?: PluginItem[];
   passPerPreset?: boolean;
   assumptions?: Assumptions;
   // browserslists-related options
@@ -221,19 +214,31 @@ export type BaseOptions = {
   generatorOpts?: GeneratorOptions;
 };
 
-export type InputOptions = BaseOptions & {
-  presets?: PluginItemInternal[];
-  plugins?: PluginItemInternal[];
+export type NormalizedOptions = Omit<InputOptions, "presets" | "plugins"> & {
+  assumptions: Assumptions;
+  targets: Targets;
+  cloneInputAst: boolean;
+  babelrc: false;
+  configFile: false;
+  browserslistConfigFile: false;
+  passPerPreset: false;
+  envName: string;
+  cwd: string;
+  root: string;
+  rootMode: "root";
+  filename: string | undefined;
+  presets: ConfigItem<PresetAPI>[];
+  plugins: ConfigItem<PluginAPI>[];
 };
 
-export type ValidatedOptions = BaseOptions & {
-  presets?: { plugins: Plugin[] }[];
-  plugins?: Plugin[];
+export type ResolvedOptions = Omit<
+  NormalizedOptions,
+  "presets" | "plugins" | "passPerPreset"
+> & {
+  presets: { plugins: Plugin[] }[];
+  plugins: Plugin[];
+  passPerPreset: boolean;
 };
-
-export type NormalizedOptions = {
-  readonly targets: Targets;
-} & Omit<InputOptions, "targets">;
 
 export type CallerMetadata = {
   // If 'caller' is specified, require that the name is given for debugging
@@ -258,7 +263,11 @@ export type MatchItem =
 export type PluginTarget =
   | string
   | ((api: PluginAPI, options?: object, dirname?: string) => PluginObject);
-export type PluginItemInternal = ConfigItem<PluginAPI> | PluginItem;
+export type PluginItem =
+  | ConfigItem<PluginAPI>
+  | PluginTarget
+  | [PluginTarget, object]
+  | [PluginTarget, object, string];
 
 export type PresetTarget =
   | string

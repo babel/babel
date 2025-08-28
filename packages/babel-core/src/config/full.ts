@@ -25,13 +25,13 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
-import type { InputOptions, PluginItemInternal } from "./validation/options.ts";
+import type { InputOptions, PluginItem } from "./validation/options.ts";
 import { validatePluginObject } from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
 import loadPrivatePartialConfig from "./partial.ts";
-import type { ValidatedOptions } from "./validation/options.ts";
+import type { ResolvedOptions } from "./validation/options.ts";
 
 import type * as Context from "./cache-contexts.ts";
 import ConfigError from "../errors/config-error.ts";
@@ -47,7 +47,7 @@ type LoadedDescriptor = {
 export type { InputOptions } from "./validation/options.ts";
 
 export type ResolvedConfig = {
-  options: ValidatedOptions;
+  options: ResolvedOptions;
   passes: PluginPasses;
   externalDependencies: ReadonlyDeepArray<string>;
 };
@@ -69,7 +69,7 @@ export default gensync(function* loadFullConfig(
     return null;
   }
 
-  const optionDefaults: ValidatedOptions = {};
+  const optionDefaults = {};
 
   const { plugins, presets } = options;
 
@@ -82,7 +82,7 @@ export default gensync(function* loadFullConfig(
     targets: options.targets,
   };
 
-  const toDescriptor = (item: PluginItemInternal) => {
+  const toDescriptor = (item: PluginItem) => {
     const desc = getItemDescriptor(item);
     if (!desc) {
       throw new Error("Assertion failure - must be config item");
@@ -169,7 +169,7 @@ export default gensync(function* loadFullConfig(
 
   if (ignored) return null;
 
-  const opts = optionDefaults;
+  const opts = optionDefaults as ResolvedOptions;
   mergeOptions(opts, options);
 
   const pluginContext: Context.FullPlugin = {

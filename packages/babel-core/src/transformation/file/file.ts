@@ -11,7 +11,7 @@ import type { NormalizedFile } from "../normalize-file.ts";
 
 // @ts-expect-error This file is `any`
 import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
-import type { ValidatedOptions } from "../../config/validation/options.ts";
+import type { ResolvedOptions } from "../../config/validation/options.ts";
 import type { SourceMapConverter } from "convert-source-map";
 
 const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
@@ -26,7 +26,7 @@ const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
 
 export default class File {
   _map: Map<unknown, unknown> = new Map();
-  opts: ValidatedOptions;
+  opts: ResolvedOptions;
   declarations: Record<string, t.Identifier> = {};
   path: NodePath<t.Program>;
   ast: t.File;
@@ -45,7 +45,7 @@ export default class File {
   };
 
   constructor(
-    options: ValidatedOptions,
+    options: ResolvedOptions,
     { code, ast, inputMap }: NormalizedFile,
   ) {
     this.opts = options;

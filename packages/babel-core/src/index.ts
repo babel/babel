@@ -51,14 +51,10 @@ export {
 import { loadOptionsSync } from "./config/index.ts";
 import type {
   ConfigApplicableTest,
-  PluginTarget,
+  PluginItem,
 } from "./config/validation/options.ts";
 export { loadOptionsSync };
-
-export type PluginItem =
-  | PluginTarget
-  | [PluginTarget, object]
-  | [PluginTarget, object, string];
+export type { PluginItem };
 
 export type PresetObject = {
   overrides?: PresetObject[];

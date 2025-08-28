@@ -10,7 +10,6 @@ import type {
   CallerMetadata,
   MatchItem,
   InputOptions,
-  NormalizedOptions,
 } from "./validation/options.ts";
 import pathPatternToRegex from "./pattern-to-regex.ts";
 import { ConfigPrinter, ChainFormatter } from "./printer.ts";
@@ -736,7 +735,7 @@ function emptyChain(): ConfigChain {
   };
 }
 
-function normalizeOptions(opts: InputOptions): NormalizedOptions {
+function normalizeOptions(opts: InputOptions): InputOptions {
   const options = {
     ...opts,
   };
@@ -758,7 +757,7 @@ function normalizeOptions(opts: InputOptions): NormalizedOptions {
     options.sourceMaps = options.sourceMap;
     delete options.sourceMap;
   }
-  return options as NormalizedOptions;
+  return options;
 }
 
 function dedupDescriptors<API>(

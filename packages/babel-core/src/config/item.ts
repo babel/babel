@@ -1,5 +1,5 @@
 import type { Handler } from "gensync";
-import type { PluginItemInternal, PresetItem } from "./validation/options.ts";
+import type { PluginItem, PresetItem } from "./validation/options.ts";
 
 import path from "node:path";
 import { createDescriptor } from "./config-descriptors.ts";
@@ -19,7 +19,7 @@ export function createItemFromDescriptor<API>(
  * and re-evaluating the plugin/preset function.
  */
 export function* createConfigItem<API>(
-  value: PluginItemInternal | PresetItem,
+  value: PluginItem | PresetItem,
   {
     dirname = ".",
     type,
