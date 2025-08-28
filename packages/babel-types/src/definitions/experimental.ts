@@ -3,6 +3,7 @@ import defineType, {
   assertNodeType,
   assertValueType,
   validateArrayOfType,
+  type ValidatorOneOfNodeTypes,
 } from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
@@ -15,13 +16,13 @@ defineType("BindExpression", {
       ? {
           object: {
             validate: Object.assign(() => {}, {
-              oneOfNodeTypes: ["Expression"],
-            }),
+              oneOfNodeTypes: ["Expression"] as const,
+            }) satisfies ValidatorOneOfNodeTypes,
           },
           callee: {
             validate: Object.assign(() => {}, {
-              oneOfNodeTypes: ["Expression"],
-            }),
+              oneOfNodeTypes: ["Expression"] as const,
+            }) satisfies ValidatorOneOfNodeTypes,
           },
         }
       : {

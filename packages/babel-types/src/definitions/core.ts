@@ -23,11 +23,14 @@ import {
   chain,
   assertOneOf,
   validateOptional,
-  type Validator,
   arrayOf,
   arrayOfType,
   validateArrayOfType,
   validateType,
+  type Validator,
+  type ValidatorImpl,
+  type ValidatorOneOfNodeTypes,
+  type ValidatorType,
 } from "./utils.ts";
 
 const defineType = defineAliasedType("Standardized");
@@ -64,7 +67,7 @@ defineType("AssignmentExpression", {
                     ? pattern
                     : identifier;
                   validator(node, key, val);
-                } as Validator;
+                } satisfies ValidatorImpl;
               })(),
               { oneOf: ASSIGNMENT_OPERATORS },
             ),
@@ -105,13 +108,13 @@ defineType("BinaryExpression", {
         const expression = assertNodeType("Expression");
         const inOp = assertNodeType("Expression", "PrivateName");
 
-        const validator: Validator = Object.assign(
+        const validator: ValidatorOneOfNodeTypes = Object.assign(
           function (node: t.BinaryExpression, key, val) {
             const validator = node.operator === "in" ? inOp : expression;
             validator(node, key, val);
-          } as Validator,
+          } satisfies ValidatorImpl,
           // todo(ts): can be discriminated union by `operator` property
-          { oneOfNodeTypes: ["Expression", "PrivateName"] },
+          { oneOfNodeTypes: ["Expression", "PrivateName"] as const },
         );
         return validator;
       })(),
@@ -533,9 +536,9 @@ defineType("Identifier", {
                       `"${val}" is not a valid identifier name`,
                     );
                   }
-                } as Validator,
-                { type: "string" },
-              ),
+                } satisfies ValidatorImpl,
+                { type: "string" as const },
+              ) satisfies ValidatorType,
             )
           : assertValueType("string"),
     },
@@ -648,9 +651,9 @@ defineType("NumericLiteral", {
                 // console.warn(error);
               }
             }
-          } satisfies Validator,
-          { type: "number" },
-        ),
+          } satisfies ValidatorImpl,
+          { type: "number" as const },
+        ) satisfies ValidatorType,
       ),
     },
   },
@@ -692,9 +695,9 @@ defineType("RegExpLiteral", {
                       `"${invalid[0]}" is not a valid RegExp flag`,
                     );
                   }
-                } as Validator,
-                { type: "string" },
-              ),
+                } satisfies ValidatorImpl,
+                { type: "string" as const },
+              ) satisfies ValidatorType,
             )
           : assertValueType("string"),
       default: "",
@@ -739,7 +742,7 @@ defineType("MemberExpression", {
         const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
-        const validator: Validator = function (
+        const validator: ValidatorOneOfNodeTypes = function (
           node: t.MemberExpression,
           key,
           val,
@@ -747,7 +750,7 @@ defineType("MemberExpression", {
           const validator: Validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // @ts-expect-error todo(ts): can be discriminated union by `computed` property
+        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = ["Expression", "Identifier", "PrivateName"];
         return validator;
       })(),
@@ -836,11 +839,15 @@ defineType("ObjectMethod", {
         );
         const computed = assertNodeType("Expression");
 
-        const validator: Validator = function (node: t.ObjectMethod, key, val) {
+        const validator: ValidatorOneOfNodeTypes = function (
+          node: t.ObjectMethod,
+          key,
+          val,
+        ) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // @ts-expect-error todo(ts): can be discriminated union by `computed` property
+        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = [
           "Expression",
           "Identifier",
@@ -905,23 +912,23 @@ defineType("ObjectProperty", {
             );
         const computed = assertNodeType("Expression");
 
-        const validator: Validator = Object.assign(
+        const validator: ValidatorOneOfNodeTypes = Object.assign(
           function (node: t.ObjectProperty, key, val) {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
-          } as Validator,
+          } satisfies ValidatorImpl,
           {
             // todo(ts): can be discriminated union by `computed` property
             oneOfNodeTypes: process.env.BABEL_8_BREAKING
-              ? [
+              ? ([
                   "Expression",
                   "Identifier",
                   "StringLiteral",
                   "NumericLiteral",
                   "BigIntLiteral",
                   "PrivateName",
-                ]
-              : [
+                ] as const)
+              : ([
                   "Expression",
                   "Identifier",
                   "StringLiteral",
@@ -929,7 +936,7 @@ defineType("ObjectProperty", {
                   "BigIntLiteral",
                   "DecimalLiteral",
                   "PrivateName",
-                ],
+                ] as const),
           },
         );
         return validator;
@@ -960,9 +967,9 @@ defineType("ObjectProperty", {
                       "Property shorthand of ObjectProperty cannot be true if key is not an Identifier",
                     );
                   }
-                } as Validator,
-                { type: "boolean" },
-              ),
+                } satisfies ValidatorImpl,
+                { type: "boolean" as const },
+              ) satisfies ValidatorType,
             )
           : assertValueType("boolean"),
       default: false,
@@ -1036,7 +1043,7 @@ defineType("RestElement", {
   },
   validate:
     process.env.BABEL_8_BREAKING || process.env.BABEL_TYPES_8_BREAKING
-      ? function (parent: t.ArrayPattern | t.ObjectPattern, key) {
+      ? (function (parent: t.ArrayPattern | t.ObjectPattern, key) {
           const match = /(\w+)\[(\d+)\]/.exec(key.toString());
           if (!match) throw new Error("Internal Babel error: malformed key.");
 
@@ -1050,7 +1057,7 @@ defineType("RestElement", {
               `RestElement must be last element of ${listKey}`,
             );
           }
-        }
+        } satisfies ValidatorImpl)
       : undefined,
 });
 
@@ -1140,9 +1147,9 @@ defineType("TryStatement", {
                       "TryStatement expects either a handler or finalizer, or both",
                     );
                   }
-                } as Validator,
-                { oneOfNodeTypes: ["BlockStatement"] },
-              ),
+                } satisfies ValidatorImpl,
+                { oneOfNodeTypes: ["BlockStatement"] as const },
+              ) satisfies ValidatorOneOfNodeTypes,
             )
           : assertNodeType("BlockStatement"),
     },
@@ -1635,9 +1642,9 @@ defineType("ExportNamedDeclaration", {
                       "Cannot export a declaration from a source",
                     );
                   }
-                } as Validator,
-                { oneOfNodeTypes: ["Declaration"] },
-              ),
+                } satisfies ValidatorImpl,
+                { oneOfNodeTypes: ["Declaration"] as const },
+              ) satisfies ValidatorOneOfNodeTypes,
             )
           : assertNodeType("Declaration"),
     },
@@ -1663,15 +1670,15 @@ defineType("ExportNamedDeclaration", {
             function (node: t.ExportNamedDeclaration, key, val) {
               const validator = node.source ? sourced : sourceless;
               validator(node, key, val);
-            } as Validator,
+            } satisfies ValidatorImpl,
             {
               oneOfNodeTypes: [
                 "ExportSpecifier",
                 "ExportDefaultSpecifier",
                 "ExportNamespaceSpecifier",
-              ],
+              ] as const,
             },
-          );
+          ) satisfies ValidatorOneOfNodeTypes;
         })(),
       ),
     },
@@ -1741,7 +1748,7 @@ defineType("ForOfStatement", {
             } else {
               lval(node, key, val);
             }
-          } as Validator,
+          } satisfies ValidatorImpl,
           {
             oneOfNodeTypes: [
               "VariableDeclaration",
@@ -1753,9 +1760,9 @@ defineType("ForOfStatement", {
               "TSSatisfiesExpression",
               "TSTypeAssertion",
               "TSNonNullExpression",
-            ],
+            ] as const,
           },
-        );
+        ) satisfies ValidatorOneOfNodeTypes;
       })(),
     },
     right: {
@@ -1887,9 +1894,9 @@ defineType("MetaProperty", {
                   if (!is("Identifier", node.property, { name: property })) {
                     throw new TypeError("Unrecognised MetaProperty");
                   }
-                } as Validator,
-                { oneOfNodeTypes: ["Identifier"] },
-              ),
+                } satisfies ValidatorImpl,
+                { oneOfNodeTypes: ["Identifier"] as const },
+              ) satisfies ValidatorOneOfNodeTypes,
             )
           : assertNodeType("Identifier"),
     },
@@ -1932,10 +1939,14 @@ export const classMethodOrPropertyCommon = () => ({
         );
         const computed = assertNodeType("Expression");
 
-        return function (node: any, key: string, val: any) {
+        return function (
+          node: Extract<t.Node, { computed: boolean }>,
+          key,
+          val,
+        ) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
-        };
+        } satisfies ValidatorImpl;
       })(),
       assertNodeType(
         "Identifier",
@@ -2133,7 +2144,7 @@ defineType("TemplateLiteral", {
               } quasis but got ${node.quasis.length}`,
             );
           }
-        } as Validator,
+        } satisfies ValidatorImpl,
       ),
     },
   },
@@ -2156,9 +2167,9 @@ defineType("YieldExpression", {
                       "Property delegate of YieldExpression cannot be true if there is no argument",
                     );
                   }
-                } as Validator,
-                { type: "boolean" },
-              ),
+                } satisfies ValidatorImpl,
+                { type: "boolean" as const },
+              ) satisfies ValidatorType,
             )
           : assertValueType("boolean"),
       default: false,
@@ -2224,13 +2235,13 @@ defineType("OptionalMemberExpression", {
         const normal = assertNodeType("Identifier");
         const computed = assertNodeType("Expression");
 
-        const validator: Validator = Object.assign(
+        const validator: ValidatorOneOfNodeTypes = Object.assign(
           function (node: t.OptionalMemberExpression, key, val) {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
-          } as Validator,
+          } satisfies ValidatorImpl,
           // todo(ts): can be discriminated union by `computed` property
-          { oneOfNodeTypes: ["Expression", "Identifier"] },
+          { oneOfNodeTypes: ["Expression", "Identifier"] as const },
         );
         return validator;
       })(),
@@ -2365,10 +2376,14 @@ defineType("ClassAccessorProperty", {
           );
           const computed = assertNodeType("Expression");
 
-          return function (node: any, key: string, val: any) {
+          return function (
+            node: t.ClassAccessorProperty,
+            key: string,
+            val: any,
+          ) {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
-          };
+          } satisfies ValidatorImpl;
         })(),
         assertNodeType(
           "Identifier",

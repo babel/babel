@@ -34,17 +34,20 @@ function registerParentMaps(parent, nodes) {
  */
 function getNodeTypesFromValidator(validator) {
   if (validator === undefined) return [];
-  if (validator.each) {
+  if ("each" in validator) {
     return getNodeTypesFromValidator(validator.each);
   }
-  if (validator.chainOf) {
+  if ("chainOf" in validator) {
     return getNodeTypesFromValidator(validator.chainOf[1]);
   }
+  /**
+   * @type {Array<string>}
+   */
   let nodeTypes = [];
-  if (validator.oneOfNodeTypes) {
-    nodeTypes = validator.oneOfNodeTypes;
+  if ("oneOfNodeTypes" in validator) {
+    nodeTypes = validator.oneOfNodeTypes.slice();
   }
-  if (validator.oneOfNodeOrValueTypes) {
+  if ("oneOfNodeOrValueTypes" in validator) {
     nodeTypes = validator.oneOfNodeOrValueTypes.filter(
       type => !isValueType(type)
     );

@@ -10,26 +10,26 @@ export default function stringifyValidator(validator, nodePrefix) {
     return "any";
   }
 
-  if (validator.each) {
+  if ("each" in validator) {
     return `Array<${stringifyValidator(validator.each, nodePrefix)}>`;
   }
 
-  if (validator.chainOf) {
+  if ("chainOf" in validator) {
     const ret = stringifyValidator(validator.chainOf[1], nodePrefix);
     return Array.isArray(ret) && ret.length === 1 && ret[0] === "any"
       ? stringifyValidator(validator.chainOf[0], nodePrefix)
       : ret;
   }
 
-  if (validator.oneOf) {
-    return validator.oneOf.map(JSON.stringify).join(" | ");
+  if ("oneOf" in validator) {
+    return validator.oneOf.map(_ => JSON.stringify(_)).join(" | ");
   }
 
-  if (validator.oneOfNodeTypes) {
+  if ("oneOfNodeTypes" in validator) {
     return validator.oneOfNodeTypes.map(_ => nodePrefix + _).join(" | ");
   }
 
-  if (validator.oneOfNodeOrValueTypes) {
+  if ("oneOfNodeOrValueTypes" in validator) {
     return validator.oneOfNodeOrValueTypes
       .map(_ => {
         return isValueType(_) ? _ : nodePrefix + _;
@@ -37,11 +37,11 @@ export default function stringifyValidator(validator, nodePrefix) {
       .join(" | ");
   }
 
-  if (validator.type) {
+  if ("type" in validator) {
     return validator.type;
   }
 
-  if (validator.shapeOf) {
+  if ("shapeOf" in validator) {
     return (
       "{ " +
       Object.keys(validator.shapeOf)
@@ -53,7 +53,7 @@ export default function stringifyValidator(validator, nodePrefix) {
             return (
               shapeKey +
               (isOptional ? "?: " : ": ") +
-              stringifyValidator(propertyDefinition.validate)
+              stringifyValidator(propertyDefinition.validate, nodePrefix)
             );
           }
           return null;
@@ -64,7 +64,7 @@ export default function stringifyValidator(validator, nodePrefix) {
     );
   }
 
-  return ["any"];
+  return "any";
 }
 
 /**
