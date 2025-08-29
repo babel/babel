@@ -147,7 +147,7 @@ jobs:
         run: |
           mkdir build
           node ./scripts/set-module-type.js commonjs
-          node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
+          node ./packages/babel-types/scripts/generators/docs.ts > ./build/types.md
 
       - name: Upload babel-types docs
         continue-on-error: true

@@ -37,6 +37,8 @@ const dependencyAliases = new Map([
   ["regenerator-transform", "@babel/helper-plugin-utils"],
 ]);
 
+const packagesHaveScripts = new Set(["@babel/types"]);
+
 /**
  * Get TypeScript packages meta info in a subdirectory
  * @param {string} subRoot
@@ -259,7 +261,9 @@ for (let i = 0; i < topoSorted.length; i++) {
     chunk,
     allDeps,
     // @ts-expect-error root must not be undefined
-    fs.existsSync(new URL(root.relative + "/tsconfig.overrides.json", rootURL))
+    fs.existsSync(new URL(root.relative + "/tsconfig.overrides.json", rootURL)),
+    // @ts-expect-error root must not be undefined
+    packagesHaveScripts.has(root.name)
   );
 
   maybeWriteFile(
@@ -270,7 +274,7 @@ for (let i = 0; i < topoSorted.length; i++) {
   );
 }
 
-function buildTSConfig(pkgs, allDeps, hasOverrides) {
+function buildTSConfig(pkgs, allDeps, hasOverrides, hasScripts) {
   const paths = {};
   const referencePaths = new Set();
 
@@ -292,6 +296,7 @@ function buildTSConfig(pkgs, allDeps, hasOverrides) {
     include: [
       "./src/**/*.ts",
       "./src/**/*.cts",
+      hasScripts && "./scripts/**/*.ts",
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
     ].filter(Boolean),

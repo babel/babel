@@ -6,15 +6,18 @@ import {
   PLACEHOLDERS,
   PLACEHOLDERS_FLIPPED_ALIAS,
   VISITOR_KEYS,
+  // @ts-expect-error: Could not find type declarations for babel-types
 } from "../../lib/index.js";
 
-const has = Function.call.bind(Object.prototype.hasOwnProperty);
-
-function buildCases(arr) {
+function buildCases(arr: string[]) {
   return arr.map(key => `case ${JSON.stringify(key)}:`).join("") + "break;";
 }
 
-function addIsHelper(type, aliasKeys, deprecated) {
+function addIsHelper(
+  type: string,
+  aliasKeys?: string[],
+  deprecatedWarning?: string
+) {
   const targetType = JSON.stringify(type);
   let cases = "";
   if (aliasKeys) {
@@ -22,10 +25,10 @@ function addIsHelper(type, aliasKeys, deprecated) {
   }
 
   const placeholderTypes = [];
-  if (PLACEHOLDERS.includes(type) && has(FLIPPED_ALIAS_KEYS, type)) {
+  if (PLACEHOLDERS.includes(type) && Object.hasOwn(FLIPPED_ALIAS_KEYS, type)) {
     placeholderTypes.push(type);
   }
-  if (has(PLACEHOLDERS_FLIPPED_ALIAS, type)) {
+  if (Object.hasOwn(PLACEHOLDERS_FLIPPED_ALIAS, type)) {
     placeholderTypes.push(...PLACEHOLDERS_FLIPPED_ALIAS[type]);
   }
   if (placeholderTypes.length === 1) {
@@ -50,7 +53,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
       : "boolean";
 
   return `export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): ${result} {
-    ${deprecated || ""}
+    ${deprecatedWarning || ""}
     if (!node) return false;
 
     ${

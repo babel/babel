@@ -1,3 +1,4 @@
+// @ts-expect-error: Could not find type declarations for babel-types
 import { DEPRECATED_ALIASES, FLIPPED_ALIAS_KEYS } from "../../lib/index.js";
 
 export default function generateConstants() {

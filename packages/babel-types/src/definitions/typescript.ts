@@ -12,7 +12,8 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-  type Validator,
+  type ValidatorImpl,
+  type ValidatorOneOfNodeTypes,
 } from "./utils.ts";
 import {
   functionDeclarationCommon,
@@ -418,7 +419,7 @@ defineType("TSTemplateLiteralType", {
               } quasis but got ${node.quasis.length}`,
             );
           }
-        } as Validator,
+        } satisfies ValidatorImpl,
       ),
     },
   },
@@ -443,7 +444,11 @@ defineType("TSLiteralType", {
           "BigIntLiteral",
           "TemplateLiteral",
         );
-        function validator(parent: any, key: string, node: any) {
+        const validator: ValidatorOneOfNodeTypes = function validator(
+          parent: t.Node,
+          key: string,
+          node: t.Node,
+        ) {
           // type A = -1 | 1;
           if (is("UnaryExpression", node)) {
             // check operator first
@@ -453,7 +458,7 @@ defineType("TSLiteralType", {
             // type A = 'foo' | 'bar' | false | 1;
             literal(parent, key, node);
           }
-        }
+        };
 
         validator.oneOfNodeTypes = [
           "NumericLiteral",

@@ -41,17 +41,37 @@ type DefineTypeOpts = {
   validate?: Validator;
 };
 
-export type Validator = (
-  | { type: PrimitiveTypes }
-  | { each: Validator }
-  | { chainOf: Validator[] }
-  | { oneOf: any[] }
-  | { oneOfNodeTypes: NodeTypes[] }
-  | { oneOfNodeOrValueTypes: (NodeTypes | PrimitiveTypes)[] }
-  | { shapeOf: { [x: string]: FieldOptions } }
-  | object
-) &
-  ((node: t.Node, key: string | { toString(): string }, val: any) => void);
+export type ValidatorImpl = (
+  node?: t.Node,
+  key?: string | { toString(): string },
+  val?: any,
+) => void;
+
+export type ValidatorType = { type: PrimitiveTypes } & ValidatorImpl;
+export type ValidatorEach = { each: Validator } & ValidatorImpl;
+export type ValidatorChainOf = {
+  chainOf: readonly Validator[];
+} & ValidatorImpl;
+export type ValidatorOneOf = { oneOf: readonly any[] } & ValidatorImpl;
+export type ValidatorOneOfNodeTypes = {
+  oneOfNodeTypes: readonly NodeTypes[];
+} & ValidatorImpl;
+export type ValidatorOneOfNodeOrValueTypes = {
+  oneOfNodeOrValueTypes: readonly (NodeTypes | PrimitiveTypes)[];
+} & ValidatorImpl;
+export type ValidatorShapeOf = {
+  shapeOf: { [x: string]: FieldOptions };
+} & ValidatorImpl;
+
+export type Validator =
+  | ValidatorType
+  | ValidatorEach
+  | ValidatorChainOf
+  | ValidatorOneOf
+  | ValidatorOneOfNodeTypes
+  | ValidatorOneOfNodeOrValueTypes
+  | ValidatorShapeOf
+  | ValidatorImpl;
 
 export type FieldOptions = {
   default?: string | number | boolean | [];
