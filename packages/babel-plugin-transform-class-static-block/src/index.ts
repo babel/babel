@@ -1,11 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath, Scope, types as t } from "@babel/core";
+import type { NodePath, PluginObject, Scope, types as t } from "@babel/core";
 
 import {
   buildNamedEvaluationVisitor,
   enableFeature,
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
+import type { VisitNodeFunction } from "../../babel-traverse/src/types";
 
 /**
  * Generate a uid that is not in `denyList`
@@ -35,7 +36,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
   assertVersion(REQUIRED_VERSION("^7.12.0"));
 
   const rawNamedEvaluationVisitor = buildNamedEvaluationVisitor(
-    (path: NodePath) => {
+    (path: NodePath): path is NodePath<t.ClassExpression> => {
       if (!path.isClassExpression()) return false;
       for (let i = path.node.body.body.length - 1; i >= 0; i--) {
         const el = path.node.body.body[i];
@@ -142,7 +143,11 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
           );
           if (parentPath) {
             namedEvaluationVisitor[parentPath.type]?.enter.forEach(f =>
-              f.call(this, parentPath, this),
+              (f as VisitNodeFunction<object & PluginObject, t.Node>).call(
+                this,
+                parentPath,
+                this,
+              ),
             );
           }
         }

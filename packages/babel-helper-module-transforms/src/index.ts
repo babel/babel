@@ -200,7 +200,7 @@ export function buildNamespaceInitStatements(
   sourceMetadata: SourceModuleMetadata,
   constantReexports: boolean | void = false,
   wrapReference: (
-    ref: t.Identifier,
+    ref: t.Expression,
     payload: unknown,
   ) => t.Expression | null = Lazy.wrapReference,
 ) {

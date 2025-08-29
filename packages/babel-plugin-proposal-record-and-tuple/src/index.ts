@@ -36,7 +36,7 @@ type State = {
 type Cache = Map<string, string>;
 type ImportCache = WeakMap<t.Program, Cache>;
 
-export default declare<State>((api, options: Options) => {
+export default declare<State, Options>((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const polyfillModuleName = v.validateStringOption(

@@ -161,7 +161,6 @@ export default function simplifyAccess(
       scope: path.scope,
       bindingNames,
       seen: new WeakSet(),
-      // @ts-expect-error This is Babel7-only
       includeUpdateExpression: arguments[2] ?? true,
     });
   }

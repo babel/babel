@@ -376,7 +376,7 @@ type ToNodePath<T> =
 function get<T extends NodePath, K extends keyof T["node"]>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
+  context?: true | TraversalContext,
 ): T extends any
   ? T["node"][K] extends Array<(infer U extends t.Node) | null | undefined>
     ? Array<NodePath<U> | null | undefined>
@@ -388,7 +388,7 @@ function get<T extends NodePath, K extends keyof T["node"]>(
 function get<T extends NodePath, K extends string>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
+  context?: true | TraversalContext,
 ): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
 
 function get(

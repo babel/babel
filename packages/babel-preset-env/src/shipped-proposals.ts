@@ -36,9 +36,9 @@ const pluginSyntaxObject = process.env.BABEL_8_BREAKING
 
 type PluginSyntaxObjectKeys = keyof typeof pluginSyntaxObject;
 
-const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map<
-  [PluginSyntaxObjectKeys, string | null]
->(function (key: PluginSyntaxObjectKeys) {
+const pluginSyntaxEntries = (
+  Object.keys(pluginSyntaxObject) as Array<PluginSyntaxObjectKeys>
+).map<[PluginSyntaxObjectKeys, string | null]>(function (key) {
   return [key, pluginSyntaxObject[key]];
 });
 

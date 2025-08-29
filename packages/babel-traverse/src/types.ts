@@ -50,6 +50,10 @@ interface VisitorVirtualAliases<S> {
   Var?: VisitNode<S, VirtualTypeAliases["Var"]>;
 }
 
+type IsStrictFunctionTypesEnabled = ((a: 1 | 2) => void) extends (a: 1) => void
+  ? true
+  : false;
+
 // TODO: Do not export this? Or give it a better name?
 export interface VisitorBase<S>
   extends VisitNodeObject<S, t.Node>,
@@ -59,10 +63,13 @@ export interface VisitorBase<S>
   // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
   // too complex for TS. So we type it as a general visitor only if the key contains `|`
   // this is good enough for non-visitor traverse options e.g. `noScope`
-  [k: `${string}|${string}`]: VisitNode<S, t.Node>;
+  [k: `${string}|${string}`]: VisitNode<
+    S,
+    IsStrictFunctionTypesEnabled extends true ? any : t.Node
+  >;
 }
 
-export type Visitor<S = unknown> = VisitorBase<S> | ExplodedVisitor<S>;
+export type Visitor<S = any> = VisitorBase<S> | ExplodedVisitor<S>;
 
 export type VisitNode<S, P extends t.Node> =
   | VisitNodeFunction<S, P>

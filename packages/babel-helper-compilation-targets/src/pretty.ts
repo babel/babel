@@ -23,17 +23,20 @@ export function prettifyVersion(version: string) {
 }
 
 export function prettifyTargets(targets: Targets): Targets {
-  return Object.keys(targets).reduce((results, target: Target) => {
-    let value = targets[target];
+  return (Object.keys(targets) as Target[]).reduce(
+    (results, target: Target) => {
+      let value = targets[target];
 
-    const unreleasedLabel =
-      // @ts-expect-error undefined is strictly compared with string later
-      unreleasedLabels[target];
-    if (typeof value === "string" && unreleasedLabel !== value) {
-      value = prettifyVersion(value);
-    }
+      const unreleasedLabel =
+        // @ts-expect-error undefined is strictly compared with string later
+        unreleasedLabels[target];
+      if (typeof value === "string" && unreleasedLabel !== value) {
+        value = prettifyVersion(value);
+      }
 
-    results[target] = value;
-    return results;
-  }, {} as Targets);
+      results[target] = value;
+      return results;
+    },
+    {} as Targets,
+  );
 }

@@ -211,7 +211,9 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
  * Test if Property needs whitespace.
  */
 
+// @ts-expect-error FIXME: parent may be DeclareExportDeclaration
 nodes.ObjectProperty =
+  // @ts-expect-error FIXME: parent may be DeclareExportDeclaration
   nodes.ObjectTypeProperty =
   nodes.ObjectMethod =
     function (
@@ -223,6 +225,7 @@ nodes.ObjectProperty =
       }
     };
 
+// @ts-expect-error FIXME: parent may be DeclareExportDeclaration
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
   parent: t.ObjectTypeAnnotation,
@@ -232,6 +235,7 @@ nodes.ObjectTypeCallProperty = function (
   }
 };
 
+// @ts-expect-error FIXME: parent may be DeclareExportDeclaration
 nodes.ObjectTypeIndexer = function (
   node: t.ObjectTypeIndexer,
   parent: t.ObjectTypeAnnotation,
@@ -245,6 +249,7 @@ nodes.ObjectTypeIndexer = function (
   }
 };
 
+// @ts-expect-error FIXME: parent may be DeclareExportDeclaration
 nodes.ObjectTypeInternalSlot = function (
   node: t.ObjectTypeInternalSlot,
   parent: t.ObjectTypeAnnotation,
@@ -277,6 +282,6 @@ nodes.ObjectTypeInternalSlot = function (
     .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
       const ret = amounts ? WhitespaceFlag.before | WhitespaceFlag.after : 0;
-      nodes[type] = () => ret;
+      nodes[type as keyof typeof nodes] = () => ret;
     });
 });

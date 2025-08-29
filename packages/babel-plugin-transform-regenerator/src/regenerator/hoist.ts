@@ -20,21 +20,21 @@ export function hoist(
     // TODO assert.equal(vdec.kind, "var");
     const exprs: t.Expression[] = [];
 
-    vdec.declarations.forEach(function (
-      dec: t.VariableDeclarator & { id: t.Identifier },
-    ) {
+    vdec.declarations.forEach(function (dec: t.VariableDeclarator) {
+      const id = dec.id as t.Identifier;
+
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
-      vars[dec.id.name] = t.identifier(dec.id.name);
+      vars[id.name] = t.identifier(id.name);
 
       // Remove the binding, to avoid "duplicate declaration" errors when it will
       // be injected again.
-      scope.removeBinding(dec.id.name);
+      scope.removeBinding(id.name);
 
       if (dec.init) {
-        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
+        exprs.push(t.assignmentExpression("=", id, dec.init));
       } else if (includeIdentifiers) {
-        exprs.push(dec.id);
+        exprs.push(id);
       }
     });
 

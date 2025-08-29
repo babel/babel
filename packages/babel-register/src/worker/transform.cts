@@ -12,7 +12,7 @@ function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-type CacheItem = { value: { code: string; map: any }; mtime: number };
+type CacheItem = { value: { code: string; map: any } | null; mtime: number };
 
 let cache: Record<string, CacheItem>;
 let transformOpts: any;
@@ -104,9 +104,15 @@ if (!process.env.BABEL_8_BREAKING) {
   };
 }
 
-const id = (value: unknown) => value;
+const id = (value: CacheItem["value"]) => value;
 
-function cacheLookup(opts: unknown, filename: string) {
+function cacheLookup(
+  opts: unknown,
+  filename: string,
+): {
+  cached: CacheItem["value"] | null;
+  store: (value: CacheItem["value"]) => CacheItem["value"];
+} {
   if (!cache) return { cached: null, store: id };
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;

@@ -21,7 +21,7 @@ export default function validate(
 }
 
 export function validateInternal(
-  field: FieldOptions,
+  field: FieldOptions<t.Node>,
   node: t.Node | undefined | null,
   key: string,
   val: unknown,
@@ -39,11 +39,11 @@ export function validateInternal(
   }
 }
 
-export function validateField(
-  node: t.Node | undefined | null,
+export function validateField<T extends t.Node>(
+  node: T | undefined | null,
   key: string,
   val: unknown,
-  field: FieldOptions | undefined | null,
+  field: FieldOptions<T> | undefined | null,
 ): void {
   if (!field?.validate) return;
   if (field.optional && val == null) return;

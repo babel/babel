@@ -22,9 +22,9 @@ export type VisitWrapper<S = any> = (
   callback: VisitNodeFunction<S, Node>,
 ) => VisitNodeFunction<S, Node>;
 
-export function isExplodedVisitor(
-  visitor: Visitor,
-): visitor is ExplodedVisitor {
+export function isExplodedVisitor<S>(
+  visitor: Visitor<S>,
+): visitor is ExplodedVisitor<S> {
   // @ts-expect-error _exploded is not defined on non-exploded Visitor
   return visitor?._exploded;
 }
@@ -169,7 +169,7 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
 // TODO: Just call it `verify` once https://github.com/Swatinem/rollup-plugin-dts/issues/307
 // is fixed.
 export { verify$1 as verify };
-function verify$1(visitor: Visitor) {
+function verify$1<S>(visitor: Visitor<S>) {
   // @ts-expect-error _verified is not defined on non-verified Visitor.
   // TODO: unify _verified and _exploded.
   if (visitor._verified) return;
@@ -236,10 +236,10 @@ export function merge<State>(
   visitors: Visitor<State>[],
 ): ExplodedVisitor<State>;
 export function merge(
-  visitors: Visitor<unknown>[],
+  visitors: Visitor<any>[],
   states?: any[],
-  wrapper?: Function | null,
-): ExplodedVisitor<unknown>;
+  wrapper?: VisitWrapper | null,
+): ExplodedVisitor<any>;
 export function merge(
   visitors: any[],
   states: any[] = [],
@@ -271,7 +271,11 @@ export function merge(
 
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
-        typeVisitor = wrapWithStateOrWrapper(typeVisitor, state, wrapper);
+        typeVisitor = wrapWithStateOrWrapper(
+          typeVisitor as ExplVisitNode<unknown, Node>,
+          state,
+          wrapper,
+        );
       }
 
       const nodeVisitor = (mergedVisitor[key] ||= {});
@@ -323,7 +327,7 @@ function wrapWithStateOrWrapper<State>(
   return newVisitor;
 }
 
-function ensureEntranceObjects(obj: Visitor) {
+function ensureEntranceObjects<S>(obj: Visitor<S>) {
   for (const key of Object.keys(obj) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(key)) continue;
 
@@ -335,7 +339,7 @@ function ensureEntranceObjects(obj: Visitor) {
   }
 }
 
-function ensureCallbackArrays(obj: Visitor) {
+function ensureCallbackArrays<S>(obj: Visitor<S>) {
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }

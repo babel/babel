@@ -65,7 +65,7 @@ export function declare<State = object, Option = object>(
   };
 }
 
-export const declarePreset = declare as <Option = object>(
+export const declarePreset = declare as unknown as <Option = object>(
   builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
 ) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
