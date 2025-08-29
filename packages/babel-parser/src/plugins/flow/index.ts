@@ -2515,10 +2515,20 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return node;
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingFlag) {
+    isValidLVal(
+      type: string,
+      disallowCallExpression: boolean,
+      isParenthesized: boolean,
+      binding: BindingFlag,
+    ) {
       return (
         type === "TypeCastExpression" ||
-        super.isValidLVal(type, isParenthesized, binding)
+        super.isValidLVal(
+          type,
+          disallowCallExpression,
+          isParenthesized,
+          binding,
+        )
       );
     }
 
