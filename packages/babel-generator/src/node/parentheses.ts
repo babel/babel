@@ -190,8 +190,6 @@ export function Binary(
       return true;
     }
   }
-
-  return undefined;
 }
 
 export function UnionTypeAnnotation(
@@ -219,7 +217,7 @@ export function OptionalIndexedAccessType(
 export function TSAsExpression(
   node: t.TSAsExpression | t.TSSatisfiesExpression,
   parent: t.Node,
-): boolean {
+): boolean | undefined {
   if (
     (parent.type === "AssignmentExpression" ||
       parent.type === "AssignmentPattern") &&
@@ -469,7 +467,7 @@ export function ConditionalExpression(
     | t.ConditionalExpression
     | t.ArrowFunctionExpression
     | t.AssignmentExpression,
-  parent?: t.Node,
+  parent: t.Node,
 ): boolean {
   const parentType = parent.type;
   if (

@@ -10,9 +10,9 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
   lastRawIdentNode = node;
 
   const { name } = node;
-  const token = this.tokenMap.find(node, tok => tok.value === name);
+  const token = this.tokenMap!.find(node, tok => tok.value === name);
   if (token) {
-    lastRawIdentResult = this._originalCode.slice(token.start, token.end);
+    lastRawIdentResult = this._originalCode!.slice(token.start, token.end);
     return lastRawIdentResult;
   }
   return (lastRawIdentResult = node.name);
@@ -258,12 +258,18 @@ export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
 }
 
 // Hack pipe operator
-const validTopicTokenSet = new Set(["^^", "@@", "^", "%", "#"]);
+const validTopicTokenSet = new Set<string | undefined>([
+  "^^",
+  "@@",
+  "^",
+  "%",
+  "#",
+]);
 export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
 
   if (validTopicTokenSet.has(topicToken)) {
-    this.token(topicToken);
+    this.token(topicToken!);
   } else {
     const givenTopicTokenJSON = JSON.stringify(topicToken);
     const validTopics = Array.from(validTopicTokenSet, v => JSON.stringify(v));
