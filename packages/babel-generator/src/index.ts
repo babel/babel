@@ -57,7 +57,7 @@ function normalizeOptions(
   const format: Format = {
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
-    // @ts-expect-error define it after
+    // @ts-expect-error define it later
     shouldPrintComment: opts.shouldPrintComment,
     preserveFormat: opts.experimental_preserveFormat,
     retainLines: opts.retainLines,
