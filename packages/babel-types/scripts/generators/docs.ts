@@ -1,7 +1,7 @@
 // @ts-check
 import util from "node:util";
+import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";
-import toFunctionName from "../utils/toFunctionName.ts";
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as t from "../../lib/index.js";
 import type { FieldOptions } from "../../src/definitions/utils.ts";
@@ -261,11 +261,15 @@ readme.push("");
 Object.keys(t.BUILDER_KEYS)
   .sort()
   .forEach(function (key) {
-    readme.push("#### " + toFunctionName(key));
+    readme.push("#### " + formatBuilderName(key));
     readme.push("");
     readme.push('```js title="JavaScript"');
     readme.push(
-      "t." + toFunctionName(key) + "(" + t.BUILDER_KEYS[key].join(", ") + ");"
+      "t." +
+        formatBuilderName(key) +
+        "(" +
+        t.BUILDER_KEYS[key].join(", ") +
+        ");"
     );
     readme.push("```");
     printAPIHistory(key, readme);

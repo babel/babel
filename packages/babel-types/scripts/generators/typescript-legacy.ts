@@ -1,7 +1,7 @@
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as t from "../../lib/index.js";
+import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";
-import toFunctionName from "../utils/toFunctionName.ts";
 import {
   areAllRemainingFieldsNullable,
   isNullable,
@@ -117,10 +117,10 @@ for (const type in t.NODE_FIELDS) {
   // super and import are reserved words in JavaScript
   if (type !== "Super" && type !== "Import") {
     lines.push(
-      `export function ${toFunctionName(type)}(${args.join(", ")}): ${type};`
+      `export function ${formatBuilderName(type)}(${args.join(", ")}): ${type};`
     );
   } else {
-    const functionName = toFunctionName(type);
+    const functionName = formatBuilderName(type);
     lines.push(
       `declare function _${functionName}(${args.join(", ")}): ${type};`,
       `export { _${functionName} as ${functionName}}`

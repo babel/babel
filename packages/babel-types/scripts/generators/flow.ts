@@ -1,7 +1,7 @@
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as t from "../../lib/index.js";
+import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";
-import toFunctionName from "../utils/toFunctionName.ts";
 
 const NODE_PREFIX = "BabelNode";
 
@@ -100,12 +100,12 @@ for (const type in t.NODE_FIELDS) {
   // Flow chokes on super() and import() :/
   if (type !== "Super" && type !== "Import") {
     lines.push(
-      `declare export function ${toFunctionName(type)}(${args.join(
+      `declare export function ${formatBuilderName(type)}(${args.join(
         ", "
       )}): ${NODE_PREFIX}${type};`
     );
   } else {
-    const functionName = toFunctionName(type);
+    const functionName = formatBuilderName(type);
     lines.push(
       `declare function _${functionName}(${args.join(
         ", "
