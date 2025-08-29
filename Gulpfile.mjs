@@ -46,7 +46,7 @@ const babelStandalonePluginConfigGlob =
 
 const buildTypingsWatchGlob = [
   "./packages/babel-types/lib/definitions/**/*.js",
-  "./packages/babel-types/scripts/generators/*.js",
+  "./packages/babel-types/scripts/generators/*.ts",
 ];
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
@@ -117,7 +117,7 @@ async function generateHelpers(generator, dest, filename, message) {
  */
 function generateTypeHelpers(helperKind, filename = "index.ts") {
   return generateHelpers(
-    `./packages/babel-types/scripts/generators/${helperKind}.js`,
+    `./packages/babel-types/scripts/generators/${helperKind}.ts`,
     `./packages/babel-types/src/${helperKind}/generated/`,
     filename,
     `@babel/types -> ${helperKind}`

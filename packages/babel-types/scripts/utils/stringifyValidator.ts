@@ -1,11 +1,14 @@
-// @ts-check
+import type { Validator } from "../../src/definitions/utils.ts";
 /**
  * Stringify a validator to its corresponding TypeScript type.
- * @param {import("../../src/definitions/utils.ts").Validator | undefined} validator
+ * @param {Validator | undefined} validator
  * @param {string} nodePrefix
  * @returns {string}
  */
-export default function stringifyValidator(validator, nodePrefix) {
+export default function stringifyValidator(
+  validator: Validator | undefined,
+  nodePrefix: string
+): string {
   if (validator === undefined) {
     return "any";
   }
@@ -79,6 +82,6 @@ export default function stringifyValidator(validator, nodePrefix) {
  * Heuristic to decide whether or not the given type is a value type (eg. "null")
  * or a Node type (eg. "Expression").
  */
-export function isValueType(type) {
+export function isValueType(type: string): boolean {
   return type.charAt(0).toLowerCase() === type.charAt(0);
 }

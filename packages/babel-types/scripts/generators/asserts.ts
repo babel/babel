@@ -1,10 +1,10 @@
-// @ts-check
 import {
   DEPRECATED_KEYS,
   DEPRECATED_ALIASES,
   FLIPPED_ALIAS_KEYS,
   NODE_FIELDS,
   VISITOR_KEYS,
+  // @ts-expect-error: Could not find type declarations for babel-types
 } from "../../lib/index.js";
 
 /**
@@ -12,7 +12,7 @@ import {
  * @param {string} type Node type or alias type
  * @returns string
  */
-function addAssertHelper(type) {
+function addAssertHelper(type: string) {
   const result =
     NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
       ? `node is t.${type}`

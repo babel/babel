@@ -4,15 +4,18 @@ import {
   DEPRECATED_KEYS,
   NODE_FIELDS,
   toBindingIdentifierName,
+  // @ts-expect-error: Could not find type declarations for babel-types
 } from "../../lib/index.js";
-import formatBuilderName from "../utils/formatBuilderName.js";
-import stringifyValidator from "../utils/stringifyValidator.js";
+import formatBuilderName from "../utils/formatBuilderName.ts";
+import stringifyValidator from "../utils/stringifyValidator.ts";
 import {
+  areAllRemainingFieldsNullable,
   isNullable,
   hasDefault,
   sortFieldNames,
-} from "../utils/fieldHelpers.js";
+} from "../utils/fieldHelpers.ts";
 import { IS_BABEL_8 } from "$repo-utils";
+import type { FieldOptions } from "../../src/definitions/utils.ts";
 
 if (!IS_BABEL_8()) {
   /**
@@ -21,20 +24,9 @@ if (!IS_BABEL_8()) {
    * @returns {string}
    */
   // eslint-disable-next-line no-var
-  var lowerFirst = function (string) {
+  var lowerFirst = function (string: string) {
     return string[0].toLowerCase() + string.slice(1);
   };
-}
-
-/**
- * @param {string} fieldName
- * @param {string[]} fieldNames
- * @param {Record<string, import("../../src/index.ts").FieldOptions>} fields
- * @returns {boolean}
- */
-function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
-  const index = fieldNames.indexOf(fieldName);
-  return fieldNames.slice(index).every(_ => isNullable(fields[_]));
 }
 
 /**
@@ -42,21 +34,18 @@ function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
  * @param {string} type
  * @returns {string[]}
  */
-function generateBuilderArgs(type) {
-  const fields = NODE_FIELDS[type];
+function generateBuilderArgs(type: string) {
+  const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
 
   /**
    * @type {string[]}
    */
-  const args = [];
+  const args: string[] = [];
 
   fieldNames.forEach(fieldName => {
-    /**
-     * @type {import("../../src/index.ts").FieldOptions}
-     */
-    const field = fields[fieldName];
+    const field: FieldOptions = fields[fieldName];
     // Future / annoying TODO:
     // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
     // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
@@ -102,7 +91,7 @@ function generateBuilderArgs(type) {
  * @param {string} kind
  * @returns {string}
  */
-export default function generateBuilders(kind) {
+export default function generateBuilders(kind: string) {
   return kind === "lowercase.ts"
     ? generateLowercaseBuilders()
     : kind === "uppercase.ts"
