@@ -38,7 +38,7 @@ type NodeHandler<R> = (
   parent: t.Node,
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
-) => R;
+) => R | undefined;
 
 export type NodeHandlers<R> = {
   [K in string]?: NodeHandler<R>;
@@ -66,10 +66,10 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     const aliases = FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
       for (const alias of aliases) {
-        add(alias, obj[type]);
+        add(alias, obj[type]!);
       }
     } else {
-      add(type, obj[type]);
+      add(type, obj[type]!);
     }
   }
 
@@ -119,7 +119,7 @@ export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
 
 export function needsParens(
   node: t.Node,
-  parent: t.Node,
+  parent: t.Node | null,
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) {

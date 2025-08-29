@@ -71,7 +71,7 @@ let warningShown = false;
 
 export function _printAttributes(
   this: Printer,
-  node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
+  node: Extract<t.Node, { attributes?: t.ImportAttribute[] | null }>,
   hasPreviousBrace: boolean,
 ) {
   const { importAttributesKeyword } = this.format;
@@ -118,11 +118,11 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
 
   const occurrenceCount = hasPreviousBrace ? 1 : 0;
 
-  this.token("{", null, occurrenceCount);
+  this.token("{", undefined, occurrenceCount);
   this.space();
   this.printList(attributes || assertions, this.shouldPrintTrailingComma("}"));
   this.space();
-  this.token("}", null, occurrenceCount);
+  this.token("}", undefined, occurrenceCount);
 }
 
 export function ExportAllDeclaration(
@@ -256,7 +256,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   const isTypeKind = node.importKind === "type" || node.importKind === "typeof";
   if (isTypeKind) {
     this.noIndentInnerCommentsHere();
-    this.word(node.importKind);
+    this.word(node.importKind!);
     this.space();
   } else if (node.module) {
     this.noIndentInnerCommentsHere();
