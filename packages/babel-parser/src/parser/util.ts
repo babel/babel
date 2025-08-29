@@ -128,7 +128,7 @@ export default abstract class UtilParser extends Tokenizer {
   hasPrecedingLineBreak(): boolean {
     return hasNewLine(
       this.input,
-      this.offsetToSourcePos(this.state.lastTokEndLoc.index),
+      this.offsetToSourcePos(this.state.lastTokEndLoc!.index),
       this.state.start,
     );
   }
@@ -146,7 +146,7 @@ export default abstract class UtilParser extends Tokenizer {
 
   semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
-    this.raise(Errors.MissingSemicolon, this.state.lastTokEndLoc);
+    this.raise(Errors.MissingSemicolon, this.state.lastTokEndLoc!);
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -161,7 +161,7 @@ export default abstract class UtilParser extends Tokenizer {
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
   tryParse<T extends Node | ReadonlyArray<Node>>(
-    fn: (abort: (node?: T) => never) => T,
+    fn: (abort: (node?: T | null) => never) => T | null,
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
@@ -193,7 +193,7 @@ export default abstract class UtilParser extends Tokenizer {
       }
 
       return {
-        node,
+        node: node!,
         error: null,
         thrown: false,
         aborted: false,

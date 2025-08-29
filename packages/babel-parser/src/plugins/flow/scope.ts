@@ -37,7 +37,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
       bindingType & BindingFlag.FLAG_FLOW_DECLARE_FN &&
       !scope.declareFunctions.has(name)
     ) {
-      const type = scope.names.get(name);
+      const type = scope.names.get(name)!;
       return (type & NameType.Function) > 0 || (type & NameType.Lexical) > 0;
     }
 

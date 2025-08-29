@@ -66,10 +66,7 @@ function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
  * innerComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  */
-export function setInnerComments(
-  node: Undone<Node>,
-  comments?: Array<Comment>,
-) {
+export function setInnerComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.innerComments === undefined) {
     node.innerComments = comments;
   } else {
@@ -84,7 +81,7 @@ export function setInnerComments(
  */
 function adjustInnerComments(
   node: Undone<Node>,
-  elements: Array<Node>,
+  elements: Array<Node | null>,
   commentWS: CommentWhitespace,
 ) {
   let lastElement = null;
@@ -166,7 +163,8 @@ export default class CommentsParser extends BaseParser {
       }
     } else {
       /*:: invariant(commentWS.containingNode !== null) */
-      const { containingNode: node, start: commentStart } = commentWS;
+      const node = commentWS.containingNode!;
+      const commentStart = commentWS.start;
       if (
         this.input.charCodeAt(this.offsetToSourcePos(commentStart) - 1) ===
         charCodes.comma
@@ -210,7 +208,7 @@ export default class CommentsParser extends BaseParser {
             break;
           case "TSEnumDeclaration":
             if (!process.env.BABEL_8_BREAKING) {
-              adjustInnerComments(node, node.members, commentWS);
+              adjustInnerComments(node, node.members!, commentWS);
             } else {
               setInnerComments(node, comments);
             }

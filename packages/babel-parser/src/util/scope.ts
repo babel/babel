@@ -95,7 +95,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   }
 
   exit(): ScopeFlag {
-    const scope = this.scopeStack.pop();
+    const scope = this.scopeStack.pop()!;
     return scope.flags;
   }
 
@@ -178,7 +178,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       return scope.names.has(name);
     }
 
-    const type = scope.names.get(name);
+    const type = scope.names.get(name) || 0;
 
     if (bindingType & BindingFlag.SCOPE_FUNCTION) {
       return (

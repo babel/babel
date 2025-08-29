@@ -348,7 +348,7 @@ export default (superClass: typeof Parser) =>
     // at the beginning of the next one (right brace).
 
     jsxParseEmptyExpression(): N.JSXEmptyExpression {
-      const node = this.startNodeAt(this.state.lastTokEndLoc);
+      const node = this.startNodeAt(this.state.lastTokEndLoc!);
       return this.finishNodeAt(node, "JSXEmptyExpression", this.state.startLoc);
     }
 
