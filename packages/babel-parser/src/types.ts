@@ -400,7 +400,7 @@ export interface TryStatement extends NodeBase {
 
 export interface CatchClause extends NodeBase {
   type: "CatchClause";
-  param: Pattern;
+  param: Pattern | null;
   body: BlockStatement;
 }
 
@@ -530,7 +530,7 @@ export interface AwaitExpression extends NodeBase {
 
 export interface ArrayExpression extends NodeBase {
   type: "ArrayExpression";
-  elements: Array<Expression | SpreadElement | undefined | null>;
+  elements: Array<Expression | SpreadElement | null>;
 }
 
 export interface DoExpression extends NodeBase {
@@ -541,7 +541,7 @@ export interface DoExpression extends NodeBase {
 
 export interface TupleExpression extends NodeBase {
   type: "TupleExpression";
-  elements: Array<Expression | SpreadElement | undefined | null>;
+  elements: Array<Expression | SpreadElement | null>;
 }
 
 export interface ObjectExpression extends NodeBase {
@@ -862,7 +862,7 @@ export interface ObjectPattern extends PatternBase {
 
 export interface ArrayPattern extends PatternBase {
   type: "ArrayPattern";
-  elements: (Pattern | undefined | null)[];
+  elements: (Pattern | null)[];
 }
 
 export interface RestElement extends PatternBase {
@@ -1836,8 +1836,8 @@ export interface TsLiteralType extends TsTypeBase {
 export interface TsImportType extends TsTypeBase {
   type: "TSImportType";
   argument: TsLiteralType;
-  qualifier?: TsEntityName;
-  typeArguments?: TsTypeParameterInstantiation;
+  qualifier?: TsEntityName | null;
+  typeArguments?: TsTypeParameterInstantiation | null;
   /**
    * @deprecated
    */

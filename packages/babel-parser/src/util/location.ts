@@ -20,13 +20,13 @@ export class Position {
 export class SourceLocation {
   start: Position;
   end: Position;
-  filename: string;
+  filename: string | undefined;
   identifierName: string | undefined | null;
 
   constructor(start: Position, end?: Position) {
     this.start = start;
     // (may start as null, but initialized later)
-    this.end = end;
+    this.end = end!;
   }
 }
 

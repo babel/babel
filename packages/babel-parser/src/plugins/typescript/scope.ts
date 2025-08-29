@@ -113,7 +113,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     name: string,
     bindingType: BindingFlag,
   ): boolean {
-    const type = scope.tsNames.get(name);
+    const type = scope.tsNames.get(name)!;
     if ((type & TsNameType.Enums) > 0) {
       if (bindingType & BindingFlag.FLAG_TS_ENUM) {
         // Enums can be merged with other enums if they are both
@@ -128,7 +128,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       bindingType & BindingFlag.FLAG_CLASS &&
       (type & TsNameType.Classes) > 0
     ) {
-      if (scope.names.get(name) & NameType.Lexical) {
+      if (scope.names.get(name)! & NameType.Lexical) {
         // Classes can be merged with interfaces
         return !!(bindingType & BindingFlag.KIND_VALUE);
       } else {
@@ -151,7 +151,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     const len = this.scopeStack.length;
     for (let i = len - 1; i >= 0; i--) {
       const scope = this.scopeStack[i];
-      const type = scope.tsNames.get(name);
+      const type = scope.tsNames.get(name)!;
       if (
         (type & TsNameType.Types) > 0 ||
         (type & TsNameType.ExportOnlyBindings) > 0
