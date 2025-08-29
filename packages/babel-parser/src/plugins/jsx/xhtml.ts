@@ -1,4 +1,5 @@
 const entities: { [name: string]: string } = {
+  // @ts-expect-error expected
   __proto__: null,
   quot: "\u0022",
   amp: "&",
