@@ -3,6 +3,7 @@ import type * as N from "../types.ts";
 import { getOptions, OptionFlags } from "../options.ts";
 import StatementParser from "./statement.ts";
 import ScopeHandler from "../util/scope.ts";
+import { locDataCache } from "../tokenizer/index.ts";
 
 export type PluginsMap = Map<
   string,
@@ -57,6 +58,9 @@ export default class Parser extends StatementParser {
     if (options.ranges) {
       optionFlags |= OptionFlags.Ranges;
     }
+    if (options.locations === true) {
+      optionFlags |= OptionFlags.Locations;
+    }
     if (options.tokens) {
       optionFlags |= OptionFlags.Tokens;
     }
@@ -93,6 +97,9 @@ export default class Parser extends StatementParser {
     this.parseTopLevel(file, program);
     file.errors = this.state.errors;
     file.comments.length = this.state.commentsLen;
+    if (this.options.locations === "packed") {
+      file.locData = locDataCache;
+    }
     return file as N.File;
   }
 }
