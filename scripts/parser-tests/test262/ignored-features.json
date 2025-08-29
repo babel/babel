@@ -103,6 +103,7 @@
   "globalThis",
   "hashbang",
   "host-gc-required",
+  "immutable-arraybuffer",
   "import-attributes",
   "import.meta",
   "intl-normative-optional",
