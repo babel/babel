@@ -686,7 +686,7 @@ defineType("RegExpLiteral", {
               assertValueType("string"),
               Object.assign(
                 function (node, key, val) {
-                  const invalid = /[^gimsuy]/.exec(val);
+                  const invalid = /[^dgimsuvy]/.exec(val);
                   if (invalid) {
                     throw new TypeError(
                       `"${invalid[0]}" is not a valid RegExp flag`,

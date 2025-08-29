@@ -1,7 +1,7 @@
 import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
-  describe("es2015", function () {
+  describe("core", function () {
     describe("templateElement", function () {
       it("should validate", function () {
         expect(

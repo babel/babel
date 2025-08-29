@@ -1,7 +1,7 @@
 import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
-  describe("experimental", function () {
+  describe("core", function () {
     describe("classProperty", function () {
       it("should validate", function () {
         expect(
