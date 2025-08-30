@@ -5,7 +5,7 @@ import { getCachedPaths } from "../cache.ts";
 import { _replaceWith } from "./replacement.ts";
 import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
-import { getBindingIdentifiers } from "@babel/types";
+import * as t from "@babel/types";
 import { updateSiblingKeys } from "./modification.ts";
 import { resync } from "./context.ts";
 
@@ -29,7 +29,7 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const bindings = getBindingIdentifiers(this.node, false, false, true);
+  const bindings = t.getBindingIdentifiers(this.node, false, false, true);
   Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
 }
 
@@ -56,6 +56,7 @@ export function _markRemoved(this: NodePath) {
   if (this.parent) {
     getCachedPaths(this)?.delete(this.node);
   }
+  // @ts-expect-error TODO: better types
   this.node = null;
 }
 

@@ -26,7 +26,10 @@ export function getCachedPaths(path: NodePath) {
     : pathsCache.get(parent);
 }
 
-export function getOrCreateCachedPaths(node: Node, parentPath?: NodePath) {
+export function getOrCreateCachedPaths(
+  node: Node,
+  parentPath?: NodePath | null,
+) {
   if (process.env.BABEL_8_BREAKING && parentPath) {
     return (parentPath._store ||= new Map());
   }

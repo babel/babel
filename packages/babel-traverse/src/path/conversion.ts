@@ -44,6 +44,7 @@ import { environmentVisitor } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
 import { setup } from "./context.ts";
+import type Scope from "../scope/index.ts";
 
 export function toComputedKey(this: NodePath) {
   let key;
@@ -390,9 +391,9 @@ function hoistFunctionEnvironment(
       );
     }
 
-    const flatSuperProps: NodePath<t.MemberExpression>[] = superProps.reduce(
+    const flatSuperProps = superProps.reduce(
       (acc, superProp) => acc.concat(standardizeSuperProperty(superProp)),
-      [],
+      [] as NodePath<t.MemberExpression>[],
     );
 
     flatSuperProps.forEach(superProp => {
@@ -466,8 +467,8 @@ function hoistFunctionEnvironment(
     ) {
       thisPaths.forEach(thisChild => {
         const thisRef = thisChild.isJSX()
-          ? jsxIdentifier(thisBinding)
-          : identifier(thisBinding);
+          ? jsxIdentifier(thisBinding!)
+          : identifier(thisBinding!);
 
         thisRef.loc = thisChild.node.loc;
         thisChild.replaceWith(thisRef);
@@ -477,7 +478,7 @@ function hoistFunctionEnvironment(
     }
   }
 
-  return { thisBinding, fnPath };
+  return { thisBinding: thisBinding!, fnPath };
 }
 
 type LogicalOp = Parameters<typeof logicalExpression>[0];
@@ -735,7 +736,7 @@ function getSuperPropBinding(
 function getBinding(
   thisEnvFn: NodePath,
   key: string,
-  init: (name: string) => t.Expression,
+  init: (name: string) => t.Expression | undefined,
 ) {
   const cacheKey = "binding:" + key;
   let data: string | undefined = thisEnvFn.getData(cacheKey);
@@ -785,7 +786,7 @@ const getScopeInformationVisitor = environmentVisitor<ScopeInfo>({
   Identifier(child, { argumentsPaths }) {
     if (!child.isReferencedIdentifier({ name: "arguments" })) return;
 
-    let curr = child.scope;
+    let curr: Scope | undefined = child.scope;
     do {
       if (curr.hasOwnBinding("arguments")) {
         curr.rename("arguments");
@@ -849,7 +850,7 @@ export function splitExportDeclaration(
       declaration.isFunctionExpression() || declaration.isClassExpression();
 
     const scope = declaration.isScope()
-      ? declaration.scope.parent
+      ? declaration.scope.parent!
       : declaration.scope;
 
     // @ts-expect-error id is not defined in expressions other than function/class
@@ -983,7 +984,7 @@ export function ensureFunctionName<
       // so we can safely just set the id and move along as it shadows the
       // bound function id
     }
-  } else if (scope.parent.hasBinding(name) || scope.hasGlobal(name)) {
+  } else if (scope.parent!.hasBinding(name) || scope.hasGlobal(name)) {
     this.traverse(refersOuterBindingVisitor, state);
   }
 

@@ -9,7 +9,7 @@ if (!process.env.BABEL_8_BREAKING) {
 /**
  * Check if the input `node` is a variable declaration.
  */
-export default function isVar(node: t.Node): boolean {
+export default function isVar(node: t.Node | null | undefined): boolean {
   if (process.env.BABEL_8_BREAKING) {
     return isVariableDeclaration(node) && node.kind === "var";
   } else {

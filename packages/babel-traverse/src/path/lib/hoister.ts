@@ -28,7 +28,7 @@ const referenceVisitor: Visitor<PathHoister> = {
 
     // If the identifier refers to `this`, we need to break on the closest non-arrow scope.
     if (path.node.name === "this") {
-      let scope = path.scope;
+      let scope: Scope | undefined = path.scope;
       do {
         if (
           scope.path.isFunction() &&
@@ -102,7 +102,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
   // Look through all scopes and push compatible ones.
   getCompatibleScopes() {
-    let scope = this.path.scope;
+    let scope: Scope | undefined = this.path.scope;
     do {
       if (this.isCompatibleScope(scope)) {
         this.scopes.push(scope);
@@ -125,7 +125,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
     // don't allow paths that have their own lexical environments to pollute
     if (targetScope.path === path) {
-      targetScope = path.scope.parent;
+      targetScope = path.scope.parent!;
     }
 
     // avoid hoisting to a scope that contains bindings that are executed after our attachment path
@@ -146,12 +146,14 @@ export default class PathHoister<T extends t.Node = t.Node> {
         const bindingParentPath = this.getAttachmentParentForPath(binding.path);
 
         // If the binding's attachment appears at or after our attachment point, then we move after it.
+        // @ts-expect-error expected
         if (bindingParentPath.key >= path.key) {
           this.attachAfter = true;
           path = binding.path;
 
           // We also move past any constant violations.
           for (const violationPath of binding.constantViolations) {
+            // @ts-expect-error expected
             if (this.getAttachmentParentForPath(violationPath).key > path.key) {
               path = violationPath;
             }
@@ -200,7 +202,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
   }
 
   // Find an attachment for this path.
-  getAttachmentParentForPath(path: NodePath) {
+  getAttachmentParentForPath(path: NodePath): NodePath {
     do {
       if (
         // Beginning of the scope
@@ -211,6 +213,8 @@ export default class PathHoister<T extends t.Node = t.Node> {
         return path;
       }
     } while ((path = path.parentPath));
+    // Unreachable
+    return path;
   }
 
   // Returns true if a scope has param bindings.

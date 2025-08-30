@@ -92,7 +92,7 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     if (!isVirtualType(nodeType)) continue;
 
     // wrap all the functions
-    const fns = visitor[nodeType];
+    const fns = visitor[nodeType]!;
     for (const type of Object.keys(fns)) {
       // @ts-expect-error normalised as VisitNodeObject
       fns[type] = wrapCheck(nodeType, fns[type]);
@@ -263,7 +263,7 @@ export function merge(
     for (const key of Object.keys(visitor) as (keyof ExplodedVisitor)[]) {
       if (shouldIgnoreKey(key)) continue;
 
-      let typeVisitor = visitor[key];
+      let typeVisitor = visitor[key]!;
 
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
@@ -295,7 +295,7 @@ function wrapWithStateOrWrapper<State>(
       let newFn = fn;
 
       if (state) {
-        newFn = function (path: NodePath) {
+        newFn = function (path: NodePath<Node>) {
           fn.call(state, path, state);
         };
       }

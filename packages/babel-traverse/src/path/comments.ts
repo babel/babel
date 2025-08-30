@@ -21,8 +21,8 @@ export function shareCommentsWithSiblings(this: NodePath) {
   const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
-  const prev = this.getSibling(this.key - 1);
-  const next = this.getSibling(this.key + 1);
+  const prev = this.getSibling(this.key! - 1);
+  const next = this.getSibling(this.key! + 1);
   const hasPrev = Boolean(prev.node);
   const hasNext = Boolean(next.node);
 
@@ -46,7 +46,7 @@ export function shareCommentsWithSiblings(this: NodePath) {
   }
 }
 
-function removeIfExisting<T>(list: T[], toRemove?: T[]): T[] {
+function removeIfExisting<T>(list: T[], toRemove?: T[] | null): T[] {
   if (!toRemove?.length) return list;
   const set = new Set(toRemove);
   return list.filter(el => {

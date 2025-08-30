@@ -300,8 +300,8 @@ export function getSibling(this: NodePath, key: string | number): NodePath {
   return NodePath.get({
     parentPath: this.parentPath,
     parent: this.parent,
-    container: this.container,
-    listKey: this.listKey,
+    container: this.container!,
+    listKey: this.listKey!,
     key: key,
   }).setContext(this.context);
 }
@@ -366,26 +366,28 @@ type Trav<
     : never
   : never;
 
-type ToNodePath<T> =
-  T extends Array<(infer U extends t.Node) | null | undefined>
-    ? Array<NodePath<U> | null | undefined>
-    : T extends (infer U extends t.Node) | null | undefined
-      ? NodePath<U> | null | undefined
-      : never;
+type ToNodePath<T> = T extends
+  | Array<infer U extends t.Node | null>
+  | null
+  | undefined
+  ? Array<NodePath<U>>
+  : T extends (infer U extends t.Node) | null | undefined
+    ? NodePath<U>
+    : never;
 
 function get<T extends NodePath, K extends keyof T["node"]>(
   this: T,
   key: K,
   context?: boolean | TraversalContext,
 ): T extends any
-  ? T["node"][K] extends Array<(infer U extends t.Node) | null | undefined>
-    ? Array<NodePath<U> | null | undefined>
+  ? T["node"][K] extends Array<infer U extends t.Node | null> | null | undefined
+    ? Array<NodePath<U>>
     : T["node"][K] extends (infer U extends t.Node) | null | undefined
-      ? NodePath<U> | null | undefined
+      ? NodePath<U>
       : never
   : never;
 
-function get<T extends NodePath, K extends string>(
+function get<T extends NodePath<t.Node>, K extends string>(
   this: T,
   key: K,
   context?: boolean | TraversalContext,
