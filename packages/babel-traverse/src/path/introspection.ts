@@ -255,7 +255,7 @@ export function getSource(this: NodePath): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
-    if (code) return code.slice(node.start, node.end);
+    if (code) return code.slice(node.start!, node.end);
   }
   return "";
 }
@@ -437,11 +437,11 @@ function _guessExecutionStatusRelativeToCached(
     divergence.this.listKey &&
     divergence.target.container === divergence.this.container
   ) {
-    return divergence.target.key > divergence.this.key ? "before" : "after";
+    return divergence.target.key! > divergence.this.key! ? "before" : "after";
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  const keys = VISITOR_KEYS[commonPath.type];
+  const keys = VISITOR_KEYS[commonPath.type!];
   const keyPosition = {
     this: keys.indexOf(divergence.this.parentKey),
     target: keys.indexOf(divergence.target.parentKey),
@@ -469,7 +469,7 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  const binding = target.scope.getBinding(target.node.id.name);
+  const binding = target.scope.getBinding(target.node.id!.name)!;
 
   // no references!
   if (!binding.references) return "before";
@@ -500,7 +500,8 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
     }
   }
 
-  return allStatus;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  return allStatus!;
 }
 
 function _guessExecutionStatusRelativeToDifferentFunctionsCached(
@@ -619,6 +620,7 @@ export function _resolve(
     } else if (target.isArrayExpression() && !isNaN(+targetName)) {
       const elems = target.get("elements");
       const elem = elems[targetName];
+      // @ts-expect-error FIXME: NodePath<null>
       if (elem) return elem.resolve(dangerous, resolved);
     }
   }
@@ -712,6 +714,7 @@ export function isInStrictMode(this: NodePath) {
         return true;
       }
     }
+    return false;
   });
 
   return !!strictParent;

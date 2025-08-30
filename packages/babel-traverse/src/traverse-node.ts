@@ -114,10 +114,10 @@ function _visit(ctx: TraversalContext, path: NodePath) {
 function _traverse<S>(
   node: t.Node,
   opts: ExplodedTraverseOptions<S>,
-  scope?: Scope,
+  scope?: Scope | null,
   state?: S,
   path?: NodePath,
-  skipKeys?: Record<string, boolean>,
+  skipKeys?: Record<string, boolean> | null,
   visitSelf?: boolean,
 ) {
   const keys = VISITOR_KEYS[node.type];
@@ -125,8 +125,8 @@ function _traverse<S>(
 
   const ctx = new TraversalContext(scope, opts, state, path);
   if (visitSelf) {
-    if (skipKeys?.[path.parentKey]) return false;
-    return _visitPaths(ctx, [path]);
+    if (skipKeys?.[path!.parentKey]) return false;
+    return _visitPaths(ctx, [path!]);
   }
 
   for (const key of keys) {
@@ -184,10 +184,10 @@ function _traverse<S>(
 export function traverseNode<S = unknown>(
   node: t.Node,
   opts: ExplodedTraverseOptions<S>,
-  scope?: Scope,
+  scope?: Scope | null,
   state?: S,
   path?: NodePath,
-  skipKeys?: Record<string, boolean>,
+  skipKeys?: Record<string, boolean> | null,
   visitSelf?: boolean,
 ): boolean {
   if (process.env.BABEL_8_BREAKING) {
@@ -197,10 +197,10 @@ export function traverseNode<S = unknown>(
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return false;
 
-  const context = new TraversalContext<S>(scope, opts, state, path);
+  const context = new TraversalContext<S>(scope, opts, state as S, path);
   if (visitSelf) {
-    if (skipKeys?.[path.parentKey]) return false;
-    return context.visitQueue([path]);
+    if (skipKeys?.[path!.parentKey]) return false;
+    return context.visitQueue([path!]);
   }
 
   for (const key of keys) {
