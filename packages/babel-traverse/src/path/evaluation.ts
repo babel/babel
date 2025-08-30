@@ -62,10 +62,9 @@ function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
  *
  */
 
-export function evaluateTruthy(this: NodePath): boolean {
+export function evaluateTruthy(this: NodePath): boolean | undefined {
   const res = this.evaluate();
   if (res.confident) return !!res.value;
-  return false;
 }
 
 type State = {
