@@ -3,6 +3,7 @@ import { BUILDER_KEYS } from "../../lib/index.js";
 import type { FieldOptions } from "../../src/index.ts";
 
 /**
+ * Check if all fields after the given field name are nullable.
  * @param {string} fieldName
  * @param {string[]} fieldNames
  * @param {Record<string, FieldOptions>} fields
@@ -18,6 +19,7 @@ export function areAllRemainingFieldsNullable(
 }
 
 /**
+ * Check if a field has a default value.
  * @param {FieldOptions} field
  * @returns {boolean}
  */
@@ -26,6 +28,8 @@ export function hasDefault(field: FieldOptions): boolean {
 }
 
 /**
+ * Check if a field is nullable. That means it is either optional
+ * or has a default value.
  * @param {FieldOptions} field
  * @returns {boolean}
  */

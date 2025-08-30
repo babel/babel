@@ -1,4 +1,3 @@
-// @ts-check
 import {
   BUILDER_KEYS,
   DEPRECATED_KEYS,
@@ -24,7 +23,7 @@ if (!IS_BABEL_8()) {
    * @returns {string}
    */
   // eslint-disable-next-line no-var
-  var lowerFirst = function (string: string) {
+  var lowerFirst = function (string: string): string {
     return string[0].toLowerCase() + string.slice(1);
   };
 }
@@ -34,14 +33,11 @@ if (!IS_BABEL_8()) {
  * @param {string} type
  * @returns {string[]}
  */
-function generateBuilderArgs(type: string) {
+function generateBuilderArgs(type: string): string[] {
   const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
 
-  /**
-   * @type {string[]}
-   */
   const args: string[] = [];
 
   fieldNames.forEach(fieldName => {
@@ -60,10 +56,7 @@ function generateBuilderArgs(type: string) {
     }
 
     if (builderNames.includes(fieldName)) {
-      /**
-       * @type {import("../../src/index.ts").FieldOptions}
-       */
-      const field = NODE_FIELDS[type][fieldName];
+      const field: FieldOptions = NODE_FIELDS[type][fieldName];
       const def = JSON.stringify(field.default);
       const bindingIdentifierName = toBindingIdentifierName(fieldName);
       let arg;
@@ -91,7 +84,7 @@ function generateBuilderArgs(type: string) {
  * @param {string} kind
  * @returns {string}
  */
-export default function generateBuilders(kind: string) {
+export default function generateBuilders(kind: string): string {
   return kind === "lowercase.ts"
     ? generateLowercaseBuilders()
     : kind === "uppercase.ts"
@@ -113,10 +106,7 @@ const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
 `;
-  /**
-   * @type {Set<string>}
-   */
-  const builderOverrideTypes = new Set();
+  const builderOverrideTypes = new Set<string>();
   if (!IS_BABEL_8()) {
     builderOverrideTypes.add("BigIntLiteral");
     const builderOverrides = `

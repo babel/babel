@@ -2,6 +2,7 @@
 import * as t from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";
+import type { FieldOptions } from "../../src/definitions/utils.ts";
 
 const NODE_PREFIX = "BabelNode";
 
@@ -66,10 +67,7 @@ for (const type in t.NODE_FIELDS) {
       return indexA - indexB;
     })
     .forEach(fieldName => {
-      /**
-       * @type {import("../../src/index.ts").FieldOptions}
-       */
-      const field = fields[fieldName];
+      const field: FieldOptions = fields[fieldName];
 
       let suffix = "";
       if (field.optional || field.default != null) suffix += "?";

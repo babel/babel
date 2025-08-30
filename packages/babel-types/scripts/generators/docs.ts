@@ -1,4 +1,3 @@
-// @ts-check
 import util from "node:util";
 import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";

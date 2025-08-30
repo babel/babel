@@ -1,4 +1,3 @@
-
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as t from "../../lib/index.js";
 import {
@@ -28,7 +27,8 @@ function registerParentMaps(parent: string, nodes: string[]) {
 }
 
 /**
- * Get the node types from a validator.
+ * Get the node types from a validator. It will also resolve alias types to their
+ * corresponding node types.
  * @param {Validator | undefined} validator
  * @returns {string[]}
  */
