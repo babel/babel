@@ -1,4 +1,3 @@
-// @ts-check
 
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as t from "../../lib/index.js";
