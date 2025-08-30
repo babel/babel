@@ -59,6 +59,7 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
   inheritLeadingComments(verifiedNodes[0], this.node);
   inheritTrailingComments(verifiedNodes[verifiedNodes.length - 1], this.node);
   getCachedPaths(this)?.delete(this.node);
+  // @ts-expect-error TODO: better types
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key] = null;
@@ -206,7 +207,7 @@ export function replaceWith(
   return [nodePath ? this.get(nodePath) : this];
 }
 
-export function _replaceWith(this: NodePath, node: t.Node) {
+export function _replaceWith(this: NodePath, node: t.Node | null) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
@@ -219,11 +220,13 @@ export function _replaceWith(this: NodePath, node: t.Node) {
   }
 
   this.debug(`Replace with ${node?.type}`);
+  // @ts-expect-error TODO: better types
   getCachedPaths(this)?.set(node, this).delete(this.node);
 
-  this.node =
-    // @ts-expect-error this.key must present in this.container
-    this.container[this.key] = node;
+  // @ts-expect-error TODO: better types
+  this.node = node;
+  // @ts-expect-error this.key must present in this.container
+  this.container[this.key] = node;
 }
 
 /**
