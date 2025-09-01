@@ -20,7 +20,7 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@unicode/unicode-16.0.0": "^1.0.0",
+    "@unicode/unicode-17.0.0": "^1.6.10",
     "charcodes": "^0.2.0"
   },
   "engines": {
