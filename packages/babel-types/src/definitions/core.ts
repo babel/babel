@@ -33,6 +33,47 @@ import {
   type ValidatorType,
 } from "./utils.ts";
 
+export const classMethodOrPropertyUnionShapeCommon = (
+  allowPrivateName = false,
+) => ({
+  unionShape: {
+    discriminator: "computed",
+    shapes: [
+      {
+        name: "computed",
+        value: [true],
+        properties: {
+          key: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+      {
+        name: "nonComputed",
+        value: [false],
+        properties: {
+          key: {
+            validate: allowPrivateName
+              ? assertNodeType(
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                  "PrivateName",
+                )
+              : assertNodeType(
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                ),
+          },
+        },
+      },
+    ],
+  },
+});
+
 const defineType = defineAliasedType("Standardized");
 
 defineType("ArrayExpression", {
@@ -733,6 +774,29 @@ defineType("MemberExpression", {
   ],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal", "PatternLike"],
+  unionShape: {
+    discriminator: "computed",
+    shapes: [
+      {
+        name: "computed",
+        value: [true],
+        properties: {
+          property: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+      {
+        name: "nonComputed",
+        value: [false],
+        properties: {
+          property: {
+            validate: assertNodeType("Identifier", "PrivateName"),
+          },
+        },
+      },
+    ],
+  },
   fields: {
     object: {
       validate: assertNodeType("Expression", "Super"),
@@ -817,6 +881,7 @@ defineType("ObjectMethod", {
     "returnType",
     "body",
   ],
+  ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
     ...functionCommon(),
     ...functionTypeAnnotationCommon(),
@@ -887,6 +952,45 @@ defineType("ObjectProperty", {
       ? ["decorators"]
       : []),
   ],
+  unionShape: {
+    discriminator: "computed",
+    shapes: [
+      {
+        name: "computed",
+        value: [true],
+        properties: {
+          key: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+      {
+        name: "nonComputed",
+        value: [false],
+        properties: {
+          key: {
+            validate: process.env.BABEL_8_BREAKING
+              ? assertNodeType(
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                  "PrivateName",
+                )
+              : assertNodeType(
+                  "Identifier",
+                  "StringLiteral",
+                  "NumericLiteral",
+                  "BigIntLiteral",
+                  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+                  "DecimalLiteral",
+                  "PrivateName",
+                ),
+          },
+        },
+      },
+    ],
+  },
   fields: {
     computed: {
       default: false,
@@ -2001,6 +2105,7 @@ defineType("ClassMethod", {
     "returnType",
     "body",
   ],
+  ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
     ...classMethodOrDeclareMethodCommon(),
     ...functionTypeAnnotationCommon(),
@@ -2312,6 +2417,7 @@ defineType("ClassProperty", {
     "static",
   ],
   aliases: ["Property"],
+  ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
     ...classMethodOrPropertyCommon(),
     value: {
@@ -2363,6 +2469,7 @@ defineType("ClassAccessorProperty", {
     "static",
   ],
   aliases: ["Property", "Accessor"],
+  ...classMethodOrPropertyUnionShapeCommon(true),
   fields: {
     ...classMethodOrPropertyCommon(),
     key: {
@@ -2502,6 +2609,8 @@ defineType("ClassPrivateMethod", {
     "Method",
     "Private",
   ],
+  // `computed` is not included in the `builder`
+  // ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
     ...classMethodOrDeclareMethodCommon(),
     ...functionTypeAnnotationCommon(),

@@ -18,6 +18,7 @@ import {
 import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
+  classMethodOrPropertyUnionShapeCommon,
 } from "./core.ts";
 import is from "../validators/is.ts";
 
@@ -79,6 +80,7 @@ defineType("TSDeclareFunction", {
 
 defineType("TSDeclareMethod", {
   visitor: ["decorators", "key", "typeParameters", "params", "returnType"],
+  ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
     ...classMethodOrDeclareMethodCommon(),
     ...tSFunctionTypeAnnotationCommon(),
