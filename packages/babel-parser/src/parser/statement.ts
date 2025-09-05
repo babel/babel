@@ -302,9 +302,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (!this.isContextual(tt._using)) {
       return false;
     }
-    const next = this.nextTokenInLineStart();
-    const nextCh = this.codePointAtPos(next);
-    return this.chStartsBindingIdentifier(nextCh, next);
+    return this.nextTokenIsIdentifierOnSameLine();
   }
 
   isForUsing(): boolean {
@@ -333,6 +331,12 @@ export default abstract class StatementParser extends ExpressionParser {
       return true;
     }
     return false;
+  }
+
+  nextTokenIsIdentifierOnSameLine(): boolean {
+    const next = this.nextTokenInLineStart();
+    const nextCh = this.codePointAtPos(next);
+    return this.chStartsBindingIdentifier(nextCh, next);
   }
 
   isAwaitUsing(): boolean {
