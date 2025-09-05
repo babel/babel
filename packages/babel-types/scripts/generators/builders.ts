@@ -3,51 +3,43 @@ import {
   DEPRECATED_KEYS,
   NODE_FIELDS,
   toBindingIdentifierName,
+  // @ts-expect-error: Could not find type declarations for babel-types
 } from "../../lib/index.js";
-import formatBuilderName from "../utils/formatBuilderName.js";
-import stringifyValidator from "../utils/stringifyValidator.js";
+import formatBuilderName from "../utils/formatBuilderName.ts";
+import stringifyValidator from "../utils/stringifyValidator.ts";
+import {
+  areAllRemainingFieldsNullable,
+  isNullable,
+  hasDefault,
+  sortFieldNames,
+} from "../utils/fieldHelpers.ts";
 import { IS_BABEL_8 } from "$repo-utils";
+import type { FieldOptions } from "../../src/definitions/utils.ts";
 
 if (!IS_BABEL_8()) {
+  /**
+   * Convert the first character of a string to lowercase.
+   * @param string
+   */
   // eslint-disable-next-line no-var
-  var lowerFirst = function (string) {
+  var lowerFirst = function (string: string): string {
     return string[0].toLowerCase() + string.slice(1);
   };
 }
 
-function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
-  const index = fieldNames.indexOf(fieldName);
-  return fieldNames.slice(index).every(_ => isNullable(fields[_]));
-}
-
-function hasDefault(field) {
-  return field.default != null;
-}
-
-function isNullable(field) {
-  return field.optional || hasDefault(field);
-}
-
-function sortFieldNames(fields, type) {
-  return fields.sort((fieldA, fieldB) => {
-    const indexA = BUILDER_KEYS[type].indexOf(fieldA);
-    const indexB = BUILDER_KEYS[type].indexOf(fieldB);
-    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
-  });
-}
-
-function generateBuilderArgs(type) {
-  const fields = NODE_FIELDS[type];
+/**
+ * Generate the builder arguments for a given node type.
+ * @param type AST Node type
+ */
+function generateBuilderArgs(type: string): string[] {
+  const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
 
-  const args = [];
+  const args: string[] = [];
 
   fieldNames.forEach(fieldName => {
-    const field = fields[fieldName];
+    const field: FieldOptions = fields[fieldName];
     // Future / annoying TODO:
     // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
     // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
@@ -62,7 +54,7 @@ function generateBuilderArgs(type) {
     }
 
     if (builderNames.includes(fieldName)) {
-      const field = NODE_FIELDS[type][fieldName];
+      const field: FieldOptions = NODE_FIELDS[type][fieldName];
       const def = JSON.stringify(field.default);
       const bindingIdentifierName = toBindingIdentifierName(fieldName);
       let arg;
@@ -85,7 +77,12 @@ function generateBuilderArgs(type) {
   return args;
 }
 
-export default function generateBuilders(kind) {
+type BuilderKind = "lowercase.ts" | "uppercase.ts" | "index.ts";
+/**
+ * Generate the builder functions for a given builder kind.
+ * @param kind
+ */
+export default function generateBuilders(kind: BuilderKind): string {
   return kind === "lowercase.ts"
     ? generateLowercaseBuilders()
     : kind === "uppercase.ts"
@@ -107,7 +104,7 @@ const { validateInternal: validate } = _validate;
 const { NODE_FIELDS } = utils;
 
 `;
-  const builderOverrideTypes = new Set();
+  const builderOverrideTypes = new Set<string>();
   if (!IS_BABEL_8()) {
     builderOverrideTypes.add("BigIntLiteral");
     const builderOverrides = `

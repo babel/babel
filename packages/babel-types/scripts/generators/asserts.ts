@@ -4,9 +4,14 @@ import {
   FLIPPED_ALIAS_KEYS,
   NODE_FIELDS,
   VISITOR_KEYS,
+  // @ts-expect-error: Could not find type declarations for babel-types
 } from "../../lib/index.js";
 
-function addAssertHelper(type) {
+/**
+ * Generate an assert helper for a given type.
+ * @param type Node type or alias type
+ */
+function addAssertHelper(type: string) {
   const result =
     NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
       ? `node is t.${type}`

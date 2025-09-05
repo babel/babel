@@ -220,7 +220,7 @@ target["build-no-bundle"] = function () {
 target["build-flow-typings"] = function () {
   writeFileSync(
     "packages/babel-types/lib/index.js.flow",
-    node(["packages/babel-types/scripts/generators/flow.js"], undefined, false)
+    node(["packages/babel-types/scripts/generators/flow.ts"], undefined, false)
   );
 };
 
@@ -339,7 +339,7 @@ target["build-typescript-legacy-typings"] = function () {
   writeFileSync(
     "packages/babel-types/lib/index-legacy.d.ts",
     node(
-      ["packages/babel-types/scripts/generators/typescript-legacy.js"],
+      ["packages/babel-types/scripts/generators/typescript-legacy.ts"],
       undefined,
       false
     )

@@ -381,6 +381,15 @@ export default [
     },
   },
   {
+    files: ["packages/babel-types/scripts/**/*.ts"],
+    rules: {
+      "import/no-extraneous-dependencies": [
+        "error",
+        { packageDir: ["./packages/babel-types", "./"] },
+      ],
+    },
+  },
+  {
     files: ["packages/babel-plugin-transform-runtime/scripts/**/*.js"],
     rules: {
       "import/no-extraneous-dependencies": [
