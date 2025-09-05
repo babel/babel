@@ -9,8 +9,7 @@ import {
 
 /**
  * Generate an assert helper for a given type.
- * @param {string} type Node type or alias type
- * @returns string
+ * @param type Node type or alias type
  */
 function addAssertHelper(type: string) {
   const result =

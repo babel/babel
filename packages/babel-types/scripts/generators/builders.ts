@@ -19,8 +19,7 @@ import type { FieldOptions } from "../../src/definitions/utils.ts";
 if (!IS_BABEL_8()) {
   /**
    * Convert the first character of a string to lowercase.
-   * @param {string} string
-   * @returns {string}
+   * @param string
    */
   // eslint-disable-next-line no-var
   var lowerFirst = function (string: string): string {
@@ -30,8 +29,7 @@ if (!IS_BABEL_8()) {
 
 /**
  * Generate the builder arguments for a given node type.
- * @param {string} type
- * @returns {string[]}
+ * @param type AST Node type
  */
 function generateBuilderArgs(type: string): string[] {
   const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
@@ -79,12 +77,12 @@ function generateBuilderArgs(type: string): string[] {
   return args;
 }
 
+type BuilderKind = "lowercase.ts" | "uppercase.ts" | "index.ts";
 /**
  * Generate the builder functions for a given builder kind.
- * @param {string} kind
- * @returns {string}
+ * @param kind
  */
-export default function generateBuilders(kind: string): string {
+export default function generateBuilders(kind: BuilderKind): string {
   return kind === "lowercase.ts"
     ? generateLowercaseBuilders()
     : kind === "uppercase.ts"

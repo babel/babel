@@ -153,10 +153,9 @@ const aliasDeprecationNotes = {
 
 /**
  * Format the history items for display.
- * @param {HistoryItem[]} historyItems
- * @returns {string[]}
+ * @param historyItems
  */
-function formatHistory(historyItems: HistoryItem[]) {
+function formatHistory(historyItems: HistoryItem[]): string[] {
   const lines = historyItems.map(
     item => "| `" + item[0] + "` | " + item[1] + " |"
   );
@@ -172,8 +171,8 @@ function formatHistory(historyItems: HistoryItem[]) {
 }
 /**
  * Print the API history for a specific node type.
- * @param {string} key
- * @param {string[]} readme collection of readme lines
+ * @param key
+ * @param readme collection of readme lines
  */
 function printAPIHistory(key: string, readme: string[]) {
   if (APIHistory[key]) {

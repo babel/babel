@@ -14,8 +14,8 @@ const parentMaps = new Map([["File", new Set(["null"])]]);
 
 /**
  * Register parent maps for a given parent and an array of nodes.
- * @param {string} parent
- * @param {string[]} nodes
+ * @param parent
+ * @param nodes
  */
 function registerParentMaps(parent: string, nodes: string[]) {
   for (const node of nodes) {
@@ -29,8 +29,8 @@ function registerParentMaps(parent: string, nodes: string[]) {
 /**
  * Get the node types from a validator. It will also resolve alias types to their
  * corresponding node types.
- * @param {Validator | undefined} validator
- * @returns {string[]}
+ * @param validator
+ * @returns
  */
 function getNodeTypesFromValidator(validator: Validator | undefined): string[] {
   if (validator === undefined) return [];
