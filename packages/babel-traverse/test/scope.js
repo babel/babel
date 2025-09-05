@@ -1039,6 +1039,85 @@ describe("scope", () => {
       `);
       expect(program.scope.hasOwnBinding("ref")).toBe(true);
     });
+    it("registers the new binding within IIFunctionExpression when it has no arguments", () => {
+      const program = getPath("(function(a, b) {})()");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(
+        `"(function (a, b, ref) {})();"`,
+      );
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("registers the new binding within IIFunctionExpression when it has same arguments with parameters", () => {
+      const program = getPath("(function(a, b) {})(0, 0)");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(
+        `"(function (a, b, ref) {})(0, 0);"`,
+      );
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("registers the new binding within IIArrowFunctionExpression when it has no arguments", () => {
+      const program = getPath("((a, b) => {})()");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(
+        `"((a, b, ref) => {})();"`,
+      );
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("registers the new binding within IIArrowFunctionExpression when it has same arguments with parameters", () => {
+      const program = getPath("((a, b) => {})(0, 0)");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(
+        `"((a, b, ref) => {})(0, 0);"`,
+      );
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+
+    it("should not register the new binding within IIFunctionExpression when it has a function name", () => {
+      const program = getPath("(function f(a, b = f.length) {})()");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "(function f(a, b = f.length) {
+          var ref;
+        })();"
+      `);
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("should not register the new binding within IIFunctionExpression when it has more arguments than parameters", () => {
+      const program = getPath("(function() { arguments.length })(0)");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "(function () {
+          var ref;
+          arguments.length;
+        })(0);"
+      `);
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("should not register the new binding within IIArrowFunctionExpression when it has more arguments than parameters", () => {
+      const program = getPath("(() => { arguments.length })(0)");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "(() => {
+          var ref;
+          arguments.length;
+        })(0);"
+      `);
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
   });
 
   describe("rename", () => {
