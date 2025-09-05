@@ -242,6 +242,15 @@ function resetScope(scope: Scope) {
   scope.globals = Object.create(null);
 }
 
+function isAnonymousFunctionExpression(
+  path: NodePath,
+): path is NodePath<t.FunctionExpression | t.ArrowFunctionExpression> {
+  return (
+    (path.isFunctionExpression() && !path.node.id) ||
+    path.isArrowFunctionExpression()
+  );
+}
+
 interface CollectVisitorState {
   assignments: NodePath<t.AssignmentExpression>[];
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
@@ -1104,9 +1113,7 @@ class Scope {
       !init &&
       !unique &&
       (kind === "var" || kind === "let") &&
-      path.isFunction() &&
-      // @ts-expect-error ArrowFunctionExpression never has a name
-      !path.node.name &&
+      isAnonymousFunctionExpression(path) &&
       isCallExpression(path.parent, { callee: path.node }) &&
       path.parent.arguments.length <= path.node.params.length &&
       isIdentifier(id)
