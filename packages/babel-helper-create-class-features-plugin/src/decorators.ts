@@ -1888,6 +1888,7 @@ function transformClass(
             ]);
           }
         }
+        // @ts-expect-error Transforms static method to non-statics attached to the wrapper class
         element.node.static = false;
         statics.push(element.node);
         element.remove();

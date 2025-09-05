@@ -1426,7 +1426,7 @@ class Scope {
       }
 
       // for (var i in test)
-      if (parentPath.parentPath.isFor({ left: parent })) {
+      if (parentPath.parentPath.isForXStatement({ left: parent })) {
         parentPath.replaceWith(firstId);
       } else if (init.length === 0) {
         parentPath.remove();
