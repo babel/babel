@@ -16,6 +16,28 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-beta.2 (2025-09-05)
+
+#### :boom: Breaking Change
+* `babel-standalone`
+  * [#17421](https://github.com/babel/babel/pull/17421) Do not enable default plugins in `@babel/standalone` ([@gwillen](https://github.com/gwillen))
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#17495](https://github.com/babel/babel/pull/17495) fix: allow `d` and `v` flag in `regExpLiteral` builder ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#17479](https://github.com/babel/babel/pull/17479) [Babel 8] Align TSMappedType AST ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-rest-spread`, `babel-traverse`
+  * [#17485](https://github.com/babel/babel/pull/17485) Improve @babel/traverse typings ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helpers`, `babel-runtime-corejs3`, `babel-traverse`, `babel-types`
+  * [#17471](https://github.com/babel/babel/pull/17471) Improve @babel/core typings ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#17470](https://github.com/babel/babel/pull/17470) export PartialConfig and NormalizedOptions ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#17468](https://github.com/babel/babel/pull/17468) build(Babel 8): disable JSON module transform ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.0-beta.1 (2025-07-02)
 
 #### :boom: Breaking Change
