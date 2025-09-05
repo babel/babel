@@ -21,6 +21,7 @@ export function hasDecorators(node: t.Class) {
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
+import type { VisitorBase } from "@babel/traverse";
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
   loose?: boolean;
@@ -2238,19 +2239,14 @@ function shouldTransformClass(node: t.Class) {
   return isDecorated(node) || node.body.body.some(shouldTransformElement);
 }
 
-export function buildNamedEvaluationVisitor(
-  needsName: (path: NodePath) => boolean,
+export function buildNamedEvaluationVisitor<T extends t.Node>(
+  needsName: (path: NodePath) => path is NodePath<T>,
   visitor: (
-    path: NodePath,
+    path: NodePath<T>,
     state: PluginPass,
-    name:
-      | string
-      | t.Identifier
-      | t.StringLiteral
-      | t.NumericLiteral
-      | t.BigIntLiteral,
+    name: string | t.Identifier | t.StringLiteral,
   ) => void,
-) {
+): Visitor<PluginPass> {
   function handleComputedProperty(
     propertyPath: NodePath<
       t.ObjectProperty | t.ClassProperty | t.ClassAccessorProperty
@@ -2415,7 +2411,9 @@ export function buildNamedEvaluationVisitor(
   } satisfies Visitor<PluginPass>;
 }
 
-function isDecoratedAnonymousClassExpression(path: NodePath) {
+function isDecoratedAnonymousClassExpression(
+  path: NodePath,
+): path is NodePath<t.ClassExpression> {
   return (
     path.isClassExpression({ id: null }) && shouldTransformClass(path.node)
   );
@@ -2536,7 +2534,7 @@ export default function (
         visitClass(path, state, undefined);
       },
 
-      ...namedEvaluationVisitor,
+      ...(namedEvaluationVisitor as VisitorBase<PluginPass>),
     },
   };
 }

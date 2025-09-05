@@ -900,7 +900,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
     if (i === this.state.labels.length) {
       const type = isBreak ? "BreakStatement" : "ContinueStatement";
-      this.raise(Errors.IllegalBreakContinue, node, { type });
+      this.raise(Errors.IllegalBreakContinue, node, { type } as const);
     }
   }
 
@@ -1530,7 +1530,7 @@ export default abstract class StatementParser extends ExpressionParser {
     ) {
       this.raise(Errors.ForInOfLoopInitializer, init, {
         type: isForIn ? "ForInStatement" : "ForOfStatement",
-      });
+      } as const);
     }
 
     if (init.type === "AssignmentPattern") {
@@ -1591,7 +1591,7 @@ export default abstract class StatementParser extends ExpressionParser {
             this.state.lastTokEndLoc,
             {
               kind: "destructuring",
-            },
+            } as const,
           );
         } else if (
           (kind === "const" || kind === "using" || kind === "await using") &&

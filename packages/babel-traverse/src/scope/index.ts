@@ -57,7 +57,7 @@ import {
 } from "@babel/types";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
-import type { ExplodedVisitor, Visitor } from "../types.ts";
+import type { ExplodedVisitor, VisitNodeFunction, Visitor } from "../types.ts";
 
 type NodePart = string | number | bigint | boolean;
 // Recursively gathers the identifying names of a node.
@@ -1039,7 +1039,11 @@ class Scope {
       const typeVisitors = scopeVisitor[path.type];
       if (typeVisitors) {
         for (const visit of typeVisitors.enter) {
-          visit.call(state, path, state);
+          (visit as VisitNodeFunction<CollectVisitorState, t.Node>).call(
+            state,
+            path,
+            state,
+          );
         }
       }
     }

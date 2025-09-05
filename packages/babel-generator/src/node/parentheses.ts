@@ -195,7 +195,7 @@ export function Binary(
 }
 
 export function UnionTypeAnnotation(
-  node: t.UnionTypeAnnotation,
+  node: t.UnionTypeAnnotation | t.IntersectionTypeAnnotation,
   parent: t.Node,
 ): boolean {
   const parentType = parent.type;
@@ -283,7 +283,7 @@ export function TSUnionType(node: t.TSUnionType, parent: t.Node): boolean {
 }
 
 export function TSIntersectionType(
-  node: t.TSUnionType,
+  node: t.TSIntersectionType,
   parent: t.Node,
 ): boolean {
   const parentType = parent.type;
@@ -346,7 +346,7 @@ export function TSInstantiationExpression(
 }
 
 export function TSFunctionType(
-  node: t.TSFunctionType,
+  node: t.TSFunctionType | t.TSConstructorType,
   parent: t.Node,
 ): boolean {
   const parentType = parent.type;
@@ -405,7 +405,7 @@ export function SequenceExpression(
 }
 
 export function YieldExpression(
-  node: t.YieldExpression,
+  node: t.YieldExpression | t.AwaitExpression,
   parent: t.Node,
 ): boolean {
   const parentType = parent.type;
@@ -490,7 +490,7 @@ export function ConditionalExpression(
 export { ConditionalExpression as ArrowFunctionExpression };
 
 export function OptionalMemberExpression(
-  node: t.OptionalMemberExpression,
+  node: t.OptionalMemberExpression | t.OptionalCallExpression,
   parent: t.Node,
 ): boolean {
   return (

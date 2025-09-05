@@ -38,7 +38,7 @@ function isReferenceOrThis(node: t.Node, name?: string) {
   return t.isThisExpression(node) || (name && t.isIdentifier(node, { name }));
 }
 
-const hasReferenceOrThisVisitor: Visitor<{ name?: string; ref: () => void }> = {
+const hasReferenceOrThisVisitor: Visitor<{ name: string; ref: () => void }> = {
   "ThisExpression|ReferencedIdentifier"(path, state) {
     if (isReferenceOrThis(path.node, state.name)) {
       state.ref();

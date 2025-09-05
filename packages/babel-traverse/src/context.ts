@@ -6,7 +6,7 @@ import type * as t from "@babel/types";
 import type { Visitor } from "./types.ts";
 import { popContext, pushContext, resync } from "./path/context.ts";
 
-export default class TraversalContext<S = unknown> {
+export default class TraversalContext<S = any> {
   constructor(
     scope: Scope,
     opts: ExplodedTraverseOptions<S>,

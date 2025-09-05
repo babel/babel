@@ -389,7 +389,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       ) => {
         if (modifier === before && modified[after]) {
           this.raise(TSErrors.InvalidModifiersOrder, loc, {
-            orderedModifiers: [before, after],
+            orderedModifiers: [before, after] as [TsModifier, TsModifier],
           });
         }
       };
@@ -404,7 +404,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           (modified[mod2] && modifier === mod1)
         ) {
           this.raise(TSErrors.IncompatibleModifiers, loc, {
-            modifiers: [mod1, mod2],
+            modifiers: [mod1, mod2] as [TsModifier, TsModifier],
           });
         }
       };
@@ -806,14 +806,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsTryParseTypeParameters(
-      parseModifiers: (node: N.TsTypeParameter) => void,
+      parseModifiers: (node: Undone<N.TsTypeParameter>) => void,
     ): N.TsTypeParameterDeclaration | undefined | null {
       if (this.match(tt.lt)) {
         return this.tsParseTypeParameters(parseModifiers);
       }
     }
 
-    tsParseTypeParameters(parseModifiers: (node: N.TsTypeParameter) => void) {
+    tsParseTypeParameters(
+      parseModifiers: (node: Undone<N.TsTypeParameter>) => void,
+    ) {
       const node = this.startNode<N.TsTypeParameterDeclaration>();
 
       if (this.match(tt.lt) || this.match(tt.jsxTagStart)) {

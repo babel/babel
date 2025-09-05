@@ -296,7 +296,7 @@ export function transform(
       willPathCastToBoolean(maybeWrapped)
         ? t.booleanLiteral(false)
         : scope.buildUndefinedNode(),
-      wrapLast,
+      wrapLast as (value: t.Expression) => t.Expression,
     );
   }
 }

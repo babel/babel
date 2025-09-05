@@ -29,14 +29,14 @@ const buildSafeArgumentsAccess = template.statement(`
 `);
 
 // last 2 parameters are optional -- they are used by transform-object-rest-spread/src/index.js
-export default function convertFunctionParams(
+export default function convertFunctionParams<T extends t.Statement>(
   path: NodePath<t.Function>,
   ignoreFunctionLength: boolean | void,
   shouldTransformParam?: (index: number) => boolean,
   replaceRestElement?: (
     path: NodePath<t.Function>,
     paramPath: NodePath<t.Function["params"][number]>,
-    transformedRestNodes: t.Statement[],
+    transformedRestNodes: T[],
   ) => void,
 ) {
   const params = path.get("params");
@@ -72,7 +72,7 @@ export default function convertFunctionParams(
     if (shouldTransformParam && !shouldTransformParam(i)) {
       continue;
     }
-    const transformedRestNodes: t.Statement[] = [];
+    const transformedRestNodes: T[] = [];
     if (replaceRestElement) {
       replaceRestElement(path, param, transformedRestNodes);
     }
