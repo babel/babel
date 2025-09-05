@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.4 (2025-09-05)
+
+#### :house: Internal
+* `babel-core`, `babel-helper-check-duplicate-nodes`, `babel-traverse`, `babel-types`
+  * [#17493](https://github.com/babel/babel/pull/17493) Update Jest to v30.1.1 ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`
+  * [#17455](https://github.com/babel/babel/pull/17455) chore: Clean up `transform-regenerator` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#17474](https://github.com/babel/babel/pull/17474) Switch to @jridgewell/remapping ([@mrginglymus](https://github.com/mrginglymus))
 ## v7.28.3 (2025-08-14)
 
 #### :eyeglasses: Spec Compliance
