@@ -79,19 +79,15 @@ export function isReferencedIdentifier(
   opts?: Options<VirtualTypeAliases["ReferencedIdentifier"]>,
 ): boolean {
   const { node, parent } = this;
-  // Todo: we should not pass `opts` to `isJSXMemberExpression` since it does not share the shape with the identifier
-  // i.e. isJSXMemberExpression(JSXMemberExpression, { name: "foo" }) always returns false because it does not has a `name` property
-  if (!isIdentifier(node, opts) && !isJSXMemberExpression(parent, opts)) {
-    if (isJSXIdentifier(node, opts)) {
-      if (isCompatTag(node.name)) return false;
-    } else {
-      // not a JSXIdentifier or an Identifier
-      return false;
-    }
+  if (isIdentifier(node, opts)) {
+    return nodeIsReferenced(node, parent, this.parentPath.parent);
+  } else if (isJSXIdentifier(node, opts)) {
+    if (!isJSXMemberExpression(parent) && isCompatTag(node.name)) return false;
+    return nodeIsReferenced(node, parent, this.parentPath.parent);
+  } else {
+    // not a JSXIdentifier or an Identifier
+    return false;
   }
-
-  // check if node is referenced
-  return nodeIsReferenced(node, parent, this.parentPath.parent);
 }
 
 export function isReferencedMemberExpression(this: NodePath): boolean {
