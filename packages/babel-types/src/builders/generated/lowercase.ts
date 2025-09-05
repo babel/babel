@@ -447,17 +447,35 @@ export function logicalExpression(
 }
 export function memberExpression(
   object: t.Expression | t.Super,
+  property: t.Expression,
+  computed?: true,
+  optional?: boolean | null,
+): Extract<t.MemberExpression, { computed: true }>;
+export function memberExpression(
+  object: t.Expression | t.Super,
+  property: t.Identifier | t.PrivateName,
+  computed?: false,
+  optional?: boolean | null,
+): Extract<t.MemberExpression, { computed: false }>;
+export function memberExpression(
+  object: t.Expression | t.Super,
+  property: t.Expression | t.Identifier | t.PrivateName,
+  computed?: boolean,
+  optional?: boolean | null,
+): t.MemberExpression;
+export function memberExpression(
+  object: t.Expression | t.Super,
   property: t.Expression | t.Identifier | t.PrivateName,
   computed: boolean = false,
   optional: boolean | null = null,
 ): t.MemberExpression {
-  const node: t.MemberExpression = {
+  const node = {
     type: "MemberExpression",
     object,
     property,
     computed,
     optional,
-  };
+  } as t.MemberExpression;
   const defs = NODE_FIELDS.MemberExpression;
   validate(defs.object, node, "object", object, 1);
   validate(defs.property, node, "property", property, 1);
@@ -511,6 +529,38 @@ export function objectExpression(
   return node;
 }
 export function objectMethod(
+  kind: "method" | "get" | "set" | undefined,
+  key: t.Expression,
+  params: Array<t.FunctionParameter>,
+  body: t.BlockStatement,
+  computed?: true,
+  generator?: boolean,
+  async?: boolean,
+): Extract<t.ObjectMethod, { computed: true }>;
+export function objectMethod(
+  kind: "method" | "get" | "set" | undefined,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+  params: Array<t.FunctionParameter>,
+  body: t.BlockStatement,
+  computed?: false,
+  generator?: boolean,
+  async?: boolean,
+): Extract<t.ObjectMethod, { computed: false }>;
+export function objectMethod(
+  kind: "method" | "get" | "set" | undefined,
+  key:
+    | t.Expression
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral,
+  params: Array<t.FunctionParameter>,
+  body: t.BlockStatement,
+  computed?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): t.ObjectMethod;
+export function objectMethod(
   kind: "method" | "get" | "set" | undefined = "method",
   key:
     | t.Expression
@@ -524,7 +574,7 @@ export function objectMethod(
   generator: boolean = false,
   async: boolean = false,
 ): t.ObjectMethod {
-  const node: t.ObjectMethod = {
+  const node = {
     type: "ObjectMethod",
     kind,
     key,
@@ -533,7 +583,7 @@ export function objectMethod(
     computed,
     generator,
     async,
-  };
+  } as t.ObjectMethod;
   const defs = NODE_FIELDS.ObjectMethod;
   validate(defs.kind, node, "kind", kind);
   validate(defs.key, node, "key", key, 1);
@@ -544,6 +594,40 @@ export function objectMethod(
   validate(defs.async, node, "async", async);
   return node;
 }
+export function objectProperty(
+  key: t.Expression,
+  value: t.Expression | t.PatternLike,
+  computed?: true,
+  shorthand?: boolean,
+  decorators?: Array<t.Decorator> | null,
+): Extract<t.ObjectProperty, { computed: true }>;
+export function objectProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.DecimalLiteral
+    | t.PrivateName,
+  value: t.Expression | t.PatternLike,
+  computed?: false,
+  shorthand?: boolean,
+  decorators?: Array<t.Decorator> | null,
+): Extract<t.ObjectProperty, { computed: false }>;
+export function objectProperty(
+  key:
+    | t.Expression
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.DecimalLiteral
+    | t.PrivateName,
+  value: t.Expression | t.PatternLike,
+  computed?: boolean,
+  shorthand?: boolean,
+  decorators?: Array<t.Decorator> | null,
+): t.ObjectProperty;
 export function objectProperty(
   key:
     | t.Expression
@@ -558,14 +642,14 @@ export function objectProperty(
   shorthand: boolean = false,
   decorators: Array<t.Decorator> | null = null,
 ): t.ObjectProperty {
-  const node: t.ObjectProperty = {
+  const node = {
     type: "ObjectProperty",
     key,
     value,
     computed,
     shorthand,
     decorators,
-  };
+  } as t.ObjectProperty;
   const defs = NODE_FIELDS.ObjectProperty;
   validate(defs.key, node, "key", key, 1);
   validate(defs.value, node, "value", value, 1);
@@ -1048,6 +1132,41 @@ export function metaProperty(
   return node;
 }
 export function classMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key: t.Expression,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  body: t.BlockStatement,
+  computed?: true,
+  _static?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): Extract<t.ClassMethod, { computed: true }>;
+export function classMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  body: t.BlockStatement,
+  computed?: false,
+  _static?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): Extract<t.ClassMethod, { computed: false }>;
+export function classMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  body: t.BlockStatement,
+  computed?: boolean,
+  _static?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): t.ClassMethod;
+export function classMethod(
   kind: "get" | "set" | "method" | "constructor" | undefined = "method",
   key:
     | t.Identifier
@@ -1062,7 +1181,7 @@ export function classMethod(
   generator: boolean = false,
   async: boolean = false,
 ): t.ClassMethod {
-  const node: t.ClassMethod = {
+  const node = {
     type: "ClassMethod",
     kind,
     key,
@@ -1072,7 +1191,7 @@ export function classMethod(
     static: _static,
     generator,
     async,
-  };
+  } as t.ClassMethod;
   const defs = NODE_FIELDS.ClassMethod;
   validate(defs.kind, node, "kind", kind);
   validate(defs.key, node, "key", key, 1);
@@ -1230,6 +1349,35 @@ export function optionalCallExpression(
   return node;
 }
 export function classProperty(
+  key: t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: true,
+  _static?: boolean,
+): Extract<t.ClassProperty, { computed: true }>;
+export function classProperty(
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: false,
+  _static?: boolean,
+): Extract<t.ClassProperty, { computed: false }>;
+export function classProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassProperty;
+export function classProperty(
   key:
     | t.Identifier
     | t.StringLiteral
@@ -1242,7 +1390,7 @@ export function classProperty(
   computed: boolean = false,
   _static: boolean = false,
 ): t.ClassProperty {
-  const node: t.ClassProperty = {
+  const node = {
     type: "ClassProperty",
     key,
     value,
@@ -1250,7 +1398,7 @@ export function classProperty(
     decorators,
     computed,
     static: _static,
-  };
+  } as t.ClassProperty;
   const defs = NODE_FIELDS.ClassProperty;
   validate(defs.key, node, "key", key, 1);
   validate(defs.value, node, "value", value, 1);
@@ -1260,6 +1408,41 @@ export function classProperty(
   validate(defs.static, node, "static", _static);
   return node;
 }
+export function classAccessorProperty(
+  key: t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: true,
+  _static?: boolean,
+): Extract<t.ClassAccessorProperty, { computed: true }>;
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: false,
+  _static?: boolean,
+): Extract<t.ClassAccessorProperty, { computed: false }>;
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassAccessorProperty;
 export function classAccessorProperty(
   key:
     | t.Identifier
@@ -1274,7 +1457,7 @@ export function classAccessorProperty(
   computed: boolean = false,
   _static: boolean = false,
 ): t.ClassAccessorProperty {
-  const node: t.ClassAccessorProperty = {
+  const node = {
     type: "ClassAccessorProperty",
     key,
     value,
@@ -1282,7 +1465,7 @@ export function classAccessorProperty(
     decorators,
     computed,
     static: _static,
-  };
+  } as t.ClassAccessorProperty;
   const defs = NODE_FIELDS.ClassAccessorProperty;
   validate(defs.key, node, "key", key, 1);
   validate(defs.value, node, "value", value, 1);
@@ -2588,6 +2771,32 @@ export function tsDeclareFunction(
 }
 export { tsDeclareFunction as tSDeclareFunction };
 export function tsDeclareMethod(
+  decorators: Array<t.Decorator> | null | undefined,
+  key: t.Expression,
+  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  returnType?: t.TSTypeAnnotation | t.Noop | null,
+): Extract<t.TSDeclareMethod, { computed: true }>;
+export function tsDeclareMethod(
+  decorators: Array<t.Decorator> | null | undefined,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  returnType?: t.TSTypeAnnotation | t.Noop | null,
+): Extract<t.TSDeclareMethod, { computed: false }>;
+export function tsDeclareMethod(
+  decorators: Array<t.Decorator> | null | undefined,
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression,
+  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  returnType?: t.TSTypeAnnotation | t.Noop | null,
+): t.TSDeclareMethod;
+export function tsDeclareMethod(
   decorators: Array<t.Decorator> | null | undefined = null,
   key:
     | t.Identifier
@@ -2603,14 +2812,14 @@ export function tsDeclareMethod(
   params: Array<t.FunctionParameter | t.TSParameterProperty>,
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
-  const node: t.TSDeclareMethod = {
+  const node = {
     type: "TSDeclareMethod",
     decorators,
     key,
     typeParameters,
     params,
     returnType,
-  };
+  } as t.TSDeclareMethod;
   const defs = NODE_FIELDS.TSDeclareMethod;
   validate(defs.decorators, node, "decorators", decorators, 1);
   validate(defs.key, node, "key", key, 1);
