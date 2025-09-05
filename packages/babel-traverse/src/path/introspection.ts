@@ -702,9 +702,6 @@ export function isInStrictMode(this: NodePath) {
     if (path.isFunction()) {
       body = path.node.body as t.BlockStatement;
     } else if (path.isProgram()) {
-      // @ts-expect-error TODO: TS thinks that `path` here cannot be
-      // Program due to the `isProgram()` check at the beginning of
-      // the function
       body = path.node;
     } else {
       return false;

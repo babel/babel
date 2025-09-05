@@ -197,7 +197,7 @@ function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
   for (const path of binding.referencePaths as NodePath<t.Identifier>[]) {
     if (path.parentPath.isUpdateExpression()) continue;
     // It will be handled after transforming the loop
-    if (path.parentPath.isFor({ left: path.node })) continue;
+    if (path.parentPath.isForXStatement({ left: path.node })) continue;
 
     const replacement = getTDZReplacement(path, state);
     if (!replacement) continue;

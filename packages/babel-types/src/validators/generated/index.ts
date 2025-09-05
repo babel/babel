@@ -9,8 +9,8 @@ import shallowEqual from "../../utils/shallowEqual.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
-type Opts<Obj> = Partial<{
-  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+type Options<Obj> = Partial<{
+  [Prop in Exclude<keyof Obj, "type">]: Obj[Prop] extends t.Node
     ? t.Node
     : Obj[Prop] extends t.Node[]
       ? t.Node[]
@@ -19,8 +19,15 @@ type Opts<Obj> = Partial<{
 
 export function isArrayExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ArrayExpression> | null,
-): node is t.ArrayExpression {
+): node is t.ArrayExpression;
+export function isArrayExpression<Opts extends Options<t.ArrayExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ArrayExpression & Opts;
+export function isArrayExpression<Opts extends Options<t.ArrayExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ArrayExpression") return false;
@@ -29,8 +36,16 @@ export function isArrayExpression(
 }
 export function isAssignmentExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.AssignmentExpression> | null,
-): node is t.AssignmentExpression {
+): node is t.AssignmentExpression;
+export function isAssignmentExpression<
+  Opts extends Options<t.AssignmentExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.AssignmentExpression & Opts;
+export function isAssignmentExpression<
+  Opts extends Options<t.AssignmentExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "AssignmentExpression") return false;
@@ -39,8 +54,15 @@ export function isAssignmentExpression(
 }
 export function isBinaryExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BinaryExpression> | null,
-): node is t.BinaryExpression {
+): node is t.BinaryExpression;
+export function isBinaryExpression<Opts extends Options<t.BinaryExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BinaryExpression & Opts;
+export function isBinaryExpression<Opts extends Options<t.BinaryExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BinaryExpression") return false;
@@ -49,8 +71,16 @@ export function isBinaryExpression(
 }
 export function isInterpreterDirective(
   node: t.Node | null | undefined,
-  opts?: Opts<t.InterpreterDirective> | null,
-): node is t.InterpreterDirective {
+): node is t.InterpreterDirective;
+export function isInterpreterDirective<
+  Opts extends Options<t.InterpreterDirective>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.InterpreterDirective & Opts;
+export function isInterpreterDirective<
+  Opts extends Options<t.InterpreterDirective>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "InterpreterDirective") return false;
@@ -59,8 +89,15 @@ export function isInterpreterDirective(
 }
 export function isDirective(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Directive> | null,
-): node is t.Directive {
+): node is t.Directive;
+export function isDirective<Opts extends Options<t.Directive>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Directive & Opts;
+export function isDirective<Opts extends Options<t.Directive>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Directive") return false;
@@ -69,8 +106,15 @@ export function isDirective(
 }
 export function isDirectiveLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DirectiveLiteral> | null,
-): node is t.DirectiveLiteral {
+): node is t.DirectiveLiteral;
+export function isDirectiveLiteral<Opts extends Options<t.DirectiveLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DirectiveLiteral & Opts;
+export function isDirectiveLiteral<Opts extends Options<t.DirectiveLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DirectiveLiteral") return false;
@@ -79,8 +123,15 @@ export function isDirectiveLiteral(
 }
 export function isBlockStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BlockStatement> | null,
-): node is t.BlockStatement {
+): node is t.BlockStatement;
+export function isBlockStatement<Opts extends Options<t.BlockStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BlockStatement & Opts;
+export function isBlockStatement<Opts extends Options<t.BlockStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BlockStatement") return false;
@@ -89,8 +140,15 @@ export function isBlockStatement(
 }
 export function isBreakStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BreakStatement> | null,
-): node is t.BreakStatement {
+): node is t.BreakStatement;
+export function isBreakStatement<Opts extends Options<t.BreakStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BreakStatement & Opts;
+export function isBreakStatement<Opts extends Options<t.BreakStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BreakStatement") return false;
@@ -99,8 +157,15 @@ export function isBreakStatement(
 }
 export function isCallExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.CallExpression> | null,
-): node is t.CallExpression {
+): node is t.CallExpression;
+export function isCallExpression<Opts extends Options<t.CallExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.CallExpression & Opts;
+export function isCallExpression<Opts extends Options<t.CallExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "CallExpression") return false;
@@ -109,8 +174,15 @@ export function isCallExpression(
 }
 export function isCatchClause(
   node: t.Node | null | undefined,
-  opts?: Opts<t.CatchClause> | null,
-): node is t.CatchClause {
+): node is t.CatchClause;
+export function isCatchClause<Opts extends Options<t.CatchClause>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.CatchClause & Opts;
+export function isCatchClause<Opts extends Options<t.CatchClause>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "CatchClause") return false;
@@ -119,8 +191,16 @@ export function isCatchClause(
 }
 export function isConditionalExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ConditionalExpression> | null,
-): node is t.ConditionalExpression {
+): node is t.ConditionalExpression;
+export function isConditionalExpression<
+  Opts extends Options<t.ConditionalExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ConditionalExpression & Opts;
+export function isConditionalExpression<
+  Opts extends Options<t.ConditionalExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ConditionalExpression") return false;
@@ -129,8 +209,15 @@ export function isConditionalExpression(
 }
 export function isContinueStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ContinueStatement> | null,
-): node is t.ContinueStatement {
+): node is t.ContinueStatement;
+export function isContinueStatement<Opts extends Options<t.ContinueStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ContinueStatement & Opts;
+export function isContinueStatement<Opts extends Options<t.ContinueStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ContinueStatement") return false;
@@ -139,8 +226,15 @@ export function isContinueStatement(
 }
 export function isDebuggerStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DebuggerStatement> | null,
-): node is t.DebuggerStatement {
+): node is t.DebuggerStatement;
+export function isDebuggerStatement<Opts extends Options<t.DebuggerStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DebuggerStatement & Opts;
+export function isDebuggerStatement<Opts extends Options<t.DebuggerStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DebuggerStatement") return false;
@@ -149,8 +243,15 @@ export function isDebuggerStatement(
 }
 export function isDoWhileStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DoWhileStatement> | null,
-): node is t.DoWhileStatement {
+): node is t.DoWhileStatement;
+export function isDoWhileStatement<Opts extends Options<t.DoWhileStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DoWhileStatement & Opts;
+export function isDoWhileStatement<Opts extends Options<t.DoWhileStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DoWhileStatement") return false;
@@ -159,8 +260,15 @@ export function isDoWhileStatement(
 }
 export function isEmptyStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EmptyStatement> | null,
-): node is t.EmptyStatement {
+): node is t.EmptyStatement;
+export function isEmptyStatement<Opts extends Options<t.EmptyStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EmptyStatement & Opts;
+export function isEmptyStatement<Opts extends Options<t.EmptyStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EmptyStatement") return false;
@@ -169,18 +277,31 @@ export function isEmptyStatement(
 }
 export function isExpressionStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExpressionStatement> | null,
-): node is t.ExpressionStatement {
+): node is t.ExpressionStatement;
+export function isExpressionStatement<
+  Opts extends Options<t.ExpressionStatement>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExpressionStatement & Opts;
+export function isExpressionStatement<
+  Opts extends Options<t.ExpressionStatement>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExpressionStatement") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isFile(
+export function isFile(node: t.Node | null | undefined): node is t.File;
+export function isFile<Opts extends Options<t.File>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.File> | null,
-): node is t.File {
+  opts?: Opts | null,
+): node is t.File & Opts;
+export function isFile<Opts extends Options<t.File>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "File") return false;
@@ -189,8 +310,15 @@ export function isFile(
 }
 export function isForInStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ForInStatement> | null,
-): node is t.ForInStatement {
+): node is t.ForInStatement;
+export function isForInStatement<Opts extends Options<t.ForInStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ForInStatement & Opts;
+export function isForInStatement<Opts extends Options<t.ForInStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ForInStatement") return false;
@@ -199,8 +327,15 @@ export function isForInStatement(
 }
 export function isForStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ForStatement> | null,
-): node is t.ForStatement {
+): node is t.ForStatement;
+export function isForStatement<Opts extends Options<t.ForStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ForStatement & Opts;
+export function isForStatement<Opts extends Options<t.ForStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ForStatement") return false;
@@ -209,8 +344,16 @@ export function isForStatement(
 }
 export function isFunctionDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionDeclaration> | null,
-): node is t.FunctionDeclaration {
+): node is t.FunctionDeclaration;
+export function isFunctionDeclaration<
+  Opts extends Options<t.FunctionDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionDeclaration & Opts;
+export function isFunctionDeclaration<
+  Opts extends Options<t.FunctionDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "FunctionDeclaration") return false;
@@ -219,8 +362,16 @@ export function isFunctionDeclaration(
 }
 export function isFunctionExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionExpression> | null,
-): node is t.FunctionExpression {
+): node is t.FunctionExpression;
+export function isFunctionExpression<
+  Opts extends Options<t.FunctionExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionExpression & Opts;
+export function isFunctionExpression<
+  Opts extends Options<t.FunctionExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "FunctionExpression") return false;
@@ -229,8 +380,15 @@ export function isFunctionExpression(
 }
 export function isIdentifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Identifier> | null,
-): node is t.Identifier {
+): node is t.Identifier;
+export function isIdentifier<Opts extends Options<t.Identifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Identifier & Opts;
+export function isIdentifier<Opts extends Options<t.Identifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Identifier") return false;
@@ -239,8 +397,15 @@ export function isIdentifier(
 }
 export function isIfStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.IfStatement> | null,
-): node is t.IfStatement {
+): node is t.IfStatement;
+export function isIfStatement<Opts extends Options<t.IfStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.IfStatement & Opts;
+export function isIfStatement<Opts extends Options<t.IfStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "IfStatement") return false;
@@ -249,8 +414,15 @@ export function isIfStatement(
 }
 export function isLabeledStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.LabeledStatement> | null,
-): node is t.LabeledStatement {
+): node is t.LabeledStatement;
+export function isLabeledStatement<Opts extends Options<t.LabeledStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.LabeledStatement & Opts;
+export function isLabeledStatement<Opts extends Options<t.LabeledStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "LabeledStatement") return false;
@@ -259,8 +431,15 @@ export function isLabeledStatement(
 }
 export function isStringLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.StringLiteral> | null,
-): node is t.StringLiteral {
+): node is t.StringLiteral;
+export function isStringLiteral<Opts extends Options<t.StringLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StringLiteral & Opts;
+export function isStringLiteral<Opts extends Options<t.StringLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "StringLiteral") return false;
@@ -269,8 +448,15 @@ export function isStringLiteral(
 }
 export function isNumericLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NumericLiteral> | null,
-): node is t.NumericLiteral {
+): node is t.NumericLiteral;
+export function isNumericLiteral<Opts extends Options<t.NumericLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NumericLiteral & Opts;
+export function isNumericLiteral<Opts extends Options<t.NumericLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "NumericLiteral") return false;
@@ -279,8 +465,15 @@ export function isNumericLiteral(
 }
 export function isNullLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NullLiteral> | null,
-): node is t.NullLiteral {
+): node is t.NullLiteral;
+export function isNullLiteral<Opts extends Options<t.NullLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NullLiteral & Opts;
+export function isNullLiteral<Opts extends Options<t.NullLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "NullLiteral") return false;
@@ -289,8 +482,15 @@ export function isNullLiteral(
 }
 export function isBooleanLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BooleanLiteral> | null,
-): node is t.BooleanLiteral {
+): node is t.BooleanLiteral;
+export function isBooleanLiteral<Opts extends Options<t.BooleanLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BooleanLiteral & Opts;
+export function isBooleanLiteral<Opts extends Options<t.BooleanLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BooleanLiteral") return false;
@@ -299,8 +499,15 @@ export function isBooleanLiteral(
 }
 export function isRegExpLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.RegExpLiteral> | null,
-): node is t.RegExpLiteral {
+): node is t.RegExpLiteral;
+export function isRegExpLiteral<Opts extends Options<t.RegExpLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.RegExpLiteral & Opts;
+export function isRegExpLiteral<Opts extends Options<t.RegExpLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "RegExpLiteral") return false;
@@ -309,8 +516,15 @@ export function isRegExpLiteral(
 }
 export function isLogicalExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.LogicalExpression> | null,
-): node is t.LogicalExpression {
+): node is t.LogicalExpression;
+export function isLogicalExpression<Opts extends Options<t.LogicalExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.LogicalExpression & Opts;
+export function isLogicalExpression<Opts extends Options<t.LogicalExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "LogicalExpression") return false;
@@ -319,8 +533,15 @@ export function isLogicalExpression(
 }
 export function isMemberExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.MemberExpression> | null,
-): node is t.MemberExpression {
+): node is t.MemberExpression;
+export function isMemberExpression<Opts extends Options<t.MemberExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.MemberExpression & Opts;
+export function isMemberExpression<Opts extends Options<t.MemberExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "MemberExpression") return false;
@@ -329,18 +550,30 @@ export function isMemberExpression(
 }
 export function isNewExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NewExpression> | null,
-): node is t.NewExpression {
+): node is t.NewExpression;
+export function isNewExpression<Opts extends Options<t.NewExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NewExpression & Opts;
+export function isNewExpression<Opts extends Options<t.NewExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "NewExpression") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isProgram(
+export function isProgram(node: t.Node | null | undefined): node is t.Program;
+export function isProgram<Opts extends Options<t.Program>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Program> | null,
-): node is t.Program {
+  opts?: Opts | null,
+): node is t.Program & Opts;
+export function isProgram<Opts extends Options<t.Program>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Program") return false;
@@ -349,8 +582,15 @@ export function isProgram(
 }
 export function isObjectExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectExpression> | null,
-): node is t.ObjectExpression {
+): node is t.ObjectExpression;
+export function isObjectExpression<Opts extends Options<t.ObjectExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectExpression & Opts;
+export function isObjectExpression<Opts extends Options<t.ObjectExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectExpression") return false;
@@ -359,8 +599,15 @@ export function isObjectExpression(
 }
 export function isObjectMethod(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectMethod> | null,
-): node is t.ObjectMethod {
+): node is t.ObjectMethod;
+export function isObjectMethod<Opts extends Options<t.ObjectMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectMethod & Opts;
+export function isObjectMethod<Opts extends Options<t.ObjectMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectMethod") return false;
@@ -369,8 +616,15 @@ export function isObjectMethod(
 }
 export function isObjectProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectProperty> | null,
-): node is t.ObjectProperty {
+): node is t.ObjectProperty;
+export function isObjectProperty<Opts extends Options<t.ObjectProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectProperty & Opts;
+export function isObjectProperty<Opts extends Options<t.ObjectProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectProperty") return false;
@@ -379,8 +633,15 @@ export function isObjectProperty(
 }
 export function isRestElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.RestElement> | null,
-): node is t.RestElement {
+): node is t.RestElement;
+export function isRestElement<Opts extends Options<t.RestElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.RestElement & Opts;
+export function isRestElement<Opts extends Options<t.RestElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "RestElement") return false;
@@ -389,8 +650,15 @@ export function isRestElement(
 }
 export function isReturnStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ReturnStatement> | null,
-): node is t.ReturnStatement {
+): node is t.ReturnStatement;
+export function isReturnStatement<Opts extends Options<t.ReturnStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ReturnStatement & Opts;
+export function isReturnStatement<Opts extends Options<t.ReturnStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ReturnStatement") return false;
@@ -399,8 +667,16 @@ export function isReturnStatement(
 }
 export function isSequenceExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SequenceExpression> | null,
-): node is t.SequenceExpression {
+): node is t.SequenceExpression;
+export function isSequenceExpression<
+  Opts extends Options<t.SequenceExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.SequenceExpression & Opts;
+export function isSequenceExpression<
+  Opts extends Options<t.SequenceExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "SequenceExpression") return false;
@@ -409,8 +685,16 @@ export function isSequenceExpression(
 }
 export function isParenthesizedExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ParenthesizedExpression> | null,
-): node is t.ParenthesizedExpression {
+): node is t.ParenthesizedExpression;
+export function isParenthesizedExpression<
+  Opts extends Options<t.ParenthesizedExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ParenthesizedExpression & Opts;
+export function isParenthesizedExpression<
+  Opts extends Options<t.ParenthesizedExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ParenthesizedExpression") return false;
@@ -419,8 +703,15 @@ export function isParenthesizedExpression(
 }
 export function isSwitchCase(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SwitchCase> | null,
-): node is t.SwitchCase {
+): node is t.SwitchCase;
+export function isSwitchCase<Opts extends Options<t.SwitchCase>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.SwitchCase & Opts;
+export function isSwitchCase<Opts extends Options<t.SwitchCase>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "SwitchCase") return false;
@@ -429,8 +720,15 @@ export function isSwitchCase(
 }
 export function isSwitchStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SwitchStatement> | null,
-): node is t.SwitchStatement {
+): node is t.SwitchStatement;
+export function isSwitchStatement<Opts extends Options<t.SwitchStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.SwitchStatement & Opts;
+export function isSwitchStatement<Opts extends Options<t.SwitchStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "SwitchStatement") return false;
@@ -439,8 +737,15 @@ export function isSwitchStatement(
 }
 export function isThisExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ThisExpression> | null,
-): node is t.ThisExpression {
+): node is t.ThisExpression;
+export function isThisExpression<Opts extends Options<t.ThisExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ThisExpression & Opts;
+export function isThisExpression<Opts extends Options<t.ThisExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ThisExpression") return false;
@@ -449,8 +754,15 @@ export function isThisExpression(
 }
 export function isThrowStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ThrowStatement> | null,
-): node is t.ThrowStatement {
+): node is t.ThrowStatement;
+export function isThrowStatement<Opts extends Options<t.ThrowStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ThrowStatement & Opts;
+export function isThrowStatement<Opts extends Options<t.ThrowStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ThrowStatement") return false;
@@ -459,8 +771,15 @@ export function isThrowStatement(
 }
 export function isTryStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TryStatement> | null,
-): node is t.TryStatement {
+): node is t.TryStatement;
+export function isTryStatement<Opts extends Options<t.TryStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TryStatement & Opts;
+export function isTryStatement<Opts extends Options<t.TryStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TryStatement") return false;
@@ -469,8 +788,15 @@ export function isTryStatement(
 }
 export function isUnaryExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.UnaryExpression> | null,
-): node is t.UnaryExpression {
+): node is t.UnaryExpression;
+export function isUnaryExpression<Opts extends Options<t.UnaryExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.UnaryExpression & Opts;
+export function isUnaryExpression<Opts extends Options<t.UnaryExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "UnaryExpression") return false;
@@ -479,8 +805,15 @@ export function isUnaryExpression(
 }
 export function isUpdateExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.UpdateExpression> | null,
-): node is t.UpdateExpression {
+): node is t.UpdateExpression;
+export function isUpdateExpression<Opts extends Options<t.UpdateExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.UpdateExpression & Opts;
+export function isUpdateExpression<Opts extends Options<t.UpdateExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "UpdateExpression") return false;
@@ -489,8 +822,16 @@ export function isUpdateExpression(
 }
 export function isVariableDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.VariableDeclaration> | null,
-): node is t.VariableDeclaration {
+): node is t.VariableDeclaration;
+export function isVariableDeclaration<
+  Opts extends Options<t.VariableDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.VariableDeclaration & Opts;
+export function isVariableDeclaration<
+  Opts extends Options<t.VariableDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "VariableDeclaration") return false;
@@ -499,8 +840,16 @@ export function isVariableDeclaration(
 }
 export function isVariableDeclarator(
   node: t.Node | null | undefined,
-  opts?: Opts<t.VariableDeclarator> | null,
-): node is t.VariableDeclarator {
+): node is t.VariableDeclarator;
+export function isVariableDeclarator<
+  Opts extends Options<t.VariableDeclarator>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.VariableDeclarator & Opts;
+export function isVariableDeclarator<
+  Opts extends Options<t.VariableDeclarator>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "VariableDeclarator") return false;
@@ -509,8 +858,15 @@ export function isVariableDeclarator(
 }
 export function isWhileStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.WhileStatement> | null,
-): node is t.WhileStatement {
+): node is t.WhileStatement;
+export function isWhileStatement<Opts extends Options<t.WhileStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.WhileStatement & Opts;
+export function isWhileStatement<Opts extends Options<t.WhileStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "WhileStatement") return false;
@@ -519,8 +875,15 @@ export function isWhileStatement(
 }
 export function isWithStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.WithStatement> | null,
-): node is t.WithStatement {
+): node is t.WithStatement;
+export function isWithStatement<Opts extends Options<t.WithStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.WithStatement & Opts;
+export function isWithStatement<Opts extends Options<t.WithStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "WithStatement") return false;
@@ -529,8 +892,15 @@ export function isWithStatement(
 }
 export function isAssignmentPattern(
   node: t.Node | null | undefined,
-  opts?: Opts<t.AssignmentPattern> | null,
-): node is t.AssignmentPattern {
+): node is t.AssignmentPattern;
+export function isAssignmentPattern<Opts extends Options<t.AssignmentPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.AssignmentPattern & Opts;
+export function isAssignmentPattern<Opts extends Options<t.AssignmentPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "AssignmentPattern") return false;
@@ -539,8 +909,15 @@ export function isAssignmentPattern(
 }
 export function isArrayPattern(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ArrayPattern> | null,
-): node is t.ArrayPattern {
+): node is t.ArrayPattern;
+export function isArrayPattern<Opts extends Options<t.ArrayPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ArrayPattern & Opts;
+export function isArrayPattern<Opts extends Options<t.ArrayPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ArrayPattern") return false;
@@ -549,8 +926,16 @@ export function isArrayPattern(
 }
 export function isArrowFunctionExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ArrowFunctionExpression> | null,
-): node is t.ArrowFunctionExpression {
+): node is t.ArrowFunctionExpression;
+export function isArrowFunctionExpression<
+  Opts extends Options<t.ArrowFunctionExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ArrowFunctionExpression & Opts;
+export function isArrowFunctionExpression<
+  Opts extends Options<t.ArrowFunctionExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ArrowFunctionExpression") return false;
@@ -559,8 +944,15 @@ export function isArrowFunctionExpression(
 }
 export function isClassBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassBody> | null,
-): node is t.ClassBody {
+): node is t.ClassBody;
+export function isClassBody<Opts extends Options<t.ClassBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassBody & Opts;
+export function isClassBody<Opts extends Options<t.ClassBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassBody") return false;
@@ -569,8 +961,15 @@ export function isClassBody(
 }
 export function isClassExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassExpression> | null,
-): node is t.ClassExpression {
+): node is t.ClassExpression;
+export function isClassExpression<Opts extends Options<t.ClassExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassExpression & Opts;
+export function isClassExpression<Opts extends Options<t.ClassExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassExpression") return false;
@@ -579,8 +978,15 @@ export function isClassExpression(
 }
 export function isClassDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassDeclaration> | null,
-): node is t.ClassDeclaration {
+): node is t.ClassDeclaration;
+export function isClassDeclaration<Opts extends Options<t.ClassDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassDeclaration & Opts;
+export function isClassDeclaration<Opts extends Options<t.ClassDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassDeclaration") return false;
@@ -589,8 +995,16 @@ export function isClassDeclaration(
 }
 export function isExportAllDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportAllDeclaration> | null,
-): node is t.ExportAllDeclaration {
+): node is t.ExportAllDeclaration;
+export function isExportAllDeclaration<
+  Opts extends Options<t.ExportAllDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportAllDeclaration & Opts;
+export function isExportAllDeclaration<
+  Opts extends Options<t.ExportAllDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportAllDeclaration") return false;
@@ -599,8 +1013,16 @@ export function isExportAllDeclaration(
 }
 export function isExportDefaultDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportDefaultDeclaration> | null,
-): node is t.ExportDefaultDeclaration {
+): node is t.ExportDefaultDeclaration;
+export function isExportDefaultDeclaration<
+  Opts extends Options<t.ExportDefaultDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportDefaultDeclaration & Opts;
+export function isExportDefaultDeclaration<
+  Opts extends Options<t.ExportDefaultDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportDefaultDeclaration") return false;
@@ -609,8 +1031,16 @@ export function isExportDefaultDeclaration(
 }
 export function isExportNamedDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportNamedDeclaration> | null,
-): node is t.ExportNamedDeclaration {
+): node is t.ExportNamedDeclaration;
+export function isExportNamedDeclaration<
+  Opts extends Options<t.ExportNamedDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportNamedDeclaration & Opts;
+export function isExportNamedDeclaration<
+  Opts extends Options<t.ExportNamedDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportNamedDeclaration") return false;
@@ -619,8 +1049,15 @@ export function isExportNamedDeclaration(
 }
 export function isExportSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportSpecifier> | null,
-): node is t.ExportSpecifier {
+): node is t.ExportSpecifier;
+export function isExportSpecifier<Opts extends Options<t.ExportSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportSpecifier & Opts;
+export function isExportSpecifier<Opts extends Options<t.ExportSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportSpecifier") return false;
@@ -629,8 +1066,15 @@ export function isExportSpecifier(
 }
 export function isForOfStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ForOfStatement> | null,
-): node is t.ForOfStatement {
+): node is t.ForOfStatement;
+export function isForOfStatement<Opts extends Options<t.ForOfStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ForOfStatement & Opts;
+export function isForOfStatement<Opts extends Options<t.ForOfStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ForOfStatement") return false;
@@ -639,8 +1083,15 @@ export function isForOfStatement(
 }
 export function isImportDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportDeclaration> | null,
-): node is t.ImportDeclaration {
+): node is t.ImportDeclaration;
+export function isImportDeclaration<Opts extends Options<t.ImportDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportDeclaration & Opts;
+export function isImportDeclaration<Opts extends Options<t.ImportDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportDeclaration") return false;
@@ -649,8 +1100,16 @@ export function isImportDeclaration(
 }
 export function isImportDefaultSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportDefaultSpecifier> | null,
-): node is t.ImportDefaultSpecifier {
+): node is t.ImportDefaultSpecifier;
+export function isImportDefaultSpecifier<
+  Opts extends Options<t.ImportDefaultSpecifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportDefaultSpecifier & Opts;
+export function isImportDefaultSpecifier<
+  Opts extends Options<t.ImportDefaultSpecifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportDefaultSpecifier") return false;
@@ -659,8 +1118,16 @@ export function isImportDefaultSpecifier(
 }
 export function isImportNamespaceSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportNamespaceSpecifier> | null,
-): node is t.ImportNamespaceSpecifier {
+): node is t.ImportNamespaceSpecifier;
+export function isImportNamespaceSpecifier<
+  Opts extends Options<t.ImportNamespaceSpecifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportNamespaceSpecifier & Opts;
+export function isImportNamespaceSpecifier<
+  Opts extends Options<t.ImportNamespaceSpecifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportNamespaceSpecifier") return false;
@@ -669,8 +1136,15 @@ export function isImportNamespaceSpecifier(
 }
 export function isImportSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportSpecifier> | null,
-): node is t.ImportSpecifier {
+): node is t.ImportSpecifier;
+export function isImportSpecifier<Opts extends Options<t.ImportSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportSpecifier & Opts;
+export function isImportSpecifier<Opts extends Options<t.ImportSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportSpecifier") return false;
@@ -679,8 +1153,15 @@ export function isImportSpecifier(
 }
 export function isImportExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportExpression> | null,
-): node is t.ImportExpression {
+): node is t.ImportExpression;
+export function isImportExpression<Opts extends Options<t.ImportExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportExpression & Opts;
+export function isImportExpression<Opts extends Options<t.ImportExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportExpression") return false;
@@ -689,8 +1170,15 @@ export function isImportExpression(
 }
 export function isMetaProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.MetaProperty> | null,
-): node is t.MetaProperty {
+): node is t.MetaProperty;
+export function isMetaProperty<Opts extends Options<t.MetaProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.MetaProperty & Opts;
+export function isMetaProperty<Opts extends Options<t.MetaProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "MetaProperty") return false;
@@ -699,8 +1187,15 @@ export function isMetaProperty(
 }
 export function isClassMethod(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassMethod> | null,
-): node is t.ClassMethod {
+): node is t.ClassMethod;
+export function isClassMethod<Opts extends Options<t.ClassMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassMethod & Opts;
+export function isClassMethod<Opts extends Options<t.ClassMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassMethod") return false;
@@ -709,8 +1204,15 @@ export function isClassMethod(
 }
 export function isObjectPattern(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectPattern> | null,
-): node is t.ObjectPattern {
+): node is t.ObjectPattern;
+export function isObjectPattern<Opts extends Options<t.ObjectPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectPattern & Opts;
+export function isObjectPattern<Opts extends Options<t.ObjectPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectPattern") return false;
@@ -719,18 +1221,30 @@ export function isObjectPattern(
 }
 export function isSpreadElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SpreadElement> | null,
-): node is t.SpreadElement {
+): node is t.SpreadElement;
+export function isSpreadElement<Opts extends Options<t.SpreadElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.SpreadElement & Opts;
+export function isSpreadElement<Opts extends Options<t.SpreadElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "SpreadElement") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isSuper(
+export function isSuper(node: t.Node | null | undefined): node is t.Super;
+export function isSuper<Opts extends Options<t.Super>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Super> | null,
-): node is t.Super {
+  opts?: Opts | null,
+): node is t.Super & Opts;
+export function isSuper<Opts extends Options<t.Super>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Super") return false;
@@ -739,8 +1253,16 @@ export function isSuper(
 }
 export function isTaggedTemplateExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TaggedTemplateExpression> | null,
-): node is t.TaggedTemplateExpression {
+): node is t.TaggedTemplateExpression;
+export function isTaggedTemplateExpression<
+  Opts extends Options<t.TaggedTemplateExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TaggedTemplateExpression & Opts;
+export function isTaggedTemplateExpression<
+  Opts extends Options<t.TaggedTemplateExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TaggedTemplateExpression") return false;
@@ -749,8 +1271,15 @@ export function isTaggedTemplateExpression(
 }
 export function isTemplateElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TemplateElement> | null,
-): node is t.TemplateElement {
+): node is t.TemplateElement;
+export function isTemplateElement<Opts extends Options<t.TemplateElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TemplateElement & Opts;
+export function isTemplateElement<Opts extends Options<t.TemplateElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TemplateElement") return false;
@@ -759,8 +1288,15 @@ export function isTemplateElement(
 }
 export function isTemplateLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TemplateLiteral> | null,
-): node is t.TemplateLiteral {
+): node is t.TemplateLiteral;
+export function isTemplateLiteral<Opts extends Options<t.TemplateLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TemplateLiteral & Opts;
+export function isTemplateLiteral<Opts extends Options<t.TemplateLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TemplateLiteral") return false;
@@ -769,8 +1305,15 @@ export function isTemplateLiteral(
 }
 export function isYieldExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.YieldExpression> | null,
-): node is t.YieldExpression {
+): node is t.YieldExpression;
+export function isYieldExpression<Opts extends Options<t.YieldExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.YieldExpression & Opts;
+export function isYieldExpression<Opts extends Options<t.YieldExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "YieldExpression") return false;
@@ -779,18 +1322,30 @@ export function isYieldExpression(
 }
 export function isAwaitExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.AwaitExpression> | null,
-): node is t.AwaitExpression {
+): node is t.AwaitExpression;
+export function isAwaitExpression<Opts extends Options<t.AwaitExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.AwaitExpression & Opts;
+export function isAwaitExpression<Opts extends Options<t.AwaitExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "AwaitExpression") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isImport(
+export function isImport(node: t.Node | null | undefined): node is t.Import;
+export function isImport<Opts extends Options<t.Import>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Import> | null,
-): node is t.Import {
+  opts?: Opts | null,
+): node is t.Import & Opts;
+export function isImport<Opts extends Options<t.Import>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Import") return false;
@@ -799,8 +1354,15 @@ export function isImport(
 }
 export function isBigIntLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BigIntLiteral> | null,
-): node is t.BigIntLiteral {
+): node is t.BigIntLiteral;
+export function isBigIntLiteral<Opts extends Options<t.BigIntLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BigIntLiteral & Opts;
+export function isBigIntLiteral<Opts extends Options<t.BigIntLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BigIntLiteral") return false;
@@ -809,8 +1371,16 @@ export function isBigIntLiteral(
 }
 export function isExportNamespaceSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportNamespaceSpecifier> | null,
-): node is t.ExportNamespaceSpecifier {
+): node is t.ExportNamespaceSpecifier;
+export function isExportNamespaceSpecifier<
+  Opts extends Options<t.ExportNamespaceSpecifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportNamespaceSpecifier & Opts;
+export function isExportNamespaceSpecifier<
+  Opts extends Options<t.ExportNamespaceSpecifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportNamespaceSpecifier") return false;
@@ -819,8 +1389,16 @@ export function isExportNamespaceSpecifier(
 }
 export function isOptionalMemberExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.OptionalMemberExpression> | null,
-): node is t.OptionalMemberExpression {
+): node is t.OptionalMemberExpression;
+export function isOptionalMemberExpression<
+  Opts extends Options<t.OptionalMemberExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.OptionalMemberExpression & Opts;
+export function isOptionalMemberExpression<
+  Opts extends Options<t.OptionalMemberExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "OptionalMemberExpression") return false;
@@ -829,8 +1407,16 @@ export function isOptionalMemberExpression(
 }
 export function isOptionalCallExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.OptionalCallExpression> | null,
-): node is t.OptionalCallExpression {
+): node is t.OptionalCallExpression;
+export function isOptionalCallExpression<
+  Opts extends Options<t.OptionalCallExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.OptionalCallExpression & Opts;
+export function isOptionalCallExpression<
+  Opts extends Options<t.OptionalCallExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "OptionalCallExpression") return false;
@@ -839,8 +1425,15 @@ export function isOptionalCallExpression(
 }
 export function isClassProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassProperty> | null,
-): node is t.ClassProperty {
+): node is t.ClassProperty;
+export function isClassProperty<Opts extends Options<t.ClassProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassProperty & Opts;
+export function isClassProperty<Opts extends Options<t.ClassProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassProperty") return false;
@@ -849,8 +1442,16 @@ export function isClassProperty(
 }
 export function isClassAccessorProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassAccessorProperty> | null,
-): node is t.ClassAccessorProperty {
+): node is t.ClassAccessorProperty;
+export function isClassAccessorProperty<
+  Opts extends Options<t.ClassAccessorProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassAccessorProperty & Opts;
+export function isClassAccessorProperty<
+  Opts extends Options<t.ClassAccessorProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassAccessorProperty") return false;
@@ -859,8 +1460,16 @@ export function isClassAccessorProperty(
 }
 export function isClassPrivateProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassPrivateProperty> | null,
-): node is t.ClassPrivateProperty {
+): node is t.ClassPrivateProperty;
+export function isClassPrivateProperty<
+  Opts extends Options<t.ClassPrivateProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassPrivateProperty & Opts;
+export function isClassPrivateProperty<
+  Opts extends Options<t.ClassPrivateProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassPrivateProperty") return false;
@@ -869,8 +1478,16 @@ export function isClassPrivateProperty(
 }
 export function isClassPrivateMethod(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassPrivateMethod> | null,
-): node is t.ClassPrivateMethod {
+): node is t.ClassPrivateMethod;
+export function isClassPrivateMethod<
+  Opts extends Options<t.ClassPrivateMethod>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassPrivateMethod & Opts;
+export function isClassPrivateMethod<
+  Opts extends Options<t.ClassPrivateMethod>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassPrivateMethod") return false;
@@ -879,8 +1496,15 @@ export function isClassPrivateMethod(
 }
 export function isPrivateName(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PrivateName> | null,
-): node is t.PrivateName {
+): node is t.PrivateName;
+export function isPrivateName<Opts extends Options<t.PrivateName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PrivateName & Opts;
+export function isPrivateName<Opts extends Options<t.PrivateName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "PrivateName") return false;
@@ -889,8 +1513,15 @@ export function isPrivateName(
 }
 export function isStaticBlock(
   node: t.Node | null | undefined,
-  opts?: Opts<t.StaticBlock> | null,
-): node is t.StaticBlock {
+): node is t.StaticBlock;
+export function isStaticBlock<Opts extends Options<t.StaticBlock>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StaticBlock & Opts;
+export function isStaticBlock<Opts extends Options<t.StaticBlock>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "StaticBlock") return false;
@@ -899,8 +1530,15 @@ export function isStaticBlock(
 }
 export function isImportAttribute(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportAttribute> | null,
-): node is t.ImportAttribute {
+): node is t.ImportAttribute;
+export function isImportAttribute<Opts extends Options<t.ImportAttribute>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportAttribute & Opts;
+export function isImportAttribute<Opts extends Options<t.ImportAttribute>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ImportAttribute") return false;
@@ -909,8 +1547,15 @@ export function isImportAttribute(
 }
 export function isAnyTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.AnyTypeAnnotation> | null,
-): node is t.AnyTypeAnnotation {
+): node is t.AnyTypeAnnotation;
+export function isAnyTypeAnnotation<Opts extends Options<t.AnyTypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.AnyTypeAnnotation & Opts;
+export function isAnyTypeAnnotation<Opts extends Options<t.AnyTypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "AnyTypeAnnotation") return false;
@@ -919,8 +1564,16 @@ export function isAnyTypeAnnotation(
 }
 export function isArrayTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ArrayTypeAnnotation> | null,
-): node is t.ArrayTypeAnnotation {
+): node is t.ArrayTypeAnnotation;
+export function isArrayTypeAnnotation<
+  Opts extends Options<t.ArrayTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ArrayTypeAnnotation & Opts;
+export function isArrayTypeAnnotation<
+  Opts extends Options<t.ArrayTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ArrayTypeAnnotation") return false;
@@ -929,8 +1582,16 @@ export function isArrayTypeAnnotation(
 }
 export function isBooleanTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BooleanTypeAnnotation> | null,
-): node is t.BooleanTypeAnnotation {
+): node is t.BooleanTypeAnnotation;
+export function isBooleanTypeAnnotation<
+  Opts extends Options<t.BooleanTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BooleanTypeAnnotation & Opts;
+export function isBooleanTypeAnnotation<
+  Opts extends Options<t.BooleanTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "BooleanTypeAnnotation") return false;
@@ -939,8 +1600,16 @@ export function isBooleanTypeAnnotation(
 }
 export function isBooleanLiteralTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BooleanLiteralTypeAnnotation> | null,
-): node is t.BooleanLiteralTypeAnnotation {
+): node is t.BooleanLiteralTypeAnnotation;
+export function isBooleanLiteralTypeAnnotation<
+  Opts extends Options<t.BooleanLiteralTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BooleanLiteralTypeAnnotation & Opts;
+export function isBooleanLiteralTypeAnnotation<
+  Opts extends Options<t.BooleanLiteralTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "BooleanLiteralTypeAnnotation") return false;
@@ -949,8 +1618,16 @@ export function isBooleanLiteralTypeAnnotation(
 }
 export function isNullLiteralTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NullLiteralTypeAnnotation> | null,
-): node is t.NullLiteralTypeAnnotation {
+): node is t.NullLiteralTypeAnnotation;
+export function isNullLiteralTypeAnnotation<
+  Opts extends Options<t.NullLiteralTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NullLiteralTypeAnnotation & Opts;
+export function isNullLiteralTypeAnnotation<
+  Opts extends Options<t.NullLiteralTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "NullLiteralTypeAnnotation") return false;
@@ -959,8 +1636,15 @@ export function isNullLiteralTypeAnnotation(
 }
 export function isClassImplements(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ClassImplements> | null,
-): node is t.ClassImplements {
+): node is t.ClassImplements;
+export function isClassImplements<Opts extends Options<t.ClassImplements>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassImplements & Opts;
+export function isClassImplements<Opts extends Options<t.ClassImplements>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ClassImplements") return false;
@@ -969,8 +1653,15 @@ export function isClassImplements(
 }
 export function isDeclareClass(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareClass> | null,
-): node is t.DeclareClass {
+): node is t.DeclareClass;
+export function isDeclareClass<Opts extends Options<t.DeclareClass>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareClass & Opts;
+export function isDeclareClass<Opts extends Options<t.DeclareClass>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareClass") return false;
@@ -979,8 +1670,15 @@ export function isDeclareClass(
 }
 export function isDeclareFunction(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareFunction> | null,
-): node is t.DeclareFunction {
+): node is t.DeclareFunction;
+export function isDeclareFunction<Opts extends Options<t.DeclareFunction>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareFunction & Opts;
+export function isDeclareFunction<Opts extends Options<t.DeclareFunction>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareFunction") return false;
@@ -989,8 +1687,15 @@ export function isDeclareFunction(
 }
 export function isDeclareInterface(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareInterface> | null,
-): node is t.DeclareInterface {
+): node is t.DeclareInterface;
+export function isDeclareInterface<Opts extends Options<t.DeclareInterface>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareInterface & Opts;
+export function isDeclareInterface<Opts extends Options<t.DeclareInterface>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareInterface") return false;
@@ -999,8 +1704,15 @@ export function isDeclareInterface(
 }
 export function isDeclareModule(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareModule> | null,
-): node is t.DeclareModule {
+): node is t.DeclareModule;
+export function isDeclareModule<Opts extends Options<t.DeclareModule>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareModule & Opts;
+export function isDeclareModule<Opts extends Options<t.DeclareModule>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareModule") return false;
@@ -1009,8 +1721,16 @@ export function isDeclareModule(
 }
 export function isDeclareModuleExports(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareModuleExports> | null,
-): node is t.DeclareModuleExports {
+): node is t.DeclareModuleExports;
+export function isDeclareModuleExports<
+  Opts extends Options<t.DeclareModuleExports>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareModuleExports & Opts;
+export function isDeclareModuleExports<
+  Opts extends Options<t.DeclareModuleExports>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareModuleExports") return false;
@@ -1019,8 +1739,15 @@ export function isDeclareModuleExports(
 }
 export function isDeclareTypeAlias(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareTypeAlias> | null,
-): node is t.DeclareTypeAlias {
+): node is t.DeclareTypeAlias;
+export function isDeclareTypeAlias<Opts extends Options<t.DeclareTypeAlias>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareTypeAlias & Opts;
+export function isDeclareTypeAlias<Opts extends Options<t.DeclareTypeAlias>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareTypeAlias") return false;
@@ -1029,8 +1756,15 @@ export function isDeclareTypeAlias(
 }
 export function isDeclareOpaqueType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareOpaqueType> | null,
-): node is t.DeclareOpaqueType {
+): node is t.DeclareOpaqueType;
+export function isDeclareOpaqueType<Opts extends Options<t.DeclareOpaqueType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareOpaqueType & Opts;
+export function isDeclareOpaqueType<Opts extends Options<t.DeclareOpaqueType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareOpaqueType") return false;
@@ -1039,8 +1773,15 @@ export function isDeclareOpaqueType(
 }
 export function isDeclareVariable(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareVariable> | null,
-): node is t.DeclareVariable {
+): node is t.DeclareVariable;
+export function isDeclareVariable<Opts extends Options<t.DeclareVariable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareVariable & Opts;
+export function isDeclareVariable<Opts extends Options<t.DeclareVariable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareVariable") return false;
@@ -1049,8 +1790,16 @@ export function isDeclareVariable(
 }
 export function isDeclareExportDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareExportDeclaration> | null,
-): node is t.DeclareExportDeclaration {
+): node is t.DeclareExportDeclaration;
+export function isDeclareExportDeclaration<
+  Opts extends Options<t.DeclareExportDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareExportDeclaration & Opts;
+export function isDeclareExportDeclaration<
+  Opts extends Options<t.DeclareExportDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareExportDeclaration") return false;
@@ -1059,8 +1808,16 @@ export function isDeclareExportDeclaration(
 }
 export function isDeclareExportAllDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclareExportAllDeclaration> | null,
-): node is t.DeclareExportAllDeclaration {
+): node is t.DeclareExportAllDeclaration;
+export function isDeclareExportAllDeclaration<
+  Opts extends Options<t.DeclareExportAllDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclareExportAllDeclaration & Opts;
+export function isDeclareExportAllDeclaration<
+  Opts extends Options<t.DeclareExportAllDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclareExportAllDeclaration") return false;
@@ -1069,8 +1826,15 @@ export function isDeclareExportAllDeclaration(
 }
 export function isDeclaredPredicate(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DeclaredPredicate> | null,
-): node is t.DeclaredPredicate {
+): node is t.DeclaredPredicate;
+export function isDeclaredPredicate<Opts extends Options<t.DeclaredPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DeclaredPredicate & Opts;
+export function isDeclaredPredicate<Opts extends Options<t.DeclaredPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DeclaredPredicate") return false;
@@ -1079,8 +1843,16 @@ export function isDeclaredPredicate(
 }
 export function isExistsTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExistsTypeAnnotation> | null,
-): node is t.ExistsTypeAnnotation {
+): node is t.ExistsTypeAnnotation;
+export function isExistsTypeAnnotation<
+  Opts extends Options<t.ExistsTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExistsTypeAnnotation & Opts;
+export function isExistsTypeAnnotation<
+  Opts extends Options<t.ExistsTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExistsTypeAnnotation") return false;
@@ -1089,8 +1861,16 @@ export function isExistsTypeAnnotation(
 }
 export function isFunctionTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionTypeAnnotation> | null,
-): node is t.FunctionTypeAnnotation {
+): node is t.FunctionTypeAnnotation;
+export function isFunctionTypeAnnotation<
+  Opts extends Options<t.FunctionTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionTypeAnnotation & Opts;
+export function isFunctionTypeAnnotation<
+  Opts extends Options<t.FunctionTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "FunctionTypeAnnotation") return false;
@@ -1099,8 +1879,15 @@ export function isFunctionTypeAnnotation(
 }
 export function isFunctionTypeParam(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionTypeParam> | null,
-): node is t.FunctionTypeParam {
+): node is t.FunctionTypeParam;
+export function isFunctionTypeParam<Opts extends Options<t.FunctionTypeParam>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionTypeParam & Opts;
+export function isFunctionTypeParam<Opts extends Options<t.FunctionTypeParam>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "FunctionTypeParam") return false;
@@ -1109,8 +1896,16 @@ export function isFunctionTypeParam(
 }
 export function isGenericTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.GenericTypeAnnotation> | null,
-): node is t.GenericTypeAnnotation {
+): node is t.GenericTypeAnnotation;
+export function isGenericTypeAnnotation<
+  Opts extends Options<t.GenericTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.GenericTypeAnnotation & Opts;
+export function isGenericTypeAnnotation<
+  Opts extends Options<t.GenericTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "GenericTypeAnnotation") return false;
@@ -1119,8 +1914,15 @@ export function isGenericTypeAnnotation(
 }
 export function isInferredPredicate(
   node: t.Node | null | undefined,
-  opts?: Opts<t.InferredPredicate> | null,
-): node is t.InferredPredicate {
+): node is t.InferredPredicate;
+export function isInferredPredicate<Opts extends Options<t.InferredPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.InferredPredicate & Opts;
+export function isInferredPredicate<Opts extends Options<t.InferredPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "InferredPredicate") return false;
@@ -1129,8 +1931,15 @@ export function isInferredPredicate(
 }
 export function isInterfaceExtends(
   node: t.Node | null | undefined,
-  opts?: Opts<t.InterfaceExtends> | null,
-): node is t.InterfaceExtends {
+): node is t.InterfaceExtends;
+export function isInterfaceExtends<Opts extends Options<t.InterfaceExtends>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.InterfaceExtends & Opts;
+export function isInterfaceExtends<Opts extends Options<t.InterfaceExtends>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "InterfaceExtends") return false;
@@ -1139,8 +1948,16 @@ export function isInterfaceExtends(
 }
 export function isInterfaceDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.InterfaceDeclaration> | null,
-): node is t.InterfaceDeclaration {
+): node is t.InterfaceDeclaration;
+export function isInterfaceDeclaration<
+  Opts extends Options<t.InterfaceDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.InterfaceDeclaration & Opts;
+export function isInterfaceDeclaration<
+  Opts extends Options<t.InterfaceDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "InterfaceDeclaration") return false;
@@ -1149,8 +1966,16 @@ export function isInterfaceDeclaration(
 }
 export function isInterfaceTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.InterfaceTypeAnnotation> | null,
-): node is t.InterfaceTypeAnnotation {
+): node is t.InterfaceTypeAnnotation;
+export function isInterfaceTypeAnnotation<
+  Opts extends Options<t.InterfaceTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.InterfaceTypeAnnotation & Opts;
+export function isInterfaceTypeAnnotation<
+  Opts extends Options<t.InterfaceTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "InterfaceTypeAnnotation") return false;
@@ -1159,8 +1984,16 @@ export function isInterfaceTypeAnnotation(
 }
 export function isIntersectionTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.IntersectionTypeAnnotation> | null,
-): node is t.IntersectionTypeAnnotation {
+): node is t.IntersectionTypeAnnotation;
+export function isIntersectionTypeAnnotation<
+  Opts extends Options<t.IntersectionTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.IntersectionTypeAnnotation & Opts;
+export function isIntersectionTypeAnnotation<
+  Opts extends Options<t.IntersectionTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "IntersectionTypeAnnotation") return false;
@@ -1169,8 +2002,16 @@ export function isIntersectionTypeAnnotation(
 }
 export function isMixedTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.MixedTypeAnnotation> | null,
-): node is t.MixedTypeAnnotation {
+): node is t.MixedTypeAnnotation;
+export function isMixedTypeAnnotation<
+  Opts extends Options<t.MixedTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.MixedTypeAnnotation & Opts;
+export function isMixedTypeAnnotation<
+  Opts extends Options<t.MixedTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "MixedTypeAnnotation") return false;
@@ -1179,8 +2020,16 @@ export function isMixedTypeAnnotation(
 }
 export function isEmptyTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EmptyTypeAnnotation> | null,
-): node is t.EmptyTypeAnnotation {
+): node is t.EmptyTypeAnnotation;
+export function isEmptyTypeAnnotation<
+  Opts extends Options<t.EmptyTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EmptyTypeAnnotation & Opts;
+export function isEmptyTypeAnnotation<
+  Opts extends Options<t.EmptyTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "EmptyTypeAnnotation") return false;
@@ -1189,8 +2038,16 @@ export function isEmptyTypeAnnotation(
 }
 export function isNullableTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NullableTypeAnnotation> | null,
-): node is t.NullableTypeAnnotation {
+): node is t.NullableTypeAnnotation;
+export function isNullableTypeAnnotation<
+  Opts extends Options<t.NullableTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NullableTypeAnnotation & Opts;
+export function isNullableTypeAnnotation<
+  Opts extends Options<t.NullableTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "NullableTypeAnnotation") return false;
@@ -1199,8 +2056,16 @@ export function isNullableTypeAnnotation(
 }
 export function isNumberLiteralTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NumberLiteralTypeAnnotation> | null,
-): node is t.NumberLiteralTypeAnnotation {
+): node is t.NumberLiteralTypeAnnotation;
+export function isNumberLiteralTypeAnnotation<
+  Opts extends Options<t.NumberLiteralTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NumberLiteralTypeAnnotation & Opts;
+export function isNumberLiteralTypeAnnotation<
+  Opts extends Options<t.NumberLiteralTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "NumberLiteralTypeAnnotation") return false;
@@ -1209,8 +2074,16 @@ export function isNumberLiteralTypeAnnotation(
 }
 export function isNumberTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NumberTypeAnnotation> | null,
-): node is t.NumberTypeAnnotation {
+): node is t.NumberTypeAnnotation;
+export function isNumberTypeAnnotation<
+  Opts extends Options<t.NumberTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.NumberTypeAnnotation & Opts;
+export function isNumberTypeAnnotation<
+  Opts extends Options<t.NumberTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "NumberTypeAnnotation") return false;
@@ -1219,8 +2092,16 @@ export function isNumberTypeAnnotation(
 }
 export function isObjectTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeAnnotation> | null,
-): node is t.ObjectTypeAnnotation {
+): node is t.ObjectTypeAnnotation;
+export function isObjectTypeAnnotation<
+  Opts extends Options<t.ObjectTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeAnnotation & Opts;
+export function isObjectTypeAnnotation<
+  Opts extends Options<t.ObjectTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeAnnotation") return false;
@@ -1229,8 +2110,16 @@ export function isObjectTypeAnnotation(
 }
 export function isObjectTypeInternalSlot(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeInternalSlot> | null,
-): node is t.ObjectTypeInternalSlot {
+): node is t.ObjectTypeInternalSlot;
+export function isObjectTypeInternalSlot<
+  Opts extends Options<t.ObjectTypeInternalSlot>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeInternalSlot & Opts;
+export function isObjectTypeInternalSlot<
+  Opts extends Options<t.ObjectTypeInternalSlot>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeInternalSlot") return false;
@@ -1239,8 +2128,16 @@ export function isObjectTypeInternalSlot(
 }
 export function isObjectTypeCallProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeCallProperty> | null,
-): node is t.ObjectTypeCallProperty {
+): node is t.ObjectTypeCallProperty;
+export function isObjectTypeCallProperty<
+  Opts extends Options<t.ObjectTypeCallProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeCallProperty & Opts;
+export function isObjectTypeCallProperty<
+  Opts extends Options<t.ObjectTypeCallProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeCallProperty") return false;
@@ -1249,8 +2146,15 @@ export function isObjectTypeCallProperty(
 }
 export function isObjectTypeIndexer(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeIndexer> | null,
-): node is t.ObjectTypeIndexer {
+): node is t.ObjectTypeIndexer;
+export function isObjectTypeIndexer<Opts extends Options<t.ObjectTypeIndexer>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeIndexer & Opts;
+export function isObjectTypeIndexer<Opts extends Options<t.ObjectTypeIndexer>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeIndexer") return false;
@@ -1259,8 +2163,16 @@ export function isObjectTypeIndexer(
 }
 export function isObjectTypeProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeProperty> | null,
-): node is t.ObjectTypeProperty {
+): node is t.ObjectTypeProperty;
+export function isObjectTypeProperty<
+  Opts extends Options<t.ObjectTypeProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeProperty & Opts;
+export function isObjectTypeProperty<
+  Opts extends Options<t.ObjectTypeProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeProperty") return false;
@@ -1269,8 +2181,16 @@ export function isObjectTypeProperty(
 }
 export function isObjectTypeSpreadProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectTypeSpreadProperty> | null,
-): node is t.ObjectTypeSpreadProperty {
+): node is t.ObjectTypeSpreadProperty;
+export function isObjectTypeSpreadProperty<
+  Opts extends Options<t.ObjectTypeSpreadProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectTypeSpreadProperty & Opts;
+export function isObjectTypeSpreadProperty<
+  Opts extends Options<t.ObjectTypeSpreadProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ObjectTypeSpreadProperty") return false;
@@ -1279,8 +2199,15 @@ export function isObjectTypeSpreadProperty(
 }
 export function isOpaqueType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.OpaqueType> | null,
-): node is t.OpaqueType {
+): node is t.OpaqueType;
+export function isOpaqueType<Opts extends Options<t.OpaqueType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.OpaqueType & Opts;
+export function isOpaqueType<Opts extends Options<t.OpaqueType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "OpaqueType") return false;
@@ -1289,8 +2216,16 @@ export function isOpaqueType(
 }
 export function isQualifiedTypeIdentifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.QualifiedTypeIdentifier> | null,
-): node is t.QualifiedTypeIdentifier {
+): node is t.QualifiedTypeIdentifier;
+export function isQualifiedTypeIdentifier<
+  Opts extends Options<t.QualifiedTypeIdentifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.QualifiedTypeIdentifier & Opts;
+export function isQualifiedTypeIdentifier<
+  Opts extends Options<t.QualifiedTypeIdentifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "QualifiedTypeIdentifier") return false;
@@ -1299,8 +2234,16 @@ export function isQualifiedTypeIdentifier(
 }
 export function isStringLiteralTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.StringLiteralTypeAnnotation> | null,
-): node is t.StringLiteralTypeAnnotation {
+): node is t.StringLiteralTypeAnnotation;
+export function isStringLiteralTypeAnnotation<
+  Opts extends Options<t.StringLiteralTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StringLiteralTypeAnnotation & Opts;
+export function isStringLiteralTypeAnnotation<
+  Opts extends Options<t.StringLiteralTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "StringLiteralTypeAnnotation") return false;
@@ -1309,8 +2252,16 @@ export function isStringLiteralTypeAnnotation(
 }
 export function isStringTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.StringTypeAnnotation> | null,
-): node is t.StringTypeAnnotation {
+): node is t.StringTypeAnnotation;
+export function isStringTypeAnnotation<
+  Opts extends Options<t.StringTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StringTypeAnnotation & Opts;
+export function isStringTypeAnnotation<
+  Opts extends Options<t.StringTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "StringTypeAnnotation") return false;
@@ -1319,8 +2270,16 @@ export function isStringTypeAnnotation(
 }
 export function isSymbolTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SymbolTypeAnnotation> | null,
-): node is t.SymbolTypeAnnotation {
+): node is t.SymbolTypeAnnotation;
+export function isSymbolTypeAnnotation<
+  Opts extends Options<t.SymbolTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.SymbolTypeAnnotation & Opts;
+export function isSymbolTypeAnnotation<
+  Opts extends Options<t.SymbolTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "SymbolTypeAnnotation") return false;
@@ -1329,8 +2288,16 @@ export function isSymbolTypeAnnotation(
 }
 export function isThisTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ThisTypeAnnotation> | null,
-): node is t.ThisTypeAnnotation {
+): node is t.ThisTypeAnnotation;
+export function isThisTypeAnnotation<
+  Opts extends Options<t.ThisTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ThisTypeAnnotation & Opts;
+export function isThisTypeAnnotation<
+  Opts extends Options<t.ThisTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ThisTypeAnnotation") return false;
@@ -1339,8 +2306,16 @@ export function isThisTypeAnnotation(
 }
 export function isTupleTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TupleTypeAnnotation> | null,
-): node is t.TupleTypeAnnotation {
+): node is t.TupleTypeAnnotation;
+export function isTupleTypeAnnotation<
+  Opts extends Options<t.TupleTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TupleTypeAnnotation & Opts;
+export function isTupleTypeAnnotation<
+  Opts extends Options<t.TupleTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TupleTypeAnnotation") return false;
@@ -1349,8 +2324,16 @@ export function isTupleTypeAnnotation(
 }
 export function isTypeofTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeofTypeAnnotation> | null,
-): node is t.TypeofTypeAnnotation {
+): node is t.TypeofTypeAnnotation;
+export function isTypeofTypeAnnotation<
+  Opts extends Options<t.TypeofTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeofTypeAnnotation & Opts;
+export function isTypeofTypeAnnotation<
+  Opts extends Options<t.TypeofTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeofTypeAnnotation") return false;
@@ -1359,8 +2342,15 @@ export function isTypeofTypeAnnotation(
 }
 export function isTypeAlias(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeAlias> | null,
-): node is t.TypeAlias {
+): node is t.TypeAlias;
+export function isTypeAlias<Opts extends Options<t.TypeAlias>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeAlias & Opts;
+export function isTypeAlias<Opts extends Options<t.TypeAlias>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeAlias") return false;
@@ -1369,8 +2359,15 @@ export function isTypeAlias(
 }
 export function isTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeAnnotation> | null,
-): node is t.TypeAnnotation {
+): node is t.TypeAnnotation;
+export function isTypeAnnotation<Opts extends Options<t.TypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeAnnotation & Opts;
+export function isTypeAnnotation<Opts extends Options<t.TypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeAnnotation") return false;
@@ -1379,8 +2376,16 @@ export function isTypeAnnotation(
 }
 export function isTypeCastExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeCastExpression> | null,
-): node is t.TypeCastExpression {
+): node is t.TypeCastExpression;
+export function isTypeCastExpression<
+  Opts extends Options<t.TypeCastExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeCastExpression & Opts;
+export function isTypeCastExpression<
+  Opts extends Options<t.TypeCastExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeCastExpression") return false;
@@ -1389,8 +2394,15 @@ export function isTypeCastExpression(
 }
 export function isTypeParameter(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeParameter> | null,
-): node is t.TypeParameter {
+): node is t.TypeParameter;
+export function isTypeParameter<Opts extends Options<t.TypeParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeParameter & Opts;
+export function isTypeParameter<Opts extends Options<t.TypeParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeParameter") return false;
@@ -1399,8 +2411,16 @@ export function isTypeParameter(
 }
 export function isTypeParameterDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeParameterDeclaration> | null,
-): node is t.TypeParameterDeclaration {
+): node is t.TypeParameterDeclaration;
+export function isTypeParameterDeclaration<
+  Opts extends Options<t.TypeParameterDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeParameterDeclaration & Opts;
+export function isTypeParameterDeclaration<
+  Opts extends Options<t.TypeParameterDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeParameterDeclaration") return false;
@@ -1409,8 +2429,16 @@ export function isTypeParameterDeclaration(
 }
 export function isTypeParameterInstantiation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeParameterInstantiation> | null,
-): node is t.TypeParameterInstantiation {
+): node is t.TypeParameterInstantiation;
+export function isTypeParameterInstantiation<
+  Opts extends Options<t.TypeParameterInstantiation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeParameterInstantiation & Opts;
+export function isTypeParameterInstantiation<
+  Opts extends Options<t.TypeParameterInstantiation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TypeParameterInstantiation") return false;
@@ -1419,18 +2447,31 @@ export function isTypeParameterInstantiation(
 }
 export function isUnionTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.UnionTypeAnnotation> | null,
-): node is t.UnionTypeAnnotation {
+): node is t.UnionTypeAnnotation;
+export function isUnionTypeAnnotation<
+  Opts extends Options<t.UnionTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.UnionTypeAnnotation & Opts;
+export function isUnionTypeAnnotation<
+  Opts extends Options<t.UnionTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "UnionTypeAnnotation") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isVariance(
+export function isVariance(node: t.Node | null | undefined): node is t.Variance;
+export function isVariance<Opts extends Options<t.Variance>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Variance> | null,
-): node is t.Variance {
+  opts?: Opts | null,
+): node is t.Variance & Opts;
+export function isVariance<Opts extends Options<t.Variance>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Variance") return false;
@@ -1439,8 +2480,16 @@ export function isVariance(
 }
 export function isVoidTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.VoidTypeAnnotation> | null,
-): node is t.VoidTypeAnnotation {
+): node is t.VoidTypeAnnotation;
+export function isVoidTypeAnnotation<
+  Opts extends Options<t.VoidTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.VoidTypeAnnotation & Opts;
+export function isVoidTypeAnnotation<
+  Opts extends Options<t.VoidTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "VoidTypeAnnotation") return false;
@@ -1449,8 +2498,15 @@ export function isVoidTypeAnnotation(
 }
 export function isEnumDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumDeclaration> | null,
-): node is t.EnumDeclaration {
+): node is t.EnumDeclaration;
+export function isEnumDeclaration<Opts extends Options<t.EnumDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumDeclaration & Opts;
+export function isEnumDeclaration<Opts extends Options<t.EnumDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumDeclaration") return false;
@@ -1459,8 +2515,15 @@ export function isEnumDeclaration(
 }
 export function isEnumBooleanBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumBooleanBody> | null,
-): node is t.EnumBooleanBody {
+): node is t.EnumBooleanBody;
+export function isEnumBooleanBody<Opts extends Options<t.EnumBooleanBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumBooleanBody & Opts;
+export function isEnumBooleanBody<Opts extends Options<t.EnumBooleanBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumBooleanBody") return false;
@@ -1469,8 +2532,15 @@ export function isEnumBooleanBody(
 }
 export function isEnumNumberBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumNumberBody> | null,
-): node is t.EnumNumberBody {
+): node is t.EnumNumberBody;
+export function isEnumNumberBody<Opts extends Options<t.EnumNumberBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumNumberBody & Opts;
+export function isEnumNumberBody<Opts extends Options<t.EnumNumberBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumNumberBody") return false;
@@ -1479,8 +2549,15 @@ export function isEnumNumberBody(
 }
 export function isEnumStringBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumStringBody> | null,
-): node is t.EnumStringBody {
+): node is t.EnumStringBody;
+export function isEnumStringBody<Opts extends Options<t.EnumStringBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumStringBody & Opts;
+export function isEnumStringBody<Opts extends Options<t.EnumStringBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumStringBody") return false;
@@ -1489,8 +2566,15 @@ export function isEnumStringBody(
 }
 export function isEnumSymbolBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumSymbolBody> | null,
-): node is t.EnumSymbolBody {
+): node is t.EnumSymbolBody;
+export function isEnumSymbolBody<Opts extends Options<t.EnumSymbolBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumSymbolBody & Opts;
+export function isEnumSymbolBody<Opts extends Options<t.EnumSymbolBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumSymbolBody") return false;
@@ -1499,8 +2583,15 @@ export function isEnumSymbolBody(
 }
 export function isEnumBooleanMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumBooleanMember> | null,
-): node is t.EnumBooleanMember {
+): node is t.EnumBooleanMember;
+export function isEnumBooleanMember<Opts extends Options<t.EnumBooleanMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumBooleanMember & Opts;
+export function isEnumBooleanMember<Opts extends Options<t.EnumBooleanMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumBooleanMember") return false;
@@ -1509,8 +2600,15 @@ export function isEnumBooleanMember(
 }
 export function isEnumNumberMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumNumberMember> | null,
-): node is t.EnumNumberMember {
+): node is t.EnumNumberMember;
+export function isEnumNumberMember<Opts extends Options<t.EnumNumberMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumNumberMember & Opts;
+export function isEnumNumberMember<Opts extends Options<t.EnumNumberMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumNumberMember") return false;
@@ -1519,8 +2617,15 @@ export function isEnumNumberMember(
 }
 export function isEnumStringMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumStringMember> | null,
-): node is t.EnumStringMember {
+): node is t.EnumStringMember;
+export function isEnumStringMember<Opts extends Options<t.EnumStringMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumStringMember & Opts;
+export function isEnumStringMember<Opts extends Options<t.EnumStringMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumStringMember") return false;
@@ -1529,8 +2634,16 @@ export function isEnumStringMember(
 }
 export function isEnumDefaultedMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumDefaultedMember> | null,
-): node is t.EnumDefaultedMember {
+): node is t.EnumDefaultedMember;
+export function isEnumDefaultedMember<
+  Opts extends Options<t.EnumDefaultedMember>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumDefaultedMember & Opts;
+export function isEnumDefaultedMember<
+  Opts extends Options<t.EnumDefaultedMember>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "EnumDefaultedMember") return false;
@@ -1539,8 +2652,15 @@ export function isEnumDefaultedMember(
 }
 export function isIndexedAccessType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.IndexedAccessType> | null,
-): node is t.IndexedAccessType {
+): node is t.IndexedAccessType;
+export function isIndexedAccessType<Opts extends Options<t.IndexedAccessType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.IndexedAccessType & Opts;
+export function isIndexedAccessType<Opts extends Options<t.IndexedAccessType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "IndexedAccessType") return false;
@@ -1549,8 +2669,16 @@ export function isIndexedAccessType(
 }
 export function isOptionalIndexedAccessType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.OptionalIndexedAccessType> | null,
-): node is t.OptionalIndexedAccessType {
+): node is t.OptionalIndexedAccessType;
+export function isOptionalIndexedAccessType<
+  Opts extends Options<t.OptionalIndexedAccessType>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.OptionalIndexedAccessType & Opts;
+export function isOptionalIndexedAccessType<
+  Opts extends Options<t.OptionalIndexedAccessType>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "OptionalIndexedAccessType") return false;
@@ -1559,8 +2687,15 @@ export function isOptionalIndexedAccessType(
 }
 export function isJSXAttribute(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXAttribute> | null,
-): node is t.JSXAttribute {
+): node is t.JSXAttribute;
+export function isJSXAttribute<Opts extends Options<t.JSXAttribute>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXAttribute & Opts;
+export function isJSXAttribute<Opts extends Options<t.JSXAttribute>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXAttribute") return false;
@@ -1569,8 +2704,15 @@ export function isJSXAttribute(
 }
 export function isJSXClosingElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXClosingElement> | null,
-): node is t.JSXClosingElement {
+): node is t.JSXClosingElement;
+export function isJSXClosingElement<Opts extends Options<t.JSXClosingElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXClosingElement & Opts;
+export function isJSXClosingElement<Opts extends Options<t.JSXClosingElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXClosingElement") return false;
@@ -1579,8 +2721,15 @@ export function isJSXClosingElement(
 }
 export function isJSXElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXElement> | null,
-): node is t.JSXElement {
+): node is t.JSXElement;
+export function isJSXElement<Opts extends Options<t.JSXElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXElement & Opts;
+export function isJSXElement<Opts extends Options<t.JSXElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXElement") return false;
@@ -1589,8 +2738,16 @@ export function isJSXElement(
 }
 export function isJSXEmptyExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXEmptyExpression> | null,
-): node is t.JSXEmptyExpression {
+): node is t.JSXEmptyExpression;
+export function isJSXEmptyExpression<
+  Opts extends Options<t.JSXEmptyExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXEmptyExpression & Opts;
+export function isJSXEmptyExpression<
+  Opts extends Options<t.JSXEmptyExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXEmptyExpression") return false;
@@ -1599,8 +2756,16 @@ export function isJSXEmptyExpression(
 }
 export function isJSXExpressionContainer(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXExpressionContainer> | null,
-): node is t.JSXExpressionContainer {
+): node is t.JSXExpressionContainer;
+export function isJSXExpressionContainer<
+  Opts extends Options<t.JSXExpressionContainer>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXExpressionContainer & Opts;
+export function isJSXExpressionContainer<
+  Opts extends Options<t.JSXExpressionContainer>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXExpressionContainer") return false;
@@ -1609,8 +2774,15 @@ export function isJSXExpressionContainer(
 }
 export function isJSXSpreadChild(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXSpreadChild> | null,
-): node is t.JSXSpreadChild {
+): node is t.JSXSpreadChild;
+export function isJSXSpreadChild<Opts extends Options<t.JSXSpreadChild>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXSpreadChild & Opts;
+export function isJSXSpreadChild<Opts extends Options<t.JSXSpreadChild>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXSpreadChild") return false;
@@ -1619,8 +2791,15 @@ export function isJSXSpreadChild(
 }
 export function isJSXIdentifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXIdentifier> | null,
-): node is t.JSXIdentifier {
+): node is t.JSXIdentifier;
+export function isJSXIdentifier<Opts extends Options<t.JSXIdentifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXIdentifier & Opts;
+export function isJSXIdentifier<Opts extends Options<t.JSXIdentifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXIdentifier") return false;
@@ -1629,8 +2808,16 @@ export function isJSXIdentifier(
 }
 export function isJSXMemberExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXMemberExpression> | null,
-): node is t.JSXMemberExpression {
+): node is t.JSXMemberExpression;
+export function isJSXMemberExpression<
+  Opts extends Options<t.JSXMemberExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXMemberExpression & Opts;
+export function isJSXMemberExpression<
+  Opts extends Options<t.JSXMemberExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXMemberExpression") return false;
@@ -1639,8 +2826,15 @@ export function isJSXMemberExpression(
 }
 export function isJSXNamespacedName(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXNamespacedName> | null,
-): node is t.JSXNamespacedName {
+): node is t.JSXNamespacedName;
+export function isJSXNamespacedName<Opts extends Options<t.JSXNamespacedName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXNamespacedName & Opts;
+export function isJSXNamespacedName<Opts extends Options<t.JSXNamespacedName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXNamespacedName") return false;
@@ -1649,8 +2843,15 @@ export function isJSXNamespacedName(
 }
 export function isJSXOpeningElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXOpeningElement> | null,
-): node is t.JSXOpeningElement {
+): node is t.JSXOpeningElement;
+export function isJSXOpeningElement<Opts extends Options<t.JSXOpeningElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXOpeningElement & Opts;
+export function isJSXOpeningElement<Opts extends Options<t.JSXOpeningElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXOpeningElement") return false;
@@ -1659,18 +2860,31 @@ export function isJSXOpeningElement(
 }
 export function isJSXSpreadAttribute(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXSpreadAttribute> | null,
-): node is t.JSXSpreadAttribute {
+): node is t.JSXSpreadAttribute;
+export function isJSXSpreadAttribute<
+  Opts extends Options<t.JSXSpreadAttribute>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXSpreadAttribute & Opts;
+export function isJSXSpreadAttribute<
+  Opts extends Options<t.JSXSpreadAttribute>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXSpreadAttribute") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isJSXText(
+export function isJSXText(node: t.Node | null | undefined): node is t.JSXText;
+export function isJSXText<Opts extends Options<t.JSXText>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXText> | null,
-): node is t.JSXText {
+  opts?: Opts | null,
+): node is t.JSXText & Opts;
+export function isJSXText<Opts extends Options<t.JSXText>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXText") return false;
@@ -1679,8 +2893,15 @@ export function isJSXText(
 }
 export function isJSXFragment(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXFragment> | null,
-): node is t.JSXFragment {
+): node is t.JSXFragment;
+export function isJSXFragment<Opts extends Options<t.JSXFragment>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXFragment & Opts;
+export function isJSXFragment<Opts extends Options<t.JSXFragment>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXFragment") return false;
@@ -1689,8 +2910,16 @@ export function isJSXFragment(
 }
 export function isJSXOpeningFragment(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXOpeningFragment> | null,
-): node is t.JSXOpeningFragment {
+): node is t.JSXOpeningFragment;
+export function isJSXOpeningFragment<
+  Opts extends Options<t.JSXOpeningFragment>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXOpeningFragment & Opts;
+export function isJSXOpeningFragment<
+  Opts extends Options<t.JSXOpeningFragment>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXOpeningFragment") return false;
@@ -1699,18 +2928,31 @@ export function isJSXOpeningFragment(
 }
 export function isJSXClosingFragment(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSXClosingFragment> | null,
-): node is t.JSXClosingFragment {
+): node is t.JSXClosingFragment;
+export function isJSXClosingFragment<
+  Opts extends Options<t.JSXClosingFragment>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.JSXClosingFragment & Opts;
+export function isJSXClosingFragment<
+  Opts extends Options<t.JSXClosingFragment>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "JSXClosingFragment") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isNoop(
+export function isNoop(node: t.Node | null | undefined): node is t.Noop;
+export function isNoop<Opts extends Options<t.Noop>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Noop> | null,
-): node is t.Noop {
+  opts?: Opts | null,
+): node is t.Noop & Opts;
+export function isNoop<Opts extends Options<t.Noop>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Noop") return false;
@@ -1719,8 +2961,15 @@ export function isNoop(
 }
 export function isPlaceholder(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Placeholder> | null,
-): node is t.Placeholder {
+): node is t.Placeholder;
+export function isPlaceholder<Opts extends Options<t.Placeholder>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Placeholder & Opts;
+export function isPlaceholder<Opts extends Options<t.Placeholder>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Placeholder") return false;
@@ -1729,8 +2978,16 @@ export function isPlaceholder(
 }
 export function isV8IntrinsicIdentifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.V8IntrinsicIdentifier> | null,
-): node is t.V8IntrinsicIdentifier {
+): node is t.V8IntrinsicIdentifier;
+export function isV8IntrinsicIdentifier<
+  Opts extends Options<t.V8IntrinsicIdentifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.V8IntrinsicIdentifier & Opts;
+export function isV8IntrinsicIdentifier<
+  Opts extends Options<t.V8IntrinsicIdentifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "V8IntrinsicIdentifier") return false;
@@ -1739,8 +2996,16 @@ export function isV8IntrinsicIdentifier(
 }
 export function isArgumentPlaceholder(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ArgumentPlaceholder> | null,
-): node is t.ArgumentPlaceholder {
+): node is t.ArgumentPlaceholder;
+export function isArgumentPlaceholder<
+  Opts extends Options<t.ArgumentPlaceholder>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ArgumentPlaceholder & Opts;
+export function isArgumentPlaceholder<
+  Opts extends Options<t.ArgumentPlaceholder>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ArgumentPlaceholder") return false;
@@ -1749,8 +3014,15 @@ export function isArgumentPlaceholder(
 }
 export function isBindExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BindExpression> | null,
-): node is t.BindExpression {
+): node is t.BindExpression;
+export function isBindExpression<Opts extends Options<t.BindExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BindExpression & Opts;
+export function isBindExpression<Opts extends Options<t.BindExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "BindExpression") return false;
@@ -1759,8 +3031,15 @@ export function isBindExpression(
 }
 export function isDecorator(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Decorator> | null,
-): node is t.Decorator {
+): node is t.Decorator;
+export function isDecorator<Opts extends Options<t.Decorator>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Decorator & Opts;
+export function isDecorator<Opts extends Options<t.Decorator>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "Decorator") return false;
@@ -1769,8 +3048,15 @@ export function isDecorator(
 }
 export function isDoExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DoExpression> | null,
-): node is t.DoExpression {
+): node is t.DoExpression;
+export function isDoExpression<Opts extends Options<t.DoExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DoExpression & Opts;
+export function isDoExpression<Opts extends Options<t.DoExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DoExpression") return false;
@@ -1779,8 +3065,16 @@ export function isDoExpression(
 }
 export function isExportDefaultSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportDefaultSpecifier> | null,
-): node is t.ExportDefaultSpecifier {
+): node is t.ExportDefaultSpecifier;
+export function isExportDefaultSpecifier<
+  Opts extends Options<t.ExportDefaultSpecifier>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportDefaultSpecifier & Opts;
+export function isExportDefaultSpecifier<
+  Opts extends Options<t.ExportDefaultSpecifier>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "ExportDefaultSpecifier") return false;
@@ -1789,8 +3083,15 @@ export function isExportDefaultSpecifier(
 }
 export function isRecordExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.RecordExpression> | null,
-): node is t.RecordExpression {
+): node is t.RecordExpression;
+export function isRecordExpression<Opts extends Options<t.RecordExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.RecordExpression & Opts;
+export function isRecordExpression<Opts extends Options<t.RecordExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "RecordExpression") return false;
@@ -1799,8 +3100,15 @@ export function isRecordExpression(
 }
 export function isTupleExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TupleExpression> | null,
-): node is t.TupleExpression {
+): node is t.TupleExpression;
+export function isTupleExpression<Opts extends Options<t.TupleExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TupleExpression & Opts;
+export function isTupleExpression<Opts extends Options<t.TupleExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TupleExpression") return false;
@@ -1809,8 +3117,15 @@ export function isTupleExpression(
 }
 export function isDecimalLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.DecimalLiteral> | null,
-): node is t.DecimalLiteral {
+): node is t.DecimalLiteral;
+export function isDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.DecimalLiteral & Opts;
+export function isDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "DecimalLiteral") return false;
@@ -1819,8 +3134,15 @@ export function isDecimalLiteral(
 }
 export function isModuleExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ModuleExpression> | null,
-): node is t.ModuleExpression {
+): node is t.ModuleExpression;
+export function isModuleExpression<Opts extends Options<t.ModuleExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ModuleExpression & Opts;
+export function isModuleExpression<Opts extends Options<t.ModuleExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "ModuleExpression") return false;
@@ -1829,8 +3151,15 @@ export function isModuleExpression(
 }
 export function isTopicReference(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TopicReference> | null,
-): node is t.TopicReference {
+): node is t.TopicReference;
+export function isTopicReference<Opts extends Options<t.TopicReference>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TopicReference & Opts;
+export function isTopicReference<Opts extends Options<t.TopicReference>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TopicReference") return false;
@@ -1839,8 +3168,16 @@ export function isTopicReference(
 }
 export function isPipelineTopicExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PipelineTopicExpression> | null,
-): node is t.PipelineTopicExpression {
+): node is t.PipelineTopicExpression;
+export function isPipelineTopicExpression<
+  Opts extends Options<t.PipelineTopicExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PipelineTopicExpression & Opts;
+export function isPipelineTopicExpression<
+  Opts extends Options<t.PipelineTopicExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "PipelineTopicExpression") return false;
@@ -1849,8 +3186,16 @@ export function isPipelineTopicExpression(
 }
 export function isPipelineBareFunction(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PipelineBareFunction> | null,
-): node is t.PipelineBareFunction {
+): node is t.PipelineBareFunction;
+export function isPipelineBareFunction<
+  Opts extends Options<t.PipelineBareFunction>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PipelineBareFunction & Opts;
+export function isPipelineBareFunction<
+  Opts extends Options<t.PipelineBareFunction>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "PipelineBareFunction") return false;
@@ -1859,8 +3204,16 @@ export function isPipelineBareFunction(
 }
 export function isPipelinePrimaryTopicReference(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PipelinePrimaryTopicReference> | null,
-): node is t.PipelinePrimaryTopicReference {
+): node is t.PipelinePrimaryTopicReference;
+export function isPipelinePrimaryTopicReference<
+  Opts extends Options<t.PipelinePrimaryTopicReference>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PipelinePrimaryTopicReference & Opts;
+export function isPipelinePrimaryTopicReference<
+  Opts extends Options<t.PipelinePrimaryTopicReference>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "PipelinePrimaryTopicReference") return false;
@@ -1869,8 +3222,15 @@ export function isPipelinePrimaryTopicReference(
 }
 export function isVoidPattern(
   node: t.Node | null | undefined,
-  opts?: Opts<t.VoidPattern> | null,
-): node is t.VoidPattern {
+): node is t.VoidPattern;
+export function isVoidPattern<Opts extends Options<t.VoidPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.VoidPattern & Opts;
+export function isVoidPattern<Opts extends Options<t.VoidPattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "VoidPattern") return false;
@@ -1879,8 +3239,16 @@ export function isVoidPattern(
 }
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSParameterProperty> | null,
-): node is t.TSParameterProperty {
+): node is t.TSParameterProperty;
+export function isTSParameterProperty<
+  Opts extends Options<t.TSParameterProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSParameterProperty & Opts;
+export function isTSParameterProperty<
+  Opts extends Options<t.TSParameterProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSParameterProperty") return false;
@@ -1889,8 +3257,15 @@ export function isTSParameterProperty(
 }
 export function isTSDeclareFunction(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSDeclareFunction> | null,
-): node is t.TSDeclareFunction {
+): node is t.TSDeclareFunction;
+export function isTSDeclareFunction<Opts extends Options<t.TSDeclareFunction>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSDeclareFunction & Opts;
+export function isTSDeclareFunction<Opts extends Options<t.TSDeclareFunction>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSDeclareFunction") return false;
@@ -1899,8 +3274,15 @@ export function isTSDeclareFunction(
 }
 export function isTSDeclareMethod(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSDeclareMethod> | null,
-): node is t.TSDeclareMethod {
+): node is t.TSDeclareMethod;
+export function isTSDeclareMethod<Opts extends Options<t.TSDeclareMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSDeclareMethod & Opts;
+export function isTSDeclareMethod<Opts extends Options<t.TSDeclareMethod>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSDeclareMethod") return false;
@@ -1909,8 +3291,15 @@ export function isTSDeclareMethod(
 }
 export function isTSQualifiedName(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSQualifiedName> | null,
-): node is t.TSQualifiedName {
+): node is t.TSQualifiedName;
+export function isTSQualifiedName<Opts extends Options<t.TSQualifiedName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSQualifiedName & Opts;
+export function isTSQualifiedName<Opts extends Options<t.TSQualifiedName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSQualifiedName") return false;
@@ -1919,8 +3308,16 @@ export function isTSQualifiedName(
 }
 export function isTSCallSignatureDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSCallSignatureDeclaration> | null,
-): node is t.TSCallSignatureDeclaration {
+): node is t.TSCallSignatureDeclaration;
+export function isTSCallSignatureDeclaration<
+  Opts extends Options<t.TSCallSignatureDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSCallSignatureDeclaration & Opts;
+export function isTSCallSignatureDeclaration<
+  Opts extends Options<t.TSCallSignatureDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSCallSignatureDeclaration") return false;
@@ -1929,8 +3326,16 @@ export function isTSCallSignatureDeclaration(
 }
 export function isTSConstructSignatureDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSConstructSignatureDeclaration> | null,
-): node is t.TSConstructSignatureDeclaration {
+): node is t.TSConstructSignatureDeclaration;
+export function isTSConstructSignatureDeclaration<
+  Opts extends Options<t.TSConstructSignatureDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSConstructSignatureDeclaration & Opts;
+export function isTSConstructSignatureDeclaration<
+  Opts extends Options<t.TSConstructSignatureDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSConstructSignatureDeclaration") return false;
@@ -1939,8 +3344,16 @@ export function isTSConstructSignatureDeclaration(
 }
 export function isTSPropertySignature(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSPropertySignature> | null,
-): node is t.TSPropertySignature {
+): node is t.TSPropertySignature;
+export function isTSPropertySignature<
+  Opts extends Options<t.TSPropertySignature>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSPropertySignature & Opts;
+export function isTSPropertySignature<
+  Opts extends Options<t.TSPropertySignature>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSPropertySignature") return false;
@@ -1949,8 +3362,15 @@ export function isTSPropertySignature(
 }
 export function isTSMethodSignature(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSMethodSignature> | null,
-): node is t.TSMethodSignature {
+): node is t.TSMethodSignature;
+export function isTSMethodSignature<Opts extends Options<t.TSMethodSignature>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSMethodSignature & Opts;
+export function isTSMethodSignature<Opts extends Options<t.TSMethodSignature>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSMethodSignature") return false;
@@ -1959,8 +3379,15 @@ export function isTSMethodSignature(
 }
 export function isTSIndexSignature(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSIndexSignature> | null,
-): node is t.TSIndexSignature {
+): node is t.TSIndexSignature;
+export function isTSIndexSignature<Opts extends Options<t.TSIndexSignature>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSIndexSignature & Opts;
+export function isTSIndexSignature<Opts extends Options<t.TSIndexSignature>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSIndexSignature") return false;
@@ -1969,8 +3396,15 @@ export function isTSIndexSignature(
 }
 export function isTSAnyKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSAnyKeyword> | null,
-): node is t.TSAnyKeyword {
+): node is t.TSAnyKeyword;
+export function isTSAnyKeyword<Opts extends Options<t.TSAnyKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSAnyKeyword & Opts;
+export function isTSAnyKeyword<Opts extends Options<t.TSAnyKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSAnyKeyword") return false;
@@ -1979,8 +3413,15 @@ export function isTSAnyKeyword(
 }
 export function isTSBooleanKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSBooleanKeyword> | null,
-): node is t.TSBooleanKeyword {
+): node is t.TSBooleanKeyword;
+export function isTSBooleanKeyword<Opts extends Options<t.TSBooleanKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSBooleanKeyword & Opts;
+export function isTSBooleanKeyword<Opts extends Options<t.TSBooleanKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSBooleanKeyword") return false;
@@ -1989,8 +3430,15 @@ export function isTSBooleanKeyword(
 }
 export function isTSBigIntKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSBigIntKeyword> | null,
-): node is t.TSBigIntKeyword {
+): node is t.TSBigIntKeyword;
+export function isTSBigIntKeyword<Opts extends Options<t.TSBigIntKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSBigIntKeyword & Opts;
+export function isTSBigIntKeyword<Opts extends Options<t.TSBigIntKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSBigIntKeyword") return false;
@@ -1999,8 +3447,16 @@ export function isTSBigIntKeyword(
 }
 export function isTSIntrinsicKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSIntrinsicKeyword> | null,
-): node is t.TSIntrinsicKeyword {
+): node is t.TSIntrinsicKeyword;
+export function isTSIntrinsicKeyword<
+  Opts extends Options<t.TSIntrinsicKeyword>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSIntrinsicKeyword & Opts;
+export function isTSIntrinsicKeyword<
+  Opts extends Options<t.TSIntrinsicKeyword>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSIntrinsicKeyword") return false;
@@ -2009,8 +3465,15 @@ export function isTSIntrinsicKeyword(
 }
 export function isTSNeverKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNeverKeyword> | null,
-): node is t.TSNeverKeyword {
+): node is t.TSNeverKeyword;
+export function isTSNeverKeyword<Opts extends Options<t.TSNeverKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNeverKeyword & Opts;
+export function isTSNeverKeyword<Opts extends Options<t.TSNeverKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNeverKeyword") return false;
@@ -2019,8 +3482,15 @@ export function isTSNeverKeyword(
 }
 export function isTSNullKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNullKeyword> | null,
-): node is t.TSNullKeyword {
+): node is t.TSNullKeyword;
+export function isTSNullKeyword<Opts extends Options<t.TSNullKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNullKeyword & Opts;
+export function isTSNullKeyword<Opts extends Options<t.TSNullKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNullKeyword") return false;
@@ -2029,8 +3499,15 @@ export function isTSNullKeyword(
 }
 export function isTSNumberKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNumberKeyword> | null,
-): node is t.TSNumberKeyword {
+): node is t.TSNumberKeyword;
+export function isTSNumberKeyword<Opts extends Options<t.TSNumberKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNumberKeyword & Opts;
+export function isTSNumberKeyword<Opts extends Options<t.TSNumberKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNumberKeyword") return false;
@@ -2039,8 +3516,15 @@ export function isTSNumberKeyword(
 }
 export function isTSObjectKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSObjectKeyword> | null,
-): node is t.TSObjectKeyword {
+): node is t.TSObjectKeyword;
+export function isTSObjectKeyword<Opts extends Options<t.TSObjectKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSObjectKeyword & Opts;
+export function isTSObjectKeyword<Opts extends Options<t.TSObjectKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSObjectKeyword") return false;
@@ -2049,8 +3533,15 @@ export function isTSObjectKeyword(
 }
 export function isTSStringKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSStringKeyword> | null,
-): node is t.TSStringKeyword {
+): node is t.TSStringKeyword;
+export function isTSStringKeyword<Opts extends Options<t.TSStringKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSStringKeyword & Opts;
+export function isTSStringKeyword<Opts extends Options<t.TSStringKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSStringKeyword") return false;
@@ -2059,8 +3550,15 @@ export function isTSStringKeyword(
 }
 export function isTSSymbolKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSSymbolKeyword> | null,
-): node is t.TSSymbolKeyword {
+): node is t.TSSymbolKeyword;
+export function isTSSymbolKeyword<Opts extends Options<t.TSSymbolKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSSymbolKeyword & Opts;
+export function isTSSymbolKeyword<Opts extends Options<t.TSSymbolKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSSymbolKeyword") return false;
@@ -2069,8 +3567,16 @@ export function isTSSymbolKeyword(
 }
 export function isTSUndefinedKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSUndefinedKeyword> | null,
-): node is t.TSUndefinedKeyword {
+): node is t.TSUndefinedKeyword;
+export function isTSUndefinedKeyword<
+  Opts extends Options<t.TSUndefinedKeyword>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSUndefinedKeyword & Opts;
+export function isTSUndefinedKeyword<
+  Opts extends Options<t.TSUndefinedKeyword>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSUndefinedKeyword") return false;
@@ -2079,8 +3585,15 @@ export function isTSUndefinedKeyword(
 }
 export function isTSUnknownKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSUnknownKeyword> | null,
-): node is t.TSUnknownKeyword {
+): node is t.TSUnknownKeyword;
+export function isTSUnknownKeyword<Opts extends Options<t.TSUnknownKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSUnknownKeyword & Opts;
+export function isTSUnknownKeyword<Opts extends Options<t.TSUnknownKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSUnknownKeyword") return false;
@@ -2089,8 +3602,15 @@ export function isTSUnknownKeyword(
 }
 export function isTSVoidKeyword(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSVoidKeyword> | null,
-): node is t.TSVoidKeyword {
+): node is t.TSVoidKeyword;
+export function isTSVoidKeyword<Opts extends Options<t.TSVoidKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSVoidKeyword & Opts;
+export function isTSVoidKeyword<Opts extends Options<t.TSVoidKeyword>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSVoidKeyword") return false;
@@ -2099,8 +3619,15 @@ export function isTSVoidKeyword(
 }
 export function isTSThisType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSThisType> | null,
-): node is t.TSThisType {
+): node is t.TSThisType;
+export function isTSThisType<Opts extends Options<t.TSThisType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSThisType & Opts;
+export function isTSThisType<Opts extends Options<t.TSThisType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSThisType") return false;
@@ -2109,8 +3636,15 @@ export function isTSThisType(
 }
 export function isTSFunctionType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSFunctionType> | null,
-): node is t.TSFunctionType {
+): node is t.TSFunctionType;
+export function isTSFunctionType<Opts extends Options<t.TSFunctionType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSFunctionType & Opts;
+export function isTSFunctionType<Opts extends Options<t.TSFunctionType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSFunctionType") return false;
@@ -2119,8 +3653,15 @@ export function isTSFunctionType(
 }
 export function isTSConstructorType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSConstructorType> | null,
-): node is t.TSConstructorType {
+): node is t.TSConstructorType;
+export function isTSConstructorType<Opts extends Options<t.TSConstructorType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSConstructorType & Opts;
+export function isTSConstructorType<Opts extends Options<t.TSConstructorType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSConstructorType") return false;
@@ -2129,8 +3670,15 @@ export function isTSConstructorType(
 }
 export function isTSTypeReference(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeReference> | null,
-): node is t.TSTypeReference {
+): node is t.TSTypeReference;
+export function isTSTypeReference<Opts extends Options<t.TSTypeReference>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeReference & Opts;
+export function isTSTypeReference<Opts extends Options<t.TSTypeReference>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeReference") return false;
@@ -2139,8 +3687,15 @@ export function isTSTypeReference(
 }
 export function isTSTypePredicate(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypePredicate> | null,
-): node is t.TSTypePredicate {
+): node is t.TSTypePredicate;
+export function isTSTypePredicate<Opts extends Options<t.TSTypePredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypePredicate & Opts;
+export function isTSTypePredicate<Opts extends Options<t.TSTypePredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypePredicate") return false;
@@ -2149,8 +3704,15 @@ export function isTSTypePredicate(
 }
 export function isTSTypeQuery(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeQuery> | null,
-): node is t.TSTypeQuery {
+): node is t.TSTypeQuery;
+export function isTSTypeQuery<Opts extends Options<t.TSTypeQuery>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeQuery & Opts;
+export function isTSTypeQuery<Opts extends Options<t.TSTypeQuery>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeQuery") return false;
@@ -2159,8 +3721,15 @@ export function isTSTypeQuery(
 }
 export function isTSTypeLiteral(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeLiteral> | null,
-): node is t.TSTypeLiteral {
+): node is t.TSTypeLiteral;
+export function isTSTypeLiteral<Opts extends Options<t.TSTypeLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeLiteral & Opts;
+export function isTSTypeLiteral<Opts extends Options<t.TSTypeLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeLiteral") return false;
@@ -2169,8 +3738,15 @@ export function isTSTypeLiteral(
 }
 export function isTSArrayType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSArrayType> | null,
-): node is t.TSArrayType {
+): node is t.TSArrayType;
+export function isTSArrayType<Opts extends Options<t.TSArrayType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSArrayType & Opts;
+export function isTSArrayType<Opts extends Options<t.TSArrayType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSArrayType") return false;
@@ -2179,8 +3755,15 @@ export function isTSArrayType(
 }
 export function isTSTupleType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTupleType> | null,
-): node is t.TSTupleType {
+): node is t.TSTupleType;
+export function isTSTupleType<Opts extends Options<t.TSTupleType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTupleType & Opts;
+export function isTSTupleType<Opts extends Options<t.TSTupleType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTupleType") return false;
@@ -2189,8 +3772,15 @@ export function isTSTupleType(
 }
 export function isTSOptionalType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSOptionalType> | null,
-): node is t.TSOptionalType {
+): node is t.TSOptionalType;
+export function isTSOptionalType<Opts extends Options<t.TSOptionalType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSOptionalType & Opts;
+export function isTSOptionalType<Opts extends Options<t.TSOptionalType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSOptionalType") return false;
@@ -2199,8 +3789,15 @@ export function isTSOptionalType(
 }
 export function isTSRestType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSRestType> | null,
-): node is t.TSRestType {
+): node is t.TSRestType;
+export function isTSRestType<Opts extends Options<t.TSRestType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSRestType & Opts;
+export function isTSRestType<Opts extends Options<t.TSRestType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSRestType") return false;
@@ -2209,8 +3806,16 @@ export function isTSRestType(
 }
 export function isTSNamedTupleMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNamedTupleMember> | null,
-): node is t.TSNamedTupleMember {
+): node is t.TSNamedTupleMember;
+export function isTSNamedTupleMember<
+  Opts extends Options<t.TSNamedTupleMember>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNamedTupleMember & Opts;
+export function isTSNamedTupleMember<
+  Opts extends Options<t.TSNamedTupleMember>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNamedTupleMember") return false;
@@ -2219,8 +3824,15 @@ export function isTSNamedTupleMember(
 }
 export function isTSUnionType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSUnionType> | null,
-): node is t.TSUnionType {
+): node is t.TSUnionType;
+export function isTSUnionType<Opts extends Options<t.TSUnionType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSUnionType & Opts;
+export function isTSUnionType<Opts extends Options<t.TSUnionType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSUnionType") return false;
@@ -2229,8 +3841,16 @@ export function isTSUnionType(
 }
 export function isTSIntersectionType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSIntersectionType> | null,
-): node is t.TSIntersectionType {
+): node is t.TSIntersectionType;
+export function isTSIntersectionType<
+  Opts extends Options<t.TSIntersectionType>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSIntersectionType & Opts;
+export function isTSIntersectionType<
+  Opts extends Options<t.TSIntersectionType>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSIntersectionType") return false;
@@ -2239,8 +3859,15 @@ export function isTSIntersectionType(
 }
 export function isTSConditionalType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSConditionalType> | null,
-): node is t.TSConditionalType {
+): node is t.TSConditionalType;
+export function isTSConditionalType<Opts extends Options<t.TSConditionalType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSConditionalType & Opts;
+export function isTSConditionalType<Opts extends Options<t.TSConditionalType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSConditionalType") return false;
@@ -2249,8 +3876,15 @@ export function isTSConditionalType(
 }
 export function isTSInferType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSInferType> | null,
-): node is t.TSInferType {
+): node is t.TSInferType;
+export function isTSInferType<Opts extends Options<t.TSInferType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSInferType & Opts;
+export function isTSInferType<Opts extends Options<t.TSInferType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSInferType") return false;
@@ -2259,8 +3893,16 @@ export function isTSInferType(
 }
 export function isTSParenthesizedType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSParenthesizedType> | null,
-): node is t.TSParenthesizedType {
+): node is t.TSParenthesizedType;
+export function isTSParenthesizedType<
+  Opts extends Options<t.TSParenthesizedType>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSParenthesizedType & Opts;
+export function isTSParenthesizedType<
+  Opts extends Options<t.TSParenthesizedType>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSParenthesizedType") return false;
@@ -2269,8 +3911,15 @@ export function isTSParenthesizedType(
 }
 export function isTSTypeOperator(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeOperator> | null,
-): node is t.TSTypeOperator {
+): node is t.TSTypeOperator;
+export function isTSTypeOperator<Opts extends Options<t.TSTypeOperator>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeOperator & Opts;
+export function isTSTypeOperator<Opts extends Options<t.TSTypeOperator>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeOperator") return false;
@@ -2279,8 +3928,16 @@ export function isTSTypeOperator(
 }
 export function isTSIndexedAccessType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSIndexedAccessType> | null,
-): node is t.TSIndexedAccessType {
+): node is t.TSIndexedAccessType;
+export function isTSIndexedAccessType<
+  Opts extends Options<t.TSIndexedAccessType>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSIndexedAccessType & Opts;
+export function isTSIndexedAccessType<
+  Opts extends Options<t.TSIndexedAccessType>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSIndexedAccessType") return false;
@@ -2289,8 +3946,15 @@ export function isTSIndexedAccessType(
 }
 export function isTSMappedType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSMappedType> | null,
-): node is t.TSMappedType {
+): node is t.TSMappedType;
+export function isTSMappedType<Opts extends Options<t.TSMappedType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSMappedType & Opts;
+export function isTSMappedType<Opts extends Options<t.TSMappedType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSMappedType") return false;
@@ -2299,8 +3963,16 @@ export function isTSMappedType(
 }
 export function isTSTemplateLiteralType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTemplateLiteralType> | null,
-): node is t.TSTemplateLiteralType {
+): node is t.TSTemplateLiteralType;
+export function isTSTemplateLiteralType<
+  Opts extends Options<t.TSTemplateLiteralType>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTemplateLiteralType & Opts;
+export function isTSTemplateLiteralType<
+  Opts extends Options<t.TSTemplateLiteralType>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTemplateLiteralType") return false;
@@ -2309,8 +3981,15 @@ export function isTSTemplateLiteralType(
 }
 export function isTSLiteralType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSLiteralType> | null,
-): node is t.TSLiteralType {
+): node is t.TSLiteralType;
+export function isTSLiteralType<Opts extends Options<t.TSLiteralType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSLiteralType & Opts;
+export function isTSLiteralType<Opts extends Options<t.TSLiteralType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSLiteralType") return false;
@@ -2319,8 +3998,16 @@ export function isTSLiteralType(
 }
 export function isTSExpressionWithTypeArguments(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSExpressionWithTypeArguments> | null,
-): node is t.TSExpressionWithTypeArguments {
+): node is t.TSExpressionWithTypeArguments;
+export function isTSExpressionWithTypeArguments<
+  Opts extends Options<t.TSExpressionWithTypeArguments>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSExpressionWithTypeArguments & Opts;
+export function isTSExpressionWithTypeArguments<
+  Opts extends Options<t.TSExpressionWithTypeArguments>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSExpressionWithTypeArguments") return false;
@@ -2329,8 +4016,16 @@ export function isTSExpressionWithTypeArguments(
 }
 export function isTSInterfaceDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSInterfaceDeclaration> | null,
-): node is t.TSInterfaceDeclaration {
+): node is t.TSInterfaceDeclaration;
+export function isTSInterfaceDeclaration<
+  Opts extends Options<t.TSInterfaceDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSInterfaceDeclaration & Opts;
+export function isTSInterfaceDeclaration<
+  Opts extends Options<t.TSInterfaceDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSInterfaceDeclaration") return false;
@@ -2339,8 +4034,15 @@ export function isTSInterfaceDeclaration(
 }
 export function isTSInterfaceBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSInterfaceBody> | null,
-): node is t.TSInterfaceBody {
+): node is t.TSInterfaceBody;
+export function isTSInterfaceBody<Opts extends Options<t.TSInterfaceBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSInterfaceBody & Opts;
+export function isTSInterfaceBody<Opts extends Options<t.TSInterfaceBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSInterfaceBody") return false;
@@ -2349,8 +4051,16 @@ export function isTSInterfaceBody(
 }
 export function isTSTypeAliasDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeAliasDeclaration> | null,
-): node is t.TSTypeAliasDeclaration {
+): node is t.TSTypeAliasDeclaration;
+export function isTSTypeAliasDeclaration<
+  Opts extends Options<t.TSTypeAliasDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeAliasDeclaration & Opts;
+export function isTSTypeAliasDeclaration<
+  Opts extends Options<t.TSTypeAliasDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeAliasDeclaration") return false;
@@ -2359,8 +4069,16 @@ export function isTSTypeAliasDeclaration(
 }
 export function isTSInstantiationExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSInstantiationExpression> | null,
-): node is t.TSInstantiationExpression {
+): node is t.TSInstantiationExpression;
+export function isTSInstantiationExpression<
+  Opts extends Options<t.TSInstantiationExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSInstantiationExpression & Opts;
+export function isTSInstantiationExpression<
+  Opts extends Options<t.TSInstantiationExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSInstantiationExpression") return false;
@@ -2369,8 +4087,15 @@ export function isTSInstantiationExpression(
 }
 export function isTSAsExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSAsExpression> | null,
-): node is t.TSAsExpression {
+): node is t.TSAsExpression;
+export function isTSAsExpression<Opts extends Options<t.TSAsExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSAsExpression & Opts;
+export function isTSAsExpression<Opts extends Options<t.TSAsExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSAsExpression") return false;
@@ -2379,8 +4104,16 @@ export function isTSAsExpression(
 }
 export function isTSSatisfiesExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSSatisfiesExpression> | null,
-): node is t.TSSatisfiesExpression {
+): node is t.TSSatisfiesExpression;
+export function isTSSatisfiesExpression<
+  Opts extends Options<t.TSSatisfiesExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSSatisfiesExpression & Opts;
+export function isTSSatisfiesExpression<
+  Opts extends Options<t.TSSatisfiesExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSSatisfiesExpression") return false;
@@ -2389,8 +4122,15 @@ export function isTSSatisfiesExpression(
 }
 export function isTSTypeAssertion(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeAssertion> | null,
-): node is t.TSTypeAssertion {
+): node is t.TSTypeAssertion;
+export function isTSTypeAssertion<Opts extends Options<t.TSTypeAssertion>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeAssertion & Opts;
+export function isTSTypeAssertion<Opts extends Options<t.TSTypeAssertion>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeAssertion") return false;
@@ -2399,8 +4139,15 @@ export function isTSTypeAssertion(
 }
 export function isTSEnumBody(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSEnumBody> | null,
-): node is t.TSEnumBody {
+): node is t.TSEnumBody;
+export function isTSEnumBody<Opts extends Options<t.TSEnumBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSEnumBody & Opts;
+export function isTSEnumBody<Opts extends Options<t.TSEnumBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSEnumBody") return false;
@@ -2409,8 +4156,15 @@ export function isTSEnumBody(
 }
 export function isTSEnumDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSEnumDeclaration> | null,
-): node is t.TSEnumDeclaration {
+): node is t.TSEnumDeclaration;
+export function isTSEnumDeclaration<Opts extends Options<t.TSEnumDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSEnumDeclaration & Opts;
+export function isTSEnumDeclaration<Opts extends Options<t.TSEnumDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSEnumDeclaration") return false;
@@ -2419,8 +4173,15 @@ export function isTSEnumDeclaration(
 }
 export function isTSEnumMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSEnumMember> | null,
-): node is t.TSEnumMember {
+): node is t.TSEnumMember;
+export function isTSEnumMember<Opts extends Options<t.TSEnumMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSEnumMember & Opts;
+export function isTSEnumMember<Opts extends Options<t.TSEnumMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSEnumMember") return false;
@@ -2429,8 +4190,16 @@ export function isTSEnumMember(
 }
 export function isTSModuleDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSModuleDeclaration> | null,
-): node is t.TSModuleDeclaration {
+): node is t.TSModuleDeclaration;
+export function isTSModuleDeclaration<
+  Opts extends Options<t.TSModuleDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSModuleDeclaration & Opts;
+export function isTSModuleDeclaration<
+  Opts extends Options<t.TSModuleDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSModuleDeclaration") return false;
@@ -2439,8 +4208,15 @@ export function isTSModuleDeclaration(
 }
 export function isTSModuleBlock(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSModuleBlock> | null,
-): node is t.TSModuleBlock {
+): node is t.TSModuleBlock;
+export function isTSModuleBlock<Opts extends Options<t.TSModuleBlock>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSModuleBlock & Opts;
+export function isTSModuleBlock<Opts extends Options<t.TSModuleBlock>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSModuleBlock") return false;
@@ -2449,8 +4225,15 @@ export function isTSModuleBlock(
 }
 export function isTSImportType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSImportType> | null,
-): node is t.TSImportType {
+): node is t.TSImportType;
+export function isTSImportType<Opts extends Options<t.TSImportType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSImportType & Opts;
+export function isTSImportType<Opts extends Options<t.TSImportType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSImportType") return false;
@@ -2459,8 +4242,16 @@ export function isTSImportType(
 }
 export function isTSImportEqualsDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSImportEqualsDeclaration> | null,
-): node is t.TSImportEqualsDeclaration {
+): node is t.TSImportEqualsDeclaration;
+export function isTSImportEqualsDeclaration<
+  Opts extends Options<t.TSImportEqualsDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSImportEqualsDeclaration & Opts;
+export function isTSImportEqualsDeclaration<
+  Opts extends Options<t.TSImportEqualsDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSImportEqualsDeclaration") return false;
@@ -2469,8 +4260,16 @@ export function isTSImportEqualsDeclaration(
 }
 export function isTSExternalModuleReference(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSExternalModuleReference> | null,
-): node is t.TSExternalModuleReference {
+): node is t.TSExternalModuleReference;
+export function isTSExternalModuleReference<
+  Opts extends Options<t.TSExternalModuleReference>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSExternalModuleReference & Opts;
+export function isTSExternalModuleReference<
+  Opts extends Options<t.TSExternalModuleReference>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSExternalModuleReference") return false;
@@ -2479,8 +4278,16 @@ export function isTSExternalModuleReference(
 }
 export function isTSNonNullExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNonNullExpression> | null,
-): node is t.TSNonNullExpression {
+): node is t.TSNonNullExpression;
+export function isTSNonNullExpression<
+  Opts extends Options<t.TSNonNullExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNonNullExpression & Opts;
+export function isTSNonNullExpression<
+  Opts extends Options<t.TSNonNullExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNonNullExpression") return false;
@@ -2489,8 +4296,16 @@ export function isTSNonNullExpression(
 }
 export function isTSExportAssignment(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSExportAssignment> | null,
-): node is t.TSExportAssignment {
+): node is t.TSExportAssignment;
+export function isTSExportAssignment<
+  Opts extends Options<t.TSExportAssignment>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSExportAssignment & Opts;
+export function isTSExportAssignment<
+  Opts extends Options<t.TSExportAssignment>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSExportAssignment") return false;
@@ -2499,8 +4314,16 @@ export function isTSExportAssignment(
 }
 export function isTSNamespaceExportDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSNamespaceExportDeclaration> | null,
-): node is t.TSNamespaceExportDeclaration {
+): node is t.TSNamespaceExportDeclaration;
+export function isTSNamespaceExportDeclaration<
+  Opts extends Options<t.TSNamespaceExportDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSNamespaceExportDeclaration & Opts;
+export function isTSNamespaceExportDeclaration<
+  Opts extends Options<t.TSNamespaceExportDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSNamespaceExportDeclaration") return false;
@@ -2509,8 +4332,15 @@ export function isTSNamespaceExportDeclaration(
 }
 export function isTSTypeAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeAnnotation> | null,
-): node is t.TSTypeAnnotation {
+): node is t.TSTypeAnnotation;
+export function isTSTypeAnnotation<Opts extends Options<t.TSTypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeAnnotation & Opts;
+export function isTSTypeAnnotation<Opts extends Options<t.TSTypeAnnotation>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeAnnotation") return false;
@@ -2519,8 +4349,16 @@ export function isTSTypeAnnotation(
 }
 export function isTSTypeParameterInstantiation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeParameterInstantiation> | null,
-): node is t.TSTypeParameterInstantiation {
+): node is t.TSTypeParameterInstantiation;
+export function isTSTypeParameterInstantiation<
+  Opts extends Options<t.TSTypeParameterInstantiation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeParameterInstantiation & Opts;
+export function isTSTypeParameterInstantiation<
+  Opts extends Options<t.TSTypeParameterInstantiation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeParameterInstantiation") return false;
@@ -2529,8 +4367,16 @@ export function isTSTypeParameterInstantiation(
 }
 export function isTSTypeParameterDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeParameterDeclaration> | null,
-): node is t.TSTypeParameterDeclaration {
+): node is t.TSTypeParameterDeclaration;
+export function isTSTypeParameterDeclaration<
+  Opts extends Options<t.TSTypeParameterDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeParameterDeclaration & Opts;
+export function isTSTypeParameterDeclaration<
+  Opts extends Options<t.TSTypeParameterDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeParameterDeclaration") return false;
@@ -2539,8 +4385,15 @@ export function isTSTypeParameterDeclaration(
 }
 export function isTSTypeParameter(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeParameter> | null,
-): node is t.TSTypeParameter {
+): node is t.TSTypeParameter;
+export function isTSTypeParameter<Opts extends Options<t.TSTypeParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeParameter & Opts;
+export function isTSTypeParameter<Opts extends Options<t.TSTypeParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   if (node.type !== "TSTypeParameter") return false;
@@ -2549,8 +4402,15 @@ export function isTSTypeParameter(
 }
 export function isStandardized(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Standardized> | null,
-): node is t.Standardized {
+): node is t.Standardized;
+export function isStandardized<Opts extends Options<t.Standardized>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Standardized & Opts;
+export function isStandardized<Opts extends Options<t.Standardized>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2663,8 +4523,15 @@ export function isStandardized(
 }
 export function isExpression(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Expression> | null,
-): node is t.Expression {
+): node is t.Expression;
+export function isExpression<Opts extends Options<t.Expression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Expression & Opts;
+export function isExpression<Opts extends Options<t.Expression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2737,10 +4604,15 @@ export function isExpression(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isBinary(
+export function isBinary(node: t.Node | null | undefined): node is t.Binary;
+export function isBinary<Opts extends Options<t.Binary>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Binary> | null,
-): node is t.Binary {
+  opts?: Opts | null,
+): node is t.Binary & Opts;
+export function isBinary<Opts extends Options<t.Binary>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2753,10 +4625,15 @@ export function isBinary(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isScopable(
+export function isScopable(node: t.Node | null | undefined): node is t.Scopable;
+export function isScopable<Opts extends Options<t.Scopable>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Scopable> | null,
-): node is t.Scopable {
+  opts?: Opts | null,
+): node is t.Scopable & Opts;
+export function isScopable<Opts extends Options<t.Scopable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2790,8 +4667,15 @@ export function isScopable(
 }
 export function isBlockParent(
   node: t.Node | null | undefined,
-  opts?: Opts<t.BlockParent> | null,
-): node is t.BlockParent {
+): node is t.BlockParent;
+export function isBlockParent<Opts extends Options<t.BlockParent>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BlockParent & Opts;
+export function isBlockParent<Opts extends Options<t.BlockParent>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2821,10 +4705,15 @@ export function isBlockParent(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isBlock(
+export function isBlock(node: t.Node | null | undefined): node is t.Block;
+export function isBlock<Opts extends Options<t.Block>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Block> | null,
-): node is t.Block {
+  opts?: Opts | null,
+): node is t.Block & Opts;
+export function isBlock<Opts extends Options<t.Block>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2842,8 +4731,15 @@ export function isBlock(
 }
 export function isStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Statement> | null,
-): node is t.Statement {
+): node is t.Statement;
+export function isStatement<Opts extends Options<t.Statement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Statement & Opts;
+export function isStatement<Opts extends Options<t.Statement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2913,8 +4809,15 @@ export function isStatement(
 }
 export function isTerminatorless(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Terminatorless> | null,
-): node is t.Terminatorless {
+): node is t.Terminatorless;
+export function isTerminatorless<Opts extends Options<t.Terminatorless>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Terminatorless & Opts;
+export function isTerminatorless<Opts extends Options<t.Terminatorless>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2933,8 +4836,16 @@ export function isTerminatorless(
 }
 export function isCompletionStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.CompletionStatement> | null,
-): node is t.CompletionStatement {
+): node is t.CompletionStatement;
+export function isCompletionStatement<
+  Opts extends Options<t.CompletionStatement>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.CompletionStatement & Opts;
+export function isCompletionStatement<
+  Opts extends Options<t.CompletionStatement>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2951,8 +4862,15 @@ export function isCompletionStatement(
 }
 export function isConditional(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Conditional> | null,
-): node is t.Conditional {
+): node is t.Conditional;
+export function isConditional<Opts extends Options<t.Conditional>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Conditional & Opts;
+export function isConditional<Opts extends Options<t.Conditional>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2965,10 +4883,15 @@ export function isConditional(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isLoop(
+export function isLoop(node: t.Node | null | undefined): node is t.Loop;
+export function isLoop<Opts extends Options<t.Loop>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Loop> | null,
-): node is t.Loop {
+  opts?: Opts | null,
+): node is t.Loop & Opts;
+export function isLoop<Opts extends Options<t.Loop>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -2984,10 +4907,15 @@ export function isLoop(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isWhile(
+export function isWhile(node: t.Node | null | undefined): node is t.While;
+export function isWhile<Opts extends Options<t.While>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.While> | null,
-): node is t.While {
+  opts?: Opts | null,
+): node is t.While & Opts;
+export function isWhile<Opts extends Options<t.While>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3002,8 +4930,15 @@ export function isWhile(
 }
 export function isExpressionWrapper(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExpressionWrapper> | null,
-): node is t.ExpressionWrapper {
+): node is t.ExpressionWrapper;
+export function isExpressionWrapper<Opts extends Options<t.ExpressionWrapper>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExpressionWrapper & Opts;
+export function isExpressionWrapper<Opts extends Options<t.ExpressionWrapper>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3017,10 +4952,15 @@ export function isExpressionWrapper(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isFor(
+export function isFor(node: t.Node | null | undefined): node is t.For;
+export function isFor<Opts extends Options<t.For>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.For> | null,
-): node is t.For {
+  opts?: Opts | null,
+): node is t.For & Opts;
+export function isFor<Opts extends Options<t.For>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3036,8 +4976,15 @@ export function isFor(
 }
 export function isForXStatement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ForXStatement> | null,
-): node is t.ForXStatement {
+): node is t.ForXStatement;
+export function isForXStatement<Opts extends Options<t.ForXStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ForXStatement & Opts;
+export function isForXStatement<Opts extends Options<t.ForXStatement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3050,10 +4997,15 @@ export function isForXStatement(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isFunction(
+export function isFunction(node: t.Node | null | undefined): node is t.Function;
+export function isFunction<Opts extends Options<t.Function>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Function> | null,
-): node is t.Function {
+  opts?: Opts | null,
+): node is t.Function & Opts;
+export function isFunction<Opts extends Options<t.Function>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3072,8 +5024,15 @@ export function isFunction(
 }
 export function isFunctionParent(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionParent> | null,
-): node is t.FunctionParent {
+): node is t.FunctionParent;
+export function isFunctionParent<Opts extends Options<t.FunctionParent>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionParent & Opts;
+export function isFunctionParent<Opts extends Options<t.FunctionParent>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3092,10 +5051,15 @@ export function isFunctionParent(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isPureish(
+export function isPureish(node: t.Node | null | undefined): node is t.Pureish;
+export function isPureish<Opts extends Options<t.Pureish>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Pureish> | null,
-): node is t.Pureish {
+  opts?: Opts | null,
+): node is t.Pureish & Opts;
+export function isPureish<Opts extends Options<t.Pureish>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3120,8 +5084,15 @@ export function isPureish(
 }
 export function isDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Declaration> | null,
-): node is t.Declaration {
+): node is t.Declaration;
+export function isDeclaration<Opts extends Options<t.Declaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Declaration & Opts;
+export function isDeclaration<Opts extends Options<t.Declaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3163,8 +5134,15 @@ export function isDeclaration(
 }
 export function isFunctionParameter(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FunctionParameter> | null,
-): node is t.FunctionParameter {
+): node is t.FunctionParameter;
+export function isFunctionParameter<Opts extends Options<t.FunctionParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FunctionParameter & Opts;
+export function isFunctionParameter<Opts extends Options<t.FunctionParameter>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3185,8 +5163,15 @@ export function isFunctionParameter(
 }
 export function isPatternLike(
   node: t.Node | null | undefined,
-  opts?: Opts<t.PatternLike> | null,
-): node is t.PatternLike {
+): node is t.PatternLike;
+export function isPatternLike<Opts extends Options<t.PatternLike>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PatternLike & Opts;
+export function isPatternLike<Opts extends Options<t.PatternLike>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3217,10 +5202,15 @@ export function isPatternLike(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isLVal(
+export function isLVal(node: t.Node | null | undefined): node is t.LVal;
+export function isLVal<Opts extends Options<t.LVal>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.LVal> | null,
-): node is t.LVal {
+  opts?: Opts | null,
+): node is t.LVal & Opts;
+export function isLVal<Opts extends Options<t.LVal>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3253,8 +5243,15 @@ export function isLVal(
 }
 export function isTSEntityName(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSEntityName> | null,
-): node is t.TSEntityName {
+): node is t.TSEntityName;
+export function isTSEntityName<Opts extends Options<t.TSEntityName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSEntityName & Opts;
+export function isTSEntityName<Opts extends Options<t.TSEntityName>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3269,10 +5266,15 @@ export function isTSEntityName(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isLiteral(
+export function isLiteral(node: t.Node | null | undefined): node is t.Literal;
+export function isLiteral<Opts extends Options<t.Literal>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Literal> | null,
-): node is t.Literal {
+  opts?: Opts | null,
+): node is t.Literal & Opts;
+export function isLiteral<Opts extends Options<t.Literal>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3295,8 +5297,15 @@ export function isLiteral(
 }
 export function isImmutable(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Immutable> | null,
-): node is t.Immutable {
+): node is t.Immutable;
+export function isImmutable<Opts extends Options<t.Immutable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Immutable & Opts;
+export function isImmutable<Opts extends Options<t.Immutable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3327,8 +5336,15 @@ export function isImmutable(
 }
 export function isUserWhitespacable(
   node: t.Node | null | undefined,
-  opts?: Opts<t.UserWhitespacable> | null,
-): node is t.UserWhitespacable {
+): node is t.UserWhitespacable;
+export function isUserWhitespacable<Opts extends Options<t.UserWhitespacable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.UserWhitespacable & Opts;
+export function isUserWhitespacable<Opts extends Options<t.UserWhitespacable>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3346,10 +5362,15 @@ export function isUserWhitespacable(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isMethod(
+export function isMethod(node: t.Node | null | undefined): node is t.Method;
+export function isMethod<Opts extends Options<t.Method>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Method> | null,
-): node is t.Method {
+  opts?: Opts | null,
+): node is t.Method & Opts;
+export function isMethod<Opts extends Options<t.Method>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3365,8 +5386,15 @@ export function isMethod(
 }
 export function isObjectMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ObjectMember> | null,
-): node is t.ObjectMember {
+): node is t.ObjectMember;
+export function isObjectMember<Opts extends Options<t.ObjectMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ObjectMember & Opts;
+export function isObjectMember<Opts extends Options<t.ObjectMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3379,10 +5407,15 @@ export function isObjectMember(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isProperty(
+export function isProperty(node: t.Node | null | undefined): node is t.Property;
+export function isProperty<Opts extends Options<t.Property>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Property> | null,
-): node is t.Property {
+  opts?: Opts | null,
+): node is t.Property & Opts;
+export function isProperty<Opts extends Options<t.Property>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3399,8 +5432,15 @@ export function isProperty(
 }
 export function isUnaryLike(
   node: t.Node | null | undefined,
-  opts?: Opts<t.UnaryLike> | null,
-): node is t.UnaryLike {
+): node is t.UnaryLike;
+export function isUnaryLike<Opts extends Options<t.UnaryLike>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.UnaryLike & Opts;
+export function isUnaryLike<Opts extends Options<t.UnaryLike>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3413,10 +5453,15 @@ export function isUnaryLike(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isPattern(
+export function isPattern(node: t.Node | null | undefined): node is t.Pattern;
+export function isPattern<Opts extends Options<t.Pattern>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Pattern> | null,
-): node is t.Pattern {
+  opts?: Opts | null,
+): node is t.Pattern & Opts;
+export function isPattern<Opts extends Options<t.Pattern>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3433,10 +5478,15 @@ export function isPattern(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isClass(
+export function isClass(node: t.Node | null | undefined): node is t.Class;
+export function isClass<Opts extends Options<t.Class>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Class> | null,
-): node is t.Class {
+  opts?: Opts | null,
+): node is t.Class & Opts;
+export function isClass<Opts extends Options<t.Class>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3451,8 +5501,16 @@ export function isClass(
 }
 export function isImportOrExportDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ImportOrExportDeclaration> | null,
-): node is t.ImportOrExportDeclaration {
+): node is t.ImportOrExportDeclaration;
+export function isImportOrExportDeclaration<
+  Opts extends Options<t.ImportOrExportDeclaration>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportOrExportDeclaration & Opts;
+export function isImportOrExportDeclaration<
+  Opts extends Options<t.ImportOrExportDeclaration>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3469,8 +5527,15 @@ export function isImportOrExportDeclaration(
 }
 export function isExportDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ExportDeclaration> | null,
-): node is t.ExportDeclaration {
+): node is t.ExportDeclaration;
+export function isExportDeclaration<Opts extends Options<t.ExportDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ExportDeclaration & Opts;
+export function isExportDeclaration<Opts extends Options<t.ExportDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3486,8 +5551,15 @@ export function isExportDeclaration(
 }
 export function isModuleSpecifier(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ModuleSpecifier> | null,
-): node is t.ModuleSpecifier {
+): node is t.ModuleSpecifier;
+export function isModuleSpecifier<Opts extends Options<t.ModuleSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ModuleSpecifier & Opts;
+export function isModuleSpecifier<Opts extends Options<t.ModuleSpecifier>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3504,10 +5576,15 @@ export function isModuleSpecifier(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isAccessor(
+export function isAccessor(node: t.Node | null | undefined): node is t.Accessor;
+export function isAccessor<Opts extends Options<t.Accessor>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Accessor> | null,
-): node is t.Accessor {
+  opts?: Opts | null,
+): node is t.Accessor & Opts;
+export function isAccessor<Opts extends Options<t.Accessor>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3519,10 +5596,15 @@ export function isAccessor(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isPrivate(
+export function isPrivate(node: t.Node | null | undefined): node is t.Private;
+export function isPrivate<Opts extends Options<t.Private>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Private> | null,
-): node is t.Private {
+  opts?: Opts | null,
+): node is t.Private & Opts;
+export function isPrivate<Opts extends Options<t.Private>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3536,10 +5618,15 @@ export function isPrivate(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isFlow(
+export function isFlow(node: t.Node | null | undefined): node is t.Flow;
+export function isFlow<Opts extends Options<t.Flow>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Flow> | null,
-): node is t.Flow {
+  opts?: Opts | null,
+): node is t.Flow & Opts;
+export function isFlow<Opts extends Options<t.Flow>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3615,10 +5702,15 @@ export function isFlow(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isFlowType(
+export function isFlowType(node: t.Node | null | undefined): node is t.FlowType;
+export function isFlowType<Opts extends Options<t.FlowType>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FlowType> | null,
-): node is t.FlowType {
+  opts?: Opts | null,
+): node is t.FlowType & Opts;
+export function isFlowType<Opts extends Options<t.FlowType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3657,8 +5749,16 @@ export function isFlowType(
 }
 export function isFlowBaseAnnotation(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FlowBaseAnnotation> | null,
-): node is t.FlowBaseAnnotation {
+): node is t.FlowBaseAnnotation;
+export function isFlowBaseAnnotation<
+  Opts extends Options<t.FlowBaseAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FlowBaseAnnotation & Opts;
+export function isFlowBaseAnnotation<
+  Opts extends Options<t.FlowBaseAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3681,8 +5781,15 @@ export function isFlowBaseAnnotation(
 }
 export function isFlowDeclaration(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FlowDeclaration> | null,
-): node is t.FlowDeclaration {
+): node is t.FlowDeclaration;
+export function isFlowDeclaration<Opts extends Options<t.FlowDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FlowDeclaration & Opts;
+export function isFlowDeclaration<Opts extends Options<t.FlowDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3708,8 +5815,15 @@ export function isFlowDeclaration(
 }
 export function isFlowPredicate(
   node: t.Node | null | undefined,
-  opts?: Opts<t.FlowPredicate> | null,
-): node is t.FlowPredicate {
+): node is t.FlowPredicate;
+export function isFlowPredicate<Opts extends Options<t.FlowPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.FlowPredicate & Opts;
+export function isFlowPredicate<Opts extends Options<t.FlowPredicate>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3722,10 +5836,15 @@ export function isFlowPredicate(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isEnumBody(
+export function isEnumBody(node: t.Node | null | undefined): node is t.EnumBody;
+export function isEnumBody<Opts extends Options<t.EnumBody>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumBody> | null,
-): node is t.EnumBody {
+  opts?: Opts | null,
+): node is t.EnumBody & Opts;
+export function isEnumBody<Opts extends Options<t.EnumBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3742,8 +5861,15 @@ export function isEnumBody(
 }
 export function isEnumMember(
   node: t.Node | null | undefined,
-  opts?: Opts<t.EnumMember> | null,
-): node is t.EnumMember {
+): node is t.EnumMember;
+export function isEnumMember<Opts extends Options<t.EnumMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.EnumMember & Opts;
+export function isEnumMember<Opts extends Options<t.EnumMember>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3758,10 +5884,15 @@ export function isEnumMember(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isJSX(
+export function isJSX(node: t.Node | null | undefined): node is t.JSX;
+export function isJSX<Opts extends Options<t.JSX>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.JSX> | null,
-): node is t.JSX {
+  opts?: Opts | null,
+): node is t.JSX & Opts;
+export function isJSX<Opts extends Options<t.JSX>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3789,8 +5920,15 @@ export function isJSX(
 }
 export function isMiscellaneous(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Miscellaneous> | null,
-): node is t.Miscellaneous {
+): node is t.Miscellaneous;
+export function isMiscellaneous<Opts extends Options<t.Miscellaneous>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Miscellaneous & Opts;
+export function isMiscellaneous<Opts extends Options<t.Miscellaneous>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3806,8 +5944,15 @@ export function isMiscellaneous(
 }
 export function isTypeScript(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TypeScript> | null,
-): node is t.TypeScript {
+): node is t.TypeScript;
+export function isTypeScript<Opts extends Options<t.TypeScript>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TypeScript & Opts;
+export function isTypeScript<Opts extends Options<t.TypeScript>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3887,8 +6032,15 @@ export function isTypeScript(
 }
 export function isTSTypeElement(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSTypeElement> | null,
-): node is t.TSTypeElement {
+): node is t.TSTypeElement;
+export function isTSTypeElement<Opts extends Options<t.TSTypeElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSTypeElement & Opts;
+export function isTSTypeElement<Opts extends Options<t.TSTypeElement>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3904,10 +6056,15 @@ export function isTSTypeElement(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isTSType(
+export function isTSType(node: t.Node | null | undefined): node is t.TSType;
+export function isTSType<Opts extends Options<t.TSType>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSType> | null,
-): node is t.TSType {
+  opts?: Opts | null,
+): node is t.TSType & Opts;
+export function isTSType<Opts extends Options<t.TSType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3956,8 +6113,15 @@ export function isTSType(
 }
 export function isTSBaseType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.TSBaseType> | null,
-): node is t.TSBaseType {
+): node is t.TSBaseType;
+export function isTSBaseType<Opts extends Options<t.TSBaseType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSBaseType & Opts;
+export function isTSBaseType<Opts extends Options<t.TSBaseType>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
   if (!node) return false;
 
   switch (node.type) {
@@ -3987,9 +6151,14 @@ export function isTSBaseType(
 /**
  * @deprecated Use `isNumericLiteral`
  */
-export function isNumberLiteral(
+export function isNumberLiteral(node: t.Node | null | undefined): boolean;
+export function isNumberLiteral<Opts extends Options<t.NumberLiteral>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.NumberLiteral> | null,
+  opts?: Opts | null,
+): boolean;
+export function isNumberLiteral<Opts extends Options<t.NumberLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
 ): boolean {
   deprecationWarning("isNumberLiteral", "isNumericLiteral");
   if (!node) return false;
@@ -4001,9 +6170,14 @@ export function isNumberLiteral(
 /**
  * @deprecated Use `isRegExpLiteral`
  */
-export function isRegexLiteral(
+export function isRegexLiteral(node: t.Node | null | undefined): boolean;
+export function isRegexLiteral<Opts extends Options<t.RegexLiteral>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.RegexLiteral> | null,
+  opts?: Opts | null,
+): boolean;
+export function isRegexLiteral<Opts extends Options<t.RegexLiteral>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
 ): boolean {
   deprecationWarning("isRegexLiteral", "isRegExpLiteral");
   if (!node) return false;
@@ -4015,9 +6189,14 @@ export function isRegexLiteral(
 /**
  * @deprecated Use `isRestElement`
  */
-export function isRestProperty(
+export function isRestProperty(node: t.Node | null | undefined): boolean;
+export function isRestProperty<Opts extends Options<t.RestProperty>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.RestProperty> | null,
+  opts?: Opts | null,
+): boolean;
+export function isRestProperty<Opts extends Options<t.RestProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
 ): boolean {
   deprecationWarning("isRestProperty", "isRestElement");
   if (!node) return false;
@@ -4029,9 +6208,14 @@ export function isRestProperty(
 /**
  * @deprecated Use `isSpreadElement`
  */
-export function isSpreadProperty(
+export function isSpreadProperty(node: t.Node | null | undefined): boolean;
+export function isSpreadProperty<Opts extends Options<t.SpreadProperty>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.SpreadProperty> | null,
+  opts?: Opts | null,
+): boolean;
+export function isSpreadProperty<Opts extends Options<t.SpreadProperty>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
 ): boolean {
   deprecationWarning("isSpreadProperty", "isSpreadElement");
   if (!node) return false;
@@ -4043,10 +6227,10 @@ export function isSpreadProperty(
 /**
  * @deprecated Use `isImportOrExportDeclaration`
  */
-export function isModuleDeclaration(
+export function isModuleDeclaration<Opts extends Options<t.ModuleDeclaration>>(
   node: t.Node | null | undefined,
-  opts?: Opts<t.ModuleDeclaration> | null,
-): node is t.ImportOrExportDeclaration {
+  opts?: Opts | null,
+): node is t.ImportOrExportDeclaration & Opts {
   deprecationWarning("isModuleDeclaration", "isImportOrExportDeclaration");
   return isImportOrExportDeclaration(node, opts);
 }

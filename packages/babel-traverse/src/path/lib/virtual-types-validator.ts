@@ -26,8 +26,8 @@ import type * as t from "@babel/types";
 const { isCompatTag } = react;
 import type { VirtualTypeAliases } from "./virtual-types.ts";
 
-type Opts<Obj> = Partial<{
-  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+type Options<Obj> = Partial<{
+  [Prop in Exclude<keyof Obj, "type">]: Obj[Prop] extends t.Node
     ? t.Node
     : Obj[Prop] extends t.Node[]
       ? t.Node[]
@@ -37,81 +37,57 @@ type Opts<Obj> = Partial<{
 export interface VirtualTypeNodePathValidators {
   isBindingIdentifier(
     this: NodePath,
-    opts?: Opts<VirtualTypeAliases["BindingIdentifier"]>,
   ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
-  isBlockScoped(opts?: Opts<VirtualTypeAliases["BlockScoped"]>): boolean;
+  isBlockScoped(this: NodePath): boolean;
   /**
    * @deprecated
    */
   isExistentialTypeParam(
     this: NodePath,
-    opts?: Opts<VirtualTypeAliases["ExistentialTypeParam"]>,
   ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
-  isExpression(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["Expression"]>,
-  ): this is NodePath<t.Expression>;
-  isFlow(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["Flow"]>,
-  ): this is NodePath<t.Flow>;
+  isExpression(this: NodePath): this is NodePath<t.Expression>;
+  isFlow(this: NodePath): this is NodePath<t.Flow>;
   isForAwaitStatement(
     this: NodePath,
-    opts?: Opts<VirtualTypeAliases["ForAwaitStatement"]>,
   ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
-  isGenerated(opts?: VirtualTypeAliases["Generated"]): boolean;
+  isGenerated(): this is NodePath<VirtualTypeAliases["Generated"]>;
   /**
    * @deprecated
    */
-  isNumericLiteralTypeAnnotation(
-    opts?: VirtualTypeAliases["NumericLiteralTypeAnnotation"],
-  ): void;
-  isPure(opts?: VirtualTypeAliases["Pure"]): boolean;
-  isReferenced(opts?: VirtualTypeAliases["Referenced"]): boolean;
-  isReferencedIdentifier(
+  isNumericLiteralTypeAnnotation(this: NodePath): void;
+  isPure(): boolean;
+  isReferenced(): boolean;
+  isReferencedIdentifier<
+    Opts extends Options<VirtualTypeAliases["ReferencedIdentifier"]>,
+  >(
     this: NodePath,
-    opts?: Opts<VirtualTypeAliases["ReferencedIdentifier"]>,
-  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
+    opts?: Opts,
+  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"] & Opts>;
   isReferencedMemberExpression(
     this: NodePath,
-    opts?: Opts<VirtualTypeAliases["ReferencedMemberExpression"]>,
   ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
-  isRestProperty(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["RestProperty"]>,
-  ): this is NodePath<t.RestProperty>;
-  isScope(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["Scope"]>,
-  ): this is NodePath<VirtualTypeAliases["Scope"]>;
-  isSpreadProperty(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["SpreadProperty"]>,
-  ): this is NodePath<t.SpreadProperty>;
-  isStatement(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["Statement"]>,
-  ): this is NodePath<t.Statement>;
-  isUser(opts?: VirtualTypeAliases["User"]): boolean;
-  isVar(
-    this: NodePath,
-    opts?: Opts<VirtualTypeAliases["Var"]>,
-  ): this is NodePath<VirtualTypeAliases["Var"]>;
+  isRestProperty(this: NodePath): this is NodePath<t.RestProperty>;
+  isScope(this: NodePath): this is NodePath<VirtualTypeAliases["Scope"]>;
+  isSpreadProperty(this: NodePath): this is NodePath<t.SpreadProperty>;
+  isStatement(this: NodePath): this is NodePath<t.Statement>;
+  isUser(): this is NodePath<VirtualTypeAliases["User"]>;
+  isVar(this: NodePath): this is NodePath<VirtualTypeAliases["Var"]>;
 }
 
-export function isReferencedIdentifier(this: NodePath, opts?: any): boolean {
+export function isReferencedIdentifier(
+  this: NodePath,
+  opts?: Options<VirtualTypeAliases["ReferencedIdentifier"]>,
+): boolean {
   const { node, parent } = this;
-  if (!isIdentifier(node, opts) && !isJSXMemberExpression(parent, opts)) {
-    if (isJSXIdentifier(node, opts)) {
-      if (isCompatTag(node.name)) return false;
-    } else {
-      // not a JSXIdentifier or an Identifier
-      return false;
-    }
+  if (isIdentifier(node, opts)) {
+    return nodeIsReferenced(node, parent, this.parentPath.parent);
+  } else if (isJSXIdentifier(node, opts)) {
+    if (!isJSXMemberExpression(parent) && isCompatTag(node.name)) return false;
+    return nodeIsReferenced(node, parent, this.parentPath.parent);
+  } else {
+    // not a JSXIdentifier or an Identifier
+    return false;
   }
-
-  // check if node is referenced
-  return nodeIsReferenced(node, parent, this.parentPath.parent);
 }
 
 export function isReferencedMemberExpression(this: NodePath): boolean {
