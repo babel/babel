@@ -49,10 +49,19 @@ function addIsHelper(
 
   const result =
     NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
+      ? `node is t.${type}`
+      : "boolean";
+
+  const resultWithOpts =
+    NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
       ? `node is t.${type} & Opts`
       : "boolean";
 
-  return `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${result} {
+  return [
+    // Signature overload to avoid issues like https://github.com/babel/babel/pull/17503#discussion_r2325598609
+    `export function is${type}(node: t.Node | null | undefined): ${result};`,
+    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${resultWithOpts};`,
+    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${resultWithOpts} {
     ${deprecatedWarning || ""}
     if (!node) return false;
 
@@ -69,7 +78,8 @@ function addIsHelper(
 
     return opts == null || shallowEqual(node, opts);
   }
-  `;
+  `,
+  ].join("\n");
 }
 
 export default function generateValidators() {
