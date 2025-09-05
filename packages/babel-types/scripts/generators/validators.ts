@@ -61,7 +61,7 @@ function addIsHelper(
     // Signature overload to avoid issues like https://github.com/babel/babel/pull/17503#discussion_r2325598609
     `export function is${type}(node: t.Node | null | undefined): ${result};`,
     `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${resultWithOpts};`,
-    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${resultWithOpts} {
+    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
     ${deprecatedWarning || ""}
     if (!node) return false;
 
