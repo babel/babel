@@ -8,8 +8,8 @@ export default function generateAsserts() {
 import type * as t from "@babel/types";
 import type NodePath from "../index";
 
-type Opts<Obj> = Partial<{
-  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+type Options<Obj> = Partial<{
+  [Prop in Exclude<keyof Obj, "type">]: Obj[Prop] extends t.Node
     ? t.Node
     : Obj[Prop] extends t.Node[]
     ? t.Node[]
@@ -20,9 +20,9 @@ export interface NodePathAssertions {`;
 
   for (const type of [...t.TYPES].sort()) {
     output += `
-  assert${type}(
-    opts?: Opts<t.${type}>,
-  ): asserts this is NodePath<t.${type}>;`;
+  assert${type}<Opts extends Options<t.${type}>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.${type} & Opts>;`;
   }
 
   output += `

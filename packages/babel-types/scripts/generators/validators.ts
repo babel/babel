@@ -49,10 +49,10 @@ function addIsHelper(
 
   const result =
     NODE_FIELDS[type] || FLIPPED_ALIAS_KEYS[type]
-      ? `node is t.${type}`
+      ? `node is t.${type} & Opts`
       : "boolean";
 
-  return `export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): ${result} {
+  return `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${result} {
     ${deprecatedWarning || ""}
     if (!node) return false;
 
@@ -84,8 +84,8 @@ import shallowEqual from "../../utils/shallowEqual.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
-type Opts<Obj> = Partial<{
-  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+type Options<Obj> = Partial<{
+  [Prop in Exclude<keyof Obj, "type">]: Obj[Prop] extends t.Node
     ? t.Node
     : Obj[Prop] extends t.Node[]
     ? t.Node[]
@@ -119,7 +119,7 @@ ${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
     output += `/**
  * @deprecated Use \`is${newType}\`
  */
-export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): node is t.${newType} {
+export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): node is t.${newType} & Opts {
   deprecationWarning("is${type}", "is${newType}");
   return is${newType}(node, opts);
 }
