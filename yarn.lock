@@ -1156,7 +1156,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
-    "@unicode/unicode-16.0.0": "npm:^1.0.0"
+    "@unicode/unicode-17.0.0": "npm:^1.6.10"
     charcodes: "npm:^0.2.0"
   languageName: unknown
   linkType: soft
@@ -6258,10 +6258,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unicode/unicode-16.0.0@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@unicode/unicode-16.0.0@npm:1.0.0"
-  checksum: 10/7c26804d7038b1f457b41be4db56bc1dc2ef1074702bec14e332c3c751bd7f806606f3da9dc8e5d208dc80eae924f3dc6d3102f68076b8b746a19af4774ea708
+"@unicode/unicode-17.0.0@npm:^1.6.10":
+  version: 1.6.10
+  resolution: "@unicode/unicode-17.0.0@npm:1.6.10"
+  checksum: 10/86479d799abd045dce8b97b7f0fe9f8b00df47cb0953ac2a62dced1a638c5891a88756f6476013a091acfd808ee5481854f8f44dc5ab14402e1ccfee66eb7d45
   languageName: node
   linkType: hard
 
