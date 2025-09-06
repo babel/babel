@@ -1,6 +1,7 @@
 /*:: declare var invariant; */
 
-import { OptionFlags, type Options } from "../options.ts";
+import type { OptionsWithDefaults } from "../options.ts";
+import { OptionFlags } from "../options.ts";
 import {
   Position,
   SourceLocation,
@@ -90,7 +91,7 @@ export default abstract class Tokenizer extends CommentsParser {
   // Token store.
   tokens: Array<Token | N.Comment> = [];
 
-  constructor(options: Options, input: string) {
+  constructor(options: OptionsWithDefaults, input: string) {
     super();
     this.state = new State();
     this.state.init(options);
@@ -310,7 +311,8 @@ export default abstract class Tokenizer extends CommentsParser {
       value: this.input.slice(start + 2, end),
       start: this.sourceToOffsetPos(start),
       end: this.sourceToOffsetPos(end + commentEnd.length),
-      loc: new SourceLocation(startLoc, this.state.curPosition()),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
     if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
@@ -339,7 +341,8 @@ export default abstract class Tokenizer extends CommentsParser {
       value,
       start: this.sourceToOffsetPos(start),
       end: this.sourceToOffsetPos(end),
-      loc: new SourceLocation(startLoc, this.state.curPosition()),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
     if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
@@ -350,7 +353,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
   skipSpace(): void {
     const spaceStart = this.state.pos;
-    const comments: N.Comment[] =
+    const comments: N.Comment[] | null =
       this.optionFlags & OptionFlags.AttachComment ? [] : null;
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
@@ -449,12 +452,13 @@ export default abstract class Tokenizer extends CommentsParser {
       }
     }
 
+    // @ts-expect-error expected
     if (comments?.length > 0) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
         start: this.sourceToOffsetPos(spaceStart),
         end: this.sourceToOffsetPos(end),
-        comments,
+        comments: comments!,
         leadingNode: null,
         trailingNode: null,
         containingNode: null,
@@ -1308,7 +1312,7 @@ export default abstract class Tokenizer extends CommentsParser {
       return;
     }
 
-    if (!process.env.BABEL_8_BREAKING && isDecimal) {
+    if (!process.env.BABEL_8_BREAKING && isDecimal!) {
       this.finishToken(tt.decimal, str);
       return;
     }
@@ -1539,7 +1543,7 @@ export default abstract class Tokenizer extends CommentsParser {
   updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
-  unexpected(loc?: Position | null, type?: TokenType): void {
+  unexpected(loc?: Position | null, type?: TokenType): any {
     throw this.raise(
       Errors.UnexpectedToken,
       loc != null ? loc : this.state.startLoc,

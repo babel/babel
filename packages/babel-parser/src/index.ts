@@ -118,7 +118,10 @@ function generateExportedTokenTypes(
 
 export const tokTypes = generateExportedTokenTypes(internalTokenTypes);
 
-function getParser(options: Options | undefined | null, input: string): Parser {
+function getParser(
+  options: ParserOptions | undefined | null,
+  input: string,
+): Parser {
   let cls = Parser;
   const pluginsMap: PluginsMap = new Map();
   if (options?.plugins) {
@@ -153,7 +156,7 @@ function getParserClass(
     }
   }
   const key = pluginList.join("|");
-  let cls = parserClassCache.get(key);
+  let cls = parserClassCache.get(key)!;
   if (!cls) {
     cls = Parser;
     for (const plugin of pluginList) {
