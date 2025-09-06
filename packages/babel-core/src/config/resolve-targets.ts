@@ -5,7 +5,7 @@ type nodeType = typeof import("./resolve-targets");
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
 ({}) as any as browserType as nodeType;
 
-import type { ValidatedOptions } from "./validation/options.ts";
+import type { InputOptions } from "./validation/options.ts";
 import path from "node:path";
 import getTargets, {
   type InputTargets,
@@ -20,10 +20,7 @@ export function resolveBrowserslistConfigFile(
   return path.resolve(configFileDir, browserslistConfigFile);
 }
 
-export function resolveTargets(
-  options: ValidatedOptions,
-  root: string,
-): Targets {
+export function resolveTargets(options: InputOptions, root: string): Targets {
   const optTargets = options.targets;
   let targets: InputTargets;
 

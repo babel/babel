@@ -4,6 +4,7 @@ import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-deve
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 import normalizeOptions from "./normalize-options.ts";
+import type { PluginItem } from "@babel/core";
 
 export interface Options {
   development?: boolean;
@@ -55,7 +56,7 @@ export default declarePreset((api, opts: Options) => {
               useBuiltIns: !!opts.useBuiltIns,
               useSpread: opts.useSpread,
             },
-      ],
+      ] satisfies PluginItem,
       transformReactDisplayName,
       pure !== false && transformReactPure,
     ].filter(Boolean),
