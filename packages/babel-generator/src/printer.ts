@@ -61,15 +61,15 @@ const enum PRINT_COMMENT_HINT {
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
-  preserveFormat: boolean;
-  retainLines: boolean;
-  retainFunctionParens: boolean;
-  comments: boolean;
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
-  compact: boolean | "auto";
-  minified: boolean;
-  concise: boolean;
+  preserveFormat: boolean | undefined;
+  retainLines: boolean | undefined;
+  retainFunctionParens: boolean | undefined;
+  comments: boolean | undefined;
+  auxiliaryCommentBefore: string | undefined;
+  auxiliaryCommentAfter: string | undefined;
+  compact: boolean | "auto" | undefined;
+  minified: boolean | undefined;
+  concise: boolean | undefined;
   indent: {
     adjustMultilineComment: boolean;
     style: string;
@@ -102,7 +102,6 @@ export type Format = {
 };
 
 interface AddNewlinesOptions {
-  addNewlines(leading: boolean, node: t.Node): number;
   nextNodeStartLine: number;
 }
 
@@ -124,22 +123,22 @@ export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
   constructor(
     format: Format,
-    map: SourceMap,
+    map: SourceMap | null,
     tokens?: Token[],
-    originalCode?: string,
+    originalCode?: string | null,
   ) {
     this.format = format;
 
-    this._tokens = tokens;
-    this._originalCode = originalCode;
+    this._tokens = tokens || null;
+    this._originalCode = originalCode || null;
 
     this._indentRepeat = format.indent.style.length;
 
-    this._inputMap = map?._inputMap;
+    this._inputMap = map?._inputMap || null;
 
     this._buf = new Buffer(map, format.indent.style[0]);
   }
-  declare _inputMap: TraceMap;
+  declare _inputMap: TraceMap | null;
 
   declare format: Format;
 
@@ -179,11 +178,11 @@ class Printer {
 
   tokenContext: number = TokenContext.normal;
 
-  _tokens: Token[] = null;
+  _tokens: Token[] | null = null;
   _originalCode: string | null = null;
 
   declare _buf: Buffer;
-  _currentNode: t.Node = null;
+  _currentNode: t.Node | null = null;
   _indent: number = 0;
   _indentRepeat: number = 0;
   _insideAux: boolean = false;
@@ -197,13 +196,13 @@ class Printer {
   _lastCommentLine = 0;
   _endsWithInnerRaw: boolean = false;
   _indentInnerComments: boolean = true;
-  tokenMap: TokenMap = null;
+  tokenMap: TokenMap | null = null;
 
   _boundGetRawIdentifier = this._getRawIdentifier.bind(this);
 
   generate(ast: t.Node) {
     if (this.format.preserveFormat) {
-      this.tokenMap = new TokenMap(ast, this._tokens, this._originalCode);
+      this.tokenMap = new TokenMap(ast, this._tokens!, this._originalCode!);
     }
     this.print(ast);
     this._maybeAddAuxComment();
@@ -262,15 +261,15 @@ class Printer {
       return;
     }
     if (this.tokenMap) {
-      const node = this._currentNode;
+      const node = this._currentNode!;
       if (node.start != null && node.end != null) {
         if (!this.tokenMap.endMatches(node, ";")) {
           // no semicolon
           this._printSemicolonBeforeNextNode = this._buf.getCurrentLine();
           return;
         }
-        const indexes = this.tokenMap.getIndexes(this._currentNode);
-        this._catchUpTo(this._tokens[indexes[indexes.length - 1]].loc.start);
+        const indexes = this.tokenMap.getIndexes(this._currentNode!)!;
+        this._catchUpTo(this._tokens![indexes[indexes.length - 1]].loc.start);
       }
     }
     this._queue(charCodes.semicolon);
@@ -469,7 +468,7 @@ class Printer {
     return this._buf.getLastChar();
   }
 
-  endsWithCharAndNewline(): number {
+  endsWithCharAndNewline(): number | undefined {
     return this._buf.endsWithCharAndNewline();
   }
 
@@ -477,7 +476,7 @@ class Printer {
     this._buf.removeTrailingNewline();
   }
 
-  exactSource(loc: Loc | undefined, cb: () => void) {
+  exactSource(loc: Loc | null | undefined, cb: () => void) {
     if (!loc) {
       cb();
       return;
@@ -498,7 +497,7 @@ class Printer {
 
   sourceWithOffset(
     prop: "start" | "end",
-    loc: Loc | undefined,
+    loc: Loc | null | undefined,
     columnOffset: number,
   ): void {
     if (!loc || this.format.preserveFormat) return;
@@ -527,8 +526,8 @@ class Printer {
   _catchUpToCurrentToken(str: string, occurrenceCount: number = 0): void {
     // Assert: this.tokenMap
 
-    const token = this.tokenMap.findMatching(
-      this._currentNode,
+    const token = this.tokenMap!.findMatching(
+      this._currentNode!,
       str,
       occurrenceCount,
     );
@@ -679,7 +678,7 @@ class Printer {
   }
 
   print(
-    node: t.Node | null,
+    node: t.Node | null | undefined,
     noLineTerminatorAfter?: boolean,
     // trailingCommentsLineOffset also used to check if called from printJoin
     // it will be ignored if `noLineTerminatorAfter||this._noLineTerminator`
@@ -781,9 +780,10 @@ class Printer {
     let oldTokenContext;
     if (!shouldPrintParens) {
       noLineTerminatorAfter ||=
-        parent &&
-        this._noLineTerminatorAfterNode === parent &&
-        n.isLastChild(parent, node);
+        (parent &&
+          this._noLineTerminatorAfterNode === parent &&
+          n.isLastChild(parent, node)) ||
+        false;
       if (noLineTerminatorAfter) {
         if (node.trailingComments?.some(commentIsNewline)) {
           if (isExpression(node)) shouldPrintParens = true;
@@ -825,7 +825,7 @@ class Printer {
         this.newline();
       }
       this.token(")");
-      this._noLineTerminator = noLineTerminatorAfter;
+      this._noLineTerminator = noLineTerminatorAfter || false;
       if (oldTokenContext) this.tokenContext = oldTokenContext;
     } else if (noLineTerminatorAfter && !this._noLineTerminator) {
       this._noLineTerminator = true;
@@ -906,10 +906,9 @@ class Printer {
     nodes: Array<t.Node> | undefined | null,
     statement?: boolean,
     indent?: boolean,
-    separator?: PrintJoinOptions["separator"],
-    printTrailingSeparator?: boolean,
-    addNewlines?: PrintJoinOptions["addNewlines"],
-    iterator?: PrintJoinOptions["iterator"],
+    separator?: PrintJoinOptions["separator"] | null,
+    printTrailingSeparator?: boolean | null,
+    iterator?: PrintJoinOptions["iterator"] | null,
     trailingCommentsLineOffset?: number,
   ) {
     if (!nodes?.length) return;
@@ -924,7 +923,6 @@ class Printer {
     if (indent) this.indent();
 
     const newlineOpts: AddNewlinesOptions = {
-      addNewlines: addNewlines,
       nextNodeStartLine: 0,
     };
 
@@ -982,7 +980,11 @@ class Printer {
     this.print(node);
   }
 
-  _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
+  _printTrailingComments(
+    node: t.Node,
+    parent?: t.Node | null,
+    lineOffset?: number,
+  ) {
     const { innerComments, trailingComments } = node;
     // We print inner comments here, so that if for some reason they couldn't
     // be printed in earlier locations they are still printed *somewhere*,
@@ -1007,7 +1009,7 @@ class Printer {
     }
   }
 
-  _printLeadingComments(node: t.Node, parent: t.Node) {
+  _printLeadingComments(node: t.Node, parent: t.Node | null) {
     const comments = node.leadingComments;
     if (!comments?.length) return;
     this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
@@ -1020,7 +1022,7 @@ class Printer {
     if (this._endsWithInnerRaw) {
       this.printInnerComments(
         this.tokenMap?.findMatching(
-          this._currentNode,
+          this._currentNode!,
           nextTokenStr,
           nextTokenOccurrenceCount,
         ),
@@ -1030,8 +1032,8 @@ class Printer {
     this._indentInnerComments = true;
   }
 
-  printInnerComments(nextToken?: Token) {
-    const node = this._currentNode;
+  printInnerComments(nextToken?: Token | null) {
+    const node = this._currentNode!;
     const comments = node.innerComments;
     if (!comments?.length) return;
 
@@ -1061,7 +1063,6 @@ class Printer {
     nodes: t.Node[],
     indent?: boolean,
     trailingCommentsLineOffset?: number,
-    addNewlines?: PrintSequenceOptions["addNewlines"],
   ) {
     this.printJoin(
       nodes,
@@ -1069,15 +1070,14 @@ class Printer {
       indent ?? false,
       undefined,
       undefined,
-      addNewlines,
       undefined,
       trailingCommentsLineOffset,
     );
   }
 
   printList(
-    items: t.Node[],
-    printTrailingSeparator?: boolean,
+    items: t.Node[] | null | undefined,
+    printTrailingSeparator?: boolean | null,
     statement?: boolean,
     indent?: boolean,
     separator?: PrintListOptions["separator"],
@@ -1089,7 +1089,6 @@ class Printer {
       indent,
       separator ?? commaSeparator,
       printTrailingSeparator,
-      undefined,
       iterator,
     );
   }
@@ -1097,11 +1096,12 @@ class Printer {
   shouldPrintTrailingComma(listEnd: string): boolean | null {
     if (!this.tokenMap) return null;
 
-    const listEndIndex = this.tokenMap.findLastIndex(this._currentNode, token =>
-      this.tokenMap.matchesOriginal(token, listEnd),
+    const listEndIndex = this.tokenMap.findLastIndex(
+      this._currentNode!,
+      token => this.tokenMap!.matchesOriginal(token, listEnd),
     );
     if (listEndIndex <= 0) return null;
-    return this.tokenMap.matchesOriginal(this._tokens[listEndIndex - 1], ",");
+    return this.tokenMap.matchesOriginal(this._tokens![listEndIndex - 1], ",");
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
@@ -1156,7 +1156,7 @@ class Printer {
   // there is at least one inner position where line terminators are allowed.
   _shouldPrintComment(
     comment: t.Comment,
-    nextToken?: Token,
+    nextToken?: Token | null,
   ): PRINT_COMMENT_HINT {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
@@ -1173,7 +1173,7 @@ class Printer {
 
     if (nextToken && this.tokenMap) {
       const commentTok = this.tokenMap.find(
-        this._currentNode,
+        this._currentNode!,
         token => token.value === comment.value,
       );
       if (commentTok && commentTok.start > nextToken.start) {
@@ -1280,15 +1280,15 @@ class Printer {
     type: COMMENT_TYPE,
     comments: readonly t.Comment[],
     node: t.Node,
-    parent?: t.Node,
+    parent?: t.Node | null,
     lineOffset: number = 0,
-    nextToken?: Token,
+    nextToken?: Token | null,
   ) {
     const nodeLoc = node.loc;
     const len = comments.length;
     let hasLoc = !!nodeLoc;
-    const nodeStartLine = hasLoc ? nodeLoc.start.line : 0;
-    const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
+    const nodeStartLine = hasLoc ? nodeLoc!.start.line : 0;
+    const nodeEndLine = hasLoc ? nodeLoc!.end.line : 0;
     let lastLine = 0;
     let leadingCommentNewline = 0;
 

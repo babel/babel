@@ -20,7 +20,7 @@ type SourcePos = {
   identifierName: string | undefined;
   filename: string | undefined;
 };
-type InternalSourcePos = SourcePos & { identifierNamePos: Pos };
+type InternalSourcePos = SourcePos & { identifierNamePos: Pos | undefined };
 
 type QueueItem = {
   char: number;
@@ -44,7 +44,7 @@ export default class Buffer {
     this._allocQueue();
   }
 
-  _map: SourceMap = null;
+  _map: SourceMap | null = null;
   _buf = "";
   _str = "";
   _appendCount = 0;
@@ -314,7 +314,7 @@ export default class Buffer {
       // unless this is the last char.
       // When manually adding multi-line content (such as a comment), `line` will be `undefined`.
       if (last < len && line !== undefined) {
-        this._mark(++line, 0, null, null, filename);
+        this._mark(++line, 0, undefined, undefined, filename);
       }
       i = str.indexOf("\n", last);
     }
@@ -385,7 +385,7 @@ export default class Buffer {
   /**
    * check if current _last + queue ends with newline, return the character before newline
    */
-  endsWithCharAndNewline(): number {
+  endsWithCharAndNewline(): number | undefined {
     const queue = this._queue;
     const queueCursor = this._queueCursor;
     if (queueCursor !== 0) {
@@ -429,7 +429,7 @@ export default class Buffer {
    * With this line, there will be one mapping range over "mod" and another
    * over "();", where previously it would have been a single mapping.
    */
-  exactSource(loc: Loc | undefined, cb: () => void) {
+  exactSource(loc: Loc, cb: () => void) {
     if (!this._map) {
       cb();
       return;
@@ -458,7 +458,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: "start" | "end", loc: Loc | undefined): void {
+  source(prop: "start" | "end", loc: Loc): void {
     if (!this._map) return;
 
     // Since this is called extremely often, we reuse the same _sourcePosition
@@ -468,7 +468,7 @@ export default class Buffer {
 
   sourceWithOffset(
     prop: "start" | "end",
-    loc: Loc | undefined,
+    loc: Loc,
     columnOffset: number,
   ): void {
     if (!this._map) return;

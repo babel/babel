@@ -135,11 +135,11 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
     let tok;
     while (
       k < indexes.length &&
-      printer.tokenMap.matchesOriginal(
-        (tok = printer._tokens[indexes[k]]),
+      printer.tokenMap!.matchesOriginal(
+        (tok = printer._tokens![indexes[k]]),
         ";",
       ) &&
-      tok.start < end
+      tok.start < end!
     ) {
       printer.token(";", undefined, occurrenceCount++);
       k++;

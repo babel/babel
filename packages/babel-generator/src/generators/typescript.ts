@@ -31,14 +31,14 @@ export function TSTypeParameterInstantiation(
 ): void {
   this.token("<");
 
-  let printTrailingSeparator =
+  let printTrailingSeparator: boolean | null =
     parent.type === "ArrowFunctionExpression" && node.params.length === 1;
   if (this.tokenMap && node.start != null && node.end != null) {
     // Only force the trailing comma for pre-existing nodes if they
     // already had a comma (either because they were multi-param, or
     // because they had a trailing comma)
     printTrailingSeparator &&= !!this.tokenMap.find(node, t =>
-      this.tokenMap.matchesOriginal(t, ","),
+      this.tokenMap!.matchesOriginal(t, ","),
     );
     // Preserve the trailing comma if it was there before
     printTrailingSeparator ||= this.shouldPrintTrailingComma(">");
@@ -391,7 +391,7 @@ function tsPrintUnionOrIntersectionType(
 
   printer.printJoin(node.types, undefined, undefined, function (i) {
     this.space();
-    this.token(sep, null, i + hasLeadingToken);
+    this.token(sep, undefined, i + hasLeadingToken);
     this.space();
   });
 }
@@ -859,7 +859,7 @@ function printBraced(printer: Printer, node: t.Node, cb: () => void) {
 function printModifiersList(
   printer: Printer,
   node: t.Node,
-  modifiers: (string | false | null)[],
+  modifiers: (string | false | null | undefined)[],
 ) {
   const modifiersSet = new Set<string>();
   for (const modifier of modifiers) {
@@ -873,6 +873,7 @@ function printModifiersList(
       modifiersSet.delete(tok.value);
       return modifiersSet.size === 0;
     }
+    return false;
   });
 
   for (const modifier of modifiersSet) {

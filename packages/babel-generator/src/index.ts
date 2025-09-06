@@ -17,7 +17,7 @@ import type {
  */
 
 function normalizeOptions(
-  code: string | { [filename: string]: string },
+  code: string | { [filename: string]: string } | undefined,
   opts: GeneratorOptions,
   ast: t.Node,
 ): Format {
@@ -57,6 +57,7 @@ function normalizeOptions(
   const format: Format = {
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
+    // @ts-expect-error define it later
     shouldPrintComment: opts.shouldPrintComment,
     preserveFormat: opts.experimental_preserveFormat,
     retainLines: opts.retainLines,
@@ -265,7 +266,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // eslint-disable-next-line no-restricted-globals
   exports.CodeGenerator = class CodeGenerator {
     private _ast: t.Node;
-    private _format: Format | undefined;
+    private _format: Format;
     private _map: SourceMap | null;
     constructor(ast: t.Node, opts: GeneratorOptions = {}, code?: string) {
       this._ast = ast;
