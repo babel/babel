@@ -15,7 +15,7 @@ const {
   BUILDER_KEYS,
   DEPRECATED_KEYS,
   NODE_FIELDS,
-  NODE_UNION_SHAPES__PRIVATE,
+  "\u{10FFFF} PRIVATE!!! NODE_UNION_SHAPES": NODE_UNION_SHAPES__PRIVATE,
   toBindingIdentifierName,
 } = _t as typeof import("@babel/types");
 

@@ -115,7 +115,7 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
   }
   for (const type in t.NODE_FIELDS) {
     const fields = t.NODE_FIELDS[type];
-    const unionShape = t.NODE_UNION_SHAPES__PRIVATE[type];
+    const unionShape = t["\u{10FFFF} PRIVATE!!! NODE_UNION_SHAPES"][type];
     const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
 
     const struct: string[] = [];
