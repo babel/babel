@@ -41,7 +41,6 @@ export default declare(api => {
               (lhs as t.MemberExpression).property = t.assignmentExpression(
                 "=",
                 t.cloneNode(memo),
-                // @ts-expect-error todo(flow->ts): property can be t.PrivateName
                 property,
               );
             }

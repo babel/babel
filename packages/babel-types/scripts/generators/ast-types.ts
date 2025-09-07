@@ -1,5 +1,5 @@
 // @ts-expect-error: Could not find type declarations for babel-types
-import * as t from "../../lib/index.js";
+import * as _t from "../../lib/index.js";
 import {
   isNullable,
   hasDefault,
@@ -9,6 +9,8 @@ import stringifyValidator, {
   isValueType,
 } from "../utils/stringifyValidator.ts";
 import type { FieldOptions, Validator } from "../../src/definitions/utils.ts";
+
+const t = _t as typeof import("@babel/types");
 
 const parentMaps = new Map([["File", new Set(["null"])]]);
 
@@ -91,7 +93,6 @@ export interface SourceLocation {
 }
 
 interface BaseNode {
-  type: Node["type"];
   leadingComments?: Comment[] | null;
   innerComments?: Comment[] | null;
   trailingComments?: Comment[] | null;
@@ -114,12 +115,22 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
   }
   for (const type in t.NODE_FIELDS) {
     const fields = t.NODE_FIELDS[type];
+    const unionShape = t.NODE_UNION_SHAPES__PRIVATE[type];
     const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
 
     const struct: string[] = [];
 
     fieldNames.forEach(fieldName => {
       const field: FieldOptions = fields[fieldName];
+      registerParentMaps(type, getNodeTypesFromValidator(field.validate));
+
+      if (
+        unionShape?.discriminator === fieldName ||
+        unionShape?.shapes[0].properties[fieldName]
+      ) {
+        return;
+      }
+
       // Future / annoying TODO:
       // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
       // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
@@ -144,14 +155,29 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
       } else {
         struct.push(`"${fieldName}"${optional}: ${typeAnnotation};`);
       }
-
-      registerParentMaps(type, getNodeTypesFromValidator(field.validate));
     });
 
-    code += `export interface ${type} extends BaseNode {
+    if (unionShape) {
+      const types: string[] = unionShape.shapes.map(shape => {
+        const name = `${type + shape.name.charAt(0).toUpperCase() + shape.name.slice(1)}`;
+        code += `export interface ${name} extends BaseNode {
   type: "${type}";
-  ${struct.join("\n  ").trim()}
+  ${struct.join("\n")}
+  ${unionShape.discriminator}: ${shape.value.map(v => JSON.stringify(v)).join("|")};
+  ${Object.entries(shape.properties)
+    .map(([key, value]) => `${key}: ${stringifyValidator(value.validate, "")};`)
+    .join("\n  ")}
+}\n`;
+        return name;
+      });
+
+      code += `export type ${type} = ${types.join(" | ")}\n\n`;
+    } else {
+      code += `export interface ${type} extends BaseNode {
+  type: "${type}";
+  ${struct.join("\n  ")}
 }\n\n`;
+    }
 
     if (deprecatedAlias[type]) {
       code += `/**

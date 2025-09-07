@@ -10,6 +10,7 @@ export const NODE_FIELDS: Record<string, FieldDefinitions> = {};
 export const BUILDER_KEYS: Record<string, string[]> = {};
 export const DEPRECATED_KEYS: Record<string, NodeTypesWithoutComment> = {};
 export const NODE_PARENT_VALIDATIONS: Record<string, Validator> = {};
+export const NODE_UNION_SHAPES__PRIVATE: Record<string, UnionShape> = {};
 
 function getType(val: any) {
   if (Array.isArray(val)) {
@@ -31,6 +32,17 @@ type FieldDefinitions = {
   [x: string]: FieldOptions;
 };
 
+type UnionShape = {
+  discriminator: string;
+  shapes: {
+    name: string;
+    value: any[];
+    properties: {
+      [x: string]: FieldOptions;
+    };
+  }[];
+};
+
 type DefineTypeOpts = {
   fields?: FieldDefinitions;
   visitor?: Array<string>;
@@ -39,6 +51,7 @@ type DefineTypeOpts = {
   inherits?: NodeTypes;
   deprecatedAlias?: string;
   validate?: Validator;
+  unionShape?: UnionShape;
 };
 
 export type ValidatorImpl = (
@@ -324,6 +337,7 @@ const validTypeOpts = new Set([
   "inherits",
   "visitor",
   "validate",
+  "unionShape",
 ]);
 const validFieldKeys = new Set([
   "default",
@@ -427,6 +441,9 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
 
   if (opts.validate) {
     NODE_PARENT_VALIDATIONS[type] = opts.validate;
+  }
+  if (opts.unionShape) {
+    NODE_UNION_SHAPES__PRIVATE[type] = opts.unionShape;
   }
 
   store[type] = opts;

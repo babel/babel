@@ -1,10 +1,5 @@
-import {
-  BUILDER_KEYS,
-  DEPRECATED_KEYS,
-  NODE_FIELDS,
-  toBindingIdentifierName,
-  // @ts-expect-error: Could not find type declarations for babel-types
-} from "../../lib/index.js";
+// @ts-expect-error: Could not find type declarations for babel-types
+import * as _t from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.ts";
 import stringifyValidator from "../utils/stringifyValidator.ts";
 import {
@@ -15,6 +10,14 @@ import {
 } from "../utils/fieldHelpers.ts";
 import { IS_BABEL_8 } from "$repo-utils";
 import type { FieldOptions } from "../../src/definitions/utils.ts";
+
+const {
+  BUILDER_KEYS,
+  DEPRECATED_KEYS,
+  NODE_FIELDS,
+  NODE_UNION_SHAPES__PRIVATE,
+  toBindingIdentifierName,
+} = _t as typeof import("@babel/types");
 
 if (!IS_BABEL_8()) {
   /**
@@ -31,7 +34,7 @@ if (!IS_BABEL_8()) {
  * Generate the builder arguments for a given node type.
  * @param type AST Node type
  */
-function generateBuilderArgs(type: string): string[] {
+function generateBuilderArgs(type: string, declare = false): string[] {
   const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
@@ -60,14 +63,14 @@ function generateBuilderArgs(type: string): string[] {
       let arg;
       if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
         arg = `${bindingIdentifierName}${
-          isNullable(field) && !def ? "?:" : ":"
+          isNullable(field) && (declare || !def) ? "?:" : ":"
         } ${typeAnnotation}`;
       } else {
         arg = `${bindingIdentifierName}: ${typeAnnotation}${
           isNullable(field) ? " | undefined" : ""
         }`;
       }
-      if (def !== "null" || isNullable(field)) {
+      if (!declare && (def !== "null" || isNullable(field))) {
         arg += `= ${def}`;
       }
       args.push(arg);
@@ -75,6 +78,75 @@ function generateBuilderArgs(type: string): string[] {
   });
 
   return args;
+}
+
+function generateBuilderDeclareFunctions(
+  type: string,
+  formattedBuilderNameLocal: string
+) {
+  const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
+  const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
+  const builderNames = BUILDER_KEYS[type];
+  const unionShape = NODE_UNION_SHAPES__PRIVATE[type];
+
+  const shapes: string[] = [];
+
+  unionShape.shapes.forEach(shape => {
+    const args: string[] = [];
+    const shapeValueTypes = shape.value.map(v => JSON.stringify(v)).join(" | ");
+
+    fieldNames.forEach(fieldName => {
+      const field = fields[fieldName];
+
+      // Future / annoying TODO:
+      // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
+      // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
+      // - declare an alias type for valid keys, detect the case and reuse it here,
+      // - declare a disjoint union with, for example, ObjectPropertyBase,
+      //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
+      //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
+      let typeAnnotation = stringifyValidator(field.validate, "t.");
+
+      if (isNullable(field) && !hasDefault(field)) {
+        typeAnnotation += " | null";
+      }
+
+      if (builderNames.includes(fieldName)) {
+        const field = NODE_FIELDS[type][fieldName];
+        const bindingIdentifierName = toBindingIdentifierName(fieldName);
+        let arg;
+        const unionProp = unionShape.shapes[0].properties[fieldName];
+        if (unionShape.discriminator === fieldName) {
+          typeAnnotation = shapeValueTypes;
+        } else if (unionProp) {
+          typeAnnotation = stringifyValidator(
+            shape.properties[fieldName].validate,
+            "t."
+          );
+        }
+        if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
+          arg = `${bindingIdentifierName}${
+            isNullable(field) ? "?:" : ":"
+          } ${typeAnnotation}`;
+        } else {
+          arg = `${bindingIdentifierName}: ${typeAnnotation}${
+            isNullable(field) ? " | undefined" : ""
+          }`;
+        }
+        args.push(arg);
+      }
+    });
+
+    shapes.push(
+      `function ${formattedBuilderNameLocal}(${args.join(", ")}) : Extract<t.${type}, { ${unionShape.discriminator}: ${shapeValueTypes} }>`
+    );
+  });
+
+  shapes.push(
+    `function ${formattedBuilderNameLocal}(${generateBuilderArgs(type, true).join(", ")}): t.${type}`
+  );
+
+  return shapes;
 }
 
 type BuilderKind = "lowercase.ts" | "uppercase.ts" | "index.ts";
@@ -132,6 +204,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
       // Skip the BigIntLiteral builder override, which is handled above.
       return;
     }
+    const unionShape = NODE_UNION_SHAPES__PRIVATE[type];
     const defArgs = generateBuilderArgs(type);
     const formattedBuilderName = formatBuilderName(type);
     const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)
@@ -152,6 +225,20 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
       }
     });
 
+    if (unionShape) {
+      output +=
+        generateBuilderDeclareFunctions(type, formattedBuilderNameLocal)
+          .map(
+            v =>
+              `${
+                formattedBuilderNameLocal === formattedBuilderName
+                  ? "export "
+                  : ""
+              }${v}`
+          )
+          .join("\n") + "\n";
+    }
+
     output += `${
       formattedBuilderNameLocal === formattedBuilderName ? "export " : ""
     }function ${formattedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
@@ -161,7 +248,9 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
       .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {
-      output += `\n  const node:t.${type} = ${nodeObjectExpression};`;
+      output += unionShape
+        ? `\n  const node = ${nodeObjectExpression} as t.${type};`
+        : `\n  const node: t.${type} = ${nodeObjectExpression};`;
       output += `\n  const defs = NODE_FIELDS.${type};`;
 
       fieldNames.forEach(fieldName => {
