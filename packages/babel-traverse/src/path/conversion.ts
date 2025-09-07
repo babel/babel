@@ -515,8 +515,7 @@ function standardizeSuperProperty(
 
       const tmp = superProp.scope.generateDeclaredUidIdentifier("tmp");
 
-      const object = superProp.node.object;
-      const property = superProp.node.property as t.Expression;
+      const { object, property } = superProp.node;
 
       assignmentPath
         .get("left")

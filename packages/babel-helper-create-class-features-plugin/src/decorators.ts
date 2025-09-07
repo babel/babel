@@ -1193,11 +1193,11 @@ function transformClass(
       let getterKey, setterKey;
       if (computed && !keyPath.isConstantExpression()) {
         getterKey = memoiseComputedKey(
-          createToPropertyKeyCall(state, key as t.Expression),
+          createToPropertyKeyCall(state, key),
           scopeParent,
           scopeParent.generateUid("computedKey"),
         )!;
-        setterKey = t.cloneNode(getterKey.left as t.Identifier);
+        setterKey = t.cloneNode(getterKey.left);
       } else {
         getterKey = t.cloneNode(key);
         setterKey = t.cloneNode(key);
