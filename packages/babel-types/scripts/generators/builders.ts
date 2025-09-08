@@ -15,7 +15,7 @@ const {
   BUILDER_KEYS,
   DEPRECATED_KEYS,
   NODE_FIELDS,
-  "\u{10FFFF} PRIVATE!!! NODE_UNION_SHAPES": NODE_UNION_SHAPES__PRIVATE,
+  "PRIVATE!!! NODE_UNION_SHAPES": NODE_UNION_SHAPES__PRIVATE,
   toBindingIdentifierName,
 } = _t as typeof import("@babel/types");
 
@@ -33,6 +33,7 @@ if (!IS_BABEL_8()) {
 /**
  * Generate the builder arguments for a given node type.
  * @param type AST Node type
+ * @param declare Whether to generate arguments for TS declaration functions
  */
 function generateBuilderArgs(type: string, declare = false): string[] {
   const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
@@ -43,13 +44,6 @@ function generateBuilderArgs(type: string, declare = false): string[] {
 
   fieldNames.forEach(fieldName => {
     const field: FieldOptions = fields[fieldName];
-    // Future / annoying TODO:
-    // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
-    // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
-    // - declare an alias type for valid keys, detect the case and reuse it here,
-    // - declare a disjoint union with, for example, ObjectPropertyBase,
-    //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
-    //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
     let typeAnnotation = stringifyValidator(field.validate, "t.");
 
     if (isNullable(field) && !hasDefault(field)) {
@@ -204,7 +198,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
       // Skip the BigIntLiteral builder override, which is handled above.
       return;
     }
-    const unionShape = NODE_UNION_SHAPES__PRIVATE[type];
+    const unionShape = IS_BABEL_8() ? NODE_UNION_SHAPES__PRIVATE[type] : null;
     const defArgs = generateBuilderArgs(type);
     const formattedBuilderName = formatBuilderName(type);
     const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)

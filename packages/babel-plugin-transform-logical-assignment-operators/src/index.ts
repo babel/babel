@@ -41,6 +41,7 @@ export default declare(api => {
               (lhs as t.MemberExpression).property = t.assignmentExpression(
                 "=",
                 t.cloneNode(memo),
+                // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
                 property,
               );
             }

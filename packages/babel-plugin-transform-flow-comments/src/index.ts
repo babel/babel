@@ -177,7 +177,7 @@ export default declare(api => {
       ClassProperty(path) {
         const { node } = path;
         if (!node.value) {
-          // @ts-expect-error Type 'NodePath<ClassPropertyNonComputed>' is not assignable to type 'NodePath<ClassPropertyComputed>'.
+          // @ts-ignore(Babel 7 vs Babel 8) Type 'NodePath<ClassPropertyNonComputed>' is not assignable to type 'NodePath<ClassPropertyComputed>'.
           wrapInFlowComment(path);
         } else if (node.typeAnnotation) {
           attachComment({

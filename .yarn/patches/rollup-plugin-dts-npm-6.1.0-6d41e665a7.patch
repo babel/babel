@@ -1,5 +1,5 @@
 diff --git a/dist/rollup-plugin-dts.mjs b/dist/rollup-plugin-dts.mjs
-index 4a9412285c48c37d03340a086c771f8e61fd82ac..9e7c42c4ca12ddbee7e1bdbfe19e30b1d5555bc0 100644
+index 4a9412285c48c37d03340a086c771f8e61fd82ac..e1ed377aa9d72b643e6e31d87d876d00bb41d326 100644
 --- a/dist/rollup-plugin-dts.mjs
 +++ b/dist/rollup-plugin-dts.mjs
 @@ -309,6 +309,19 @@ class NamespaceFixer {
@@ -22,3 +22,15 @@ index 4a9412285c48c37d03340a086c771f8e61fd82ac..9e7c42c4ca12ddbee7e1bdbfe19e30b1
                  if (!ts.isPropertyAssignment(prop) ||
                      !(ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)) ||
                      (prop.name.text !== "__proto__" && !ts.isIdentifier(prop.initializer))) {
+@@ -417,9 +430,10 @@ function createReference(id) {
+     };
+ }
+ function createIdentifier(node) {
++    const text = node.getText();
+     return withStartEnd({
+         type: "Identifier",
+-        name: node.getText(),
++        name: text.startsWith(`"`) ? JSON.parse(text) : text,
+     }, node);
+ }
+ /**

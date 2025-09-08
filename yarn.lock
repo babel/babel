@@ -15720,7 +15720,7 @@ __metadata:
 
 "rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch":
   version: 6.1.0
-  resolution: "rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch::version=6.1.0&hash=2a7348"
+  resolution: "rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch::version=6.1.0&hash=82bfcf"
   dependencies:
     "@babel/code-frame": "npm:^7.22.13"
     magic-string: "npm:^0.30.4"
@@ -15730,7 +15730,7 @@ __metadata:
   dependenciesMeta:
     "@babel/code-frame":
       optional: true
-  checksum: 10/59e110adea284f2e50efc99e3d3d5859e96919f5b34e6815868dedc62966ffc06b6d8169effb371dcf80bacf4babca9ec146a7d9363cc138d170e07c65fb0c34
+  checksum: 10/ce939278b74f8906ee1689221e3caccee604411a2b8a1a20f567c52ecff2527b5ef598126f10fd1438bcf38ce8103ad1d1832975fd1f165edc5591ca78866950
   languageName: node
   linkType: hard
 

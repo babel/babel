@@ -1193,6 +1193,7 @@ function transformClass(
       let getterKey, setterKey;
       if (computed && !keyPath.isConstantExpression()) {
         getterKey = memoiseComputedKey(
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
           createToPropertyKeyCall(state, key),
           scopeParent,
           scopeParent.generateUid("computedKey"),

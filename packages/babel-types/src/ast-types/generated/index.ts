@@ -545,23 +545,13 @@ export interface LogicalExpression extends BaseNode {
   right: Expression;
 }
 
-export interface MemberExpressionComputed extends BaseNode {
+export interface MemberExpression extends BaseNode {
   type: "MemberExpression";
   object: Expression | Super;
+  property: Expression | Identifier | PrivateName;
+  computed: boolean;
   optional?: boolean | null;
-  computed: true;
-  property: Expression;
 }
-export interface MemberExpressionNonComputed extends BaseNode {
-  type: "MemberExpression";
-  object: Expression | Super;
-  optional?: boolean | null;
-  computed: false;
-  property: Identifier | PrivateName;
-}
-export type MemberExpression =
-  | MemberExpressionComputed
-  | MemberExpressionNonComputed;
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
@@ -585,11 +575,13 @@ export interface ObjectExpression extends BaseNode {
   properties: Array<ObjectMethod | ObjectProperty | SpreadElement>;
 }
 
-export interface ObjectMethodComputed extends BaseNode {
+export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
+  key: Expression | Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
   params: Array<FunctionParameter>;
   body: BlockStatement;
+  computed: boolean;
   generator: boolean;
   async: boolean;
   decorators?: Array<Decorator> | null;
@@ -599,51 +591,23 @@ export interface ObjectMethodComputed extends BaseNode {
     | TSTypeParameterDeclaration
     | Noop
     | null;
-  computed: true;
-  key: Expression;
 }
-export interface ObjectMethodNonComputed extends BaseNode {
-  type: "ObjectMethod";
-  kind: "method" | "get" | "set";
-  params: Array<FunctionParameter>;
-  body: BlockStatement;
-  generator: boolean;
-  async: boolean;
-  decorators?: Array<Decorator> | null;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
-  computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-}
-export type ObjectMethod = ObjectMethodComputed | ObjectMethodNonComputed;
 
-export interface ObjectPropertyComputed extends BaseNode {
+export interface ObjectProperty extends BaseNode {
   type: "ObjectProperty";
-  value: Expression | PatternLike;
-  shorthand: boolean;
-  decorators?: Array<Decorator> | null;
-  computed: true;
-  key: Expression;
-}
-export interface ObjectPropertyNonComputed extends BaseNode {
-  type: "ObjectProperty";
-  value: Expression | PatternLike;
-  shorthand: boolean;
-  decorators?: Array<Decorator> | null;
-  computed: false;
   key:
+    | Expression
     | Identifier
     | StringLiteral
     | NumericLiteral
     | BigIntLiteral
     | DecimalLiteral
     | PrivateName;
+  value: Expression | PatternLike;
+  computed: boolean;
+  shorthand: boolean;
+  decorators?: Array<Decorator> | null;
 }
-export type ObjectProperty = ObjectPropertyComputed | ObjectPropertyNonComputed;
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
@@ -953,11 +917,13 @@ export interface MetaProperty extends BaseNode {
   property: Identifier;
 }
 
-export interface ClassMethodComputed extends BaseNode {
+export interface ClassMethod extends BaseNode {
   type: "ClassMethod";
   kind: "get" | "set" | "method" | "constructor";
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   params: Array<FunctionParameter | TSParameterProperty>;
   body: BlockStatement;
+  computed: boolean;
   static: boolean;
   generator: boolean;
   async: boolean;
@@ -973,33 +939,7 @@ export interface ClassMethodComputed extends BaseNode {
     | TSTypeParameterDeclaration
     | Noop
     | null;
-  computed: true;
-  key: Expression;
 }
-export interface ClassMethodNonComputed extends BaseNode {
-  type: "ClassMethod";
-  kind: "get" | "set" | "method" | "constructor";
-  params: Array<FunctionParameter | TSParameterProperty>;
-  body: BlockStatement;
-  static: boolean;
-  generator: boolean;
-  async: boolean;
-  abstract?: boolean | null;
-  access?: "public" | "private" | "protected" | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  decorators?: Array<Decorator> | null;
-  optional?: boolean | null;
-  override?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
-  computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-}
-export type ClassMethod = ClassMethodComputed | ClassMethodNonComputed;
 
 export interface ObjectPattern extends BaseNode {
   type: "ObjectPattern";
@@ -1090,11 +1030,13 @@ export interface OptionalCallExpression extends BaseNode {
   typeParameters?: TSTypeParameterInstantiation | null;
 }
 
-export interface ClassPropertyComputed extends BaseNode {
+export interface ClassProperty extends BaseNode {
   type: "ClassProperty";
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
+  computed: boolean;
   static: boolean;
   abstract?: boolean | null;
   accessibility?: "public" | "private" | "protected" | null;
@@ -1104,70 +1046,31 @@ export interface ClassPropertyComputed extends BaseNode {
   override?: boolean;
   readonly?: boolean | null;
   variance?: Variance | null;
-  computed: true;
-  key: Expression;
 }
-export interface ClassPropertyNonComputed extends BaseNode {
-  type: "ClassProperty";
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: Array<Decorator> | null;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean;
-  readonly?: boolean | null;
-  variance?: Variance | null;
-  computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-}
-export type ClassProperty = ClassPropertyComputed | ClassPropertyNonComputed;
 
-export interface ClassAccessorPropertyComputed extends BaseNode {
+export interface ClassAccessorProperty extends BaseNode {
   type: "ClassAccessorProperty";
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: Array<Decorator> | null;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean;
-  readonly?: boolean | null;
-  variance?: Variance | null;
-  computed: true;
-  key: Expression;
-}
-export interface ClassAccessorPropertyNonComputed extends BaseNode {
-  type: "ClassAccessorProperty";
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: Array<Decorator> | null;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean;
-  readonly?: boolean | null;
-  variance?: Variance | null;
-  computed: false;
   key:
     | Identifier
     | StringLiteral
     | NumericLiteral
     | BigIntLiteral
+    | Expression
     | PrivateName;
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  decorators?: Array<Decorator> | null;
+  computed: boolean;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+  variance?: Variance | null;
 }
-export type ClassAccessorProperty =
-  | ClassAccessorPropertyComputed
-  | ClassAccessorPropertyNonComputed;
 
 export interface ClassPrivateProperty extends BaseNode {
   type: "ClassPrivateProperty";
@@ -1826,9 +1729,10 @@ export interface TSDeclareFunction extends BaseNode {
   generator?: boolean;
 }
 
-export interface TSDeclareMethodComputed extends BaseNode {
+export interface TSDeclareMethod extends BaseNode {
   type: "TSDeclareMethod";
   decorators?: Array<Decorator> | null;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
   params: Array<FunctionParameter | TSParameterProperty>;
   returnType?: TSTypeAnnotation | Noop | null;
@@ -1836,35 +1740,13 @@ export interface TSDeclareMethodComputed extends BaseNode {
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
   async?: boolean;
+  computed?: boolean;
   generator?: boolean;
   kind?: "get" | "set" | "method" | "constructor";
   optional?: boolean | null;
   override?: boolean;
   static?: boolean;
-  computed: true;
-  key: Expression;
 }
-export interface TSDeclareMethodNonComputed extends BaseNode {
-  type: "TSDeclareMethod";
-  decorators?: Array<Decorator> | null;
-  typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: Array<FunctionParameter | TSParameterProperty>;
-  returnType?: TSTypeAnnotation | Noop | null;
-  abstract?: boolean | null;
-  access?: "public" | "private" | "protected" | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  async?: boolean;
-  generator?: boolean;
-  kind?: "get" | "set" | "method" | "constructor";
-  optional?: boolean | null;
-  override?: boolean;
-  static?: boolean;
-  computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
-}
-export type TSDeclareMethod =
-  | TSDeclareMethodComputed
-  | TSDeclareMethodNonComputed;
 
 export interface TSQualifiedName extends BaseNode {
   type: "TSQualifiedName";

@@ -517,15 +517,14 @@ function standardizeSuperProperty(
 
       const { object, property } = superProp.node;
 
-      assignmentPath
-        .get("left")
-        .replaceWith(
-          memberExpression(
-            object,
-            assignmentExpression("=", tmp, property),
-            true /* computed */,
-          ),
-        );
+      assignmentPath.get("left").replaceWith(
+        memberExpression(
+          object,
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
+          assignmentExpression("=", tmp, property),
+          true /* computed */,
+        ),
+      );
 
       assignmentPath
         .get("right")

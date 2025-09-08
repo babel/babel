@@ -9,6 +9,7 @@ import stringifyValidator, {
   isValueType,
 } from "../utils/stringifyValidator.ts";
 import type { FieldOptions, Validator } from "../../src/definitions/utils.ts";
+import { IS_BABEL_8 } from "$repo-utils";
 
 const t = _t as typeof import("@babel/types");
 
@@ -115,7 +116,9 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
   }
   for (const type in t.NODE_FIELDS) {
     const fields = t.NODE_FIELDS[type];
-    const unionShape = t["\u{10FFFF} PRIVATE!!! NODE_UNION_SHAPES"][type];
+    const unionShape = IS_BABEL_8()
+      ? t["PRIVATE!!! NODE_UNION_SHAPES"][type]
+      : null;
     const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
 
     const struct: string[] = [];
@@ -131,13 +134,6 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
         return;
       }
 
-      // Future / annoying TODO:
-      // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
-      // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
-      // - declare an alias type for valid keys, detect the case and reuse it here,
-      // - declare a disjoint union with, for example, ObjectPropertyBase,
-      //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
-      //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
       let typeAnnotation = stringifyValidator(field.validate, "");
 
       if (isNullable(field) && !hasDefault(field)) {
