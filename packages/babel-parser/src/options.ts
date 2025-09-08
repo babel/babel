@@ -30,6 +30,10 @@ export interface Options {
    */
   allowNewTargetOutsideFunction?: boolean;
 
+  /**
+   * By default, super calls are not allowed outside of a method.
+   * Set this to true to accept such code.
+   */
   allowSuperOutsideMethod?: boolean;
 
   /**
@@ -190,7 +194,7 @@ function createDefaultOptions(): OptionsWithDefaults {
     // When enabled, import/export statements are not constrained to
     // appearing at the top of the program.
     allowImportExportEverywhere: false,
-    // TODO
+    // When enabled, super outside a method is not considered an error.
     allowSuperOutsideMethod: false,
     // When enabled, export statements can reference undeclared variables.
     allowUndeclaredExports: false,
