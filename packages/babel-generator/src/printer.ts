@@ -906,7 +906,7 @@ class Printer {
     statement?: boolean,
     indent?: boolean,
     separator?: PrintJoinOptions["separator"] | null,
-    printTrailingSeparator?: boolean,
+    printTrailingSeparator?: boolean | null,
     iterator?: PrintJoinOptions["iterator"] | null,
     trailingCommentsLineOffset?: number,
   ) {
@@ -1076,7 +1076,7 @@ class Printer {
 
   printList(
     items: t.Node[] | null | undefined,
-    printTrailingSeparator?: boolean,
+    printTrailingSeparator?: boolean | null,
     statement?: boolean,
     indent?: boolean,
     separator?: PrintListOptions["separator"],
@@ -1092,14 +1092,14 @@ class Printer {
     );
   }
 
-  shouldPrintTrailingComma(listEnd: string): boolean {
-    if (!this.tokenMap) return false;
+  shouldPrintTrailingComma(listEnd: string): boolean | null {
+    if (!this.tokenMap) return null;
 
     const listEndIndex = this.tokenMap.findLastIndex(
       this._currentNode!,
       token => this.tokenMap!.matchesOriginal(token, listEnd),
     );
-    if (listEndIndex <= 0) return false;
+    if (listEndIndex <= 0) return null;
     return this.tokenMap.matchesOriginal(this._tokens![listEndIndex - 1], ",");
   }
 

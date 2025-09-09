@@ -59,7 +59,8 @@ export default class SourceMap {
           setSourceContent(
             map,
             resolvedSources[i],
-            this._inputMap.sourcesContent?.[i] ?? null,
+            // @ts-expect-error FIXME: this._inputMap.sourcesContent?.[i] may be undefined, which is not acceptable by setSourceContent
+            this._inputMap.sourcesContent?.[i],
           );
         }
       }
