@@ -79,7 +79,7 @@
     "prettier": "^3.5.2",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
-    "rollup-plugin-dts-5": "patch:rollup-plugin-dts@npm%3A5.3.1#~/.yarn/patches/rollup-plugin-dts-npm-5.3.1-204dd6f08f.patch",
+    "rollup-plugin-dts-5": "npm:rollup-plugin-dts@^5.3.1",
     "rollup-plugin-polyfill-node": "^0.13.0",
     "semver": "^6.3.1",
     "shelljs": "^0.8.5",

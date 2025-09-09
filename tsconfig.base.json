@@ -18,7 +18,8 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
-    "incremental": true
+    "incremental": true,
+    "stripInternal": true
   },
   "exclude": ["./packages/babel-helpers/src/helpers/**/*"],
   "references": [{
