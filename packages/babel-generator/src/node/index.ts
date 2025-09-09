@@ -122,7 +122,7 @@ export function needsParens(
   parent: t.Node | null,
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
-) {
+): boolean {
   if (!parent) return false;
 
   if (isNewExpression(parent) && parent.callee === node) {
@@ -137,11 +137,13 @@ export function needsParens(
     );
   }
 
-  return expandedParens.get(node.type)?.(
-    node,
-    parent,
-    tokenContext,
-    getRawIdentifier,
+  return (
+    expandedParens.get(node.type)?.(
+      node,
+      parent,
+      tokenContext,
+      getRawIdentifier,
+    ) || false
   );
 }
 

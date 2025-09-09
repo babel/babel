@@ -23,6 +23,8 @@ export class TokenMap {
       const indexes = this._getTokensIndexesOfNode(node);
       if (indexes.length > 0) this._nodesToTokenIndexes.set(node, indexes);
     });
+
+    this._tokensCache.clear();
   }
 
   has(node: t.Node): boolean {

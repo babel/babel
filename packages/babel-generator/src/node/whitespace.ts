@@ -135,10 +135,10 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     return (
       (!!node.consequent.length || parent.cases[0] === node
         ? WhitespaceFlag.before
-        : 0) |
+        : WhitespaceFlag.none) |
       (!node.consequent.length && parent.cases[parent.cases.length - 1] === node
         ? WhitespaceFlag.after
-        : 0)
+        : WhitespaceFlag.none)
     );
   },
 
@@ -150,7 +150,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.left) || isFunction(node.right)) {
       return WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -161,7 +161,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isStringLiteral(node) && node.value === "use strict") {
       return WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -172,14 +172,14 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.callee) || isHelper(node)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   OptionalCallExpression(node: t.OptionalCallExpression): WhitespaceFlag {
     if (isFunction(node.callee)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -200,7 +200,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         return WhitespaceFlag.before | WhitespaceFlag.after;
       }
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -211,7 +211,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isBlockStatement(node.consequent)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 };
 
@@ -229,7 +229,7 @@ nodes.ObjectProperty =
       if (parent.properties[0] === node) {
         return WhitespaceFlag.before;
       }
-      return 0;
+      return WhitespaceFlag.none;
     };
 
 nodes.ObjectTypeCallProperty = function (
@@ -240,7 +240,7 @@ nodes.ObjectTypeCallProperty = function (
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return WhitespaceFlag.before;
   }
-  return 0;
+  return WhitespaceFlag.none;
 };
 
 nodes.ObjectTypeIndexer = function (
@@ -255,7 +255,7 @@ nodes.ObjectTypeIndexer = function (
   ) {
     return WhitespaceFlag.before;
   }
-  return 0;
+  return WhitespaceFlag.none;
 };
 
 nodes.ObjectTypeInternalSlot = function (
@@ -271,7 +271,7 @@ nodes.ObjectTypeInternalSlot = function (
   ) {
     return WhitespaceFlag.before;
   }
-  return 0;
+  return WhitespaceFlag.none;
 };
 
 /**

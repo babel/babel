@@ -59,8 +59,7 @@ export default class SourceMap {
           setSourceContent(
             map,
             resolvedSources[i],
-            // @ts-expect-error FIXME: cannot be undefined
-            this._inputMap.sourcesContent?.[i],
+            this._inputMap.sourcesContent?.[i] ?? null,
           );
         }
       }
@@ -109,7 +108,7 @@ export default class SourceMap {
   ) {
     this._rawMappings = undefined;
 
-    let originalMapping: OriginalMapping | InvalidOriginalMapping;
+    let originalMapping: OriginalMapping | InvalidOriginalMapping | undefined;
 
     if (line != null) {
       if (this._inputMap) {
@@ -149,9 +148,8 @@ export default class SourceMap {
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,
-      // eslint-disable-next-line @typescript-eslint/no-extra-non-null-assertion
-      source: originalMapping!?.source,
-      original: originalMapping!,
+      source: originalMapping?.source,
+      original: originalMapping,
     });
   }
 }
