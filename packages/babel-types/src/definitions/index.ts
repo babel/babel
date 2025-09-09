@@ -49,7 +49,7 @@ const TYPES: Array<string> = [].concat(
 /**
  * @internal
  */
-export { NODE_UNION_SHAPES__PRIVATE as "PRIVATE!!! NODE_UNION_SHAPES" };
+export { NODE_UNION_SHAPES__PRIVATE };
 
 export {
   VISITOR_KEYS,
