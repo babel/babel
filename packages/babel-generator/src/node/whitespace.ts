@@ -124,7 +124,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         ? WhitespaceFlag.before | WhitespaceFlag.after
         : WhitespaceFlag.after;
     }
-    return 0;
+    return WhitespaceFlag.none;
   },
 
   /**

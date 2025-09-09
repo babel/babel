@@ -780,10 +780,9 @@ class Printer {
     let oldTokenContext;
     if (!shouldPrintParens) {
       noLineTerminatorAfter ||=
-        (parent &&
-          this._noLineTerminatorAfterNode === parent &&
-          n.isLastChild(parent, node)) ||
-        false;
+        !!parent &&
+        this._noLineTerminatorAfterNode === parent &&
+        n.isLastChild(parent, node)
       if (noLineTerminatorAfter) {
         if (node.trailingComments?.some(commentIsNewline)) {
           if (isExpression(node)) shouldPrintParens = true;
