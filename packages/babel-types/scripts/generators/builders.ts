@@ -92,13 +92,6 @@ function generateBuilderDeclareFunctions(
     fieldNames.forEach(fieldName => {
       const field = fields[fieldName];
 
-      // Future / annoying TODO:
-      // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
-      // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
-      // - declare an alias type for valid keys, detect the case and reuse it here,
-      // - declare a disjoint union with, for example, ObjectPropertyBase,
-      //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
-      //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
       let typeAnnotation = stringifyValidator(field.validate, "t.");
 
       if (isNullable(field) && !hasDefault(field)) {
