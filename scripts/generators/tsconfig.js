@@ -334,7 +334,6 @@ maybeWriteFile(
             ["glob", ["./node_modules/glob-BABEL_8_BREAKING-true"]],
             ["globals", ["./node_modules/globals-BABEL_8_BREAKING-true"]],
             ["js-tokens", ["./node_modules/js-tokens-BABEL_8_BREAKING-true"]],
-            ["regexpu-core", ["./lib/regexpu-core.d.ts"]],
             [
               "to-fast-properties",
               ["./node_modules/to-fast-properties-BABEL_8_BREAKING-true"],
