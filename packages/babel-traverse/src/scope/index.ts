@@ -893,7 +893,7 @@ class Scope {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
         return false;
       }
-      // @ts-expect-error expected
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }
@@ -920,7 +920,7 @@ class Scope {
       return true;
     } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      // @ts-expect-error expected
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }
@@ -928,7 +928,7 @@ class Scope {
     } else if (isProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      // @ts-expect-error expected
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }

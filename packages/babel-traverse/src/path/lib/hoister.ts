@@ -146,14 +146,14 @@ export default class PathHoister<T extends t.Node = t.Node> {
         const bindingParentPath = this.getAttachmentParentForPath(binding.path);
 
         // If the binding's attachment appears at or after our attachment point, then we move after it.
-        // @ts-expect-error expected
+        // @ts-expect-error comparing undefined and number
         if (bindingParentPath.key >= path.key) {
           this.attachAfter = true;
           path = binding.path;
 
           // We also move past any constant violations.
           for (const violationPath of binding.constantViolations) {
-            // @ts-expect-error expected
+            // @ts-expect-error comparing undefined and number
             if (this.getAttachmentParentForPath(violationPath).key > path.key) {
               path = violationPath;
             }
