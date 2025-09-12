@@ -2,11 +2,11 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
 
 // TODO(Babel 8): Remove this
 import babel7 from "./babel-7/index.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
+import semver from "semver" with { if: "!process.env.BABEL_8_BREAKING" };
 
 export interface Options {
   absoluteRuntime?: boolean;
@@ -46,9 +46,40 @@ export default declare((api, options: Options, dirname) => {
     // In recent @babel/runtime versions, we can use require("helper").default
     // instead of require("helper") so that it has the same interface as the
     // ESM helper, and bundlers can better exchange one format for the other.
-    const DUAL_MODE_RUNTIME = "7.13.0";
+
     // eslint-disable-next-line no-var
-    var supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
+    var supportsCJSDefault: boolean;
+    if (!runtimeVersion) {
+      // If the range is unavailable, we're running the script during Babel's
+      // build process, and we want to assume that all versions are satisfied so
+      // that the built output will include all definitions.
+      supportsCJSDefault = true;
+    } else {
+      // semver.intersects() has some surprising behavior with comparing ranges
+      // with pre-release versions. We add '^' to ensure that we are always
+      // comparing ranges with ranges, which sidesteps this logic.
+      // For example:
+      //
+      //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+      //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+      //
+      // This is because the first falls back to
+      //
+      //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+      //
+      // and this fails because a prerelease version can only satisfy a range
+      // if it is a prerelease within the same major/minor/patch range.
+      //
+      // Note: If this is found to have issues, please also revisit the logic in
+      // babel-core's availableHelper() API.
+      const normalizedRuntimeVersion = semver.valid(runtimeVersion)
+        ? `^${runtimeVersion}`
+        : runtimeVersion;
+
+      supportsCJSDefault =
+        !semver.intersects(`<7.13.0`, normalizedRuntimeVersion) &&
+        !semver.intersects(`>=8.0.0`, normalizedRuntimeVersion);
+    }
   }
 
   if (Object.hasOwn(options, "useBuiltIns")) {

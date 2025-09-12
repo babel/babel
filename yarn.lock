@@ -3563,7 +3563,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: "npm:^0.13.0"
     babel-plugin-polyfill-regenerator: "condition:BABEL_8_BREAKING ? : ^0.6.5 (peer:@babel/core)"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    semver: "condition:BABEL_8_BREAKING ? : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -15966,6 +15966,15 @@ __metadata:
   dependencies:
     sver: "npm:^1.8.3"
   checksum: 10/478a52a34fa4a265d7caf1f2279bf3f427abeee36175bfa03c29d48df65040f4d934ccdf5896b7ae6012f60f7364ec30826390ecb7c913f94109002dbd53a588
+  languageName: node
+  linkType: hard
+
+"semver@condition:BABEL_8_BREAKING ? : ^6.3.1":
+  version: 0.0.0-condition-82bd19
+  resolution: "semver@condition:BABEL_8_BREAKING?:^6.3.1#82bd19"
+  dependencies:
+    semver-BABEL_8_BREAKING-false: "npm:semver@^6.3.1"
+  checksum: 10/821b359c1f8227348301eb813c0cf64fd6dc60fcaadcac61fba30b7cc42e34473c62716278d3e867ed1d6d8dad4ab765ddffb0288ef846d20da10a86824f7de3
   languageName: node
   linkType: hard
 
