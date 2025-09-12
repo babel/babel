@@ -224,7 +224,7 @@ function _evaluate(path: NodePath, state: State): any {
     if (binding) {
       if (
         binding.constantViolations.length > 0 ||
-        // @ts-expect-error expected
+        // @ts-expect-error comparing undefined and number
         path.node.start < binding.path.node.end
       ) {
         deopt(binding.path, state);
