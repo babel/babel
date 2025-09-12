@@ -274,7 +274,7 @@ function FlowExportDeclaration(
     if (!isStatement(declar)) this.semicolon();
   } else {
     this.token("{");
-    if (node.specifiers.length) {
+    if (node.specifiers!.length) {
       this.space();
       this.printList(node.specifiers);
       this.space();
@@ -615,22 +615,12 @@ export function ObjectTypeAnnotation(
 
     this.space();
 
-    this.printJoin(
-      props,
-      true,
-      true,
-      undefined,
-      undefined,
-      function addNewlines(leading) {
-        if (leading && !props[0]) return 1;
-      },
-      () => {
-        if (props.length !== 1 || node.inexact) {
-          this.token(",");
-          this.space();
-        }
-      },
-    );
+    this.printJoin(props, true, true, undefined, undefined, () => {
+      if (props.length !== 1 || node.inexact) {
+        this.token(",");
+        this.space();
+      }
+    });
 
     this.space();
   }

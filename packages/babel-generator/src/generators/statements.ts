@@ -139,7 +139,10 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.semicolon();
 }
 
-function printStatementAfterKeyword(printer: Printer, node: t.Node) {
+function printStatementAfterKeyword(
+  printer: Printer,
+  node: t.Node | null | undefined,
+) {
   if (node) {
     printer.space();
     printer.printTerminatorless(node);
@@ -222,14 +225,7 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
   this.space();
   this.token("{");
 
-  this.printSequence(
-    node.cases,
-    true,
-    undefined,
-    function addNewlines(leading, cas) {
-      if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
-    },
-  );
+  this.printSequence(node.cases, true);
 
   this.rightBrace(node);
 }

@@ -8,8 +8,8 @@ type ParentsOf<T extends t.Node> = ParentMaps[T["type"]];
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
-  idNode: t.Expression | t.PrivateName,
-  parentNode: ParentsOf<typeof node>,
+  idNode: t.Expression | t.PrivateName | null | undefined,
+  parentNode?: ParentsOf<typeof node>,
 ) {
   this.print(node.typeParameters);
 
@@ -41,7 +41,7 @@ export function _parameters(
     this._param(parameters[i]);
 
     if (trailingComma || i < paramLength - 1) {
-      this.token(",", null, i);
+      this.token(",", undefined, i);
       this.space();
     }
   }
@@ -113,7 +113,6 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
   this._params(
     node,
     node.computed && node.key.type !== "StringLiteral" ? undefined : node.key,
-    undefined,
   );
 }
 

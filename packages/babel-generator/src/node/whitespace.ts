@@ -24,6 +24,7 @@ import type { NodeHandlers } from "./index.ts";
 import type * as t from "@babel/types";
 
 const enum WhitespaceFlag {
+  none = 0,
   before = 1 << 0,
   after = 1 << 1,
 }
@@ -97,7 +98,7 @@ function isHelper(node: t.Node): boolean {
   }
 }
 
-function isType(node: t.Node) {
+function isType(node: t.Node | null | undefined) {
   return (
     isLiteral(node) ||
     isObjectExpression(node) ||
@@ -123,6 +124,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         ? WhitespaceFlag.before | WhitespaceFlag.after
         : WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -133,10 +135,10 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     return (
       (!!node.consequent.length || parent.cases[0] === node
         ? WhitespaceFlag.before
-        : 0) |
+        : WhitespaceFlag.none) |
       (!node.consequent.length && parent.cases[parent.cases.length - 1] === node
         ? WhitespaceFlag.after
-        : 0)
+        : WhitespaceFlag.none)
     );
   },
 
@@ -148,6 +150,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.left) || isFunction(node.right)) {
       return WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -158,6 +161,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isStringLiteral(node) && node.value === "use strict") {
       return WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -168,12 +172,14 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.callee) || isHelper(node)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 
   OptionalCallExpression(node: t.OptionalCallExpression): WhitespaceFlag {
     if (isFunction(node.callee)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -194,6 +200,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         return WhitespaceFlag.before | WhitespaceFlag.after;
       }
     }
+    return WhitespaceFlag.none;
   },
 
   /**
@@ -204,6 +211,7 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isBlockStatement(node.consequent)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
+    return WhitespaceFlag.none;
   },
 };
 
@@ -221,15 +229,18 @@ nodes.ObjectProperty =
       if (parent.properties[0] === node) {
         return WhitespaceFlag.before;
       }
+      return WhitespaceFlag.none;
     };
 
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
+  // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return WhitespaceFlag.before;
   }
+  return WhitespaceFlag.none;
 };
 
 nodes.ObjectTypeIndexer = function (
@@ -237,12 +248,14 @@ nodes.ObjectTypeIndexer = function (
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
   if (
+    // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
     parent.indexers[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length
   ) {
     return WhitespaceFlag.before;
   }
+  return WhitespaceFlag.none;
 };
 
 nodes.ObjectTypeInternalSlot = function (
@@ -250,6 +263,7 @@ nodes.ObjectTypeInternalSlot = function (
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
   if (
+    // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
     parent.internalSlots[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length &&
@@ -257,6 +271,7 @@ nodes.ObjectTypeInternalSlot = function (
   ) {
     return WhitespaceFlag.before;
   }
+  return WhitespaceFlag.none;
 };
 
 /**

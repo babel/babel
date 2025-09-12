@@ -24,7 +24,7 @@ export class TokenMap {
       if (indexes.length > 0) this._nodesToTokenIndexes.set(node, indexes);
     });
 
-    this._tokensCache = null;
+    this._tokensCache.clear();
   }
 
   has(node: t.Node): boolean {
@@ -178,8 +178,8 @@ export class TokenMap {
     const cached = this._tokensCache.get(node);
     if (cached) return cached;
 
-    const first = this._findFirstTokenOfNode(node.start, low, high);
-    const last = this._findLastTokenOfNode(node.end, first, high);
+    const first = this._findFirstTokenOfNode(node.start!, low, high);
+    const last = this._findLastTokenOfNode(node.end!, first, high);
 
     this._tokensCache.set(node, { first, last });
     return { first, last };
