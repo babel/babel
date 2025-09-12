@@ -33,7 +33,7 @@ export default class ClassScopeHandler {
   }
 
   exit() {
-    const oldClassScope = this.stack.pop();
+    const oldClassScope = this.stack.pop()!;
 
     // Migrate the usage of not yet defined private names to the outer
     // class scope, or raise an error if we reached the top-level scope.
