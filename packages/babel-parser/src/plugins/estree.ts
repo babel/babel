@@ -562,7 +562,7 @@ export default (superClass: typeof Parser) =>
             this.castNodeTo(node, "ExportAllDeclaration");
             // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
-            // @ts-expect-error expected
+            // @ts-expect-error The ESTree AST shape differs from the Babel AST
             delete node.specifiers;
           }
 
