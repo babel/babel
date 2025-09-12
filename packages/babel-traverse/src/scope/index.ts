@@ -61,7 +61,7 @@ import type { ExplodedVisitor, Visitor } from "../types.ts";
 
 type NodePart = string | number | bigint | boolean;
 // Recursively gathers the identifying names of a node.
-function gatherNodeParts(node: t.Node, parts: NodePart[]) {
+function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
   switch (node?.type) {
     default:
       if (isImportDeclaration(node) || isExportDeclaration(node)) {
@@ -254,7 +254,7 @@ function isAnonymousFunctionExpression(
 interface CollectVisitorState {
   assignments: NodePath<t.AssignmentExpression>[];
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
-  constantViolations: NodePath[];
+  constantViolations: NodePath<t.Node>[];
 }
 
 if (!process.env.BABEL_8_BREAKING) {
@@ -367,8 +367,8 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   BlockScoped(path) {
-    let scope = path.scope;
-    if (scope.path === path) scope = scope.parent;
+    let scope: Scope = path.scope;
+    if (scope.path === path) scope = scope.parent!;
 
     const parent = scope.getBlockParent();
     parent.registerDeclaration(path);
@@ -378,7 +378,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       const id = path.node.id;
       const name = id.name;
 
-      path.scope.bindings[name] = path.scope.parent.getBinding(name);
+      path.scope.bindings[name] = path.scope.parent!.getBinding(name)!;
     }
   },
 
@@ -387,7 +387,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   Function(path) {
-    const params: Array<NodePath> = path.get("params");
+    const params = path.get("params");
     for (const param of params) {
       path.scope.registerBinding("param", param);
     }
@@ -432,20 +432,20 @@ export { Scope as default };
 class Scope {
   uid;
 
-  path: NodePath;
-  block: t.Pattern | t.Scopable;
+  declare path: NodePath;
+  declare block: t.Pattern | t.Scopable;
 
-  inited;
+  declare inited;
 
-  labels: Map<string, NodePath<t.LabeledStatement>>;
-  bindings: { [name: string]: Binding };
+  declare labels: Map<string, NodePath<t.LabeledStatement>>;
+  declare bindings: { [name: string]: Binding };
   /** Only defined in the program scope */
-  referencesSet?: Set<string>;
-  globals: { [name: string]: t.Identifier | t.JSXIdentifier };
+  declare referencesSet?: Set<string>;
+  declare globals: { [name: string]: t.Identifier | t.JSXIdentifier };
   /** Only defined in the program scope */
-  uidsSet?: Set<string>;
-  data: { [key: string | symbol]: unknown };
-  crawling: boolean;
+  declare uidsSet?: Set<string>;
+  declare data: { [key: string | symbol]: unknown };
+  declare crawling: boolean;
 
   /**
    * This searches the current "scope" and collects all references/bindings
@@ -701,7 +701,7 @@ class Scope {
   dump() {
     const sep = "-".repeat(60);
     console.log(sep);
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       console.log("#", scope.block.type);
       for (const name of Object.keys(scope.bindings)) {
@@ -729,7 +729,7 @@ class Scope {
     this.labels.set(path.node.label.name, path);
   }
 
-  registerDeclaration(path: NodePath) {
+  registerDeclaration(path: NodePath<t.Node>) {
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
@@ -778,7 +778,7 @@ class Scope {
     return buildUndefinedNode();
   }
 
-  registerConstantViolation(path: NodePath) {
+  registerConstantViolation(path: NodePath<t.Node>) {
     const ids = path.getAssignmentIdentifiers();
     for (const name of Object.keys(ids)) {
       this.getBinding(name)?.reassign(path);
@@ -787,13 +787,13 @@ class Scope {
 
   registerBinding(
     kind: Binding["kind"],
-    path: NodePath,
-    bindingPath: NodePath = path,
+    path: NodePath<t.Node>,
+    bindingPath: NodePath<t.Node> = path,
   ) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     if (path.isVariableDeclaration()) {
-      const declarators: Array<NodePath> = path.get("declarations");
+      const declarators = path.get("declarations");
       for (const declar of declarators) {
         this.registerBinding(kind, declar);
       }
@@ -845,7 +845,7 @@ class Scope {
     if (process.env.BABEL_8_BREAKING) {
       return this.getProgramParent().uidsSet.has(name);
     } else {
-      let scope: Scope = this;
+      let scope: Scope | undefined = this;
 
       do {
         // @ts-expect-error Babel 7
@@ -857,7 +857,7 @@ class Scope {
   }
 
   hasGlobal(name: string): boolean {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
 
     do {
       if (scope.globals[name]) return true;
@@ -875,7 +875,7 @@ class Scope {
     }
   }
 
-  isPure(node: t.Node, constantsOnly?: boolean): boolean {
+  isPure(node: t.Node | null | undefined, constantsOnly?: boolean): boolean {
     if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (!binding) return false;
@@ -892,6 +892,7 @@ class Scope {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
         return false;
       }
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }
@@ -918,6 +919,7 @@ class Scope {
       return true;
     } else if (isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }
@@ -925,6 +927,7 @@ class Scope {
     } else if (isProperty(node)) {
       // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
+      // @ts-expect-error comparing undefined and number
       if (node.decorators?.length > 0) {
         return false;
       }
@@ -981,7 +984,7 @@ class Scope {
    */
 
   getData(key: string | symbol): any {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       const data = scope.data[key];
       if (data != null) return data;
@@ -994,7 +997,7 @@ class Scope {
    */
 
   removeData(key: string) {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       const data = scope.data[key];
       if (data != null) scope.data[key] = null;
@@ -1014,7 +1017,7 @@ class Scope {
     resetScope(this);
     this.data = Object.create(null);
 
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (scope.crawling) return;
       if (scope.path.isProgram()) {
@@ -1022,7 +1025,7 @@ class Scope {
       }
     } while ((scope = scope.parent));
 
-    const programParent = scope;
+    const programParent = scope!;
 
     const state: CollectVisitorState = {
       references: [],
@@ -1042,12 +1045,12 @@ class Scope {
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
     if (path.type !== "Program") {
-      for (const visit of scopeVisitor.enter) {
+      for (const visit of scopeVisitor.enter!) {
         visit.call(state, path, state);
       }
-      const typeVisitors = scopeVisitor[path.type];
+      const typeVisitors = scopeVisitor[path.type!];
       if (typeVisitors) {
-        for (const visit of typeVisitors.enter) {
+        for (const visit of typeVisitors.enter!) {
           visit.call(state, path, state);
         }
       }
@@ -1161,7 +1164,7 @@ class Scope {
     referencesSet: Set<string>;
     uidsSet: Set<string>;
   } {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (scope.path.isProgram()) {
         return scope as Scope & {
@@ -1178,7 +1181,7 @@ class Scope {
    */
 
   getFunctionParent(): Scope | null {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (scope.path.isFunctionParent()) {
         return scope;
@@ -1193,7 +1196,7 @@ class Scope {
    */
 
   getBlockParent() {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (scope.path.isBlockParent()) {
         return scope;
@@ -1210,12 +1213,12 @@ class Scope {
    * @returns An ancestry scope whose path is a block parent
    */
   getPatternParent() {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (!scope.path.isPattern()) {
         return scope.getBlockParent();
       }
-    } while ((scope = scope.parent.parent));
+    } while ((scope = scope.parent!.parent));
     throw new Error(
       "We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...",
     );
@@ -1228,7 +1231,7 @@ class Scope {
   getAllBindings(): Record<string, Binding> {
     const ids = Object.create(null);
 
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       for (const key of Object.keys(scope.bindings)) {
         if (key in ids === false) {
@@ -1246,7 +1249,7 @@ class Scope {
   }
 
   getBinding(name: string): Binding | undefined {
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     let previousPath;
 
     do {
@@ -1286,13 +1289,11 @@ class Scope {
     return this.bindings[name];
   }
 
-  // todo: return probably can be undefined…
-  getBindingIdentifier(name: string): t.Identifier {
+  getBindingIdentifier(name: string): t.Identifier | undefined {
     return this.getBinding(name)?.identifier;
   }
 
-  // todo: flow->ts return probably can be undefined
-  getOwnBindingIdentifier(name: string): t.Identifier {
+  getOwnBindingIdentifier(name: string): t.Identifier | undefined {
     const binding = this.bindings[name];
     return binding?.identifier;
   }
@@ -1325,7 +1326,7 @@ class Scope {
     } else if (typeof opts === "boolean") {
       noGlobals = opts;
     }
-    let scope: Scope = this;
+    let scope: Scope | undefined = this;
     do {
       if (upToScope === scope) {
         break;
@@ -1373,7 +1374,7 @@ class Scope {
     if (process.env.BABEL_8_BREAKING) {
       this.getProgramParent().uidsSet.delete(name);
     } else {
-      let scope: Scope = this;
+      let scope: Scope | undefined = this;
       do {
         // @ts-expect-error Babel 7
         if (scope.uids[name]) {
@@ -1434,7 +1435,8 @@ class Scope {
 
       // for (var i in test)
       if (parentPath.parentPath.isForXStatement({ left: parent })) {
-        parentPath.replaceWith(firstId);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        parentPath.replaceWith(firstId!);
       } else if (init.length === 0) {
         parentPath.remove();
       } else {
@@ -1565,7 +1567,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
     const ids = Object.create(null);
 
     for (const kind of kinds) {
-      let scope: Scope = this;
+      let scope: Scope | undefined = this;
       do {
         for (const name of Object.keys(scope.bindings)) {
           const binding = scope.bindings[name];

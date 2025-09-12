@@ -140,7 +140,7 @@ export function isVar(this: NodePath): boolean {
 }
 
 export function isUser(this: NodePath): boolean {
-  return this.node && !!this.node.loc;
+  return !!this.node?.loc;
 }
 
 export function isGenerated(this: NodePath): boolean {

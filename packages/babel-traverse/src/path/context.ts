@@ -156,7 +156,8 @@ export function setScope(this: NodePath) {
     path = path.parentPath;
   }
 
-  this.scope = this.getScope(target);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  this.scope = this.getScope(target!);
   this.scope?.init();
 }
 
@@ -279,7 +280,7 @@ export function setup(
   this: NodePath,
   parentPath: NodePath | undefined,
   container: t.Node | t.Node[],
-  listKey: string,
+  listKey: string | undefined,
   key: string | number,
 ) {
   this.listKey = listKey;
