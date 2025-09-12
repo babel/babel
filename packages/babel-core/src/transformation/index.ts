@@ -16,6 +16,7 @@ import type File from "./file/file.ts";
 
 import { flattenToSet } from "../config/helpers/deep-array.ts";
 import { isAsync, maybeAsync } from "../gensync-utils/async.ts";
+import type { SourceTypeOption } from "../config/validation/options.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -23,12 +24,12 @@ export type FileResultCallback = {
 };
 
 export type FileResult = {
-  metadata: { [key: string]: any };
-  options: { [key: string]: any };
+  metadata: Record<string, any>;
+  options: Record<string, any>;
   ast: t.File | null;
   code: string | null;
   map: GeneratorResult["map"];
-  sourceType: "script" | "module";
+  sourceType: Exclude<SourceTypeOption, "unambiguous">;
   externalDependencies: Set<string>;
 };
 

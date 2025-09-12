@@ -70,10 +70,11 @@ const Formatter = {
 
 function descriptorToConfig<API>(
   d: UnloadedDescriptor<API>,
-): object | string | [string, unknown] | [string, unknown, string] {
-  let name: object | string = d.file?.request;
+): string | [string, object] | [string, object, string] {
+  let name: string = d.file?.request;
   if (name == null) {
     if (typeof d.value === "object") {
+      // @ts-expect-error FIXME
       name = d.value;
     } else if (typeof d.value === "function") {
       // If the unloaded descriptor is a function, i.e. `plugins: [ require("my-plugin") ]`,

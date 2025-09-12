@@ -93,7 +93,7 @@ function validateResolvedConfig(
         throw new Error(error);
       }
     }
-    if (config.options) return config.options;
+    if (config.options) return config.options as InputOptions;
   }
 
   return getDefaultParserOptions(parseOptions);
