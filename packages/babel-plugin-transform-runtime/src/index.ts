@@ -20,7 +20,9 @@ export default declare((api, options: Options, dirname) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const {
-    version: runtimeVersion = "7.0.0-beta.0",
+    version: runtimeVersion = process.env.BABEL_8_BREAKING
+      ? "8.0.0-beta.0"
+      : "7.0.0-beta.0",
     absoluteRuntime = false,
     moduleName = null,
   } = options;
