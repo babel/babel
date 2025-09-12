@@ -304,7 +304,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
     if (tokenIsAssignment(this.state.type)) {
       const node = this.startNodeAt<N.AssignmentExpression>(startLoc);
-      const operator = this.state.value;
+      const operator = this.state.value as N.AssignmentOperator;
       node.operator = operator;
 
       if (this.match(tt.eq)) {
@@ -343,7 +343,15 @@ export default abstract class ExpressionParser extends LValParser {
 
       this.next();
       node.right = this.parseMaybeAssign();
-      this.checkLVal(left, this.finishNode(node, "AssignmentExpression"));
+      this.checkLVal(
+        left,
+        this.finishNode(node, "AssignmentExpression"),
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        operator === "||=" || operator === "&&=" || operator === "??=",
+      );
       // @ts-expect-error todo(flow->ts) improve node types
       return node;
     } else if (ownExpressionErrors) {
