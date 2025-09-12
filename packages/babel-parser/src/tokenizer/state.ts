@@ -31,18 +31,18 @@ export const enum LoopLabelKind {
 declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<State>;
 
 export default class State {
-  @bit.storage flags: number = 0;
+  @bit.storage flags!: number;
 
   @bit accessor strict = false;
 
-  declare startIndex: number;
-  declare curLine: number;
-  declare lineStart: number;
+  startIndex!: number;
+  curLine!: number;
+  lineStart!: number;
 
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
-  declare startLoc: Position;
-  declare endLoc: Position;
+  startLoc!: Position;
+  endLoc!: Position;
 
   init({
     strictMode,

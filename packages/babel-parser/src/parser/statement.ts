@@ -275,7 +275,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.addExtra(directiveLiteral, "expressionValue", expressionValue);
 
     directive.value = directiveLiteral;
-    // @ts-expect-error expected
+    // @ts-expect-error delete non-optional properties
     delete stmt.expression;
 
     return directive;
@@ -2958,7 +2958,7 @@ export default abstract class StatementParser extends ExpressionParser {
       if (singleBindingType !== "ImportDefaultSpecifier") {
         this.raise(Errors.ImportReflectionNotBinding, specifiers[0].loc.start);
       }
-      // @ts-expect-error expected
+      // @ts-expect-error comparing undefined and number
       if (node.assertions?.length > 0) {
         this.raise(
           Errors.ImportReflectionHasAssertion,

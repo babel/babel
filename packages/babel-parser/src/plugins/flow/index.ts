@@ -507,10 +507,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const bodyNode = (node.body = this.startNode<N.BlockStatement>());
-      const body: any[] = (bodyNode.body = []);
+      const body: N.Statement[] = (bodyNode.body = []);
       this.expect(tt.braceL);
       while (!this.match(tt.braceR)) {
-        let bodyNode = this.startNode<N.ImportDeclaration>();
+        const bodyNode = this.startNode<N.ImportDeclaration>();
 
         if (this.match(tt._import)) {
           this.next();
@@ -520,17 +520,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               this.state.lastTokStartLoc!,
             );
           }
-          super.parseImport(bodyNode);
+          body.push(super.parseImport(bodyNode));
         } else {
           this.expectContextual(
             tt._declare,
             FlowErrors.UnsupportedStatementInDeclareModule,
           );
-          // @ts-expect-error refine typings
-          bodyNode = this.flowParseDeclare(bodyNode, true);
+          body.push(this.flowParseDeclare(bodyNode, true));
         }
-
-        body.push(bodyNode);
       }
 
       this.scope.exit();

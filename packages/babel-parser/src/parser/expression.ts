@@ -1260,9 +1260,9 @@ export default abstract class ExpressionParser extends LValParser {
           isIdentifierStart(lookaheadCh) || // Element/Type Parameter <foo>
           lookaheadCh === charCodes.greaterThan // Fragment <>
         ) {
-          this.expectOnePlugin(["jsx", "flow", "typescript"]);
-          // @ts-expect-error expected
-          return;
+          // None of these plugins is enabled, otherwise they would have
+          // handled `<` by themselves.
+          throw this.expectOnePlugin(["jsx", "flow", "typescript"]);
         }
         throw this.unexpected();
       }

@@ -160,8 +160,8 @@ export default abstract class UtilParser extends Tokenizer {
 
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
-  tryParse<T extends Node | ReadonlyArray<Node>>(
-    fn: (abort: (node?: T | null) => never) => T | null,
+  tryParse<T extends Node | ReadonlyArray<Node> | null>(
+    fn: (abort: (node?: T) => never) => T,
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
@@ -171,7 +171,7 @@ export default abstract class UtilParser extends Tokenizer {
       node: T | null;
     } = { node: null };
     try {
-      const node = fn((node = null) => {
+      const node = fn((node = null as T) => {
         abortSignal.node = node;
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw abortSignal;

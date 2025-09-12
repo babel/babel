@@ -188,7 +188,7 @@ export default abstract class LValParser extends NodeUtils {
         }
 
         this.castNodeTo(node, "AssignmentPattern");
-        // @ts-expect-error expected
+        // @ts-expect-error delete non-optional properties
         delete node.operator;
         if (node.left.type === "VoidPattern") {
           this.raise(Errors.VoidPatternInitializer, node.left);

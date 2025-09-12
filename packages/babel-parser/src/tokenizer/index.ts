@@ -452,7 +452,7 @@ export default abstract class Tokenizer extends CommentsParser {
       }
     }
 
-    // @ts-expect-error expected
+    // @ts-expect-error comparing undefined and number
     if (comments?.length > 0) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
@@ -1567,7 +1567,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectOnePlugin(pluginNames: Plugin[]): void {
+  expectOnePlugin(pluginNames: Plugin[]): any {
     if (!pluginNames.some(name => this.hasPlugin(name))) {
       throw this.raise(Errors.MissingOneOfPlugins, this.state.startLoc, {
         missingPlugin: pluginNames,
