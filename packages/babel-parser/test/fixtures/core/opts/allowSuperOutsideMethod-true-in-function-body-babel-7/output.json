@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":13,"end":45,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":4,"column":1,"index":45}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":17,"end":25,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":10,"index":25}},
+              "expression": {
+                "type": "CallExpression",
+                "start":17,"end":24,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":9,"index":24}},
+                "callee": {
+                  "type": "Super",
+                  "start":17,"end":22,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":7,"index":22}}
+                },
+                "arguments": []
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":28,"end":43,"loc":{"start":{"line":3,"column":2,"index":28},"end":{"line":3,"column":17,"index":43}},
+              "expression": {
+                "type": "MemberExpression",
+                "start":28,"end":42,"loc":{"start":{"line":3,"column":2,"index":28},"end":{"line":3,"column":16,"index":42}},
+                "object": {
+                  "type": "Super",
+                  "start":28,"end":33,"loc":{"start":{"line":3,"column":2,"index":28},"end":{"line":3,"column":7,"index":33}}
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":34,"end":42,"loc":{"start":{"line":3,"column":8,"index":34},"end":{"line":3,"column":16,"index":42},"identifierName":"property"},
+                  "name": "property"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

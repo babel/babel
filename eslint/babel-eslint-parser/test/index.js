@@ -930,7 +930,20 @@ describe("Babel and Espree", () => {
         );
       });
 
-      it("super outside method - enabled", () => {
+      it("super outside method - enabled - in top level", () => {
+        expect(() => {
+          parseForESLint("super();", {
+            babelOptions: {
+              ...BABEL_OPTIONS,
+              parserOpts: {
+                allowSuperOutsideMethod: true,
+              },
+            },
+          });
+        }).not.toThrow();
+      });
+
+      it("super outside method - enabled - in function body", () => {
         expect(() => {
           parseForESLint("function F() { super(); }", {
             babelOptions: {
@@ -940,7 +953,9 @@ describe("Babel and Espree", () => {
               },
             },
           });
-        }).not.toThrow();
+        }).toThrow(
+          /`super\(\)` is only valid inside a class constructor of a subclass\./,
+        );
       });
     } else {
       it("super outside method in Babel 7", () => {

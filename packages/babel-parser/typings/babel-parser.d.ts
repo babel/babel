@@ -120,6 +120,10 @@ interface Options {
      * Set this to true to accept such code.
      */
     allowNewTargetOutsideFunction?: boolean;
+    /**
+     * By default, super calls are not allowed outside of a method.
+     * Set this to true to accept such code.
+     */
     allowSuperOutsideMethod?: boolean;
     /**
      * By default, exported identifiers must refer to a declared variable.
