@@ -291,6 +291,31 @@ describe("scope", () => {
       ).toBe("outside");
     });
 
+    it.each([
+      `switch (a) { default: let a = "inside" }`,
+      `class foo { @a m() { var a = "inside"; } }`,
+      `class foo { [a]() { var a = "inside" } }`,
+    ])("scope hasGlobal with crawl: `%s`", function (code) {
+      let hasGlobal;
+      traverse(
+        parse(code, {
+          plugins: [["decorators", { version: "2025-03" }]],
+        }),
+        {
+          Identifier(path) {
+            if (
+              path.node.name === "a" &&
+              path.parent.type !== "VariableDeclarator" &&
+              path.parent.type !== "AssignmentPattern"
+            ) {
+              hasGlobal = path.scope.hasGlobal("a");
+            }
+          },
+        },
+      );
+      expect(hasGlobal).toBe(true);
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",
