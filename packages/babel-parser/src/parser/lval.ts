@@ -112,6 +112,7 @@ export default abstract class LValParser extends NodeUtils {
             node,
           );
         } else if (
+          parenthesized.type !== "CallExpression" &&
           parenthesized.type !== "MemberExpression" &&
           !this.isOptionalMemberExpression(parenthesized)
         ) {
@@ -604,6 +605,7 @@ export default abstract class LValParser extends NodeUtils {
    * `[key: string, parenthesized: false]`.
    *
    * @param type A Node `type` string
+   * @param disallowCallExpression Whether to disallow `CallExpression` as an LVal.
    * @param isUnparenthesizedInAssign
    *        Whether the node in question is unparenthesized and its parent
    *        is either an assignment pattern or an assignment expression.
@@ -678,6 +680,7 @@ export default abstract class LValParser extends NodeUtils {
    * @param hasParenthesizedAncestor
    *        This is only used internally during recursive calls, and you should
    *        not have to set it yourself.
+   * @param disallowCallExpression Whether to disallow `CallExpression` as an LVal.
    */
 
   checkLVal(
@@ -738,11 +741,15 @@ export default abstract class LValParser extends NodeUtils {
       this.raise(Errors.VoidPatternCatchClauseParam, expression);
     }
 
+    const unwrappedExpression = unwrapParenthesizedExpression(expression);
+    disallowCallExpression =
+      disallowCallExpression ||
+      (unwrappedExpression.type === "CallExpression" &&
+        (unwrappedExpression.callee.type === "Import" ||
+          unwrappedExpression.callee.type === "Super"));
     const validity = this.isValidLVal(
       type,
-      disallowCallExpression ||
-        (expression.type === "CallExpression" &&
-          expression.callee.type === "Import"),
+      disallowCallExpression,
       !(hasParenthesizedAncestor || expression.extra?.parenthesized) &&
         ancestor.type === "AssignmentExpression",
       binding,
@@ -784,6 +791,7 @@ export default abstract class LValParser extends NodeUtils {
             checkClashes,
             strictModeChanged,
             isParenthesizedExpression,
+            true,
           );
         }
       }
@@ -795,6 +803,7 @@ export default abstract class LValParser extends NodeUtils {
         checkClashes,
         strictModeChanged,
         isParenthesizedExpression,
+        disallowCallExpression,
       );
     }
   }
