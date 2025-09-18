@@ -23,19 +23,18 @@ export async function runCodeMayInWorker(
   },
 ) {
   if (!EXEC_TESTS_NODE) {
-    // @ts-expect-error write global
-    globalThis.BABEL_HELPERS ??= buildExternalHelpers();
+    (global as any).BABEL_HELPERS ??= buildExternalHelpers();
     const ctx = createTestContext();
     return runCodeInTestContext(code, opts, ctx);
   }
 
   return new Promise((resolve, reject) => {
-    if (!(globalThis as any).worker) {
+    if (!(global as any).worker) {
       const workerFile = path.join(dirname, "worker.cjs");
       // Avoid data race when running tests in parallel
       const helpersFile = path.join(dirname, `babel-helpers-${process.pid}.js`);
       writeFileSync(helpersFile, buildExternalHelpers());
-      const worker = ((globalThis as any).worker = spawn("fnm", [
+      const worker = ((global as any).worker = spawn("fnm", [
         "exec",
         "--using",
         EXEC_TESTS_NODE,
