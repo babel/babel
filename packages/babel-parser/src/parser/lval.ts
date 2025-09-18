@@ -32,6 +32,7 @@ import { BindingFlag } from "../util/scopeflags.ts";
 import type { ExpressionErrors } from "./util.ts";
 import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
+import { OptionFlags } from "../options.ts";
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
@@ -111,6 +112,7 @@ export default abstract class LValParser extends NodeUtils {
             node,
           );
         } else if (
+          parenthesized.type !== "CallExpression" &&
           parenthesized.type !== "MemberExpression" &&
           !this.isOptionalMemberExpression(parenthesized)
         ) {
@@ -603,6 +605,7 @@ export default abstract class LValParser extends NodeUtils {
    * `[key: string, parenthesized: false]`.
    *
    * @param type A Node `type` string
+   * @param disallowCallExpression Whether to disallow `CallExpression` as an LVal.
    * @param isUnparenthesizedInAssign
    *        Whether the node in question is unparenthesized and its parent
    *        is either an assignment pattern or an assignment expression.
@@ -617,6 +620,7 @@ export default abstract class LValParser extends NodeUtils {
    */
   isValidLVal(
     type: string,
+    disallowCallExpression: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isUnparenthesizedInAssign: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -637,6 +641,14 @@ export default abstract class LValParser extends NodeUtils {
         return "properties";
       case "VoidPattern":
         return true;
+      case "CallExpression":
+        if (
+          !disallowCallExpression &&
+          !this.state.strict &&
+          this.optionFlags & OptionFlags.AnnexB
+        ) {
+          return true;
+        }
     }
     return false;
   }
@@ -668,6 +680,7 @@ export default abstract class LValParser extends NodeUtils {
    * @param hasParenthesizedAncestor
    *        This is only used internally during recursive calls, and you should
    *        not have to set it yourself.
+   * @param disallowCallExpression Whether to disallow `CallExpression` as an LVal.
    */
 
   checkLVal(
@@ -682,6 +695,7 @@ export default abstract class LValParser extends NodeUtils {
     checkClashes: Set<string> | false = false,
     strictModeChanged: boolean = false,
     hasParenthesizedAncestor: boolean = false,
+    disallowCallExpression: boolean = false,
   ): void {
     const type = expression.type;
 
@@ -727,8 +741,14 @@ export default abstract class LValParser extends NodeUtils {
       this.raise(Errors.VoidPatternCatchClauseParam, expression);
     }
 
+    const unwrappedExpression = unwrapParenthesizedExpression(expression);
+    disallowCallExpression ||=
+      unwrappedExpression.type === "CallExpression" &&
+      (unwrappedExpression.callee.type === "Import" ||
+        unwrappedExpression.callee.type === "Super");
     const validity = this.isValidLVal(
       type,
+      disallowCallExpression,
       !(hasParenthesizedAncestor || expression.extra?.parenthesized) &&
         ancestor.type === "AssignmentExpression",
       binding,
@@ -770,6 +790,7 @@ export default abstract class LValParser extends NodeUtils {
             checkClashes,
             strictModeChanged,
             isParenthesizedExpression,
+            true,
           );
         }
       }
@@ -781,6 +802,7 @@ export default abstract class LValParser extends NodeUtils {
         checkClashes,
         strictModeChanged,
         isParenthesizedExpression,
+        disallowCallExpression,
       );
     }
   }

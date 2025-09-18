@@ -153,10 +153,20 @@ export default (superClass: typeof Parser) =>
       return this.parsePlaceholder("Pattern") || super.parseBindingAtom();
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingFlag) {
+    isValidLVal(
+      type: string,
+      disallowCallExpression: boolean,
+      isParenthesized: boolean,
+      binding: BindingFlag,
+    ) {
       return (
         type === "Placeholder" ||
-        super.isValidLVal(type, isParenthesized, binding)
+        super.isValidLVal(
+          type,
+          disallowCallExpression,
+          isParenthesized,
+          binding,
+        )
       );
     }
 
