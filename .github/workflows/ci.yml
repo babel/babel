@@ -456,6 +456,44 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
 
+  test-babel8-exec-tests:
+    name: Test Babel 8 changes (exec tests)
+    needs: build-babel8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install fnm
+        run: |
+          curl -fsSL https://fnm.vercel.app/install | bash
+          PATH="/home/runner/.local/share/fnm:$PATH"
+          eval "`fnm env`"
+          fnm install 6
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
+      - name: Run tests
+        run: |
+          PATH="/home/runner/.local/share/fnm:$PATH"
+          yarn jest --ci
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          EXEC_TESTS_NODE: 6
+
   external-parser-tests:
     name: Third-party Parser Tests
     needs: build
