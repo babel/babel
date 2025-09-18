@@ -307,7 +307,10 @@ function pushTask(
       );
     }
 
-    if (semver.lt(nodeVersion, minimumVersion)) {
+    if (
+      semver.lt(nodeVersion, minimumVersion) ||
+      semver.lt(runnerNodeVersion, minimumVersion)
+    ) {
       return;
     }
 

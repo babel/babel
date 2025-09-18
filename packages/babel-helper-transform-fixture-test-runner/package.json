@@ -23,8 +23,9 @@
     "expect-24": "npm:expect@^24.9.0",
     "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^30.0.0",
-    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
+    "lru-cache": "^5.1.1",
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
+    "resolve-from": "^4.0.0"
   },
   "devDependencies": {
     "@types/fs-readdir-recursive": "^1.1.0"

@@ -1,7 +1,9 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createTestContext, runCodeInTestContext } from "./worker.ts";
+import { buildExternalHelpers } from "@babel/core";
+import { createTestContext, runCodeInTestContext } from "./worker.cts";
+import { writeFileSync } from "node:fs";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,13 +23,18 @@ export async function runCodeMayInWorker(
   },
 ) {
   if (!EXEC_TESTS_NODE) {
+    // @ts-expect-error write global
+    globalThis.BABEL_HELPERS ??= buildExternalHelpers();
     const ctx = createTestContext();
     return runCodeInTestContext(code, opts, ctx);
   }
 
   return new Promise((resolve, reject) => {
     if (!(globalThis as any).worker) {
-      const workerFile = path.join(dirname, "worker.js");
+      const workerFile = path.join(dirname, "worker.cjs");
+      // Avoid data race when running tests in parallel
+      const helpersFile = path.join(dirname, `babel-helpers-${process.pid}.js`);
+      writeFileSync(helpersFile, buildExternalHelpers());
       const worker = ((globalThis as any).worker = spawn("fnm", [
         "exec",
         "--using",
@@ -36,13 +43,18 @@ export async function runCodeMayInWorker(
         "node",
         workerFile,
         "$BABEL_WORKER$",
+        helpersFile,
       ]));
       worker.unref();
+      let stderr = "";
       worker.on("error", err => {
         throw err;
       });
       worker.on("exit", code => {
-        throw new Error(`Worker exited with code ${code}`);
+        throw new Error(`Worker exited with code ${code}, stderr: ${stderr}`);
+      });
+      worker.stderr.on("data", data => {
+        stderr += data;
       });
       worker.stdout.on("data", data => {
         data = data + "";

@@ -98,13 +98,13 @@ async function run(task: Test) {
 
   let execCode = exec.code;
   let result: FileResult;
-  let resultExec;
-
   let execErr: Error;
 
   if (execCode) {
     const execOpts = getOpts(exec);
-
+    if (execOpts.targets?.node === "current" && process.env.EXEC_TESTS_NODE) {
+      execOpts.targets.node = process.env.EXEC_TESTS_NODE;
+    }
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
     ({ result } = await maybeMockConsole(validateLogs, () =>
@@ -115,7 +115,7 @@ async function run(task: Test) {
     execCode = result.code;
 
     try {
-      resultExec = await runCodeMayInWorker(execCode, execOpts);
+      await runCodeMayInWorker(execCode, execOpts);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       if (typeof err === "object" && err.message) {
@@ -226,10 +226,6 @@ async function run(task: Test) {
         JSON.stringify(result.map, null, 2),
       );
     }
-  }
-
-  if (execCode && resultExec) {
-    return resultExec;
   }
 }
 
@@ -408,7 +404,7 @@ Actual Error: ${err.message}`,
   }
 }
 
-export { createTestContext, runCodeInTestContext, runCode } from "./worker.ts";
+export { createTestContext, runCodeInTestContext, runCode } from "./worker.cts";
 export { buildProcessTests, buildParallelProcessTests } from "./process.ts";
 export type {
   ProcessTestOpts,

@@ -1,21 +1,24 @@
-import * as babel from "@babel/core";
-import { buildExternalHelpers, type InputOptions } from "@babel/core";
-import expect from "expect-24";
-import * as helpers from "./helpers.ts";
-import vm from "node:vm";
-import LruCache from "lru-cache";
-import { createRequire } from "node:module";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { readFileSync } from "node:fs";
+import expect = require("expect-24");
+// @ts-expect-error no types
+import resolveFrom = require("resolve-from");
+import vm = require("vm");
+import LruCache = require("lru-cache");
+import path = require("path");
+import fs = require("fs");
+
+const helpers = {
+  assertNoOwnProperties: function assertNoOwnProperties(obj: object) {
+    expect(Object.getOwnPropertyNames(obj)).toHaveLength(0);
+  },
+  multiline: function multiline(arr: string[]) {
+    return arr.join("\n");
+  },
+};
 
 type Module = {
   id: string;
   exports: Record<string, unknown>;
 };
-
-const require = createRequire(import.meta.url);
-const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const cachedScripts = new LruCache<
   string,
@@ -23,45 +26,10 @@ const cachedScripts = new LruCache<
 >({ max: 10 });
 const contextModuleCache = new WeakMap();
 
-// We never want our tests to accidentally load the root
-// babel.config.js file, so we disable config loading by
-// default. Tests can still set `configFile: true | string`
-// to re-enable config loading.
-function transformWithoutConfigFile(code: string, opts: InputOptions) {
-  return babel.transformSync(code, {
-    browserslistConfigFile: false,
-    configFile: false,
-    babelrc: false,
-    caller: {
-      name: "babel-helper-transform-fixture-test-runner/sync",
-      supportsStaticESM: false,
-      supportsDynamicImport: false,
-      supportsExportNamespaceFrom: false,
-    },
-    ...opts,
-  });
-}
-function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
-  return babel.transformAsync(code, {
-    browserslistConfigFile: false,
-    configFile: false,
-    babelrc: false,
-    caller: {
-      name: "babel-helper-transform-fixture-test-runner/async",
-      supportsStaticESM: false,
-      supportsDynamicImport: false,
-      supportsExportNamespaceFrom: false,
-    },
-    ...opts,
-  });
-}
-
 export function createTestContext() {
   const context = vm.createContext({
     ...helpers,
     process: process,
-    transform: transformWithoutConfigFile,
-    transformAsync: transformAsyncWithoutConfigFile,
     setTimeout: setTimeout,
     setImmediate: setImmediate,
     expect,
@@ -71,10 +39,16 @@ export function createTestContext() {
   const moduleCache = Object.create(null);
   contextModuleCache.set(context, moduleCache);
 
+  const babelHelpers =
+    // @ts-expect-error read global
+    global.BABEL_HELPERS ||
+    (process.argv.includes("$BABEL_WORKER$")
+      ? fs.readFileSync(process.argv[3], "utf8")
+      : require("@babel/core").buildExternalHelpers());
   // Populate the "babelHelpers" global with Babel's helper utilities.
   runCacheableScriptInTestContext(
-    path.join(dirname, "babel-helpers-in-memory.js"),
-    buildExternalHelpers,
+    path.join(__dirname, "babel-helpers-in-memory.js"),
+    () => babelHelpers,
     context,
     moduleCache,
   );
@@ -145,10 +119,7 @@ function runModuleInTestContext(
   context: vm.Context,
   moduleCache: any,
 ) {
-  const filename = require.resolve(id, {
-    paths: [path.dirname(relativeFilename)],
-  });
-
+  const filename = resolveFrom(path.dirname(relativeFilename), id);
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
   // the context's global scope.
   if (filename === id) return require(id);
@@ -159,7 +130,7 @@ function runModuleInTestContext(
 
   return runCacheableScriptInTestContext(
     filename,
-    () => readFileSync(filename, "utf8"),
+    () => fs.readFileSync(filename, "utf8"),
     context,
     moduleCache,
   ).exports;
@@ -178,7 +149,7 @@ export function runCodeInTestContext(
     filename: string;
     timeout?: number;
   },
-  context = (sharedTestContext ??= createTestContext()),
+  context = (sharedTestContext = sharedTestContext || createTestContext()),
 ) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
@@ -204,7 +175,7 @@ export function runCodeInTestContext(
       filename,
       displayErrors: true,
       lineOffset: -1,
-      timeout: opts.timeout ?? 10000,
+      timeout: opts.timeout === undefined ? 10000 : opts.timeout,
     });
   } finally {
     context.__callArgs = undefined;
@@ -222,13 +193,31 @@ export function runCode(
   return runCodeInTestContext(code, opts, createTestContext());
 }
 
+function isThenable<T = any>(val: any): val is PromiseLike<T> {
+  return (
+    !!val &&
+    (typeof val === "object" || typeof val === "function") &&
+    !!val.then &&
+    typeof val.then === "function"
+  );
+}
+
 if (process.argv.includes("$BABEL_WORKER$")) {
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  process.stdin.on("data", async data => {
+  process.stdin.on("data", data => {
     const { id, code, opts } = JSON.parse(data.toString());
     let error;
     try {
-      await runCodeInTestContext(code, opts, createTestContext());
+      const result = runCodeInTestContext(code, opts, createTestContext());
+      if (isThenable(result)) {
+        result.then(
+          () => process.stdout.write(JSON.stringify({ id })),
+          e =>
+            process.stdout.write(
+              JSON.stringify({ id, error: { msg: e.message, stack: e.stack } }),
+            ),
+        );
+        return;
+      }
     } catch (e) {
       error = { msg: e.message, stack: e.stack };
     }
