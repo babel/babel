@@ -187,6 +187,10 @@ export function replaceWith(
     }
   }
 
+  if (!this.opts?.noScope) {
+    this._removeFromScope();
+  }
+
   const oldNode = this.node;
   if (oldNode) {
     inheritsComments(replacement, oldNode);
