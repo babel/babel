@@ -742,11 +742,10 @@ export default abstract class LValParser extends NodeUtils {
     }
 
     const unwrappedExpression = unwrapParenthesizedExpression(expression);
-    disallowCallExpression =
-      disallowCallExpression ||
-      (unwrappedExpression.type === "CallExpression" &&
-        (unwrappedExpression.callee.type === "Import" ||
-          unwrappedExpression.callee.type === "Super"));
+    disallowCallExpression ||=
+      unwrappedExpression.type === "CallExpression" &&
+      (unwrappedExpression.callee.type === "Import" ||
+        unwrappedExpression.callee.type === "Super");
     const validity = this.isValidLVal(
       type,
       disallowCallExpression,
