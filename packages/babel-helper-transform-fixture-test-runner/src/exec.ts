@@ -8,6 +8,7 @@ import { writeFileSync } from "node:fs";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const EXEC_TESTS_NODE = process.env.EXEC_TESTS_NODE;
+const EXEC_TESTS_NODE_PATH = process.env.EXEC_TESTS_NODE_PATH;
 
 let id = 0;
 const tasks = new Map<
@@ -34,16 +35,22 @@ export async function runCodeMayInWorker(
       // Avoid data race when running tests in parallel
       const helpersFile = path.join(dirname, `babel-helpers-${process.pid}.js`);
       writeFileSync(helpersFile, buildExternalHelpers());
-      const worker = ((global as any).worker = spawn("fnm", [
-        "exec",
-        "--using",
-        EXEC_TESTS_NODE,
-        "--",
-        "node",
-        workerFile,
-        "$BABEL_WORKER$",
-        helpersFile,
-      ]));
+      const worker = ((global as any).worker = EXEC_TESTS_NODE_PATH
+        ? spawn(EXEC_TESTS_NODE_PATH, [
+            workerFile,
+            "$BABEL_WORKER$",
+            helpersFile,
+          ])
+        : spawn("fnm", [
+            "exec",
+            "--using",
+            EXEC_TESTS_NODE,
+            "--",
+            "node",
+            workerFile,
+            "$BABEL_WORKER$",
+            helpersFile,
+          ]));
       worker.unref();
       let stderr = "";
       worker.on("error", err => {
