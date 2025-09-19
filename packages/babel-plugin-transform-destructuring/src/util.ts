@@ -516,21 +516,27 @@ export class DestructuringTransformer {
       // hole
       if (!elem) continue;
 
-      let elemRef;
-
       if (t.isRestElement(elem)) {
-        elemRef = this.toArray(arrayRef);
-        elemRef = t.callExpression(
-          t.memberExpression(elemRef, t.identifier("slice")),
-          [t.numericLiteral(i)],
-        );
-
         // set the element to the rest element argument since we've dealt with it
         // being a rest already
-        this.push(elem.argument, elemRef);
+        this.push(
+          elem.argument,
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(
+                this.scope.path.hub.addHelper("arrayLikeToArray"),
+                [arrayRef],
+              ),
+              t.identifier("slice"),
+            ),
+            [t.numericLiteral(i)],
+          ),
+        );
       } else {
-        elemRef = t.memberExpression(arrayRef, t.numericLiteral(i), true);
-        this.push(elem, elemRef);
+        this.push(
+          elem,
+          t.memberExpression(arrayRef, t.numericLiteral(i), true),
+        );
       }
     }
   }

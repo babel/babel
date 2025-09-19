@@ -10,7 +10,7 @@ for (const _ref of [[0, {
   var _ref2$ = _ref2[1];
   const _2 = _ref2$.p;
   const rest1_ = babelHelpers.objectWithoutProperties(_ref2$, _excluded);
-  const rest2_ = _ref2.slice(2);
+  const rest2_ = babelHelpers.arrayLikeToArray(_ref2).slice(2);
   rest1 = rest1_;
   rest2 = rest2_;
   break;

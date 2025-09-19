@@ -7,4 +7,4 @@ const _ref = [0],
   } : _ref$,
   _ = _ref$2.p,
   rest1 = babelHelpers.objectWithoutProperties(_ref$2, ["p"]),
-  rest2 = _ref.slice(2);
+  rest2 = babelHelpers.arrayLikeToArray(_ref).slice(2);
