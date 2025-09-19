@@ -9,5 +9,5 @@ _ref$ = _ref$ === void 0 ? {
 } : _ref$;
 _ = _ref$.p;
 rest1 = babelHelpers.objectWithoutProperties(_ref$, ["p"]);
-rest2 = _ref.slice(2);
+rest2 = babelHelpers.arrayLikeToArray(_ref).slice(2);
 _ref;

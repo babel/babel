@@ -5,4 +5,4 @@ var a = (() => [1, 2, 3])();
 // and exec.js
 var _a = babelHelpers.toArray(a),
   first = _a[0],
-  rest = _a.slice(1);
+  rest = babelHelpers.arrayLikeToArray(_a).slice(1);
