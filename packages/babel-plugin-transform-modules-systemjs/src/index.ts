@@ -678,17 +678,27 @@ export default declare<PluginState>((api, options: Options) => {
           }
 
           let hasTLA = false;
-          path.traverse({
-            AwaitExpression(path) {
-              hasTLA = true;
-              path.stop();
-            },
-            Function(path) {
-              path.skip();
-            },
-            // @ts-expect-error - todo: add noScope to type definitions
-            noScope: true,
-          });
+          if (process.env.BABEL_8_BREAKING) {
+            t.traverseFast(path.node, node => {
+              if (t.isFunction(node)) return t.traverseFast.skip;
+              if (t.isAwaitExpression(node)) {
+                hasTLA = true;
+                return t.traverseFast.stop;
+              }
+            });
+          } else {
+            path.traverse({
+              AwaitExpression(path) {
+                hasTLA = true;
+                path.stop();
+              },
+              Function(path) {
+                path.skip();
+              },
+              // @ts-expect-error - todo: add noScope to type definitions
+              noScope: true,
+            });
+          }
 
           path.node.body = [
             buildTemplate({
