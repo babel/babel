@@ -134,7 +134,7 @@ export function stop(this: NodePath) {
 }
 
 export function setScope(this: NodePath) {
-  if (this.opts?.noScope) return;
+  if (!process.env.BABEL_8_BREAKING && this.opts?.noScope) return;
 
   let path = this.parentPath;
 
@@ -150,7 +150,7 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (path.opts?.noScope) return;
+    if (!process.env.BABEL_8_BREAKING && path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
