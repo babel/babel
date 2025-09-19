@@ -6,6 +6,6 @@ declare function REQUIRED_VERSION(version: string): string;
 
 declare namespace NodeJS {
   export interface ProcessEnv {
-    BABEL_8_BREAKING: string;
+    BABEL_8_BREAKING?: string;
   }
 }
