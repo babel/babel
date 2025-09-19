@@ -87,11 +87,19 @@ function createPrivateUidGeneratorForClass(
   const currentPrivateId: number[] = [];
   const privateNames = new Set<string>();
 
-  classPath.traverse({
-    PrivateName(path) {
-      privateNames.add(path.node.id.name);
-    },
-  });
+  if (process.env.BABEL_8_BREAKING) {
+    t.traverseFast(classPath.node, node => {
+      if (t.isPrivateName(node)) {
+        privateNames.add(node.id.name);
+      }
+    });
+  } else {
+    classPath.traverse({
+      PrivateName(path) {
+        privateNames.add(path.node.id.name);
+      },
+    });
+  }
 
   return (): t.PrivateName => {
     let reifiedId;
