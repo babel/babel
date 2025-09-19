@@ -172,7 +172,7 @@ function isAlmostConstantAssignment(
   // we can be sure that its value won't change.
   return (
     blockScope.hasOwnBinding(node.left.name) &&
-    blockScope.getOwnBinding(node.left.name).constantViolations.length <= 1
+    blockScope.getOwnBinding(node.left.name)!.constantViolations.length <= 1
   );
 }
 
@@ -252,7 +252,7 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
         // Inserting after the computed key of a method should insert the
         // temporary binding in the method's parent's scope.
         if (parentPath.isMethod({ computed: true, key: node })) {
-          scope = scope.parent;
+          scope = scope.parent!;
         }
         const temp = scope.generateDeclaredUidIdentifier();
         nodes.unshift(
@@ -317,7 +317,7 @@ export function updateSiblingKeys(
   }
 }
 
-export function _verifyNodeList<N extends t.Node | null>(
+export function _verifyNodeList<N extends t.Node>(
   this: NodePath,
   nodes: N | N[],
 ) {
