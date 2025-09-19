@@ -1012,6 +1012,10 @@ class Scope {
   crawl() {
     const path = this.path;
 
+    if (process.env.BABEL_8_BREAKING && path.opts?.noScope) {
+      return;
+    }
+
     resetScope(this);
     this.data = Object.create(null);
 

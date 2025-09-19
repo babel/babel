@@ -133,31 +133,8 @@ export function stop(this: NodePath) {
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
-export function _forceSetScope(current: NodePath) {
-  let path = current.parentPath;
-
-  if (
-    // Skip method scope if is computed method key or decorator expression
-    ((current.key === "key" || current.listKey === "decorators") &&
-      path.isMethod()) ||
-    // Skip switch scope if for discriminant (`x` in `switch (x) {}`).
-    (current.key === "discriminant" && path.isSwitchStatement())
-  ) {
-    path = path.parentPath;
-  }
-
-  let target;
-  while (path && !target) {
-    target = path.scope;
-    path = path.parentPath;
-  }
-
-  current.scope = current.getScope(target);
-  current.scope?.init();
-}
-
 export function setScope(this: NodePath) {
-  if (this.opts?.noScope) return;
+  if (!process.env.BABEL_8_BREAKING && this.opts?.noScope) return;
 
   let path = this.parentPath;
 
@@ -173,7 +150,7 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (path.opts?.noScope) return;
+    if (!process.env.BABEL_8_BREAKING && path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
