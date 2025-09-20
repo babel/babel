@@ -165,7 +165,9 @@ export const enum OptionFlags {
   AnnexB = 1 << 13,
 }
 
-type OptionsWithDefaults = Required<Options>;
+type KeepOptionalKeys = "sourceFilename" | "strictMode";
+export type OptionsWithDefaults = Omit<Required<Options>, KeepOptionalKeys> &
+  Pick<Options, KeepOptionalKeys>;
 
 function createDefaultOptions(): OptionsWithDefaults {
   return {
@@ -202,7 +204,7 @@ function createDefaultOptions(): OptionsWithDefaults {
     // An array of plugins to enable
     plugins: [],
     // TODO
-    strictMode: null,
+    strictMode: undefined,
     // Nodes have their start and end characters offsets recorded in
     // `start` and `end` properties (directly on the node, rather than
     // the `loc` object, which holds line/column data. To also add a
