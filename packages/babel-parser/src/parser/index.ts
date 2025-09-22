@@ -3,6 +3,7 @@ import type * as N from "../types.ts";
 import { getOptions, OptionFlags } from "../options.ts";
 import StatementParser from "./statement.ts";
 import ScopeHandler from "../util/scope.ts";
+import type { ParseResult, File } from "../index.ts";
 
 export type PluginsMap = Map<
   string,
@@ -12,12 +13,6 @@ export type PluginsMap = Map<
 >;
 
 export default class Parser extends StatementParser {
-  // Forward-declaration so typescript plugin can override jsx plugin
-  // todo(flow->ts) - this probably can be removed
-  // abstract jsxParseOpeningElementAfterName(
-  //   node: N.JSXOpeningElement,
-  // ): N.JSXOpeningElement;
-
   constructor(
     options: Options | undefined | null,
     input: string,
@@ -84,15 +79,15 @@ export default class Parser extends StatementParser {
     return ScopeHandler;
   }
 
-  parse(): N.File {
+  parse(): ParseResult<File> {
     this.enterInitialScopes();
     const file = this.startNode<N.File>();
     const program = this.startNode<N.Program>();
     this.nextToken();
     file.errors = null;
-    this.parseTopLevel(file, program);
-    file.errors = this.state.errors;
-    file.comments.length = this.state.commentsLen;
-    return file as N.File;
+    const result = this.parseTopLevel(file, program);
+    result.errors = this.state.errors;
+    result.comments.length = this.state.commentsLen;
+    return result as ParseResult<File>;
   }
 }

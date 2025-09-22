@@ -13,6 +13,7 @@ export type {
   TypeScriptPluginOptions,
 } from "./typings.ts";
 import Parser, { type PluginsMap } from "./parser/index.ts";
+import type { ParseError as ParseErrorGeneric } from "./parse-error.ts";
 
 import type { ExportedTokenType } from "./tokenizer/types.ts";
 import {
@@ -29,10 +30,7 @@ export type { Expression, File };
 
 export type ParserOptions = Partial<Options>;
 
-export interface ParseError {
-  code: string;
-  reasonCode: string;
-}
+export type ParseError = ParseErrorGeneric<object>;
 export type ParseResult<Result extends File | Expression = File> = Result & {
   errors: null | ParseError[];
 };
@@ -54,7 +52,7 @@ export function parse(
       const ast = parser.parse();
 
       if (parser.sawUnambiguousESM) {
-        return ast as unknown as ParseResult<File>;
+        return ast;
       }
 
       if (parser.ambiguousScriptDifferentAst) {
@@ -65,10 +63,7 @@ export function parse(
         // can be parsed either as an AwaitExpression, or as two ExpressionStatements.
         try {
           options.sourceType = "script";
-          return getParser(
-            options,
-            input,
-          ).parse() as unknown as ParseResult<File>;
+          return getParser(options, input).parse();
         } catch {}
       } else {
         // This is both a valid module and a valid script, but
@@ -76,20 +71,17 @@ export function parse(
         ast.program.sourceType = "script";
       }
 
-      return ast as unknown as ParseResult<File>;
+      return ast;
     } catch (moduleError) {
       try {
         options.sourceType = "script";
-        return getParser(
-          options,
-          input,
-        ).parse() as unknown as ParseResult<File>;
+        return getParser(options, input).parse();
       } catch {}
 
       throw moduleError;
     }
   } else {
-    return getParser(options, input).parse() as unknown as ParseResult<File>;
+    return getParser(options, input).parse();
   }
 }
 
@@ -101,7 +93,7 @@ export function parseExpression(
   if (parser.options.strictMode) {
     parser.state.strict = true;
   }
-  return parser.getExpression() as unknown as ParseResult<Expression>;
+  return parser.getExpression() as ParseResult<Expression>;
 }
 
 function generateExportedTokenTypes(
