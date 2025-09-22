@@ -1,13 +1,14 @@
 import type { TokenType } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
 import type * as N from "../types.ts";
-import type { Node as NodeType, NodeBase, File } from "../types.ts";
+import type { Node as NodeType, NodeBase } from "../types.ts";
 import type { Position } from "../util/location.ts";
 import { Errors } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
 import { OptionFlags } from "../options.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
+import type { ParseResult, File } from "../index.ts";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object: any, key: string) => {
@@ -25,7 +26,7 @@ function toESTreeLocation(node: any) {
 
 export default (superClass: typeof Parser) =>
   class ESTreeParserMixin extends superClass implements Parser {
-    parse(): File {
+    parse(): ParseResult<File> {
       const file = toESTreeLocation(super.parse());
 
       if (this.optionFlags & OptionFlags.Tokens) {
