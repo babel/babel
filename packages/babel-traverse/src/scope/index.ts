@@ -433,8 +433,8 @@ export { Scope as default };
 class Scope {
   uid;
 
-  declare path: NodePath;
-  declare block: t.Pattern | t.Scopable;
+  path!: NodePath;
+  block!: t.Pattern | t.Scopable;
 
   declare inited;
 
