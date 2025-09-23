@@ -5,13 +5,18 @@ import * as helpers from "@babel/helpers";
 import { transformFromAstSync, template, types as t } from "@babel/core";
 import { fileURLToPath } from "node:url";
 
+// @ts-expect-error Can not find typings for the built JS file
 import transformRuntime from "../lib/index.js";
-import corejs2Definitions from "./runtime-corejs2-definitions.js";
-import corejs3Definitions from "./runtime-corejs3-definitions.js";
+import corejs2Definitions from "./runtime-corejs2-definitions.ts";
+import corejs3Definitions from "./runtime-corejs3-definitions.ts";
 
 import presetEnv from "@babel/preset-env";
 import polyfillCorejs2 from "babel-plugin-polyfill-corejs2";
 import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
+
+import type { PluginObject, PluginAPI, InputOptions } from "@babel/core";
+
+type PluginItem = NonNullable<InputOptions["plugins"]>[0];
 
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
@@ -24,16 +29,16 @@ const requireTemplate = template.statement(`
 `);
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value) {
+function bool(value: string | undefined) {
   return Boolean(value) && value !== "false" && value !== "0";
 }
 
-function outputFile(filePath, data) {
+function outputFile(filePath: string, data: string) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 }
 
-function corejsVersion(pkgName, depName) {
+function corejsVersion(pkgName: string, depName: string) {
   return require(`../../${pkgName}/package.json`).dependencies[depName];
 }
 
@@ -90,12 +95,25 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
     corejsRoot: "core-js-pure/features",
   });
 
+  type CoreJSDefinitionItem = { stable: boolean; path: string };
+  type CoreJSDefinitions = {
+    BuiltIns: Record<string, CoreJSDefinitionItem>;
+    StaticProperties: Record<string, Record<string, CoreJSDefinitionItem>>;
+    InstanceProperties?: Record<string, CoreJSDefinitionItem>;
+  };
+
   function writeCoreJS({
     corejs,
     proposals,
     definitions: { BuiltIns, StaticProperties, InstanceProperties },
     paths,
     corejsRoot,
+  }: {
+    corejs: 2 | 3;
+    proposals: boolean;
+    definitions: CoreJSDefinitions;
+    paths: string[];
+    corejsRoot: string;
   }) {
     const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
 
@@ -130,7 +148,11 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
     writeCorejsExports(pkgDirname, runtimeRoot, paths);
   }
 
-  function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
+  function writeCorejsExports(
+    pkgDirname: string,
+    runtimeRoot: string,
+    paths: string[]
+  ) {
     const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
     const pkgJson = require(pkgJsonPath);
     const exports = pkgJson.exports;
@@ -150,11 +172,11 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
 }
 
 function writeHelperFile(
-  runtimeName,
-  pkgDirname,
-  helperPath,
-  helperName,
-  { esm, polyfillProvider }
+  runtimeName: string,
+  pkgDirname: string,
+  helperPath: string,
+  helperName: string,
+  { esm, polyfillProvider }: { esm: boolean; polyfillProvider?: PluginItem }
 ) {
   const fileName = `${helperName}.js`;
   const filePath = esm
@@ -173,9 +195,18 @@ function writeHelperFile(
   return esm ? `./helpers/esm/${fileName}` : `./helpers/${fileName}`;
 }
 
-function writeHelpers(runtimeName, { polyfillProvider } = {}) {
+type SubExportItem = { node: string; import: string; default: string };
+type HelperSubExports = Record<
+  string,
+  SubExportItem | string | [SubExportItem, string]
+>;
+
+function writeHelpers(
+  runtimeName: string,
+  { polyfillProvider }: { polyfillProvider?: PluginItem } = {}
+) {
   const pkgDirname = getRuntimeRoot(runtimeName);
-  const helperSubExports = {};
+  const helperSubExports: HelperSubExports = {};
   for (const helperName of helpers.list) {
     const helperPath = path.join("helpers", helperName);
     const cjs = writeHelperFile(
@@ -243,7 +274,10 @@ function writeHelpers(runtimeName, { polyfillProvider } = {}) {
   writeHelperExports(runtimeName, helperSubExports);
 }
 
-function writeHelperExports(runtimeName, helperSubExports) {
+function writeHelperExports(
+  runtimeName: string,
+  helperSubExports: HelperSubExports
+) {
   const exports = {
     ...helperSubExports,
     "./package": "./package.json",
@@ -267,7 +301,7 @@ function writeHelperExports(runtimeName, helperSubExports) {
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
-function getRuntimeRoot(runtimeName) {
+function getRuntimeRoot(runtimeName: string) {
   return path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "..",
@@ -276,14 +310,18 @@ function getRuntimeRoot(runtimeName) {
   );
 }
 
-function adjustEsmHelperAst(ast, exportName) {
+function adjustEsmHelperAst(ast: t.Program, exportName: string) {
   ast.body.push(
     template.statement({ sourceType: "module" }).ast`
       export { ${t.identifier(exportName)} as default };
     `
   );
 }
-function adjustCjsHelperAst(ast, exportName, mapExportBindingAssignments) {
+function adjustCjsHelperAst(
+  ast: t.Program,
+  exportName: string,
+  mapExportBindingAssignments: (cb: (node: t.Node) => t.Expression) => void
+) {
   mapExportBindingAssignments(
     node => template.expression.ast`module.exports = ${node}`
   );
@@ -295,13 +333,13 @@ function adjustCjsHelperAst(ast, exportName, mapExportBindingAssignments) {
 }
 
 function buildHelper(
-  runtimeName,
-  helperFilename,
-  helperName,
-  { esm, polyfillProvider }
+  runtimeName: string,
+  helperFilename: string,
+  helperName: string,
+  { esm, polyfillProvider }: { esm: boolean; polyfillProvider?: PluginItem }
 ) {
   const tree = t.program([], [], esm ? "module" : "script");
-  const dependencies = {};
+  const dependencies: Record<string, t.Identifier> = {};
   const bindings = [];
 
   const depTemplate = esm ? importTemplate : requireTemplate;
@@ -313,14 +351,14 @@ function buildHelper(
 
   const helper = helpers.get(
     helperName,
-    dep => dependencies[dep],
+    (dep: string) => dependencies[dep],
     null,
     bindings,
     esm ? adjustEsmHelperAst : adjustCjsHelperAst
   );
   tree.body.push(...helper.nodes);
 
-  return transformFromAstSync(tree, null, {
+  return transformFromAstSync(tree, "", {
     filename: helperFilename,
     presets: [[presetEnv, { modules: false }]],
     plugins: [
@@ -332,7 +370,10 @@ function buildHelper(
   }).code;
 }
 
-function buildRuntimeRewritePlugin(runtimeName, helperName) {
+function buildRuntimeRewritePlugin(
+  runtimeName: string,
+  helperName: string
+): PluginObject {
   /**
    * Rewrite helper imports to load the adequate module format version
    * @example
@@ -343,7 +384,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
    * // returns ast`"./typeof"`
    * @param {*} node The string literal that contains the import path
    */
-  function adjustImportPath(node) {
+  function adjustImportPath(node: t.StringLiteral) {
     const helpersPath = path.posix.join(runtimeName, "helpers");
     const helper = node.value.startsWith(helpersPath)
       ? path.basename(node.value)
@@ -357,7 +398,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
   return {
     pre(file) {
       const original = file.get("helperGenerator");
-      file.set("helperGenerator", name => {
+      file.set("helperGenerator", (name: string) => {
         // make sure that helpers won't insert circular references to themselves
         if (name === helperName) return false;
 
@@ -371,20 +412,22 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
       CallExpression(path) {
         if (
           !path.get("callee").isIdentifier({ name: "require" }) ||
-          path.get("arguments").length !== 1 ||
-          !path.get("arguments")[0].isStringLiteral()
+          path.get("arguments").length !== 1
         ) {
           return;
         }
 
-        // replace reference to internal helpers with @babel/runtime import path
-        adjustImportPath(path.get("arguments")[0].node);
+        const firstArg = path.get("arguments")[0];
+        if (firstArg.isStringLiteral()) {
+          // replace reference to internal helpers with @babel/runtime import path
+          adjustImportPath(firstArg.node);
+        }
       },
     },
   };
 }
 
-function addDefaultCJSExport({ template }) {
+function addDefaultCJSExport({ template }: PluginAPI): PluginObject {
   const transformed = new WeakSet();
 
   return {

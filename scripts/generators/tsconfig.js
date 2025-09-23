@@ -37,8 +37,36 @@ const dependencyAliases = new Map([
   ["regenerator-transform", "@babel/helper-plugin-utils"],
 ]);
 
-const packagesHaveScripts = new Set(["@babel/types"]);
+const packagesHaveScripts = new Set([
+  "@babel/types",
+  "@babel/plugin-transform-runtime",
+]);
 
+/**
+ * Get the TypeScript typing dependencies for a package
+ * @param {string} pkgName
+ * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string> }} pkgJSON
+ * @returns {Set<string>}
+ */
+const packageTypingDependencies = (pkgName, pkgJSON) => {
+  const dependencies = new Set([
+    ...Object.keys(pkgJSON.dependencies ?? {}),
+    ...Object.keys(pkgJSON.peerDependencies ?? {}),
+  ]);
+  switch (pkgName) {
+    case "@babel/standalone":
+      Object.keys(pkgJSON.devDependencies ?? {}).forEach(dep =>
+        dependencies.add(dep)
+      );
+      break;
+    case "@babel/plugin-transform-runtime":
+      dependencies.add("@babel/preset-env");
+      break;
+    default:
+      break;
+  }
+  return dependencies;
+};
 /**
  * Get TypeScript packages meta info in a subdirectory
  * @param {string} subRoot
@@ -124,13 +152,7 @@ function getTsPkgs(subRoot) {
           return [];
         }
       );
-      const dependencies = new Set([
-        ...Object.keys(packageJSON.dependencies ?? {}),
-        ...(name === "@babel/standalone"
-          ? Object.keys(packageJSON.devDependencies ?? {})
-          : []),
-        ...Object.keys(packageJSON.peerDependencies ?? {}),
-      ]);
+      const dependencies = packageTypingDependencies(name, packageJSON);
       if (name === "@babel/core") {
         // This dependency is only used in Babel 7, and does not affect
         // types. Remove it to avoid a cycle.

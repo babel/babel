@@ -7,6 +7,7 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.cts",
+    "./scripts/**/*.ts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts"
   ],
@@ -19,6 +20,9 @@
     },
     {
       "path": "../../packages/babel-core"
+    },
+    {
+      "path": "../../packages/babel-preset-env"
     }
   ]
 }
