@@ -174,7 +174,6 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
 function writeHelperFile(
   runtimeName: string,
   pkgDirname: string,
-  helperPath: string,
   helperName: string,
   { esm, polyfillProvider }: { esm: boolean; polyfillProvider?: PluginItem }
 ) {
@@ -208,21 +207,14 @@ function writeHelpers(
   const pkgDirname = getRuntimeRoot(runtimeName);
   const helperSubExports: HelperSubExports = {};
   for (const helperName of helpers.list) {
-    const helperPath = path.join("helpers", helperName);
-    const cjs = writeHelperFile(
-      runtimeName,
-      pkgDirname,
-      helperPath,
-      helperName,
-      { esm: false, polyfillProvider }
-    );
-    const esm = writeHelperFile(
-      runtimeName,
-      pkgDirname,
-      helperPath,
-      helperName,
-      { esm: true, polyfillProvider }
-    );
+    const cjs = writeHelperFile(runtimeName, pkgDirname, helperName, {
+      esm: false,
+      polyfillProvider,
+    });
+    const esm = writeHelperFile(runtimeName, pkgDirname, helperName, {
+      esm: true,
+      polyfillProvider,
+    });
 
     if (helpers.isInternal(helperName)) continue;
 
