@@ -244,6 +244,7 @@ interface Options {
 type ParserOptions = Partial<Options>;
 type ParseError = ParseError$1<object>;
 type ParseResult<Result extends File | Expression = File> = Result & {
+    comments: File["comments"];
     errors: null | ParseError[];
 };
 /**
