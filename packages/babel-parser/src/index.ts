@@ -32,6 +32,7 @@ export type ParserOptions = Partial<Options>;
 
 export type ParseError = ParseErrorGeneric<object>;
 export type ParseResult<Result extends File | Expression = File> = Result & {
+  comments: File["comments"];
   errors: null | ParseError[];
 };
 
