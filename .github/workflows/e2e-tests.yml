@@ -52,7 +52,6 @@ jobs:
           - vue-cli
           - jest
           - react-native
-          - prettier
           - angular-cli
           - nextjs-10
           - ember
