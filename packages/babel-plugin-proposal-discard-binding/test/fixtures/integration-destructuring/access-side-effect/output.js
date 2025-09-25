@@ -19,4 +19,4 @@ var _arr = babelHelpers.toArray(arr),
   _arr$ = _arr[1],
   _ = _arr$.p,
   rest1 = babelHelpers.objectWithoutProperties(_arr$, ["p"]),
-  rest2 = _arr.slice(2);
+  rest2 = babelHelpers.arrayLikeToArray(_arr).slice(2);
