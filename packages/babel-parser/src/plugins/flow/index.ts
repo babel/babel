@@ -358,7 +358,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.next(); // eat `%`
       this.expectContextual(tt._checks);
       // Force '%' and 'checks' to be adjacent
-      if (this.state.lastTokStartLoc.index > moduloLoc.index + 1) {
+      if (this.state.lastTokStartLoc!.index > moduloLoc.index + 1) {
         this.raise(FlowErrors.UnexpectedSpaceBetweenModuloChecks, moduloLoc);
       }
       if (this.eat(tt.parenL)) {
@@ -371,8 +371,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     flowParseTypeAndPredicateInitialiser(): [
-      N.FlowType | undefined | null,
-      N.FlowPredicate | undefined | null,
+      N.FlowType | null,
+      N.FlowPredicate | null,
     ] {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -462,7 +462,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (insideModule) {
             this.raise(
               FlowErrors.NestedDeclareModule,
-              this.state.lastTokStartLoc,
+              this.state.lastTokStartLoc!,
             );
           }
           return this.flowParseDeclareModule(node);
@@ -475,9 +475,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return this.flowParseDeclareInterface(node);
       } else if (this.match(tt._export)) {
         return this.flowParseDeclareExportDeclaration(node, insideModule);
-      } else {
-        this.unexpected();
       }
+      throw this.unexpected();
     }
 
     flowParseDeclareVariable(
@@ -508,31 +507,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const bodyNode = (node.body = this.startNode<N.BlockStatement>());
-      // @ts-expect-error refine typings
-      const body = (bodyNode.body = []);
+      const body: N.Statement[] = (bodyNode.body = []);
       this.expect(tt.braceL);
       while (!this.match(tt.braceR)) {
-        let bodyNode = this.startNode<N.ImportDeclaration>();
+        const bodyNode = this.startNode<N.ImportDeclaration>();
 
         if (this.match(tt._import)) {
           this.next();
           if (!this.isContextual(tt._type) && !this.match(tt._typeof)) {
             this.raise(
               FlowErrors.InvalidNonTypeImportInDeclareModule,
-              this.state.lastTokStartLoc,
+              this.state.lastTokStartLoc!,
             );
           }
-          super.parseImport(bodyNode);
+          body.push(super.parseImport(bodyNode));
         } else {
           this.expectContextual(
             tt._declare,
             FlowErrors.UnsupportedStatementInDeclareModule,
           );
-          // @ts-expect-error refine typings
-          bodyNode = this.flowParseDeclare(bodyNode, true);
+          body.push(this.flowParseDeclare(bodyNode, true));
         }
-
-        body.push(bodyNode);
       }
 
       this.scope.exit();
@@ -643,7 +638,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      this.unexpected();
+      throw this.unexpected();
     }
 
     flowParseDeclareModuleExports(
@@ -977,8 +972,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TypeParameterInstantiation");
     }
 
-    flowParseTypeParameterInstantiationCallOrNew(): N.TypeParameterInstantiation {
-      if (this.reScan_lt() !== tt.lt) return;
+    flowParseTypeParameterInstantiationCallOrNew(): N.TypeParameterInstantiation | null {
+      if (this.reScan_lt() !== tt.lt) return null;
       const node = this.startNode<N.TypeParameterInstantiation>();
       const oldInType = this.state.inType;
       node.params = [];
@@ -1294,12 +1289,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (!allowSpread) {
             this.raise(
               FlowErrors.InexactInsideNonObject,
-              this.state.lastTokStartLoc,
+              this.state.lastTokStartLoc!,
             );
           } else if (!allowInexact) {
             this.raise(
               FlowErrors.InexactInsideExact,
-              this.state.lastTokStartLoc,
+              this.state.lastTokStartLoc!,
             );
           }
           if (variance) {
@@ -1312,7 +1307,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (!allowSpread) {
           this.raise(
             FlowErrors.UnexpectedSpreadType,
-            this.state.lastTokStartLoc,
+            this.state.lastTokStartLoc!,
           );
         }
         if (protoStartLoc != null) {
@@ -1727,8 +1722,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               this.state.startLoc,
             );
           }
-          this.unexpected();
-          return;
+          throw this.unexpected();
         case tt.num:
           return this.parseLiteral(
             this.state.value,
@@ -1778,7 +1772,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
       }
 
-      this.unexpected();
+      throw this.unexpected();
     }
 
     flowParsePostfixType(): N.FlowType {
@@ -1966,7 +1960,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           typeNode.typeAnnotation,
           // @ts-expect-error predicate may not exist
           node.predicate,
-        ] = this.flowParseTypeAndPredicateInitialiser();
+        ] = this.flowParseTypeAndPredicateInitialiser() as [
+          N.FlowType,
+          N.FlowPredicate,
+        ];
 
         node.returnType = typeNode.typeAnnotation
           ? this.finishNode(typeNode, "TypeAnnotation")
@@ -2081,7 +2078,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           nextCh === charCodes.rightParenthesis // (a?) => c
         ) {
           /*:: invariant(refExpressionErrors != null) */
-          this.setOptionalParametersError(refExpressionErrors);
+          this.setOptionalParametersError(refExpressionErrors!);
           return expr;
         }
       }
@@ -2168,7 +2165,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const arrows: N.ArrowFunctionExpression[] = [];
 
       while (stack.length !== 0) {
-        const node = stack.pop();
+        const node = stack.pop()!;
         if (
           node.type === "ArrowFunctionExpression" &&
           node.body.type !== "BlockStatement"
@@ -2469,11 +2466,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // type casts that we've found that are illegal in this context
     toReferencedList(
       exprList:
-        | ReadonlyArray<N.Expression | N.SpreadElement>
+        | ReadonlyArray<N.Expression | N.SpreadElement | null>
         | ReadonlyArray<N.Expression | N.RestElement>,
       isParenthesizedExpr?: boolean,
     ):
-      | ReadonlyArray<N.Expression | N.SpreadElement>
+      | ReadonlyArray<N.Expression | N.SpreadElement | null>
       | ReadonlyArray<N.Expression | N.RestElement> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -2991,7 +2988,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         /*:: invariant(!jsx.aborted) */
         /*:: invariant(jsx.node != null) */
-        if (!jsx.error) return jsx.node;
+        if (!jsx.error) return jsx.node!;
 
         // Remove `tc.j_expr` and `tc.j_oTag` from context added
         // by parsing `jsxTagStart` to stop the JSX plugin from
@@ -3060,7 +3057,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               /*:: invariant(typeParameters) */
               this.raise(
                 FlowErrors.UnexpectedTypeParameterBeforeAsyncArrowFunction,
-                typeParameters,
+                typeParameters!,
               );
             }
             return arrow.node;
@@ -3084,7 +3081,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (arrowExpression) {
           /*:: invariant(arrow.failState) */
-          this.state = arrow.failState;
+          this.state = arrow.failState!;
           return arrowExpression;
         }
 
@@ -3094,7 +3091,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         /*:: invariant(typeParameters) */
         throw this.raise(
           FlowErrors.UnexpectedTokenAfterTypeParameter,
-          typeParameters,
+          typeParameters!,
         );
       }
 
@@ -3117,7 +3114,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             typeNode.typeAnnotation,
             // @ts-expect-error (destructuring not supported yet)
             node.predicate,
-          ] = this.flowParseTypeAndPredicateInitialiser();
+          ] = this.flowParseTypeAndPredicateInitialiser() as [
+            N.FlowType,
+            N.FlowPredicate,
+          ];
 
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
 
@@ -3135,7 +3135,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // assign after it is clear it is an arrow
         // @ts-expect-error todo(flow->ts)
         node.returnType = result.node.typeAnnotation
-          ? this.finishNode(result.node, "TypeAnnotation")
+          ? this.finishNode(result.node!, "TypeAnnotation")
           : null;
       }
 
@@ -3247,11 +3247,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
 
         if (result.node) {
-          this.state = result.failState;
+          this.state = result.failState!;
           return result.node;
         }
 
-        throw arrow.error || result.error;
+        throw arrow.error || result.error!;
       }
 
       return super.parseSubscripts(base, startLoc, noCalls);
@@ -3588,13 +3588,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     } {
       const seenNames = new Set();
       const members = {
-        // @ts-expect-error: migrate to Babel types
         booleanMembers: [],
-        // @ts-expect-error: migrate to Babel types
         numberMembers: [],
-        // @ts-expect-error: migrate to Babel types
         stringMembers: [],
-        // @ts-expect-error: migrate to Babel types
         defaultedMembers: [],
       };
       let hasUnknownMembers = false;
@@ -3634,6 +3630,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             );
             memberNode.init = init.value;
             members.booleanMembers.push(
+              // @ts-expect-error NodeAny not supported
               this.finishNode(memberNode, "EnumBooleanMember"),
             );
             break;
@@ -3642,6 +3639,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "number");
             memberNode.init = init.value;
             members.numberMembers.push(
+              // @ts-expect-error NodeAny not supported
               this.finishNode(memberNode, "EnumNumberMember"),
             );
             break;
@@ -3650,6 +3648,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "string");
             memberNode.init = init.value;
             members.stringMembers.push(
+              // @ts-expect-error NodeAny not supported
               this.finishNode(memberNode, "EnumStringMember"),
             );
             break;
@@ -3670,6 +3669,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
                 break;
               default:
                 members.defaultedMembers.push(
+                  // @ts-expect-error NodeAny not supported
                   this.finishNode(memberNode, "EnumDefaultedMember"),
                 );
             }

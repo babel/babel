@@ -114,15 +114,16 @@ export default (superClass: typeof Parser) =>
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
       const expression = directive.value as any as N.EstreeLiteral;
+      // @ts-expect-error delete non-optional properties
       delete directive.value;
 
       this.castNodeTo(expression, "Literal");
-      expression.raw = expression.extra.raw;
-      expression.value = expression.extra.expressionValue;
+      expression.raw = expression.extra!.raw;
+      expression.value = expression.extra!.expressionValue;
 
       const stmt = this.castNodeTo(directive, "ExpressionStatement");
       stmt.expression = expression;
-      stmt.directive = expression.extra.rawValue;
+      stmt.directive = expression.extra!.rawValue;
 
       delete expression.extra;
 
@@ -205,6 +206,7 @@ export default (superClass: typeof Parser) =>
       );
       // @ts-expect-error estree plugin typings
       node.body = directiveStatements.concat(node.body);
+      // @ts-expect-error delete non-optional properties
       delete node.directives;
     }
 
@@ -222,7 +224,7 @@ export default (superClass: typeof Parser) =>
       node: N.PrivateName,
     ): N.EstreePrivateIdentifier {
       const name = super.getPrivateNameSV(node);
-      node = node as any;
+      // @ts-expect-error delete non-optional properties
       delete node.id;
       // @ts-expect-error mutate AST types
       node.name = name;
@@ -294,6 +296,7 @@ export default (superClass: typeof Parser) =>
         type,
         inClassScope,
       );
+      // @ts-expect-error delete non-optional properties
       delete funcNode.kind;
       const { typeParameters } = node;
       if (typeParameters) {
@@ -516,8 +519,10 @@ export default (superClass: typeof Parser) =>
             (node.arguments[1] as N.Expression) ?? null;
         }
         // arguments isn't optional in the type definition
+        // @ts-expect-error delete non-optional properties
         delete node.arguments;
         // callee isn't optional in the type definition
+        // @ts-expect-error delete non-optional properties
         delete node.callee;
       } else if (node.type === "OptionalCallExpression") {
         this.castNodeTo(node, "CallExpression");
@@ -547,7 +552,7 @@ export default (superClass: typeof Parser) =>
       unfinished: Undone<N.AnyExport>,
       decorators: N.Decorator[] | null,
     ) {
-      const exportStartLoc = this.state.lastTokStartLoc;
+      const exportStartLoc = this.state.lastTokStartLoc!;
       const node = super.parseExport(unfinished, decorators);
 
       switch (node.type) {
@@ -564,6 +569,7 @@ export default (superClass: typeof Parser) =>
             this.castNodeTo(node, "ExportAllDeclaration");
             // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
+            // @ts-expect-error The ESTree AST shape differs from the Babel AST
             delete node.specifiers;
           }
 
@@ -573,6 +579,7 @@ export default (superClass: typeof Parser) =>
             const { declaration } = node;
             if (
               declaration?.type === "ClassDeclaration" &&
+              // @ts-expect-error comparing undefined and number
               declaration.decorators?.length > 0 &&
               // decorator comes before export
               declaration.start === node.start
@@ -695,7 +702,7 @@ export default (superClass: typeof Parser) =>
 
     resetEndLocation(
       node: NodeBase,
-      endLoc: Position = this.state.lastTokEndLoc,
+      endLoc: Position = this.state.lastTokEndLoc!,
     ): void {
       super.resetEndLocation(node, endLoc);
       toESTreeLocation(node);
