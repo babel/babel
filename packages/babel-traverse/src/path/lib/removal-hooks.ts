@@ -68,8 +68,9 @@ export const hooks = [
     ) {
       self.replaceWith({
         type: "BlockStatement",
+        directives: [],
         body: [],
-      } as t.BlockStatement);
+      } satisfies t.BlockStatement);
       return true;
     }
   },

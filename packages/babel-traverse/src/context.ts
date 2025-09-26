@@ -8,10 +8,10 @@ import { popContext, pushContext, resync } from "./path/context.ts";
 
 export default class TraversalContext<S = unknown> {
   constructor(
-    scope: Scope,
+    scope: Scope | null | undefined,
     opts: ExplodedTraverseOptions<S>,
     state: S,
-    parentPath: NodePath,
+    parentPath: NodePath | undefined,
   ) {
     this.parentPath = parentPath;
     this.scope = scope;
@@ -19,8 +19,8 @@ export default class TraversalContext<S = unknown> {
     this.opts = opts;
   }
 
-  declare parentPath: NodePath;
-  declare scope: Scope;
+  declare parentPath: NodePath | undefined;
+  declare scope: Scope | null | undefined;
   declare state: S;
   declare opts: ExplodedTraverseOptions<S>;
   queue: Array<NodePath> | null = null;
@@ -77,7 +77,7 @@ export default class TraversalContext<S = unknown> {
       if (notPriority) {
         this.queue.push(path);
       } else {
-        this.priorityQueue.push(path);
+        this.priorityQueue!.push(path);
       }
     }
   }

@@ -30,7 +30,7 @@ function isValidObjectCallee(
 
 function isValidIdentifierCallee(
   val: string,
-): val is (typeof VALID_IDENTIFIER_CALLEES)[number] {
+): val is NonNullable<(typeof VALID_IDENTIFIER_CALLEES)[number]> {
   return VALID_IDENTIFIER_CALLEES.includes(
     // @ts-expect-error val is a string
     val,
@@ -62,7 +62,7 @@ function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
  *
  */
 
-export function evaluateTruthy(this: NodePath): boolean {
+export function evaluateTruthy(this: NodePath): boolean | undefined {
   const res = this.evaluate();
   if (res.confident) return !!res.value;
 }
@@ -80,7 +80,7 @@ type Result = {
 /**
  * Deopts the evaluation
  */
-function deopt(path: NodePath, state: State) {
+function deopt(path: NodePath | null, state: State) {
   if (!state.confident) return;
   state.deoptPath = path;
   state.confident = false;
@@ -105,7 +105,7 @@ function evaluateCached(path: NodePath, state: State): any {
   const { seen } = state;
 
   if (seen.has(node)) {
-    const existing = seen.get(node);
+    const existing = seen.get(node)!;
     if (existing.resolved) {
       return existing.value;
     } else {
@@ -224,6 +224,7 @@ function _evaluate(path: NodePath, state: State): any {
     if (binding) {
       if (
         binding.constantViolations.length > 0 ||
+        // @ts-expect-error comparing undefined and number
         path.node.start < binding.path.node.end
       ) {
         deopt(binding.path, state);
@@ -266,7 +267,11 @@ function _evaluate(path: NodePath, state: State): any {
       return;
     }
     const value = evaluateCached(resolved, state);
-    if (typeof value === "object" && value !== null && binding.references > 1) {
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      binding!.references > 1
+    ) {
       deopt(resolved, state);
       return;
     }
@@ -305,8 +310,9 @@ function _evaluate(path: NodePath, state: State): any {
 
   if (path.isArrayExpression()) {
     const arr = [];
-    const elems: Array<NodePath> = path.get("elements");
+    const elems = path.get("elements");
     for (const elem of elems) {
+      // @ts-expect-error FIXME: better types
       const elemValue = elem.evaluate();
 
       if (elemValue.confident) {
@@ -541,7 +547,7 @@ function evaluateQuasis(
 export function evaluate(this: NodePath): {
   confident: boolean;
   value: any;
-  deopt?: NodePath;
+  deopt: NodePath | null;
 } {
   const state: State = {
     confident: true,
