@@ -13,6 +13,7 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-runtime",
   "author": "The Babel Team (https://babel.dev/team)",
+  "sideEffects": false,
   "exports": {
     "./helpers/OverloadYield": {
       "node": "./helpers/OverloadYield.js",
