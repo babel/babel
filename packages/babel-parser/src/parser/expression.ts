@@ -1173,7 +1173,6 @@ export default abstract class ExpressionParser extends LValParser {
       case tt.bracketL: {
         return this.parseArrayLike(
           tt.bracketR,
-          /* canBePattern */ true,
           /* isTuple */ false,
           refExpressionErrors,
         );
@@ -1283,7 +1282,6 @@ export default abstract class ExpressionParser extends LValParser {
           } else if (type === tt.bracketBarL || type === tt.bracketHashL) {
             return this.parseArrayLike(
               this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
-              /* canBePattern */ false,
               /* isTuple */ true,
             );
           } else if (type === tt.braceBarL || type === tt.braceHashL) {
@@ -2505,7 +2503,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseArrayLike(
     this: Parser,
     close: TokenType,
-    canBePattern: boolean,
     isTuple: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ArrayExpression | N.TupleExpression {
@@ -2520,7 +2517,6 @@ export default abstract class ExpressionParser extends LValParser {
       close,
       /* allowEmpty */ !isTuple,
       refExpressionErrors,
-      // @ts-expect-error todo(flow->ts)
       node,
     );
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
@@ -2723,7 +2719,7 @@ export default abstract class ExpressionParser extends LValParser {
     close: TokenType,
     allowEmpty?: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-    nodeForExtra?: N.Node | null,
+    nodeForExtra?: Undone<N.Node> | null,
   ): (N.Expression | null)[] {
     const elts: (N.Expression | null)[] = [];
     let first = true;

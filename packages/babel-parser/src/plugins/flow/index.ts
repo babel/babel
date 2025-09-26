@@ -2492,23 +2492,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseArrayLike(
       close: TokenType,
-      canBePattern: boolean,
       isTuple: boolean,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.ArrayExpression | N.TupleExpression {
-      const node = super.parseArrayLike(
-        close,
-        canBePattern,
-        isTuple,
-        refExpressionErrors,
-      );
+      const node = super.parseArrayLike(close, isTuple, refExpressionErrors);
 
       // This could be an array pattern:
       //   ([a: string, b: string]) => {}
       // In this case, we don't have to call toReferencedList. We will
       // call it, if needed, when we are sure that it is a parenthesized
       // expression by calling toReferencedListDeep.
-      if (canBePattern && !this.state.maybeInArrowParameters) {
+      if (refExpressionErrors != null && !this.state.maybeInArrowParameters) {
         this.toReferencedList(node.elements);
       }
 
