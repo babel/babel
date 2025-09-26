@@ -46,8 +46,6 @@ import {
   toIdentifier,
   variableDeclaration,
   variableDeclarator,
-  isRecordExpression,
-  isTupleExpression,
   isObjectProperty,
   isTopicReference,
   isMetaProperty,
@@ -908,12 +906,18 @@ class Scope {
         this.isPure(node.left, constantsOnly) &&
         this.isPure(node.right, constantsOnly)
       );
-    } else if (isArrayExpression(node) || isTupleExpression(node)) {
+    } else if (
+      isArrayExpression(node) ||
+      (!process.env.BABEL_8_BREAKING && t.isTupleExpression(node))
+    ) {
       for (const elem of node.elements) {
         if (elem !== null && !this.isPure(elem, constantsOnly)) return false;
       }
       return true;
-    } else if (isObjectExpression(node) || isRecordExpression(node)) {
+    } else if (
+      isObjectExpression(node) ||
+      (!process.env.BABEL_8_BREAKING && t.isRecordExpression(node))
+    ) {
       for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
