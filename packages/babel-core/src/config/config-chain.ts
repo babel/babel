@@ -10,6 +10,7 @@ import type {
   CallerMetadata,
   MatchItem,
   InputOptions,
+  ConfigChainOptions,
 } from "./validation/options.ts";
 import pathPatternToRegex from "./pattern-to-regex.ts";
 import { ConfigPrinter, ChainFormatter } from "./printer.ts";
@@ -44,7 +45,7 @@ import type {
 export type ConfigChain = {
   plugins: Array<UnloadedDescriptor<PluginAPI>>;
   presets: Array<UnloadedDescriptor<PresetAPI>>;
-  options: Array<InputOptions>;
+  options: Array<ConfigChainOptions>;
   files: Set<string>;
 };
 
@@ -77,7 +78,7 @@ export function* buildPresetChain(
   return {
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
-    options: chain.options.map(o => normalizeOptions(o)),
+    options: chain.options.map(o => createConfigChainOptions(o)),
     files: new Set(),
   };
 }
@@ -278,7 +279,9 @@ export function* buildRootChain(
   return {
     plugins: isIgnored ? [] : dedupDescriptors(chain.plugins),
     presets: isIgnored ? [] : dedupDescriptors(chain.presets),
-    options: isIgnored ? [] : chain.options.map(o => normalizeOptions(o)),
+    options: isIgnored
+      ? []
+      : chain.options.map(o => createConfigChainOptions(o)),
     fileHandling: isIgnored ? "ignored" : "transpile",
     ignore: ignoreFile || undefined,
     babelrc: babelrcFile || undefined,
@@ -735,7 +738,7 @@ function emptyChain(): ConfigChain {
   };
 }
 
-function normalizeOptions(opts: InputOptions): InputOptions {
+function createConfigChainOptions(opts: InputOptions): ConfigChainOptions {
   const options = {
     ...opts,
   };
