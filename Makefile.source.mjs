@@ -229,7 +229,7 @@ target["build-dist"] = function () {
 };
 
 target["build-plugin-transform-runtime-dist"] = function () {
-  node(["scripts/build-dist.js"], "packages/babel-plugin-transform-runtime");
+  node(["scripts/build-dist.ts"], "packages/babel-plugin-transform-runtime");
 };
 
 target["prepublish"] = function () {
