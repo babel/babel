@@ -50,7 +50,8 @@
       {
         "engines": {
           "node": "^20.19.0 || >=22.12.0"
-        }
+        },
+        "sideEffects": false
       },
       {
         "exports": null
