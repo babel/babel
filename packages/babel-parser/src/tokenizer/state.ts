@@ -1,4 +1,4 @@
-import type { Options } from "../options.ts";
+import type { OptionsWithDefaults } from "../options.ts";
 import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location.ts";
 
@@ -31,18 +31,18 @@ export const enum LoopLabelKind {
 declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<State>;
 
 export default class State {
-  @bit.storage flags: number;
+  @bit.storage flags: number = 0;
 
   @bit accessor strict = false;
 
-  startIndex: number;
-  curLine: number;
-  lineStart: number;
+  startIndex!: number;
+  curLine!: number;
+  lineStart!: number;
 
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
-  startLoc: Position;
-  endLoc: Position;
+  startLoc!: Position;
+  endLoc!: Position;
 
   init({
     strictMode,
@@ -50,7 +50,7 @@ export default class State {
     startIndex,
     startLine,
     startColumn,
-  }: Options): void {
+  }: OptionsWithDefaults): void {
     this.strict =
       strictMode === false
         ? false
@@ -108,7 +108,7 @@ export default class State {
 
   // Labels in scope.
   labels: Array<{
-    kind: LoopLabelKind;
+    kind: LoopLabelKind | null;
     name?: string | null;
     statementStart?: number;
   }> = [];
@@ -133,9 +133,9 @@ export default class State {
 
   // Position information for the previous token
   // this is initialized when generating the second token.
-  lastTokEndLoc: Position = null;
+  lastTokEndLoc: Position | null = null;
   // this is initialized when generating the second token.
-  lastTokStartLoc: Position = null;
+  lastTokStartLoc: Position | null = null;
 
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
@@ -221,7 +221,7 @@ export type LookaheadState = {
   end: number;
   context: TokContext[];
   startLoc: Position;
-  lastTokEndLoc: Position;
+  lastTokEndLoc: Position | null;
   curLine: number;
   lineStart: number;
   curPosition: State["curPosition"];

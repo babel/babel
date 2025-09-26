@@ -39,7 +39,7 @@ const NodePrototype = Node.prototype;
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error __clone is not defined in Node prototype
   NodePrototype.__clone = function (): Node {
-    const newNode = new Node(undefined, this.start, this.loc.start);
+    const newNode = new Node(undefined!, this.start, this.loc.start);
     const keys = Object.keys(this) as (keyof Node)[];
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];
@@ -80,7 +80,7 @@ export abstract class NodeUtils extends UtilParser {
   // Finish an AST node, adding `type` and `end` properties.
 
   finishNode<T extends NodeType>(node: Undone<T>, type: T["type"]): T {
-    return this.finishNodeAt(node, type, this.state.lastTokEndLoc);
+    return this.finishNodeAt(node, type, this.state.lastTokEndLoc!);
   }
 
   // Finish node at given position
@@ -99,7 +99,7 @@ export abstract class NodeUtils extends UtilParser {
     (node as T).type = type;
     node.end = endLoc.index;
     node.loc.end = endLoc;
-    if (this.optionFlags & OptionFlags.Ranges) node.range[1] = endLoc.index;
+    if (this.optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
     if (this.optionFlags & OptionFlags.AttachComment) {
       this.processComment(node as T);
     }
@@ -109,16 +109,16 @@ export abstract class NodeUtils extends UtilParser {
   resetStartLocation(node: NodeBase, startLoc: Position): void {
     node.start = startLoc.index;
     node.loc.start = startLoc;
-    if (this.optionFlags & OptionFlags.Ranges) node.range[0] = startLoc.index;
+    if (this.optionFlags & OptionFlags.Ranges) node.range![0] = startLoc.index;
   }
 
   resetEndLocation(
     node: NodeBase,
-    endLoc: Position = this.state.lastTokEndLoc,
+    endLoc: Position = this.state.lastTokEndLoc!,
   ): void {
     node.end = endLoc.index;
     node.loc.end = endLoc;
-    if (this.optionFlags & OptionFlags.Ranges) node.range[1] = endLoc.index;
+    if (this.optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
   }
 
   /**

@@ -427,9 +427,12 @@ export default (superClass: typeof Parser) =>
     assertNoSpace(): void {
       if (
         this.state.start >
-        this.offsetToSourcePos(this.state.lastTokEndLoc.index)
+        this.offsetToSourcePos(this.state.lastTokEndLoc!.index)
       ) {
-        this.raise(PlaceholderErrors.UnexpectedSpace, this.state.lastTokEndLoc);
+        this.raise(
+          PlaceholderErrors.UnexpectedSpace,
+          this.state.lastTokEndLoc!,
+        );
       }
     }
   };
