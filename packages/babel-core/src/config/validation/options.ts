@@ -240,6 +240,22 @@ export type ResolvedOptions = Omit<
   passPerPreset: boolean;
 };
 
+export type ConfigChainOptions = Omit<
+  InputOptions,
+  | "extends"
+  | "env"
+  | "overrides"
+  | "plugins"
+  | "presets"
+  | "passPerPreset"
+  | "ignore"
+  | "only"
+  | "test"
+  | "include"
+  | "exclude"
+  | "sourceMap"
+>;
+
 export type CallerMetadata = {
   // If 'caller' is specified, require that the name is given for debugging
   // messages.
