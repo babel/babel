@@ -246,7 +246,7 @@ type ParseError = ParseError$1<object>;
 type ParseResult<Result extends File | Expression = File> = Result & {
     comments: File["comments"];
     errors: null | ParseError[];
-    tokens: File["tokens"];
+    tokens?: File["tokens"];
 };
 /**
  * Parse the provided code as an entire ECMAScript program.
