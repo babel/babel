@@ -1,4 +1,4 @@
-import type { IClient, Options } from "./types.cts";
+import type { IClient, Options, RegistrationOptions } from "./types.cts";
 
 import pirates = require("pirates");
 const sourceMapSupport: typeof import("@cspotcode/source-map-support") = process
@@ -6,7 +6,10 @@ const sourceMapSupport: typeof import("@cspotcode/source-map-support") = process
   ? require("@cspotcode/source-map-support")
   : require("source-map-support");
 
-let piratesRevert: () => void;
+type RevertBabelRegister = () => void;
+
+const piratesRevertFnsSet: Set<RevertBabelRegister> = new Set();
+
 const maps = Object.create(null);
 
 function installSourceMapSupport() {
@@ -75,10 +78,12 @@ function compile(client: IClient, inputCode: string, filename: string) {
   return code;
 }
 
-function register(client: IClient, opts: Options = {}) {
-  if (piratesRevert) piratesRevert();
+function register(client: IClient, opts: Options = {}, regOpts: RegistrationOptions = {}): RevertBabelRegister {
+  if (regOpts.revertPreviousHooks !== false) {
+    revertAll();
+  }
 
-  piratesRevert = pirates.addHook(
+  const piratesRevert = pirates.addHook(
     (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(null, client),
     {
       exts: opts.extensions ?? client.getDefaultExtensions(),
@@ -87,10 +92,17 @@ function register(client: IClient, opts: Options = {}) {
   );
 
   client.setOptions(opts);
+
+  piratesRevertFnsSet.add(piratesRevert);
+
+  return piratesRevert;
 }
 
-function revert() {
-  if (piratesRevert) piratesRevert();
+function revertAll() {
+  piratesRevertFnsSet.forEach(piratesRevertFn => {
+    piratesRevertFn();
+    piratesRevertFnsSet.delete(piratesRevertFn);
+  });
 }
 
-export = { register, revert };
+export = { register, revert: revertAll };
