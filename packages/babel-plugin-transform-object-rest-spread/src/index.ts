@@ -310,6 +310,16 @@ export default declare((api, opts: Options) => {
     }
   }
 
+  function isEvaluationValueIgnored(path: NodePath) {
+    const last = <T>(arr: T[]) => arr[arr.length - 1];
+
+    return (
+      (t.isExpressionStatement(path.parent) && !path.isCompletionRecord()) ||
+      (t.isSequenceExpression(path.parent) &&
+        last(path.parent.expressions) !== path.node)
+    );
+  }
+
   return {
     name: "transform-object-rest-spread",
     manipulateOptions: process.env.BABEL_8_BREAKING
@@ -523,37 +533,64 @@ export default declare((api, opts: Options) => {
         if (leftPath.isObjectPattern() && hasObjectRestElement(leftPath)) {
           const nodes = [];
 
-          const refName = path.scope.generateUidBasedOnNode(
-            path.node.right,
-            "ref",
-          );
+          const { right } = path.node;
 
-          nodes.push(
-            t.variableDeclaration("var", [
-              t.variableDeclarator(t.identifier(refName), path.node.right),
-            ]),
-          );
+          let refName;
+
+          if (
+            t.isIdentifier(right) &&
+            (pureGetters ||
+              path.scope.getBinding(right.name)?.constantViolations.every(
+                // If a variable is only reassigned through other variable declarations,
+                // we are sure that it is not being reassigned while destructuring it.
+                p => p.isVariableDeclarator(),
+              ))
+          ) {
+            refName = right.name;
+          } else {
+            refName = path.scope.generateUidBasedOnNode(path.node.right, "ref");
+            path.scope.push({
+              id: t.identifier(refName),
+            });
+            nodes.push(
+              t.assignmentExpression(
+                "=",
+                t.identifier(refName),
+                path.node.right,
+              ),
+            );
+          }
 
           const [impureComputedPropertyDeclarators, argument, callExpression] =
             createObjectRest(leftPath, file, t.identifier(refName));
 
           if (impureComputedPropertyDeclarators.length > 0) {
-            nodes.push(
-              t.variableDeclaration("var", impureComputedPropertyDeclarators),
-            );
+            impureComputedPropertyDeclarators.forEach(declarator => {
+              path.scope.push({ id: declarator.id as t.Identifier });
+              nodes.push(
+                t.assignmentExpression(
+                  "=",
+                  t.cloneNode(declarator.id),
+                  declarator.init,
+                ),
+              );
+            });
           }
 
           const nodeWithoutSpread = t.cloneNode(path.node);
-          nodeWithoutSpread.right = t.identifier(refName);
-          nodes.push(t.expressionStatement(nodeWithoutSpread));
-          nodes.push(
-            t.expressionStatement(
-              t.assignmentExpression("=", argument, callExpression),
-            ),
-          );
-          nodes.push(t.expressionStatement(t.identifier(refName)));
+          if (nodes.length === 1) {
+            nodeWithoutSpread.right = nodes.shift();
+          } else {
+            nodeWithoutSpread.right = t.identifier(refName);
+          }
+          nodes.push(nodeWithoutSpread);
+          nodes.push(t.assignmentExpression("=", argument, callExpression));
 
-          path.replaceWithMultiple(nodes);
+          if (!isEvaluationValueIgnored(path)) {
+            nodes.push(t.identifier(refName));
+          }
+
+          path.replaceWith(t.sequenceExpression(nodes));
         }
       },
 
@@ -618,6 +655,8 @@ export default declare((api, opts: Options) => {
           scope.crawl();
           return;
         }
+
+        path.scope.registerDeclaration(path.get("left"));
       },
 
       // [{a, ...b}] = c;
