@@ -455,19 +455,21 @@ type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
 interface NodePath<
   N extends t.Node | null,
-  T extends t.Node["type"] = NonNullable<N>["type"],
+  T extends t.Node["type"] | null = N extends t.Node
+    ? NonNullable<N>["type"]
+    : null,
 > extends InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,
     NodePathMixins,
     NodePathOverwrites {
-  type: T | null;
+  type: T;
   node: N;
   // .parent is only null for File nodes, which are not traversed by @babel/traverse
   // You can technically create a path that contains one, but it's so rare that
   // we can ignore it to avoid having non-null assertions everywhere.
-  parent: NonNullable<t.ParentMaps[T]>;
-  parentPath: NodePath_Final<NonNullable<t.ParentMaps[T]>>;
+  parent: NonNullable<t.ParentMaps[NonNullable<T>]>;
+  parentPath: NodePath_Final<NonNullable<t.ParentMaps[NonNullable<T>]>>;
 }
 
 // This trick is necessary so that
