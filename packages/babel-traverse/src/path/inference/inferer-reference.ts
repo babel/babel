@@ -186,7 +186,7 @@ function inferAnnotationFromBinaryExpression(
 function getParentConditionalPath(
   binding: Binding,
   path: NodePath,
-  name: string | undefined,
+  name: string,
 ) {
   let parentPath;
   while ((parentPath = path.parentPath)) {
@@ -212,7 +212,7 @@ function getParentConditionalPath(
 function getConditionalAnnotation<T extends t.Node>(
   binding: Binding,
   path: NodePath<T>,
-  name?: string,
+  name: string,
 ):
   | {
       typeAnnotation: t.FlowType | t.TSType;
@@ -242,8 +242,7 @@ function getConditionalAnnotation<T extends t.Node>(
 
   if (types.length) {
     return {
-      // @ts-expect-error FIXME: may return undefined
-      typeAnnotation: createUnionType(types),
+      typeAnnotation: createUnionType(types)!,
       ifStatement,
     };
   }

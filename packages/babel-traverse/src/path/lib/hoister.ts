@@ -153,7 +153,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
           // We also move past any constant violations.
           for (const violationPath of binding.constantViolations) {
-            // @ts-expect-error comparing undefined and number
+            // @ts-expect-error comparing null and number
             if (this.getAttachmentParentForPath(violationPath).key > path.key) {
               path = violationPath;
             }
