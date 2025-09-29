@@ -90,7 +90,7 @@ export function getEarliestCommonAncestorFrom(
     paths,
     function (deepest, i, ancestries) {
       let earliest;
-      const keys = VISITOR_KEYS[deepest.type!];
+      const keys = VISITOR_KEYS[deepest.type];
 
       for (const ancestry of ancestries) {
         const path = ancestry[i + 1];
