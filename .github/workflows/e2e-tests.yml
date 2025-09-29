@@ -50,7 +50,6 @@ jobs:
           - babel-old-version
           - create-react-app
           - vue-cli
-          - jest
           - react-native
           - angular-cli
           - nextjs-10
