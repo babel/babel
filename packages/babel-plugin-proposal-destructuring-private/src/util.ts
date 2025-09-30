@@ -355,6 +355,50 @@ export function* transformPrivateKeyDestructuring(
         // `{ ...z } = babelHelpers.objectWithoutProperties(m, ["x"])`
         // to
         // `z = babelHelpers.objectWithoutProperties(m, ["x"])`
+
+        // Split the trailing segment `{ ...r }` from explicit properties so that:
+        // - explicit properties are bound from the original `right`,
+        // - only the Rest identifier receives the excluded object.
+        const objPat = left as t.ObjectPattern;
+        const props = objPat.properties;
+        const last = props[props.length - 1];
+
+        if (last?.type === "RestElement") {
+          // Split explicit properties and the Rest element.
+          const nonRestProps = props.slice(0, -1) as t.ObjectProperty[];
+          const rest = last;
+
+          // Important: add explicit properties to excluding keys so the subsequent Rest excludes them.
+          // This also memoises non-static computed keys with declared temps.
+          if (restExcludingKeys) {
+            growRestExcludingKeys(restExcludingKeys, nonRestProps, scope);
+          }
+
+          // Bind explicit properties from the original `right`.
+          if (nonRestProps.length > 0) {
+            yield {
+              left: objectPattern(nonRestProps),
+              right: cloneNode(right),
+            };
+          }
+
+          // Bind the Rest identifier from the excluded object.
+          // Only the Rest receives the filtered object so that named properties are unaffected.
+          yield {
+            // The argument of an object rest element must be an Identifier
+            left: rest.argument as t.Identifier,
+            right: buildObjectExcludingKeys(
+              restExcludingKeys,
+              right,
+              scope,
+              addHelper,
+              objectRestNoSymbols,
+              useBuiltIns,
+            ),
+          };
+          continue;
+        }
+
         const { properties } = left as t.ObjectPattern;
         if (properties.length === 1) {
           // The argument of an object rest element must be an Identifier
