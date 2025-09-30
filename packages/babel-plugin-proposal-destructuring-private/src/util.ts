@@ -66,7 +66,19 @@ function growRestExcludingKeys(
       property.key = assignmentExpression("=", tempId, propertyKey);
       excludingKeys.push({ key: tempId, computed: true });
     } else if (propertyKey.type !== "PrivateName") {
-      excludingKeys.push(property);
+      const isDuplicate = excludingKeys.some(existing => {
+        if (existing.computed || property.computed) return false;
+        if (
+          existing.key.type === "Identifier" &&
+          propertyKey.type === "Identifier"
+        ) {
+          return existing.key.name === propertyKey.name;
+        }
+        return false;
+      });
+      if (!isDuplicate) {
+        excludingKeys.push(property);
+      }
     }
   }
 }
