@@ -27,7 +27,7 @@ import type { ChildProcess } from "node:child_process";
 import { spawn } from "node:child_process";
 import os from "node:os";
 import readdirRecursive from "fs-readdir-recursive";
-import resolveFrom from "resolve-from";
+import * as resolve from "resolve";
 
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
@@ -194,7 +194,9 @@ function runModuleInTestContext(
   context: vm.Context,
   moduleCache: any,
 ) {
-  const filename = resolveFrom(path.dirname(relativeFilename), id);
+  const filename = resolve.sync(id, {
+    basedir: path.dirname(relativeFilename),
+  });
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
   // the context's global scope.
