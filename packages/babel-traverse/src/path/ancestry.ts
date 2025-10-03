@@ -104,7 +104,7 @@ export function getEarliestCommonAncestorFrom(
         // handle containers
         if (path.listKey && earliest.listKey === path.listKey) {
           // we're in the same container so check if we're earlier
-          if (path.key < earliest.key) {
+          if (path.key! < earliest.key!) {
             earliest = path;
             continue;
           }
@@ -119,7 +119,8 @@ export function getEarliestCommonAncestorFrom(
         }
       }
 
-      return earliest;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      return earliest!;
     },
   );
 }
@@ -186,7 +187,8 @@ export function getDeepestCommonAncestorFrom(
 
   if (lastCommon) {
     if (filter) {
-      return filter(lastCommon, lastCommonIndex, ancestries);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      return filter(lastCommon, lastCommonIndex!, ancestries);
     } else {
       return lastCommon;
     }

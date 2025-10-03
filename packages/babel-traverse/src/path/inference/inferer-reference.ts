@@ -127,7 +127,7 @@ function getConstantViolationsBefore(
 }
 
 function inferAnnotationFromBinaryExpression(
-  name: string,
+  name: string | undefined,
   path: NodePath<t.BinaryExpression>,
 ) {
   const operator = path.node.operator;
@@ -165,12 +165,12 @@ function inferAnnotationFromBinaryExpression(
     typePath = left as NodePath<t.Expression>;
   }
 
-  if (!typeofPath) return;
+  if (!typeofPath!) return;
   // and that the argument of the typeof path references us!
   if (!typeofPath.get("argument").isIdentifier({ name })) return;
 
   // ensure that the type path is a Literal
-  typePath = typePath.resolve() as NodePath<t.Expression>;
+  typePath = typePath!.resolve() as NodePath<t.Expression>;
   if (!typePath.isLiteral()) return;
 
   // and that it's a string so we can infer it
@@ -198,7 +198,11 @@ function getParentConditionalPath(
       return parentPath as NodePath<t.IfStatement | t.ConditionalExpression>;
     }
     if (parentPath.isFunction()) {
-      if (parentPath.parentPath.scope.getBinding(name) !== binding) return;
+      if (
+        name == null ||
+        parentPath.parentPath.scope.getBinding(name) !== binding
+      )
+        return;
     }
 
     path = parentPath;
@@ -208,11 +212,13 @@ function getParentConditionalPath(
 function getConditionalAnnotation<T extends t.Node>(
   binding: Binding,
   path: NodePath<T>,
-  name?: string,
-): {
-  typeAnnotation: t.FlowType | t.TSType;
-  ifStatement: NodePath<t.IfStatement | t.ConditionalExpression>;
-} {
+  name: string,
+):
+  | {
+      typeAnnotation: t.FlowType | t.TSType;
+      ifStatement: NodePath<t.IfStatement | t.ConditionalExpression>;
+    }
+  | undefined {
   const ifStatement = getParentConditionalPath(binding, path, name);
   if (!ifStatement) return;
 
@@ -236,7 +242,7 @@ function getConditionalAnnotation<T extends t.Node>(
 
   if (types.length) {
     return {
-      typeAnnotation: createUnionType(types),
+      typeAnnotation: createUnionType(types)!,
       ifStatement,
     };
   }

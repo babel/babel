@@ -52,35 +52,37 @@ export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
 export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
 
 const NodePath_Final = class NodePath {
-  constructor(hub: HubInterface, parent: t.Node | null) {
+  constructor(hub: HubInterface | undefined, parent: t.Node) {
     this.parent = parent;
-    this.hub = hub;
+    this.hub = hub!;
     this.data = null;
 
+    // @ts-expect-error Set it in setContext
     this.context = null;
+    // @ts-expect-error Set it in setContext
     this.scope = null;
   }
 
   declare parent: t.Node;
   declare hub: HubInterface;
-  declare data: Record<string | symbol, unknown>;
+  declare data: Record<string | symbol, unknown> | null;
   // TraversalContext is configured by setContext
   declare context: TraversalContext;
   declare scope: Scope;
 
   contexts: Array<TraversalContext> = [];
   state: any = null;
-  opts: ExplodedTraverseOptions | null = null;
+  declare opts: ExplodedTraverseOptions;
 
-  @bit.storage _traverseFlags: number;
+  @bit.storage _traverseFlags: number = 0;
   @bit(REMOVED) accessor removed = false;
   @bit(SHOULD_STOP) accessor shouldStop = false;
   @bit(SHOULD_SKIP) accessor shouldSkip = false;
 
   skipKeys: Record<string, boolean> | null = null;
-  parentPath: NodePath_Final = null;
+  parentPath: NodePath_Final | null = null;
   container: t.Node | Array<t.Node> | null = null;
-  listKey: string | null = null;
+  listKey: string | null | undefined = null;
   key: string | number | null = null;
   node: t.Node | null = null;
   type: t.Node["type"] | null = null;
@@ -95,10 +97,10 @@ const NodePath_Final = class NodePath {
     key,
   }: {
     hub?: HubInterface;
-    parentPath: NodePath_Final | null;
+    parentPath: NodePath_Final | null | undefined;
     parent: t.Node;
     container: t.Node | t.Node[];
-    listKey?: string;
+    listKey?: string | null;
     key: string | number;
   }): NodePath_Final {
     if (!hub && parentPath) {
@@ -134,15 +136,15 @@ const NodePath_Final = class NodePath {
     if (this.data == null) {
       this.data = Object.create(null);
     }
-    return (this.data[key] = val);
+    return (this.data![key] = val);
   }
 
   getData(key: string | symbol, def?: any): any {
     if (this.data == null) {
       this.data = Object.create(null);
     }
-    let val = this.data[key];
-    if (val === undefined && def !== undefined) val = this.data[key] = def;
+    let val = this.data![key];
+    if (val === undefined && def !== undefined) val = this.data![key] = def;
     return val;
   }
 
@@ -154,7 +156,7 @@ const NodePath_Final = class NodePath {
     msg: string,
     Error: new () => Error = SyntaxError,
   ): Error {
-    return this.hub.buildError(this.node, msg, Error);
+    return this.hub.buildError(this.node!, msg, Error);
   }
 
   traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
@@ -186,7 +188,7 @@ const NodePath_Final = class NodePath {
   }
 
   toString() {
-    return generator(this.node).code;
+    return generator(this.node!).code;
   }
 
   get inList() {
@@ -451,24 +453,29 @@ interface NodePathOverwrites {
 
 type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
-interface NodePath<T extends t.Node>
-  extends InstanceType<typeof NodePath_Final>,
+interface NodePath<
+  N extends t.Node | null,
+  T extends t.Node["type"] | null = N extends null
+    ? null
+    : NonNullable<N>["type"],
+  P extends t.Node = NonNullable<t.ParentMaps[NonNullable<T>]>,
+> extends InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,
     NodePathMixins,
     NodePathOverwrites {
-  type: T["type"] | null;
-  node: T;
+  type: T;
+  node: N;
   // .parent is only null for File nodes, which are not traversed by @babel/traverse
   // You can technically create a path that contains one, but it's so rare that
   // we can ignore it to avoid having non-null assertions everywhere.
-  parent: NonNullable<t.ParentMaps[T["type"]]>;
-  parentPath: NodePath_Final<NonNullable<t.ParentMaps[T["type"]]>>;
+  parent: P;
+  parentPath: NodePath_Final<P>;
 }
 
 // This trick is necessary so that
 // NodePath_Final<A | B> is the same as NodePath_Final<A> | NodePath_Final<B>
-type NodePath_Final<T extends t.Node = t.Node> = T extends any
+type NodePath_Final<T extends t.Node | null = t.Node> = T extends any
   ? NodePath<T>
   : never;
 

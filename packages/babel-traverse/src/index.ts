@@ -35,7 +35,7 @@ export type ExplodedTraverseOptions<S = t.Node> = TraverseOptions<S> &
 function traverse<S>(
   parent: t.Node,
   opts: TraverseOptions<S>,
-  scope: Scope | undefined,
+  scope: Scope | null | undefined,
   state: S,
   parentPath?: NodePath,
   visitSelf?: boolean,
@@ -44,7 +44,7 @@ function traverse<S>(
 function traverse(
   parent: t.Node,
   opts: TraverseOptions,
-  scope?: Scope,
+  scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
   visitSelf?: boolean,
@@ -54,7 +54,7 @@ function traverse<Options extends TraverseOptions>(
   parent: t.Node,
   // @ts-expect-error provide {} as default value for Options
   opts: Options = {},
-  scope?: Scope,
+  scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
   visitSelf?: boolean,
@@ -87,7 +87,7 @@ function traverse<Options extends TraverseOptions>(
     scope,
     state,
     parentPath,
-    /* skipKeys */ null,
+    /* skipKeys */ undefined,
     visitSelf,
   );
 }
