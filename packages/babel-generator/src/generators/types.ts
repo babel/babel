@@ -132,12 +132,11 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
 
 export { ArrayExpression as ArrayPattern };
 
-// @ts-ignore(Babel 7 vs Babel 8) - t.RecordExpression only exists in Babel 7
-export let RecordExpression: (this: Printer, node: t.RecordExpression) => void;
-// @ts-ignore(Babel 7 vs Babel 8) - t.TupleExpression only exists in Babel 7
-export let TupleExpression: (this: Printer, node: t.TupleExpression) => void;
+export let RecordExpression: never;
+export let TupleExpression: never;
 if (!process.env.BABEL_8_BREAKING) {
-  RecordExpression = function (node) {
+  // @ts-ignore(Babel 7 vs Babel 8) - t.RecordExpression only exists in Babel 7
+  RecordExpression = function (this: Printer, node: t.RecordExpression) {
     const props = node.properties;
 
     let startToken;
@@ -175,7 +174,8 @@ if (!process.env.BABEL_8_BREAKING) {
     this.token(endToken);
   };
 
-  TupleExpression = function (node) {
+  // @ts-ignore(Babel 7 vs Babel 8) - t.TupleExpression only exists in Babel 7
+  TupleExpression = function (this: Printer, node: t.TupleExpression) {
     const elems = node.elements;
     const len = elems.length;
 
