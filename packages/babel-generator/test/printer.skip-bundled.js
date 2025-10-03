@@ -15,7 +15,9 @@ describe("Printer", () => {
         // Babel 7 AST
         if (
           type === "DecimalLiteral" ||
-          type === "TSExpressionWithTypeArguments"
+          type === "TSExpressionWithTypeArguments" ||
+          type === "RecordExpression" ||
+          type === "TupleExpression"
         ) {
           return;
         }
