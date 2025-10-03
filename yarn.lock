@@ -1654,6 +1654,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-proposal-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
