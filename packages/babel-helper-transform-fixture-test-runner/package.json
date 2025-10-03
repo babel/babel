@@ -23,7 +23,8 @@
     "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^30.0.0",
     "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
+    "resolve": "2.0.0-next.5"
   },
   "devDependencies": {
     "@types/fs-readdir-recursive": "^1.1.0"
