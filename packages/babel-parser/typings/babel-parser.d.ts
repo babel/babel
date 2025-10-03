@@ -291,25 +291,8 @@ declare const _default: {
 };
 //# sourceMappingURL=parse-expression-errors.d.ts.map
 
-type ParseError = SyntaxError & {
-    missingPlugin?: string | string[];
-    loc: Position;
-    pos: number;
-} & ErrorObjects;
-type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
-type ErrorToObject<T> = {
-    [K in keyof T]: {
-        code: T[K] extends {
-            code: string;
-        } ? T[K]["code"] : "BABEL_PARSER_SYNTAX_ERROR";
-        reasonCode: K;
-        details: T[K] extends {
-            message: string | ToMessage<any>;
-        } ? T[K]["message"] extends ToMessage<any> ? Parameters<T[K]["message"]>[0] : object : T[K] extends ToMessage<any> ? Parameters<T[K]>[0] : object;
-    };
-};
-type ErrorToObjects<T, U = ErrorToObject<T>> = U[keyof U];
-type ErrorObjects = ErrorToObjects<typeof _default$3> | ErrorToObjects<typeof _default$2> | ErrorToObjects<typeof _default$1> | ErrorToObjects<typeof _default> | ErrorToObjects<typeof _default$4>;
+type Accessibility = "public" | "protected" | "private";
+type VarianceAnnotations = "in" | "out";
 
 type BABEL_8_BREAKING = false;
 type IF_BABEL_7<V> = false extends BABEL_8_BREAKING ? V : never;
@@ -403,6 +386,244 @@ interface TypeScriptPluginOptions {
   dts?: boolean;
   disallowAmbiguousJSXLike?: boolean;
 }
+
+declare const JsxErrorTemplates: {
+    AttributeIsEmpty: string;
+    MissingClosingTagElement: ({ openingTagName }: {
+        openingTagName: string;
+    }) => string;
+    MissingClosingTagFragment: string;
+    UnexpectedSequenceExpression: string;
+    UnexpectedToken: ({ unexpected, HTMLEntity, }: {
+        unexpected: string;
+        HTMLEntity: string;
+    }) => string;
+    UnsupportedJsxValue: string;
+    UnterminatedJsxContent: string;
+    UnwrappedAdjacentJSXElements: string;
+};
+
+type TsModifier = "readonly" | "abstract" | "declare" | "static" | "override" | "const" | Accessibility | VarianceAnnotations;
+declare const TSErrorTemplates: {
+    AbstractMethodHasImplementation: ({ methodName }: {
+        methodName: string;
+    }) => string;
+    AbstractPropertyHasInitializer: ({ propertyName, }: {
+        propertyName: string;
+    }) => string;
+    AccessorCannotBeOptional: string;
+    AccesorCannotDeclareThisParameter: string;
+    AccesorCannotHaveTypeParameters: string;
+    ClassMethodHasDeclare: string;
+    ClassMethodHasReadonly: string;
+    ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference: string;
+    ConstructorHasTypeParameters: string;
+    DeclareAccessor: ({ kind }: {
+        kind: "get" | "set";
+    }) => string;
+    DeclareClassFieldHasInitializer: string;
+    DeclareFunctionHasImplementation: string;
+    DuplicateAccessibilityModifier: ({ modifier, }: {
+        modifier: Accessibility;
+    }) => string;
+    DuplicateModifier: ({ modifier }: {
+        modifier: TsModifier;
+    }) => string;
+    EmptyHeritageClauseType: ({ token }: {
+        token: "extends" | "implements";
+    }) => string;
+    EmptyTypeArguments: string;
+    EmptyTypeParameters: string;
+    ExpectedAmbientAfterExportDeclare: string;
+    ImportAliasHasImportType: string;
+    ImportReflectionHasImportType: string;
+    IncompatibleModifiers: ({ modifiers, }: {
+        modifiers: [TsModifier, TsModifier];
+    }) => string;
+    IndexSignatureHasAbstract: string;
+    IndexSignatureHasAccessibility: ({ modifier, }: {
+        modifier: Accessibility;
+    }) => string;
+    IndexSignatureHasDeclare: string;
+    IndexSignatureHasOverride: string;
+    IndexSignatureHasStatic: string;
+    InitializerNotAllowedInAmbientContext: string;
+    InvalidHeritageClauseType: ({ token }: {
+        token: "extends" | "implements";
+    }) => string;
+    InvalidModifierOnAwaitUsingDeclaration: (modifier: TsModifier) => string;
+    InvalidModifierOnTypeMember: ({ modifier }: {
+        modifier: TsModifier;
+    }) => string;
+    InvalidModifierOnTypeParameter: ({ modifier }: {
+        modifier: TsModifier;
+    }) => string;
+    InvalidModifierOnTypeParameterPositions: ({ modifier, }: {
+        modifier: TsModifier;
+    }) => string;
+    InvalidModifierOnUsingDeclaration: (modifier: TsModifier) => string;
+    InvalidModifiersOrder: ({ orderedModifiers, }: {
+        orderedModifiers: [TsModifier, TsModifier];
+    }) => string;
+    InvalidPropertyAccessAfterInstantiationExpression: string;
+    InvalidTupleMemberLabel: string;
+    MissingInterfaceName: string;
+    NonAbstractClassHasAbstractMethod: string;
+    NonClassMethodPropertyHasAbstractModifier: string;
+    OptionalTypeBeforeRequired: string;
+    OverrideNotInSubClass: string;
+    PatternIsOptional: string;
+    PrivateElementHasAbstract: string;
+    PrivateElementHasAccessibility: ({ modifier, }: {
+        modifier: Accessibility;
+    }) => string;
+    ReadonlyForMethodSignature: string;
+    ReservedArrowTypeParam: string;
+    ReservedTypeAssertion: string;
+    SetAccesorCannotHaveOptionalParameter: string;
+    SetAccesorCannotHaveRestParameter: string;
+    SetAccesorCannotHaveReturnType: string;
+    SingleTypeParameterWithoutTrailingComma: ({ typeParameterName, }: {
+        typeParameterName: string;
+    }) => string;
+    StaticBlockCannotHaveModifier: string;
+    TupleOptionalAfterType: string;
+    TypeAnnotationAfterAssign: string;
+    TypeImportCannotSpecifyDefaultAndNamed: string;
+    TypeModifierIsUsedInTypeExports: string;
+    TypeModifierIsUsedInTypeImports: string;
+    UnexpectedParameterModifier: string;
+    UnexpectedReadonly: string;
+    UnexpectedTypeAnnotation: string;
+    UnexpectedTypeCastInParameter: string;
+    UnsupportedImportTypeArgument: string;
+    UnsupportedParameterPropertyKind: string;
+    UnsupportedSignatureParameterKind: ({ type }: {
+        type: string;
+    }) => string;
+    UsingDeclarationInAmbientContext: (kind: "using" | "await using") => string;
+};
+
+declare const FlowErrorTemplates: {
+    AmbiguousConditionalArrow: string;
+    AmbiguousDeclareModuleKind: string;
+    AssignReservedType: ({ reservedType }: {
+        reservedType: string;
+    }) => string;
+    DeclareClassElement: string;
+    DeclareClassFieldInitializer: string;
+    DuplicateDeclareModuleExports: string;
+    EnumBooleanMemberNotInitialized: ({ memberName, enumName, }: {
+        memberName: string;
+        enumName: string;
+    }) => string;
+    EnumDuplicateMemberName: ({ memberName, enumName, }: {
+        memberName: string;
+        enumName: string;
+    }) => string;
+    EnumInconsistentMemberValues: ({ enumName }: {
+        enumName: string;
+    }) => string;
+    EnumInvalidExplicitType: ({ invalidEnumType, enumName, }: {
+        invalidEnumType: string;
+        enumName: string;
+    }) => string;
+    EnumInvalidExplicitTypeUnknownSupplied: ({ enumName, }: {
+        enumName: string;
+    }) => string;
+    EnumInvalidMemberInitializerPrimaryType: ({ enumName, memberName, explicitType, }: {
+        enumName: string;
+        memberName: string;
+        explicitType: EnumExplicitType;
+    }) => string;
+    EnumInvalidMemberInitializerSymbolType: ({ enumName, memberName, }: {
+        enumName: string;
+        memberName: string;
+        explicitType: EnumExplicitType;
+    }) => string;
+    EnumInvalidMemberInitializerUnknownType: ({ enumName, memberName, }: {
+        enumName: string;
+        memberName: string;
+        explicitType: EnumExplicitType;
+    }) => string;
+    EnumInvalidMemberName: ({ enumName, memberName, suggestion, }: {
+        enumName: string;
+        memberName: string;
+        suggestion: string;
+    }) => string;
+    EnumNumberMemberNotInitialized: ({ enumName, memberName, }: {
+        enumName: string;
+        memberName: string;
+    }) => string;
+    EnumStringMemberInconsistentlyInitialized: ({ enumName, }: {
+        enumName: string;
+    }) => string;
+    GetterMayNotHaveThisParam: string;
+    ImportReflectionHasImportType: string;
+    ImportTypeShorthandOnlyInPureImport: string;
+    InexactInsideExact: string;
+    InexactInsideNonObject: string;
+    InexactVariance: string;
+    InvalidNonTypeImportInDeclareModule: string;
+    MissingTypeParamDefault: string;
+    NestedDeclareModule: string;
+    NestedFlowComment: string;
+    PatternIsOptional: {
+        reasonCode?: string | undefined;
+        message: string;
+    };
+    SetterMayNotHaveThisParam: string;
+    SpreadVariance: string;
+    ThisParamAnnotationRequired: string;
+    ThisParamBannedInConstructor: string;
+    ThisParamMayNotBeOptional: string;
+    ThisParamMustBeFirst: string;
+    ThisParamNoDefault: string;
+    TypeBeforeInitializer: string;
+    TypeCastInPattern: string;
+    UnexpectedExplicitInexactInObject: string;
+    UnexpectedReservedType: ({ reservedType }: {
+        reservedType: string;
+    }) => string;
+    UnexpectedReservedUnderscore: string;
+    UnexpectedSpaceBetweenModuloChecks: string;
+    UnexpectedSpreadType: string;
+    UnexpectedSubtractionOperand: string;
+    UnexpectedTokenAfterTypeParameter: string;
+    UnexpectedTypeParameterBeforeAsyncArrowFunction: string;
+    UnsupportedDeclareExportKind: ({ unsupportedExportKind, suggestion, }: {
+        unsupportedExportKind: string;
+        suggestion: string;
+    }) => string;
+    UnsupportedStatementInDeclareModule: string;
+    UnterminatedFlowComment: string;
+};
+type EnumExplicitType = null | "boolean" | "number" | "string" | "symbol";
+
+type ParseError = SyntaxError & {
+    missingPlugin?: string | string[];
+    loc: Position;
+    pos: number;
+} & ErrorObjects;
+type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
+type ErrorToObject<T> = {
+    [K in keyof T]: {
+        code: T[K] extends {
+            code: string;
+        } ? T[K]["code"] : "BABEL_PARSER_SYNTAX_ERROR";
+        reasonCode: K;
+        details: T[K] extends {
+            message: string | ToMessage<any>;
+        } ? T[K]["message"] extends ToMessage<any> ? Parameters<T[K]["message"]>[0] : object : T[K] extends ToMessage<any> ? Parameters<T[K]>[0] : object;
+    };
+};
+type ErrorToObjects<T, U = ErrorToObject<T>> = U[keyof U];
+type ErrorObjects = ErrorToObjects<typeof _default$3> | ErrorToObjects<typeof _default$2> | ErrorToObjects<typeof _default$1> | ErrorToObjects<typeof _default> | ErrorToObjects<typeof _default$4> | ErrorToObjects<typeof TSErrorTemplates> | ErrorToObjects<typeof FlowErrorTemplates> | ErrorToObjects<typeof JsxErrorTemplates> | ErrorToObjects<typeof PlaceholderErrorTemplates>;
+
+declare const PlaceholderErrorTemplates: {
+    ClassNameIsRequired: string;
+    UnexpectedSpace: string;
+};
 
 type Plugin = PluginConfig;
 
