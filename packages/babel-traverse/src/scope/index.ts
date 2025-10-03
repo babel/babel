@@ -436,17 +436,17 @@ class Scope {
   path!: NodePath;
   block!: t.Pattern | t.Scopable;
 
-  declare inited;
+  inited!: boolean;
 
-  declare labels: Map<string, NodePath<t.LabeledStatement>>;
-  declare bindings: { [name: string]: Binding };
+  labels!: Map<string, NodePath<t.LabeledStatement>>;
+  bindings!: { [name: string]: Binding };
   /** Only defined in the program scope */
-  declare referencesSet?: Set<string>;
-  declare globals: { [name: string]: t.Identifier | t.JSXIdentifier };
+  referencesSet?: Set<string>;
+  globals!: { [name: string]: t.Identifier | t.JSXIdentifier };
   /** Only defined in the program scope */
-  declare uidsSet?: Set<string>;
-  declare data: { [key: string | symbol]: unknown };
-  declare crawling: boolean;
+  uidsSet?: Set<string>;
+  data!: { [key: string | symbol]: unknown };
+  crawling!: boolean;
 
   /**
    * This searches the current "scope" and collects all references/bindings
