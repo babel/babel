@@ -474,9 +474,14 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     function accumulateAttribute(
       array: ObjectExpression["properties"],
       attribute: NodePath<JSXAttribute | JSXSpreadAttribute>,
+      i?: number,
     ) {
+      if (i === 0) {
+        leadingComments = undefined;
+      }
       if (t.isJSXSpreadAttribute(attribute.node)) {
         const arg = attribute.node.argument;
+        leadingComments ||= arg.leadingComments;
         // Collect properties into props array if spreading object expression
         if (t.isObjectExpression(arg) && !hasProto(arg)) {
           array.push(...arg.properties);
@@ -601,6 +606,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // which will be thrown later
           children,
         );
+        if (leadingComments) {
+          attribs.leadingComments = leadingComments;
+        }
       } else {
         // attributes should never be null
         attribs = t.objectExpression([]);
@@ -777,6 +785,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             return t.nullLiteral();
           }
 
+          if (leadingComments) {
+            objs[0].leadingComments = leadingComments;
+          }
+
           if (objs.length === 1) {
             if (
               !(
@@ -808,6 +820,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const props: ObjectExpression["properties"] = [];
       const found = Object.create(null);
 
+      leadingComments = undefined;
       for (const attr of attribs) {
         const { node } = attr;
         const name =
@@ -826,16 +839,21 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         accumulateAttribute(props, attr);
       }
 
-      return props.length === 1 &&
+      const ret =
+        props.length === 1 &&
         t.isSpreadElement(props[0]) &&
         // If an object expression is spread element's argument
         // it is very likely to contain __proto__ and we should stop
         // optimizing spread element
         !t.isObjectExpression(props[0].argument)
-        ? props[0].argument
-        : props.length > 0
-          ? t.objectExpression(props)
-          : t.nullLiteral();
+          ? props[0].argument
+          : props.length > 0
+            ? t.objectExpression(props)
+            : t.nullLiteral();
+      if (leadingComments) {
+        ret.leadingComments = leadingComments;
+      }
+      return ret;
     }
   });
 
