@@ -64,7 +64,7 @@ const pluginsListWithProposals = Object.assign(
   pluginsList,
   pluginsBugfixesList,
 );
-const pluginsListWithuotProposals = filterStageFromList(
+const pluginsListWithoutProposals = filterStageFromList(
   pluginsListWithProposals,
   proposalPlugins,
 );
@@ -392,7 +392,7 @@ option \`forceAllTransforms: true\` instead.
     process.env.BABEL_8_BREAKING || bugfixes
       ? shippedProposals
         ? pluginsListWithProposals
-        : pluginsListWithuotProposals
+        : pluginsListWithoutProposals
       : shippedProposals
         ? pluginsListNoBugfixesWithProposals
         : pluginsListNoBugfixesWithoutProposals;
