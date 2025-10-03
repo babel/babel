@@ -35,6 +35,11 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn info
 
+
+if [ "$BABEL_8_BREAKING" = true ] ; then
+  sed -i "s/ts-expect-error//g" ./src/language-json/parser-json.js
+fi
+
 # Test typings for @babel/parser
 yarn lint:typecheck
 
