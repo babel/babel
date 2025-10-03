@@ -163,6 +163,7 @@ function generateStandalone() {
           let exportDecls = "";
           let exportsList = "";
           let allList = "";
+          let extraCode = "";
 
           for (const plugin of pluginConfig.noopPlugins) {
             const camelPlugin = kebabToCamel(plugin);
@@ -177,6 +178,13 @@ function generateStandalone() {
             allList += `"${plugin}": ${camelPlugin},`;
           }
 
+          for (const plugin of pluginConfig.babel7OnlyExternalPlugins) {
+            const camelPlugin = kebabToCamel(plugin);
+            imports += `import ${camelPlugin} from "@babel/plugin-${plugin}" with { if: "!process.env.BABEL_8_BREAKING" };`;
+            extraCode += `\nexport { default as ${camelPlugin} } from "@babel/plugin-${plugin}" with { if: "!process.env.BABEL_8_BREAKING" };`;
+            extraCode += `if (!process.env.BABEL_8_BREAKING) all["${plugin}"] = ${camelPlugin};`;
+          }
+
           const fileContents = `/*
    * This file is auto-generated! Do not modify it directly.
    * To re-generate run 'yarn gulp generate-standalone'
@@ -184,7 +192,8 @@ function generateStandalone() {
   ${imports}
   export const ${exportDecls.slice(0, -1)};
   export {${exportsList}};
-  export const all: { [k: string]: any } = {${allList}};`;
+  export const all: { [k: string]: any } = {${allList}};
+  ${extraCode}`;
           file.path = "plugins.ts";
           file.contents = Buffer.from(
             await formatCode(fileContents, dest + file.path)

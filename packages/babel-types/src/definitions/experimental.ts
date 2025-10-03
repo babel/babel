@@ -69,26 +69,26 @@ defineType("ExportDefaultSpecifier", {
   },
 });
 
-defineType("RecordExpression", {
-  visitor: ["properties"],
-  aliases: ["Expression"],
-  fields: {
-    properties: validateArrayOfType("ObjectProperty", "SpreadElement"),
-  },
-});
-
-defineType("TupleExpression", {
-  fields: {
-    elements: {
-      validate: arrayOfType("Expression", "SpreadElement"),
-      default: [],
-    },
-  },
-  visitor: ["elements"],
-  aliases: ["Expression"],
-});
-
 if (!process.env.BABEL_8_BREAKING) {
+  defineType("RecordExpression", {
+    visitor: ["properties"],
+    aliases: ["Expression"],
+    fields: {
+      properties: validateArrayOfType("ObjectProperty", "SpreadElement"),
+    },
+  });
+
+  defineType("TupleExpression", {
+    fields: {
+      elements: {
+        validate: arrayOfType("Expression", "SpreadElement"),
+        default: [],
+      },
+    },
+    visitor: ["elements"],
+    aliases: ["Expression"],
+  });
+
   defineType("DecimalLiteral", {
     builder: ["value"],
     fields: {

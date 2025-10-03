@@ -1,6 +1,0 @@
-{
-  "plugins": [["proposal-record-and-tuple", {
-    "syntaxType": "hash",
-    "polyfillModuleName": "my-polyfill"
-  }]]
-}

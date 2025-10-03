@@ -20,7 +20,6 @@ import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxModuleBlocks from "@babel/plugin-syntax-module-blocks";
 import syntaxOptionalChainingAssign from "@babel/plugin-syntax-optional-chaining-assign";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
-import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformClassProperties from "@babel/plugin-transform-class-properties";
@@ -45,7 +44,6 @@ import proposalOptionalChainingAssign from "@babel/plugin-proposal-optional-chai
 import proposalPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
-import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple";
 import transformRegexpModifiers from "@babel/plugin-transform-regexp-modifiers";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import transformUnicodePropertyRegex from "@babel/plugin-transform-unicode-property-regex";
@@ -104,6 +102,8 @@ import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformExplicitResourceManagement from "@babel/plugin-transform-explicit-resource-management";
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
+import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
+import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -129,7 +129,6 @@ export {
   syntaxModuleBlocks,
   syntaxOptionalChainingAssign,
   syntaxPipelineOperator,
-  syntaxRecordAndTuple,
   syntaxTypescript,
   transformAsyncGeneratorFunctions,
   transformClassProperties,
@@ -154,7 +153,6 @@ export {
   proposalPipelineOperator,
   transformPrivateMethods,
   transformPrivatePropertyInObject,
-  proposalRecordAndTuple,
   transformRegexpModifiers,
   proposalThrowExpressions,
   transformUnicodePropertyRegex,
@@ -239,7 +237,6 @@ export const all: { [k: string]: any } = {
   "syntax-module-blocks": syntaxModuleBlocks,
   "syntax-optional-chaining-assign": syntaxOptionalChainingAssign,
   "syntax-pipeline-operator": syntaxPipelineOperator,
-  "syntax-record-and-tuple": syntaxRecordAndTuple,
   "syntax-typescript": syntaxTypescript,
   "transform-async-generator-functions": transformAsyncGeneratorFunctions,
   "transform-class-properties": transformClassProperties,
@@ -265,7 +262,6 @@ export const all: { [k: string]: any } = {
   "proposal-pipeline-operator": proposalPipelineOperator,
   "transform-private-methods": transformPrivateMethods,
   "transform-private-property-in-object": transformPrivatePropertyInObject,
-  "proposal-record-and-tuple": proposalRecordAndTuple,
   "transform-regexp-modifiers": transformRegexpModifiers,
   "proposal-throw-expressions": proposalThrowExpressions,
   "transform-unicode-property-regex": transformUnicodePropertyRegex,
@@ -326,3 +322,10 @@ export const all: { [k: string]: any } = {
   "transform-explicit-resource-management": transformExplicitResourceManagement,
   "proposal-import-defer": proposalImportDefer,
 };
+
+export { default as syntaxRecordAndTuple } from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
+if (!process.env.BABEL_8_BREAKING)
+  all["syntax-record-and-tuple"] = syntaxRecordAndTuple;
+export { default as proposalRecordAndTuple } from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
+if (!process.env.BABEL_8_BREAKING)
+  all["proposal-record-and-tuple"] = proposalRecordAndTuple;

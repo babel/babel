@@ -1654,6 +1654,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-proposal-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1678,20 +1679,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-record-and-tuple@workspace:^, @babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple"
+"@babel/plugin-proposal-record-and-tuple@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-proposal-record-and-tuple@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-syntax-record-and-tuple": "workspace:^"
+    "@babel/helper-module-imports": "npm:^7.27.1"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
+    "@babel/helper-validator-option": "npm:^7.27.1"
+    "@babel/plugin-syntax-record-and-tuple": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.12.0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/1dd707370ac5c6c349da7af826bd26448bed3cf06b9ba1d6864894105fd25fb02af0e1f0a2d50489826ee2d3e0bafcea47f5e4879d2fa8ff6148e2dc2c4f6278
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-proposal-throw-expressions@workspace:^, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
@@ -2145,16 +2145,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-record-and-tuple@workspace:^, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple"
+"@babel/plugin-syntax-record-and-tuple@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-syntax-record-and-tuple@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/c45d6b3fa76b032a070162c277b80e3686c805cb56382338445f09d9edd869b67f9750606dd420a529bd7b4569641554c500d246ebd1d1df550a2a2e1f0ddd88
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-syntax-throw-expressions@workspace:packages/babel-plugin-syntax-throw-expressions":
   version: 0.0.0-use.local
@@ -4140,7 +4140,7 @@ __metadata:
     "@babel/plugin-proposal-import-defer": "workspace:^"
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
-    "@babel/plugin-proposal-record-and-tuple": "workspace:^"
+    "@babel/plugin-proposal-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-syntax-decimal": "npm:^7.24.7"
     "@babel/plugin-syntax-decorators": "workspace:^"
@@ -4158,7 +4158,7 @@ __metadata:
     "@babel/plugin-syntax-module-blocks": "workspace:^"
     "@babel/plugin-syntax-optional-chaining-assign": "workspace:^"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
-    "@babel/plugin-syntax-record-and-tuple": "workspace:^"
+    "@babel/plugin-syntax-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-syntax-typescript": "workspace:^"
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-async-generator-functions": "workspace:^"
