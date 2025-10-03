@@ -1,5 +1,5 @@
 // TODO: Move this file to index.js in Babel 8
-import type { IClient, Options } from "./types.cts";
+import type { IClient, Options, RegistrationOptions } from "./types.cts";
 
 const [major, minor] = process.versions.node.split(".").map(Number);
 
@@ -13,9 +13,9 @@ import hook = require("./hook.cjs");
 import workerClient = require("./worker-client.cjs");
 
 let client: IClient;
-function register(opts?: Options) {
+function register(opts?: Options, regOpts?: RegistrationOptions) {
   client ||= new workerClient.WorkerClient();
-  hook.register(client, opts);
+  hook.register(client, opts, regOpts);
 }
 
 export = Object.assign(register, {
