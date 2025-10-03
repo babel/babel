@@ -3,7 +3,7 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
 import type * as N from "../types.ts";
-import { ParseErrorEnum } from "../parse-error.ts";
+import { ParseErrorEnum, type ParseErrorTemplates } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
@@ -30,10 +30,14 @@ type NodeOf<T extends keyof PossiblePlaceholders> = PossiblePlaceholders[T];
 type MaybePlaceholder<T extends PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = ParseErrorEnum`placeholders`({
+export const PlaceholderErrorTemplates = {
   ClassNameIsRequired: "A class name is required.",
   UnexpectedSpace: "Unexpected space in placeholder.",
-});
+} satisfies ParseErrorTemplates;
+
+const PlaceholderErrors = ParseErrorEnum`placeholders`(
+  PlaceholderErrorTemplates,
+);
 
 export default (superClass: typeof Parser) =>
   class PlaceholdersParserMixin extends superClass implements Parser {

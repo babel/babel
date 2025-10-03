@@ -16,11 +16,15 @@ import type * as N from "../../types.ts";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier.ts";
 import type { Position } from "../../util/location.ts";
 import { isNewLine } from "../../util/whitespace.ts";
-import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import {
+  Errors,
+  ParseErrorEnum,
+  type ParseErrorTemplates,
+} from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = ParseErrorEnum`jsx`({
+export const JsxErrorTemplates = {
   AttributeIsEmpty:
     "JSX attributes must only be assigned a non-empty expression.",
   MissingClosingTagElement: ({ openingTagName }: { openingTagName: string }) =>
@@ -42,9 +46,10 @@ const JsxErrors = ParseErrorEnum`jsx`({
   UnterminatedJsxContent: "Unterminated JSX contents.",
   UnwrappedAdjacentJSXElements:
     "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-});
-
+} satisfies ParseErrorTemplates;
 /* eslint-disable sort-keys */
+
+const JsxErrors = ParseErrorEnum`jsx`(JsxErrorTemplates);
 
 function isFragment(object?: N.JSXTag | null): object is N.JSXFragmentTag {
   return object
