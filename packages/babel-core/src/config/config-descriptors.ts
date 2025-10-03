@@ -146,7 +146,7 @@ export function createUncachedDescriptors(
 
 const PRESET_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPresetDescriptors = makeWeakCacheSync(
-  (items: PluginItem[], cache: CacheConfigurator<string>) => {
+  (items: PresetItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
@@ -235,7 +235,7 @@ function loadCachedDescriptor<API>(
 }
 
 function* createPresetDescriptors(
-  items: PluginItem[],
+  items: PresetItem[],
   dirname: string,
   alias: string,
   passPerPreset: boolean,
@@ -257,13 +257,15 @@ function* createPluginDescriptors(
   return yield* createDescriptors("plugin", items, dirname, alias);
 }
 
-function* createDescriptors<API>(
-  type: "plugin" | "preset",
-  items: PluginItem[] | PresetItem[],
+function* createDescriptors<const Type extends "plugin" | "preset">(
+  type: Type,
+  items: Type extends "plugin" ? PluginItem[] : PresetItem[],
   dirname: string,
   alias: string,
   ownPass?: boolean,
-): Handler<Array<UnloadedDescriptor<API>>> {
+): Handler<
+  Array<UnloadedDescriptor<Type extends "plugin" ? PluginAPI : PresetAPI>>
+> {
   const descriptors = yield* gensync.all(
     items.map((item, index) =>
       createDescriptor(item, dirname, {

@@ -39,6 +39,7 @@ import ConfigError from "../../errors/config-error.ts";
 import type { PluginObject } from "./plugins.ts";
 import type Plugin from "../plugin.ts";
 import type { PresetAPI } from "../index.ts";
+import type { PresetObject } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: assertString as Validator<InputOptions["cwd"]>,
@@ -183,7 +184,7 @@ export type InputOptions = {
   test?: ConfigApplicableTest;
   include?: ConfigApplicableTest;
   exclude?: ConfigApplicableTest;
-  presets?: PluginItem[];
+  presets?: PresetItem[];
   plugins?: PluginItem[];
   passPerPreset?: boolean;
   assumptions?: Assumptions;
@@ -276,9 +277,13 @@ export type MatchItem =
       context: { dirname: string; caller: CallerMetadata; envName: string },
     ) => unknown);
 
+export type MaybeDefaultProperty<T> = T | { default: T };
+
 export type PluginTarget =
   | string
-  | ((api: PluginAPI, options?: object, dirname?: string) => PluginObject);
+  | MaybeDefaultProperty<
+      (api: PluginAPI, options?: object, dirname?: string) => PluginObject
+    >;
 export type PluginItem =
   | ConfigItem<PluginAPI>
   | PluginTarget
@@ -287,7 +292,9 @@ export type PluginItem =
 
 export type PresetTarget =
   | string
-  | ((api: PresetAPI, options?: object, dirname?: string) => PluginObject);
+  | MaybeDefaultProperty<
+      (api: PresetAPI, options?: object, dirname?: string) => PresetObject
+    >;
 export type PresetItem =
   | ConfigItem<PresetAPI>
   | PresetTarget
