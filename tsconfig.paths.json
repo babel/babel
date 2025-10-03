@@ -164,9 +164,6 @@
       "@babel/plugin-proposal-pipeline-operator": [
         "./packages/babel-plugin-proposal-pipeline-operator/src"
       ],
-      "@babel/plugin-proposal-record-and-tuple": [
-        "./packages/babel-plugin-proposal-record-and-tuple/src"
-      ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"
       ],
@@ -223,9 +220,6 @@
       ],
       "@babel/plugin-syntax-pipeline-operator": [
         "./packages/babel-plugin-syntax-pipeline-operator/src"
-      ],
-      "@babel/plugin-syntax-record-and-tuple": [
-        "./packages/babel-plugin-syntax-record-and-tuple/src"
       ],
       "@babel/plugin-syntax-throw-expressions": [
         "./packages/babel-plugin-syntax-throw-expressions/src"
@@ -491,6 +485,9 @@
       "@babel/plugin-codemod-optional-catch-binding": [
         "./codemods/babel-plugin-codemod-optional-catch-binding/src"
       ],
+      "@babel/plugin-proposal-record-and-tuple": [
+        "./lib/archived-libs.d.ts"
+      ],
       "@babel/plugin-syntax-async-functions": [
         "./lib/archived-libs.d.ts"
       ],
@@ -546,6 +543,9 @@
         "./lib/archived-libs.d.ts"
       ],
       "@babel/plugin-syntax-private-property-in-object": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-syntax-record-and-tuple": [
         "./lib/archived-libs.d.ts"
       ],
       "@babel/plugin-syntax-top-level-await": [
