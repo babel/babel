@@ -908,16 +908,22 @@ class Scope {
       );
     } else if (
       isArrayExpression(node) ||
-      (!process.env.BABEL_8_BREAKING && t.isTupleExpression(node))
+      (!process.env.BABEL_8_BREAKING &&
+        // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
+        t.isTupleExpression(node))
     ) {
+      // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ArrayExpression
       for (const elem of node.elements) {
         if (elem !== null && !this.isPure(elem, constantsOnly)) return false;
       }
       return true;
     } else if (
       isObjectExpression(node) ||
-      (!process.env.BABEL_8_BREAKING && t.isRecordExpression(node))
+      (!process.env.BABEL_8_BREAKING &&
+        // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
+        t.isRecordExpression(node))
     ) {
+      // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ObjectExpression
       for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
