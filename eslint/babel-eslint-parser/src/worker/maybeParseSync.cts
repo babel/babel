@@ -3,7 +3,7 @@ import convert = require("../convert/index.cts");
 import astInfo = require("./ast-info.cts");
 import extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
 
-import type { InputOptions, ConfigItem } from "@babel/core";
+import type { InputOptions, ConfigItem, NormalizedOptions } from "@babel/core";
 import type { AST, ParseResult } from "../types.cts";
 
 const { getVisitorKeys, getTokLabels } = astInfo;
@@ -15,7 +15,7 @@ const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
 export = function maybeParseSync(
   code: string,
-  options: InputOptions,
+  options: InputOptions | NormalizedOptions,
 ): {
   ast: AST.Program | null;
   parserOptions: ParseResult | null;

@@ -596,12 +596,10 @@ export default function (
             if (dynamicOpts) dynamicOpts(task.options, task);
 
             if (task.externalHelpers) {
-              (task.options.plugins ??= [])
-                // @ts-expect-error manipulating input options
-                .push([
-                  "external-helpers",
-                  { helperVersion: EXTERNAL_HELPERS_VERSION },
-                ]);
+              (task.options.plugins ??= []).push([
+                "external-helpers",
+                { helperVersion: EXTERNAL_HELPERS_VERSION },
+              ]);
             }
 
             const throwMsg = task.options.throws;

@@ -355,16 +355,16 @@ function buildHelper(
     presets: [[presetEnv, { modules: false }]],
     plugins: [
       polyfillProvider,
-      [transformRuntime, { version: runtimeVersion }],
-      buildRuntimeRewritePlugin(runtimeName, helperName),
+      [transformRuntime, { version: runtimeVersion }] satisfies PluginItem,
+      [runtimeRewritePlugin, { runtimeName, helperName }] satisfies PluginItem,
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean),
   }).code;
 }
 
-function buildRuntimeRewritePlugin(
-  runtimeName: string,
-  helperName: string
+function runtimeRewritePlugin(
+  _api: PluginAPI,
+  { runtimeName, helperName }: { runtimeName: string; helperName: string }
 ): PluginObject {
   /**
    * Rewrite helper imports to load the adequate module format version
