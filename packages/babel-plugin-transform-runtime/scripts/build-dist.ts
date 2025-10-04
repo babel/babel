@@ -363,7 +363,7 @@ function buildHelper(
 }
 
 function runtimeRewritePlugin(
-  _api: unknown,
+  _api: PluginAPI,
   { runtimeName, helperName }: { runtimeName: string; helperName: string }
 ): PluginObject {
   /**
