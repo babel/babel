@@ -68,12 +68,30 @@ function growRestExcludingKeys(
     } else if (propertyKey.type !== "PrivateName") {
       const isDuplicate = excludingKeys.some(existing => {
         if (existing.computed || property.computed) return false;
-        if (
-          existing.key.type === "Identifier" &&
-          propertyKey.type === "Identifier"
-        ) {
-          return existing.key.name === propertyKey.name;
+
+        // Helper function to get the string representation of a key
+        const getKeyString = (key: t.ObjectProperty["key"]): string | null => {
+          switch (key.type) {
+            case "Identifier":
+              return key.name;
+            case "StringLiteral":
+              return key.value;
+            case "NumericLiteral":
+              return String(key.value);
+            case "BigIntLiteral":
+              return key.value; // Already a string in the AST
+            default:
+              return null;
+          }
+        };
+
+        const existingKeyStr = getKeyString(existing.key);
+        const propertyKeyStr = getKeyString(propertyKey);
+
+        if (existingKeyStr !== null && propertyKeyStr !== null) {
+          return existingKeyStr === propertyKeyStr;
         }
+
         return false;
       });
       if (!isDuplicate) {
