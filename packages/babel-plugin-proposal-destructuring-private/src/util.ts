@@ -70,7 +70,9 @@ function growRestExcludingKeys(
         if (existing.computed || property.computed) return false;
 
         // Helper function to get the string representation of a key
+        // Handles LiteralPropertyName (IdentifierName | StringLiteral | NumericLiteral)
         // https://tc39.es/ecma262/#prod-LiteralPropertyName
+        // Also handles BigIntLiteral from computed property names
         const getKeyString = (key: t.ObjectProperty["key"]): string | null => {
           switch (key.type) {
             case "Identifier":
