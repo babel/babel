@@ -1,4 +1,10 @@
 // TODO(Babel 8): Remove this file.
+if (require("../package.json").version.startsWith("8.")) {
+  throw new Error(
+    "The package '@babel/runtime/regenerator' has been removed in Babel 8. Babel" +
+      " now automatically injects the regenerator runtime like any other runtime helper."
+  );
+}
 
 var runtime = require("../helpers/regeneratorRuntime")();
 module.exports = runtime;
