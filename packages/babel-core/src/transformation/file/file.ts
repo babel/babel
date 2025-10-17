@@ -10,18 +10,19 @@ import type { NormalizedFile } from "../normalize-file.ts";
 
 // @ts-expect-error This file is `any`
 import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
-import type { NormalizedOptions } from "../../config/index.ts";
+import type { ResolvedOptions } from "../../config/validation/options.ts";
+import type { SourceMapConverter } from "convert-source-map";
 
 export default class File {
   _map: Map<unknown, unknown> = new Map();
-  opts: NormalizedOptions;
-  declarations: { [key: string]: t.Identifier } = {};
+  opts: ResolvedOptions;
+  declarations: Record<string, t.Identifier> = {};
   path: NodePath<t.Program>;
   ast: t.File;
   scope: Scope;
-  metadata: { [key: string]: any } = {};
+  metadata: Record<string, any> = {};
   code: string = "";
-  inputMap: any;
+  inputMap: SourceMapConverter;
 
   hub: HubInterface & { file: File } = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
@@ -32,7 +33,10 @@ export default class File {
     buildError: this.buildCodeFrameError.bind(this),
   };
 
-  constructor(options: any, { code, ast, inputMap }: NormalizedFile) {
+  constructor(
+    options: ResolvedOptions,
+    { code, ast, inputMap }: NormalizedFile,
+  ) {
     this.opts = options;
     this.code = code;
     this.ast = ast;

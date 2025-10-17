@@ -1,7 +1,7 @@
 import babel = require("./babel-core.cts");
 import semver = require("semver");
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
-import type { InputOptions } from "@babel/core";
+import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types.cts";
 import type { PartialConfig } from "../../../../packages/babel-core/src/config";
 
@@ -80,7 +80,7 @@ function validateResolvedConfig(
   config: PartialConfig,
   options: Options,
   parseOptions: InputOptions,
-) {
+): InputOptions | NormalizedOptions {
   if (config !== null) {
     if (options.requireConfigFile !== false) {
       if (!config.hasFilesystemConfig()) {
@@ -113,13 +113,15 @@ function getDefaultParserOptions(options: InputOptions): InputOptions {
 
 export async function normalizeBabelParseConfig(
   options: Options,
-): Promise<InputOptions> {
+): Promise<InputOptions | NormalizedOptions> {
   const parseOptions = normalizeParserOptions(options, babel.version);
   const config = await babel.loadPartialConfigAsync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }
 
-export function normalizeBabelParseConfigSync(options: Options): InputOptions {
+export function normalizeBabelParseConfigSync(
+  options: Options,
+): InputOptions | NormalizedOptions {
   const parseOptions = normalizeParserOptions(options, babel.version);
   const config = babel.loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);

@@ -13,7 +13,7 @@ import type {
 } from "./option-assertions.ts";
 import type { parse, ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
-import type { NormalizedOptions } from "./options.ts";
+import type { ResolvedOptions } from "./options.ts";
 import type { File, PluginAPI, PluginPass } from "../../index.ts";
 import type { GeneratorOptions, GeneratorResult } from "@babel/generator";
 import type babelGenerator from "@babel/generator";
@@ -84,7 +84,7 @@ type VisitorHandler =
 export type PluginObject<S extends PluginPass = PluginPass> = {
   name?: string;
   manipulateOptions?: (
-    options: NormalizedOptions,
+    options: ResolvedOptions,
     parserOpts: ParserOptions,
   ) => void;
   pre?: (this: S, file: File) => void | Promise<void>;

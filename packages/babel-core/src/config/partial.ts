@@ -9,10 +9,9 @@ import { getEnv } from "./helpers/environment.ts";
 import { validate } from "./validation/options.ts";
 
 import type {
-  ValidatedOptions,
-  NormalizedOptions,
   RootMode,
   InputOptions,
+  NormalizedOptions,
 } from "./validation/options.ts";
 
 import {
@@ -59,9 +58,9 @@ export type PrivPartialConfig = {
   showIgnoredFiles?: boolean;
   options: NormalizedOptions;
   context: ConfigContext;
-  babelrc: ConfigFile | void;
-  config: ConfigFile | void;
-  ignore: IgnoreFile | void;
+  babelrc: ConfigFile | undefined;
+  config: ConfigFile | undefined;
+  ignore: IgnoreFile | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 };
@@ -111,7 +110,7 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const merged: ValidatedOptions = {
+  const merged = {
     assumptions: {},
   };
   configChain.options.forEach(opts => {
@@ -177,7 +176,6 @@ export function* loadPartialConfig(
   }
 
   (options.plugins || []).forEach(item => {
-    // @ts-expect-error todo(flow->ts): better type annotation for `item.value`
     if (item.value instanceof Plugin) {
       throw new Error(
         "Passing cached plugin instances is not supported in " +
@@ -204,17 +202,17 @@ class PartialConfig {
    * a breaking change to Babel's API.
    */
   options: NormalizedOptions;
-  babelrc: string | void;
-  babelignore: string | void;
-  config: string | void;
+  babelrc: string | undefined;
+  babelignore: string | undefined;
+  config: string | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 
   constructor(
     options: NormalizedOptions,
-    babelrc: string | void,
-    ignore: string | void,
-    config: string | void,
+    babelrc: string | undefined,
+    ignore: string | undefined,
+    config: string | undefined,
     fileHandling: FileHandling,
     files: Set<string>,
   ) {
