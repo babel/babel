@@ -1,5 +1,0 @@
-{
-  "plugins": ["proposal-do-expressions"],
-  "presets": [["typescript", { "ignoreExtensions": true }]],
-  "minNodeVersion": "8.0.0"
-}

@@ -6,7 +6,7 @@ function f1(a) {
 function f2(a) {
   (do { if (effects.push(1), false) return 0; ({ key: (arg) => effects.push(arg) }) })
   [do { if (effects.push(2), a) return 1; 'key' }]
-  (...do { if (effects.push(3), false) return [2]; ['arg'] });
+  (do { if (effects.push(3), false) return 2; 'arg' });
 }
 
 effects = [];

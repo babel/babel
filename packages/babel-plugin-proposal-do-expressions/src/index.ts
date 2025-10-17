@@ -1,9 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath } from "@babel/core";
-import {
-  wrapDoExpressionInIIFE,
-  collectControlFlowStatements,
-} from "./utils.ts";
+import { wrapDoExpressionInIIFE } from "./utils.ts";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
@@ -18,39 +15,16 @@ export default declare(api => {
       DoExpression: {
         exit(path) {
           if (path.node.async) {
-            // Async do expressions are handled by proposal-async-do-expressions
+            // Async do expressions are not yet supported
             return;
           }
-          const controlFlowState = collectControlFlowStatements(path);
-          if (
-            controlFlowState.returnPath ||
-            controlFlowState.break.size ||
-            controlFlowState.continue.size
-          ) {
-            transformDoExpressionWithControlFlowStatements(path);
-          } else {
-            const body = path.node.body.body;
-            if (body.length) {
-              path.replaceExpressionWithStatements(body);
-            } else {
-              path.replaceWith(path.scope.buildUndefinedNode());
-            }
-          }
+          transformDoExpression(path);
         },
       },
     },
   };
 
-  /**
-   * Transforms a do expression with control flow statements, e.g. break, continue, return.
-   * To support these statements, we memoize top level expressions in the do block and then
-   * unwrap the block.
-   * @param doExprPath NodePath<t.DoExpression>
-   * @returns
-   */
-  function transformDoExpressionWithControlFlowStatements(
-    doExprPath: NodePath<t.DoExpression>,
-  ) {
+  function transformDoExpression(doExprPath: NodePath<t.DoExpression>) {
     const doAncestors = new WeakSet<t.Node>();
     let path: NodePath = doExprPath;
     while (path) {
@@ -202,8 +176,6 @@ export default declare(api => {
             if (left.isVariableDeclaration()) {
               const init = left.get("declarations")[0].get("init");
               if (init.node) {
-                // Sloppy mode would allow:
-                // for (var x = do { ... } in <iterator>);
                 throw init.buildCodeFrameError(
                   "Complex variable declaration in for-in with do expression is not currently supported",
                 );
@@ -318,7 +290,7 @@ export default declare(api => {
           if (doAncestors.has(left.node)) {
             if (path.node.operator !== "=") {
               throw path.buildCodeFrameError(
-                "Do expression inside complex assignment expression is not currently supported.",
+                "Do expression inside complex assignment expression is not currently supported",
               );
             }
             const uid = path.scope.generateDeclaredUidIdentifier("do");
