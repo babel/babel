@@ -637,6 +637,28 @@ function buildRollupDts(packages) {
       format: "es",
       banner,
     });
+
+    if (
+      !bool(process.env.BABEL_8_BREAKING) &&
+      output.includes("babel-parser.d.ts")
+    ) {
+      let code = fs.readFileSync(output, "utf-8");
+      const oldReasonCodes = {
+        AccessorCannotDeclareThisParameter: "AccesorCannotDeclareThisParameter",
+        AccessorCannotHaveTypeParameters: "AccesorCannotHaveTypeParameters",
+        ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+          "ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference",
+        SetAccessorCannotHaveOptionalParameter:
+          "SetAccesorCannotHaveOptionalParameter",
+        SetAccessorCannotHaveRestParameter: "SetAccesorCannotHaveRestParameter",
+        SetAccessorCannotHaveReturnType: "SetAccesorCannotHaveReturnType",
+      };
+      for (const k of Object.keys(oldReasonCodes)) {
+        const v = oldReasonCodes[k];
+        code = code.replaceAll(k, v);
+      }
+      fs.writeFileSync(output, code);
+    }
   }
 
   const tasks = packages.map(async packageName => {
