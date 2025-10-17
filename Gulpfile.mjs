@@ -638,7 +638,10 @@ function buildRollupDts(packages) {
       banner,
     });
 
-    if (output.includes("babel-parser.d.ts")) {
+    if (
+      !bool(process.env.BABEL_8_BREAKING) &&
+      output.includes("babel-parser.d.ts")
+    ) {
       let code = fs.readFileSync(output, "utf-8");
       const oldReasonCodes = {
         AccessorCannotDeclareThisParameter: "AccesorCannotDeclareThisParameter",
