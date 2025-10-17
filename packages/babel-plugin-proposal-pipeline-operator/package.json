@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-proposal-record-and-tuple": "^7.27.1"
   },
   "engines": {
     "node": ">=6.9.0"

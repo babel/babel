@@ -132,15 +132,16 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RecordExpression(this: Printer, node: t.RecordExpression) {
-  const props = node.properties;
+export let RecordExpression: never;
+export let TupleExpression: never;
+if (!process.env.BABEL_8_BREAKING) {
+  // @ts-ignore(Babel 7 vs Babel 8) - t.RecordExpression only exists in Babel 7
+  RecordExpression = function (this: Printer, node: t.RecordExpression) {
+    const props = node.properties;
 
-  let startToken;
-  let endToken;
-  if (process.env.BABEL_8_BREAKING) {
-    startToken = "#{";
-    endToken = "}";
-  } else {
+    let startToken;
+    let endToken;
+
     if (this.format.recordAndTupleSyntaxType === "bar") {
       startToken = "{|";
       endToken = "|}";
@@ -157,55 +158,61 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
       startToken = "#{";
       endToken = "}";
     }
-  }
 
-  this.token(startToken);
+    this.token(startToken);
 
-  if (props.length) {
-    this.space();
-    this.printList(props, this.shouldPrintTrailingComma(endToken), true, true);
-    this.space();
-  }
-  this.token(endToken);
-}
+    if (props.length) {
+      this.space();
+      this.printList(
+        props,
+        this.shouldPrintTrailingComma(endToken),
+        true,
+        true,
+      );
+      this.space();
+    }
+    this.token(endToken);
+  };
 
-export function TupleExpression(this: Printer, node: t.TupleExpression) {
-  const elems = node.elements;
-  const len = elems.length;
+  // @ts-ignore(Babel 7 vs Babel 8) - t.TupleExpression only exists in Babel 7
+  TupleExpression = function (this: Printer, node: t.TupleExpression) {
+    const elems = node.elements;
+    const len = elems.length;
 
-  let startToken;
-  let endToken;
-  if (process.env.BABEL_8_BREAKING) {
-    startToken = "#[";
-    endToken = "]";
-  } else {
-    if (this.format.recordAndTupleSyntaxType === "bar") {
-      startToken = "[|";
-      endToken = "|]";
-    } else if (this.format.recordAndTupleSyntaxType === "hash") {
+    let startToken;
+    let endToken;
+    if (process.env.BABEL_8_BREAKING) {
       startToken = "#[";
       endToken = "]";
     } else {
-      throw new Error(
-        `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
-      );
-    }
-  }
-
-  this.token(startToken);
-
-  for (let i = 0; i < elems.length; i++) {
-    const elem = elems[i];
-    if (elem) {
-      if (i > 0) this.space();
-      this.print(elem);
-      if (i < len - 1 || this.shouldPrintTrailingComma(endToken)) {
-        this.token(",", false, i);
+      if (this.format.recordAndTupleSyntaxType === "bar") {
+        startToken = "[|";
+        endToken = "|]";
+      } else if (this.format.recordAndTupleSyntaxType === "hash") {
+        startToken = "#[";
+        endToken = "]";
+      } else {
+        throw new Error(
+          `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
+        );
       }
     }
-  }
 
-  this.token(endToken);
+    this.token(startToken);
+
+    for (let i = 0; i < elems.length; i++) {
+      const elem = elems[i];
+      if (elem) {
+        if (i > 0) this.space();
+        this.print(elem);
+        if (i < len - 1 || this.shouldPrintTrailingComma(endToken)) {
+          this.token(",", false, i);
+        }
+      }
+    }
+
+    this.token(endToken);
+  };
 }
 
 export function RegExpLiteral(this: Printer, node: t.RegExpLiteral) {
