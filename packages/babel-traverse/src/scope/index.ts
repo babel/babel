@@ -910,7 +910,7 @@ class Scope {
       isArrayExpression(node) ||
       (!process.env.BABEL_8_BREAKING &&
         // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
-        t.isTupleExpression(node))
+        node?.type === "TupleExpression")
     ) {
       // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ArrayExpression
       for (const elem of node.elements) {
@@ -921,7 +921,7 @@ class Scope {
       isObjectExpression(node) ||
       (!process.env.BABEL_8_BREAKING &&
         // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
-        t.isRecordExpression(node))
+        node?.type === "RecordExpression")
     ) {
       // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ObjectExpression
       for (const prop of node.properties) {
