@@ -13,7 +13,7 @@ export function hoist(
   const vars: Record<string, t.Identifier> = { __proto__: null };
 
   function varDeclToExpr(
-    { node: vdec, scope }: NodePath,
+    { node: vdec }: NodePath,
     includeIdentifiers: boolean,
   ) {
     t.assertVariableDeclaration(vdec);
@@ -26,10 +26,6 @@ export function hoist(
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
       vars[dec.id.name] = t.identifier(dec.id.name);
-
-      // Remove the binding, to avoid "duplicate declaration" errors when it will
-      // be injected again.
-      scope.removeBinding(dec.id.name);
 
       if (dec.init) {
         exprs.push(t.assignmentExpression("=", dec.id, dec.init));
@@ -52,6 +48,12 @@ export function hoist(
         if (expr === null) {
           path.remove();
         } else {
+          for (const name of Object.keys(vars)) {
+            // Remove the binding, to avoid "duplicate declaration" errors when it will
+            // be injected again.
+            path.scope.removeBinding(name);
+          }
+
           // We don't need to traverse this expression any further because
           // there can't be any new declarations inside an expression.
           path.replaceWith(t.expressionStatement(expr));
@@ -113,11 +115,11 @@ export function hoist(
         // replace the declaration with the equivalent assignment form
         // without worrying about hoisting it.
         path.replaceWith(assignment);
-      }
 
-      // Remove the binding, to avoid "duplicate declaration" errors when it will
-      // be injected again.
-      path.scope.removeBinding(node.id.name);
+        // Remove the binding, to avoid "duplicate declaration" errors when it will
+        // be injected again.
+        path.scope.removeBinding(node.id.name);
+      }
 
       // Don't hoist variables out of inner functions.
       path.skip();
