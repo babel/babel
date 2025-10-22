@@ -160,7 +160,7 @@ export default function createPlugin({
       },
     };
 
-    let leadingComments: t.Comment[] | undefined;
+    let commentsNode: t.Node | null = null;
 
     return {
       name,
@@ -414,17 +414,24 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
+    function processComments(
+      attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
+    ) {
+      commentsNode = null;
+      if (attribs.length && attribs[0].isJSXSpreadAttribute()) {
+        const node = attribs[0].node.argument;
+        if (node.leadingComments || node.trailingComments) {
+          commentsNode = t.cloneNode(node);
+        }
+      }
+    }
+
     function accumulateAttribute(
       array: ObjectExpression["properties"],
       attribute: NodePath<JSXAttribute | JSXSpreadAttribute>,
-      i?: number,
     ) {
-      if (i === 0) {
-        leadingComments = undefined;
-      }
       if (t.isJSXSpreadAttribute(attribute.node)) {
         const arg = attribute.node.argument;
-        leadingComments ||= arg.leadingComments;
         // Collect properties into props array if spreading object expression
         if (t.isObjectExpression(arg) && !hasProto(arg)) {
           array.push(...arg.properties);
@@ -549,8 +556,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // which will be thrown later
           children,
         );
-        if (leadingComments) {
-          attribs.leadingComments = leadingComments;
+        if (commentsNode) {
+          t.inheritsComments(attribs, commentsNode);
         }
       } else {
         // attributes should never be null
@@ -586,6 +593,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
       children: Expression[],
     ) {
+      processComments(attribs);
       const props = attribs.reduce(accumulateAttribute, []);
 
       // In React.jsx, children is no longer a separate argument, but passed in
@@ -703,6 +711,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (!process.env.BABEL_8_BREAKING) {
         if (runtime !== "automatic") {
           const objs = [];
+          processComments(attribs);
           const props = attribs.reduce(accumulateAttribute, []);
 
           if (!useSpread) {
@@ -728,8 +737,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             return t.nullLiteral();
           }
 
-          if (leadingComments) {
-            objs[0].leadingComments = leadingComments;
+          if (commentsNode) {
+            t.inheritsComments(objs[0], commentsNode);
           }
 
           if (objs.length === 1) {
@@ -763,7 +772,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const props: ObjectExpression["properties"] = [];
       const found = Object.create(null);
 
-      leadingComments = undefined;
+      processComments(attribs);
       for (const attr of attribs) {
         const { node } = attr;
         const name =
@@ -793,8 +802,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           : props.length > 0
             ? t.objectExpression(props)
             : t.nullLiteral();
-      if (leadingComments) {
-        ret.leadingComments = leadingComments;
+      if (commentsNode) {
+        t.inheritsComments(ret, commentsNode);
       }
       return ret;
     }
