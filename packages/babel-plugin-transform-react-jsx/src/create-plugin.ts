@@ -18,7 +18,6 @@ import type {
   ObjectExpression,
   Program,
 } from "@babel/types";
-import { traverse } from "@babel/types";
 
 const DEFAULT = {
   importSource: "react",
@@ -322,7 +321,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               }
 
               const set = new Set();
-              traverse(path.node, {
+              t.traverse(path.node, {
                 enter(node, parents) {
                   if (!t.isJSXOpeningElement(node)) {
                     return;
