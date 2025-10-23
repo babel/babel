@@ -176,9 +176,6 @@
       "path": "./packages/babel-plugin-proposal-pipeline-operator"
     },
     {
-      "path": "./packages/babel-plugin-proposal-record-and-tuple"
-    },
-    {
       "path": "./packages/babel-plugin-proposal-throw-expressions"
     },
     {
@@ -234,9 +231,6 @@
     },
     {
       "path": "./packages/babel-plugin-syntax-pipeline-operator"
-    },
-    {
-      "path": "./packages/babel-plugin-syntax-record-and-tuple"
     },
     {
       "path": "./packages/babel-plugin-syntax-throw-expressions"

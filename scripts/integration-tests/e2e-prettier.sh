@@ -38,6 +38,10 @@ yarn info
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i "s/ts-expect-error//g" ./src/language-json/parser-json.js
+
+  # Removed in Babel 8
+  sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
+  sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
 fi
 
 # Test typings for @babel/parser
