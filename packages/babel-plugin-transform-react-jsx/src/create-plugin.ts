@@ -314,10 +314,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                     : t.nullLiteral();
 
                 return template.expression.ast`{
-    fileName: ${fileNameIdentifier},
-    lineNumber: ${fileLineLiteral},
-    columnNumber: ${fileColumnLiteral},
-  }`;
+                    fileName: ${fileNameIdentifier},
+                    lineNumber: ${fileLineLiteral},
+                    columnNumber: ${fileColumnLiteral},
+                  }`;
               }
 
               const set = new Set();
