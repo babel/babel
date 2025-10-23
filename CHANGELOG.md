@@ -24,6 +24,34 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.5 (2025-10-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17446](https://github.com/babel/babel/pull/17446) Allow `Runtime Errors for Function Call Assignment Targets` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-validator-identifier`
+  * [#17501](https://github.com/babel/babel/pull/17501) fix: update identifier to unicode 17 ([@fisker](https://github.com/fisker))
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-destructuring-private`
+  * [#17534](https://github.com/babel/babel/pull/17534) Allow mixing private destructuring and rest ([@CO0Ki3](https://github.com/CO0Ki3))
+* `babel-parser`
+  * [#17521](https://github.com/babel/babel/pull/17521) Improve `@babel/parser` error typing ([@JLHwung](https://github.com/JLHwung))
+  * [#17491](https://github.com/babel/babel/pull/17491) fix: improve ts-only declaration parsing ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-discard-binding`, `babel-plugin-transform-destructuring`
+  * [#17519](https://github.com/babel/babel/pull/17519) fix: `rest` correctly returns plain array ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-optional-chaining`, `babel-traverse`, `babel-types`
+  * [#17503](https://github.com/babel/babel/pull/17503) Fix `JSXIdentifier` handling in `isReferencedIdentifier` ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17504](https://github.com/babel/babel/pull/17504) fix: ensure scope.push register in anonymous fn ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-types`
+  * [#17494](https://github.com/babel/babel/pull/17494) Type checking babel-types scripts ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-core`
+  * [#17490](https://github.com/babel/babel/pull/17490) Faster finding of locations in `buildCodeFrameError` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.28.4 (2025-09-05)
 
 #### :house: Internal
