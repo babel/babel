@@ -16,6 +16,33 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-beta.3 (2025-10-23)
+
+#### :boom: Breaking Change
+* `babel-parser`
+  * [#17505](https://github.com/babel/babel/pull/17505) [Babel 8] Treat `allowSuperOutsideMethod` as top-level only ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-traverse`, `babel-types`
+  * [#17499](https://github.com/babel/babel/pull/17499) Enable `strictNullChecks` for `traverse` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-runtime`
+  * [#17512](https://github.com/babel/babel/pull/17512) [babel 8] Update default `@babel/runtime` version ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-preset-react`, `babel-preset-typescript`
+  * [#17404](https://github.com/babel/babel/pull/17404) Improve `@babel/core` types ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-logical-assignment-operators`, `babel-traverse`, `babel-types`
+  * [#17500](https://github.com/babel/babel/pull/17500) [Babel 8] Better node type definitions for `computed` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-plugin-transform-runtime`
+  * [#17511](https://github.com/babel/babel/pull/17511) [babel 8] Remove `semver` dependency from transform-runtime ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-traverse`
+  * [#17043](https://github.com/babel/babel/pull/17043) [Babel 8] Improve scope information collection performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-typescript`
+  * [#17518](https://github.com/babel/babel/pull/17518) [Babel 8] Use `t.traverseFast` to replace some `path.traverse` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-beta.2 (2025-09-05)
 
 #### :boom: Breaking Change
