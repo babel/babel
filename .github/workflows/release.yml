@@ -140,8 +140,6 @@ jobs:
       - name: Publish to npm (Babel 7)
         run: yarn release-tool publish --yes
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
-        env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Generate babel-types docs
         continue-on-error: true
@@ -165,7 +163,6 @@ jobs:
         run: yarn release-tool publish --yes --tag next --tag-version-prefix tmp.v
         if: needs.check-release-type.outputs.is-babel-8 == 'true'
         env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           BABEL_8_BREAKING: true
           USE_ESM: true
 
