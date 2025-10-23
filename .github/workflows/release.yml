@@ -101,6 +101,8 @@ jobs:
       - check-release-type
       - git-version
     environment: npm
+    permissions:
+      id-token: write
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
