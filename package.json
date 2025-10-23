@@ -19,7 +19,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
-  "packageManager": "yarn@4.9.1",
+  "packageManager": "yarn@4.10.3",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
     "@actions/github": "6.0.1",
