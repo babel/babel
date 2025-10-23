@@ -112,6 +112,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
       - name: Checkout the temporary branch
         if: needs.git-version.result == 'success'
         run: git checkout ${{ needs.git-version.outputs.branch }}
