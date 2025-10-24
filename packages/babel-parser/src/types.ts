@@ -265,7 +265,7 @@ export interface DecimalLiteral extends NodeBase {
 
 export interface ParserOutput {
   comments: Comment[];
-  errors: Array<ParseError<any>>;
+  errors: Array<ParseError>;
   tokens?: Array<Token | Comment>;
 }
 // Programs

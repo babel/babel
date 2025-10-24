@@ -19,11 +19,8 @@ import {
   type TokenType,
 } from "./types.ts";
 import type { TokContext } from "./context.ts";
-import {
-  Errors,
-  type ParseError,
-  type ParseErrorConstructor,
-} from "../parse-error.ts";
+import type { ParseError } from "../parse-error.ts";
+import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import {
   lineBreakG,
   isNewLine,
@@ -1502,7 +1499,7 @@ export default abstract class Tokenizer extends CommentsParser {
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
-  ): ParseError<ErrorDetails> {
+  ): ParseError {
     const loc = at instanceof Position ? at : at.loc.start;
     const error = toParseError(loc, details);
 
@@ -1522,7 +1519,7 @@ export default abstract class Tokenizer extends CommentsParser {
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
-  ): ParseError<ErrorDetails> | never {
+  ): ParseError {
     const loc = at instanceof Position ? at : at.loc.start;
     const pos = loc.index;
     const errors = this.state.errors;
