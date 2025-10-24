@@ -1,7 +1,7 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
-import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
+import type { PluginPass, NodePath } from "@babel/core";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type {
@@ -139,27 +139,6 @@ export default function createPlugin({
       }
     }
 
-    const injectMetaPropertiesVisitor: Visitor<PluginPass> = {
-      JSXOpeningElement(path, state) {
-        const attributes = [];
-        if (isThisAllowed(path.scope)) {
-          attributes.push(
-            t.jsxAttribute(
-              t.jsxIdentifier("__self"),
-              t.jsxExpressionContainer(t.thisExpression()),
-            ),
-          );
-        }
-        attributes.push(
-          t.jsxAttribute(
-            t.jsxIdentifier("__source"),
-            t.jsxExpressionContainer(makeSource(path, state)),
-          ),
-        );
-        path.pushContainer("attributes", attributes);
-      },
-    };
-
     return {
       name,
       inherits: jsx,
@@ -262,7 +241,119 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             }
 
             if (development) {
-              path.traverse(injectMetaPropertiesVisitor, state);
+              // Returns whether the class has specified a superclass.
+              function isDerivedClass(classNode: Class) {
+                return classNode.superClass !== null;
+              }
+
+              // Returns whether `this` is allowed at given scope.
+              function isThisAllowed(parents: t.TraversalAncestors) {
+                let i = parents.length - 1;
+
+                // This specifically skips arrow functions as they do not rewrite `this`.
+                do {
+                  const { node } = parents[i];
+                  if (
+                    t.isFunctionParent(node) &&
+                    !t.isArrowFunctionExpression(node)
+                  ) {
+                    if (!t.isMethod(node)) {
+                      // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
+                      return true;
+                    }
+                    // Current node is within a method, so we need to check if the method is a constructor.
+                    if (node.kind !== "constructor") {
+                      // We are not in a constructor, therefore it is always fine to use `this`.
+                      return true;
+                    }
+                    // Now we are in a constructor. If it is a derived class, we do not reference `this`.
+                    return !isDerivedClass(parents[i - 2].node as Class);
+                  }
+                  if (t.isTSModuleBlock(node)) {
+                    // If the closest parent is a TS Module block, `this` will not be allowed.
+                    return false;
+                  }
+                } while (i-- > 0);
+                // We are not in a method or function. It is fine to use `this`.
+                return true;
+              }
+
+              let fileNameIdentifier: Identifier;
+              function makeSource(node: t.Node) {
+                const location = node.loc;
+                if (!location) {
+                  // the element was generated and doesn't have location information
+                  return path.scope.buildUndefinedNode();
+                }
+
+                if (!fileNameIdentifier) {
+                  fileNameIdentifier =
+                    path.scope.generateUidIdentifier("_jsxFileName");
+                }
+
+                return makeTrace(
+                  t.cloneNode(fileNameIdentifier),
+                  location.start.line,
+                  location.start.column,
+                );
+              }
+
+              function makeTrace(
+                fileNameIdentifier: Identifier,
+                lineNumber?: number,
+                column0Based?: number,
+              ) {
+                const fileLineLiteral =
+                  lineNumber != null
+                    ? t.numericLiteral(lineNumber)
+                    : t.nullLiteral();
+
+                const fileColumnLiteral =
+                  column0Based != null
+                    ? t.numericLiteral(column0Based + 1)
+                    : t.nullLiteral();
+
+                return template.expression.ast`{
+                    fileName: ${fileNameIdentifier},
+                    lineNumber: ${fileLineLiteral},
+                    columnNumber: ${fileColumnLiteral},
+                  }`;
+              }
+
+              const set = new Set();
+              t.traverse(path.node, {
+                enter(node, parents) {
+                  if (!t.isJSXOpeningElement(node)) {
+                    return;
+                  }
+                  set.add(node);
+                  const attributes = [];
+                  if (isThisAllowed(parents)) {
+                    attributes.push(
+                      t.jsxAttribute(
+                        t.jsxIdentifier("__self"),
+                        t.jsxExpressionContainer(t.thisExpression()),
+                      ),
+                    );
+                  }
+                  attributes.push(
+                    t.jsxAttribute(
+                      t.jsxIdentifier("__source"),
+                      t.jsxExpressionContainer(makeSource(node)),
+                    ),
+                  );
+                  node.attributes.push(...attributes);
+                },
+              });
+
+              if (fileNameIdentifier) {
+                const { filename = "" } = state;
+
+                path.scope.push({
+                  id: fileNameIdentifier,
+                  init: t.stringLiteral(filename),
+                });
+              }
             }
           },
         },
@@ -303,38 +394,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         },
       },
     };
-
-    // Returns whether the class has specified a superclass.
-    function isDerivedClass(classPath: NodePath<Class>) {
-      return classPath.node.superClass !== null;
-    }
-
-    // Returns whether `this` is allowed at given scope.
-    function isThisAllowed(scope: Scope) {
-      // This specifically skips arrow functions as they do not rewrite `this`.
-      do {
-        const { path } = scope;
-        if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
-          if (!path.isMethod()) {
-            // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
-            return true;
-          }
-          // Current node is within a method, so we need to check if the method is a constructor.
-          if (path.node.kind !== "constructor") {
-            // We are not in a constructor, therefore it is always fine to use `this`.
-            return true;
-          }
-          // Now we are in a constructor. If it is a derived class, we do not reference `this`.
-          return !isDerivedClass(path.parentPath.parentPath as NodePath<Class>);
-        }
-        if (path.isTSModuleBlock()) {
-          // If the closest parent is a TS Module block, `this` will not be allowed.
-          return false;
-        }
-      } while ((scope = scope.parent));
-      // We are not in a method or function. It is fine to use `this`.
-      return true;
-    }
 
     function call(
       pass: PluginPass,
@@ -839,54 +898,6 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
       // where the type of initial value differs from callback return type
       .reduce((object, property) => t.memberExpression(object, property))
   );
-}
-
-function makeSource(path: NodePath, state: PluginPass) {
-  const location = path.node.loc;
-  if (!location) {
-    // the element was generated and doesn't have location information
-    return path.scope.buildUndefinedNode();
-  }
-
-  // @ts-expect-error todo: avoid mutating PluginPass
-  if (!state.fileNameIdentifier) {
-    const { filename = "" } = state;
-
-    const fileNameIdentifier = path.scope.generateUidIdentifier("_jsxFileName");
-    path.scope.getProgramParent().push({
-      id: fileNameIdentifier,
-      init: t.stringLiteral(filename),
-    });
-    // @ts-expect-error todo: avoid mutating PluginPass
-    state.fileNameIdentifier = fileNameIdentifier;
-  }
-
-  return makeTrace(
-    t.cloneNode(
-      // @ts-expect-error todo: avoid mutating PluginPass
-      state.fileNameIdentifier,
-    ),
-    location.start.line,
-    location.start.column,
-  );
-}
-
-function makeTrace(
-  fileNameIdentifier: Identifier,
-  lineNumber?: number,
-  column0Based?: number,
-) {
-  const fileLineLiteral =
-    lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
-
-  const fileColumnLiteral =
-    column0Based != null ? t.numericLiteral(column0Based + 1) : t.nullLiteral();
-
-  return template.expression.ast`{
-    fileName: ${fileNameIdentifier},
-    lineNumber: ${fileLineLiteral},
-    columnNumber: ${fileColumnLiteral},
-  }`;
 }
 
 function sourceSelfError(path: NodePath, name: string) {
