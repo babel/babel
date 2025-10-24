@@ -352,6 +352,30 @@ describe("traverse", function () {
       );
       expect(contextLevel).toBe(2);
     });
+
+    it("traverse no parent path", function () {
+      const code = `
+        var foo = {
+            "files": []
+        }
+      `;
+      const ast = parse(code);
+      let result;
+      traverse(ast, {
+        ObjectProperty(path) {
+          traverse(path.node, {
+            noScope: true,
+            ArrayExpression(path) {
+              result = path.node;
+            },
+          });
+        },
+      });
+
+      expect(ast.program.body[0].declarations[0].init.properties[0].value).toBe(
+        result,
+      );
+    });
   });
   describe("path.stop()", () => {
     it("should stop the traversal when a grand child is stopped", () => {
