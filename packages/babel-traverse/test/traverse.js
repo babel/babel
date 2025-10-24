@@ -353,6 +353,25 @@ describe("traverse", function () {
       expect(contextLevel).toBe(2);
     });
   });
+
+  it("regression - #17563", () => {
+    const ast = parse("const a = 1;");
+    traverse(ast, {
+      noScope: true,
+      Identifier() {},
+    });
+
+    let result;
+
+    traverse(ast, {
+      Identifier(path) {
+        result = path.scope.hasOwnBinding("a");
+      },
+    });
+
+    expect(result).toBe(true);
+  });
+
   describe("path.stop()", () => {
     it("should stop the traversal when a grand child is stopped", () => {
       const ast = parse("f;g;");
