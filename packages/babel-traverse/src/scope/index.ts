@@ -455,11 +455,19 @@ class Scope {
   constructor(path: NodePath<t.Pattern | t.Scopable>) {
     const { node } = path;
     const cached = scopeCache.get(node);
-    // Sometimes, a scopable path is placed higher in the AST tree.
-    // In these cases, have to create a new Scope.
-    if (cached?.path === path) {
-      return cached;
+
+    if (cached) {
+      if (
+        // Sometimes, a scopable path is placed higher in the AST tree.
+        // In these cases, have to create a new Scope.
+        cached.path === path &&
+        // If the cached Scope is created in noScope.
+        !cached.path.opts?.noScope === !!cached.bindings
+      ) {
+        return cached;
+      }
     }
+
     scopeCache.set(node, this);
 
     this.uid = uid++;
