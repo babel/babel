@@ -3367,6 +3367,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.shouldParseExportDeclaration();
     }
 
+    parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+      const pos = this.sourceToOffsetPos(this.state.start);
+      if (canBeArrow && !this.state.noArrowAt.includes(pos)) {
+        this.state.noArrowAt.push(pos);
+      } else {
+        canBeArrow = false;
+      }
+      return super.parseParenAndDistinguishExpression(canBeArrow);
+    }
+
     // An apparent conditional expression could actually be an optional parameter in an arrow function.
     parseConditional(
       expr: N.Expression,
@@ -3393,7 +3403,31 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseConditional(expr, startLoc, refExpressionErrors);
+      this.next(); // eat '?'
+
+      const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
+      node.test = expr;
+
+      const state = this.state.clone();
+      this.state.noArrowAt = [];
+
+      node.consequent = this.parseMaybeAssignAllowIn();
+
+      if (!this.eat(tt.colon)) {
+        state.noArrowAt = this.state.noArrowAt;
+        if (state.noArrowAt.length <= 3) {
+          state.noArrowAt = [state.noArrowAt[0]];
+        } else {
+          state.noArrowAt = state.noArrowAt.slice(3);
+        }
+        this.state = state;
+        node.consequent = this.parseMaybeAssignAllowIn();
+        this.expect(tt.colon);
+      }
+      this.state.noArrowAt = state.noArrowAt;
+
+      node.alternate = this.parseMaybeAssign();
+      return this.finishNode(node, "ConditionalExpression");
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
@@ -4164,14 +4198,33 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     shouldParseArrow(params: Array<N.Node>) {
+      const pos = this.sourceToOffsetPos(this.state.start);
+      if (this.state.noArrowAt.includes(pos)) {
+        return false;
+      }
       if (this.match(tt.colon)) {
-        return params.every(expr => this.isAssignable(expr, true));
+        if (params.every(expr => this.isAssignable(expr, true))) {
+          this.state.noArrowAt.push(pos);
+          return true;
+        }
+        return false;
       }
       return super.shouldParseArrow(params);
     }
 
     shouldParseAsyncArrow(): boolean {
-      return this.match(tt.colon) || super.shouldParseAsyncArrow();
+      const pos = this.sourceToOffsetPos(this.state.start);
+      if (this.state.noArrowAt.includes(pos)) {
+        return false;
+      }
+      this.state.noArrowAt.push(pos);
+      if (this.match(tt.colon)) {
+        return this.tsLookAhead(() => {
+          this.tsParseTypeOrTypePredicateAnnotation(tt.colon);
+          return this.match(tt.arrow);
+        });
+      }
+      return super.shouldParseAsyncArrow();
     }
 
     canHaveLeadingDecorator() {
