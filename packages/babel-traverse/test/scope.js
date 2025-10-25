@@ -698,6 +698,13 @@ describe("scope", () => {
       });
       expect(path.scope.hasGlobal("x")).toBe(false);
     });
+
+    it("export should be counted as reference", () => {
+      const path = getPath("export const two = 2; two;", {
+        sourceType: "module",
+      });
+      expect(path.scope.getBinding("two").references).toBe(2);
+    });
   });
 
   describe("duplicate bindings", () => {

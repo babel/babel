@@ -55,18 +55,12 @@ export default function traverseForScope(
     setScope.call(path);
 
     const visitor = exploded[node.type];
-    if (visitor) {
-      if (visitor.enter) {
-        for (const visit of visitor.enter) {
-          visit.call(state, path, state);
-        }
-      }
-      if (visitor.exit) {
-        for (const visit of visitor.exit) {
-          visit.call(state, path, state);
-        }
+    if (visitor?.enter) {
+      for (const visit of visitor.enter) {
+        visit.call(state, path, state);
       }
     }
+
     if (path.shouldSkip) {
       return;
     }
@@ -87,6 +81,12 @@ export default function traverseForScope(
         }
       } else {
         _traverse(path, node, prop, node, key, null);
+      }
+    }
+
+    if (visitor?.exit) {
+      for (const visit of visitor.exit) {
+        visit.call(state, path, state);
       }
     }
   }
