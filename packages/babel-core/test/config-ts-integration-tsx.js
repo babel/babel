@@ -27,7 +27,7 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
     let unregister;
     beforeAll(async () => {
       // tsx/cjs/api is a defined sub-export
-      // eslint-disable-next-line import/no-unresolved, import/extensions
+      // eslint-disable-next-line import/extensions
       const tsx = require("tsx/cjs/api");
       // Provide a dummy tsconfig.json to avoid tsx resolving @babel/* from the `src` directory, where
       // undeclared globals such as the PACKAGE_JSON macro will break
