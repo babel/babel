@@ -353,6 +353,24 @@ describe("traverse", function () {
       expect(contextLevel).toBe(2);
     });
 
+    it("regression - #17563", () => {
+      const ast = parse("const a = 1;");
+      traverse(ast, {
+        noScope: true,
+        Identifier() {},
+      });
+
+      let result;
+
+      traverse(ast, {
+        Identifier(path) {
+          result = path.scope.hasOwnBinding("a");
+        },
+      });
+
+      expect(result).toBe(true);
+    });
+
     it("traverse no parent path", function () {
       const code = `
         var foo = {

@@ -133,6 +133,30 @@ export function stop(this: NodePath) {
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
+export function _forceSetScope(this: NodePath) {
+  let path = this.parentPath;
+
+  if (
+    // Skip method scope if is computed method key or decorator expression
+    ((this.key === "key" || this.listKey === "decorators") &&
+      path.isMethod()) ||
+    // Skip switch scope if for discriminant (`x` in `switch (x) {}`).
+    (this.key === "discriminant" && path.isSwitchStatement())
+  ) {
+    path = path.parentPath;
+  }
+
+  let target;
+  while (path && !target) {
+    target = path.scope;
+    path = path.parentPath;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  this.scope = this.getScope(target!);
+  this.scope?.init();
+}
+
 export function setScope(this: NodePath) {
   if (this.opts?.noScope) return;
 
