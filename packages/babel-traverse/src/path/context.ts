@@ -134,13 +134,11 @@ export function stop(this: NodePath) {
 }
 
 export function setScope(this: NodePath) {
-  if (!process.env.BABEL_8_BREAKING && this.opts?.noScope) return;
+  if (this.opts?.noScope) return;
 
   let path = this.parentPath;
 
-  if (!path) {
-    if (!this.isScope()) return;
-  } else if (
+  if (
     // Skip method scope if is computed method key or decorator expression
     ((this.key === "key" || this.listKey === "decorators") &&
       path.isMethod()) ||
@@ -152,7 +150,7 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (!process.env.BABEL_8_BREAKING && path.opts?.noScope) return;
+    if (path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
