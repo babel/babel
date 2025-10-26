@@ -1,5 +1,3 @@
-// @ts-check
-
 import babelParser from "@babel/eslint-parser/experimental-worker";
 import globals from "globals";
 import js from "@eslint/js";
@@ -26,7 +24,7 @@ const testFiles = [
   "codemods/*/test/**/*.js",
   "eslint/*/test/**/*.js",
 ];
-const sourceFiles = exts => [
+const sourceFiles = (exts: string) => [
   `packages/*/src/**/*.{${exts}}`,
   `codemods/*/src/**/*.{${exts}}`,
   `eslint/*/src/**/*.{${exts}}`,
@@ -265,8 +263,10 @@ export default [
       "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
       "test/**/*.js",
     ],
+    // @ts-expect-error eslint-plugin-jest does not have types for flat configs yet
     ...pluginJest.configs["flat/recommended"],
     rules: {
+      // @ts-expect-error eslint-plugin-jest does not have types for flat configs yet
       ...pluginJest.configs["flat/recommended"].rules,
       "jest/expect-expect": "off",
       "jest/no-standalone-expect": [
