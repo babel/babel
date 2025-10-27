@@ -50,6 +50,7 @@
     "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.1",
     "c8": "^10.0.0",
+    "chai": "^6.2.0",
     "charcodes": "^0.2.0",
     "core-js": "^3.36.1",
     "eslint": "^9.22.0",
