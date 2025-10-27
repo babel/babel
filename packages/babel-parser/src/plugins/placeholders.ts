@@ -209,7 +209,7 @@ export default (superClass: typeof Parser) =>
       isBreak: boolean,
     ) {
       // @ts-expect-error: node.label could be Placeholder
-      if (node.label && node.label.type === "Placeholder") return;
+      if (node.label?.type === "Placeholder") return;
       super.verifyBreakContinue(node, isBreak);
     }
 

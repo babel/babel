@@ -165,7 +165,7 @@ const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
   Scope(path, { names }) {
     for (const name of names) {
       const binding = path.scope.getOwnBinding(name);
-      if (binding && binding.kind === "hoisted") {
+      if (binding?.kind === "hoisted") {
         path.scope.rename(name);
       }
     }

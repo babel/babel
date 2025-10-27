@@ -45,7 +45,7 @@ const unshadowSuperBindingVisitor = visitors.environmentVisitor<{
   Scopable(path, { refName }) {
     // https://github.com/Zzzen/babel/pull/1#pullrequestreview-564833183
     const binding = path.scope.getOwnBinding(refName);
-    if (binding && binding.identifier.name === refName) {
+    if (binding?.identifier.name === refName) {
       path.scope.rename(refName);
     }
   },

@@ -83,7 +83,7 @@ export class TokenMap {
       // overhead in the simple case of having unique tokens per node.
       if (count > 1) {
         const cache = this._nodesOccurrencesCountCache.get(node);
-        if (cache && cache.test === test && cache.count < count) {
+        if (cache?.test === test && cache.count < count) {
           i = cache.i + 1;
           occurrenceCount -= cache.count + 1;
         }
@@ -143,8 +143,7 @@ export class TokenMap {
     if (
       (node.type === "ExportNamedDeclaration" ||
         node.type === "ExportDefaultDeclaration") &&
-      node.declaration &&
-      node.declaration.type === "ClassDeclaration"
+      node.declaration?.type === "ClassDeclaration"
     ) {
       // Exported class declarations can be not properly nested inside
       // the export declaration that contains them. For example, in
