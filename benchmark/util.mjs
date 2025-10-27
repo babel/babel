@@ -124,7 +124,7 @@ class Benchmark {
     this.bench.addEventListener("error", function (event) {
       console.error(event.task.result.error);
     });
-    await this.bench.run();
+    this.bench.runSync();
   }
 }
 
@@ -173,7 +173,7 @@ setTimeout(async () => {
     }
   }
 
-  await bench.run();
+  bench.run();
 }, 0);
 
 export {
