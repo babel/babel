@@ -58,6 +58,8 @@ import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
 import type { ExplodedVisitor, Visitor } from "../types.ts";
 
+export type { BindingKind };
+
 type NodePart = string | number | bigint | boolean;
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
