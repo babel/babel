@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 import * as currentTypes from "@babel/types";
 import baselineTypes from "@babel-baseline/types";
 import _currentGenerator from "@babel/generator";
@@ -58,7 +56,7 @@ async function copyPkg(name) {
     return await import(pathToFileURL(dst));
   } catch (error) {
     console.error("Please run with `make prepublish-build`");
-    return {};
+    return await import(name);
   }
 }
 
@@ -101,6 +99,7 @@ class Benchmark {
     this.bench = withCodSpeed(
       new Bench({
         time: 5000,
+        warmup: false,
       })
     );
   }

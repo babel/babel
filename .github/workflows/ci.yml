@@ -878,8 +878,9 @@ jobs:
       - name: Build
         run: make prepublish-build
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@v4
         env:
           CODSPEED_RUNNER_MODE: walltime
         with:
+          mode: walltime
           run: node --expose-gc ./benchmark/index.mjs --only-current
