@@ -10,7 +10,8 @@
   },
   "include": [
     "./lib/libdom-minimal.d.ts",
-    "dts/**/*.d.ts"
+    "dts/**/*.d.ts",
+    "*.mts"
   ],
   "references": [
     {
