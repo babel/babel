@@ -53,11 +53,11 @@
     "charcodes": "^0.2.0",
     "core-js": "^3.36.1",
     "eslint": "^9.38.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-n": "^17.10.3",
     "eslint-plugin-regexp": "^2.6.0",
     "eslint-plugin-unicorn": "^56.0.0",
@@ -85,8 +85,8 @@
     "shelljs": "^0.8.5",
     "terser": "^5.43.1",
     "test262-stream": "^1.4.0",
-    "typescript": "5.9.2",
-    "typescript-eslint": "8.39.1"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2"
   },
   "workspaces": [
     "codemods/*",
