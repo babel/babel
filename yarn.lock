@@ -7749,6 +7749,7 @@ __metadata:
     shelljs: "npm:^0.8.5"
     terser: "npm:^5.43.1"
     test262-stream: "npm:^1.4.0"
+    tstyche: "npm:^5.0.1"
     typescript: "npm:5.9.3"
     typescript-eslint: "npm:8.46.2"
   languageName: unknown
@@ -17398,6 +17399,20 @@ __metadata:
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
+  languageName: node
+  linkType: hard
+
+"tstyche@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "tstyche@npm:5.0.1"
+  peerDependencies:
+    typescript: ">=5.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    tstyche: ./build/bin.js
+  checksum: 10/fcd643538334d20fa172443b3271783e763d9d4747f107da58be12f602276eef864d14bab10a157f3116871de556a08c69f18e635a211fa04d56c94f7821462b
   languageName: node
   linkType: hard
 

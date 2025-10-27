@@ -251,6 +251,12 @@ export default defineConfig([
     },
   },
   {
+    files: ["packages/*/test/*.tst.ts"],
+    rules: {
+      "import/no-extraneous-dependencies": "off",
+    },
+  },
+  {
     files: [
       ...testFiles,
       "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
