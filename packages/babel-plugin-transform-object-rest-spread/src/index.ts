@@ -157,24 +157,46 @@ export default declare((api, opts: Options) => {
     return { keys, allPrimitives, hasTemplateLiteral };
   }
 
-  // replaces impure computed keys with new identifiers
-  // and returns variable declarators of these new identifiers
+  /**
+   * Replaces computed keys that have side effects with temporary variables.
+   *
+   * Example: { [foo()]: x } becomes { [_temp]: x } with declaration: const _temp = foo()
+   *
+   * This function is called in multiple places during transformation. To avoid creating
+   * duplicate temp variables, we skip properties that were already processed by the
+   * global hoisting pass (marked with _keyAlreadyHoisted flag).
+   */
   function replaceImpureComputedKeys(
     properties: NodePath<t.ObjectProperty>[],
     scope: Scope,
   ) {
-    const impureComputedPropertyDeclarators: t.VariableDeclarator[] = [];
-    for (const propPath of properties) {
+    const tempVariableDeclarations: t.VariableDeclarator[] = [];
+
+    for (const property of properties) {
       // PrivateName is handled in destructuring-private plugin
-      const key = propPath.get("key") as NodePath<t.Expression>;
-      if (propPath.node.computed && !key.isPure()) {
-        const name = scope.generateUidBasedOnNode(key.node);
-        const declarator = t.variableDeclarator(t.identifier(name), key.node);
-        impureComputedPropertyDeclarators.push(declarator);
-        key.replaceWith(t.identifier(name));
+      const keyExpression = property.get("key") as NodePath<t.Expression>;
+
+      // Skip if already processed by global computed key hoisting pass
+      // (This prevents creating duplicate temp variables like _a2 = _a)
+      if ((property.node as any)._keyAlreadyHoisted) {
+        continue;
+      }
+
+      // Only process computed keys that have side effects (function calls, mutations, etc.)
+      if (property.node.computed && !keyExpression.isPure()) {
+        const tempVariableName = scope.generateUidBasedOnNode(
+          keyExpression.node,
+        );
+        const tempVariableDeclaration = t.variableDeclarator(
+          t.identifier(tempVariableName),
+          keyExpression.node,
+        );
+        tempVariableDeclarations.push(tempVariableDeclaration);
+        keyExpression.replaceWith(t.identifier(tempVariableName));
       }
     }
-    return impureComputedPropertyDeclarators;
+
+    return tempVariableDeclarations;
   }
 
   function removeUnusedExcludedKeys(path: NodePath<t.ObjectPattern>): void {
@@ -191,6 +213,64 @@ export default declare((api, opts: Options) => {
       }
       bindingParentPath.remove();
     });
+  }
+
+  /**
+   * Finds all computed property keys in a destructuring pattern,
+   * in the order they appear in the source code.
+   *
+   * Example: const { [a()]: { [b()]: x, ...rest }, [c()]: y } = obj
+   * Returns: [a(), b(), c()] in that order
+   *
+   * This is needed because when nested patterns have rest elements (...rest),
+   * the transformation splits them up, but need to ensure a(), b(), c()
+   * are always evaluated in this exact order (left-to-right as written).
+   */
+  function collectComputedKeysInSourceOrder(
+    destructuringPattern: NodePath<t.ObjectPattern>,
+  ): NodePath<t.ObjectProperty>[] {
+    const computedProperties: NodePath<t.ObjectProperty>[] = [];
+
+    function visitPattern(pattern: NodePath<t.PatternLike | t.LVal>) {
+      if (pattern.isObjectPattern()) {
+        const properties = pattern.get("properties") as NodePath<
+          t.ObjectProperty | t.RestElement
+        >[];
+        for (const property of properties) {
+          if (property.isRestElement()) continue;
+
+          // If this property has a computed key like [someExpression], collect it
+          if (property.node.computed) {
+            computedProperties.push(property);
+          }
+
+          // Then look inside the property's value for more nested patterns
+          const nestedPattern = property.get(
+            "value",
+          ) as NodePath<t.PatternLike>;
+          visitPattern(nestedPattern as NodePath<t.PatternLike | t.LVal>);
+        }
+      } else if (pattern.isArrayPattern()) {
+        for (const element of pattern.get("elements")) {
+          if (!element) continue;
+          if (element.isRestElement()) {
+            const restArgument = element.get("argument") as NodePath<
+              t.PatternLike | t.LVal
+            >;
+            visitPattern(restArgument);
+          } else {
+            visitPattern(element as NodePath<t.PatternLike | t.LVal>);
+          }
+        }
+      } else if (pattern.isAssignmentPattern()) {
+        visitPattern(pattern.get("left") as NodePath<t.PatternLike | t.LVal>);
+      }
+    }
+
+    visitPattern(
+      destructuringPattern as unknown as NodePath<t.PatternLike | t.LVal>,
+    );
+    return computedProperties;
   }
 
   //expects path to an object pattern
@@ -424,6 +504,79 @@ export default declare((api, opts: Options) => {
             );
 
             return;
+          }
+
+          /**
+           * Fix for: https://github.com/babel/babel/issues/17274
+           *
+           * Problem: When you have nested destructuring with computed keys and rest elements:
+           *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
+           *
+           * The functions log(0), log(1), log(2) must be called in that exact order.
+           * But without this fix, the nested pattern gets processed first, causing the wrong order.
+           *
+           * Solution: Extract all computed key expressions into variables first, in source order.
+           * This happens after the right-hand side (obj) is stored, but before destructuring starts.
+           *
+           * Transform:
+           *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
+           * Into:
+           *   const _obj = obj,           // Store right-hand side first
+           *         _key1 = log(0),       // Then evaluate keys in order
+           *         _key2 = log(1),
+           *         _key3 = log(2),
+           *         { [_key1]: { [_key2]: x, ...rest }, [_key3]: y } = _obj  // Then destructure
+           */
+
+          // Only do this once per variable declaration (even if multiple rest elements exist)
+          const alreadyHoistedComputedKeys = originalPath.getData(
+            "computedKeysAlreadyHoisted",
+          );
+          if (!alreadyHoistedComputedKeys) {
+            originalPath.setData("computedKeysAlreadyHoisted", true);
+
+            // Find all computed keys (like [someExpression]) in left-to-right order
+            const destructuringPattern = originalPath.get(
+              "id",
+            ) as NodePath<t.ObjectPattern>;
+            const propertiesWithComputedKeys =
+              collectComputedKeysInSourceOrder(destructuringPattern);
+            const tempVariableDeclarations: t.VariableDeclarator[] = [];
+
+            // For each computed key that has side effects (not a simple variable)
+            for (const property of propertiesWithComputedKeys) {
+              const computedKeyExpression = property.get(
+                "key",
+              ) as NodePath<t.Expression>;
+
+              // Check if the expression has side effects (function call, ++x, etc.)
+              if (!computedKeyExpression.isPure()) {
+                // Create a temporary variable: _key1 = log(0)
+                const tempVariableName =
+                  originalPath.scope.generateUidBasedOnNode(
+                    computedKeyExpression.node,
+                  );
+                tempVariableDeclarations.push(
+                  t.variableDeclarator(
+                    t.identifier(tempVariableName),
+                    computedKeyExpression.node,
+                  ),
+                );
+
+                // Replace [log(0)] with [_key1] in the pattern
+                computedKeyExpression.replaceWith(
+                  t.identifier(tempVariableName),
+                );
+
+                // Mark this property so we don't process it again later
+                (property.node as any)._keyAlreadyHoisted = true;
+              }
+            }
+
+            // Insert all the temporary variables before the destructuring
+            if (tempVariableDeclarations.length > 0) {
+              insertionPath.insertBefore(tempVariableDeclarations);
+            }
           }
 
           let ref = originalPath.node.init;

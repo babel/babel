@@ -36,15 +36,15 @@ var _$ = {
   _key2 = ++key,
   _key3 = ++key,
   {
-    [_key3]: {
+    [_key2]: {
       y
     },
-    [_key2]: {
+    [_key3]: {
       z
     }
   } = _$,
-  rest_y = babelHelpers.objectWithoutProperties(_$[_key3], ["y"]),
-  rest_z = babelHelpers.objectWithoutProperties(_$[_key2], ["z"]);
+  rest_y = babelHelpers.objectWithoutProperties(_$[_key2], ["y"]),
+  rest_z = babelHelpers.objectWithoutProperties(_$[_key3], ["z"]);
 expect(y).toBe(2);
 expect(rest_y).toEqual({
   z: 3
