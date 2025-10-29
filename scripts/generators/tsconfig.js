@@ -378,10 +378,10 @@ maybeWriteFile(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
         compilerOptions: {
-          skipLibCheck: false,
           strict: true,
         },
         include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts", "*.ts"],
+        exclude: ["dts/*.d.ts"],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),
