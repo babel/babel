@@ -39,6 +39,8 @@
     "babel-plugin-transform-private-property-in-object",
     "babel-plugin-transform-regexp-modifiers",
     "babel-plugin-transform-unicode-sets-regex",
-    "babel-plugin-transform-unicode-property-regex"
+    "babel-plugin-transform-unicode-property-regex",
+    "babel-plugin-transform-flow-strip-types",
+    "babel-plugin-transform-typescript"
   ]
 }
