@@ -11,7 +11,7 @@ import {
 
 export default declare(api => {
   const { types: t, template } = api;
-  api.assertVersion(REQUIRED_VERSION("^7.23.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.23.0 || ^8.0.0-0"));
 
   const targets = api.targets();
 

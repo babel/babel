@@ -7,7 +7,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.19.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.19.0 || ^8.0.0-0"));
 
   const { runtime } = options;
   if (runtime !== undefined && typeof runtime !== "boolean") {

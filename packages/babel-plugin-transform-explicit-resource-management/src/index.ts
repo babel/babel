@@ -34,7 +34,7 @@ function emitSetFunctionNameCall(
 
 export default declare(api => {
   // The first Babel 7 version with usingCtx helper support.
-  api.assertVersion(REQUIRED_VERSION("^7.23.9"));
+  api.assertVersion(REQUIRED_VERSION("^7.23.9 || ^8.0.0-0"));
 
   const TOP_LEVEL_USING = new Map<t.Node, USING_KIND>();
 

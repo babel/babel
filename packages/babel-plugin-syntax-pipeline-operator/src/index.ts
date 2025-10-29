@@ -13,7 +13,7 @@ export interface Options {
 }
 
 export default declare((api, { proposal, topicToken }: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
 
   if (
     typeof proposal !== "string" ||
