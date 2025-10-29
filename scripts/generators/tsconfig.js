@@ -378,7 +378,6 @@ maybeWriteFile(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
         compilerOptions: {
-          skipLibCheck: false,
           strict: true,
         },
         include: [
