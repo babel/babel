@@ -106,13 +106,6 @@ function throwVersionError(range: string | number, version: string) {
     throw new Error("Expected string or integer value.");
   }
 
-  if (
-    typeof process !== "undefined" &&
-    process.env.BABEL_ALLOW_VERSION_MISMATCH
-  ) {
-    return;
-  }
-
   const limit = Error.stackTraceLimit;
 
   if (typeof limit === "number" && limit < 25) {

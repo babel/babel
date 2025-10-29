@@ -131,17 +131,27 @@ function assertVersion(range: string | number): void {
     throw new Error("Expected string or integer value.");
   }
 
-  if (
-    typeof process !== "undefined" &&
-    process.env.BABEL_ALLOW_VERSION_MISMATCH
-  ) {
-    return;
-  }
-
   // We want "*" to also allow any pre-release, but we do not pass
   // the includePrerelease option to semver.satisfies because we
   // do not want ^7.0.0 to match 8.0.0-alpha.1.
   if (range === "*" || semver.satisfies(coreVersion, range)) return;
+
+  const message =
+    `Requires Babel "${range}", but was loaded with "${coreVersion}". ` +
+    `If you are sure you have a compatible version of @babel/core, ` +
+    `it is likely that something in your build process is loading the ` +
+    `wrong version. Inspect the stack trace of this error to look for ` +
+    `the first entry that doesn't mention "@babel/core" or "babel-core" ` +
+    `to see what is calling Babel.`;
+
+  if (
+    typeof process !== "undefined" &&
+    process.env.BABEL_8_BREAKING &&
+    process.env.BABEL_7_TO_8_DANGEROUSLY_DISABLE_VERSION_CHECK
+  ) {
+    console.warn(message);
+    return;
+  }
 
   const limit = Error.stackTraceLimit;
 
@@ -151,14 +161,7 @@ function assertVersion(range: string | number): void {
     Error.stackTraceLimit = 25;
   }
 
-  const err = new Error(
-    `Requires Babel "${range}", but was loaded with "${coreVersion}". ` +
-      `If you are sure you have a compatible version of @babel/core, ` +
-      `it is likely that something in your build process is loading the ` +
-      `wrong version. Inspect the stack trace of this error to look for ` +
-      `the first entry that doesn't mention "@babel/core" or "babel-core" ` +
-      `to see what is calling Babel.`,
-  );
+  const err = new Error(message);
 
   if (typeof limit === "number") {
     Error.stackTraceLimit = limit;
