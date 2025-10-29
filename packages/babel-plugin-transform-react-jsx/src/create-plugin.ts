@@ -139,6 +139,8 @@ export default function createPlugin({
       }
     }
 
+    let commentsNode: t.Node | null = null;
+
     return {
       name,
       inherits: jsx,
@@ -471,6 +473,18 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
+    function processComments(
+      attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
+    ) {
+      commentsNode = null;
+      if (attribs.length && attribs[0].isJSXSpreadAttribute()) {
+        const node = attribs[0].node.argument;
+        if (node.leadingComments || node.trailingComments) {
+          commentsNode = t.cloneNode(node);
+        }
+      }
+    }
+
     function accumulateAttribute(
       array: ObjectExpression["properties"],
       attribute: NodePath<JSXAttribute | JSXSpreadAttribute>,
@@ -601,6 +615,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // which will be thrown later
           children,
         );
+        if (commentsNode) {
+          t.inheritsComments(attribs, commentsNode);
+        }
       } else {
         // attributes should never be null
         attribs = t.objectExpression([]);
@@ -635,6 +652,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
       children: Expression[],
     ) {
+      processComments(attribs);
       const props = attribs.reduce(accumulateAttribute, []);
 
       // In React.jsx, children is no longer a separate argument, but passed in
@@ -752,6 +770,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (!process.env.BABEL_8_BREAKING) {
         if (runtime !== "automatic") {
           const objs = [];
+          processComments(attribs);
           const props = attribs.reduce(accumulateAttribute, []);
 
           if (!useSpread) {
@@ -775,6 +794,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
           if (!objs.length) {
             return t.nullLiteral();
+          }
+
+          if (commentsNode) {
+            t.inheritsComments(objs[0], commentsNode);
           }
 
           if (objs.length === 1) {
@@ -808,6 +831,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const props: ObjectExpression["properties"] = [];
       const found = Object.create(null);
 
+      processComments(attribs);
       for (const attr of attribs) {
         const { node } = attr;
         const name =
@@ -826,16 +850,21 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         accumulateAttribute(props, attr);
       }
 
-      return props.length === 1 &&
+      const ret =
+        props.length === 1 &&
         t.isSpreadElement(props[0]) &&
         // If an object expression is spread element's argument
         // it is very likely to contain __proto__ and we should stop
         // optimizing spread element
         !t.isObjectExpression(props[0].argument)
-        ? props[0].argument
-        : props.length > 0
-          ? t.objectExpression(props)
-          : t.nullLiteral();
+          ? props[0].argument
+          : props.length > 0
+            ? t.objectExpression(props)
+            : t.nullLiteral();
+      if (commentsNode) {
+        t.inheritsComments(ret, commentsNode);
+      }
+      return ret;
     }
   });
 
