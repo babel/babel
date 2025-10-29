@@ -355,7 +355,13 @@ target["clone-license"] = function () {
  */
 
 function eslint(...extraArgs) {
-  const eslintArgs = ["--format", "codeframe", ...extraArgs.filter(Boolean)];
+  const eslintArgs = [
+    "--format",
+    "codeframe",
+    "--flag",
+    "unstable_native_nodejs_ts_config",
+    ...extraArgs.filter(Boolean),
+  ];
 
   const packagesPackages = readdirSync("packages").filter(n =>
     existsSync(`packages/${n}/package.json`)

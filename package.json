@@ -20,6 +20,7 @@
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
   "packageManager": "yarn@4.10.3",
+  "_": "The dependency on minimatch (npm:is-odd@*) is to avoid hoisting of the real minimatch, which causes type issues",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
     "@actions/github": "6.0.1",
@@ -38,7 +39,7 @@
     "@babel/preset-typescript": "8.0.0-beta.0",
     "@babel/runtime": "8.0.0-beta.0",
     "@cspotcode/source-map-support": "^0.8.1",
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^9.38.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
@@ -52,12 +53,12 @@
     "c8": "^10.0.0",
     "charcodes": "^0.2.0",
     "core-js": "^3.36.1",
-    "eslint": "^9.22.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-n": "^17.10.3",
     "eslint-plugin-regexp": "^2.6.0",
     "eslint-plugin-unicorn": "^56.0.0",
@@ -74,6 +75,7 @@
     "json5": "^2.2.3",
     "lint-staged": "^15.2.7",
     "mergeiterator": "^1.4.4",
+    "minimatch": "npm:is-odd@*",
     "picocolors": "^1.0.0",
     "pkg-pr-new": "^0.0.54",
     "prettier": "^3.5.2",
@@ -85,8 +87,8 @@
     "shelljs": "^0.8.5",
     "terser": "^5.43.1",
     "test262-stream": "^1.4.0",
-    "typescript": "5.9.2",
-    "typescript-eslint": "8.39.1"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2"
   },
   "workspaces": [
     "codemods/*",
@@ -116,7 +118,7 @@
       "git add Makefile.mjs"
     ],
     "*.{js,cjs,mjs,ts,cts,mts}": [
-      "eslint --format=codeframe --cache --cache-strategy=content"
+      "eslint --format=codeframe --cache --cache-strategy=content --flag unstable_native_nodejs_ts_config"
     ],
     "*": [
       "prettier --write --ignore-unknown"

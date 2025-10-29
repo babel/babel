@@ -58,7 +58,7 @@ export default function isReferenced(
         return !!parent.computed;
       }
       // parent.value === node
-      return !grandparent || grandparent.type !== "ObjectPattern";
+      return grandparent?.type !== "ObjectPattern";
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }

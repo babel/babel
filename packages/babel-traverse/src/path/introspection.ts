@@ -216,7 +216,7 @@ export function referencesImport(
   }
 
   const binding = this.scope.getBinding((this.node as t.Identifier).name);
-  if (!binding || binding.kind !== "module") return false;
+  if (binding?.kind !== "module") return false;
 
   const path = binding.path;
   const parent = path.parentPath;

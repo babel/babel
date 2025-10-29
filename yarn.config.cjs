@@ -354,7 +354,12 @@ function enforceExports({ Yarn }) {
   }
 }
 
-function enforceBabelCodeVersionFor78Compat({ Yarn }, version) {
+/**
+ * Enforces the @babel/core version for compatibility with Babel 7 and 8
+ * @param {Context} context
+ * @param {string} version
+ */
+function enforceBabelCoreVersionFor78Compat({ Yarn }, version) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.cwd === ".") {
       workspace.set("devDependencies['@babel/core']", version);
@@ -388,7 +393,7 @@ module.exports = {
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);
     if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
-      enforceBabelCodeVersionFor78Compat(
+      enforceBabelCoreVersionFor78Compat(
         ctx,
         process.env.BABEL_CORE_DEV_DEP_VERSION
       );

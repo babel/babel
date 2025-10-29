@@ -139,7 +139,6 @@ describe("converters", function () {
       expect(
         t.valueToNode({
           ["__proto__"]: "__proto__",
-          // eslint-disable-next-line no-dupe-keys
           __proto__: null,
         }),
       ).toEqual(

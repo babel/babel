@@ -1,8 +1,7 @@
-// @ts-check
-
 import babelParser from "@babel/eslint-parser/experimental-worker";
 import globals from "globals";
 import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
 // @ts-expect-error no types
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
@@ -10,7 +9,9 @@ import pluginN from "eslint-plugin-n";
 import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
 import pluginUnicorn from "eslint-plugin-unicorn";
+// @ts-expect-error no types
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
+// @ts-expect-error no types
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
 import { commonJS } from "$repo-utils";
@@ -26,13 +27,13 @@ const testFiles = [
   "codemods/*/test/**/*.js",
   "eslint/*/test/**/*.js",
 ];
-const sourceFiles = exts => [
+const sourceFiles = (exts: string) => [
   `packages/*/src/**/*.{${exts}}`,
   `codemods/*/src/**/*.{${exts}}`,
   `eslint/*/src/**/*.{${exts}}`,
 ];
 
-export default [
+export default defineConfig([
   {
     ignores: [
       "/lib",
@@ -127,11 +128,11 @@ export default [
       "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
-  ...typescriptEslint.config({
-    files: ["**/*.{ts,cts}"],
+  ...defineConfig({
+    files: ["**/*.{ts,cts,mts}"],
     extends: [
-      ...typescriptEslint.configs.recommendedTypeChecked,
-      ...typescriptEslint.configs.stylisticTypeChecked,
+      typescriptEslint.configs.recommendedTypeChecked,
+      typescriptEslint.configs.stylisticTypeChecked,
     ],
     languageOptions: {
       parser: typescriptEslint.parser,
@@ -440,4 +441,4 @@ export default [
       "@typescript-eslint/dot-notation": ["error", { allowKeywords: false }],
     },
   },
-];
+]);

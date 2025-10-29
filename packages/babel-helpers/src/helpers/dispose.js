@@ -3,7 +3,6 @@
 
 function dispose_SuppressedError(error, suppressed) {
   if (typeof SuppressedError !== "undefined") {
-    // eslint-disable-next-line no-undef
     dispose_SuppressedError = SuppressedError;
   } else {
     dispose_SuppressedError = function SuppressedError(error, suppressed) {

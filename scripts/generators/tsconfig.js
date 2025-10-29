@@ -380,7 +380,7 @@ maybeWriteFile(
           skipLibCheck: false,
           strict: true,
         },
-        include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts"],
+        include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts", "*.mts"],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),

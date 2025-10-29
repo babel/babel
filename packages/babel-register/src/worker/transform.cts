@@ -117,7 +117,7 @@ function cacheLookup(opts: unknown, filename: string) {
   const cached = cache[cacheKey];
   const fileMtime = +fs.statSync(filename).mtime;
 
-  if (cached && cached.mtime === fileMtime) {
+  if (cached?.mtime === fileMtime) {
     return { cached: cached.value, store: id };
   }
 
