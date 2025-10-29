@@ -39,6 +39,7 @@ const dependencyAliases = new Map([
 
 const packagesHaveScripts = new Set([
   "@babel/types",
+  "@babel/traverse",
   "@babel/plugin-transform-runtime",
 ]);
 
@@ -380,7 +381,12 @@ maybeWriteFile(
           skipLibCheck: false,
           strict: true,
         },
-        include: ["./lib/libdom-minimal.d.ts", "dts/**/*.d.ts", "*.mts"],
+        include: [
+          "./lib/libdom-minimal.d.ts",
+          "dts/**/*.d.ts",
+          "*.mts",
+          "*.ts",
+        ],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),
