@@ -10,6 +10,7 @@ scripts/integration-tests/fixtures/**
 packages/babel-parser/test/schema.json
 packages/babel-plugin-proposal-discard-binding/test/scripts/check-transform-scope-integrity.cjs
 packages/babel-plugin-transform-regenerator/test/regenerator-fixtures/**
+scripts/parser-tests/typescript/_harnessIO.cjs
 
 CHANGELOG.md
 .github/*.md

@@ -7617,6 +7617,7 @@ __metadata:
     "@yarnpkg/types": "npm:^4.0.0"
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^10.0.0"
+    chai: "npm:^6.2.0"
     charcodes: "npm:^0.2.0"
     core-js: "npm:^3.36.1"
     eslint: "npm:^9.22.0"
@@ -8240,6 +8241,13 @@ __metadata:
     align-text: "npm:^0.1.3"
     lazy-cache: "npm:^1.0.3"
   checksum: 10/f3a4e224f0eeb7a9ebc09e6519639acadd8b65942ae33db2b6f38946fcee6320499bd6b980894f7e33fec4f1b66c056d55bb96a9b05a2ca0fde25876e9ee2ab8
+  languageName: node
+  linkType: hard
+
+"chai@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "chai@npm:6.2.0"
+  checksum: 10/199422854e253d8711ea3f220365c6a850c450abf68b31131d2a0f703cbfc5cb48e6c81567e0adbe80e83cdcae6dba82d069a41a77c16bdf6703329c5c3447ef
   languageName: node
   linkType: hard
 

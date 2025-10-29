@@ -1,9 +1,10 @@
 // @ts-check
 import path from "node:path";
-import fs from "node:fs";
+import fs, { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestRunner from "../utils/parser-test-runner.js";
-import ErrorCodes from "./error-codes.js";
+import { TestCaseParser } from "./_harnessIO.cjs";
+import * as ts from "typescript";
 
 /**
  * Get the encoding of a file based on its BOM.
@@ -14,8 +15,6 @@ const getEncoding = path =>
   ({ fffe: "utf-16le", feff: "utf-16be" })[
     fs.readFileSync(path).subarray(0, 2).toString("hex")
   ] || "utf-8";
-
-const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -34,25 +33,32 @@ function* loadTests(dir) {
 
 const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
-// Check if the baseline errors contain the codes that should also be thrown from babel-parser
-function baselineContainsParserErrorCodes(testName) {
-  try {
-    return ErrorCodeRegExp.test(
-      fs.readFileSync(
-        path.join(
-          TSTestsPath,
-          "baselines/reference",
-          testName.replace(/\.tsx?$/, ".errors.txt")
-        ),
-        "utf8"
-      )
-    );
-  } catch (e) {
-    if (e.code !== "ENOENT") {
-      throw e;
-    }
-    return false;
-  }
+/**
+ *
+ * @param {TestCaseParser.TestCaseContent} testCase
+ */
+function hasErrorsWithTS(testCase) {
+  /**
+   * @type {ts.CompilerOptions}
+   */
+  const options = {
+    noLib: true,
+    noResolve: true,
+  };
+  const host = ts.createCompilerHost(options);
+  host.readFile = fileName => {
+    const unit = testCase.testUnitData.find(unit => unit.name === fileName);
+    return unit ? unit.content : readFileSync(fileName, "utf8");
+  };
+
+  const program = ts.createProgram({
+    rootNames: testCase.testUnitData.map(unit => unit.name),
+    options,
+    host,
+  });
+  const syntacticDiagnostics = program.getSyntacticDiagnostics();
+  const semanticDiagnostics = program.getSemanticDiagnostics();
+  return syntacticDiagnostics.length > 0 || semanticDiagnostics.length > 0;
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
@@ -72,90 +78,39 @@ const runner = new TestRunner({
       }
 
       const strictMode = AlwaysStrictRegExp.test(test.contents) || void 0;
-      const files = toFiles(strictMode, test.contents, test.name);
-      const expectedError =
-        files.length > 0 && baselineContainsParserErrorCodes(test.name);
+      const testCase = TestCaseParser.makeUnitsFromTest(
+        test.contents,
+        path.join(this.testDir, test.name)
+      );
+      const files = testCase.testUnitData
+        .map(unit => [unit.name, unit.content])
+        .filter(([sourceFilename, contents]) => {
+          if (contents == null) return false;
+          return (
+            !/\.(?:css|js|json|md)$/.test(sourceFilename) &&
+            contents.split("\n").some(line => !/^\s*$|^\/\/[^\n]*$/.test(line))
+          );
+        })
+        .map(([sourceFilename, contents]) => ({
+          contents,
+          sourceFilename,
+          sourceType: "unambiguous",
+          strictMode,
+          plugins: [
+            ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
+            "decorators-legacy", // For TS parameter decorator
+            "decoratorAutoAccessors",
+            "importAssertions",
+            /\.[tj]sx$/.test(sourceFilename) && "jsx",
+          ].filter(plugin => !!plugin),
+        }));
+
+      const expectedError = files.length > 0 && hasErrorsWithTS(testCase);
 
       yield { id: test.name, expectedError, contents: files };
     }
   },
 });
-
-function toFiles(strictMode, contents, name) {
-  return splitTwoslashCodeInfoFiles(contents, "default", `${name}/`)
-    .map(([filename, lines]) => [
-      filename.replace(/\/default$/, ""),
-      lines.join("\n"),
-    ])
-    .filter(
-      ([sourceFilename, contents]) =>
-        !/\.(?:css|js|json|md)$/.test(sourceFilename) &&
-        contents.split("\n").some(line => !/^\s*$|^\/\/[^\n]*$/.test(line))
-    )
-    .map(([sourceFilename, contents]) => ({
-      contents,
-      sourceFilename,
-      sourceType: "unambiguous",
-      strictMode,
-      plugins: [
-        ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
-        "decorators-legacy", // For TS parameter decorator
-        "decoratorAutoAccessors",
-        "importAssertions",
-        /\.[tj]sx$/.test(sourceFilename) && "jsx",
-      ].filter(plugin => !!plugin),
-    }));
-}
-
-const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(?:\n|$)/;
-const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*(\S+)\s*(?:\n|$)/i;
-
-// Modified from: https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ts-twoslasher/src/index.ts
-/**
- * Split a code string into multiple files based on twoslash `//` comments.
- * @param {string} code
- * @param {string} defaultFileName
- * @param {string} root
- * @returns {Array<[string, string[]]>}
- */
-function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
-  const lines = code.split(/\r\n?|\n/);
-
-  let nameForFile = code.includes(`@filename: ${defaultFileName}`)
-    ? "global.ts"
-    : defaultFileName;
-  let currentFileContent = [];
-  /**
-   * @type {Array<[string, string[]]>}
-   */
-  const fileMap = [];
-
-  for (const line of lines) {
-    const newFileName = BracketedFileRegExp.test(line)
-      ? // @ts-expect-error checked above
-        line.match(BracketedFileRegExp)[1]
-      : (line.match(AtFileRegExp)?.[1] ?? false);
-    if (newFileName) {
-      fileMap.push([root + nameForFile, currentFileContent]);
-      nameForFile = newFileName;
-      currentFileContent = [];
-    } else {
-      currentFileContent.push(line);
-    }
-  }
-  fileMap.push([root + nameForFile, currentFileContent]);
-
-  // Basically, strip these:
-  // ["index.ts", []]
-  // ["index.ts", [""]]
-  const nameContent = fileMap.filter(
-    n =>
-      n[1].length > 2 ||
-      (n[1].length === 1 && n[1][0] !== "") ||
-      (n[1].length === 2 && n[1][0] !== "content not parsed" && n[1][0] !== "")
-  );
-  return nameContent;
-}
 
 runner.run().catch(err => {
   console.error(err);
