@@ -85,6 +85,7 @@
     "shelljs": "^0.8.5",
     "terser": "^5.43.1",
     "test262-stream": "^1.4.0",
+    "ts-node": "^11.0.0-beta.1",
     "typescript": "5.9.2",
     "typescript-eslint": "8.39.1"
   },
