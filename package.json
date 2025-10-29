@@ -20,6 +20,7 @@
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
   "packageManager": "yarn@4.10.3",
+  "_": "The dependency on minimatch (npm:is-odd@*) is to avoid hoisting of the real minimatch, which causes type issues",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
     "@actions/github": "6.0.1",
@@ -74,6 +75,7 @@
     "json5": "^2.2.3",
     "lint-staged": "^15.2.7",
     "mergeiterator": "^1.4.4",
+    "minimatch": "npm:is-odd@*",
     "picocolors": "^1.0.0",
     "pkg-pr-new": "^0.0.54",
     "prettier": "^3.5.2",

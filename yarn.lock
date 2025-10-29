@@ -7710,6 +7710,7 @@ __metadata:
     json5: "npm:^2.2.3"
     lint-staged: "npm:^15.2.7"
     mergeiterator: "npm:^1.4.4"
+    minimatch: "npm:is-odd@*"
     picocolors: "npm:^1.0.0"
     pkg-pr-new: "npm:^0.0.54"
     prettier: "npm:^3.5.2"
@@ -12110,6 +12111,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-number@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "is-number@npm:6.0.0"
+  checksum: 10/8668b49747649ee0878e0a6d9e35e1c95bab58c5dd1a2b698df34989512ec553cfd090fa7af247d590afe4b12ec996e735b9a670c2cf0efbaefe7fb2c2457615
+  languageName: node
+  linkType: hard
+
 "is-number@npm:^7.0.0":
   version: 7.0.0
   resolution: "is-number@npm:7.0.0"
@@ -13853,6 +13861,15 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^2.0.1"
   checksum: 10/dd6a8927b063aca6d910b119e1f2df6d2ce7d36eab91de83167dd136bb85e1ebff97b0d3de1cb08bd1f7e018ca170b4962479fefab5b2a69e2ae12cb2edc8348
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:is-odd@*":
+  version: 3.0.1
+  resolution: "is-odd@npm:3.0.1"
+  dependencies:
+    is-number: "npm:^6.0.0"
+  checksum: 10/c9d35c336c0c0ada0bfaf1f4564f354a222c4ffb9c3b42fac353767c9b8f0af844d3ddf16fbf7b12d6ecf57ee4d2fbeb9e456e8c9d68a78bb44e91bb43fdfd56
   languageName: node
   linkType: hard
 
