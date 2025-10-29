@@ -39,6 +39,7 @@ const dependencyAliases = new Map([
 
 const packagesHaveScripts = new Set([
   "@babel/types",
+  "@babel/traverse",
   "@babel/plugin-transform-runtime",
 ]);
 

@@ -1,5 +1,3 @@
-// @ts-check
-
 import path from "node:path";
 import fs from "node:fs";
 import { cpus } from "node:os";
@@ -8,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { Transform as TransformStream } from "node:stream";
 import { callbackify } from "node:util";
 import colors from "picocolors";
+// @ts-expect-error no types
 import gulp from "gulp";
 import { rollup } from "rollup";
 import {
@@ -26,13 +25,21 @@ import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
 
+// @ts-expect-error no types
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
+// @ts-expect-error no types
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
+// @ts-expect-error no types
 import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.js";
+// @ts-expect-error no types
 import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs";
+// @ts-expect-error no types
 import formatCode from "./scripts/utils/formatCode.js";
+// @ts-expect-error no types
 import { log } from "./scripts/utils/logger.cjs";
 import { USE_ESM, commonJS } from "$repo-utils";
+
+import { type PluginItem, types as t } from "@babel/core";
 
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
@@ -51,7 +58,7 @@ const buildTypingsWatchGlob = [
 ];
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value) {
+function bool(value: unknown) {
   return Boolean(value) && value !== "false" && value !== "0";
 }
 
@@ -66,10 +73,8 @@ function bool(value) {
  * @example
  * mapSrcToLib("packages/babel-template/src/index.d.ts")
  * // returns "packages/babel-template/lib/index.d.ts"
- * @param {string} srcPath
- * @returns {string}
  */
-function mapSrcToLib(srcPath) {
+function mapSrcToLib(srcPath: string): string {
   const parts = srcPath
     .replace(/(?<!\.d)\.ts$/, ".js")
     .replace(/(?<!\.d)\.cts$/, ".cjs")
@@ -78,14 +83,14 @@ function mapSrcToLib(srcPath) {
   return parts.join("/");
 }
 
-function mapToDts(packageName) {
+function mapToDts(packageName: string): string {
   return packageName.replace(
     /(?<=\\|\/|^)(packages|eslint|codemods)(?=\\|\/)/,
     "dts/$1"
   );
 }
 
-function getIndexFromPackage(name) {
+function getIndexFromPackage(name: string): string {
   try {
     fs.statSync(`./${name}/src/index.ts`);
     return `${name}/src/index.ts`;
@@ -94,13 +99,12 @@ function getIndexFromPackage(name) {
   }
 }
 
-/**
- * @param {string} generator
- * @param {string} dest
- * @param {string} filename
- * @param {string} message
- */
-async function generateHelpers(generator, dest, filename, message) {
+async function generateHelpers(
+  generator: string,
+  dest: string,
+  filename: string,
+  message: string
+) {
   const { default: generateCode } = await import(generator);
   const result = await formatCode(
     await generateCode(filename),
@@ -110,13 +114,17 @@ async function generateHelpers(generator, dest, filename, message) {
   log(`${colors.green("✔")} Generated ${message}`);
 }
 
-/**
- *
- * @typedef {("asserts" | "ast-types" | "builders" | "constants" | "validators")} TypesHelperKind
- * @param {TypesHelperKind} helperKind
- * @param {string} filename
- */
-function generateTypeHelpers(helperKind, filename = "index.ts") {
+type TypesHelperKind =
+  | "asserts"
+  | "ast-types"
+  | "builders"
+  | "constants"
+  | "validators";
+
+function generateTypeHelpers(
+  helperKind: TypesHelperKind,
+  filename = "index.ts"
+) {
   return generateHelpers(
     `./packages/babel-types/scripts/generators/${helperKind}.ts`,
     `./packages/babel-types/src/${helperKind}/generated/`,
@@ -125,21 +133,18 @@ function generateTypeHelpers(helperKind, filename = "index.ts") {
   );
 }
 
-/**
- *
- * @typedef {("asserts" | "validators" | "visitor-types")} TraverseHelperKind
- * @param {TraverseHelperKind} helperKind
- */
-function generateTraverseHelpers(helperKind, outBase = "") {
+type TraverseHelperKind = "asserts" | "validators" | "visitor-types";
+
+function generateTraverseHelpers(helperKind: TraverseHelperKind, outBase = "") {
   return generateHelpers(
-    `./packages/babel-traverse/scripts/generators/${helperKind}.js`,
+    `./packages/babel-traverse/scripts/generators/${helperKind}.ts`,
     `./packages/babel-traverse/src/${outBase}/generated/`,
     `${helperKind}.d.ts`,
     `@babel/traverse -> ${helperKind}`
   );
 }
 
-function generateHelperGlobalsData(filename) {
+function generateHelperGlobalsData(filename: string) {
   return generateHelpers(
     `./packages/babel-helper-globals/scripts/generate.mjs`,
     `./packages/babel-helper-globals/data/`,
@@ -148,7 +153,11 @@ function generateHelperGlobalsData(filename) {
   );
 }
 
-async function applyBabelToSource(inputCode, filename, options) {
+async function applyBabelToSource(
+  inputCode: string,
+  filename: string,
+  options: any
+) {
   const { transformAsync } = await import("@babel/core");
   return transformAsync(inputCode, {
     configFile: false,
@@ -163,10 +172,11 @@ async function applyBabelToSource(inputCode, filename, options) {
       experimental_preserveFormat: true,
       ...options?.generatorOpts,
     },
-  }).then(({ code }) => formatCode(code, filename));
+  }).then(res => formatCode(res!.code, filename));
 }
 
-const kebabToCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
+const kebabToCamel = (str: string) =>
+  str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
@@ -175,6 +185,7 @@ function generateStandalone() {
     .pipe(
       new TransformStream({
         objectMode: true,
+        // @ts-expect-error FIXME
         transform: callbackify(async file => {
           log("Generating @babel/standalone files");
           const pluginConfig = JSON.parse(file.contents);
@@ -225,7 +236,7 @@ function generateStandalone() {
     .pipe(gulp.dest(dest));
 }
 
-function createWorker(useWorker) {
+function createWorker(useWorker: boolean) {
   const numWorkers = Math.ceil(Math.max(cpus().length, 1) / 2) - 1;
   if (
     numWorkers === 0 ||
@@ -245,7 +256,7 @@ function createWorker(useWorker) {
   return worker;
 }
 
-async function buildBabel(useWorker, ignore = []) {
+async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
   const worker = createWorker(useWorker);
   const files = new Glob(defaultSourcesGlob, {
     ignore: ignore.map(p => `${p.src}/**`),
@@ -282,7 +293,7 @@ async function buildBabel(useWorker, ignore = []) {
 /**
  * Resolve a nested dependency starting from the given file
  */
-function resolveChain(baseUrl, ...packages) {
+function resolveChain(baseUrl: string, ...packages: string[]) {
   const require = createRequire(baseUrl);
 
   return packages.reduce(
@@ -301,7 +312,7 @@ if (process.env.CIRCLE_PR_NUMBER) {
 
 const babelVersion =
   require("./packages/babel-core/package.json").version + versionSuffix;
-function buildRollup(packages, buildStandalone) {
+function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
@@ -446,7 +457,7 @@ function buildRollup(packages, buildStandalone) {
                 // This is needed because @jridgewell's packages always use
                 // the UMD version when targeting browsers, but we need to use
                 // the ESM version so that it can be bundled.
-                handler(importee) {
+                handler(importee: string) {
                   if (/@jridgewell[\\/].*\.umd\.js$/.test(importee)) {
                     return importee.slice(0, -".umd.js".length) + ".mjs";
                   }
@@ -470,7 +481,7 @@ function buildRollup(packages, buildStandalone) {
                   compact: false,
                 },
                 plugins: [
-                  function babelPluginInlineConstNumericObjects({ types: t }) {
+                  function babelPluginInlineConstNumericObjects() {
                     return {
                       visitor: {
                         VariableDeclarator(path) {
@@ -482,11 +493,12 @@ function buildRollup(packages, buildStandalone) {
                             return;
                           }
 
-                          const binding = path.scope.getBinding(node.id.name);
+                          const binding = path.scope.getBinding(node.id.name)!;
                           if (!binding.constant) return;
 
                           const vals = new Map();
-                          for (const { key, value } of node.init.properties) {
+                          for (const { key, value } of node.init
+                            .properties as t.ObjectProperty[]) {
                             if (!t.isIdentifier(key)) return;
                             if (!t.isNumericLiteral(value)) return;
                             vals.set(key.name, value.value);
@@ -513,7 +525,7 @@ function buildRollup(packages, buildStandalone) {
                         },
                       },
                     };
-                  },
+                  } satisfies PluginItem,
                 ],
               }),
             buildStandalone &&
@@ -607,8 +619,13 @@ function buildRollup(packages, buildStandalone) {
   );
 }
 
-function buildRollupDts(packages) {
-  async function build(input, output, banner, packageName) {
+function buildRollupDts(packages: string[]) {
+  async function build(
+    input: string,
+    output: string,
+    banner: string,
+    packageName: string
+  ) {
     log(`Bundling '${colors.cyan(output)}' with rollup ...`);
 
     let external;
@@ -667,7 +684,7 @@ function buildRollupDts(packages) {
     });
   }
 
-  const tasks = packages.map(async packageName => {
+  const tasks = packages.map(async (packageName: string) => {
     const input = `${mapToDts(packageName)}/src/index.d.ts`;
     const output = `${packageName}/lib/index.d.ts`;
 
@@ -689,7 +706,7 @@ function buildRollupDts(packages) {
   return Promise.all(tasks);
 }
 
-function* packagesIterator(exclude) {
+function* packagesIterator(exclude: Set<string>) {
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
       const src = `${packageDir}/${dir}`;
@@ -702,7 +719,7 @@ function* packagesIterator(exclude) {
   }
 }
 
-function* libBundlesIterator() {
+function* libBundlesIterator(): IterableIterator<PackageInfo> {
   const noBundle = new Set(
     [
       // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
@@ -740,7 +757,8 @@ function* libBundlesIterator() {
         input: getIndexFromPackage(src),
       };
     } else if (pkgJSON.bin) {
-      for (const binPath of Object.values(pkgJSON.bin)) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      for (const binPath of Object.values(pkgJSON.bin) as string[]) {
         const filename = binPath.slice(binPath.lastIndexOf("/") + 1);
         const input =
           src === "packages/babel-cli" && filename === "babel.js"
@@ -758,7 +776,18 @@ function* libBundlesIterator() {
   }
 }
 
-let libBundles;
+type PackageInfo = {
+  src: string;
+  format: "cjs" | "esm" | "umd";
+  dest: string;
+  input: string;
+  name?: string;
+  filename?: string;
+  envName?: string;
+};
+
+let libBundles: PackageInfo[];
+
 if (bool(process.env.BABEL_8_BREAKING)) {
   libBundles = Array.from(libBundlesIterator());
 } else {
@@ -808,7 +837,7 @@ const dtsBundles = bool(process.env.BABEL_8_BREAKING)
 const standaloneBundle = [
   {
     src: "packages/babel-standalone",
-    format: "umd",
+    format: "umd" as const,
     name: "Babel",
     filename: "babel.js",
     dest: "",
@@ -876,12 +905,12 @@ gulp.task("materialize-babel-8", async () => {
                 babelPluginToggleBooleanFlag,
                 { name: "process.env.BABEL_8_BREAKING", value: true },
               ],
-              ({ types: t }) => ({
+              (api: any) => ({
                 visitor: {
                   SpreadElement: {
-                    exit(path) {
+                    exit(path: any) {
                       const { argument } = path.node;
-                      if (t.isObjectExpression(argument)) {
+                      if (api.types.isObjectExpression(argument)) {
                         path.replaceWithMultiple(argument.properties);
                       }
                     },
@@ -893,7 +922,7 @@ gulp.task("materialize-babel-8", async () => {
               plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
             },
             generatorOpts: {
-              shouldPrintComment: comment =>
+              shouldPrintComment: (comment: string) =>
                 !comment.includes("@ts-ignore(Babel 7 vs Babel 8)"),
             },
           });
