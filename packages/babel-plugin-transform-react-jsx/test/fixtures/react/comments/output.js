@@ -22,3 +22,17 @@
     a: 1
   } /* comments */));
 }
+{
+  /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Trans /*test1 */, {
+    a: "1" /**test2 */,
+    b: "2" /**test3 */
+  }));
+}
+{
+  /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Trans,
+  /*test1*/
+  {
+    a: 1,
+    /**test2 */b: "2" /*test3 */
+  }));
+}

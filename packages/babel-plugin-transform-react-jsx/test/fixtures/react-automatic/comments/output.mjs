@@ -27,3 +27,21 @@ import { jsx as _jsx } from "react/jsx-runtime";
     } /* comments */)
   });
 }
+{
+  /*#__PURE__*/_jsx("div", {
+    children: /*#__PURE__*/_jsx(Trans /*test1 */, {
+      a: "1" /**test2 */,
+      b: "2" /**test3 */
+    })
+  });
+}
+{
+  /*#__PURE__*/_jsx("div", {
+    children: /*#__PURE__*/_jsx(Trans,
+    /*test1*/
+    {
+      a: 1,
+      /**test2 */b: "2" /*test3 */
+    })
+  });
+}
