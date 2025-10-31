@@ -261,18 +261,20 @@ function _evaluate(path: NodePath, state: State): any {
       return;
     }
 
-    const resolved = path.resolve();
-    if (resolved === path) {
+    if (!binding) {
       deopt(path, state);
       return;
     }
-    const value = evaluateCached(resolved, state);
-    if (
-      typeof value === "object" &&
-      value !== null &&
-      binding!.references > 1
-    ) {
-      deopt(resolved, state);
+
+    const bindingPath = binding.path;
+    if (!bindingPath.isVariableDeclarator()) {
+      deopt(bindingPath, state);
+      return;
+    }
+    const initPath = bindingPath.get("init");
+    const value = evaluateCached(initPath, state);
+    if (typeof value === "object" && value !== null && binding.references > 1) {
+      deopt(initPath, state);
       return;
     }
     return value;

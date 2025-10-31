@@ -445,6 +445,17 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(true);
   });
 
+  it("should not evaluate arrays with new references", function () {
+    const path = getPath(`
+      let value = [];
+      value.push(Math.random());
+      let value2 = value;
+      value2;
+    `);
+    const evalResult = path.get("body.3.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
