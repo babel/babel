@@ -38,6 +38,7 @@
   "--loader",
   "--localstorage-file",
   "--max-http-header-size",
+  "--max-old-space-size-percentage",
   "--network-family-autoselection-attempt-timeout",
   "--openssl-config",
   "--policy-integrity",
