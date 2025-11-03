@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":99}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":99}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":99}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":99,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":99}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":4,"index":4}},
+              "name": "div"
+            },
+            "attributes": [],
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start":93,"end":99,"loc":{"start":{"line":3,"column":0,"index":93},"end":{"line":3,"column":6,"index":99}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":95,"end":98,"loc":{"start":{"line":3,"column":2,"index":95},"end":{"line":3,"column":5,"index":98}},
+              "name": "div"
+            }
+          },
+          "children": [
+            {
+              "type": "JSXText",
+              "start":5,"end":93,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":3,"column":0,"index":93}},
+              "extra": {
+                "rawValue": "\n  ' ( · · & ® · · 𝒲 }\n",
+                "raw": "\n  &apos; &lpar; &middot; &#xB7; &amp; &reg; &centerdot; &CenterDot; &#x1D4B2; &rbrace;\n"
+              },
+              "value": "\n  ' ( · · & ® · · 𝒲 }\n"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
