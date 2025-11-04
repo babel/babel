@@ -113,15 +113,24 @@ export default declare((api, opts: Options) => {
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
   // `allPrimitives: false` doesn't necessarily mean that there is a non-primitive, but just
   // that we are not sure.
-  function extractNormalizedKeys(node: t.ObjectPattern) {
+  function extractNormalizedKeys(
+    pattern: t.ObjectPattern | NodePath<t.ObjectPattern>,
+  ) {
     // RestElement has been removed in createObjectRest
-    const props = node.properties as t.ObjectProperty[];
+    // If we have a NodePath, get the current nodes (which reflect any transformations)
+    const isPath = "get" in pattern;
+    const propsList: t.ObjectProperty[] = isPath
+      ? pattern
+          .get("properties")
+          .map((p: NodePath) => p.node as t.ObjectProperty)
+      : (pattern.properties as t.ObjectProperty[]);
+
     const keys: t.Expression[] = [];
     let allPrimitives = true;
     let hasTemplateLiteral = false;
 
-    for (const prop of props) {
-      const { key } = prop;
+    for (const prop of propsList) {
+      const key = prop.key;
       if (t.isIdentifier(key) && !prop.computed) {
         // since a key {a: 3} is equivalent to {"a": 3}, use the latter
         keys.push(t.stringLiteral(key.name));
@@ -138,14 +147,24 @@ export default declare((api, opts: Options) => {
           ),
         );
       } else {
-        // @ts-expect-error private name has been handled by destructuring-private
-        keys.push(t.cloneNode(key));
+        // If the key is an inline memoization assignment (e.g. _key = expr),
+        // use just the identifier part for the exclusion array
+        if (t.isAssignmentExpression(key) && t.isIdentifier(key.left)) {
+          // For inline memoized keys, use just the left side (the identifier)
+          // to avoid evaluating the assignment expression multiple times
+          keys.push(t.cloneNode(key.left));
+        } else {
+          // @ts-expect-error private name has been handled by destructuring-private
+          keys.push(t.cloneNode(key));
+        }
 
+        // Check the original key for primitiveness
+        const keyToCheck = t.isAssignmentExpression(key) ? key.right : key;
         if (
-          (t.isMemberExpression(key, { computed: false }) &&
-            t.isIdentifier(key.object, { name: "Symbol" })) ||
-          (t.isCallExpression(key) &&
-            t.matchesPattern(key.callee, "Symbol.for"))
+          (t.isMemberExpression(keyToCheck, { computed: false }) &&
+            t.isIdentifier(keyToCheck.object, { name: "Symbol" })) ||
+          (t.isCallExpression(keyToCheck) &&
+            t.matchesPattern(keyToCheck.callee, "Symbol.for"))
         ) {
           // there all return a primitive
         } else {
@@ -180,6 +199,28 @@ export default declare((api, opts: Options) => {
       // (This prevents creating duplicate temp variables like _a2 = _a)
       if ((property.node as any)._keyAlreadyHoisted) {
         continue;
+      }
+
+      // Skip if already memoised (inline assignment expression with a UID)
+      // This happens when inline memoization is used for nested object rest
+      if (
+        keyExpression.isAssignmentExpression() &&
+        keyExpression.get("left").isIdentifier()
+      ) {
+        const identName = (keyExpression.node.left as t.Identifier).name;
+        // Check current scope and parent scopes for the UID
+        let currentScope: Scope | null = scope;
+        let isUid = false;
+        while (currentScope) {
+          if (currentScope.hasUid(identName)) {
+            isUid = true;
+            break;
+          }
+          currentScope = currentScope.parent;
+        }
+        if (isUid) {
+          continue;
+        }
       }
 
       // Only process computed keys that have side effects (function calls, mutations, etc.)
@@ -293,9 +334,8 @@ export default declare((api, opts: Options) => {
       path.get("properties") as NodePath<t.ObjectProperty>[],
       path.scope,
     );
-    const { keys, allPrimitives, hasTemplateLiteral } = extractNormalizedKeys(
-      path.node,
-    );
+    const { keys, allPrimitives, hasTemplateLiteral } =
+      extractNormalizedKeys(path);
 
     if (keys.length === 0) {
       return [
@@ -515,25 +555,27 @@ export default declare((api, opts: Options) => {
            * The functions log(0), log(1), log(2) must be called in that exact order.
            * But without this fix, the nested pattern gets processed first, causing the wrong order.
            *
-           * Solution: Extract all computed key expressions into variables first, in source order.
-           * This happens after the right-hand side (obj) is stored, but before destructuring starts.
+           * Additionally, with default values:
+           *   const { [log(0)]: x = log(1), [log(2)]: y } = obj
            *
+           * The order must be: log(0), then log(1) (if x is undefined), then log(2).
+           *
+           * Solution: Use inline memoization with assignment expressions.
            * Transform:
            *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
            * Into:
-           *   const _obj = obj,           // Store right-hand side first
-           *         _key1 = log(0),       // Then evaluate keys in order
-           *         _key2 = log(1),
-           *         _key3 = log(2),
-           *         { [_key1]: { [_key2]: x, ...rest }, [_key3]: y } = _obj  // Then destructure
+           *   var _log, _log2, _log3;
+           *   const { [_log = log(0)]: { [_log2 = log(1)]: x, ...rest }, [_log3 = log(2)]: y } = obj
+           *
+           * This preserves correct evaluation order even with default values.
            */
 
           // Only do this once per variable declaration (even if multiple rest elements exist)
-          const alreadyHoistedComputedKeys = originalPath.getData(
-            "computedKeysAlreadyHoisted",
+          const alreadyMemoisedComputedKeys = originalPath.getData(
+            "computedKeysAlreadyMemoised",
           );
-          if (!alreadyHoistedComputedKeys) {
-            originalPath.setData("computedKeysAlreadyHoisted", true);
+          if (!alreadyMemoisedComputedKeys) {
+            originalPath.setData("computedKeysAlreadyMemoised", true);
 
             // Find all computed keys (like [someExpression]) in left-to-right order
             const destructuringPattern = originalPath.get(
@@ -541,7 +583,6 @@ export default declare((api, opts: Options) => {
             ) as NodePath<t.ObjectPattern>;
             const propertiesWithComputedKeys =
               collectComputedKeysInSourceOrder(destructuringPattern);
-            const tempVariableDeclarations: t.VariableDeclarator[] = [];
 
             // For each computed key that has side effects (not a simple variable)
             for (const property of propertiesWithComputedKeys) {
@@ -549,33 +590,44 @@ export default declare((api, opts: Options) => {
                 "key",
               ) as NodePath<t.Expression>;
 
+              // Skip if already memoised (assignment expression with a UID)
+              if (
+                computedKeyExpression.isAssignmentExpression() &&
+                computedKeyExpression.get("left").isIdentifier() &&
+                originalPath.scope.hasUid(
+                  (computedKeyExpression.node.left as t.Identifier).name,
+                )
+              ) {
+                continue;
+              }
+
               // Check if the expression has side effects (function call, ++x, etc.)
               if (!computedKeyExpression.isPure()) {
-                // Create a temporary variable: _key1 = log(0)
+                // Create a temporary variable identifier
                 const tempVariableName =
                   originalPath.scope.generateUidBasedOnNode(
                     computedKeyExpression.node,
                   );
-                tempVariableDeclarations.push(
-                  t.variableDeclarator(
-                    t.identifier(tempVariableName),
+                const tempIdentifier = t.identifier(tempVariableName);
+
+                // Declare the variable upfront with no initializer (var declaration)
+                originalPath.scope.push({
+                  id: tempIdentifier,
+                  kind: "var",
+                });
+
+                // Replace [log(0)] with [_key = log(0)] for inline memoization
+                computedKeyExpression.replaceWith(
+                  t.assignmentExpression(
+                    "=",
+                    t.cloneNode(tempIdentifier),
                     computedKeyExpression.node,
                   ),
-                );
-
-                // Replace [log(0)] with [_key1] in the pattern
-                computedKeyExpression.replaceWith(
-                  t.identifier(tempVariableName),
                 );
 
                 // Mark this property so we don't process it again later
                 (property.node as any)._keyAlreadyHoisted = true;
               }
-            }
-
-            // Insert all the temporary variables before the destructuring
-            if (tempVariableDeclarations.length > 0) {
-              insertionPath.insertBefore(tempVariableDeclarations);
             }
           }
 
@@ -597,11 +649,21 @@ export default declare((api, opts: Options) => {
             path.scope,
           );
           refPropertyPath.forEach(prop => {
-            const { node } = prop;
+            // Get the current key (which may have been transformed to an inline assignment)
+            const keyPath = prop.get("key") as NodePath<t.Expression>;
+            let keyForMemberExpression: t.Expression = keyPath.node;
+
+            // If the key is an inline memoization assignment, use just the identifier
+            if (t.isAssignmentExpression(keyPath.node)) {
+              // For inline memoized keys, extract just the left side (the identifier)
+              // to avoid re-evaluating the assignment expression
+              keyForMemberExpression = keyPath.node.left as t.Expression;
+            }
+
             ref = t.memberExpression(
               ref,
-              t.cloneNode(node.key),
-              node.computed || t.isLiteral(node.key),
+              t.cloneNode(keyForMemberExpression),
+              prop.node.computed || t.isLiteral(keyPath.node),
             );
           });
 
