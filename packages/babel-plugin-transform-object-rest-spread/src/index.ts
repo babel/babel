@@ -182,8 +182,8 @@ export default declare((api, opts: Options) => {
    * Example: { [foo()]: x } becomes { [_temp = foo()]: x } with upfront declaration: var _temp;
    *
    * This function is called in multiple places during transformation. To avoid creating
-   * duplicate temp variables, we skip properties that were already memoized inline
-   * (marked with _keyAlreadyHoisted flag).
+   * duplicate temp variables, we skip properties that were already memoized inline by
+   * checking if the key is an assignment expression with a UID identifier.
    */
   function replaceImpureComputedKeys(
     properties: NodePath<t.ObjectProperty>[],
@@ -194,12 +194,6 @@ export default declare((api, opts: Options) => {
     for (const property of properties) {
       // PrivateName is handled in destructuring-private plugin
       const keyExpression = property.get("key") as NodePath<t.Expression>;
-
-      // Skip if already memoized inline in the VariableDeclarator visitor
-      // (This prevents creating duplicate temp variables like _a2 = _a)
-      if ((property.node as any)._keyAlreadyHoisted) {
-        continue;
-      }
 
       // Skip if already memoised (inline assignment expression with a UID)
       // This happens when inline memoization is used for nested object rest
@@ -518,6 +512,79 @@ export default declare((api, opts: Options) => {
         let insertionPath = path;
         const originalPath = path;
 
+        /**
+         * Fix for: https://github.com/babel/babel/issues/17274
+         *
+         * Problem: When you have nested destructuring with computed keys and rest elements:
+         *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
+         *
+         * The functions log(0), log(1), log(2) must be called in that exact order.
+         * But without this fix, the nested pattern gets processed first, causing the wrong order.
+         *
+         * Additionally, with default values:
+         *   const { [log(0)]: x = log(1), [log(2)]: y } = obj
+         *
+         * The order must be: log(0), then log(1) (if x is undefined), then log(2).
+         *
+         * Solution: Use inline memoization with assignment expressions.
+         * Transform:
+         *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
+         * Into:
+         *   var _log, _log2, _log3;
+         *   const { [_log = log(0)]: { [_log2 = log(1)]: x, ...rest }, [_log3 = log(2)]: y } = obj
+         *
+         * This preserves correct evaluation order even with default values.
+         */
+
+        // Find all computed keys (like [someExpression]) in left-to-right order
+        const destructuringPattern = originalPath.get(
+          "id",
+        ) as NodePath<t.ObjectPattern>;
+        const propertiesWithComputedKeys =
+          collectComputedKeysInSourceOrder(destructuringPattern);
+
+        // For each computed key that has side effects (not a simple variable)
+        for (const property of propertiesWithComputedKeys) {
+          const computedKeyExpression = property.get(
+            "key",
+          ) as NodePath<t.Expression>;
+
+          // Skip if already memoised (assignment expression with a UID)
+          if (
+            computedKeyExpression.isAssignmentExpression() &&
+            computedKeyExpression.get("left").isIdentifier() &&
+            originalPath.scope.hasUid(
+              (computedKeyExpression.node.left as t.Identifier).name,
+            )
+          ) {
+            continue;
+          }
+
+          // Check if the expression has side effects (function call, ++x, etc.)
+          if (!computedKeyExpression.isPure()) {
+            // Create a temporary variable identifier
+            const tempVariableName = originalPath.scope.generateUidBasedOnNode(
+              computedKeyExpression.node,
+            );
+            const tempIdentifier = t.identifier(tempVariableName);
+
+            // Declare the variable upfront with no initializer (var declaration)
+            originalPath.scope.push({
+              id: tempIdentifier,
+              kind: "var",
+            });
+
+            // Replace [log(0)] with [_key = log(0)] for inline memoization
+            computedKeyExpression.replaceWith(
+              t.assignmentExpression(
+                "=",
+                t.cloneNode(tempIdentifier),
+                computedKeyExpression.node,
+              ),
+            );
+          }
+        }
+
         visitObjectRestElements(path.get("id"), path => {
           if (
             // skip single-property case, e.g.
@@ -544,91 +611,6 @@ export default declare((api, opts: Options) => {
             );
 
             return;
-          }
-
-          /**
-           * Fix for: https://github.com/babel/babel/issues/17274
-           *
-           * Problem: When you have nested destructuring with computed keys and rest elements:
-           *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
-           *
-           * The functions log(0), log(1), log(2) must be called in that exact order.
-           * But without this fix, the nested pattern gets processed first, causing the wrong order.
-           *
-           * Additionally, with default values:
-           *   const { [log(0)]: x = log(1), [log(2)]: y } = obj
-           *
-           * The order must be: log(0), then log(1) (if x is undefined), then log(2).
-           *
-           * Solution: Use inline memoization with assignment expressions.
-           * Transform:
-           *   const { [log(0)]: { [log(1)]: x, ...rest }, [log(2)]: y } = obj
-           * Into:
-           *   var _log, _log2, _log3;
-           *   const { [_log = log(0)]: { [_log2 = log(1)]: x, ...rest }, [_log3 = log(2)]: y } = obj
-           *
-           * This preserves correct evaluation order even with default values.
-           */
-
-          // Only do this once per variable declaration (even if multiple rest elements exist)
-          const alreadyMemoisedComputedKeys = originalPath.getData(
-            "computedKeysAlreadyMemoised",
-          );
-          if (!alreadyMemoisedComputedKeys) {
-            originalPath.setData("computedKeysAlreadyMemoised", true);
-
-            // Find all computed keys (like [someExpression]) in left-to-right order
-            const destructuringPattern = originalPath.get(
-              "id",
-            ) as NodePath<t.ObjectPattern>;
-            const propertiesWithComputedKeys =
-              collectComputedKeysInSourceOrder(destructuringPattern);
-
-            // For each computed key that has side effects (not a simple variable)
-            for (const property of propertiesWithComputedKeys) {
-              const computedKeyExpression = property.get(
-                "key",
-              ) as NodePath<t.Expression>;
-
-              // Skip if already memoised (assignment expression with a UID)
-              if (
-                computedKeyExpression.isAssignmentExpression() &&
-                computedKeyExpression.get("left").isIdentifier() &&
-                originalPath.scope.hasUid(
-                  (computedKeyExpression.node.left as t.Identifier).name,
-                )
-              ) {
-                continue;
-              }
-
-              // Check if the expression has side effects (function call, ++x, etc.)
-              if (!computedKeyExpression.isPure()) {
-                // Create a temporary variable identifier
-                const tempVariableName =
-                  originalPath.scope.generateUidBasedOnNode(
-                    computedKeyExpression.node,
-                  );
-                const tempIdentifier = t.identifier(tempVariableName);
-
-                // Declare the variable upfront with no initializer (var declaration)
-                originalPath.scope.push({
-                  id: tempIdentifier,
-                  kind: "var",
-                });
-
-                // Replace [log(0)] with [_key = log(0)] for inline memoization
-                computedKeyExpression.replaceWith(
-                  t.assignmentExpression(
-                    "=",
-                    t.cloneNode(tempIdentifier),
-                    computedKeyExpression.node,
-                  ),
-                );
-
-                // Mark this property so we don't process it again later
-                (property.node as any)._keyAlreadyHoisted = true;
-              }
-            }
           }
 
           let ref = originalPath.node.init;
