@@ -11,7 +11,10 @@
   "main": "./lib/index.cjs",
   "type": "module",
   "exports": {
-    ".": "./lib/index.cjs",
+    ".": {
+      "default": "./lib/index.cjs",
+      "types": "./types.d.cts"
+    },
     "./package.json": "./package.json"
   },
   "engines": {
