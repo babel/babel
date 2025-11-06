@@ -536,52 +536,56 @@ export default declare((api, opts: Options) => {
          * This preserves correct evaluation order even with default values.
          */
 
-        // Find all computed keys (like [someExpression]) in left-to-right order
-        const destructuringPattern = originalPath.get(
-          "id",
-        ) as NodePath<t.ObjectPattern>;
-        const propertiesWithComputedKeys =
-          collectComputedKeysInSourceOrder(destructuringPattern);
+        // Only memoize computed keys if there are rest elements that require this fix
+        if (hasObjectRestElement(path.get("id"))) {
+          // Find all computed keys (like [someExpression]) in left-to-right order
+          const destructuringPattern = originalPath.get(
+            "id",
+          ) as NodePath<t.ObjectPattern>;
+          const propertiesWithComputedKeys =
+            collectComputedKeysInSourceOrder(destructuringPattern);
 
-        // For each computed key that has side effects (not a simple variable)
-        for (const property of propertiesWithComputedKeys) {
-          const computedKeyExpression = property.get(
-            "key",
-          ) as NodePath<t.Expression>;
+          // For each computed key that has side effects (not a simple variable)
+          for (const property of propertiesWithComputedKeys) {
+            const computedKeyExpression = property.get(
+              "key",
+            ) as NodePath<t.Expression>;
 
-          // Skip if already memoised (assignment expression with a UID)
-          if (
-            computedKeyExpression.isAssignmentExpression() &&
-            computedKeyExpression.get("left").isIdentifier() &&
-            originalPath.scope.hasUid(
-              (computedKeyExpression.node.left as t.Identifier).name,
-            )
-          ) {
-            continue;
-          }
+            // Skip if already memoised (assignment expression with a UID)
+            if (
+              computedKeyExpression.isAssignmentExpression() &&
+              computedKeyExpression.get("left").isIdentifier() &&
+              originalPath.scope.hasUid(
+                (computedKeyExpression.node.left as t.Identifier).name,
+              )
+            ) {
+              continue;
+            }
 
-          // Check if the expression has side effects (function call, ++x, etc.)
-          if (!computedKeyExpression.isPure()) {
-            // Create a temporary variable identifier
-            const tempVariableName = originalPath.scope.generateUidBasedOnNode(
-              computedKeyExpression.node,
-            );
-            const tempIdentifier = t.identifier(tempVariableName);
+            // Check if the expression has side effects (function call, ++x, etc.)
+            if (!computedKeyExpression.isPure()) {
+              // Create a temporary variable identifier
+              const tempVariableName =
+                originalPath.scope.generateUidBasedOnNode(
+                  computedKeyExpression.node,
+                );
+              const tempIdentifier = t.identifier(tempVariableName);
 
-            // Declare the variable upfront with no initializer (var declaration)
-            originalPath.scope.push({
-              id: tempIdentifier,
-              kind: "var",
-            });
+              // Declare the variable upfront with no initializer (var declaration)
+              originalPath.scope.push({
+                id: tempIdentifier,
+                kind: "var",
+              });
 
-            // Replace [log(0)] with [_key = log(0)] for inline memoization
-            computedKeyExpression.replaceWith(
-              t.assignmentExpression(
-                "=",
-                t.cloneNode(tempIdentifier),
-                computedKeyExpression.node,
-              ),
-            );
+              // Replace [log(0)] with [_key = log(0)] for inline memoization
+              computedKeyExpression.replaceWith(
+                t.assignmentExpression(
+                  "=",
+                  t.cloneNode(tempIdentifier),
+                  computedKeyExpression.node,
+                ),
+              );
+            }
           }
         }
 
