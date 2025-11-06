@@ -177,13 +177,13 @@ export default declare((api, opts: Options) => {
   }
 
   /**
-   * Replaces computed keys that have side effects with temporary variables.
+   * Replaces computed keys that have side effects with inline memoization.
    *
-   * Example: { [foo()]: x } becomes { [_temp]: x } with declaration: const _temp = foo()
+   * Example: { [foo()]: x } becomes { [_temp = foo()]: x } with upfront declaration: var _temp;
    *
    * This function is called in multiple places during transformation. To avoid creating
-   * duplicate temp variables, we skip properties that were already processed by the
-   * global hoisting pass (marked with _keyAlreadyHoisted flag).
+   * duplicate temp variables, we skip properties that were already memoized inline
+   * (marked with _keyAlreadyHoisted flag).
    */
   function replaceImpureComputedKeys(
     properties: NodePath<t.ObjectProperty>[],
@@ -195,7 +195,7 @@ export default declare((api, opts: Options) => {
       // PrivateName is handled in destructuring-private plugin
       const keyExpression = property.get("key") as NodePath<t.Expression>;
 
-      // Skip if already processed by global computed key hoisting pass
+      // Skip if already memoized inline in the VariableDeclarator visitor
       // (This prevents creating duplicate temp variables like _a2 = _a)
       if ((property.node as any)._keyAlreadyHoisted) {
         continue;
