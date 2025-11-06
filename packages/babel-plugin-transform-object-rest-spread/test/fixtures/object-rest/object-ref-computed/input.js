@@ -12,9 +12,9 @@ key = 1;
 var {
   [++key]: { y, ...rest_y },
   [++key]: { z, ...rest_z }
-} = {2: { y: 2, z: 3 }, 3: { y: 2, z: 3 } };
+} = {2: { y: 2, z: 3 }, 3: { y: 4, z: 6 } };
 expect(y).toBe(2);
 expect(rest_y).toEqual({z: 3});
-expect(z).toBe(3);
-expect(rest_z).toEqual({ y: 2 });
+expect(z).toBe(6);
+expect(rest_z).toEqual({ y: 4 });
 expect(key).toBe(3);
