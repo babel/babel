@@ -127,6 +127,39 @@ describe("highlight", function () {
         ),
       );
     });
+
+    test("unicode capitalized", function () {
+      const gutter = colors.gray;
+      const yellow = colors.yellow;
+      const cyan = colors.cyan;
+
+      const rawLines = ["var 𐐔𐐯𐑅𐐨𐑉𐐯𐐻, deseret;"].join("\n");
+
+      expect(
+        JSON.stringify(
+          codeFrame(rawLines, 0, null, {
+            linesAbove: 1,
+            linesBelow: 1,
+            forceColor: true,
+          }),
+        ),
+      ).toEqual(
+        JSON.stringify(
+          colors.reset(
+            " " +
+              gutter(" 1 |") +
+              " " +
+              cyan("var") +
+              " " +
+              yellow("𐐔𐐯𐑅𐐨𐑉𐐯𐐻") +
+              yellow(",") +
+              " " +
+              "deseret" +
+              yellow(";"),
+          ),
+        ),
+      );
+    });
   });
 
   describe("when colors are not supported", () => {
