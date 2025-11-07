@@ -233,7 +233,7 @@ export default declare((api, options: Options) => {
               getWrapperPayload: hooks.getWrapperPayload,
               esNamespaceOnly:
                 typeof state.filename === "string" &&
-                /\.mjs$/.test(state.filename)
+                state.filename.endsWith(".mjs")
                   ? mjsStrictNamespace
                   : strictNamespace,
               noIncompleteNsImportDetection,

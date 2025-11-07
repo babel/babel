@@ -34,7 +34,7 @@ export default function removeProperties(
 
   for (const key of Object.keys(node)) {
     // @ts-expect-error string can not index node
-    if (key[0] === "_" && node[key] != null) node[key] = undefined;
+    if (key.startsWith("_") && node[key] != null) node[key] = undefined;
   }
 
   const symbols: Array<symbol> = Object.getOwnPropertySymbols(node);

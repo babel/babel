@@ -50,7 +50,7 @@ export function toDefineObject(mutatorMap: any) {
 
     Object.keys(map).forEach(function (key) {
       const node = map[key];
-      if (key[0] === "_") return;
+      if (key.startsWith("_")) return;
 
       const prop = t.objectProperty(t.identifier(key), node);
       t.inheritsComments(prop, node);

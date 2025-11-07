@@ -79,7 +79,7 @@ const babelNodePath = path.join(
       const arg = programArgs[i];
       const list = babelOptions.has(arg.split("=")[0]) ? babelArgs : nodeArgs;
       list.push(arg);
-      if (i + 1 < programArgs.length && programArgs[i + 1][0] !== "-") {
+      if (i + 1 < programArgs.length && !programArgs[i + 1].startsWith("-")) {
         list.push(programArgs[++i]);
       }
     }

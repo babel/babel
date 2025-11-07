@@ -216,7 +216,6 @@ export default defineConfig([
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/prefer-for-of": "off",
       "@typescript-eslint/prefer-nullish-coalescing": "off",
-      "@typescript-eslint/prefer-string-starts-ends-with": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/sort-type-constituents": "off",
       "@typescript-eslint/unbound-method": "off",

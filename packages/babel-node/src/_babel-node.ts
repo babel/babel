@@ -153,7 +153,7 @@ if (opts.eval || opts.print) {
         return;
       }
 
-      if (arg[0] === "-") {
+      if (arg.startsWith("-")) {
         const parsedOption = program.options.find((option: any) => {
           return option.long === arg || option.short === arg;
         });
@@ -212,7 +212,7 @@ function replEval(
   let result;
 
   try {
-    if (code[0] === "(" && code[code.length - 1] === ")") {
+    if (code.startsWith("(") && code.endsWith(")")) {
       code = code.slice(1, -1); // remove "(" and ")"
     }
 

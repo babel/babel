@@ -35,7 +35,7 @@ export function readdir(
           if (dirent.isDirectory()) return false;
           const filename = dirent.name;
           return (
-            (includeDotfiles || filename[0] !== ".") &&
+            (includeDotfiles || !filename.startsWith(".")) &&
             (!filter || filter(filename))
           );
         })
@@ -54,7 +54,7 @@ export function readdir(
         if (stat.isDirectory()) return true;
 
         return (
-          (includeDotfiles || filename[0] !== ".") &&
+          (includeDotfiles || !filename.startsWith(".")) &&
           (!filter || filter(filename))
         );
       },

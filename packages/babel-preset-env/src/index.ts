@@ -132,7 +132,7 @@ function getSpecialModulesPluginNames(
     }
   }
 
-  if (!process.env.BABEL_8_BREAKING && babelVersion[0] !== "8") {
+  if (!process.env.BABEL_8_BREAKING && !babelVersion.startsWith("8")) {
     // Enable module-related syntax plugins for older Babel versions
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
