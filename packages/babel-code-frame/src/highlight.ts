@@ -1,5 +1,8 @@
 import type { Token as JSToken, JSXToken } from "js-tokens";
 import jsTokens from "js-tokens";
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as charCodes from "charcodes";
 
 import {
   isStrictReservedWord,
@@ -55,9 +58,20 @@ if (process.env.BABEL_8_BREAKING) {
         return "keyword";
       }
 
-      const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
-      if (firstChar !== firstChar.toLowerCase()) {
-        return "capitalized";
+      const firstChar = tokenValue.charCodeAt(0);
+      if (firstChar < 128) {
+        // ASCII characters
+        if (
+          firstChar >= charCodes.uppercaseA &&
+          firstChar <= charCodes.uppercaseZ
+        ) {
+          return "capitalized";
+        }
+      } else {
+        const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
+        if (firstChar !== firstChar.toLowerCase()) {
+          return "capitalized";
+        }
       }
     }
 

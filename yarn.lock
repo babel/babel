@@ -347,6 +347,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
+    charcodes: "npm:^0.2.0"
     import-meta-resolve: "npm:^4.1.0"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
     picocolors: "npm:^1.1.1"

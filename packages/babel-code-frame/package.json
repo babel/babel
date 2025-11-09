@@ -21,6 +21,7 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "charcodes": "^0.2.0",
     "import-meta-resolve": "^4.1.0",
     "strip-ansi": "^4.0.0"
   },
