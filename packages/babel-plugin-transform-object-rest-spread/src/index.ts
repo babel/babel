@@ -113,17 +113,11 @@ export default declare((api, opts: Options) => {
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
   // `allPrimitives: false` doesn't necessarily mean that there is a non-primitive, but just
   // that we are not sure.
-  function extractNormalizedKeys(
-    pattern: t.ObjectPattern | NodePath<t.ObjectPattern>,
-  ) {
+  function extractNormalizedKeys(pattern: NodePath<t.ObjectPattern>) {
     // RestElement has been removed in createObjectRest
-    // If we have a NodePath, get the current nodes (which reflect any transformations)
-    const isPath = "get" in pattern;
-    const propsList: t.ObjectProperty[] = isPath
-      ? pattern
-          .get("properties")
-          .map((p: NodePath) => p.node as t.ObjectProperty)
-      : (pattern.properties as t.ObjectProperty[]);
+    const propsList: t.ObjectProperty[] = pattern
+      .get("properties")
+      .map((p: NodePath) => p.node as t.ObjectProperty);
 
     const keys: t.Expression[] = [];
     let allPrimitives = true;
@@ -202,17 +196,8 @@ export default declare((api, opts: Options) => {
         keyExpression.get("left").isIdentifier()
       ) {
         const identName = (keyExpression.node.left as t.Identifier).name;
-        // Check current scope and parent scopes for the UID
-        let currentScope: Scope | null = scope;
-        let isUid = false;
-        while (currentScope) {
-          if (currentScope.hasUid(identName)) {
-            isUid = true;
-            break;
-          }
-          currentScope = currentScope.parent;
-        }
-        if (isUid) {
+        // Check if it's a UID (hasUid already searches parent scopes)
+        if (scope.hasUid(identName)) {
           continue;
         }
       }
