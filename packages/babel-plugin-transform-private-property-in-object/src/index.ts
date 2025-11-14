@@ -22,11 +22,11 @@ export default declare((api, opt: Options) => {
   // The visitor of this plugin is only effective when not compiling
   // private fields and methods.
 
-  const classWeakSets: WeakMap<t.Class, t.Identifier> = new WeakMap();
-  const fieldsWeakSets: WeakMap<
+  const classWeakSets = new WeakMap<t.Class, t.Identifier>();
+  const fieldsWeakSets = new WeakMap<
     t.ClassPrivateProperty | t.ClassPrivateMethod,
     t.Identifier
-  > = new WeakMap();
+  >();
 
   function unshadow(name: string, targetScope: Scope, scope: Scope) {
     while (scope !== targetScope) {

@@ -14,7 +14,7 @@ import type { ResolvedOptions } from "../../config/validation/options.ts";
 import type { SourceMapConverter } from "convert-source-map";
 
 export default class File {
-  _map: Map<unknown, unknown> = new Map();
+  _map = new Map<unknown, unknown>();
   opts: ResolvedOptions;
   declarations: Record<string, t.Identifier> = {};
   path: NodePath<t.Program>;

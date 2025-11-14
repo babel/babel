@@ -486,7 +486,7 @@ export default class ImportInjector {
 
   _insertStatementsAfter(statements: t.Statement[]): boolean {
     const statementsSet = new Set(statements);
-    const importDeclarations: Map<string, t.ImportDeclaration[]> = new Map();
+    const importDeclarations = new Map<string, t.ImportDeclaration[]>();
 
     for (const statement of statements) {
       if (isImportDeclaration(statement) && isValueImport(statement)) {

@@ -65,8 +65,10 @@ export default declare((api, opts: Options) => {
           }
 
           const captured: string[] = [];
-          const updatedBindingsUsages: Map<string, NodePath<t.Identifier>[]> =
-            new Map();
+          const updatedBindingsUsages = new Map<
+            string,
+            NodePath<t.Identifier>[]
+          >();
 
           if (headPath && isBlockScoped(headPath)) {
             const names = Object.keys(headPath.getBindingIdentifiers());

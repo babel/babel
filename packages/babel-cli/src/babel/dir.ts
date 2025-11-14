@@ -192,14 +192,14 @@ export default async function ({
     } else {
       // A map from absolute compiled file path to its base, from which
       // the output destination will be determined
-      const filenameToBaseMap: Map<string, string> = new Map(
+      const filenameToBaseMap = new Map<string, string>(
         filenames.map(filename => {
           const absoluteFilename = path.resolve(filename);
           return [absoluteFilename, path.dirname(filename)];
         }),
       );
 
-      const absoluteFilenames: Map<string, string> = new Map(
+      const absoluteFilenames = new Map<string, string>(
         filenames.map(filename => {
           const absoluteFilename = path.resolve(filename);
           return [absoluteFilename, filename];

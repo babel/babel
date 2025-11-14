@@ -20,7 +20,7 @@ const enum TsNameType {
 }
 
 class TypeScriptScope extends Scope {
-  tsNames: Map<string, TsNameType> = new Map();
+  tsNames = new Map<string, TsNameType>();
 }
 
 // See https://github.com/babel/babel/pull/9766#discussion_r268920730 for an

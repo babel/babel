@@ -16,7 +16,7 @@ export const enum NameType {
 // Start an AST node, attaching a start offset.
 export class Scope {
   flags: ScopeFlag = 0;
-  names: Map<string, NameType> = new Map();
+  names = new Map<string, NameType>();
   firstLexicalName = "";
 
   constructor(flags: ScopeFlag) {
@@ -30,7 +30,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   parser: Tokenizer;
   scopeStack: Array<IScope> = [];
   inModule: boolean;
-  undefinedExports: Map<string, Position> = new Map();
+  undefinedExports = new Map<string, Position>();
 
   constructor(parser: Tokenizer, inModule: boolean) {
     this.parser = parser;
