@@ -10,7 +10,7 @@ export type FullPreset = {
   targets: TargetsListOrObject;
 } & ConfigContext;
 export type FullPlugin = {
-  assumptions: { [name: string]: boolean };
+  assumptions: Record<string, boolean>;
 } & FullPreset;
 
 // Context not including filename since it is used in places that cannot
@@ -23,7 +23,5 @@ export type SimplePreset = {
   targets: TargetsListOrObject;
 } & SimpleConfig;
 export type SimplePlugin = {
-  assumptions: {
-    [name: string]: boolean;
-  };
+  assumptions: Record<string, boolean>;
 } & SimplePreset;

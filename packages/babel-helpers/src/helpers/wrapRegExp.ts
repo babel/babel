@@ -4,9 +4,7 @@ import setPrototypeOf from "./setPrototypeOf.ts";
 import inherits from "./inherits.ts";
 
 // Define interfaces for clarity and type safety
-interface GroupMap {
-  [key: string]: number | [number, number];
-}
+type GroupMap = Record<string, number | [number, number]>;
 
 declare class BabelRegExp extends RegExp {
   exec(str: string): RegExpExecArray | null;

@@ -169,7 +169,7 @@ export default class File {
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
 
-    const dependencies: { [key: string]: t.Identifier } = {};
+    const dependencies: Record<string, t.Identifier> = {};
     for (const dep of helpers.getDependencies(name)) {
       dependencies[dep] = this._addHelper(dep);
     }

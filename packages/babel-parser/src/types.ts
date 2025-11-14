@@ -48,9 +48,7 @@ export interface NodeBase {
   leadingComments?: Array<Comment>;
   trailingComments?: Array<Comment>;
   innerComments?: Array<Comment>;
-  extra?: {
-    [key: string]: any;
-  };
+  extra?: Record<string, any>;
 }
 
 type NodeAny<T extends string, KnownProps = object> = NodeBase & {

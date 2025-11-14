@@ -167,7 +167,7 @@ function buildHelpers(
       : identifier(`_${name}`);
   };
 
-  const refs: { [key: string]: t.Identifier | t.MemberExpression } = {};
+  const refs: Record<string, t.Identifier | t.MemberExpression> = {};
   helpers.list.forEach(function (name) {
     if (allowlist && !allowlist.includes(name)) return;
 

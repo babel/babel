@@ -40,9 +40,7 @@ type NodeHandler<R> = (
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R | undefined;
 
-export type NodeHandlers<R> = {
-  [K in string]?: NodeHandler<R>;
-};
+export type NodeHandlers<R> = Partial<Record<string, NodeHandler<R>>>;
 
 function expandAliases<R>(obj: NodeHandlers<R>) {
   const map = new Map<string, NodeHandler<R>>();

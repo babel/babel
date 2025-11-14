@@ -62,9 +62,7 @@ type ParsingContext =
 
 type ModifierBase = {
   accessibility?: N.Accessibility;
-} & {
-  [key in TsModifier]?: boolean | undefined | null;
-};
+} & Partial<Record<TsModifier, boolean | undefined | null>>;
 
 /* eslint sort-keys: "error" */
 const TSErrors = ParseErrorEnum`typescript`({

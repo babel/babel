@@ -17,7 +17,7 @@ import type {
  */
 
 function normalizeOptions(
-  code: string | { [filename: string]: string } | undefined,
+  code: string | Record<string, string> | undefined,
   opts: GeneratorOptions,
   ast: t.Node,
 ): Format {
@@ -291,7 +291,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
 export function generate(
   ast: t.Node,
   opts: GeneratorOptions = {},
-  code?: string | { [filename: string]: string },
+  code?: string | Record<string, string>,
 ): GeneratorResult {
   const format = normalizeOptions(code, opts, ast);
   const map = opts.sourceMaps ? new SourceMap(opts, code) : null;

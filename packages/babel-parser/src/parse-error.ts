@@ -139,7 +139,7 @@ type ParseErrorTemplate =
   | ToMessage<any>
   | { message: string | ToMessage<any>; code?: ParseErrorCode };
 
-export type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
+export type ParseErrorTemplates = Record<string, ParseErrorTemplate>;
 
 // This is the templated form of `ParseErrorEnum`.
 //

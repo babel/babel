@@ -14,8 +14,8 @@ interface Helper {
 
 export interface HelperMetadata {
   globals: string[];
-  locals: { [name: string]: string[] };
-  dependencies: { [name: string]: string[] };
+  locals: Record<string, string[]>;
+  dependencies: Record<string, string[]>;
   exportBindingAssignments: string[];
   exportName: string;
   internal: boolean;

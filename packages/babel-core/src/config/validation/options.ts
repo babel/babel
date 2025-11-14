@@ -266,9 +266,7 @@ export type CallerMetadata = {
   supportsTopLevelAwait?: boolean;
   supportsExportNamespaceFrom?: boolean;
 };
-export type EnvSet<T> = {
-  [x: string]: T;
-};
+export type EnvSet<T> = Record<string, T>;
 export type MatchItem =
   | string
   | RegExp
@@ -405,7 +403,7 @@ export function validate(
   }
 }
 
-function validateNested(loc: NestingPath, opts: { [key: string]: unknown }) {
+function validateNested(loc: NestingPath, opts: Record<string, unknown>) {
   const type = getSource(loc);
   assertNoDuplicateSourcemap(opts);
 

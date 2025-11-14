@@ -30,9 +30,7 @@ class Node implements NodeBase {
   declare leadingComments: Array<Comment>;
   declare trailingComments: Array<Comment>;
   declare innerComments: Array<Comment>;
-  declare extra: {
-    [key: string]: any;
-  };
+  declare extra: Record<string, any>;
 }
 const NodePrototype = Node.prototype;
 

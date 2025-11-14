@@ -4,12 +4,7 @@ import StatementParser from "./statement.ts";
 import ScopeHandler from "../util/scope.ts";
 import type { ParserOptions, ParseResult, File } from "@babel/parser";
 
-export type PluginsMap = Map<
-  string,
-  {
-    [x: string]: any;
-  }
->;
+export type PluginsMap = Map<string, Record<string, any>>;
 
 export default class Parser extends StatementParser {
   constructor(
