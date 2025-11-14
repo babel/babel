@@ -22,5 +22,12 @@
   "devDependencies": {
     "eslint": "^9.21.0"
   },
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./lib/index.cjs",
+      "types": "./types.d.cts"
+    },
+    "./package.json": "./package.json"
+  }
 }

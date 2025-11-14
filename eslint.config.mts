@@ -9,9 +9,7 @@ import pluginN from "eslint-plugin-n";
 import configPrettier from "eslint-config-prettier";
 import pluginRegexp from "eslint-plugin-regexp";
 import pluginUnicorn from "eslint-plugin-unicorn";
-// @ts-expect-error no types
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
-// @ts-expect-error no types
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
 import { commonJS } from "$repo-utils";
@@ -143,8 +141,7 @@ export default defineConfig([
             "packages/babel-helpers/src/helpers/applyDecs2305.ts",
             "scripts/repo-utils/index.d.cts",
             "scripts/babel-plugin-bit-decorator/types.d.ts",
-            "eslint/babel-eslint-plugin/types.d.cts",
-            "eslint/babel-eslint-parser/types.d.cts",
+            "eslint/*/types.d.cts",
           ],
         },
       },
