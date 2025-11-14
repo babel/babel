@@ -76,7 +76,7 @@ function copyApiObject(api: PluginAPI): PluginAPI {
   // keep complexity, the Babel 6 behavior has been reverted and this
   // normalizes all that for Babel 7.
   let proto = null;
-  if (typeof api.version === "string" && /^7\./.test(api.version)) {
+  if (typeof api.version === "string" && api.version.startsWith("7.")) {
     proto = Object.getPrototypeOf(api);
     if (
       proto &&
@@ -115,7 +115,7 @@ function throwVersionError(range: string | number, version: string) {
   }
 
   let err;
-  if (version.slice(0, 2) === "7.") {
+  if (version.startsWith("7.")) {
     err = new Error(
       `Requires Babel "^7.0.0-beta.41", but was loaded with "${version}". ` +
         `You'll need to update your @babel/core version.`,

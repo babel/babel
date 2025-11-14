@@ -90,7 +90,7 @@ function shouldIgnore(name: string, ignore?: Array<string>) {
   const base = path.basename(name, ext);
 
   return (
-    name[0] === "." ||
+    name.startsWith(".") ||
     ext === ".md" ||
     base === "LICENSE" ||
     base === "options" ||
@@ -225,12 +225,11 @@ function pushTask(
     taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
-    disabled:
-      taskName[0] === "."
-        ? true
-        : (process.env.TEST_babel7plugins_babel8core &&
-            taskOpts.SKIP_babel7plugins_babel8core) ||
-          false,
+    disabled: taskName.startsWith(".")
+      ? true
+      : (process.env.TEST_babel7plugins_babel8core &&
+          taskOpts.SKIP_babel7plugins_babel8core) ||
+        false,
     options: taskOpts,
     doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
     externalHelpers: taskOpts.externalHelpers ?? true,
@@ -373,7 +372,7 @@ function wrapPackagesArray(
     if (typeof val === "string") val = [val];
 
     // relative path (outside of monorepo)
-    if (val[0][0] === ".") {
+    if (val[0].startsWith(".")) {
       if (!optionsDir) {
         throw new Error(
           "Please provide an options.json in test dir when using a " +

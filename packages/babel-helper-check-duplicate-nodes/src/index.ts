@@ -15,7 +15,7 @@ export default function checkDuplicateNodes(ast: t.Node) {
   const hidePrivateProperties = (key: string, val: unknown) => {
     // Hides properties like _shadowedFunctionLiteral,
     // which makes the AST circular
-    if (key[0] === "_") return "[Private]";
+    if (key.startsWith("_")) return "[Private]";
     return val;
   };
 

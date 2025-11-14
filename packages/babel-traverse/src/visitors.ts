@@ -359,7 +359,7 @@ function shouldIgnoreKey(key: string): key is
   | "skipKeys"
   | "blacklist" {
   // internal/hidden key
-  if (key[0] === "_") return true;
+  if (key.startsWith("_")) return true;
 
   // ignore function keys
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;

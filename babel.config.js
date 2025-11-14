@@ -198,10 +198,7 @@ module.exports = function (api) {
     ].filter(Boolean),
     overrides: [
       {
-        test: [
-          "packages/babel-parser",
-          "packages/babel-helper-validator-identifier",
-        ].map(normalize),
+        test: ["packages/babel-parser"].map(normalize),
         plugins: [
           "babel-plugin-transform-charcodes",
           pluginBabelParserTokenType,
@@ -210,9 +207,11 @@ module.exports = function (api) {
       },
       {
         test: [
+          "packages/babel-code-frame",
           "packages/babel-generator",
           "packages/babel-helper-create-class-features-plugin",
           "packages/babel-helper-string-parser",
+          "packages/babel-helper-validator-identifier",
         ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
       },

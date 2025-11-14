@@ -199,7 +199,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
     .filter(Boolean);
 
   for (const pattern of ignorePatterns) {
-    if (pattern[0] === "!") {
+    if (pattern.startsWith("!")) {
       throw new ConfigError(
         `Negation of file paths is not supported.`,
         filepath,

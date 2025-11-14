@@ -1,5 +1,8 @@
 import type { Token as JSToken, JSXToken } from "js-tokens";
 import jsTokens from "js-tokens";
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as charCodes from "charcodes";
 
 import {
   isStrictReservedWord,
@@ -46,16 +49,29 @@ if (process.env.BABEL_8_BREAKING) {
     token: JSToken | JSXToken,
   ): InternalTokenType | "uncolored" {
     if (token.type === "IdentifierName") {
+      const tokenValue = token.value;
       if (
-        isKeyword(token.value) ||
-        isStrictReservedWord(token.value, true) ||
-        sometimesKeywords.has(token.value)
+        isKeyword(tokenValue) ||
+        isStrictReservedWord(tokenValue, true) ||
+        sometimesKeywords.has(tokenValue)
       ) {
         return "keyword";
       }
 
-      if (token.value[0] !== token.value[0].toLowerCase()) {
-        return "capitalized";
+      const firstChar = tokenValue.charCodeAt(0);
+      if (firstChar < 128) {
+        // ASCII characters
+        if (
+          firstChar >= charCodes.uppercaseA &&
+          firstChar <= charCodes.uppercaseZ
+        ) {
+          return "capitalized";
+        }
+      } else {
+        const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
+        if (firstChar !== firstChar.toLowerCase()) {
+          return "capitalized";
+        }
       }
     }
 
@@ -139,22 +155,24 @@ if (process.env.BABEL_8_BREAKING) {
   // typing it since the whole block will be removed in Babel 8
   const getTokenType = function (token: any, offset: number, text: string) {
     if (token.type === "name") {
+      const tokenValue = token.value;
       if (
-        isKeyword(token.value) ||
-        isStrictReservedWord(token.value, true) ||
-        sometimesKeywords.has(token.value)
+        isKeyword(tokenValue) ||
+        isStrictReservedWord(tokenValue, true) ||
+        sometimesKeywords.has(tokenValue)
       ) {
         return "keyword";
       }
 
       if (
-        JSX_TAG.test(token.value) &&
+        JSX_TAG.test(tokenValue) &&
         (text[offset - 1] === "<" || text.slice(offset - 2, offset) === "</")
       ) {
         return "jsxIdentifier";
       }
 
-      if (token.value[0] !== token.value[0].toLowerCase()) {
+      const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
+      if (firstChar !== firstChar.toLowerCase()) {
         return "capitalized";
       }
     }

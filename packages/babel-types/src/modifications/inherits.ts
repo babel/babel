@@ -22,7 +22,7 @@ export default function inherits<T extends t.Node | null | undefined>(
 
   // force inherit "private" properties
   for (const key of Object.keys(parent)) {
-    if (key[0] === "_" && key !== "__clone") {
+    if (key.startsWith("_") && key !== "__clone") {
       // @ts-expect-error Fixme: refine parent types
       child[key] = parent[key];
     }

@@ -20,12 +20,12 @@ export function splitArgs(argv: string[], extraOptionsWithValue?: Set<string>) {
       break;
     }
 
-    if (arg[0] === "-") {
+    if (arg.startsWith("-")) {
       programArgs.push(arg);
       if (
         (nodeFlagsWithValue.has(arg) || extraOptionsWithValue?.has(arg)) &&
         i < argv.length - 1 &&
-        argv[i + 1][0] !== "-"
+        !argv[i + 1].startsWith("-")
       ) {
         i++;
         programArgs.push(argv[i]);

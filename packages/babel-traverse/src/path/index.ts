@@ -416,7 +416,7 @@ for (const type of t.TYPES) {
 Object.assign(NodePath_Final.prototype, NodePath_virtual_types_validator);
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
-  if (type[0] === "_") continue;
+  if (type.startsWith("_")) continue;
   if (!t.TYPES.includes(type)) t.TYPES.push(type);
 }
 

@@ -90,7 +90,7 @@ export default declare(api => {
       .replace(/\*-\//g, "*-ESCAPED/")
       .replace(/\*\//g, "*-/");
     if (optional) comment = "?" + comment;
-    if (comment[0] !== ":") comment = ":: " + comment;
+    if (!comment.startsWith(":")) comment = ":: " + comment;
     return comment;
   }
 
