@@ -25,9 +25,7 @@ import { assumptionsNames } from "./options.ts";
 
 export type { RootPath } from "./options.ts";
 
-export type ValidatorSet = {
-  [name: string]: Validator<any>;
-};
+export type ValidatorSet = Record<string, Validator<any>>;
 
 export type Validator<T> = (loc: OptionPath, value: unknown) => T;
 
@@ -218,7 +216,7 @@ export function assertBoolean(
 export function assertObject(
   loc: GeneralPath,
   value: unknown,
-): { readonly [key: string]: unknown } | void {
+): Readonly<Record<string, unknown>> | void {
   if (
     value !== undefined &&
     (typeof value !== "object" || Array.isArray(value) || !value)
@@ -455,8 +453,8 @@ function assertBrowserVersion(loc: GeneralPath, value: unknown) {
 
 export function assertAssumptions(
   loc: GeneralPath,
-  value: { [key: string]: unknown },
-): { [name: string]: boolean } | void {
+  value: Record<string, unknown>,
+): Record<string, boolean> | void {
   if (value === undefined) return;
 
   if (typeof value !== "object" || value === null) {

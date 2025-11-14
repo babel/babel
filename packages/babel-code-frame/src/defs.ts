@@ -24,9 +24,7 @@ export type InternalTokenType =
 
 type UITokens = "gutter" | "marker" | "message";
 
-export type Defs = {
-  [_ in InternalTokenType | UITokens | "reset"]: Formatter;
-};
+export type Defs = Record<InternalTokenType | UITokens | "reset", Formatter>;
 
 const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
   (f, g) => v =>

@@ -47,7 +47,7 @@ export function isPluginRequired(targets: Targets, support: Targets) {
 }
 
 function filterStageFromList(
-  list: { [feature: string]: Targets },
+  list: Record<string, Targets>,
   stageList: Set<string>,
 ) {
   return Object.keys(list).reduce((result, item) => {

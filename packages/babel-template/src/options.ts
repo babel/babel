@@ -132,8 +132,8 @@ export function validate(opts: unknown): TemplateOpts {
   };
 }
 
-export type PublicReplacements = { [x: string]: unknown } | Array<unknown>;
-export type TemplateReplacements = { [x: string]: unknown } | void;
+export type PublicReplacements = Record<string, unknown> | Array<unknown>;
+export type TemplateReplacements = Record<string, unknown> | void;
 
 export function normalizeReplacements(
   replacements: unknown,

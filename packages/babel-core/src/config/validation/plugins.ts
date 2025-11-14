@@ -106,9 +106,9 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   ) => GeneratorResult;
 };
 
-export function validatePluginObject(obj: {
-  [key: string]: unknown;
-}): PluginObject {
+export function validatePluginObject(
+  obj: Record<string, unknown>,
+): PluginObject {
   const rootPath: RootPath = {
     type: "root",
     source: "plugin",

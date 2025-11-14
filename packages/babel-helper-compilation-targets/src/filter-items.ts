@@ -63,7 +63,7 @@ export function isRequired(
     includes,
     excludes,
   }: {
-    compatData?: { [feature: string]: Targets };
+    compatData?: Record<string, Targets>;
     includes?: Set<string>;
     excludes?: Set<string>;
   } = {},
@@ -74,7 +74,7 @@ export function isRequired(
 }
 
 export default function filterItems(
-  list: { [feature: string]: Targets },
+  list: Record<string, Targets>,
   includes: Set<string>,
   excludes: Set<string>,
   targets: Targets,

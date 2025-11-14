@@ -212,7 +212,7 @@ export {
   transformExplicitResourceManagement,
   proposalImportDefer,
 };
-export const all: { [k: string]: any } = {
+export const all: Record<string, any> = {
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-class-properties": syntaxClassProperties,
   "syntax-class-static-block": syntaxClassStaticBlock,

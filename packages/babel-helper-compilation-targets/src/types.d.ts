@@ -14,9 +14,7 @@ export type Target =
   | "samsung"
   | "opera_mobile";
 
-export type Targets = {
-  [target in Target]?: string;
-};
+export type Targets = Partial<Record<Target, string>>;
 
 export type TargetsTuple = Omit<Targets, "node"> & {
   node?: string | true;

@@ -28,18 +28,14 @@ type NodeTypes = NodeTypesWithoutComment | t.Comment["type"];
 
 type PrimitiveTypes = ReturnType<typeof getType>;
 
-type FieldDefinitions = {
-  [x: string]: FieldOptions;
-};
+type FieldDefinitions = Record<string, FieldOptions>;
 
 type UnionShape = {
   discriminator: string;
   shapes: {
     name: string;
     value: any[];
-    properties: {
-      [x: string]: FieldOptions;
-    };
+    properties: Record<string, FieldOptions>;
   }[];
 };
 
@@ -73,7 +69,7 @@ export type ValidatorOneOfNodeOrValueTypes = {
   oneOfNodeOrValueTypes: readonly (NodeTypes | PrimitiveTypes)[];
 } & ValidatorImpl;
 export type ValidatorShapeOf = {
-  shapeOf: { [x: string]: FieldOptions };
+  shapeOf: Record<string, FieldOptions>;
 } & ValidatorImpl;
 
 export type Validator =
@@ -250,7 +246,7 @@ export function assertValueType(type: PrimitiveTypes): Validator {
   return validate;
 }
 
-export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
+export function assertShape(shape: Record<string, FieldOptions>): Validator {
   const keys = Object.keys(shape);
   function validate(node: t.Node, key: string, val: any) {
     const errors = [];

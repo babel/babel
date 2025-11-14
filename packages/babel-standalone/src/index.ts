@@ -182,9 +182,9 @@ export function registerPlugin(name: string, plugin: () => PluginObject): void {
  * Registers multiple plugins for use with Babel. `newPlugins` should be an object where the key
  * is the name of the plugin, and the value is the plugin itself.
  */
-export function registerPlugins(newPlugins: {
-  [x: string]: () => PluginObject;
-}): void {
+export function registerPlugins(
+  newPlugins: Record<string, () => PluginObject>,
+): void {
   Object.keys(newPlugins).forEach(name =>
     registerPlugin(name, newPlugins[name]),
   );
@@ -213,9 +213,9 @@ export function registerPreset(name: string, preset: () => PresetObject): void {
  * Registers multiple presets for use with Babel. `newPresets` should be an object where the key
  * is the name of the preset, and the value is the preset itself.
  */
-export function registerPresets(newPresets: {
-  [x: string]: () => PresetObject;
-}): void {
+export function registerPresets(
+  newPresets: Record<string, () => PresetObject>,
+): void {
   Object.keys(newPresets).forEach(name =>
     registerPreset(name, newPresets[name]),
   );
