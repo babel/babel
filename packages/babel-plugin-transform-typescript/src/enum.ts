@@ -302,7 +302,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 function computeConstantValue(
   path: NodePath,
   prevMembers?: PreviousEnumMembers,
-  seen: Set<t.Identifier> = new Set(),
+  seen = new Set<t.Identifier>(),
 ): number | string | undefined {
   return evaluate(path);
 

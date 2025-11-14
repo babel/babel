@@ -83,8 +83,10 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<number, [ParseErrorConstructor<object>, Position]> =
-    new Map();
+  declarationErrors = new Map<
+    number,
+    [ParseErrorConstructor<object>, Position]
+  >();
   constructor(
     type:
       | ExpressionScopeType.kMaybeArrowParameterDeclaration

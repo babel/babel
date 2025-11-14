@@ -2,7 +2,7 @@ import type * as t from "@babel/types";
 import type File from "./file/file.ts";
 
 export default class PluginPass<Options = object> {
-  _map: Map<unknown, unknown> = new Map();
+  _map = new Map<unknown, unknown>();
   key: string | undefined | null;
   file: File;
   opts: Partial<Options>;

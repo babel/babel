@@ -766,10 +766,10 @@ function createConfigChainOptions(opts: InputOptions): ConfigChainOptions {
 function dedupDescriptors<API>(
   items: Array<UnloadedDescriptor<API>>,
 ): Array<UnloadedDescriptor<API>> {
-  const map: Map<
+  const map = new Map<
     Function,
     Map<string | void, { value: UnloadedDescriptor<API> }>
-  > = new Map();
+  >();
 
   const descriptors = [];
 
