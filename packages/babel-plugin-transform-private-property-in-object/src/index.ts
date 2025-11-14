@@ -12,7 +12,7 @@ export interface Options {
   loose?: boolean;
 }
 export default declare((api, opt: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
   const { types: t, template } = api;
   const { loose } = opt;
 
