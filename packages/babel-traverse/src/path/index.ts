@@ -44,8 +44,10 @@ export type NodePaths<T extends t.Node | t.Node[]> = T extends t.Node[]
     ? [NodePath_Final<T>]
     : never;
 
-export type NodeListType<N, K extends keyof N> =
-  N[K] extends Array<infer P extends t.Node> ? P : never;
+export type NodeListType<N, K extends keyof N> = N[K] extends (infer P extends
+  t.Node)[]
+  ? P
+  : never;
 
 export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
 
@@ -70,7 +72,7 @@ const NodePath_Final = class NodePath {
   declare context: TraversalContext;
   declare scope: Scope;
 
-  contexts: Array<TraversalContext> = [];
+  contexts: TraversalContext[] = [];
   state: any = null;
   declare opts: ExplodedTraverseOptions;
 
@@ -81,7 +83,7 @@ const NodePath_Final = class NodePath {
 
   skipKeys: Record<string, boolean> | null = null;
   parentPath: NodePath_Final | null = null;
-  container: t.Node | Array<t.Node> | null = null;
+  container: t.Node | t.Node[] | null = null;
   listKey: string | null | undefined = null;
   key: string | number | null = null;
   node: t.Node | null = null;

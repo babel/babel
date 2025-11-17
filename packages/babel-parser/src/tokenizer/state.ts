@@ -107,15 +107,15 @@ export default class State {
   @bit accessor inFSharpPipelineDirectBody = false;
 
   // Labels in scope.
-  labels: Array<{
+  labels: {
     kind: LoopLabelKind | null;
     name?: string | null;
     statementStart?: number;
-  }> = [];
+  }[] = [];
 
   commentsLen = 0;
   // Comment attachment store
-  commentStack: Array<CommentWhitespace> = [];
+  commentStack: CommentWhitespace[] = [];
 
   // The current position of the tokenizer in the input.
   pos: number = 0;
@@ -139,7 +139,7 @@ export default class State {
 
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
-  context: Array<TokContext> = [ct.brace];
+  context: TokContext[] = [ct.brace];
 
   // Used to track whether a JSX element is allowed to form
   @bit accessor canStartJSXElement = true;

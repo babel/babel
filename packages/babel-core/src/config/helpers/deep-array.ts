@@ -1,8 +1,8 @@
-export type DeepArray<T> = Array<T | ReadonlyDeepArray<T>>;
+export type DeepArray<T> = (T | ReadonlyDeepArray<T>)[];
 
 // Just to make sure that DeepArray<T> is not assignable to ReadonlyDeepArray<T>
 declare const __marker: unique symbol;
-export type ReadonlyDeepArray<T> = ReadonlyArray<T | ReadonlyDeepArray<T>> & {
+export type ReadonlyDeepArray<T> = readonly (T | ReadonlyDeepArray<T>)[] & {
   [__marker]: true;
 };
 

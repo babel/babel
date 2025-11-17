@@ -2466,12 +2466,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // type casts that we've found that are illegal in this context
     toReferencedList(
       exprList:
-        | ReadonlyArray<N.Expression | N.SpreadElement | null>
-        | ReadonlyArray<N.Expression | N.RestElement>,
+        | readonly (N.Expression | N.SpreadElement | null)[]
+        | readonly (N.Expression | N.RestElement)[],
       isParenthesizedExpr?: boolean,
     ):
-      | ReadonlyArray<N.Expression | N.SpreadElement | null>
-      | ReadonlyArray<N.Expression | N.RestElement> {
+      | readonly (N.Expression | N.SpreadElement | null)[]
+      | readonly (N.Expression | N.RestElement)[] {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (
@@ -3142,15 +3142,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.parseArrow(node);
     }
 
-    shouldParseArrow(params: Array<N.Node>): boolean {
+    shouldParseArrow(params: N.Node[]): boolean {
       return this.match(tt.colon) || super.shouldParseArrow(params);
     }
 
     setArrowFunctionParameters(
       node: Undone<N.ArrowFunctionExpression>,
       params:
-        | Array<N.Expression | N.SpreadElement>
-        | Array<N.Expression | N.RestElement>,
+        | (N.Expression | N.SpreadElement)[]
+        | (N.Expression | N.RestElement)[],
     ): void {
       if (
         this.state.noArrowParamsConversionAt.includes(
@@ -3684,14 +3684,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     flowEnumStringMembers(
-      initializedMembers: Array<N.Node>,
-      defaultedMembers: Array<N.Node>,
+      initializedMembers: N.Node[],
+      defaultedMembers: N.Node[],
       {
         enumName,
       }: {
         enumName: string;
       },
-    ): Array<N.Node> {
+    ): N.Node[] {
       if (initializedMembers.length === 0) {
         return defaultedMembers;
       } else if (defaultedMembers.length === 0) {

@@ -64,7 +64,7 @@ function validateBrowsers(browsers: Browsers | undefined) {
   return browsers;
 }
 
-function getLowestVersions(browsers: Array<string>): Targets {
+function getLowestVersions(browsers: string[]): Targets {
   return browsers.reduce(
     (all, browser) => {
       const [browserName, browserVersion] = browser.split(" ") as [
@@ -110,7 +110,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 }
 
 function outputDecimalWarning(
-  decimalTargets: Array<{ target: string; value: number }>,
+  decimalTargets: { target: string; value: number }[],
 ) {
   if (!decimalTargets.length) {
     return;

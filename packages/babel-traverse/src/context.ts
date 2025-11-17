@@ -23,8 +23,8 @@ export default class TraversalContext<S = unknown> {
   declare scope: Scope | null | undefined;
   declare state: S;
   declare opts: ExplodedTraverseOptions<S>;
-  queue: Array<NodePath> | null = null;
-  priorityQueue: Array<NodePath> | null = null;
+  queue: NodePath[] | null = null;
+  priorityQueue: NodePath[] | null = null;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -39,7 +39,7 @@ export default class TraversalContext<S = unknown> {
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    const keys: Array<string> | undefined = VISITOR_KEYS[node.type];
+    const keys: string[] | undefined = VISITOR_KEYS[node.type];
     if (!keys?.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!
@@ -112,7 +112,7 @@ export default class TraversalContext<S = unknown> {
     }
   }
 
-  visitQueue(queue: Array<NodePath>): boolean {
+  visitQueue(queue: NodePath[]): boolean {
     // set queue
     this.queue = queue;
     this.priorityQueue = [];

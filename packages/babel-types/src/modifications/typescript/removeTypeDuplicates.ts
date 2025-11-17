@@ -20,8 +20,8 @@ function getQualifiedName(node: t.TSTypeReference["typeName"]): string {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodesIn: ReadonlyArray<t.TSType>,
-): Array<t.TSType> {
+  nodesIn: readonly t.TSType[],
+): t.TSType[] {
   const nodes = Array.from(nodesIn);
 
   const generics = new Map<string, t.TSTypeReference>();

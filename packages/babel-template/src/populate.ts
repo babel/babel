@@ -142,7 +142,7 @@ function applyReplacement(
 
     set(parent, key, replacement);
   } else {
-    const items: Array<t.Node> = (parent as any)[key].slice();
+    const items: t.Node[] = (parent as any)[key].slice();
 
     if (placeholder.type === "statement" || placeholder.type === "param") {
       if (replacement == null) {

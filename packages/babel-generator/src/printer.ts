@@ -902,7 +902,7 @@ class Printer {
   }
 
   printJoin(
-    nodes: Array<t.Node> | undefined | null,
+    nodes: t.Node[] | undefined | null,
     statement?: boolean,
     indent?: boolean,
     separator?: PrintJoinOptions["separator"] | null,

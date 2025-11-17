@@ -299,7 +299,7 @@ export type PresetItem =
   | [PresetTarget, object]
   | [PresetTarget, object, string];
 
-export type ConfigApplicableTest = MatchItem | Array<MatchItem>;
+export type ConfigApplicableTest = MatchItem | MatchItem[];
 
 export type ConfigFileSearch = string | boolean;
 export type BabelrcSearch = boolean | MatchItem | MatchItem[];
@@ -543,7 +543,7 @@ function assertOverridesList(
 }
 
 export function checkNoUnwrappedItemOptionPairs<API>(
-  items: Array<UnloadedDescriptor<API>>,
+  items: UnloadedDescriptor<API>[],
   index: number,
   type: "plugin" | "preset",
   e: Error,

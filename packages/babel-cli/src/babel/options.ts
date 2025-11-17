@@ -208,7 +208,7 @@ export type CmdOptions = {
   };
 };
 
-export default function parseArgv(args: Array<string>): CmdOptions | null {
+export default function parseArgv(args: string[]): CmdOptions | null {
   //
   program.parse(args);
 
@@ -333,9 +333,9 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   // new options for @babel/core, we'll potentially get option validation errors from
   // @babel/core. To avoid that, we delete undefined options, so @babel/core will only
   // give the error if users actually pass an unsupported CLI option.
-  for (const key of Object.keys(babelOptions) as Array<
-    keyof typeof babelOptions
-  >) {
+  for (const key of Object.keys(
+    babelOptions,
+  ) as (keyof typeof babelOptions)[]) {
     if (babelOptions[key] === undefined) {
       delete babelOptions[key];
     }
@@ -380,7 +380,7 @@ function booleanify(val: string): boolean | string {
   return val;
 }
 
-function collect(value: unknown, previousValue: Array<string>): Array<string> {
+function collect(value: unknown, previousValue: string[]): string[] {
   // If the user passed the option with no value, like "babel file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 

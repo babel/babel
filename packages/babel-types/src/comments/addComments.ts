@@ -6,7 +6,7 @@ import type * as t from "../index.ts";
 export default function addComments<T extends t.Node>(
   node: T,
   type: t.CommentTypeShorthand,
-  comments: Array<t.Comment>,
+  comments: t.Comment[],
 ): T {
   if (!comments || !node) return node;
 

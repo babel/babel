@@ -26,8 +26,8 @@ import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
   options: InputOptions;
-  plugins: () => Handler<Array<UnloadedDescriptor<PluginAPI>>>;
-  presets: () => Handler<Array<UnloadedDescriptor<PresetAPI>>>;
+  plugins: () => Handler<UnloadedDescriptor<PluginAPI>[]>;
+  presets: () => Handler<UnloadedDescriptor<PresetAPI>[]>;
 };
 
 // Represents a plugin or presets at a given location in a config object.
@@ -151,7 +151,7 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
         passPerPreset: boolean,
-      ): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
+      ): Handler<UnloadedDescriptor<PresetAPI>[]> {
         const descriptors = yield* createPresetDescriptors(
           items,
           dirname,
@@ -175,7 +175,7 @@ const createCachedPluginDescriptors = makeWeakCacheSync(
     const dirname = cache.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
-    ): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
+    ): Handler<UnloadedDescriptor<PluginAPI>[]> {
       const descriptors = yield* createPluginDescriptors(items, dirname, alias);
       return descriptors.map(
         // Items are cached using the overall plugin array identity when
@@ -199,10 +199,7 @@ const DEFAULT_OPTIONS = {};
  * next time.
  */
 function loadCachedDescriptor<API>(
-  cache: WeakMap<
-    object | Function,
-    WeakMap<object, Array<UnloadedDescriptor<API>>>
-  >,
+  cache: WeakMap<object | Function, WeakMap<object, UnloadedDescriptor<API>[]>>,
   desc: UnloadedDescriptor<API>,
 ) {
   const { value, options = DEFAULT_OPTIONS } = desc;
@@ -239,7 +236,7 @@ function* createPresetDescriptors(
   dirname: string,
   alias: string,
   passPerPreset: boolean,
-): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
+): Handler<UnloadedDescriptor<PresetAPI>[]> {
   return yield* createDescriptors(
     "preset",
     items,
@@ -253,7 +250,7 @@ function* createPluginDescriptors(
   items: PluginItem[],
   dirname: string,
   alias: string,
-): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
+): Handler<UnloadedDescriptor<PluginAPI>[]> {
   return yield* createDescriptors("plugin", items, dirname, alias);
 }
 
@@ -264,7 +261,7 @@ function* createDescriptors<const Type extends "plugin" | "preset">(
   alias: string,
   ownPass?: boolean,
 ): Handler<
-  Array<UnloadedDescriptor<Type extends "plugin" ? PluginAPI : PresetAPI>>
+  UnloadedDescriptor<Type extends "plugin" ? PluginAPI : PresetAPI>[]
 > {
   const descriptors = yield* gensync.all(
     items.map((item, index) =>
@@ -374,7 +371,7 @@ export function* createDescriptor<API>(
   };
 }
 
-function assertNoDuplicates<API>(items: Array<UnloadedDescriptor<API>>): void {
+function assertNoDuplicates<API>(items: UnloadedDescriptor<API>[]): void {
   const map = new Map();
 
   for (const item of items) {

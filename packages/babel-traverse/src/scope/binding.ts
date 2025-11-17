@@ -51,10 +51,10 @@ export default class Binding {
     this.clearValue();
   }
 
-  constantViolations: Array<NodePath> = [];
+  constantViolations: NodePath[] = [];
   constant: boolean = true;
 
-  referencePaths: Array<NodePath> = [];
+  referencePaths: NodePath[] = [];
   referenced: boolean = false;
   references: number = 0;
 

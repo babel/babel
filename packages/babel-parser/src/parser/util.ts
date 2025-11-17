@@ -160,7 +160,7 @@ export default abstract class UtilParser extends Tokenizer {
 
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
-  tryParse<T extends Node | ReadonlyArray<Node> | null>(
+  tryParse<T extends Node | readonly Node[] | null>(
     fn: (abort: (node?: T) => never) => T,
     oldState: State = this.state.clone(),
   ):

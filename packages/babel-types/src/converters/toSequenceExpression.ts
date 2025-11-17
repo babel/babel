@@ -18,7 +18,7 @@ import type { DeclarationInfo } from "./gatherSequenceExpressions.ts";
  * Expression statements are just resolved to their expression.
  */
 export default function toSequenceExpression(
-  nodes: ReadonlyArray<t.Node>,
+  nodes: readonly t.Node[],
   scope: any,
 ): t.SequenceExpression | undefined {
   if (!nodes?.length) return;

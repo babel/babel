@@ -28,7 +28,7 @@ export class Scope {
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope extends Scope = Scope> {
   parser: Tokenizer;
-  scopeStack: Array<IScope> = [];
+  scopeStack: IScope[] = [];
   inModule: boolean;
   undefinedExports = new Map<string, Position>();
 

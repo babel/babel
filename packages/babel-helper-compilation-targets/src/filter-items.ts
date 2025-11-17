@@ -10,7 +10,7 @@ import {
 } from "./utils.ts";
 
 export function targetsSupported(target: Targets, support: Targets) {
-  const targetEnvironments = Object.keys(target) as Array<keyof Targets>;
+  const targetEnvironments = Object.keys(target) as (keyof Targets)[];
 
   if (targetEnvironments.length === 0) {
     return false;
@@ -78,8 +78,8 @@ export default function filterItems(
   includes: Set<string>,
   excludes: Set<string>,
   targets: Targets,
-  defaultIncludes: Array<string> | null,
-  defaultExcludes?: Array<string> | null,
+  defaultIncludes: string[] | null,
+  defaultExcludes?: string[] | null,
   pluginSyntaxMap?: Map<string, string | null>,
 ) {
   const result = new Set<string>();

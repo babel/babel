@@ -9,7 +9,7 @@ export default function _objectWithoutPropertiesLoose<
 ): Pick<T, Exclude<keyof T, K[number]>>;
 export default function _objectWithoutPropertiesLoose<
   T extends object,
-  K extends Array<keyof T>,
+  K extends (keyof T)[],
 >(source: T | null | undefined, excluded: K): Omit<T, K[number]>;
 export default function _objectWithoutPropertiesLoose<T extends object>(
   source: T | null | undefined,

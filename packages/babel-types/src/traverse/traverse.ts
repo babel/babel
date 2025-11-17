@@ -1,11 +1,11 @@
 import { VISITOR_KEYS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 
-export type TraversalAncestors = Array<{
+export type TraversalAncestors = {
   node: t.Node;
   key: string;
   index?: number;
-}>;
+}[];
 
 export type TraversalHandler<T> = (
   this: undefined,

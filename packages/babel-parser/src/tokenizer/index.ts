@@ -89,7 +89,7 @@ export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.
-  tokens: Array<Token | N.Comment> = [];
+  tokens: (Token | N.Comment)[] = [];
 
   constructor(options: OptionsWithDefaults, input: string) {
     super();

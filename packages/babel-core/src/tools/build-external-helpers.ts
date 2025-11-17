@@ -42,7 +42,7 @@ const buildUmdWrapper = (replacements: Replacements) =>
     });
   `(replacements);
 
-function buildGlobal(allowlist?: Array<string>) {
+function buildGlobal(allowlist?: string[]) {
   const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
@@ -86,7 +86,7 @@ function buildGlobal(allowlist?: Array<string>) {
   return tree;
 }
 
-function buildModule(allowlist?: Array<string>) {
+function buildModule(allowlist?: string[]) {
   const body: t.Statement[] = [];
   const refs = buildHelpers(body, null, allowlist);
 
@@ -102,7 +102,7 @@ function buildModule(allowlist?: Array<string>) {
   return program(body, [], "module");
 }
 
-function buildUmd(allowlist?: Array<string>) {
+function buildUmd(allowlist?: string[]) {
   const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
@@ -130,7 +130,7 @@ function buildUmd(allowlist?: Array<string>) {
   ]);
 }
 
-function buildVar(allowlist?: Array<string>) {
+function buildVar(allowlist?: string[]) {
   const namespace = identifier("babelHelpers");
 
   const body: t.Statement[] = [];
@@ -148,18 +148,18 @@ function buildVar(allowlist?: Array<string>) {
 function buildHelpers(
   body: t.Statement[],
   namespace: t.Expression,
-  allowlist?: Array<string>,
+  allowlist?: string[],
 ): Record<string, t.MemberExpression>;
 function buildHelpers(
   body: t.Statement[],
   namespace: null,
-  allowlist?: Array<string>,
+  allowlist?: string[],
 ): Record<string, t.Identifier>;
 
 function buildHelpers(
   body: t.Statement[],
   namespace: t.Expression | null,
-  allowlist?: Array<string>,
+  allowlist?: string[],
 ) {
   const getHelperReference = (name: string) => {
     return namespace
@@ -197,7 +197,7 @@ function buildHelpers(
   return refs;
 }
 export default function (
-  allowlist?: Array<string>,
+  allowlist?: string[],
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
   let tree: t.Program;

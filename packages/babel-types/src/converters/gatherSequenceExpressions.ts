@@ -29,8 +29,8 @@ export type DeclarationInfo = {
 };
 
 export default function gatherSequenceExpressions(
-  nodes: ReadonlyArray<t.Node>,
-  declars: Array<DeclarationInfo>,
+  nodes: readonly t.Node[],
+  declars: DeclarationInfo[],
 ) {
   const exprs: t.Expression[] = [];
   let ensureLastUndefined = true;

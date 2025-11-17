@@ -63,7 +63,7 @@ export interface TaskOptions extends InputOptions {
 
 type Suite = {
   options: TaskOptions;
-  tests: Array<Test>;
+  tests: Test[];
   title: string;
   filename: string;
 };
@@ -81,7 +81,7 @@ function assertDirectory(loc: string) {
   }
 }
 
-function shouldIgnore(name: string, ignore?: Array<string>) {
+function shouldIgnore(name: string, ignore?: string[]) {
   if (ignore?.includes(name)) {
     return true;
   }
@@ -492,7 +492,7 @@ export default function get(entryLoc: string) {
   return suites;
 }
 
-export function multiple(entryLoc: string, ignore?: Array<string>) {
+export function multiple(entryLoc: string, ignore?: string[]) {
   const categories: Record<string, Suite[]> = {};
 
   for (const name of fs.readdirSync(entryLoc)) {

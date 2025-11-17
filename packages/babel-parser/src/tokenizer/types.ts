@@ -58,10 +58,7 @@ export class ExportedTokenType {
   postfix: boolean;
   binop: number | undefined | null;
   // todo(Babel 8): remove updateContext from exposed token layout
-  declare updateContext:
-    | ((context: Array<TokContext>) => void)
-    | undefined
-    | null;
+  declare updateContext: ((context: TokContext[]) => void) | undefined | null;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
