@@ -129,9 +129,37 @@ describe("@babel/standalone", () => {
     );
   });
 
+  it("throws on invalid preset name with options", () => {
+    expect(() =>
+      Babel.transform("var foo", {
+        presets: [["lolfail", { option: function () {} }]],
+      }),
+    ).toThrow(/Invalid preset specified in Babel options: "lolfail"/);
+  });
+
+  it("throws on falsy preset", () => {
+    expect(() => Babel.transform("var foo", { presets: [null] })).toThrow(
+      /Invalid preset specified in Babel options: "null"/,
+    );
+  });
+
   it("throws on invalid plugin name", () => {
     expect(() => Babel.transform("var foo", { plugins: ["lolfail"] })).toThrow(
       /Invalid plugin specified in Babel options: "lolfail"/,
+    );
+  });
+
+  it("throws on invalid plugin name with options", () => {
+    expect(() =>
+      Babel.transform("var foo", {
+        plugins: [["lolfail", { option: function () {} }]],
+      }),
+    ).toThrow(/Invalid plugin specified in Babel options: "lolfail"/);
+  });
+
+  it("throws on falsy plugin", () => {
+    expect(() => Babel.transform("var foo", { plugins: [null] })).toThrow(
+      /Invalid plugin specified in Babel options: "null"/,
     );
   });
 

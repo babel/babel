@@ -26,7 +26,8 @@ import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
 import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
-import type { InputOptions } from "@babel/core";
+import type { InputOptions, PluginItem } from "@babel/core";
+type PresetItem = NonNullable<InputOptions["presets"]>[number];
 
 import { runScripts } from "./transformScriptTags.ts";
 
@@ -85,7 +86,9 @@ export const availablePresets = {
 
 const isArray =
   Array.isArray ||
-  (arg => Object.prototype.toString.call(arg) === "[object Array]");
+  ((arg =>
+    Object.prototype.toString.call(arg) ===
+    "[object Array]") as typeof Array.isArray);
 
 /**
  * Loads the given name (or [name, options] pair) from the given table object
@@ -105,6 +108,22 @@ function loadBuiltin(builtinTable: Record<string, unknown>, name: any) {
   }
   // Could be an actual preset/plugin module
   return name;
+}
+
+/**
+ * This function will be called only when the preset or plugin, specified via string or [string, object],
+ * is not available in the builtin table. Therefore we do not handle the case when the plugin/preset is an
+ * object or a function here.
+ * @param item
+ * @returns
+ */
+function getPluginOrPresetName(item: PluginItem | PresetItem) {
+  if (typeof item === "string") {
+    return item;
+  } else if (isArray(item)) {
+    return getPluginOrPresetName(item[0]);
+  }
+  return JSON.stringify(item);
 }
 
 /**
@@ -128,7 +147,7 @@ function processOptions(options: InputOptions) {
       }
     } else {
       throw new Error(
-        `Invalid preset specified in Babel options: "${presetName}"`,
+        `Invalid preset specified in Babel options: "${getPluginOrPresetName(presetName)}"`,
       );
     }
     return preset;
@@ -140,7 +159,7 @@ function processOptions(options: InputOptions) {
 
     if (!plugin) {
       throw new Error(
-        `Invalid plugin specified in Babel options: "${pluginName}"`,
+        `Invalid plugin specified in Babel options: "${getPluginOrPresetName(pluginName)}"`,
       );
     }
     return plugin;
