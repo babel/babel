@@ -210,7 +210,6 @@ export default defineConfig([
       "@typescript-eslint/prefer-for-of": "off",
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/sort-type-constituents": "off",
       "@typescript-eslint/unbound-method": "off",
       "prefer-rest-params": "off",
 
