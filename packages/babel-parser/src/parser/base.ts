@@ -37,7 +37,7 @@ export default class BaseParser {
   declare input: string;
   declare length: number;
   // Comment store for Program.comments
-  declare comments: Array<N.Comment>;
+  declare comments: N.Comment[];
 
   sourceToOffsetPos(sourcePos: number) {
     return sourcePos + this.startIndex;

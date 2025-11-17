@@ -501,14 +501,14 @@ function _evaluate(path: NodePath, state: State): any {
 
 function evaluateQuasis(
   path: NodePath<t.TaggedTemplateExpression | t.TemplateLiteral>,
-  quasis: Array<any>,
+  quasis: any[],
   state: State,
   raw = false,
 ) {
   let str = "";
 
   let i = 0;
-  const exprs: Array<NodePath<t.Node>> = path.isTemplateLiteral()
+  const exprs: NodePath<t.Node>[] = path.isTemplateLiteral()
     ? path.get("expressions")
     : path.get("quasi.expressions");
 

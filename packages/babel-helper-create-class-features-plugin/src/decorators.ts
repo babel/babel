@@ -1474,9 +1474,10 @@ function transformClass(
 
       let locals: t.Identifier[];
       if (hasDecorators) {
-        let privateMethods: Array<
-          t.FunctionExpression | t.ArrowFunctionExpression
-        >;
+        let privateMethods: (
+          | t.FunctionExpression
+          | t.ArrowFunctionExpression
+        )[];
 
         let nameExpr: t.Expression;
 

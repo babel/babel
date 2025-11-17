@@ -48,7 +48,7 @@ const getValidIncludesAndExcludes = (
   return Array.from(set);
 };
 
-function flatMap<T, U>(array: Array<T>, fn: (item: T) => Array<U>): Array<U> {
+function flatMap<T, U>(array: T[], fn: (item: T) => U[]): U[] {
   return Array.prototype.concat.apply([], array.map(fn));
 }
 
@@ -101,8 +101,8 @@ const expandIncludesAndExcludes = (
 };
 
 export const checkDuplicateIncludeExcludes = (
-  include: Array<string> = [],
-  exclude: Array<string> = [],
+  include: string[] = [],
+  exclude: string[] = [],
 ) => {
   const duplicates = include.filter(opt => exclude.includes(opt));
 

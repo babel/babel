@@ -5,7 +5,7 @@ interface DescriptorWithInitializer extends PropertyDescriptor {
 }
 
 declare const Object: Omit<typeof globalThis.Object, "keys"> & {
-  keys<T>(o: T): Array<keyof T>;
+  keys<T>(o: T): (keyof T)[];
 };
 
 export default function _applyDecoratedDescriptor<T>(

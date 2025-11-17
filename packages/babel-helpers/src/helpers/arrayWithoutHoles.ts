@@ -2,6 +2,6 @@
 
 import arrayLikeToArray from "./arrayLikeToArray.ts";
 
-export default function _arrayWithoutHoles<T>(arr: Array<T>) {
+export default function _arrayWithoutHoles<T>(arr: T[]) {
   if (Array.isArray(arr)) return arrayLikeToArray<T>(arr);
 }

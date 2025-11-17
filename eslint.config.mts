@@ -196,7 +196,6 @@ export default defineConfig([
       "@typescript-eslint/require-await": "error",
 
       // Todo: Investigate, for each of these, whether we want them
-      "@typescript-eslint/array-type": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",

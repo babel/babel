@@ -64,11 +64,11 @@ export default function visualize(output: string, map: any) {
 
   type Pos = { line: number; column: number };
   type Range = { from: Pos; to: Pos };
-  const ranges: Array<{
+  const ranges: {
     original: Range;
     generated: Range;
     source: string;
-  }> = [];
+  }[] = [];
   let prev: EachMapping = null;
   eachMapping(new TraceMap(map), mapping => {
     if (prev === null) {

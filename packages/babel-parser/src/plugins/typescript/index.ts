@@ -870,13 +870,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    tsParseBindingListForSignature(): Array<
+    tsParseBindingListForSignature(): (
       | N.Identifier
       | N.RestElement
       | N.ObjectPattern
       | N.ArrayPattern
       | N.VoidPattern
-    > {
+    )[] {
       const list = super.parseBindingList(
         tt.parenR,
         charCodes.rightParenthesis,
@@ -1095,7 +1095,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTypeLiteral");
     }
 
-    tsParseObjectTypeMembers(): Array<N.TsTypeElement> {
+    tsParseObjectTypeMembers(): N.TsTypeElement[] {
       this.expect(tt.braceL);
       const members = this.tsParseList(
         "TypeMembers",
@@ -1842,11 +1842,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
-    tsParseHeritageClause(token: "extends"): Array<N.TSInterfaceHeritage>;
-    tsParseHeritageClause(token: "implements"): Array<N.TSClassImplements>;
+    tsParseHeritageClause(token: "extends"): N.TSInterfaceHeritage[];
+    tsParseHeritageClause(token: "implements"): N.TSClassImplements[];
     tsParseHeritageClause(
       token: "extends" | "implements",
-    ): Array<N.TSClassImplements> | Array<N.TSInterfaceHeritage> {
+    ): N.TSClassImplements[] | N.TSInterfaceHeritage[] {
       const originalStartLoc = this.state.startLoc;
 
       const delimitedList = this.tsParseDelimitedList(
@@ -1907,9 +1907,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
       }
 
-      return delimitedList as
-        | Array<N.TSClassImplements>
-        | Array<N.TSInterfaceHeritage>;
+      return delimitedList as N.TSClassImplements[] | N.TSInterfaceHeritage[];
     }
 
     tsParseInterfaceDeclaration(
@@ -2622,7 +2620,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsCheckForInvalidTypeCasts(
-      items: Array<N.Expression | N.SpreadElement | null>,
+      items: (N.Expression | N.SpreadElement | null)[],
     ) {
       items.forEach(node => {
         if (node?.type === "TSTypeCastExpression") {
@@ -2632,10 +2630,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     toReferencedList(
-      exprList: Array<N.Expression | null>,
+      exprList: (N.Expression | null)[],
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isInParens?: boolean,
-    ): Array<N.Expression | null> {
+    ): (N.Expression | null)[] {
       // Handles invalid scenarios like: `f(a:b)`, `(a:b);`, and `(a:b,c:d)`.
       //
       // Note that `f<T>(a:b)` goes through a different path and is handled
@@ -4161,7 +4159,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return node.expression;
     }
 
-    shouldParseArrow(params: Array<N.Node>) {
+    shouldParseArrow(params: N.Node[]) {
       if (this.match(tt.colon)) {
         return params.every(expr => this.isAssignable(expr, true));
       }

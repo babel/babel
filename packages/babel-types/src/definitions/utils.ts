@@ -41,9 +41,9 @@ type UnionShape = {
 
 type DefineTypeOpts = {
   fields?: FieldDefinitions;
-  visitor?: Array<string>;
-  aliases?: Array<string>;
-  builder?: Array<string>;
+  visitor?: string[];
+  aliases?: string[];
+  builder?: string[];
   inherits?: NodeTypes;
   deprecatedAlias?: string;
   validate?: Validator;
@@ -147,7 +147,7 @@ export function assertEach(callback: Validator): Validator {
   return validator;
 }
 
-export function assertOneOf(...values: Array<any>): Validator {
+export function assertOneOf(...values: any[]): Validator {
   function validate(node: any, key: string, val: any) {
     if (!values.includes(val)) {
       throw new TypeError(
@@ -303,7 +303,7 @@ export function assertOptionalChainStart(): Validator {
   return validate;
 }
 
-export function chain(...fns: Array<Validator>): Validator {
+export function chain(...fns: Validator[]): Validator {
   function validate(...args: Parameters<Validator>) {
     for (const fn of fns) {
       fn(...args);
@@ -387,9 +387,9 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     }
   }
 
-  const visitor: Array<string> = opts.visitor || inherits.visitor || [];
-  const aliases: Array<string> = opts.aliases || inherits.aliases || [];
-  const builder: Array<string> =
+  const visitor: string[] = opts.visitor || inherits.visitor || [];
+  const aliases: string[] = opts.aliases || inherits.aliases || [];
+  const builder: string[] =
     opts.builder || inherits.builder || opts.visitor || [];
 
   for (const k of Object.keys(opts)) {

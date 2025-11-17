@@ -20,7 +20,7 @@ export type TargetsTuple = Omit<Targets, "node"> & {
   node?: string | true;
 };
 
-export type Browsers = string | ReadonlyArray<string>;
+export type Browsers = string | readonly string[];
 
 export type InputTargets = {
   browsers?: Browsers;

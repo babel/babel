@@ -196,7 +196,7 @@ export default function transformClass(
   }
 
   function pushBody() {
-    const classBodyPaths: Array<any> = classState.path.get("body.body");
+    const classBodyPaths: any[] = classState.path.get("body.body");
 
     for (const path of classBodyPaths) {
       const node = path.node;

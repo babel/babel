@@ -28,7 +28,7 @@ import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
 type ElementState = {
   tagExpr: t.Expression; // tag node,
   tagName: string | undefined | null; // raw string tag name,
-  args: Array<any>; // array of call arguments,
+  args: any[]; // array of call arguments,
   call?: any; // optional call property that can be set to override the call expression returned,
   pure: boolean; // true if the element can be marked with a #__PURE__ annotation
   callee?: any;

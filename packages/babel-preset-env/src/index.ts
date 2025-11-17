@@ -94,7 +94,7 @@ const getPlugin = (pluginName: string) => {
   return plugin;
 };
 
-export const transformIncludesAndExcludes = (opts: Array<string>): any => {
+export const transformIncludesAndExcludes = (opts: string[]): any => {
   return opts.reduce(
     (result, opt) => {
       const target = /^(?:es|es6|es7|esnext|web)\./.test(opt)

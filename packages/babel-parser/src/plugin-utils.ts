@@ -240,6 +240,11 @@ export const mixinPlugins = {
   placeholders,
 };
 
-export const mixinPluginNames = Object.keys(mixinPlugins) as ReadonlyArray<
-  "estree" | "jsx" | "flow" | "typescript" | "v8intrinsic" | "placeholders"
->;
+export const mixinPluginNames = Object.keys(mixinPlugins) as readonly (
+  | "estree"
+  | "jsx"
+  | "flow"
+  | "typescript"
+  | "v8intrinsic"
+  | "placeholders"
+)[];

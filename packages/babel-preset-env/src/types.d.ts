@@ -19,7 +19,7 @@ export type CorejsOption =
     };
 
 export type PluginListItem = string | RegExp;
-export type PluginListOption = Array<PluginListItem>;
+export type PluginListOption = PluginListItem[];
 
 export type Options = {
   bugfixes: boolean;

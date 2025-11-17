@@ -6,9 +6,9 @@ import populatePlaceholders from "./populate.ts";
 
 export default function literalTemplate<T>(
   formatter: Formatter<T>,
-  tpl: Array<string>,
+  tpl: string[],
   opts: TemplateOpts,
-): (_: Array<unknown>) => (_: unknown) => T {
+): (_: unknown[]) => (_: unknown) => T {
   const { metadata, names } = buildLiteralData(formatter, tpl, opts);
 
   return arg => {
@@ -42,7 +42,7 @@ export default function literalTemplate<T>(
 
 function buildLiteralData<T>(
   formatter: Formatter<T>,
-  tpl: Array<string>,
+  tpl: string[],
   opts: TemplateOpts,
 ) {
   let prefix = "BABEL_TPL$";
@@ -77,9 +77,9 @@ function buildLiteralData<T>(
 }
 
 function buildTemplateCode(
-  tpl: Array<string>,
+  tpl: string[],
   prefix: string,
-): { names: Array<string>; code: string } {
+): { names: string[]; code: string } {
   const names = [];
 
   let code = tpl[0];

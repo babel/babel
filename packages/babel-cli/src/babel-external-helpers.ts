@@ -5,7 +5,7 @@ const program = process.env.BABEL_8_BREAKING
   ? commander.program
   : commander.default.program;
 
-function collect(value: unknown, previousValue: Array<string>): Array<string> {
+function collect(value: unknown, previousValue: string[]): string[] {
   // If the user passed the option with no value, like "babel-external-helpers --whitelist", do nothing.
   if (typeof value !== "string") return previousValue;
 

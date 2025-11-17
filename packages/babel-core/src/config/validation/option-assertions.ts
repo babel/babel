@@ -229,8 +229,8 @@ export function assertObject(
 
 export function assertArray<T>(
   loc: GeneralPath,
-  value: Array<T> | undefined | null,
-): Array<T> | undefined | null {
+  value: T[] | undefined | null,
+): T[] | undefined | null {
   if (value != null && !Array.isArray(value)) {
     throw new Error(`${msg(loc)} must be an array, or undefined`);
   }

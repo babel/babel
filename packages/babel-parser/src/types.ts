@@ -34,7 +34,7 @@ export type Comment = CommentBlock | CommentLine;
 export interface CommentWhitespace {
   start: number;
   end: number;
-  comments: Array<Comment>;
+  comments: Comment[];
   leadingNode: Node | null;
   trailingNode: Node | null;
   containerNode: Node | null;
@@ -45,9 +45,9 @@ export interface NodeBase {
   end: number;
   loc: SourceLocation;
   range?: [number, number];
-  leadingComments?: Array<Comment>;
-  trailingComments?: Array<Comment>;
-  innerComments?: Array<Comment>;
+  leadingComments?: Comment[];
+  trailingComments?: Comment[];
+  innerComments?: Comment[];
   extra?: Record<string, any>;
 }
 
@@ -263,8 +263,8 @@ export interface DecimalLiteral extends NodeBase {
 
 export interface ParserOutput {
   comments: Comment[];
-  errors: Array<ParseError<any>>;
-  tokens?: Array<Token | Comment>;
+  errors: ParseError<any>[];
+  tokens?: (Token | Comment)[];
 }
 // Programs
 
@@ -278,7 +278,7 @@ export interface File extends NodeBase, ParserOutput {
 export interface Program extends NodeBase {
   type: "Program";
   sourceType: SourceType;
-  body: Array<Statement | ModuleDeclaration>; // TODO: $ReadOnlyArray,
+  body: (Statement | ModuleDeclaration)[]; // TODO: $ReadOnlyArray,
   directives: Directive[]; // TODO: Not in spec,
   interpreter: InterpreterDirective | null;
 }
@@ -297,7 +297,7 @@ export interface BodilessFunctionOrMethodBase extends HasDecorators {
   // TODO: Remove this. Should not assign "id" to methods.
   // https://github.com/babel/babylon/issues/535
   id: Identifier | undefined | null;
-  params: Array<Pattern | TSParameterProperty>;
+  params: (Pattern | TSParameterProperty)[];
   generator: boolean;
   async: boolean;
   // TODO: All not in spec
@@ -321,7 +321,7 @@ export interface ExpressionStatement extends NodeBase {
 
 export interface BlockStatement extends NodeBase {
   type: "BlockStatement";
-  body: Array<Statement>; // TODO: $ReadOnlyArray,
+  body: Statement[]; // TODO: $ReadOnlyArray,
   directives: Directive[];
 }
 // | Placeholder<"BlockStatement">;
@@ -528,7 +528,7 @@ export interface AwaitExpression extends NodeBase {
 
 export interface ArrayExpression extends NodeBase {
   type: "ArrayExpression";
-  elements: Array<Expression | SpreadElement | null>;
+  elements: (Expression | SpreadElement | null)[];
 }
 
 export interface DoExpression extends NodeBase {
@@ -539,16 +539,16 @@ export interface DoExpression extends NodeBase {
 
 export interface TupleExpression extends NodeBase {
   type: "TupleExpression";
-  elements: Array<Expression | SpreadElement | null>;
+  elements: (Expression | SpreadElement | null)[];
 }
 
 export interface ObjectExpression extends NodeBase {
   type: "ObjectExpression";
-  properties: Array<ObjectProperty | ObjectMethod | SpreadElement>;
+  properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
 }
 export interface RecordExpression extends NodeBase {
   type: "RecordExpression";
-  properties: Array<ObjectProperty | ObjectMethod | SpreadElement>;
+  properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
 }
 
 export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
@@ -728,7 +728,7 @@ export interface ConditionalExpression extends NodeBase {
 
 export interface CallOrNewBase extends NodeBase {
   callee: Expression | Super | Import;
-  arguments: Array<Expression | SpreadElement>; // TODO: $ReadOnlyArray,
+  arguments: (Expression | SpreadElement)[]; // TODO: $ReadOnlyArray,
   // For ESTree
   optional: boolean;
   typeArguments: TypeParameterInstantiationBase | undefined | null;
@@ -902,7 +902,7 @@ export interface ClassBase extends HasDecorators {
 
 export interface ClassBody extends NodeBase {
   type: "ClassBody";
-  body: Array<ClassMember | StaticBlock | TsIndexSignature>; // TODO: $ReadOnlyArray
+  body: (ClassMember | StaticBlock | TsIndexSignature)[]; // TODO: $ReadOnlyArray
 }
 // | Placeholder<"ClassBody">;
 
@@ -918,7 +918,7 @@ export interface ClassMemberBase extends NodeBase, HasDecorators {
 
 export interface StaticBlock extends NodeBase {
   type: "StaticBlock";
-  body: Array<Statement>;
+  body: Statement[];
 }
 
 export type ClassMember =
@@ -1057,9 +1057,11 @@ interface ModuleSpecifier extends NodeBase {
 export interface ImportDeclaration extends NodeBase {
   type: "ImportDeclaration";
   // TODO: $ReadOnlyArray
-  specifiers: Array<
-    ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
-  >;
+  specifiers: (
+    | ImportSpecifier
+    | ImportDefaultSpecifier
+    | ImportNamespaceSpecifier
+  )[];
   source: Literal;
   importKind?: "type" | "typeof" | "value"; // TODO: Not in spec,
   phase?: null | "source" | "defer";
@@ -1088,9 +1090,11 @@ export interface ImportNamespaceSpecifier extends ModuleSpecifier {
 export interface ExportNamedDeclaration extends NodeBase {
   type: "ExportNamedDeclaration";
   declaration: Declaration | undefined | null;
-  specifiers: Array<
-    ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier
-  >;
+  specifiers: (
+    | ExportSpecifier
+    | ExportDefaultSpecifier
+    | ExportNamespaceSpecifier
+  )[];
   source: Literal | undefined | null;
   exportKind?: "type" | "value"; // TODO: Not in spec,
   attributes?: ImportAttribute[];
@@ -1192,7 +1196,7 @@ export interface TsTypeAnnotation extends NodeBase {
 }
 
 export interface TypeParameterDeclarationBase extends NodeBase {
-  params: Array<TypeParameter | TsTypeParameter>;
+  params: (TypeParameter | TsTypeParameter)[];
 }
 
 export interface TypeParameterDeclaration extends TypeParameterDeclarationBase {
@@ -1542,14 +1546,22 @@ export type TsSignatureDeclaration =
 
 export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
-  params: Array<
-    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
-  >;
+  params: (
+    | Identifier
+    | RestElement
+    | ObjectPattern
+    | ArrayPattern
+    | VoidPattern
+  )[];
   returnType: TsTypeAnnotation | undefined | null;
   // TODO(Babel 8): Remove
-  parameters: Array<
-    Identifier | RestElement | ObjectPattern | ArrayPattern | VoidPattern
-  >;
+  parameters: (
+    | Identifier
+    | RestElement
+    | ObjectPattern
+    | ArrayPattern
+    | VoidPattern
+  )[];
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }
 
@@ -1744,7 +1756,7 @@ export interface TsArrayType extends TsTypeBase {
 
 export interface TsTupleType extends TsTypeBase {
   type: "TSTupleType";
-  elementTypes: Array<TsType | TsNamedTupleMember>;
+  elementTypes: (TsType | TsNamedTupleMember)[];
 }
 
 export interface TsNamedTupleMember extends TsTypeBase {

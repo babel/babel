@@ -237,7 +237,7 @@ export function _replaceWith(this: NodePath, node: t.Node | null) {
 
 export function replaceExpressionWithStatements(
   this: NodePath,
-  nodes: Array<t.Statement>,
+  nodes: t.Statement[],
 ) {
   resync.call(this);
 
@@ -268,7 +268,7 @@ export function replaceExpressionWithStatements(
   callee.get("body").scope.hoistVariables(id => this.scope.push({ id }));
 
   // add implicit returns to all ending expression statements
-  const completionRecords: Array<NodePath> = callee.getCompletionRecords();
+  const completionRecords: NodePath[] = callee.getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
 
@@ -333,8 +333,8 @@ export function replaceExpressionWithStatements(
 }
 
 function gatherSequenceExpressions(
-  nodes: ReadonlyArray<t.Node>,
-  declars: Array<t.Identifier>,
+  nodes: readonly t.Node[],
+  declars: t.Identifier[],
 ) {
   const exprs: t.Expression[] = [];
   let ensureLastUndefined = true;
@@ -408,7 +408,7 @@ function gatherSequenceExpressions(
   }
 }
 
-export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
+export function replaceInline(this: NodePath, nodes: t.Node | t.Node[]) {
   resync.call(this);
 
   if (Array.isArray(nodes)) {

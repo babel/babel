@@ -114,7 +114,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
 
 export default class ExpressionScopeHandler {
   parser: Tokenizer;
-  stack: Array<ExpressionScope> = [new ExpressionScope()];
+  stack: ExpressionScope[] = [new ExpressionScope()];
 
   constructor(parser: Tokenizer) {
     this.parser = parser;

@@ -4,7 +4,7 @@ export const program = process.env.BABEL_8_BREAKING
   ? commander.program
   : commander.default.program;
 
-function collect(value: unknown, previousValue: string[]): Array<string> {
+function collect(value: unknown, previousValue: string[]): string[] {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 

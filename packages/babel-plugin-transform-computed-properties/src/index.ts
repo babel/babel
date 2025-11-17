@@ -151,7 +151,7 @@ export default declare((api, options: Options) => {
     const CHUNK_LENGTH_CAP = 10;
 
     let currentChunk: t.ObjectMember[] = null;
-    const computedPropsChunks: Array<t.ObjectMember[]> = [];
+    const computedPropsChunks: t.ObjectMember[][] = [];
     for (const prop of computedProps) {
       if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
         currentChunk = [];

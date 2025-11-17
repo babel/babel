@@ -1018,7 +1018,7 @@ export default abstract class ExpressionParser extends LValParser {
     allowPlaceholder?: boolean,
     nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
-  ): Array<N.Expression> {
+  ): N.Expression[] {
     const elts: N.Expression[] = [];
     let first = true;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
@@ -1896,7 +1896,7 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- `params` is used in typescript plugin
-  shouldParseArrow(params: Array<N.Node>): boolean {
+  shouldParseArrow(params: N.Node[]): boolean {
     return !this.canInsertSemicolon();
   }
 
@@ -2532,12 +2532,8 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     node: Undone<N.ArrowFunctionExpression>,
     params:
-      | Array<
-          N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern
-        >
-      | Array<
-          N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern
-        >
+      | (N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern)[]
+      | (N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern)[]
       | null
       | undefined,
     isAsync: boolean,
@@ -2572,12 +2568,8 @@ export default abstract class ExpressionParser extends LValParser {
   setArrowFunctionParameters(
     node: Undone<N.ArrowFunctionExpression>,
     params:
-      | Array<
-          N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern
-        >
-      | Array<
-          N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern
-        >,
+      | (N.Expression | N.SpreadElement | N.VoidPattern | N.AssignmentPattern)[]
+      | (N.Expression | N.RestElement | N.VoidPattern | N.AssignmentPattern)[],
     trailingCommaLoc?: Position | null,
   ): void {
     this.toAssignableList(params, trailingCommaLoc, false);
@@ -2676,7 +2668,7 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   isSimpleParamList(
-    params: ReadonlyArray<N.Pattern | N.TSParameterProperty>,
+    params: readonly (N.Pattern | N.TSParameterProperty)[],
   ): boolean {
     for (let i = 0, len = params.length; i < len; i++) {
       if (!this.isSimpleParameter(params[i])) return false;

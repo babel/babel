@@ -250,7 +250,7 @@ export function importToPlatformApi(
 }
 
 export function buildParallelStaticImports(
-  data: Array<{ id: t.Identifier; fetch: t.Expression }>,
+  data: { id: t.Identifier; fetch: t.Expression }[],
   needsAwait: boolean,
 ): t.VariableDeclaration | null {
   if (data.length === 0) return null;
