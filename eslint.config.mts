@@ -181,6 +181,18 @@ export default defineConfig([
           allowNamedExports: true,
         },
       ],
+      "@typescript-eslint/no-base-to-string": [
+        "error",
+        {
+          ignoredTypeNames: [
+            "Error",
+            "RegExp",
+            "URL",
+            "URLSearchParams",
+            "SemVer",
+          ],
+        },
+      ],
       "@typescript-eslint/no-confusing-void-expression": [
         "error",
         { ignoreArrowShorthand: true },
@@ -201,7 +213,6 @@ export default defineConfig([
       "@typescript-eslint/consistent-generic-constructors": "off",
       "@typescript-eslint/consistent-indexed-object-style": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-empty-interface": "off",
