@@ -28,7 +28,7 @@
     "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)",
     "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",
-    "glob": "condition:BABEL_8_BREAKING ? ^11.0.3 : ^7.2.0 (esm:sync|default)",
+    "glob": "condition:BABEL_8_BREAKING ? ^12.0.0 : ^7.2.0 (esm:sync|default)",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "slash": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   },
