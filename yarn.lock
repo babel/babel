@@ -4366,10 +4366,10 @@ __metadata:
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
     "@babel/generator": "workspace:^"
+    "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
-    glob: "npm:^7.2.0"
   languageName: unknown
   linkType: soft
 
