@@ -403,7 +403,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         // @ts-expect-error Fixme: document symbol ast properties
         !path.node.id[NOT_LOCAL_BINDING])
     ) {
-      path.scope.registerBinding("local", path.get("id"), path);
+      path.scope.registerBinding(
+        "local",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     }
   },
 
@@ -414,7 +418,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         // @ts-expect-error Fixme: document symbol ast properties
         !path.node.id[NOT_LOCAL_BINDING])
     ) {
-      path.scope.registerBinding("local", path.get("id"), path);
+      path.scope.registerBinding(
+        "local",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     }
   },
 
@@ -734,7 +742,11 @@ class Scope {
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
-      this.registerBinding("hoisted", path.get("id"), path);
+      this.registerBinding(
+        "hoisted",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
       const { kind } = path.node;

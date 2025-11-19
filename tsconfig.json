@@ -14,6 +14,9 @@
     "*.mts",
     "packages/*/test/*.tst.ts"
   ],
+  "exclude": [
+    "dts/**/*.tst.d.ts"
+  ],
   "references": [
     {
       "path": "./codemods/babel-plugin-codemod-object-assign-to-object-spread"
