@@ -906,7 +906,7 @@ export function splitExportDeclaration(
   const aliasDeclar = exportNamedDeclaration(null, specifiers);
 
   this.insertAfter(aliasDeclar);
-  this.replaceWith(declaration.node);
+  this.replaceWith(declaration.node!);
   return this;
 }
 

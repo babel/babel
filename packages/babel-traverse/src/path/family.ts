@@ -51,11 +51,12 @@ export function getOpposite(this: NodePath): NodePath | null {
 }
 
 function addCompletionRecords(
-  path: NodePath | null | undefined,
+  path: NodePath<t.Node | null> | null | undefined,
   records: Completion[],
   context: CompletionContext,
 ): Completion[] {
   if (path) {
+    // @ts-expect-error FIXME: NodePath<null>
     records.push(..._getCompletionRecords(path, context));
   }
   return records;
@@ -358,31 +359,35 @@ type Trav<
   Path extends unknown[],
 > = Path extends [infer K, ...infer R]
   ? K extends keyof Node
-    ? Node[K] extends t.Node | t.Node[]
-      ? R extends []
-        ? Node[K]
-        : Trav<Node[K], R>
-      : never
+    ? R extends []
+      ? Node[K]
+      : Node[K] extends t.Node | t.Node[] | null | undefined
+        ? TravD<Node[K] & {}, R> | null
+        : never
     : never
   : never;
 
-type ToNodePath<T> = T extends
-  | (infer U extends t.Node | null)[]
-  | null
-  | undefined
-  ? NodePath<U>[]
-  : T extends (infer U extends t.Node) | null | undefined
-    ? NodePath<U>
-    : never;
+type TravD<
+  Node extends t.Node | t.Node[],
+  Path extends unknown[],
+> = Node extends any ? Trav<Node, Path> : never;
+
+type ToNodePath<T> = T extends undefined | null
+  ? NodePath<null>
+  : T extends (infer U extends t.Node | null)[]
+    ? NodePath<U>[]
+    : T extends t.Node | null | undefined
+      ? NodePath<T & {}>
+      : never;
 
 function get<T extends NodePath, K extends keyof T["node"]>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
+  context?: true | TraversalContext,
 ): T extends any
   ? T["node"][K] extends (infer U extends t.Node | null)[] | null | undefined
     ? NodePath<U>[]
-    : T["node"][K] extends (infer U extends t.Node) | null | undefined
+    : T["node"][K] extends (infer U extends t.Node | null) | undefined
       ? NodePath<U>
       : never
   : never;
@@ -390,14 +395,14 @@ function get<T extends NodePath, K extends keyof T["node"]>(
 function get<T extends NodePath<t.Node>, K extends string>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
+  context?: true | TraversalContext,
 ): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
 
 function get(
   this: NodePath,
   key: string,
   context?: true | TraversalContext,
-): NodePath | NodePath[];
+): NodePath<t.Node | null> | NodePath<t.Node | null>[];
 
 function get(
   this: NodePath,
@@ -562,6 +567,7 @@ function getBindingIdentifierPaths(
 
     if (outerOnly) {
       if (id.isFunctionDeclaration()) {
+        // @ts-expect-error FIXME: NodePath<null>
         search.push(id.get("id"));
         continue;
       }
@@ -575,6 +581,7 @@ function getBindingIdentifierPaths(
         const key = keys[i];
         const child = id.get(key);
         if (Array.isArray(child)) {
+          // @ts-expect-error FIXME: NodePath<null>
           search.push(...child);
         } else if (child.node) {
           search.push(child);
