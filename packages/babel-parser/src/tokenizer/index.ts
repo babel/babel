@@ -526,10 +526,7 @@ export default abstract class Tokenizer extends CommentsParser {
       // which is not allowed in the spec. Throwing expecting recordAndTuple is
       // misleading
       this.expectPlugin("recordAndTuple");
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.getPluginOption("recordAndTuple", "syntaxType") === "bar"
-      ) {
+      if (this.getPluginOption("recordAndTuple", "syntaxType") === "bar") {
         throw this.raise(
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
