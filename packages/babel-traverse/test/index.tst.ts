@@ -21,13 +21,13 @@ describe("traverse", () => {
     it("TaggedTemplateExpression.tag.object", () => {
       const path = {} as NodePath<t.TaggedTemplateExpression>;
       const object = path.get("tag.object");
-      expect(object).type.toBe<NodePath<t.Expression | null>>();
+      expect(object).type.toBe<NodePath<t.Expression | t.Super | null>>();
     });
 
     it("AssignmentExpression.left.object", () => {
       const path = {} as NodePath<t.AssignmentExpression>;
       const object = path.get("left.object");
-      expect(object).type.toBe<NodePath<t.Expression | null>>();
+      expect(object).type.toBe<NodePath<t.Expression | t.Super | null>>();
     });
   });
 
