@@ -294,7 +294,7 @@ __metadata:
     commander: "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
-    glob: "condition:BABEL_8_BREAKING ? ^11.0.3 : ^7.2.0 (esm:sync|default)"
+    glob: "condition:BABEL_8_BREAKING ? ^12.0.0 : ^7.2.0 (esm:sync|default)"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "npm:^6.3.1"
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -4366,10 +4366,10 @@ __metadata:
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
     "@babel/generator": "workspace:^"
+    "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
-    glob: "npm:^7.2.0"
   languageName: unknown
   linkType: soft
 
@@ -7715,7 +7715,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^2.6.0"
     eslint-plugin-unicorn: "npm:^56.0.0"
     execa: "npm:^9.0.0"
-    glob: "npm:^11.0.3"
+    glob: "npm:^12.0.0"
     globals: "npm:^15.9.0"
     gulp: "npm:^5.0.0"
     husky: "npm:^9.0.11"
@@ -11084,19 +11084,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob-BABEL_8_BREAKING-true@npm:glob@^11.0.3, glob@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "glob@npm:11.0.3"
+"glob-BABEL_8_BREAKING-true@npm:glob@^12.0.0, glob@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "glob@npm:12.0.0"
   dependencies:
     foreground-child: "npm:^3.3.1"
     jackspeak: "npm:^4.1.1"
-    minimatch: "npm:^10.0.3"
+    minimatch: "npm:^10.1.1"
     minipass: "npm:^7.1.2"
     package-json-from-dist: "npm:^1.0.0"
     path-scurry: "npm:^2.0.0"
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 10/2ae536c1360c0266b523b2bfa6aadc10144a8b7e08869b088e37ac3c27cd30774f82e4bfb291cde796776e878f9e13200c7ff44010eb7054e00f46f649397893
+  checksum: 10/6e21b3f1f1fa635836d45e54bbe50704884cc3e310e0cc011cfb5429db65a030e12936d99b07e66236370efe45dc8c8b26fa5334dbf555d6f8709e0315c77c30
   languageName: node
   linkType: hard
 
@@ -11161,13 +11161,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@condition:BABEL_8_BREAKING ? ^11.0.3 : ^7.2.0 (esm:sync|default)":
-  version: 0.0.0-condition-ebf458
-  resolution: "glob@condition:BABEL_8_BREAKING?^11.0.3:^7.2.0(esm:sync|default)#ebf458"
+"glob@condition:BABEL_8_BREAKING ? ^12.0.0 : ^7.2.0 (esm:sync|default)":
+  version: 0.0.0-condition-0162ca
+  resolution: "glob@condition:BABEL_8_BREAKING?^12.0.0:^7.2.0(esm:sync|default)#0162ca"
   dependencies:
     glob-BABEL_8_BREAKING-false: "npm:glob@^7.2.0"
-    glob-BABEL_8_BREAKING-true: "npm:glob@^11.0.3"
-  checksum: 10/313f6ff9d6660ad57eee63a0562caadc685bccd1893398a9428a10fb3d0d4af8411d1ad7f3029a274002008cf48fddc5397620b000268b3205f8590778d46c8c
+    glob-BABEL_8_BREAKING-true: "npm:glob@^12.0.0"
+  checksum: 10/68a13d7d8ad103b12cd091e525b8760d9133d1f930206e89c2aa4c484d59062488b27c4898bc19ac7bda9d8c2e6ca7a9932e4d4e7a9b91519f8e9fd3d7800080
   languageName: node
   linkType: hard
 
@@ -13858,7 +13858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.3":
+"minimatch@npm:^10.1.1":
   version: 10.1.1
   resolution: "minimatch@npm:10.1.1"
   dependencies:
