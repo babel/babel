@@ -31,7 +31,7 @@ yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 yarn install
 # Install browser-playwright for ChromiumHeadless testing
-yarn add @vitest/browser-playwright --dev
+yarn add playwright @vitest/browser-playwright --dev
 yarn run build
 yarn run ng test --watch=false --browsers ChromiumHeadless
 
