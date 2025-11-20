@@ -30,9 +30,9 @@ touch yarn.lock
 yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 yarn install
-# Install browser-webdriverio for ChromeHeadless testing
-yarn add @vitest/browser-webdriverio --dev
+# Install browser-playwright for ChromiumHeadless testing
+yarn add @vitest/browser-playwright --dev
 yarn run build
-yarn run ng test --watch=false --browsers ChromeHeadless
+yarn run ng test --watch=false --browsers ChromiumHeadless
 
 cleanup
