@@ -28,9 +28,10 @@ cd ngx
 node "$dir"/utils/bump-babel-dependencies.js resolutions
 touch yarn.lock
 yarn set version stable
-YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
-# Install browser-playwright for ChromeHeadless testing
-yarn add @vitest/browser-playwright --dev
+export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+yarn install
+# Install browser-webdriverio for ChromeHeadless testing
+yarn add @vitest/browser-webdriverio --dev
 yarn run build
 yarn run ng test --watch=false --browsers ChromeHeadless
 
