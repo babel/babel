@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
 
   const isPlugin = (plugin: string | [string, object], name: string) =>
     name === "plugin" || (Array.isArray(plugin) && plugin[0] === "plugin");
