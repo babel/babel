@@ -7739,6 +7739,7 @@ __metadata:
     shelljs: "npm:^0.8.5"
     terser: "npm:^5.43.1"
     test262-stream: "npm:^1.4.0"
+    ts-node: "npm:^11.0.0-beta.1"
     typescript: "npm:5.9.3"
     typescript-eslint: "npm:8.46.2"
   languageName: unknown

@@ -5,13 +5,16 @@
     "./tsconfig.paths.json"
   ],
   "compilerOptions": {
-    "skipLibCheck": false,
     "strict": true
   },
   "include": [
     "./lib/libdom-minimal.d.ts",
     "dts/**/*.d.ts",
-    "*.mts"
+    "*.mts",
+    "*.ts"
+  ],
+  "exclude": [
+    "dts/*.d.ts"
   ],
   "references": [
     {
