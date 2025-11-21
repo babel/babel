@@ -16,7 +16,7 @@ export default function _interopRequireWildcard(
     }
     // Temporary variable for output size
     var _;
-    var newObj: { [key: string]: any } = { __proto__: null, default: obj };
+    var newObj: Record<string, any> = { __proto__: null, default: obj };
     var desc: PropertyDescriptor | undefined;
 
     if (

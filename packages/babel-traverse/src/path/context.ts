@@ -24,7 +24,7 @@ export function call(this: NodePath, key: VisitPhase): boolean {
   return false;
 }
 
-export function _call(this: NodePath, fns?: Array<Function>): boolean {
+export function _call(this: NodePath, fns?: Function[]): boolean {
   if (!fns) return false;
 
   for (const fn of fns) {

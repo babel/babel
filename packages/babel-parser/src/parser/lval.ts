@@ -351,32 +351,56 @@ export default abstract class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList:
-      | ReadonlyArray<
-          Expression | SpreadElement | VoidPattern | AssignmentPattern | null
-        >
-      | ReadonlyArray<
-          Expression | RestElement | VoidPattern | AssignmentPattern | null
-        >,
+      | readonly (
+          | Expression
+          | SpreadElement
+          | VoidPattern
+          | AssignmentPattern
+          | null
+        )[]
+      | readonly (
+          | Expression
+          | RestElement
+          | VoidPattern
+          | AssignmentPattern
+          | null
+        )[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isParenthesizedExpr?: boolean,
   ):
-    | ReadonlyArray<
-        Expression | SpreadElement | VoidPattern | AssignmentPattern | null
-      >
-    | ReadonlyArray<
-        Expression | RestElement | VoidPattern | AssignmentPattern | null
-      > {
+    | readonly (
+        | Expression
+        | SpreadElement
+        | VoidPattern
+        | AssignmentPattern
+        | null
+      )[]
+    | readonly (
+        | Expression
+        | RestElement
+        | VoidPattern
+        | AssignmentPattern
+        | null
+      )[] {
     return exprList;
   }
 
   toReferencedListDeep(
     exprList:
-      | ReadonlyArray<
-          Expression | SpreadElement | VoidPattern | AssignmentPattern | null
-        >
-      | ReadonlyArray<
-          Expression | RestElement | VoidPattern | AssignmentPattern | null
-        >,
+      | readonly (
+          | Expression
+          | SpreadElement
+          | VoidPattern
+          | AssignmentPattern
+          | null
+        )[]
+      | readonly (
+          | Expression
+          | RestElement
+          | VoidPattern
+          | AssignmentPattern
+          | null
+        )[],
     isParenthesizedExpr?: boolean,
   ): void {
     this.toReferencedList(exprList, isParenthesizedExpr);
@@ -447,22 +471,22 @@ export default abstract class LValParser extends NodeUtils {
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags.ALLOW_EMPTY,
-  ): Array<Pattern | null>;
+  ): (Pattern | null)[];
   parseBindingList(
     this: Parser,
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags.IS_FUNCTION_PARAMS,
-  ): Array<Pattern | TSParameterProperty>;
+  ): (Pattern | TSParameterProperty)[];
   parseBindingList(
     this: Parser,
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags,
-  ): Array<Pattern | TSParameterProperty | null> {
+  ): (Pattern | TSParameterProperty | null)[] {
     const allowEmpty = flags & ParseBindingListFlags.ALLOW_EMPTY;
 
-    const elts: Array<Pattern | TSParameterProperty | null> = [];
+    const elts: (Pattern | TSParameterProperty | null)[] = [];
     let first = true;
     while (!this.eat(close)) {
       if (first) {

@@ -120,6 +120,7 @@ interface PrintListOptions {
 }
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class Printer {
   constructor(
     format: Format,
@@ -902,7 +903,7 @@ class Printer {
   }
 
   printJoin(
-    nodes: Array<t.Node> | undefined | null,
+    nodes: t.Node[] | undefined | null,
     statement?: boolean,
     indent?: boolean,
     separator?: PrintJoinOptions["separator"] | null,
@@ -1422,7 +1423,7 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 
 type GeneratorFunctions = typeof generatorFunctions;
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
 interface Printer extends GeneratorFunctions {}
 export default Printer;
 

@@ -130,7 +130,7 @@ traverse.removeProperties = function (
 traverse.hasType = function (
   tree: t.Node,
   type: t.Node["type"],
-  denylistTypes?: Array<string>,
+  denylistTypes?: string[],
 ): boolean {
   // the node we're searching in is denylisted
   if (denylistTypes?.includes(tree.type)) return false;

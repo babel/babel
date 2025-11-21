@@ -25,7 +25,7 @@ export function readdir(
   dirname: string,
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
-): Array<string> {
+): string[] {
   if (process.env.BABEL_8_BREAKING) {
     return (
       fs
@@ -68,8 +68,8 @@ export function readdir(
 export function readdirForCompilable(
   dirname: string,
   includeDotfiles: boolean,
-  altExts?: Array<string>,
-): Array<string> {
+  altExts?: string[],
+): string[] {
   return readdir(dirname, includeDotfiles, function (filename) {
     return isCompilableExtension(filename, altExts);
   });

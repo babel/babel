@@ -27,12 +27,10 @@ class Node implements NodeBase {
   declare end: number;
   declare loc: SourceLocation;
   declare range: [number, number];
-  declare leadingComments: Array<Comment>;
-  declare trailingComments: Array<Comment>;
-  declare innerComments: Array<Comment>;
-  declare extra: {
-    [key: string]: any;
-  };
+  declare leadingComments: Comment[];
+  declare trailingComments: Comment[];
+  declare innerComments: Comment[];
+  declare extra: Record<string, any>;
 }
 const NodePrototype = Node.prototype;
 

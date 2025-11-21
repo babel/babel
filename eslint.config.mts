@@ -184,6 +184,18 @@ export default defineConfig([
           allowNamedExports: true,
         },
       ],
+      "@typescript-eslint/no-base-to-string": [
+        "error",
+        {
+          ignoredTypeNames: [
+            "Error",
+            "RegExp",
+            "URL",
+            "URLSearchParams",
+            "SemVer",
+          ],
+        },
+      ],
       "@typescript-eslint/no-confusing-void-expression": [
         "error",
         { ignoreArrowShorthand: true },
@@ -199,12 +211,7 @@ export default defineConfig([
       "@typescript-eslint/require-await": "error",
 
       // Todo: Investigate, for each of these, whether we want them
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/ban-types": "off",
-      "@typescript-eslint/consistent-generic-constructors": "off",
-      "@typescript-eslint/consistent-indexed-object-style": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-empty-interface": "off",
@@ -212,12 +219,10 @@ export default defineConfig([
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-unsafe-declaration-merging": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/prefer-for-of": "off",
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/sort-type-constituents": "off",
       "@typescript-eslint/unbound-method": "off",
       "prefer-rest-params": "off",
 

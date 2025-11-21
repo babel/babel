@@ -54,7 +54,7 @@ export interface SourceModuleMetadata {
 }
 
 export interface LocalExportMetadata {
-  names: Array<string>; // names of exports,
+  names: string[]; // names of exports,
   kind: "import" | "hoisted" | "block" | "var";
 }
 

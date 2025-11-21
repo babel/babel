@@ -21,10 +21,10 @@ export type SimpleCacheConfigurator = {
   invalidate: <T extends SimpleType>(handler: () => T) => T;
 };
 
-export type CacheEntry<ResultT, SideChannel> = Array<{
+export type CacheEntry<ResultT, SideChannel> = {
   value: ResultT;
   valid: (channel: SideChannel) => Handler<boolean>;
-}>;
+}[];
 
 const synchronize = <ArgsT extends unknown[], ResultT>(
   gen: (...args: ArgsT) => Handler<ResultT>,
@@ -246,9 +246,10 @@ class CacheConfigurator<SideChannel = void> {
 
   _configured: boolean = false;
 
-  _pairs: Array<
-    [cachedValue: unknown, handler: (data: SideChannel) => Handler<unknown>]
-  > = [];
+  _pairs: [
+    cachedValue: unknown,
+    handler: (data: SideChannel) => Handler<unknown>,
+  ][] = [];
 
   _data: SideChannel;
 

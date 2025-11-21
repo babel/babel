@@ -72,7 +72,7 @@ function classOrObjectMethod(
   const node = path.node;
   const body = node.body;
 
-  let params: Array<t.Identifier | t.Pattern | t.RestElement> = [];
+  let params: (t.Identifier | t.Pattern | t.RestElement)[] = [];
 
   // Errors thrown during argument evaluation must reject the resulting promise
   const shouldForwardParams = node.params.some(p => isPattern(p));

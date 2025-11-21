@@ -45,7 +45,7 @@ export default class SourceMap {
       sourceRoot?: string;
       inputSourceMap?: SourceMapInput;
     },
-    code: string | { [sourceFileName: string]: string } | null | undefined,
+    code: string | Record<string, string> | null | undefined,
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");

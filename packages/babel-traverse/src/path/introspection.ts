@@ -474,7 +474,7 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   // no references!
   if (!binding.references) return "before";
 
-  const referencePaths: Array<NodePath> = binding.referencePaths;
+  const referencePaths: NodePath[] = binding.referencePaths;
 
   let allStatus;
 

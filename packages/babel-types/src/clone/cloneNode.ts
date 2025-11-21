@@ -153,11 +153,11 @@ function cloneNodeInternal<T extends t.Node>(
 }
 
 function maybeCloneComments<T extends t.Comment>(
-  comments: ReadonlyArray<T> | null,
+  comments: readonly T[] | null,
   deep: boolean,
   withoutLoc: boolean,
   commentsCache: Map<T, T>,
-): ReadonlyArray<T> | null {
+): readonly T[] | null {
   if (!comments || !deep) {
     return comments;
   }

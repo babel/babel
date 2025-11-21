@@ -2,7 +2,7 @@
 /* @onlyBabel7 */
 export default function _defineEnumerableProperties<T>(
   obj: T,
-  descs: { [key: string | symbol]: PropertyDescriptor },
+  descs: Record<string | symbol, PropertyDescriptor>,
 ): T {
   // eslint-disable-next-line guard-for-in
   for (var key in descs) {

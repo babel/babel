@@ -2,9 +2,9 @@ import type { Node } from "@babel/types";
 import type NodePath from "./path/index.ts";
 import type Scope from "./scope/index.ts";
 
-let pathsCache: WeakMap<Node, Map<Node, NodePath>> = new WeakMap();
+let pathsCache = new WeakMap<Node, Map<Node, NodePath>>();
 export { pathsCache as path };
-export let scope: WeakMap<Node, Scope> = new WeakMap();
+export let scope = new WeakMap<Node, Scope>();
 
 export function clear() {
   clearPath();

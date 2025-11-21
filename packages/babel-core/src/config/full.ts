@@ -53,8 +53,8 @@ export type ResolvedConfig = {
 };
 
 export type { Plugin };
-export type PluginPassList = Array<Plugin>;
-export type PluginPasses = Array<PluginPassList>;
+export type PluginPassList = Plugin[];
+export type PluginPasses = PluginPassList[];
 
 export default gensync(function* loadFullConfig(
   inputOpts: InputOptions,
@@ -93,23 +93,21 @@ export default gensync(function* loadFullConfig(
 
   const presetsDescriptors = presets.map(toDescriptor);
   const initialPluginsDescriptors = plugins.map(toDescriptor);
-  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor<PluginAPI>>> = [
-    [],
-  ];
-  const passes: Array<Array<Plugin>> = [];
+  const pluginDescriptorsByPass: UnloadedDescriptor<PluginAPI>[][] = [[]];
+  const passes: Plugin[][] = [];
 
   const externalDependencies: DeepArray<string> = [];
 
   const ignored = yield* enhanceError(
     context,
     function* recursePresetDescriptors(
-      rawPresets: Array<UnloadedDescriptor<PresetAPI>>,
-      pluginDescriptorsPass: Array<UnloadedDescriptor<PluginAPI>>,
+      rawPresets: UnloadedDescriptor<PresetAPI>[],
+      pluginDescriptorsPass: UnloadedDescriptor<PluginAPI>[],
     ): Handler<true | void> {
-      const presets: Array<{
+      const presets: {
         preset: ConfigChain | null;
-        pass: Array<UnloadedDescriptor<PluginAPI>>;
-      }> = [];
+        pass: UnloadedDescriptor<PluginAPI>[];
+      }[] = [];
 
       for (let i = 0; i < rawPresets.length; i++) {
         const descriptor = rawPresets[i];
@@ -244,7 +242,7 @@ function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
 const makeDescriptorLoader = <Context, API>(
   apiFactory: (
     cache: CacheConfigurator<Context>,
-    externalDependencies: Array<string>,
+    externalDependencies: string[],
   ) => API,
 ) =>
   makeWeakCache(function* (
@@ -257,7 +255,7 @@ const makeDescriptorLoader = <Context, API>(
 
     options = options || {};
 
-    const externalDependencies: Array<string> = [];
+    const externalDependencies: string[] = [];
 
     let item: unknown = value;
     if (typeof value === "function") {

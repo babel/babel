@@ -84,7 +84,7 @@ export function getStatementParent(this: NodePath): NodePath<t.Statement> {
 
 export function getEarliestCommonAncestorFrom(
   this: NodePath,
-  paths: Array<NodePath>,
+  paths: NodePath[],
 ): NodePath {
   return this.getDeepestCommonAncestorFrom(
     paths,
@@ -133,7 +133,7 @@ export function getEarliestCommonAncestorFrom(
 
 export function getDeepestCommonAncestorFrom(
   this: NodePath,
-  paths: Array<NodePath>,
+  paths: NodePath[],
   filter?: (deepest: NodePath, i: number, ancestries: NodePath[][]) => NodePath,
 ): NodePath {
   if (!paths.length) {
@@ -203,7 +203,7 @@ export function getDeepestCommonAncestorFrom(
  * NOTE: The current node path is included in this.
  */
 
-export function getAncestry(this: NodePath): Array<NodePath> {
+export function getAncestry(this: NodePath): NodePath[] {
   let path = this;
   const paths = [];
   do {

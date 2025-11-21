@@ -10,7 +10,7 @@ import {
 } from "./utils.ts";
 
 export function targetsSupported(target: Targets, support: Targets) {
-  const targetEnvironments = Object.keys(target) as Array<keyof Targets>;
+  const targetEnvironments = Object.keys(target) as (keyof Targets)[];
 
   if (targetEnvironments.length === 0) {
     return false;
@@ -63,7 +63,7 @@ export function isRequired(
     includes,
     excludes,
   }: {
-    compatData?: { [feature: string]: Targets };
+    compatData?: Record<string, Targets>;
     includes?: Set<string>;
     excludes?: Set<string>;
   } = {},
@@ -74,12 +74,12 @@ export function isRequired(
 }
 
 export default function filterItems(
-  list: { [feature: string]: Targets },
+  list: Record<string, Targets>,
   includes: Set<string>,
   excludes: Set<string>,
   targets: Targets,
-  defaultIncludes: Array<string> | null,
-  defaultExcludes?: Array<string> | null,
+  defaultIncludes: string[] | null,
+  defaultExcludes?: string[] | null,
   pluginSyntaxMap?: Map<string, string | null>,
 ) {
   const result = new Set<string>();

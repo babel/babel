@@ -24,7 +24,7 @@ export default valueToNode as {
   (value: number): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
   (value: bigint): t.BigIntLiteral;
   (value: RegExp): t.RegExpLiteral;
-  (value: ReadonlyArray<unknown>): t.ArrayExpression;
+  (value: readonly unknown[]): t.ArrayExpression;
 
   // this throws with objects that are not plain objects,
   // or if there are non-valueToNode-able values

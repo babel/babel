@@ -1730,7 +1730,7 @@ export default abstract class StatementParser extends ExpressionParser {
       charCodes.rightParenthesis,
       ParseBindingListFlags.IS_FUNCTION_PARAMS |
         (isConstructor ? ParseBindingListFlags.IS_CONSTRUCTOR_PARAMS : 0),
-    ) as Array<N.Pattern>;
+    ) as N.Pattern[];
 
     this.expressionScope.exit();
   }
@@ -2153,7 +2153,7 @@ export default abstract class StatementParser extends ExpressionParser {
     classBody: Undone<N.ClassBody>,
     member: Undone<
       N.StaticBlock & {
-        decorators?: Array<N.Decorator>;
+        decorators?: N.Decorator[];
       }
     >,
   ) {
@@ -2853,7 +2853,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   // Parses a comma-separated list of module exports.
 
-  parseExportSpecifiers(isInTypeExport: boolean): Array<N.ExportSpecifier> {
+  parseExportSpecifiers(isInTypeExport: boolean): N.ExportSpecifier[] {
     const nodes = [];
     let first = true;
 

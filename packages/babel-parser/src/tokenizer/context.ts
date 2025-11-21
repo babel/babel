@@ -11,9 +11,7 @@ export class TokContext {
   preserveSpace: boolean;
 }
 
-const types: {
-  [key: string]: TokContext;
-} = {
+const types: Record<string, TokContext> = {
   brace: new TokContext("{"), // normal JavaScript expression
   j_oTag: new TokContext("<tag"), // JSX opening tag
   j_cTag: new TokContext("</tag"), // JSX closing tag

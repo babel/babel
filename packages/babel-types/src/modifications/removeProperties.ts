@@ -37,7 +37,7 @@ export default function removeProperties(
     if (key.startsWith("_") && node[key] != null) node[key] = undefined;
   }
 
-  const symbols: Array<symbol> = Object.getOwnPropertySymbols(node);
+  const symbols: symbol[] = Object.getOwnPropertySymbols(node);
   for (const sym of symbols) {
     // @ts-expect-error Fixme: document symbol properties
     node[sym] = null;

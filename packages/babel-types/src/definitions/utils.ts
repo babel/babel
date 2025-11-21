@@ -28,26 +28,22 @@ type NodeTypes = NodeTypesWithoutComment | t.Comment["type"];
 
 type PrimitiveTypes = ReturnType<typeof getType>;
 
-type FieldDefinitions = {
-  [x: string]: FieldOptions;
-};
+type FieldDefinitions = Record<string, FieldOptions>;
 
 type UnionShape = {
   discriminator: string;
   shapes: {
     name: string;
     value: any[];
-    properties: {
-      [x: string]: FieldOptions;
-    };
+    properties: Record<string, FieldOptions>;
   }[];
 };
 
 type DefineTypeOpts = {
   fields?: FieldDefinitions;
-  visitor?: Array<string>;
-  aliases?: Array<string>;
-  builder?: Array<string>;
+  visitor?: string[];
+  aliases?: string[];
+  builder?: string[];
   inherits?: NodeTypes;
   deprecatedAlias?: string;
   validate?: Validator;
@@ -73,7 +69,7 @@ export type ValidatorOneOfNodeOrValueTypes = {
   oneOfNodeOrValueTypes: readonly (NodeTypes | PrimitiveTypes)[];
 } & ValidatorImpl;
 export type ValidatorShapeOf = {
-  shapeOf: { [x: string]: FieldOptions };
+  shapeOf: Record<string, FieldOptions>;
 } & ValidatorImpl;
 
 export type Validator =
@@ -151,7 +147,7 @@ export function assertEach(callback: Validator): Validator {
   return validator;
 }
 
-export function assertOneOf(...values: Array<any>): Validator {
+export function assertOneOf(...values: any[]): Validator {
   function validate(node: any, key: string, val: any) {
     if (!values.includes(val)) {
       throw new TypeError(
@@ -250,7 +246,7 @@ export function assertValueType(type: PrimitiveTypes): Validator {
   return validate;
 }
 
-export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
+export function assertShape(shape: Record<string, FieldOptions>): Validator {
   const keys = Object.keys(shape);
   function validate(node: t.Node, key: string, val: any) {
     const errors = [];
@@ -307,7 +303,7 @@ export function assertOptionalChainStart(): Validator {
   return validate;
 }
 
-export function chain(...fns: Array<Validator>): Validator {
+export function chain(...fns: Validator[]): Validator {
   function validate(...args: Parameters<Validator>) {
     for (const fn of fns) {
       fn(...args);
@@ -391,9 +387,9 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     }
   }
 
-  const visitor: Array<string> = opts.visitor || inherits.visitor || [];
-  const aliases: Array<string> = opts.aliases || inherits.aliases || [];
-  const builder: Array<string> =
+  const visitor: string[] = opts.visitor || inherits.visitor || [];
+  const aliases: string[] = opts.aliases || inherits.aliases || [];
+  const builder: string[] =
     opts.builder || inherits.builder || opts.visitor || [];
 
   for (const k of Object.keys(opts)) {

@@ -5,20 +5,20 @@ import type Tokenizer from "../tokenizer/index.ts";
 
 export class ClassScope {
   // A list of private named declared in the current class
-  privateNames: Set<string> = new Set();
+  privateNames = new Set<string>();
 
   // A list of private getters of setters without their counterpart
-  loneAccessors: Map<string, ClassElementType> = new Map();
+  loneAccessors = new Map<string, ClassElementType>();
 
   // A list of private names used before being defined, mapping to
   // their position.
-  undefinedPrivateNames: Map<string, Position> = new Map();
+  undefinedPrivateNames = new Map<string, Position>();
 }
 
 export default class ClassScopeHandler {
   parser: Tokenizer;
-  stack: Array<ClassScope> = [];
-  undefinedPrivateNames: Map<string, Position> = new Map();
+  stack: ClassScope[] = [];
+  undefinedPrivateNames = new Map<string, Position>();
 
   constructor(parser: Tokenizer) {
     this.parser = parser;

@@ -42,7 +42,7 @@ export const enum ParamKind {
 //   | typeof PARAM_YIELD;
 
 export default class ProductionParameterHandler {
-  stacks: Array<ParamKind> = [];
+  stacks: ParamKind[] = [];
   enter(flags: ParamKind) {
     this.stacks.push(flags);
   }

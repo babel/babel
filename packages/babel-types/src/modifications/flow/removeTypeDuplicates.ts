@@ -17,7 +17,7 @@ function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodesIn: ReadonlyArray<t.FlowType | false | null | undefined>,
+  nodesIn: readonly (t.FlowType | false | null | undefined)[],
 ): t.FlowType[] {
   const nodes = Array.from(nodesIn);
 
