@@ -378,6 +378,7 @@ function deeplyRemoveProperties(obj, props) {
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
         "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
+        "typescript/conditional/async-call-2/input.ts",
       ]);
       for (const [name, testSuites] of Object.entries(fixtures)) {
         if (["typescript"].includes(name)) {
