@@ -175,7 +175,6 @@ export default class CommentsParser extends BaseParser {
         switch (node.type) {
           case "ObjectExpression":
           case "ObjectPattern":
-          case "RecordExpression":
             adjustInnerComments(node, node.properties, commentWS);
             break;
           case "CallExpression":
@@ -199,7 +198,6 @@ export default class CommentsParser extends BaseParser {
             break;
           case "ArrayExpression":
           case "ArrayPattern":
-          case "TupleExpression":
             adjustInnerComments(node, node.elements, commentWS);
             break;
           case "ExportNamedDeclaration":
@@ -217,6 +215,16 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.members, commentWS);
             break;
           default: {
+            if (!process.env.BABEL_8_BREAKING) {
+              if (node.type === "RecordExpression") {
+                adjustInnerComments(node, node.properties, commentWS);
+                break;
+              }
+              if (node.type === "TupleExpression") {
+                adjustInnerComments(node, node.elements, commentWS);
+                break;
+              }
+            }
             setInnerComments(node, comments);
           }
         }
