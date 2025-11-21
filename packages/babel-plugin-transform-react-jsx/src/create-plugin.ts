@@ -322,14 +322,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   }`;
               }
 
-              const set = new Set();
               t.traverse(path.node, {
                 enter(node, parents) {
                   if (!t.isJSXOpeningElement(node)) {
                     return;
                   }
-                  set.add(node);
-                  const attributes = [];
+                  const attributes = node.attributes;
                   if (isThisAllowed(parents)) {
                     attributes.push(
                       t.jsxAttribute(
@@ -344,7 +342,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                       t.jsxExpressionContainer(makeSource(node)),
                     ),
                   );
-                  node.attributes.push(...attributes);
                 },
               });
 
