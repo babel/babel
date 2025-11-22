@@ -228,7 +228,9 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
         assertExpression(node);
 
         self.replaceWith(callExpression(arrowFunctionExpression([], node), []));
-        (self.get("callee.body") as NodePath<t.Expression>).insertAfter(nodes);
+        (
+          self.get("callee.body") as unknown as NodePath<t.Expression>
+        ).insertAfter(nodes);
         // todo: this cast is unsound, we wrap nodes in the IIFE but never unwrap them in the return values.
         // consider just returning the insertAfter result.
         return [self] as NodePaths<Nodes>;

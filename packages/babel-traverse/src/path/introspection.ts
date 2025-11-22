@@ -566,6 +566,7 @@ export function _resolve(
 
   if (this.isVariableDeclarator()) {
     if (this.get("id").isIdentifier()) {
+      // @ts-expect-error FIXME: NodePath<null>
       return this.get("init").resolve(dangerous, resolved);
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky

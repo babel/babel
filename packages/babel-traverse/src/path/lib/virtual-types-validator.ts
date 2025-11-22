@@ -36,46 +36,58 @@ type Options<Obj> = Partial<{
 
 export interface VirtualTypeNodePathValidators {
   isBindingIdentifier(
-    this: NodePath,
+    this: NodePath<t.Node | null>,
   ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
-  isBlockScoped(this: NodePath): boolean;
+  isBlockScoped(this: NodePath<t.Node | null>): boolean;
   /**
    * @deprecated
    */
   isExistentialTypeParam(
-    this: NodePath,
+    this: NodePath<t.Node | null>,
   ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
-  isExpression(this: NodePath): this is NodePath<t.Expression>;
-  isFlow(this: NodePath): this is NodePath<t.Flow>;
+  isExpression(this: NodePath<t.Node | null>): this is NodePath<t.Expression>;
+  isFlow(this: NodePath<t.Node | null>): this is NodePath<t.Flow>;
   isForAwaitStatement(
-    this: NodePath,
+    this: NodePath<t.Node | null>,
   ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
-  isGenerated(): this is NodePath<VirtualTypeAliases["Generated"]>;
+  isGenerated(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<VirtualTypeAliases["Generated"]>;
   /**
    * @deprecated
    */
-  isNumericLiteralTypeAnnotation(this: NodePath): void;
+  isNumericLiteralTypeAnnotation(this: NodePath<t.Node | null>): void;
   isPure(): boolean;
   isReferenced(): boolean;
   isReferencedIdentifier<
     Opts extends Options<VirtualTypeAliases["ReferencedIdentifier"]>,
   >(
-    this: NodePath,
+    this: NodePath<t.Node | null>,
     opts?: Opts,
   ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"] & Opts>;
   isReferencedMemberExpression(
-    this: NodePath,
+    this: NodePath<t.Node | null>,
   ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
-  isRestProperty(this: NodePath): this is NodePath<t.RestProperty>;
-  isScope(this: NodePath): this is NodePath<VirtualTypeAliases["Scope"]>;
-  isSpreadProperty(this: NodePath): this is NodePath<t.SpreadProperty>;
-  isStatement(this: NodePath): this is NodePath<t.Statement>;
-  isUser(): this is NodePath<VirtualTypeAliases["User"]>;
-  isVar(this: NodePath): this is NodePath<VirtualTypeAliases["Var"]>;
+  isRestProperty(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.RestProperty>;
+  isScope(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<VirtualTypeAliases["Scope"]>;
+  isSpreadProperty(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.SpreadProperty>;
+  isStatement(this: NodePath<t.Node | null>): this is NodePath<t.Statement>;
+  isUser(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<VirtualTypeAliases["User"]>;
+  isVar(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<VirtualTypeAliases["Var"]>;
 }
 
 export function isReferencedIdentifier(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   opts?: Options<VirtualTypeAliases["ReferencedIdentifier"]>,
 ): boolean {
   const { node, parent } = this;
@@ -90,18 +102,20 @@ export function isReferencedIdentifier(
   }
 }
 
-export function isReferencedMemberExpression(this: NodePath): boolean {
+export function isReferencedMemberExpression(
+  this: NodePath<t.Node | null>,
+): boolean {
   const { node, parent } = this;
   return isMemberExpression(node) && nodeIsReferenced(node, parent);
 }
 
-export function isBindingIdentifier(this: NodePath): boolean {
+export function isBindingIdentifier(this: NodePath<t.Node | null>): boolean {
   const { node, parent } = this;
   const grandparent = this.parentPath.parent;
   return isIdentifier(node) && isBinding(node, parent, grandparent);
 }
 
-export function isStatement(this: NodePath): boolean {
+export function isStatement(this: NodePath<t.Node | null>): boolean {
   const { node, parent } = this;
   if (nodeIsStatement(node)) {
     if (isVariableDeclaration(node)) {
@@ -115,7 +129,7 @@ export function isStatement(this: NodePath): boolean {
   }
 }
 
-export function isExpression(this: NodePath): boolean {
+export function isExpression(this: NodePath<t.Node | null>): boolean {
   if (this.isIdentifier()) {
     return this.isReferencedIdentifier();
   } else {
@@ -123,35 +137,38 @@ export function isExpression(this: NodePath): boolean {
   }
 }
 
-export function isScope(this: NodePath): boolean {
+export function isScope(this: NodePath<t.Node | null>): boolean {
   return nodeIsScope(this.node, this.parent);
 }
 
-export function isReferenced(this: NodePath): boolean {
+export function isReferenced(this: NodePath<t.Node | null>): boolean {
   return nodeIsReferenced(this.node, this.parent);
 }
 
-export function isBlockScoped(this: NodePath): boolean {
+export function isBlockScoped(this: NodePath<t.Node | null>): boolean {
   return nodeIsBlockScoped(this.node);
 }
 
-export function isVar(this: NodePath): boolean {
+export function isVar(this: NodePath<t.Node | null>): boolean {
   return nodeIsVar(this.node);
 }
 
-export function isUser(this: NodePath): boolean {
+export function isUser(this: NodePath<t.Node | null>): boolean {
   return !!this.node?.loc;
 }
 
-export function isGenerated(this: NodePath): boolean {
+export function isGenerated(this: NodePath<t.Node | null>): boolean {
   return !this.isUser();
 }
 
-export function isPure(this: NodePath, constantsOnly?: boolean): boolean {
+export function isPure(
+  this: NodePath<t.Node | null>,
+  constantsOnly?: boolean,
+): boolean {
   return this.scope.isPure(this.node, constantsOnly);
 }
 
-export function isFlow(this: NodePath): boolean {
+export function isFlow(this: NodePath<t.Node | null>): boolean {
   const { node } = this;
   if (nodeIsFlow(node)) {
     return true;
@@ -167,15 +184,15 @@ export function isFlow(this: NodePath): boolean {
 }
 
 // TODO: 7.0 Backwards Compat
-export function isRestProperty(this: NodePath): boolean {
+export function isRestProperty(this: NodePath<t.Node | null>): boolean {
   return nodeIsRestElement(this.node) && this.parentPath?.isObjectPattern();
 }
 
-export function isSpreadProperty(this: NodePath): boolean {
+export function isSpreadProperty(this: NodePath<t.Node | null>): boolean {
   return nodeIsRestElement(this.node) && this.parentPath?.isObjectExpression();
 }
 
-export function isForAwaitStatement(this: NodePath): boolean {
+export function isForAwaitStatement(this: NodePath<t.Node | null>): boolean {
   return isForOfStatement(this.node, { await: true });
 }
 

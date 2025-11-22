@@ -266,8 +266,10 @@ export default class PathHoister<T extends t.Node = t.Node> {
 
     this.path.replaceWith(cloneNode(uid));
 
-    return attached.isVariableDeclarator()
-      ? attached.get("init")
-      : attached.get("declarations.0.init");
+    return (
+      attached.isVariableDeclarator()
+        ? attached.get("init")
+        : attached.get("declarations.0.init")
+    ) as NodePath<t.Expression>;
   }
 }

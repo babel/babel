@@ -420,12 +420,14 @@ function eslint(...extraArgs) {
 target["lint"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
   eslint();
+  yarn(["tstyche"]);
   target["lint-prettier"]();
 };
 
 target["lint-ci"] = function () {
   target["tscheck"]();
   eslint();
+  yarn(["tstyche"]);
   target["lint-prettier"]();
   target["prepublish-prepare-dts-no-clean"]();
 };

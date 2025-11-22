@@ -11,7 +11,11 @@
   "include": [
     "./lib/libdom-minimal.d.ts",
     "dts/**/*.d.ts",
-    "*.mts"
+    "*.mts",
+    "packages/*/test/*.tst.ts"
+  ],
+  "exclude": [
+    "dts/**/*.tst.d.ts"
   ],
   "references": [
     {

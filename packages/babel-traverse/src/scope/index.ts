@@ -58,6 +58,8 @@ import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
 import type { ExplodedVisitor, Visitor } from "../types.ts";
 
+export type { BindingKind };
+
 type NodePart = string | number | bigint | boolean;
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
@@ -401,7 +403,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         // @ts-expect-error Fixme: document symbol ast properties
         !path.node.id[NOT_LOCAL_BINDING])
     ) {
-      path.scope.registerBinding("local", path.get("id"), path);
+      path.scope.registerBinding(
+        "local",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     }
   },
 
@@ -412,7 +418,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         // @ts-expect-error Fixme: document symbol ast properties
         !path.node.id[NOT_LOCAL_BINDING])
     ) {
-      path.scope.registerBinding("local", path.get("id"), path);
+      path.scope.registerBinding(
+        "local",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     }
   },
 
@@ -732,7 +742,11 @@ class Scope {
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
-      this.registerBinding("hoisted", path.get("id"), path);
+      this.registerBinding(
+        "hoisted",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
       const { kind } = path.node;
