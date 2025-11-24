@@ -876,6 +876,18 @@ gulp.task("materialize-babel-8", async () => {
                 babelPluginToggleBooleanFlag,
                 { name: "process.env.BABEL_8_BREAKING", value: true },
               ],
+              ({ types: t }) => ({
+                visitor: {
+                  SpreadElement: {
+                    exit(path) {
+                      const { argument } = path.node;
+                      if (t.isObjectExpression(argument)) {
+                        path.replaceWithMultiple(argument.properties);
+                      }
+                    },
+                  },
+                },
+              }),
             ],
             parserOpts: {
               plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
