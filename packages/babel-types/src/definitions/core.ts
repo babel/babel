@@ -1666,12 +1666,15 @@ export const importAttributes = {
     optional: true,
     validate: arrayOfType("ImportAttribute"),
   },
-  assertions: {
+};
+if (!process.env.BABEL_8_BREAKING) {
+  // @ts-expect-error (Babel 7 only)
+  importAttributes.assertions = {
     deprecated: true,
     optional: true,
     validate: arrayOfType("ImportAttribute"),
-  },
-};
+  };
+}
 
 defineType("ExportAllDeclaration", {
   builder: ["source"],

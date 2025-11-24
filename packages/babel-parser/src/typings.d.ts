@@ -14,7 +14,7 @@ export type Plugin =
   | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
-  | "deprecatedImportAssert"
+  | IF_BABEL_7<"deprecatedImportAssert">
   | "doExpressions"
   | IF_BABEL_7<"dynamicImport">
   | IF_BABEL_7<"explicitResourceManagement">
