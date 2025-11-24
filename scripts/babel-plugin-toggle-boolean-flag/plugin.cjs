@@ -98,11 +98,17 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
         if (res.replacement) {
           path.get("test").replaceWith(res.replacement);
         } else {
-          path.replaceWith(
-            res.value
-              ? path.node.consequent
-              : path.node.alternate || t.emptyStatement()
-          );
+          const replacementNode = res.value
+            ? path.node.consequent
+            : path.node.alternate;
+
+          if (t.isBlockStatement(replacementNode)) {
+            path.replaceWithMultiple(replacementNode.body);
+          } else if (replacementNode) {
+            path.replaceWith(replacementNode);
+          } else {
+            path.remove();
+          }
         }
       },
       LogicalExpression(path) {
