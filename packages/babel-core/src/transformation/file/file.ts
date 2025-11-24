@@ -14,7 +14,7 @@ import type { ResolvedOptions } from "../../config/validation/options.ts";
 import type { SourceMapConverter } from "convert-source-map";
 
 export default class File {
-  _map: Map<unknown, unknown> = new Map();
+  _map = new Map<unknown, unknown>();
   opts: ResolvedOptions;
   declarations: Record<string, t.Identifier> = {};
   path: NodePath<t.Program>;
@@ -169,7 +169,7 @@ export default class File {
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
 
-    const dependencies: { [key: string]: t.Identifier } = {};
+    const dependencies: Record<string, t.Identifier> = {};
     for (const dep of helpers.getDependencies(name)) {
       dependencies[dep] = this._addHelper(dep);
     }

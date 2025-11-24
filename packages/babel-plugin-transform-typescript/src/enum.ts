@@ -224,8 +224,8 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
       path.get("body").get("members")
     : path.get("members");
 
-  const enumValues: Array<[name: string, value: t.Expression]> =
-    enumMembers.map(memberPath => {
+  const enumValues: [name: string, value: t.Expression][] = enumMembers.map(
+    memberPath => {
       const member = memberPath.node;
       const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
       const initializerPath = memberPath.get("initializer");
@@ -289,7 +289,8 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 
       lastName = name;
       return [name, value];
-    });
+    },
+  );
 
   return {
     isPure,
@@ -302,7 +303,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 function computeConstantValue(
   path: NodePath,
   prevMembers?: PreviousEnumMembers,
-  seen: Set<t.Identifier> = new Set(),
+  seen = new Set<t.Identifier>(),
 ): number | string | undefined {
   return evaluate(path);
 

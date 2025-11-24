@@ -27,7 +27,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
   return node;
 }
 export function arrayExpression(
-  elements: Array<null | t.Expression | t.SpreadElement> = [],
+  elements: (null | t.Expression | t.SpreadElement)[] = [],
 ): t.ArrayExpression {
   const node: t.ArrayExpression = {
     type: "ArrayExpression",
@@ -122,8 +122,8 @@ export function directiveLiteral(value: string): t.DirectiveLiteral {
   return node;
 }
 export function blockStatement(
-  body: Array<t.Statement>,
-  directives: Array<t.Directive> = [],
+  body: t.Statement[],
+  directives: t.Directive[] = [],
 ): t.BlockStatement {
   const node: t.BlockStatement = {
     type: "BlockStatement",
@@ -148,7 +148,7 @@ export function breakStatement(
 }
 export function callExpression(
   callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
+  _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.CallExpression {
   const node: t.CallExpression = {
     type: "CallExpression",
@@ -244,8 +244,8 @@ export function expressionStatement(
 }
 export function file(
   program: t.Program,
-  comments: Array<t.CommentBlock | t.CommentLine> | null = null,
-  tokens: Array<any> | null = null,
+  comments: (t.CommentBlock | t.CommentLine)[] | null = null,
+  tokens: any[] | null = null,
 ): t.File {
   const node: t.File = {
     type: "File",
@@ -298,7 +298,7 @@ export function forStatement(
 }
 export function functionDeclaration(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.FunctionParameter>,
+  params: t.FunctionParameter[],
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -321,7 +321,7 @@ export function functionDeclaration(
 }
 export function functionExpression(
   id: t.Identifier | null | undefined = null,
-  params: Array<t.FunctionParameter>,
+  params: t.FunctionParameter[],
   body: t.BlockStatement,
   generator: boolean = false,
   async: boolean = false,
@@ -467,7 +467,7 @@ export function memberExpression(
 }
 export function newExpression(
   callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
+  _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
     type: "NewExpression",
@@ -480,8 +480,8 @@ export function newExpression(
   return node;
 }
 export function program(
-  body: Array<t.Statement>,
-  directives: Array<t.Directive> = [],
+  body: t.Statement[],
+  directives: t.Directive[] = [],
   sourceType: "script" | "module" = "script",
   interpreter: t.InterpreterDirective | null = null,
 ): t.Program {
@@ -500,7 +500,7 @@ export function program(
   return node;
 }
 export function objectExpression(
-  properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadElement>,
+  properties: (t.ObjectMethod | t.ObjectProperty | t.SpreadElement)[],
 ): t.ObjectExpression {
   const node: t.ObjectExpression = {
     type: "ObjectExpression",
@@ -518,7 +518,7 @@ export function objectMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral,
-  params: Array<t.FunctionParameter>,
+  params: t.FunctionParameter[],
   body: t.BlockStatement,
   computed: boolean = false,
   generator: boolean = false,
@@ -556,7 +556,7 @@ export function objectProperty(
   value: t.Expression | t.PatternLike,
   computed: boolean = false,
   shorthand: boolean = false,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
 ): t.ObjectProperty {
   const node: t.ObjectProperty = {
     type: "ObjectProperty",
@@ -607,7 +607,7 @@ export function returnStatement(
   return node;
 }
 export function sequenceExpression(
-  expressions: Array<t.Expression>,
+  expressions: t.Expression[],
 ): t.SequenceExpression {
   const node: t.SequenceExpression = {
     type: "SequenceExpression",
@@ -630,7 +630,7 @@ export function parenthesizedExpression(
 }
 export function switchCase(
   test: t.Expression | null | undefined = null,
-  consequent: Array<t.Statement>,
+  consequent: t.Statement[],
 ): t.SwitchCase {
   const node: t.SwitchCase = {
     type: "SwitchCase",
@@ -644,7 +644,7 @@ export function switchCase(
 }
 export function switchStatement(
   discriminant: t.Expression,
-  cases: Array<t.SwitchCase>,
+  cases: t.SwitchCase[],
 ): t.SwitchStatement {
   const node: t.SwitchStatement = {
     type: "SwitchStatement",
@@ -723,7 +723,7 @@ export function updateExpression(
 }
 export function variableDeclaration(
   kind: "var" | "let" | "const" | "using" | "await using",
-  declarations: Array<t.VariableDeclarator>,
+  declarations: t.VariableDeclarator[],
 ): t.VariableDeclaration {
   const node: t.VariableDeclaration = {
     type: "VariableDeclaration",
@@ -800,7 +800,7 @@ export function assignmentPattern(
   return node;
 }
 export function arrayPattern(
-  elements: Array<null | t.PatternLike>,
+  elements: (null | t.PatternLike)[],
 ): t.ArrayPattern {
   const node: t.ArrayPattern = {
     type: "ArrayPattern",
@@ -811,7 +811,7 @@ export function arrayPattern(
   return node;
 }
 export function arrowFunctionExpression(
-  params: Array<t.FunctionParameter>,
+  params: t.FunctionParameter[],
   body: t.BlockStatement | t.Expression,
   async: boolean = false,
 ): t.ArrowFunctionExpression {
@@ -829,7 +829,7 @@ export function arrowFunctionExpression(
   return node;
 }
 export function classBody(
-  body: Array<
+  body: (
     | t.ClassMethod
     | t.ClassPrivateMethod
     | t.ClassProperty
@@ -838,7 +838,7 @@ export function classBody(
     | t.TSDeclareMethod
     | t.TSIndexSignature
     | t.StaticBlock
-  >,
+  )[],
 ): t.ClassBody {
   const node: t.ClassBody = {
     type: "ClassBody",
@@ -852,7 +852,7 @@ export function classExpression(
   id: t.Identifier | null | undefined = null,
   superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
 ): t.ClassExpression {
   const node: t.ClassExpression = {
     type: "ClassExpression",
@@ -872,7 +872,7 @@ export function classDeclaration(
   id: t.Identifier | null | undefined = null,
   superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
 ): t.ClassDeclaration {
   const node: t.ClassDeclaration = {
     type: "ClassDeclaration",
@@ -916,9 +916,11 @@ export function exportDefaultDeclaration(
 }
 export function exportNamedDeclaration(
   declaration: t.Declaration | null = null,
-  specifiers: Array<
-    t.ExportSpecifier | t.ExportDefaultSpecifier | t.ExportNamespaceSpecifier
-  > = [],
+  specifiers: (
+    | t.ExportSpecifier
+    | t.ExportDefaultSpecifier
+    | t.ExportNamespaceSpecifier
+  )[] = [],
   source: t.StringLiteral | null = null,
 ): t.ExportNamedDeclaration {
   const node: t.ExportNamedDeclaration = {
@@ -968,9 +970,11 @@ export function forOfStatement(
   return node;
 }
 export function importDeclaration(
-  specifiers: Array<
-    t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier
-  >,
+  specifiers: (
+    | t.ImportSpecifier
+    | t.ImportDefaultSpecifier
+    | t.ImportNamespaceSpecifier
+  )[],
   source: t.StringLiteral,
 ): t.ImportDeclaration {
   const node: t.ImportDeclaration = {
@@ -1055,7 +1059,7 @@ export function classMethod(
     | t.NumericLiteral
     | t.BigIntLiteral
     | t.Expression,
-  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  params: (t.FunctionParameter | t.TSParameterProperty)[],
   body: t.BlockStatement,
   computed: boolean = false,
   _static: boolean = false,
@@ -1085,7 +1089,7 @@ export function classMethod(
   return node;
 }
 export function objectPattern(
-  properties: Array<t.RestElement | t.ObjectProperty>,
+  properties: (t.RestElement | t.ObjectProperty)[],
 ): t.ObjectPattern {
   const node: t.ObjectPattern = {
     type: "ObjectPattern",
@@ -1139,8 +1143,8 @@ export function templateElement(
   return node;
 }
 export function templateLiteral(
-  quasis: Array<t.TemplateElement>,
-  expressions: Array<t.Expression | t.TSType>,
+  quasis: t.TemplateElement[],
+  expressions: (t.Expression | t.TSType)[],
 ): t.TemplateLiteral {
   const node: t.TemplateLiteral = {
     type: "TemplateLiteral",
@@ -1214,7 +1218,7 @@ export function optionalMemberExpression(
 }
 export function optionalCallExpression(
   callee: t.Expression,
-  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
+  _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
   optional: boolean,
 ): t.OptionalCallExpression {
   const node: t.OptionalCallExpression = {
@@ -1238,7 +1242,7 @@ export function classProperty(
     | t.Expression,
   value: t.Expression | null = null,
   typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
   computed: boolean = false,
   _static: boolean = false,
 ): t.ClassProperty {
@@ -1270,7 +1274,7 @@ export function classAccessorProperty(
     | t.PrivateName,
   value: t.Expression | null = null,
   typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
   computed: boolean = false,
   _static: boolean = false,
 ): t.ClassAccessorProperty {
@@ -1295,7 +1299,7 @@ export function classAccessorProperty(
 export function classPrivateProperty(
   key: t.PrivateName,
   value: t.Expression | null = null,
-  decorators: Array<t.Decorator> | null = null,
+  decorators: t.Decorator[] | null = null,
   _static: boolean = false,
 ): t.ClassPrivateProperty {
   const node: t.ClassPrivateProperty = {
@@ -1315,7 +1319,7 @@ export function classPrivateProperty(
 export function classPrivateMethod(
   kind: "get" | "set" | "method" | undefined = "method",
   key: t.PrivateName,
-  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  params: (t.FunctionParameter | t.TSParameterProperty)[],
   body: t.BlockStatement,
   _static: boolean = false,
 ): t.ClassPrivateMethod {
@@ -1344,7 +1348,7 @@ export function privateName(id: t.Identifier): t.PrivateName {
   validate(defs.id, node, "id", id, 1);
   return node;
 }
-export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
+export function staticBlock(body: t.Statement[]): t.StaticBlock {
   const node: t.StaticBlock = {
     type: "StaticBlock",
     body,
@@ -1421,7 +1425,7 @@ export function classImplements(
 export function declareClass(
   id: t.Identifier,
   typeParameters: t.TypeParameterDeclaration | null | undefined = null,
-  _extends: Array<t.InterfaceExtends> | null | undefined = null,
+  _extends: t.InterfaceExtends[] | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.DeclareClass {
   const node: t.DeclareClass = {
@@ -1450,7 +1454,7 @@ export function declareFunction(id: t.Identifier): t.DeclareFunction {
 export function declareInterface(
   id: t.Identifier,
   typeParameters: t.TypeParameterDeclaration | null | undefined = null,
-  _extends: Array<t.InterfaceExtends> | null | undefined = null,
+  _extends: t.InterfaceExtends[] | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.DeclareInterface {
   const node: t.DeclareInterface = {
@@ -1540,11 +1544,9 @@ export function declareVariable(id: t.Identifier): t.DeclareVariable {
 }
 export function declareExportDeclaration(
   declaration: t.Flow | null = null,
-  specifiers: Array<
-    t.ExportSpecifier | t.ExportNamespaceSpecifier
-  > | null = null,
+  specifiers: (t.ExportSpecifier | t.ExportNamespaceSpecifier)[] | null = null,
   source: t.StringLiteral | null = null,
-  attributes: Array<t.ImportAttribute> | null = null,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.DeclareExportDeclaration {
   const node: t.DeclareExportDeclaration = {
     type: "DeclareExportDeclaration",
@@ -1562,7 +1564,7 @@ export function declareExportDeclaration(
 }
 export function declareExportAllDeclaration(
   source: t.StringLiteral,
-  attributes: Array<t.ImportAttribute> | null = null,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.DeclareExportAllDeclaration {
   const node: t.DeclareExportAllDeclaration = {
     type: "DeclareExportAllDeclaration",
@@ -1590,7 +1592,7 @@ export function existsTypeAnnotation(): t.ExistsTypeAnnotation {
 }
 export function functionTypeAnnotation(
   typeParameters: t.TypeParameterDeclaration | null | undefined = null,
-  params: Array<t.FunctionTypeParam>,
+  params: t.FunctionTypeParam[],
   rest: t.FunctionTypeParam | null | undefined = null,
   returnType: t.FlowType,
 ): t.FunctionTypeAnnotation {
@@ -1658,7 +1660,7 @@ export function interfaceExtends(
 export function interfaceDeclaration(
   id: t.Identifier,
   typeParameters: t.TypeParameterDeclaration | null | undefined = null,
-  _extends: Array<t.InterfaceExtends> | null | undefined = null,
+  _extends: t.InterfaceExtends[] | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.InterfaceDeclaration {
   const node: t.InterfaceDeclaration = {
@@ -1676,7 +1678,7 @@ export function interfaceDeclaration(
   return node;
 }
 export function interfaceTypeAnnotation(
-  _extends: Array<t.InterfaceExtends> | null | undefined = null,
+  _extends: t.InterfaceExtends[] | null | undefined = null,
   body: t.ObjectTypeAnnotation,
 ): t.InterfaceTypeAnnotation {
   const node: t.InterfaceTypeAnnotation = {
@@ -1690,7 +1692,7 @@ export function interfaceTypeAnnotation(
   return node;
 }
 export function intersectionTypeAnnotation(
-  types: Array<t.FlowType>,
+  types: t.FlowType[],
 ): t.IntersectionTypeAnnotation {
   const node: t.IntersectionTypeAnnotation = {
     type: "IntersectionTypeAnnotation",
@@ -1738,10 +1740,10 @@ export function numberTypeAnnotation(): t.NumberTypeAnnotation {
   };
 }
 export function objectTypeAnnotation(
-  properties: Array<t.ObjectTypeProperty | t.ObjectTypeSpreadProperty>,
-  indexers: Array<t.ObjectTypeIndexer> = [],
-  callProperties: Array<t.ObjectTypeCallProperty> = [],
-  internalSlots: Array<t.ObjectTypeInternalSlot> = [],
+  properties: (t.ObjectTypeProperty | t.ObjectTypeSpreadProperty)[],
+  indexers: t.ObjectTypeIndexer[] = [],
+  callProperties: t.ObjectTypeCallProperty[] = [],
+  internalSlots: t.ObjectTypeInternalSlot[] = [],
   exact: boolean = false,
 ): t.ObjectTypeAnnotation {
   const node: t.ObjectTypeAnnotation = {
@@ -1910,7 +1912,7 @@ export function thisTypeAnnotation(): t.ThisTypeAnnotation {
   };
 }
 export function tupleTypeAnnotation(
-  types: Array<t.FlowType>,
+  types: t.FlowType[],
 ): t.TupleTypeAnnotation {
   const node: t.TupleTypeAnnotation = {
     type: "TupleTypeAnnotation",
@@ -1990,7 +1992,7 @@ export function typeParameter(
   return node;
 }
 export function typeParameterDeclaration(
-  params: Array<t.TypeParameter>,
+  params: t.TypeParameter[],
 ): t.TypeParameterDeclaration {
   const node: t.TypeParameterDeclaration = {
     type: "TypeParameterDeclaration",
@@ -2001,7 +2003,7 @@ export function typeParameterDeclaration(
   return node;
 }
 export function typeParameterInstantiation(
-  params: Array<t.FlowType>,
+  params: t.FlowType[],
 ): t.TypeParameterInstantiation {
   const node: t.TypeParameterInstantiation = {
     type: "TypeParameterInstantiation",
@@ -2012,7 +2014,7 @@ export function typeParameterInstantiation(
   return node;
 }
 export function unionTypeAnnotation(
-  types: Array<t.FlowType>,
+  types: t.FlowType[],
 ): t.UnionTypeAnnotation {
   const node: t.UnionTypeAnnotation = {
     type: "UnionTypeAnnotation",
@@ -2055,7 +2057,7 @@ export function enumDeclaration(
   return node;
 }
 export function enumBooleanBody(
-  members: Array<t.EnumBooleanMember>,
+  members: t.EnumBooleanMember[],
 ): t.EnumBooleanBody {
   const node: t.EnumBooleanBody = {
     type: "EnumBooleanBody",
@@ -2068,7 +2070,7 @@ export function enumBooleanBody(
   return node;
 }
 export function enumNumberBody(
-  members: Array<t.EnumNumberMember>,
+  members: t.EnumNumberMember[],
 ): t.EnumNumberBody {
   const node: t.EnumNumberBody = {
     type: "EnumNumberBody",
@@ -2081,7 +2083,7 @@ export function enumNumberBody(
   return node;
 }
 export function enumStringBody(
-  members: Array<t.EnumStringMember | t.EnumDefaultedMember>,
+  members: (t.EnumStringMember | t.EnumDefaultedMember)[],
 ): t.EnumStringBody {
   const node: t.EnumStringBody = {
     type: "EnumStringBody",
@@ -2094,7 +2096,7 @@ export function enumStringBody(
   return node;
 }
 export function enumSymbolBody(
-  members: Array<t.EnumDefaultedMember>,
+  members: t.EnumDefaultedMember[],
 ): t.EnumSymbolBody {
   const node: t.EnumSymbolBody = {
     type: "EnumSymbolBody",
@@ -2216,13 +2218,13 @@ export { jsxClosingElement as jSXClosingElement };
 export function jsxElement(
   openingElement: t.JSXOpeningElement,
   closingElement: t.JSXClosingElement | null | undefined = null,
-  children: Array<
+  children: (
     | t.JSXText
     | t.JSXExpressionContainer
     | t.JSXSpreadChild
     | t.JSXElement
     | t.JSXFragment
-  >,
+  )[],
   selfClosing: boolean | null = null,
 ): t.JSXElement {
   const node: t.JSXElement = {
@@ -2310,7 +2312,7 @@ export function jsxNamespacedName(
 export { jsxNamespacedName as jSXNamespacedName };
 export function jsxOpeningElement(
   name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
-  attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>,
+  attributes: (t.JSXAttribute | t.JSXSpreadAttribute)[],
   selfClosing: boolean = false,
 ): t.JSXOpeningElement {
   const node: t.JSXOpeningElement = {
@@ -2351,13 +2353,13 @@ export { jsxText as jSXText };
 export function jsxFragment(
   openingFragment: t.JSXOpeningFragment,
   closingFragment: t.JSXClosingFragment,
-  children: Array<
+  children: (
     | t.JSXText
     | t.JSXExpressionContainer
     | t.JSXSpreadChild
     | t.JSXElement
     | t.JSXFragment
-  >,
+  )[],
 ): t.JSXFragment {
   const node: t.JSXFragment = {
     type: "JSXFragment",
@@ -2474,7 +2476,7 @@ export function exportDefaultSpecifier(
   return node;
 }
 export function recordExpression(
-  properties: Array<t.ObjectProperty | t.SpreadElement>,
+  properties: (t.ObjectProperty | t.SpreadElement)[],
 ): t.RecordExpression {
   const node: t.RecordExpression = {
     type: "RecordExpression",
@@ -2485,7 +2487,7 @@ export function recordExpression(
   return node;
 }
 export function tupleExpression(
-  elements: Array<t.Expression | t.SpreadElement> = [],
+  elements: (t.Expression | t.SpreadElement)[] = [],
 ): t.TupleExpression {
   const node: t.TupleExpression = {
     type: "TupleExpression",
@@ -2569,7 +2571,7 @@ export function tsDeclareFunction(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<t.FunctionParameter>,
+  params: t.FunctionParameter[],
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareFunction {
   const node: t.TSDeclareFunction = {
@@ -2588,7 +2590,7 @@ export function tsDeclareFunction(
 }
 export { tsDeclareFunction as tSDeclareFunction };
 export function tsDeclareMethod(
-  decorators: Array<t.Decorator> | null | undefined = null,
+  decorators: t.Decorator[] | null | undefined = null,
   key:
     | t.Identifier
     | t.StringLiteral
@@ -2600,7 +2602,7 @@ export function tsDeclareMethod(
     | t.Noop
     | null
     | undefined = null,
-  params: Array<t.FunctionParameter | t.TSParameterProperty>,
+  params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
   const node: t.TSDeclareMethod = {
@@ -2637,9 +2639,12 @@ export function tsQualifiedName(
 export { tsQualifiedName as tSQualifiedName };
 export function tsCallSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<
-    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
-  >,
+  parameters: (
+    | t.ArrayPattern
+    | t.Identifier
+    | t.ObjectPattern
+    | t.RestElement
+  )[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSCallSignatureDeclaration {
   const node: t.TSCallSignatureDeclaration = {
@@ -2657,9 +2662,12 @@ export function tsCallSignatureDeclaration(
 export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function tsConstructSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<
-    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
-  >,
+  parameters: (
+    | t.ArrayPattern
+    | t.Identifier
+    | t.ObjectPattern
+    | t.RestElement
+  )[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructSignatureDeclaration {
   const node: t.TSConstructSignatureDeclaration = {
@@ -2693,9 +2701,12 @@ export { tsPropertySignature as tSPropertySignature };
 export function tsMethodSignature(
   key: t.Expression,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<
-    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
-  >,
+  parameters: (
+    | t.ArrayPattern
+    | t.Identifier
+    | t.ObjectPattern
+    | t.RestElement
+  )[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSMethodSignature {
   const node: t.TSMethodSignature = {
@@ -2715,7 +2726,7 @@ export function tsMethodSignature(
 }
 export { tsMethodSignature as tSMethodSignature };
 export function tsIndexSignature(
-  parameters: Array<t.Identifier>,
+  parameters: t.Identifier[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSIndexSignature {
   const node: t.TSIndexSignature = {
@@ -2815,9 +2826,12 @@ export function tsThisType(): t.TSThisType {
 export { tsThisType as tSThisType };
 export function tsFunctionType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<
-    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
-  >,
+  parameters: (
+    | t.ArrayPattern
+    | t.Identifier
+    | t.ObjectPattern
+    | t.RestElement
+  )[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSFunctionType {
   const node: t.TSFunctionType = {
@@ -2835,9 +2849,12 @@ export function tsFunctionType(
 export { tsFunctionType as tSFunctionType };
 export function tsConstructorType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<
-    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
-  >,
+  parameters: (
+    | t.ArrayPattern
+    | t.Identifier
+    | t.ObjectPattern
+    | t.RestElement
+  )[],
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructorType {
   const node: t.TSConstructorType = {
@@ -2901,9 +2918,7 @@ export function tsTypeQuery(
   return node;
 }
 export { tsTypeQuery as tSTypeQuery };
-export function tsTypeLiteral(
-  members: Array<t.TSTypeElement>,
-): t.TSTypeLiteral {
+export function tsTypeLiteral(members: t.TSTypeElement[]): t.TSTypeLiteral {
   const node: t.TSTypeLiteral = {
     type: "TSTypeLiteral",
     members,
@@ -2924,7 +2939,7 @@ export function tsArrayType(elementType: t.TSType): t.TSArrayType {
 }
 export { tsArrayType as tSArrayType };
 export function tsTupleType(
-  elementTypes: Array<t.TSType | t.TSNamedTupleMember>,
+  elementTypes: (t.TSType | t.TSNamedTupleMember)[],
 ): t.TSTupleType {
   const node: t.TSTupleType = {
     type: "TSTupleType",
@@ -2973,7 +2988,7 @@ export function tsNamedTupleMember(
   return node;
 }
 export { tsNamedTupleMember as tSNamedTupleMember };
-export function tsUnionType(types: Array<t.TSType>): t.TSUnionType {
+export function tsUnionType(types: t.TSType[]): t.TSUnionType {
   const node: t.TSUnionType = {
     type: "TSUnionType",
     types,
@@ -2983,9 +2998,7 @@ export function tsUnionType(types: Array<t.TSType>): t.TSUnionType {
   return node;
 }
 export { tsUnionType as tSUnionType };
-export function tsIntersectionType(
-  types: Array<t.TSType>,
-): t.TSIntersectionType {
+export function tsIntersectionType(types: t.TSType[]): t.TSIntersectionType {
   const node: t.TSIntersectionType = {
     type: "TSIntersectionType",
     types,
@@ -3087,8 +3100,8 @@ export function tsMappedType(
 }
 export { tsMappedType as tSMappedType };
 export function tsTemplateLiteralType(
-  quasis: Array<t.TemplateElement>,
-  types: Array<t.TSType>,
+  quasis: t.TemplateElement[],
+  types: t.TSType[],
 ): t.TSTemplateLiteralType {
   const node: t.TSTemplateLiteralType = {
     type: "TSTemplateLiteralType",
@@ -3137,7 +3150,7 @@ export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
 export function tsInterfaceDeclaration(
   id: t.Identifier,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  _extends: Array<t.TSExpressionWithTypeArguments> | null | undefined = null,
+  _extends: t.TSExpressionWithTypeArguments[] | null | undefined = null,
   body: t.TSInterfaceBody,
 ): t.TSInterfaceDeclaration {
   const node: t.TSInterfaceDeclaration = {
@@ -3155,9 +3168,7 @@ export function tsInterfaceDeclaration(
   return node;
 }
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
-export function tsInterfaceBody(
-  body: Array<t.TSTypeElement>,
-): t.TSInterfaceBody {
+export function tsInterfaceBody(body: t.TSTypeElement[]): t.TSInterfaceBody {
   const node: t.TSInterfaceBody = {
     type: "TSInterfaceBody",
     body,
@@ -3245,7 +3256,7 @@ export function tsTypeAssertion(
   return node;
 }
 export { tsTypeAssertion as tSTypeAssertion };
-export function tsEnumBody(members: Array<t.TSEnumMember>): t.TSEnumBody {
+export function tsEnumBody(members: t.TSEnumMember[]): t.TSEnumBody {
   const node: t.TSEnumBody = {
     type: "TSEnumBody",
     members,
@@ -3257,7 +3268,7 @@ export function tsEnumBody(members: Array<t.TSEnumMember>): t.TSEnumBody {
 export { tsEnumBody as tSEnumBody };
 export function tsEnumDeclaration(
   id: t.Identifier,
-  members: Array<t.TSEnumMember>,
+  members: t.TSEnumMember[],
 ): t.TSEnumDeclaration {
   const node: t.TSEnumDeclaration = {
     type: "TSEnumDeclaration",
@@ -3301,7 +3312,7 @@ export function tsModuleDeclaration(
   return node;
 }
 export { tsModuleDeclaration as tSModuleDeclaration };
-export function tsModuleBlock(body: Array<t.Statement>): t.TSModuleBlock {
+export function tsModuleBlock(body: t.Statement[]): t.TSModuleBlock {
   const node: t.TSModuleBlock = {
     type: "TSModuleBlock",
     body,
@@ -3404,7 +3415,7 @@ export function tsTypeAnnotation(typeAnnotation: t.TSType): t.TSTypeAnnotation {
 }
 export { tsTypeAnnotation as tSTypeAnnotation };
 export function tsTypeParameterInstantiation(
-  params: Array<t.TSType>,
+  params: t.TSType[],
 ): t.TSTypeParameterInstantiation {
   const node: t.TSTypeParameterInstantiation = {
     type: "TSTypeParameterInstantiation",
@@ -3416,7 +3427,7 @@ export function tsTypeParameterInstantiation(
 }
 export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function tsTypeParameterDeclaration(
-  params: Array<t.TSTypeParameter>,
+  params: t.TSTypeParameter[],
 ): t.TSTypeParameterDeclaration {
   const node: t.TSTypeParameterDeclaration = {
     type: "TSTypeParameterDeclaration",

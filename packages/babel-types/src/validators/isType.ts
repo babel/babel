@@ -25,7 +25,7 @@ export default function isType(nodeType: string, targetType: string): boolean {
   // @ts-expect-error targetType may not index ALIAS_KEYS
   if (ALIAS_KEYS[targetType]) return false;
 
-  const aliases: Array<string> | undefined = FLIPPED_ALIAS_KEYS[targetType];
+  const aliases: string[] | undefined = FLIPPED_ALIAS_KEYS[targetType];
   if (aliases?.includes(nodeType)) return true;
 
   return false;

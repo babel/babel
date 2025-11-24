@@ -96,7 +96,7 @@ function descriptorToConfig<API>(
 }
 
 export class ConfigPrinter {
-  _stack: Array<PrintableConfig> = [];
+  _stack: PrintableConfig[] = [];
   configure(
     enabled: boolean,
     type: (typeof ChainFormatter)[keyof typeof ChainFormatter],

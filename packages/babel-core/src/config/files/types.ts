@@ -9,7 +9,7 @@ export type ConfigFile = {
 export type IgnoreFile = {
   filepath: string;
   dirname: string;
-  ignore: Array<RegExp>;
+  ignore: RegExp[];
 };
 
 export type RelativeConfig = {
@@ -24,7 +24,7 @@ export type FilePackageData = {
   // The file in the package.
   filepath: string;
   // Any ancestor directories of the file that are within the package.
-  directories: Array<string>;
+  directories: string[];
   // The contents of the package.json. May not be found if the package just
   // terminated at a node_modules folder without finding one.
   pkg: ConfigFile | null;

@@ -83,8 +83,10 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<number, [ParseErrorConstructor<object>, Position]> =
-    new Map();
+  declarationErrors = new Map<
+    number,
+    [ParseErrorConstructor<object>, Position]
+  >();
   constructor(
     type:
       | ExpressionScopeType.kMaybeArrowParameterDeclaration
@@ -112,7 +114,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
 
 export default class ExpressionScopeHandler {
   parser: Tokenizer;
-  stack: Array<ExpressionScope> = [new ExpressionScope()];
+  stack: ExpressionScope[] = [new ExpressionScope()];
 
   constructor(parser: Tokenizer) {
     this.parser = parser;

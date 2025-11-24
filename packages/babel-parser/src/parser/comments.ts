@@ -20,7 +20,7 @@ export type CommentWhitespace = {
   /**
    * the containing comments
    */
-  comments: Array<Comment>;
+  comments: Comment[];
   /**
    * the immediately preceding AST node of the whitespace token
    */
@@ -40,7 +40,7 @@ export type CommentWhitespace = {
  * trailingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  */
-function setTrailingComments(node: Undone<Node>, comments: Array<Comment>) {
+function setTrailingComments(node: Undone<Node>, comments: Comment[]) {
   if (node.trailingComments === undefined) {
     node.trailingComments = comments;
   } else {
@@ -53,7 +53,7 @@ function setTrailingComments(node: Undone<Node>, comments: Array<Comment>) {
  * leadingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  */
-function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
+function setLeadingComments(node: Undone<Node>, comments: Comment[]) {
   if (node.leadingComments === undefined) {
     node.leadingComments = comments;
   } else {
@@ -66,7 +66,7 @@ function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
  * innerComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  */
-export function setInnerComments(node: Undone<Node>, comments: Array<Comment>) {
+export function setInnerComments(node: Undone<Node>, comments: Comment[]) {
   if (node.innerComments === undefined) {
     node.innerComments = comments;
   } else {
@@ -81,7 +81,7 @@ export function setInnerComments(node: Undone<Node>, comments: Array<Comment>) {
  */
 function adjustInnerComments(
   node: Undone<Node>,
-  elements: Array<Node | null>,
+  elements: (Node | null)[],
   commentWS: CommentWhitespace,
 ) {
   let lastElement = null;

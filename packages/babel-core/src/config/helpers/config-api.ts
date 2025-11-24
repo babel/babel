@@ -22,7 +22,7 @@ type EnvFunction = {
   (): string;
   <T extends SimpleType>(extractor: (envName: EnvName) => T): T;
   (envVar: string): boolean;
-  (envVars: Array<string>): boolean;
+  (envVars: string[]): boolean;
 };
 
 type CallerFactory = {
@@ -94,7 +94,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
 
 export function makePresetAPI<SideChannel extends Context.SimplePreset>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Array<string>,
+  externalDependencies: string[],
 ): PresetAPI {
   const targets = () =>
     // We are using JSON.parse/JSON.stringify because it's only possible to cache
@@ -112,7 +112,7 @@ export function makePresetAPI<SideChannel extends Context.SimplePreset>(
 
 export function makePluginAPI<SideChannel extends Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Array<string>,
+  externalDependencies: string[],
 ): PluginAPI {
   const assumption = (name: string) =>
     cache.using(data => data.assumptions[name]);

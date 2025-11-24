@@ -38,9 +38,7 @@ const babelOptions = {
   babelrc: opts.babelrc === true ? undefined : opts.babelrc,
 };
 
-for (const key of Object.keys(babelOptions) as Array<
-  keyof typeof babelOptions
->) {
+for (const key of Object.keys(babelOptions) as (keyof typeof babelOptions)[]) {
   if (babelOptions[key] === undefined) {
     delete babelOptions[key];
   }

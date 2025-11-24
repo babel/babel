@@ -192,7 +192,7 @@ function generateStandalone() {
   ${imports}
   export const ${exportDecls.slice(0, -1)};
   export {${exportsList}};
-  export const all: { [k: string]: any } = {${allList}};
+  export const all: Record<string, any> = {${allList}};
   ${extraCode}`;
           file.path = "plugins.ts";
           file.contents = Buffer.from(

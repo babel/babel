@@ -59,7 +59,7 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    const parts: Array<string> = nodeType.split("|");
+    const parts: string[] = nodeType.split("|");
     if (parts.length === 1) continue;
 
     const fns = visitor[nodeType];

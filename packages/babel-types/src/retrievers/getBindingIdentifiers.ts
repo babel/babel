@@ -19,7 +19,7 @@ function getBindingIdentifiers(
   duplicates: true,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, Array<t.Identifier>>;
+): Record<string, t.Identifier[]>;
 
 function getBindingIdentifiers(
   node: t.Node,
@@ -33,7 +33,7 @@ function getBindingIdentifiers(
   duplicates?: boolean,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, t.Identifier> | Record<string, Array<t.Identifier>>;
+): Record<string, t.Identifier> | Record<string, t.Identifier[]>;
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
@@ -43,7 +43,7 @@ function getBindingIdentifiers(
   duplicates?: boolean,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, t.Identifier> | Record<string, Array<t.Identifier>> {
+): Record<string, t.Identifier> | Record<string, t.Identifier[]> {
   const search: t.Node[] = [].concat(node);
   const ids = Object.create(null);
 

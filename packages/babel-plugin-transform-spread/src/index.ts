@@ -62,7 +62,7 @@ export default declare((api, options: Options) => {
     return spread.elements.includes(null);
   }
 
-  function hasSpread(nodes: Array<t.Node>): boolean {
+  function hasSpread(nodes: t.Node[]): boolean {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
         return true;
@@ -71,19 +71,19 @@ export default declare((api, options: Options) => {
     return false;
   }
 
-  function push(_props: Array<ListElement>, nodes: Array<t.Expression>) {
+  function push(_props: ListElement[], nodes: t.Expression[]) {
     if (!_props.length) return _props;
     nodes.push(t.arrayExpression(_props));
     return [];
   }
 
   function build(
-    props: Array<ListElement>,
+    props: ListElement[],
     scope: Scope,
     file: File,
   ): t.Expression[] {
-    const nodes: Array<t.Expression> = [];
-    let _props: Array<ListElement> = [];
+    const nodes: t.Expression[] = [];
+    let _props: ListElement[] = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
@@ -158,7 +158,7 @@ export default declare((api, options: Options) => {
       CallExpression(path): void {
         const { node, scope } = path;
 
-        const args = node.arguments as Array<ListElement>;
+        const args = node.arguments as ListElement[];
         if (!hasSpread(args)) return;
         const calleePath = skipTransparentExprWrappers(
           path.get("callee") as NodePath<t.Expression>,
@@ -231,11 +231,7 @@ export default declare((api, options: Options) => {
         const { node, scope } = path;
         if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(
-          node.arguments as Array<ListElement>,
-          scope,
-          this.file,
-        );
+        const nodes = build(node.arguments as ListElement[], scope, this.file);
 
         const first = nodes.shift();
 

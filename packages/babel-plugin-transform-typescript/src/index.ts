@@ -302,7 +302,7 @@ export default declare((api, opts: Options) => {
                 continue;
               }
 
-              const importsToRemove: Set<NodePath<t.Node>> = new Set();
+              const importsToRemove = new Set<NodePath<t.Node>>();
               const specifiersLength = stmt.node.specifiers.length;
               const isAllSpecifiersElided = () =>
                 specifiersLength > 0 &&

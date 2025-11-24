@@ -6,4 +6,4 @@ export default {
   cjs: "transform-modules-commonjs",
   systemjs: "transform-modules-systemjs",
   umd: "transform-modules-umd",
-} as { [transform: string]: keyof AvailablePlugins };
+} as Record<string, keyof AvailablePlugins>;

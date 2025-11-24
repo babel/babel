@@ -453,7 +453,7 @@ function buildExportInitializationStatements(
   constantReexports: boolean | void = false,
   noIncompleteNsImportDetection: boolean | void = false,
 ) {
-  const initStatements: Array<[string, t.Statement | null]> = [];
+  const initStatements: [string, t.Statement | null][] = [];
 
   for (const [localName, data] of metadata.local) {
     if (data.kind === "import") {

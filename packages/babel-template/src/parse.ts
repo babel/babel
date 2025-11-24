@@ -20,7 +20,7 @@ import type { Formatter } from "./formatters.ts";
 
 export type Metadata = {
   ast: t.File;
-  placeholders: Array<Placeholder>;
+  placeholders: Placeholder[];
   placeholderNames: Set<string>;
 };
 
@@ -177,11 +177,11 @@ function resolveAncestors(ast: t.File, ancestors: TraversalAncestors) {
 
 type MetadataState = {
   syntactic: {
-    placeholders: Array<Placeholder>;
+    placeholders: Placeholder[];
     placeholderNames: Set<string>;
   };
   legacy: {
-    placeholders: Array<Placeholder>;
+    placeholders: Placeholder[];
     placeholderNames: Set<string>;
   };
   placeholderWhitelist?: Set<string>;

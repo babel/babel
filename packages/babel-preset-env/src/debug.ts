@@ -10,7 +10,7 @@ import compatData from "@babel/compat-data/plugins" with { type: "json" };
 export const logPlugin = (
   item: string,
   targetVersions: Targets,
-  list: { [key: string]: Targets },
+  list: Record<string, Targets>,
 ) => {
   const filteredList = getInclusionReasons(item, targetVersions, list);
 

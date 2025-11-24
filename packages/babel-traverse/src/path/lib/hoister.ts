@@ -63,7 +63,7 @@ const referenceVisitor: Visitor<PathHoister> = {
 
 export default class PathHoister<T extends t.Node = t.Node> {
   breakOnScopePaths: NodePath[];
-  bindings: { [k: string]: Binding };
+  bindings: Record<string, Binding>;
   mutableBinding: boolean;
   private scopes: Scope[];
   scope: Scope;

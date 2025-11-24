@@ -14,7 +14,8 @@ export default function stringifyValidator(
   }
 
   if ("each" in validator) {
-    return `Array<${stringifyValidator(validator.each, nodePrefix)}>`;
+    const subValidator = stringifyValidator(validator.each, nodePrefix);
+    return `${subValidator.includes("|") ? `(${subValidator})` : subValidator}[]`;
   }
 
   if ("chainOf" in validator) {

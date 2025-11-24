@@ -159,7 +159,7 @@ export function minVersion(name: string) {
   return loadHelper(name).minVersion;
 }
 
-export function getDependencies(name: string): ReadonlyArray<string> {
+export function getDependencies(name: string): readonly string[] {
   return loadHelper(name).getDependencies();
 }
 

@@ -84,7 +84,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
     }
   };
 
-  const blocksToExpressions = (blocks: Array<t.StaticBlock>) =>
+  const blocksToExpressions = (blocks: t.StaticBlock[]) =>
     blocks.map(block => {
       const { body } = block;
       if (body.length === 1 && t.isExpressionStatement(body[0])) {
@@ -147,7 +147,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
           }
         }
 
-        const pendingStaticBlocks: Array<t.StaticBlock> = [];
+        const pendingStaticBlocks: t.StaticBlock[] = [];
         let lastStaticProp:
           | null
           | NodePath<t.ClassProperty>

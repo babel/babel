@@ -15,7 +15,7 @@ if (!process.env.BABEL_8_BREAKING) {
   overlappingPlugins["syntax-import-attributes"] = ["syntax-import-assertions"];
 }
 
-function filterAvailable<Data extends { [name: string]: unknown }>(
+function filterAvailable<Data extends Record<string, unknown>>(
   data: Data,
 ): { [Name in keyof Data & keyof typeof availablePlugins]: Data[Name] } {
   const result = {} as any;

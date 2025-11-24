@@ -469,7 +469,7 @@ export default declare(api => {
               thisArgument.isSuper()
                 ? t.thisExpression()
                 : t.cloneNode(thisArgument.node),
-              ...(path.node.arguments as Array<t.Expression | t.SpreadElement>),
+              ...(path.node.arguments as (t.Expression | t.SpreadElement)[]),
             ],
           ),
         );

@@ -55,12 +55,11 @@ export interface VisitorBase<S>
   extends VisitNodeObject<S, t.Node>,
     VisitorBaseNodes<S>,
     VisitorBaseAliases<S>,
-    VisitorVirtualAliases<S> {
-  // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
-  // too complex for TS. So we type it as a general visitor only if the key contains `|`
-  // this is good enough for non-visitor traverse options e.g. `noScope`
-  [k: `${string}|${string}`]: VisitNode<S, t.Node>;
-}
+    VisitorVirtualAliases<S>,
+    // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
+    // too complex for TS. So we type it as a general visitor only if the key contains `|`
+    // this is good enough for non-visitor traverse options e.g. `noScope`
+    Record<`${string}|${string}`, VisitNode<S, t.Node>> {}
 
 export type Visitor<S = unknown> = VisitorBase<S> | ExplodedVisitor<S>;
 

@@ -7,11 +7,11 @@ export class TokenMap {
   _tokens: Token[];
   _source: string;
 
-  _nodesToTokenIndexes: Map<t.Node, number[]> = new Map();
-  _nodesOccurrencesCountCache: Map<
+  _nodesToTokenIndexes = new Map<t.Node, number[]>();
+  _nodesOccurrencesCountCache = new Map<
     t.Node,
     { test: string; count: number; i: number }
-  > = new Map();
+  >();
 
   _tokensCache = new Map<t.Node, { first: number; last: number }>();
 

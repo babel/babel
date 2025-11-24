@@ -51,7 +51,7 @@ type MarkerLines = Record<number, true | [number, number]>;
 
 function getMarkerLines(
   loc: NodeLocation,
-  source: Array<string>,
+  source: string[],
   opts: Options,
 ): {
   start: number;

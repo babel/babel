@@ -355,7 +355,7 @@ export function _verifyNodeList<N extends t.Node>(
 }
 
 type NodeKeyOfArrays<N extends t.Node> = {
-  [P in string & keyof N]-?: N[P] extends Array<t.Node | null> ? P : never;
+  [P in string & keyof N]-?: N[P] extends (t.Node | null)[] ? P : never;
 }[string & keyof N];
 
 export function unshiftContainer<

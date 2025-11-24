@@ -8,7 +8,7 @@ import type * as t from "../../index.ts";
  * returns a `UnionTypeAnnotation` node containing them.
  */
 export default function createTSUnionType(
-  typeAnnotations: Array<t.TSTypeAnnotation | t.TSType>,
+  typeAnnotations: (t.TSTypeAnnotation | t.TSType)[],
 ): t.TSType {
   const types = typeAnnotations.map(type => {
     return isTSTypeAnnotation(type) ? type.typeAnnotation : type;

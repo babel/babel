@@ -8,7 +8,7 @@ export type Formatter<T> = {
 };
 
 function makeStatementFormatter<T>(
-  fn: (statements: Array<t.Statement>) => T,
+  fn: (statements: t.Statement[]) => T,
 ): Formatter<T> {
   return {
     // We need to prepend a ";" to force statement parsing so that

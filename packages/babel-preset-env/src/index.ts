@@ -47,7 +47,7 @@ export function isPluginRequired(targets: Targets, support: Targets) {
 }
 
 function filterStageFromList(
-  list: { [feature: string]: Targets },
+  list: Record<string, Targets>,
   stageList: Set<string>,
 ) {
   return Object.keys(list).reduce((result, item) => {
@@ -94,7 +94,7 @@ const getPlugin = (pluginName: string) => {
   return plugin;
 };
 
-export const transformIncludesAndExcludes = (opts: Array<string>): any => {
+export const transformIncludesAndExcludes = (opts: string[]): any => {
   return opts.reduce(
     (result, opt) => {
       const target = /^(?:es|es6|es7|esnext|web)\./.test(opt)

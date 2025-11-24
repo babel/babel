@@ -88,7 +88,7 @@ export function ensureBlock(
     return bodyNode;
   }
 
-  const statements: Array<t.Statement> = [];
+  const statements: t.Statement[] = [];
 
   let stringPath = "body";
   let key;
