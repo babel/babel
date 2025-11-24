@@ -1,0 +1,12 @@
+diff --git a/index.js b/index.js
+index b951fd9e47ecfd4c902ace0cc301fa17cfab6289..076b648c9fbeb5e0807c3ed71458b40a6b53120e 100644
+--- a/index.js
++++ b/index.js
+@@ -521,6 +521,7 @@ var jsVariantExtensions = [
+   '.litcoffee',
+   '.mdx',
+   '.mjs',
++  '.mts',
+   '.sucrase.js',
+   '.sucrase.jsx',
+   '.sucrase.ts',

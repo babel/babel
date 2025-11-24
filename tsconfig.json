@@ -16,9 +16,6 @@
   "exclude": [
     "dts/**/*.tst.d.ts"
   ],
-  "exclude": [
-    "dts/*.d.ts"
-  ],
   "references": [
     {
       "path": "./codemods/babel-plugin-codemod-object-assign-to-object-spread"
