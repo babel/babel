@@ -45,6 +45,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
 
   rm tests/format/js/babel-plugins/import-assertions-static.js
   rm tests/format/js/import-assertions/format.test.js
+  rm tests/format/js/import-assertions/bracket-spacing/format.test.js
 fi
 
 # Test typings for @babel/parser
