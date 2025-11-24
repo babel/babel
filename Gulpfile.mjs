@@ -148,19 +148,20 @@ function generateHelperGlobalsData(filename) {
   );
 }
 
-async function applyBabelToSource(inputCode, filename, plugins) {
+async function applyBabelToSource(inputCode, filename, options) {
   const { transformAsync } = await import("@babel/core");
   return transformAsync(inputCode, {
     configFile: false,
-    plugins,
     filename,
+    ...options,
     parserOpts: {
       tokens: true,
-      plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
+      ...options?.parserOpts,
     },
     generatorOpts: {
       retainLines: true,
       experimental_preserveFormat: true,
+      ...options?.generatorOpts,
     },
   }).then(({ code }) => formatCode(code, filename));
 }
@@ -869,12 +870,21 @@ gulp.task("materialize-babel-8", async () => {
         .readFile(file, "utf-8")
         .then(async code => {
           await ac.signal.throwIfAborted();
-          return applyBabelToSource(code, file, [
-            [
-              babelPluginToggleBooleanFlag,
-              { name: "process.env.BABEL_8_BREAKING", value: true },
+          return applyBabelToSource(code, file, {
+            plugins: [
+              [
+                babelPluginToggleBooleanFlag,
+                { name: "process.env.BABEL_8_BREAKING", value: true },
+              ],
             ],
-          ]);
+            parserOpts: {
+              plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
+            },
+            generatorOpts: {
+              shouldPrintComment: comment =>
+                !comment.includes("@ts-ignore(Babel 7 vs Babel 8)"),
+            },
+          });
         })
         .then(async transformedCode => {
           await ac.signal.throwIfAborted();
