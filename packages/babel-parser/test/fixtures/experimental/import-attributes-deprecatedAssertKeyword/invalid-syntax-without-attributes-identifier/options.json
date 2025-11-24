@@ -1,6 +1,5 @@
 {
   "BABEL_8_BREAKING": true,
   "plugins": ["deprecatedImportAssert"],
-  "sourceType": "module",
-  "throws": "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead."
+  "sourceType": "module"
 }
