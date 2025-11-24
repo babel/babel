@@ -74,9 +74,12 @@ export function _printAttributes(
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] | null }>,
   hasPreviousBrace: boolean,
 ) {
-  const { attributes, assertions } = node;
+  const { attributes } = node;
 
   if (!process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+    // eslint-disable-next-line no-var
+    var { assertions } = node;
     const { importAttributesKeyword } = this.format;
 
     if (
@@ -146,7 +149,11 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  if (node.attributes?.length || node.assertions?.length) {
+  if (
+    node.attributes?.length ||
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+    (!process.env.BABEL_8_BREAKING && node.assertions?.length)
+  ) {
     this.print(node.source, true);
     this.space();
     this._printAttributes(node, false);
@@ -226,7 +233,11 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
-      if (node.attributes?.length || node.assertions?.length) {
+      if (
+        node.attributes?.length ||
+        // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+        (!process.env.BABEL_8_BREAKING && node.assertions?.length)
+      ) {
         this.print(node.source, true);
         this.space();
         this._printAttributes(node, hasBrace);
@@ -312,7 +323,11 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
-  if (node.attributes?.length || node.assertions?.length) {
+  if (
+    node.attributes?.length ||
+    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+    (!process.env.BABEL_8_BREAKING && node.assertions?.length)
+  ) {
     this.print(node.source, true);
     this.space();
     this._printAttributes(node, hasBrace);

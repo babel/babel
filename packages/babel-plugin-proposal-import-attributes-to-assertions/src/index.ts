@@ -24,6 +24,7 @@ export default declare(api => {
       ) {
         const { node } = path;
         if (!node.attributes) return;
+        // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
         node.assertions = node.attributes;
         node.attributes = null;
       },
