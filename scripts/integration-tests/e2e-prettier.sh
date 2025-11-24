@@ -42,6 +42,8 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Removed in Babel 8
   sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
   sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
+
+  rm tests/format/js/babel-plugins/import-assertions-static.js
 fi
 
 # Test typings for @babel/parser
