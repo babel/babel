@@ -39,7 +39,7 @@ import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
 import { USE_ESM, commonJS } from "$repo-utils";
 
-import { type PluginItem, types as t } from "@babel/core";
+import type { PluginItem, types } from "@babel/core";
 
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
@@ -481,7 +481,9 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                   compact: false,
                 },
                 plugins: [
-                  function babelPluginInlineConstNumericObjects() {
+                  function babelPluginInlineConstNumericObjects(api) {
+                    // @ts-expect-error FIXME: add `types` in types
+                    const t = api.types as typeof types;
                     return {
                       visitor: {
                         VariableDeclarator(path) {
@@ -498,7 +500,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
 
                           const vals = new Map();
                           for (const { key, value } of node.init
-                            .properties as t.ObjectProperty[]) {
+                            .properties as types.ObjectProperty[]) {
                             if (!t.isIdentifier(key)) return;
                             if (!t.isNumericLiteral(value)) return;
                             vals.set(key.name, value.value);
