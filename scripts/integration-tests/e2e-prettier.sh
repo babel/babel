@@ -44,6 +44,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
 
   rm tests/format/js/babel-plugins/import-assertions-static.js
+  rm tests/format/js/import-assertions/format.test.js
 fi
 
 # Test typings for @babel/parser
