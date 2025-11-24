@@ -141,7 +141,7 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
   }
   if (pluginsMap.has("deprecatedImportAssert")) {
     if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
+      console.warn(
         "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead.",
       );
     }
@@ -150,7 +150,7 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     pluginsMap.get("importAttributes").deprecatedAssertSyntax
   ) {
     if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
+      console.warn(
         "The 'importAttributes' plugin has been removed in Babel 8. Please migrate any usage of `assert`-style attributes to `with`.",
       );
     } else {
