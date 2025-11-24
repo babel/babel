@@ -7,5 +7,6 @@
         "method": "coroutine"
       }
     ]
-  ]
+  ],
+  "BABEL_8_BREAKING": false
 }
