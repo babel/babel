@@ -8,13 +8,11 @@
       }
     ],
     "babel-plugin-transform-explicit-resource-management",
-    "babel-plugin-proposal-import-attributes-to-assertions",
     "babel-plugin-proposal-import-wasm-source",
     "babel-plugin-transform-json-modules",
     "babel-plugin-syntax-decorators",
     "babel-plugin-syntax-explicit-resource-management",
     "babel-plugin-syntax-import-source",
-    "babel-plugin-syntax-import-attributes",
     "babel-plugin-transform-async-generator-functions",
     "babel-plugin-transform-async-to-generator",
     [
