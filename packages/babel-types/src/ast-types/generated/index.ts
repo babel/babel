@@ -808,7 +808,7 @@ export interface ArrowFunctionExpression extends BaseNode {
   body: BlockStatement | Expression;
   async: boolean;
   expression: boolean;
-  generator?: boolean;
+  generator?: boolean | null;
   predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
@@ -972,7 +972,7 @@ export interface ClassMethodComputed extends BaseNode {
   accessibility?: "public" | "private" | "protected" | null;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
   computed: true;
@@ -991,7 +991,7 @@ export interface ClassMethodNonComputed extends BaseNode {
   accessibility?: "public" | "private" | "protected" | null;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
   computed: false;
@@ -1036,7 +1036,7 @@ export interface TaggedTemplateExpression extends BaseNode {
 
 export interface TemplateElement extends BaseNode {
   type: "TemplateElement";
-  value: { raw: string; cooked?: string };
+  value: { raw: string; cooked?: string | null };
   tail: boolean;
 }
 
@@ -1101,7 +1101,7 @@ export interface ClassPropertyComputed extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   readonly?: boolean | null;
   variance?: Variance | null;
   computed: true;
@@ -1118,7 +1118,7 @@ export interface ClassPropertyNonComputed extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   readonly?: boolean | null;
   variance?: Variance | null;
   computed: false;
@@ -1137,7 +1137,7 @@ export interface ClassAccessorPropertyComputed extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   readonly?: boolean | null;
   variance?: Variance | null;
   computed: true;
@@ -1154,7 +1154,7 @@ export interface ClassAccessorPropertyNonComputed extends BaseNode {
   declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   readonly?: boolean | null;
   variance?: Variance | null;
   computed: false;
@@ -1192,12 +1192,12 @@ export interface ClassPrivateMethod extends BaseNode {
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
-  async?: boolean;
-  computed?: boolean;
+  async?: boolean | null;
+  computed?: boolean | null;
   decorators?: Decorator[] | null;
-  generator?: boolean;
+  generator?: boolean | null;
   optional?: boolean | null;
-  override?: boolean;
+  override?: boolean | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
@@ -1803,9 +1803,9 @@ export interface TSDeclareFunction extends BaseNode {
   typeParameters?: TSTypeParameterDeclaration | null;
   params: FunctionParameter[];
   returnType?: TSTypeAnnotation | null;
-  async?: boolean;
+  async?: boolean | null;
   declare?: boolean | null;
-  generator?: boolean;
+  generator?: boolean | null;
 }
 
 export interface TSDeclareMethodComputed extends BaseNode {
@@ -1817,12 +1817,12 @@ export interface TSDeclareMethodComputed extends BaseNode {
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
-  async?: boolean;
-  generator?: boolean;
-  kind?: "get" | "set" | "method" | "constructor";
+  async?: boolean | null;
+  generator?: boolean | null;
+  kind?: "get" | "set" | "method" | "constructor" | null;
   optional?: boolean | null;
-  override?: boolean;
-  static?: boolean;
+  override?: boolean | null;
+  static?: boolean | null;
   computed: true;
   key: Expression;
 }
@@ -1835,12 +1835,12 @@ export interface TSDeclareMethodNonComputed extends BaseNode {
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
-  async?: boolean;
-  generator?: boolean;
-  kind?: "get" | "set" | "method" | "constructor";
+  async?: boolean | null;
+  generator?: boolean | null;
+  kind?: "get" | "set" | "method" | "constructor" | null;
   optional?: boolean | null;
-  override?: boolean;
-  static?: boolean;
+  override?: boolean | null;
+  static?: boolean | null;
   computed: false;
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
 }
@@ -1872,7 +1872,7 @@ export interface TSPropertySignature extends BaseNode {
   type: "TSPropertySignature";
   key: Expression;
   typeAnnotation?: TSTypeAnnotation | null;
-  computed?: boolean;
+  computed?: boolean | null;
   kind?: "get" | "set" | null;
   optional?: boolean | null;
   readonly?: boolean | null;
@@ -1884,7 +1884,7 @@ export interface TSMethodSignature extends BaseNode {
   typeParameters?: TSTypeParameterDeclaration | null;
   params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
   returnType?: TSTypeAnnotation | null;
-  computed?: boolean;
+  computed?: boolean | null;
   kind: "method" | "get" | "set";
   optional?: boolean | null;
 }

@@ -35,11 +35,11 @@ function captureShortStackTrace(skip: number, length: number) {
   Error.stackTraceLimit = stackTraceLimit;
   Error.prepareStackTrace = prepareStackTrace;
 
-  if (!stackTrace) return { internal: false, trace: "" };
+  if (!stackTrace!) return { internal: false, trace: "" };
 
   const shortStackTrace = stackTrace.slice(1 + skip, 1 + skip + length);
   return {
-    internal: /[\\/]@babel[\\/]/.test(shortStackTrace[1].getFileName()),
+    internal: /[\\/]@babel[\\/]/.test(shortStackTrace[1].getFileName()!),
     trace: shortStackTrace.map(frame => `    at ${frame}`).join("\n"),
   };
 }

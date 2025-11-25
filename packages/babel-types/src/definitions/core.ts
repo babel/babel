@@ -621,7 +621,7 @@ defineType("NumericLiteral", {
               // TODO(@nicolo-ribaudo) Fix regenerator to not pass negative
               // numbers here.
               if (!IS_STANDALONE) {
-                if (!new Error().stack.includes("regenerator")) {
+                if (!new Error().stack!.includes("regenerator")) {
                   throw error;
                 }
               }
@@ -1466,8 +1466,7 @@ export const importAttributes = {
 };
 
 defineType("ExportAllDeclaration", {
-  builder: ["source"],
-  visitor: ["source", "attributes", "assertions"],
+  visitor: ["source", "assertions"],
   aliases: [
     "Statement",
     "Declaration",

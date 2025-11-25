@@ -40,7 +40,7 @@ for (const { types, set } of allExpandedTypes) {
   }
 }
 
-const TYPES: string[] = [].concat(
+const TYPES: string[] = ([] as string[]).concat(
   Object.keys(VISITOR_KEYS),
   Object.keys(FLIPPED_ALIAS_KEYS),
   Object.keys(DEPRECATED_KEYS),
