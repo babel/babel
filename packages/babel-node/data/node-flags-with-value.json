@@ -63,6 +63,7 @@
   "--test-name-pattern",
   "--test-reporter",
   "--test-reporter-destination",
+  "--test-rerun-failures",
   "--test-shard",
   "--test-skip-pattern",
   "--test-timeout",
