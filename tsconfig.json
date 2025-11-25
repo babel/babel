@@ -5,7 +5,6 @@
     "./tsconfig.paths.json"
   ],
   "compilerOptions": {
-    "skipLibCheck": false,
     "strict": true
   },
   "include": [

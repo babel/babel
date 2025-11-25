@@ -108,7 +108,10 @@
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
+    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
+    "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"

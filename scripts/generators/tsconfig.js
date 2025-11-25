@@ -39,6 +39,7 @@ const dependencyAliases = new Map([
 
 const packagesHaveScripts = new Set([
   "@babel/types",
+  "@babel/traverse",
   "@babel/plugin-transform-runtime",
 ]);
 
@@ -377,7 +378,6 @@ maybeWriteFile(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
         compilerOptions: {
-          skipLibCheck: false,
           strict: true,
         },
         include: [
