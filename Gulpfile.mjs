@@ -29,6 +29,7 @@ import { resolve as importMetaResolve } from "import-meta-resolve";
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
 import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.js";
+import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs";
 import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
 import { USE_ESM, commonJS } from "$repo-utils";
@@ -145,6 +146,24 @@ function generateHelperGlobalsData(filename) {
     filename,
     `@babel/helper-globals -> ${filename}`
   );
+}
+
+async function applyBabelToSource(inputCode, filename, options) {
+  const { transformAsync } = await import("@babel/core");
+  return transformAsync(inputCode, {
+    configFile: false,
+    filename,
+    ...options,
+    parserOpts: {
+      tokens: true,
+      ...options?.parserOpts,
+    },
+    generatorOpts: {
+      retainLines: true,
+      experimental_preserveFormat: true,
+      ...options?.generatorOpts,
+    },
+  }).then(({ code }) => formatCode(code, filename));
 }
 
 const kebabToCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
@@ -838,6 +857,59 @@ gulp.task("generate-runtime-helpers", async () => {
 });
 
 gulp.task("generate-standalone", () => generateStandalone());
+
+gulp.task("materialize-babel-8", async () => {
+  const promises = [];
+  const files = new Glob(defaultSourcesGlob, { posix: true });
+
+  const ac = new AbortController();
+
+  for (const file of files) {
+    promises.push(
+      fs.promises
+        .readFile(file, "utf-8")
+        .then(async code => {
+          await ac.signal.throwIfAborted();
+          return applyBabelToSource(code, file, {
+            plugins: [
+              [
+                babelPluginToggleBooleanFlag,
+                { name: "process.env.BABEL_8_BREAKING", value: true },
+              ],
+              ({ types: t }) => ({
+                visitor: {
+                  SpreadElement: {
+                    exit(path) {
+                      const { argument } = path.node;
+                      if (t.isObjectExpression(argument)) {
+                        path.replaceWithMultiple(argument.properties);
+                      }
+                    },
+                  },
+                },
+              }),
+            ],
+            parserOpts: {
+              plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
+            },
+            generatorOpts: {
+              shouldPrintComment: comment =>
+                !comment.includes("@ts-ignore(Babel 7 vs Babel 8)"),
+            },
+          });
+        })
+        .then(async transformedCode => {
+          await ac.signal.throwIfAborted();
+          return fs.promises.writeFile(file, transformedCode);
+        })
+    );
+  }
+
+  return Promise.all(promises).catch(err => {
+    ac.abort();
+    throw err;
+  });
+});
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("rollup-babel-standalone", () => buildRollup(standaloneBundle, true));
