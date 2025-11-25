@@ -3,7 +3,7 @@ import type { types as t, NodePath } from "@babel/core";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
 
   return {
     name: "proposal-import-attributes-to-assertions",
