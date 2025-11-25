@@ -9,7 +9,7 @@ if (!process.env.BABEL_8_BREAKING) {
 /**
  * Check if the input `node` is a `let` variable declaration.
  */
-export default function isLet(node: t.Node): boolean {
+export default function isLet(node: t.Node | null | undefined): boolean {
   if (process.env.BABEL_8_BREAKING) {
     return isVariableDeclaration(node) && node.kind !== "var";
   } else {

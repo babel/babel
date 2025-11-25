@@ -71,7 +71,7 @@ export default function removeTypeDuplicates(
       const name = getQualifiedName(node.typeName);
 
       if (generics.has(name)) {
-        let existing: t.TypeScript = generics.get(name);
+        let existing: t.TypeScript = generics.get(name)!;
         // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
         const existingTypeArguments = existing[typeArgumentsKey];
         if (existingTypeArguments) {
