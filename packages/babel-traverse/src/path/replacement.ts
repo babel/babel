@@ -301,22 +301,13 @@ export function replaceExpressionWithStatements(
   // Fixme: we can not `assert this is NodePath<t.FunctionExpression>` in `arrowFunctionToExpression`
   // because it is not a class method known at compile time.
   const newCallee = callee as unknown as NodePath<t.FunctionExpression>;
-
   // (() => await xxx)() -> await (async () => await xxx)();
   const needToAwaitFunction =
     isParentAsync &&
-    traverse.hasType(
-      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
-      "AwaitExpression",
-      FUNCTION_TYPES,
-    );
+    traverse.hasType(newCallee.node.body, "AwaitExpression", FUNCTION_TYPES);
   const needToYieldFunction =
     isParentGenerator &&
-    traverse.hasType(
-      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
-      "YieldExpression",
-      FUNCTION_TYPES,
-    );
+    traverse.hasType(newCallee.node.body, "YieldExpression", FUNCTION_TYPES);
   if (needToAwaitFunction) {
     newCallee.set("async", true);
     // yield* will await the generator return result

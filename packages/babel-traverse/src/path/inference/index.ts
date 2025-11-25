@@ -28,7 +28,9 @@ import type * as t from "@babel/types";
  * Infer the type of the current `NodePath`.
  */
 
-export function getTypeAnnotation(this: NodePath): t.FlowType | t.TSType {
+export function getTypeAnnotation(
+  this: NodePath<t.Node | null>,
+): t.FlowType | t.TSType {
   let type = this.getData("typeAnnotation");
   if (type != null) {
     return type;

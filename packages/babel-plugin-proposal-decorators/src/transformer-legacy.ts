@@ -357,7 +357,7 @@ const visitor: Visitor<PluginPass> = {
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
-        // @ts-expect-error todo(flow->ts) typesafe NodePath.get
+        // @ts-ignore(Babel 7 vs Babel 8) Super is not belonging to Expression
         t.cloneNode(path.get("left.object").node),
         t.stringLiteral(
           // @ts-expect-error todo(flow->ts) typesafe NodePath.get
@@ -365,9 +365,7 @@ const visitor: Visitor<PluginPass> = {
             // @ts-expect-error todo(flow->ts) typesafe NodePath.get
             path.get("left.property").node.value,
         ),
-        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("right.arguments")[0].node),
-        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("right.arguments")[1].node),
       ]),
     );
@@ -388,9 +386,7 @@ const visitor: Visitor<PluginPass> = {
       t.callExpression(state.addHelper("initializerDefineProperty"), [
         t.cloneNode(path.get("arguments")[0].node),
         t.cloneNode(path.get("arguments")[1].node),
-        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("arguments.2.arguments")[0].node),
-        // @ts-expect-error todo(flow->ts)
         t.cloneNode(path.get("arguments.2.arguments")[1].node),
       ]),
     );
