@@ -661,7 +661,7 @@ defineType("TSImportType", {
   ],
   fields: {
     ...(process.env.BABEL_8_BREAKING
-      ? { source: validateType("TSLiteralType") }
+      ? { source: validateType("StringLiteral") }
       : { argument: validateType("StringLiteral") }),
     qualifier: validateOptionalType("TSEntityName"),
     ...(process.env.BABEL_8_BREAKING

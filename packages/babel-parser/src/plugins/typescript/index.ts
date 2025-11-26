@@ -601,7 +601,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       } else {
         if (process.env.BABEL_8_BREAKING) {
-          node.source = this.tsParseLiteralTypeNode();
+          node.source = this.parseStringLiteral(this.state.value);
         } else {
           // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           node.argument = this.parseStringLiteral(this.state.value);

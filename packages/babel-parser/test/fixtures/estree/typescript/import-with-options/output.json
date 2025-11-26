@@ -30,14 +30,10 @@
                     "type": "TSImportType",
                     "start":14,"end":55,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":55}},
                     "source": {
-                      "type": "TSLiteralType",
+                      "type": "Literal",
                       "start":21,"end":26,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":26}},
-                      "literal": {
-                        "type": "Literal",
-                        "start":21,"end":26,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":26}},
-                        "value": "./x",
-                        "raw": "'./x'"
-                      }
+                      "value": "./x",
+                      "raw": "'./x'"
                     },
                     "options": {
                       "type": "ObjectExpression",
@@ -122,14 +118,10 @@
                   "type": "TSImportType",
                   "start":64,"end":107,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":50}},
                   "source": {
-                    "type": "TSLiteralType",
+                    "type": "Literal",
                     "start":71,"end":76,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}},
-                    "literal": {
-                      "type": "Literal",
-                      "start":71,"end":76,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}},
-                      "value": "./y",
-                      "raw": "'./y'"
-                    }
+                    "value": "./y",
+                    "raw": "'./y'"
                   },
                   "options": {
                     "type": "ObjectExpression",
@@ -219,14 +211,10 @@
                   "type": "TSImportType",
                   "start":116,"end":172,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":63}},
                   "source": {
-                    "type": "TSLiteralType",
+                    "type": "Literal",
                     "start":123,"end":127,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":18}},
-                    "literal": {
-                      "type": "Literal",
-                      "start":123,"end":127,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":18}},
-                      "value": "/z",
-                      "raw": "\"/z\""
-                    }
+                    "value": "/z",
+                    "raw": "\"/z\""
                   },
                   "options": {
                     "type": "ObjectExpression",
