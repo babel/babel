@@ -6,7 +6,7 @@ import { explode } from "../visitors.ts";
 import { _forceSetScope } from "../path/context.ts";
 
 export default function traverseForScope(
-  path: NodePath,
+  path: NodePath<t.Node>,
   visitors: Visitor,
   state: any,
 ) {

@@ -70,7 +70,7 @@ type GeneralPath = OptionPath | AccessPath;
 export function assertRootMode(
   loc: OptionPath,
   value: unknown,
-): RootMode | void {
+): RootMode | undefined {
   if (
     value !== undefined &&
     value !== "root" &&
@@ -81,14 +81,13 @@ export function assertRootMode(
       `${msg(loc)} must be a "root", "upward", "upward-optional" or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertSourceMaps(
   loc: OptionPath,
   value: unknown,
-): SourceMapsOption | void {
+): SourceMapsOption | undefined {
   if (
     value !== undefined &&
     typeof value !== "boolean" &&
@@ -99,25 +98,23 @@ export function assertSourceMaps(
       `${msg(loc)} must be a boolean, "inline", "both", or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertCompact(
   loc: OptionPath,
   value: unknown,
-): CompactOption | void {
+): CompactOption | undefined {
   if (value !== undefined && typeof value !== "boolean" && value !== "auto") {
     throw new Error(`${msg(loc)} must be a boolean, "auto", or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertSourceType(
   loc: OptionPath,
   value: unknown,
-): SourceTypeOption | void {
+): SourceTypeOption | undefined {
   if (
     value !== undefined &&
     value !== "module" &&
@@ -129,7 +126,6 @@ export function assertSourceType(
       `${msg(loc)} must be "module", "commonjs", "script", "unambiguous", or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -183,40 +179,40 @@ export function assertInputSourceMap(
   return value as RootInputSourceMapOption;
 }
 
-export function assertString(loc: GeneralPath, value: unknown): string | void {
+export function assertString(
+  loc: GeneralPath,
+  value: unknown,
+): string | undefined {
   if (value !== undefined && typeof value !== "string") {
     throw new Error(`${msg(loc)} must be a string, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertFunction(
   loc: GeneralPath,
   value: unknown,
-): Function | void {
+): Function | undefined {
   if (value !== undefined && typeof value !== "function") {
     throw new Error(`${msg(loc)} must be a function, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertBoolean(
   loc: GeneralPath,
   value: unknown,
-): boolean | void {
+): boolean | undefined {
   if (value !== undefined && typeof value !== "boolean") {
     throw new Error(`${msg(loc)} must be a boolean, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertObject(
   loc: GeneralPath,
   value: unknown,
-): Readonly<Record<string, unknown>> | void {
+): Readonly<Record<string, unknown>> | undefined {
   if (
     value !== undefined &&
     (typeof value !== "object" || Array.isArray(value) || !value)
@@ -240,7 +236,7 @@ export function assertArray<T>(
 export function assertIgnoreList(
   loc: OptionPath,
   value: unknown[] | undefined,
-): MatchItem[] | void {
+): MatchItem[] | undefined {
   const arr = assertArray(loc, value);
   arr?.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
   // @ts-expect-error todo(flow->ts)
@@ -264,9 +260,8 @@ function assertIgnoreItem(loc: GeneralPath, value: unknown): MatchItem {
 export function assertConfigApplicableTest(
   loc: OptionPath,
   value: unknown,
-): ConfigApplicableTest | void {
+): ConfigApplicableTest | undefined {
   if (value === undefined) {
-    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
     return value;
   }
 
@@ -297,7 +292,7 @@ function checkValidTest(value: unknown): value is string | Function | RegExp {
 export function assertConfigFileSearch(
   loc: OptionPath,
   value: unknown,
-): ConfigFileSearch | void {
+): ConfigFileSearch | undefined {
   if (
     value !== undefined &&
     typeof value !== "boolean" &&
@@ -308,16 +303,14 @@ export function assertConfigFileSearch(
         `got ${JSON.stringify(value)}`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertBabelrcSearch(
   loc: OptionPath,
   value: unknown,
-): BabelrcSearch | void {
+): BabelrcSearch | undefined {
   if (value === undefined || typeof value === "boolean") {
-    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
     return value;
   }
 
@@ -454,7 +447,7 @@ function assertBrowserVersion(loc: GeneralPath, value: unknown) {
 export function assertAssumptions(
   loc: GeneralPath,
   value: Record<string, unknown>,
-): Record<string, boolean> | void {
+): Record<string, boolean> | undefined {
   if (value === undefined) return;
 
   if (typeof value !== "object" || value === null) {

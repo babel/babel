@@ -58,8 +58,8 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
   const verifiedNodes = _verifyNodeList.call(this, nodes);
   inheritLeadingComments(verifiedNodes[0], this.node);
   inheritTrailingComments(verifiedNodes[verifiedNodes.length - 1], this.node);
+  // @ts-expect-error this.node may be null
   getCachedPaths(this)?.delete(this.node);
-  // @ts-expect-error TODO: better types
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key] = null;
@@ -81,7 +81,10 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
  * easier to use, your transforms will be extremely brittle.
  */
 
-export function replaceWithSourceString(this: NodePath, replacement: string) {
+export function replaceWithSourceString(
+  this: NodePath<t.Node>,
+  replacement: string,
+) {
   resync.call(this);
   let ast: t.File;
 
@@ -117,14 +120,14 @@ export function replaceWith<R extends t.Node>(
   this: NodePath,
   replacementPath: R,
 ): [NodePath<R>];
-export function replaceWith<R extends NodePath>(
+export function replaceWith<R extends NodePath<t.Node>>(
   this: NodePath,
   replacementPath: R,
 ): [R];
 export function replaceWith(
   this: NodePath,
-  replacementPath: t.Node | NodePath,
-): [NodePath] {
+  replacementPath: t.Node | NodePath<t.Node>,
+): [NodePath<t.Node>] {
   resync.call(this);
 
   if (this.removed) {
@@ -184,7 +187,9 @@ export function replaceWith(
       !this.canSwapBetweenExpressionAndStatement(replacement)
     ) {
       // replacing an expression with a statement so let's explode it
-      return this.replaceExpressionWithStatements([replacement]) as [NodePath];
+      return this.replaceExpressionWithStatements([replacement]) as [
+        NodePath<t.Node>,
+      ];
     }
   }
 
@@ -204,7 +209,7 @@ export function replaceWith(
   // requeue for visiting
   this.requeue();
 
-  return [nodePath ? this.get(nodePath) : this];
+  return [(nodePath ? this.get(nodePath) : this) as NodePath<t.Node>];
 }
 
 export function _replaceWith(this: NodePath, node: t.Node | null) {
@@ -223,7 +228,6 @@ export function _replaceWith(this: NodePath, node: t.Node | null) {
   // @ts-expect-error TODO: better types
   getCachedPaths(this)?.set(node, this).delete(this.node);
 
-  // @ts-expect-error TODO: better types
   this.node = node;
   // @ts-expect-error this.key must present in this.container
   this.container[this.key] = node;

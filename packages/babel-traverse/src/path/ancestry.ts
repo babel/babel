@@ -83,8 +83,8 @@ export function getStatementParent(this: NodePath): NodePath<t.Statement> {
  */
 
 export function getEarliestCommonAncestorFrom(
-  this: NodePath,
-  paths: NodePath[],
+  this: NodePath<t.Node>,
+  paths: NodePath<t.Node>[],
 ): NodePath {
   return this.getDeepestCommonAncestorFrom(
     paths,
@@ -133,8 +133,12 @@ export function getEarliestCommonAncestorFrom(
 
 export function getDeepestCommonAncestorFrom(
   this: NodePath,
-  paths: NodePath[],
-  filter?: (deepest: NodePath, i: number, ancestries: NodePath[][]) => NodePath,
+  paths: NodePath<t.Node>[],
+  filter?: (
+    deepest: NodePath<t.Node>,
+    i: number,
+    ancestries: NodePath<t.Node>[][],
+  ) => NodePath,
 ): NodePath {
   if (!paths.length) {
     return this;
@@ -152,7 +156,7 @@ export function getDeepestCommonAncestorFrom(
 
   // get the ancestors of the path, breaking when the parent exceeds ourselves
   const ancestries = paths.map(path => {
-    const ancestry: NodePath[] = [];
+    const ancestry: NodePath<t.Node>[] = [];
 
     do {
       ancestry.unshift(path);
@@ -226,7 +230,10 @@ export function isDescendant(this: NodePath, maybeAncestor: NodePath): boolean {
   return !!this.findParent(parent => parent === maybeAncestor);
 }
 
-export function inType(this: NodePath, ...candidateTypes: string[]): boolean {
+export function inType(
+  this: NodePath<t.Node>,
+  ...candidateTypes: string[]
+): boolean {
   let path = this;
   while (path) {
     if (candidateTypes.includes(path.node.type)) return true;

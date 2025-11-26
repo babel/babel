@@ -251,7 +251,7 @@ export function referencesImport(
  * Get the source code associated with this node.
  */
 
-export function getSource(this: NodePath): string {
+export function getSource(this: NodePath<t.Node>): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
@@ -261,8 +261,8 @@ export function getSource(this: NodePath): string {
 }
 
 export function willIMaybeExecuteBefore(
-  this: NodePath,
-  target: NodePath,
+  this: NodePath<t.Node>,
+  target: NodePath<t.Node>,
 ): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
@@ -360,15 +360,15 @@ type ExecutionStatusCache = Map<
  */
 
 export function _guessExecutionStatusRelativeTo(
-  this: NodePath,
-  target: NodePath,
+  this: NodePath<t.Node>,
+  target: NodePath<t.Node>,
 ): RelativeExecutionStatus {
   return _guessExecutionStatusRelativeToCached(this, target, new Map());
 }
 
 function _guessExecutionStatusRelativeToCached(
-  base: NodePath,
-  target: NodePath,
+  base: NodePath<t.Node>,
+  target: NodePath<t.Node>,
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   // check if the two paths are in different functions, we can't track execution of these
@@ -405,7 +405,7 @@ function _guessExecutionStatusRelativeToCached(
     const path = paths.this[commonIndex.this];
     commonIndex.target = paths.target.indexOf(path);
     if (commonIndex.target >= 0) {
-      commonPath = path;
+      commonPath = path as NodePath<t.Node>;
     } else {
       commonIndex.this++;
     }
@@ -450,8 +450,8 @@ function _guessExecutionStatusRelativeToCached(
 }
 
 function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
-  base: NodePath,
-  target: NodePath,
+  base: NodePath<t.Node>,
+  target: NodePath<t.Node>,
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   if (!target.isFunctionDeclaration()) {
@@ -474,7 +474,7 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   // no references!
   if (!binding.references) return "before";
 
-  const referencePaths: NodePath[] = binding.referencePaths;
+  const referencePaths = binding.referencePaths;
 
   let allStatus;
 
@@ -505,8 +505,8 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
 }
 
 function _guessExecutionStatusRelativeToDifferentFunctionsCached(
-  base: NodePath,
-  target: NodePath,
+  base: NodePath<t.Node>,
+  target: NodePath<t.Node>,
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   let nodeMap = cache.get(base.node);
@@ -544,18 +544,18 @@ function _guessExecutionStatusRelativeToDifferentFunctionsCached(
  * `b.resolve()` will return `1`
  */
 export function resolve(
-  this: NodePath,
+  this: NodePath<t.Node>,
   dangerous?: boolean,
-  resolved?: NodePath[],
+  resolved?: NodePath<t.Node>[],
 ) {
   return _resolve.call(this, dangerous, resolved) || this;
 }
 
 export function _resolve(
-  this: NodePath,
+  this: NodePath<t.Node>,
   dangerous?: boolean,
-  resolved?: NodePath[],
-): NodePath | undefined | null {
+  resolved?: NodePath<t.Node>[],
+): NodePath<t.Node> | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved?.includes(this)) return;

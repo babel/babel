@@ -176,7 +176,7 @@ function buildHelpers(
     const { nodes } = helpers.get(
       name,
       getHelperReference,
-      namespace ? null : `_${name}`,
+      namespace ? undefined : `_${name}`,
       [],
       namespace
         ? (ast, exportName, mapExportBindingAssignments) => {
@@ -189,7 +189,7 @@ function buildHelpers(
               ),
             );
           }
-        : null,
+        : undefined,
     );
 
     body.push(...nodes);

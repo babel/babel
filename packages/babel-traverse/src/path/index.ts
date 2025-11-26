@@ -161,9 +161,13 @@ const NodePath_Final = class NodePath {
     return this.hub.buildError(this.node!, msg, Error);
   }
 
-  traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
-  traverse(this: NodePath_Final, visitor: Visitor): void;
-  traverse(this: NodePath_Final, visitor: any, state?: any) {
+  traverse<T>(
+    this: NodePath_Final<t.Node>,
+    visitor: Visitor<T>,
+    state: T,
+  ): void;
+  traverse(this: NodePath_Final<t.Node>, visitor: Visitor): void;
+  traverse(this: NodePath_Final<t.Node>, visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
@@ -460,7 +464,9 @@ interface NodePath<
   T extends t.Node["type"] | null = N extends null
     ? null
     : NonNullable<N>["type"],
-  P extends t.Node = NonNullable<t.ParentMaps[NonNullable<T>]>,
+  P extends t.Node = T extends null
+    ? t.Node
+    : NonNullable<t.ParentMaps[NonNullable<T>]>,
 > extends InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,
@@ -477,7 +483,7 @@ interface NodePath<
 
 // This trick is necessary so that
 // NodePath_Final<A | B> is the same as NodePath_Final<A> | NodePath_Final<B>
-type NodePath_Final<T extends t.Node | null = t.Node> = T extends any
+type NodePath_Final<T extends t.Node | null = t.Node | null> = T extends any
   ? NodePath<T>
   : never;
 

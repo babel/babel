@@ -56,7 +56,6 @@ function addCompletionRecords(
   context: CompletionContext,
 ): Completion[] {
   if (path) {
-    // @ts-expect-error FIXME: NodePath<null>
     records.push(..._getCompletionRecords(path, context));
   }
   return records;
@@ -474,7 +473,7 @@ export function _getPattern(
   return path;
 }
 
-export function getAssignmentIdentifiers(this: NodePath) {
+export function getAssignmentIdentifiers(this: NodePath<t.Node>) {
   return _getAssignmentIdentifiers(this.node);
 }
 
@@ -489,7 +488,7 @@ function getBindingIdentifiers(
 ): Record<string, t.Identifier[] | t.Identifier>;
 
 function getBindingIdentifiers(
-  this: NodePath,
+  this: NodePath<t.Node>,
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
   return _getBindingIdentifiers(this.node, duplicates);
@@ -508,7 +507,7 @@ function getOuterBindingIdentifiers(
 ): Record<string, t.Identifier[] | t.Identifier>;
 
 function getOuterBindingIdentifiers(
-  this: NodePath,
+  this: NodePath<t.Node>,
   duplicates?: boolean,
 ): Record<string, t.Identifier[] | t.Identifier> {
   return _getOuterBindingIdentifiers(this.node, duplicates);
@@ -567,7 +566,6 @@ function getBindingIdentifierPaths(
 
     if (outerOnly) {
       if (id.isFunctionDeclaration()) {
-        // @ts-expect-error FIXME: NodePath<null>
         search.push(id.get("id"));
         continue;
       }
@@ -581,7 +579,6 @@ function getBindingIdentifierPaths(
         const key = keys[i];
         const child = id.get(key);
         if (Array.isArray(child)) {
-          // @ts-expect-error FIXME: NodePath<null>
           search.push(...child);
         } else if (child.node) {
           search.push(child);

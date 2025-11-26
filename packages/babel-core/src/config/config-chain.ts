@@ -394,8 +394,8 @@ const loadFileChainWalker = makeChainWalker<ValidatedFile>({
 function* loadFileChain(
   input: ValidatedFile,
   context: ConfigContext,
-  files: Set<ConfigFile>,
-  baseLogger: ConfigPrinter,
+  files: Set<ConfigFile> | undefined,
+  baseLogger: ConfigPrinter | undefined,
 ) {
   const chain = yield* loadFileChainWalker(input, context, files, baseLogger);
   chain?.files.add(input.filepath);
@@ -455,7 +455,7 @@ function buildFileLogger(
 }
 
 function buildRootDescriptors(
-  { dirname, options }: Partial<ValidatedFile>,
+  { dirname, options }: Omit<ValidatedFile, "filepath">,
   alias: string,
   descriptors: (
     dirname: string,
@@ -469,7 +469,7 @@ function buildRootDescriptors(
 function buildProgrammaticLogger(
   _: unknown,
   context: ConfigContext,
-  baseLogger: ConfigPrinter | void,
+  baseLogger: ConfigPrinter | undefined,
 ) {
   if (!baseLogger) {
     return () => {};
@@ -480,7 +480,7 @@ function buildProgrammaticLogger(
 }
 
 function buildEnvDescriptors(
-  { dirname, options }: Partial<ValidatedFile>,
+  { dirname, options }: Omit<ValidatedFile, "filepath">,
   alias: string,
   descriptors: (
     dirname: string,
@@ -494,7 +494,7 @@ function buildEnvDescriptors(
 }
 
 function buildOverrideDescriptors(
-  { dirname, options }: Partial<ValidatedFile>,
+  { dirname, options }: Omit<ValidatedFile, "filepath">,
   alias: string,
   descriptors: (
     dirname: string,
@@ -510,7 +510,7 @@ function buildOverrideDescriptors(
 }
 
 function buildOverrideEnvDescriptors(
-  { dirname, options }: Partial<ValidatedFile>,
+  { dirname, options }: Omit<ValidatedFile, "filepath">,
   alias: string,
   descriptors: (
     dirname: string,
@@ -557,7 +557,7 @@ function makeChainWalker<
   createLogger: (
     configEntry: ArgT,
     context: ConfigContext,
-    printer: ConfigPrinter | void,
+    printer: ConfigPrinter | undefined,
   ) => (
     opts: OptionsAndDescriptors,
     index?: number | null,
@@ -800,14 +800,14 @@ function dedupDescriptors<API>(
   return descriptors.reduce((acc, desc) => {
     acc.push(desc.value);
     return acc;
-  }, []);
+  }, [] as UnloadedDescriptor<API>[]);
 }
 
 function configIsApplicable(
   { options }: OptionsAndDescriptors,
   dirname: string,
   context: ConfigContext,
-  configName: string,
+  configName: string | undefined,
 ): boolean {
   return (
     (options.test === undefined ||
@@ -823,7 +823,7 @@ function configFieldIsApplicable(
   context: ConfigContext,
   test: ConfigApplicableTest,
   dirname: string,
-  configName: string,
+  configName: string | undefined,
 ): boolean {
   const patterns = Array.isArray(test) ? test : [test];
 

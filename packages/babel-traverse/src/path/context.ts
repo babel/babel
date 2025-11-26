@@ -56,7 +56,7 @@ export function _call(this: NodePath, fns?: Function[]): boolean {
   return false;
 }
 
-export function isDenylisted(this: NodePath): boolean {
+export function isDenylisted(this: NodePath<t.Node>): boolean {
   // @ts-expect-error TODO(Babel 8): Remove blacklist
   const denylist = this.opts.denylist ?? this.opts.blacklist;
   return denylist?.includes(this.node.type);
@@ -302,7 +302,7 @@ export function pushContext(this: NodePath, context: TraversalContext) {
 
 export function setup(
   this: NodePath,
-  parentPath: NodePath | undefined,
+  parentPath: NodePath<t.Node> | undefined,
   container: t.Node | t.Node[],
   listKey: string | undefined,
   key: string | number,
@@ -314,7 +314,7 @@ export function setup(
   setKey.call(this, key);
 }
 
-export function setKey(this: NodePath, key: string | number) {
+export function setKey(this: NodePath<t.Node>, key: string | number) {
   this.key = key;
   this.node =
     // @ts-expect-error this.key must present in this.container

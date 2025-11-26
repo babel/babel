@@ -222,7 +222,7 @@ export function TaggedTemplateExpression(
   return resolveCall(this.get("tag"));
 }
 
-function resolveCall(callee: NodePath) {
+function resolveCall(callee: NodePath<t.Node>) {
   callee = callee.resolve();
 
   if (callee.isFunction()) {

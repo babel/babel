@@ -145,6 +145,7 @@ export default class TraversalContext<S = unknown> {
 
       // ensure we don't visit the same node twice
       const { node } = path;
+      // @ts-expect-error node is possibly null
       if (visited.has(node)) continue;
       if (node) visited.add(node);
 

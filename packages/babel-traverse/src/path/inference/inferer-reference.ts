@@ -45,7 +45,7 @@ function getTypeAnnotationBindingConstantViolations(
 ) {
   const types = [];
 
-  const functionConstantViolations: NodePath[] = [];
+  const functionConstantViolations: NodePath<t.Node>[] = [];
   let constantViolations = getConstantViolationsBefore(
     binding,
     path,
@@ -113,7 +113,7 @@ function getTypeAnnotationBindingConstantViolations(
 
 function getConstantViolationsBefore(
   binding: Binding,
-  path: NodePath,
+  path: NodePath<t.Node>,
   functions?: NodePath[],
 ) {
   const violations = binding.constantViolations.slice();
