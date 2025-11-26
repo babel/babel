@@ -3353,14 +3353,18 @@ export default abstract class StatementParser extends ExpressionParser {
       if (!process.env.BABEL_8_BREAKING) {
         useWith = true;
       }
-    } else if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
+    } else if (
+      !process.env.BABEL_8_BREAKING &&
+      this.isContextual(tt._assert) &&
+      !this.hasPrecedingLineBreak()
+    ) {
       if (
         !this.hasPlugin("deprecatedImportAssert") &&
-        (process.env.BABEL_8_BREAKING || !this.hasPlugin("importAssertions"))
+        !this.hasPlugin("importAssertions")
       ) {
         this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
       }
-      if (process.env.BABEL_8_BREAKING || !this.hasPlugin("importAssertions")) {
+      if (!this.hasPlugin("importAssertions")) {
         this.addExtra(node, "deprecatedAssertSyntax", true);
       }
       this.next(); // eat `assert`

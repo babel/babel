@@ -63,7 +63,11 @@ export default declare(api => {
         for (const decl of path.get("body")) {
           if (!decl.isImportDeclaration({ phase: "source" })) continue;
 
-          if (decl.node.attributes?.length || decl.node.assertions?.length) {
+          if (
+            decl.node.attributes?.length ||
+            // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+            (!process.env.BABEL_8_BREAKING && decl.node.assertions?.length)
+          ) {
             throw path.buildCodeFrameError(
               "`import source` with import attributes cannot be compiled.",
             );

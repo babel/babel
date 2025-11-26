@@ -77,13 +77,13 @@ function normalizeOptions(
       ...opts.jsescOption,
     },
     topicToken: opts.topicToken,
-    importAttributesKeyword: opts.importAttributesKeyword,
   };
 
   if (!process.env.BABEL_8_BREAKING) {
     format.decoratorsBeforeExport = opts.decoratorsBeforeExport;
     format.jsescOption.json = opts.jsonCompatibleStrings;
     format.recordAndTupleSyntaxType = opts.recordAndTupleSyntaxType ?? "hash";
+    format.importAttributesKeyword = opts.importAttributesKeyword;
   }
 
   if (format.minified) {
@@ -245,6 +245,7 @@ export interface GeneratorOptions {
    * - "with"        : `import { a } from "b" with { type: "json" };`
    * - "assert"      : `import { a } from "b" assert { type: "json" };`
    * - "with-legacy" : `import { a } from "b" with type: "json";`
+   * @deprecated Removed in Babel 8.
    */
   importAttributesKeyword?: "with" | "assert" | "with-legacy";
 }

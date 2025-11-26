@@ -1,5 +1,5 @@
 {
+  "BABEL_8_BREAKING": true,
   "plugins": ["deprecatedImportAssert"],
-  "sourceType": "module",
-  "throws": "Unexpected token, expected \"{\" (1:17)"
+  "sourceType": "module"
 }

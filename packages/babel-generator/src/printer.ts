@@ -97,6 +97,7 @@ export type Format = {
    * - "with"        : `import { a } from "b" with { type: "json" };`
    * - "assert"      : `import { a } from "b" assert { type: "json" };`
    * - "with-legacy" : `import { a } from "b" with type: "json";`
+   * @deprecated Removed in Babel 8.
    */
   importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };

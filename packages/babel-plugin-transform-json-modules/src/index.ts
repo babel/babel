@@ -71,7 +71,10 @@ export default declare((api, options: Options) => {
         const data = [];
         for (const decl of path.get("body")) {
           if (!decl.isImportDeclaration()) continue;
-          const attributes = decl.node.attributes || decl.node.assertions;
+          const attributes =
+            decl.node.attributes ||
+            // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+            (process.env.BABEL_8_BREAKING ? undefined : decl.node.assertions);
           if (!hasTypeJson(attributes)) continue;
 
           if (decl.node.phase != null) {

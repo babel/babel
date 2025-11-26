@@ -131,8 +131,7 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
   if (pluginsMap.has("importAssertions")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "`importAssertions` has been removed in Babel 8, please use import attributes instead." +
-          " To use the non-standard `assert` syntax you can enable the `deprecatedImportAssert` parser plugin.",
+        "`importAssertions` has been removed in Babel 8, please use import attributes instead.",
       );
     } else if (pluginsMap.has("deprecatedImportAssert")) {
       throw new Error(
@@ -140,15 +139,19 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       );
     }
   }
-  if (
-    !pluginsMap.has("deprecatedImportAssert") &&
+  if (pluginsMap.has("deprecatedImportAssert")) {
+    if (process.env.BABEL_8_BREAKING) {
+      console.warn(
+        "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead.",
+      );
+    }
+  } else if (
     pluginsMap.has("importAttributes") &&
     pluginsMap.get("importAttributes").deprecatedAssertSyntax
   ) {
     if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "The 'importAttributes' plugin has been removed in Babel 8. If you need to enable support " +
-          "for the deprecated `assert` syntax, you can enable the `deprecatedImportAssert` parser plugin.",
+      console.warn(
+        "The 'importAttributes' plugin has been removed in Babel 8. Please migrate any usage of `assert`-style attributes to `with`.",
       );
     } else {
       pluginsMap.set("deprecatedImportAssert", {});
