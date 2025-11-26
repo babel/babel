@@ -20,7 +20,7 @@ type Transform = {
 
 const transformRunner = gensync(function* transform(
   code: string,
-  opts?: InputOptions,
+  opts?: InputOptions | null,
 ): Handler<FileResult | null> {
   const config: ResolvedConfig | null = yield* loadConfig(opts);
   if (config === null) return null;
@@ -50,6 +50,7 @@ export const transform: Transform = function transform(
   }
 
   beginHiddenCallStack(transformRunner.errback)(code, opts, callback);
+  return null;
 };
 
 export function transformSync(

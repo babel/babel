@@ -60,7 +60,7 @@ const runConfig = makeWeakCache(function* runConfig(
   yield* [];
 
   return {
-    options: endHiddenCallStack(options as any as (api: ConfigAPI) => unknown)(
+    options: endHiddenCallStack(options as any as (api: ConfigAPI) => any)(
       makeConfigAPI(cache),
     ),
     cacheNeedsConfiguration: !cache.configured(),
@@ -355,7 +355,7 @@ export function* resolveShowConfigPath(
   const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
   if (targetPath != null) {
     const absolutePath = path.resolve(dirname, targetPath);
-    const stats = yield* fs.stat(absolutePath);
+    const stats = (yield* fs.stat(absolutePath))!;
     if (!stats.isFile()) {
       throw new Error(
         `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,

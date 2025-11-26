@@ -14,7 +14,7 @@ export default class PluginPass<Options = object> {
   cwd: string;
 
   /** The absolute path of the file being compiled. */
-  filename: string | void;
+  filename: string | undefined;
 
   /**
    * Is Babel executed in async mode or not.
@@ -23,7 +23,7 @@ export default class PluginPass<Options = object> {
 
   constructor(
     file: File,
-    key: string | null,
+    key: string | null | undefined,
     options: Options | undefined,
     isAsync: boolean,
   ) {

@@ -4,7 +4,7 @@ import { isAsync, waitFor } from "./async.ts";
 
 export function once<R>(fn: () => Handler<R>): () => Handler<R> {
   let result: { ok: true; value: R } | { ok: false; value: unknown };
-  let resultP: Promise<R>;
+  let resultP: Promise<R> | null;
   let promiseReferenced = false;
   return function* () {
     if (!result) {
@@ -35,11 +35,11 @@ export function once<R>(fn: () => Handler<R>): () => Handler<R> {
           // referenced. If there are no listeners we can forget about it.
           // In the reject case, this avoid uncatchable unhandledRejection
           // events.
-          if (promiseReferenced) resolve(result.value);
+          if (promiseReferenced) resolve!(result.value);
         } catch (error) {
           result = { ok: false, value: error };
           resultP = null;
-          if (promiseReferenced) reject(error);
+          if (promiseReferenced) reject!(error);
         }
       }
     }

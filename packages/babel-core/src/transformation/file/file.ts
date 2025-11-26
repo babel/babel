@@ -20,7 +20,7 @@ export default class File {
   scope: Scope;
   metadata: Record<string, any> = {};
   code: string = "";
-  inputMap: SourceMapConverter;
+  inputMap: SourceMapConverter | null;
 
   hub: HubInterface & { file: File } = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
@@ -28,7 +28,9 @@ export default class File {
     getCode: () => this.code,
     getScope: () => this.scope,
     addHelper: this.addHelper.bind(this),
-    buildError: this.buildCodeFrameError.bind(this),
+    buildError: this.buildCodeFrameError.bind(
+      this,
+    ) as HubInterface["buildError"],
   };
 
   constructor(
@@ -61,8 +63,10 @@ export default class File {
   }
   set shebang(value: string) {
     if (value) {
+      // @ts-expect-error this.path.get("interpreter") may be PathNode<null>
       this.path.get("interpreter").replaceWith(interpreterDirective(value));
     } else {
+      // @ts-expect-error this.path.get("interpreter") may be PathNode<null>
       this.path.get("interpreter").remove();
     }
   }

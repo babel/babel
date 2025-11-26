@@ -19,7 +19,7 @@ export const transformFile: TransformFile = function transformFile(
     callback = opts;
   }
 
-  callback(new Error("Transforming files is not supported in browsers"), null);
+  callback!(new Error("Transforming files is not supported in browsers"), null);
 };
 
 export function transformFileSync(): never {

@@ -63,7 +63,7 @@ export default function normalizeOptions(
   for (const plugins of config.passes) {
     for (const plugin of plugins) {
       if (plugin.manipulateOptions) {
-        plugin.manipulateOptions(options, options.parserOpts);
+        plugin.manipulateOptions(options, options.parserOpts!);
       }
     }
   }

@@ -66,7 +66,7 @@ export type PrivPartialConfig = {
 };
 
 export default function* loadPrivatePartialConfig(
-  inputOpts: InputOptions,
+  inputOpts: InputOptions | null | undefined,
 ): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
@@ -158,7 +158,7 @@ export default function* loadPrivatePartialConfig(
 export function* loadPartialConfig(
   opts?: InputOptions,
 ): Handler<PartialConfig | null> {
-  let showIgnoredFiles = false;
+  let showIgnoredFiles: boolean | undefined = false;
   // We only extract showIgnoredFiles if opts is an object, so that
   // loadPrivatePartialConfig can throw the appropriate error if it's not.
   if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {

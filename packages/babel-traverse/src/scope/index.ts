@@ -573,7 +573,7 @@ class Scope {
    *  - Bound identifiers
    */
 
-  isStatic(node: t.Node): boolean {
+  isStatic(node: t.Node | null): boolean {
     if (isThisExpression(node) || isSuper(node) || isTopicReference(node)) {
       return true;
     }

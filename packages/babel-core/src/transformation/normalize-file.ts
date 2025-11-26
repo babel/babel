@@ -104,9 +104,9 @@ export default function* normalizeFile(
 
 function extractCommentsFromList(
   regex: RegExp,
-  comments: t.Comment[],
+  comments: t.Comment[] | undefined | null,
   lastComment: string | null,
-): [t.Comment[], string | null] {
+): [t.Comment[] | undefined | null, string | null] {
   if (comments) {
     comments = comments.filter(({ value }) => {
       if (regex.test(value)) {
@@ -119,8 +119,8 @@ function extractCommentsFromList(
   return [comments, lastComment];
 }
 
-function extractComments(regex: RegExp, ast: t.Node) {
-  let lastComment: string = null;
+function extractComments(regex: RegExp, ast: t.Node): string | null {
+  let lastComment: string | null = null;
   traverseFast(ast, node => {
     [node.leadingComments, lastComment] = extractCommentsFromList(
       regex,
