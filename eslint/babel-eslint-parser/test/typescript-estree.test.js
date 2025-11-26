@@ -304,7 +304,8 @@ function deeplyRemoveProperties(obj, props) {
           ["function type", "var v: (x: string) => string"],
 
           ["conditional type", "type M = T extends Q ? string : number"],
-          ["import type", "var v: import('foo')"],
+          // Pending release of https://github.com/typescript-eslint/typescript-eslint/pull/11591
+          ...(IS_BABEL_8 ? [] : [["import type", "var v: import('foo')"]]),
           ["instantiation expression optional chain", "a?.b<c>"],
           ["type parameter", "type Id<T> = T"],
 
@@ -378,6 +379,12 @@ function deeplyRemoveProperties(obj, props) {
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
         "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
+
+        // Pending release of https://github.com/typescript-eslint/typescript-eslint/pull/11591
+        "typescript/types/import-type-dynamic/input.ts",
+        "typescript/types/import-type-dynamic-with-options/input.ts",
+        "typescript/types/import-type-dynamic-with-options-trailing-comma/input.ts",
+        "typescript/types/import-type-dynamic-with-string-options/input.ts",
       ]);
       for (const [name, testSuites] of Object.entries(fixtures)) {
         if (["typescript"].includes(name)) {

@@ -720,10 +720,13 @@ export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
-  const { argument, qualifier, options } = node;
+  const { qualifier, options } = node;
   this.word("import");
   this.token("(");
-  this.print(argument);
+  this.print(
+    //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
+    process.env.BABEL_8_BREAKING ? node.source : node.argument,
+  );
   if (options) {
     this.token(",");
     this.print(options);
