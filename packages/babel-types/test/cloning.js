@@ -149,9 +149,9 @@ describe("cloneNode", function () {
     node.declarations[0].id.loc = {};
 
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
-    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(null);
-    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(null);
-    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(null);
+    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(undefined);
+    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(undefined);
+    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(undefined);
   });
 
   it("should generate same code after deep cloning", function () {
