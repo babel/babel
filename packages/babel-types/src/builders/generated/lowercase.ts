@@ -820,7 +820,7 @@ export function arrowFunctionExpression(
     params,
     body,
     async,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     expression: null,
   };
   const defs = NODE_FIELDS.ArrowFunctionExpression;
@@ -1792,7 +1792,7 @@ export function objectTypeCallProperty(
   const node: t.ObjectTypeCallProperty = {
     type: "ObjectTypeCallProperty",
     value,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     static: null,
   };
   const defs = NODE_FIELDS.ObjectTypeCallProperty;
@@ -1811,7 +1811,7 @@ export function objectTypeIndexer(
     key,
     value,
     variance,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     static: null,
   };
   const defs = NODE_FIELDS.ObjectTypeIndexer;
@@ -1831,15 +1831,15 @@ export function objectTypeProperty(
     key,
     value,
     variance,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     kind: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     method: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     optional: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     proto: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     static: null,
   };
   const defs = NODE_FIELDS.ObjectTypeProperty;
@@ -1991,7 +1991,7 @@ export function typeParameter(
     bound,
     default: _default,
     variance,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     name: null,
   };
   const defs = NODE_FIELDS.TypeParameter;
@@ -2071,9 +2071,9 @@ export function enumBooleanBody(
   const node: t.EnumBooleanBody = {
     type: "EnumBooleanBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     hasUnknownMembers: null,
   };
   const defs = NODE_FIELDS.EnumBooleanBody;
@@ -2086,9 +2086,9 @@ export function enumNumberBody(
   const node: t.EnumNumberBody = {
     type: "EnumNumberBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     hasUnknownMembers: null,
   };
   const defs = NODE_FIELDS.EnumNumberBody;
@@ -2101,9 +2101,9 @@ export function enumStringBody(
   const node: t.EnumStringBody = {
     type: "EnumStringBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     hasUnknownMembers: null,
   };
   const defs = NODE_FIELDS.EnumStringBody;
@@ -2116,7 +2116,7 @@ export function enumSymbolBody(
   const node: t.EnumSymbolBody = {
     type: "EnumSymbolBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     hasUnknownMembers: null,
   };
   const defs = NODE_FIELDS.EnumSymbolBody;
@@ -2127,7 +2127,7 @@ export function enumBooleanMember(id: t.Identifier): t.EnumBooleanMember {
   const node: t.EnumBooleanMember = {
     type: "EnumBooleanMember",
     id,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     init: null,
   };
   const defs = NODE_FIELDS.EnumBooleanMember;
@@ -2193,7 +2193,7 @@ export function optionalIndexedAccessType(
     type: "OptionalIndexedAccessType",
     objectType,
     indexType,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     optional: null,
   };
   const defs = NODE_FIELDS.OptionalIndexedAccessType;
@@ -2733,7 +2733,7 @@ export function tsMethodSignature(
     typeParameters,
     parameters,
     typeAnnotation,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     kind: null,
   };
   const defs = NODE_FIELDS.TSMethodSignature;
@@ -3323,7 +3323,7 @@ export function tsModuleDeclaration(
     type: "TSModuleDeclaration",
     id,
     body,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     kind: null,
   };
   const defs = NODE_FIELDS.TSModuleDeclaration;
@@ -3368,7 +3368,7 @@ export function tsImportEqualsDeclaration(
     type: "TSImportEqualsDeclaration",
     id,
     moduleReference,
-    //@ts-expect-error FIXME in Babel 8
+    //@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8
     isExport: null,
   };
   const defs = NODE_FIELDS.TSImportEqualsDeclaration;

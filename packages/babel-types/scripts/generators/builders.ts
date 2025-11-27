@@ -235,8 +235,9 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
     const nodeObjectExpression = `{\n${objectFields
       .map(
         ([k, v, usedDefault]) =>
-          (usedDefault ? "//@ts-expect-error FIXME in Babel 8\n" : "") +
-          (k === v ? `    ${k},` : `    ${k}: ${v},`)
+          (usedDefault
+            ? "//@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8\n"
+            : "") + (k === v ? `    ${k},` : `    ${k}: ${v},`)
       )
       .join("\n")}\n  }`;
 
