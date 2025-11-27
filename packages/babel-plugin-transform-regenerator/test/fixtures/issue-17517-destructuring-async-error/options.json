@@ -1,3 +1,5 @@
 {
-  "plugins": ["@babel/plugin-transform-regenerator"]
+  "plugins": [
+    "transform-regenerator"
+  ]
 }
