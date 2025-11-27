@@ -3117,6 +3117,40 @@ export function isVoidPattern<Opts extends Options<t.VoidPattern>>(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isStructDeclaration(
+  node: t.Node | null | undefined,
+): node is t.StructDeclaration;
+export function isStructDeclaration<Opts extends Options<t.StructDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StructDeclaration & Opts;
+export function isStructDeclaration<Opts extends Options<t.StructDeclaration>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  if (node.type !== "StructDeclaration") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isStructBody(
+  node: t.Node | null | undefined,
+): node is t.StructBody;
+export function isStructBody<Opts extends Options<t.StructBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.StructBody & Opts;
+export function isStructBody<Opts extends Options<t.StructBody>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  if (node.type !== "StructBody") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
 ): node is t.TSParameterProperty;
@@ -4544,6 +4578,7 @@ export function isScopable<Opts extends Options<t.Scopable>>(
     case "ClassMethod":
     case "ClassPrivateMethod":
     case "StaticBlock":
+    case "StructDeclaration":
     case "TSModuleBlock":
       break;
     case "Placeholder":
@@ -4671,6 +4706,7 @@ export function isStatement<Opts extends Options<t.Statement>>(
     case "OpaqueType":
     case "TypeAlias":
     case "EnumDeclaration":
+    case "StructDeclaration":
     case "TSDeclareFunction":
     case "TSInterfaceDeclaration":
     case "TSTypeAliasDeclaration":
@@ -5005,6 +5041,7 @@ export function isDeclaration<Opts extends Options<t.Declaration>>(
     case "OpaqueType":
     case "TypeAlias":
     case "EnumDeclaration":
+    case "StructDeclaration":
     case "TSDeclareFunction":
     case "TSInterfaceDeclaration":
     case "TSTypeAliasDeclaration":

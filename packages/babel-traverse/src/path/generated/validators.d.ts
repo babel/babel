@@ -1290,6 +1290,18 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.StringTypeAnnotation & Opts>;
+  isStructBody(this: NodePath<t.Node | null>): this is NodePath<t.StructBody>;
+  isStructBody<Opts extends Options<t.StructBody>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.StructBody & Opts>;
+  isStructDeclaration(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.StructDeclaration>;
+  isStructDeclaration<Opts extends Options<t.StructDeclaration>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.StructDeclaration & Opts>;
   isSuper(this: NodePath<t.Node | null>): this is NodePath<t.Super>;
   isSuper<Opts extends Options<t.Super>>(
     this: NodePath<t.Node | null>,

@@ -629,6 +629,12 @@ export interface NodePathAssertions {
   assertStringTypeAnnotation<Opts extends Options<t.StringTypeAnnotation>>(
     opts?: Opts,
   ): asserts this is NodePath<t.StringTypeAnnotation & Opts>;
+  assertStructBody<Opts extends Options<t.StructBody>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.StructBody & Opts>;
+  assertStructDeclaration<Opts extends Options<t.StructDeclaration>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.StructDeclaration & Opts>;
   assertSuper<Opts extends Options<t.Super>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Super & Opts>;
