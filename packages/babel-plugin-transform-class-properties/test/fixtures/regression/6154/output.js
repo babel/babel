@@ -7,10 +7,7 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
     function Other() {
       var _this;
       babelHelpers.classCallCheck(this, Other);
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      _this = babelHelpers.callSuper(this, Other, [].concat(args));
+      _this = babelHelpers.callSuper(this, Other, arguments);
       babelHelpers.defineProperty(_this, "a", function () {
         return babelHelpers.superPropGet((_this, Other), "test", _this, 1);
       });

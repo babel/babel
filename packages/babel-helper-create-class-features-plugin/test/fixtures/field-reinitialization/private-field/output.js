@@ -6,8 +6,8 @@ class Base {
 let counter = 0;
 var _foo = /*#__PURE__*/new WeakMap();
 class Derived extends Base {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     babelHelpers.classPrivateFieldInitSpec(this, _foo, ++counter);
   }
   static get(obj) {

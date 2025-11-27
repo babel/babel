@@ -5,8 +5,8 @@ class Base {
 }
 var _Derived_brand = /*#__PURE__*/new WeakSet();
 class Derived extends Base {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     babelHelpers.classPrivateMethodInitSpec(this, _Derived_brand);
   }
   static get(obj) {

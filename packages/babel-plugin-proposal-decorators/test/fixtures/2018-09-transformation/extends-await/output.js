@@ -3,8 +3,8 @@ async function g() {
     "use strict";
 
     class A extends _await$B {
-      constructor(...args) {
-        super(...args);
+      constructor() {
+        super(...arguments);
         _initialize(this);
       }
     }

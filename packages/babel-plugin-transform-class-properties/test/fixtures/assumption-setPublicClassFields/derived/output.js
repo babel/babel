@@ -1,6 +1,6 @@
 class Foo extends Bar {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     this.bar = "foo";
   }
 }

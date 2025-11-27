@@ -1,6 +1,6 @@
 export class Foo extends Bar {
-  constructor(..._args) {
-    super(..._args);
+  constructor() {
+    super(...arguments);
     babelHelpers.defineProperty(this, "test", args);
   }
 }

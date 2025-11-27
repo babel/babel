@@ -3,8 +3,8 @@ import React from 'react';
 
 // Regression test for https://github.com/babel/babel/issues/5552
 class BugReport extends React.Component {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
     this.thisWontWork = ({
       color
     }) => {
