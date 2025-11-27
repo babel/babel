@@ -7,9 +7,12 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
-const program = process.env.BABEL_8_BREAKING
-  ? commander.program
-  : commander.default.program;
+const program = (
+  process.env.BABEL_8_BREAKING
+    ? // @ts-expect-error no types for commander.program
+      commander.program
+    : commander.default.program
+) as commander.Command;
 
 // Standard Babel input configs.
 program.option(
@@ -209,7 +212,6 @@ export type CmdOptions = {
 };
 
 export default function parseArgv(args: string[]): CmdOptions | null {
-  //
   program.parse(args);
 
   const opts = program.opts();
@@ -223,6 +225,8 @@ export default function parseArgv(args: string[]): CmdOptions | null {
         glob.sync(input, { dotRelative: true }).sort(alphasort)
       : // When USE_ESM is true and BABEL_8_BREAKING is off,
         // the glob package is an ESM wrapper of the CJS glob 7
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore tsgo: Property 'default' does not exist on type
         (USE_ESM ? glob.default.sync : glob.sync)(input);
     if (!files.length) files = [input];
     globbed.push(...files);
