@@ -272,8 +272,10 @@ function _evaluate(path: NodePath, state: State): any {
       return;
     }
     const initPath = bindingPath.get("init");
+    // @ts-expect-error FIXME: evaluateCached does not accept NodePath<null>
     const value = evaluateCached(initPath, state);
     if (typeof value === "object" && value !== null && binding.references > 1) {
+      // @ts-expect-error FIXME: deopt does not accept NodePath<null>
       deopt(initPath, state);
       return;
     }
