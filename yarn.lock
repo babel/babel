@@ -3015,16 +3015,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-object-assign@workspace:^, @babel/plugin-transform-object-assign@workspace:packages/babel-plugin-transform-object-assign":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-object-assign@workspace:packages/babel-plugin-transform-object-assign"
+"@babel/plugin-transform-object-assign@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-transform-object-assign@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/5edab2e02c20e85557a1ada436d630596db896853da6005d892ccce7be1f2efe985f32a81021f6da220d67f2b40f0fff7a5847b52965a0eebe5674687e7711fe
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-transform-object-rest-spread@npm:8.0.0-beta.3, @babel/plugin-transform-object-rest-spread@npm:^8.0.0-beta.3":
   version: 8.0.0-beta.3
@@ -4091,7 +4091,7 @@ __metadata:
     "@babel/plugin-transform-new-target": "workspace:^"
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^"
     "@babel/plugin-transform-numeric-separator": "workspace:^"
-    "@babel/plugin-transform-object-assign": "workspace:^"
+    "@babel/plugin-transform-object-assign": "npm:^7.27.1"
     "@babel/plugin-transform-object-rest-spread": "workspace:^"
     "@babel/plugin-transform-object-set-prototype-of-to-assign": "workspace:^"
     "@babel/plugin-transform-object-super": "workspace:^"

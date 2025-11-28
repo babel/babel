@@ -332,9 +332,6 @@
       "@babel/plugin-transform-numeric-separator": [
         "./packages/babel-plugin-transform-numeric-separator/src"
       ],
-      "@babel/plugin-transform-object-assign": [
-        "./packages/babel-plugin-transform-object-assign/src"
-      ],
       "@babel/plugin-transform-object-rest-spread": [
         "./packages/babel-plugin-transform-object-rest-spread/src"
       ],
