@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "This experimental syntax requires enabling the parser plugin: \"structs\". (1:7)"
+}
