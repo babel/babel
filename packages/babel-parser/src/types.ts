@@ -1096,6 +1096,7 @@ export interface ExportNamedDeclaration extends NodeBase {
     | ExportNamespaceSpecifier
   )[];
   source: Literal | undefined | null;
+  phase?: null | "defer";
   exportKind?: "type" | "value"; // TODO: Not in spec,
   attributes?: ImportAttribute[];
   // @deprecated

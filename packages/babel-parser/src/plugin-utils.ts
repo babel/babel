@@ -222,6 +222,15 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       );
     }
   }
+
+  if (
+    pluginsMap.has("deferredReexports") &&
+    !pluginsMap.has("deferredImportEvaluation")
+  ) {
+    throw new Error(
+      "The 'deferredReexports' plugin requires 'deferredImportEvaluation'.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
