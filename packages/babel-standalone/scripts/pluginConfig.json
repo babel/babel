@@ -100,10 +100,7 @@
     "transform-react-display-name",
     "transform-react-inline-elements",
     "transform-react-jsx",
-    "transform-react-jsx-compat",
     "transform-react-jsx-development",
-    "transform-react-jsx-self",
-    "transform-react-jsx-source",
     "transform-regenerator",
     "transform-reserved-words",
     "transform-runtime",
@@ -121,6 +118,9 @@
   ],
   "babel7OnlyExternalPlugins": [
     "syntax-record-and-tuple",
-    "proposal-record-and-tuple"
+    "proposal-record-and-tuple",
+    "transform-react-jsx-compat",
+    "transform-react-jsx-self",
+    "transform-react-jsx-source"
   ]
 }

@@ -84,10 +84,7 @@ import transformReactConstantElements from "@babel/plugin-transform-react-consta
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactInlineElements from "@babel/plugin-transform-react-inline-elements";
 import transformReactJsx from "@babel/plugin-transform-react-jsx";
-import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
 import transformReactJsxDevelopment from "@babel/plugin-transform-react-jsx-development";
-import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
-import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformRuntime from "@babel/plugin-transform-runtime";
@@ -104,6 +101,9 @@ import transformExplicitResourceManagement from "@babel/plugin-transform-explici
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
 import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
+import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat" with { if: "!process.env.BABEL_8_BREAKING" };
+import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self" with { if: "!process.env.BABEL_8_BREAKING" };
+import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source" with { if: "!process.env.BABEL_8_BREAKING" };
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -193,10 +193,7 @@ export {
   transformReactDisplayName,
   transformReactInlineElements,
   transformReactJsx,
-  transformReactJsxCompat,
   transformReactJsxDevelopment,
-  transformReactJsxSelf,
-  transformReactJsxSource,
   transformRegenerator,
   transformReservedWords,
   transformRuntime,
@@ -303,10 +300,7 @@ export const all: Record<string, any> = {
   "transform-react-display-name": transformReactDisplayName,
   "transform-react-inline-elements": transformReactInlineElements,
   "transform-react-jsx": transformReactJsx,
-  "transform-react-jsx-compat": transformReactJsxCompat,
   "transform-react-jsx-development": transformReactJsxDevelopment,
-  "transform-react-jsx-self": transformReactJsxSelf,
-  "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,
   "transform-reserved-words": transformReservedWords,
   "transform-runtime": transformRuntime,
@@ -329,3 +323,12 @@ if (!process.env.BABEL_8_BREAKING)
 export { default as proposalRecordAndTuple } from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
 if (!process.env.BABEL_8_BREAKING)
   all["proposal-record-and-tuple"] = proposalRecordAndTuple;
+export { default as transformReactJsxCompat } from "@babel/plugin-transform-react-jsx-compat" with { if: "!process.env.BABEL_8_BREAKING" };
+if (!process.env.BABEL_8_BREAKING)
+  all["transform-react-jsx-compat"] = transformReactJsxCompat;
+export { default as transformReactJsxSelf } from "@babel/plugin-transform-react-jsx-self" with { if: "!process.env.BABEL_8_BREAKING" };
+if (!process.env.BABEL_8_BREAKING)
+  all["transform-react-jsx-self"] = transformReactJsxSelf;
+export { default as transformReactJsxSource } from "@babel/plugin-transform-react-jsx-source" with { if: "!process.env.BABEL_8_BREAKING" };
+if (!process.env.BABEL_8_BREAKING)
+  all["transform-react-jsx-source"] = transformReactJsxSource;
