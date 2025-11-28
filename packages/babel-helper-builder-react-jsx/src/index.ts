@@ -1,4 +1,9 @@
-import {
+import * as t_1 from "@babel/types" with { if: "!process.env.BABEL_8_BREAKING" };
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+import type { PluginPass, NodePath, Visitor } from "@babel/core";
+import { types as t } from "@babel/core" with { if: "process.env.BABEL_8_BREAKING" };
+
+const {
   booleanLiteral,
   callExpression,
   identifier,
@@ -21,9 +26,7 @@ import {
   spreadElement,
   stringLiteral,
   thisExpression,
-} from "@babel/types";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
+} = process.env.BABEL_8_BREAKING ? t : t_1;
 
 type ElementState = {
   tagExpr: t.Expression; // tag node,
