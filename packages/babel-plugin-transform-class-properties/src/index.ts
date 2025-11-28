@@ -20,11 +20,6 @@ export default declare((api, options: Options) => {
     feature: FEATURES.fields,
     loose: options.loose,
 
-    manipulateOptions(opts, parserOpts) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-ignore(Babel 7 vs Babel 8) These plugins have been removed
-        parserOpts.plugins.push("classProperties", "classPrivateProperties");
-      }
-    },
+    manipulateOptions(opts, parserOpts) {},
   });
 });

@@ -16,10 +16,7 @@ export default declare(api => {
 
   return {
     name: "transform-json-strings",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("jsonStrings"),
-
+    manipulateOptions: undefined,
     visitor: {
       "DirectiveLiteral|StringLiteral"({
         node,

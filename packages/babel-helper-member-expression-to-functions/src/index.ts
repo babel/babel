@@ -244,10 +244,7 @@ const handle = {
       } else if (parentIsCall) {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
         member.replaceWith(this.boundGet(member));
-      } else if (
-        (process.env.BABEL_8_BREAKING || this.delete) &&
-        parentPath.isUnaryExpression({ operator: "delete" })
-      ) {
+      } else if (parentPath.isUnaryExpression({ operator: "delete" })) {
         parentPath.replaceWith(this.delete(member));
       } else if (parentPath.isAssignmentExpression()) {
         // `a?.#b = c` to `(a == null ? void 0 : a.#b = c)`
@@ -461,10 +458,7 @@ const handle = {
     }
 
     // delete MEMBER -> _delete(MEMBER)
-    if (
-      (process.env.BABEL_8_BREAKING || this.delete) &&
-      parentPath.isUnaryExpression({ operator: "delete" })
-    ) {
+    if (parentPath.isUnaryExpression({ operator: "delete" })) {
       parentPath.replaceWith(this.delete(member));
       return;
     }

@@ -41,9 +41,7 @@ defineType("JSXClosingElement", {
 });
 
 defineType("JSXElement", {
-  builder: process.env.BABEL_8_BREAKING
-    ? ["openingElement", "closingElement", "children"]
-    : ["openingElement", "closingElement", "children", "selfClosing"],
+  builder: ["openingElement", "closingElement", "children"],
   visitor: ["openingElement", "children", "closingElement"],
   aliases: ["Immutable", "Expression"],
   fields: {
@@ -61,14 +59,6 @@ defineType("JSXElement", {
       "JSXElement",
       "JSXFragment",
     ),
-    ...(process.env.BABEL_8_BREAKING
-      ? {}
-      : {
-          selfClosing: {
-            validate: assertValueType("boolean"),
-            optional: true,
-          },
-        }),
   },
 });
 
@@ -129,9 +119,7 @@ defineType("JSXNamespacedName", {
 
 defineType("JSXOpeningElement", {
   builder: ["name", "attributes", "selfClosing"],
-  visitor: process.env.BABEL_8_BREAKING
-    ? ["name", "typeArguments", "attributes"]
-    : ["name", "typeParameters", "typeArguments", "attributes"],
+  visitor: ["name", "typeArguments", "attributes"],
   aliases: ["Immutable"],
   fields: {
     name: {
@@ -146,22 +134,12 @@ defineType("JSXOpeningElement", {
     },
     attributes: validateArrayOfType("JSXAttribute", "JSXSpreadAttribute"),
     typeArguments: {
-      validate: process.env.BABEL_8_BREAKING
-        ? assertNodeType(
-            "TypeParameterInstantiation",
-            "TSTypeParameterInstantiation",
-          )
-        : assertNodeType("TypeParameterInstantiation"),
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
       optional: true,
     },
-    ...(process.env.BABEL_8_BREAKING
-      ? {}
-      : {
-          typeParameters: {
-            validate: assertNodeType("TSTypeParameterInstantiation"),
-            optional: true,
-          },
-        }),
   },
 });
 

@@ -151,11 +151,7 @@ function requireChokidar(): any {
   const require = createRequire(import.meta.url);
 
   try {
-    return process.env.BABEL_8_BREAKING
-      ? require("chokidar")
-      : parseInt(process.versions.node) >= 8
-        ? require("chokidar")
-        : require("@nicolo-ribaudo/chokidar-2");
+    return require("chokidar");
   } catch (err) {
     console.error(
       "The optional dependency chokidar failed to install and is required for " +

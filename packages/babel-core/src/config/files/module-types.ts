@@ -16,16 +16,6 @@ const debug = buildDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
-if (!process.env.BABEL_8_BREAKING) {
-  try {
-    // Old Node.js versions don't support import() syntax.
-    // eslint-disable-next-line no-var
-    var import_:
-      | ((specifier: string | URL) => any)
-      | undefined = require("./import.cjs");
-  } catch {}
-}
-
 export const supportsESM = semver.satisfies(
   process.versions.node,
   // older versions, starting from 10, support the dynamic
@@ -54,18 +44,10 @@ function loadCjsDefault(filepath: string) {
     LOADING_CJS_FILES.delete(filepath);
   }
 
-  if (process.env.BABEL_8_BREAKING) {
-    return module != null &&
-      (module.__esModule || module[Symbol.toStringTag] === "Module")
-      ? module.default
-      : module;
-  } else {
-    return module != null &&
-      (module.__esModule || module[Symbol.toStringTag] === "Module")
-      ? module.default ||
-          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
-      : module;
-  }
+  return module != null &&
+    (module.__esModule || module[Symbol.toStringTag] === "Module")
+    ? module.default
+    : module;
 }
 
 const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
@@ -74,18 +56,7 @@ const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
   // Add ?import as a workaround for https://github.com/nodejs/node/issues/55500
   const url = pathToFileURL(filepath).toString() + "?import";
 
-  if (process.env.BABEL_8_BREAKING) {
-    return await import(url);
-  } else {
-    if (!import_) {
-      throw new ConfigError(
-        "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
-        filepath,
-      );
-    }
-
-    return await import_(url);
-  }
+  return await import(url);
 });
 
 const tsNotSupportedError = (ext: string) => `\
@@ -130,29 +101,18 @@ export default function* loadCodeDefault(
     case "auto cjs":
       if (isTS) {
         return ensureTsSupport(filepath, ext, () => loadCjsDefault(filepath));
-      } else if (process.env.BABEL_8_BREAKING) {
-        return loadCjsDefault(filepath);
       } else {
-        return loadCjsDefault(
-          filepath,
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          /* fallbackToTranspiledModule */ arguments[2],
-        );
+        return loadCjsDefault(filepath);
       }
+
     case "auto unknown":
     case "require unknown":
     case "require esm":
       try {
         if (isTS) {
           return ensureTsSupport(filepath, ext, () => loadCjsDefault(filepath));
-        } else if (process.env.BABEL_8_BREAKING) {
-          return loadCjsDefault(filepath);
         } else {
-          return loadCjsDefault(
-            filepath,
-            // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-            /* fallbackToTranspiledModule */ arguments[2],
-          );
+          return loadCjsDefault(filepath);
         }
       } catch (e) {
         if (
@@ -169,10 +129,7 @@ export default function* loadCodeDefault(
             throw new ConfigError(tlaError, filepath);
           }
           // fall through: require() failed due to TLA
-        } else if (
-          e.code === "ERR_REQUIRE_ESM" ||
-          (!process.env.BABEL_8_BREAKING && type === "esm")
-        ) {
+        } else if (e.code === "ERR_REQUIRE_ESM") {
           // fall through: require() failed due to ESM
         } else {
           throw e;
@@ -227,7 +184,6 @@ function ensureTsSupport<T>(
         {
           onlyRemoveTypeImports: true,
           optimizeConstEnums: true,
-          ...(process.env.BABEL_8_BREAKING ? {} : { allowDeclareFields: true }),
         },
       ],
     ],
@@ -278,21 +234,6 @@ function getTSPreset(filepath: string) {
 
     let message =
       "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found: please install it!";
-
-    if (!process.env.BABEL_8_BREAKING) {
-      if (process.versions.pnp) {
-        // Using Yarn PnP, which doesn't allow requiring packages that are not
-        // explicitly specified as dependencies.
-        message += `
-If you are using Yarn Plug'n'Play, you may also need to add the following configuration to your .yarnrc.yml file:
-
-packageExtensions:
-\t"@babel/core@*":
-\t\tpeerDependencies:
-\t\t\t"@babel/preset-typescript": "*"
-`;
-      }
-    }
 
     throw new ConfigError(message, filepath);
   }

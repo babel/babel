@@ -242,13 +242,6 @@ export function merge(
   wrapper?: VisitWrapper | null,
 ): ExplodedVisitor {
   const mergedVisitor: ExplodedVisitor = { _verified: true, _exploded: true };
-  if (!process.env.BABEL_8_BREAKING) {
-    // For compatibility with old Babel versions, we must hide _verified and _exploded.
-    // Otherwise, old versions of the validator will throw sayng that `true` is not
-    // a function, because it tries to validate it as a visitor.
-    Object.defineProperty(mergedVisitor, "_exploded", { enumerable: false });
-    Object.defineProperty(mergedVisitor, "_verified", { enumerable: false });
-  }
 
   for (let i = 0; i < visitors.length; i++) {
     const visitor = explode$1(visitors[i]);
@@ -369,12 +362,6 @@ function shouldIgnoreKey(key: string): key is
     return true;
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
-    if (key === "blacklist") {
-      return true;
-    }
-  }
-
   return false;
 }
 
@@ -401,29 +388,14 @@ const _environmentVisitor: Visitor = {
 
     path.skip();
     if (path.isMethod()) {
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        !path.requeueComputedKeyAndDecorators
-      ) {
-        // See https://github.com/babel/babel/issues/16694
-        requeueComputedKeyAndDecorators.call(path);
-      } else {
-        path.requeueComputedKeyAndDecorators();
-      }
+      path.requeueComputedKeyAndDecorators();
     }
   },
   Property(path) {
     if (path.isObjectProperty()) return;
     path.skip();
-    if (
-      !process.env.BABEL_8_BREAKING &&
-      !path.requeueComputedKeyAndDecorators
-    ) {
-      // See https://github.com/babel/babel/issues/16694
-      requeueComputedKeyAndDecorators.call(path);
-    } else {
-      path.requeueComputedKeyAndDecorators();
-    }
+
+    path.requeueComputedKeyAndDecorators();
   },
 };
 

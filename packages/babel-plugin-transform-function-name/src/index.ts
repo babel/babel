@@ -15,12 +15,6 @@ export default declare(api => {
       FunctionExpression: {
         exit(path) {
           if (path.key !== "value" && !path.parentPath.isObjectProperty()) {
-            if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-              // polyfill when being run by an older Babel version
-              path.ensureFunctionName ??=
-                // eslint-disable-next-line no-restricted-globals
-                require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-            }
             path.ensureFunctionName(supportUnicodeId);
           }
         },
@@ -29,12 +23,6 @@ export default declare(api => {
       ObjectProperty(path) {
         const value = path.get("value");
         if (value.isFunction()) {
-          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-            // polyfill when being run by an older Babel version
-            value.ensureFunctionName ??=
-              // eslint-disable-next-line no-restricted-globals
-              require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-          }
           // @ts-expect-error Fixme: should check ArrowFunctionExpression
           value.ensureFunctionName(supportUnicodeId);
         }

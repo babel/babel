@@ -65,7 +65,6 @@ export default declare(api => {
           const { property, computed } = node.left;
 
           if (computed) {
-            // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
             const prop = maybeMemoize(property, scope);
             member1 = t.memberExpression(object.assign, prop.assign, true);
             member2 = t.memberExpression(object.ref, prop.ref, true);

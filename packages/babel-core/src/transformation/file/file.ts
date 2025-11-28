@@ -9,7 +9,7 @@ import semver from "semver";
 import type { NormalizedFile } from "../normalize-file.ts";
 
 // @ts-expect-error This file is `any`
-import babel7 from "./babel-7-helpers.cjs" with { if: "!process.env.BABEL_8_BREAKING && (!USE_ESM || IS_STANDALONE)" };
+
 import type { ResolvedOptions } from "../../config/validation/options.ts";
 import type { SourceMapConverter } from "convert-source-map";
 
@@ -70,18 +70,6 @@ export default class File {
   }
 
   set(key: unknown, val: unknown) {
-    if (!process.env.BABEL_8_BREAKING) {
-      if (key === "helpersNamespace") {
-        throw new Error(
-          "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
-            "If you are using @babel/plugin-external-helpers you will need to use a newer " +
-            "version than the one you currently have installed. " +
-            "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
-            "alongside 'file.availableHelper()'.",
-        );
-      }
-    }
-
     this._map.set(key, val);
   }
 
@@ -133,17 +121,10 @@ export default class File {
     // transform-runtime's definitions.js file.
     if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
 
-    if (process.env.BABEL_8_BREAKING) {
-      return (
-        !semver.intersects(`<${minVersion}`, versionRange) &&
-        !semver.intersects(`>=9.0.0`, versionRange)
-      );
-    } else {
-      return (
-        !semver.intersects(`<${minVersion}`, versionRange) &&
-        !semver.intersects(`>=8.0.0`, versionRange)
-      );
-    }
+    return (
+      !semver.intersects(`<${minVersion}`, versionRange) &&
+      !semver.intersects(`>=9.0.0`, versionRange)
+    );
   }
 
   addHelper(name: string): t.Identifier {
@@ -249,30 +230,5 @@ export default class File {
     }
 
     return new _Error(msg);
-  }
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  // @ts-expect-error Babel 7
-  File.prototype.addImport = function addImport() {
-    throw new Error(
-      "This API has been removed. If you're looking for this " +
-        "functionality in Babel 7, you should import the " +
-        "'@babel/helper-module-imports' module and use the functions exposed " +
-        " from that module, such as 'addNamed' or 'addDefault'.",
-    );
-  };
-  // @ts-expect-error Babel 7
-  File.prototype.addTemplateObject = function addTemplateObject() {
-    throw new Error(
-      "This function has been moved into the template literal transform itself.",
-    );
-  };
-
-  if (!USE_ESM || IS_STANDALONE) {
-    // @ts-expect-error Babel 7
-    File.prototype.getModuleName = function getModuleName() {
-      return babel7.getModuleName()(this.opts, this.opts);
-    };
   }
 }

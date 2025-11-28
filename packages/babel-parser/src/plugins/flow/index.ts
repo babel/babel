@@ -176,11 +176,8 @@ const FlowErrors = ParseErrorEnum`flow`({
   PatternIsOptional: {
     message:
       "A binding pattern parameter cannot be optional in an implementation signature.",
-    // For consistency in TypeScript and Flow error codes
-    ...(!process.env.BABEL_8_BREAKING
-      ? { reasonCode: "OptionalBindingPattern" }
-      : {}),
   },
+
   SetterMayNotHaveThisParam: "A setter cannot have a `this` parameter.",
   SpreadVariance: "Spread properties cannot have variance.",
   ThisParamAnnotationRequired:
@@ -2627,14 +2624,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // handles `class extends C<<T>`
           this.match(tt.bitShiftL))
       ) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.superTypeArguments =
-            this.flowParseTypeParameterInstantiationInExpression();
-        } else {
-          node.superTypeParameters =
-            this.flowParseTypeParameterInstantiationInExpression();
-        }
+        node.superTypeArguments =
+          this.flowParseTypeParameterInstantiationInExpression();
       }
+
       if (this.isContextual(tt._implements)) {
         this.next();
         const implemented: N.FlowClassImplements[] = (node.implements = []);

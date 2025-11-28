@@ -22,15 +22,7 @@ const renameVisitor: Visitor<Renamer> = {
     ) {
       path.skip();
       if (path.isMethod()) {
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          !path.requeueComputedKeyAndDecorators
-        ) {
-          // See https://github.com/babel/babel/issues/16694
-          requeueComputedKeyAndDecorators.call(path);
-        } else {
-          path.requeueComputedKeyAndDecorators();
-        }
+        path.requeueComputedKeyAndDecorators();
       }
     }
   },
@@ -48,9 +40,6 @@ const renameVisitor: Visitor<Renamer> = {
       scope.getBindingIdentifier(name) === state.binding.identifier
     ) {
       node.shorthand = false;
-      if (!process.env.BABEL_8_BREAKING) {
-        if (node.extra?.shorthand) node.extra.shorthand = false;
-      }
     }
   },
 
@@ -160,10 +149,7 @@ export default class Renamer {
       }
     }
 
-    const blockToTraverse = process.env.BABEL_8_BREAKING
-      ? scope.block
-      : (arguments[0] as t.Pattern | t.Scopable) || scope.block;
-
+    const blockToTraverse = scope.block;
     // When blockToTraverse is a SwitchStatement, the discriminant
     // is not part of the current scope and thus should be skipped.
 
@@ -191,15 +177,9 @@ export default class Renamer {
       skipKeys,
     );
 
-    if (process.env.BABEL_8_BREAKING) {
-      scope.removeOwnBinding(oldName);
-      scope.bindings[newName] = binding;
-      this.binding.identifier.name = newName;
-    } else if (!arguments[0]) {
-      scope.removeOwnBinding(oldName);
-      scope.bindings[newName] = binding;
-      this.binding.identifier.name = newName;
-    }
+    scope.removeOwnBinding(oldName);
+    scope.bindings[newName] = binding;
+    this.binding.identifier.name = newName;
 
     if (parentDeclar) {
       this.maybeConvertFromClassFunctionDeclaration(path);

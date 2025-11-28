@@ -104,15 +104,3 @@ export const react = {
 
 // this is used by @babel/traverse to warn about deprecated visitors
 export { default as __internal__deprecationWarning } from "./utils/deprecationWarning.ts";
-
-import toSequenceExpression from "./converters/toSequenceExpression.ts" with { if: "!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE" };
-if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.toSequenceExpression = toSequenceExpression;
-}
-
-if (!process.env.BABEL_8_BREAKING && process.env.BABEL_TYPES_8_BREAKING) {
-  console.warn(
-    "BABEL_TYPES_8_BREAKING is not supported anymore. Use the latest Babel 8.0.0 pre-release instead!",
-  );
-}

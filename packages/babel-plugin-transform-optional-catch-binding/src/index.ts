@@ -5,10 +5,7 @@ export default declare(api => {
 
   return {
     name: "transform-optional-catch-binding",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("optionalCatchBinding"),
-
+    manipulateOptions: undefined,
     visitor: {
       CatchClause(path) {
         if (!path.node.param) {

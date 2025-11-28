@@ -79,31 +79,6 @@ async function transform(input: string, filename: string) {
 
 export = { setOptions, transform };
 
-if (!process.env.BABEL_8_BREAKING) {
-  module.exports.transformSync = function (input: string, filename: string) {
-    const opts = new babel.OptionManager().init({
-      // sourceRoot can be overwritten
-      sourceRoot: path.dirname(filename) + path.sep,
-      ...cloneDeep(transformOpts),
-      filename,
-    });
-
-    // Bail out ASAP if the file has been ignored.
-    if (opts === null) return null;
-
-    const { cached, store } = cacheLookup(opts, filename);
-    if (cached) return cached;
-
-    const { code, map } = babel.transformSync(input, {
-      ...opts,
-      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
-      ast: false,
-    });
-
-    return store({ code, map });
-  };
-}
-
 const id = (value: unknown) => value;
 
 function cacheLookup(opts: unknown, filename: string) {

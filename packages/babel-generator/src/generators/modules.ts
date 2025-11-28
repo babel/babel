@@ -76,61 +76,14 @@ export function _printAttributes(
 ) {
   const { attributes } = node;
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    // eslint-disable-next-line no-var
-    var { assertions } = node;
-    const { importAttributesKeyword } = this.format;
-
-    if (
-      attributes &&
-      !importAttributesKeyword &&
-      node.extra &&
-      (node.extra.deprecatedAssertSyntax ||
-        node.extra.deprecatedWithLegacySyntax) &&
-      // In the production build only show the warning once.
-      // We want to show it per-usage locally for tests.
-      (!process.env.IS_PUBLISH || !warningShown)
-    ) {
-      warningShown = true;
-      console.warn(`\
-You are using import attributes, without specifying the desired output syntax.
-Please specify the "importAttributesKeyword" generator option, whose value can be one of:
- - "with"        : \`import { a } from "b" with { type: "json" };\`
- - "assert"      : \`import { a } from "b" assert { type: "json" };\`
- - "with-legacy" : \`import { a } from "b" with type: "json";\`
-`);
-    }
-
-    const useAssertKeyword =
-      importAttributesKeyword === "assert" ||
-      (!importAttributesKeyword && assertions);
-
-    this.word(useAssertKeyword ? "assert" : "with");
-    this.space();
-
-    if (
-      !useAssertKeyword &&
-      (importAttributesKeyword === "with-legacy" ||
-        (!importAttributesKeyword && node.extra?.deprecatedWithLegacySyntax))
-    ) {
-      // with-legacy
-      this.printList(attributes || assertions);
-      return;
-    }
-  } else {
-    this.word("with");
-    this.space();
-  }
+  this.word("with");
+  this.space();
 
   const occurrenceCount = hasPreviousBrace ? 1 : 0;
 
   this.token("{", undefined, occurrenceCount);
   this.space();
-  this.printList(
-    process.env.BABEL_8_BREAKING ? attributes : attributes || assertions,
-    this.shouldPrintTrailingComma("}"),
-  );
+  this.printList(attributes, this.shouldPrintTrailingComma("}"));
   this.space();
   this.token("}", undefined, occurrenceCount);
 }
@@ -149,11 +102,7 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  if (
-    node.attributes?.length ||
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    (!process.env.BABEL_8_BREAKING && node.assertions?.length)
-  ) {
+  if (node.attributes?.length) {
     this.print(node.source, true);
     this.space();
     this._printAttributes(node, false);
@@ -233,11 +182,7 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
-      if (
-        node.attributes?.length ||
-        // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-        (!process.env.BABEL_8_BREAKING && node.assertions?.length)
-      ) {
+      if (node.attributes?.length) {
         this.print(node.source, true);
         this.space();
         this._printAttributes(node, hasBrace);
@@ -323,11 +268,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
-  if (
-    node.attributes?.length ||
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    (!process.env.BABEL_8_BREAKING && node.assertions?.length)
-  ) {
+  if (node.attributes?.length) {
     this.print(node.source, true);
     this.space();
     this._printAttributes(node, hasBrace);

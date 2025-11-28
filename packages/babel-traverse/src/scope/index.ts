@@ -229,12 +229,7 @@ function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
 }
 
 function resetScope(scope: Scope) {
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-expect-error(Babel 7 vs Babel 8)
-    scope.references = Object.create(null);
-    // @ts-expect-error(Babel 7 vs Babel 8)
-    scope.uids = Object.create(null);
-  } else if (scope.path.type === "Program") {
+  if (scope.path.type === "Program") {
     scope.referencesSet = new Set();
     scope.uidsSet = new Set();
   }
@@ -256,13 +251,6 @@ interface CollectVisitorState {
   assignments: NodePath<t.AssignmentExpression>[];
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
   constantViolations: NodePath<t.Node>[];
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var NOT_LOCAL_BINDING = Symbol.for(
-    "should not be considered a local binding",
-  );
 }
 
 const collectorVisitor: Visitor<CollectVisitorState> = {
@@ -396,13 +384,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     // Register function expression id after params. When the id
     // collides with a function param, the id effectively can't be
     // referenced: here we registered it as a constantViolation
-    if (
-      path.isFunctionExpression() &&
-      path.node.id &&
-      (process.env.BABEL_8_BREAKING ||
-        // @ts-expect-error Fixme: document symbol ast properties
-        !path.node.id[NOT_LOCAL_BINDING])
-    ) {
+    if (path.isFunctionExpression() && path.node.id) {
       path.scope.registerBinding(
         "local",
         path.get("id") as NodePath<t.Identifier>,
@@ -412,12 +394,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   ClassExpression(path) {
-    if (
-      path.node.id &&
-      (process.env.BABEL_8_BREAKING ||
-        // @ts-expect-error Fixme: document symbol ast properties
-        !path.node.id[NOT_LOCAL_BINDING])
-    ) {
+    if (path.node.id) {
       path.scope.registerBinding(
         "local",
         path.get("id") as NodePath<t.Identifier>,
@@ -477,24 +454,6 @@ class Scope {
 
     this.labels = new Map();
     this.inited = false;
-
-    if (!process.env.BABEL_8_BREAKING) {
-      // Shadow the Babel 8 removal getters
-      Object.defineProperties(this, {
-        references: {
-          enumerable: true,
-          configurable: true,
-          writable: true,
-          value: Object.create(null),
-        },
-        uids: {
-          enumerable: true,
-          configurable: true,
-          writable: true,
-          value: Object.create(null),
-        },
-      });
-    }
   }
 
   /**
@@ -582,15 +541,9 @@ class Scope {
     );
 
     const program = this.getProgramParent();
-    if (process.env.BABEL_8_BREAKING) {
-      program.referencesSet.add(uid);
-      program.uidsSet.add(uid);
-    } else {
-      // @ts-expect-error Babel 7
-      program.references[uid] = true;
-      // @ts-expect-error Babel 7
-      program.uids[uid] = true;
-    }
+
+    program.referencesSet.add(uid);
+    program.uidsSet.add(uid);
 
     return uid;
   }
@@ -690,20 +643,15 @@ class Scope {
 
   rename(
     oldName: string,
-    newName?: string,
-    // prettier-ignore
-    /* Babel 7 - block?: t.Pattern | t.Scopable */
+    newName? // prettier-ignore
+    /* Babel 7 - block?: t.Pattern | t.Scopable */ :string,
   ) {
     const binding = this.getBinding(oldName);
     if (binding) {
       newName ||= this.generateUidIdentifier(oldName).name;
       const renamer = new Renamer(binding, oldName, newName);
-      if (process.env.BABEL_8_BREAKING) {
-        renamer.rename();
-      } else {
-        // @ts-ignore(Babel 7 vs Babel 8) TODO: Delete this
-        renamer.rename(arguments[2]);
-      }
+
+      renamer.rename();
     }
   }
 
@@ -817,12 +765,7 @@ class Scope {
     const ids = path.getOuterBindingIdentifiers(true);
 
     for (const name of Object.keys(ids)) {
-      if (process.env.BABEL_8_BREAKING) {
-        parent.referencesSet.add(name);
-      } else {
-        // @ts-expect-error Babel 7
-        parent.references[name] = true;
-      }
+      parent.referencesSet.add(name);
 
       for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
@@ -855,18 +798,7 @@ class Scope {
   }
 
   hasUid(name: string): boolean {
-    if (process.env.BABEL_8_BREAKING) {
-      return this.getProgramParent().uidsSet.has(name);
-    } else {
-      let scope: Scope | undefined = this;
-
-      do {
-        // @ts-expect-error Babel 7
-        if (scope.uids[name]) return true;
-      } while ((scope = scope.parent));
-
-      return false;
-    }
+    return this.getProgramParent().uidsSet.has(name);
   }
 
   hasGlobal(name: string): boolean {
@@ -880,12 +812,7 @@ class Scope {
   }
 
   hasReference(name: string): boolean {
-    if (process.env.BABEL_8_BREAKING) {
-      return this.getProgramParent().referencesSet.has(name);
-    } else {
-      // @ts-expect-error Babel 7
-      return !!this.getProgramParent().references[name];
-    }
+    return this.getProgramParent().referencesSet.has(name);
   }
 
   isPure(node: t.Node | null | undefined, constantsOnly?: boolean): boolean {
@@ -920,24 +847,12 @@ class Scope {
         this.isPure(node.left, constantsOnly) &&
         this.isPure(node.right, constantsOnly)
       );
-    } else if (
-      isArrayExpression(node) ||
-      (!process.env.BABEL_8_BREAKING &&
-        // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
-        node?.type === "TupleExpression")
-    ) {
-      // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ArrayExpression
+    } else if (isArrayExpression(node)) {
       for (const elem of node.elements) {
         if (elem !== null && !this.isPure(elem, constantsOnly)) return false;
       }
       return true;
-    } else if (
-      isObjectExpression(node) ||
-      (!process.env.BABEL_8_BREAKING &&
-        // @ts-ignore(Babel 7 vs Babel 8) - Removed in Babel 8
-        node?.type === "RecordExpression")
-    ) {
-      // @ts-ignore(Babel 7 vs Babel 8) - TS detects this as t.Node instead of t.ObjectExpression
+    } else if (isObjectExpression(node)) {
       for (const prop of node.properties) {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
@@ -1077,11 +992,9 @@ class Scope {
         }
       }
     }
-    if (process.env.BABEL_8_BREAKING) {
-      traverseForScope(path, scopeVisitor, state);
-    } else {
-      path.traverse(scopeVisitor, state);
-    }
+
+    traverseForScope(path, scopeVisitor, state);
+
     this.crawling = false;
 
     // register assignments
@@ -1397,18 +1310,8 @@ class Scope {
     this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
-    if (process.env.BABEL_8_BREAKING) {
-      this.getProgramParent().uidsSet.delete(name);
-    } else {
-      let scope: Scope | undefined = this;
-      do {
-        // @ts-expect-error Babel 7
-        if (scope.uids[name]) {
-          // @ts-expect-error Babel 7
-          scope.uids[name] = false;
-        }
-      } while ((scope = scope.parent));
-    }
+
+    this.getProgramParent().uidsSet.delete(name);
   }
 
   /**
@@ -1475,153 +1378,6 @@ class Scope {
       }
     }
   }
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /** @deprecated Not used in our codebase */
-  // @ts-expect-error Babel 7 compatibility
-  Scope.prototype._renameFromMap = function _renameFromMap(
-    map: Record<string | symbol, unknown>,
-    oldName: string | symbol,
-    newName: string | symbol,
-    value: unknown,
-  ) {
-    if (map[oldName]) {
-      map[newName] = value;
-      map[oldName] = null;
-    }
-  };
-
-  /**
-   * Traverse node with current scope and path.
-   *
-   * !!! WARNING !!!
-   * This method assumes that `this.path` is the NodePath representing `node`.
-   * After running the traversal, the `.parentPath` of the NodePaths
-   * corresponding to `node`'s children will be set to `this.path`.
-   *
-   * There is no good reason to use this method, since the only safe way to use
-   * it is equivalent to `scope.path.traverse(opts, state)`.
-   */
-  // @ts-expect-error Babel 7 compatibility
-  Scope.prototype.traverse = function <S>(
-    this: Scope,
-    node: any,
-    opts: any,
-    state?: S,
-  ) {
-    traverse(node, opts, this, state, this.path);
-  };
-
-  /**
-   * Generate an `_id1`.
-   */
-  // @ts-expect-error Babel 7 compatibility
-  Scope.prototype._generateUid = function _generateUid(
-    name: string,
-    i: number,
-  ) {
-    let id = name;
-    if (i > 1) id += i;
-    return `_${id}`;
-  };
-
-  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
-  // @ts-expect-error Babel 7 compatibility
-  Scope.prototype.toArray = function toArray(
-    this: Scope,
-    node: t.Node,
-    i?: number | boolean,
-    arrayLikeIsIterable?: boolean | void,
-  ) {
-    if (isIdentifier(node)) {
-      const binding = this.getBinding(node.name);
-      if (binding?.constant && binding.path.isGenericType("Array")) {
-        return node;
-      }
-    }
-
-    if (isArrayExpression(node)) {
-      return node;
-    }
-
-    if (isIdentifier(node, { name: "arguments" })) {
-      return callExpression(
-        memberExpression(
-          memberExpression(
-            memberExpression(identifier("Array"), identifier("prototype")),
-            identifier("slice"),
-          ),
-          identifier("call"),
-        ),
-        [node],
-      );
-    }
-
-    let helperName;
-    const args = [node];
-    if (i === true) {
-      // Used in array-spread to create an array.
-      helperName = "toConsumableArray";
-    } else if (typeof i === "number") {
-      args.push(numericLiteral(i));
-
-      // Used in array-rest to create an array from a subset of an iterable.
-      helperName = "slicedToArray";
-      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
-    } else {
-      // Used in array-rest to create an array
-      helperName = "toArray";
-    }
-
-    if (arrayLikeIsIterable) {
-      args.unshift(this.path.hub.addHelper(helperName));
-      helperName = "maybeArrayLike";
-    }
-
-    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
-    return callExpression(this.path.hub.addHelper(helperName), args);
-  };
-
-  /**
-   * Walks the scope tree and gathers all declarations of `kind`.
-   */
-  // @ts-expect-error Babel 7 compatibility
-  Scope.prototype.getAllBindingsOfKind = function getAllBindingsOfKind(
-    ...kinds: string[]
-  ): Record<string, Binding> {
-    const ids = Object.create(null);
-
-    for (const kind of kinds) {
-      let scope: Scope | undefined = this;
-      do {
-        for (const name of Object.keys(scope.bindings)) {
-          const binding = scope.bindings[name];
-          if (binding.kind === kind) ids[name] = binding;
-        }
-        scope = scope.parent;
-      } while (scope);
-    }
-
-    return ids;
-  };
-
-  Object.defineProperties(Scope.prototype, {
-    parentBlock: {
-      configurable: true,
-      enumerable: true,
-      get(this: Scope) {
-        return this.path.parent;
-      },
-    },
-    hub: {
-      configurable: true,
-      enumerable: true,
-      get(this: Scope) {
-        return this.path.hub;
-      },
-    },
-  });
 }
 
 type _Binding = Binding;

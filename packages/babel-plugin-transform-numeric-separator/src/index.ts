@@ -21,10 +21,7 @@ export default declare(api => {
 
   return {
     name: "transform-numeric-separator",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("numericSeparator"),
-
+    manipulateOptions: undefined,
     visitor: {
       NumericLiteral: remover,
       BigIntLiteral: remover,

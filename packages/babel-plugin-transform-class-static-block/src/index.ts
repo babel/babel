@@ -65,11 +65,6 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
     },
   );
 
-  if (!process.env.BABEL_8_BREAKING && !t.classAccessorProperty) {
-    // For old versions of Babel 7, with no ClassAccessorProperty support.
-    delete rawNamedEvaluationVisitor.ClassAccessorProperty;
-  }
-
   const namedEvaluationVisitor = traverse.visitors.explode(
     rawNamedEvaluationVisitor,
   );
@@ -114,10 +109,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
 
   return {
     name: "transform-class-static-block",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("classStaticBlock"),
-
+    manipulateOptions: undefined,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.

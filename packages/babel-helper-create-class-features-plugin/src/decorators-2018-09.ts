@@ -1,5 +1,5 @@
 // TODO(Babel 8): Remove this file
-if (process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH) {
+if (process.env.IS_PUBLISH) {
   throw new Error(
     "Internal Babel error: This file should only be loaded in Babel 7",
   );
@@ -108,12 +108,6 @@ function extractElementDescriptor(
   ].filter(Boolean);
 
   if (isMethod) {
-    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-      // polyfill when being run by an older Babel version
-      path.ensureFunctionName ??=
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-    }
     // @ts-expect-error path is a ClassMethod, that technically
     // is not supported as it does not have an .id property
     // This plugin will however then transform the ClassMethod

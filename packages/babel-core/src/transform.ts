@@ -45,16 +45,9 @@ export const transform: Transform = function transform(
   }
 
   if (callback === undefined) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'.",
-      );
-    } else {
-      // console.warn(
-      //   "Starting from Babel 8.0.0, the 'transform' function will expect a callback. If you need to call it synchronously, please use 'transformSync'.",
-      // );
-      return beginHiddenCallStack(transformRunner.sync)(code, opts);
-    }
+    throw new Error(
+      "Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'.",
+    );
   }
 
   beginHiddenCallStack(transformRunner.errback)(code, opts, callback);

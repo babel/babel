@@ -20,9 +20,8 @@ export default declare(api => {
       ]);
       node.argument = t.callExpression(
         state.addHelper("asyncGeneratorDelegate"),
-        process.env.BABEL_8_BREAKING
-          ? [asyncIter]
-          : [asyncIter, state.addHelper("awaitAsyncGenerator")],
+
+        [asyncIter],
       );
     },
   });
@@ -94,10 +93,7 @@ export default declare(api => {
   return {
     name: "transform-async-generator-functions",
 
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("asyncGenerators"),
-
+    manipulateOptions: undefined,
     visitor: {
       Program(path, state) {
         // We need to traverse the ast here (instead of just vising Function

@@ -8,13 +8,7 @@ export default declare(api => {
   const unicodeEscape = /(\\+)u\{([0-9a-fA-F]+)\}/g;
 
   function escape(code: number) {
-    if (process.env.BABEL_8_BREAKING) {
-      return "\\u" + code.toString(16).padStart(4, "0");
-    } else {
-      let str = code.toString(16);
-      while (str.length < 4) str = "0" + str;
-      return "\\u" + str;
-    }
+    return "\\u" + code.toString(16).padStart(4, "0");
   }
 
   function replacer(match: string, backslashes: string, code: string) {

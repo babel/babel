@@ -8,16 +8,13 @@ export default declare(api => {
     parentPath: NodePath,
     paths: NodePath<t.Statement>[],
   ) {
-    if (process.env.BABEL_8_BREAKING) {
-      // eslint-disable-next-line no-var
-      var isInStrictMode = parentPath.isInStrictMode();
-    }
+    // eslint-disable-next-line no-var
+    var isInStrictMode = parentPath.isInStrictMode();
 
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
 
       if (
-        process.env.BABEL_8_BREAKING &&
         !isInStrictMode &&
         !(
           path.node.async ||

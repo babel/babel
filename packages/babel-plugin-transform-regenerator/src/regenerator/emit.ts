@@ -218,15 +218,7 @@ export class Emitter {
   // Emits code for an unconditional jump to the given location, even if the
   // exact value of the location is not yet known.
   jump(toLoc: t.Expression) {
-    this.emitAssign(
-      this.contextProperty(
-        process.env.BABEL_8_BREAKING ||
-          util.newHelpersAvailable(this.pluginPass)
-          ? "n"
-          : "next",
-      ),
-      toLoc,
-    );
+    this.emitAssign(this.contextProperty("n"), toLoc);
     this.emit(t.breakStatement());
   }
 
@@ -236,15 +228,7 @@ export class Emitter {
       t.ifStatement(
         test,
         t.blockStatement([
-          this.assign(
-            this.contextProperty(
-              process.env.BABEL_8_BREAKING ||
-                util.newHelpersAvailable(this.pluginPass)
-                ? "n"
-                : "next",
-            ),
-            toLoc,
-          ),
+          this.assign(this.contextProperty("n"), toLoc),
           t.breakStatement(),
         ]),
       ),
@@ -265,15 +249,7 @@ export class Emitter {
       t.ifStatement(
         negatedTest,
         t.blockStatement([
-          this.assign(
-            this.contextProperty(
-              process.env.BABEL_8_BREAKING ||
-                util.newHelpersAvailable(this.pluginPass)
-                ? "n"
-                : "next",
-            ),
-            toLoc,
-          ),
+          this.assign(this.contextProperty("n"), toLoc),
           t.breakStatement(),
         ]),
       ),
@@ -344,34 +320,16 @@ export class Emitter {
     this.finalLoc.value = this.getIndex();
 
     if (
-      process.env.BABEL_8_BREAKING ||
-      util.newHelpersAvailable(this.pluginPass)
+      this.lastReferenceIndex === this.index ||
+      !this.returns.has(this.listing.length)
     ) {
-      if (
-        this.lastReferenceIndex === this.index ||
-        !this.returns.has(this.listing.length)
-      ) {
-        cases.push(
-          t.switchCase(this.finalLoc, [
-            t.returnStatement(
-              t.callExpression(this.contextProperty("a"), [
-                t.numericLiteral(OperatorType.Return),
-              ]),
-            ),
-          ]),
-        );
-      }
-    } else {
       cases.push(
         t.switchCase(this.finalLoc, [
-          // Intentionally fall through to the "end" case...
-        ]),
-
-        // So that the runtime can jump to the final location without having
-        // to know its offset, we provide the "end" case as a synonym.
-        t.switchCase(t.stringLiteral("end"), [
-          // This will check/clear both context.thrown and context.rval.
-          t.returnStatement(t.callExpression(this.contextProperty("stop"), [])),
+          t.returnStatement(
+            t.callExpression(this.contextProperty("a"), [
+              t.numericLiteral(OperatorType.Return),
+            ]),
+          ),
         ]),
       );
     }
@@ -379,20 +337,14 @@ export class Emitter {
     return t.whileStatement(
       t.numericLiteral(1),
       t.switchStatement(
-        process.env.BABEL_8_BREAKING ||
-          util.newHelpersAvailable(this.pluginPass)
-          ? this.tryEntries.length === 0
-            ? this.contextProperty("n")
-            : t.assignmentExpression(
-                "=",
-                this.contextProperty("p"),
-                this.contextProperty("n"),
-              )
+        this.tryEntries.length === 0
+          ? this.contextProperty("n")
           : t.assignmentExpression(
               "=",
-              this.contextProperty("prev"),
-              this.contextProperty("next"),
+              this.contextProperty("p"),
+              this.contextProperty("n"),
             ),
+
         cases,
       ),
     );
@@ -430,12 +382,9 @@ export class Emitter {
         return t.arrayExpression(locs.map(loc => loc && t.cloneNode(loc)));
       }),
     );
-    if (
-      process.env.BABEL_8_BREAKING ||
-      util.newHelpersAvailable(this.pluginPass)
-    ) {
-      arrayExpression.elements.reverse();
-    }
+
+    arrayExpression.elements.reverse();
+
     return arrayExpression;
   }
 
@@ -623,12 +572,7 @@ export class Emitter {
 
         const keyIterNextFn = self.makeTempVar();
 
-        const helper =
-          process.env.BABEL_8_BREAKING ||
-          util.newHelpersAvailable(this.pluginPass)
-            ? this.pluginPass.addHelper("regeneratorKeys")
-            : util.runtimeProperty(this.pluginPass, "keys");
-
+        const helper = this.pluginPass.addHelper("regeneratorKeys");
         self.emitAssign(
           keyIterNextFn,
           t.callExpression(helper, [self.explodeExpression(path.get("right"))]),
@@ -820,14 +764,8 @@ export class Emitter {
 
             const bodyPath = path.get("handler.body");
             const safeParam = self.makeTempVar();
-            if (
-              process.env.BABEL_8_BREAKING ||
-              util.newHelpersAvailable(this.pluginPass)
-            ) {
-              this.emitAssign(safeParam, self.contextProperty("v"));
-            } else {
-              self.clearPendingException(tryEntry.firstLoc, safeParam);
-            }
+
+            this.emitAssign(safeParam, self.contextProperty("v"));
 
             bodyPath.traverse(catchParamVisitor, {
               getSafeParam: () => t.cloneNode(safeParam),
@@ -850,15 +788,9 @@ export class Emitter {
 
             self.emit(
               t.returnStatement(
-                t.callExpression(
-                  self.contextProperty(
-                    process.env.BABEL_8_BREAKING ||
-                      util.newHelpersAvailable(this.pluginPass)
-                      ? "f"
-                      : "finish",
-                  ),
-                  [finallyEntry.firstLoc],
-                ),
+                t.callExpression(self.contextProperty("f"), [
+                  finallyEntry.firstLoc,
+                ]),
               ),
             );
           }
@@ -888,11 +820,7 @@ export class Emitter {
 
   emitAbruptCompletion(record: AbruptCompletion) {
     const abruptArgs: [t.NumericLiteral | t.StringLiteral, t.Expression?] = [
-      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this.pluginPass)
-        ? t.numericLiteral(record.type)
-        : t.stringLiteral(
-            record.type === OperatorType.Jump ? "continue" : "return",
-          ),
+      t.numericLiteral(record.type),
     ];
 
     if (record.type === OperatorType.Jump) {
@@ -907,15 +835,7 @@ export class Emitter {
 
     this.emit(
       t.returnStatement(
-        t.callExpression(
-          this.contextProperty(
-            process.env.BABEL_8_BREAKING ||
-              util.newHelpersAvailable(this.pluginPass)
-              ? "a"
-              : "abrupt",
-          ),
-          abruptArgs,
-        ),
+        t.callExpression(this.contextProperty("a"), abruptArgs),
       ),
     );
 
@@ -964,15 +884,7 @@ export class Emitter {
     // Make sure context.prev is up to date in case we fell into this try
     // statement without jumping to it. TODO Consider avoiding this
     // assignment when we know control must have jumped here.
-    this.emitAssign(
-      this.contextProperty(
-        process.env.BABEL_8_BREAKING ||
-          util.newHelpersAvailable(this.pluginPass)
-          ? "p"
-          : "prev",
-      ),
-      loc,
-    );
+    this.emitAssign(this.contextProperty("p"), loc);
   }
 
   // In order to save the rest of explodeExpression from a combinatorial
@@ -1392,53 +1304,23 @@ export class Emitter {
           path.node.argument && self.explodeExpression(path.get("argument"));
 
         if (arg && path.node.delegate) {
-          if (
-            process.env.BABEL_8_BREAKING ||
-            util.newHelpersAvailable(this.pluginPass)
-          ) {
-            const ret = t.returnStatement(
-              t.callExpression(self.contextProperty("d"), [
-                t.callExpression(
-                  this.pluginPass.addHelper("regeneratorValues"),
-                  [arg],
-                ),
-                after,
-              ]),
-            );
-            ret.loc = expr.loc;
-
-            self.emit(ret);
-            self.mark(after);
-
-            return self.contextProperty("v");
-          } else {
-            const result = self.makeContextTempVar();
-
-            const ret = t.returnStatement(
-              t.callExpression(self.contextProperty("delegateYield"), [
+          const ret = t.returnStatement(
+            t.callExpression(self.contextProperty("d"), [
+              t.callExpression(this.pluginPass.addHelper("regeneratorValues"), [
                 arg,
-                t.stringLiteral((result.property as t.Identifier).name),
-                after,
               ]),
-            );
-            ret.loc = expr.loc;
+              after,
+            ]),
+          );
+          ret.loc = expr.loc;
 
-            self.emit(ret);
-            self.mark(after);
+          self.emit(ret);
+          self.mark(after);
 
-            return result;
-          }
+          return self.contextProperty("v");
         }
 
-        self.emitAssign(
-          self.contextProperty(
-            process.env.BABEL_8_BREAKING ||
-              util.newHelpersAvailable(this.pluginPass)
-              ? "n"
-              : "next",
-          ),
-          after,
-        );
+        self.emitAssign(self.contextProperty("n"), after);
 
         const ret = t.returnStatement(t.cloneNode(arg) || null);
         // Preserve the `yield` location so that source mappings for the statements
@@ -1447,12 +1329,7 @@ export class Emitter {
         self.emit(ret);
         self.mark(after);
 
-        return self.contextProperty(
-          process.env.BABEL_8_BREAKING ||
-            util.newHelpersAvailable(self.pluginPass)
-            ? "v"
-            : "sent",
-        );
+        return self.contextProperty("v");
 
       case "ClassExpression":
         return finish(self.explodeClass(path));

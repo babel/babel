@@ -6,10 +6,7 @@ export default declare(api => {
 
   return {
     name: "transform-logical-assignment-operators",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("logicalAssignment"),
-
+    manipulateOptions: undefined,
     visitor: {
       AssignmentExpression(path) {
         const { node, scope } = path;
@@ -41,7 +38,7 @@ export default declare(api => {
               (lhs as t.MemberExpression).property = t.assignmentExpression(
                 "=",
                 t.cloneNode(memo),
-                // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
+
                 property,
               );
             }

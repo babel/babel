@@ -177,7 +177,6 @@ export default declare(api => {
       ClassProperty(path) {
         const { node } = path;
         if (!node.value) {
-          // @ts-ignore(Babel 7 vs Babel 8) Type 'NodePath<ClassPropertyNonComputed>' is not assignable to type 'NodePath<ClassPropertyComputed>'.
           wrapInFlowComment(path);
         } else if (node.typeAnnotation) {
           attachComment({
@@ -279,17 +278,9 @@ export default declare(api => {
           }
 
           // superTypeParameters is for compatibility with Babel 7
-          if (
-            process.env.BABEL_8_BREAKING
-              ? // @ts-ignore(Babel 7 vs Babel 8) Renamed
-                node.superTypeArguments
-              : // @ts-ignore(Babel 7 vs Babel 8) Renamed
-                node.superTypeParameters
-          ) {
+          if (node.superTypeArguments) {
             const superTypeArguments = path.get(
-              process.env.BABEL_8_BREAKING
-                ? "superTypeArguments"
-                : "superTypeParameters",
+              "superTypeArguments",
             ) as NodePath<t.TypeParameterInstantiation>;
             comments.push(
               generateComment(

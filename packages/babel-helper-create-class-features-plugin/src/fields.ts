@@ -29,21 +29,6 @@ type PrivateNamesMapGeneric<V> = Map<string, V>;
 
 type PrivateNamesMap = PrivateNamesMapGeneric<PrivateNameMetadata>;
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var newHelpers = (file: File) => {
-    if (!process.env.IS_PUBLISH) {
-      const { comments } = file.ast;
-      // This is needed for the test in
-      // babel-plugin-transform-class-properties/test/fixtures/regression/old-helpers
-      if (comments?.some(c => c.value.includes("@force-old-private-helpers"))) {
-        return false;
-      }
-    }
-    return file.availableHelper("classPrivateFieldGet2");
-  };
-}
-
 export function buildPrivateNamesMap(
   className: string,
   privateFieldsAsSymbolsOrProperties: boolean,
@@ -61,12 +46,7 @@ export function buildPrivateNamesMap(
         const isStatic = prop.node.static;
         let initAdded = false;
         let id: t.Identifier;
-        if (
-          !privateFieldsAsSymbolsOrProperties &&
-          (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
-          isMethod &&
-          !isStatic
-        ) {
+        if (!privateFieldsAsSymbolsOrProperties && isMethod && !isStatic) {
           initAdded = !!classBrandId;
           classBrandId ??= prop.scope.generateUidIdentifier(
             `${className}_brand`,
@@ -169,14 +149,7 @@ export function buildPrivateNamesNodes(
       injectedIds.add(id.name);
 
       init = t.newExpression(
-        t.identifier(
-          isMethod &&
-            (process.env.BABEL_8_BREAKING ||
-              !isGetterOrSetter ||
-              newHelpers(state))
-            ? "WeakSet"
-            : "WeakMap",
-        ),
+        t.identifier(isMethod ? "WeakSet" : "WeakMap"),
         [],
       );
     }
@@ -381,15 +354,6 @@ function readOnlyError(file: File, name: string) {
 }
 
 function writeOnlyError(file: File, name: string) {
-  if (
-    !process.env.BABEL_8_BREAKING &&
-    !file.availableHelper("writeOnlyError")
-  ) {
-    console.warn(
-      `@babel/helpers is outdated, update it to silence this warning.`,
-    );
-    return t.buildUndefinedNode();
-  }
   return t.callExpression(file.addHelper("writeOnlyError"), [
     t.stringLiteral(`#${name}`),
   ]);
@@ -465,21 +429,6 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         // see #12960
         unshadow(classRef.name, member.scope, innerBinding);
 
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          // NOTE: This package has a peerDependency on @babel/core@^7.0.0, but these
-          // helpers have been introduced in @babel/helpers@7.1.0.
-          const helperName =
-            isMethod && !isGetterOrSetter
-              ? "classStaticPrivateMethodGet"
-              : "classStaticPrivateFieldSpecGet";
-
-          return t.callExpression(file.addHelper(helperName), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-            cloneId(id),
-          ]);
-        }
-
         const receiver = this.receiver(member);
         const skipCheck =
           t.isIdentifier(receiver) && receiver.name === classRef.name;
@@ -541,37 +490,25 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
               writeOnlyError(file, name),
             ]);
           }
-          if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-            return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-              this.receiver(member),
-              cloneId(id),
-            ]);
-          }
+
           return t.callExpression(file.addHelper("classPrivateGetter"), [
             t.cloneNode(id),
             this.receiver(member),
             cloneId(getId),
           ]);
         }
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          return t.callExpression(file.addHelper("classPrivateMethodGet"), [
-            this.receiver(member),
-            t.cloneNode(id),
-            cloneId(methodId),
-          ]);
-        }
+
         return t.callExpression(file.addHelper("assertClassBrand"), [
           t.cloneNode(id),
           this.receiver(member),
           cloneId(methodId),
         ]);
       }
-      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
-        return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
-          cloneId(id),
-          this.receiver(member),
-        ]);
-      }
+
+      return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
+        cloneId(id),
+        this.receiver(member),
+      ]);
 
       return t.callExpression(file.addHelper("classPrivateFieldGet"), [
         this.receiver(member),
@@ -610,20 +547,6 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         t.inherits(t.cloneNode(id), privateName);
 
       if (isStatic) {
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          const helperName =
-            isMethod && !isGetterOrSetter
-              ? "classStaticPrivateMethodSet"
-              : "classStaticPrivateFieldSpecSet";
-
-          return t.callExpression(file.addHelper(helperName), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-            cloneId(id),
-            value,
-          ]);
-        }
-
         const receiver = this.receiver(member);
         const skipCheck =
           t.isIdentifier(receiver) && receiver.name === classRef.name;
@@ -667,15 +590,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
               ]),
         );
       }
+
       if (isMethod) {
         if (setId) {
-          if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-            return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-              this.receiver(member),
-              cloneId(id),
-              value,
-            ]);
-          }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
             t.cloneNode(id),
             cloneId(setId),
@@ -683,6 +600,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             value,
           ]);
         }
+
         return t.sequenceExpression([
           this.receiver(member),
           value,
@@ -690,13 +608,11 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         ]);
       }
 
-      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
-        return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
-          cloneId(id),
-          this.receiver(member),
-          value,
-        ]);
-      }
+      return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
+        cloneId(id),
+        this.receiver(member),
+        value,
+      ]);
 
       return t.callExpression(file.addHelper("classPrivateFieldSet"), [
         this.receiver(member),
@@ -724,46 +640,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       const cloneId = (id: t.Identifier) =>
         t.inherits(t.cloneNode(id), privateName);
 
-      if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-        if (isStatic) {
-          try {
-            // classStaticPrivateFieldDestructureSet was introduced in 7.13.10
-            // eslint-disable-next-line no-var
-            var helper = file.addHelper(
-              "classStaticPrivateFieldDestructureSet",
-            );
-          } catch {
-            throw new Error(
-              "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.13.10, \n" +
-                "please update @babel/helpers to the latest version.",
-            );
-          }
-          return t.memberExpression(
-            t.callExpression(helper, [
-              this.receiver(member),
-              t.cloneNode(classRef),
-              cloneId(id),
-            ]),
-            t.identifier("value"),
-          );
-        }
-
-        return t.memberExpression(
-          t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
-            this.receiver(member),
-            cloneId(id),
-          ]),
-          t.identifier("value"),
-        );
-      }
-
       if (isMethod && !setId) {
         return t.memberExpression(
-          t.sequenceExpression([
-            // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
-            member.node.object,
-            readOnlyError(file, name),
-          ]),
+          t.sequenceExpression([member.node.object, readOnlyError(file, name)]),
           t.identifier("_"),
         );
       }
@@ -806,7 +685,6 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         setCall.callee.property.name === "call"
       ) {
         args = [
-          // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
           setCall.callee.object,
           t.arrayExpression(
             // Remove '_'
@@ -829,7 +707,6 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         t.identifier("_"),
       );
     },
-
     call(member, args: (t.Expression | t.SpreadElement)[]) {
       // The first access (the get) should do the memo assignment.
       this.memoise(member, 1);
@@ -971,20 +848,6 @@ function buildPrivateInstanceFieldInitSpec(
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-          // configurable is always false for private elements
-          // enumerable is always false for private elements
-          writable: true,
-          value: ${value},
-        })` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
-
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return inheritLoc(
     inheritPropComments(
@@ -992,9 +855,8 @@ function buildPrivateInstanceFieldInitSpec(
         t.callExpression(helper, [
           t.thisExpression(),
           inheritLoc(t.cloneNode(id), prop.node.key),
-          process.env.BABEL_8_BREAKING || newHelpers(state)
-            ? value
-            : template.expression.ast`{ writable: true, value: ${value} }`,
+
+          value,
         ]),
       ),
       prop,
@@ -1022,53 +884,6 @@ function buildPrivateStaticFieldInitSpec(
     ]),
     prop,
   );
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var buildPrivateStaticFieldInitSpecOld = function (
-    prop: NodePath<t.ClassPrivateProperty>,
-    privateNamesMap: PrivateNamesMap,
-  ) {
-    const privateName = privateNamesMap.get(prop.node.key.id.name);
-    const { id, getId, setId, initAdded } = privateName;
-    const isGetterOrSetter = getId || setId;
-
-    if (!prop.isProperty() && (initAdded || !isGetterOrSetter)) return;
-
-    if (isGetterOrSetter) {
-      privateNamesMap.set(prop.node.key.id.name, {
-        ...privateName,
-        initAdded: true,
-      });
-
-      return inheritPropComments(
-        template.statement.ast`
-          var ${t.cloneNode(id)} = {
-            // configurable is false by default
-            // enumerable is false by default
-            // writable is false by default
-            get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-            set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-          }
-        `,
-        prop,
-      );
-    }
-
-    const value = prop.node.value || prop.scope.buildUndefinedNode();
-    return inheritPropComments(
-      template.statement.ast`
-        var ${t.cloneNode(id)} = {
-          // configurable is false by default
-          // enumerable is false by default
-          writable: true,
-          value: ${value}
-        };
-      `,
-      prop,
-    );
-  };
 }
 
 function buildPrivateMethodInitLoose(
@@ -1125,18 +940,6 @@ function buildPrivateInstanceMethodInitSpec(
 
   if (privateName.initAdded) return;
 
-  if (!process.env.BABEL_8_BREAKING && !newHelpers(state)) {
-    const isGetterOrSetter = privateName.getId || privateName.setId;
-    if (isGetterOrSetter) {
-      return buildPrivateAccessorInitialization(
-        ref,
-        prop,
-        privateNamesMap,
-        state,
-      );
-    }
-  }
-
   return buildPrivateInstanceMethodInitialization(
     ref,
     prop,
@@ -1158,20 +961,6 @@ function buildPrivateAccessorInitialization(
     ...privateName,
     initAdded: true,
   });
-
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`
-          ${id}.set(${ref}, {
-            get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-            set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-          });
-        ` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return inheritLoc(
@@ -1198,15 +987,6 @@ function buildPrivateInstanceMethodInitialization(
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id } = privateName;
-
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateMethodInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`${id}.add(${ref})` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
   return inheritPropComments(
@@ -1332,11 +1112,7 @@ function buildPrivateMethodDeclaration(
     return null;
   }
 
-  if (
-    (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
-    (isGetter || isSetter) &&
-    !privateFieldsAsSymbolsOrProperties
-  ) {
+  if ((isGetter || isSetter) && !privateFieldsAsSymbolsOrProperties) {
     const scope = prop.get("body").scope;
     const thisArg = scope.generateUidIdentifier("this");
     const state: ReplaceThisState = {
@@ -1649,19 +1425,14 @@ export function buildFieldsInitNodes(
         isPrivate &&
         isField &&
         !privateFieldsAsSymbolsOrProperties:
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          staticNodes.push(
-            buildPrivateStaticFieldInitSpecOld(prop, privateNamesMap),
-          );
-        } else {
-          staticNodes.push(
-            buildPrivateStaticFieldInitSpec(
-              prop,
-              privateNamesMap,
-              noUninitializedPrivateFieldAccess,
-            ),
-          );
-        }
+        staticNodes.push(
+          buildPrivateStaticFieldInitSpec(
+            prop,
+            privateNamesMap,
+            noUninitializedPrivateFieldAccess,
+          ),
+        );
+
         break;
       case isStatic && isPublic && isField && setPublicClassFields:
         // Functions always have non-writable .name and .length properties,
@@ -1745,12 +1516,6 @@ export function buildFieldsInitNodes(
         isPrivate &&
         isMethod &&
         !privateFieldsAsSymbolsOrProperties:
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          staticNodes.unshift(
-            // @ts-expect-error checked in switch
-            buildPrivateStaticFieldInitSpecOld(prop, privateNamesMap),
-          );
-        }
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             file,

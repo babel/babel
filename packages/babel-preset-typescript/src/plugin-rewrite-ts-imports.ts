@@ -29,22 +29,12 @@ export default declare(function ({ types: t, template }) {
       return;
     }
 
-    if (
-      process.env.BABEL_8_BREAKING ||
-      state.availableHelper("tsRewriteRelativeImportExtensions")
-    ) {
-      path.replaceWith(
-        t.callExpression(
-          state.addHelper("tsRewriteRelativeImportExtensions"),
-          preserveJsx ? [source, t.booleanLiteral(true)] : [source],
-        ),
-      );
-    } else {
-      path.replaceWith(
-        template.expression
-          .ast`(${source} + "").replace(/([\\/].*\.[mc]?)tsx?$/, "$1js")`,
-      );
-    }
+    path.replaceWith(
+      t.callExpression(
+        state.addHelper("tsRewriteRelativeImportExtensions"),
+        preserveJsx ? [source, t.booleanLiteral(true)] : [source],
+      ),
+    );
   }
 
   return {
@@ -66,16 +56,7 @@ export default declare(function ({ types: t, template }) {
           maybeReplace(node.source, path.get("source"), state);
         }
       },
-      CallExpression(path, state) {
-        if (!process.env.BABEL_8_BREAKING && t.isImport(path.node.callee)) {
-          maybeReplace(
-            // The argument of import must not be a spread element
-            path.node.arguments[0] as t.ArgumentPlaceholder | t.Expression,
-            path.get("arguments.0"),
-            state,
-          );
-        }
-      },
+      CallExpression(path, state) {},
       ImportExpression(path, state) {
         maybeReplace(path.node.source, path.get("source"), state);
       },

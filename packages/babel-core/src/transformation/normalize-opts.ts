@@ -14,10 +14,7 @@ export default function normalizeOptions(
     sourceType = "module",
     inputSourceMap,
     sourceMaps = !!inputSourceMap,
-    sourceRoot = process.env.BABEL_8_BREAKING
-      ? undefined
-      : // @ts-ignore(Babel 7 vs Babel 8) moduleRoot is a Babel 7 option
-        config.options.moduleRoot,
+    sourceRoot = undefined,
 
     sourceFileName = path.basename(filenameRelative),
 

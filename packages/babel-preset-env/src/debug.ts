@@ -16,19 +16,6 @@ export const logPlugin = (
 
   const support = list[item];
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // It's needed to keep outputting proposal- in the debug log.
-    if (item.startsWith("transform-")) {
-      const proposalName = `proposal-${item.slice(10)}`;
-      if (
-        proposalName === "proposal-dynamic-import" ||
-        Object.hasOwn(compatData, proposalName)
-      ) {
-        item = proposalName;
-      }
-    }
-  }
-
   if (!support) {
     console.log(`  ${item}`);
     return;

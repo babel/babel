@@ -7,7 +7,7 @@ export default declarePreset((api, opts) => {
   const {
     all,
     allowDeclareFields,
-    ignoreExtensions = process.env.BABEL_8_BREAKING ? false : true,
+    ignoreExtensions = false,
     experimental_useHermesParser: useHermesParser = false,
   } = normalizeOptions(opts);
 

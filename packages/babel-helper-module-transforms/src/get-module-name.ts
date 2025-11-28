@@ -11,23 +11,6 @@ export type PluginOptions = {
   moduleRoot?: string;
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  const originalGetModuleName = getModuleName;
-
-  // @ts-expect-error TS doesn't like reassigning a function.
-  getModuleName = function getModuleName(
-    rootOpts: RootOptions & PluginOptions,
-    pluginOpts: PluginOptions,
-  ): string | null {
-    return originalGetModuleName(rootOpts, {
-      moduleId: pluginOpts.moduleId ?? rootOpts.moduleId,
-      moduleIds: pluginOpts.moduleIds ?? rootOpts.moduleIds,
-      getModuleId: pluginOpts.getModuleId ?? rootOpts.getModuleId,
-      moduleRoot: pluginOpts.moduleRoot ?? rootOpts.moduleRoot,
-    });
-  };
-}
-
 export default function getModuleName(
   rootOpts: RootOptions,
   pluginOpts: PluginOptions,

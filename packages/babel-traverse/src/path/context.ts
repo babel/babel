@@ -62,11 +62,6 @@ export function isDenylisted(this: NodePath): boolean {
   return denylist?.includes(this.node.type);
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.isBlacklisted = isDenylisted;
-}
-
 function restoreContext(path: NodePath, context: TraversalContext) {
   if (path.context !== context) {
     path.context = context;
@@ -327,9 +322,8 @@ export function requeue(this: NodePath, pathToQueue = this) {
 
   // If a path is skipped, and then replaced with a
   // new one, the new one shouldn't probably be skipped.
-  if (process.env.BABEL_8_BREAKING) {
-    pathToQueue.shouldSkip = false;
-  }
+
+  pathToQueue.shouldSkip = false;
 
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
   // automatically once #2892 and #4135 have been resolved. See #4140.

@@ -233,19 +233,12 @@ export default function getTargets(
     }
 
     if (browsers == null) {
-      if (process.env.BABEL_8_BREAKING) {
-        // In Babel 8, if no targets are passed, we use browserslist's defaults.
-        browsers = ["defaults"];
-      } else {
-        // If no targets are passed, we need to overwrite browserslist's defaults
-        // so that we enable all transforms (acting like the now deprecated
-        // preset-latest).
-        browsers = [];
-      }
+      // In Babel 8, if no targets are passed, we use browserslist's defaults.
+      browsers = ["defaults"];
     }
   }
 
-  if (process.env.BABEL_8_BREAKING && esmodules) {
+  if (esmodules) {
     esmodules = "intersect";
   }
 

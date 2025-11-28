@@ -71,9 +71,6 @@ export class ExportedTokenType {
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
     this.binop = conf.binop != null ? conf.binop : null;
-    if (!process.env.BABEL_8_BREAKING) {
-      this.updateContext = null;
-    }
   }
 }
 
@@ -440,29 +437,4 @@ export function getExportedToken(token: TokenType): ExportedTokenType {
 
 export function isTokenType(obj: any): boolean {
   return typeof obj === "number";
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  tokenTypes[tt.braceR].updateContext = context => {
-    context.pop();
-  };
-
-  tokenTypes[tt.braceL].updateContext =
-    tokenTypes[tt.braceHashL].updateContext =
-    tokenTypes[tt.dollarBraceL].updateContext =
-      context => {
-        context.push(tc.brace);
-      };
-
-  tokenTypes[tt.backQuote].updateContext = context => {
-    if (context[context.length - 1] === tc.template) {
-      context.pop();
-    } else {
-      context.push(tc.template);
-    }
-  };
-
-  tokenTypes[tt.jsxTagStart].updateContext = context => {
-    context.push(tc.j_expr, tc.j_oTag);
-  };
 }

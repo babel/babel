@@ -56,15 +56,9 @@ export default declare((api, options: Options) => {
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
         // top-level statement.
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.splitExportDeclaration ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-        }
+
         path.splitExportDeclaration();
       },
-
       ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const left = node.left;

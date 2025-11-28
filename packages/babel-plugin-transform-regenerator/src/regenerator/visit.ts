@@ -169,19 +169,16 @@ export const getVisitor = (): Visitor<PluginPass> => ({
       }
 
       const wrapCall = t.callExpression(
-        process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
-          ? !node.async
-            ? t.memberExpression(
-                t.callExpression(this.addHelper("regenerator"), []),
-                t.identifier("w"),
-              )
-            : node.generator
-              ? this.addHelper("regeneratorAsyncGen")
-              : this.addHelper("regeneratorAsync")
-          : util.runtimeProperty(this, node.async ? "async" : "wrap"),
+        !node.async
+          ? t.memberExpression(
+              t.callExpression(this.addHelper("regenerator"), []),
+              t.identifier("w"),
+            )
+          : node.generator
+            ? this.addHelper("regeneratorAsyncGen")
+            : this.addHelper("regeneratorAsync"),
         wrapArgs,
       );
-
       outerBody.push(t.returnStatement(wrapCall));
       node.body = t.blockStatement(outerBody);
       // We injected a few new variable declarations (for every hoisted var),
@@ -207,12 +204,10 @@ export const getVisitor = (): Visitor<PluginPass> => ({
       if (wasGeneratorFunction && t.isExpression(node)) {
         path.replaceWith(
           t.callExpression(
-            process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
-              ? t.memberExpression(
-                  t.callExpression(this.addHelper("regenerator"), []),
-                  t.identifier("m"),
-                )
-              : util.runtimeProperty(this, "mark"),
+            t.memberExpression(
+              t.callExpression(this.addHelper("regenerator"), []),
+              t.identifier("m"),
+            ),
             [node],
           ),
         );
@@ -325,15 +320,12 @@ function getMarkedFunctionId(
   // Get a new unique identifier for our marked variable.
   const markedId = blockPath.scope.generateUidIdentifier("marked");
   const markCallExp = t.callExpression(
-    process.env.BABEL_8_BREAKING || util.newHelpersAvailable(state)
-      ? t.memberExpression(
-          t.callExpression(state.addHelper("regenerator"), []),
-          t.identifier("m"),
-        )
-      : util.runtimeProperty(state, "mark"),
+    t.memberExpression(
+      t.callExpression(state.addHelper("regenerator"), []),
+      t.identifier("m"),
+    ),
     [t.cloneNode(node.id)],
   );
-
   const index =
     info.decl.declarations.push(t.variableDeclarator(markedId, markCallExp)) -
     1;
@@ -377,15 +369,7 @@ const functionSentVisitor: Visitor<{
 
     if (node.meta.name === "function" && node.property.name === "sent") {
       path.replaceWith(
-        t.memberExpression(
-          t.cloneNode(state.context),
-          t.identifier(
-            process.env.BABEL_8_BREAKING ||
-              util.newHelpersAvailable(state.pluginPass)
-              ? "v"
-              : "_sent",
-          ),
-        ),
+        t.memberExpression(t.cloneNode(state.context), t.identifier("v")),
       );
     }
   },
@@ -406,10 +390,8 @@ const awaitVisitor: Visitor<PluginPass> = {
       // `regeneratorRuntime().awrap`. There is no direct way to test if we
       // have that part of the helper available, but we know that it has been
       // introduced in the same version as `regeneratorKeys`.
-      process.env.BABEL_8_BREAKING || util.newHelpersAvailable(this)
-        ? this.addHelper("awaitAsyncGenerator")
-        : util.runtimeProperty(this, "awrap");
 
+      this.addHelper("awaitAsyncGenerator");
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
     // causes the argument to be wrapped in such a way that the runtime
     // can distinguish between awaited and merely yielded values.

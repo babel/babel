@@ -129,18 +129,6 @@ export function ensureBlock(
   return this.node;
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.arrowFunctionToShadowed = function (this: NodePath) {
-    if (!this.isArrowFunctionExpression()) return;
-
-    this.arrowFunctionToExpression();
-  };
-}
-
 /**
  * Given an arbitrary function, process its content as if it were an arrow function, moving references
  * to "this", "arguments", "super", and such into the function's parent scope. This method is useful if
@@ -176,10 +164,8 @@ export function arrowFunctionToExpression(
   {
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
-    noNewArrows = process.env.BABEL_8_BREAKING
-      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliance
-        true
-      : !arguments[0]?.specCompliant,
+    // TODO(Babel 8): Consider defaulting to `false` for spec compliance
+    noNewArrows = true,
   }: {
     allowInsertArrow?: boolean | void;
     allowInsertArrowWithRest?: boolean | void;
@@ -521,7 +507,7 @@ function standardizeSuperProperty(
       assignmentPath.get("left").replaceWith(
         memberExpression(
           object,
-          // @ts-ignore(Babel 7 vs Babel 8) Babel 8 has better type definitions
+
           assignmentExpression("=", tmp, property),
           true /* computed */,
         ),
@@ -990,12 +976,9 @@ export function ensureFunctionName<
 
   if (!state.needsRename) {
     this.node.id = id;
-    if (process.env.BABEL_8_BREAKING) {
-      scope.getProgramParent().referencesSet.add(id.name);
-    } else {
-      // @ts-expect-error Babel 7
-      scope.getProgramParent().references[id.name] = true;
-    }
+
+    scope.getProgramParent().referencesSet.add(id.name);
+
     return this;
   }
 
@@ -1003,12 +986,9 @@ export function ensureFunctionName<
     // we can just munge the local binding
     scope.rename(id.name);
     this.node.id = id;
-    if (process.env.BABEL_8_BREAKING) {
-      scope.getProgramParent().referencesSet.add(id.name);
-    } else {
-      // @ts-expect-error Babel 7
-      scope.getProgramParent().references[id.name] = true;
-    }
+
+    scope.getProgramParent().referencesSet.add(id.name);
+
     return this;
   }
 

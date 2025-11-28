@@ -76,13 +76,6 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
   }
 
   let plugins = script.plugins;
-  if (!process.env.BABEL_8_BREAKING && !plugins) {
-    plugins = [
-      "transform-class-properties",
-      "transform-object-rest-spread",
-      "transform-flow-strip-types",
-    ];
-  }
 
   return {
     filename,

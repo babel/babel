@@ -54,15 +54,7 @@ export function createRegExpFeaturePlugin({
       }
 
       if (runtime !== undefined) {
-        if (
-          file.has(runtimeKey) &&
-          file.get(runtimeKey) !== runtime &&
-          (process.env.BABEL_8_BREAKING ||
-            // This check. Is necessary because in Babel 7 we allow multiple
-            // copies of transform-named-capturing-groups-regex with
-            // conflicting 'runtime' options.
-            hasFeature(newFeatures, FEATURES.duplicateNamedCaptureGroups))
-        ) {
+        if (file.has(runtimeKey) && file.get(runtimeKey) !== runtime) {
           throw new Error(
             `The 'runtime' option must be the same for ` +
               `'@babel/plugin-transform-named-capturing-groups-regex' and ` +
@@ -70,29 +62,9 @@ export function createRegExpFeaturePlugin({
           );
         }
 
-        if (process.env.BABEL_8_BREAKING) {
-          file.set(runtimeKey, runtime);
-        } else if (
-          // This check. Is necessary because in Babel 7 we allow multiple
-          // copies of transform-named-capturing-groups-regex with
-          // conflicting 'runtime' options.
-          feature === "namedCaptureGroups"
-        ) {
-          if (!runtime || !file.has(runtimeKey)) file.set(runtimeKey, runtime);
-        } else {
-          file.set(runtimeKey, runtime);
-        }
+        file.set(runtimeKey, runtime);
       }
 
-      if (!process.env.BABEL_8_BREAKING) {
-        // Until 7.21.4, we used to encode the version as a number.
-        // If file.get(versionKey) is a number, it has thus been
-        // set by an older version of this plugin.
-        if (typeof file.get(versionKey) === "number") {
-          file.set(versionKey, PACKAGE_JSON.version);
-          return;
-        }
-      }
       if (
         !file.get(versionKey) ||
         semver.lt(file.get(versionKey), PACKAGE_JSON.version)
@@ -100,7 +72,6 @@ export function createRegExpFeaturePlugin({
         file.set(versionKey, PACKAGE_JSON.version);
       }
     },
-
     visitor: {
       RegExpLiteral(path) {
         const { node } = path;

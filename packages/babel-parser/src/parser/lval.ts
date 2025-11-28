@@ -500,10 +500,7 @@ export default abstract class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         let rest: Pattern = this.parseRestBinding();
-        if (
-          (!process.env.BABEL_8_BREAKING && this.hasPlugin("flow")) ||
-          flags & ParseBindingListFlags.IS_FUNCTION_PARAMS
-        ) {
+        if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
           rest = this.parseFunctionParamType(rest);
         }
         elts.push(rest);
@@ -581,10 +578,7 @@ export default abstract class LValParser extends NodeUtils {
     decorators: Decorator[],
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
-    if (
-      (!process.env.BABEL_8_BREAKING && this.hasPlugin("flow")) ||
-      flags & ParseBindingListFlags.IS_FUNCTION_PARAMS
-    ) {
+    if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
       this.parseFunctionParamType(left);
     }
     if (decorators.length) {

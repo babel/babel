@@ -64,13 +64,9 @@ export function loadPartialConfig(
       opts as (err: Error, val: PartialConfig | null) => void,
     );
   } else {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "Starting from Babel 8.0.0, the 'loadPartialConfig' function expects a callback. If you need to call it synchronously, please use 'loadPartialConfigSync'.",
-      );
-    } else {
-      return loadPartialConfigSync(opts);
-    }
+    throw new Error(
+      "Starting from Babel 8.0.0, the 'loadPartialConfig' function expects a callback. If you need to call it synchronously, please use 'loadPartialConfigSync'.",
+    );
   }
 }
 
@@ -102,13 +98,9 @@ export function loadOptions(
       opts as (err: Error, val: ResolvedOptions | null) => void,
     );
   } else {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "Starting from Babel 8.0.0, the 'loadOptions' function expects a callback. If you need to call it synchronously, please use 'loadOptionsSync'.",
-      );
-    } else {
-      return loadOptionsSync(opts);
-    }
+    throw new Error(
+      "Starting from Babel 8.0.0, the 'loadOptions' function expects a callback. If you need to call it synchronously, please use 'loadOptionsSync'.",
+    );
   }
 }
 
@@ -141,12 +133,8 @@ export function createConfigItem(
       callback,
     );
   } else {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
-      );
-    } else {
-      return createConfigItemSync(target, options);
-    }
+    throw new Error(
+      "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
+    );
   }
 }

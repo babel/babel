@@ -177,10 +177,7 @@ function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
       }
     } else if (path.isAssignmentExpression()) {
       const nodes = [];
-      const ids = process.env.BABEL_8_BREAKING
-        ? path.getAssignmentIdentifiers()
-        : path.getBindingIdentifiers();
-
+      const ids = path.getAssignmentIdentifiers();
       for (const name of Object.keys(ids)) {
         const replacement = getTDZReplacement(path, state, ids[name]);
         if (replacement) {

@@ -205,26 +205,13 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
           case "TSEnumDeclaration":
-            if (!process.env.BABEL_8_BREAKING) {
-              adjustInnerComments(node, node.members!, commentWS);
-            } else {
-              setInnerComments(node, comments);
-            }
+            setInnerComments(node, comments);
+
             break;
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
             break;
           default: {
-            if (!process.env.BABEL_8_BREAKING) {
-              if (node.type === "RecordExpression") {
-                adjustInnerComments(node, node.properties, commentWS);
-                break;
-              }
-              if (node.type === "TupleExpression") {
-                adjustInnerComments(node, node.elements, commentWS);
-                break;
-              }
-            }
             setInnerComments(node, comments);
           }
         }

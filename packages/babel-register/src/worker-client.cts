@@ -81,22 +81,3 @@ class WorkerClient extends Client {
 }
 
 export = { WorkerClient };
-
-if (!process.env.BABEL_8_BREAKING) {
-  module.exports.LocalClient = class LocalClient extends Client {
-    isLocalClient = true;
-
-    static #handleMessage: (action: ACTIONS, payload: any) => any;
-
-    constructor() {
-      LocalClient.#handleMessage ??= require("./worker/handle-message.cjs");
-
-      super((action, payload) => {
-        return LocalClient.#handleMessage(
-          action === ACTIONS.TRANSFORM ? ACTIONS.TRANSFORM_SYNC : action,
-          payload,
-        );
-      });
-    }
-  };
-}

@@ -195,9 +195,7 @@ function pushTask(
   }
 
   const shouldIgnore =
-    (process.env.BABEL_8_BREAKING
-      ? taskOpts.BABEL_8_BREAKING === false
-      : taskOpts.BABEL_8_BREAKING === true) ||
+    taskOpts.BABEL_8_BREAKING === false ||
     (process.env.IS_PUBLISH ? taskOpts.SKIP_ON_PUBLISH : false);
 
   if (shouldIgnore) return;

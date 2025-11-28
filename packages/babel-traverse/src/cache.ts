@@ -21,16 +21,14 @@ export function clearScope() {
 
 export function getCachedPaths(path: NodePath) {
   const { parent, parentPath } = path;
-  return process.env.BABEL_8_BREAKING && parentPath
-    ? parentPath._store
-    : pathsCache.get(parent);
+  return parentPath ? parentPath._store : pathsCache.get(parent);
 }
 
 export function getOrCreateCachedPaths(
   node: Node,
   parentPath?: NodePath | null,
 ) {
-  if (process.env.BABEL_8_BREAKING && parentPath) {
+  if (parentPath) {
     return (parentPath._store ||= new Map());
   }
 

@@ -1,9 +1,8 @@
 // TODO(Babel 8) Remove this file
-if (process.env.BABEL_8_BREAKING) {
-  throw new Error(
-    "Internal Babel error: This file should only be loaded in Babel 7",
-  );
-}
+
+throw new Error(
+  "Internal Babel error: This file should only be loaded in Babel 7",
+);
 
 const pluginCorejs2 = require("babel-plugin-polyfill-corejs2").default;
 const pluginCorejs3 = require("babel-plugin-polyfill-corejs3").default;

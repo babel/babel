@@ -102,8 +102,7 @@ import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformExplicitResourceManagement from "@babel/plugin-transform-explicit-resource-management";
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
-import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
-import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
+
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -324,8 +323,5 @@ export const all: Record<string, any> = {
 };
 
 export { default as syntaxRecordAndTuple } from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
-if (!process.env.BABEL_8_BREAKING)
-  all["syntax-record-and-tuple"] = syntaxRecordAndTuple;
+
 export { default as proposalRecordAndTuple } from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
-if (!process.env.BABEL_8_BREAKING)
-  all["proposal-record-and-tuple"] = proposalRecordAndTuple;

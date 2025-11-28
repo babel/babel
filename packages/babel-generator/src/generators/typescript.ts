@@ -10,11 +10,7 @@ export function TSTypeAnnotation(
   // of the return type of an arrow function type
   this.token(
     (parent.type === "TSFunctionType" || parent.type === "TSConstructorType") &&
-      (process.env.BABEL_8_BREAKING
-        ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-          parent.returnType
-        : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-          parent.typeAnnotation) === node
+      parent.returnType === node
       ? "=>"
       : ":",
   );
@@ -66,11 +62,7 @@ export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
     this.space();
   }
 
-  this.word(
-    !process.env.BABEL_8_BREAKING
-      ? (node.name as unknown as string)
-      : (node.name as unknown as t.Identifier).name,
-  );
+  this.word((node.name as unknown as t.Identifier).name);
 
   if (node.constraint) {
     this.space();
@@ -279,29 +271,20 @@ export function tsPrintFunctionOrConstructorType(
   node: t.TSFunctionType | t.TSConstructorType,
 ) {
   const { typeParameters } = node;
-  const parameters = process.env.BABEL_8_BREAKING
-    ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-      node.params
-    : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-      node.parameters;
+  const parameters = node.params;
+
   this.print(typeParameters);
   this.token("(");
   this._parameters(parameters, ")");
   this.space();
-  const returnType = process.env.BABEL_8_BREAKING
-    ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-      node.returnType
-    : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-      node.typeAnnotation;
+  const returnType = node.returnType;
+
   this.print(returnType);
 }
 
 export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
-  const typeArguments = process.env.BABEL_8_BREAKING
-    ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-      node.typeArguments
-    : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-      node.typeParameters;
+  const typeArguments = node.typeArguments;
+
   this.print(node.typeName, !!typeArguments);
   this.print(typeArguments);
 }
@@ -325,11 +308,8 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
   this.space();
   this.print(node.exprName);
 
-  const typeArguments = process.env.BABEL_8_BREAKING
-    ? //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-      node.typeArguments
-    : //@ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-      node.typeParameters;
+  const typeArguments = node.typeArguments;
+
   if (typeArguments) {
     this.print(typeArguments);
   }
@@ -454,24 +434,14 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   }
 
   this.token("[");
-  if (process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-    this.word(node.key.name);
-  } else {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-    this.word(node.typeParameter.name);
-  }
+
+  this.word(node.key.name);
 
   this.space();
   this.word("in");
   this.space();
-  if (process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-    this.print(node.constraint);
-  } else {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-    this.print(node.typeParameter.constraint);
-  }
+
+  this.print(node.constraint);
 
   if (nameType) {
     this.space();
@@ -606,13 +576,8 @@ export function TSInstantiationExpression(
   node: t.TSInstantiationExpression,
 ) {
   this.print(node.expression);
-  if (process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-    this.print(node.typeArguments);
-  } else {
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    this.print(node.typeParameters);
-  }
+
+  this.print(node.typeArguments);
 }
 
 export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
@@ -630,21 +595,14 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.print(id);
   this.space();
 
-  if (process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-    this.print(node.body);
-  } else {
-    // cast to TSEnumBody for Babel 7 AST
-    TSEnumBody.call(this, node as unknown as t.TSEnumBody);
-  }
+  this.print(node.body);
 }
 
 export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
   printBraced(this, node, () =>
     this.printList(
       node.members,
-      this.shouldPrintTrailingComma("}") ??
-        (process.env.BABEL_8_BREAKING ? false : true),
+      this.shouldPrintTrailingComma("}") ?? false,
       true,
       true,
     ),
@@ -673,46 +631,18 @@ export function TSModuleDeclaration(
     this.space();
   }
 
-  if (process.env.BABEL_8_BREAKING) {
-    if (kind !== "global") {
-      this.word(kind);
-      this.space();
-    }
-
-    this.print(node.id);
-    if (!node.body) {
-      this.semicolon();
-      return;
-    }
+  if (kind !== "global") {
+    this.word(kind);
     this.space();
-    this.print(node.body);
-  } else {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-    if (!node.global) {
-      this.word(kind ?? (id.type === "Identifier" ? "namespace" : "module"));
-      this.space();
-    }
-
-    this.print(id);
-
-    if (!node.body) {
-      this.semicolon();
-      return;
-    }
-
-    let body = node.body;
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-    while (body.type === "TSModuleDeclaration") {
-      this.token(".");
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-      this.print(body.id);
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-      body = body.body;
-    }
-
-    this.space();
-    this.print(body);
   }
+
+  this.print(node.id);
+  if (!node.body) {
+    this.semicolon();
+    return;
+  }
+  this.space();
+  this.print(node.body);
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
@@ -723,10 +653,7 @@ export function TSImportType(this: Printer, node: t.TSImportType) {
   const { qualifier, options } = node;
   this.word("import");
   this.token("(");
-  this.print(
-    //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-    process.env.BABEL_8_BREAKING ? node.source : node.argument,
-  );
+  this.print(node.source);
   if (options) {
     this.token(",");
     this.print(options);
@@ -736,11 +663,8 @@ export function TSImportType(this: Printer, node: t.TSImportType) {
     this.token(".");
     this.print(qualifier);
   }
-  const typeArguments = process.env.BABEL_8_BREAKING
-    ? //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-      node.typeArguments
-    : //@ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-      node.typeParameters;
+  const typeArguments = node.typeArguments;
+
   if (typeArguments) {
     this.print(typeArguments);
   }
@@ -751,14 +675,7 @@ export function TSImportEqualsDeclaration(
   node: t.TSImportEqualsDeclaration,
 ) {
   const { id, moduleReference } = node;
-  if (
-    !process.env.BABEL_8_BREAKING &&
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-    node.isExport
-  ) {
-    this.word("export");
-    this.space();
-  }
+
   this.word("import");
   this.space();
   this.print(id);
@@ -811,15 +728,11 @@ export function TSNamespaceExportDeclaration(
 
 export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
   const { typeParameters } = node;
-  const parameters = process.env.BABEL_8_BREAKING
-    ? node.params
-    : node.parameters;
+  const parameters = node.params;
   this.print(typeParameters);
   this.token("(");
   this._parameters(parameters, ")");
-  const returnType = process.env.BABEL_8_BREAKING
-    ? node.returnType
-    : node.typeAnnotation;
+  const returnType = node.returnType;
   this.print(returnType);
 }
 

@@ -111,9 +111,7 @@ export default declare((api, opt: Options) => {
 
   return {
     name: "transform-private-property-in-object",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("privateIn"),
+    manipulateOptions: undefined,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.

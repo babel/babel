@@ -2,10 +2,7 @@ import { NODE_FIELDS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 import { isFile, isIdentifier } from "../validators/generated/index.ts";
 
-const { hasOwn } = process.env.BABEL_8_BREAKING
-  ? Object
-  : { hasOwn: Function.call.bind(Object.prototype.hasOwnProperty) };
-
+const { hasOwn } = Object;
 type CommentCache = Map<t.Comment, t.Comment>;
 
 // This function will never be called for comments, only for real nodes.

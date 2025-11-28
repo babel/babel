@@ -574,12 +574,7 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
   // Name anonymous exported locals.
   programPath.get("body").forEach(child => {
     if (!child.isExportDefaultDeclaration()) return;
-    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-      // polyfill when being run by an older Babel version
-      child.splitExportDeclaration ??=
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-    }
+
     child.splitExportDeclaration();
   });
 }

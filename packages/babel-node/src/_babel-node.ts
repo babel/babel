@@ -242,9 +242,6 @@ function replStart() {
     preview: true,
   });
   const NODE_REPL_HISTORY = process.env.NODE_REPL_HISTORY;
-  if (process.env.BABEL_8_BREAKING) {
-    replServer.setupHistory(NODE_REPL_HISTORY, () => {});
-  } else {
-    replServer.setupHistory?.(NODE_REPL_HISTORY, () => {});
-  }
+
+  replServer.setupHistory(NODE_REPL_HISTORY, () => {});
 }

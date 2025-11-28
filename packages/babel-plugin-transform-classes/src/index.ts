@@ -46,15 +46,9 @@ export default declare((api, options: Options) => {
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.splitExportDeclaration ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-        }
+
         path.splitExportDeclaration();
       },
-
       ClassDeclaration(path) {
         const { node } = path;
 
@@ -73,12 +67,6 @@ export default declare((api, options: Options) => {
         const { node } = path;
         if (VISITED.has(node)) return;
 
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.ensureFunctionName ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-        }
         const replacement = path.ensureFunctionName(supportUnicodeId);
         if (replacement && replacement.node !== node) return;
 

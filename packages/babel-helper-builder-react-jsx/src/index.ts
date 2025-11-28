@@ -1,7 +1,6 @@
-import * as t_1 from "@babel/types" with { if: "!process.env.BABEL_8_BREAKING" };
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type { PluginPass, NodePath, Visitor } from "@babel/core";
-import { types as t } from "@babel/core" with { if: "process.env.BABEL_8_BREAKING" };
+import { types as t } from "@babel/core";
 
 const {
   booleanLiteral,
@@ -26,7 +25,7 @@ const {
   spreadElement,
   stringLiteral,
   thisExpression,
-} = process.env.BABEL_8_BREAKING ? t : t_1;
+} = t;
 
 type ElementState = {
   tagExpr: t.Expression; // tag node,
@@ -201,11 +200,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const attribs = openingPath.node.attributes;
     let convertedAttributes: t.Expression;
     if (attribs.length) {
-      if (process.env.BABEL_8_BREAKING) {
-        convertedAttributes = objectExpression(attribs.map(convertAttribute));
-      } else {
-        convertedAttributes = buildOpeningElementAttributes(attribs, pass);
-      }
+      convertedAttributes = objectExpression(attribs.map(convertAttribute));
     } else {
       convertedAttributes = nullLiteral();
     }

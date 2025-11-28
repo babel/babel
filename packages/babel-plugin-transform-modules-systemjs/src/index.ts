@@ -271,11 +271,7 @@ export default declare<PluginState>((api, options: Options) => {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
         if (path.isCallExpression()) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
-            if (process.env.BABEL_8_BREAKING) {
-              throw new Error(MISSING_PLUGIN_ERROR);
-            } else {
-              console.warn(MISSING_PLUGIN_WARNING);
-            }
+            throw new Error(MISSING_PLUGIN_ERROR);
           }
         } else {
           // when createImportExpressions is true, we require the dynamic import transform
@@ -628,13 +624,6 @@ export default declare<PluginState>((api, options: Options) => {
           // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-            // polyfill when being run by an older Babel version
-            path.scope.hoistVariables ??=
-              // eslint-disable-next-line no-restricted-globals
-              require("@babel/traverse").Scope.prototype.hoistVariables;
-          }
-
           path.scope.hoistVariables((id, hasInit) => {
             variableIds.push(id);
             if (!hasInit && id.name in exportMap) {
@@ -678,27 +667,14 @@ export default declare<PluginState>((api, options: Options) => {
           }
 
           let hasTLA = false;
-          if (process.env.BABEL_8_BREAKING) {
-            t.traverseFast(path.node, node => {
-              if (t.isFunction(node)) return t.traverseFast.skip;
-              if (t.isAwaitExpression(node)) {
-                hasTLA = true;
-                return t.traverseFast.stop;
-              }
-            });
-          } else {
-            path.traverse({
-              AwaitExpression(path) {
-                hasTLA = true;
-                path.stop();
-              },
-              Function(path) {
-                path.skip();
-              },
-              // @ts-expect-error - todo: add noScope to type definitions
-              noScope: true,
-            });
-          }
+
+          t.traverseFast(path.node, node => {
+            if (t.isFunction(node)) return t.traverseFast.skip;
+            if (t.isAwaitExpression(node)) {
+              hasTLA = true;
+              return t.traverseFast.stop;
+            }
+          });
 
           path.node.body = [
             buildTemplate({

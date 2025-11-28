@@ -16,19 +16,6 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var DefineAccessorHelper = template.expression.ast`
-    function (type, obj, key, fn) {
-      var desc = { configurable: true, enumerable: true };
-      desc[type] = fn;
-      return Object.defineProperty(obj, key, desc);
-    }
-  `;
-  // @ts-expect-error undocumented _compact node property
-  DefineAccessorHelper._compact = true;
-}
-
 export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
@@ -50,34 +37,13 @@ export default declare((api, options: Options) => {
         ? t.stringLiteral(prop.key.name)
         : prop.key;
     const fn = getValue(prop);
-    if (process.env.BABEL_8_BREAKING) {
-      return t.callExpression(state.addHelper("defineAccessor"), [
-        t.stringLiteral(type),
-        obj,
-        key,
-        fn,
-      ]);
-    } else {
-      let helper: t.Identifier;
-      if (state.availableHelper("defineAccessor")) {
-        helper = state.addHelper("defineAccessor");
-      } else {
-        // Fallback for @babel/helpers <= 7.20.6, manually add helper function
-        const file = state.file;
-        helper = file.get("fallbackDefineAccessorHelper");
-        if (!helper) {
-          const id = file.scope.generateUidIdentifier("defineAccessor");
-          file.scope.push({
-            id,
-            init: DefineAccessorHelper,
-          });
-          file.set("fallbackDefineAccessorHelper", (helper = id));
-        }
-        helper = t.cloneNode(helper);
-      }
 
-      return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
-    }
+    return t.callExpression(state.addHelper("defineAccessor"), [
+      t.stringLiteral(type),
+      obj,
+      key,
+      fn,
+    ]);
   }
 
   /**

@@ -18,28 +18,7 @@ export default (_: any, opts: any = {}) => {
     ],
     babelPlugins.transformExplicitResourceManagement,
     // These are Stage 4
-    ...(process.env.BABEL_8_BREAKING
-      ? []
-      : [
-          babelPlugins.transformExportNamespaceFrom,
-          babelPlugins.transformLogicalAssignmentOperators,
-          [babelPlugins.transformOptionalChaining, { loose }],
-          [babelPlugins.transformNullishCoalescingOperator, { loose }],
-          [babelPlugins.transformClassProperties, { loose }],
-          babelPlugins.transformJsonStrings,
-          babelPlugins.transformJsonModules,
-          babelPlugins.transformNumericSeparator,
-          [babelPlugins.transformPrivateMethods, { loose }],
-          babelPlugins.transformPrivatePropertyInObject,
-          babelPlugins.transformClassStaticBlock,
-          babelPlugins.transformUnicodeSetsRegex,
-          babelPlugins.transformDuplicateNamedCapturingGroupsRegex,
-          babelPlugins.transformRegexpModifiers,
-          [
-            babelPlugins.syntaxImportAttributes,
-            { deprecatedAssertSyntax: true },
-          ],
-        ]),
+    ...[],
   ];
 
   return { plugins };

@@ -150,12 +150,8 @@ function plainFunction(
   const nodeParams = inPath.node.params;
 
   if (path.isArrowFunctionExpression()) {
-    if (process.env.BABEL_8_BREAKING) {
-      path = path.arrowFunctionToExpression({ noNewArrows });
-    } else {
-      // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
-      path = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
-    }
+    path = path.arrowFunctionToExpression({ noNewArrows });
+
     node = path.node as
       | t.FunctionDeclaration
       | t.FunctionExpression
@@ -225,12 +221,7 @@ export default function wrapFunction(
     classOrObjectMethod(path, callId, ignoreFunctionLength);
   } else {
     const hadName = "id" in path.node && !!path.node.id;
-    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-      // polyfill when being run by an older Babel version
-      path.ensureFunctionName ??=
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-    }
+
     // @ts-expect-error It is invalid to call this on an arrow expression,
     // but we'll convert it to a function expression anyway.
     path = path.ensureFunctionName(false);

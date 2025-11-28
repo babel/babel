@@ -15,20 +15,6 @@ const {
   thisExpression,
 } = t;
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.environmentVisitor = visitors.environmentVisitor({});
-  // eslint-disable-next-line no-restricted-globals
-  exports.skipAllButComputedKey = function skipAllButComputedKey(
-    path: NodePath<t.Method | t.ClassProperty>,
-  ) {
-    path.skip();
-    if (path.node.computed) {
-      path.context.maybeQueue(path.get("key"));
-    }
-  };
-}
-
 const visitor = visitors.environmentVisitor<
   HandlerState<ReplaceState> & ReplaceState
 >({
@@ -521,10 +507,7 @@ export default class ReplaceSupers {
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;
-    this.constantSuper = process.env.BABEL_8_BREAKING
-      ? opts.constantSuper
-      : // Fallback to isLoose for backward compatibility
-        (opts.constantSuper ?? (opts as any).isLoose);
+    this.constantSuper = opts.constantSuper;
     this.opts = opts;
   }
 
@@ -556,13 +539,7 @@ export default class ReplaceSupers {
       });
     }
 
-    const handler = this.constantSuper
-      ? looseHandlers
-      : process.env.BABEL_8_BREAKING ||
-          this.file.availableHelper("superPropSet")
-        ? specHandlers
-        : specHandlers_old;
-
+    const handler = this.constantSuper ? looseHandlers : specHandlers;
     // todo: this should have been handled by the environmentVisitor,
     // consider add visitSelf support for the path.traverse
     // @ts-expect-error: Refine typings in packages/babel-traverse/src/types.ts

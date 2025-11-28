@@ -22,9 +22,7 @@ export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const {
-    development = process.env.BABEL_8_BREAKING
-      ? api.env(env => env === "development")
-      : false,
+    development = api.env(env => env === "development"),
     importSource,
     pragma,
     pragmaFrag,
@@ -37,25 +35,15 @@ export default declarePreset((api, opts: Options) => {
     plugins: [
       [
         development ? transformReactJSXDevelopment : transformReactJSX,
-        process.env.BABEL_8_BREAKING
-          ? {
-              importSource,
-              pragma,
-              pragmaFrag,
-              runtime,
-              throwIfNamespace,
-              pure,
-            }
-          : {
-              importSource,
-              pragma,
-              pragmaFrag,
-              runtime,
-              throwIfNamespace,
-              pure,
-              useBuiltIns: !!opts.useBuiltIns,
-              useSpread: opts.useSpread,
-            },
+
+        {
+          importSource,
+          pragma,
+          pragmaFrag,
+          runtime,
+          throwIfNamespace,
+          pure,
+        },
       ] satisfies PluginItem,
       transformReactDisplayName,
       pure !== false && transformReactPure,

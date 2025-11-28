@@ -14,14 +14,7 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
   exports.createConfigItemAsync = babel.createConfigItemAsync;
 
-  if (process.env.BABEL_8_BREAKING) {
-    exports.createConfigItemSync = babel.createConfigItemSync;
-  } else {
-    // babel.createConfigItemSync is available on 7.13+
-    // we support Babel 7.11+
-    exports.createConfigItemSync =
-      babel.createConfigItemSync || babel.createConfigItem;
-  }
+  exports.createConfigItemSync = babel.createConfigItemSync;
 }
 
 if (USE_ESM) {

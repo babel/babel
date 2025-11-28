@@ -15,6 +15,3 @@ const rules = {
 
 exports.meta = meta;
 exports.rules = rules;
-if (!process.env.BABEL_8_BREAKING) {
-  exports.default = { meta, rules };
-}

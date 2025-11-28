@@ -73,18 +73,11 @@ function normalizeOptions(
     jsescOption: {
       quotes: "double",
       wrap: true,
-      minimal: process.env.BABEL_8_BREAKING ? true : false,
+      minimal: true,
       ...opts.jsescOption,
     },
     topicToken: opts.topicToken,
   };
-
-  if (!process.env.BABEL_8_BREAKING) {
-    format.decoratorsBeforeExport = opts.decoratorsBeforeExport;
-    format.jsescOption.json = opts.jsonCompatibleStrings;
-    format.recordAndTupleSyntaxType = opts.recordAndTupleSyntaxType ?? "hash";
-    format.importAttributesKeyword = opts.importAttributesKeyword;
-  }
 
   if (format.minified) {
     format.compact = true;
@@ -255,31 +248,6 @@ export interface GeneratorResult {
   map: EncodedSourceMap | null;
   decodedMap: DecodedSourceMap | undefined;
   rawMappings: Mapping[] | undefined;
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * We originally exported the Generator class above, but to make it extra clear that it is a private API,
-   * we have moved that to an internal class instance and simplified the interface to the two public methods
-   * that we wish to support.
-   */
-
-  // eslint-disable-next-line no-restricted-globals
-  exports.CodeGenerator = class CodeGenerator {
-    private _ast: t.Node;
-    private _format: Format;
-    private _map: SourceMap | null;
-    constructor(ast: t.Node, opts: GeneratorOptions = {}, code?: string) {
-      this._ast = ast;
-      this._format = normalizeOptions(code, opts, ast);
-      this._map = opts.sourceMaps ? new SourceMap(opts, code) : null;
-    }
-    generate(): GeneratorResult {
-      const printer = new Printer(this._format, this._map);
-
-      return printer.generate(this._ast);
-    }
-  };
 }
 
 /**

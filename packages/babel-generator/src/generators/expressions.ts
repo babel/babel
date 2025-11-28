@@ -84,7 +84,6 @@ export function NewExpression(
   if (
     this.format.minified &&
     node.arguments.length === 0 &&
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     !node.optional &&
     !isCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
@@ -94,14 +93,6 @@ export function NewExpression(
   }
 
   this.print(node.typeArguments);
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    this.print(node.typeParameters); // Legacy TS AST
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    if (node.optional) {
-      this.token("?.");
-    }
-  }
 
   if (
     node.arguments.length === 0 &&
@@ -187,11 +178,6 @@ export function OptionalCallExpression(
 ) {
   this.print(node.callee);
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    this.print(node.typeParameters); // legacy TS AST
-  }
-
   if (node.optional) {
     this.token("?.");
   }
@@ -209,10 +195,7 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.callee);
 
   this.print(node.typeArguments);
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    this.print(node.typeParameters); // legacy TS AST
-  }
+
   this.token("(");
   const exit = this.enterDelimited();
   this.printList(node.arguments, this.shouldPrintTrailingComma(")"));

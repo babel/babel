@@ -31,11 +31,7 @@ export default declare(api => {
     file: File,
   ) {
     return t.expressionStatement(
-      t.callExpression(file.addHelper("defaults"), [
-        // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.__proto__ = ...`
-        ref,
-        expr.right,
-      ]),
+      t.callExpression(file.addHelper("defaults"), [ref, expr.right]),
     );
   }
 
