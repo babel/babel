@@ -169,5 +169,6 @@ function setupPrepareStackTrace() {
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
   if (trace.length === 0) return ErrorToString(err);
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   return `${ErrorToString(err)}\n    at ${trace.join("\n    at ")}`;
 }

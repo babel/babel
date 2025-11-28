@@ -331,6 +331,7 @@ export function* createDescriptor<API>(
   }
 
   if (!value) {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw new Error(`Unexpected falsy value: ${String(value)}`);
   }
 
