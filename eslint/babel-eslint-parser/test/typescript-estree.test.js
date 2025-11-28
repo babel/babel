@@ -19,6 +19,9 @@ const PROPS_TO_REMOVE = [
   { key: "identifierName", type: null },
   // For legacy estree AST
   { key: "attributes", type: "ImportExpression" },
+
+  // Babel sets `computed: false`, while typescript-estree omits it
+  { key: "computed", value: false, type: "TSEnumMember" },
 ];
 
 // TODO: remove the ESLint token fixes after they are fixed in upstream
@@ -53,8 +56,9 @@ function deeplyRemoveProperties(obj, props) {
   for (const [k, v] of Object.entries(obj)) {
     if (
       props.some(
-        ({ key, type }) =>
+        ({ key, value, type }) =>
           key === k &&
+          (value === undefined || value === v) &&
           ((type === "Node" && obj.type) || type === obj.type || type == null),
       )
     ) {
@@ -75,6 +79,22 @@ function deeplyRemoveProperties(obj, props) {
         deeplyRemoveProperties(v, props);
       }
     }
+  }
+}
+
+function deeplyMakePlainObject(obj) {
+  if (!obj || typeof obj !== "object") return;
+
+  if (Array.isArray(obj)) {
+    for (const el of obj) {
+      deeplyMakePlainObject(el);
+    }
+    return;
+  }
+
+  Object.setPrototypeOf(obj, Object.prototype);
+  for (const v of Object.values(obj)) {
+    deeplyMakePlainObject(v);
   }
 }
 
@@ -139,6 +159,10 @@ function deeplyRemoveProperties(obj, props) {
       } else {
         fixTSESLintTokens(tsEstreeAST);
       }
+
+      deeplyMakePlainObject(babelAST);
+      deeplyMakePlainObject(tsEstreeAST);
+
       expect(babelAST).toEqual(tsEstreeAST);
     }
 
@@ -304,8 +328,7 @@ function deeplyRemoveProperties(obj, props) {
           ["function type", "var v: (x: string) => string"],
 
           ["conditional type", "type M = T extends Q ? string : number"],
-          // Pending release of https://github.com/typescript-eslint/typescript-eslint/pull/11591
-          ...(IS_BABEL_8 ? [] : [["import type", "var v: import('foo')"]]),
+          ...(IS_BABEL_8 ? [["import type", "var v: import('foo')"]] : []),
           ["instantiation expression optional chain", "a?.b<c>"],
           ["type parameter", "type Id<T> = T"],
 
@@ -342,9 +365,6 @@ function deeplyRemoveProperties(obj, props) {
         // Pending release https://github.com/microsoft/TypeScript/pull/61764
         "typescript/explicit-resource-management/valid-for-using-declaration-binding-of/input.js",
 
-        // Pending https://github.com/typescript-eslint/typescript-eslint/issues/11474
-        "typescript/types/import-type-options-with-trailing-comma/input.ts",
-
         // ts-eslint/tsc does not support arrow generic in tsx mode
         "typescript/arrow-function/async-await-null/input.ts",
         "typescript/arrow-function/async-generic-after-await/input.ts",
@@ -379,12 +399,6 @@ function deeplyRemoveProperties(obj, props) {
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
         "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
-
-        // Pending release of https://github.com/typescript-eslint/typescript-eslint/pull/11591
-        "typescript/types/import-type-dynamic/input.ts",
-        "typescript/types/import-type-dynamic-with-options/input.ts",
-        "typescript/types/import-type-dynamic-with-options-trailing-comma/input.ts",
-        "typescript/types/import-type-dynamic-with-string-options/input.ts",
       ]);
       for (const [name, testSuites] of Object.entries(fixtures)) {
         if (["typescript"].includes(name)) {
