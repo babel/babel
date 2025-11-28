@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
 import rimraf from "rimraf";
-import { itBabel7, itBabel8, itSatisfies, itNegate } from "$repo-utils";
+import { itSatisfies, itNegate } from "$repo-utils";
 
 import _getTargets from "@babel/helper-compilation-targets";
 const getTargets = _getTargets.default || _getTargets;
@@ -1355,22 +1355,7 @@ describe("buildConfigChain", function () {
         );
       });
 
-      itBabel7("should load .babelignore", () => {
-        const loadOptions = name => {
-          const filename = fixture("config-files", "babelignore", name);
-          return loadOptionsSync({ filename, cwd: path.dirname(filename) });
-        };
-
-        expect(loadOptions("src.js")).toBeNull();
-        expect(loadOptions("bar.js")).not.toBeNull();
-        expect(loadOptions("#baz.js")).not.toBeNull();
-
-        // This changes in Babel 8
-        expect(loadOptions("foo.js#.js")).not.toBeNull();
-        expect(loadOptions("foo.js")).toBeNull();
-      });
-
-      itBabel8("should load .babelignore", () => {
+      it("should load .babelignore", () => {
         const loadOptions = name => {
           const filename = fixture("config-files", "babelignore", name);
           return loadOptionsSync({ filename, cwd: path.dirname(filename) });

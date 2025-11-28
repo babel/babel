@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import { itBabel7, itBabel8 } from "$repo-utils";
+
 import _traverse, { visitors } from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
 
@@ -11,26 +11,7 @@ describe("visitors", () => {
       expect(visitor._exploded).toBe(true);
     });
 
-    itBabel7("should work when merging node type visitors", () => {
-      const ast = parse("1");
-      const visitor = visitors.merge([
-        { ArrayExpression() {} },
-        { ArrayExpression() {} },
-      ]);
-      traverse(ast, visitor);
-      expect(visitor).toMatchInlineSnapshot(`
-        Object {
-          "ArrayExpression": Object {
-            "enter": Array [
-              [Function],
-              [Function],
-            ],
-          },
-        }
-      `);
-    });
-
-    itBabel8("should work when merging node type visitors", () => {
+    it("should work when merging node type visitors", () => {
       const ast = parse("1");
       const visitor = visitors.merge([
         { ArrayExpression() {} },
@@ -51,21 +32,7 @@ describe("visitors", () => {
       `);
     });
 
-    itBabel7("enter", () => {
-      const ast = parse("1");
-      const visitor = visitors.merge([{ enter() {} }, { enter() {} }]);
-      traverse(ast, visitor);
-      expect(visitor).toMatchInlineSnapshot(`
-        Object {
-          "enter": Array [
-            [Function],
-            [Function],
-          ],
-        }
-      `);
-    });
-
-    itBabel8("enter", () => {
+    it("enter", () => {
       const ast = parse("1");
       const visitor = visitors.merge([{ enter() {} }, { enter() {} }]);
       traverse(ast, visitor);
@@ -81,24 +48,7 @@ describe("visitors", () => {
       `);
     });
 
-    itBabel7("enter with states", () => {
-      const ast = parse("1");
-      const visitor = visitors.merge(
-        [{ enter() {} }, { enter() {} }],
-        [{}, {}],
-      );
-      traverse(ast, visitor);
-      expect(visitor).toMatchInlineSnapshot(`
-        Object {
-          "enter": Array [
-            [Function],
-            [Function],
-          ],
-        }
-      `);
-    });
-
-    itBabel8("enter with states", () => {
+    it("enter with states", () => {
       const ast = parse("1");
       const visitor = visitors.merge(
         [{ enter() {} }, { enter() {} }],
@@ -117,25 +67,7 @@ describe("visitors", () => {
       `);
     });
 
-    itBabel7("enter with wrapper", () => {
-      const ast = parse("1");
-      const visitor = visitors.merge(
-        [{ enter() {} }, { enter() {} }],
-        [{}, {}],
-        (stateKey, key, fn) => fn,
-      );
-      traverse(ast, visitor);
-      expect(visitor).toMatchInlineSnapshot(`
-        Object {
-          "enter": Array [
-            [Function],
-            [Function],
-          ],
-        }
-      `);
-    });
-
-    itBabel8("enter with wrapper", () => {
+    it("enter with wrapper", () => {
       const ast = parse("1");
       const visitor = visitors.merge(
         [{ enter() {} }, { enter() {} }],

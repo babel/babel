@@ -1,9 +1,9 @@
 import * as t from "../../lib/index.js";
-import { itBabel7, itBabel8 } from "$repo-utils";
+
 import cp from "node:child_process";
 
 describe("builders", function () {
-  itBabel8("t.numericLiteral expects a non-negative finite value", () => {
+  it("t.numericLiteral expects a non-negative finite value", () => {
     expect(() => t.numericLiteral(-1)).toThrow();
     expect(() => t.numericLiteral(-0)).toThrow();
     expect(() => t.numericLiteral(-Infinity)).toThrow();
@@ -11,11 +11,7 @@ describe("builders", function () {
     expect(() => t.numericLiteral(NaN)).toThrow();
   });
 
-  itBabel7("t.bigIntLiteral expects a string value", () => {
-    expect(t.bigIntLiteral("1")).toHaveProperty("value", "1");
-  });
-
-  itBabel8("t.bigIntLiteral expects a bigint value", () => {
+  it("t.bigIntLiteral expects a bigint value", () => {
     const bigIntLiteral = t.bigIntLiteral(BigInt(1));
     expect(bigIntLiteral).toHaveProperty("value", BigInt(1));
   });
@@ -24,7 +20,7 @@ describe("builders", function () {
     expect(t.ThisTypeAnnotation()).toEqual(t.thisTypeAnnotation());
   });
 
-  itBabel8("uppercase builders are deprecated", async () => {
+  it("uppercase builders are deprecated", async () => {
     // Spawn a separate process, because the warning only happens once for all builders
     // and it relies on global state due to the deduplication
 

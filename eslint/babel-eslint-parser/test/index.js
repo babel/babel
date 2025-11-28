@@ -3,7 +3,7 @@ import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
-import { itDummy, commonJS, itBabel7 } from "$repo-utils";
+import { itDummy, commonJS } from "$repo-utils";
 
 function parseForESLint(code, options) {
   return parseForESLintOriginal(code, {
@@ -414,69 +414,6 @@ describe("Babel and Espree", () => {
   });
 
   // Espree doesn't support the pipeline operator yet
-  itBabel7("pipeline operator (token)", () => {
-    const code = "foo |> bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: {
-        filename: "test.js",
-        parserOpts: {
-          plugins: [["pipelineOperator", { proposal: "minimal" }]],
-          tokens: true,
-        },
-      },
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
-  });
-
-  itBabel7("brace and bracket hash operator (token)", () => {
-    const code = "#[]; #{}";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: {
-        filename: "test.js",
-        parserOpts: {
-          plugins: [["recordAndTuple", { syntaxType: "hash" }]],
-          tokens: true,
-        },
-      },
-    }).ast;
-    expect(babylonAST.tokens[0]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "#[" }),
-    );
-    expect(babylonAST.tokens[3]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "#{" }),
-    );
-  });
-
-  itBabel7("brace and bracket bar operator (token)", () => {
-    const code = "{||}; [||]";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: {
-        filename: "test.js",
-        parserOpts: {
-          plugins: [["recordAndTuple", { syntaxType: "bar" }]],
-          tokens: true,
-        },
-      },
-    }).ast;
-    expect(babylonAST.tokens[0]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "{|" }),
-    );
-    expect(babylonAST.tokens[1]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "|}" }),
-    );
-    expect(babylonAST.tokens[3]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "[|" }),
-    );
-    expect(babylonAST.tokens[4]).toEqual(
-      expect.objectContaining({ type: "Punctuator", value: "|]" }),
-    );
-  });
 
   itESLint7("hash (token) - ESLint 7", () => {
     const code = "class A { #x }";

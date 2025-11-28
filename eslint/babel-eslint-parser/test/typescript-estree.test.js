@@ -4,7 +4,7 @@ import { parseForESLint } from "../lib/index.cjs";
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import unpad from "dedent";
 import { ESLint } from "eslint";
-import { itDummy, commonJS, IS_BABEL_8, describeBabel8 } from "$repo-utils";
+import { itDummy, commonJS, IS_BABEL_8 } from "$repo-utils";
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint9 = ESLINT_VERSION.startsWith("9.");
@@ -354,7 +354,7 @@ function deeplyMakePlainObject(obj) {
       });
     });
 
-    describeBabel8("babel-parser typescript tests without tokens", () => {
+    describe("babel-parser typescript tests without tokens", () => {
       const projectRoot = path.resolve(__dirname, "../../..");
       const parserTestFixtureRoot = path.resolve(
         projectRoot,

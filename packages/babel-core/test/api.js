@@ -10,7 +10,7 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-import { itBabel8, commonJS, IS_BABEL_8, USE_ESM } from "$repo-utils";
+import { commonJS, IS_BABEL_8, USE_ESM } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 const cwd = __dirname;
@@ -174,13 +174,13 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  itBabel8("parse throws on undefined callback", () => {
+  it("parse throws on undefined callback", () => {
     expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
       `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
     );
   });
 
-  itBabel8("transform throws on undefined callback", () => {
+  it("transform throws on undefined callback", () => {
     const options = {
       filename: "example.js",
     };
@@ -245,7 +245,7 @@ describe("api", function () {
     expect(options).toEqual({ babelrc: false });
   });
 
-  itBabel8("transformFromAst throws on undefined callback", () => {
+  it("transformFromAst throws on undefined callback", () => {
     const program = "const identifier = 1";
     const node = parseSync(program);
     expect(() =>

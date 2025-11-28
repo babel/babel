@@ -9,7 +9,7 @@ import {
   supportsESM,
 } from "./helpers/esm.js";
 
-import { itGte, itESM, itNegate, itSatisfies } from "$repo-utils";
+import { itGte, itNegate, itSatisfies } from "$repo-utils";
 
 // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
 const nodeGte8 = itGte("8.0.0");
@@ -120,7 +120,7 @@ describe("asynchronicity", () => {
       });
     });
 
-    itESM("mjs configuring cache", async () => {
+    it("mjs configuring cache", async () => {
       process.chdir("config-file-mjs-cache");
 
       const { code } = await babel.transformAsync("");

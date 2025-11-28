@@ -1,4 +1,3 @@
-import { itBabel8 } from "$repo-utils";
 import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
@@ -13,12 +12,12 @@ describe("builders", function () {
           expect(t.regExpLiteral("test", flags)).toHaveProperty("flags", flags);
         },
       );
-      itBabel8("should reject invalid flags", function () {
+      it("should reject invalid flags", function () {
         expect(() => t.regExpLiteral("test", "a")).toThrow(
           '"a" is not a valid RegExp flag',
         );
       });
-      itBabel8("should print the first invalid flags", function () {
+      it("should print the first invalid flags", function () {
         expect(() => t.regExpLiteral("test", "def")).toThrow(
           '"e" is not a valid RegExp flag',
         );

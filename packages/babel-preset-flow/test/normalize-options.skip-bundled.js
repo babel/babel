@@ -1,9 +1,8 @@
 import _normalizeOptions from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
-import { describeBabel8, describeBabel7 } from "$repo-utils";
 
 describe("normalize options", () => {
-  describeBabel8("Babel 8", () => {
+  describe("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ al: true }))
         .toThrowErrorMatchingInlineSnapshot(`
@@ -30,27 +29,6 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "all": undefined,
-          "experimental_useHermesParser": undefined,
-          "ignoreExtensions": undefined,
-        }
-      `);
-    });
-  });
-  describeBabel7("Babel 7", () => {
-    it("should not throw on unknown options", () => {
-      expect(() => normalizeOptions({ allDeclareField: true })).not.toThrow();
-    });
-    it.each(["all", "allowDeclareFields"])(
-      "should not throw when `%p` is not a boolean",
-      optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
-      },
-    );
-    it("default values in Babel 7", () => {
-      expect(normalizeOptions({})).toMatchInlineSnapshot(`
-        Object {
-          "all": undefined,
-          "allowDeclareFields": undefined,
           "experimental_useHermesParser": undefined,
           "ignoreExtensions": undefined,
         }
