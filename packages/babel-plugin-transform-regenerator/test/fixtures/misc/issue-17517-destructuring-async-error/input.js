@@ -4,6 +4,9 @@ async function testA() {
     resData,
     other: { otherData: foo },
   } = config;
+  for (const { x: { y } } of []) {
+    y;
+  }
   return resData;
 }
 

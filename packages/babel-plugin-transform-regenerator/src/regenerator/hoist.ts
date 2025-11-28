@@ -12,38 +12,52 @@ export function hoist(
 
   const vars: Record<string, t.Identifier> = { __proto__: null };
 
-  function varDeclToExpr(decl) {
-  const id = decl.id;
-  if (t.isIdentifier(id)) return id.name;
+  function varDeclToExpr(
+    path: NodePath,
+    includeIdentifiers: false,
+  ): t.Expression | null;
+  function varDeclToExpr(
+    path: NodePath,
+    includeIdentifiers: true,
+  ): t.Expression | t.LVal | null;
+  function varDeclToExpr(
+    { node: vdec }: NodePath,
+    includeIdentifiers: boolean,
+  ) {
+    t.assertVariableDeclaration(vdec);
+    // TODO assert.equal(vdec.kind, "var");
+    const exprs: (t.Expression | t.LVal)[] = [];
 
-  const ids = t.getBindingIdentifiers(id, false, true);
-  const keys = Object.keys(ids);
+    vdec.declarations.forEach(function (dec: t.VariableDeclarator) {
+      if (t.isVoidPattern(dec.id)) {
+        throw new Error("Must transform void patterns before regenerator.");
+      }
+      // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
+      // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
+      const names = t.getBindingIdentifiers(vdec, false, true, true);
+      for (const name of Object.keys(names)) {
+        vars[name] = t.identifier(name);
+      }
 
-  if (keys.length > 0) return keys[0];
+      if (includeIdentifiers) {
+        exprs.push(dec.id);
+      } else if (dec.init) {
+        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
+      }
+    });
 
-  return null; // this prevents the undefined crash
-}
+    if (exprs.length === 0) return null;
 
+    if (exprs.length === 1) return exprs[0];
 
+    return t.sequenceExpression(exprs as t.Expression[]);
+  }
 
   funPath.get("body").traverse({
     VariableDeclaration: {
       exit: function (path) {
-        const exprs: t.Expression[] = [];
-
-        path.get("declarations").forEach(decPath => {
-          const dec = decPath.node;
-          const name = varDeclToExpr(dec);
-          if (name) {
-            vars[name] = dec.id.type === "Identifier" ? dec.id : t.identifier(name);
-          }
-
-          if (dec.init) {
-            exprs.push(t.assignmentExpression("=", dec.id, dec.init));
-          }
-        });
-
-        if (exprs.length === 0) {
+        const expr = varDeclToExpr(path, false);
+        if (expr === null) {
           path.remove();
         } else {
           for (const name of Object.keys(vars)) {
@@ -54,8 +68,6 @@ export function hoist(
 
           // We don't need to traverse this expression any further because
           // there can't be any new declarations inside an expression.
-          const expr =
-            exprs.length === 1 ? exprs[0] : t.sequenceExpression(exprs);
           path.replaceWith(t.expressionStatement(expr));
         }
 
@@ -68,25 +80,11 @@ export function hoist(
     ForStatement: function (path) {
       const init = path.get("init");
       if (init.isVariableDeclaration()) {
-        const exprs: t.Expression[] = [];
-        init.get("declarations").forEach(decPath => {
-          const dec = decPath.node;
-          const name = varDeclToExpr(dec);
-          if (name) {
-            vars[name] = dec.id.type === "Identifier" ? dec.id : t.identifier(name);
-          }
-
-          if (dec.init) {
-            exprs.push(t.assignmentExpression("=", dec.id, dec.init));
-          }
-        });
-
-        if (exprs.length === 0) {
-          init.remove();
-        } else {
-          const expr =
-            exprs.length === 1 ? exprs[0] : t.sequenceExpression(exprs);
+        const expr = varDeclToExpr(init, false);
+        if (expr) {
           init.replaceWith(expr);
+        } else {
+          init.remove();
         }
       }
     },
@@ -94,13 +92,7 @@ export function hoist(
     ForXStatement: function (path) {
       const left = path.get("left");
       if (left.isVariableDeclaration()) {
-        const dec = left.node.declarations[0];
-        const name = varDeclToExpr(dec);
-        if (name) {
-          vars[name] = dec.id.type === "Identifier" ? dec.id : t.identifier(name);
-        }
-
-        left.replaceWith(dec.id);
+        left.replaceWith(varDeclToExpr(left, true));
       }
     },
 
