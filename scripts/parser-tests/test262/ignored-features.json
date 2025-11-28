@@ -109,6 +109,7 @@
   "intl-normative-optional",
   "iterator-helpers",
   "iterator-sequencing",
+  "joint-iteration",
   "json-modules",
   "json-parse-with-source",
   "json-superset",
