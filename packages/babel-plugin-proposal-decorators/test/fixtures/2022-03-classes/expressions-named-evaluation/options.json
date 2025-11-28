@@ -1,8 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": [
-    ["proposal-decorators", { "version": "2022-03" }],
-    "transform-modules-commonjs"
-  ],
-  "minNodeVersion": "16.11.0"
-}

@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": ["transform-flow-strip-types"],
-  "throws": "The 'declare' modifier is only allowed when the 'allowDeclareFields' option of @babel/plugin-transform-flow-strip-types or @babel/preset-flow is enabled."
-}

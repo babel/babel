@@ -1,5 +1,0 @@
-{
-  "compact": true,
-  "plugins": ["decimal"],
-  "BABEL_8_BREAKING": false
-}

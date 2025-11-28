@@ -1,4 +1,0 @@
-{
-  "plugins": [["pipelineOperator", { "proposal": "minimal" }]],
-  "BABEL_8_BREAKING": false
-}

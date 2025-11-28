@@ -1,5 +1,0 @@
-{
-  "plugins": [["transform-typescript", { "optimizeConstEnums": true }]],
-  "sourceType": "module",
-  "BABEL_8_BREAKING": false
-}

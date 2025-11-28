@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["pipelineOperator", { "proposal": "smart" }],
-    ["decorators", {"decoratorsBeforeExport": true}]
-  ]
-}

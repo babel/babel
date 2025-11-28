@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "decorators-legacy",
-    "typescript"
-  ],
-  "BABEL_8_BREAKING": false
-}

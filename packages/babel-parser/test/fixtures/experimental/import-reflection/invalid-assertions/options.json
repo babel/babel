@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": ["importReflection", "importAssertions"],
-  "sourceType": "module"
-}

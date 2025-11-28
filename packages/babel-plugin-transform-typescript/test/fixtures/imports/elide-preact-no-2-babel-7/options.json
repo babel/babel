@@ -1,9 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [
-    [
-      "transform-typescript",
-      { "jsxPragma": "h", "jsxPragmaFrag": "Fragment", "isTSX": true }
-    ]
-  ]
-}

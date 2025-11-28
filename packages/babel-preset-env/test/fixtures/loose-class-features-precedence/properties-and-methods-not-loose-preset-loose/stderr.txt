@@ -1,9 +1,0 @@
-Though the "loose" option was set to "true" in your @babel/preset-env config, it will not be used for @babel/plugin-transform-private-property-in-object since the "loose" mode option was set to "false" for @babel/plugin-transform-private-methods.
-The "loose" option must be the same for @babel/plugin-transform-class-properties, @babel/plugin-transform-private-methods and @babel/plugin-transform-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
-	["@babel/plugin-transform-private-property-in-object", { "loose": false }]
-to the "plugins" section of your Babel config.
-
-If you already set the same 'loose' mode for these plugins in your config, it's possible that they are enabled multiple times with different options.
-You can re-run Babel with the BABEL_SHOW_CONFIG_FOR environment variable to show the loaded configuration:
-	npx cross-env BABEL_SHOW_CONFIG_FOR=<CWD>/packages/babel-preset-env/test/fixtures/loose-class-features-precedence/properties-and-methods-not-loose-preset-loose/input.js <your build command>
-See https://babeljs.io/docs/configuration#print-effective-configs for more info.

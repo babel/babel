@@ -1,4 +1,0 @@
-{
-  "plugins": [["pipelineOperator", { "proposal": "smart" }], "doExpressions"],
-  "BABEL_8_BREAKING": false
-}

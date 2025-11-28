@@ -1,5 +1,0 @@
-{
-  "validateLogs": true,
-  "plugins": [["proposal-pipeline-operator", { "proposal": "smart" }]],
-  "BABEL_8_BREAKING": false
-}
