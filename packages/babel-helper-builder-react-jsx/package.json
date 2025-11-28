@@ -15,7 +15,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
