@@ -50,7 +50,7 @@ import { resync, setScope } from "./context.ts";
 import type { NodeOrNodeList, NodePaths } from "./index.ts";
 
 export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {
   resync.call(this);
@@ -82,7 +82,7 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
  */
 
 export function replaceWithSourceString(
-  this: NodePath<t.Node>,
+  this: NodePath<t.Node | null>,
   replacement: string,
 ) {
   resync.call(this);
@@ -117,15 +117,15 @@ export function replaceWithSourceString(
  * Replace the current node with another.
  */
 export function replaceWith<R extends t.Node>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacementPath: R,
 ): [NodePath<R>];
 export function replaceWith<R extends NodePath<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacementPath: R,
 ): [R];
 export function replaceWith(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacementPath: t.Node | NodePath<t.Node>,
 ): [NodePath<t.Node>] {
   resync.call(this);
@@ -209,10 +209,13 @@ export function replaceWith(
   // requeue for visiting
   this.requeue();
 
-  return [(nodePath ? this.get(nodePath) : this) as NodePath<t.Node>];
+  return [nodePath ? (this as NodePath).get(nodePath) : (this as NodePath)];
 }
 
-export function _replaceWith(this: NodePath, node: t.Node | null) {
+export function _replaceWith(
+  this: NodePath<t.Node | null>,
+  node: t.Node | null,
+) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
@@ -240,7 +243,7 @@ export function _replaceWith(this: NodePath, node: t.Node | null) {
  */
 
 export function replaceExpressionWithStatements(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes: t.Statement[],
 ) {
   resync.call(this);
@@ -403,7 +406,10 @@ function gatherSequenceExpressions(
   }
 }
 
-export function replaceInline(this: NodePath, nodes: t.Node | t.Node[]) {
+export function replaceInline(
+  this: NodePath<t.Node | null>,
+  nodes: t.Node | t.Node[],
+) {
   resync.call(this);
 
   if (Array.isArray(nodes)) {

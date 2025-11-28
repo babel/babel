@@ -75,7 +75,7 @@ function restoreContext(path: NodePath, context: TraversalContext) {
   }
 }
 
-export function visit(this: NodePath): boolean {
+export function visit(this: NodePath<t.Node | null>): boolean {
   if (!this.node) {
     return false;
   }
@@ -322,7 +322,7 @@ export function setKey(this: NodePath<t.Node>, key: string | number) {
   this.type = this.node?.type;
 }
 
-export function requeue(this: NodePath, pathToQueue = this) {
+export function requeue(this: NodePath<t.Node | null>, pathToQueue = this) {
   if (pathToQueue.removed) return;
 
   // If a path is skipped, and then replaced with a

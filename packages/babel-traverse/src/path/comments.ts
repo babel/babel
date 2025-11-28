@@ -10,7 +10,7 @@ import {
  * Share comments amongst siblings.
  */
 
-export function shareCommentsWithSiblings(this: NodePath) {
+export function shareCommentsWithSiblings(this: NodePath<t.Node | null>) {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 

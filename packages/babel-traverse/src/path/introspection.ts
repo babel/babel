@@ -48,7 +48,7 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   };
 }
 
-export function isStatic(this: NodePath): boolean {
+export function isStatic(this: NodePath<t.Node | null>): boolean {
   return this.scope.isStatic(this.node);
 }
 
@@ -89,7 +89,10 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isNodeType(this: NodePath, type: string): boolean {
+export function isNodeType(
+  this: NodePath<t.Node | null>,
+  type: string,
+): boolean {
   return isType(this.type, type);
 }
 
@@ -103,7 +106,9 @@ export function isNodeType(this: NodePath, type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
-export function canHaveVariableDeclarationOrExpression(this: NodePath) {
+export function canHaveVariableDeclarationOrExpression(
+  this: NodePath<t.Node | null>,
+): boolean {
   return (
     (this.key === "init" || this.key === "left") && this.parentPath.isFor()
   );
@@ -118,7 +123,7 @@ export function canHaveVariableDeclarationOrExpression(this: NodePath) {
  */
 
 export function canSwapBetweenExpressionAndStatement(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacement: t.Node,
 ): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
@@ -174,7 +179,7 @@ export function isCompletionRecord(
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock(this: NodePath): boolean {
+export function isStatementOrBlock(this: NodePath<t.Node | null>): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     isBlockStatement(this.container as t.Node)
@@ -627,7 +632,7 @@ export function _resolve(
   }
 }
 
-export function isConstantExpression(this: NodePath): boolean {
+export function isConstantExpression(this: NodePath<t.Node | null>): boolean {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return false;
@@ -686,7 +691,7 @@ export function isConstantExpression(this: NodePath): boolean {
   return false;
 }
 
-export function isInStrictMode(this: NodePath) {
+export function isInStrictMode(this: NodePath<t.Node | null>) {
   const start = this.isProgram() ? this : this.parentPath;
 
   const strictParent = start.find(path => {

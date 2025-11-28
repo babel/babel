@@ -9,7 +9,7 @@ import * as t from "@babel/types";
 import { updateSiblingKeys } from "./modification.ts";
 import { resync } from "./context.ts";
 
-export function remove(this: NodePath) {
+export function remove(this: NodePath<t.Node | null>) {
   _assertUnremoved.call(this);
 
   resync.call(this);
@@ -50,7 +50,7 @@ export function _remove(this: NodePath) {
   }
 }
 
-export function _markRemoved(this: NodePath) {
+export function _markRemoved(this: NodePath<t.Node | null>) {
   // this.shouldSkip = true; this.removed = true;
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
   if (this.parent) {
