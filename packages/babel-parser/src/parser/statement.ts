@@ -3,7 +3,6 @@ import {
   tokenIsIdentifier,
   tokenIsKeywordOrIdentifier,
   tokenIsLoop,
-  tokenIsTemplate,
   tt,
   type TokenType,
   getExportedToken,
@@ -24,7 +23,7 @@ import {
   newParameterDeclarationScope,
 } from "../util/expression-scope.ts";
 import { OptionFlags, type SourceType } from "../options.ts";
-import { Token } from "../tokenizer/index.ts";
+import type { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
 import { createPositionWithColumnOffset } from "../util/location.ts";
 import type { Undone } from "./node.ts";
@@ -63,11 +62,7 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * For performance reasons this routine mutates `tokens`, it is okay
  * here since we execute `parseTopLevel` once for every file.
  */
-function babel7CompatTokens(
-  tokens: (Token | N.Comment)[],
-  input: string,
-  startIndex: number,
-) {
+function babel7CompatTokens(tokens: (Token | N.Comment)[]) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
@@ -99,11 +94,7 @@ export default abstract class StatementParser extends ExpressionParser {
     file.comments = this.comments;
 
     if (this.optionFlags & OptionFlags.Tokens) {
-      file.tokens = babel7CompatTokens(
-        this.tokens,
-        this.input,
-        this.startIndex,
-      );
+      file.tokens = babel7CompatTokens(this.tokens);
     }
 
     return this.finishNode(file, "File");

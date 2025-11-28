@@ -2,12 +2,9 @@ import { Module } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
 import child from "node:child_process";
-import { USE_ESM, commonJS, describeGte, itSatisfies } from "$repo-utils";
+import { commonJS, describeGte } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
-
-// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 22
-const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 const testCacheFilename = path.join(__dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
@@ -90,84 +87,6 @@ describe("@babel/register", function () {
 
     afterAll(() => {
       Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
-    });
-  }
-
-  if (!USE_ESM && !process.env.BABEL_8_BREAKING) {
-    describe("babel 7", () => {
-      if (!OLD_JEST_MOCKS) {
-        beforeEach(() => {
-          const isEmptyObj = obj =>
-            Object.getPrototypeOf(obj) === null &&
-            Object.keys(obj).length === 0;
-
-          // This setter intercepts the Module._cache assignment in
-          // packages/babel-register/src/nodeWrapper.js to install in the
-          // internal isolated cache.
-          const emptyInitialCache = {};
-          Object.defineProperty(Module, "_cache", {
-            get: () => emptyInitialCache,
-            set(value) {
-              // eslint-disable-next-line jest/no-standalone-expect
-              expect(isEmptyObj(value)).toBe(true);
-
-              Object.defineProperty(Module, "_cache", {
-                value,
-                enumerable: originalRequireCacheDescriptor.enumerable,
-                configurable: originalRequireCacheDescriptor.configurable,
-                writable: originalRequireCacheDescriptor.writable,
-              });
-              value[piratesPath] = { exports: mocks.pirates };
-              value[smsPath] = { exports: mocks["source-map-support"] };
-            },
-            enumerable: originalRequireCacheDescriptor.enumerable,
-            configurable: originalRequireCacheDescriptor.configurable,
-          });
-        });
-      }
-
-      const { setupRegister } = buildTests(require.resolve(".."));
-
-      it("does not mutate options", () => {
-        const proxyHandler = {
-          defineProperty: jest.fn(Reflect.defineProperty),
-          deleteProperty: jest.fn(Reflect.deleteProperty),
-          set: jest.fn(Reflect.set),
-        };
-
-        setupRegister(
-          new Proxy(
-            {
-              babelrc: true,
-              sourceMaps: false,
-              cwd: path.dirname(testFile),
-              extensions: [".js"],
-            },
-            proxyHandler,
-          ),
-        );
-
-        currentHook(testFileContent, testFile);
-
-        expect(proxyHandler.defineProperty).not.toHaveBeenCalled();
-        expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
-        expect(proxyHandler.set).not.toHaveBeenCalled();
-      });
-
-      itSatisfies(versionHasRequireESM)(
-        "works with mjs config files without top-level await",
-        () => {
-          setupRegister({
-            babelrc: true,
-            sourceMaps: false,
-            cwd: path.dirname(testFileMjs),
-          });
-
-          const result = currentHook(testFileMjsContent, testFileMjs);
-
-          expect(result).toBe('"use strict";\n\nrequire("assert");');
-        },
-      );
     });
   }
 

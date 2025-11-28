@@ -2,9 +2,8 @@ import normalizeESLintConfig = require("./configuration.cts");
 import analyzeScope = require("./analyze-scope.cts");
 import baseParse = require("./parse.cts");
 
-// @ts-expect-error LocalClient only exists in the cjs build
-import { LocalClient, WorkerClient } from "./client.cts";
-const client = new (USE_ESM ? WorkerClient : LocalClient)();
+import Clients = require("./client.cts");
+const client = new Clients.WorkerClient();
 
 export const meta = {
   name: PACKAGE_JSON.name,

@@ -4,7 +4,6 @@ import type { NodePath, Visitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
-import { requeueComputedKeyAndDecorators } from "../../path/context.ts";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {

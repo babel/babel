@@ -1,6 +1,6 @@
 import browserCompatData from "@mdn/browser-compat-data" with { type: "json" };
 import { addElectronSupportFromChromium } from "./chromium-to-electron.mjs";
-import { writeFile, babel7Only } from "./utils-build-data.mjs";
+import { writeFile } from "./utils-build-data.mjs";
 
 const compatData = browserCompatData.javascript;
 const browserNameMaps = {
@@ -74,11 +74,6 @@ const dataURL = new URL("../data/native-modules.json", import.meta.url);
 const processed = generateModuleSupport(compatData.statements.export, false);
 // todo: restore deno support when browserslist recognizes deno
 delete processed.deno;
-babel7Only(() => {
-  if (processed.ios) {
-    processed.ios_saf = processed.ios;
-  }
-});
 const data = {
   "es6.module": processed,
 };

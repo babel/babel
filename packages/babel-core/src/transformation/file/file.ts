@@ -8,8 +8,6 @@ import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file.ts";
 
-// @ts-expect-error This file is `any`
-
 import type { ResolvedOptions } from "../../config/validation/options.ts";
 import type { SourceMapConverter } from "convert-source-map";
 

@@ -19,7 +19,5 @@ export default declare((api, options: Options) => {
     api,
     feature: FEATURES.privateMethods,
     loose: options.loose,
-
-    manipulateOptions(opts, parserOpts) {},
   });
 });

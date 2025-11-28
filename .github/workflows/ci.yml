@@ -59,33 +59,6 @@ jobs:
           yarn
           yarn release-tool check-cycles
 
-  test-esm:
-    name: Test ESM version
-    needs: prepare-yarn-cache
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [latest, 24, 22]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js ${{matrix.node-version}}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{matrix.node-version}}
-          check-latest: true
-          cache: "yarn"
-      - name: Use ESM and build
-        run: make use-esm
-        env:
-          USE_ESM: true
-      - name: Test
-        run: yarn jest --ci
-        env:
-          BABEL_ENV: test
-          USE_ESM: true
-
   build:
     name: Build Babel Artifacts
     needs: prepare-yarn-cache
@@ -107,8 +80,8 @@ jobs:
           make -j build-standalone-ci
         env:
           BABEL_ENV: test-legacy
-          BABEL_8_BREAKING: false
-          STRIP_BABEL_8_FLAG: true
+          BABEL_9_BREAKING: false
+          STRIP_BABEL_VERSION_FLAG: true
       - name: Build Makefile.js
         run: |
           node ./scripts/pack-script.js
@@ -160,8 +133,8 @@ jobs:
           make -j build-standalone-ci
         env:
           BABEL_ENV: test-legacy
-          BABEL_8_BREAKING: false
-          STRIP_BABEL_8_FLAG: true
+          BABEL_9_BREAKING: false
+          STRIP_BABEL_VERSION_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.js build
@@ -229,7 +202,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [24, 22, 20, 18, 16, 14, 12, 10, 8, 6]
+        node-version: [24, 22, 20]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -242,35 +215,6 @@ jobs:
       - name: Install
         run: |
           yarn install
-      - name: Downgrade Jest and Babel for node <= 10
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
-        run: |
-          # It's a bit sarcastic that in this scenario bump-babel-dependencies.js
-          # actually downgrades the root `@babel/*` deps from 8.0 alpha to 7
-          node ./scripts/integration-tests/utils/bump-babel-dependencies.js
-          yarn up jest@24
-          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@24 && cd ../..
-          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
-          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
-          yarn dedupe
-      - name: Downgrade Jest and jest-light-runner for node 12
-        if: matrix.node-version == '12'
-        run: |
-          yarn up jest@28
-          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@28 && cd ../..
-          yarn up jest-light-runner@0.3.0
-          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
-          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
-          yarn dedupe
-      - name: Downgrade Jest and jest-light-runner for node 14 and 16
-        if: matrix.node-version == '14' || matrix.node-version == '16'
-        run: |
-          yarn up jest@29
-          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@28 && cd ../..
-          yarn up jest-light-runner@0.5.1
-          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
-          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
-          yarn dedupe
       - uses: actions/download-artifact@v4
         with:
           name: babel-artifact
@@ -287,12 +231,7 @@ jobs:
           node ./node_modules/.bin/jest --ci
         env:
           BABEL_ENV: test
-          TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
-      - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
+          TEST_FUZZ: true
 
   test-windows-mac:
     name: Test on
@@ -321,8 +260,8 @@ jobs:
         env:
           BABEL_ENV: test
 
-  build-babel8:
-    name: Build Babel 8 Artifacts
+  build-babel9:
+    name: Build Babel 9 Artifacts
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
@@ -337,18 +276,16 @@ jobs:
           node-version: latest
           check-latest: true
           cache: "yarn"
-      - name: Use ESM
-        run: node scripts/set-module-type.js module
       - name: Build babel artifacts
         run: |
           make -j build-standalone-ci
         env:
           BABEL_ENV: test-legacy
-          BABEL_8_BREAKING: true
-          STRIP_BABEL_8_FLAG: true
+          BABEL_9_BREAKING: true
+          STRIP_BABEL_VERSION_FLAG: true
       - uses: actions/upload-artifact@v4
         with:
-          name: babel8-artifact
+          name: babel9-artifact
           path: |
             codemods/*/lib/**/*
             eslint/*/lib/**/*
@@ -361,9 +298,9 @@ jobs:
             !**/node_modules/**
           retention-days: 5
 
-  lint-babel8:
-    name: Lint (Babel 8)
-    needs: build-babel8
+  lint-babel9:
+    name: Lint (Babel 9)
+    needs: build-babel9
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -378,16 +315,16 @@ jobs:
         run: yarn install
       - uses: actions/download-artifact@v4
         with:
-          name: babel8-artifact
+          name: babel9-artifact
       - name: Lint
         run: make -j lint-ci check-compat-data
         env:
           BABEL_ENV: test
-          BABEL_8_BREAKING: true
+          BABEL_9_BREAKING: true
 
-  test-babel8-coverage:
-    name: Test Babel 8 changes (with coverage)
-    needs: build-babel8
+  test-babel9-coverage:
+    name: Test Babel 9 changes (with coverage)
+    needs: build-babel9
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -403,26 +340,23 @@ jobs:
           yarn install
       - uses: actions/download-artifact@v4
         with:
-          name: babel8-artifact
-      - name: Use ESM
-        run: node scripts/set-module-type.js module
+          name: babel9-artifact
       - name: Run tests
         run: |
           yarn c8 jest --ci
-          yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_COVERAGE: true
-          BABEL_8_BREAKING: true
+          BABEL_9_BREAKING: true
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          name: babel-8
+          name: babel-9
 
-  test-babel8-windows-mac:
-    name: Test Babel 8 changes
-    needs: build-babel8
+  test-babel9-windows-mac:
+    name: Test Babel 9 changes
+    needs: build-babel9
     strategy:
       fail-fast: false
       matrix:
@@ -431,28 +365,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 20.19.0
+      - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "20.19.0" # Node.js 20.19.0 is the first LTS supported by Babel 8
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v4
         with:
-          name: babel8-artifact
-      - name: Use ESM
-        run: node scripts/set-module-type.js module
+          name: babel9-artifact
       - name: Test
         run: yarn jest --ci
         env:
           BABEL_ENV: test
-          BABEL_8_BREAKING: true
-      - name: Test ESM
-        run: yarn test:esm
-        env:
-          BABEL_ENV: test
-          BABEL_8_BREAKING: true
+          BABEL_9_BREAKING: true
 
   external-parser-tests:
     name: Third-party Parser Tests
@@ -541,7 +469,6 @@ jobs:
             12.13,
             12.15,
             12.16,
-            "13.0",
             13.2,
             13.6,
             13.7,
@@ -594,29 +521,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Test Node.js ${{ matrix.node-version }}
         run: node test/runtime-integration/node.cjs
-
-  eslint7-test:
-    name: Test @babel/eslint-* with ESLint 7.5.0
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-          cache: "yarn"
-      - name: Install
-        run: yarn install
-      - uses: actions/download-artifact@v4
-        with:
-          name: babel-artifact
-      - name: Downgrade ESLint to 7.5.0
-        run: yarn up eslint@7.5.0
-      - name: Run babel/eslint tests
-        run: node ./node_modules/.bin/jest eslint
 
   eslint8-test:
     name: Test @babel/eslint-* with ESLint 8.0.0
@@ -783,79 +687,3 @@ jobs:
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
-
-  test262-babel8:
-    name: test262 - Babel 8
-    runs-on: ubuntu-latest
-    if: github.repository == 'babel/babel'
-    needs: [build-babel8]
-    steps:
-      - name: Checkout Babel
-        uses: actions/checkout@v4
-      - name: Use Node.js latest
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-      - name: Install
-        run: yarn install
-      - uses: actions/download-artifact@v4
-        with:
-          name: babel8-artifact
-      - name: Checkout test runner
-        uses: actions/checkout@v4
-        with:
-          repository: babel/babel-test262-runner
-          path: babel-test262-runner
-          ref: main
-      - name: Install test runner
-        run: |
-          cd babel-test262-runner
-          npm ci
-          node lib/download-node
-      - name: Download test262
-        run: make bootstrap-test262
-      - name: Download test262 results cache
-        id: results-cache-restore
-        uses: actions/cache/restore@v4
-        with:
-          key: test262-babel8-${{ hashFiles('Makefile') }}
-          restore-keys: |
-            test262-babel8-
-          path: babel-test262-runner/cache.lmdb
-      - name: Run test262
-        run: |
-          cd babel-test262-runner
-          node lib/run-tests I_AM_SURE | tee ~/test262.tap
-        # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
-        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
-        shell: bash
-        env:
-          BABEL_PATH: ".."
-          TEST262_PATH: ../build/test262
-          THREADS: 4
-      - name: Create artifact with report results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test262-result-babel8
-          path: ~/test262.tap
-          retention-days: 30
-      - name: Download previous results
-        run: |
-          cd babel-test262-runner
-          node lib/download-main-artifact/index.mjs ~/test262-main.tap test262-result-babel8
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Compare previous main branch & current results
-        run: |
-          cd babel-test262-runner
-          node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
-        # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
-        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
-        shell: bash
-      - name: Upload test262 results cache
-        if: success() || github.ref == 'refs/heads/main'
-        uses: actions/cache/save@v4
-        with:
-          key: ${{ steps.results-cache-restore.outputs.cache-primary-key }}
-          path: babel-test262-runner/cache.lmdb

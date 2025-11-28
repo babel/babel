@@ -1,10 +1,4 @@
-import defineType, {
-  arrayOfType,
-  assertNodeType,
-  assertValueType,
-  validateArrayOfType,
-  type ValidatorOneOfNodeTypes,
-} from "./utils.ts";
+import defineType, { assertNodeType, assertValueType } from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
 

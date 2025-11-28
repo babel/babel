@@ -3,7 +3,6 @@ import {
   type Targets,
   type Target,
 } from "@babel/helper-compilation-targets";
-import compatData from "@babel/compat-data/plugins" with { type: "json" };
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }

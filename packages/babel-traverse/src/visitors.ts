@@ -10,7 +10,6 @@ import {
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
 import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
-import { requeueComputedKeyAndDecorators } from "./path/context.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {

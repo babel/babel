@@ -130,9 +130,6 @@ target["clean-lib"] = function () {
     "-rf",
     SOURCES.map(source => `${source}/*/lib`)
   );
-
-  // re-generate the necessary lib/package.json files
-  node(["scripts/set-module-type.js"]);
 };
 
 target["clean-runtime-helpers"] = function () {
@@ -147,22 +144,6 @@ target["clean-runtime-helpers"] = function () {
     "packages/babel-runtime-corejs3/core-js",
     "packages/babel-runtime-corejs3/core-js-stable",
   ]);
-};
-
-/**
- * BUILD
- */
-
-target["use-cjs"] = function () {
-  node(["scripts/set-module-type.js", "commonjs"]);
-
-  target["bootstrap"]();
-};
-
-target["use-esm"] = function () {
-  node(["scripts/set-module-type.js", "module"]);
-
-  target["bootstrap"]();
 };
 
 target["bootstrap-only"] = function () {
@@ -194,8 +175,6 @@ target["build-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
 
-  node(["scripts/set-module-type.js"]);
-
   yarn(["gulp", "build"]);
 
   target["build-dist"]();
@@ -204,8 +183,6 @@ target["build-bundle"] = function () {
 target["build-no-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
-
-  node(["scripts/set-module-type.js"]);
 
   env(
     () => {
@@ -233,12 +210,6 @@ target["build-plugin-transform-runtime-dist"] = function () {
 };
 
 target["prepublish"] = function () {
-  if (process.env.BABEL_8_BREAKING) {
-    node(["scripts/set-module-type.js", "module"]);
-  } else {
-    node(["scripts/set-module-type.js", "commonjs"]);
-  }
-
   target["bootstrap-only"]();
 
   env(
@@ -250,8 +221,6 @@ target["prepublish"] = function () {
       IS_PUBLISH: "true",
     }
   );
-
-  node(["scripts/set-module-type.js", "clean"]);
 };
 
 target["prepublish-build"] = function () {
@@ -267,7 +236,7 @@ target["prepublish-build"] = function () {
     {
       NODE_ENV: "production",
       BABEL_ENV: "production",
-      STRIP_BABEL_8_FLAG: "true",
+      STRIP_BABEL_VERSION_FLAG: "true",
     }
   );
 
@@ -280,7 +249,7 @@ target["prepublish-build"] = function () {
     },
     {
       NODE_ENV: "production",
-      STRIP_BABEL_8_FLAG: "true",
+      STRIP_BABEL_VERSION_FLAG: "true",
     }
   );
 };

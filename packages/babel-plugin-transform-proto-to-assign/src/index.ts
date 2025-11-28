@@ -31,7 +31,11 @@ export default declare(api => {
     file: File,
   ) {
     return t.expressionStatement(
-      t.callExpression(file.addHelper("defaults"), [ref, expr.right]),
+      t.callExpression(file.addHelper("defaults"), [
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
+        ref,
+        expr.right,
+      ]),
     );
   }
 
@@ -53,7 +57,6 @@ export default declare(api => {
                 "=",
                 temp,
                 // left must not be Super when `temp` is an identifier
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 left as t.Expression,
               ),
             ),

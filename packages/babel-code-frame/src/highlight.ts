@@ -37,10 +37,6 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
  */
 const BRACKET = /^[()[\]{}]$/;
 
-let tokenize: (
-  text: string,
-) => Generator<{ type: InternalTokenType | "uncolored"; value: string }>;
-
 /**
  * Get the type of token, specifying punctuator type.
  */
@@ -117,7 +113,7 @@ const getTokenType = function (
 /**
  * Turn a string of JS into an array of objects.
  */
-tokenize = function* (text: string): Generator<Token> {
+function* tokenize(text: string): Generator<Token> {
   for (const token of jsTokens(text, { jsx: true })) {
     switch (token.type) {
       case "TemplateHead":
@@ -143,7 +139,7 @@ tokenize = function* (text: string): Generator<Token> {
         };
     }
   }
-};
+}
 
 export function highlight(text: string) {
   if (text === "") return "";

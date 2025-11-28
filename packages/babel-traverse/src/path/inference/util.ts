@@ -1,7 +1,6 @@
 import {
   createFlowUnionType,
   createTSUnionType,
-  createUnionTypeAnnotation,
   isFlowType,
   isTSType,
 } from "@babel/types";

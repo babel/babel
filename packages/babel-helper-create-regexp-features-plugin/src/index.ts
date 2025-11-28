@@ -9,7 +9,6 @@ import {
   FEATURES,
   enableFeature,
   runtimeKey,
-  hasFeature,
 } from "./features.ts";
 import {
   generateRegexpuOptions,

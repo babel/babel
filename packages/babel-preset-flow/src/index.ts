@@ -6,14 +6,11 @@ export default declarePreset((api, opts) => {
   api.assertVersion(REQUIRED_VERSION(7));
   const {
     all,
-    allowDeclareFields,
     ignoreExtensions = false,
     experimental_useHermesParser: useHermesParser = false,
   } = normalizeOptions(opts);
 
-  const plugins: any[] = [
-    [transformFlowStripTypes, { all, allowDeclareFields }],
-  ];
+  const plugins: any[] = [[transformFlowStripTypes, { all }]];
 
   if (useHermesParser) {
     if (Number.parseInt(process.versions.node, 10) < 12) {

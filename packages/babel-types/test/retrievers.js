@@ -1,7 +1,3 @@
-import {
-  describeBabel7,
-  describeBabel8,
-} from "../../../scripts/repo-utils/index.cjs";
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 

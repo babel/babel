@@ -1,5 +1,4 @@
 import type { PluginPass } from "@babel/core";
-import { types as t } from "@babel/core";
 
 export let newHelpersAvailable: (file: PluginPass) => boolean;
 

@@ -1136,7 +1136,6 @@ export default abstract class Tokenizer extends CommentsParser {
     const startLoc = this.state.curPosition();
     let isFloat = false;
     let isBigInt = false;
-    let hasExponent = false;
     let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
@@ -1183,7 +1182,6 @@ export default abstract class Tokenizer extends CommentsParser {
         this.raise(Errors.InvalidOrMissingExponent, startLoc);
       }
       isFloat = true;
-      hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
     }
 

@@ -75,7 +75,7 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
     }
   }
 
-  let plugins = script.plugins;
+  const plugins = script.plugins;
 
   return {
     filename,

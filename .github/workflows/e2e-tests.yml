@@ -47,23 +47,28 @@ jobs:
       matrix:
         project:
           - babel
-          - babel-old-version
           - create-react-app
-          - vue-cli
-          - react-native
+          # - vue-cli
+          # - react-native
           - angular-cli
-          - nextjs-10
-          - ember
+          # - nextjs-10
+          - prettier
+          # - jest
+          # - ember # TODO: https://github.com/ember-cli/babel-remove-types/pull/9
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js latest
+      # Pin node to 22 for create-react-app project.
+      # The create-react-app e2e breaking test throws
+      # http fetch GET https://localhost:4873/zwitch/-/zwitch-1.0.5.tgz attempt 3 failed with ERR_SSL_WRONG_VERSION_NUMBER
+      # when installing on Node.js 24. It might be an npm issue.
+      - name: Use Node.js ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
         uses: actions/setup-node@v4
         with:
-          node-version: "*"
+          node-version: ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT

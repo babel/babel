@@ -1,7 +1,7 @@
 const eslint = require("eslint");
 const babelESLintParserPath = require.resolve("../../../babel-eslint-parser");
 /**
- * Convert ESLint 9 config to ESLint 7/8 config
+ * Convert ESLint 9 config to 8 config
  * @param {eslint.Linter.FlatConfig} ESLint 9 config
  */
 function eslintConfigCompatTo8(config) {

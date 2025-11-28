@@ -26,7 +26,6 @@ import { diff } from "jest-diff";
 import type { ChildProcess } from "node:child_process";
 import { spawn } from "node:child_process";
 import os from "node:os";
-import readdirRecursive from "fs-readdir-recursive";
 import * as resolve from "resolve";
 
 import { createRequire } from "node:module";
@@ -127,9 +126,7 @@ function runCacheableScriptInTestContext(
     cachedScripts.set(filename, cached);
   }
 
-  let script: vm.Script;
-
-  script = new vm.Script(cached.code, {
+  const script = new vm.Script(cached.code, {
     filename,
     lineOffset: -1,
     cachedData: cached.cachedData,
@@ -450,7 +447,7 @@ function escapeRegExp(string: string) {
 
 function normalizeOutput(
   code: string,
-  { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
+  { normalizePathSeparator = false } = {},
 ) {
   const dir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),

@@ -14,7 +14,7 @@ NODE := $(YARN) node
 MAKEJS := node Makefile.mjs
 
 
-.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 Makefile.mjs: Makefile.source.mjs yarn.lock .yarn/install-state.gz
 	$(NODE) ./scripts/pack-script.js
@@ -108,12 +108,6 @@ bootstrap-only:
 
 bootstrap:
 	$(MAKEJS) bootstrap
-
-use-cjs:
-	$(MAKEJS) use-cjs
-
-use-esm:
-	$(MAKEJS) use-esm
 
 clean-lib:
 	$(MAKEJS) clean-lib
@@ -224,6 +218,5 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 endif
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish
-	node ./scripts/set-module-type.js clean
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean

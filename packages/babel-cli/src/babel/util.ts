@@ -1,4 +1,3 @@
-import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import path from "node:path";
 import fs from "node:fs";

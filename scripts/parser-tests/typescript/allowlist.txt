@@ -1,12 +1,13 @@
-# 7 invalid programs did not produce a parsing error
+# 8 invalid programs did not produce a parsing error
 
-collisionArgumentsArrowFunctions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
-collisionArgumentsFunction.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
-collisionArgumentsFunctionExpressions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
+collisionArgumentsArrowFunctions.ts
+collisionArgumentsFunction.ts
+collisionArgumentsFunctionExpressions.ts
 dynamicImportTrailingComma.ts
 exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
-regularExpressionAnnexB.ts # Babel parser does not handle regex parsing
+regularExpressionAnnexB.ts
+strictModeReservedWordInModuleDeclaration.ts
 
 
 # 130 valid programs produced a parsing error
@@ -73,11 +74,11 @@ exportClassWithoutName.ts
 exportDefaultAsyncFunction2.ts
 exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
-exportSpecifierForAGlobal.ts # We handle this fine, but it doesn't consider the different files together
-exportSpecifierReferencingOuterDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
+exportSpecifierForAGlobal.ts
+exportSpecifierReferencingOuterDeclaration2.ts
 expressionWithJSDocTypeArguments.ts
 expressionsForbiddenInParameterInitializers.ts
-fileWithNextLine2.ts # This is a bug in TS: U+0085 is not a whitespace in ECMAScript
+fileWithNextLine2.ts
 funClodule.ts
 functionCall15.ts
 importAndVariableDeclarationConflict3.ts
@@ -91,7 +92,7 @@ indexTypeCheck.ts
 indexWithoutParamType.ts
 indexerSignatureWithRestParam.ts
 interfaceMayNotBeExtendedWitACall.ts
-interfaceNaming1.ts # We correctly identify this error, but we can't bring it in without bringing a bunch of other tests too.
+interfaceNaming1.ts
 interfaceWithImplements1.ts
 invalidOptionalChainFromNewExpression.ts
 jsxAttributeMissingInitializer.tsx
@@ -119,15 +120,15 @@ multipleInheritance.ts
 nameCollisions.ts
 nonMergedOverloads.ts
 optionalChainWithInstantiationExpression1.ts
-parameterInitializerBeforeDestructuringEmit.ts # This is a bug in TS: "use strict" is not allowed when a function has destructuring parameters
+parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
 parseInvalidNonNullableTypes.ts
 parseInvalidNullableTypes.ts
 parserConstructorDeclaration12.ts
 reExportGlobalDeclaration1.ts
-reExportGlobalDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
-reExportGlobalDeclaration3.ts # We handle this fine, but it doesn't consider the different files together
-reExportGlobalDeclaration4.ts # We handle this fine, but it doesn't consider the different files together
+reExportGlobalDeclaration2.ts
+reExportGlobalDeclaration3.ts
+reExportGlobalDeclaration4.ts
 reExportUndefined1.ts
 readonlyInNonPropertyParameters.ts
 redeclareParameterInCatchBlock.ts

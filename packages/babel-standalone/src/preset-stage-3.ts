@@ -2,7 +2,6 @@ import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any = {}) => {
   const {
-    loose = false,
     decoratorsLegacy = false,
     decoratorsVersion = "2018-09",
     decoratorsBeforeExport,

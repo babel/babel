@@ -325,6 +325,7 @@ export function VariableDeclarator(this: Printer, node: t.VariableDeclarator) {
   this.print(node.id);
   if (node.definite) this.token("!"); // TS
 
+  // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
   this.print(node.id.typeAnnotation);
   if (node.init) {
     this.space();

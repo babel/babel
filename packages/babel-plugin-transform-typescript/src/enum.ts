@@ -130,6 +130,7 @@ function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
 }
 
 export function isSyntacticallyString(expr: t.Expression): boolean {
+  // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
   expr = skipTransparentExprWrapperNodes(expr);
   switch (expr.type) {
     case "BinaryExpression": {

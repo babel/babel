@@ -132,9 +132,6 @@ export interface NodePathAssertions {
   assertDebuggerStatement<Opts extends Options<t.DebuggerStatement>>(
     opts?: Opts,
   ): asserts this is NodePath<t.DebuggerStatement & Opts>;
-  assertDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
-    opts?: Opts,
-  ): asserts this is NodePath<t.DecimalLiteral & Opts>;
   assertDeclaration<Opts extends Options<t.Declaration>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Declaration & Opts>;
@@ -475,9 +472,6 @@ export interface NodePathAssertions {
   assertNewExpression<Opts extends Options<t.NewExpression>>(
     opts?: Opts,
   ): asserts this is NodePath<t.NewExpression & Opts>;
-  assertNoop<Opts extends Options<t.Noop>>(
-    opts?: Opts,
-  ): asserts this is NodePath<t.Noop & Opts>;
   assertNullLiteral<Opts extends Options<t.NullLiteral>>(
     opts?: Opts,
   ): asserts this is NodePath<t.NullLiteral & Opts>;
@@ -601,9 +595,6 @@ export interface NodePathAssertions {
   >(
     opts?: Opts,
   ): asserts this is NodePath<t.QualifiedTypeIdentifier & Opts>;
-  assertRecordExpression<Opts extends Options<t.RecordExpression>>(
-    opts?: Opts,
-  ): asserts this is NodePath<t.RecordExpression & Opts>;
   assertRegExpLiteral<Opts extends Options<t.RegExpLiteral>>(
     opts?: Opts,
   ): asserts this is NodePath<t.RegExpLiteral & Opts>;
@@ -686,6 +677,9 @@ export interface NodePathAssertions {
   >(
     opts?: Opts,
   ): asserts this is NodePath<t.TSCallSignatureDeclaration & Opts>;
+  assertTSClassImplements<Opts extends Options<t.TSClassImplements>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.TSClassImplements & Opts>;
   assertTSConditionalType<Opts extends Options<t.TSConditionalType>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TSConditionalType & Opts>;
@@ -718,11 +712,6 @@ export interface NodePathAssertions {
   assertTSExportAssignment<Opts extends Options<t.TSExportAssignment>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TSExportAssignment & Opts>;
-  assertTSExpressionWithTypeArguments<
-    Opts extends Options<t.TSExpressionWithTypeArguments>,
-  >(
-    opts?: Opts,
-  ): asserts this is NodePath<t.TSExpressionWithTypeArguments & Opts>;
   assertTSExternalModuleReference<
     Opts extends Options<t.TSExternalModuleReference>,
   >(
@@ -759,6 +748,9 @@ export interface NodePathAssertions {
   assertTSInterfaceDeclaration<Opts extends Options<t.TSInterfaceDeclaration>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TSInterfaceDeclaration & Opts>;
+  assertTSInterfaceHeritage<Opts extends Options<t.TSInterfaceHeritage>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.TSInterfaceHeritage & Opts>;
   assertTSIntersectionType<Opts extends Options<t.TSIntersectionType>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TSIntersectionType & Opts>;
@@ -923,9 +915,6 @@ export interface NodePathAssertions {
   assertTryStatement<Opts extends Options<t.TryStatement>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TryStatement & Opts>;
-  assertTupleExpression<Opts extends Options<t.TupleExpression>>(
-    opts?: Opts,
-  ): asserts this is NodePath<t.TupleExpression & Opts>;
   assertTupleTypeAnnotation<Opts extends Options<t.TupleTypeAnnotation>>(
     opts?: Opts,
   ): asserts this is NodePath<t.TupleTypeAnnotation & Opts>;

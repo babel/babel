@@ -59,6 +59,7 @@ export function DeclareFunction(
   this.space();
   this.print(node.id);
 
+  // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
   this.print(node.id.typeAnnotation.typeAnnotation);
 
   if (node.predicate) {

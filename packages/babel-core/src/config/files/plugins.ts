@@ -235,6 +235,5 @@ function* requireModule(
   } catch (err) {
     err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
     throw err;
-  } finally {
   }
 }

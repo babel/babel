@@ -34,6 +34,7 @@ const parseRunner = gensync(function* parse(
   return yield* parser(config.passes, normalizeOptions(config), code);
 });
 
+// @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
 export const parse: Parse = function parse(
   code,
   opts?,

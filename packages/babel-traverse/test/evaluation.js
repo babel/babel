@@ -202,17 +202,13 @@ describe("evaluation", function () {
         .evaluate().value,
     ).toBe("?x=1");
 
-    if (process.env.BABEL_8_BREAKING) {
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect(
-        getPath("btoa('babel');").get("body.0.expression").evaluate().value,
-      ).toBe("YmFiZWw=");
+    expect(
+      getPath("btoa('babel');").get("body.0.expression").evaluate().value,
+    ).toBe("YmFiZWw=");
 
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect(
-        getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
-      ).toBe("babel");
-    }
+    expect(
+      getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
+    ).toBe("babel");
   });
 
   it("should not deopt vars in different scope", function () {

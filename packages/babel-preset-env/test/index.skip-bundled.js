@@ -1,34 +1,12 @@
 import * as babel from "@babel/core";
 
-import { USE_ESM } from "$repo-utils";
-
 import * as babelPresetEnv from "../lib/index.js";
 
-import _transformations from "../lib/module-transformations.js";
 import _availablePlugins from "../lib/available-plugins.js";
-const transformations = _transformations.default || _transformations;
 const availablePlugins = _availablePlugins.default || _availablePlugins;
 
-// We need to load the correct plugins version (ESM or CJS),
-// because our tests rely on function identity.
-let pluginCoreJS3;
-import _pluginCoreJS3_esm from "babel-plugin-polyfill-corejs3";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-if (USE_ESM) {
-  pluginCoreJS3 = _pluginCoreJS3_esm;
-} else {
-  pluginCoreJS3 = require("babel-plugin-polyfill-corejs3").default;
-}
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var {
-    pluginCoreJS2,
-    pluginRegenerator,
-    removeRegeneratorEntryPlugin,
-    legacyBabelPolyfillPlugin,
-  } = require("../lib/polyfills/babel-7-plugins.cjs");
-}
 
 // TODO(Babel 8): Once we only run tests in modern Node.js versions, we can
 // use import with { type: "json" } to load the compat data.

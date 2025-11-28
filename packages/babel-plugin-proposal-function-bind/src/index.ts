@@ -42,7 +42,7 @@ export default declare(api => {
       bind.callee.object = t.assignmentExpression(
         "=",
         tempId,
-
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         bind.callee.object,
       );
     }

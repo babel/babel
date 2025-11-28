@@ -143,5 +143,3 @@ const availablePlugins = {
 };
 
 export const minVersions = {};
-// TODO(Babel 8): Remove this
-export let legacyBabel7SyntaxPlugins: Set<string>;

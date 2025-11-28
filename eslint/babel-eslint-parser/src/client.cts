@@ -91,20 +91,3 @@ export class WorkerClient extends Client {
     this.#worker.unref();
   }
 }
-
-if (!USE_ESM) {
-  exports.LocalClient = class LocalClient extends Client {
-    static #handleMessage: Function;
-
-    constructor() {
-      LocalClient.#handleMessage ??= require("./worker/handle-message.cjs");
-
-      super((action: ACTIONS, payload: any) => {
-        return LocalClient.#handleMessage(
-          action === ACTIONS.MAYBE_PARSE ? ACTIONS.MAYBE_PARSE_SYNC : action,
-          payload,
-        );
-      });
-    }
-  };
-}

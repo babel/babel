@@ -38,10 +38,6 @@ export type Options = {
   } & InputTargets;
   useBuiltIns: BuiltInsOption;
   browserslistEnv: string;
-
-  // TODO(Babel 8): Remove these options
-  loose: boolean;
-  spec: boolean;
 };
 
 // Babel

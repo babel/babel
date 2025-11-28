@@ -95,7 +95,7 @@ export default declare(api => {
             t.assignmentExpression(
               "=",
               t.cloneNode(receiverLVal),
-
+              // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
               receiver,
             ),
             t.assignmentExpression(

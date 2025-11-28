@@ -28,14 +28,6 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
-  # This option is removed in Babel 8
-  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
-
-  # Babel 8 only supports ESM
-  make use-esm
-fi
-
 # Build and test
 make -j test-ci
 

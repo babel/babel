@@ -51,7 +51,6 @@ jobs:
         if: steps.updated.outputs.updated == 'true'
         continue-on-error: true
         run: |
-          make use-esm
           yarn jest -u
           git commit -am "chore: update test fixtures"
         env:

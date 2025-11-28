@@ -39,12 +39,6 @@
       "path": "../../packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
     },
     {
-      "path": "../../packages/babel-plugin-syntax-import-assertions"
-    },
-    {
-      "path": "../../packages/babel-plugin-syntax-import-attributes"
-    },
-    {
       "path": "../../packages/babel-plugin-transform-arrow-functions"
     },
     {

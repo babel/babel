@@ -20,7 +20,6 @@ import rollupNodeResolve from "@rollup/plugin-node-resolve";
 import rollupReplace from "@rollup/plugin-replace";
 import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
-import rollupDts5 from "rollup-plugin-dts-5";
 import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
@@ -37,7 +36,7 @@ import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-
 import formatCode from "./scripts/utils/formatCode.js";
 // @ts-expect-error no types
 import { log } from "./scripts/utils/logger.cjs";
-import { USE_ESM, commonJS } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 
 import type { NodePath, PluginItem, types } from "@babel/core";
 
@@ -58,7 +57,7 @@ const buildTypingsWatchGlob = [
 ];
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value: unknown) {
+function bool(value: string | undefined): boolean {
   return Boolean(value) && value !== "false" && value !== "0";
 }
 
@@ -219,7 +218,6 @@ function generateStandalone() {
           let exportDecls = "";
           let exportsList = "";
           let allList = "";
-          let extraCode = "";
 
           for (const plugin of pluginConfig.noopPlugins) {
             const camelPlugin = kebabToCamel(plugin);
@@ -234,13 +232,6 @@ function generateStandalone() {
             allList += `"${plugin}": ${camelPlugin},`;
           }
 
-          for (const plugin of pluginConfig.babel7OnlyExternalPlugins) {
-            const camelPlugin = kebabToCamel(plugin);
-            imports += `import ${camelPlugin} from "@babel/plugin-${plugin}" with { if: "!process.env.BABEL_8_BREAKING" };`;
-            extraCode += `\nexport { default as ${camelPlugin} } from "@babel/plugin-${plugin}" with { if: "!process.env.BABEL_8_BREAKING" };`;
-            extraCode += `if (!process.env.BABEL_8_BREAKING) all["${plugin}"] = ${camelPlugin};`;
-          }
-
           const fileContents = `/*
    * This file is auto-generated! Do not modify it directly.
    * To re-generate run 'yarn gulp generate-standalone'
@@ -248,8 +239,7 @@ function generateStandalone() {
   ${imports}
   export const ${exportDecls.slice(0, -1)};
   export {${exportsList}};
-  export const all: Record<string, any> = {${allList}};
-  ${extraCode}`;
+  export const all: Record<string, any> = {${allList}};`;
           file.path = "plugins.ts";
           file.contents = Buffer.from(
             await formatCode(fileContents, dest + file.path)
@@ -395,7 +385,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                   warning.binding === "default" &&
                   [
                     "@babel/helper-define-polyfill-provider",
-                    "babel-plugin-polyfill-corejs2",
                     "babel-plugin-polyfill-corejs3",
                     "babel-plugin-polyfill-regenerator",
                     // @ts-expect-error warning.id is defined when code is MISSING_EXPORT
@@ -415,8 +404,8 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           plugins: [
             buildStandalone && rollupStandaloneInternals(),
             rollupBabelSource(),
-            process.env.STRIP_BABEL_8_FLAG &&
-              rollupDependencyCondition(bool(process.env.BABEL_8_BREAKING)),
+            process.env.STRIP_BABEL_VERSION_FLAG &&
+              rollupDependencyCondition(bool(process.env.BABEL_9_BREAKING)),
             rollupReplace({
               preventAssignment: true,
               values: {
@@ -438,24 +427,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 "packages/babel-compat-data/scripts/data/legacy-plugin-aliases.js",
                 "packages/*/src/**/*.cjs",
               ],
-              ignore:
-                process.env.STRIP_BABEL_8_FLAG &&
-                bool(process.env.BABEL_8_BREAKING)
-                  ? [
-                      // These require()s are all in babel-preset-env/src/polyfills/babel-7-plugins.cjs
-                      // and packages/babel-preset-env/src/babel-7-available-plugins.cjs.
-                      // They are gated by a !process.env.BABEL_8_BREAKING check, but
-                      // @rollup/plugin-commonjs extracts them to import statements outside of the
-                      // check and thus they end up in the final bundle.
-                      "babel-plugin-polyfill-corejs2",
-                      "babel-plugin-polyfill-regenerator",
-                      "./babel-polyfill.cjs",
-                      "./regenerator.cjs",
-                      "@babel/compat-data/corejs2-built-ins",
-                      "@babel/plugin-syntax-import-assertions",
-                      "@babel/plugin-syntax-import-attributes",
-                    ]
-                  : [],
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
                 resolveChain(
@@ -680,10 +651,10 @@ function buildRollupDts(packages: string[]) {
           transform: code =>
             code.replace(
               /type BABEL_8_BREAKING\s*=\s*boolean/g,
-              `type BABEL_8_BREAKING = ${bool(process.env.BABEL_8_BREAKING)}`
+              `type BABEL_8_BREAKING = true`
             ),
         },
-        bool(process.env.BABEL_8_BREAKING) ? rollupDts() : rollupDts5(),
+        rollupDts(),
       ],
       external,
       onwarn(warning) {
@@ -780,7 +751,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     if (pkgJSON.main) {
       yield {
         src,
-        format: USE_ESM ? "esm" : "cjs",
+        format: "esm",
         dest: "lib",
         input: getIndexFromPackage(src),
       };
@@ -794,7 +765,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
             : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
         yield {
           src,
-          format: USE_ESM ? "esm" : "cjs",
+          format: "esm",
           dest: "lib",
           filename,
           input,
@@ -814,53 +785,25 @@ type PackageInfo = {
   envName?: string;
 };
 
-let libBundles: PackageInfo[];
+const libBundles: PackageInfo[] = Array.from(libBundlesIterator());
 
-if (bool(process.env.BABEL_8_BREAKING)) {
-  libBundles = Array.from(libBundlesIterator());
-} else {
-  libBundles = [
-    "packages/babel-code-frame",
-    "packages/babel-parser",
-    "packages/babel-plugin-proposal-destructuring-private",
-    "packages/babel-plugin-transform-object-rest-spread",
-    "packages/babel-plugin-transform-optional-chaining",
-    "packages/babel-preset-react",
-    "packages/babel-plugin-transform-destructuring",
-    "packages/babel-preset-typescript",
-    "packages/babel-helper-member-expression-to-functions",
-    "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
-    "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
-    "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
-    "packages/babel-plugin-bugfix-safari-class-field-initializer-scope",
-  ].map(src => ({
-    src,
-    format: USE_ESM ? "esm" : "cjs",
-    dest: "lib",
-    input: getIndexFromPackage(src),
-  }));
-}
-
-const dtsBundles = bool(process.env.BABEL_8_BREAKING)
-  ? Array.from(
-      packagesIterator(
-        new Set([
-          // CLIs
-          "packages/babel-cli",
-          "packages/babel-node",
-          // This will be just JSON
-          "packages/babel-compat-data",
-          "packages/babel-helper-globals",
-          // Not meant to be consumed manually
-          "packages/babel-runtime",
-          "packages/babel-runtime-corejs2",
-          "packages/babel-runtime-corejs3",
-          // TODO: Add type definitions
-          "packages/babel-register",
-        ])
-      )
-    )
-  : ["packages/babel-types"];
+const dtsBundles = Array.from(
+  packagesIterator(
+    new Set([
+      // CLIs
+      "packages/babel-cli",
+      "packages/babel-node",
+      // This will be just JSON
+      "packages/babel-compat-data",
+      "packages/babel-helper-globals",
+      // Not meant to be consumed manually
+      "packages/babel-runtime",
+      "packages/babel-runtime-corejs3",
+      // TODO: Add type definitions
+      "packages/babel-register",
+    ])
+  )
+);
 
 const standaloneBundle = [
   {
@@ -921,6 +864,11 @@ gulp.task("materialize-babel-8-src", () =>
       [
         babelPluginToggleBooleanFlag,
         { name: "process.env.BABEL_8_BREAKING", value: true },
+      ],
+      [
+        babelPluginToggleBooleanFlag,
+        { name: "USE_ESM", value: true },
+        "USE_ESM",
       ],
       (api: any) => ({
         visitor: {

@@ -11,6 +11,7 @@ import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 import { commonJS, IS_BABEL_8, USE_ESM } from "$repo-utils";
+import { itBabel9 } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 const cwd = __dirname;
@@ -1031,6 +1032,16 @@ describe("api", function () {
         `"unknown file: Unknown helper fooBar"`,
       );
     });
+  });
+
+  it("exports the version", function () {
+    // TODO: This should be 8, not 7
+    expect(babel.version[0]).toBe("7");
+  });
+
+  itBabel9("the version ends with 999999999", () => {
+    // eslint-disable-next-line jest/no-conditional-expect
+    expect(babel.version.endsWith("999999999")).toBe(true);
   });
 });
 

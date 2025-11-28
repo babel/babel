@@ -265,13 +265,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.DebuggerStatement & Opts>;
-  isDecimalLiteral(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.DecimalLiteral>;
-  isDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.DecimalLiteral & Opts>;
   isDeclaration(this: NodePath<t.Node | null>): this is NodePath<t.Declaration>;
   isDeclaration<Opts extends Options<t.Declaration>>(
     this: NodePath<t.Node | null>,
@@ -988,11 +981,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.NewExpression & Opts>;
-  isNoop(this: NodePath<t.Node | null>): this is NodePath<t.Noop>;
-  isNoop<Opts extends Options<t.Noop>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.Noop & Opts>;
   isNullLiteral(this: NodePath<t.Node | null>): this is NodePath<t.NullLiteral>;
   isNullLiteral<Opts extends Options<t.NullLiteral>>(
     this: NodePath<t.Node | null>,
@@ -1226,13 +1214,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.QualifiedTypeIdentifier & Opts>;
-  isRecordExpression(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.RecordExpression>;
-  isRecordExpression<Opts extends Options<t.RecordExpression>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.RecordExpression & Opts>;
   isRegExpLiteral(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.RegExpLiteral>;
@@ -1403,6 +1384,13 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.TSCallSignatureDeclaration & Opts>;
+  isTSClassImplements(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.TSClassImplements>;
+  isTSClassImplements<Opts extends Options<t.TSClassImplements>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.TSClassImplements & Opts>;
   isTSConditionalType(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.TSConditionalType>;
@@ -1473,15 +1461,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.TSExportAssignment & Opts>;
-  isTSExpressionWithTypeArguments(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.TSExpressionWithTypeArguments>;
-  isTSExpressionWithTypeArguments<
-    Opts extends Options<t.TSExpressionWithTypeArguments>,
-  >(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.TSExpressionWithTypeArguments & Opts>;
   isTSExternalModuleReference(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.TSExternalModuleReference>;
@@ -1556,6 +1535,13 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.TSInterfaceDeclaration & Opts>;
+  isTSInterfaceHeritage(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.TSInterfaceHeritage>;
+  isTSInterfaceHeritage<Opts extends Options<t.TSInterfaceHeritage>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.TSInterfaceHeritage & Opts>;
   isTSIntersectionType(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.TSIntersectionType>;
@@ -1914,13 +1900,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.TryStatement & Opts>;
-  isTupleExpression(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.TupleExpression>;
-  isTupleExpression<Opts extends Options<t.TupleExpression>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.TupleExpression & Opts>;
   isTupleTypeAnnotation(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.TupleTypeAnnotation>;

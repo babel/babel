@@ -2944,21 +2944,6 @@ export function isJSXClosingFragment<
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isNoop(node: t.Node | null | undefined): node is t.Noop;
-export function isNoop<Opts extends Options<t.Noop>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.Noop & Opts;
-export function isNoop<Opts extends Options<t.Noop>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Noop") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
 export function isPlaceholder(
   node: t.Node | null | undefined,
 ): node is t.Placeholder;
@@ -3078,57 +3063,6 @@ export function isExportDefaultSpecifier<
   if (!node) return false;
 
   if (node.type !== "ExportDefaultSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isRecordExpression(
-  node: t.Node | null | undefined,
-): node is t.RecordExpression;
-export function isRecordExpression<Opts extends Options<t.RecordExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.RecordExpression & Opts;
-export function isRecordExpression<Opts extends Options<t.RecordExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  if (node.type !== "RecordExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isTupleExpression(
-  node: t.Node | null | undefined,
-): node is t.TupleExpression;
-export function isTupleExpression<Opts extends Options<t.TupleExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.TupleExpression & Opts;
-export function isTupleExpression<Opts extends Options<t.TupleExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TupleExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isDecimalLiteral(
-  node: t.Node | null | undefined,
-): node is t.DecimalLiteral;
-export function isDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.DecimalLiteral & Opts;
-export function isDecimalLiteral<Opts extends Options<t.DecimalLiteral>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DecimalLiteral") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
@@ -3996,21 +3930,38 @@ export function isTSLiteralType<Opts extends Options<t.TSLiteralType>>(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isTSExpressionWithTypeArguments(
+export function isTSClassImplements(
   node: t.Node | null | undefined,
-): node is t.TSExpressionWithTypeArguments;
-export function isTSExpressionWithTypeArguments<
-  Opts extends Options<t.TSExpressionWithTypeArguments>,
+): node is t.TSClassImplements;
+export function isTSClassImplements<Opts extends Options<t.TSClassImplements>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.TSClassImplements & Opts;
+export function isTSClassImplements<Opts extends Options<t.TSClassImplements>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  if (node.type !== "TSClassImplements") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isTSInterfaceHeritage(
+  node: t.Node | null | undefined,
+): node is t.TSInterfaceHeritage;
+export function isTSInterfaceHeritage<
+  Opts extends Options<t.TSInterfaceHeritage>,
 >(
   node: t.Node | null | undefined,
   opts?: Opts | null,
-): node is t.TSExpressionWithTypeArguments & Opts;
-export function isTSExpressionWithTypeArguments<
-  Opts extends Options<t.TSExpressionWithTypeArguments>,
+): node is t.TSInterfaceHeritage & Opts;
+export function isTSInterfaceHeritage<
+  Opts extends Options<t.TSInterfaceHeritage>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   if (!node) return false;
 
-  if (node.type !== "TSExpressionWithTypeArguments") return false;
+  if (node.type !== "TSInterfaceHeritage") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
@@ -4560,7 +4511,6 @@ export function isExpression<Opts extends Options<t.Expression>>(
     case "ClassExpression":
     case "ImportExpression":
     case "MetaProperty":
-    case "Super":
     case "TaggedTemplateExpression":
     case "TemplateLiteral":
     case "YieldExpression":
@@ -4574,9 +4524,6 @@ export function isExpression<Opts extends Options<t.Expression>>(
     case "JSXFragment":
     case "BindExpression":
     case "DoExpression":
-    case "RecordExpression":
-    case "TupleExpression":
-    case "DecimalLiteral":
     case "ModuleExpression":
     case "TopicReference":
     case "PipelineTopicExpression":
@@ -5072,7 +5019,6 @@ export function isPureish<Opts extends Options<t.Pureish>>(
     case "RegExpLiteral":
     case "ArrowFunctionExpression":
     case "BigIntLiteral":
-    case "DecimalLiteral":
       break;
     case "Placeholder":
       if (node.expectedNode === "StringLiteral") break;
@@ -5216,11 +5162,8 @@ export function isLVal<Opts extends Options<t.LVal>>(
   switch (node.type) {
     case "Identifier":
     case "MemberExpression":
-    case "RestElement":
-    case "AssignmentPattern":
     case "ArrayPattern":
     case "ObjectPattern":
-    case "TSParameterProperty":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
     case "TSTypeAssertion":
@@ -5256,6 +5199,7 @@ export function isTSEntityName<Opts extends Options<t.TSEntityName>>(
 
   switch (node.type) {
     case "Identifier":
+    case "ThisExpression":
     case "TSQualifiedName":
       break;
     case "Placeholder":
@@ -5285,7 +5229,6 @@ export function isLiteral<Opts extends Options<t.Literal>>(
     case "RegExpLiteral":
     case "TemplateLiteral":
     case "BigIntLiteral":
-    case "DecimalLiteral":
       break;
     case "Placeholder":
       if (node.expectedNode === "StringLiteral") break;
@@ -5324,7 +5267,6 @@ export function isImmutable<Opts extends Options<t.Immutable>>(
     case "JSXFragment":
     case "JSXOpeningFragment":
     case "JSXClosingFragment":
-    case "DecimalLiteral":
       break;
     case "Placeholder":
       if (node.expectedNode === "StringLiteral") break;
@@ -5932,7 +5874,6 @@ export function isMiscellaneous<Opts extends Options<t.Miscellaneous>>(
   if (!node) return false;
 
   switch (node.type) {
-    case "Noop":
     case "Placeholder":
     case "V8IntrinsicIdentifier":
       break;
@@ -6000,7 +5941,8 @@ export function isTypeScript<Opts extends Options<t.TypeScript>>(
     case "TSMappedType":
     case "TSTemplateLiteralType":
     case "TSLiteralType":
-    case "TSExpressionWithTypeArguments":
+    case "TSClassImplements":
+    case "TSInterfaceHeritage":
     case "TSInterfaceDeclaration":
     case "TSInterfaceBody":
     case "TSTypeAliasDeclaration":
@@ -6102,7 +6044,8 @@ export function isTSType<Opts extends Options<t.TSType>>(
     case "TSMappedType":
     case "TSTemplateLiteralType":
     case "TSLiteralType":
-    case "TSExpressionWithTypeArguments":
+    case "TSClassImplements":
+    case "TSInterfaceHeritage":
     case "TSImportType":
       break;
     default:

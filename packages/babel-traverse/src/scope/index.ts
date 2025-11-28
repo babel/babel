@@ -8,7 +8,6 @@ import globalsBuiltinLower from "@babel/helper-globals/data/builtin-lower.json" 
 import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
 import {
   assignmentExpression,
-  callExpression,
   cloneNode,
   getBindingIdentifiers,
   identifier,
@@ -41,8 +40,6 @@ import {
   isVariableDeclaration,
   expressionStatement,
   matchesPattern,
-  memberExpression,
-  numericLiteral,
   toIdentifier,
   variableDeclaration,
   variableDeclarator,

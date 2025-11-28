@@ -12,7 +12,6 @@ import {
 } from "./fields.ts";
 import type { PropPath } from "./fields.ts";
 import createDecoratorTransform, {
-  hasDecorators,
   buildNamedEvaluationVisitor,
 } from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
@@ -53,7 +52,6 @@ export function createClassFeaturePlugin({
   manipulateOptions,
   api,
   inherits,
-  decoratorVersion,
 }: Options): PluginObject {
   if (feature & FEATURES.decorators) {
     return createDecoratorTransform(api, { loose }, "2023-11", inherits);
@@ -133,7 +131,6 @@ export function createClassFeaturePlugin({
         const loose = isLoose(file, feature);
 
         let constructor: NodePath<t.ClassMethod>;
-        const isDecorated = hasDecorators(path.node);
         const props: PropPath[] = [];
         const elements = [];
         const computedPaths: NodePath<t.ClassProperty | t.ClassMethod>[] = [];
@@ -216,7 +213,6 @@ export function createClassFeaturePlugin({
           classRefForDefine.name,
           privateFieldsAsSymbolsOrProperties ?? loose,
           props,
-          file,
         );
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
@@ -239,16 +235,8 @@ export function createClassFeaturePlugin({
           file,
         );
 
-        let keysNodes: t.Statement[],
-          staticNodes: t.Statement[],
-          instanceNodes: t.ExpressionStatement[],
-          lastInstanceNodeReturnsThis: boolean,
-          pureStaticNodes: t.FunctionDeclaration[],
-          classBindingNode: t.Statement | null,
-          wrapClass: (path: NodePath<t.Class>) => NodePath;
-
-        keysNodes = extractComputedKeys(path, computedPaths, file);
-        ({
+        const keysNodes = extractComputedKeys(path, computedPaths, file);
+        const {
           staticNodes,
           pureStaticNodes,
           instanceNodes,
@@ -266,7 +254,7 @@ export function createClassFeaturePlugin({
           noUninitializedPrivateFieldAccess,
           constantSuper ?? loose,
           innerBinding,
-        ));
+        );
 
         if (instanceNodes.length > 0) {
           injectInitialization(
@@ -299,7 +287,6 @@ export function createClassFeaturePlugin({
           wrappedPath.insertAfter(classBindingNode);
         }
       },
-      ExportDefaultDeclaration(path, { file }) {},
     },
   };
 }

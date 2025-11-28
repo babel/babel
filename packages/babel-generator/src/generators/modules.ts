@@ -67,8 +67,6 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported);
 }
 
-let warningShown = false;
-
 export function _printAttributes(
   this: Printer,
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] | null }>,

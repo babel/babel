@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    "transform-block-scoping",
-    "syntax-jsx",
-    ["transform-react-jsx", { "runtime": "classic" }],
-    "transform-block-scoped-functions",
-    "transform-arrow-functions"
-  ]
-}

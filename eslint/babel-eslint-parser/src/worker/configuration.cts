@@ -1,5 +1,4 @@
 import babel = require("./babel-core.cts");
-import semver = require("semver");
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types.cts";
@@ -25,10 +24,7 @@ function getParserPlugins(
   return [["estree", estreeOptions], ...babelParserPlugins];
 }
 
-function normalizeParserOptions(
-  options: Options,
-  version: string,
-): InputOptions & {
+function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
   // Babel <= 7.28.0 does not support `sourceType: "commonjs"`.
@@ -96,7 +92,7 @@ function getDefaultParserOptions(options: InputOptions): InputOptions {
 export async function normalizeBabelParseConfig(
   options: Options,
 ): Promise<InputOptions | NormalizedOptions> {
-  const parseOptions = normalizeParserOptions(options, babel.version);
+  const parseOptions = normalizeParserOptions(options);
   const config = await babel.loadPartialConfigAsync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }
@@ -104,7 +100,7 @@ export async function normalizeBabelParseConfig(
 export function normalizeBabelParseConfigSync(
   options: Options,
 ): InputOptions | NormalizedOptions {
-  const parseOptions = normalizeParserOptions(options, babel.version);
+  const parseOptions = normalizeParserOptions(options);
   const config = babel.loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }

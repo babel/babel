@@ -3,11 +3,7 @@ import {
   assignmentExpression,
   binaryExpression,
   cloneNode,
-  identifier,
   logicalExpression,
-  numericLiteral,
-  sequenceExpression,
-  unaryExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";

@@ -32,7 +32,6 @@ export default declare((api, { proposal, topicToken }: Options) => {
 
     manipulateOptions(opts, parserOpts) {
       // Add parser options.
-      // @ts-expect-error Babel 7 compatibility
       parserOpts.plugins.push(["pipelineOperator", { proposal, topicToken }]);
 
       // Add generator options.

@@ -38,7 +38,7 @@ export default declare(api => {
           }
         }
 
-        let isUnderHelper = path.findParent(path => {
+        const isUnderHelper = path.findParent(path => {
           if (path.isFunctionDeclaration()) {
             return (
               path.get("body.directives.0")?.node.value.value ===

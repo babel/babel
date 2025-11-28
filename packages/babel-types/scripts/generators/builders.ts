@@ -8,7 +8,6 @@ import {
   hasDefault,
   sortFieldNames,
 } from "../utils/fieldHelpers.ts";
-import { IS_BABEL_8 } from "$repo-utils";
 import type { FieldOptions } from "../../src/definitions/utils.ts";
 
 const {
@@ -18,17 +17,6 @@ const {
   NODE_UNION_SHAPES__PRIVATE,
   toBindingIdentifierName,
 } = _t as typeof import("@babel/types");
-
-if (!IS_BABEL_8()) {
-  /**
-   * Convert the first character of a string to lowercase.
-   * @param string
-   */
-  // eslint-disable-next-line no-var
-  var lowerFirst = function (string: string): string {
-    return string[0].toLowerCase() + string.slice(1);
-  };
-}
 
 /**
  * Generate the builder arguments for a given node type.
@@ -164,26 +152,6 @@ const { NODE_FIELDS } = utils;
 
 `;
   const builderOverrideTypes = new Set<string>();
-  if (!IS_BABEL_8()) {
-    builderOverrideTypes.add("BigIntLiteral");
-    const builderOverrides = `
-/** @deprecated */ export function bigIntLiteral(value: string): t.BigIntLiteral;
-export function bigIntLiteral(value: bigint): t.BigIntLiteral;
-export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
-  if (typeof value === "bigint") {
-    value = value.toString();
-  }
-  const node: t.BigIntLiteral = {
-    type: "BigIntLiteral",
-    value,
-  };
-  const defs = NODE_FIELDS.BigIntLiteral;
-  validate(defs.value, node, "value", value);
-  return node;
-}
-`;
-    output += builderOverrides;
-  }
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
@@ -191,7 +159,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
       // Skip the BigIntLiteral builder override, which is handled above.
       return;
     }
-    const unionShape = IS_BABEL_8() ? NODE_UNION_SHAPES__PRIVATE[type] : null;
+    const unionShape = NODE_UNION_SHAPES__PRIVATE[type];
     const defArgs = generateBuilderArgs(type);
     const formattedBuilderName = formatBuilderName(type);
     const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)
@@ -262,16 +230,6 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
     if (formattedBuilderNameLocal !== formattedBuilderName) {
       output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
     }
-
-    if (!IS_BABEL_8()) {
-      // This is needed for backwards compatibility.
-      // JSXIdentifier -> jSXIdentifier
-      if (/^[A-Z]{2}/.test(type)) {
-        output += `export { ${formattedBuilderNameLocal} as ${lowerFirst(
-          type
-        )} }\n`;
-      }
-    }
   });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
@@ -284,14 +242,6 @@ function ${type}(${generateBuilderArgs(newType).join(", ")}) {
   return ${formattedNewBuilderName}(${BUILDER_KEYS[newType].join(", ")});
 }
 export { ${type} as ${formattedBuilderName} };\n`;
-
-    if (!IS_BABEL_8()) {
-      // This is needed for backwards compatibility.
-      // JSXIdentifier -> jSXIdentifier
-      if (/^[A-Z]{2}/.test(type)) {
-        output += `export { ${type} as ${lowerFirst(type)} }\n`;
-      }
-    }
   });
 
   return output;
@@ -307,19 +257,15 @@ function generateUppercaseBuilders() {
   import deprecationWarning from "../../utils/deprecationWarning.ts";
 
   function alias<const N extends keyof typeof b>(lowercase: N): typeof b[N] {
-    if (process.env.BABEL_8_BREAKING) {
-      return function () {
-        deprecationWarning(
-          lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
-          lowercase,
-          "Usage of builders starting with an uppercase letter such as ",
-          "uppercase builders",
-        );
-        return (b[lowercase] as any)(...arguments);
-      } as any;
-    } else {
-      return b[lowercase];
-    }
+    return function () {
+      deprecationWarning(
+        lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
+        lowercase,
+        "Usage of builders starting with an uppercase letter such as ",
+        "uppercase builders",
+      );
+      return (b[lowercase] as any)(...arguments);
+    } as any;
   }
 
   export const\n`;
@@ -327,14 +273,6 @@ function generateUppercaseBuilders() {
     .map(type => `  ${type} = alias("${formatBuilderName(type)}")`)
     .join(",\n");
   output += `;\n`;
-
-  if (!IS_BABEL_8()) {
-    output += `export const\n`;
-    output += Object.keys(DEPRECATED_KEYS)
-      .map(type => `  ${type} = b.${formatBuilderName(type)}`)
-      .join(",\n");
-    output += `;\n`;
-  }
 
   return output;
 }

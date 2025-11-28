@@ -29,6 +29,7 @@ const transformRunner = gensync(function* transform(
   return yield* run(config, code);
 });
 
+// @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
 export const transform: Transform = function transform(
   code,
   optsOrCallback?: InputOptions | null | undefined | FileResultCallback,

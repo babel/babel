@@ -152,10 +152,7 @@ function plainFunction(
   if (path.isArrowFunctionExpression()) {
     path = path.arrowFunctionToExpression({ noNewArrows });
 
-    node = path.node as
-      | t.FunctionDeclaration
-      | t.FunctionExpression
-      | t.CallExpression;
+    node = path.node;
   } else {
     node = path.node;
   }

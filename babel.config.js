@@ -26,14 +26,6 @@ function normalize(src) {
 module.exports = function (api) {
   const env = api.env();
 
-  const outputType = api.cache.invalidate(() => {
-    try {
-      const type = fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
-      if (type === "module") return type;
-    } catch (_) {}
-    return "script";
-  });
-
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
   const envOpts = {
@@ -50,9 +42,6 @@ module.exports = function (api) {
     onlyRemoveTypeImports: true,
     optimizeConstEnums: true,
   };
-  if (api.version.startsWith("7") && !bool(process.env.BABEL_8_BREAKING)) {
-    presetTsOpts.allowDeclareFields = true;
-  }
 
   // These are "safe" assumptions, that we can enable globally
   const assumptions = {
@@ -83,12 +72,11 @@ module.exports = function (api) {
   };
 
   let targets = {};
-  let convertESM = outputType === "script";
   let replaceTSImportExtension = true;
   let ignoreLib = true;
   let needsPolyfillsForOldNode = false;
 
-  const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "20.19" : "6.9";
+  const nodeVersion = "20.19";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
@@ -99,16 +87,9 @@ module.exports = function (api) {
     "eslint/*/test",
   ];
 
-  const lazyRequireSources = [
-    "./packages/babel-cli",
-    "./packages/babel-core",
-    "./packages/babel-preset-env/src/available-plugins.js",
-  ];
-
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
-      convertESM = false;
       replaceTSImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
@@ -122,7 +103,6 @@ module.exports = function (api) {
       needsPolyfillsForOldNode = true;
       break;
     case "rollup":
-      convertESM = false;
       replaceTSImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
@@ -151,10 +131,8 @@ module.exports = function (api) {
       break;
   }
 
-  if (process.env.STRIP_BABEL_8_FLAG && bool(process.env.BABEL_8_BREAKING)) {
-    // Never apply polyfills when compiling for Babel 8
-    needsPolyfillsForOldNode = false;
-  }
+  // Never apply polyfills when compiling for Babel 8
+  needsPolyfillsForOldNode = false;
 
   const config = {
     targets,
@@ -188,12 +166,6 @@ module.exports = function (api) {
     plugins: [
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
-      convertESM ? "@babel/transform-export-namespace-from" : null,
-      env !== "standalone" && !bool(process.env.BABEL_8_BREAKING)
-        ? // Babel 8 requires Node.js 20.19.0+ featured native JSON modules support
-          ["@babel/plugin-transform-json-modules", { uncheckedRequire: true }]
-        : null,
-
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
       require("./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs"),
     ].filter(Boolean),
@@ -220,11 +192,6 @@ module.exports = function (api) {
         test: ["packages/babel-generator"].map(normalize),
         plugins: [pluginGeneratorOptimization],
       },
-      convertESM && {
-        test: ["./packages/babel-node/src"].map(normalize),
-        // Used to conditionally import kexec
-        plugins: ["@babel/plugin-transform-dynamic-import"],
-      },
       {
         test: sources.map(normalize),
         assumptions: sourceAssumptions,
@@ -232,11 +199,6 @@ module.exports = function (api) {
           transformNamedBabelTypesImportToDestructuring,
           replaceTSImportExtension ? pluginReplaceTSImportExtension : null,
 
-          [
-            pluginToggleBooleanFlag,
-            { name: "USE_ESM", value: outputType === "module" },
-            "flag-USE_ESM",
-          ],
           [
             pluginToggleBooleanFlag,
             { name: "IS_STANDALONE", value: env === "standalone" },
@@ -250,16 +212,15 @@ module.exports = function (api) {
             },
             "flag-IS_PUBLISH",
           ],
-
           [
             pluginToggleBooleanFlag,
             {
-              name: "process.env.BABEL_8_BREAKING",
-              value: process.env.STRIP_BABEL_8_FLAG
-                ? bool(process.env.BABEL_8_BREAKING)
+              name: "process.env.BABEL_9_BREAKING",
+              value: process.env.STRIP_BABEL_VERSION_FLAG
+                ? bool(process.env.BABEL_9_BREAKING)
                 : null,
             },
-            "flag-BABEL_8_BREAKING",
+            "flag-BABEL_9_BREAKING",
           ],
 
           pluginPackageJsonMacro,
@@ -286,41 +247,6 @@ module.exports = function (api) {
 
           needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
-      },
-      convertESM && {
-        test: lazyRequireSources.map(normalize),
-        plugins: [
-          // Explicitly use the lazy version of CommonJS modules.
-          [
-            "@babel/transform-modules-commonjs",
-            { importInterop: importInteropSrc, lazy: true },
-          ],
-        ],
-      },
-      convertESM && {
-        test: ["./packages/babel-core/src"].map(normalize),
-        plugins: [
-          [
-            pluginInjectNodeReexportsHints,
-            { names: ["types", "tokTypes", "traverse", "template"] },
-          ],
-        ],
-      },
-      convertESM && {
-        test: sources.map(normalize),
-        exclude: lazyRequireSources.map(normalize),
-        plugins: [
-          [
-            "@babel/transform-modules-commonjs",
-            { importInterop: importInteropSrc },
-          ],
-        ],
-      },
-      convertESM && {
-        exclude: [
-          "./packages/babel-core/src/config/files/import-meta-resolve.ts",
-        ].map(normalize),
-        plugins: [pluginImportMetaUrl],
       },
       {
         test: sources.map(source => normalize(source.replace("/src", "/test"))),
@@ -351,43 +277,6 @@ module.exports = function (api) {
 
   return config;
 };
-
-let monorepoPackages;
-function getMonorepoPackages() {
-  if (!monorepoPackages) {
-    monorepoPackages = ["codemods", "eslint", "packages"]
-      .map(folder => fs.readdirSync(__dirname + "/" + folder))
-      .reduce((a, b) => a.concat(b))
-      .map(name => name.replace(/^babel-/, "@babel/"));
-  }
-  return monorepoPackages;
-}
-
-function importInteropSrc(source, filename) {
-  if (
-    // These internal files are "real CJS" (whose default export is
-    // on module.exports) and not compiled ESM.
-    source.startsWith("@babel/compat-data/") ||
-    source.includes("babel-eslint-shared-fixtures/utils") ||
-    (source.includes("../data/") &&
-      /babel-preset-env[\\/]src[\\/]/.test(filename)) ||
-    // For JSON modules, the default export is the whole module
-    source.endsWith(".json")
-  ) {
-    return "node";
-  }
-  if (
-    (source[0] === "." && !source.endsWith(".cjs")) ||
-    getMonorepoPackages().some(name => source.startsWith(name))
-  ) {
-    // We don't need to worry about interop for internal files, since we know
-    // for sure that they are ESM modules compiled to CJS
-    return "none";
-  }
-
-  // For external modules, we want to match the Node.js behavior
-  return "node";
-}
 
 function importInteropTest(source) {
   // This file will soon have an esm entrypoint
@@ -717,118 +606,6 @@ function transformNamedBabelTypesImportToDestructuring({
   };
 }
 
-/**
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObject}
- */
-function pluginImportMetaUrl({ types: t, template }) {
-  const isImportMeta = node =>
-    t.isMetaProperty(node) &&
-    t.isIdentifier(node.meta, { name: "import" }) &&
-    t.isIdentifier(node.property, { name: "meta" });
-
-  const isImportMetaUrl = node =>
-    t.isMemberExpression(node, { computed: false }) &&
-    t.isIdentifier(node.property, { name: "url" }) &&
-    isImportMeta(node.object);
-
-  return {
-    visitor: {
-      CallExpression(path) {
-        const { node } = path;
-
-        // fileURLToPath(import.meta.url)
-        if (
-          (function () {
-            if (
-              !t.isIdentifier(node.callee, {
-                name: "fileURLToPath",
-              }) ||
-              node.arguments.length !== 1
-            ) {
-              return;
-            }
-
-            const arg = node.arguments[0];
-
-            if (
-              !t.isMemberExpression(arg, {
-                computed: false,
-              }) ||
-              !t.isIdentifier(arg.property, {
-                name: "url",
-              }) ||
-              !isImportMeta(arg.object)
-            ) {
-              return;
-            }
-            path.replaceWith(t.identifier("__filename"));
-            return true;
-          })()
-        ) {
-          return;
-        }
-
-        // const { __dirname: cwd } = commonJS(import.meta.url)
-        if (
-          !t.isIdentifier(node.callee, { name: "commonJS" }) ||
-          node.arguments.length !== 1
-        ) {
-          return;
-        }
-
-        const binding = path.scope.getBinding("commonJS");
-        if (!binding) return;
-
-        if (binding.path.isImportSpecifier()) {
-          path.parentPath.parentPath.assertVariableDeclaration();
-          path.parentPath.parentPath.remove();
-        }
-      },
-
-      // const require = createRequire(import.meta.url)
-      VariableDeclarator(path) {
-        const { node } = path;
-
-        if (
-          !t.isIdentifier(node.id, { name: "require" }) ||
-          !t.isCallExpression(node.init) ||
-          !t.isIdentifier(node.init.callee, { name: "createRequire" }) ||
-          node.init.arguments.length !== 1 ||
-          !isImportMetaUrl(node.init.arguments[0])
-        ) {
-          return;
-        }
-
-        // Let's just remove this declaration to unshadow the "global" cjs require.
-        path.remove();
-        path.scope.crawl();
-
-        const createRequireBinding = path.scope.getBinding("createRequire");
-        if (!createRequireBinding.referenced) {
-          createRequireBinding.path.remove();
-        }
-      },
-
-      // import.meta.url
-      MemberExpression(path) {
-        if (!isImportMetaUrl(path.node)) return;
-
-        path.replaceWith(
-          template.expression
-            .ast`\`file://\${__filename.replace(/\\\\/g, "/")}\``
-        );
-      },
-
-      MetaProperty(path) {
-        if (isImportMeta(path.node)) {
-          throw path.buildCodeFrameError("Unsupported import.meta");
-        }
-      },
-    },
-  };
-}
-
 /** @returns {import("@babel/core").PluginObject} */
 function pluginReplaceTSImportExtension() {
   return {
@@ -913,46 +690,6 @@ function pluginBabelParserTokenType({
           }
           path.replaceWith(numericLiteral(tokenType));
         }
-      },
-    },
-  };
-}
-
-// Inject `0 && exports.foo = 0` hints for the specified exports,
-// to help the Node.js CJS-ESM interop. This is only
-// needed when compiling ESM re-exports to CJS in `lazy` mode.
-function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
-  return {
-    visitor: {
-      Program: {
-        exit(path) {
-          const seen = [];
-          for (const stmt of path.get("body")) {
-            if (!stmt.isExpressionStatement()) continue;
-            const expr = stmt.get("expression");
-            if (
-              !expr.isCallExpression() ||
-              !expr.get("callee").matchesPattern("Object.defineProperty") ||
-              expr.node.arguments.length !== 3 ||
-              !expr.get("arguments.0").isIdentifier({ name: "exports" }) ||
-              !expr.get("arguments.1").isStringLiteral() ||
-              !names.includes(expr.node.arguments[1].value)
-            ) {
-              continue;
-            }
-
-            expr
-              .get("arguments.0")
-              .replaceWith(template.expression.ast`(0, exports)`);
-            seen.push(expr.node.arguments[1].value);
-          }
-
-          const assign = seen.reduce(
-            (rhs, name) => template.expression.ast`exports.${name} = ${rhs}`,
-            t.numericLiteral(0)
-          );
-          path.pushContainer("body", template.statement.ast`0 && (${assign})`);
-        },
       },
     },
   };

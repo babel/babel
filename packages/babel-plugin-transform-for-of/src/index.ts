@@ -79,7 +79,7 @@ export default declare((api, options: Options) => {
           if (isAwait) {
             return;
           }
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
           const right = skipTransparentExprWrapperNodes(
             path.node.right,
           ) as t.Expression;
