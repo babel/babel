@@ -37,6 +37,7 @@ type Plugin$1 =
   | IF_BABEL_7<"decimal">
   | "decorators-legacy"
   | "deferredImportEvaluation"
+  | "deferredReexports"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | IF_BABEL_7<"deprecatedImportAssert">
