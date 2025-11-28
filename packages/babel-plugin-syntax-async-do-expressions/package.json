@@ -33,7 +33,7 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-async-do-expressions",
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "type": "module",
@@ -43,14 +43,6 @@
       {
         "type": "commonjs"
       }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {}
     ]
   }
 }

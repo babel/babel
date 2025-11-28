@@ -24,7 +24,7 @@
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
     "@babel/traverse": "workspace:^",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    "semver": "^7.3.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
@@ -37,19 +37,9 @@
     "charcodes": "^0.2.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

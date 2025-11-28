@@ -16,7 +16,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@jridgewell/gen-mapping": "^0.3.12",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    "semver": "^7.3.4"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -26,20 +26,9 @@
     "@babel/core": "^7.0.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null,
-        "peerDependencies": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

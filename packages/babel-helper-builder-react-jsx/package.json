@@ -14,8 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^ (esm:booleanLiteral|callExpression|identifier|inherits|isIdentifier|isJSXExpressionContainer|isJSXIdentifier|isJSXMemberExpression|isJSXNamespacedName|isJSXSpreadAttribute|isObjectExpression|isReferenced|isStringLiteral|isValidIdentifier|memberExpression|nullLiteral|objectExpression|objectProperty|react|spreadElement|stringLiteral|thisExpression)"
+    "@babel/helper-annotate-as-pure": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -25,21 +24,10 @@
     "@babel/core": "^7.0.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null,
-        "peerDependencies": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

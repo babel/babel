@@ -22,27 +22,16 @@
     "@jridgewell/trace-mapping": "^0.3.28",
     "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^30.0.0",
-    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
+    "lru-cache": "^7.14.1",
     "resolve": "2.0.0-next.5"
   },
   "devDependencies": {
     "@types/fs-readdir-recursive": "^1.1.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

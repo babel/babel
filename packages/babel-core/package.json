@@ -31,7 +31,7 @@
     "compiler"
   ],
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "funding": {
     "type": "opencollective",
@@ -49,19 +49,18 @@
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^",
     "@babel/helpers": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
     "@jridgewell/remapping": "^2.3.5",
-    "@types/gensync": "condition:BABEL_8_BREAKING ? ^1.0.0 :",
+    "@types/gensync": "^1.0.0",
     "convert-source-map": "^2.0.0",
     "debug": "^4.1.0",
     "gensync": "^1.0.0-beta.2",
     "json5": "^2.2.3",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    "semver": "^7.3.4"
   },
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
@@ -80,24 +79,6 @@
     "tsx": "^4.20.3"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "peerDependencies": {
-          "@babel/preset-typescript": "^7.21.4 || ^8.0.0-0"
-        },
-        "peerDependenciesMeta": {
-          "@babel/preset-typescript": {
-            "optional": true
-          }
-        },
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       {
         "exports": {

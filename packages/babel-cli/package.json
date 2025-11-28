@@ -25,15 +25,13 @@
   ],
   "dependencies": {
     "@jridgewell/trace-mapping": "^0.3.28",
-    "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)",
+    "commander": "^12.1.0",
     "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",
-    "glob": "condition:BABEL_8_BREAKING ? ^12.0.0 : ^7.2.0 (esm:sync|default)",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
-    "slash": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    "glob": "^12.0.0",
+    "slash": "^3.0.0"
   },
   "optionalDependencies": {
-    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3",
     "chokidar": "^3.6.0"
   },
   "peerDependencies": {
@@ -51,19 +49,9 @@
     "babel-external-helpers": "./bin/babel-external-helpers.js"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       {
         "bin": {

@@ -17,7 +17,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^",
-    "js-tokens": "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0",
+    "js-tokens": "^8.0.0",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
@@ -26,19 +26,9 @@
     "strip-ansi": "^4.0.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       null,
       {
