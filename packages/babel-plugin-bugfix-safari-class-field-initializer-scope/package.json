@@ -39,13 +39,5 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  }
+  "type": "module"
 }

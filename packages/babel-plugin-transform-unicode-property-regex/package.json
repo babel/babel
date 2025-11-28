@@ -37,14 +37,6 @@
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

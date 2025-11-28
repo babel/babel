@@ -39,14 +39,6 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

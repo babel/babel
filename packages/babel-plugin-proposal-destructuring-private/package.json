@@ -43,13 +43,5 @@
     },
     "./package.json": "./package.json"
   },
-  "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  }
+  "type": "module"
 }

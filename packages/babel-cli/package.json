@@ -51,19 +51,6 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
-  "conditions": {
-    "USE_ESM": [
-      {
-        "bin": {
-          "babel": "./bin/babel.mjs",
-          "babel-external-helpers": "./bin/babel-external-helpers.mjs"
-        }
-      },
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
