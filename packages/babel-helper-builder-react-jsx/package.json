@@ -15,7 +15,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^"
+    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^ (esm:booleanLiteral|callExpression|identifier|inherits|isIdentifier|isJSXExpressionContainer|isJSXIdentifier|isJSXMemberExpression|isJSXNamespacedName|isJSXSpreadAttribute|isObjectExpression|isReferenced|isStringLiteral|isValidIdentifier|memberExpression|nullLiteral|objectExpression|objectProperty|react|spreadElement|stringLiteral|thisExpression)"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

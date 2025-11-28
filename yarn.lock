@@ -651,7 +651,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^"
+    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^ (esm:booleanLiteral|callExpression|identifier|inherits|isIdentifier|isJSXExpressionContainer|isJSXIdentifier|isJSXMemberExpression|isJSXNamespacedName|isJSXSpreadAttribute|isObjectExpression|isReferenced|isStringLiteral|isValidIdentifier|memberExpression|nullLiteral|objectExpression|objectProperty|react|spreadElement|stringLiteral|thisExpression)"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -4375,12 +4375,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/types@condition:BABEL_8_BREAKING ? : workspace:^":
-  version: 0.0.0-condition-9ef56a
-  resolution: "@babel/types@condition:BABEL_8_BREAKING?:workspace:^#9ef56a"
+"@babel/types@condition:BABEL_8_BREAKING ? : workspace:^ (esm:booleanLiteral|callExpression|identifier|inherits|isIdentifier|isJSXExpressionContainer|isJSXIdentifier|isJSXMemberExpression|isJSXNamespacedName|isJSXSpreadAttribute|isObjectExpression|isReferenced|isStringLiteral|isValidIdentifier|memberExpression|nullLiteral|objectExpression|objectProperty|react|spreadElement|stringLiteral|thisExpression)":
+  version: 0.0.0-condition-c16754
+  resolution: "@babel/types@condition:BABEL_8_BREAKING?:workspace:^(esm:booleanLiteral|callExpression|identifier|inherits|isIdentifier|isJSXExpressionContainer|isJSXIdentifier|isJSXMemberExpression|isJSXNamespacedName|isJSXSpreadAttribute|isObjectExpression|isReferenced|isStringLiteral|isValidIdentifier|memberExpression|nullLiteral|objectExpression|objectProperty|react|spreadElement|stringLiteral|thisExpression)#c16754"
   dependencies:
     "@babel/types-BABEL_8_BREAKING-false": "npm:@babel/types@workspace:^"
-  checksum: 10/c256bc06392368e725b0765066d645d04b905cadef731c7058e10f18fbb26af584bd105bf40e1e36ff02a5bc13f0c87f245fe6fe900b25cce921413f8ea0fe5a
+  checksum: 10/f9f21c480660b5f1598a605311168b8f6b7d66652def2d8682972c2af16b0a816759849d32f9ad750da6d9b1fd118115cd71a4396aa539859f6d29200fa72917
   languageName: node
   linkType: hard
 
