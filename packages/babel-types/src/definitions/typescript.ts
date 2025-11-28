@@ -649,23 +649,28 @@ defineType("TSModuleBlock", {
 defineType("TSImportType", {
   aliases: ["TSType"],
   builder: [
-    "argument",
+    process.env.BABEL_8_BREAKING ? "source" : "argument",
     "qualifier",
     process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters",
   ],
   visitor: [
-    "argument",
+    process.env.BABEL_8_BREAKING ? "source" : "argument",
     "options",
     "qualifier",
     process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters",
   ],
   fields: {
-    argument: process.env.BABEL_8_BREAKING
-      ? validateType("TSLiteralType")
-      : validateType("StringLiteral"),
+    ...(process.env.BABEL_8_BREAKING
+      ? { source: validateType("StringLiteral") }
+      : { argument: validateType("StringLiteral") }),
     qualifier: validateOptionalType("TSEntityName"),
-    [process.env.BABEL_8_BREAKING ? "typeArguments" : "typeParameters"]:
-      validateOptionalType("TSTypeParameterInstantiation"),
+    ...(process.env.BABEL_8_BREAKING
+      ? {
+          typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
+        }
+      : {
+          typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+        }),
     options: {
       validate: assertNodeType("ObjectExpression"),
       optional: true,

@@ -595,13 +595,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.raise(TSErrors.UnsupportedImportTypeArgument, this.state.startLoc);
         if (process.env.BABEL_8_BREAKING) {
           // Consume as an non-conditional type so that we can recover from this error
-          node.argument = this.tsParseNonConditionalType() as any;
+          node.source = this.tsParseNonConditionalType() as any;
         } else {
           node.argument = super.parseExprAtom() as any;
         }
       } else {
         if (process.env.BABEL_8_BREAKING) {
-          node.argument = this.tsParseLiteralTypeNode();
+          node.source = this.parseStringLiteral(this.state.value);
         } else {
           // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           node.argument = this.parseStringLiteral(this.state.value);

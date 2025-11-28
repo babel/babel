@@ -1848,7 +1848,10 @@ export interface TsLiteralType extends TsTypeBase {
 
 export interface TsImportType extends TsTypeBase {
   type: "TSImportType";
+  /** Only in Babel 7 */
   argument: TsLiteralType;
+  /** Only in Babel 8 */
+  source: StringLiteral;
   qualifier?: TsEntityName | null;
   typeArguments?: TsTypeParameterInstantiation | null;
   /**
