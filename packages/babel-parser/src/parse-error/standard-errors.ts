@@ -67,7 +67,7 @@ export default {
   DecoratorStaticBlock: "Decorators can't be used with a static block.",
   DeferImportRequiresNamespace:
     'Only `import defer * as x from "./module"` is valid.',
-  DeferExportInvlaidAll:
+  DeferExportInvalidAll:
     '`export defer * from "./module"` is invalid. Explicitly list the re-exported names.',
   DeletePrivateField: "Deleting a private field is not allowed.",
   DestructureNamedImport:

@@ -2405,7 +2405,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.hasPlugin("deferredReexports") &&
         (node as N.ExportNamedDeclaration).phase === "defer"
       ) {
-        this.raise(Errors.DeferExportInvlaidAll, node);
+        this.raise(Errors.DeferExportInvalidAll, node);
       }
       this.parseExportFrom(node, true);
 
