@@ -1,6 +1,5 @@
 import _helper from "../lib/index.js";
-import { transformSync } from "@babel/core";
-import * as t from "@babel/types";
+import { transformSync, types as t } from "@babel/core";
 
 const helper = _helper.default || _helper;
 
