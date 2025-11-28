@@ -73,16 +73,12 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '>=6.9.0') :-
   \+ atom_concat('@babel/eslint', _, WorkspaceIdent).
 
 % Enforces the engines.node field for '@babel/eslint*' workspaces
-gen_enforced_field(WorkspaceCwd, 'engines.node', '^10.13.0 || ^12.13.0 || >=14.0.0') :-
+gen_enforced_field(WorkspaceCwd, 'engines.node', "^20.19.0 || >=22.12.0") :-
   \+ workspace_field(WorkspaceCwd, 'private', true),
   % Get the workspace name
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   % Only target '@babel/eslint*' workspaces
   atom_concat('@babel/eslint', _, WorkspaceIdent).
-
-% (Babel 8) Enforces the engines.node field for all workspaces except private ones
-gen_enforced_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.0.engines.node', '^16.20.0 || ^18.16.0 || >=20.0.0') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
 
 % Removes the 'engines.node' field from private workspaces
 gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
@@ -94,39 +90,7 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     if (workspace.manifest.private) {
       workspace.unset("engines.node");
     } else {
-      if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
-        workspace.set(
-          "conditions.BABEL_8_BREAKING.0.engines.node",
-          "^20.19.0 || >=22.12.0"
-        );
-      }
-
-      if (workspace.ident === "@babel/parser") continue;
-      if (workspace.ident?.startsWith("@babel/eslint")) {
-        workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
-      } else {
-        workspace.set("engines.node", ">=6.9.0");
-      }
-    }
-  }
-}
-
-/**
- * Ensure that the BABEL_8_BREAKING condition has both 'yes' and 'no' cases
-gen_enforced_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.1', {}) :-
-  workspace_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.0', _),
-  \+ workspace_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.1', _).
- * @param {Context} context
- */
-function enforceBothConditionsSetForBABEL_8_BREAKING({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    const condition = workspace.manifest.conditions?.BABEL_8_BREAKING;
-    if (condition) {
-      if (!Array.isArray(condition)) {
-        workspace.error("The BABEL_8_BREAKING condition must be an array");
-      } else if (condition.length === 1) {
-        workspace.set("conditions.BABEL_8_BREAKING.1", {});
-      }
+      workspace.set("engines.node", "^20.19.0 || >=22.12.0");
     }
   }
 }
@@ -213,34 +177,6 @@ function enforceNoDualTypeDependencies({ Yarn }) {
 }
 
 /**
- * Enforces a default 'conditions', unless it's already specified
-gen_enforced_field(WorkspaceCwd, 'conditions', '{ "USE_ESM": [{ "type": "module" }, null] }') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true),
-  \+ workspace_field(WorkspaceCwd, 'conditions', _),
-  \+ workspace_field(WorkspaceCwd, 'main', './lib/index.cjs'),
-  % Exclude some packages
-  workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  WorkspaceIdent \= '@babel/compat-data'.
- * @param {Context} context
- */
-function enforceConditions({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) continue;
-    if (workspace.manifest.main === "./lib/index.cjs") continue;
-    if (workspace.ident === "@babel/compat-data") continue;
-    if (workspace.manifest.type !== "commonjs") {
-      if (!workspace.manifest.conditions) {
-        workspace.set("conditions", { USE_ESM: [null, { type: "commonjs" }] });
-      } else if (!workspace.manifest.conditions.USE_ESM) {
-        workspace.set("conditions.USE_ESM", [null, { type: "commonjs" }]);
-      } else {
-        workspace.set("conditions.USE_ESM.1", { type: "commonjs" });
-      }
-    }
-  }
-}
-
-/**
  * Enforces that @babel/helper-* must not depend on @babel/traverse, @babel/template, @babel/types if they peer-depend on @babel/core
 gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
   % Get the workspace name
@@ -253,12 +189,7 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
 function enforceBabelHelperBabelDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.ident?.startsWith("@babel/helper-")) {
-      if (
-        workspace.pkg.peerDependencies.has("@babel/core") &&
-        // In some cases, we remove peerDependencies for Babel 7
-        workspace.manifest.conditions?.BABEL_8_BREAKING?.[1]
-          ?.peerDependencies !== null
-      ) {
+      if (workspace.pkg.peerDependencies.has("@babel/core")) {
         workspace.unset("dependencies['@babel/template']");
         workspace.unset("dependencies['@babel/types']");
         // TODO: Consider re-enforcing this in Babel 8
@@ -384,11 +315,9 @@ module.exports = {
     enforceWorkspaceDependencies(ctx);
     enforcePackageInfo(ctx);
     enforceEnginesNodeForPublicUnsetForPrivate(ctx);
-    enforceBothConditionsSetForBABEL_8_BREAKING(ctx);
     enforceMainAndTypes(ctx);
     enforceType(ctx);
     enforceExports(ctx);
-    enforceConditions(ctx);
     enforceNoDualTypeDependencies(ctx);
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);

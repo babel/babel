@@ -1,10 +1,6 @@
-if (!process.env.IS_PUBLISH && !USE_ESM) {
-  throw new Error(
-    "BABEL_8_BREAKING is only supported in ESM. Please run `make use-esm`.",
-  );
-}
-
-export const version = PACKAGE_JSON.version;
+export const version = process.env.BABEL_9_BREAKING
+  ? PACKAGE_JSON.version + "999999999"
+  : PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file.ts";
 export type { default as PluginPass } from "./transformation/plugin-pass.ts";

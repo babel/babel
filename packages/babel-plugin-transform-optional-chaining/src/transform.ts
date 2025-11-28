@@ -159,7 +159,6 @@ export function transformOptionalChain(
         // Here `chainWithTypes` MUST NOT be cloned because it could be
         // updated when generating the memoised context of a call
         // expression. It must be an Expression when `ref` is an identifier
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         chainWithTypes as t.Expression,
       );
 
@@ -268,7 +267,7 @@ export function transform(
       wrapLast = (replacement: t.MemberExpression) => {
         // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
         // object must not be Super as super?.foo is invalid
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
         const object = skipTransparentExprWrapperNodes(
           replacement.object,
         ) as t.Expression;

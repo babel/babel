@@ -1029,12 +1029,6 @@ export function assertJSXClosingFragment(
 ): asserts node is t.JSXClosingFragment {
   assert("JSXClosingFragment", node, opts);
 }
-export function assertNoop(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.Noop {
-  assert("Noop", node, opts);
-}
 export function assertPlaceholder(
   node: object | null | undefined,
   opts?: object | null,
@@ -1076,24 +1070,6 @@ export function assertExportDefaultSpecifier(
   opts?: object | null,
 ): asserts node is t.ExportDefaultSpecifier {
   assert("ExportDefaultSpecifier", node, opts);
-}
-export function assertRecordExpression(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.RecordExpression {
-  assert("RecordExpression", node, opts);
-}
-export function assertTupleExpression(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.TupleExpression {
-  assert("TupleExpression", node, opts);
-}
-export function assertDecimalLiteral(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.DecimalLiteral {
-  assert("DecimalLiteral", node, opts);
 }
 export function assertModuleExpression(
   node: object | null | undefined,
@@ -1395,11 +1371,17 @@ export function assertTSLiteralType(
 ): asserts node is t.TSLiteralType {
   assert("TSLiteralType", node, opts);
 }
-export function assertTSExpressionWithTypeArguments(
+export function assertTSClassImplements(
   node: object | null | undefined,
   opts?: object | null,
-): asserts node is t.TSExpressionWithTypeArguments {
-  assert("TSExpressionWithTypeArguments", node, opts);
+): asserts node is t.TSClassImplements {
+  assert("TSClassImplements", node, opts);
+}
+export function assertTSInterfaceHeritage(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.TSInterfaceHeritage {
+  assert("TSInterfaceHeritage", node, opts);
 }
 export function assertTSInterfaceDeclaration(
   node: object | null | undefined,

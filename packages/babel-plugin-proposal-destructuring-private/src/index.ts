@@ -135,6 +135,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       const newDeclarations = [];
       for (const declarator of declarations) {
         for (const { left, right } of transformPrivateKeyDestructuring(
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           declarator.id,
           declarator.init,
           scope,
@@ -164,6 +165,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         (!isExpressionStatement(parent) && !isSequenceExpression(parent)) ||
         path.isCompletionRecord();
       for (const { left, right } of transformPrivateKeyDestructuring(
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         node.left,
         node.right,
         scope,

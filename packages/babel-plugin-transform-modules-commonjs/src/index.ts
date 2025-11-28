@@ -120,7 +120,6 @@ export default declare((api, options: Options) => {
 
       path.replaceWith(
         t.assignmentExpression(
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           (path.node.operator[0] + "=") as t.AssignmentExpression["operator"],
           arg.node,
           getAssertion(localName),

@@ -8,6 +8,5 @@ export default declare(api => {
   return createRegExpFeaturePlugin({
     name: "transform-unicode-sets-regex",
     feature: "unicodeSetsFlag",
-    manipulateOptions(opts, parserOpts) {},
   });
 });

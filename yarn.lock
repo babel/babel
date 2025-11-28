@@ -4013,14 +4013,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2":
-  version: 0.0.0-use.local
-  resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
-  dependencies:
-    core-js: "npm:^2.6.12"
-  languageName: unknown
-  linkType: soft
-
 "@babel/runtime-corejs3@workspace:^, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
@@ -9811,6 +9803,7 @@ __metadata:
   dependencies:
     esrecurse: "npm:^4.3.0"
     estraverse: "npm:^5.2.0"
+  checksum: 10/5c660fb905d5883ad018a6fea2b49f3cb5b1cbf2cd4bd08e98646e9864f9bc2c74c0839bed2d292e90a4a328833accc197c8f0baed89cbe8d605d6f918465491
   languageName: node
   linkType: hard
 
@@ -10360,6 +10353,7 @@ __metadata:
     commondir: "npm:^1.0.1"
     make-dir: "npm:^3.0.2"
     pkg-dir: "npm:^4.1.0"
+  checksum: 10/3907c2e0b15132704ed67083686cd3e68ab7d9ecc22e50ae9da20678245d488b01fa22c0e34c0544dc6edc4354c766f016c8c186a787be7c17f7cde8c5281e85
   languageName: node
   linkType: hard
 

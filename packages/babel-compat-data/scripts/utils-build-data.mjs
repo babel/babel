@@ -205,36 +205,15 @@ export function writeFile(data, dataPath, name) {
   return true;
 }
 
-// TODO(Babel 8): Remove this.
-// Since these scripts generates different compat data files, we generate
-// Babel 7 files also when BABEL_8_BREAKING to avoid diffs during development.
-// It's safe to do so because the Babel 7 data is a superset of the Babel 8
-// data, so it works with both versions.
-// When BABEL_8_BREAKING and IS_PUBLISHING are both true, we generate
-// the actual Babel 8 files so that:
-// - we don't accidentally release Babel 8 with the Babel 7 file
-// - at lest in our e2e tests, we use the new file
-export function babel7Only(fn, arg) {
-  if (process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH) {
-    return arg;
-  } else {
-    return fn(arg);
-  }
-}
-
-// TODO(Babel 8): Remove this.
-export const maybeDefineLegacyPluginAliases = babel7Only.bind(
-  null,
-  function (data) {
-    // We create a new object to inject legacy aliases in the correct
-    // order, rather than all at the end.
-    const result = {};
-    for (const key in data) {
-      result[key] = data[key];
-      if (key in legacyPluginAliases) {
-        result[legacyPluginAliases[key]] = data[key];
-      }
+export function maybeDefineLegacyPluginAliases(data) {
+  // We create a new object to inject legacy aliases in the correct
+  // order, rather than all at the end.
+  const result = {};
+  for (const key in data) {
+    result[key] = data[key];
+    if (key in legacyPluginAliases) {
+      result[legacyPluginAliases[key]] = data[key];
     }
-    return result;
   }
-);
+  return result;
+}

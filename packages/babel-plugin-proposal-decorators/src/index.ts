@@ -45,7 +45,6 @@ export default declare((api, options: Options) => {
       api,
       feature: FEATURES.decorators,
       inherits: syntaxDecorators,
-      // @ts-expect-error version must not be "legacy" here
       decoratorVersion: version,
       // loose: options.loose, Not supported
     });

@@ -9,7 +9,6 @@ import stringifyValidator, {
   isValueType,
 } from "../utils/stringifyValidator.ts";
 import type { FieldOptions, Validator } from "../../src/definitions/utils.ts";
-import { IS_BABEL_8 } from "$repo-utils";
 
 const t = _t as typeof import("@babel/types");
 
@@ -116,7 +115,7 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
   }
   for (const type in t.NODE_FIELDS) {
     const fields = t.NODE_FIELDS[type];
-    const unionShape = IS_BABEL_8() ? t.NODE_UNION_SHAPES__PRIVATE[type] : null;
+    const unionShape = t.NODE_UNION_SHAPES__PRIVATE[type];
     const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
 
     const struct: string[] = [];

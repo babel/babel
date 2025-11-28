@@ -152,7 +152,6 @@ jobs:
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
         run: |
           mkdir build
-          node ./scripts/set-module-type.js commonjs
           node ./packages/babel-types/scripts/generators/docs.ts > ./build/types.md
 
       - name: Upload babel-types docs

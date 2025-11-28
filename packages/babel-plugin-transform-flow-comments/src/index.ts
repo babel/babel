@@ -177,6 +177,7 @@ export default declare(api => {
       ClassProperty(path) {
         const { node } = path;
         if (!node.value) {
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           wrapInFlowComment(path);
         } else if (node.typeAnnotation) {
           attachComment({

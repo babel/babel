@@ -33,13 +33,12 @@ cd /tmp
 YARN_ENABLE_IMMUTABLE_INSTALLS=false npx @react-native-community/cli init rnbabel
 cd rnbabel
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
+# Babel 8 adjustments
   # metro-react-native-babel-preset unconditionally enables the Flow plugin, even on TS files.
   # https://github.com/facebook/metro/blob/2c16fa67/packages/metro-react-native-babel-preset/src/configs/main.js#L25
   npx replace '(?=\[require\("@babel/plugin-syntax-flow")' '//' node_modules/metro-react-native-babel-preset/src/configs/main.js
   # https://github.com/facebook/metro/blob/2c16fa67/packages/metro-react-native-babel-preset/src/configs/main.js#L169
   npx replace '(?=plugins:.*?flow-strip-types)' 'exclude: [isTypeScriptSource, isTSXSource],' node_modules/metro-react-native-babel-preset/src/configs/main.js
-fi
 
 node "$root"/utils/bump-babel-dependencies.js resolutions
 

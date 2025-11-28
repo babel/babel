@@ -1965,7 +1965,6 @@ function transformClass(
         setClassName,
         t.cloneNode(superClass),
         state,
-        version,
       ),
     ),
   );
@@ -2050,7 +2049,6 @@ function createLocalsAssignment(
   setClassName: t.Identifier | t.StringLiteral | undefined,
   superClass: null | t.Expression,
   state: PluginPass,
-  version: DecoratorVersionKind,
 ) {
   let lhs, rhs;
   const args: t.Expression[] = [
@@ -2083,12 +2081,14 @@ function createLocalsAssignment(
     } else {
       lhs = t.arrayPattern(elementLocals);
 
+      // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
       rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
     }
   } else {
     // invariant: classLocals.length > 0
     lhs = t.arrayPattern(classLocals);
 
+    // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
     rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
   }
 

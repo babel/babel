@@ -102,7 +102,6 @@ import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformExplicitResourceManagement from "@babel/plugin-transform-explicit-resource-management";
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
-
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -321,7 +320,3 @@ export const all: Record<string, any> = {
   "transform-explicit-resource-management": transformExplicitResourceManagement,
   "proposal-import-defer": proposalImportDefer,
 };
-
-export { default as syntaxRecordAndTuple } from "@babel/plugin-syntax-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };
-
-export { default as proposalRecordAndTuple } from "@babel/plugin-proposal-record-and-tuple" with { if: "!process.env.BABEL_8_BREAKING" };

@@ -1,7 +1,5 @@
 # 27 invalid programs did not produce a parsing error
 
-JSX/invalid_unpaired_gt.js
-JSX/invalid_unpaired_rcurly.js
 JSX/jsx_type_args_types_disabled.js
 JSX_invalid/migrated_0000.js
 arrow_function_invalid/migrated_0002.js

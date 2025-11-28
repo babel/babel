@@ -1,5 +1,5 @@
 import semver from "semver";
-import { minVersions, legacyBabel7SyntaxPlugins } from "./available-plugins.ts";
+import { minVersions } from "./available-plugins.ts";
 
 export function addProposalSyntaxPlugins(
   items: Set<string>,

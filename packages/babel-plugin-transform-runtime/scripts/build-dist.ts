@@ -7,11 +7,9 @@ import { fileURLToPath } from "node:url";
 
 // @ts-expect-error Can not find typings for the built JS file
 import transformRuntime from "../lib/index.js";
-import corejs2Definitions from "./runtime-corejs2-definitions.ts";
 import corejs3Definitions from "./runtime-corejs3-definitions.ts";
 
 import presetEnv from "@babel/preset-env";
-import polyfillCorejs2 from "babel-plugin-polyfill-corejs2";
 import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 
 import type { PluginObject, PluginAPI, InputOptions } from "@babel/core";
@@ -28,11 +26,6 @@ const requireTemplate = template.statement(`
   const ID = require("SOURCE");
 `);
 
-// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value: string | undefined) {
-  return Boolean(value) && value !== "false" && value !== "0";
-}
-
 function outputFile(filePath: string, data: string) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
@@ -43,17 +36,6 @@ function corejsVersion(pkgName: string, depName: string) {
 }
 
 writeHelpers("@babel/runtime");
-if (!bool(process.env.BABEL_8_BREAKING)) {
-  writeHelpers("@babel/runtime-corejs2", {
-    polyfillProvider: [
-      polyfillCorejs2,
-      {
-        method: "usage-pure",
-        version: corejsVersion("babel-runtime-corejs2", "core-js"),
-      },
-    ],
-  });
-}
 writeHelpers("@babel/runtime-corejs3", {
   polyfillProvider: [
     polyfillCorejs3,
@@ -65,110 +47,94 @@ writeHelpers("@babel/runtime-corejs3", {
   ],
 });
 
-if (!bool(process.env.BABEL_8_BREAKING)) {
-  writeCoreJS({
-    corejs: 2,
-    proposals: true,
-    definitions: corejs2Definitions,
-    paths: [
-      "is-iterable",
-      "get-iterator",
-      // This was previously in definitions, but was removed to work around
-      // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
-      // avoid a breaking change there.
-      "symbol/async-iterator",
-    ],
-    corejsRoot: "core-js/library/fn",
-  });
-  writeCoreJS({
-    corejs: 3,
-    proposals: false,
-    definitions: corejs3Definitions,
-    paths: [],
-    corejsRoot: "core-js-pure/stable",
-  });
-  writeCoreJS({
-    corejs: 3,
-    proposals: true,
-    definitions: corejs3Definitions,
-    paths: ["is-iterable", "get-iterator", "get-iterator-method"],
-    corejsRoot: "core-js-pure/features",
+writeCoreJS({
+  corejs: 3,
+  proposals: false,
+  definitions: corejs3Definitions,
+  paths: [],
+  corejsRoot: "core-js-pure/stable",
+});
+writeCoreJS({
+  corejs: 3,
+  proposals: true,
+  definitions: corejs3Definitions,
+  paths: ["is-iterable", "get-iterator", "get-iterator-method"],
+  corejsRoot: "core-js-pure/features",
+});
+
+type CoreJSDefinitionItem = { stable: boolean; path: string };
+type CoreJSDefinitions = {
+  BuiltIns: Record<string, CoreJSDefinitionItem>;
+  StaticProperties: Record<string, Record<string, CoreJSDefinitionItem>>;
+  InstanceProperties?: Record<string, CoreJSDefinitionItem>;
+};
+
+function writeCoreJS({
+  corejs,
+  proposals,
+  definitions: { BuiltIns, StaticProperties, InstanceProperties },
+  paths,
+  corejsRoot,
+}: {
+  corejs: 2 | 3;
+  proposals: boolean;
+  definitions: CoreJSDefinitions;
+  paths: string[];
+  corejsRoot: string;
+}) {
+  const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
+
+  Object.keys(BuiltIns).forEach(name => {
+    const { stable, path } = BuiltIns[name];
+    if (stable || proposals) paths.push(path);
   });
 
-  type CoreJSDefinitionItem = { stable: boolean; path: string };
-  type CoreJSDefinitions = {
-    BuiltIns: Record<string, CoreJSDefinitionItem>;
-    StaticProperties: Record<string, Record<string, CoreJSDefinitionItem>>;
-    InstanceProperties?: Record<string, CoreJSDefinitionItem>;
-  };
-
-  function writeCoreJS({
-    corejs,
-    proposals,
-    definitions: { BuiltIns, StaticProperties, InstanceProperties },
-    paths,
-    corejsRoot,
-  }: {
-    corejs: 2 | 3;
-    proposals: boolean;
-    definitions: CoreJSDefinitions;
-    paths: string[];
-    corejsRoot: string;
-  }) {
-    const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
-
-    Object.keys(BuiltIns).forEach(name => {
-      const { stable, path } = BuiltIns[name];
+  Object.keys(StaticProperties).forEach(builtin => {
+    const props = StaticProperties[builtin];
+    Object.keys(props).forEach(name => {
+      const { stable, path } = props[name];
       if (stable || proposals) paths.push(path);
     });
+  });
 
-    Object.keys(StaticProperties).forEach(builtin => {
-      const props = StaticProperties[builtin];
-      Object.keys(props).forEach(name => {
-        const { stable, path } = props[name];
-        if (stable || proposals) paths.push(path);
-      });
+  if (InstanceProperties) {
+    Object.keys(InstanceProperties).forEach(name => {
+      const { stable, path } = InstanceProperties[name];
+      if (stable || proposals) paths.push(`instance/${path}`);
     });
-
-    if (InstanceProperties) {
-      Object.keys(InstanceProperties).forEach(name => {
-        const { stable, path } = InstanceProperties[name];
-        if (stable || proposals) paths.push(`instance/${path}`);
-      });
-    }
-
-    const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-    paths.forEach(function (corejsPath) {
-      outputFile(
-        path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
-        `module.exports = require("${corejsRoot}/${corejsPath}");`
-      );
-    });
-
-    writeCorejsExports(pkgDirname, runtimeRoot, paths);
   }
 
-  function writeCorejsExports(
-    pkgDirname: string,
-    runtimeRoot: string,
-    paths: string[]
-  ) {
-    const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-    const pkgJson = require(pkgJsonPath);
-    const exports = pkgJson.exports;
-    // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
-    // Node < 17
-    exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
-    // Node >= 17
-    exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
-    for (const corejsPath of paths) {
-      // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
-      const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
-      exports[corejsExportPath] = corejsExportPath + ".js";
-    }
-    pkgJson.exports = exports;
-    outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
+  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
+  paths.forEach(function (corejsPath) {
+    outputFile(
+      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
+      `module.exports = require("${corejsRoot}/${corejsPath}");`
+    );
+  });
+
+  writeCorejsExports(pkgDirname, runtimeRoot, paths);
+}
+
+function writeCorejsExports(
+  pkgDirname: string,
+  runtimeRoot: string,
+  paths: string[]
+) {
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  const exports = pkgJson.exports;
+  // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
+  // Node < 17
+  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
+  // Node >= 17
+  exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
+  for (const corejsPath of paths) {
+    // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
+    const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
+    exports[corejsExportPath] = corejsExportPath + ".js";
   }
+  pkgJson.exports = exports;
+  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
 function writeHelperFile(
@@ -218,49 +184,24 @@ function writeHelpers(
 
     if (helpers.isInternal(helperName)) continue;
 
-    if (bool(process.env.BABEL_8_BREAKING)) {
-      // Note: This does not work in Node.js 13.0 and 13.1, which support
-      // the `exports` field only as strings and not as objects.
-      // For other Node.js versions:
-      // - <13.0.0 does not support `exports` at all, so
-      //   @babel/runtime/helpers/foo will automatically resolve to
-      //   @babel/runtime/helpers/foo.js
-      // - >=13.2.0 < 13.7.0 ignore the `node` and `import` conditions, so
-      //   they will always fallback to `default` and correctly load the
-      //   CJS helper.
-      // - Node.js >=13.7.0 and bundlers will successfully parse `conditions`
-      //    * Node.js will always load the CJS file
-      //    * Modern tools when using "import" will load the ESM file
-      //    * Tools when using require() will load the CJS file
-      helperSubExports[`./${path.posix.join("helpers", helperName)}`] = {
-        node: cjs,
-        import: esm,
-        default: cjs,
-      };
-    } else {
-      // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
-      // not conditional exports (`require`/`node`/`default`)
-      // We can specify exports with an array of fallbacks:
-      // - Node.js >=13.7.0 and bundlers will successfully load the first
-      //   array entry:
-      //    * Node.js will always load the CJS file
-      //    * Modern tools when using "import" will load the ESM file
-      //    * Everything else (old tools, or require() in tools) will
-      //      load the CJS file
-      // - Node.js 13.2-13.7 will ignore the "node" and "import" conditions,
-      //   will fallback to "default" and load the CJS file
-      // - Node.js <13.2.0 will fail resolving the first array entry, and will
-      //   fallback to the second entry (the CJS file)
-      // In Babel 8 we can simplify this.
-      helperSubExports[`./${path.posix.join("helpers", helperName)}`] = [
-        { node: cjs, import: esm, default: cjs },
-        cjs,
-      ];
-      // This is needed for backwards compatibility, but new versions of Babel
-      // do not emit imports to the /esm/ directory anymore.
-      helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
-        esm;
-    }
+    // Note: This does not work in Node.js 13.0 and 13.1, which support
+    // the `exports` field only as strings and not as objects.
+    // For other Node.js versions:
+    // - <13.0.0 does not support `exports` at all, so
+    //   @babel/runtime/helpers/foo will automatically resolve to
+    //   @babel/runtime/helpers/foo.js
+    // - >=13.2.0 < 13.7.0 ignore the `node` and `import` conditions, so
+    //   they will always fallback to `default` and correctly load the
+    //   CJS helper.
+    // - Node.js >=13.7.0 and bundlers will successfully parse `conditions`
+    //    * Node.js will always load the CJS file
+    //    * Modern tools when using "import" will load the ESM file
+    //    * Tools when using require() will load the CJS file
+    helperSubExports[`./${path.posix.join("helpers", helperName)}`] = {
+      node: cjs,
+      import: esm,
+      default: cjs,
+    };
   }
 
   writeHelperExports(runtimeName, helperSubExports);
@@ -270,26 +211,14 @@ function writeHelperExports(
   runtimeName: string,
   helperSubExports: HelperSubExports
 ) {
-  const exports = {
+  const pkgDirname = getRuntimeRoot(runtimeName);
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  pkgJson.exports = {
     ...helperSubExports,
     "./package": "./package.json",
     "./package.json": "./package.json",
   };
-  if (!bool(process.env.BABEL_8_BREAKING)) {
-    Object.assign(exports, {
-      "./regenerator": "./regenerator/index.js",
-      "./regenerator/*.js": "./regenerator/*.js",
-      // These patterns are deprecated, but since patterns
-      // containing * are not supported in every Node.js
-      // version we keep them for better compatibility.
-      // For node < 17
-      "./regenerator/": "./regenerator/",
-    });
-  }
-  const pkgDirname = getRuntimeRoot(runtimeName);
-  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-  const pkgJson = require(pkgJsonPath);
-  pkgJson.exports = exports;
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
@@ -351,6 +280,7 @@ function buildHelper(
   tree.body.push(...helper.nodes);
 
   return transformFromAstSync(tree, "", {
+    targets: ["ie 5.5", "ios 3.2"], // old enough to guarantee support everywhere
     filename: helperFilename,
     presets: [[presetEnv, { modules: false }]],
     plugins: [

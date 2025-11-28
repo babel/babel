@@ -118,9 +118,5 @@
     "transform-unicode-regex",
     "transform-explicit-resource-management",
     "proposal-import-defer"
-  ],
-  "babel7OnlyExternalPlugins": [
-    "syntax-record-and-tuple",
-    "proposal-record-and-tuple"
   ]
 }

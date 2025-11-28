@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath, PluginPass } from "@babel/core";
 
-export default declare(function ({ types: t, template }) {
+export default declare(function ({ types: t }) {
   function maybeReplace(
     source: t.ArgumentPlaceholder | t.Expression,
     path: NodePath,
@@ -56,7 +56,6 @@ export default declare(function ({ types: t, template }) {
           maybeReplace(node.source, path.get("source"), state);
         }
       },
-      CallExpression(path, state) {},
       ImportExpression(path, state) {
         maybeReplace(path.node.source, path.get("source"), state);
       },

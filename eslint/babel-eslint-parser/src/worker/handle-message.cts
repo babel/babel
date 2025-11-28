@@ -1,6 +1,5 @@
 import babel = require("./babel-core.cts");
 import maybeParse = require("./maybeParse.cts");
-import maybeParseSync = require("./maybeParseSync.cts");
 import astInfo = require("./ast-info.cts");
 import config = require("./configuration.cts");
 
@@ -25,12 +24,6 @@ export = function handleMessage(action: ACTIONS, payload: any) {
         .normalizeBabelParseConfig(payload.options)
         .then(options => maybeParse(payload.code, options));
     case ACTIONS.MAYBE_PARSE_SYNC:
-      if (!USE_ESM) {
-        return maybeParseSync(
-          payload.code,
-          config.normalizeBabelParseConfigSync(payload.options),
-        );
-      }
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);

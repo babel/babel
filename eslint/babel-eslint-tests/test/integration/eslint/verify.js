@@ -1591,29 +1591,6 @@ describe("verify", () => {
     );
   });
 
-  const babel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-
-  babel7("allowImportExportEverywhere option (#327)", () => {
-    verifyAndAssertMessages(
-      `
-        if (true) { import Foo from 'foo'; }
-        function foo() { import Bar from 'bar'; }
-        switch (a) { case 1: import FooBar from 'foobar'; }
-      `,
-      {},
-      [],
-      "module",
-      {
-        env: {},
-        parserOptions: {
-          ecmaVersion: 6,
-          sourceType: "module",
-          allowImportExportEverywhere: true,
-        },
-      },
-    );
-  });
-
   it("allowImportExportEverywhere @babel/parser option (#327)", () => {
     verifyAndAssertMessages(
       `

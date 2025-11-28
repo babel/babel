@@ -42,7 +42,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn dedupe '@babel/*'
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
+# Babel 8 adjustments
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
 
@@ -62,7 +62,6 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
     pkg.resolutions['@types/babel__traverse/@babel/types'] = 'latest';
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
   "
-fi
 
 sed -i 's/"skipLibCheck": false,/"skipLibCheck": true,/g' tsconfig.json # Speedup
 

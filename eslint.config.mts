@@ -281,10 +281,8 @@ export default defineConfig([
         "error",
         {
           additionalTestBlockFunctions: [
-            "itBabel7",
-            "itBabel7NoESM",
-            "itBabel7NodeGte14NoESM",
             "itBabel8",
+            "itBabel9",
             "itESLint7",
             "itESLintGte8",
             "itNoESM",

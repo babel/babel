@@ -25,6 +25,7 @@ export default declare(api => {
         const { node } = path;
         if (!node.attributes) return;
 
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         node.assertions = node.attributes;
         node.attributes = null;
       },

@@ -39,13 +39,12 @@ fi
 # but we import it from @babel/runtime.
 sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers/regenerator`)%' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
+# Babel 8 adjustments
   # This option is renamed in Babel 8
   sed -i 's/legacy: decoratorsLegacy !== false/version: decoratorsLegacy === false ? "legacy": "2021-12"/g' packages/@vue/babel-preset-app/index.js
 
   # Delete once https://github.com/jestjs/jest/pull/14109 is released
   sed -i "s/blacklist/denylist/g" node_modules/babel-plugin-jest-hoist/build/index.js
-fi
 
 # Test
 CI=true yarn test -p babel,babel-preset-app

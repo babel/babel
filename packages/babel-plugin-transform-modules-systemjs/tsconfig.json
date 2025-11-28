@@ -21,9 +21,6 @@
       "path": "../../packages/babel-helper-validator-identifier"
     },
     {
-      "path": "../../packages/babel-traverse"
-    },
-    {
       "path": "../../packages/babel-core"
     }
   ]

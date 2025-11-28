@@ -357,6 +357,7 @@ const visitor: Visitor<PluginPass> = {
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         t.cloneNode(path.get("left.object").node),
         t.stringLiteral(
           // @ts-expect-error todo(flow->ts) typesafe NodePath.get

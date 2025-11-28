@@ -1,90 +1,5 @@
 import type { BabelToken } from "../types.cts";
 import type * as t from "@babel/types";
-import ESLINT_VERSION = require("../utils/eslint-version.cjs");
-
-function convertTemplateType(tokens: BabelToken[], tl: Record<string, any>) {
-  let curlyBrace: BabelToken = null;
-  let templateTokens: BabelToken[] = [];
-  const result: any[] = [];
-
-  function addTemplateType() {
-    const start = templateTokens[0];
-    const end = templateTokens[templateTokens.length - 1];
-
-    const value = templateTokens.reduce((result, token) => {
-      if (token.value) {
-        result += token.value;
-      } else if (token.type.label !== tl.template) {
-        result += token.type.label;
-      }
-
-      return result;
-    }, "");
-
-    result.push({
-      type: "Template",
-      value: value,
-      start: start.start,
-      end: end.end,
-      loc: {
-        start: start.loc.start,
-        end: end.loc.end,
-      },
-    });
-
-    templateTokens = [];
-  }
-
-  tokens.forEach(token => {
-    switch (token.type.label) {
-      case tl.backQuote:
-        if (curlyBrace) {
-          result.push(curlyBrace);
-          curlyBrace = null;
-        }
-
-        templateTokens.push(token);
-
-        if (templateTokens.length > 1) {
-          addTemplateType();
-        }
-
-        break;
-
-      case tl.dollarBraceL:
-        templateTokens.push(token);
-        addTemplateType();
-        break;
-
-      case tl.braceR:
-        if (curlyBrace) {
-          result.push(curlyBrace);
-        }
-
-        curlyBrace = token;
-        break;
-
-      case tl.template:
-        if (curlyBrace) {
-          templateTokens.push(curlyBrace);
-          curlyBrace = null;
-        }
-
-        templateTokens.push(token);
-        break;
-
-      default:
-        if (curlyBrace) {
-          result.push(curlyBrace);
-          curlyBrace = null;
-        }
-
-        result.push(token);
-    }
-  });
-
-  return result;
-}
 
 function convertToken(
   token: BabelToken,
@@ -238,6 +153,7 @@ export = function convertTokens(
   for (let i = 0, { length } = templateTypeMergedTokens; i < length - 1; i++) {
     const token = templateTypeMergedTokens[i];
     const tokenType = token.type;
+    // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
     if (tokenType === "CommentLine" || tokenType === "CommentBlock") {
       continue;
     }

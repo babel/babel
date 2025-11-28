@@ -261,7 +261,7 @@ describe("getTargets", () => {
       ).toEqual({ ...baseESModulesTargets, ie: "11.0.0" });
     });
 
-    it("returns browser supporting modules, intersect with browsers key, then combined with keyed browser overrides, ", () => {
+    it("returns browser supporting modules, intersect with browsers key, then combined with keyed browser overrides,", () => {
       expect(
         getTargets({
           esmodules: true,

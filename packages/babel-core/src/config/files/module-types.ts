@@ -232,7 +232,7 @@ function getTSPreset(filepath: string) {
   } catch (error) {
     if (error.code !== "MODULE_NOT_FOUND") throw error;
 
-    let message =
+    const message =
       "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found: please install it!";
 
     throw new ConfigError(message, filepath);

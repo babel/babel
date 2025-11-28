@@ -19,7 +19,7 @@ export interface Options {
 export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
 
-  let { version } = options;
+  const { version } = options;
 
   if (version === undefined) {
     throw new Error(
@@ -51,7 +51,7 @@ export default declare((api, options: Options) => {
   return {
     name: "syntax-decorators",
 
-    manipulateOptions({ generatorOpts }, parserOpts) {
+    manipulateOptions(_opts, parserOpts) {
       if (version === "legacy") {
         parserOpts.plugins.push("decorators-legacy");
       } else {

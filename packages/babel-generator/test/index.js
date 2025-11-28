@@ -10,7 +10,7 @@ import { encode } from "@jridgewell/sourcemap-codec";
 import _generate from "../lib/index.js";
 const generate = _generate.default || _generate;
 
-const { __dirname, require } = commonJS(import.meta.url);
+const { __dirname } = commonJS(import.meta.url);
 
 describe("generation", function () {
   it("multiple sources", function () {
@@ -609,13 +609,7 @@ describe("generation", function () {
 
   it("wraps around infer inside an array type", () => {
     const type = t.tsArrayType(
-      t.tsInferType(
-        t.tsTypeParameter(
-          null,
-          null,
-          !process.env.BABEL_8_BREAKING ? "T" : t.identifier("T"),
-        ),
-      ),
+      t.tsInferType(t.tsTypeParameter(null, null, t.identifier("T"))),
     );
 
     const output = generate(type).code;
@@ -1391,19 +1385,11 @@ describe("programmatic generation", function () {
       expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
     });
 
-    if (process.env.BABEL_8_BREAKING) {
-      it("default", () => {
-        const output = generate(string).code;
+    it("default", () => {
+      const output = generate(string).code;
 
-        expect(output).toBe(`"表格_副本"`);
-      });
-    } else {
-      it("default in Babel 7", () => {
-        const output = generate(string).code;
-
-        expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
-      });
-    }
+      expect(output).toBe(`"表格_副本"`);
+    });
   });
 
   describe("typescript interface declaration", () => {

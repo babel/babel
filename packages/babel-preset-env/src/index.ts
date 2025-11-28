@@ -102,7 +102,6 @@ export const transformIncludesAndExcludes = (opts: string[]): any => {
 function getSpecialModulesPluginNames(
   modules: Exclude<ModuleOption, "auto">,
   shouldTransformDynamicImport: boolean,
-  babelVersion: string,
 ) {
   const modulesPluginNames = [];
   if (modules) {
@@ -282,11 +281,7 @@ export default declarePreset((api, opts: Options) => {
     include.plugins,
     exclude.plugins,
     transformTargets,
-    getSpecialModulesPluginNames(
-      modules,
-      shouldTransformDynamicImport,
-      api.version,
-    ),
+    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
 
     undefined,
     pluginSyntaxMap,

@@ -80,23 +80,6 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
-### Develop compiling to CommonJS or to ECMAScript modules
-
-Babel can currently be compiled both to CJS and to ESM. You can toggle between those two
-modes by running one of the following commands:
-
-```sh
-make use-esm
-```
-
-```sh
-make use-cjs
-```
-
-Note that they need to recompile the whole monorepo, so please make sure to stop any running `make watch` process before running them.
-
-If you never run a `make use-*` (or if you delete the `.module-type` file that they generate), our build process defaults to CJS.
-
 ### Running linting/tests
 
 #### Lint

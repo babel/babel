@@ -23,7 +23,7 @@ interface ParseErrorSpecification<ErrorDetails> {
 }
 type ParseError$1<ErrorDetails> = SyntaxError & ParseErrorSpecification<ErrorDetails>;
 
-type BABEL_8_BREAKING = false;
+type BABEL_8_BREAKING = true;
 type IF_BABEL_7<V> = false extends BABEL_8_BREAKING ? V : never;
 
 type Plugin$1 =
@@ -259,4 +259,4 @@ declare const tokTypes: {
   [name: string]: any;
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, PluginConfig as ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type ParserPluginWithOptions, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };

@@ -33,7 +33,6 @@ export function buildPrivateNamesMap(
   className: string,
   privateFieldsAsSymbolsOrProperties: boolean,
   props: PropPath[],
-  file: File,
 ) {
   const privateNamesMap: PrivateNamesMap = new Map();
   let classBrandId: t.Identifier;
@@ -132,8 +131,7 @@ export function buildPrivateNamesNodes(
     // - In spec mode, only instance fields need a "private name" initializer
     //   because static fields are directly assigned to a variable in the
     //   buildPrivateStaticFieldInitSpec function.
-    const { static: isStatic, method: isMethod, getId, setId } = value;
-    const isGetterOrSetter = getId || setId;
+    const { static: isStatic, method: isMethod } = value;
     const id = t.cloneNode(value.id);
 
     let init: t.Expression;
@@ -539,9 +537,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         static: isStatic,
         method: isMethod,
         setId,
-        getId,
       } = privateNamesMap.get(name);
-      const isGetterOrSetter = getId || setId;
 
       const cloneId = (id: t.Identifier) =>
         t.inherits(t.cloneNode(id), privateName);
@@ -613,35 +609,21 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         this.receiver(member),
         value,
       ]);
-
-      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-        this.receiver(member),
-        cloneId(id),
-        value,
-      ]);
     }),
 
     destructureSet(member) {
-      const {
-        classRef,
-        privateNamesMap,
-        file,
-        noUninitializedPrivateFieldAccess,
-      } = this;
+      const { privateNamesMap, file, noUninitializedPrivateFieldAccess } = this;
       const privateName = member.node.property as t.PrivateName;
       const { name } = privateName.id;
       const {
-        id,
         static: isStatic,
         method: isMethod,
         setId,
       } = privateNamesMap.get(name);
 
-      const cloneId = (id: t.Identifier) =>
-        t.inherits(t.cloneNode(id), privateName);
-
       if (isMethod && !setId) {
         return t.memberExpression(
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           t.sequenceExpression([member.node.object, readOnlyError(file, name)]),
           t.identifier("_"),
         );
@@ -685,6 +667,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         setCall.callee.property.name === "call"
       ) {
         args = [
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           setCall.callee.object,
           t.arrayExpression(
             // Remove '_'
@@ -748,7 +731,6 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       [t.cloneNode(member.node.object as t.Expression)],
     );
   },
@@ -945,37 +927,6 @@ function buildPrivateInstanceMethodInitSpec(
     prop,
     privateNamesMap,
     state,
-  );
-}
-
-function buildPrivateAccessorInitialization(
-  ref: t.Expression,
-  prop: NodePath<t.ClassPrivateMethod>,
-  privateNamesMap: PrivateNamesMap,
-  state: File,
-) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
-  const { id, getId, setId } = privateName;
-
-  privateNamesMap.set(prop.node.key.id.name, {
-    ...privateName,
-    initAdded: true,
-  });
-
-  const helper = state.addHelper("classPrivateFieldInitSpec");
-  return inheritLoc(
-    inheritPropComments(
-      template.statement.ast`${helper}(
-      ${t.thisExpression()},
-      ${t.cloneNode(id)},
-      {
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      },
-    )` as t.ExpressionStatement,
-      prop,
-    ),
-    prop.node,
   );
 }
 

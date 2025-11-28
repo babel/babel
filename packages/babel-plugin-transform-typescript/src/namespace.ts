@@ -9,7 +9,6 @@ export function getFirstIdentifier(node: t.TSEntityName): t.Identifier {
   }
   // In Babel 8 TSEntityName also includes ThisExpression, however, a namespace
   // id must not be a ThisExpression or a TSQualifiedName { left: ThisExpression }.
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   return getFirstIdentifier((node as t.TSQualifiedName).left);
 }
 
@@ -132,7 +131,7 @@ function handleNested(
 ): t.Statement | null {
   const names = new Set();
   const realName = t.isIdentifier(node.id)
-    ? (node.id as t.Identifier)
+    ? node.id
     : getFirstIdentifier(node.id as unknown as t.TSQualifiedName);
 
   const name = path.scope.generateUid(realName.name);

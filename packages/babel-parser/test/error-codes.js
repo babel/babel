@@ -33,11 +33,7 @@ describe("error codes", function () {
       errorRecovery: true,
       plugins: ["flow"],
     });
-    expect(flowError.reasonCode).toBe(
-      process.env.BABEL_8_BREAKING
-        ? tsError.reasonCode
-        : "OptionalBindingPattern",
-    );
+    expect(flowError.reasonCode).toBe(tsError.reasonCode);
     expect(flowError.message).toBe(tsError.message);
   });
   it("Use correct spelling in Babel 8", function () {

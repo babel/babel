@@ -1,4 +1,3 @@
-// @ts-expect-error no types
 import _ESLINT_VISITOR_KEYS = require("eslint-visitor-keys");
 import babel = require("./babel-core.cts");
 
@@ -26,6 +25,7 @@ export function getVisitorKeys() {
       ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
     };
 
+    // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
     visitorKeys = {
       ...newTypes,
       ...babel.types.VISITOR_KEYS,

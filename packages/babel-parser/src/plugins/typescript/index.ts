@@ -2040,14 +2040,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseModuleOrNamespaceDeclaration(
       node: Undone<N.TsModuleDeclaration>,
-      nested: boolean = false,
     ): N.TsModuleDeclaration {
       node.id = this.tsParseEntityName(
         tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
       );
 
       if (node.id.type === "Identifier") {
-        // @ts-expect-error checked above
         this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
@@ -2089,7 +2087,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseImportEqualsDeclaration(
       node: Undone<N.TsImportEqualsDeclaration>,
       maybeDefaultIdentifier?: N.Identifier | null,
-      isExport?: boolean,
     ): N.TsImportEqualsDeclaration {
       node.id = maybeDefaultIdentifier || this.parseIdentifier();
       this.checkIdentifier(node.id, BindingFlag.TYPE_TS_VALUE_IMPORT);
@@ -2916,7 +2913,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const declaration = this.tsParseImportEqualsDeclaration(
           nodeImportEquals,
           maybeDefaultIdentifier,
-          /* isExport */ true,
         );
 
         (node as Undone<N.ExportNamedDeclaration>).attributes = [];

@@ -34,26 +34,6 @@ export const annexB33FunctionsVisitor: Visitor = {
   },
 };
 
-function transformStatementList(paths: NodePath<t.Statement>[]) {
-  outer: for (const path of paths) {
-    if (!path.isFunctionDeclaration()) continue;
-    // Annex B.3.3 only applies to plain functions.
-    if (path.node.async || path.node.generator) return;
-
-    const { scope } = path.parentPath;
-    if (isVarScope(scope)) return;
-
-    const { name } = path.node.id;
-    let currScope = scope;
-    do {
-      if (currScope.parent.hasOwnBinding(name)) continue outer;
-      currScope = currScope.parent;
-    } while (!isVarScope(currScope));
-
-    maybeTransformBlockScopedFunction(path);
-  }
-}
-
 function maybeTransformBlockScopedFunction(
   path: NodePath<t.FunctionDeclaration>,
 ) {

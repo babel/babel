@@ -3,7 +3,6 @@ const v = new OptionValidator("@babel/preset-flow");
 
 export default function normalizeOptions(options: any = {}) {
   let { all, ignoreExtensions, experimental_useHermesParser } = options;
-  const { allowDeclareFields } = options;
 
   v.invariant(
     !("allowDeclareFields" in options),

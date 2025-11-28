@@ -79,7 +79,6 @@ export type Node =
   | ConditionalExpression
   | ContinueStatement
   | DebuggerStatement
-  | DecimalLiteral
   | DeclareClass
   | DeclareExportAllDeclaration
   | DeclareExportDeclaration
@@ -162,7 +161,6 @@ export type Node =
   | MixedTypeAnnotation
   | ModuleExpression
   | NewExpression
-  | Noop
   | NullLiteral
   | NullLiteralTypeAnnotation
   | NullableTypeAnnotation
@@ -192,7 +190,6 @@ export type Node =
   | PrivateName
   | Program
   | QualifiedTypeIdentifier
-  | RecordExpression
   | RegExpLiteral
   | RegexLiteral
   | RestElement
@@ -215,6 +212,7 @@ export type Node =
   | TSBigIntKeyword
   | TSBooleanKeyword
   | TSCallSignatureDeclaration
+  | TSClassImplements
   | TSConditionalType
   | TSConstructSignatureDeclaration
   | TSConstructorType
@@ -224,7 +222,6 @@ export type Node =
   | TSEnumDeclaration
   | TSEnumMember
   | TSExportAssignment
-  | TSExpressionWithTypeArguments
   | TSExternalModuleReference
   | TSFunctionType
   | TSImportEqualsDeclaration
@@ -235,6 +232,7 @@ export type Node =
   | TSInstantiationExpression
   | TSInterfaceBody
   | TSInterfaceDeclaration
+  | TSInterfaceHeritage
   | TSIntersectionType
   | TSIntrinsicKeyword
   | TSLiteralType
@@ -284,7 +282,6 @@ export type Node =
   | ThrowStatement
   | TopicReference
   | TryStatement
-  | TupleExpression
   | TupleTypeAnnotation
   | TypeAlias
   | TypeAnnotation
@@ -313,8 +310,33 @@ export interface ArrayExpression extends BaseNode {
 
 export interface AssignmentExpression extends BaseNode {
   type: "AssignmentExpression";
-  operator: string;
-  left: LVal | OptionalMemberExpression;
+  operator:
+    | "="
+    | "+="
+    | "-="
+    | "/="
+    | "%="
+    | "*="
+    | "**="
+    | "&="
+    | "|="
+    | ">>="
+    | ">>>="
+    | "<<="
+    | "^="
+    | "||="
+    | "&&="
+    | "??=";
+  left:
+    | Identifier
+    | MemberExpression
+    | OptionalMemberExpression
+    | ArrayPattern
+    | ObjectPattern
+    | TSAsExpression
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TSNonNullExpression;
   right: Expression;
 }
 
@@ -378,9 +400,10 @@ export interface CallExpression extends BaseNode {
   type: "CallExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
-  optional?: boolean | null;
-  typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?:
+    | TypeParameterInstantiation
+    | TSTypeParameterInstantiation
+    | null;
 }
 
 export interface CatchClause extends BaseNode {
@@ -429,7 +452,16 @@ export interface File extends BaseNode {
 
 export interface ForInStatement extends BaseNode {
   type: "ForInStatement";
-  left: VariableDeclaration | LVal;
+  left:
+    | VariableDeclaration
+    | Identifier
+    | MemberExpression
+    | ArrayPattern
+    | ObjectPattern
+    | TSAsExpression
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TSNonNullExpression;
   right: Expression;
   body: Statement;
 }
@@ -451,12 +483,8 @@ export interface FunctionDeclaration extends BaseNode {
   async: boolean;
   declare?: boolean | null;
   predicate?: DeclaredPredicate | InferredPredicate | null;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface FunctionExpression extends BaseNode {
@@ -467,12 +495,8 @@ export interface FunctionExpression extends BaseNode {
   generator: boolean;
   async: boolean;
   predicate?: DeclaredPredicate | InferredPredicate | null;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface Identifier extends BaseNode {
@@ -480,7 +504,7 @@ export interface Identifier extends BaseNode {
   name: string;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface IfStatement extends BaseNode {
@@ -545,21 +569,30 @@ export interface LogicalExpression extends BaseNode {
   right: Expression;
 }
 
-export interface MemberExpression extends BaseNode {
+export interface MemberExpressionComputed extends BaseNode {
   type: "MemberExpression";
   object: Expression | Super;
-  property: Expression | Identifier | PrivateName;
-  computed: boolean;
-  optional?: boolean | null;
+  computed: true;
+  property: Expression;
 }
+export interface MemberExpressionNonComputed extends BaseNode {
+  type: "MemberExpression";
+  object: Expression | Super;
+  computed: false;
+  property: Identifier | PrivateName;
+}
+export type MemberExpression =
+  | MemberExpressionComputed
+  | MemberExpressionNonComputed;
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
-  optional?: boolean | null;
-  typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?:
+    | TypeParameterInstantiation
+    | TSTypeParameterInstantiation
+    | null;
 }
 
 export interface Program extends BaseNode {
@@ -575,39 +608,56 @@ export interface ObjectExpression extends BaseNode {
   properties: (ObjectMethod | ObjectProperty | SpreadElement)[];
 }
 
-export interface ObjectMethod extends BaseNode {
+export interface ObjectMethodComputed extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
-  key: Expression | Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
   params: FunctionParameter[];
   body: BlockStatement;
-  computed: boolean;
   generator: boolean;
   async: boolean;
   decorators?: Decorator[] | null;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
+  computed: true;
+  key: Expression;
 }
+export interface ObjectMethodNonComputed extends BaseNode {
+  type: "ObjectMethod";
+  kind: "method" | "get" | "set";
+  params: FunctionParameter[];
+  body: BlockStatement;
+  generator: boolean;
+  async: boolean;
+  decorators?: Decorator[] | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
+  computed: false;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+}
+export type ObjectMethod = ObjectMethodComputed | ObjectMethodNonComputed;
 
-export interface ObjectProperty extends BaseNode {
+export interface ObjectPropertyComputed extends BaseNode {
   type: "ObjectProperty";
+  value: Expression | PatternLike;
+  shorthand: boolean;
+  decorators?: Decorator[] | null;
+  computed: true;
+  key: Expression;
+}
+export interface ObjectPropertyNonComputed extends BaseNode {
+  type: "ObjectProperty";
+  value: Expression | PatternLike;
+  shorthand: boolean;
+  decorators?: Decorator[] | null;
+  computed: false;
   key:
-    | Expression
     | Identifier
     | StringLiteral
     | NumericLiteral
     | BigIntLiteral
-    | DecimalLiteral
     | PrivateName;
-  value: Expression | PatternLike;
-  computed: boolean;
-  shorthand: boolean;
-  decorators?: Decorator[] | null;
 }
+export type ObjectProperty = ObjectPropertyComputed | ObjectPropertyNonComputed;
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
@@ -619,12 +669,10 @@ export interface RestElement extends BaseNode {
     | TSAsExpression
     | TSSatisfiesExpression
     | TSTypeAssertion
-    | TSNonNullExpression
-    | RestElement
-    | AssignmentPattern;
+    | TSNonNullExpression;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 /**
@@ -640,12 +688,10 @@ export interface RestProperty extends BaseNode {
     | TSAsExpression
     | TSSatisfiesExpression
     | TSTypeAssertion
-    | TSNonNullExpression
-    | RestElement
-    | AssignmentPattern;
+    | TSNonNullExpression;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface ReturnStatement extends BaseNode {
@@ -701,7 +747,7 @@ export interface UnaryExpression extends BaseNode {
 export interface UpdateExpression extends BaseNode {
   type: "UpdateExpression";
   operator: "++" | "--";
-  argument: Expression;
+  argument: Identifier | MemberExpression;
   prefix: boolean;
 }
 
@@ -714,7 +760,7 @@ export interface VariableDeclaration extends BaseNode {
 
 export interface VariableDeclarator extends BaseNode {
   type: "VariableDeclarator";
-  id: LVal | VoidPattern;
+  id: Identifier | ArrayPattern | ObjectPattern | VoidPattern;
   init?: Expression | null;
   definite?: boolean | null;
 }
@@ -745,7 +791,7 @@ export interface AssignmentPattern extends BaseNode {
   right: Expression;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface ArrayPattern extends BaseNode {
@@ -753,7 +799,7 @@ export interface ArrayPattern extends BaseNode {
   elements: (null | PatternLike)[];
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface ArrowFunctionExpression extends BaseNode {
@@ -764,12 +810,8 @@ export interface ArrowFunctionExpression extends BaseNode {
   expression: boolean;
   generator?: boolean;
   predicate?: DeclaredPredicate | InferredPredicate | null;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface ClassBody extends BaseNode {
@@ -792,17 +834,13 @@ export interface ClassExpression extends BaseNode {
   superClass?: Expression | null;
   body: ClassBody;
   decorators?: Decorator[] | null;
-  implements?: (TSExpressionWithTypeArguments | ClassImplements)[] | null;
+  implements?: (TSClassImplements | ClassImplements)[] | null;
   mixins?: InterfaceExtends | null;
-  superTypeParameters?:
+  superTypeArguments?:
     | TypeParameterInstantiation
     | TSTypeParameterInstantiation
     | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface ClassDeclaration extends BaseNode {
@@ -813,24 +851,19 @@ export interface ClassDeclaration extends BaseNode {
   decorators?: Decorator[] | null;
   abstract?: boolean | null;
   declare?: boolean | null;
-  implements?: (TSExpressionWithTypeArguments | ClassImplements)[] | null;
+  implements?: (TSClassImplements | ClassImplements)[] | null;
   mixins?: InterfaceExtends | null;
-  superTypeParameters?:
+  superTypeArguments?:
     | TypeParameterInstantiation
     | TSTypeParameterInstantiation
     | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface ExportAllDeclaration extends BaseNode {
   type: "ExportAllDeclaration";
   source: StringLiteral;
-  /** @deprecated */
-  assertions?: ImportAttribute[] | null;
+  assertions: any;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
@@ -854,8 +887,6 @@ export interface ExportNamedDeclaration extends BaseNode {
     | ExportNamespaceSpecifier
   )[];
   source?: StringLiteral | null;
-  /** @deprecated */
-  assertions?: ImportAttribute[] | null;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
@@ -869,7 +900,16 @@ export interface ExportSpecifier extends BaseNode {
 
 export interface ForOfStatement extends BaseNode {
   type: "ForOfStatement";
-  left: VariableDeclaration | LVal;
+  left:
+    | VariableDeclaration
+    | Identifier
+    | MemberExpression
+    | ArrayPattern
+    | ObjectPattern
+    | TSAsExpression
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TSNonNullExpression;
   right: Expression;
   body: Statement;
   await: boolean;
@@ -883,8 +923,6 @@ export interface ImportDeclaration extends BaseNode {
     | ImportNamespaceSpecifier
   )[];
   source: StringLiteral;
-  /** @deprecated */
-  assertions?: ImportAttribute[] | null;
   attributes?: ImportAttribute[] | null;
   importKind?: "type" | "typeof" | "value" | null;
   module?: boolean | null;
@@ -921,13 +959,11 @@ export interface MetaProperty extends BaseNode {
   property: Identifier;
 }
 
-export interface ClassMethod extends BaseNode {
+export interface ClassMethodComputed extends BaseNode {
   type: "ClassMethod";
   kind: "get" | "set" | "method" | "constructor";
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   params: (FunctionParameter | TSParameterProperty)[];
   body: BlockStatement;
-  computed: boolean;
   static: boolean;
   generator: boolean;
   async: boolean;
@@ -937,20 +973,38 @@ export interface ClassMethod extends BaseNode {
   decorators?: Decorator[] | null;
   optional?: boolean | null;
   override?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
+  computed: true;
+  key: Expression;
 }
+export interface ClassMethodNonComputed extends BaseNode {
+  type: "ClassMethod";
+  kind: "get" | "set" | "method" | "constructor";
+  params: (FunctionParameter | TSParameterProperty)[];
+  body: BlockStatement;
+  static: boolean;
+  generator: boolean;
+  async: boolean;
+  abstract?: boolean | null;
+  access?: "public" | "private" | "protected" | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  decorators?: Decorator[] | null;
+  optional?: boolean | null;
+  override?: boolean;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
+  computed: false;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+}
+export type ClassMethod = ClassMethodComputed | ClassMethodNonComputed;
 
 export interface ObjectPattern extends BaseNode {
   type: "ObjectPattern";
   properties: (RestElement | ObjectProperty)[];
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface SpreadElement extends BaseNode {
@@ -974,7 +1028,7 @@ export interface TaggedTemplateExpression extends BaseNode {
   type: "TaggedTemplateExpression";
   tag: Expression;
   quasi: TemplateLiteral;
-  typeParameters?:
+  typeArguments?:
     | TypeParameterInstantiation
     | TSTypeParameterInstantiation
     | null;
@@ -1009,7 +1063,7 @@ export interface Import extends BaseNode {
 
 export interface BigIntLiteral extends BaseNode {
   type: "BigIntLiteral";
-  value: string;
+  value: bigint;
 }
 
 export interface ExportNamespaceSpecifier extends BaseNode {
@@ -1030,17 +1084,17 @@ export interface OptionalCallExpression extends BaseNode {
   callee: Expression;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   optional: boolean;
-  typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?:
+    | TypeParameterInstantiation
+    | TSTypeParameterInstantiation
+    | null;
 }
 
-export interface ClassProperty extends BaseNode {
+export interface ClassPropertyComputed extends BaseNode {
   type: "ClassProperty";
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
   decorators?: Decorator[] | null;
-  computed: boolean;
   static: boolean;
   abstract?: boolean | null;
   accessibility?: "public" | "private" | "protected" | null;
@@ -1050,31 +1104,70 @@ export interface ClassProperty extends BaseNode {
   override?: boolean;
   readonly?: boolean | null;
   variance?: Variance | null;
+  computed: true;
+  key: Expression;
 }
+export interface ClassPropertyNonComputed extends BaseNode {
+  type: "ClassProperty";
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
+  decorators?: Decorator[] | null;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+  computed: false;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+}
+export type ClassProperty = ClassPropertyComputed | ClassPropertyNonComputed;
 
-export interface ClassAccessorProperty extends BaseNode {
+export interface ClassAccessorPropertyComputed extends BaseNode {
   type: "ClassAccessorProperty";
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
+  decorators?: Decorator[] | null;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+  computed: true;
+  key: Expression;
+}
+export interface ClassAccessorPropertyNonComputed extends BaseNode {
+  type: "ClassAccessorProperty";
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
+  decorators?: Decorator[] | null;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+  computed: false;
   key:
     | Identifier
     | StringLiteral
     | NumericLiteral
     | BigIntLiteral
-    | Expression
     | PrivateName;
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: Decorator[] | null;
-  computed: boolean;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean;
-  readonly?: boolean | null;
-  variance?: Variance | null;
 }
+export type ClassAccessorProperty =
+  | ClassAccessorPropertyComputed
+  | ClassAccessorPropertyNonComputed;
 
 export interface ClassPrivateProperty extends BaseNode {
   type: "ClassPrivateProperty";
@@ -1085,7 +1178,7 @@ export interface ClassPrivateProperty extends BaseNode {
   definite?: boolean | null;
   optional?: boolean | null;
   readonly?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
   variance?: Variance | null;
 }
 
@@ -1105,12 +1198,8 @@ export interface ClassPrivateMethod extends BaseNode {
   generator?: boolean;
   optional?: boolean | null;
   override?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?:
-    | TypeParameterDeclaration
-    | TSTypeParameterDeclaration
-    | Noop
-    | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface PrivateName extends BaseNode {
@@ -1219,8 +1308,6 @@ export interface DeclareExportDeclaration extends BaseNode {
   specifiers?: (ExportSpecifier | ExportNamespaceSpecifier)[] | null;
   source?: StringLiteral | null;
   attributes?: ImportAttribute[] | null;
-  /** @deprecated */
-  assertions?: ImportAttribute[] | null;
   default?: boolean | null;
 }
 
@@ -1228,8 +1315,6 @@ export interface DeclareExportAllDeclaration extends BaseNode {
   type: "DeclareExportAllDeclaration";
   source: StringLiteral;
   attributes?: ImportAttribute[] | null;
-  /** @deprecated */
-  assertions?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
 
@@ -1318,9 +1403,9 @@ export interface NumberTypeAnnotation extends BaseNode {
 export interface ObjectTypeAnnotation extends BaseNode {
   type: "ObjectTypeAnnotation";
   properties: (ObjectTypeProperty | ObjectTypeSpreadProperty)[];
-  indexers?: ObjectTypeIndexer[];
-  callProperties?: ObjectTypeCallProperty[];
-  internalSlots?: ObjectTypeInternalSlot[];
+  indexers: ObjectTypeIndexer[];
+  callProperties: ObjectTypeCallProperty[];
+  internalSlots: ObjectTypeInternalSlot[];
   exact: boolean;
   inexact?: boolean | null;
 }
@@ -1553,7 +1638,6 @@ export interface JSXElement extends BaseNode {
     | JSXElement
     | JSXFragment
   )[];
-  selfClosing?: boolean | null;
 }
 
 export interface JSXEmptyExpression extends BaseNode {
@@ -1592,8 +1676,10 @@ export interface JSXOpeningElement extends BaseNode {
   name: JSXIdentifier | JSXMemberExpression | JSXNamespacedName;
   attributes: (JSXAttribute | JSXSpreadAttribute)[];
   selfClosing: boolean;
-  typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?:
+    | TypeParameterInstantiation
+    | TSTypeParameterInstantiation
+    | null;
 }
 
 export interface JSXSpreadAttribute extends BaseNode {
@@ -1627,10 +1713,6 @@ export interface JSXClosingFragment extends BaseNode {
   type: "JSXClosingFragment";
 }
 
-export interface Noop extends BaseNode {
-  type: "Noop";
-}
-
 export interface Placeholder extends BaseNode {
   type: "Placeholder";
   expectedNode:
@@ -1645,7 +1727,7 @@ export interface Placeholder extends BaseNode {
   name: Identifier;
   decorators?: Decorator[] | null;
   optional?: boolean | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
 }
 
 export interface V8IntrinsicIdentifier extends BaseNode {
@@ -1677,21 +1759,6 @@ export interface DoExpression extends BaseNode {
 export interface ExportDefaultSpecifier extends BaseNode {
   type: "ExportDefaultSpecifier";
   exported: Identifier;
-}
-
-export interface RecordExpression extends BaseNode {
-  type: "RecordExpression";
-  properties: (ObjectProperty | SpreadElement)[];
-}
-
-export interface TupleExpression extends BaseNode {
-  type: "TupleExpression";
-  elements: (Expression | SpreadElement)[];
-}
-
-export interface DecimalLiteral extends BaseNode {
-  type: "DecimalLiteral";
-  value: string;
 }
 
 export interface ModuleExpression extends BaseNode {
@@ -1733,32 +1800,53 @@ export interface TSParameterProperty extends BaseNode {
 export interface TSDeclareFunction extends BaseNode {
   type: "TSDeclareFunction";
   id?: Identifier | null;
-  typeParameters?: TSTypeParameterDeclaration | Noop | null;
+  typeParameters?: TSTypeParameterDeclaration | null;
   params: FunctionParameter[];
-  returnType?: TSTypeAnnotation | Noop | null;
+  returnType?: TSTypeAnnotation | null;
   async?: boolean;
   declare?: boolean | null;
   generator?: boolean;
 }
 
-export interface TSDeclareMethod extends BaseNode {
+export interface TSDeclareMethodComputed extends BaseNode {
   type: "TSDeclareMethod";
   decorators?: Decorator[] | null;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
-  typeParameters?: TSTypeParameterDeclaration | Noop | null;
+  typeParameters?: TSTypeParameterDeclaration | null;
   params: (FunctionParameter | TSParameterProperty)[];
-  returnType?: TSTypeAnnotation | Noop | null;
+  returnType?: TSTypeAnnotation | null;
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
   async?: boolean;
-  computed?: boolean;
   generator?: boolean;
   kind?: "get" | "set" | "method" | "constructor";
   optional?: boolean | null;
   override?: boolean;
   static?: boolean;
+  computed: true;
+  key: Expression;
 }
+export interface TSDeclareMethodNonComputed extends BaseNode {
+  type: "TSDeclareMethod";
+  decorators?: Decorator[] | null;
+  typeParameters?: TSTypeParameterDeclaration | null;
+  params: (FunctionParameter | TSParameterProperty)[];
+  returnType?: TSTypeAnnotation | null;
+  abstract?: boolean | null;
+  access?: "public" | "private" | "protected" | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  async?: boolean;
+  generator?: boolean;
+  kind?: "get" | "set" | "method" | "constructor";
+  optional?: boolean | null;
+  override?: boolean;
+  static?: boolean;
+  computed: false;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+}
+export type TSDeclareMethod =
+  | TSDeclareMethodComputed
+  | TSDeclareMethodNonComputed;
 
 export interface TSQualifiedName extends BaseNode {
   type: "TSQualifiedName";
@@ -1769,15 +1857,15 @@ export interface TSQualifiedName extends BaseNode {
 export interface TSCallSignatureDeclaration extends BaseNode {
   type: "TSCallSignatureDeclaration";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
-  typeAnnotation?: TSTypeAnnotation | null;
+  params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
+  returnType?: TSTypeAnnotation | null;
 }
 
 export interface TSConstructSignatureDeclaration extends BaseNode {
   type: "TSConstructSignatureDeclaration";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
-  typeAnnotation?: TSTypeAnnotation | null;
+  params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
+  returnType?: TSTypeAnnotation | null;
 }
 
 export interface TSPropertySignature extends BaseNode {
@@ -1794,8 +1882,8 @@ export interface TSMethodSignature extends BaseNode {
   type: "TSMethodSignature";
   key: Expression;
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
-  typeAnnotation?: TSTypeAnnotation | null;
+  params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
+  returnType?: TSTypeAnnotation | null;
   computed?: boolean;
   kind: "method" | "get" | "set";
   optional?: boolean | null;
@@ -1868,22 +1956,22 @@ export interface TSThisType extends BaseNode {
 export interface TSFunctionType extends BaseNode {
   type: "TSFunctionType";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
-  typeAnnotation?: TSTypeAnnotation | null;
+  params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
+  returnType?: TSTypeAnnotation | null;
 }
 
 export interface TSConstructorType extends BaseNode {
   type: "TSConstructorType";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
-  typeAnnotation?: TSTypeAnnotation | null;
+  params: (ArrayPattern | Identifier | ObjectPattern | RestElement)[];
+  returnType?: TSTypeAnnotation | null;
   abstract?: boolean | null;
 }
 
 export interface TSTypeReference extends BaseNode {
   type: "TSTypeReference";
   typeName: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSTypePredicate extends BaseNode {
@@ -1896,7 +1984,7 @@ export interface TSTypePredicate extends BaseNode {
 export interface TSTypeQuery extends BaseNode {
   type: "TSTypeQuery";
   exprName: TSEntityName | TSImportType;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSTypeLiteral extends BaseNode {
@@ -1962,7 +2050,7 @@ export interface TSParenthesizedType extends BaseNode {
 export interface TSTypeOperator extends BaseNode {
   type: "TSTypeOperator";
   typeAnnotation: TSType;
-  operator: string;
+  operator: "keyof" | "readonly" | "unique";
 }
 
 export interface TSIndexedAccessType extends BaseNode {
@@ -1973,9 +2061,10 @@ export interface TSIndexedAccessType extends BaseNode {
 
 export interface TSMappedType extends BaseNode {
   type: "TSMappedType";
-  typeParameter: TSTypeParameter;
-  typeAnnotation?: TSType | null;
+  key: Identifier;
+  constraint: TSType;
   nameType?: TSType | null;
+  typeAnnotation?: TSType | null;
   optional?: true | false | "+" | "-" | null;
   readonly?: true | false | "+" | "-" | null;
 }
@@ -1997,17 +2086,23 @@ export interface TSLiteralType extends BaseNode {
     | UnaryExpression;
 }
 
-export interface TSExpressionWithTypeArguments extends BaseNode {
-  type: "TSExpressionWithTypeArguments";
-  expression: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
+export interface TSClassImplements extends BaseNode {
+  type: "TSClassImplements";
+  expression: Expression;
+  typeArguments?: TSTypeParameterInstantiation | null;
+}
+
+export interface TSInterfaceHeritage extends BaseNode {
+  type: "TSInterfaceHeritage";
+  expression: Expression;
+  typeArguments?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSInterfaceDeclaration extends BaseNode {
   type: "TSInterfaceDeclaration";
   id: Identifier;
   typeParameters?: TSTypeParameterDeclaration | null;
-  extends?: TSExpressionWithTypeArguments[] | null;
+  extends?: TSClassImplements[] | null;
   body: TSInterfaceBody;
   declare?: boolean | null;
 }
@@ -2028,7 +2123,7 @@ export interface TSTypeAliasDeclaration extends BaseNode {
 export interface TSInstantiationExpression extends BaseNode {
   type: "TSInstantiationExpression";
   expression: Expression;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?: TSTypeParameterInstantiation | null;
 }
 
 export interface TSAsExpression extends BaseNode {
@@ -2057,11 +2152,9 @@ export interface TSEnumBody extends BaseNode {
 export interface TSEnumDeclaration extends BaseNode {
   type: "TSEnumDeclaration";
   id: Identifier;
-  members: TSEnumMember[];
-  body?: TSEnumBody | null;
+  body: TSEnumBody;
   const?: boolean | null;
   declare?: boolean | null;
-  initializer?: Expression | null;
 }
 
 export interface TSEnumMember extends BaseNode {
@@ -2072,10 +2165,9 @@ export interface TSEnumMember extends BaseNode {
 
 export interface TSModuleDeclaration extends BaseNode {
   type: "TSModuleDeclaration";
-  id: Identifier | StringLiteral;
-  body: TSModuleBlock | TSModuleDeclaration;
+  id: TSEntityName | StringLiteral;
+  body: TSModuleBlock;
   declare?: boolean | null;
-  global?: boolean | null;
   kind: "global" | "module" | "namespace";
 }
 
@@ -2086,9 +2178,9 @@ export interface TSModuleBlock extends BaseNode {
 
 export interface TSImportType extends BaseNode {
   type: "TSImportType";
-  argument: StringLiteral;
+  source: StringLiteral;
   qualifier?: TSEntityName | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?: TSTypeParameterInstantiation | null;
   options?: ObjectExpression | null;
 }
 
@@ -2097,7 +2189,6 @@ export interface TSImportEqualsDeclaration extends BaseNode {
   id: Identifier;
   moduleReference: TSEntityName | TSExternalModuleReference;
   importKind?: "type" | "value" | null;
-  isExport: boolean;
 }
 
 export interface TSExternalModuleReference extends BaseNode {
@@ -2139,7 +2230,7 @@ export interface TSTypeParameter extends BaseNode {
   type: "TSTypeParameter";
   constraint?: TSType | null;
   default?: TSType | null;
-  name: string;
+  name: Identifier;
   const?: boolean | null;
   in?: boolean | null;
   out?: boolean | null;
@@ -2261,7 +2352,6 @@ export type Expression =
   | ClassExpression
   | ImportExpression
   | MetaProperty
-  | Super
   | TaggedTemplateExpression
   | TemplateLiteral
   | YieldExpression
@@ -2275,9 +2365,6 @@ export type Expression =
   | JSXFragment
   | BindExpression
   | DoExpression
-  | RecordExpression
-  | TupleExpression
-  | DecimalLiteral
   | ModuleExpression
   | TopicReference
   | PipelineTopicExpression
@@ -2427,8 +2514,7 @@ export type Pureish =
   | BooleanLiteral
   | RegExpLiteral
   | ArrowFunctionExpression
-  | BigIntLiteral
-  | DecimalLiteral;
+  | BigIntLiteral;
 export type Declaration =
   | FunctionDeclaration
   | VariableDeclaration
@@ -2479,16 +2565,13 @@ export type PatternLike =
 export type LVal =
   | Identifier
   | MemberExpression
-  | RestElement
-  | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
-  | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
   | TSTypeAssertion
   | TSNonNullExpression;
-export type TSEntityName = Identifier | TSQualifiedName;
+export type TSEntityName = Identifier | ThisExpression | TSQualifiedName;
 export type Literal =
   | StringLiteral
   | NumericLiteral
@@ -2496,8 +2579,7 @@ export type Literal =
   | BooleanLiteral
   | RegExpLiteral
   | TemplateLiteral
-  | BigIntLiteral
-  | DecimalLiteral;
+  | BigIntLiteral;
 export type Immutable =
   | StringLiteral
   | NumericLiteral
@@ -2513,8 +2595,7 @@ export type Immutable =
   | JSXText
   | JSXFragment
   | JSXOpeningFragment
-  | JSXClosingFragment
-  | DecimalLiteral;
+  | JSXClosingFragment;
 export type UserWhitespacable =
   | ObjectMethod
   | ObjectProperty
@@ -2700,7 +2781,7 @@ export type JSX =
   | JSXFragment
   | JSXOpeningFragment
   | JSXClosingFragment;
-export type Miscellaneous = Noop | Placeholder | V8IntrinsicIdentifier;
+export type Miscellaneous = Placeholder | V8IntrinsicIdentifier;
 export type TypeScript =
   | TSParameterProperty
   | TSDeclareFunction
@@ -2746,7 +2827,8 @@ export type TypeScript =
   | TSMappedType
   | TSTemplateLiteralType
   | TSLiteralType
-  | TSExpressionWithTypeArguments
+  | TSClassImplements
+  | TSInterfaceHeritage
   | TSInterfaceDeclaration
   | TSInterfaceBody
   | TSTypeAliasDeclaration
@@ -2810,7 +2892,8 @@ export type TSType =
   | TSMappedType
   | TSTemplateLiteralType
   | TSLiteralType
-  | TSExpressionWithTypeArguments
+  | TSClassImplements
+  | TSInterfaceHeritage
   | TSImportType;
 export type TSBaseType =
   | TSAnyKeyword
@@ -2966,11 +3049,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -2979,10 +3063,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3079,11 +3161,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3092,10 +3175,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3144,11 +3225,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3157,10 +3239,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3168,20 +3248,15 @@ export interface ParentMaps {
   AssignmentPattern:
     | ArrayPattern
     | ArrowFunctionExpression
-    | AssignmentExpression
     | ClassMethod
     | ClassPrivateMethod
-    | ForInStatement
-    | ForOfStatement
     | FunctionDeclaration
     | FunctionExpression
     | ObjectMethod
     | ObjectProperty
-    | RestElement
     | TSDeclareFunction
     | TSDeclareMethod
-    | TSParameterProperty
-    | VariableDeclarator;
+    | TSParameterProperty;
   AwaitExpression:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -3226,11 +3301,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3239,10 +3315,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3291,11 +3365,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSNonNullExpression
@@ -3305,10 +3380,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3357,11 +3430,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3370,10 +3444,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3422,11 +3494,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3435,10 +3508,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3512,11 +3583,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSNonNullExpression
@@ -3526,10 +3598,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3642,11 +3712,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3655,10 +3726,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3726,11 +3795,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3739,10 +3809,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3803,11 +3871,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -3816,10 +3885,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -3852,71 +3919,6 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  DecimalLiteral:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSDeclareMethod
-    | TSEnumDeclaration
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TupleExpression
-    | TypeCastExpression
-    | UnaryExpression
-    | UpdateExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
   DeclareClass:
     | BlockStatement
     | DeclareExportDeclaration
@@ -4158,11 +4160,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -4171,10 +4174,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -4472,11 +4473,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -4485,10 +4487,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -4633,6 +4633,7 @@ export interface ParentMaps {
     | SwitchStatement
     | TSAsExpression
     | TSCallSignatureDeclaration
+    | TSClassImplements
     | TSConstructSignatureDeclaration
     | TSConstructorType
     | TSDeclareFunction
@@ -4640,13 +4641,14 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
-    | TSExpressionWithTypeArguments
     | TSFunctionType
     | TSImportEqualsDeclaration
     | TSImportType
     | TSIndexSignature
     | TSInstantiationExpression
     | TSInterfaceDeclaration
+    | TSInterfaceHeritage
+    | TSMappedType
     | TSMethodSignature
     | TSModuleDeclaration
     | TSNamedTupleMember
@@ -4658,13 +4660,13 @@ export interface ParentMaps {
     | TSSatisfiesExpression
     | TSTypeAliasDeclaration
     | TSTypeAssertion
+    | TSTypeParameter
     | TSTypePredicate
     | TSTypeQuery
     | TSTypeReference
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeAlias
     | TypeCastExpression
     | UnaryExpression
@@ -4731,11 +4733,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -4744,10 +4747,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -4818,11 +4819,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -4831,10 +4833,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -4999,11 +4999,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5012,10 +5013,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5069,11 +5068,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5082,10 +5082,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5164,11 +5162,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5177,10 +5176,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5231,11 +5228,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5244,7 +5242,6 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
     | UpdateExpression
@@ -5296,11 +5293,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5309,10 +5307,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5386,11 +5382,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5399,10 +5396,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5451,11 +5446,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5464,34 +5460,12 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  Noop:
-    | ArrayPattern
-    | ArrowFunctionExpression
-    | AssignmentPattern
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | FunctionDeclaration
-    | FunctionExpression
-    | Identifier
-    | ObjectMethod
-    | ObjectPattern
-    | Placeholder
-    | RestElement
-    | TSDeclareFunction
-    | TSDeclareMethod;
   NullLiteral:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -5536,11 +5510,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5549,10 +5524,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5703,11 +5676,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSNonNullExpression
@@ -5717,10 +5691,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5769,12 +5741,13 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSImportType
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5783,10 +5756,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -5815,7 +5786,7 @@ export interface ParentMaps {
     | TSFunctionType
     | TSMethodSignature
     | VariableDeclarator;
-  ObjectProperty: ObjectExpression | ObjectPattern | RecordExpression;
+  ObjectProperty: ObjectExpression | ObjectPattern;
   ObjectTypeAnnotation:
     | ArrayTypeAnnotation
     | DeclareClass
@@ -5926,11 +5897,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -5939,10 +5911,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6016,11 +5986,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6029,10 +6000,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6081,11 +6050,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6094,10 +6064,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6146,11 +6114,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6159,10 +6128,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6211,11 +6178,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6224,10 +6192,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6276,11 +6242,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6289,10 +6256,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6312,71 +6277,6 @@ export interface ParentMaps {
     | GenericTypeAnnotation
     | InterfaceExtends
     | QualifiedTypeIdentifier;
-  RecordExpression:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSDeclareMethod
-    | TSEnumDeclaration
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TupleExpression
-    | TypeCastExpression
-    | UnaryExpression
-    | UpdateExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
   RegExpLiteral:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -6421,11 +6321,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6434,10 +6335,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6446,25 +6345,20 @@ export interface ParentMaps {
   RestElement:
     | ArrayPattern
     | ArrowFunctionExpression
-    | AssignmentExpression
     | ClassMethod
     | ClassPrivateMethod
-    | ForInStatement
-    | ForOfStatement
     | FunctionDeclaration
     | FunctionExpression
     | ObjectMethod
     | ObjectPattern
     | ObjectProperty
-    | RestElement
     | TSCallSignatureDeclaration
     | TSConstructSignatureDeclaration
     | TSConstructorType
     | TSDeclareFunction
     | TSDeclareMethod
     | TSFunctionType
-    | TSMethodSignature
-    | VariableDeclarator;
+    | TSMethodSignature;
   RestProperty: null;
   ReturnStatement:
     | BlockStatement
@@ -6524,11 +6418,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6537,10 +6432,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6550,9 +6443,7 @@ export interface ParentMaps {
     | CallExpression
     | NewExpression
     | ObjectExpression
-    | OptionalCallExpression
-    | RecordExpression
-    | TupleExpression;
+    | OptionalCallExpression;
   SpreadProperty: null;
   StaticBlock: ClassBody;
   StringLiteral:
@@ -6611,13 +6502,14 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSExternalModuleReference
     | TSImportType
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSModuleDeclaration
@@ -6628,10 +6520,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6686,71 +6576,7 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  Super:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSDeclareMethod
-    | TSEnumDeclaration
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TupleExpression
-    | TypeCastExpression
-    | UnaryExpression
-    | UpdateExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
+  Super: CallExpression | MemberExpression | NewExpression;
   SwitchCase: SwitchStatement;
   SwitchStatement:
     | BlockStatement
@@ -6881,11 +6707,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -6894,10 +6721,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -6947,6 +6772,31 @@ export interface ParentMaps {
     | TSUnionType
     | TemplateLiteral;
   TSCallSignatureDeclaration: TSInterfaceBody | TSTypeLiteral;
+  TSClassImplements:
+    | ClassDeclaration
+    | ClassExpression
+    | TSArrayType
+    | TSAsExpression
+    | TSConditionalType
+    | TSIndexedAccessType
+    | TSInterfaceDeclaration
+    | TSIntersectionType
+    | TSMappedType
+    | TSNamedTupleMember
+    | TSOptionalType
+    | TSParenthesizedType
+    | TSRestType
+    | TSSatisfiesExpression
+    | TSTemplateLiteralType
+    | TSTupleType
+    | TSTypeAliasDeclaration
+    | TSTypeAnnotation
+    | TSTypeAssertion
+    | TSTypeOperator
+    | TSTypeParameter
+    | TSTypeParameterInstantiation
+    | TSUnionType
+    | TemplateLiteral;
   TSConditionalType:
     | TSArrayType
     | TSAsExpression
@@ -7025,7 +6875,7 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TSEnumMember: TSEnumBody | TSEnumDeclaration;
+  TSEnumMember: TSEnumBody;
   TSExportAssignment:
     | BlockStatement
     | DoWhileStatement
@@ -7040,31 +6890,6 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TSExpressionWithTypeArguments:
-    | ClassDeclaration
-    | ClassExpression
-    | TSArrayType
-    | TSAsExpression
-    | TSConditionalType
-    | TSIndexedAccessType
-    | TSInterfaceDeclaration
-    | TSIntersectionType
-    | TSMappedType
-    | TSNamedTupleMember
-    | TSOptionalType
-    | TSParenthesizedType
-    | TSRestType
-    | TSSatisfiesExpression
-    | TSTemplateLiteralType
-    | TSTupleType
-    | TSTypeAliasDeclaration
-    | TSTypeAnnotation
-    | TSTypeAssertion
-    | TSTypeOperator
-    | TSTypeParameter
-    | TSTypeParameterInstantiation
-    | TSUnionType
-    | TemplateLiteral;
   TSExternalModuleReference: TSImportEqualsDeclaration;
   TSFunctionType:
     | TSArrayType
@@ -7215,11 +7040,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -7228,10 +7054,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -7252,6 +7076,28 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
+  TSInterfaceHeritage:
+    | TSArrayType
+    | TSAsExpression
+    | TSConditionalType
+    | TSIndexedAccessType
+    | TSIntersectionType
+    | TSMappedType
+    | TSNamedTupleMember
+    | TSOptionalType
+    | TSParenthesizedType
+    | TSRestType
+    | TSSatisfiesExpression
+    | TSTemplateLiteralType
+    | TSTupleType
+    | TSTypeAliasDeclaration
+    | TSTypeAnnotation
+    | TSTypeAssertion
+    | TSTypeOperator
+    | TSTypeParameter
+    | TSTypeParameterInstantiation
+    | TSUnionType
+    | TemplateLiteral;
   TSIntersectionType:
     | TSArrayType
     | TSAsExpression
@@ -7355,7 +7201,6 @@ export interface ParentMaps {
     | StaticBlock
     | SwitchCase
     | TSModuleBlock
-    | TSModuleDeclaration
     | WhileStatement
     | WithStatement;
   TSNamedTupleMember: TSTupleType;
@@ -7441,11 +7286,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -7454,10 +7300,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -7550,14 +7394,7 @@ export interface ParentMaps {
     | TSTypeParameterInstantiation
     | TSUnionType
     | TemplateLiteral;
-  TSParameterProperty:
-    | AssignmentExpression
-    | ClassMethod
-    | ClassPrivateMethod
-    | ForInStatement
-    | ForOfStatement
-    | TSDeclareMethod
-    | VariableDeclarator;
+  TSParameterProperty: ClassMethod | ClassPrivateMethod | TSDeclareMethod;
   TSParenthesizedType:
     | TSArrayType
     | TSAsExpression
@@ -7582,9 +7419,9 @@ export interface ParentMaps {
     | TemplateLiteral;
   TSPropertySignature: TSInterfaceBody | TSTypeLiteral;
   TSQualifiedName:
-    | TSExpressionWithTypeArguments
     | TSImportEqualsDeclaration
     | TSImportType
+    | TSModuleDeclaration
     | TSQualifiedName
     | TSTypeQuery
     | TSTypeReference;
@@ -7656,11 +7493,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -7669,10 +7507,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -7875,11 +7711,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -7888,10 +7725,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -7940,7 +7775,7 @@ export interface ParentMaps {
     | TSTypeParameterInstantiation
     | TSUnionType
     | TemplateLiteral;
-  TSTypeParameter: TSInferType | TSMappedType | TSTypeParameterDeclaration;
+  TSTypeParameter: TSInferType | TSTypeParameterDeclaration;
   TSTypeParameterDeclaration:
     | ArrowFunctionExpression
     | ClassDeclaration
@@ -7966,9 +7801,10 @@ export interface ParentMaps {
     | JSXOpeningElement
     | NewExpression
     | OptionalCallExpression
-    | TSExpressionWithTypeArguments
+    | TSClassImplements
     | TSImportType
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSTypeQuery
     | TSTypeReference
     | TaggedTemplateExpression;
@@ -8170,11 +8006,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -8183,10 +8020,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8236,11 +8071,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSNonNullExpression
@@ -8250,10 +8086,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8302,23 +8136,28 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportEqualsDeclaration
+    | TSImportType
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
+    | TSModuleDeclaration
     | TSNonNullExpression
     | TSPropertySignature
+    | TSQualifiedName
     | TSSatisfiesExpression
     | TSTypeAssertion
+    | TSTypeQuery
+    | TSTypeReference
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8406,11 +8245,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -8419,10 +8259,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8441,71 +8279,6 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TupleExpression:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSDeclareMethod
-    | TSEnumDeclaration
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TupleExpression
-    | TypeCastExpression
-    | UnaryExpression
-    | UpdateExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
   TupleTypeAnnotation:
     | ArrayTypeAnnotation
     | DeclareExportDeclaration
@@ -8615,11 +8388,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -8628,10 +8402,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8741,11 +8513,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSLiteralType
     | TSMethodSignature
     | TSNonNullExpression
@@ -8755,10 +8528,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8832,11 +8603,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -8845,10 +8617,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement
@@ -8988,11 +8758,12 @@ export interface ParentMaps {
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
+    | TSClassImplements
     | TSDeclareMethod
-    | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
     | TSInstantiationExpression
+    | TSInterfaceHeritage
     | TSMethodSignature
     | TSNonNullExpression
     | TSPropertySignature
@@ -9001,10 +8772,8 @@ export interface ParentMaps {
     | TaggedTemplateExpression
     | TemplateLiteral
     | ThrowStatement
-    | TupleExpression
     | TypeCastExpression
     | UnaryExpression
-    | UpdateExpression
     | VariableDeclarator
     | WhileStatement
     | WithStatement

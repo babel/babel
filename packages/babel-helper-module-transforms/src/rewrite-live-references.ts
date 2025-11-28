@@ -362,7 +362,6 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         if (importData) {
           path.replaceWith(
             t.assignmentExpression(
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               (update.operator[0] + "=") as t.AssignmentExpression["operator"],
               buildImportReference(importData, arg.node),
               buildImportThrow(localName),

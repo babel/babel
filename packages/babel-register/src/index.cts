@@ -6,8 +6,4 @@
  * from a compiled Babel import.
  */
 
-if (USE_ESM) {
-  module.exports = require("./experimental-worker.cjs");
-} else {
-  module.exports = require("./experimental-worker.cjs");
-}
+module.exports = require("./experimental-worker.cjs");

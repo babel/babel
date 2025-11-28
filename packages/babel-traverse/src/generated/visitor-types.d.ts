@@ -41,7 +41,6 @@ export interface ExplVisitorBase<S> {
   ConditionalExpression?: ExplVisitNode<S, t.ConditionalExpression>;
   ContinueStatement?: ExplVisitNode<S, t.ContinueStatement>;
   DebuggerStatement?: ExplVisitNode<S, t.DebuggerStatement>;
-  DecimalLiteral?: ExplVisitNode<S, t.DecimalLiteral>;
   DeclareClass?: ExplVisitNode<S, t.DeclareClass>;
   DeclareExportAllDeclaration?: ExplVisitNode<S, t.DeclareExportAllDeclaration>;
   DeclareExportDeclaration?: ExplVisitNode<S, t.DeclareExportDeclaration>;
@@ -124,7 +123,6 @@ export interface ExplVisitorBase<S> {
   MixedTypeAnnotation?: ExplVisitNode<S, t.MixedTypeAnnotation>;
   ModuleExpression?: ExplVisitNode<S, t.ModuleExpression>;
   NewExpression?: ExplVisitNode<S, t.NewExpression>;
-  Noop?: ExplVisitNode<S, t.Noop>;
   NullLiteral?: ExplVisitNode<S, t.NullLiteral>;
   NullLiteralTypeAnnotation?: ExplVisitNode<S, t.NullLiteralTypeAnnotation>;
   NullableTypeAnnotation?: ExplVisitNode<S, t.NullableTypeAnnotation>;
@@ -157,7 +155,6 @@ export interface ExplVisitorBase<S> {
   PrivateName?: ExplVisitNode<S, t.PrivateName>;
   Program?: ExplVisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: ExplVisitNode<S, t.QualifiedTypeIdentifier>;
-  RecordExpression?: ExplVisitNode<S, t.RecordExpression>;
   RegExpLiteral?: ExplVisitNode<S, t.RegExpLiteral>;
   RegexLiteral?: ExplVisitNode<S, t.RegexLiteral>;
   RestElement?: ExplVisitNode<S, t.RestElement>;
@@ -180,6 +177,7 @@ export interface ExplVisitorBase<S> {
   TSBigIntKeyword?: ExplVisitNode<S, t.TSBigIntKeyword>;
   TSBooleanKeyword?: ExplVisitNode<S, t.TSBooleanKeyword>;
   TSCallSignatureDeclaration?: ExplVisitNode<S, t.TSCallSignatureDeclaration>;
+  TSClassImplements?: ExplVisitNode<S, t.TSClassImplements>;
   TSConditionalType?: ExplVisitNode<S, t.TSConditionalType>;
   TSConstructSignatureDeclaration?: ExplVisitNode<
     S,
@@ -192,10 +190,6 @@ export interface ExplVisitorBase<S> {
   TSEnumDeclaration?: ExplVisitNode<S, t.TSEnumDeclaration>;
   TSEnumMember?: ExplVisitNode<S, t.TSEnumMember>;
   TSExportAssignment?: ExplVisitNode<S, t.TSExportAssignment>;
-  TSExpressionWithTypeArguments?: ExplVisitNode<
-    S,
-    t.TSExpressionWithTypeArguments
-  >;
   TSExternalModuleReference?: ExplVisitNode<S, t.TSExternalModuleReference>;
   TSFunctionType?: ExplVisitNode<S, t.TSFunctionType>;
   TSImportEqualsDeclaration?: ExplVisitNode<S, t.TSImportEqualsDeclaration>;
@@ -206,6 +200,7 @@ export interface ExplVisitorBase<S> {
   TSInstantiationExpression?: ExplVisitNode<S, t.TSInstantiationExpression>;
   TSInterfaceBody?: ExplVisitNode<S, t.TSInterfaceBody>;
   TSInterfaceDeclaration?: ExplVisitNode<S, t.TSInterfaceDeclaration>;
+  TSInterfaceHeritage?: ExplVisitNode<S, t.TSInterfaceHeritage>;
   TSIntersectionType?: ExplVisitNode<S, t.TSIntersectionType>;
   TSIntrinsicKeyword?: ExplVisitNode<S, t.TSIntrinsicKeyword>;
   TSLiteralType?: ExplVisitNode<S, t.TSLiteralType>;
@@ -261,7 +256,6 @@ export interface ExplVisitorBase<S> {
   ThrowStatement?: ExplVisitNode<S, t.ThrowStatement>;
   TopicReference?: ExplVisitNode<S, t.TopicReference>;
   TryStatement?: ExplVisitNode<S, t.TryStatement>;
-  TupleExpression?: ExplVisitNode<S, t.TupleExpression>;
   TupleTypeAnnotation?: ExplVisitNode<S, t.TupleTypeAnnotation>;
   TypeAlias?: ExplVisitNode<S, t.TypeAlias>;
   TypeAnnotation?: ExplVisitNode<S, t.TypeAnnotation>;
@@ -316,7 +310,6 @@ export interface VisitorBaseNodes<S> {
   ConditionalExpression?: VisitNode<S, t.ConditionalExpression>;
   ContinueStatement?: VisitNode<S, t.ContinueStatement>;
   DebuggerStatement?: VisitNode<S, t.DebuggerStatement>;
-  DecimalLiteral?: VisitNode<S, t.DecimalLiteral>;
   DeclareClass?: VisitNode<S, t.DeclareClass>;
   DeclareExportAllDeclaration?: VisitNode<S, t.DeclareExportAllDeclaration>;
   DeclareExportDeclaration?: VisitNode<S, t.DeclareExportDeclaration>;
@@ -399,7 +392,6 @@ export interface VisitorBaseNodes<S> {
   MixedTypeAnnotation?: VisitNode<S, t.MixedTypeAnnotation>;
   ModuleExpression?: VisitNode<S, t.ModuleExpression>;
   NewExpression?: VisitNode<S, t.NewExpression>;
-  Noop?: VisitNode<S, t.Noop>;
   NullLiteral?: VisitNode<S, t.NullLiteral>;
   NullLiteralTypeAnnotation?: VisitNode<S, t.NullLiteralTypeAnnotation>;
   NullableTypeAnnotation?: VisitNode<S, t.NullableTypeAnnotation>;
@@ -429,7 +421,6 @@ export interface VisitorBaseNodes<S> {
   PrivateName?: VisitNode<S, t.PrivateName>;
   Program?: VisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: VisitNode<S, t.QualifiedTypeIdentifier>;
-  RecordExpression?: VisitNode<S, t.RecordExpression>;
   RegExpLiteral?: VisitNode<S, t.RegExpLiteral>;
   RegexLiteral?: VisitNode<S, t.RegexLiteral>;
   RestElement?: VisitNode<S, t.RestElement>;
@@ -452,6 +443,7 @@ export interface VisitorBaseNodes<S> {
   TSBigIntKeyword?: VisitNode<S, t.TSBigIntKeyword>;
   TSBooleanKeyword?: VisitNode<S, t.TSBooleanKeyword>;
   TSCallSignatureDeclaration?: VisitNode<S, t.TSCallSignatureDeclaration>;
+  TSClassImplements?: VisitNode<S, t.TSClassImplements>;
   TSConditionalType?: VisitNode<S, t.TSConditionalType>;
   TSConstructSignatureDeclaration?: VisitNode<
     S,
@@ -464,7 +456,6 @@ export interface VisitorBaseNodes<S> {
   TSEnumDeclaration?: VisitNode<S, t.TSEnumDeclaration>;
   TSEnumMember?: VisitNode<S, t.TSEnumMember>;
   TSExportAssignment?: VisitNode<S, t.TSExportAssignment>;
-  TSExpressionWithTypeArguments?: VisitNode<S, t.TSExpressionWithTypeArguments>;
   TSExternalModuleReference?: VisitNode<S, t.TSExternalModuleReference>;
   TSFunctionType?: VisitNode<S, t.TSFunctionType>;
   TSImportEqualsDeclaration?: VisitNode<S, t.TSImportEqualsDeclaration>;
@@ -475,6 +466,7 @@ export interface VisitorBaseNodes<S> {
   TSInstantiationExpression?: VisitNode<S, t.TSInstantiationExpression>;
   TSInterfaceBody?: VisitNode<S, t.TSInterfaceBody>;
   TSInterfaceDeclaration?: VisitNode<S, t.TSInterfaceDeclaration>;
+  TSInterfaceHeritage?: VisitNode<S, t.TSInterfaceHeritage>;
   TSIntersectionType?: VisitNode<S, t.TSIntersectionType>;
   TSIntrinsicKeyword?: VisitNode<S, t.TSIntrinsicKeyword>;
   TSLiteralType?: VisitNode<S, t.TSLiteralType>;
@@ -524,7 +516,6 @@ export interface VisitorBaseNodes<S> {
   ThrowStatement?: VisitNode<S, t.ThrowStatement>;
   TopicReference?: VisitNode<S, t.TopicReference>;
   TryStatement?: VisitNode<S, t.TryStatement>;
-  TupleExpression?: VisitNode<S, t.TupleExpression>;
   TupleTypeAnnotation?: VisitNode<S, t.TupleTypeAnnotation>;
   TypeAlias?: VisitNode<S, t.TypeAlias>;
   TypeAnnotation?: VisitNode<S, t.TypeAnnotation>;

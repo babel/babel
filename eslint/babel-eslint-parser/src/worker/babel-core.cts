@@ -17,8 +17,4 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.createConfigItemSync = babel.createConfigItemSync;
 }
 
-if (USE_ESM) {
-  exports.init = import("@babel/core").then(initialize);
-} else {
-  initialize(require("@babel/core"));
-}
+exports.init = import("@babel/core").then(initialize);

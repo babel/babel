@@ -477,7 +477,6 @@ export default abstract class ExpressionParser extends LValParser {
             // PrivateName must be followed by `in`, but we have `|>`
             return left as N.Expression;
           }
-          this.checkPipelineAtInfixOperator(left as N.Expression, leftStartLoc);
         }
         const node = this.startNodeAt<N.LogicalExpression | N.BinaryExpression>(
           leftStartLoc,
@@ -532,7 +531,6 @@ export default abstract class ExpressionParser extends LValParser {
     op: TokenType,
     prec: number,
   ): N.Expression {
-    const startLoc = this.state.startLoc;
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
@@ -2960,67 +2958,6 @@ export default abstract class ExpressionParser extends LValParser {
     }
     this.expect(tt.parenR);
     return this.finishNode(node, "ImportExpression");
-  }
-
-  // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
-  // of the infix operator `|>`.
-
-  checkPipelineAtInfixOperator(left: N.Expression, leftStartLoc: Position) {
-    // @ts-expect-error Remove this in Babel 8
-    if (this.hasPlugin(["pipelineOperator", { proposal: "smart" }])) {
-      if (left.type === "SequenceExpression") {
-        // Ensure that the pipeline head is not a comma-delimited
-        // sequence expression.
-        this.raise(Errors.PipelineHeadSequenceExpression!, leftStartLoc);
-      }
-    }
-  }
-
-  parseSmartPipelineBodyInStyle(childExpr: N.Expression, startLoc: Position) {
-    if (this.isSimpleReference(childExpr)) {
-      const bodyNode = this.startNodeAt<N.PipelineBareFunction>(startLoc);
-      bodyNode.callee = childExpr;
-      return this.finishNode(bodyNode, "PipelineBareFunction");
-    } else {
-      const bodyNode = this.startNodeAt<N.PipelineTopicExpression>(startLoc);
-      this.checkSmartPipeTopicBodyEarlyErrors(startLoc);
-      bodyNode.expression = childExpr;
-      return this.finishNode(bodyNode, "PipelineTopicExpression");
-    }
-  }
-
-  isSimpleReference(expression: N.Expression): boolean {
-    switch (expression.type) {
-      case "MemberExpression":
-        return (
-          !expression.computed && this.isSimpleReference(expression.object)
-        );
-      case "Identifier":
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  // This helper method is to be called immediately
-  // after a topic-style smart-mix pipe body is parsed.
-  // The `startLoc` is the starting position of the pipe body.
-
-  checkSmartPipeTopicBodyEarlyErrors(startLoc: Position): void {
-    // If the following token is invalidly `=>`, then throw a human-friendly error
-    // instead of something like 'Unexpected token, expected ";"'.
-    // For example, `x => x |> y => #` (assuming `#` is the topic reference)
-    // groups into `x => (x |> y) => #`,
-    // and `(x |> y) => #` is an invalid arrow function.
-    // This is because smart-mix `|>` has tighter precedence than `=>`.
-    if (this.match(tt.arrow)) {
-      throw this.raise(Errors.PipelineBodyNoArrow!, this.state.startLoc);
-    }
-
-    // A topic-style smart-mix pipe body must use the topic reference at least once.
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
-      this.raise(Errors.PipelineTopicUnused!, startLoc);
-    }
   }
 
   // Enable topic references from outer contexts within Hack-style pipe bodies.

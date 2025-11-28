@@ -624,7 +624,7 @@ export function TSModuleDeclaration(
   this: Printer,
   node: t.TSModuleDeclaration,
 ) {
-  const { declare, id, kind } = node;
+  const { declare, kind } = node;
 
   if (declare) {
     this.word("declare");

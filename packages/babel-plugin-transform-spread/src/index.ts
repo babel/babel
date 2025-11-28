@@ -201,7 +201,6 @@ export default declare((api, options: Options) => {
               "=",
               temp,
               // object must not be Super when `temp` is an identifier
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               callee.object as t.Expression,
             );
             contextLiteral = temp;

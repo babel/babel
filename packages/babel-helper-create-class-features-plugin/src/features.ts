@@ -41,7 +41,7 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
   }
 
   let resolvedLoose: boolean | undefined;
-  for (const [mask, name] of featuresSameLoose) {
+  for (const [mask] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
 
     const loose = isLoose(file, mask);
