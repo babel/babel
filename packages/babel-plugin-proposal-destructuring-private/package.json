@@ -26,7 +26,6 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/plugin-syntax-decimal": "condition:BABEL_8_BREAKING ? : ^7.24.7",
     "@babel/plugin-transform-class-properties": "workspace:^",
     "@babel/plugin-transform-class-static-block": "workspace:^",
     "@babel/traverse": "workspace:^",
@@ -34,7 +33,7 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-destructuring-private",
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "exports": {
@@ -51,14 +50,6 @@
       {
         "type": "commonjs"
       }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {}
     ]
   }
 }

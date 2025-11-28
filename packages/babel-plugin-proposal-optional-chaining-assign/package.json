@@ -30,18 +30,10 @@
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {}
-    ],
     "USE_ESM": [
       null,
       {

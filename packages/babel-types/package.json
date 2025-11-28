@@ -25,27 +25,9 @@
     "@babel/parser": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null,
-        "types": "./lib/index-legacy.d.ts",
-        "typesVersions": {
-          ">=4.1": {
-            "lib/index-legacy.d.ts": [
-              "lib/index.d.ts"
-            ]
-          }
-        }
-      }
-    ],
     "USE_ESM": [
       null,
       {

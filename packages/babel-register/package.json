@@ -15,12 +15,10 @@
   "type": "commonjs",
   "main": "./lib/index.cjs",
   "dependencies": {
-    "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
+    "@cspotcode/source-map-support": "^0.8.1",
     "clone-deep": "^4.0.1",
-    "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
-    "pirates": "^4.0.6",
-    "source-map-support": "condition:BABEL_8_BREAKING ? : ^0.5.16"
+    "find-cache-dir": "^3.3.1",
+    "pirates": "^4.0.6"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -34,23 +32,7 @@
   "homepage": "https://babel.dev/docs/en/next/babel-register",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen",
   "engines": {
-    "node": ">=6.9.0"
-  },
-  "browser": {
-    "./lib/index.cjs": "./lib/browser.cjs"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "browser": null,
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ]
+    "node": "^20.19.0 || >=22.12.0"
   },
   "exports": {
     ".": {
@@ -58,5 +40,8 @@
       "default": "./lib/index.cjs"
     },
     "./package.json": "./package.json"
+  },
+  "browser": {
+    "./lib/index.cjs": "./lib/browser.cjs"
   }
 }

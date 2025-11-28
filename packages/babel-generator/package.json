@@ -23,7 +23,7 @@
     "@babel/types": "workspace:^",
     "@jridgewell/gen-mapping": "^0.3.12",
     "@jridgewell/trace-mapping": "^0.3.28",
-    "@types/jsesc": "condition:BABEL_8_BREAKING ? ^2.5.0 :",
+    "@types/jsesc": "^2.5.0",
     "jsesc": "^3.0.2"
   },
   "devDependencies": {
@@ -34,19 +34,9 @@
     "charcodes": "^0.2.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

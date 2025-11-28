@@ -1201,13 +1201,5 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "type": "commonjs",
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "private": true
-      },
-      {}
-    ]
-  }
+  "type": "commonjs"
 }

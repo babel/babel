@@ -28,8 +28,8 @@
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.24.0",
-    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    "lru-cache": "^7.14.1",
+    "semver": "^7.3.4"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^",
@@ -37,7 +37,7 @@
     "@types/semver": "^5.5.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "type": "module",
   "conditions": {
@@ -46,14 +46,6 @@
       {
         "type": "commonjs"
       }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {}
     ]
   }
 }

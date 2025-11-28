@@ -146,19 +146,7 @@
     "directory": "packages/babel-standalone"
   },
   "engines": {
-    "node": ">=6.9.0"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ]
+    "node": "^20.19.0 || >=22.12.0"
   },
   "exports": {
     ".": "./babel.js",

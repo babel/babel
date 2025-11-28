@@ -19,14 +19,6 @@
     "./package.json": "./package.json"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {}
-    ],
     "USE_ESM": [
       null,
       {
@@ -42,7 +34,7 @@
     "globals": "^16.1.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "type": "module"
 }

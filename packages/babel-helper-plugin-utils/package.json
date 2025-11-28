@@ -15,7 +15,7 @@
   },
   "main": "./lib/index.js",
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^"
@@ -24,17 +24,6 @@
     "@babel/core": "^7.0.0"
   },
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null,
-        "peerDependencies": null
-      }
-    ],
     "USE_ESM": [
       null,
       {

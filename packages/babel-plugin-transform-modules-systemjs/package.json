@@ -15,8 +15,7 @@
   "dependencies": {
     "@babel/helper-module-transforms": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^",
-    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^"
   },
   "keywords": [
     "babel-plugin"
@@ -32,20 +31,10 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-systemjs",
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^20.19.0 || >=22.12.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
     "USE_ESM": [
       null,
       {
