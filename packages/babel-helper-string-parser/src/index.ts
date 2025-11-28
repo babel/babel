@@ -118,16 +118,7 @@ export function readStringContents(
       ++pos;
     }
   }
-  return process.env.BABEL_8_BREAKING
-    ? { pos, str: out, firstInvalidLoc, lineStart, curLine }
-    : {
-        pos,
-        str: out,
-        firstInvalidLoc,
-        lineStart,
-        curLine,
-        containsInvalid: !!firstInvalidLoc,
-      };
+  return { pos, str: out, firstInvalidLoc, lineStart, curLine };
 }
 
 function isStringEnd(

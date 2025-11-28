@@ -193,9 +193,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);
   const ignorePatterns = content
     .split("\n")
-    .map(line =>
-      line.replace(process.env.BABEL_8_BREAKING ? /^#.*$/ : /#.*$/, "").trim(),
-    )
+    .map(line => line.replace(/^#.*$/, "").trim())
     .filter(Boolean);
 
   for (const pattern of ignorePatterns) {

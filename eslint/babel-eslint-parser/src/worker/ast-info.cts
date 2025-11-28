@@ -30,13 +30,6 @@ export function getVisitorKeys() {
       ...newTypes,
       ...babel.types.VISITOR_KEYS,
       ...conflictTypes,
-      ...(process.env.BABEL_8_BREAKING
-        ? {}
-        : {
-            ClassPrivateMethod: ["decorators"].concat(
-              ESLINT_VISITOR_KEYS.MethodDefinition,
-            ),
-          }),
     };
   }
   return visitorKeys;
@@ -44,9 +37,7 @@ export function getVisitorKeys() {
 
 let tokLabels;
 export function getTokLabels() {
-  return (tokLabels ||= (
-    process.env.BABEL_8_BREAKING
-      ? Object.fromEntries
-      : (p: any[]) => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {})
-  )(Object.entries(babel.tokTypes).map(([key, tok]) => [key, tok.label])));
+  return (tokLabels ||= Object.fromEntries(
+    Object.entries(babel.tokTypes).map(([key, tok]) => [key, tok.label]),
+  ));
 }

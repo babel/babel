@@ -17,30 +17,20 @@ export default (_: any, opts: any = {}) => {
     presets: [
       [
         presetStage2,
-        process.env.BABEL_8_BREAKING
-          ? {
-              loose,
-              useBuiltIns,
-              decoratorsLegacy,
-              decoratorsVersion,
-              decoratorsBeforeExport,
-              pipelineProposal,
-              pipelineTopicToken,
-            }
-          : {
-              loose,
-              useBuiltIns,
-              decoratorsLegacy,
-              decoratorsVersion,
-              decoratorsBeforeExport,
-              pipelineProposal,
-              pipelineTopicToken,
-              recordAndTupleSyntax: opts.recordAndTupleSyntax,
-            },
+
+        {
+          loose,
+          useBuiltIns,
+          decoratorsLegacy,
+          decoratorsVersion,
+          decoratorsBeforeExport,
+          pipelineProposal,
+          pipelineTopicToken,
+        },
       ],
     ],
     plugins: [
-      ...(process.env.BABEL_8_BREAKING ? [] : [babelPlugins.syntaxDecimal]),
+      ...[],
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalDoExpressions,
       [

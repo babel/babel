@@ -31,7 +31,3 @@ const rulesConfig = {
 exports.meta = meta;
 exports.rules = rules;
 exports.rulesConfig = rulesConfig;
-
-if (!process.env.BABEL_8_BREAKING) {
-  exports.default = { meta, rules, rulesConfig };
-}

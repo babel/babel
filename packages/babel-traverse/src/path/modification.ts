@@ -406,19 +406,3 @@ export function pushContainer<
 
   return path.replaceWithMultiple(verifiedNodes) as NodePaths<Nodes>;
 }
-
-import PathHoister from "./lib/hoister.ts" with { if: "!process.env.BABEL_8_BREAKING && !USE_ESM" };
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Hoist the current node to the highest scope possible and return a UID
-   * referencing it.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.hoist = function hoist<N extends t.Node>(
-    this: NodePath<N>,
-    scope: Scope = this.scope,
-  ) {
-    const hoister = new PathHoister<N>(this, scope);
-    return hoister.run();
-  };
-}

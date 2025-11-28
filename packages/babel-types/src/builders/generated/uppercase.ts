@@ -7,19 +7,15 @@ import * as b from "./lowercase.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
 function alias<const N extends keyof typeof b>(lowercase: N): (typeof b)[N] {
-  if (process.env.BABEL_8_BREAKING) {
-    return function () {
-      deprecationWarning(
-        lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
-        lowercase,
-        "Usage of builders starting with an uppercase letter such as ",
-        "uppercase builders",
-      );
-      return (b[lowercase] as any)(...arguments);
-    } as any;
-  } else {
-    return b[lowercase];
-  }
+  return function () {
+    deprecationWarning(
+      lowercase.replace(/^(?:ts|jsx|[a-z])/, x => x.toUpperCase()),
+      lowercase,
+      "Usage of builders starting with an uppercase letter such as ",
+      "uppercase builders",
+    );
+    return (b[lowercase] as any)(...arguments);
+  } as any;
 }
 
 export const ArrayExpression = alias("arrayExpression"),

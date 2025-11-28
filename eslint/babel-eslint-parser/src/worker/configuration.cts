@@ -32,34 +32,16 @@ function normalizeParserOptions(
   showIgnoredFiles?: boolean;
 } {
   // Babel <= 7.28.0 does not support `sourceType: "commonjs"`.
-  if (
-    !process.env.BABEL_8_BREAKING &&
-    options.sourceType === "commonjs" &&
-    !semver.satisfies(version, REQUIRED_VERSION(">=7.28.0"))
-  ) {
-    options.sourceType = "script";
-    options.ecmaFeatures = {
-      ...(options.ecmaFeatures ?? {}),
-      globalReturn: true,
-    };
-  }
+
   return {
     sourceType: options.sourceType,
     filename: options.filePath,
     ...options.babelOptions,
     parserOpts: {
-      ...(process.env.BABEL_8_BREAKING
-        ? {}
-        : {
-            allowImportExportEverywhere:
-              options.allowImportExportEverywhere ?? false,
-            allowSuperOutsideMethod: true,
-          }),
       ...(options.sourceType !== "commonjs"
         ? {
             allowReturnOutsideFunction:
-              options.ecmaFeatures?.globalReturn ??
-              (process.env.BABEL_8_BREAKING ? false : true),
+              options.ecmaFeatures?.globalReturn ?? false,
           }
         : {}),
       ...options.babelOptions.parserOpts,

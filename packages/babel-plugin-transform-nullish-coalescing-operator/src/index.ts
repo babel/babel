@@ -12,10 +12,7 @@ export default declare((api, { loose = false }: Options) => {
 
   return {
     name: "transform-nullish-coalescing-operator",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("nullishCoalescingOperator"),
-
+    manipulateOptions: undefined,
     visitor: {
       LogicalExpression(path) {
         const { node, scope } = path;

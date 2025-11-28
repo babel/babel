@@ -114,11 +114,8 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
       passes,
       file.opts.wrapPluginVisitorMethod,
     );
-    if (process.env.BABEL_8_BREAKING) {
-      traverse(file.ast.program, visitor, file.scope, null, file.path, true);
-    } else {
-      traverse(file.ast, visitor, file.scope);
-    }
+
+    traverse(file.ast.program, visitor, file.scope, null, file.path, true);
 
     for (const [plugin, pass] of passPairs) {
       if (plugin.post) {

@@ -9,12 +9,6 @@ import { patternLikeCommon } from "./core.ts";
 
 const defineType = defineAliasedType("Miscellaneous");
 
-if (!process.env.BABEL_8_BREAKING) {
-  defineType("Noop", {
-    visitor: [],
-  });
-}
-
 defineType("Placeholder", {
   visitor: [],
   builder: ["expectedNode", "name"],

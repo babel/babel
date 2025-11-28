@@ -233,43 +233,13 @@ export = function convertTokens(
   tokLabels: Record<string, any>,
 ) {
   const result = [];
-  const templateTypeMergedTokens = process.env.BABEL_8_BREAKING
-    ? tokens
-    : convertTemplateType(tokens, tokLabels);
+  const templateTypeMergedTokens = tokens;
   // The last token is always tt.eof and should be skipped
   for (let i = 0, { length } = templateTypeMergedTokens; i < length - 1; i++) {
     const token = templateTypeMergedTokens[i];
     const tokenType = token.type;
     if (tokenType === "CommentLine" || tokenType === "CommentBlock") {
       continue;
-    }
-
-    if (!process.env.BABEL_8_BREAKING) {
-      // Babel 8 already produces a single token
-
-      if (
-        ESLINT_VERSION >= 8 &&
-        i + 1 < length &&
-        tokenType.label === tokLabels.hash
-      ) {
-        const nextToken = templateTypeMergedTokens[i + 1];
-
-        // We must disambiguate private identifier from the hack pipes topic token
-        if (
-          nextToken.type.label === tokLabels.name &&
-          token.end === nextToken.start
-        ) {
-          i++;
-
-          nextToken.type = "PrivateIdentifier";
-          nextToken.start -= 1;
-          nextToken.loc.start.column -= 1;
-          nextToken.range = [nextToken.start, nextToken.end];
-
-          result.push(nextToken);
-          continue;
-        }
-      }
     }
 
     result.push(convertToken(token, code, tokLabels));

@@ -95,7 +95,7 @@ export default declare(api => {
             t.assignmentExpression(
               "=",
               t.cloneNode(receiverLVal),
-              // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.foo(?)`
+
               receiver,
             ),
             t.assignmentExpression(

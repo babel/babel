@@ -50,12 +50,7 @@ const helperIDs = new WeakMap();
 
 export default function addCallSuperHelper(file: File) {
   if (helperIDs.has(file)) {
-    if (process.env.BABEL_8_BREAKING) {
-      return t.cloneNode(helperIDs.get(file));
-    } else {
-      // t.cloneNode isn't supported in every version
-      return (t.cloneNode || t.clone)(helperIDs.get(file));
-    }
+    return t.cloneNode(helperIDs.get(file));
   }
 
   try {

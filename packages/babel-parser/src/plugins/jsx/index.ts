@@ -133,13 +133,12 @@ export default (superClass: typeof Parser) =>
 
           case charCodes.greaterThan:
           case charCodes.rightCurlyBrace:
-            if (process.env.BABEL_8_BREAKING) {
-              this.raise(JsxErrors.UnexpectedToken, this.state.curPosition(), {
-                unexpected: this.input[this.state.pos],
-                HTMLEntity:
-                  ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
-              });
-            }
+            this.raise(JsxErrors.UnexpectedToken, this.state.curPosition(), {
+              unexpected: this.input[this.state.pos],
+              HTMLEntity:
+                ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
+            });
+
           /* falls through */
 
           default:
@@ -375,20 +374,19 @@ export default (superClass: typeof Parser) =>
       } else {
         const expression = this.parseExpression();
 
-        if (process.env.BABEL_8_BREAKING) {
-          if (
-            expression.type === "SequenceExpression" &&
-            !expression.extra?.parenthesized
-          ) {
-            this.raise(
-              JsxErrors.UnexpectedSequenceExpression,
-              expression.expressions[1],
-            );
-          }
+        if (
+          expression.type === "SequenceExpression" &&
+          !expression.extra?.parenthesized
+        ) {
+          this.raise(
+            JsxErrors.UnexpectedSequenceExpression,
+            expression.expressions[1],
+          );
         }
 
         node.expression = expression;
       }
+
       this.setContext(previousContext);
       this.state.canStartJSXElement = true;
       this.expect(tt.braceR);

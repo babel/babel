@@ -6,10 +6,7 @@ export default declare(api => {
 
   return {
     name: "transform-export-namespace-from",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("exportNamespaceFrom"),
-
+    manipulateOptions: undefined,
     visitor: {
       ExportNamedDeclaration(path) {
         const { node, scope } = path;

@@ -18,12 +18,7 @@ export default declare(({ types: t, assertVersion }) => {
           }
           // Hoist variable declaration to containing function scope
           // `async do { var x = 1; x }` -> `var x; (async() => { x = 1; return x })()`
-          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-            // polyfill when being run by an older Babel version
-            path.scope.hoistVariables ??=
-              // eslint-disable-next-line no-restricted-globals
-              require("@babel/traverse").Scope.prototype.hoistVariables;
-          }
+
           path.scope.hoistVariables();
 
           const bodyPath = path.get("body");

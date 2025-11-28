@@ -33,18 +33,16 @@ export default declare(({ types: t, assertVersion }) => {
     if (t.isClassExpression(path.node)) return true;
     if (t.isFunction(path.node)) return false;
     const state = { found: false };
-    if (process.env.BABEL_8_BREAKING) {
-      t.traverseFast(path.node, node => {
-        if (t.isClassExpression(node)) {
-          state.found = true;
-          return t.traverseFast.stop;
-        } else if (t.isFunction(node)) {
-          return t.traverseFast.skip;
-        }
-      });
-    } else {
-      path.traverse(containsClassExpressionVisitor, state);
-    }
+
+    t.traverseFast(path.node, node => {
+      if (t.isClassExpression(node)) {
+        state.found = true;
+        return t.traverseFast.stop;
+      } else if (t.isFunction(node)) {
+        return t.traverseFast.skip;
+      }
+    });
+
     return state.found;
   }
 
@@ -53,19 +51,16 @@ export default declare(({ types: t, assertVersion }) => {
       yield: t.isYieldExpression(path.node),
       await: t.isAwaitExpression(path.node),
     };
-    if (process.env.BABEL_8_BREAKING) {
-      t.traverseFast(path.node, node => {
-        if (t.isYieldExpression(node)) {
-          context.yield = true;
-          if (context.await) return t.traverseFast.stop;
-        } else if (t.isAwaitExpression(node)) {
-          context.await = true;
-          if (context.yield) return t.traverseFast.stop;
-        }
-      });
-    } else {
-      path.traverse(containsYieldOrAwaitVisitor, context);
-    }
+
+    t.traverseFast(path.node, node => {
+      if (t.isYieldExpression(node)) {
+        context.yield = true;
+        if (context.await) return t.traverseFast.stop;
+      } else if (t.isAwaitExpression(node)) {
+        context.await = true;
+        if (context.yield) return t.traverseFast.stop;
+      }
+    });
 
     let replacement;
 

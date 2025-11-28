@@ -58,7 +58,7 @@ export function DeclareFunction(
   this.word("function");
   this.space();
   this.print(node.id);
-  // @ts-ignore(Babel 7 vs Babel 8) TODO(Babel 8) Remove this comment, since we'll remove the Noop node
+
   this.print(node.id.typeAnnotation.typeAnnotation);
 
   if (node.predicate) {

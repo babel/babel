@@ -1,4 +1,4 @@
-if (!process.env.IS_PUBLISH && !USE_ESM && process.env.BABEL_8_BREAKING) {
+if (!process.env.IS_PUBLISH && !USE_ESM) {
   throw new Error(
     "BABEL_8_BREAKING is only supported in ESM. Please run `make use-esm`.",
   );
@@ -104,20 +104,3 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
   ".mjs",
   ".cjs",
 ] as const);
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
-  // eslint-disable-next-line no-restricted-globals
-  exports.OptionManager = class OptionManager {
-    init(opts: any) {
-      return loadOptionsSync(opts);
-    }
-  };
-
-  // eslint-disable-next-line no-restricted-globals
-  exports.Plugin = function Plugin(alias: string) {
-    throw new Error(
-      `The (${alias}) Babel 5 plugin is being run with an unsupported Babel version.`,
-    );
-  };
-}

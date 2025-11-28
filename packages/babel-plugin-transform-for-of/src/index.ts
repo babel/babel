@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t, type NodePath } from "@babel/core";
 
-import transformWithoutHelper from "./no-helper-implementation.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 export interface Options {
@@ -48,15 +47,6 @@ export default declare((api, options: Options) => {
       throw new Error(
         `The assumeArray and allowArrayLike options cannot be used together in @babel/plugin-transform-for-of`,
       );
-    }
-
-    if (!process.env.BABEL_8_BREAKING) {
-      // TODO: Remove in Babel 8
-      if (allowArrayLike && /^7\.\d\./.test(api.version)) {
-        throw new Error(
-          `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
-        );
-      }
     }
   }
 
@@ -219,23 +209,9 @@ export default declare((api, options: Options) => {
     visitor: {
       ForOfStatement(path, state) {
         const right = path.get("right");
-        if (
-          right.isArrayExpression() ||
-          (process.env.BABEL_8_BREAKING
-            ? right.isGenericType("Array")
-            : right.isGenericType("Array") ||
-              t.isArrayTypeAnnotation(right.getTypeAnnotation()))
-        ) {
+        if (right.isArrayExpression() || right.isGenericType("Array")) {
           path.replaceWith(_ForOfStatementArray(path));
           return;
-        }
-
-        if (!process.env.BABEL_8_BREAKING) {
-          if (!state.availableHelper(builder.helper)) {
-            // Babel <7.9.0 doesn't support this helper
-            transformWithoutHelper(skipIteratorClosing, path, state);
-            return;
-          }
         }
 
         const { node, parent, scope } = path;

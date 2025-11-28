@@ -9,14 +9,6 @@ import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring"
 
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
 // We need to detect this bug to know if "unused" means 0 or 1 references.
-if (!process.env.BABEL_8_BREAKING) {
-  const node = t.identifier("a");
-  const property = t.objectProperty(t.identifier("key"), node);
-  const pattern = t.objectPattern([property]);
-
-  // eslint-disable-next-line no-var
-  var ZERO_REFS = t.isReferenced(node, property, pattern) ? 1 : 0;
-}
 
 export interface Options {
   useBuiltIns?: boolean;
@@ -225,8 +217,7 @@ export default declare((api, opts: Options) => {
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references >
-          (process.env.BABEL_8_BREAKING ? 0 : ZERO_REFS) ||
+        path.scope.getBinding(bindingName).references > 0 ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
@@ -411,10 +402,7 @@ export default declare((api, opts: Options) => {
 
   return {
     name: "transform-object-rest-spread",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("objectRestSpread"),
-
+    manipulateOptions: undefined,
     visitor: {
       // function a({ b, ...c }) {}
       Function(path) {
@@ -688,15 +676,9 @@ export default declare((api, opts: Options) => {
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
         // top-level statement.
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.splitExportDeclaration ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-        }
+
         path.splitExportDeclaration();
       },
-
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
@@ -865,22 +847,7 @@ export default declare((api, opts: Options) => {
         if (setSpreadProperties) {
           helper = getExtendsHelper(file);
         } else {
-          if (process.env.BABEL_8_BREAKING) {
-            helper = file.addHelper("objectSpread2");
-          } else {
-            try {
-              helper = file.addHelper("objectSpread2");
-            } catch {
-              // TODO: This is needed to workaround https://github.com/babel/babel/issues/10187
-              // and https://github.com/babel/babel/issues/10179 for older @babel/core versions
-              // where #10187 isn't fixed.
-              this.file.declarations.objectSpread2 = null;
-
-              // objectSpread2 has been introduced in v7.5.0
-              // We have to maintain backward compatibility.
-              helper = file.addHelper("objectSpread");
-            }
-          }
+          helper = file.addHelper("objectSpread2");
         }
 
         let exp: t.CallExpression = null;

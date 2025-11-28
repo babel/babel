@@ -59,18 +59,3 @@ export default class PluginPass<Options = object> {
     return this.file.buildCodeFrameError(node, msg, _Error);
   }
 }
-
-if (!process.env.BABEL_8_BREAKING) {
-  (PluginPass as any).prototype.getModuleName = function getModuleName(
-    this: PluginPass,
-  ): string | undefined {
-    // @ts-expect-error only exists in Babel 7
-    return this.file.getModuleName();
-  };
-  (PluginPass as any).prototype.addImport = function addImport(
-    this: PluginPass,
-  ): void {
-    // @ts-expect-error only exists in Babel 7
-    this.file.addImport();
-  };
-}

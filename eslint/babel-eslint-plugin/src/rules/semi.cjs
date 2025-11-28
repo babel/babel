@@ -95,7 +95,6 @@ if (parseInt(eslintVersion, 10) >= 8) {
           options && options.omitLastInOneLineBlock === true;
         const sourceCode = context.getSourceCode();
         const lastToken = sourceCode.getLastToken(node);
-
         if (context.options[0] === "never") {
           if (isUnnecessarySemicolon(context, lastToken)) {
             report(context, node, true);

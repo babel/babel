@@ -31,12 +31,6 @@ export function removeUnsupportedItems(
       )
     ) {
       items.delete(item);
-    } else if (
-      !process.env.BABEL_8_BREAKING &&
-      babelVersion.startsWith("8") &&
-      legacyBabel7SyntaxPlugins.has(item)
-    ) {
-      items.delete(item);
     }
   });
 }

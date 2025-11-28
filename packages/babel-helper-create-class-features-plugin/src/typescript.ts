@@ -3,12 +3,7 @@ import type { NodePath, types as t } from "@babel/core";
 export function assertFieldTransformed(
   path: NodePath<t.ClassProperty | t.ClassDeclaration>,
 ) {
-  if (
-    path.node.declare ||
-    (process.env.BABEL_8_BREAKING
-      ? path.isClassProperty({ definite: true })
-      : false)
-  ) {
+  if (path.node.declare || path.isClassProperty({ definite: true })) {
     throw path.buildCodeFrameError(
       `TypeScript 'declare' fields must first be transformed by ` +
         `@babel/plugin-transform-typescript.\n` +

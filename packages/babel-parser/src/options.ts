@@ -218,7 +218,7 @@ function createDefaultOptions(): OptionsWithDefaults {
     tokens: false,
     // Whether to create ImportExpression AST nodes (if false
     // `import(foo)` will be parsed as CallExpression(Import, [Identifier(foo)])
-    createImportExpressions: process.env.BABEL_8_BREAKING ? true : false,
+    createImportExpressions: true,
     // Whether to create ParenthesizedExpression AST nodes (if false
     // the parser sets extra.parenthesized on the expression nodes instead).
     createParenthesizedExpressions: false,
@@ -262,11 +262,9 @@ export function getOptions(opts?: Options | null): OptionsWithDefaults {
       options.startColumn = options.startIndex;
     }
   } else if (opts.startColumn == null || opts.startIndex == null) {
-    if (opts.startIndex != null || process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "With a `startLine > 1` you must also specify `startIndex` and `startColumn`.",
-      );
-    }
+    throw new Error(
+      "With a `startLine > 1` you must also specify `startIndex` and `startColumn`.",
+    );
   }
 
   if (options.sourceType === "commonjs") {

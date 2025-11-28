@@ -131,46 +131,32 @@ function handleNested(
   parentExport?: t.Expression,
 ): t.Statement | null {
   const names = new Set();
-  const realName =
-    !process.env.BABEL_8_BREAKING || t.isIdentifier(node.id)
-      ? (node.id as t.Identifier)
-      : getFirstIdentifier(node.id as unknown as t.TSQualifiedName);
+  const realName = t.isIdentifier(node.id)
+    ? (node.id as t.Identifier)
+    : getFirstIdentifier(node.id as unknown as t.TSQualifiedName);
 
   const name = path.scope.generateUid(realName.name);
 
   const body = node.body;
   let id = node.id;
   let namespaceTopLevel: t.Statement[];
-  if (process.env.BABEL_8_BREAKING) {
-    if (t.isTSQualifiedName(id)) {
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-      namespaceTopLevel = body.body;
-      while (t.isTSQualifiedName(id)) {
-        namespaceTopLevel = [
-          t.exportNamedDeclaration(
-            t.tsModuleDeclaration(
-              // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-              t.cloneNode(id.right),
-              t.tsModuleBlock(namespaceTopLevel),
-            ),
-          ),
-        ];
 
-        // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-        id = id.left;
-      }
-    } else {
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-      namespaceTopLevel = body.body;
+  if (t.isTSQualifiedName(id)) {
+    namespaceTopLevel = body.body;
+    while (t.isTSQualifiedName(id)) {
+      namespaceTopLevel = [
+        t.exportNamedDeclaration(
+          t.tsModuleDeclaration(
+            t.cloneNode(id.right),
+            t.tsModuleBlock(namespaceTopLevel),
+          ),
+        ),
+      ];
+
+      id = id.left;
     }
   } else {
-    namespaceTopLevel = t.isTSModuleBlock(body)
-      ? body.body
-      : // We handle `namespace X.Y {}` as if it was
-        //   namespace X {
-        //     export namespace Y {}
-        //   }
-        [t.exportNamedDeclaration(body)];
+    namespaceTopLevel = body.body;
   }
 
   let isEmpty = true;

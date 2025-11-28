@@ -146,7 +146,6 @@ function assertVersion(range: string | number): void {
 
   if (
     typeof process !== "undefined" &&
-    process.env.BABEL_8_BREAKING &&
     process.env.BABEL_7_TO_8_DANGEROUSLY_DISABLE_VERSION_CHECK
   ) {
     console.warn(message);

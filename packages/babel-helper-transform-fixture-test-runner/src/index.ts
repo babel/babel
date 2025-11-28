@@ -41,26 +41,6 @@ type Module = {
   exports: Record<string, unknown>;
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  // Introduced in Node.js 10
-  if (!assert.rejects) {
-    assert.rejects = async function (block, validateError) {
-      try {
-        await (typeof block === "function" ? block() : block);
-        return Promise.reject(new Error("Promise not rejected"));
-      } catch (error) {
-        // @ts-expect-error Fixme: validateError can be a string | object
-        // see https://nodejs.org/api/assert.html#assertrejectsasyncfn-error-message
-        if (typeof validateError === "function" && !validateError(error)) {
-          return Promise.reject(
-            new Error("Promise rejected with invalid error"),
-          );
-        }
-      }
-    };
-  }
-}
-
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
 const cachedScripts = new LruCache<
@@ -148,24 +128,13 @@ function runCacheableScriptInTestContext(
   }
 
   let script: vm.Script;
-  if (process.env.BABEL_8_BREAKING) {
-    script = new vm.Script(cached.code, {
-      filename,
-      lineOffset: -1,
-      cachedData: cached.cachedData,
-    });
-    cached.cachedData = script.createCachedData();
-  } else {
-    script = new vm.Script(cached.code, {
-      filename,
-      lineOffset: -1,
-      cachedData: cached.cachedData,
-      produceCachedData: true,
-    });
-    if (script.cachedDataProduced) {
-      cached.cachedData = script.cachedData;
-    }
-  }
+
+  script = new vm.Script(cached.code, {
+    filename,
+    lineOffset: -1,
+    cachedData: cached.cachedData,
+  });
+  cached.cachedData = script.createCachedData();
 
   const module = {
     id: filename,
@@ -510,25 +479,6 @@ function normalizeOutput(
     }
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // In Babel 8, preset-env logs transform- instead of proposal-. Manually rewrite
-    // the output logs so that we don't have to duplicate all the debug fixtures for
-    // the two different Babel versions.
-    if (normalizePresetEnvDebug) {
-      result = result.replace(/(\s+)proposal-/g, "$1transform-");
-    }
-
-    // For some reasons, in older Node.js versions some symlinks are not properly
-    // resolved. The behavior is still ok, but we need to unify the output with
-    // newer Node.js versions.
-    if (parseInt(process.versions.node, 10) <= 8) {
-      result = result.replace(
-        /<CWD>\/node_modules\/@babel\/runtime-corejs3/g,
-        "<CWD>/packages/babel-runtime-corejs3",
-      );
-    }
-  }
-
   return result;
 }
 
@@ -676,19 +626,14 @@ const tmpDir = realpathSync(os.tmpdir());
 const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
   const files: Record<string, string> = {};
   if (fs.existsSync(loc)) {
-    if (process.env.BABEL_8_BREAKING) {
-      fs.readdirSync(loc, { withFileTypes: true, recursive: true })
-        .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
-        .forEach(dirent => {
-          const fullpath = path.join(dirent.parentPath, dirent.name);
-          files[path.relative(loc, fullpath)] = readFile(fullpath);
-        });
-    } else {
-      readdirRecursive(loc, pathFilter).forEach(function (filename) {
-        files[filename] = readFile(path.join(loc, filename));
+    fs.readdirSync(loc, { withFileTypes: true, recursive: true })
+      .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
+      .forEach(dirent => {
+        const fullpath = path.join(dirent.parentPath, dirent.name);
+        files[path.relative(loc, fullpath)] = readFile(fullpath);
       });
-    }
   }
+
   return files;
 };
 
@@ -889,10 +834,7 @@ export function buildProcessTests(
       const skip =
         (opts.minNodeVersion &&
           parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
-        (process.env.BABEL_8_BREAKING
-          ? opts.BABEL_8_BREAKING === false
-          : opts.BABEL_8_BREAKING === true);
-
+        opts.BABEL_8_BREAKING === false;
       const test: ProcessTest = {
         suiteName,
         testName,

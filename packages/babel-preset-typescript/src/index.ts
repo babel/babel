@@ -23,40 +23,21 @@ export default declarePreset((api, opts: Options) => {
     rewriteImportExtensions,
   } = normalizeOptions(opts);
 
-  const pluginOptions = process.env.BABEL_8_BREAKING
-    ? (disallowAmbiguousJSXLike: boolean) => ({
-        allowNamespaces,
-        disallowAmbiguousJSXLike,
-        jsxPragma,
-        jsxPragmaFrag,
-        onlyRemoveTypeImports,
-        optimizeConstEnums,
-      })
-    : (disallowAmbiguousJSXLike: boolean) => ({
-        allowDeclareFields: opts.allowDeclareFields,
-        allowNamespaces,
-        disallowAmbiguousJSXLike,
-        jsxPragma,
-        jsxPragmaFrag,
-        onlyRemoveTypeImports,
-        optimizeConstEnums,
-      });
+  const pluginOptions = (disallowAmbiguousJSXLike: boolean) => ({
+    allowNamespaces,
+    disallowAmbiguousJSXLike,
+    jsxPragma,
+    jsxPragmaFrag,
+    onlyRemoveTypeImports,
+    optimizeConstEnums,
+  });
 
   const getPlugins = (isTSX: boolean, disallowAmbiguousJSXLike: boolean) => {
-    if (process.env.BABEL_8_BREAKING) {
-      const tsPlugin: PluginItem = [
-        transformTypeScript,
-        pluginOptions(disallowAmbiguousJSXLike),
-      ];
-      return isTSX ? [tsPlugin, syntaxJSX] : [tsPlugin];
-    } else {
-      return [
-        [
-          transformTypeScript,
-          { isTSX, ...pluginOptions(disallowAmbiguousJSXLike) },
-        ] satisfies PluginItem,
-      ];
-    }
+    const tsPlugin: PluginItem = [
+      transformTypeScript,
+      pluginOptions(disallowAmbiguousJSXLike),
+    ];
+    return isTSX ? [tsPlugin, syntaxJSX] : [tsPlugin];
   };
 
   const disableExtensionDetect = allExtensions || ignoreExtensions;
@@ -69,22 +50,16 @@ export default declarePreset((api, opts: Options) => {
         // Babel is being called with a filename.
         [
           {
-            test: !process.env.BABEL_8_BREAKING
-              ? /\.ts$/
-              : filename => filename == null || filename.endsWith(".ts"),
+            test: filename => filename == null || filename.endsWith(".ts"),
             plugins: getPlugins(false, false),
           },
           {
-            test: !process.env.BABEL_8_BREAKING
-              ? /\.mts$/
-              : filename => filename?.endsWith(".mts"),
+            test: filename => filename?.endsWith(".mts"),
             sourceType: "module",
             plugins: getPlugins(false, true),
           },
           {
-            test: !process.env.BABEL_8_BREAKING
-              ? /\.cts$/
-              : filename => filename?.endsWith(".cts"),
+            test: filename => filename?.endsWith(".cts"),
             sourceType: "unambiguous",
             plugins: [
               [transformModulesCommonJS, { allowTopLevelThis: true }],
@@ -92,9 +67,7 @@ export default declarePreset((api, opts: Options) => {
             ],
           },
           {
-            test: !process.env.BABEL_8_BREAKING
-              ? /\.tsx$/
-              : filename => filename?.endsWith(".tsx"),
+            test: filename => filename?.endsWith(".tsx"),
             // disallowAmbiguousJSXLike is a no-op when parsing TSX, since it's
             // always disallowed.
             plugins: getPlugins(true, false),

@@ -54,7 +54,7 @@ export default function transpileConstEnum(
       );
     } else {
       path.replaceWith(
-        t.variableDeclaration(process.env.BABEL_8_BREAKING ? "const" : "var", [
+        t.variableDeclaration("const", [
           t.variableDeclarator(path.node.id, obj),
         ]),
       );

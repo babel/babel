@@ -593,20 +593,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
         this.raise(TSErrors.UnsupportedImportTypeArgument, this.state.startLoc);
-        if (process.env.BABEL_8_BREAKING) {
-          // Consume as an non-conditional type so that we can recover from this error
-          node.source = this.tsParseNonConditionalType() as any;
-        } else {
-          node.argument = super.parseExprAtom() as any;
-        }
+
+        // Consume as an non-conditional type so that we can recover from this error
+        node.source = this.tsParseNonConditionalType() as any;
       } else {
-        if (process.env.BABEL_8_BREAKING) {
-          node.source = this.parseStringLiteral(this.state.value);
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-          node.argument = this.parseStringLiteral(this.state.value);
-        }
+        node.source = this.parseStringLiteral(this.state.value);
       }
+
       if (this.eat(tt.comma)) {
         node.options = this.tsParseImportTypeOptions();
       } else {
@@ -623,12 +616,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
       if (this.match(tt.lt)) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.typeArguments = this.tsParseTypeArguments();
-        } else {
-          node.typeParameters = this.tsParseTypeArguments();
-        }
+        node.typeArguments = this.tsParseTypeArguments();
       }
+
       return this.finishNode(node, "TSImportType");
     }
 
@@ -706,12 +696,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
       );
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.typeArguments = this.tsParseTypeArguments();
-        } else {
-          node.typeParameters = this.tsParseTypeArguments();
-        }
+        node.typeArguments = this.tsParseTypeArguments();
       }
+
       return this.finishNode(node, "TSTypeReference");
     }
 
@@ -736,24 +723,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (this.match(tt._import)) {
         node.exprName = this.tsParseImportType();
       } else {
-        if (process.env.BABEL_8_BREAKING) {
-          node.exprName = this.tsParseEntityName(
-            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
-          );
-        } else {
-          node.exprName = this.tsParseEntityName(
-            tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
-              tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
-          );
-        }
+        node.exprName = this.tsParseEntityName(
+          tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
+        );
       }
+
       if (!this.hasPrecedingLineBreak() && this.match(tt.lt)) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.typeArguments = this.tsParseTypeArguments();
-        } else {
-          node.typeParameters = this.tsParseTypeArguments();
-        }
+        node.typeArguments = this.tsParseTypeArguments();
       }
+
       return this.finishNode(node, "TSTypeQuery");
     }
 
@@ -851,11 +829,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const returnTokenRequired = returnToken === tt.arrow;
 
       // https://github.com/babel/babel/issues/9231
-      const paramsKey = process.env.BABEL_8_BREAKING ? "params" : "parameters";
-      const returnTypeKey = process.env.BABEL_8_BREAKING
-        ? "returnType"
-        : "typeAnnotation";
-
+      const paramsKey = "params";
+      const returnTypeKey = "returnType";
       signature.typeParameters = this.tsTryParseTypeParameters(
         this.tsParseConstModifier,
       );
@@ -967,12 +942,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
-        const paramsKey = process.env.BABEL_8_BREAKING
-          ? "params"
-          : "parameters";
-        const returnTypeKey = process.env.BABEL_8_BREAKING
-          ? "returnType"
-          : "typeAnnotation";
+        const paramsKey = "params";
+        const returnTypeKey = "returnType";
         if (method.kind === "get") {
           if (method[paramsKey].length > 0) {
             this.raise(Errors.BadGetterArity, this.state.curPosition());
@@ -1138,16 +1109,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       this.expect(tt.bracketL);
-      if (process.env.BABEL_8_BREAKING) {
-        node.key = this.tsParseTypeParameterName() as N.Identifier;
-        node.constraint = this.tsExpectThenParseType(tt._in);
-      } else {
-        const typeParameter = this.startNode<N.TsTypeParameter>();
-        typeParameter.name = this.tsParseTypeParameterName();
-        typeParameter.constraint = this.tsExpectThenParseType(tt._in);
-        // @ts-expect-error for Babel 7
-        node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
-      }
+
+      node.key = this.tsParseTypeParameterName() as N.Identifier;
+      node.constraint = this.tsExpectThenParseType(tt._in);
+
       node.nameType = this.eatContextual(tt._as) ? this.tsParseType() : null;
 
       this.expect(tt.bracketR);
@@ -1333,33 +1298,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsParseTemplateLiteralType(): N.TsTemplateLiteralType | N.TsLiteralType {
-      if (process.env.BABEL_8_BREAKING) {
-        const startLoc = this.state.startLoc;
-        let curElt = this.parseTemplateElement(false);
-        const quasis = [curElt];
-        if (curElt.tail) {
-          const node = this.startNodeAt<N.TsLiteralType>(startLoc);
-          const literal = this.startNodeAt<N.TemplateLiteral>(startLoc);
-          literal.expressions = [];
-          literal.quasis = quasis;
-          node.literal = this.finishNode(literal, "TemplateLiteral");
-          return this.finishNode(node, "TSLiteralType");
-        } else {
-          const substitutions: N.TsType[] = [];
-          while (!curElt.tail) {
-            substitutions.push(this.tsParseType());
-            this.readTemplateContinuation();
-            quasis.push((curElt = this.parseTemplateElement(false)));
-          }
-          const node = this.startNodeAt<N.TsTemplateLiteralType>(startLoc);
-          node.types = substitutions;
-          node.quasis = quasis;
-          return this.finishNode(node, "TSTemplateLiteralType");
-        }
-      } else {
-        const node = this.startNode<N.TsLiteralType>();
-        node.literal = super.parseTemplate(false);
+      const startLoc = this.state.startLoc;
+      let curElt = this.parseTemplateElement(false);
+      const quasis = [curElt];
+      if (curElt.tail) {
+        const node = this.startNodeAt<N.TsLiteralType>(startLoc);
+        const literal = this.startNodeAt<N.TemplateLiteral>(startLoc);
+        literal.expressions = [];
+        literal.quasis = quasis;
+        node.literal = this.finishNode(literal, "TemplateLiteral");
         return this.finishNode(node, "TSLiteralType");
+      } else {
+        const substitutions: N.TsType[] = [];
+        while (!curElt.tail) {
+          substitutions.push(this.tsParseType());
+          this.readTemplateContinuation();
+          quasis.push((curElt = this.parseTemplateElement(false)));
+        }
+        const node = this.startNodeAt<N.TsTemplateLiteralType>(startLoc);
+        node.types = substitutions;
+        node.quasis = quasis;
+        return this.finishNode(node, "TSTemplateLiteralType");
       }
     }
 
@@ -1409,18 +1368,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case tt.bracketL:
           return this.tsParseTupleType();
         case tt.parenL:
-          if (process.env.BABEL_8_BREAKING) {
-            if (
-              !(this.optionFlags & OptionFlags.CreateParenthesizedExpressions)
-            ) {
-              const startLoc = this.state.startLoc;
-              this.next();
-              const type = this.tsParseType();
-              this.expect(tt.parenR);
-              this.addExtra(type, "parenthesized", true);
-              this.addExtra(type, "parenStart", startLoc.index);
-              return type;
-            }
+          if (
+            !(this.optionFlags & OptionFlags.CreateParenthesizedExpressions)
+          ) {
+            const startLoc = this.state.startLoc;
+            this.next();
+            const type = this.tsParseType();
+            this.expect(tt.parenR);
+            this.addExtra(type, "parenthesized", true);
+            this.addExtra(type, "parenStart", startLoc.index);
+            return type;
           }
 
           return this.tsParseParenthesizedType();
@@ -1852,52 +1809,31 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          if (process.env.BABEL_8_BREAKING) {
-            const expression = super.parseExprSubscripts();
-            if (!tsIsEntityName(expression)) {
-              this.raise(
-                TSErrors.InvalidHeritageClauseType,
-                expression.loc.start,
-                { token },
-              );
-            }
-            const nodeType =
-              token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements";
-            if (expression.type === "TSInstantiationExpression") {
-              // @ts-expect-error cast TSInstantiationExpression to TSInterfaceHeritage/TSClassImplements
-              expression.type = nodeType;
-              return expression;
-            }
-            const node = this.startNodeAtNode<
-              N.TSInterfaceHeritage | N.TSClassImplements
-            >(expression);
-            node.expression = expression;
-            // The last element can not form a TSInstantiationExpression because of the bail condition in
-            // `parseSubscript`, in this case we have to parse type arguments again
-            if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
-              node.typeArguments = this.tsParseTypeArgumentsInExpression();
-            }
-            return this.finishNode(node, nodeType);
-          } else {
-            const node = this.startNode<
-              N.TSInterfaceHeritage | N.TSClassImplements
-            >();
-            // @ts-expect-error Babel 7 vs Babel 8
-            node.expression = this.tsParseEntityName(
-              tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
-                tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
-            );
-            if (this.match(tt.lt)) {
-              // @ts-expect-error Babel 7 vs Babel 8
-              node.typeParameters = this.tsParseTypeArguments();
-            }
-
-            return this.finishNode(
-              node,
-              // @ts-expect-error Babel 7 vs Babel 8
-              "TSExpressionWithTypeArguments",
+          const expression = super.parseExprSubscripts();
+          if (!tsIsEntityName(expression)) {
+            this.raise(
+              TSErrors.InvalidHeritageClauseType,
+              expression.loc.start,
+              { token },
             );
           }
+          const nodeType =
+            token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements";
+          if (expression.type === "TSInstantiationExpression") {
+            // @ts-expect-error cast TSInstantiationExpression to TSInterfaceHeritage/TSClassImplements
+            expression.type = nodeType;
+            return expression;
+          }
+          const node = this.startNodeAtNode<
+            N.TSInterfaceHeritage | N.TSClassImplements
+          >(expression);
+          node.expression = expression;
+          // The last element can not form a TSInstantiationExpression because of the bail condition in
+          // `parseSubscript`, in this case we have to parse type arguments again
+          if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
+            node.typeArguments = this.tsParseTypeArgumentsInExpression();
+          }
+          return this.finishNode(node, nodeType);
         },
       );
 
@@ -2070,16 +2006,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.const ? BindingFlag.TYPE_TS_CONST_ENUM : BindingFlag.TYPE_TS_ENUM,
       );
 
-      if (process.env.BABEL_8_BREAKING) {
-        node.body = this.tsParseEnumBody();
-      } else {
-        this.expect(tt.braceL);
-        node.members = this.tsParseDelimitedList(
-          "EnumMembers",
-          this.tsParseEnumMember.bind(this),
-        );
-        this.expect(tt.braceR);
-      }
+      node.body = this.tsParseEnumBody();
+
       return this.finishNode(node, "TSEnumDeclaration");
     }
 
@@ -2114,29 +2042,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.TsModuleDeclaration>,
       nested: boolean = false,
     ): N.TsModuleDeclaration {
-      node.id = process.env.BABEL_8_BREAKING
-        ? this.tsParseEntityName(tsParseEntityNameFlags.ALLOW_RESERVED_WORDS)
-        : this.parseIdentifier();
+      node.id = this.tsParseEntityName(
+        tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
+      );
 
-      if (
-        process.env.BABEL_8_BREAKING ? node.id.type === "Identifier" : !nested
-      ) {
+      if (node.id.type === "Identifier") {
         // @ts-expect-error checked above
         this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
-      if (!process.env.BABEL_8_BREAKING && this.eat(tt.dot)) {
-        const inner = this.startNode<N.TsModuleDeclaration>();
-        this.tsParseModuleOrNamespaceDeclaration(inner, true);
-        // @ts-expect-error Fixme: refine typings
-        node.body = inner;
-      } else {
-        this.scope.enter(ScopeFlag.TS_MODULE);
-        this.prodParam.enter(ParamKind.PARAM);
-        node.body = this.tsParseModuleBlock();
-        this.prodParam.exit();
-        this.scope.exit();
-      }
+      this.scope.enter(ScopeFlag.TS_MODULE);
+      this.prodParam.enter(ParamKind.PARAM);
+      node.body = this.tsParseModuleBlock();
+      this.prodParam.exit();
+      this.scope.exit();
+
       return this.finishNode(node, "TSModuleDeclaration");
     }
 
@@ -2145,9 +2065,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
         node.kind = "global";
-        if (!process.env.BABEL_8_BREAKING) {
-          node.global = true;
-        }
+
         node.id = this.parseIdentifier();
       } else if (this.match(tt.string)) {
         node.kind = "module";
@@ -2173,9 +2091,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       maybeDefaultIdentifier?: N.Identifier | null,
       isExport?: boolean,
     ): N.TsImportEqualsDeclaration {
-      if (!process.env.BABEL_8_BREAKING) {
-        node.isExport = isExport || false;
-      }
       node.id = maybeDefaultIdentifier || this.parseIdentifier();
       this.checkIdentifier(node.id, BindingFlag.TYPE_TS_VALUE_IMPORT);
       this.expect(tt.eq);
@@ -2721,11 +2636,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               startLoc,
               state,
             );
-            if (process.env.BABEL_8_BREAKING) {
-              result.typeArguments = typeArguments;
-            } else {
-              result.typeParameters = typeArguments;
-            }
+
+            result.typeArguments = typeArguments;
+
             return result;
           }
 
@@ -2739,11 +2652,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             // Handles invalid case: `f<T>(a:b)`
             this.tsCheckForInvalidTypeCasts(node.arguments);
 
-            if (process.env.BABEL_8_BREAKING) {
-              node.typeArguments = typeArguments;
-            } else {
-              node.typeParameters = typeArguments;
-            }
+            node.typeArguments = typeArguments;
 
             if (state.optionalChainMember) {
               (node as Undone<N.OptionalCallExpression>).optional =
@@ -2770,11 +2679,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
           const node = this.startNodeAt<N.TsInstantiationExpression>(startLoc);
           node.expression = base;
-          if (process.env.BABEL_8_BREAKING) {
-            node.typeArguments = typeArguments;
-          } else {
-            node.typeParameters = typeArguments;
-          }
+
+          node.typeArguments = typeArguments;
+
           return this.finishNode(node, "TSInstantiationExpression");
         });
 
@@ -2816,11 +2723,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         callee.type === "TSInstantiationExpression" &&
         !callee.extra?.parenthesized
       ) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.typeArguments = callee.typeArguments;
-        } else {
-          node.typeParameters = callee.typeParameters;
-        }
+        node.typeArguments = callee.typeArguments;
+
         node.callee = callee.expression;
       }
     }
@@ -2994,9 +2898,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
-        const nodeImportEquals = process.env.BABEL_8_BREAKING
-          ? this.startNode<N.TsImportEqualsDeclaration>()
-          : (node as Undone<N.TsImportEqualsDeclaration>);
+        const nodeImportEquals = this.startNode<N.TsImportEqualsDeclaration>();
         this.next(); // eat `tt._import`
         let maybeDefaultIdentifier: N.Identifier | null = null;
         if (
@@ -3016,16 +2918,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           maybeDefaultIdentifier,
           /* isExport */ true,
         );
-        if (process.env.BABEL_8_BREAKING) {
-          (node as Undone<N.ExportNamedDeclaration>).attributes = [];
-          (node as Undone<N.ExportNamedDeclaration>).declaration = declaration;
-          (node as Undone<N.ExportNamedDeclaration>).exportKind = "value";
-          (node as Undone<N.ExportNamedDeclaration>).source = null;
-          (node as Undone<N.ExportNamedDeclaration>).specifiers = [];
-          return this.finishNode(node, "ExportNamedDeclaration");
-        } else {
-          return declaration;
-        }
+
+        (node as Undone<N.ExportNamedDeclaration>).attributes = [];
+        (node as Undone<N.ExportNamedDeclaration>).declaration = declaration;
+        (node as Undone<N.ExportNamedDeclaration>).exportKind = "value";
+        (node as Undone<N.ExportNamedDeclaration>).source = null;
+        (node as Undone<N.ExportNamedDeclaration>).specifiers = [];
+        return this.finishNode(node, "ExportNamedDeclaration");
       } else if (this.eat(tt.eq)) {
         // `export = x;`
         const assign = node as Undone<N.TsExportAssignment>;
@@ -3626,12 +3525,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.parseClassSuper(node);
       // handle `extends f<<T>
       if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
-        } else {
-          node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
-        }
+        node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
       }
+
       if (this.eatContextual(tt._implements)) {
         node.implements = this.tsParseHeritageClause("implements");
       }
@@ -3773,28 +3669,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         expr.typeParameters = typeParameters;
 
-        if (process.env.BABEL_8_BREAKING) {
-          if (
-            this.hasPlugin("jsx") &&
-            expr.typeParameters.params.length === 1 &&
-            !expr.typeParameters.extra?.trailingComma
-          ) {
-            // report error if single type parameter used without trailing comma.
-            const parameter = expr.typeParameters
-              .params[0] as N.TsTypeParameter;
-            if (!parameter.constraint) {
-              // A single type parameter must either have constraints
-              // or a trailing comma, otherwise it's ambiguous with JSX.
-              this.raise(
-                TSErrors.SingleTypeParameterWithoutTrailingComma,
-                createPositionWithColumnOffset(parameter.loc.end, 1),
-                {
-                  typeParameterName: process.env.BABEL_8_BREAKING
-                    ? (parameter.name as N.Identifier).name
-                    : (parameter.name as string),
-                },
-              );
-            }
+        if (
+          this.hasPlugin("jsx") &&
+          expr.typeParameters.params.length === 1 &&
+          !expr.typeParameters.extra?.trailingComma
+        ) {
+          // report error if single type parameter used without trailing comma.
+          const parameter = expr.typeParameters.params[0] as N.TsTypeParameter;
+          if (!parameter.constraint) {
+            // A single type parameter must either have constraints
+            // or a trailing comma, otherwise it's ambiguous with JSX.
+            this.raise(
+              TSErrors.SingleTypeParameterWithoutTrailingComma,
+              createPositionWithColumnOffset(parameter.loc.end, 1),
+              {
+                typeParameterName: (parameter.name as N.Identifier).name,
+              },
+            );
           }
         }
 
@@ -4041,11 +3932,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             expr,
             startLoc,
           ) as N.CallExpression;
-          if (process.env.BABEL_8_BREAKING) {
-            call.typeArguments = typeArguments;
-          } else {
-            call.typeParameters = typeArguments;
-          }
+
+          call.typeArguments = typeArguments;
 
           return call;
         }
@@ -4184,11 +4072,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.tsParseTypeArgumentsInExpression(),
         );
         if (typeArguments) {
-          if (process.env.BABEL_8_BREAKING) {
-            node.typeArguments = typeArguments;
-          } else {
-            node.typeParameters = typeArguments;
-          }
+          node.typeArguments = typeArguments;
         }
       }
       return super.jsxParseOpeningElementAfterName(node);
@@ -4319,7 +4203,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseTypeParameterName(): N.Identifier | string {
       const typeName: N.Identifier = this.parseIdentifier();
-      return process.env.BABEL_8_BREAKING ? typeName : typeName.name;
+      return typeName;
     }
 
     shouldParseAsAmbientContext(): boolean {
@@ -4591,9 +4475,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TSImportType":
           node.qualifier ??= null;
           node.options ??= null;
-          if (process.env.BABEL_8_BREAKING) {
-            node.typeArguments ??= null;
-          }
+
+          node.typeArguments ??= null;
+
           return;
         case "TSInterfaceDeclaration":
           node.declare ??= false;

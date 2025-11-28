@@ -10,12 +10,6 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.transformAsync = babel.transformAsync;
   exports.getEnv = babel.getEnv;
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-expect-error Babel 7
-    exports.OptionManager = babel.OptionManager;
-    exports.transformSync = babel.transformSync;
-  }
-
   cache.initializeCacheFilename();
 }
 

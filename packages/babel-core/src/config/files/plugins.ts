@@ -217,63 +217,24 @@ function resolveStandardizedName(
   }
 }
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var LOADING_MODULES = new Set();
-}
 function* requireModule(
   type: string,
   loader: "require" | "auto",
   name: string,
 ): Handler<unknown> {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!(yield* isAsync()) && LOADING_MODULES.has(name)) {
-      throw new Error(
-        `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
-          "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
-          'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
-      );
-    }
-  }
-
   try {
-    if (!process.env.BABEL_8_BREAKING) {
-      LOADING_MODULES.add(name);
-    }
-
-    if (process.env.BABEL_8_BREAKING) {
-      return yield* loadCodeDefault(
-        name,
-        loader,
-        `You appear to be using a native ECMAScript module ${type}, ` +
-          "which is only supported when running Babel asynchronously " +
-          "or when using the Node.js `--experimental-require-module` flag.",
-        `You appear to be using a ${type} that contains top-level await, ` +
-          "which is only supported when running Babel asynchronously.",
-      );
-    } else {
-      return yield* loadCodeDefault(
-        name,
-        loader,
-        `You appear to be using a native ECMAScript module ${type}, ` +
-          "which is only supported when running Babel asynchronously " +
-          "or when using the Node.js `--experimental-require-module` flag.",
-        `You appear to be using a ${type} that contains top-level await, ` +
-          "which is only supported when running Babel asynchronously.",
-        // For backward compatibility, we need to support malformed presets
-        // defined as separate named exports rather than a single default
-        // export.
-        // See packages/babel-core/test/fixtures/option-manager/presets/es2015_named.js
-        // @ts-ignore(Babel 7 vs Babel 8) This param has been removed
-        true,
-      );
-    }
+    return yield* loadCodeDefault(
+      name,
+      loader,
+      `You appear to be using a native ECMAScript module ${type}, ` +
+        "which is only supported when running Babel asynchronously " +
+        "or when using the Node.js `--experimental-require-module` flag.",
+      `You appear to be using a ${type} that contains top-level await, ` +
+        "which is only supported when running Babel asynchronously.",
+    );
   } catch (err) {
     err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
     throw err;
   } finally {
-    if (!process.env.BABEL_8_BREAKING) {
-      LOADING_MODULES.delete(name);
-    }
   }
 }

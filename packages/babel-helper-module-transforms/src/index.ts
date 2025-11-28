@@ -21,13 +21,6 @@ import type { NodePath } from "@babel/core";
 
 export { buildDynamicImport } from "./dynamic-import.ts";
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.getDynamicImportSource =
-    // eslint-disable-next-line no-restricted-globals, import/extensions
-    require("./dynamic-import").getDynamicImportSource;
-}
-
 export { default as getModuleName } from "./get-module-name.ts";
 export type { PluginOptions } from "./get-module-name.ts";
 
@@ -78,12 +71,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
     esNamespaceOnly,
     filename,
 
-    constantReexports = process.env.BABEL_8_BREAKING
-      ? undefined
-      : arguments[1].loose,
-    enumerableModuleMeta = process.env.BABEL_8_BREAKING
-      ? undefined
-      : arguments[1].loose,
+    constantReexports = undefined,
+    enumerableModuleMeta = undefined,
     noIncompleteNsImportDetection,
   }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {

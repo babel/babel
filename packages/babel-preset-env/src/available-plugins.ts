@@ -1,8 +1,5 @@
 /* eslint sort-keys: "error" */
 
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions" with { if: "!process.env.BABEL_8_BREAKING" };
-import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes" with { if: "!process.env.BABEL_8_BREAKING" };
-
 import transformAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -148,67 +145,3 @@ const availablePlugins = {
 export const minVersions = {};
 // TODO(Babel 8): Remove this
 export let legacyBabel7SyntaxPlugins: Set<string>;
-
-if (!process.env.BABEL_8_BREAKING) {
-  /* eslint-disable no-restricted-globals */
-
-  Object.assign(minVersions, {
-    "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
-      "7.16.0",
-    "bugfix/transform-v8-static-class-fields-redefine-readonly": "7.12.0",
-    "syntax-import-attributes": "7.22.0",
-    "transform-class-static-block": "7.12.0",
-    "transform-duplicate-named-capturing-groups-regex": "7.19.0",
-    "transform-explicit-resource-management": "7.23.9",
-    "transform-private-property-in-object": "7.10.0",
-    "transform-regexp-modifiers": "7.19.0",
-  });
-
-  // This is a factory to create a plugin that enables a parser plugin
-  const syntax =
-    (name: ParserPlugin) => (): typeof transformJsonStrings => () => ({
-      manipulateOptions: (_, p) => p.plugins.push(name),
-    });
-  type ParserPlugin = Parameters<
-    ReturnType<typeof transformJsonStrings>["manipulateOptions"]
-  >[1]["plugins"][number];
-
-  const legacyBabel7SyntaxPluginsLoaders = {
-    "syntax-async-generators": syntax("asyncGenerators"),
-    "syntax-class-properties": syntax("classProperties"),
-    "syntax-class-static-block": syntax("classStaticBlock"),
-    "syntax-dynamic-import": syntax("dynamicImport"),
-    "syntax-explicit-resource-management": syntax("explicitResourceManagement"),
-    "syntax-export-namespace-from": syntax("exportNamespaceFrom"),
-    "syntax-import-meta": syntax("importMeta"),
-    "syntax-json-strings": syntax("jsonStrings"),
-    "syntax-logical-assignment-operators": syntax("logicalAssignment"),
-    "syntax-nullish-coalescing-operator": syntax("nullishCoalescingOperator"),
-    "syntax-numeric-separator": syntax("numericSeparator"),
-    "syntax-object-rest-spread": syntax("objectRestSpread"),
-    "syntax-optional-catch-binding": syntax("optionalCatchBinding"),
-    "syntax-optional-chaining": syntax("optionalChaining"),
-    "syntax-private-property-in-object": syntax("privateIn"),
-    "syntax-top-level-await": syntax("topLevelAwait"),
-
-    // These plugins have more logic than just enabling/disabling a feature
-    // eslint-disable-next-line sort-keys
-    "syntax-import-assertions": () => syntaxImportAssertions,
-    "syntax-import-attributes": () => syntaxImportAttributes,
-
-    // These are CJS plugins that depend on a package from the monorepo, so it
-    // breaks using ESM. Given that ESM builds are new enough to have this
-    // syntax enabled by default, we can safely skip enabling it.
-
-    "syntax-unicode-sets-regex":
-      USE_ESM || IS_STANDALONE
-        ? () => () => ({})
-        : () => require("@babel/plugin-syntax-unicode-sets-regex"),
-  };
-
-  Object.assign(availablePlugins, legacyBabel7SyntaxPluginsLoaders);
-
-  legacyBabel7SyntaxPlugins = new Set(
-    Object.keys(legacyBabel7SyntaxPluginsLoaders),
-  );
-}

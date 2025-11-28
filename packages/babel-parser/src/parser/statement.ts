@@ -72,115 +72,6 @@ function babel7CompatTokens(
     const token = tokens[i];
     const { type } = token;
     if (typeof type === "number") {
-      if (!process.env.BABEL_8_BREAKING) {
-        if (type === tt.privateName) {
-          const { loc, start, value, end } = token;
-          const hashEndPos = start + 1;
-          const hashEndLoc = createPositionWithColumnOffset(loc.start, 1);
-          tokens.splice(
-            i,
-            1,
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.hash),
-              value: "#",
-              start: start,
-              end: hashEndPos,
-              startLoc: loc.start,
-              endLoc: hashEndLoc,
-            }),
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.name),
-              value: value,
-              start: hashEndPos,
-              end: end,
-              startLoc: hashEndLoc,
-              endLoc: loc.end,
-            }),
-          );
-          i++;
-          continue;
-        }
-
-        if (tokenIsTemplate(type)) {
-          const { loc, start, value, end } = token;
-          const backquoteEnd = start + 1;
-          const backquoteEndLoc = createPositionWithColumnOffset(loc.start, 1);
-          let startToken;
-          if (input.charCodeAt(start - startIndex) === charCodes.graveAccent) {
-            startToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.backQuote),
-              value: "`",
-              start: start,
-              end: backquoteEnd,
-              startLoc: loc.start,
-              endLoc: backquoteEndLoc,
-            });
-          } else {
-            startToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.braceR),
-              value: "}",
-              start: start,
-              end: backquoteEnd,
-              startLoc: loc.start,
-              endLoc: backquoteEndLoc,
-            });
-          }
-          let templateValue,
-            templateElementEnd,
-            templateElementEndLoc,
-            endToken;
-          if (type === tt.templateTail) {
-            // ends with '`'
-            templateElementEnd = end - 1;
-            templateElementEndLoc = createPositionWithColumnOffset(loc.end, -1);
-            templateValue = value === null ? null : value.slice(1, -1);
-            endToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.backQuote),
-              value: "`",
-              start: templateElementEnd,
-              end: end,
-              startLoc: templateElementEndLoc,
-              endLoc: loc.end,
-            });
-          } else {
-            // ends with `${`
-            templateElementEnd = end - 2;
-            templateElementEndLoc = createPositionWithColumnOffset(loc.end, -2);
-            templateValue = value === null ? null : value.slice(1, -2);
-            endToken = new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.dollarBraceL),
-              value: "${",
-              start: templateElementEnd,
-              end: end,
-              startLoc: templateElementEndLoc,
-              endLoc: loc.end,
-            });
-          }
-          tokens.splice(
-            i,
-            1,
-            startToken,
-            new Token({
-              // @ts-expect-error: hacky way to create token
-              type: getExportedToken(tt.template),
-              value: templateValue,
-              start: backquoteEnd,
-              end: templateElementEnd,
-              startLoc: backquoteEndLoc,
-              endLoc: templateElementEndLoc,
-            }),
-            endToken,
-          );
-          i += 2;
-          continue;
-        }
-      }
       // @ts-expect-error: we manipulate `token` for performance reasons
       token.type = getExportedToken(type);
     }
@@ -2525,14 +2416,13 @@ export default abstract class StatementParser extends ExpressionParser {
       const isTypeExport = node2.exportKind === "type";
       node2.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
       node2.source = null;
-      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
-        node2.assertions = [];
-      } else {
-        node2.attributes = [];
-      }
+
+      node2.attributes = [];
+
       node2.declaration = null;
       return true;
     }
+
     return false;
   }
 
@@ -2543,14 +2433,13 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.shouldParseExportDeclaration()) {
       node.specifiers = [];
       node.source = null;
-      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("importAssertions")) {
-        node.assertions = [];
-      } else {
-        node.attributes = [];
-      }
+
+      node.attributes = [];
+
       node.declaration = this.parseExportDeclaration(node);
       return true;
     }
+
     return false;
   }
 
@@ -2889,8 +2778,7 @@ export default abstract class StatementParser extends ExpressionParser {
     isString: boolean,
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser */
     isInTypeExport: boolean,
-    isMaybeTypeOnly: boolean,
-    /* eslint-enable @typescript-eslint/no-unused-vars */
+    isMaybeTypeOnly /* eslint-enable @typescript-eslint/no-unused-vars */ : boolean,
   ): N.ExportSpecifier {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
@@ -3004,11 +2892,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   isPotentialImportPhase(isExport: boolean): boolean {
     if (isExport) return false;
-    return (
-      this.isContextual(tt._source) ||
-      this.isContextual(tt._defer) ||
-      (!process.env.BABEL_8_BREAKING && this.isContextual(tt._module))
-    );
+    return this.isContextual(tt._source) || this.isContextual(tt._defer);
   }
 
   applyImportPhase(
@@ -3019,10 +2903,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
-        if (
-          (!process.env.BABEL_8_BREAKING && phase === "module") ||
-          phase === "source"
-        ) {
+        if (phase === "source") {
           throw new Error(
             `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
@@ -3031,10 +2912,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return;
     }
 
-    if (!process.env.BABEL_8_BREAKING && phase === "module") {
-      this.expectPlugin("importReflection", loc);
-      (node as N.ImportDeclaration).module = true;
-    } else if (this.hasPlugin("importReflection")) {
+    if (this.hasPlugin("importReflection")) {
       (node as N.ImportDeclaration).module = false;
     }
 
@@ -3326,10 +3204,6 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ) {
     let attributes: N.ImportAttribute[];
-    if (!process.env.BABEL_8_BREAKING) {
-      // eslint-disable-next-line no-var
-      var useWith = false;
-    }
 
     // https://tc39.es/proposal-import-attributes/#prod-WithClause
     if (this.match(tt._with)) {
@@ -3344,44 +3218,12 @@ export default abstract class StatementParser extends ExpressionParser {
 
       this.next(); // eat `with`
 
-      if (!process.env.BABEL_8_BREAKING && this.hasPlugin("moduleAttributes")) {
-        attributes = this.parseModuleAttributes();
-        this.addExtra(node, "deprecatedWithLegacySyntax", true);
-      } else {
-        attributes = this.parseImportAttributes();
-      }
-      if (!process.env.BABEL_8_BREAKING) {
-        useWith = true;
-      }
-    } else if (
-      !process.env.BABEL_8_BREAKING &&
-      this.isContextual(tt._assert) &&
-      !this.hasPrecedingLineBreak()
-    ) {
-      if (
-        !this.hasPlugin("deprecatedImportAssert") &&
-        !this.hasPlugin("importAssertions")
-      ) {
-        this.raise(Errors.ImportAttributesUseAssert, this.state.startLoc);
-      }
-      if (!this.hasPlugin("importAssertions")) {
-        this.addExtra(node, "deprecatedAssertSyntax", true);
-      }
-      this.next(); // eat `assert`
       attributes = this.parseImportAttributes();
     } else {
       attributes = [];
     }
 
-    if (
-      !process.env.BABEL_8_BREAKING &&
-      !useWith! &&
-      this.hasPlugin("importAssertions")
-    ) {
-      node.assertions = attributes;
-    } else {
-      node.attributes = attributes;
-    }
+    node.attributes = attributes;
   }
 
   maybeParseDefaultImportSpecifier(

@@ -136,17 +136,6 @@ export function get(
   localBindings?: string[],
   adjustAst?: AdjustAst,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    // In older versions, bindingName was a t.Identifier | t.MemberExpression
-    if (typeof bindingName === "object") {
-      const id = bindingName as t.Identifier | t.MemberExpression | null;
-      if (id?.type === "Identifier") {
-        bindingName = id.name;
-      } else {
-        bindingName = undefined;
-      }
-    }
-  }
   return loadHelper(name).build(
     getDependency,
     bindingName,
@@ -165,13 +154,6 @@ export function getDependencies(name: string): readonly string[] {
 
 export function isInternal(name: string): boolean {
   return helpers[name]?.metadata.internal;
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.ensure = (name: string) => {
-    loadHelper(name);
-  };
 }
 
 export const list = Object.keys(helpers).map(name => name.replace(/^_/, ""));

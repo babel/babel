@@ -14,10 +14,6 @@ export = function handleMessage(action: ACTIONS, payload: any) {
     case "TRANSFORM":
       return transform.transform(payload.code, payload.filename);
     case "TRANSFORM_SYNC":
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-expect-error Babel 7
-        return transform.transformSync(payload.code, payload.filename);
-      }
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);

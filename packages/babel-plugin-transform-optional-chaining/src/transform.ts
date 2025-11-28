@@ -223,8 +223,8 @@ export function transformOptionalChain(
 
   // prettier-ignore
   const tpl = ifNullishFalse
-    ? (noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
-    : (noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK);
+    ?( noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
+    :( noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK);
   const logicalOp = ifNullishFalse ? "&&" : "||";
 
   const check = checks

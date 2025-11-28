@@ -52,13 +52,7 @@ export function ClassDeclaration(
     this.word("extends");
     this.space();
     this.print(node.superClass);
-    this.print(
-      process.env.BABEL_8_BREAKING
-        ? // @ts-ignore(Babel 7 vs Babel 8) Renamed
-          node.superTypeArguments
-        : // @ts-ignore(Babel 7 vs Babel 8) Renamed
-          node.superTypeParameters,
-    );
+    this.print(node.superTypeArguments);
   }
 
   if (node.implements) {

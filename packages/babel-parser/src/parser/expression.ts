@@ -496,20 +496,6 @@ export default abstract class ExpressionParser extends LValParser {
 
         this.next();
 
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          op === tt.pipeline &&
-          // @ts-expect-error: Only in Babel 7
-          this.hasPlugin(["pipelineOperator", { proposal: "minimal" }])
-        ) {
-          if (this.state.type === tt._await && this.prodParam.hasAwait) {
-            throw this.raise(
-              Errors.UnexpectedAwaitAfterPipelineBody,
-              this.state.startLoc,
-            );
-          }
-        }
-
         node.right = this.parseExprOpRightExpr(op, prec);
         const finishedNode = this.finishNode(
           node,
@@ -559,22 +545,6 @@ export default abstract class ExpressionParser extends LValParser {
             return this.withSoloAwaitPermittingContext(() => {
               return this.parseFSharpPipelineBody(prec);
             });
-        }
-
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          // @ts-expect-error: Babel 7 only
-          this.getPluginOption("pipelineOperator", "proposal") === "smart"
-        ) {
-          return this.withTopicBindingContext(() => {
-            if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
-              throw this.raise(Errors.PipeBodyIsTighter, this.state.startLoc);
-            }
-            return this.parseSmartPipelineBodyInStyle(
-              this.parseExprOpBaseRightExpr(op, prec),
-              startLoc,
-            );
-          });
         }
 
       // Falls through.
@@ -1275,23 +1245,6 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       default:
-        if (!process.env.BABEL_8_BREAKING) {
-          if (type === tt.decimal) {
-            return this.parseDecimalLiteral(this.state.value);
-          } else if (type === tt.bracketBarL || type === tt.bracketHashL) {
-            return this.parseArrayLike(
-              this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
-              /* isTuple */ true,
-            );
-          } else if (type === tt.braceBarL || type === tt.braceHashL) {
-            return this.parseObjectLike(
-              this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR,
-              /* isPattern */ false,
-              /* isRecord */ true,
-            );
-          }
-        }
-
         if (tokenIsIdentifier(type)) {
           if (
             this.isContextual(tt._module) &&
@@ -1440,25 +1393,15 @@ export default abstract class ExpressionParser extends LValParser {
       // The token matches the plugin’s configuration.
       // The token is therefore a topic reference.
 
-      if (process.env.BABEL_8_BREAKING || pipeProposal === "hack") {
-        if (!this.topicReferenceIsAllowedInCurrentContext()) {
-          this.raise(Errors.PipeTopicUnbound, startLoc);
-        }
-
-        // Register the topic reference so that its pipe body knows
-        // that its topic was used at least once.
-        this.registerTopicReference();
-
-        return this.finishNode(node, "TopicReference");
-      } else {
-        // pipeProposal is "smart"
-
-        if (!this.topicReferenceIsAllowedInCurrentContext()) {
-          this.raise(Errors.PrimaryTopicNotAllowed!, startLoc);
-        }
-        this.registerTopicReference();
-        return this.finishNode(node, "PipelinePrimaryTopicReference");
+      if (!this.topicReferenceIsAllowedInCurrentContext()) {
+        this.raise(Errors.PipeTopicUnbound, startLoc);
       }
+
+      // Register the topic reference so that its pipe body knows
+      // that its topic was used at least once.
+      this.registerTopicReference();
+
+      return this.finishNode(node, "TopicReference");
     } else {
       // The token does not match the plugin’s configuration.
       throw this.raise(Errors.PipeTopicUnconfiguredToken, startLoc, {
@@ -1550,21 +1493,9 @@ export default abstract class ExpressionParser extends LValParser {
     const node = this.startNode<N.Super>();
     this.next(); // eat `super`
     if (this.match(tt.parenL) && !this.scope.allowDirectSuper) {
-      if (process.env.BABEL_8_BREAKING) {
-        this.raise(Errors.SuperNotAllowed, node);
-      } else {
-        if (!(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)) {
-          this.raise(Errors.SuperNotAllowed, node);
-        }
-      }
+      this.raise(Errors.SuperNotAllowed, node);
     } else if (!this.scope.allowSuper) {
-      if (process.env.BABEL_8_BREAKING) {
-        this.raise(Errors.UnexpectedSuper, node);
-      } else {
-        if (!(this.optionFlags & OptionFlags.AllowSuperOutsideMethod)) {
-          this.raise(Errors.UnexpectedSuper, node);
-        }
-      }
+      this.raise(Errors.UnexpectedSuper, node);
     }
 
     if (
@@ -1711,21 +1642,17 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseBigIntLiteral(value: any) {
-    if (process.env.BABEL_8_BREAKING) {
-      let bigInt: bigint | null;
-      try {
-        bigInt = BigInt(value);
-      } catch {
-        // parser supports invalid bigints like `1.0n` or `1e1n` such that it
-        // can throw a recoverable error, but BigInt constructor does not
-        // support them.
-        bigInt = null;
-      }
-      const node = this.parseLiteral<N.BigIntLiteral>(bigInt, "BigIntLiteral");
-      return node;
-    } else {
-      return this.parseLiteral<N.BigIntLiteral>(value, "BigIntLiteral");
+    let bigInt: bigint | null;
+    try {
+      bigInt = BigInt(value);
+    } catch {
+      // parser supports invalid bigints like `1.0n` or `1e1n` such that it
+      // can throw a recoverable error, but BigInt constructor does not
+      // support them.
+      bigInt = null;
     }
+    const node = this.parseLiteral<N.BigIntLiteral>(bigInt, "BigIntLiteral");
+    return node;
   }
 
   // TODO: Remove this in Babel 8
@@ -2109,13 +2036,6 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.InvalidRecordProperty, prop);
       }
 
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-expect-error shorthand may not index prop
-        if (prop.shorthand) {
-          this.addExtra(prop, "shorthand", true);
-        }
-      }
-
       // @ts-expect-error Fixme: refine typings
       node.properties.push(prop);
     }
@@ -2443,11 +2363,6 @@ export default abstract class ExpressionParser extends LValParser {
             break;
           }
           default:
-            if (!process.env.BABEL_8_BREAKING && type === tt.decimal) {
-              key = this.parseDecimalLiteral(value);
-              break;
-            }
-
             this.unexpected();
         }
       }
@@ -3139,34 +3054,12 @@ export default abstract class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
+    // If the pipe proposal is "minimal"(Babel 7), "fsharp", or "hack",
+    // or if no pipe proposal is active,
+    // then the callback result is returned
+    // without touching any extra parser state.
     // TODO(Babel 8): Remove this method
-
-    if (
-      !process.env.BABEL_8_BREAKING &&
-      // @ts-expect-error Babel 7 only
-      this.hasPlugin(["pipelineOperator", { proposal: "smart" }])
-    ) {
-      // Reset the parser’s topic context only if the smart-mix pipe proposal is active.
-      const outerContextTopicState = this.state.topicContext;
-      this.state.topicContext = {
-        // Disable the use of the primary topic reference.
-        maxNumOfResolvableTopics: 0,
-        // Hide the use of any topic references from outer contexts.
-        maxTopicIndex: null,
-      };
-
-      try {
-        return callback();
-      } finally {
-        this.state.topicContext = outerContextTopicState;
-      }
-    } else {
-      // If the pipe proposal is "minimal"(Babel 7), "fsharp", or "hack",
-      // or if no pipe proposal is active,
-      // then the callback result is returned
-      // without touching any extra parser state.
-      return callback();
-    }
+    return callback();
   }
 
   withSoloAwaitPermittingContext<T>(callback: () => T): T {

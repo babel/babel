@@ -7,9 +7,7 @@ export type MixinPlugin = (
   superClass: new (...args: any) => Parser,
 ) => new (...args: any) => Parser;
 
-const PIPELINE_PROPOSALS = process.env.BABEL_8_BREAKING
-  ? ["fsharp", "hack"]
-  : ["minimal", "fsharp", "hack", "smart"];
+const PIPELINE_PROPOSALS = ["fsharp", "hack"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
 export function validatePlugins(pluginsMap: Map<string, any>) {
@@ -81,100 +79,38 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
           `"pipelineOperator" in "proposal": "hack" mode also requires a "topicToken" option whose value must be one of: ${tokenList}.`,
         );
       }
-
-      if (!process.env.BABEL_8_BREAKING) {
-        if (
-          topicToken === "#" &&
-          pluginsMap.get("recordAndTuple")?.syntaxType === "hash"
-        ) {
-          throw new Error(
-            `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
-          );
-        }
-      }
-    } else if (
-      !process.env.BABEL_8_BREAKING &&
-      proposal === "smart" &&
-      pluginsMap.get("recordAndTuple")?.syntaxType === "hash"
-    ) {
-      throw new Error(
-        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
-      );
     }
   }
 
   if (pluginsMap.has("moduleAttributes")) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "`moduleAttributes` has been removed in Babel 8, please migrate to import attributes instead.",
-      );
-    } else {
-      if (
-        pluginsMap.has("deprecatedImportAssert") ||
-        pluginsMap.has("importAssertions")
-      ) {
-        throw new Error(
-          "Cannot combine importAssertions, deprecatedImportAssert and moduleAttributes plugins.",
-        );
-      }
-      const moduleAttributesVersionPluginOption =
-        pluginsMap.get("moduleAttributes").version;
-      if (moduleAttributesVersionPluginOption !== "may-2020") {
-        throw new Error(
-          "The 'moduleAttributes' plugin requires a 'version' option," +
-            " representing the last proposal update. Currently, the" +
-            " only supported value is 'may-2020'.",
-        );
-      }
-    }
+    throw new Error(
+      "`moduleAttributes` has been removed in Babel 8, please migrate to import attributes instead.",
+    );
   }
+
   if (pluginsMap.has("importAssertions")) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "`importAssertions` has been removed in Babel 8, please use import attributes instead.",
-      );
-    } else if (pluginsMap.has("deprecatedImportAssert")) {
-      throw new Error(
-        "Cannot combine importAssertions and deprecatedImportAssert plugins.",
-      );
-    }
+    throw new Error(
+      "`importAssertions` has been removed in Babel 8, please use import attributes instead.",
+    );
   }
+
   if (pluginsMap.has("deprecatedImportAssert")) {
-    if (process.env.BABEL_8_BREAKING) {
-      console.warn(
-        "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead.",
-      );
-    }
+    console.warn(
+      "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead.",
+    );
   } else if (
     pluginsMap.has("importAttributes") &&
     pluginsMap.get("importAttributes").deprecatedAssertSyntax
   ) {
-    if (process.env.BABEL_8_BREAKING) {
-      console.warn(
-        "The 'importAttributes' plugin has been removed in Babel 8. Please migrate any usage of `assert`-style attributes to `with`.",
-      );
-    } else {
-      pluginsMap.set("deprecatedImportAssert", {});
-    }
+    console.warn(
+      "The 'importAttributes' plugin has been removed in Babel 8. Please migrate any usage of `assert`-style attributes to `with`.",
+    );
   }
 
   if (pluginsMap.has("recordAndTuple")) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "The 'recordAndTuple' plugin has been removed in Babel 8. Please remove it from your configuration.",
-      );
-    } else {
-      const syntaxType = pluginsMap.get("recordAndTuple").syntaxType;
-      if (syntaxType != null) {
-        const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
-        if (!RECORD_AND_TUPLE_SYNTAX_TYPES.includes(syntaxType)) {
-          throw new Error(
-            "The 'syntaxType' option of the 'recordAndTuple' plugin must be one of: " +
-              RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
-          );
-        }
-      }
-    }
+    throw new Error(
+      "The 'recordAndTuple' plugin has been removed in Babel 8. Please remove it from your configuration.",
+    );
   }
 
   if (
@@ -209,18 +145,16 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     );
   }
 
-  if (process.env.BABEL_8_BREAKING) {
-    if (pluginsMap.has("decimal")) {
-      throw new Error(
-        "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
-      );
-    }
-    if (pluginsMap.has("importReflection")) {
-      throw new Error(
-        "The 'importReflection' plugin has been removed in Babel 8. Use 'sourcePhaseImports' instead, and " +
-          "replace 'import module' with 'import source' in your code.",
-      );
-    }
+  if (pluginsMap.has("decimal")) {
+    throw new Error(
+      "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
+    );
+  }
+  if (pluginsMap.has("importReflection")) {
+    throw new Error(
+      "The 'importReflection' plugin has been removed in Babel 8. Use 'sourcePhaseImports' instead, and " +
+        "replace 'import module' with 'import source' in your code.",
+    );
   }
 }
 

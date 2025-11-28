@@ -16,9 +16,7 @@ const rule = (
 function isAccessorFieldName(node) {
   const parent = node.parent;
   return (
-    (parent.type === "AccessorProperty" ||
-      (!process.env.BABEL_8_BREAKING &&
-        parent.type === "ClassAccessorProperty")) &&
+    parent.type === "AccessorProperty" &&
     parent.key === node &&
     !parent.computed
   );

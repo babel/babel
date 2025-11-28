@@ -212,11 +212,7 @@ export default (superClass: typeof Parser) =>
 
     parsePrivateName(): any {
       const node = super.parsePrivateName();
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return node;
-        }
-      }
+
       return this.convertPrivateNameToPrivateIdentifier(node);
     }
 
@@ -233,21 +229,11 @@ export default (superClass: typeof Parser) =>
 
     // @ts-expect-error ESTree plugin changes node types
     isPrivateName(node: N.Node): node is N.EstreePrivateIdentifier {
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return super.isPrivateName(node);
-        }
-      }
       return node.type === "PrivateIdentifier";
     }
 
     // @ts-expect-error ESTree plugin changes node types
     getPrivateNameSV(node: N.EstreePrivateIdentifier): string {
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return super.getPrivateNameSV(node as unknown as N.PrivateName);
-        }
-      }
       return node.name;
     }
 
@@ -306,9 +292,8 @@ export default (superClass: typeof Parser) =>
       }
       const valueNode = this.castNodeTo(
         funcNode as N.MethodLike,
-        process.env.BABEL_8_BREAKING &&
-          this.hasPlugin("typescript") &&
-          !funcNode.body
+
+        this.hasPlugin("typescript") && !funcNode.body
           ? "TSEmptyBodyFunctionExpression"
           : "FunctionExpression",
       );
@@ -322,7 +307,7 @@ export default (superClass: typeof Parser) =>
       if (type === "ClassPrivateMethod") {
         node.computed = false;
       }
-      if (process.env.BABEL_8_BREAKING && this.hasPlugin("typescript")) {
+      if (this.hasPlugin("typescript")) {
         // @ts-expect-error todo(flow->ts) property not defined for all types in union
         if (node.abstract) {
           // @ts-expect-error remove abstract from TSAbstractMethodDefinition
@@ -360,16 +345,8 @@ export default (superClass: typeof Parser) =>
 
     parseClassProperty(...args: [N.ClassProperty]): any {
       const propertyNode = super.parseClassProperty(...args);
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return propertyNode as unknown as N.EstreePropertyDefinition;
-        }
-      }
-      if (
-        process.env.BABEL_8_BREAKING &&
-        propertyNode.abstract &&
-        this.hasPlugin("typescript")
-      ) {
+
+      if (propertyNode.abstract && this.hasPlugin("typescript")) {
         delete propertyNode.abstract;
         this.castNodeTo(propertyNode, "TSAbstractPropertyDefinition");
       } else {
@@ -380,16 +357,8 @@ export default (superClass: typeof Parser) =>
 
     parseClassPrivateProperty(...args: [N.ClassPrivateProperty]): any {
       const propertyNode = super.parseClassPrivateProperty(...args);
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return propertyNode as unknown as N.EstreePropertyDefinition;
-        }
-      }
-      if (
-        process.env.BABEL_8_BREAKING &&
-        propertyNode.abstract &&
-        this.hasPlugin("typescript")
-      ) {
+
+      if (propertyNode.abstract && this.hasPlugin("typescript")) {
         this.castNodeTo(propertyNode, "TSAbstractPropertyDefinition");
       } else {
         this.castNodeTo(propertyNode, "PropertyDefinition");
@@ -403,11 +372,7 @@ export default (superClass: typeof Parser) =>
       node: N.ClassAccessorProperty,
     ): any {
       const accessorPropertyNode = super.parseClassAccessorProperty(node);
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!this.getPluginOption("estree", "classFeatures")) {
-          return accessorPropertyNode;
-        }
-      }
+
       if (accessorPropertyNode.abstract && this.hasPlugin("typescript")) {
         delete accessorPropertyNode.abstract;
         this.castNodeTo(accessorPropertyNode, "TSAbstractAccessorProperty");
@@ -513,11 +478,7 @@ export default (superClass: typeof Parser) =>
           .arguments[0] as N.Expression;
         (node as N.Node as N.EstreeImportExpression).options =
           (node.arguments[1] as N.Expression) ?? null;
-        if (!process.env.BABEL_8_BREAKING) {
-          // compatibility with previous ESTree AST
-          (node as N.Node as N.EstreeImportExpression).attributes =
-            (node.arguments[1] as N.Expression) ?? null;
-        }
+
         // arguments isn't optional in the type definition
         // @ts-expect-error delete non-optional properties
         delete node.arguments;
@@ -534,11 +495,10 @@ export default (superClass: typeof Parser) =>
     }
 
     toReferencedArguments(
-      node:
+      node /* isParenthesizedExpr?: boolean, */ :
         | N.CallExpression
         | N.OptionalCallExpression
         | N.EstreeImportExpression,
-      /* isParenthesizedExpr?: boolean, */
     ) {
       // ImportExpressions do not have an arguments array.
       if (node.type === "ImportExpression") {

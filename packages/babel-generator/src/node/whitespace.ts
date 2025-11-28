@@ -236,7 +236,6 @@ nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
-  // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return WhitespaceFlag.before;
   }
@@ -248,7 +247,6 @@ nodes.ObjectTypeIndexer = function (
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
   if (
-    // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
     parent.indexers[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length
@@ -263,7 +261,6 @@ nodes.ObjectTypeInternalSlot = function (
   parent: t.ObjectTypeAnnotation,
 ): WhitespaceFlag {
   if (
-    // @ts-ignore(Babel 7 vs Babel 8) Difference parent.indexers
     parent.internalSlots[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length &&

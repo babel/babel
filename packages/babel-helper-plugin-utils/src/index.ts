@@ -22,20 +22,6 @@ const apiPolyfills: APIPolyfills = {
     throwVersionError(range, api.version);
   },
 };
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(apiPolyfills, {
-    // This is supported starting from Babel 7.13
-    targets: () => (): any => {
-      return {};
-    },
-    // This is supported starting from Babel 7.13
-    assumption: () => (): any => {
-      return undefined;
-    },
-    // This is supported starting from Babel 7.17
-    addExternalDependency: () => () => {},
-  });
-}
 
 export function declare<State = object, Option = object>(
   builder: (

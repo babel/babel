@@ -91,14 +91,9 @@ export default declare((api, options: Options) => {
         let spreadLiteral = getSpreadLiteral(prop, scope);
 
         if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
-          spreadLiteral = t.callExpression(
-            file.addHelper(
-              process.env.BABEL_8_BREAKING
-                ? "arrayLikeToArray"
-                : "arrayWithoutHoles",
-            ),
-            [spreadLiteral],
-          );
+          spreadLiteral = t.callExpression(file.addHelper("arrayLikeToArray"), [
+            spreadLiteral,
+          ]);
         }
 
         nodes.push(spreadLiteral);

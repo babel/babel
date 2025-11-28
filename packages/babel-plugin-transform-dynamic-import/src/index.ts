@@ -20,10 +20,7 @@ export default declare(api => {
 
   return {
     name: "transform-dynamic-import",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("dynamicImport"),
-
+    manipulateOptions: undefined,
     pre() {
       // We keep using the old name, for compatibility with older
       // version of the CommonJS transform.

@@ -20,17 +20,10 @@ export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
 
   // Options are validated in @babel/plugin-syntax-decorators
-  if (!process.env.BABEL_8_BREAKING) {
-    // eslint-disable-next-line no-var
-    var { legacy } = options;
-  }
+
   const { version } = options;
 
-  if (
-    process.env.BABEL_8_BREAKING
-      ? version === "legacy"
-      : legacy || version === "legacy"
-  ) {
+  if (version === "legacy") {
     return {
       name: "proposal-decorators",
       inherits: syntaxDecorators,

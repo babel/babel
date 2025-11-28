@@ -17,12 +17,8 @@ import transpileNamespace, { getFirstIdentifier } from "./namespace.ts";
 function isInType(path: NodePath) {
   switch (path.parent.type) {
     case "TSTypeReference":
-    case process.env.BABEL_8_BREAKING
-      ? "TSClassImplements"
-      : "TSExpressionWithTypeArguments":
-    case process.env.BABEL_8_BREAKING
-      ? "TSInterfaceHeritage"
-      : "TSExpressionWithTypeArguments":
+    case "TSClassImplements":
+    case "TSInterfaceHeritage":
     case "TSTypeQuery":
       return true;
     case "TSQualifiedName":
@@ -118,11 +114,6 @@ export default declare((api, opts: Options) => {
     optimizeConstEnums = false,
   } = opts;
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // eslint-disable-next-line no-var
-    var { allowDeclareFields = false } = opts;
-  }
-
   const classMemberVisitors = {
     field(
       path: NodePath<
@@ -132,14 +123,6 @@ export default declare((api, opts: Options) => {
     ) {
       const { node } = path;
 
-      if (!process.env.BABEL_8_BREAKING) {
-        if (!allowDeclareFields && node.declare) {
-          throw path.buildCodeFrameError(
-            `The 'declare' modifier is only allowed when the 'allowDeclareFields' option of ` +
-              `@babel/plugin-transform-typescript or @babel/preset-typescript is enabled.`,
-          );
-        }
-      }
       if (node.declare) {
         if (node.value) {
           throw path.buildCodeFrameError(
@@ -155,28 +138,8 @@ export default declare((api, opts: Options) => {
             `Definitely assigned fields cannot be initialized here, but only in the constructor`,
           );
         }
-        if (!process.env.BABEL_8_BREAKING) {
-          // keep the definitely assigned fields only when `allowDeclareFields` (equivalent of
-          // Typescript's `useDefineForClassFields`) is true
-          if (
-            !allowDeclareFields &&
-            !node.decorators &&
-            !t.isClassPrivateProperty(node)
-          ) {
-            path.remove();
-          }
-        }
       } else if (node.abstract) {
         path.remove();
-      } else if (!process.env.BABEL_8_BREAKING) {
-        if (
-          !allowDeclareFields &&
-          !node.value &&
-          !node.decorators &&
-          !t.isClassPrivateProperty(node)
-        ) {
-          path.remove();
-        }
       }
 
       if (node.accessibility) node.accessibility = null;
@@ -375,9 +338,6 @@ export default declare((api, opts: Options) => {
               const binding = stmt.scope.getBinding(id.name);
               if (
                 binding &&
-                (process.env.BABEL_8_BREAKING ||
-                  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-                  !stmt.node.isExport) &&
                 isImportTypeOnly({
                   binding,
                   programPath: path,
@@ -437,10 +397,7 @@ export default declare((api, opts: Options) => {
           return;
         }
 
-        if (
-          process.env.BABEL_8_BREAKING &&
-          t.isTSImportEqualsDeclaration(path.node.declaration)
-        ) {
+        if (t.isTSImportEqualsDeclaration(path.node.declaration)) {
           return;
         }
 
@@ -572,13 +529,9 @@ export default declare((api, opts: Options) => {
         const { node }: { node: typeof path.node & ExtraNodeProps } = path;
 
         if (node.typeParameters) node.typeParameters = null;
-        if (process.env.BABEL_8_BREAKING) {
-          // @ts-ignore(Babel 7 vs Babel 8) Renamed
-          if (node.superTypeArguments) node.superTypeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Renamed
-          if (node.superTypeParameters) node.superTypeParameters = null;
-        }
+
+        if (node.superTypeArguments) node.superTypeArguments = null;
+
         if (node.implements) node.implements = null;
         if (node.abstract) node.abstract = null;
 
@@ -606,7 +559,6 @@ export default declare((api, opts: Options) => {
           }
         });
       },
-
       Function(path) {
         const { node } = path;
         if (node.typeParameters) node.typeParameters = null;
@@ -668,17 +620,10 @@ export default declare((api, opts: Options) => {
           t.variableDeclarator(id, init),
         ]);
 
-        if (process.env.BABEL_8_BREAKING) {
-          path.replaceWith(newNode);
-        } else {
-          path.replaceWith(
-            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-            path.node.isExport ? t.exportNamedDeclaration(newNode) : newNode,
-          );
-        }
+        path.replaceWith(newNode);
+
         path.scope.registerDeclaration(path);
       },
-
       TSExportAssignment(path, pass) {
         assertCjsTransformEnabled(
           path,
@@ -706,70 +651,30 @@ export default declare((api, opts: Options) => {
         path.replaceWith(node);
       },
 
-      [process.env.BABEL_8_BREAKING
-        ? "TSNonNullExpression|TSInstantiationExpression"
-        : /* This has been introduced in Babel 7.18.0
-             We use api.types.* and not t.* for feature detection,
-             because the Babel version that is running this plugin
-             (where we check if the visitor is valid) might be different
-             from the Babel version that we resolve with `import "@babel/core"`.
-             This happens, for example, with Next.js that bundled `@babel/core`
-             but allows loading unbundled plugin (which cannot obviously import
-             the bundled `@babel/core` version).
-           */
-          api.types.tsInstantiationExpression
-          ? "TSNonNullExpression|TSInstantiationExpression"
-          : "TSNonNullExpression"](
+      ["TSNonNullExpression|TSInstantiationExpression"](
         path: NodePath<t.TSNonNullExpression | t.TSInstantiationExpression>,
       ) {
         path.replaceWith(path.node.expression);
       },
 
       CallExpression(path) {
-        if (process.env.BABEL_8_BREAKING) {
-          path.node.typeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          path.node.typeParameters = null;
-        }
+        path.node.typeArguments = null;
       },
 
       OptionalCallExpression(path) {
-        if (process.env.BABEL_8_BREAKING) {
-          path.node.typeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          path.node.typeParameters = null;
-        }
+        path.node.typeArguments = null;
       },
 
       NewExpression(path) {
-        if (process.env.BABEL_8_BREAKING) {
-          path.node.typeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          path.node.typeParameters = null;
-        }
+        path.node.typeArguments = null;
       },
 
       JSXOpeningElement(path) {
-        if (process.env.BABEL_8_BREAKING) {
-          //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-          path.node.typeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          path.node.typeParameters = null;
-        }
+        path.node.typeArguments = null;
       },
 
       TaggedTemplateExpression(path) {
-        if (process.env.BABEL_8_BREAKING) {
-          // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
-          path.node.typeArguments = null;
-        } else {
-          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-          path.node.typeParameters = null;
-        }
+        path.node.typeArguments = null;
       },
     },
   };
@@ -817,21 +722,13 @@ export default declare((api, opts: Options) => {
 
     // "React" or the JSX pragma is referenced as a value if there are any JSX elements/fragments in the code.
     let sourceFileHasJsx = false;
-    if (process.env.BABEL_8_BREAKING) {
-      t.traverseFast(programPath.node, node => {
-        if (t.isJSXElement(node) || t.isJSXFragment(node)) {
-          sourceFileHasJsx = true;
-          return t.traverseFast.stop;
-        }
-      });
-    } else {
-      programPath.traverse({
-        "JSXElement|JSXFragment"(path) {
-          sourceFileHasJsx = true;
-          path.stop();
-        },
-      });
-    }
+
+    t.traverseFast(programPath.node, node => {
+      if (t.isJSXElement(node) || t.isJSXFragment(node)) {
+        sourceFileHasJsx = true;
+        return t.traverseFast.stop;
+      }
+    });
 
     return !sourceFileHasJsx;
   }

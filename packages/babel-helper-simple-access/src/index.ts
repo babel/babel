@@ -73,96 +73,13 @@ const simpleAssignmentVisitor: Visitor<State> = {
   },
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  simpleAssignmentVisitor.UpdateExpression = {
-    exit(path) {
-      // @ts-expect-error This is Babel7-only
-      if (!this.includeUpdateExpression) return;
-
-      const { scope, bindingNames } = this;
-
-      const arg = path.get("argument");
-      if (!arg.isIdentifier()) return;
-      const localName = arg.node.name;
-
-      if (!bindingNames.has(localName)) return;
-
-      // redeclared in this scope
-      if (scope.getBinding(localName) !== path.scope.getBinding(localName)) {
-        return;
-      }
-
-      if (
-        path.parentPath.isExpressionStatement() &&
-        !path.isCompletionRecord()
-      ) {
-        // ++i => (i += 1);
-        const operator = path.node.operator === "++" ? "+=" : "-=";
-        path.replaceWith(
-          assignmentExpression(operator, arg.node, numericLiteral(1)),
-        );
-      } else if (path.node.prefix) {
-        // ++i => (i = (+i) + 1);
-        path.replaceWith(
-          assignmentExpression(
-            "=",
-            identifier(localName),
-            binaryExpression(
-              path.node.operator[0] as "+" | "-",
-              unaryExpression("+", arg.node),
-              numericLiteral(1),
-            ),
-          ),
-        );
-      } else {
-        const old = path.scope.generateUidIdentifierBasedOnNode(
-          arg.node,
-          "old",
-        );
-        const varName = old.name;
-        path.scope.push({ id: old });
-
-        const binary = binaryExpression(
-          path.node.operator[0] as "+" | "-",
-          identifier(varName),
-          // todo: support bigint
-          numericLiteral(1),
-        );
-
-        // i++ => (_old = (+i), i = _old + 1, _old)
-        path.replaceWith(
-          sequenceExpression([
-            assignmentExpression(
-              "=",
-              identifier(varName),
-              unaryExpression("+", arg.node),
-            ),
-            assignmentExpression("=", cloneNode(arg.node), binary),
-            identifier(varName),
-          ]),
-        );
-      }
-    },
-  };
-}
-
 export default function simplifyAccess(
   path: NodePath,
   bindingNames: Set<string>,
 ) {
-  if (process.env.BABEL_8_BREAKING) {
-    path.traverse(simpleAssignmentVisitor, {
-      scope: path.scope,
-      bindingNames,
-      seen: new WeakSet(),
-    });
-  } else {
-    path.traverse(simpleAssignmentVisitor, {
-      scope: path.scope,
-      bindingNames,
-      seen: new WeakSet(),
-      // @ts-expect-error This is Babel7-only
-      includeUpdateExpression: arguments[2] ?? true,
-    });
-  }
+  path.traverse(simpleAssignmentVisitor, {
+    scope: path.scope,
+    bindingNames,
+    seen: new WeakSet(),
+  });
 }

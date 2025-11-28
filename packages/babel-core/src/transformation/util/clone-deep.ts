@@ -58,16 +58,8 @@ function deepClone(
 export default function <T>(value: T): T {
   if (typeof value !== "object") return value;
 
-  if (process.env.BABEL_8_BREAKING) {
-    if (!process.env.IS_PUBLISH && depth > 0) {
-      throw new Error("depth > 0");
-    }
-    return deepClone(value, new Map(), false);
-  } else {
-    try {
-      return deepClone(value, new Map(), true);
-    } catch (_) {
-      return structuredClone(value);
-    }
+  if (!process.env.IS_PUBLISH && depth > 0) {
+    throw new Error("depth > 0");
   }
+  return deepClone(value, new Map(), false);
 }

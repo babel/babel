@@ -14,10 +14,7 @@ export default declare((api, options: Options) => {
 
   return {
     name: "transform-optional-chaining",
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("optionalChaining"),
-
+    manipulateOptions: undefined,
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(
         path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,

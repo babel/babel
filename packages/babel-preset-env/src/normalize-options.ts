@@ -9,8 +9,6 @@ import {
 } from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
-import babel7 from "./polyfills/babel-7-plugins.cjs" with { if: "!process.env.BABEL_8_BREAKING" };
-
 import type {
   BuiltInsOption,
   CorejsOption,
@@ -38,13 +36,9 @@ const getValidIncludesAndExcludes = (
   const set = new Set(allPluginsList);
   if (type === "exclude") modulePlugins.map(set.add, set);
   if (corejs) {
-    if (!process.env.BABEL_8_BREAKING && corejs === 2) {
-      Object.keys(babel7.corejs2Polyfills).map(set.add, set);
-      set.add("web.timers").add("web.immediate").add("web.dom.iterable");
-    } else {
-      Object.keys(corejs3Polyfills).map(set.add, set);
-    }
+    Object.keys(corejs3Polyfills).map(set.add, set);
   }
+
   return Array.from(set);
 };
 
@@ -78,12 +72,7 @@ const expandIncludesAndExcludes = (
       re = filter;
     }
     const items = filterableItems.filter(item => {
-      return process.env.BABEL_8_BREAKING
-        ? re.test(item)
-        : re.test(item) ||
-            // For backwards compatibility, we also support matching against the
-            // proposal- name.
-            re.test(item.replace(/^transform-/, "proposal-"));
+      return re.test(item);
     });
     if (items.length === 0) invalidFilters.push(filter);
     return items;
@@ -170,29 +159,10 @@ export function normalizeCoreJSOption(
   let rawVersion: false | string | number | undefined | null;
 
   if (useBuiltIns && corejs === undefined) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "When using the `useBuiltIns` option you must specify" +
-          ' the code-js version you are using, such as `"corejs": "3.32.0"`.',
-      );
-    } else {
-      rawVersion = 2;
-      console.warn(
-        "\nWARNING (@babel/preset-env): We noticed you're using the `useBuiltIns` option without declaring a " +
-          `core-js version. Currently, we assume version 2.x when no version ` +
-          "is passed. Since this default version will likely change in future " +
-          "versions of Babel, we recommend explicitly setting the core-js version " +
-          "you are using via the `corejs` option.\n" +
-          "\nYou should also be sure that the version you pass to the `corejs` " +
-          "option matches the version specified in your `package.json`'s " +
-          "`dependencies` section. If it doesn't, you need to run one of the " +
-          "following commands:\n\n" +
-          "  npm install --save core-js@2    npm install --save core-js@3\n" +
-          "  yarn add core-js@2              yarn add core-js@3\n\n" +
-          "More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins\n" +
-          "More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs",
-      );
-    }
+    throw new Error(
+      "When using the `useBuiltIns` option you must specify" +
+        ' the code-js version you are using, such as `"corejs": "3.32.0"`.',
+    );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
     proposals = Boolean(corejs.proposals);
@@ -204,29 +174,17 @@ export function normalizeCoreJSOption(
 
   if (version) {
     if (useBuiltIns) {
-      if (process.env.BABEL_8_BREAKING) {
-        if (version.major !== 3) {
-          throw new RangeError(
-            "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
-              "only core-js@3 is supported.",
-          );
-        }
+      if (version.major !== 3) {
+        throw new RangeError(
+          "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+            "only core-js@3 is supported.",
+        );
+      }
 
-        if (
-          typeof rawVersion !== "string" ||
-          !String(rawVersion).includes(".")
-        ) {
-          throw new Error(
-            'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
-          );
-        }
-      } else {
-        if (version.major < 2 || version.major > 3) {
-          throw new RangeError(
-            "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
-              "only core-js@2 and core-js@3 are supported.",
-          );
-        }
+      if (typeof rawVersion !== "string" || !String(rawVersion).includes(".")) {
+        throw new Error(
+          'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
+        );
       }
     } else {
       console.warn(
@@ -239,13 +197,11 @@ export function normalizeCoreJSOption(
 }
 
 export default function normalizeOptions(opts: Options) {
-  if (process.env.BABEL_8_BREAKING) {
-    v.invariant(
-      !Object.hasOwn(opts, "bugfixes"),
-      "The 'bugfixes' option has been removed, and now bugfix plugins are" +
-        " always enabled. Please remove it from your config.",
-    );
-  }
+  v.invariant(
+    !Object.hasOwn(opts, "bugfixes"),
+    "The 'bugfixes' option has been removed, and now bugfix plugins are" +
+      " always enabled. Please remove it from your config.",
+  );
 
   v.validateTopLevelOptions(opts, TopLevelOptions);
 
@@ -266,12 +222,6 @@ export default function normalizeOptions(opts: Options) {
   );
 
   checkDuplicateIncludeExcludes(include, exclude);
-
-  if (!process.env.BABEL_8_BREAKING) {
-    v.validateBooleanOption("loose", opts.loose);
-    v.validateBooleanOption("spec", opts.spec);
-    v.validateBooleanOption("bugfixes", opts.bugfixes);
-  }
 
   return {
     configPath: v.validateStringOption(

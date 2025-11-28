@@ -8,11 +8,6 @@ export default declare(api => {
   return createRegExpFeaturePlugin({
     name: "transform-unicode-sets-regex",
     feature: "unicodeSetsFlag",
-    manipulateOptions(opts, parserOpts) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-ignore(Babel 7 vs Babel 8) This plugin has been removed
-        parserOpts.plugins.push("regexpUnicodeSets");
-      }
-    },
+    manipulateOptions(opts, parserOpts) {},
   });
 });

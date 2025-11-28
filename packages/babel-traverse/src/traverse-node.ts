@@ -190,9 +190,7 @@ export function traverseNode<S = unknown>(
   skipKeys?: Record<string, boolean> | null,
   visitSelf?: boolean,
 ): boolean {
-  if (process.env.BABEL_8_BREAKING) {
-    return _traverse(node, opts, scope, state, path, skipKeys, visitSelf);
-  }
+  return _traverse(node, opts, scope, state, path, skipKeys, visitSelf);
 
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return false;

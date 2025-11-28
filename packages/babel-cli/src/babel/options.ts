@@ -7,10 +7,7 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
-const program = process.env.BABEL_8_BREAKING
-  ? commander.program
-  : commander.default.program;
-
+const program = commander.program;
 // Standard Babel input configs.
 program.option(
   "-f, --filename [filename]",
@@ -108,19 +105,6 @@ program.option(
   "The root from which all sources are relative.",
 );
 
-if (!process.env.BABEL_8_BREAKING) {
-  // Config params for certain module output formats.
-  program.option(
-    "--module-root [filename]",
-    "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
-  );
-  program.option("-M, --module-ids", "Insert an explicit id for modules.");
-  program.option(
-    "--module-id [string]",
-    "Specify a custom name for module ids.",
-  );
-}
-
 // "babel" command specific arguments that are not passed to @babel/core.
 program.option(
   "-x, --extensions [extensions]",
@@ -217,13 +201,11 @@ export default function parseArgv(args: string[]): CmdOptions | null {
   const errors: string[] = [];
 
   let filenames = program.args.reduce(function (globbed: string[], input) {
-    let files = process.env.BABEL_8_BREAKING
-      ? // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
-        // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
-        glob.sync(input, { dotRelative: true }).sort(alphasort)
-      : // When USE_ESM is true and BABEL_8_BREAKING is off,
-        // the glob package is an ESM wrapper of the CJS glob 7
-        (USE_ESM ? glob.default.sync : glob.sync)(input);
+    let files =
+      // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
+      // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
+      glob.sync(input, { dotRelative: true }).sort(alphasort);
+
     if (!files.length) files = [input];
     globbed.push(...files);
     return globbed;
@@ -320,14 +302,6 @@ export default function parseArgv(args: string[]): CmdOptions | null {
     highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
     comments: opts.comments === true ? undefined : opts.comments,
   };
-
-  if (!process.env.BABEL_8_BREAKING) {
-    Object.assign(babelOptions, {
-      moduleRoot: opts.moduleRoot,
-      moduleIds: opts.moduleIds,
-      moduleId: opts.moduleId,
-    });
-  }
 
   // If the @babel/cli version is newer than the @babel/core version, and we have added
   // new options for @babel/core, we'll potentially get option validation errors from

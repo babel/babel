@@ -385,11 +385,11 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction) {
       scopeFlags |= ScopeFlag.NEW_TARGET;
     }
-    if (process.env.BABEL_8_BREAKING) {
-      if (this.optionFlags & OptionFlags.AllowSuperOutsideMethod) {
-        scopeFlags |= ScopeFlag.SUPER | ScopeFlag.DIRECT_SUPER;
-      }
+
+    if (this.optionFlags & OptionFlags.AllowSuperOutsideMethod) {
+      scopeFlags |= ScopeFlag.SUPER | ScopeFlag.DIRECT_SUPER;
     }
+
     this.scope.enter(scopeFlags);
   }
 

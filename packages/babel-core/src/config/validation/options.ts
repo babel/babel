@@ -122,14 +122,6 @@ const COMMON_VALIDATORS: ValidatorSet = {
   parserOpts: assertObject as Validator<InputOptions["parserOpts"]>,
   generatorOpts: assertObject as Validator<InputOptions["generatorOpts"]>,
 };
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(COMMON_VALIDATORS, {
-    getModuleId: assertFunction,
-    moduleRoot: assertString,
-    moduleIds: assertBoolean,
-    moduleId: assertString,
-  });
-}
 
 type Assumptions = {
   arrayLikeIsIterable?: boolean;

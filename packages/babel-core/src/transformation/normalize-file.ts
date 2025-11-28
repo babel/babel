@@ -64,15 +64,11 @@ export default function* normalizeFile(
         try {
           inputMap = convertSourceMap.fromComment("//" + lastComment);
         } catch (err) {
-          if (process.env.BABEL_8_BREAKING) {
-            console.warn(
-              "discarding unknown inline input sourcemap",
-              options.filename,
-              err,
-            );
-          } else {
-            debug("discarding unknown inline input sourcemap");
-          }
+          console.warn(
+            "discarding unknown inline input sourcemap",
+            options.filename,
+            err,
+          );
         }
       }
     }

@@ -26,43 +26,23 @@ export function readdir(
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
 ): string[] {
-  if (process.env.BABEL_8_BREAKING) {
-    return (
-      fs
-        .readdirSync(dirname, { recursive: true, withFileTypes: true })
-        .filter(dirent => {
-          // exclude directory entries from readdir results
-          if (dirent.isDirectory()) return false;
-          const filename = dirent.name;
-          return (
-            (includeDotfiles || !filename.startsWith(".")) &&
-            (!filter || filter(filename))
-          );
-        })
-        .map(dirent => path.join(dirent.parentPath, dirent.name))
-        // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
-        // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
-        .sort(alphasort)
-    );
-  } else {
-    return readdirRecursive(
-      "",
-      (filename, index, currentDirectory) => {
-        const stat = fs.statSync(path.join(currentDirectory, filename));
-
-        // ensure we recurse into .* folders
-        if (stat.isDirectory()) return true;
-
+  return (
+    fs
+      .readdirSync(dirname, { recursive: true, withFileTypes: true })
+      .filter(dirent => {
+        // exclude directory entries from readdir results
+        if (dirent.isDirectory()) return false;
+        const filename = dirent.name;
         return (
           (includeDotfiles || !filename.startsWith(".")) &&
           (!filter || filter(filename))
         );
-      },
-      // @ts-expect-error improve @types/fs-readdir-recursive typings
-      [],
-      dirname,
-    );
-  }
+      })
+      .map(dirent => path.join(dirent.parentPath, dirent.name))
+      // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
+      // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
+      .sort(alphasort)
+  );
 }
 
 export function readdirForCompilable(
@@ -125,19 +105,9 @@ export async function compile(filename: string, opts: InputOptions) {
     caller: CALLER,
   };
 
-  const result = process.env.BABEL_8_BREAKING
-    ? await babel.transformFileAsync(filename, opts)
-    : await new Promise<FileResult>((resolve, reject) => {
-        babel.transformFile(filename, opts, (err, result) => {
-          if (err) reject(err);
-          else resolve(result);
-        });
-      });
+  const result = await babel.transformFileAsync(filename, opts);
 
   if (result) {
-    if (!process.env.BABEL_8_BREAKING) {
-      if (!result.externalDependencies) return result;
-    }
     watcher.updateExternalDependencies(filename, result.externalDependencies);
   }
 

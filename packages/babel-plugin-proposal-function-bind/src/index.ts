@@ -42,7 +42,7 @@ export default declare(api => {
       bind.callee.object = t.assignmentExpression(
         "=",
         tempId,
-        // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.foo(?)`
+
         bind.callee.object,
       );
     }

@@ -515,35 +515,7 @@ export default abstract class Tokenizer extends CommentsParser {
       );
     }
 
-    if (
-      !process.env.BABEL_8_BREAKING &&
-      (next === charCodes.leftCurlyBrace ||
-        (next === charCodes.leftSquareBracket &&
-          this.hasPlugin("recordAndTuple")))
-    ) {
-      // When we see `#{`, it is likely to be a hash record.
-      // However we don't yell at `#[` since users may intend to use "computed private fields",
-      // which is not allowed in the spec. Throwing expecting recordAndTuple is
-      // misleading
-      this.expectPlugin("recordAndTuple");
-      if (this.getPluginOption("recordAndTuple", "syntaxType") === "bar") {
-        throw this.raise(
-          next === charCodes.leftCurlyBrace
-            ? Errors.RecordExpressionHashIncorrectStartSyntaxType
-            : Errors.TupleExpressionHashIncorrectStartSyntaxType,
-          this.state.curPosition(),
-        );
-      }
-
-      this.state.pos += 2;
-      if (next === charCodes.leftCurlyBrace) {
-        // #{
-        this.finishToken(tt.braceHashL);
-      } else {
-        // #[
-        this.finishToken(tt.bracketHashL);
-      }
-    } else if (isIdentifierStart(next)) {
+    if (isIdentifierStart(next)) {
       ++this.state.pos;
       this.finishToken(tt.privateName, this.readWord1(next));
     } else if (next === charCodes.backslash) {
@@ -650,38 +622,8 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       }
       // '|}'
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.hasPlugin("recordAndTuple") &&
-        next === charCodes.rightCurlyBrace
-      ) {
-        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            Errors.RecordExpressionBarIncorrectEndSyntaxType,
-            this.state.curPosition(),
-          );
-        }
-        this.state.pos += 2;
-        this.finishToken(tt.braceBarR);
-        return;
-      }
 
       // '|]'
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.hasPlugin("recordAndTuple") &&
-        next === charCodes.rightSquareBracket
-      ) {
-        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            Errors.TupleExpressionBarIncorrectEndSyntaxType,
-            this.state.curPosition(),
-          );
-        }
-        this.state.pos += 2;
-        this.finishToken(tt.bracketBarR);
-        return;
-      }
     }
 
     if (next === charCodes.equalsTo) {
@@ -884,50 +826,18 @@ export default abstract class Tokenizer extends CommentsParser {
         this.finishToken(tt.comma);
         return;
       case charCodes.leftSquareBracket:
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          this.hasPlugin("recordAndTuple") &&
-          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
-        ) {
-          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            throw this.raise(
-              Errors.TupleExpressionBarIncorrectStartSyntaxType,
-              this.state.curPosition(),
-            );
-          }
+        ++this.state.pos;
+        this.finishToken(tt.bracketL);
 
-          // [|
-          this.state.pos += 2;
-          this.finishToken(tt.bracketBarL);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.bracketL);
-        }
         return;
       case charCodes.rightSquareBracket:
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
       case charCodes.leftCurlyBrace:
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          this.hasPlugin("recordAndTuple") &&
-          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
-        ) {
-          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            throw this.raise(
-              Errors.RecordExpressionBarIncorrectStartSyntaxType,
-              this.state.curPosition(),
-            );
-          }
+        ++this.state.pos;
+        this.finishToken(tt.braceL);
 
-          // {|
-          this.state.pos += 2;
-          this.finishToken(tt.braceBarL);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.braceL);
-        }
         return;
       case charCodes.rightCurlyBrace:
         ++this.state.pos;
@@ -1287,16 +1197,6 @@ export default abstract class Tokenizer extends CommentsParser {
       isBigInt = true;
     }
 
-    if (!process.env.BABEL_8_BREAKING && next === charCodes.lowercaseM) {
-      this.expectPlugin("decimal", this.state.curPosition());
-      if (hasExponent || hasLeadingZero) {
-        this.raise(Errors.InvalidDecimal, startLoc);
-      }
-      ++this.state.pos;
-      // eslint-disable-next-line no-var
-      var isDecimal = true;
-    }
-
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
@@ -1306,11 +1206,6 @@ export default abstract class Tokenizer extends CommentsParser {
 
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
-      return;
-    }
-
-    if (!process.env.BABEL_8_BREAKING && isDecimal!) {
-      this.finishToken(tt.decimal, str);
       return;
     }
 

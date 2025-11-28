@@ -13,8 +13,8 @@ const VALID_IDENTIFIER_CALLEES = [
   "decodeURIComponent",
   "encodeURI",
   "encodeURIComponent",
-  process.env.BABEL_8_BREAKING ? "btoa" : null,
-  process.env.BABEL_8_BREAKING ? "atob" : null,
+  "btoa",
+  "atob",
 ] as const;
 
 const INVALID_METHODS = ["random"] as const;

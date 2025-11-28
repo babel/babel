@@ -2,10 +2,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 export default function ({ types: t }: PluginAPI): PluginObject {
   return {
-    manipulateOptions: process.env.BABEL_8_BREAKING
-      ? undefined
-      : (_, parser) => parser.plugins.push("optionalCatchBinding"),
-
+    manipulateOptions: undefined,
     visitor: {
       CatchClause(path) {
         if (path.node.param === null || !t.isIdentifier(path.node.param)) {

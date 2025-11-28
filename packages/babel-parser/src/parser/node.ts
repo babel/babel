@@ -34,28 +34,6 @@ class Node implements NodeBase {
 }
 const NodePrototype = Node.prototype;
 
-if (!process.env.BABEL_8_BREAKING) {
-  // @ts-expect-error __clone is not defined in Node prototype
-  NodePrototype.__clone = function (): Node {
-    const newNode = new Node(undefined!, this.start, this.loc.start);
-    const keys = Object.keys(this) as (keyof Node)[];
-    for (let i = 0, length = keys.length; i < length; i++) {
-      const key = keys[i];
-      // Do not clone comments that are already attached to the node
-      if (
-        key !== "leadingComments" &&
-        key !== "trailingComments" &&
-        key !== "innerComments"
-      ) {
-        // @ts-expect-error cloning this to newNode
-        newNode[key] = this[key];
-      }
-    }
-
-    return newNode;
-  };
-}
-
 export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {

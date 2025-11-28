@@ -16,11 +16,6 @@ export default declare((api, opts: Options) => {
 
   const { requireDirective = false } = opts;
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // eslint-disable-next-line no-var
-    var { allowDeclareFields = false } = opts;
-  }
-
   return {
     name: "transform-flow-strip-types",
     inherits: syntaxFlow,
@@ -105,27 +100,9 @@ export default declare((api, opts: Options) => {
           if (child.isClassProperty()) {
             const { node } = child;
 
-            if (!process.env.BABEL_8_BREAKING) {
-              if (!allowDeclareFields && node.declare) {
-                throw child.buildCodeFrameError(
-                  `The 'declare' modifier is only allowed when the ` +
-                    `'allowDeclareFields' option of ` +
-                    `@babel/plugin-transform-flow-strip-types or ` +
-                    `@babel/preset-flow is enabled.`,
-                );
-              }
-            }
-
             if (node.declare) {
               child.remove();
             } else {
-              if (!process.env.BABEL_8_BREAKING) {
-                if (!allowDeclareFields && !node.value && !node.decorators) {
-                  child.remove();
-                  return;
-                }
-              }
-
               node.variance = null;
               node.typeAnnotation = null;
             }

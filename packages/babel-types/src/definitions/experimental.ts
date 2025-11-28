@@ -11,28 +11,14 @@ defineType("ArgumentPlaceholder", {});
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  fields:
-    !process.env.BABEL_8_BREAKING && !process.env.BABEL_TYPES_8_BREAKING
-      ? {
-          object: {
-            validate: Object.assign(() => {}, {
-              oneOfNodeTypes: ["Expression"] as const,
-            }) satisfies ValidatorOneOfNodeTypes,
-          },
-          callee: {
-            validate: Object.assign(() => {}, {
-              oneOfNodeTypes: ["Expression"] as const,
-            }) satisfies ValidatorOneOfNodeTypes,
-          },
-        }
-      : {
-          object: {
-            validate: assertNodeType("Expression"),
-          },
-          callee: {
-            validate: assertNodeType("Expression"),
-          },
-        },
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("Decorator", {
@@ -68,37 +54,6 @@ defineType("ExportDefaultSpecifier", {
     },
   },
 });
-
-if (!process.env.BABEL_8_BREAKING) {
-  defineType("RecordExpression", {
-    visitor: ["properties"],
-    aliases: ["Expression"],
-    fields: {
-      properties: validateArrayOfType("ObjectProperty", "SpreadElement"),
-    },
-  });
-
-  defineType("TupleExpression", {
-    fields: {
-      elements: {
-        validate: arrayOfType("Expression", "SpreadElement"),
-        default: [],
-      },
-    },
-    visitor: ["elements"],
-    aliases: ["Expression"],
-  });
-
-  defineType("DecimalLiteral", {
-    builder: ["value"],
-    fields: {
-      value: {
-        validate: assertValueType("string"),
-      },
-    },
-    aliases: ["Expression", "Pureish", "Literal", "Immutable"],
-  });
-}
 
 // https://github.com/tc39/proposal-js-module-blocks
 defineType("ModuleExpression", {

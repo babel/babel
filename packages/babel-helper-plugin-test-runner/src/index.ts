@@ -3,14 +3,6 @@ import path from "node:path";
 import { URL } from "node:url";
 
 export default function (loc: string) {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!loc.startsWith("file://")) {
-      const name = path.basename(path.dirname(loc));
-      testRunner(loc + "/fixtures", name);
-      return;
-    }
-  }
-
   let fixtures = new URL("./fixtures", loc).pathname;
   if (process.platform === "win32") {
     // Remove the leading / before the drive letter

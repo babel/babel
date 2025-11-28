@@ -29,59 +29,8 @@ export function matchesPattern(
   return _matchesPattern(this.node, pattern, allowPartial);
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Check whether we have the input `key`. If the `key` references an array then we check
-   * if the array has any items, otherwise we just check if it's falsy.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.has = function has<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-  ): boolean {
-    const val = (this.node as N)?.[key];
-    if (val && Array.isArray(val)) {
-      return !!val.length;
-    } else {
-      return !!val;
-    }
-  };
-}
-
 export function isStatic(this: NodePath): boolean {
   return this.scope.isStatic(this.node);
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Alias of `has`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.is = exports.has;
-
-  /**
-   * Opposite of `has`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.isnt = function isnt<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-  ): boolean {
-    // @ts-expect-error Babel 7
-    return !this.has(key);
-  };
-
-  /**
-   * Check whether the path node `key` strict equals `value`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.equals = function equals<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-    value: any,
-  ): boolean {
-    return (this.node as N)[key] === value;
-  };
 }
 
 /**
