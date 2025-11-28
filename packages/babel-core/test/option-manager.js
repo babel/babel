@@ -1,7 +1,6 @@
 import * as babel from "../lib/index.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { itBabel7, itBabel7NoESM } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -14,14 +13,6 @@ function loadOptionsAsync(opts) {
 }
 
 describe("option-manager", () => {
-  itBabel7NoESM("throws for babel 5 plugin", () => {
-    return expect(() => {
-      loadOptions({
-        plugins: [({ Plugin }) => new Plugin("object-assign", {})],
-      });
-    }).toThrow(/Babel 5 plugin is being run with an unsupported Babel/);
-  });
-
   describe("config plugin/preset flattening and overriding", () => {
     function makePlugin() {
       const calls = [];
@@ -246,16 +237,6 @@ describe("option-manager", () => {
       expect(Array.isArray(options.plugins)).toBe(true);
       expect(options.plugins).toHaveLength(1);
       expect(options.presets).toHaveLength(0);
-    });
-
-    itBabel7("es2015_named should throw", async () => {
-      await expect(
-        loadOptionsAsync({
-          presets: [
-            path.join(cwd, "fixtures/option-manager/presets", "es2015_named"),
-          ],
-        }),
-      ).rejects.toThrow(/Must export a default export when using ES6 modules/);
     });
 
     it.each(["es2015_invalid", "es5_invalid"])(

@@ -1,9 +1,8 @@
 import _normalizeOptions from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
-import { describeBabel8, describeBabel7 } from "$repo-utils";
 
 describe("normalize options", () => {
-  describeBabel8("Babel 8", () => {
+  describe("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ throwIfNamespaces: true })).toThrow(
         "@babel/preset-react: 'throwIfNamespaces' is not a valid top-level option.\n- Did you mean 'throwIfNamespace'?",
@@ -77,51 +76,6 @@ describe("normalize options", () => {
           "pure": undefined,
           "runtime": "classic",
           "throwIfNamespace": true,
-        }
-      `);
-    });
-  });
-  describeBabel7("Babel 7", () => {
-    it("should not throw on unknown options", () => {
-      expect(() => normalizeOptions({ throwIfNamespaces: true })).not.toThrow();
-    });
-    it.each(["development", "pure", "throwIfNamespace"])(
-      "should not throw when `%p` is not a boolean",
-      optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
-      },
-    );
-    it.each(["importSource", "pragma", "pragmaFrag", "runtime"])(
-      "should throw when `%p` is not a string",
-      optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
-      },
-    );
-    it("default values in Babel 7", () => {
-      expect(normalizeOptions({})).toMatchInlineSnapshot(`
-        Object {
-          "development": undefined,
-          "importSource": undefined,
-          "pragma": "React.createElement",
-          "pragmaFrag": "React.Fragment",
-          "pure": undefined,
-          "runtime": "classic",
-          "throwIfNamespace": true,
-          "useBuiltIns": undefined,
-          "useSpread": undefined,
-        }
-      `);
-      expect(normalizeOptions({ runtime: "automatic" })).toMatchInlineSnapshot(`
-        Object {
-          "development": undefined,
-          "importSource": undefined,
-          "pragma": undefined,
-          "pragmaFrag": undefined,
-          "pure": undefined,
-          "runtime": "automatic",
-          "throwIfNamespace": true,
-          "useBuiltIns": undefined,
-          "useSpread": undefined,
         }
       `);
     });

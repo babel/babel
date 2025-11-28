@@ -1,11 +1,6 @@
 import { execFile } from "node:child_process";
 import { createRequire } from "node:module";
-import {
-  describeESM,
-  describeSatisfies,
-  itNegate,
-  itSatisfies,
-} from "$repo-utils";
+import { describeSatisfies, itNegate, itSatisfies } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
@@ -30,7 +25,7 @@ describe("dummy", () => {
   it("dummy", () => {});
 });
 
-describeESM("usage from cjs", () => {
+describe("usage from cjs", () => {
   it("lazy plugin required", async () => {
     expect(await run("lazy-plugin-required.cjs")).toMatchInlineSnapshot(`
       Object {
@@ -126,7 +121,7 @@ describeESM("usage from cjs", () => {
   });
 });
 
-describeESM("sync loading of ESM plugins", () => {
+describe("sync loading of ESM plugins", () => {
   itNegate(itSatisfies(versionHasRequireESM))(
     "without --experimental-require-module flag",
     async () => {

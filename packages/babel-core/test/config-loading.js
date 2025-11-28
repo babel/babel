@@ -9,7 +9,7 @@ import {
   createConfigItemSync,
 } from "../lib/index.js";
 import path from "node:path";
-import { itNoWin32, itBabel8, commonJS } from "$repo-utils";
+import { itNoWin32, commonJS } from "$repo-utils";
 import { supportsESM } from "./helpers/esm.js";
 
 const { require, __dirname } = commonJS(import.meta.url);
@@ -50,7 +50,7 @@ describe("@babel/core config loading", () => {
   }
 
   describe("createConfigItem", () => {
-    itBabel8("throws on undefined callback", () => {
+    it("throws on undefined callback", () => {
       function myPlugin() {
         return {};
       }
@@ -96,7 +96,7 @@ describe("@babel/core config loading", () => {
   });
 
   describe("loadPartialConfig", () => {
-    itBabel8("throws on undefined callback", () => {
+    it("throws on undefined callback", () => {
       expect(() =>
         loadPartialConfig({
           ...makeOpts(true),
@@ -199,7 +199,7 @@ describe("@babel/core config loading", () => {
   });
 
   describe("loadOptions", () => {
-    itBabel8("throws on undefined callback", () => {
+    it("throws on undefined callback", () => {
       const opts = makeOpts();
 
       expect(() => loadOptions(opts)).toThrowErrorMatchingInlineSnapshot(

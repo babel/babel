@@ -1,5 +1,4 @@
 import { parse } from "../lib/index.js";
-import { itBabel8 } from "$repo-utils";
 
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
@@ -67,7 +66,7 @@ describe("plugin options", function () {
     });
   });
   describe("'moduleAttributes' plugin", () => {
-    itBabel8("removed in Babel 8", () => {
+    it("removed in Babel 8", () => {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(
