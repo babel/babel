@@ -89,7 +89,6 @@
     "transform-modules-umd",
     "transform-named-capturing-groups-regex",
     "transform-new-target",
-    "transform-object-assign",
     "transform-object-super",
     "transform-object-set-prototype-of-to-assign",
     "transform-parameters",
@@ -121,6 +120,7 @@
   ],
   "babel7OnlyExternalPlugins": [
     "syntax-record-and-tuple",
-    "proposal-record-and-tuple"
+    "proposal-record-and-tuple",
+    "transform-object-assign"
   ]
 }
