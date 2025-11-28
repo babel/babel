@@ -651,7 +651,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/types": "condition:BABEL_8_BREAKING ? : workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -4363,6 +4363,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types-BABEL_8_BREAKING-false@npm:@babel/types@workspace:^, @babel/types@workspace:*, @babel/types@workspace:^, @babel/types@workspace:packages/babel-types":
+  version: 0.0.0-use.local
+  resolution: "@babel/types@workspace:packages/babel-types"
+  dependencies:
+    "@babel/generator": "workspace:^"
+    "@babel/helper-fixtures": "workspace:^"
+    "@babel/helper-string-parser": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/parser": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
+"@babel/types@condition:BABEL_8_BREAKING ? : workspace:^":
+  version: 0.0.0-condition-9ef56a
+  resolution: "@babel/types@condition:BABEL_8_BREAKING?:workspace:^#9ef56a"
+  dependencies:
+    "@babel/types-BABEL_8_BREAKING-false": "npm:@babel/types@workspace:^"
+  checksum: 10/c256bc06392368e725b0765066d645d04b905cadef731c7058e10f18fbb26af584bd105bf40e1e36ff02a5bc13f0c87f245fe6fe900b25cce921413f8ea0fe5a
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.12.7, @babel/types@npm:^7.24.0, @babel/types@npm:^7.24.7, @babel/types@npm:^7.27.1, @babel/types@npm:^7.27.3, @babel/types@npm:^7.27.6, @babel/types@npm:^7.4.4":
   version: 7.27.6
   resolution: "@babel/types@npm:7.27.6"
@@ -4382,18 +4403,6 @@ __metadata:
   checksum: 10/162784ece3223284dec9f97b08cf741ce07564cc25a563f47892c445b449e87c4b46864af4965814bc007e1ed5a73231031b7de80771572a5ecf3897fcf4169a
   languageName: node
   linkType: hard
-
-"@babel/types@workspace:*, @babel/types@workspace:^, @babel/types@workspace:packages/babel-types":
-  version: 0.0.0-use.local
-  resolution: "@babel/types@workspace:packages/babel-types"
-  dependencies:
-    "@babel/generator": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
-    "@babel/helper-string-parser": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/parser": "workspace:^"
-  languageName: unknown
-  linkType: soft
 
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
