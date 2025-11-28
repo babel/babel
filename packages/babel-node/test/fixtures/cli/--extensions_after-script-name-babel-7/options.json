@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "args": ["foo", "--extensions", ".bar"],
-  "stdout": "[ 1, 4, 9 ]"
-}

@@ -1,6 +1,5 @@
 {
   "plugins": [
     "typescript"
-  ],
-  "BABEL_8_BREAKING": true
+  ]
 }

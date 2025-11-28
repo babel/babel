@@ -1,8 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "presets": [["typescript"]],
-  "plugins": [
-    ["proposal-decorators", { "decoratorsBeforeExport": true }],
-    ["transform-class-properties"]
-  ]
-}

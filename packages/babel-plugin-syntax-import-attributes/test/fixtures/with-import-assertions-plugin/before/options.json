@@ -1,6 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "sourceType": "module",
-  "plugins": ["syntax-import-attributes", "syntax-import-assertions"],
-  "SKIP_babel7plugins_babel8core": "'importAssertions' has been removed in Babel 8"
-}

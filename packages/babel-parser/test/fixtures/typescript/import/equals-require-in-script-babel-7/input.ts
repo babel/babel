@@ -1,1 +1,0 @@
-import a = require("a");

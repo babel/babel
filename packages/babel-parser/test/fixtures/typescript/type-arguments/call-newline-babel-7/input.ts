@@ -1,2 +1,0 @@
-makeBox<number>
-(a)

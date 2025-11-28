@@ -1,4 +1,0 @@
-{
-  "plugins": ["deprecatedImportAssert"],
-  "sourceType": "module"
-}

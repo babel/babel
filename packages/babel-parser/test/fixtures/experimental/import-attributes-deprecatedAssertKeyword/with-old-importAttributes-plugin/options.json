@@ -1,6 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "createImportExpressions": false,
-  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
-  "sourceType": "module"
-}

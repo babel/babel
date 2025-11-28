@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "transform-block-scoped-functions",
-    "transform-block-scoping",
-    "transform-async-generator-functions"
-  ],
-  "BABEL_8_BREAKING": false
-}

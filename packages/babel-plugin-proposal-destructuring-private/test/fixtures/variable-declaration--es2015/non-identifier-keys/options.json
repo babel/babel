@@ -1,5 +1,0 @@
-{
-  "plugins": ["proposal-destructuring-private", "@babel/plugin-syntax-decimal"],
-  "minNodeVersion": "16.11.0",
-  "BABEL_8_BREAKING": false
-}

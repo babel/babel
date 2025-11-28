@@ -1,4 +1,3 @@
 {
-  "BABEL_8_BREAKING": true,
   "throws": "Topic references are only supported when using the `\"proposal\": \"hack\"` version of the pipeline proposal. (1:5)"
 }

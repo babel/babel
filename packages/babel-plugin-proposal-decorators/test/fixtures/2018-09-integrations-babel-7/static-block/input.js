@@ -1,3 +1,0 @@
-@f class C {
-  static {}
-}

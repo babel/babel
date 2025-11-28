@@ -10,6 +10,5 @@
         "debug": true
       }
     ]
-  ],
-  "BABEL_8_BREAKING": true
+  ]
 }

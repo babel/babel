@@ -5,6 +5,5 @@
     ["transform-react-jsx", { "runtime": "classic" }],
     "transform-block-scoped-functions",
     "transform-arrow-functions"
-  ],
-  "BABEL_8_BREAKING": true
+  ]
 }

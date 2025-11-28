@@ -1,5 +1,0 @@
-{
-  "validateLogs": true,
-  "plugins": ["transform-modules-systemjs"],
-  "BABEL_8_BREAKING": false
-}

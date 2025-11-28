@@ -1,5 +1,4 @@
 {
-  "BABEL_8_BREAKING": true,
   "plugins": [
     ["transform-runtime", { "corejs": { "version": 3, "poroposals": true } }]
   ]

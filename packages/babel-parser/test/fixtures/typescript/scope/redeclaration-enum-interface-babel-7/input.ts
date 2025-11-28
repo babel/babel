@@ -1,2 +1,0 @@
-enum X {}
-interface X {}

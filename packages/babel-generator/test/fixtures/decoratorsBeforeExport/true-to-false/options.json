@@ -1,6 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [["decorators", { "decoratorsBeforeExport": true }]],
-  "decoratorsBeforeExport": false,
-  "expectedReParseError": true
-}
