@@ -30,14 +30,6 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

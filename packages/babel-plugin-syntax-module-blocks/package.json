@@ -33,14 +33,6 @@
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "devDependencies": {
     "@babel/core": "workspace:^"
   }

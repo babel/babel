@@ -78,22 +78,6 @@
     "ts-node": "^11.0.0-beta.1",
     "tsx": "^4.20.3"
   },
-  "conditions": {
-    "USE_ESM": [
-      {
-        "exports": {
-          ".": {
-            "types": "./lib/index.d.ts",
-            "default": "./lib/index.js"
-          },
-          "./package.json": "./package.json"
-        }
-      },
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

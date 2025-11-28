@@ -45,14 +45,6 @@
     "charcodes": "^0.2.0"
   },
   "bin": "./bin/babel-parser.js",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "type": "module",
   "exports": {
     ".": {

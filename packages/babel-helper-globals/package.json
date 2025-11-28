@@ -18,14 +18,6 @@
     "./data/builtin-upper.json": "./data/builtin-upper.json",
     "./package.json": "./package.json"
   },
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "keywords": [
     "babel",
     "globals"
