@@ -43,6 +43,7 @@ export type Plugin =
   | IF_BABEL_7<"privateIn">
   | IF_BABEL_7<"regexpUnicodeSets">
   | "sourcePhaseImports"
+  | "structs"
   | "throwExpressions"
   | IF_BABEL_7<"topLevelAwait">
   | "v8intrinsic"
