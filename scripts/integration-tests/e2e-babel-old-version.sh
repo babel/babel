@@ -32,6 +32,7 @@ node -e "
     '@babel/core@npm:7.0.0/@babel/traverse': '7.0.0',
     '@babel/core@npm:7.0.0/@babel/helpers': '7.1.0',
     '@babel/helpers@npm:7.1.0/@babel/traverse': '7.0.0',
+    'prettier@npm:*': '3.6.2'
   });
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
