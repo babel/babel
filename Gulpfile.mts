@@ -39,7 +39,7 @@ import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
 import { USE_ESM, commonJS } from "$repo-utils";
 
-import type { PluginItem, types } from "@babel/core";
+import type { NodePath, PluginItem, types } from "@babel/core";
 
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
@@ -173,6 +173,32 @@ async function applyBabelToSource(
       ...options?.generatorOpts,
     },
   }).then(res => formatCode(res!.code, filename));
+}
+
+function applyBabelToGlob(glob: any, options: any) {
+  const promises = [];
+
+  const ac = new AbortController();
+
+  for (const file of glob) {
+    promises.push(
+      fs.promises
+        .readFile(file, "utf-8")
+        .then(code => {
+          ac.signal.throwIfAborted();
+          return applyBabelToSource(code, file, options);
+        })
+        .then(transformedCode => {
+          ac.signal.throwIfAborted();
+          return fs.promises.writeFile(file, transformedCode);
+        })
+    );
+  }
+
+  return Promise.all(promises).catch(err => {
+    ac.abort();
+    throw err;
+  });
 }
 
 const kebabToCamel = (str: string) =>
@@ -889,58 +915,113 @@ gulp.task("generate-runtime-helpers", async () => {
 
 gulp.task("generate-standalone", () => generateStandalone());
 
-gulp.task("materialize-babel-8", async () => {
-  const promises = [];
-  const files = new Glob(defaultSourcesGlob, { posix: true });
-
-  const ac = new AbortController();
-
-  for (const file of files) {
-    promises.push(
-      fs.promises
-        .readFile(file, "utf-8")
-        .then(async code => {
-          await ac.signal.throwIfAborted();
-          return applyBabelToSource(code, file, {
-            plugins: [
-              [
-                babelPluginToggleBooleanFlag,
-                { name: "process.env.BABEL_8_BREAKING", value: true },
-              ],
-              (api: any) => ({
-                visitor: {
-                  SpreadElement: {
-                    exit(path: any) {
-                      const { argument } = path.node;
-                      if (api.types.isObjectExpression(argument)) {
-                        path.replaceWithMultiple(argument.properties);
-                      }
-                    },
-                  },
-                },
-              }),
-            ],
-            parserOpts: {
-              plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
+gulp.task("materialize-babel-8-src", () =>
+  applyBabelToGlob(new Glob(defaultSourcesGlob, { posix: true }), {
+    plugins: [
+      [
+        babelPluginToggleBooleanFlag,
+        { name: "process.env.BABEL_8_BREAKING", value: true },
+      ],
+      (api: any) => ({
+        visitor: {
+          SpreadElement: {
+            exit(path: any) {
+              const { argument } = path.node;
+              if (api.types.isObjectExpression(argument)) {
+                path.replaceWithMultiple(argument.properties);
+              }
             },
-            generatorOpts: {
-              shouldPrintComment: (comment: string) =>
-                !comment.includes("@ts-ignore(Babel 7 vs Babel 8)"),
-            },
-          });
-        })
-        .then(async transformedCode => {
-          await ac.signal.throwIfAborted();
-          return fs.promises.writeFile(file, transformedCode);
-        })
-    );
-  }
+          },
+        },
+      }),
+    ],
+    parserOpts: {
+      plugins: ["typescript", "decorators", "decoratorAutoAccessors"],
+    },
+    generatorOpts: {
+      shouldPrintComment: (comment: string) =>
+        !comment.includes("@ts-ignore(Babel 7 vs Babel 8)"),
+    },
+  })
+);
 
-  return Promise.all(promises).catch(err => {
-    ac.abort();
-    throw err;
-  });
-});
+gulp.task("materialize-babel-8-tests", () =>
+  applyBabelToGlob(
+    new Glob(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
+      ignore: [
+        `**/test/fixtures/**`,
+        `**/test/regenerator-fixtures/**`,
+        `**/test/tmp/**`,
+        `**/test/node_modules/**`,
+        `**/babel-parser/test/expressions/**`,
+      ],
+    }),
+    {
+      plugins: [
+        ({ types: t }: typeof import("@babel/core")) => ({
+          visitor: {
+            CallExpression(path: NodePath<types.CallExpression>) {
+              if (path.node.arguments.length < 2) return;
+              if (!path.parentPath.isExpressionStatement()) return;
+
+              let callee = path.get("callee");
+              while (callee.isMemberExpression() || callee.isCallExpression()) {
+                if (callee.isCallExpression()) {
+                  callee = callee.get("callee");
+                } else {
+                  callee = callee.get("object");
+                }
+              }
+              if (!callee.isIdentifier()) return;
+              switch (callee.node.name) {
+                case "itNoESM":
+                case "itGteNoESM":
+                case "itBabel7":
+                case "itBabel7NoESM":
+                case "itBabel7GteNoESM":
+                case "describeBabel7":
+                case "describeBabel7NoESM":
+                  path.remove();
+                  break;
+
+                case "itESM":
+                case "itBabel8":
+                  callee.replaceWith(t.identifier("it"));
+                  break;
+
+                case "describeESM":
+                case "describeBabel8":
+                  callee.replaceWith(t.identifier("describe"));
+                  break;
+              }
+            },
+            Program: {
+              exit(path: NodePath<types.Program>) {
+                path.scope.crawl();
+
+                for (const decl of path.get("body")) {
+                  if (!decl.isImportDeclaration()) continue;
+                  if (decl.node.source.value !== "$repo-utils") continue;
+
+                  for (const spec of decl.get("specifiers")) {
+                    if (
+                      !path.scope.getBinding(spec.node.local.name)?.referenced
+                    ) {
+                      spec.remove();
+                    }
+                  }
+                  if (decl.node.specifiers.length === 0) {
+                    decl.remove();
+                  }
+                }
+              },
+            },
+          },
+        }),
+      ],
+    }
+  )
+);
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("rollup-babel-standalone", () => buildRollup(standaloneBundle, true));
