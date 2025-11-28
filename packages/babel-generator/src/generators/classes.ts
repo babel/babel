@@ -293,3 +293,24 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.rightBrace(node);
   }
 }
+
+export function StructDeclaration(this: Printer, node: t.StructDeclaration) {
+  this.word("struct", true);
+
+  if (node.id) {
+    this.space();
+    this.print(node.id);
+  }
+
+  if (node.superClass) {
+    this.space();
+    this.word("extends");
+    this.space();
+    this.print(node.superClass);
+  }
+
+  this.space();
+  this.print(node.body);
+}
+
+export { ClassBody as StructBody };
