@@ -63,10 +63,8 @@ export default class File {
   }
   set shebang(value: string) {
     if (value) {
-      // @ts-expect-error this.path.get("interpreter") may be PathNode<null>
       this.path.get("interpreter").replaceWith(interpreterDirective(value));
     } else {
-      // @ts-expect-error this.path.get("interpreter") may be PathNode<null>
       this.path.get("interpreter").remove();
     }
   }

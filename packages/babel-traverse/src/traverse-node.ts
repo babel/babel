@@ -6,7 +6,10 @@ import type * as t from "@babel/types";
 import { VISITOR_KEYS } from "@babel/types";
 import { _call, popContext, pushContext, resync } from "./path/context.ts";
 
-function _visitPaths(ctx: TraversalContext, paths: NodePath[]): boolean {
+function _visitPaths(
+  ctx: TraversalContext,
+  paths: NodePath<t.Node | null>[],
+): boolean {
   // set queue
   ctx.queue = paths;
   ctx.priorityQueue = [];
@@ -63,7 +66,7 @@ function _visitPaths(ctx: TraversalContext, paths: NodePath[]): boolean {
   return stop;
 }
 
-function _visit(ctx: TraversalContext, path: NodePath) {
+function _visit(ctx: TraversalContext, path: NodePath<t.Node | null>) {
   const node = path.node;
   if (!node) {
     return false;

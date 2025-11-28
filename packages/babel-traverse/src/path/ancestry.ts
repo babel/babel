@@ -12,7 +12,7 @@ import type NodePath from "./index.ts";
  */
 
 export function findParent(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   callback: (path: NodePath) => boolean,
 ): NodePath | null {
   let path = this;
@@ -43,7 +43,9 @@ export function find(
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
+export function getFunctionParent(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Function> | null {
   return this.findParent(p => p.isFunction()) as NodePath<t.Function> | null;
 }
 
@@ -51,7 +53,9 @@ export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent(this: NodePath): NodePath<t.Statement> {
+export function getStatementParent(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Statement> {
   let path = this;
 
   do {

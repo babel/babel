@@ -56,7 +56,7 @@ function addCompletionRecords(
   context: CompletionContext,
 ): Completion[] {
   if (path) {
-    // @ts-expect-error FIXME: NodePath<null>
+    // @ts-expect-error FIXME: path may be NodePath<null>
     records.push(..._getCompletionRecords(path, context));
   }
   return records;
@@ -297,7 +297,10 @@ export function getCompletionRecords(
   return records.map(r => r.path);
 }
 
-export function getSibling(this: NodePath, key: string | number): NodePath {
+export function getSibling(
+  this: NodePath<t.Node | null>,
+  key: string | number,
+): NodePath {
   return NodePath.get({
     parentPath: this.parentPath,
     parent: this.parent,
@@ -307,17 +310,17 @@ export function getSibling(this: NodePath, key: string | number): NodePath {
   }).setContext(this.context);
 }
 
-export function getPrevSibling(this: NodePath): NodePath {
+export function getPrevSibling(this: NodePath<t.Node | null>): NodePath {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key - 1);
 }
 
-export function getNextSibling(this: NodePath): NodePath {
+export function getNextSibling(this: NodePath<t.Node | null>): NodePath {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key + 1);
 }
 
-export function getAllNextSiblings(this: NodePath): NodePath[] {
+export function getAllNextSiblings(this: NodePath<t.Node | null>): NodePath[] {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   let _key: number = this.key;
   let sibling = this.getSibling(++_key);
@@ -329,7 +332,7 @@ export function getAllNextSiblings(this: NodePath): NodePath[] {
   return siblings;
 }
 
-export function getAllPrevSiblings(this: NodePath): NodePath[] {
+export function getAllPrevSiblings(this: NodePath<t.Node | null>): NodePath[] {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   let _key: number = this.key;
   let sibling = this.getSibling(--_key);
@@ -540,7 +543,7 @@ function getBindingIdentifierPaths(
 // original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation returns paths
 function getBindingIdentifierPaths(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   duplicates: boolean = false,
   outerOnly: boolean = false,
 ): Record<string, NodePath<t.Identifier> | NodePath<t.Identifier>[]> {
@@ -575,7 +578,6 @@ function getBindingIdentifierPaths(
 
     if (outerOnly) {
       if (id.isFunctionDeclaration()) {
-        // @ts-expect-error FIXME: NodePath<null>
         search.push(id.get("id"));
         continue;
       }
@@ -589,7 +591,6 @@ function getBindingIdentifierPaths(
         const key = keys[i];
         const child = id.get(key);
         if (Array.isArray(child)) {
-          // @ts-expect-error FIXME: NodePath<null>
           search.push(...child);
         } else if (child.node) {
           search.push(child);

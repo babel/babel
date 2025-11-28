@@ -173,9 +173,9 @@ const NodePath_Final = class NodePath {
     this.node[key] = node;
   }
 
-  getPathLocation(this: NodePath_Final): string {
+  getPathLocation(this: NodePath_Final<t.Node | null>): string {
     const parts = [];
-    let path: NodePath_Final = this;
+    let path: NodePath_Final<t.Node | null> = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -184,7 +184,7 @@ const NodePath_Final = class NodePath {
     return parts.join(".");
   }
 
-  debug(this: NodePath_Final, message: string) {
+  debug(this: NodePath_Final<t.Node | null>, message: string) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
@@ -369,7 +369,7 @@ interface NodePathOverwrites {
    * @see ./introspection.ts for implementation.
    */
   isStatementOrBlock(
-    this: NodePath_Final,
+    this: NodePath_Final<t.Node | null>,
   ): this is NodePath_Final<t.Statement | t.Block>;
 }
 

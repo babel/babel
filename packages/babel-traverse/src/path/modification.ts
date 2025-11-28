@@ -35,7 +35,7 @@ import type {
  */
 
 export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes_: Nodes,
 ): NodePaths<Nodes> {
   _assertUnremoved.call(this);
@@ -90,7 +90,7 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
 }
 
 export function _containerInsert<Nodes extends NodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   from: number,
   nodes: Nodes,
 ): NodePaths<Nodes> {
@@ -125,7 +125,7 @@ export function _containerInsert<Nodes extends NodeList<t.Node>>(
 }
 
 export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {
   return _containerInsert.call(
@@ -136,7 +136,7 @@ export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
 }
 
 export function _containerInsertAfter<Nodes extends NodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {
   return _containerInsert.call(
@@ -182,7 +182,7 @@ function isAlmostConstantAssignment(
  */
 
 export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes_: Nodes,
 ): NodePaths<Nodes> {
   _assertUnremoved.call(this);
@@ -320,7 +320,7 @@ export function updateSiblingKeys(
 }
 
 export function _verifyNodeList<N extends t.Node>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   nodes: N | N[],
 ) {
   if (!nodes) {
