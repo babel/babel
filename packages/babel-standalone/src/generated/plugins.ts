@@ -84,10 +84,7 @@ import transformReactConstantElements from "@babel/plugin-transform-react-consta
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactInlineElements from "@babel/plugin-transform-react-inline-elements";
 import transformReactJsx from "@babel/plugin-transform-react-jsx";
-import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
 import transformReactJsxDevelopment from "@babel/plugin-transform-react-jsx-development";
-import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
-import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformRuntime from "@babel/plugin-transform-runtime";
@@ -191,10 +188,7 @@ export {
   transformReactDisplayName,
   transformReactInlineElements,
   transformReactJsx,
-  transformReactJsxCompat,
   transformReactJsxDevelopment,
-  transformReactJsxSelf,
-  transformReactJsxSource,
   transformRegenerator,
   transformReservedWords,
   transformRuntime,
@@ -301,10 +295,7 @@ export const all: Record<string, any> = {
   "transform-react-display-name": transformReactDisplayName,
   "transform-react-inline-elements": transformReactInlineElements,
   "transform-react-jsx": transformReactJsx,
-  "transform-react-jsx-compat": transformReactJsxCompat,
   "transform-react-jsx-development": transformReactJsxDevelopment,
-  "transform-react-jsx-self": transformReactJsxSelf,
-  "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,
   "transform-reserved-words": transformReservedWords,
   "transform-runtime": transformRuntime,

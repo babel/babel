@@ -1,4 +1,0 @@
-{
-  "os": ["linux", "darwin"],
-  "parserOpts": { "allowReturnOutsideFunction": true }
-}
