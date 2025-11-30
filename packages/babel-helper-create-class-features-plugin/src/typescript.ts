@@ -5,7 +5,7 @@ export function assertFieldTransformed(
 ) {
   if (
     path.node.declare ||
-    path.node.abstract ||
+    (process.env.BABEL_8_BREAKING && path.node.abstract) ||
     (process.env.BABEL_8_BREAKING
       ? path.isClassProperty({ definite: true })
       : false)
