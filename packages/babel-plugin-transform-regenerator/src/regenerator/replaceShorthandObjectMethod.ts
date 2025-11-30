@@ -59,18 +59,18 @@ export default function replaceShorthandObjectMethod(path: NodePath): NodePath {
     path.node.async,
   );
 
-  path.replaceWith(
-    t.objectProperty(
-      t.cloneNode(path.node.key), // key
-      functionExpression, //value
-      path.node.computed, // computed
-      false, // shorthand
-    ),
-  );
-
   // path now refers to the ObjectProperty AST node path, but we want to return a
   // Function AST node path for the function expression we created. we know that
   // the FunctionExpression we just created is the value of the ObjectProperty,
   // so return the "value" path off of this path.
-  return path.get("value");
+  return path
+    .replaceWith(
+      t.objectProperty(
+        t.cloneNode(path.node.key), // key
+        functionExpression, //value
+        path.node.computed, // computed
+        false, // shorthand
+      ),
+    )[0]
+    .get("value");
 }
