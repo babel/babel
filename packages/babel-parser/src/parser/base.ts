@@ -39,6 +39,8 @@ export default class BaseParser {
   // Comment store for Program.comments
   declare comments: N.Comment[];
 
+  declare locData: Uint32Array;
+
   sourceToOffsetPos(sourcePos: number) {
     return sourcePos + this.startIndex;
   }
