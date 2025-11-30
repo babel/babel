@@ -5,12 +5,13 @@ export function assertFieldTransformed(
 ) {
   if (
     path.node.declare ||
+    path.node.abstract ||
     (process.env.BABEL_8_BREAKING
       ? path.isClassProperty({ definite: true })
       : false)
   ) {
     throw path.buildCodeFrameError(
-      `TypeScript 'declare' fields must first be transformed by ` +
+      `TypeScript fields must first be transformed by ` +
         `@babel/plugin-transform-typescript.\n` +
         `If you have already enabled that plugin (or '@babel/preset-typescript'), make sure ` +
         `that it runs before any plugin related to additional class features:\n` +
