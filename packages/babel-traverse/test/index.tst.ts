@@ -29,6 +29,23 @@ describe("traverse", () => {
       const object = path.get("left.object");
       expect(object).type.toBe<NodePath<t.Expression | t.Super | null>>();
     });
+
+    it("ClassDeclaration.body.body", () => {
+      const path = {} as NodePath<t.ClassDeclaration>;
+      const body = path.get("body.body");
+      expect(body).type.toBe<
+        NodePath<
+          | t.ClassMethod
+          | t.ClassPrivateMethod
+          | t.ClassProperty
+          | t.ClassPrivateProperty
+          | t.ClassAccessorProperty
+          | t.TSDeclareMethod
+          | t.TSIndexSignature
+          | t.StaticBlock
+        >[]
+      >();
+    });
   });
 
   describe("NodePath#is*", () => {
