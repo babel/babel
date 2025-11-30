@@ -221,13 +221,13 @@ export function arrowFunctionToExpression(
       ),
     );
 
-    fn.replaceWith(
-      callExpression(memberExpression(fn.node, identifier("bind")), [
-        checkBinding ? identifier(checkBinding.name) : thisExpression(),
-      ]),
-    );
-
-    return fn.get("callee.object");
+    return fn
+      .replaceWith(
+        callExpression(memberExpression(fn.node, identifier("bind")), [
+          checkBinding ? identifier(checkBinding.name) : thisExpression(),
+        ]),
+      )[0]
+      .get("callee.object") as NodePath<t.FunctionExpression>;
   }
 
   return fn;
@@ -280,13 +280,14 @@ function hoistFunctionEnvironment(
       // top level because the 'this' binding is constant in class
       // properties (since 'super()' has already been called), so we don't
       // need to capture/reassign it at the top level.
-      fnPath.replaceWith(
-        callExpression(
-          arrowFunctionExpression([], toExpression(fnPath.node)),
-          [],
-        ),
-      );
-      thisEnvFn = fnPath.get("callee") as NodePath<t.ArrowFunctionExpression>;
+      thisEnvFn = fnPath
+        .replaceWith(
+          callExpression(
+            arrowFunctionExpression([], toExpression(fnPath.node)),
+            [],
+          ),
+        )[0]
+        .get("callee") as NodePath<t.ArrowFunctionExpression>;
       fnPath = thisEnvFn.get("body") as NodePath<t.FunctionExpression>;
     } else {
       throw fnPath.buildCodeFrameError(
@@ -425,14 +426,15 @@ function hoistFunctionEnvironment(
         // Replace not only the super.prop, but the whole assignment
         superParentPath.replaceWith(call);
       } else if (isTaggedTemplate) {
-        superProp.replaceWith(
-          callExpression(memberExpression(call, identifier("bind"), false), [
-            thisExpression(),
-          ]),
-        );
-
         thisPaths.push(
-          superProp.get("arguments.0") as NodePath<t.ThisExpression>,
+          superProp
+            .replaceWith(
+              callExpression(
+                memberExpression(call, identifier("bind"), false),
+                [thisExpression()],
+              ),
+            )[0]
+            .get("arguments.0") as NodePath<t.ThisExpression>,
         );
       } else {
         superProp.replaceWith(call);
@@ -607,12 +609,12 @@ function standardizeSuperProperty(
       parts.push(identifier(tmp.name));
     }
 
-    updateExpr.replaceWith(sequenceExpression(parts));
+    const sequenceExpr = updateExpr.replaceWith(sequenceExpression(parts))[0];
 
-    const left = updateExpr.get(
+    const left = sequenceExpr.get(
       "expressions.0.right",
     ) as NodePath<t.MemberExpression>;
-    const right = updateExpr.get(
+    const right = sequenceExpr.get(
       "expressions.1.left",
     ) as NodePath<t.MemberExpression>;
     return [left, right];
