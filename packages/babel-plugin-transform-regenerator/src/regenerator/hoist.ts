@@ -13,24 +13,36 @@ export function hoist(
   const vars: Record<string, t.Identifier> = { __proto__: null };
 
   function varDeclToExpr(
+    path: NodePath,
+    includeIdentifiers: false,
+  ): t.Expression | null;
+  function varDeclToExpr(
+    path: NodePath,
+    includeIdentifiers: true,
+  ): t.Expression | t.LVal | null;
+  function varDeclToExpr(
     { node: vdec }: NodePath,
     includeIdentifiers: boolean,
   ) {
     t.assertVariableDeclaration(vdec);
     // TODO assert.equal(vdec.kind, "var");
-    const exprs: t.Expression[] = [];
+    const exprs: (t.Expression | t.LVal)[] = [];
 
-    vdec.declarations.forEach(function (
-      dec: t.VariableDeclarator & { id: t.Identifier },
-    ) {
+    vdec.declarations.forEach(function (dec: t.VariableDeclarator) {
+      if (t.isVoidPattern(dec.id)) {
+        throw new Error("Must transform void patterns before regenerator.");
+      }
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
-      vars[dec.id.name] = t.identifier(dec.id.name);
+      const names = t.getBindingIdentifiers(vdec, false, true, true);
+      for (const name of Object.keys(names)) {
+        vars[name] = t.identifier(name);
+      }
 
-      if (dec.init) {
-        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
-      } else if (includeIdentifiers) {
+      if (includeIdentifiers) {
         exprs.push(dec.id);
+      } else if (dec.init) {
+        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
       }
     });
 
@@ -38,7 +50,10 @@ export function hoist(
 
     if (exprs.length === 1) return exprs[0];
 
-    return t.sequenceExpression(exprs);
+    // `exprs` will contain `LVal` iff `varDeclToExpr` is called on the `left` of a ForXStatement,
+    // which does not permit multiple declarators and will exit early. Thus at this moment
+    // the `exprs` must be expressions.
+    return t.sequenceExpression(exprs as t.Expression[]);
   }
 
   funPath.get("body").traverse({
