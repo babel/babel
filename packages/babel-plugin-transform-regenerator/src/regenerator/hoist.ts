@@ -50,6 +50,9 @@ export function hoist(
 
     if (exprs.length === 1) return exprs[0];
 
+    // `exprs` will contain `LVal` iff `varDeclToExpr` is called on the `left` of a ForXStatement,
+    // which does not permit multiple declarators and will exit early. Thus at this moment
+    // the `exprs` must be expressions.
     return t.sequenceExpression(exprs as t.Expression[]);
   }
 
