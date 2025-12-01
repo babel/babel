@@ -101,6 +101,7 @@ const buildEnumMember = (isString: boolean, options: Record<string, unknown>) =>
  */
 function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
   const { enumValues, data, isPure } = translateEnumValues(path, t);
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
   const enumMembers: NodePath<t.TSEnumMember>[] = process.env.BABEL_8_BREAKING
     ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
       path.get("body").get("members")
@@ -219,6 +220,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
   let lastName: string;
   let isPure = true;
 
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
   const enumMembers: NodePath<t.TSEnumMember>[] = process.env.BABEL_8_BREAKING
     ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
       path.get("body").get("members")
