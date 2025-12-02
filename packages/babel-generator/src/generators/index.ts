@@ -9,3 +9,4 @@ export * from "./flow.ts";
 export * from "./base.ts";
 export * from "./jsx.ts";
 export * from "./typescript.ts";
+export * from "./deprecated.ts" with { if: "!process.env.BABEL_8_BREAKING" };

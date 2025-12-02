@@ -75,6 +75,83 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
     return res.unrelated();
   }
 
+  /**
+   * @param {import("@babel/core").NodePath<
+   *  | import("@babel/types").ImportDeclaration
+   *  | import("@babel/types").ExportAllDeclaration
+   *  | import("@babel/types").ExportNamedDeclaration
+   * >} path
+   */
+  function handleAttributes(path) {
+    if (!path.node.attributes) return;
+
+    /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
+    const ifAttribute = path
+      .get("attributes")
+      .find(attr => attr.node.key.name === "if");
+    if (ifAttribute == null) {
+      return;
+    }
+
+    const condition = parseExpression(ifAttribute.node.value.value);
+
+    let res;
+    res_block: if (value !== null) {
+      res = evaluate(condition, value);
+    } else {
+      const ifTrue = evaluate(condition, true);
+      if (ifTrue.unrelated || ifTrue.value === true) {
+        res = ifTrue;
+        break res_block;
+      }
+      const ifFalse = evaluate(condition, false);
+      if (ifFalse.unrelated) throw new Error("Cannot be unrelated");
+      if (ifFalse.value === true) {
+        res = ifFalse;
+        break res_block;
+      }
+
+      if (ifTrue.value === false) {
+        res = ifFalse;
+        break res_block;
+      }
+      if (ifTrue.value === false) {
+        res = ifTrue;
+        break res_block;
+      }
+
+      if (!ifTrue.replacement && !ifFalse.replacement) {
+        throw new Error("Expected two replacements");
+      }
+
+      res = {
+        replacement: t.binaryExpression(
+          "||",
+          ifTrue.replacement,
+          ifFalse.replacement
+        ),
+        value: null,
+        unrelated: false,
+      };
+    }
+
+    if (res.unrelated) return;
+    if (res.replacement) {
+      ifAttribute
+        .get("value")
+        .replaceWith(
+          t.stringLiteral(ifAttribute.toString.call({ node: res.replacement }))
+        );
+    } else if (res.value === true) {
+      ifAttribute.remove();
+      if (path.node.attributes.length === 0) {
+        path.node.attributes = null;
+      }
+    } else if (res.value === false) {
+      path.remove();
+    }
+  }
+
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
@@ -137,75 +214,11 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
         }
       },
       ImportDeclaration(path) {
-        if (!path.node.attributes) return;
-
-        /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
-        const ifAttribute = path
-          .get("attributes")
-          .find(attr => attr.node.key.name === "if");
-        if (ifAttribute == null) {
-          return;
-        }
-
-        const condition = parseExpression(ifAttribute.node.value.value);
-
-        let res;
-        res_block: if (value !== null) {
-          res = evaluate(condition, value);
-        } else {
-          const ifTrue = evaluate(condition, true);
-          if (ifTrue.unrelated || ifTrue.value === true) {
-            res = ifTrue;
-            break res_block;
-          }
-          const ifFalse = evaluate(condition, false);
-          if (ifFalse.unrelated) throw new Error("Cannot be unrelated");
-          if (ifFalse.value === true) {
-            res = ifFalse;
-            break res_block;
-          }
-
-          if (ifTrue.value === false) {
-            res = ifFalse;
-            break res_block;
-          }
-          if (ifTrue.value === false) {
-            res = ifTrue;
-            break res_block;
-          }
-
-          if (!ifTrue.replacement && !ifFalse.replacement) {
-            throw new Error("Expected two replacements");
-          }
-
-          res = {
-            replacement: t.binaryExpression(
-              "||",
-              ifTrue.replacement,
-              ifFalse.replacement
-            ),
-            value: null,
-            unrelated: false,
-          };
-        }
-
-        if (res.unrelated) return;
-        if (res.replacement) {
-          ifAttribute
-            .get("value")
-            .replaceWith(
-              t.stringLiteral(
-                ifAttribute.toString.call({ node: res.replacement })
-              )
-            );
-        } else if (res.value === true) {
-          ifAttribute.remove();
-          if (path.node.attributes.length === 0) {
-            path.node.attributes = null;
-          }
-        } else if (res.value === false) {
-          path.remove();
-        }
+        handleAttributes(path);
+      },
+      ExportDeclaration(path) {
+        if (path.isExportDefaultDeclaration()) return;
+        handleAttributes(path);
       },
     },
   };
