@@ -16,6 +16,7 @@ import { TokenMap } from "./token-map.ts";
 import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
 import type { DeprecatedBabel7ASTTypes } from "./generators/deprecated.ts";
+import * as deprecatedGeneratorFunctions from "./generators/deprecated.ts" with { if: "!process.env.BABEL_8_BREAKING" };
 import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 import type { Token } from "@babel/parser";
@@ -1415,6 +1416,10 @@ class Printer {
 
 // Expose the node type functions and helpers on the prototype for easy usage.
 Object.assign(Printer.prototype, generatorFunctions);
+
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(Printer.prototype, deprecatedGeneratorFunctions);
+}
 
 type GeneratorFunctions = typeof generatorFunctions;
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
