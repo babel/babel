@@ -340,7 +340,6 @@ describe("addon resolution", function () {
     });
   });
 
-  // TODO(Babel 8): remove node version check.
   it("should throw about module: usage for presets", function () {
     process.chdir("throw-module-paths");
 
@@ -351,13 +350,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      // Todo(Babel 8): remove node checks in this file. We cannot test the desired behaviour
-      // because Jest 24 has an issue on setting the MODULE_NOT_FOUND error when the native
-      // `require.resolve` is provided.
-      // see https://github.com/babel/babel/pull/12439/files#r535996000
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
-        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
+      /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 

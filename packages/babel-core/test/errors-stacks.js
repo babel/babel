@@ -39,49 +39,6 @@ function expectError(run) {
     // the code is compiled. The first optional ?\d+ is added by Jest.
     stack = stack.replace(/(?:\?\d+)?:\d+:\d+(\)?)$/gm, ":_:_$1");
 
-    // This is only needed because Node.js < 16 (and old Jest) stack traces
-    // are quite different from newer stack traces.
-    // TODO(Babel 8): Delete this code
-    {
-      // Node.js <= 14
-      stack = stack.replace(
-        "\n    at Module._extensions..js (... internal node frames ...)",
-        "",
-      );
-      stack = stack.replace(
-        "\n    at Object.require.extensions.<computed> [as .js] (<CWD>/node_modules/ts-node/src/index.ts:_:_)",
-        "",
-      );
-      // Node.js <= 10
-      stack = stack.replace(/(?:Object|undefined)(?=\.parseSync)/g, "Module");
-      stack = stack.replace(
-        /(?:run|Object\.<anonymous>) \((<CWD>[^)]+)\)/g,
-        "$1",
-      );
-      stack = replaceAll(
-        stack,
-        "at ... internal jest frames ...\n    at Module.parseSync",
-        "at require (... internal node frames ...)\n    at Module.parseSync",
-      );
-      stack = replaceAll(
-        stack,
-        "\n    at ... internal jest frames ...\n    at new Promise (<anonymous>)",
-        "",
-      );
-      // For some reason this is only there in Node.js 10
-      stack = stack.replace(
-        "\n    at process._tickCallback (... internal node frames ...)",
-        "",
-      );
-      // Node.js 8
-      stack = stack.replace(/\n\s*at <anonymous>$/g, "");
-      // Node.js 6
-      stack = stack.replace(
-        /(at (\w+) \([^)]+\)\n\s*at) next \(native\)/g,
-        "$1 $2.next (<anonymous>)",
-      );
-    }
-
     // expectError is a customized expect wrapper
     // eslint-disable-next-line jest/valid-expect
     return expect(stack);
@@ -133,7 +90,7 @@ describe("@babel/core errors", function () {
       });
     }).toMatchInlineSnapshot(`
       "Error: Error inside config!
-          at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file/babel.config.js:_:_
+          at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file/babel.config.js:_:_)
           at require (... internal node frames ...)
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -152,7 +109,7 @@ describe("@babel/core errors", function () {
       "Error: Error inside config!
           at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
-          at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_
+          at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at require (... internal node frames ...)
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -277,13 +234,13 @@ describe("@babel/core errors", function () {
     }).toMatchTemplate`\
 Error: Internal error! This is a fake bug :)
     at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-    at ${/loadOneConfig|findRootConfig/} (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
+    at findRootConfig (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
     at loadOneConfig.next (<anonymous>)
     at buildRootChain (<CWD>/packages/babel-core/src/config/config-chain.ts:_:_)
     at buildRootChain.next (<anonymous>)
     at loadPrivatePartialConfig (<CWD>/packages/babel-core/src/config/partial.ts:_:_)
     at loadPrivatePartialConfig.next (<anonymous>)
-    at ${/loadFullConfig|loadConfig/} (<CWD>/packages/babel-core/src/config/full.ts:_:_)
+    at loadConfig (<CWD>/packages/babel-core/src/config/full.ts:_:_)
     at loadFullConfig.next (<anonymous>)
     at parse (<CWD>/packages/babel-core/src/parse.ts:_:_)
     at parse.next (<anonymous>)
@@ -296,7 +253,6 @@ Error: Internal error! This is a fake bug :)
     at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
     at ... internal jest frames ...\
 `;
-    // TODO(Babel 8): We do not need regexps anymore in the matcher above
   });
 
   nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
