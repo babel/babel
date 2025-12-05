@@ -100,9 +100,6 @@ export type Expression =
   | DecimalLiteral
   | ModuleExpression
   | TopicReference
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
   | TsInstantiationExpression
   | TsAsExpression
   | TsSatisfiesExpression
@@ -769,42 +766,6 @@ export interface TopicReference extends NodeBase {
   type: "TopicReference";
 }
 
-// Smart-mix pipe operator
-
-export interface PipelineBody extends NodeBase {
-  type: "PipelineBody";
-}
-
-export interface PipelineBareFunctionBody extends NodeBase {
-  type: "PipelineBareFunctionBody";
-  callee: Expression;
-}
-
-export interface PipelineBareConstructorBody extends NodeBase {
-  type: "PipelineBareConstructorBody";
-  callee: Expression;
-}
-
-export interface PipelineBareAwaitedFunctionBody extends NodeBase {
-  type: "PipelineBareAwaitedFunctionBody";
-  callee: Expression;
-}
-
-export interface PipelineTopicBody extends NodeBase {
-  type: "PipelineTopicBody";
-  expression: Expression;
-}
-
-export type PipelineStyle =
-  | "PipelineBareFunction"
-  | "PipelineBareConstructor"
-  | "PipelineBareAwaitedFunction"
-  | "PipelineTopicExpression";
-
-export interface PipelinePrimaryTopicReference extends NodeBase {
-  type: "PipelinePrimaryTopicReference";
-}
-
 // Template Literals
 
 export interface TemplateLiteral extends NodeBase {
@@ -1136,16 +1097,6 @@ export interface ExportAllDeclaration extends NodeBase {
   exportKind?: "type" | "value"; // TODO: Not in spec,
   assertions?: ImportAttribute[];
   attributes?: ImportAttribute[];
-}
-
-export interface PipelineTopicExpression extends NodeBase {
-  type: "PipelineTopicExpression";
-  expression: Expression;
-}
-
-export interface PipelineBareFunction extends NodeBase {
-  type: "PipelineBareFunction";
-  callee: Expression;
 }
 
 // JSX (TODO: Not in spec)
@@ -2175,14 +2126,6 @@ export type Node =
   | OptionalCallExpression
   | OptionalMemberExpression
   | ParenthesizedExpression
-  | PipelineBareAwaitedFunctionBody
-  | PipelineBareConstructorBody
-  | PipelineBareFunction
-  | PipelineBareFunctionBody
-  | PipelineBody
-  | PipelinePrimaryTopicReference
-  | PipelineTopicBody
-  | PipelineTopicExpression
   | Placeholder
   | PrivateName
   | Program

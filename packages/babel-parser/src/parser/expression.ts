@@ -1377,14 +1377,12 @@ export default abstract class ExpressionParser extends LValParser {
   // If the `pipelineOperator` plugin is active,
   // but if the given `tokenType` does not match the plugin’s configuration,
   // then this method will throw a `PipeTopicUnconfiguredToken` error.
-  finishTopicReference<
-    T extends N.PipelinePrimaryTopicReference | N.TopicReference,
-  >(
-    node: Undone<T>,
+  finishTopicReference(
+    node: Undone<N.TopicReference>,
     startLoc: Position,
     pipeProposal: string,
     tokenType: TokenType,
-  ): T {
+  ): N.TopicReference {
     if (
       this.testTopicReferenceConfiguration(pipeProposal, startLoc, tokenType)
     ) {
@@ -1413,9 +1411,7 @@ export default abstract class ExpressionParser extends LValParser {
   // If the active pipe proposal is Hack style,
   // and if the given token is the same as the plugin configuration’s `topicToken`,
   // then this is a valid topic reference.
-  // If the active pipe proposal is smart mix,
-  // then the topic token must always be `#`.
-  // If the active pipe proposal is neither (e.g., "minimal"(Babel 7) or "fsharp"),
+  // If the active pipe proposal is "fsharp",
   // then an error is thrown.
   testTopicReferenceConfiguration(
     pipeProposal: string,
@@ -1432,8 +1428,6 @@ export default abstract class ExpressionParser extends LValParser {
           },
         ]);
       }
-      case "smart":
-        return tokenType === tt.hash;
       default:
         throw this.raise(Errors.PipeTopicRequiresHackPipes, startLoc);
     }
@@ -2980,23 +2974,6 @@ export default abstract class ExpressionParser extends LValParser {
     } finally {
       this.state.topicContext = outerContextTopicState;
     }
-  }
-
-  // This helper method is used only with the deprecated smart-mix pipe proposal.
-  // Disables topic references from outer contexts within syntax constructs
-  // such as the bodies of iteration statements.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references with the smartPipelines plugin. They then run a
-  // callback, then they reset the parser to the old topic-context state that it
-  // had before the function was called.
-
-  withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
-    // If the pipe proposal is "minimal"(Babel 7), "fsharp", or "hack",
-    // or if no pipe proposal is active,
-    // then the callback result is returned
-    // without touching any extra parser state.
-    // TODO(Babel 8): Remove this method
-    return callback();
   }
 
   withSoloAwaitPermittingContext<T>(callback: () => T): T {

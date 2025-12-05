@@ -249,8 +249,6 @@ export default {
   TupleExpressionHashIncorrectStartSyntaxType:
     "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'.",
   UnexpectedArgumentPlaceholder: "Unexpected argument placeholder.",
-  UnexpectedAwaitAfterPipelineBody:
-    'Unexpected "await" after pipeline body; await must have parentheses in minimal proposal.',
   UnexpectedDigitAfterHash: "Unexpected digit after hash token.",
   UnexpectedImportExport:
     "'import' and 'export' may only appear at the top level.",

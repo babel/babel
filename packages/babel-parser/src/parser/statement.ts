@@ -815,14 +815,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     // Parse the loop body's body.
-    node.body =
-      // For the smartPipelines plugin: Disable topic references from outer
-      // contexts within the loop body. They are permitted in test expressions,
-      // outside of the loop body.
-      this.withSmartMixTopicForbiddingContext(() =>
-        // Parse the loop body's body.
-        this.parseStatement(),
-      );
+    node.body = this.parseStatement();
 
     this.state.labels.pop();
 
@@ -1100,13 +1093,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
 
       // Parse the catch clause's body.
-      clause.body =
-        // For the smartPipelines plugin: Disable topic references from outer
-        // contexts within the catch clause's body.
-        this.withSmartMixTopicForbiddingContext(() =>
-          // Parse the catch clause's body.
-          this.parseBlock(false, false),
-        );
+      clause.body = this.parseBlock(false, false);
 
       this.scope.exit();
       node.handler = this.finishNode(clause, "CatchClause");
@@ -1145,14 +1132,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     // Parse the loop body.
-    node.body =
-      // For the smartPipelines plugin:
-      // Disable topic references from outer contexts within the loop body.
-      // They are permitted in test expressions, outside of the loop body.
-      this.withSmartMixTopicForbiddingContext(() =>
-        // Parse loop body.
-        this.parseStatement(),
-      );
+    node.body = this.parseStatement();
 
     this.state.labels.pop();
 
@@ -1170,15 +1150,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node.object = this.parseHeaderExpression();
 
     // Parse the statement body.
-    node.body =
-      // For the smartPipelines plugin:
-      // Disable topic references from outer contexts within the with statement's body.
-      // They are permitted in function default-parameter expressions, which are
-      // part of the outer context, outside of the with statement's body.
-      this.withSmartMixTopicForbiddingContext(() =>
-        // Parse the statement body.
-        this.parseStatement(),
-      );
+    node.body = this.parseStatement();
 
     return this.finishNode(node, "WithStatement");
   }
@@ -1373,14 +1345,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.expect(tt.parenR);
 
     // Parse the loop body.
-    node.body =
-      // For the smartPipelines plugin: Disable topic references from outer
-      // contexts within the loop body. They are permitted in test expressions,
-      // outside of the loop body.
-      this.withSmartMixTopicForbiddingContext(() =>
-        // Parse the loop body.
-        this.parseStatement(),
-      );
+    node.body = this.parseStatement();
 
     this.scope.exit();
     this.state.labels.pop();
@@ -1433,14 +1398,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.expect(tt.parenR);
 
     // Parse the loop body.
-    node.body =
-      // For the smartPipelines plugin:
-      // Disable topic references from outer contexts within the loop body.
-      // They are permitted in test expressions, outside of the loop body.
-      this.withSmartMixTopicForbiddingContext(() =>
-        // Parse loop body.
-        this.parseStatement(),
-      );
+    node.body = this.parseStatement();
 
     this.scope.exit();
     this.state.labels.pop();
@@ -1569,16 +1527,10 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.parseFunctionParams(node, /* isConstructor */ false);
 
-    // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the function body. They are permitted in function
-    // default-parameter expressions, outside of the function body.
-    this.withSmartMixTopicForbiddingContext(() => {
-      // Parse the function body.
-      this.parseFunctionBodyAndFinish(
-        node,
-        isDeclaration ? "FunctionDeclaration" : "FunctionExpression",
-      );
-    });
+    this.parseFunctionBodyAndFinish(
+      node,
+      isDeclaration ? "FunctionDeclaration" : "FunctionExpression",
+    );
 
     this.prodParam.exit();
     this.scope.exit();
@@ -1700,50 +1652,46 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.expect(tt.braceL);
 
-    // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the class body.
-    this.withSmartMixTopicForbiddingContext(() => {
-      // Parse the contents within the braces.
-      while (!this.match(tt.braceR)) {
-        if (this.eat(tt.semi)) {
-          if (decorators.length > 0) {
-            throw this.raise(
-              Errors.DecoratorSemicolon,
-              this.state.lastTokEndLoc!,
-            );
-          }
-          continue;
+    // Parse the contents within the braces.
+    while (!this.match(tt.braceR)) {
+      if (this.eat(tt.semi)) {
+        if (decorators.length > 0) {
+          throw this.raise(
+            Errors.DecoratorSemicolon,
+            this.state.lastTokEndLoc!,
+          );
         }
-
-        if (this.match(tt.at)) {
-          decorators.push(this.parseDecorator());
-          continue;
-        }
-
-        const member = this.startNode<N.ClassMember>();
-
-        // steal the decorators if there are any
-        if (decorators.length) {
-          // @ts-expect-error Fixme
-          member.decorators = decorators;
-          this.resetStartLocationFromNode(member, decorators[0]);
-          decorators = [];
-        }
-
-        this.parseClassMember(classBody, member, state);
-
-        if (
-          // @ts-expect-error Fixme
-          member.kind === "constructor" &&
-          // @ts-expect-error Fixme
-          member.decorators &&
-          // @ts-expect-error Fixme
-          member.decorators.length > 0
-        ) {
-          this.raise(Errors.DecoratorConstructor, member);
-        }
+        continue;
       }
-    });
+
+      if (this.match(tt.at)) {
+        decorators.push(this.parseDecorator());
+        continue;
+      }
+
+      const member = this.startNode<N.ClassMember>();
+
+      // steal the decorators if there are any
+      if (decorators.length) {
+        // @ts-expect-error Fixme
+        member.decorators = decorators;
+        this.resetStartLocationFromNode(member, decorators[0]);
+        decorators = [];
+      }
+
+      this.parseClassMember(classBody, member, state);
+
+      if (
+        // @ts-expect-error Fixme
+        member.kind === "constructor" &&
+        // @ts-expect-error Fixme
+        member.decorators &&
+        // @ts-expect-error Fixme
+        member.decorators.length > 0
+      ) {
+        this.raise(Errors.DecoratorConstructor, member);
+      }
+    }
 
     this.state.strict = oldStrict;
 
