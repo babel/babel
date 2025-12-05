@@ -13,7 +13,7 @@ console.log(LICENSE);
 shell.ls("-d", "./packages/*/").forEach(dir => {
   if (
     !dir.match(
-      /.*packages\/babel-(helpers|parser|plugin-transform-object-assign|plugin-transform-regenerator)\/?$/
+      /.*packages\/babel-(helpers|parser|plugin-transform-regenerator)\/?$/
     )
   ) {
     writeFileSync(path.join(dir, "LICENSE"), LICENSE);

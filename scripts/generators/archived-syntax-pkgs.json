@@ -1,4 +1,5 @@
 [
+  "@babel/plugin-transform-object-assign",
   "@babel/plugin-proposal-record-and-tuple",
   "@babel/plugin-syntax-async-functions",
   "@babel/plugin-syntax-async-generators",
