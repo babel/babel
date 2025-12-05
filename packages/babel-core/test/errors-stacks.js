@@ -1,12 +1,10 @@
 import * as babel from "../lib/index.js";
 
-import { commonJS, itGte } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 
 const { __dirname } = commonJS(import.meta.url);
-
-const nodeGte12 = itGte("12.0.0");
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -299,7 +297,7 @@ Error: Internal error! This is a fake bug :)
     // TODO(Babel 8): We do not need regexps anymore in the matcher above
   });
 
-  nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
+  it("should not throw in `node --frozen-intrinsics`", function () {
     expect(
       spawnSync(
         process.execPath,

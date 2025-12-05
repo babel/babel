@@ -16,13 +16,6 @@ const debug = buildDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
-export const supportsESM = semver.satisfies(
-  process.versions.node,
-  // older versions, starting from 10, support the dynamic
-  // import syntax but always return a rejected promise.
-  "^12.17 || >=13.2",
-);
-
 const LOADING_CJS_FILES = new Set();
 
 function loadCjsDefault(filepath: string) {
