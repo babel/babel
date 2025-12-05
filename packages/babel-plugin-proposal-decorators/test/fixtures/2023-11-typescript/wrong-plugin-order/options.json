@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "2023-11" }],
+    "transform-typescript"
+  ],
+  "BABEL_8_BREAKING": true,
+  "throws": "TypeScript fields must first be transformed by @babel/plugin-transform-typescript."
+}

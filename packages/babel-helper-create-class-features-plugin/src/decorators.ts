@@ -21,6 +21,7 @@ export function hasDecorators(node: t.Class) {
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
+import { assertFieldTransformed } from "./typescript.ts";
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
   loose?: boolean;
@@ -1123,6 +1124,10 @@ function transformClass(
   // transform simple auto accessors which are not decorated, and handle inferred
   // class name when the initializer of the class field is a class expression
   for (const element of body) {
+    if (process.env.BABEL_8_BREAKING && element.isClassProperty()) {
+      assertFieldTransformed(element);
+    }
+
     if (!isClassDecoratableElementPath(element)) {
       continue;
     }
