@@ -5,13 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 Object.defineProperty(exports, "named1", {
   enumerable: true,
-  get: function () {
+  get() {
     return _white().named1;
   }
 });
 Object.defineProperty(exports, "named2", {
   enumerable: true,
-  get: function () {
+  get() {
     return _black.named2;
   }
 });

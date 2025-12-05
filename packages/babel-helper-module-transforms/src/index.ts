@@ -34,6 +34,7 @@ export type { PluginOptions } from "./get-module-name.ts";
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
 export interface RewriteModuleStatementsAndPrepareHeaderOptions {
+  implicitAssignmentExports?: boolean;
   exportName?: string;
   strict: boolean;
   allowTopLevelThis?: boolean;
@@ -50,9 +51,9 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   wrapReference?: (ref: t.Expression, payload: unknown) => t.Expression | null;
   esNamespaceOnly?: boolean;
   filename: string | undefined;
-  constantReexports?: boolean | void;
-  enumerableModuleMeta?: boolean | void;
-  noIncompleteNsImportDetection?: boolean | void;
+  constantReexports?: boolean;
+  enumerableModuleMeta?: boolean;
+  noIncompleteNsImportDetection?: boolean;
 }
 
 /**
@@ -64,6 +65,7 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath<t.Program>,
   {
+    implicitAssignmentExports,
     exportName,
     strict,
     allowTopLevelThis,
@@ -99,6 +101,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
     filename,
   });
 
+  meta.implicitAssignmentExports = implicitAssignmentExports;
+
   if (!allowTopLevelThis) {
     rewriteThis(path);
   }
@@ -122,12 +126,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     headers.push(buildESModuleHeader(meta, enumerableModuleMeta));
   }
 
-  const nameList = buildExportNameListDeclaration(path, meta);
-
-  if (nameList) {
-    meta.exportNameListName = nameList.name;
-    headers.push(nameList.statement);
-  }
+  meta.exportNameList = buildExportNameListDeclaration(meta);
 
   // Create all of the statically known named exports.
   headers.push(
@@ -140,7 +139,23 @@ export function rewriteModuleStatementsAndPrepareHeader(
     ),
   );
 
-  return { meta, headers };
+  const namedReexports = new Set<t.ExpressionStatement>();
+  const exportHelperName = path.getData(PACKAGE_JSON.name + "#export")?.name;
+  if (exportHelperName) {
+    for (const header of headers) {
+      // _expert("name", ...)
+      if (
+        header.type === "ExpressionStatement" &&
+        header.expression.type === "CallExpression" &&
+        header.expression.callee.type === "Identifier" &&
+        header.expression.callee.name === exportHelperName
+      ) {
+        namedReexports.add(header);
+      }
+    }
+  }
+
+  return { meta, headers, namedReexports };
 }
 
 /**
@@ -198,11 +213,12 @@ export function wrapInterop(
 export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
-  constantReexports: boolean | void = false,
+  constantReexports: boolean = false,
   wrapReference: (
     ref: t.Identifier,
     payload: unknown,
   ) => t.Expression | null = Lazy.wrapReference,
+  buildExportStar?: (body: t.Statement[]) => t.Statement,
 ) {
   const statements = [];
 
@@ -248,10 +264,28 @@ export function buildNamespaceInitStatements(
     );
   }
   if (sourceMetadata.reexportAll) {
+    let exportNameListName;
+    if (metadata.implicitAssignmentExports === undefined) {
+      // __esModule, default
+      if (metadata.exportNameList.length > 2) {
+        exportNameListName =
+          metadata.programPath.scope.generateUidIdentifier("exportNames");
+        statements.push(
+          t.variableDeclaration("var", [
+            t.variableDeclarator(
+              exportNameListName,
+              t.valueToNode(metadata.exportNameList),
+            ),
+          ]),
+        );
+      }
+    }
     const statement = buildNamespaceReexport(
       metadata,
       t.cloneNode(srcNamespace),
       constantReexports,
+      exportNameListName,
+      buildExportStar,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
 
@@ -276,11 +310,24 @@ const ReexportTemplate = {
     template.statement.ast`
       ${exports}["${exportName}"] = ${namespaceImport};
     `,
-  spec: ({ exports, exportName, namespaceImport }: ReexportParts) =>
+  spec: ({
+    exportFn,
+    exportName,
+    namespaceImport,
+    importName,
+  }: {
+    exportFn: t.Identifier;
+    exportName: string;
+    namespaceImport: t.Expression;
+    importName: t.StringLiteral | null;
+  }) => template.statement.ast`
+    ${exportFn}("${exportName}", ${namespaceImport}, ${importName});
+  `,
+  spec2: ({ exports, exportName, namespaceImport }: ReexportParts) =>
     template.statement.ast`
       Object.defineProperty(${exports}, "${exportName}", {
         enumerable: true,
-        get: function() {
+        get() {
           return ${namespaceImport};
         },
       });
@@ -324,8 +371,32 @@ function buildReexportsFromMeta(
       } else {
         return ReexportTemplate.constant(astNodes);
       }
+    } else if (meta.implicitAssignmentExports === undefined) {
+      return ReexportTemplate.spec2(astNodes);
     } else {
-      return ReexportTemplate.spec(astNodes);
+      return ReexportTemplate.spec({
+        exportName: exportName,
+        namespaceImport: t.cloneNode(namespace),
+        importName:
+          importName === exportName ? null : t.stringLiteral(importName),
+        exportFn: addPrivateHelper(
+          meta.programPath,
+          "export",
+          () =>
+            template.expression`
+              function (name, mod, name2) {
+                Object.defineProperty(EXPORTS, name, {
+                  enumerable: true,
+                  get() {
+                    return mod[name2 == null ? name : name2];
+                  }
+                });
+              }
+            `({
+              EXPORTS: t.identifier(meta.exportName),
+            }) as t.FunctionExpression,
+        ),
+      });
     }
   });
 }
@@ -356,11 +427,16 @@ function buildESModuleHeader(
 function buildNamespaceReexport(
   metadata: ModuleMetadata,
   namespace: t.Expression,
-  constantReexports: boolean | void,
+  constantReexports: boolean,
+  exportNameListName?: t.Identifier,
+  buildExportStar?: (body: t.Statement[]) => t.Statement,
 ) {
-  return (
-    constantReexports
-      ? template.statement`
+  const { programPath, exportNameList } = metadata;
+
+  if (metadata.implicitAssignmentExports === undefined) {
+    return (
+      constantReexports
+        ? template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
           VERIFY_NAME_LIST;
@@ -369,13 +445,13 @@ function buildNamespaceReexport(
           EXPORTS[key] = NAMESPACE[key];
         });
       `
-      : // Also skip already assigned bindings if they are strictly equal
-        // to be somewhat more spec-compliant when a file has multiple
-        // namespace re-exports that would cause a binding to be exported
-        // multiple times. However, multiple bindings of the same name that
-        // export the same primitive value are silently skipped
-        // (the spec requires an "ambiguous bindings" early error here).
-        template.statement`
+        : // Also skip already assigned bindings if they are strictly equal
+          // to be somewhat more spec-compliant when a file has multiple
+          // namespace re-exports that would cause a binding to be exported
+          // multiple times. However, multiple bindings of the same name that
+          // export the same primitive value are silently skipped
+          // (the spec requires an "ambiguous bindings" early error here).
+          template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
           VERIFY_NAME_LIST;
@@ -389,15 +465,96 @@ function buildNamespaceReexport(
           });
         });
     `
-  )({
-    NAMESPACE: namespace,
-    EXPORTS: metadata.exportName,
-    VERIFY_NAME_LIST: metadata.exportNameListName
-      ? template`
+    )({
+      NAMESPACE: namespace,
+      EXPORTS: metadata.exportName,
+      VERIFY_NAME_LIST: exportNameListName
+        ? template`
             if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
-          `({ EXPORTS_LIST: metadata.exportNameListName })
-      : null,
-  });
+          `({ EXPORTS_LIST: t.cloneNode(exportNameListName) })
+        : null,
+    });
+  }
+
+  // Also skip already assigned bindings if they are strictly equal
+  // to be somewhat more spec-compliant when a file has multiple
+  // namespace re-exports that would cause a binding to be exported
+  // multiple times. However, multiple bindings of the same name that
+  // export the same primitive value are silently skipped
+  // (the spec requires an "ambiguous bindings" early error here).
+  const fn = template.expression`
+      function (mod) {
+        Object.keys(mod).forEach(function (k) {
+          if (NAME_LIST.indexOf(k) < 0 && !(k in EXPORTS && EXPORTS[k] === mod[k])) {
+            SET_PROPERTY;
+          }
+        });
+        return mod;
+      }`({
+    NAME_LIST: t.valueToNode(exportNameList),
+    SET_PROPERTY: constantReexports
+      ? template.statement.ast`${metadata.exportName}[k] = mod[k]`
+      : template.statement.ast`
+          Object.defineProperty(${metadata.exportName}, k, {
+            get() {
+              return mod[k];
+            },
+            enumerable: true
+          });
+    `,
+    EXPORTS: metadata.exportName,
+  }) as t.FunctionExpression;
+
+  if (buildExportStar) {
+    return buildExportStar(fn.body.body);
+  }
+
+  const fnId = addPrivateHelper(programPath, "exportStar", () => fn);
+  return t.expressionStatement(t.callExpression(fnId, [namespace]));
+}
+
+export function addPrivateHelper(
+  path: NodePath<t.Program>,
+  name: string,
+  buildFn: () => t.FunctionExpression,
+) {
+  const scope = path.scope;
+  const key = PACKAGE_JSON.name + "#" + name;
+  let id: t.Identifier = path.getData(key);
+  if (id) {
+    return t.cloneNode(id);
+  }
+  if (name.startsWith("_")) {
+    let uid = name;
+    let i = 1;
+    do {
+      if (i > 1) uid += i;
+      uid = `_${uid}`;
+      i++;
+    } while (
+      scope.hasLabel(uid) ||
+      scope.hasBinding(uid) ||
+      scope.hasGlobal(uid) ||
+      scope.hasReference(uid)
+    );
+
+    scope.references[uid] = true;
+    scope.uids[uid] = true;
+
+    id = t.identifier(uid);
+  } else {
+    id = scope.generateUidIdentifier(name);
+  }
+  path.setData(key, id);
+
+  const fn = buildFn();
+  const [fnPath] = path.unshiftContainer(
+    "body",
+    t.functionDeclaration(id, fn.params, fn.body),
+  );
+  path.scope.registerBinding("hoisted", fnPath);
+
+  return t.cloneNode(id);
 }
 
 /**
@@ -405,41 +562,31 @@ function buildNamespaceReexport(
  * variable names in an object so they can easily be referenced from an
  * export * from statement to check for conflicts.
  */
-function buildExportNameListDeclaration(
-  programPath: NodePath,
-  metadata: ModuleMetadata,
-) {
-  const exportedVars = Object.create(null);
+function buildExportNameListDeclaration(metadata: ModuleMetadata) {
+  const exportedVars = new Set<string>();
+
+  exportedVars.add("default");
+  exportedVars.add("__esModule");
+
   for (const data of metadata.local.values()) {
     for (const name of data.names) {
-      exportedVars[name] = true;
+      exportedVars.add(name);
     }
   }
 
   let hasReexport = false;
   for (const data of metadata.source.values()) {
     for (const exportName of data.reexports.keys()) {
-      exportedVars[exportName] = true;
+      exportedVars.add(exportName);
     }
     for (const exportName of data.reexportNamespace) {
-      exportedVars[exportName] = true;
+      exportedVars.add(exportName);
     }
 
     hasReexport = hasReexport || !!data.reexportAll;
   }
 
-  if (!hasReexport || Object.keys(exportedVars).length === 0) return null;
-
-  const name = programPath.scope.generateUidIdentifier("exportNames");
-
-  delete exportedVars.default;
-
-  return {
-    name: name.name,
-    statement: t.variableDeclaration("var", [
-      t.variableDeclarator(name, t.valueToNode(exportedVars)),
-    ]),
-  };
+  return Array.from(exportedVars);
 }
 
 /**
@@ -450,8 +597,8 @@ function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
   wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
-  constantReexports: boolean | void = false,
-  noIncompleteNsImportDetection: boolean | void = false,
+  constantReexports: boolean = false,
+  noIncompleteNsImportDetection: boolean = false,
 ) {
   const initStatements: [string, t.Statement | null][] = [];
 
@@ -501,6 +648,19 @@ function buildExportInitializationStatements(
     return 0;
   });
 
+  const defineInits = [];
+  if (metadata.implicitAssignmentExports === false) {
+    for (const init of initStatements) {
+      if (
+        t.isExpressionStatement(init[1]) &&
+        t.isCallExpression(init[1].expression)
+      ) {
+        defineInits.push(init[1]);
+        init[1] = null;
+      }
+    }
+  }
+
   const results = [];
   if (noIncompleteNsImportDetection) {
     for (const [, initStatement] of initStatements) {
@@ -544,7 +704,7 @@ function buildExportInitializationStatements(
     }
   }
 
-  return results;
+  return results.concat(defineInits);
 }
 
 interface InitParts {
