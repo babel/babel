@@ -1,4 +1,4 @@
-function f0(_x) {
+function f0(_x, _x2) {
   return _f.apply(this, arguments);
 }
 function _f() {
@@ -7,16 +7,16 @@ function _f() {
   });
   return _f.apply(this, arguments);
 }
-function f1(_x2, _x3) {
+function f1(_x3, _x4) {
   return _f2.apply(this, arguments);
 }
 function _f2() {
-  _f2 = babelHelpers.wrapAsyncGenerator(function* (_2, x) {
+  _f2 = babelHelpers.wrapAsyncGenerator(function* (_, x) {
     "f1";
   });
   return _f2.apply(this, arguments);
 }
-function f2() {
+function f2(_x5) {
   return _f3.apply(this, arguments);
 }
 function _f3() {
@@ -26,17 +26,17 @@ function _f3() {
   return _f3.apply(this, arguments);
 }
 class C {
-  static m0(_x4, _x5) {
+  static m0(_x6, _x7) {
     "m0";
 
     return babelHelpers.wrapAsyncGenerator(function* (x) {}).apply(this, arguments);
   }
-  static m1(_x6, _x7) {
+  static m1(_x8, _x9) {
     "m1";
 
-    return babelHelpers.wrapAsyncGenerator(function* (_, x) {}).apply(this, arguments);
+    return babelHelpers.wrapAsyncGenerator(function* (_2, x) {}).apply(this, arguments);
   }
-  static m2(_x8) {
+  static m2(_x0) {
     "m2";
 
     return babelHelpers.wrapAsyncGenerator(function* () {}).apply(this, arguments);
