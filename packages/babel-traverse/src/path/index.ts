@@ -2,7 +2,7 @@ import type { HubInterface } from "../hub.ts";
 import type TraversalContext from "../context.ts";
 import type { ExplodedTraverseOptions } from "../index.ts";
 import * as virtualTypes from "./lib/virtual-types.ts";
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import traverse from "../index.ts";
 import type { Visitor } from "../types.ts";
 import Scope from "../scope/index.ts";
@@ -28,7 +28,7 @@ import type { NodePathAssertions } from "./generated/asserts.ts";
 import type { NodePathValidators } from "./generated/validators.ts";
 import { setup } from "./context.ts";
 
-const debug = buildDebug("babel");
+const debug = createDebug("babel");
 
 export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;

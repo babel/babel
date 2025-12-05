@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import path from "node:path";
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import type { Handler } from "gensync";
 import { validate } from "./validation/options.ts";
 import type {
@@ -20,7 +20,7 @@ import { endHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
 import ConfigError from "../errors/config-error.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
-const debug = buildDebug("babel:config:config-chain");
+const debug = createDebug("babel:config:config-chain");
 
 import {
   findPackageData,

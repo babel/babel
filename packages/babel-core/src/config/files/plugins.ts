@@ -2,7 +2,7 @@
  * This file handles all logic for converting string-based configuration references into loaded objects.
  */
 
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import path from "node:path";
 import type { Handler } from "gensync";
 import { isAsync } from "../../gensync-utils/async.ts";
@@ -15,7 +15,7 @@ import { createRequire } from "node:module";
 import { existsSync } from "node:fs";
 const require = createRequire(import.meta.url);
 
-const debug = buildDebug("babel:config:loading:files:plugins");
+const debug = createDebug("babel:config:loading:files:plugins");
 
 const EXACT_RE = /^module:/;
 const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;

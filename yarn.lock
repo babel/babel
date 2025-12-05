@@ -471,14 +471,13 @@ __metadata:
     "@jridgewell/remapping": "npm:^2.3.5"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/convert-source-map": "npm:^2.0.0"
-    "@types/debug": "npm:^4.1.0"
     "@types/gensync": "npm:^1.0.0"
     "@types/resolve": "npm:^1.3.2"
     "@types/semver": "npm:^5.4.0"
     convert-source-map: "npm:^2.0.0"
-    debug: "npm:^4.1.0"
     gensync: "npm:^1.0.0-beta.2"
     json5: "npm:^2.2.3"
+    obug: "npm:^2.1.1"
     rimraf: "npm:^3.0.0"
     semver: "npm:^7.3.4"
     ts-node: "npm:^11.0.0-beta.1"
@@ -4238,7 +4237,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
-    debug: "npm:^4.3.1"
+    obug: "npm:^2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -5686,13 +5685,6 @@ __metadata:
   version: 2.0.0
   resolution: "@types/convert-source-map@npm:2.0.0"
   checksum: 10/13aed920e658c7605e2a126b067c6c5308e4ff854e909ffc604537307f8a32501382db0a978e29fd3cc03a129a7df8a7e4fa340076e7df9e9782fda179f42cba
-  languageName: node
-  linkType: hard
-
-"@types/debug@npm:^4.1.0":
-  version: 4.1.5
-  resolution: "@types/debug@npm:4.1.5"
-  checksum: 10/24ea68372e95794ee094e81e9e25f2c90caf99b15f508e565d98a593d9919c034b8a2432588f696fe63634735a895d518f39d76ed36c9c9e1b3cb17ea30b8e3b
   languageName: node
   linkType: hard
 
@@ -14109,6 +14101,13 @@ __metadata:
     define-properties: "npm:^1.2.1"
     es-object-atoms: "npm:^1.0.0"
   checksum: 10/db2e498019c354428c5dd30d02980d920ac365b155fce4dcf63eb9433f98ccf0f72624309e182ce7cc227c95e45d474e1d483418e60de2293dd23fa3ebe34903
+  languageName: node
+  linkType: hard
+
+"obug@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "obug@npm:2.1.1"
+  checksum: 10/bdcf9213361786688019345f3452b95a1dc73710e4b403c82a1994b98bad6abc31b26cb72a482128c5fd53ea9daf6fbb7d0e0e7b2b7e9c8be6d779deeccee07f
   languageName: node
   linkType: hard
 
