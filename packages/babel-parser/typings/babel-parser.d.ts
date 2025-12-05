@@ -258,4 +258,4 @@ declare const tokTypes: {
   [name: string]: any;
 };
 
-export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type ParserPluginWithOptions, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };
