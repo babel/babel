@@ -1647,11 +1647,6 @@ export default abstract class ExpressionParser extends LValParser {
     return node;
   }
 
-  // TODO: Remove this in Babel 8
-  parseDecimalLiteral(value: any) {
-    return this.parseLiteral<N.DecimalLiteral>(value, "DecimalLiteral");
-  }
-
   parseRegExpLiteral(value: {
     value: any;
     pattern: string;
