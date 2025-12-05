@@ -1,4 +1,4 @@
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import nodeFs from "node:fs";
 import path from "node:path";
 import json5 from "json5";
@@ -22,7 +22,7 @@ import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
 import { isAsync } from "../../gensync-utils/async.ts";
 const require = createRequire(import.meta.url);
 
-const debug = buildDebug("babel:config:loading:files:configuration");
+const debug = createDebug("babel:config:loading:files:configuration");
 
 export const ROOT_CONFIG_FILENAMES = [
   "babel.config.js",

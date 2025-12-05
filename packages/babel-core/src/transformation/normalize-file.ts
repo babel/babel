@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
@@ -12,7 +12,7 @@ import parser from "../parser/index.ts";
 import cloneDeep from "./util/clone-deep.ts";
 import type { ResolvedOptions } from "../config/validation/options.ts";
 
-const debug = buildDebug("babel:transform:file");
+const debug = createDebug("babel:transform:file");
 
 // These regexps are copied from the convert-source-map package,
 // but without // or /* at the beginning of the comment.
