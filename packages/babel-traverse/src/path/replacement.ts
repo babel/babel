@@ -204,7 +204,7 @@ export function replaceWith(
   // requeue for visiting
   this.requeue();
 
-  return [nodePath ? this.get(nodePath) : this];
+  return [nodePath ? (this.get(nodePath) as NodePath) : this];
 }
 
 export function _replaceWith(this: NodePath, node: t.Node | null) {
