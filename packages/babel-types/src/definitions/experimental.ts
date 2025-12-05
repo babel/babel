@@ -1,4 +1,4 @@
-import defineType, { assertNodeType, assertValueType } from "./utils.ts";
+import defineType, { assertNodeType, assertValueType, validateArrayOfType } from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
 
@@ -39,6 +39,7 @@ defineType("DoExpression", {
   },
 });
 
+// https://github.com/tc39/proposal-export-default-from
 defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
@@ -61,13 +62,10 @@ defineType("ModuleExpression", {
 });
 
 // https://github.com/tc39/proposal-pipeline-operator
-// https://github.com/js-choi/proposal-hack-pipes
 defineType("TopicReference", {
   aliases: ["Expression"],
 });
 
-// https://github.com/tc39/proposal-pipeline-operator
-// https://github.com/js-choi/proposal-smart-pipes
 defineType("PipelineTopicExpression", {
   builder: ["expression"],
   visitor: ["expression"],
@@ -97,4 +95,38 @@ defineType("PipelinePrimaryTopicReference", {
 // https://github.com/tc39/proposal-discard-binding
 defineType("VoidPattern", {
   aliases: ["Pattern", "PatternLike", "FunctionParameter"],
+});
+
+// https://github.com/tc39/proposal-structs
+defineType("StructDeclaration", {
+  visitor: ["id", "superClass", "body"],
+  aliases: ["Scopable", "Statement", "Declaration"],
+  fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+      // The id may be omitted if this is the child of an
+      // ExportDefaultDeclaration.
+      optional: true,
+    },
+    body: {
+      validate: assertNodeType("StructBody"),
+    },
+    superClass: {
+      optional: true,
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("StructBody", {
+  visitor: ["body"],
+  fields: {
+    body: validateArrayOfType(
+      "ClassMethod",
+      "ClassPrivateMethod",
+      "ClassProperty",
+      "ClassPrivateProperty",
+      "StaticBlock",
+    ),
+  },
 });
