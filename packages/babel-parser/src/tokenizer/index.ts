@@ -1112,8 +1112,6 @@ export default abstract class Tokenizer extends CommentsParser {
     if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
-    } else if (next === charCodes.lowercaseM) {
-      throw this.raise(Errors.InvalidDecimal, startLoc);
     }
 
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
