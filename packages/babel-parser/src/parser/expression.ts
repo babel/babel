@@ -102,12 +102,8 @@ export default abstract class ExpressionParser extends LValParser {
   // For object literal, check if property __proto__ has been used more than once.
   // If the expression is a destructuring assignment, then __proto__ may appear
   // multiple times. Otherwise, __proto__ is a duplicated key.
-
-  // For record expression, check if property __proto__ exists
-
   checkProto(
     prop: N.ObjectMember | N.SpreadElement,
-    isRecord: boolean | undefined | null,
     sawProto: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): boolean {
@@ -129,10 +125,6 @@ export default abstract class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : key.value;
 
     if (name === "__proto__") {
-      if (isRecord) {
-        this.raise(Errors.RecordNoProto, key);
-        return true;
-      }
       if (sawProto) {
         if (refExpressionErrors) {
           // Store the first redefinition's position, otherwise ignore because
@@ -1139,17 +1131,12 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       case tt.bracketL: {
-        return this.parseArrayLike(
-          tt.bracketR,
-          /* isTuple */ false,
-          refExpressionErrors,
-        );
+        return this.parseArrayLike(tt.bracketR, refExpressionErrors);
       }
       case tt.braceL: {
         return this.parseObjectLike(
           tt.braceR,
           /* isPattern */ false,
-          /* isRecord */ false,
           refExpressionErrors,
         );
       }
@@ -1950,43 +1937,28 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseExpression();
   }
 
-  // Parse an object literal, binding pattern, or record.
-
+  // Parse an object literal or binding pattern.
   parseObjectLike(
     close: TokenType,
     isPattern: true,
-    isRecord?: boolean | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ObjectPattern;
   parseObjectLike(
     close: TokenType,
     isPattern: false,
-    isRecord?: false | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ObjectExpression;
-  parseObjectLike(
-    close: TokenType,
-    isPattern: false,
-    isRecord?: true,
-    refExpressionErrors?: ExpressionErrors | null,
-  ): N.RecordExpression;
   parseObjectLike<T extends N.ObjectPattern | N.ObjectExpression>(
     this: Parser,
     close: TokenType,
     isPattern: boolean,
-    isRecord?: boolean | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): T {
-    if (isRecord) {
-      this.expectPlugin("recordAndTuple");
-    }
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
     let sawProto = false;
     let first = true;
-    const node = this.startNode<
-      N.ObjectExpression | N.ObjectPattern | N.RecordExpression
-    >();
+    const node = this.startNode<N.ObjectExpression | N.ObjectPattern>();
 
     node.properties = [];
     this.next();
@@ -2007,20 +1979,7 @@ export default abstract class ExpressionParser extends LValParser {
         prop = this.parseBindingProperty();
       } else {
         prop = this.parsePropertyDefinition(refExpressionErrors);
-        sawProto = this.checkProto(
-          prop,
-          isRecord,
-          sawProto,
-          refExpressionErrors,
-        );
-      }
-
-      if (
-        isRecord &&
-        !this.isObjectProperty(prop) &&
-        prop.type !== "SpreadElement"
-      ) {
-        this.raise(Errors.InvalidRecordProperty, prop);
+        sawProto = this.checkProto(prop, sawProto, refExpressionErrors);
       }
 
       // @ts-expect-error Fixme: refine typings
@@ -2030,12 +1989,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-    let type = "ObjectExpression";
-    if (isPattern) {
-      type = "ObjectPattern";
-    } else if (isRecord) {
-      type = "RecordExpression";
-    }
+    const type = isPattern ? "ObjectPattern" : "ObjectExpression";
     // @ts-expect-error type is well defined
     return this.finishNode(node, type);
   }
@@ -2398,33 +2352,25 @@ export default abstract class ExpressionParser extends LValParser {
     return finishedNode;
   }
 
-  // parse an array literal or tuple literal
+  // parse an array literal
   // https://tc39.es/ecma262/#prod-ArrayLiteral
-  // https://tc39.es/proposal-record-tuple/#prod-TupleLiteral
   parseArrayLike(
     this: Parser,
     close: TokenType,
-    isTuple: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-  ): N.ArrayExpression | N.TupleExpression {
-    if (isTuple) {
-      this.expectPlugin("recordAndTuple");
-    }
+  ): N.ArrayExpression {
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
-    const node = this.startNode<N.ArrayExpression | N.TupleExpression>();
+    const node = this.startNode<N.ArrayExpression>();
     this.next();
     node.elements = this.parseExprList(
       close,
-      /* allowEmpty */ !isTuple,
+      /* allowEmpty */ true,
       refExpressionErrors,
       node,
     );
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-    return this.finishNode(
-      node,
-      isTuple ? "TupleExpression" : "ArrayExpression",
-    );
+    return this.finishNode(node, "ArrayExpression");
   }
 
   // Parse arrow function expression.

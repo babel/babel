@@ -95,9 +95,6 @@ export type Expression =
   | JSXFragment
   | BindExpression
   | DoExpression
-  | RecordExpression
-  | TupleExpression
-  | DecimalLiteral
   | ModuleExpression
   | TopicReference
   | TsInstantiationExpression
@@ -218,8 +215,7 @@ export type Literal =
   | StringLiteral
   | BooleanLiteral
   | NumericLiteral
-  | BigIntLiteral
-  | DecimalLiteral;
+  | BigIntLiteral;
 
 type RegExpFlag = "g" | "i" | "m" | "u" | "s" | "y" | "v";
 
@@ -251,11 +247,6 @@ export interface NumericLiteral extends NodeBase {
 export interface BigIntLiteral extends NodeBase {
   type: "BigIntLiteral";
   value: bigint;
-}
-
-export interface DecimalLiteral extends NodeBase {
-  type: "DecimalLiteral";
-  value: number;
 }
 
 export interface ParserOutput {
@@ -534,17 +525,8 @@ export interface DoExpression extends NodeBase {
   async: boolean;
 }
 
-export interface TupleExpression extends NodeBase {
-  type: "TupleExpression";
-  elements: (Expression | SpreadElement | null)[];
-}
-
 export interface ObjectExpression extends NodeBase {
   type: "ObjectExpression";
-  properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
-}
-export interface RecordExpression extends NodeBase {
-  type: "RecordExpression";
   properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
 }
 
@@ -1341,7 +1323,6 @@ export interface BigIntLiteralTypeAnnotation extends NodeBase {
 export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
-  decimal?: string;
   raw: any;
 }
 
@@ -2016,7 +1997,6 @@ export type Node =
   | ConditionalExpression
   | ContinueStatement
   | DebuggerStatement
-  | DecimalLiteral
   | Decorator
   | Directive
   | DirectiveLiteral
@@ -2129,7 +2109,6 @@ export type Node =
   | Placeholder
   | PrivateName
   | Program
-  | RecordExpression
   | RegExpLiteral
   | RestElement
   | ReturnStatement
@@ -2205,7 +2184,6 @@ export type Node =
   | TsTypeQuery
   | TsTypeReference
   | TsUnionType
-  | TupleExpression
   | TypeAnnotation
   | TypeCastExpression
   | TypeParameter

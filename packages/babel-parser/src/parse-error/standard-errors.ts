@@ -130,7 +130,6 @@ export default {
   InvalidCoverDiscardElement:
     "'void' must be followed by an expression when not used in a binding position.",
   InvalidCoverInitializedName: "Invalid shorthand property initializer.",
-  InvalidDecimal: "Invalid decimal.",
   InvalidDigit: ({ radix }: { radix: number }) =>
     `Expected number in radix ${radix}.`,
   InvalidEscapeSequence: "Bad character escape sequence.",
@@ -159,8 +158,6 @@ export default {
     identifierName: string;
   }) => `Private name #${identifierName} is not defined.`,
   InvalidPropertyBindingPattern: "Binding member expression.",
-  InvalidRecordProperty:
-    "Only properties and spread elements are allowed in record definitions.",
   InvalidRestAssignmentPattern: "Invalid rest operator's argument.",
   LabelRedeclaration: ({ labelName }: { labelName: string }) =>
     `Label '${labelName}' is already declared.`,
@@ -219,13 +216,6 @@ export default {
     `Private names are only allowed in property accesses (\`obj.#${identifierName}\`) or in \`in\` expressions (\`#${identifierName} in obj\`).`,
   PrivateNameRedeclaration: ({ identifierName }: { identifierName: string }) =>
     `Duplicate private name #${identifierName}.`,
-  RecordExpressionBarIncorrectEndSyntaxType:
-    "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
-  RecordExpressionBarIncorrectStartSyntaxType:
-    "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
-  RecordExpressionHashIncorrectStartSyntaxType:
-    "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'.",
-  RecordNoProto: "'__proto__' is not allowed in Record expressions.",
   RestTrailingComma: "Unexpected trailing comma after rest element.",
   SloppyFunction:
     "In non-strict mode code, functions can only be declared at top level or inside a block.",
@@ -238,12 +228,6 @@ export default {
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
   SuperPrivateField: "Private fields can't be accessed on super.",
   TrailingDecorator: "Decorators must be attached to a class element.",
-  TupleExpressionBarIncorrectEndSyntaxType:
-    "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
-  TupleExpressionBarIncorrectStartSyntaxType:
-    "Tuple expressions starting with '[|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
-  TupleExpressionHashIncorrectStartSyntaxType:
-    "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'.",
   UnexpectedArgumentPlaceholder: "Unexpected argument placeholder.",
   UnexpectedDigitAfterHash: "Unexpected digit after hash token.",
   UnexpectedImportExport:
