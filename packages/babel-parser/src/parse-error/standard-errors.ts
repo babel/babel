@@ -113,8 +113,6 @@ export default {
   IllegalLanguageModeDirective:
     "Illegal 'use strict' directive in function with non-simple parameter list.",
   IllegalReturn: "'return' outside of function.",
-  ImportAttributesUseAssert:
-    "The `assert` keyword in import attributes is deprecated and it has been replaced by the `with` keyword. You can enable the `deprecatedImportAssert` parser plugin to suppress this error.",
   ImportBindingIsString: ({ importName }: { importName: string }) =>
     `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importName}" as foo }\`?`,
   ImportCallArity: `\`import()\` requires exactly one or two arguments.`,
@@ -186,8 +184,6 @@ export default {
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX.",
   MixingCoalesceWithLogical:
     "Nullish coalescing operator(??) requires parens when mixing with logical operators.",
-  ModuleAttributeDifferentFromType:
-    "The only accepted module attribute is `type`.",
   ModuleAttributeInvalidValue:
     "Only string literals are allowed as module attribute values.",
   ModuleAttributesWithDuplicateKeys: ({ key }: { key: string }) =>

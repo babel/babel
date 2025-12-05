@@ -3102,41 +3102,6 @@ export default abstract class StatementParser extends ExpressionParser {
     return attrs;
   }
 
-  /**
-   * parse module attributes
-   * @deprecated It will be removed in Babel 8
-   */
-  parseModuleAttributes() {
-    const attrs: N.ImportAttribute[] = [];
-    const attributes = new Set();
-    do {
-      const node = this.startNode<N.ImportAttribute>();
-      node.key = this.parseIdentifier(true);
-
-      if (node.key.name !== "type") {
-        this.raise(Errors.ModuleAttributeDifferentFromType, node.key);
-      }
-
-      if (attributes.has(node.key.name)) {
-        this.raise(Errors.ModuleAttributesWithDuplicateKeys, node.key, {
-          key: node.key.name,
-        });
-      }
-      attributes.add(node.key.name);
-      this.expect(tt.colon);
-      if (!this.match(tt.string)) {
-        throw this.raise(
-          Errors.ModuleAttributeInvalidValue,
-          this.state.startLoc,
-        );
-      }
-      node.value = this.parseStringLiteral(this.state.value);
-      attrs.push(this.finishNode(node, "ImportAttribute"));
-    } while (this.eat(tt.comma));
-
-    return attrs;
-  }
-
   maybeParseImportAttributes(
     node: Undone<
       N.ImportDeclaration | N.ExportNamedDeclaration | N.ExportAllDeclaration
