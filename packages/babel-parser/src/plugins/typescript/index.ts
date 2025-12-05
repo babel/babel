@@ -1413,12 +1413,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (
               !(this.optionFlags & OptionFlags.CreateParenthesizedExpressions)
             ) {
-              const startLoc = this.state.startLoc;
+              const { start } = this.state;
               this.next();
               const type = this.tsParseType();
               this.expect(tt.parenR);
               this.addExtra(type, "parenthesized", true);
-              this.addExtra(type, "parenStart", startLoc.index);
+              this.addExtra(type, "parenStart", start);
               return type;
             }
           }
@@ -1853,13 +1853,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         "HeritageClauseElement",
         () => {
           if (process.env.BABEL_8_BREAKING) {
+            this.setLoc(this.state.startLoc);
             const expression = super.parseExprSubscripts();
             if (!tsIsEntityName(expression)) {
-              this.raise(
-                TSErrors.InvalidHeritageClauseType,
-                expression.loc.start,
-                { token },
-              );
+              this.raise(TSErrors.InvalidHeritageClauseType, expression, {
+                token,
+              });
             }
             const nodeType =
               token === "extends" ? "TSInterfaceHeritage" : "TSClassImplements";
@@ -2495,9 +2494,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       decorators: N.Decorator[],
     ): N.Pattern | N.TSParameterProperty {
       // Store original location to include decorators/modifiers in range
-      const startLoc = decorators.length
-        ? decorators[0].loc.start
-        : this.state.startLoc;
+      const startLoc = decorators.length ? null : this.state.startLoc;
 
       const modified: ModifierBase = {};
       this.tsParseModifiers(
@@ -2519,16 +2516,22 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         !(flags & ParseBindingListFlags.IS_CONSTRUCTOR_PARAMS) &&
         (accessibility || readonly || override)
       ) {
-        this.raise(TSErrors.UnexpectedParameterModifier, startLoc);
+        this.raise(
+          TSErrors.UnexpectedParameterModifier,
+          startLoc || decorators[0],
+        );
       }
 
-      const left = this.parseMaybeDefault();
+      const startLoc2 = this.state.startLoc;
+      const left = this.parseMaybeDefault(startLoc2);
       if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
         this.parseFunctionParamType(left);
       }
-      const elt = this.parseMaybeDefault(left.loc.start, left);
+      const elt = this.parseMaybeDefault(startLoc2, left);
       if (accessibility || readonly || override) {
-        const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
+        const pp = startLoc
+          ? this.startNodeAt<N.TSParameterProperty>(startLoc)
+          : this.startNodeAtNode<N.TSParameterProperty>(decorators[0]);
         if (decorators.length) {
           pp.decorators = decorators;
         }
@@ -2536,7 +2539,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (readonly) pp.readonly = readonly;
         if (override) pp.override = override;
         if (elt.type !== "Identifier" && elt.type !== "AssignmentPattern") {
-          this.raise(TSErrors.UnsupportedParameterPropertyKind, pp);
+          this.raise(
+            TSErrors.UnsupportedParameterPropertyKind,
+            startLoc || decorators[0],
+          );
         }
         pp.parameter = elt as any as N.Identifier | N.AssignmentPattern;
         return this.finishNode(pp, "TSParameterProperty");
@@ -2873,7 +2879,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     checkReservedWord(
       word: string,
-      startLoc: Position,
+      startLoc: number,
       checkKeywords: boolean,
       isBinding: boolean,
     ): void {
@@ -2887,10 +2893,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     checkImportReflection(node: Undone<N.ImportDeclaration>) {
       super.checkImportReflection(node);
       if (node.module && node.importKind !== "value") {
-        this.raise(
-          TSErrors.ImportReflectionHasImportType,
-          node.specifiers[0].loc.start,
-        );
+        this.raise(TSErrors.ImportReflectionHasImportType, node.specifiers[0]);
       }
     }
 
@@ -2920,7 +2923,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
       isExport: boolean,
       phase: string | null,
-      loc?: Position,
+      loc?: number,
     ): void {
       super.applyImportPhase(node, isExport, phase, loc);
       if (isExport) {
@@ -3153,7 +3156,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               } else {
                 // The production is invalid. Construct AST for error recovery.
                 node.expression = this.createIdentifier(
-                  this.startNodeAt<N.Identifier>(node.loc.start),
+                  this.startNodeAtNode<N.Identifier>(node),
                   token === tt._declare ? "declare" : "abstract",
                 );
                 this.semicolon(false);
@@ -3787,7 +3790,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               // or a trailing comma, otherwise it's ambiguous with JSX.
               this.raise(
                 TSErrors.SingleTypeParameterWithoutTrailingComma,
-                createPositionWithColumnOffset(parameter.loc.end, 1),
+                this.optionFlags & OptionFlags.Locations
+                  ? createPositionWithColumnOffset(parameter.loc.end, 1)
+                  : parameter,
                 {
                   typeParameterName: process.env.BABEL_8_BREAKING
                     ? (parameter.name as N.Identifier).name
@@ -4154,7 +4159,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     typeCastToParameter(node: N.TsTypeCastExpression): N.Expression {
       (node.expression as N.Identifier).typeAnnotation = node.typeAnnotation;
 
-      this.resetEndLocation(node.expression, node.typeAnnotation.loc.end);
+      this.resetEndLocationFromNode(node.expression, node.typeAnnotation);
 
       return node.expression;
     }
@@ -4405,7 +4410,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let hasTypeSpecifier = false;
       let canParseAsKeyword = true;
 
-      const loc = leftOfAs.loc.start;
+      const loc = leftOfAs.start;
 
       // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
       // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
@@ -4448,12 +4453,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (isImport) {
           leftOfAs = this.parseIdentifier(true);
           if (!this.isContextual(tt._as)) {
-            this.checkReservedWord(
-              leftOfAs.name,
-              leftOfAs.loc.start,
-              true,
-              true,
-            );
+            this.checkReservedWord(leftOfAs.name, leftOfAs.start, true, true);
           }
         } else {
           leftOfAs = this.parseModuleExportName();

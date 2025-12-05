@@ -159,10 +159,7 @@ export default abstract class LValParser extends NodeUtils {
       case "ObjectProperty": {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(
-            this.getPrivateNameSV(key),
-            key.loc.start,
-          );
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key.start);
         }
         this.toAssignable(value, isLHS);
         break;
@@ -186,7 +183,12 @@ export default abstract class LValParser extends NodeUtils {
 
       case "AssignmentExpression":
         if (node.operator !== "=") {
-          this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
+          this.raise(
+            Errors.MissingEqInAssignment,
+            this.optionFlags & OptionFlags.Locations
+              ? node.left.loc.end
+              : node.left,
+          );
         }
 
         this.castNodeTo(node, "AssignmentPattern");
@@ -580,6 +582,7 @@ export default abstract class LValParser extends NodeUtils {
     flags: ParseBindingListFlags,
     decorators: Decorator[],
   ): Pattern | TSParameterProperty {
+    const { startLoc } = this.state;
     const left = this.parseMaybeDefault();
     if (
       (!process.env.BABEL_8_BREAKING && this.hasPlugin("flow")) ||
@@ -591,7 +594,7 @@ export default abstract class LValParser extends NodeUtils {
       left.decorators = decorators;
       this.resetStartLocationFromNode(left, decorators[0]);
     }
-    const elt = this.parseMaybeDefault(left.loc.start, left);
+    const elt = this.parseMaybeDefault(startLoc, left);
     return elt;
   }
 
@@ -745,7 +748,7 @@ export default abstract class LValParser extends NodeUtils {
 
     if (isOptionalMemberExpression || type === "MemberExpression") {
       if (isOptionalMemberExpression) {
-        this.expectPlugin("optionalChainingAssign", expression.loc.start);
+        this.expectPlugin("optionalChainingAssign", expression.start);
         if (ancestor.type !== "AssignmentExpression") {
           this.raise(Errors.InvalidLhsOptionalChaining, expression, {
             ancestor,
@@ -873,7 +876,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   declareNameFromIdentifier(identifier: Identifier, binding: BindingFlag) {
-    this.scope.declareName(identifier.name, binding, identifier.loc.start);
+    this.scope.declareName(identifier.name, binding, identifier.start);
   }
 
   checkToRestConversion(node: Node, allowPattern: boolean): void {
