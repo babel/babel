@@ -6,7 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "^10",
+    "next": "^14.2.32",
     "react": "^17",
     "react-dom": "^17"
   },
