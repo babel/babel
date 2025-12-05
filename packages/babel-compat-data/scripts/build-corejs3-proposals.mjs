@@ -8,11 +8,6 @@ const shippedProposals = features.filter(feature => {
   return feature.startsWith("esnext.") && Object.keys(data[feature]).length > 0;
 });
 
-fs.writeFileSync(
-  new URL("../data/corejs3-shipped-proposals.json", import.meta.url),
-  JSON.stringify(shippedProposals, undefined, 2) + "\n"
-);
-
 const finishedProposals = shippedProposals.filter(feature => {
   return features.includes(feature.replace("esnext.", "es."));
 });
