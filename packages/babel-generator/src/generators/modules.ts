@@ -195,6 +195,10 @@ export function ExportNamedDeclaration(
       this.word("type");
       this.space();
     }
+    if (node.phase === "defer") {
+      this.word("defer");
+      this.space();
+    }
 
     const specifiers = node.specifiers.slice(0);
 

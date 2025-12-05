@@ -1757,6 +1757,10 @@ defineType("ExportNamedDeclaration", {
           : assertNodeType("Declaration"),
     },
     ...importAttributes,
+    phase: {
+      default: null,
+      validate: assertOneOf("defer"),
+    },
     specifiers: {
       default: [],
       validate: arrayOf(

@@ -215,6 +215,7 @@
               "decorators-legacy",
               "decoratorAutoAccessors",
               "deferredImportEvaluation",
+              "deferredReexports",
               "destructuringPrivate",
               "doExpressions",
               "estree",
