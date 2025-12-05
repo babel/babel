@@ -8,12 +8,10 @@ const availablePlugins = _availablePlugins.default || _availablePlugins;
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
-// TODO(Babel 8): Once we only run tests in modern Node.js versions, we can
-// use import with { type: "json" } to load the compat data.
 // eslint-disable-next-line import/extensions
-const compatData = require("@babel/compat-data/plugins");
+import compatData from "@babel/compat-data/plugins" with { type: "json" };
 // eslint-disable-next-line import/extensions
-const bugfixesData = require("@babel/compat-data/plugin-bugfixes");
+import bugfixesData from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {

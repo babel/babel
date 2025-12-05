@@ -2,23 +2,18 @@ import * as babel from "@babel/core";
 import simplifyAccess from "../lib/index.js";
 
 const plugin = (_api, options) => {
-  // TODO(Babel 8): Remove includeUpdateExpression
-  const { includeUpdateExpression, bindingNames } = options;
+  const { bindingNames } = options;
 
   return {
     visitor: {
       Program(path) {
-        (simplifyAccess.default || simplifyAccess)(
-          path,
-          new Set(bindingNames),
-          includeUpdateExpression,
-        );
+        (simplifyAccess.default || simplifyAccess)(path, new Set(bindingNames));
       },
     },
   };
 };
 
-it("simplifyAccess with includeUpdateExpression=false", function () {
+it("simplifyAccess", function () {
   const code = `
     let a = foo++;
     a = ++foo;
@@ -58,12 +53,7 @@ it("simplifyAccess with includeUpdateExpression=false", function () {
   const output = babel.transformSync(code, {
     configFile: false,
     ast: false,
-    plugins: [
-      [
-        plugin,
-        { includeUpdateExpression: false, bindingNames: ["foo", "bar", "baz"] },
-      ],
-    ],
+    plugins: [[plugin, { bindingNames: ["foo", "bar", "baz"] }]],
   }).code;
 
   expect(output).toMatchInlineSnapshot(`
