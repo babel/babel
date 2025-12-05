@@ -161,9 +161,13 @@ const NodePath_Final = class NodePath {
     return this.hub.buildError(this.node!, msg, Error);
   }
 
-  traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
-  traverse(this: NodePath_Final, visitor: Visitor): void;
-  traverse(this: NodePath_Final, visitor: any, state?: any) {
+  traverse<T>(
+    this: NodePath_Final<t.Node>,
+    visitor: Visitor<T>,
+    state: T,
+  ): void;
+  traverse(this: NodePath_Final<t.Node>, visitor: Visitor): void;
+  traverse(this: NodePath_Final<t.Node>, visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
@@ -173,9 +177,9 @@ const NodePath_Final = class NodePath {
     this.node[key] = node;
   }
 
-  getPathLocation(this: NodePath_Final): string {
+  getPathLocation(this: NodePath_Final<t.Node | null>): string {
     const parts = [];
-    let path: NodePath_Final = this;
+    let path: NodePath_Final<t.Node | null> = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -184,7 +188,7 @@ const NodePath_Final = class NodePath {
     return parts.join(".");
   }
 
-  debug(this: NodePath_Final, message: string) {
+  debug(this: NodePath_Final<t.Node | null>, message: string) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
@@ -449,7 +453,7 @@ interface NodePathOverwrites {
    * @see ./introspection.ts for implementation.
    */
   isStatementOrBlock(
-    this: NodePath_Final,
+    this: NodePath_Final<t.Node | null>,
   ): this is NodePath_Final<t.Statement | t.Block>;
 }
 
@@ -460,7 +464,9 @@ interface NodePath<
   T extends t.Node["type"] | null = N extends null
     ? null
     : NonNullable<N>["type"],
-  P extends t.Node = NonNullable<t.ParentMaps[NonNullable<T>]>,
+  P extends t.Node = T extends null
+    ? t.Node
+    : NonNullable<t.ParentMaps[NonNullable<T>]>,
 > extends InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,

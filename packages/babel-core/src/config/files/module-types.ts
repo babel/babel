@@ -242,7 +242,7 @@ function ensureTsSupport<T>(
           transformFileSync(filename, {
             ...opts,
             filename,
-          }).code,
+          })!.code,
           filename,
         );
       } catch (error) {

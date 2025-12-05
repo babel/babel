@@ -9,7 +9,7 @@ import * as t from "@babel/types";
 import { updateSiblingKeys } from "./modification.ts";
 import { resync } from "./context.ts";
 
-export function remove(this: NodePath) {
+export function remove(this: NodePath<t.Node | null>) {
   _assertUnremoved.call(this);
 
   resync.call(this);
@@ -28,7 +28,7 @@ export function remove(this: NodePath) {
   _markRemoved.call(this);
 }
 
-export function _removeFromScope(this: NodePath) {
+export function _removeFromScope(this: NodePath<t.Node>) {
   const bindings = t.getBindingIdentifiers(this.node, false, false, true);
   Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
 }
@@ -50,13 +50,13 @@ export function _remove(this: NodePath) {
   }
 }
 
-export function _markRemoved(this: NodePath) {
+export function _markRemoved(this: NodePath<t.Node | null>) {
   // this.shouldSkip = true; this.removed = true;
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
   if (this.parent) {
+    // @ts-expect-error this.node may be null
     getCachedPaths(this)?.delete(this.node);
   }
-  // @ts-expect-error TODO: better types
   this.node = null;
 }
 

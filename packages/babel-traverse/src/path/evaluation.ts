@@ -62,7 +62,7 @@ function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
  *
  */
 
-export function evaluateTruthy(this: NodePath): boolean | undefined {
+export function evaluateTruthy(this: NodePath<t.Node>): boolean | undefined {
   const res = this.evaluate();
   if (res.confident) return !!res.value;
 }
@@ -100,7 +100,7 @@ const Globals = new Map([
  *   var g = a ? 1 : 2,
  *       a = g * this.foo
  */
-function evaluateCached(path: NodePath, state: State): any {
+function evaluateCached(path: NodePath<t.Node>, state: State): any {
   const { node } = path;
   const { seen } = state;
 
@@ -550,7 +550,7 @@ function evaluateQuasis(
  *
  */
 
-export function evaluate(this: NodePath): {
+export function evaluate(this: NodePath<t.Node>): {
   confident: boolean;
   value: any;
   deopt: NodePath | null;

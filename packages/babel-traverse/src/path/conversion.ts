@@ -109,7 +109,7 @@ export function ensureBlock(
   }
 
   this.node.body = blockStatement(statements);
-  const parentPath = this.get(stringPath) as NodePath;
+  const parentPath = this.get(stringPath) as NodePath<t.Node>;
   setup.call(
     body,
     parentPath,
@@ -807,7 +807,7 @@ const getScopeInformationVisitor = environmentVisitor<ScopeInfo>({
   },
 });
 
-function getScopeInformation(fnPath: NodePath) {
+function getScopeInformation(fnPath: NodePath<t.Node>) {
   const thisPaths: ScopeInfo["thisPaths"] = [];
   const argumentsPaths: ScopeInfo["argumentsPaths"] = [];
   const newTargetPaths: ScopeInfo["newTargetPaths"] = [];

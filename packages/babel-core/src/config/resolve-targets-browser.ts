@@ -35,7 +35,7 @@ export function resolveTargets(
     }
   }
 
-  return getTargets(targets, {
+  return getTargets(targets!, {
     ignoreBrowserslistConfig: true,
     browserslistEnv: options.browserslistEnv,
   });

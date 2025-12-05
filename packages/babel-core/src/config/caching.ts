@@ -137,7 +137,7 @@ function makeCachedFunction<ArgT, ResultT, SideChannel>(
 
     updateFunctionCache(callCache, cache, arg, value);
 
-    if (finishLock) {
+    if (finishLock!) {
       futureCache.delete(arg);
       finishLock.release(value);
     }
@@ -373,7 +373,7 @@ export type SimpleType =
   | boolean
   | number
   | null
-  | void
+  | undefined
   | Promise<SimpleType>;
 export function assertSimpleType(value: unknown): SimpleType {
   if (isThenable(value)) {
@@ -396,15 +396,13 @@ export function assertSimpleType(value: unknown): SimpleType {
       "Cache keys must be either string, boolean, number, null, or undefined.",
     );
   }
-  // @ts-expect-error Type 'unknown' is not assignable to type 'SimpleType'. This can be removed
-  // when strictNullCheck is enabled
   return value;
 }
 
 class Lock<T> {
   released: boolean = false;
   promise: Promise<T>;
-  _resolve: (value: T) => void;
+  _resolve: undefined | ((value: T) => void);
 
   constructor() {
     this.promise = new Promise(resolve => {
@@ -414,6 +412,6 @@ class Lock<T> {
 
   release(value: T) {
     this.released = true;
-    this._resolve(value);
+    this._resolve!(value);
   }
 }

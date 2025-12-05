@@ -74,7 +74,9 @@ export function loadPartialConfig(
   }
 }
 
-function* loadOptionsImpl(opts: InputOptions): Handler<ResolvedOptions | null> {
+function* loadOptionsImpl(
+  opts: InputOptions | null | undefined,
+): Handler<ResolvedOptions | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
@@ -138,7 +140,7 @@ export function createConfigItem(
     beginHiddenCallStack(createConfigItemRunner.errback)(
       target,
       undefined,
-      callback,
+      callback!,
     );
   } else {
     if (process.env.BABEL_8_BREAKING) {

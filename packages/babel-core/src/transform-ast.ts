@@ -69,6 +69,7 @@ export const transformFromAst: TransformFromAst = function transformFromAst(
     opts,
     callback,
   );
+  return null;
 };
 
 export function transformFromAstSync(

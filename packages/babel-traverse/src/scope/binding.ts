@@ -25,7 +25,7 @@ export type BindingKind =
 export default class Binding {
   identifier: t.Identifier;
   scope: Scope;
-  path: NodePath;
+  path: NodePath<t.Node>;
   kind: BindingKind;
 
   constructor({
@@ -36,7 +36,7 @@ export default class Binding {
   }: {
     identifier: t.Identifier;
     scope: Scope;
-    path: NodePath;
+    path: NodePath<t.Node>;
     kind: BindingKind;
   }) {
     this.identifier = identifier;
@@ -51,10 +51,10 @@ export default class Binding {
     this.clearValue();
   }
 
-  constantViolations: NodePath[] = [];
+  constantViolations: NodePath<t.Node>[] = [];
   constant: boolean = true;
 
-  referencePaths: NodePath[] = [];
+  referencePaths: NodePath<t.Node>[] = [];
   referenced: boolean = false;
   references: number = 0;
 
@@ -83,7 +83,7 @@ export default class Binding {
    * Register a constant violation with the provided `path`.
    */
 
-  reassign(path: NodePath) {
+  reassign(path: NodePath<t.Node>) {
     this.constant = false;
     if (this.constantViolations.includes(path)) {
       return;
@@ -95,7 +95,7 @@ export default class Binding {
    * Increment the amount of references to this binding.
    */
 
-  reference(path: NodePath) {
+  reference(path: NodePath<t.Node>) {
     if (this.referencePaths.includes(path)) {
       return;
     }
