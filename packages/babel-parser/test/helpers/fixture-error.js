@@ -1,6 +1,5 @@
 import { inspect } from "node:util";
 import Difference from "./difference.js";
-import "./polyfill.js";
 
 const { isArray } = Array;
 const { defineProperty, entries, fromEntries } = Object;
