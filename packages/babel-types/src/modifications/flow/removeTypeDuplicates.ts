@@ -61,7 +61,7 @@ export default function removeTypeDuplicates(
       const name = getQualifiedName(node.id);
 
       if (generics.has(name)) {
-        let existing: t.Flow = generics.get(name);
+        let existing: t.Flow = generics.get(name)!;
         if (existing.typeParameters) {
           if (node.typeParameters) {
             existing.typeParameters.params.push(...node.typeParameters.params);
@@ -70,7 +70,7 @@ export default function removeTypeDuplicates(
             );
           }
         } else {
-          existing = node.typeParameters;
+          existing = node.typeParameters!;
         }
       } else {
         generics.set(name, node);

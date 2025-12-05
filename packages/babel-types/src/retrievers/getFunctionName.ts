@@ -14,7 +14,7 @@ import {
   isVariableDeclarator,
 } from "../validators/generated/index.ts";
 
-function getNameFromLiteralId(id: t.Literal): string {
+function getNameFromLiteralId(id: t.Literal): string | null {
   if (isNullLiteral(id)) {
     return "null";
   }
@@ -36,10 +36,11 @@ function getNameFromLiteralId(id: t.Literal): string {
 
 function getObjectMemberKey(
   node: t.ObjectProperty | t.ObjectMethod | t.ClassProperty | t.ClassMethod,
-): t.Expression | t.PrivateName {
+): t.Expression | t.PrivateName | null {
   if (!node.computed || isLiteral(node.key)) {
     return node.key;
   }
+  return null;
 }
 
 type GetFunctionNameResult = {
@@ -76,7 +77,7 @@ export default function getFunctionName(
     id = getObjectMemberKey(node);
     if (node.kind === "get") prefix = "get ";
     else if (node.kind === "set") prefix = "set ";
-  } else if (isVariableDeclarator(parent, { init: node })) {
+  } else if (isVariableDeclarator(parent) && parent.init === node) {
     // let foo = function () {};
     id = parent.id;
   } else if (isAssignmentExpression(parent, { operator: "=", right: node })) {

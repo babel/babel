@@ -7,7 +7,7 @@ export default function toIdentifier(input: string): string {
   // replace all non-valid identifiers with dashes
   let name = "";
   for (const c of input) {
-    name += isIdentifierChar(c.codePointAt(0)) ? c : "-";
+    name += isIdentifierChar(c.codePointAt(0)!) ? c : "-";
   }
 
   // remove all dashes and numbers from start of name

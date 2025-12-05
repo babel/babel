@@ -200,7 +200,9 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
 
     const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
     const builderNames = BUILDER_KEYS[type];
-    const objectFields = [["type", JSON.stringify(type)]];
+    const objectFields: [string, string, boolean?][] = [
+      ["type", JSON.stringify(type)],
+    ];
     fieldNames.forEach(fieldName => {
       const field = NODE_FIELDS[type][fieldName];
       if (builderNames.includes(fieldName)) {
@@ -208,7 +210,7 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
         objectFields.push([fieldName, bindingIdentifierName]);
       } else if (!field.optional) {
         const def = JSON.stringify(field.default);
-        objectFields.push([fieldName, def]);
+        objectFields.push([fieldName, def, field.default === null]);
       }
     });
 
@@ -231,7 +233,12 @@ export function bigIntLiteral(value: bigint | string): t.BigIntLiteral {
     }function ${formattedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
 
     const nodeObjectExpression = `{\n${objectFields
-      .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
+      .map(
+        ([k, v, usedDefault]) =>
+          (usedDefault
+            ? "//@ts-ignore(Babel 7 vs Babel 8) should fix in Babel 8\n"
+            : "") + (k === v ? `    ${k},` : `    ${k}: ${v},`)
+      )
       .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {

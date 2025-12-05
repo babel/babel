@@ -51,9 +51,9 @@ type DefineTypeOpts = {
 };
 
 export type ValidatorImpl = (
-  node?: t.Node,
-  key?: string | { toString(): string },
-  val?: any,
+  node: t.Node | null | undefined,
+  key: string | { toString(): string },
+  val: any,
 ) => void;
 
 export type ValidatorType = { type: PrimitiveTypes } & ValidatorImpl;
@@ -83,7 +83,7 @@ export type Validator =
   | ValidatorImpl;
 
 export type FieldOptions = {
-  default?: string | number | boolean | [];
+  default?: string | number | boolean | [] | null;
   optional?: boolean;
   deprecated?: boolean;
   validate?: Validator;

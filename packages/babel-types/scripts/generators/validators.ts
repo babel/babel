@@ -121,7 +121,7 @@ type Options<Obj> = Partial<{
     output += `/**
  * @deprecated Use \`is${newType}\`
  */
-${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
+${addIsHelper(type, undefined, `deprecationWarning("is${type}", "is${newType}")`)}`;
   });
 
   Object.keys(DEPRECATED_ALIASES).forEach(type => {

@@ -21,8 +21,8 @@ export default function isNodesEquivalent<T extends Partial<t.Node>>(
     return false;
   }
 
-  const fields = Object.keys(NODE_FIELDS[a.type] || a.type);
-  const visitorKeys = VISITOR_KEYS[a.type];
+  const fields = Object.keys(NODE_FIELDS[a.type!] || a.type);
+  const visitorKeys = VISITOR_KEYS[a.type!];
 
   for (const field of fields) {
     const val_a =
