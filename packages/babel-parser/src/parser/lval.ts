@@ -62,7 +62,6 @@ export default abstract class LValParser extends NodeUtils {
   abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
-    isRecord?: boolean,
     refExpressionErrors?: ExpressionErrors,
   ): T;
   abstract parseObjPropValue(

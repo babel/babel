@@ -95,14 +95,8 @@ export type Expression =
   | JSXFragment
   | BindExpression
   | DoExpression
-  | RecordExpression
-  | TupleExpression
-  | DecimalLiteral
   | ModuleExpression
   | TopicReference
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
   | TsInstantiationExpression
   | TsAsExpression
   | TsSatisfiesExpression
@@ -221,8 +215,7 @@ export type Literal =
   | StringLiteral
   | BooleanLiteral
   | NumericLiteral
-  | BigIntLiteral
-  | DecimalLiteral;
+  | BigIntLiteral;
 
 type RegExpFlag = "g" | "i" | "m" | "u" | "s" | "y" | "v";
 
@@ -254,11 +247,6 @@ export interface NumericLiteral extends NodeBase {
 export interface BigIntLiteral extends NodeBase {
   type: "BigIntLiteral";
   value: bigint;
-}
-
-export interface DecimalLiteral extends NodeBase {
-  type: "DecimalLiteral";
-  value: number;
 }
 
 export interface ParserOutput {
@@ -537,17 +525,8 @@ export interface DoExpression extends NodeBase {
   async: boolean;
 }
 
-export interface TupleExpression extends NodeBase {
-  type: "TupleExpression";
-  elements: (Expression | SpreadElement | null)[];
-}
-
 export interface ObjectExpression extends NodeBase {
   type: "ObjectExpression";
-  properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
-}
-export interface RecordExpression extends NodeBase {
-  type: "RecordExpression";
   properties: (ObjectProperty | ObjectMethod | SpreadElement)[];
 }
 
@@ -767,42 +746,6 @@ export interface ParenthesizedExpression extends NodeBase {
 
 export interface TopicReference extends NodeBase {
   type: "TopicReference";
-}
-
-// Smart-mix pipe operator
-
-export interface PipelineBody extends NodeBase {
-  type: "PipelineBody";
-}
-
-export interface PipelineBareFunctionBody extends NodeBase {
-  type: "PipelineBareFunctionBody";
-  callee: Expression;
-}
-
-export interface PipelineBareConstructorBody extends NodeBase {
-  type: "PipelineBareConstructorBody";
-  callee: Expression;
-}
-
-export interface PipelineBareAwaitedFunctionBody extends NodeBase {
-  type: "PipelineBareAwaitedFunctionBody";
-  callee: Expression;
-}
-
-export interface PipelineTopicBody extends NodeBase {
-  type: "PipelineTopicBody";
-  expression: Expression;
-}
-
-export type PipelineStyle =
-  | "PipelineBareFunction"
-  | "PipelineBareConstructor"
-  | "PipelineBareAwaitedFunction"
-  | "PipelineTopicExpression";
-
-export interface PipelinePrimaryTopicReference extends NodeBase {
-  type: "PipelinePrimaryTopicReference";
 }
 
 // Template Literals
@@ -1138,16 +1081,6 @@ export interface ExportAllDeclaration extends NodeBase {
   attributes?: ImportAttribute[];
 }
 
-export interface PipelineTopicExpression extends NodeBase {
-  type: "PipelineTopicExpression";
-  expression: Expression;
-}
-
-export interface PipelineBareFunction extends NodeBase {
-  type: "PipelineBareFunction";
-  callee: Expression;
-}
-
 // JSX (TODO: Not in spec)
 
 export type JSXIdentifier = NodeAny<"JSXIdentifier">;
@@ -1390,7 +1323,6 @@ export interface BigIntLiteralTypeAnnotation extends NodeBase {
 export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
-  decimal?: string;
   raw: any;
 }
 
@@ -2065,7 +1997,6 @@ export type Node =
   | ConditionalExpression
   | ContinueStatement
   | DebuggerStatement
-  | DecimalLiteral
   | Decorator
   | Directive
   | DirectiveLiteral
@@ -2175,18 +2106,9 @@ export type Node =
   | OptionalCallExpression
   | OptionalMemberExpression
   | ParenthesizedExpression
-  | PipelineBareAwaitedFunctionBody
-  | PipelineBareConstructorBody
-  | PipelineBareFunction
-  | PipelineBareFunctionBody
-  | PipelineBody
-  | PipelinePrimaryTopicReference
-  | PipelineTopicBody
-  | PipelineTopicExpression
   | Placeholder
   | PrivateName
   | Program
-  | RecordExpression
   | RegExpLiteral
   | RestElement
   | ReturnStatement
@@ -2262,7 +2184,6 @@ export type Node =
   | TsTypeQuery
   | TsTypeReference
   | TsUnionType
-  | TupleExpression
   | TypeAnnotation
   | TypeCastExpression
   | TypeParameter

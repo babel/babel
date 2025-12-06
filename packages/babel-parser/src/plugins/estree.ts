@@ -66,17 +66,6 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    // @ts-expect-error ESTree plugin changes node types
-    parseDecimalLiteral(value: any): N.Node {
-      // https://github.com/estree/estree/blob/master/experimental/decimal.md
-      // todo: use BigDecimal when node supports it.
-      const decimal: null = null;
-      const node = this.estreeParseLiteral(decimal);
-      node.decimal = String(node.value || value);
-
-      return node;
-    }
-
     estreeParseLiteral<T extends N.EstreeLiteral>(value: any) {
       // @ts-expect-error ESTree plugin changes node types
       return this.parseLiteral<T>(value, "Literal");

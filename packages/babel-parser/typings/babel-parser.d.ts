@@ -234,9 +234,8 @@ interface Options {
      */
     createParenthesizedExpressions?: boolean;
     /**
-     * The default is false in Babel 7 and true in Babel 8
-     * Set this to true to parse it as an `ImportExpression` node.
-     * Otherwise `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
+     * By default, the parser parses import expressions as an `ImportExpression` node.
+     * Set this to false to parse it as `CallExpression(Import, [Identifier(foo)])`.
      */
     createImportExpressions?: boolean;
 }
@@ -259,4 +258,4 @@ declare const tokTypes: {
   [name: string]: any;
 };
 
-export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type ParserPluginWithOptions, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };
