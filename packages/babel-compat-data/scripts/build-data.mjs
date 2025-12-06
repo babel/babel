@@ -7,7 +7,6 @@ import {
   maybeDefineLegacyPluginAliases,
 } from "./utils-build-data.mjs";
 import pluginFeatures from "./data/plugin-features.mjs";
-import { buildCorejs2BuiltinFeatures } from "./build-corejs2-built-in-features.mjs";
 
 const compatData = browserCompatData.javascript;
 if (process.cwd().endsWith("scripts")) {
@@ -35,4 +34,3 @@ function buildPluginFeatures() {
 }
 
 buildPluginFeatures();
-buildCorejs2BuiltinFeatures();

@@ -1,5 +1,7 @@
 import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// eslint-disable-next-line import/no-unresolved
 import browserModulesData from "@babel/compat-data/native-modules" with { type: "json" };
 import LruCache from "lru-cache";
 

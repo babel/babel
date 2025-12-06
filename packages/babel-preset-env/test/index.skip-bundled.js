@@ -8,9 +8,9 @@ const availablePlugins = _availablePlugins.default || _availablePlugins;
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
-// eslint-disable-next-line import/extensions
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import compatData from "@babel/compat-data/plugins" with { type: "json" };
-// eslint-disable-next-line import/extensions
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import bugfixesData from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
 
 describe("babel-preset-env", () => {

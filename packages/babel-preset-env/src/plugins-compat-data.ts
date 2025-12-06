@@ -1,5 +1,9 @@
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// eslint-disable-next-line import/no-unresolved
 import originalPlugins from "@babel/compat-data/plugins" with { type: "json" };
+// eslint-disable-next-line import/no-unresolved
 import originalPluginsBugfixes from "@babel/compat-data/plugin-bugfixes" with { type: "json" };
+// eslint-disable-next-line import/no-unresolved
 import originalOverlappingPlugins from "@babel/compat-data/overlapping-plugins" with { type: "json" };
 import availablePlugins from "./available-plugins.ts";
 
