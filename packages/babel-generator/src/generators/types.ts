@@ -2,6 +2,7 @@ import type Printer from "../printer.ts";
 import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
+import { _methodHead } from "./methods.ts";
 
 let lastRawIdentNode: t.Identifier | null = null;
 let lastRawIdentResult: string = "";
@@ -19,9 +20,11 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
 }
 
 export function Identifier(this: Printer, node: t.Identifier) {
-  this.sourceIdentifierName(node.loc?.identifierName || node.name);
+  if (this._buf._map) {
+    this.sourceIdentifierName(node.loc?.identifierName || node.name);
+  }
 
-  this.word(this.tokenMap ? this._getRawIdentifier(node) : node.name);
+  this.word(this.tokenMap ? _getRawIdentifier.call(this, node) : node.name);
 }
 
 export function ArgumentPlaceholder(this: Printer) {
@@ -57,7 +60,7 @@ export { ObjectExpression as ObjectPattern };
 
 export function ObjectMethod(this: Printer, node: t.ObjectMethod) {
   this.printJoin(node.decorators);
-  this._methodHead(node);
+  _methodHead.call(this, node);
   this.space();
   this.print(node.body);
 }

@@ -21,7 +21,7 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
     this.word(operator);
     this.space();
   } else {
-    this.token(operator);
+    this.tokenChar(operator.charCodeAt(0));
   }
 
   this.print(node.argument);
@@ -280,11 +280,13 @@ export function AssignmentExpression(
   this.print(node.left);
 
   this.space();
-  if (node.operator === "in" || node.operator === "instanceof") {
-    this.word(node.operator);
+  const { operator } = node;
+  if (operator === "in" || operator === "instanceof") {
+    this.word(operator);
   } else {
-    this.token(node.operator);
-    this._endsWithDiv = node.operator === "/";
+    this.token(operator);
+    this.setLastChar(operator.charCodeAt(operator.length - 1));
+    this._endsWithDiv = operator === "/";
   }
   this.space();
 
