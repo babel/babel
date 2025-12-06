@@ -1,8 +1,6 @@
 import {
   isArrayTypeAnnotation,
   isBinaryExpression,
-  isCallExpression,
-  isForOfStatement,
   isIndexedAccessType,
   isMemberExpression,
   isObjectPattern,
@@ -491,10 +489,18 @@ export function OptionalMemberExpression(
   node: t.OptionalMemberExpression,
   parent: t.Node,
 ): boolean {
-  return (
-    (isCallExpression(parent) && parent.callee === node) ||
-    (isMemberExpression(parent) && parent.object === node)
-  );
+  switch (parent.type) {
+    case "CallExpression":
+      if (parent.callee === node) {
+        return true;
+      }
+      break;
+    case "MemberExpression":
+      if (parent.object === node) {
+        return true;
+      }
+  }
+  return false;
 }
 
 export { OptionalMemberExpression as OptionalCallExpression };
@@ -590,6 +596,8 @@ export function Identifier(
   // `for (async of => {};;)`, so we need to add extra parentheses.
   return (
     node.name === "async" &&
-    isForOfStatement(parent, { left: node, await: false })
+    parentType === "ForOfStatement" &&
+    !parent.await &&
+    parent.left === node
   );
 }

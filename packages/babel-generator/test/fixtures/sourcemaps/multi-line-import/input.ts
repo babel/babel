@@ -1,0 +1,4 @@
+import type {
+  RecordAndTuplePluginOptions,
+  PipelineOperatorPluginOptions,
+} from "@babel/parser";

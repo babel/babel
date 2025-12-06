@@ -264,12 +264,16 @@ export function VariableDeclaration(
   }
 
   const { kind } = node;
-  if (kind === "await using") {
-    this.word("await");
-    this.space();
-    this.word("using", true);
-  } else {
-    this.word(kind, kind === "using");
+  switch (kind) {
+    case "await using":
+      this.word("await");
+      this.space();
+    // fallthrough
+    case "using":
+      this.word("using", true);
+      break;
+    default:
+      this.word(kind);
   }
   this.space();
 
@@ -303,7 +307,7 @@ export function VariableDeclaration(
     node.declarations.length > 1,
     hasInits
       ? function (this: Printer, occurrenceCount: number) {
-          this.token(",", false, occurrenceCount);
+          this.tokenChar(charCodes.comma, occurrenceCount);
           this.newline();
         }
       : undefined,
