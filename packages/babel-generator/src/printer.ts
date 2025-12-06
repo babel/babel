@@ -1,6 +1,10 @@
 import Buffer, { type Pos } from "./buffer.ts";
 import type { Loc } from "./buffer.ts";
-import * as n from "./node/index.ts";
+import {
+  parentNeedsParens,
+  expandedParens,
+  isLastChild,
+} from "./node/index.ts";
 import type * as t from "@babel/types";
 import {
   isExpression,
@@ -15,10 +19,7 @@ import type { Opts as jsescOptions } from "jsesc";
 import { TokenMap } from "./token-map.ts";
 import type { GeneratorOptions } from "./index.ts";
 import * as generatorFunctions from "./generators/index.ts";
-import {
-  addDeprecatedGenerators,
-  type DeprecatedBabel7ASTTypes,
-} from "./generators/deprecated.ts";
+import * as deprecatedGeneratorFunctions from "./generators/deprecated.ts";
 import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 import type { Token } from "@babel/parser";
@@ -36,9 +37,23 @@ function commentIsNewline(c: t.Comment) {
   return c.type === "CommentLine" || HAS_NEWLINE.test(c.value);
 }
 
-const { needsParens } = n;
-
 import { TokenContext } from "./node/index.ts";
+import { _getRawIdentifier } from "./generators/types.ts";
+
+const map = new Map<string, [Function, Function | undefined]>();
+for (const key of Object.keys(
+  generatorFunctions,
+) as (keyof typeof generatorFunctions)[]) {
+  if (key.startsWith("_")) continue;
+  map.set(key, [generatorFunctions[key], expandedParens.get(key)]);
+}
+if (!process.env.BABEL_8_BREAKING) {
+  for (const key of Object.keys(
+    deprecatedGeneratorFunctions,
+  ) as (keyof typeof deprecatedGeneratorFunctions)[]) {
+    map.set(key, [deprecatedGeneratorFunctions[key], expandedParens.get(key)]);
+  }
+}
 
 const enum COMMENT_TYPE {
   LEADING,
@@ -102,11 +117,7 @@ export type Format = {
   importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };
 
-interface AddNewlinesOptions {
-  nextNodeStartLine: number;
-}
-
-interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
+interface PrintSequenceOptions {
   statement?: boolean;
   indent?: boolean;
   trailingCommentsLineOffset?: number;
@@ -121,7 +132,6 @@ interface PrintListOptions {
 }
 
 export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class Printer {
   constructor(
     format: Format,
@@ -200,7 +210,8 @@ class Printer {
   _indentInnerComments: boolean = true;
   tokenMap: TokenMap | null = null;
 
-  _boundGetRawIdentifier = this._getRawIdentifier.bind(this);
+  _boundGetRawIdentifier = _getRawIdentifier.bind(this);
+  _boundNewline = this.newline.bind(this);
 
   generate(ast: t.Node) {
     if (this.format.preserveFormat) {
@@ -257,11 +268,6 @@ class Printer {
    */
   semicolon(force: boolean = false): void {
     this._maybeAddAuxComment();
-    if (force) {
-      this._appendChar(charCodes.semicolon);
-      this._noLineTerminator = false;
-      return;
-    }
     if (this.tokenMap) {
       const node = this._currentNode!;
       if (node.start != null && node.end != null) {
@@ -274,7 +280,11 @@ class Printer {
         this._catchUpTo(this._tokens![indexes[indexes.length - 1]].loc.start);
       }
     }
-    this._queue(charCodes.semicolon);
+    if (force) {
+      this._appendChar(charCodes.semicolon);
+    } else {
+      this._queue(charCodes.semicolon);
+    }
     this._noLineTerminator = false;
   }
 
@@ -394,7 +404,7 @@ class Printer {
       (lastChar === charCodes.exclamationMark &&
         // space is mandatory to avoid outputting <!--
         // http://javascript.spec.whatwg.org/#comment-syntax
-        (str === "--" ||
+        ((strFirst === charCodes.dash && str === "--") ||
           // Needs spaces to avoid changing a! == 0 to a!== 0
           strFirst === charCodes.equalsTo)) ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
@@ -409,15 +419,15 @@ class Printer {
     this._noLineTerminator = false;
   }
 
-  tokenChar(char: number): void {
+  tokenChar(char: number, occurrenceCount = 0): void {
     this.tokenContext &= TokenContext.forInOrInitHeadAccumulatePassThroughMask;
 
     const str = String.fromCharCode(char);
-    this._maybePrintInnerComments(str);
+    this._maybePrintInnerComments(str, occurrenceCount);
 
     this._maybeAddAuxComment();
 
-    if (this.tokenMap) this._catchUpToCurrentToken(str);
+    if (this.tokenMap) this._catchUpToCurrentToken(str, occurrenceCount);
 
     const lastChar = this.getLastChar();
     if (
@@ -458,8 +468,6 @@ class Printer {
     for (let j = 0; j < i; j++) {
       this._newline();
     }
-
-    return;
   }
 
   endsWith(char: number): boolean {
@@ -470,12 +478,8 @@ class Printer {
     return this._buf.getLastChar();
   }
 
-  endsWithCharAndNewline(): number | undefined {
-    return this._buf.endsWithCharAndNewline();
-  }
-
-  removeTrailingNewline(): void {
-    this._buf.removeTrailingNewline();
+  setLastChar(char: number) {
+    this._buf._last = char;
   }
 
   exactSource(loc: Loc | null | undefined, cb: () => void) {
@@ -522,7 +526,10 @@ class Printer {
   }
 
   _newline(): void {
-    this._queue(charCodes.lineFeed);
+    // Drop trailing spaces when a newline is inserted.
+    if (this._buf._queuedChar === charCodes.space) this._buf._queuedChar = 0;
+
+    this._appendChar(charCodes.lineFeed);
   }
 
   _catchUpToCurrentToken(str: string, occurrenceCount: number = 0): void {
@@ -549,7 +556,8 @@ class Printer {
   }
 
   _append(str: string, maybeNewline: boolean): void {
-    this._maybeIndent(str.charCodeAt(0));
+    // First char must not be newline
+    this._maybeIndent(-1);
 
     this._buf.append(str, maybeNewline);
 
@@ -571,8 +579,6 @@ class Printer {
   }
 
   _queue(char: number) {
-    this._maybeIndent(char);
-
     this._buf.queue(char);
 
     this._endsWithWord = false;
@@ -582,11 +588,14 @@ class Printer {
   _maybeIndent(firstChar: number): void {
     // we've got a newline before us so prepend on the indentation
     if (
-      this._indent &&
       firstChar !== charCodes.lineFeed &&
+      this._indent &&
       this.endsWith(charCodes.lineFeed)
     ) {
-      this._buf.queueIndentation(this._getIndent());
+      const indent = this._getIndent();
+      if (indent > 0) {
+        this._buf._appendChar(-1, indent, false);
+      }
     }
   }
 
@@ -648,6 +657,7 @@ class Printer {
             .replace(/[^\t\v\f\uFEFF\p{Space_Separator}]/gu, " ")
         : " ".repeat(spacesCount);
       this._append(spaces, false);
+      this.setLastChar(charCodes.space);
     }
   }
 
@@ -701,22 +711,16 @@ class Printer {
       format.concise = true;
     }
 
-    const printMethod =
-      this[
-        nodeType as Exclude<
-          t.Node["type"],
-          | DeprecatedBabel7ASTTypes
-          // renamed
-          | t.DeprecatedAliases["type"]
-        >
-      ];
-    if (printMethod === undefined) {
+    const nodeInfo = map.get(nodeType);
+    if (nodeInfo === undefined) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
           nodeType,
         )} with constructor ${JSON.stringify(node.constructor.name)}`,
       );
     }
+
+    const [printMethod, needsParens] = nodeInfo;
 
     const parent = this._currentNode;
     this._currentNode = node;
@@ -735,12 +739,14 @@ class Printer {
       (parenthesized &&
         format.retainFunctionParens &&
         nodeType === "FunctionExpression") ||
-      needsParens(
-        node,
-        parent,
-        this.tokenContext,
-        format.preserveFormat ? this._boundGetRawIdentifier : undefined,
-      );
+      (parent &&
+        (parentNeedsParens(node, parent) ||
+          needsParens?.(
+            node,
+            parent,
+            this.tokenContext,
+            format.preserveFormat ? this._boundGetRawIdentifier : undefined,
+          )));
 
     if (
       !shouldPrintParens &&
@@ -784,7 +790,7 @@ class Printer {
       noLineTerminatorAfter ||=
         !!parent &&
         this._noLineTerminatorAfterNode === parent &&
-        n.isLastChild(parent, node);
+        isLastChild(parent, node);
       if (noLineTerminatorAfter) {
         if (node.trailingComments?.some(commentIsNewline)) {
           if (isExpression(node)) shouldPrintParens = true;
@@ -813,11 +819,7 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
-    this.exactSource(
-      loc,
-      // @ts-expect-error Expected 1 arguments, but got 3.
-      printMethod.bind(this, node, parent),
-    );
+    this.exactSource(loc, printMethod.bind(this, node, parent));
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);
@@ -923,26 +925,22 @@ class Printer {
 
     if (indent) this.indent();
 
-    const newlineOpts: AddNewlinesOptions = {
-      nextNodeStartLine: 0,
-    };
-
-    const boundSeparator = separator?.bind(this);
+    let nextNodeStartLine = 0;
 
     const len = nodes.length;
     for (let i = 0; i < len; i++) {
       const node = nodes[i];
       if (!node) continue;
 
-      if (statement) this._printNewline(i === 0, newlineOpts);
+      if (statement) this._printNewline(i === 0, nextNodeStartLine);
 
       this.print(node, undefined, trailingCommentsLineOffset || 0);
 
       iterator?.(node, i);
 
-      if (boundSeparator != null) {
-        if (i < len - 1) boundSeparator(i, false);
-        else if (printTrailingSeparator) boundSeparator(i, true);
+      if (separator != null) {
+        if (i < len - 1) separator.call(this, i, false);
+        else if (printTrailingSeparator) separator.call(this, i, true);
       }
 
       if (statement) {
@@ -954,9 +952,9 @@ class Printer {
           this.newline(1);
         } else {
           const nextNode = nodes[i + 1];
-          newlineOpts.nextNodeStartLine = nextNode.loc?.start.line || 0;
+          nextNodeStartLine = nextNode.loc?.start.line || 0;
 
-          this._printNewline(true, newlineOpts);
+          this._printNewline(true, nextNodeStartLine);
         }
       }
     }
@@ -1094,18 +1092,22 @@ class Printer {
     );
   }
 
-  shouldPrintTrailingComma(listEnd: string): boolean | null {
+  shouldPrintTrailingComma(listEnd: string | number): boolean | null {
     if (!this.tokenMap) return null;
 
     const listEndIndex = this.tokenMap.findLastIndex(
       this._currentNode!,
-      token => this.tokenMap!.matchesOriginal(token, listEnd),
+      token =>
+        this.tokenMap!.matchesOriginal(
+          token,
+          typeof listEnd === "number" ? String.fromCharCode(listEnd) : listEnd,
+        ),
     );
     if (listEndIndex <= 0) return null;
     return this.tokenMap.matchesOriginal(this._tokens![listEndIndex - 1], ",");
   }
 
-  _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
+  _printNewline(newLine: boolean, nextNodeStartLine: number) {
     const format = this.format;
 
     // Fast path since 'this.newline' does nothing when not tracking lines.
@@ -1122,10 +1124,9 @@ class Printer {
       return;
     }
 
-    const startLine = opts.nextNodeStartLine;
     const lastCommentLine = this._lastCommentLine;
-    if (startLine > 0 && lastCommentLine > 0) {
-      const offset = startLine - lastCommentLine;
+    if (nextNodeStartLine > 0 && lastCommentLine > 0) {
+      const offset = nextNodeStartLine - lastCommentLine;
       if (offset >= 0) {
         this.newline(offset || 1);
         return;
@@ -1134,18 +1135,6 @@ class Printer {
 
     // don't add newlines at the beginning of the file
     if (this._buf.hasContent()) {
-      // Here is the logic of the original line wrapping according to the node layout, we are not using it now.
-      // We currently add at most one newline to each node in the list, ignoring `opts.addNewlines`.
-
-      // let lines = 0;
-      // if (!leading) lines++; // always include at least a single line after
-      // if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
-
-      // const needs = leading ? needsWhitespaceBefore : needsWhitespaceAfter;
-      // if (needs(node, parent)) lines++;
-
-      // this.newline(Math.min(2, lines));
-
       this.newline(1);
     }
   }
@@ -1294,8 +1283,8 @@ class Printer {
     let leadingCommentNewline = 0;
 
     const maybeNewline = this._noLineTerminator
-      ? function () {}
-      : this.newline.bind(this);
+      ? undefined
+      : this._boundNewline;
 
     for (let i = 0; i < len; i++) {
       const comment = comments[i];
@@ -1325,11 +1314,11 @@ class Printer {
           }
           lastLine = commentEndLine;
 
-          maybeNewline(offset);
+          maybeNewline?.(offset);
           this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
 
           if (i + 1 === len) {
-            maybeNewline(
+            maybeNewline?.(
               Math.max(nodeStartLine - lastLine, leadingCommentNewline),
             );
             lastLine = nodeStartLine;
@@ -1339,11 +1328,11 @@ class Printer {
             commentStartLine - (i === 0 ? nodeStartLine : lastLine);
           lastLine = commentEndLine;
 
-          maybeNewline(offset);
+          maybeNewline?.(offset);
           this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
 
           if (i + 1 === len) {
-            maybeNewline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
+            maybeNewline?.(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
             lastLine = nodeEndLine;
           }
         } else {
@@ -1351,7 +1340,7 @@ class Printer {
             commentStartLine - (i === 0 ? nodeEndLine - lineOffset : lastLine);
           lastLine = commentEndLine;
 
-          maybeNewline(offset);
+          maybeNewline?.(offset);
           this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
         }
       } else {
@@ -1416,16 +1405,6 @@ class Printer {
   }
 }
 
-// Expose the node type functions and helpers on the prototype for easy usage.
-Object.assign(Printer.prototype, generatorFunctions);
-
-if (!process.env.BABEL_8_BREAKING) {
-  addDeprecatedGenerators(Printer);
-}
-
-type GeneratorFunctions = typeof generatorFunctions;
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
-interface Printer extends GeneratorFunctions {}
 export default Printer;
 
 function commaSeparator(this: Printer, occurrenceCount: number, last: boolean) {
