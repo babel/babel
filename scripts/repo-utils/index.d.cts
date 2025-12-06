@@ -1,13 +1,10 @@
-export const USE_ESM: boolean;
-export const IS_BABEL_8: () => boolean;
+export const IS_BABEL_9: () => boolean;
 export function commonJS(metaUrl: string): {
   __dirname: string;
   __filename: string;
   require: NodeJS.Require;
 };
 export const repoRoot: string;
-export const itNoESM: jest.It;
-export const itESM: jest.It;
 export function itGte(version: string): jest.It;
 export function itLt(version: string): jest.It;
 export function itNegate(it: jest.It): jest.It;

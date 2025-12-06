@@ -1,9 +1,8 @@
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { describeGte } from "$repo-utils";
 const require = createRequire(import.meta.url);
 
-describeGte("16.0.0")("transformScriptTags", () => {
+describe("transformScriptTags", () => {
   let standaloneSource;
   let JSDOM;
   beforeAll(async () => {

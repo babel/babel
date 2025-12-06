@@ -10,7 +10,7 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-import { commonJS, IS_BABEL_8, USE_ESM } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 import { itBabel9 } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
@@ -1040,22 +1040,19 @@ describe("api", function () {
   });
 
   itBabel9("the version ends with 999999999", () => {
-    // eslint-disable-next-line jest/no-conditional-expect
     expect(babel.version.endsWith("999999999")).toBe(true);
   });
 });
 
-if (IS_BABEL_8() && USE_ESM) {
-  describe("cjs-proxy", function () {
-    it("error should be caught", () => {
-      let err;
-      try {
-        const cjs = require("../lib/index.js");
-        cjs.parse("foo");
-      } catch (error) {
-        err = error;
-      }
-      expect(err).toBeInstanceOf(Error);
-    });
+describe("cjs-proxy", function () {
+  it("error should be caught", () => {
+    let err;
+    try {
+      const cjs = require("../lib/index.js");
+      cjs.parse("foo");
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeInstanceOf(Error);
   });
-}
+});

@@ -169,7 +169,6 @@ jobs:
         if: needs.check-release-type.outputs.is-babel-8 == 'true'
         env:
           BABEL_8_BREAKING: true
-          USE_ESM: true
 
   github-release:
     name: Create GitHub release draft

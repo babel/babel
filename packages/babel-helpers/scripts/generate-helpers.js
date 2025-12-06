@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { URL, fileURLToPath } from "node:url";
 import { minify } from "terser";
 import { babel, presetTypescript } from "$repo-utils/babel-top-level";
-import { IS_BABEL_8 } from "$repo-utils";
 import { gzipSync } from "node:zlib";
 
 import {
@@ -28,7 +27,7 @@ function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
    * @param {import("@babel/core").PluginAPI} api
    * @returns {import("@babel/core").PluginObject}
    */
-  return function BabelPluginProcessHelpers({ types: t }) {
+  return function BabelPluginProcessHelpers() {
     /**
      * @type {import("@babel/core").PluginObject}
      */
@@ -54,37 +53,6 @@ function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
           : () => {},
       },
     };
-    if (!IS_BABEL_8() && process.env.IS_BABEL_OLD_E2E) {
-      // These pre/post hooks are needed because the TS transform is,
-      // when building in the old Babel e2e test, removing the
-      // `export { OverloadYield as default }` in the OverloadYield helper.
-      pluginObj.pre = file => {
-        file.metadata.exportName = null;
-        file.path.traverse({
-          ExportSpecifier(path) {
-            if (path.node.exported.name === "default") {
-              file.metadata.exportName = path.node.local.name;
-            }
-          },
-        });
-      };
-      pluginObj.post = file => {
-        if (!process.env.IS_BABEL_OLD_E2E) return;
-        if (!file.metadata.exportName) return;
-        file.path.traverse({
-          ExportNamedDeclaration(path) {
-            if (!path.node.declaration && path.node.specifiers.length === 0) {
-              path.node.specifiers.push(
-                t.exportSpecifier(
-                  t.identifier(file.metadata.exportName),
-                  t.identifier("default")
-                )
-              );
-            }
-          },
-        });
-      };
-    }
     return pluginObj;
   };
 }
@@ -124,8 +92,6 @@ export { helpers as default };
 const helpers: Record<string, Helper> = {
   __proto__: null,
 `;
-
-  let babel7extraOutput = "";
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
     if (IGNORED_FILES.has(file)) continue;
@@ -205,24 +171,13 @@ const helpers: Record<string, Helper> = {
 `;
 
     if (onlyBabel7) {
-      if (!IS_BABEL_8()) babel7extraOutput += helperStr;
+      // TODO(Babel 8): Remove Babel-7-specific helpers
     } else {
       output += helperStr;
     }
   }
 
   output += "};";
-
-  if (babel7extraOutput) {
-    output += `
-
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(helpers, {
-    ${babel7extraOutput}
-  });
-}
-`;
-  }
 
   return output;
 }

@@ -615,8 +615,6 @@ export type ProcessTestAfterHook = (
   stderr: string;
 };
 
-const nodeGte8 = parseInt(process.versions.node, 10) >= 8;
-
 // https://github.com/nodejs/node/issues/11422#issue-208189446
 const tmpDir = realpathSync(os.tmpdir());
 
@@ -858,14 +856,13 @@ export function buildProcessTests(
               throw new Error("test.binLoc is undefined");
             }
 
-            let args =
-              opts.executor && nodeGte8
-                ? [
-                    "--require",
-                    path.join(dirname, "./exit-loader.cjs"),
-                    test.binLoc,
-                  ]
-                : [test.binLoc];
+            let args = opts.executor
+              ? [
+                  "--require",
+                  path.join(dirname, "./exit-loader.cjs"),
+                  test.binLoc,
+                ]
+              : [test.binLoc];
 
             args = args.concat(opts.args);
             const env = {
@@ -880,7 +877,7 @@ export function buildProcessTests(
               env,
               cwd: tmpLoc,
               stdio:
-                (opts.executor && nodeGte8) || opts.ipc
+                opts.executor || opts.ipc
                   ? ["pipe", "pipe", "pipe", "ipc"]
                   : "pipe",
             });
@@ -951,11 +948,7 @@ export function buildProcessTests(
               child.stderr.pipe(executor.stdin);
 
               executor.on("close", function () {
-                if (nodeGte8) {
-                  child.send("exit");
-                } else {
-                  child.kill("SIGKILL");
-                }
+                child.send("exit");
               });
 
               captureOutput(executor);

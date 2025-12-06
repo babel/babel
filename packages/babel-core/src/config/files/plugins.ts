@@ -6,7 +6,7 @@ import { createDebug } from "obug";
 import path from "node:path";
 import type { Handler } from "gensync";
 import { isAsync } from "../../gensync-utils/async.ts";
-import loadCodeDefault, { supportsESM } from "./module-types.ts";
+import loadCodeDefault from "./module-types.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { resolve as importMetaResolve } from "../../vendor/import-meta-resolve.js";
@@ -192,7 +192,7 @@ function resolveStandardizedName(
   dirname: string,
   allowAsync: boolean,
 ) {
-  if (!supportsESM || !allowAsync) {
+  if (!allowAsync) {
     return resolveStandardizedNameForRequire(type, name, dirname);
   }
 

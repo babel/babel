@@ -1,4 +1,3 @@
-declare const USE_ESM: boolean;
 declare const IS_STANDALONE: boolean;
 declare const PACKAGE_JSON: { name: string; version: string };
 declare function REQUIRED_VERSION(version: number): number | string;

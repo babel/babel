@@ -4,7 +4,7 @@ import { parseForESLint } from "../lib/index.cjs";
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import unpad from "dedent";
 import { ESLint } from "eslint";
-import { itDummy, commonJS, IS_BABEL_8 } from "$repo-utils";
+import { itDummy, commonJS } from "$repo-utils";
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint9 = ESLINT_VERSION.startsWith("9.");
@@ -233,6 +233,7 @@ function deeplyMakePlainObject(obj) {
           "class decorators",
           "@dec class C { @dec static p; @dec accessor a; }",
         ],
+        ["class private method", "class C { #m() {} }"],
 
         ["variable declaration", "var a = 0"],
         [
@@ -284,15 +285,6 @@ function deeplyMakePlainObject(obj) {
       ])("%s: %s", (_, input) => {
         parseAndAssertSame(input);
       });
-
-      if (IS_BABEL_8()) {
-        it.each([["class private method", "class C { #m() {} }"]])(
-          "%s: %s",
-          (_, input) => {
-            parseAndAssertSame(input);
-          },
-        );
-      }
     });
 
     describe("typescript", () => {
@@ -308,35 +300,29 @@ function deeplyMakePlainObject(obj) {
 
         ["type query", "var v: typeof T"],
         ["tuple type", "var v: [version: string, number?, ...[]]"],
+
+        ["class abstract property", "abstract class C { abstract p; }"],
+        ["class abstract method", "abstract class C { abstract m(): void }"],
+        [
+          "class abstract accessor property",
+          "abstract class C { abstract accessor p; }",
+        ],
+
+        ["mapped type", "var v: { [k in string]: unknown }"],
+        ["method signature", "var v: { foo(x: string): string; }"],
+
+        ["constructor type", "var v: new (x: string) => string"],
+        ["function type", "var v: (x: string) => string"],
+
+        ["conditional type", "type M = T extends Q ? string : number"],
+        ["import type", "var v: import('foo')"],
+        ["instantiation expression optional chain", "a?.b<c>"],
+        ["type parameter", "type Id<T> = T"],
+
+        ["import equals declaration", "import foo = require('foo')"],
       ])("%s: %s", (_, input) => {
         parseAndAssertSame(input);
       });
-
-      if (IS_BABEL_8()) {
-        it.each([
-          ["class abstract property", "abstract class C { abstract p; }"],
-          ["class abstract method", "abstract class C { abstract m(): void }"],
-          [
-            "class abstract accessor property",
-            "abstract class C { abstract accessor p; }",
-          ],
-
-          ["mapped type", "var v: { [k in string]: unknown }"],
-          ["method signature", "var v: { foo(x: string): string; }"],
-
-          ["constructor type", "var v: new (x: string) => string"],
-          ["function type", "var v: (x: string) => string"],
-
-          ["conditional type", "type M = T extends Q ? string : number"],
-          ...(IS_BABEL_8 ? [["import type", "var v: import('foo')"]] : []),
-          ["instantiation expression optional chain", "a?.b<c>"],
-          ["type parameter", "type Id<T> = T"],
-
-          ["import equals declaration", "import foo = require('foo')"],
-        ])("%s: %s", (_, input) => {
-          parseAndAssertSame(input);
-        });
-      }
     });
 
     describe("typescript without tokens", () => {

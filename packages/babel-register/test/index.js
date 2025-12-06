@@ -2,7 +2,7 @@ import { Module } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
 import child from "node:child_process";
-import { commonJS, describeGte } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -90,7 +90,7 @@ describe("@babel/register", function () {
     });
   }
 
-  describeGte("12.0.0")("worker", () => {
+  describe("worker", () => {
     if (!OLD_JEST_MOCKS) {
       beforeEach(() => {
         Object.defineProperty(Module, "_cache", {
