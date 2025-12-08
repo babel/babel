@@ -6,10 +6,8 @@ import {
 } from "./plugin-utils.ts";
 export type {
   PluginConfig as ParserPlugin,
-  DecoratorsPluginOptions,
   FlowPluginOptions,
   PipelineOperatorPluginOptions,
-  RecordAndTuplePluginOptions,
   TypeScriptPluginOptions,
 } from "./typings.ts";
 import Parser, { type PluginsMap } from "./parser/index.ts";
