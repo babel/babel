@@ -5,9 +5,7 @@ export default (_: any, opts: any = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
-    decoratorsLegacy,
     decoratorsVersion,
-    decoratorsBeforeExport,
     pipelineProposal,
     pipelineTopicToken,
     optionalChainingAssignVersion = "2023-07",
@@ -21,9 +19,7 @@ export default (_: any, opts: any = {}) => {
         {
           loose,
           useBuiltIns,
-          decoratorsLegacy,
           decoratorsVersion,
-          decoratorsBeforeExport,
           pipelineProposal,
           pipelineTopicToken,
         },

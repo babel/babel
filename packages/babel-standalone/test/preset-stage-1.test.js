@@ -37,7 +37,7 @@ describe("stage-1 preset", () => {
         [
           "stage-1",
           {
-            decoratorsVersion: "2021-12",
+            decoratorsVersion: "2023-11",
           },
         ],
       ],
@@ -47,7 +47,7 @@ describe("stage-1 preset", () => {
 
   it("should support optional chaining assignment", () => {
     const output = Babel.transform("expr1?.prop = val", {
-      presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
+      presets: [["stage-1", { decoratorsVersion: "2023-11" }]],
     }).code;
     expect(output).toMatchInlineSnapshot(`
       "var _expr;
