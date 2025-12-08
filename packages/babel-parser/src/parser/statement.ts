@@ -2743,7 +2743,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseIdentifier(true);
   }
 
-  checkImportReflection(node: Undone<N.ImportDeclaration>) {
+  checkImportPhase(node: Undone<N.ImportDeclaration>) {
     const { specifiers } = node;
     const singleBindingType =
       specifiers.length === 1 ? specifiers[0].type : null;
@@ -2938,7 +2938,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node.specifiers ??= [];
     node.source = this.parseImportSource();
     this.maybeParseImportAttributes(node);
-    this.checkImportReflection(node);
+    this.checkImportPhase(node);
 
     this.semicolon();
     this.sawUnambiguousESM = true;
