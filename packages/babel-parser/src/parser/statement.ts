@@ -664,11 +664,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
         const paramsStartLoc = this.state.startLoc;
         node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
-        if (
-          this.getPluginOption("decorators", "allowCallParenthesized") ===
-            false &&
-          node.expression !== expr
-        ) {
+        if (node.expression !== expr) {
           this.raise(
             Errors.DecoratorArgumentsOutsideParentheses,
             paramsStartLoc,

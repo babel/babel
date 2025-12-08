@@ -10,6 +10,7 @@ export type Plugin =
   | IF_BABEL_7<"classProperties">
   | IF_BABEL_7<"classStaticBlock">
   | IF_BABEL_7<"decimal">
+  | "decorators"
   | "decorators-legacy"
   | "decoratorAutoAccessors"
   | "deferredImportEvaluation"
@@ -48,14 +49,12 @@ export type Plugin =
   | ParserPluginWithOptions[0];
 
 export type ParserPluginWithOptions =
-  | ["decorators", DecoratorsPluginOptions]
   | ["discardBinding", { syntaxType: "void" }]
   | ["estree", { classFeatures?: boolean }]
   | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
   | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
-  | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 
@@ -64,19 +63,11 @@ export type PluginConfig = Plugin | ParserPluginWithOptions;
 export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
   Extract<ParserPluginWithOptions, [PluginName, any]>[1];
 
-export interface DecoratorsPluginOptions {
-  allowCallParenthesized?: boolean;
-}
-
 export interface PipelineOperatorPluginOptions {
   proposal: BABEL_8_BREAKING extends false
     ? "minimal" | "fsharp" | "hack" | "smart"
     : "fsharp" | "hack";
   topicToken?: "%" | "#" | "@@" | "^^" | "^";
-}
-
-export interface RecordAndTuplePluginOptions {
-  syntaxType: "bar" | "hash";
 }
 
 export type FlowPluginOptions = BABEL_8_BREAKING extends true

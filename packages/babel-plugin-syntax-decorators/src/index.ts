@@ -38,10 +38,7 @@ export default declare((api, options: Options) => {
       if (version === "legacy") {
         parserOpts.plugins.push("decorators-legacy");
       } else {
-        parserOpts.plugins.push(
-          ["decorators", { allowCallParenthesized: false }],
-          "decoratorAutoAccessors",
-        );
+        parserOpts.plugins.push("decorators", "decoratorAutoAccessors");
       }
     },
   };

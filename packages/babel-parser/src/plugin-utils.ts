@@ -17,15 +17,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         "Cannot use the decorators and decorators-legacy plugin together",
       );
     }
-
-    const allowCallParenthesized =
-      pluginsMap.get("decorators").allowCallParenthesized;
-    if (
-      allowCallParenthesized != null &&
-      typeof allowCallParenthesized !== "boolean"
-    ) {
-      throw new Error("'allowCallParenthesized' must be a boolean.");
-    }
   }
 
   if (pluginsMap.has("flow") && pluginsMap.has("typescript")) {
