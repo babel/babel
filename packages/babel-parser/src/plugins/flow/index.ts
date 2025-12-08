@@ -157,8 +157,6 @@ const FlowErrors = ParseErrorEnum`flow`({
   }) =>
     `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`,
   GetterMayNotHaveThisParam: "A getter cannot have a `this` parameter.",
-  ImportReflectionHasImportType:
-    "An `import module` declaration can not use `type` or `typeof` keyword.",
   ImportTypeShorthandOnlyInPureImport:
     "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements.",
   InexactInsideExact:
@@ -2743,16 +2741,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       return node;
-    }
-
-    checkImportReflection(node: Undone<N.ImportDeclaration>) {
-      super.checkImportReflection(node);
-      if (node.module && node.importKind !== "value") {
-        this.raise(
-          FlowErrors.ImportReflectionHasImportType,
-          node.specifiers[0].loc.start,
-        );
-      }
     }
 
     parseImportSpecifierLocal<

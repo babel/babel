@@ -2762,17 +2762,6 @@ export default abstract class StatementParser extends ExpressionParser {
           specifiers[0].loc.start,
         );
       }
-    } else if (node.module) {
-      if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(Errors.ImportReflectionNotBinding, specifiers[0].loc.start);
-      }
-      // @ts-expect-error comparing undefined and number
-      if (node.assertions?.length > 0) {
-        this.raise(
-          Errors.ImportReflectionHasAssertion,
-          specifiers[0].loc.start,
-        );
-      }
     }
   }
 
@@ -2796,10 +2785,6 @@ export default abstract class StatementParser extends ExpressionParser {
         }
       }
       return;
-    }
-
-    if (this.hasPlugin("importReflection")) {
-      (node as N.ImportDeclaration).module = false;
     }
 
     if (phase === "source") {

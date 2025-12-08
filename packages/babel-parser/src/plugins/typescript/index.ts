@@ -107,8 +107,6 @@ const TSErrors = ParseErrorEnum`typescript`({
   ExpectedAmbientAfterExportDeclare:
     "'export declare' must be followed by an ambient declaration.",
   ImportAliasHasImportType: "An import alias can not use 'import type'.",
-  ImportReflectionHasImportType:
-    "An `import module` declaration can not use `type` modifier",
   IncompatibleModifiers: ({
     modifiers,
   }: {
@@ -2781,16 +2779,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // And we have a type checker anyway, so don't bother having the parser do it.
       if (!this.state.isAmbientContext) {
         super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
-      }
-    }
-
-    checkImportReflection(node: Undone<N.ImportDeclaration>) {
-      super.checkImportReflection(node);
-      if (node.module && node.importKind !== "value") {
-        this.raise(
-          TSErrors.ImportReflectionHasImportType,
-          node.specifiers[0].loc.start,
-        );
       }
     }
 
