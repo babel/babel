@@ -22,9 +22,6 @@ const FAILURES = [
   // or about an old decorators version
   "comments/decorators-after-export-to-before/input.js",
   "comments/decorators-before-export-to-after/input.js",
-  "decorators/decorator-call-expression/input.js",
-  "decorators/decorator-parenthesized-expression/input.js",
-  "decorators/decorator-parenthesized-expression-createParenthesizedExpression/input.js",
   "decoratorsBeforeExport/false-to-true/input.js",
   "decoratorsBeforeExport/true-to-false/input.js",
 
