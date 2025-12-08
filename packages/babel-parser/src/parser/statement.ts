@@ -598,14 +598,6 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  decoratorsEnabledBeforeExport(): boolean {
-    if (this.hasPlugin("decorators-legacy")) return true;
-    return (
-      this.hasPlugin("decorators") &&
-      this.getPluginOption("decorators", "decoratorsBeforeExport") !== false
-    );
-  }
-
   // Attach the decorators to the given class.
   // NOTE: This method changes the .start location of the class, and thus
   // can affect comment attachment. Calling it before or after finalizing
@@ -619,22 +611,9 @@ export default abstract class StatementParser extends ExpressionParser {
   ): T {
     if (maybeDecorators) {
       if (classNode.decorators?.length) {
-        // Note: decorators attachment is only attempred multiple times
+        // Note: decorators attachment is only attempted multiple times
         // when the class is part of an export declaration.
-        if (
-          typeof this.getPluginOption(
-            "decorators",
-            "decoratorsBeforeExport",
-          ) !== "boolean"
-        ) {
-          // If `decoratorsBeforeExport` was set to `true` or `false`, we
-          // already threw an error about decorators not being in a valid
-          // position.
-          this.raise(
-            Errors.DecoratorsBeforeAfterExport,
-            classNode.decorators[0],
-          );
-        }
+        this.raise(Errors.DecoratorsBeforeAfterExport, classNode.decorators[0]);
         classNode.decorators.unshift(...maybeDecorators);
       } else {
         classNode.decorators = maybeDecorators;
@@ -658,10 +637,6 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.match(tt._export)) {
       if (!allowExport) {
         this.unexpected();
-      }
-
-      if (!this.decoratorsEnabledBeforeExport()) {
-        this.raise(Errors.DecoratorExportClass, this.state.startLoc);
       }
     } else if (!this.canHaveLeadingDecorator()) {
       throw this.raise(Errors.UnexpectedLeadingDecorator, this.state.startLoc);
@@ -2415,12 +2390,6 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (this.match(tt.at)) {
-      if (
-        this.hasPlugin("decorators") &&
-        this.getPluginOption("decorators", "decoratorsBeforeExport") === true
-      ) {
-        this.raise(Errors.DecoratorBeforeExport, this.state.startLoc);
-      }
       return this.parseClass(
         this.maybeTakeDecorators(
           this.parseDecorators(false),
@@ -2534,12 +2503,6 @@ export default abstract class StatementParser extends ExpressionParser {
     if (type === tt.at) {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
-        if (
-          this.getPluginOption("decorators", "decoratorsBeforeExport") === true
-        ) {
-          this.raise(Errors.DecoratorBeforeExport, this.state.startLoc);
-        }
-
         return true;
       }
     }

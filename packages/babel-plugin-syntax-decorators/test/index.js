@@ -12,7 +12,9 @@ function makeParser(code, options) {
 
 describe("'version' option", function () {
   test("is incompatible with the 'legacy' option", function () {
-    expect(makeParser("", { version: "2018-09", legacy: true })).toThrow();
+    expect(makeParser("", { version: "legacy", legacy: true })).toThrow(
+      /The \.legacy option has been removed in Babel 8. Use .version: "legacy" instead./,
+    );
   });
 
   test("throws on invalid values", function () {
@@ -22,26 +24,19 @@ describe("'version' option", function () {
     ).toThrow();
   });
 
-  test("'2022-03' disallows @(...)()", function () {
-    expect(makeParser("@(foo)() class A {}", { version: "2022-03" })).toThrow();
+  test("'2023-11' disallows @(...)()", function () {
+    expect(makeParser("@(foo)() class A {}", { version: "2023-11" })).toThrow();
     expect(
-      makeParser("@(foo()) class A {}", { version: "2022-03" }),
+      makeParser("@(foo()) class A {}", { version: "2023-11" }),
     ).not.toThrow();
   });
 
-  test("'2023-01' disallows @(...)()", function () {
-    expect(makeParser("@(foo)() class A {}", { version: "2023-01" })).toThrow();
+  test("'2023-11' allows decorators both before and after export", function () {
     expect(
-      makeParser("@(foo()) class A {}", { version: "2023-01" }),
-    ).not.toThrow();
-  });
-
-  test("'2023-01' allows decorators both before and after export", function () {
-    expect(
-      makeParser("@dec export class A {}", { version: "2023-01" }),
+      makeParser("@dec export class A {}", { version: "2023-11" }),
     ).not.toThrow();
     expect(
-      makeParser("export @dec class A {}", { version: "2023-01" }),
+      makeParser("export @dec class A {}", { version: "2023-11" }),
     ).not.toThrow();
   });
 

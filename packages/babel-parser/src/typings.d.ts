@@ -11,8 +11,8 @@ export type Plugin =
   | IF_BABEL_7<"classStaticBlock">
   | IF_BABEL_7<"decimal">
   | "decorators-legacy"
-  | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
+  | "deferredImportEvaluation"
   | "destructuringPrivate"
   | IF_BABEL_7<"deprecatedImportAssert">
   | "doExpressions"
@@ -65,7 +65,6 @@ export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
   Extract<ParserPluginWithOptions, [PluginName, any]>[1];
 
 export interface DecoratorsPluginOptions {
-  decoratorsBeforeExport?: boolean;
   allowCallParenthesized?: boolean;
 }
 

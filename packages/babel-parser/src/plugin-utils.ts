@@ -18,17 +18,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       );
     }
 
-    const decoratorsBeforeExport =
-      pluginsMap.get("decorators").decoratorsBeforeExport;
-    if (
-      decoratorsBeforeExport != null &&
-      typeof decoratorsBeforeExport !== "boolean"
-    ) {
-      throw new Error(
-        "'decoratorsBeforeExport' must be a boolean, if specified.",
-      );
-    }
-
     const allowCallParenthesized =
       pluginsMap.get("decorators").allowCallParenthesized;
     if (
