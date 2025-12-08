@@ -1,11 +1,6 @@
 {
   "plugins": [
     "typescript",
-    [
-      "decorators",
-      {
-        "decoratorsBeforeExport": true
-      }
-    ]
+    "decorators"
   ]
 }

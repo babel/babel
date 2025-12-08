@@ -9,7 +9,7 @@ module.exports = {
   plugins: [
     "@babel/plugin-syntax-export-default-from",
     "@babel/plugin-transform-class-properties",
-    ["@babel/plugin-proposal-decorators", { version: "2023-05" }],
+    ["@babel/plugin-proposal-decorators", { version: "2023-11" }],
     "@babel/plugin-transform-private-methods",
     "@babel/plugin-proposal-do-expressions",
     "@babel/plugin-transform-explicit-resource-management",
