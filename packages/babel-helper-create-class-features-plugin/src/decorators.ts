@@ -44,13 +44,7 @@ type ClassElementCanHaveComputedKeys =
   | t.ClassProperty
   | t.ClassAccessorProperty;
 
-// TODO(Babel 8): Only keep 2023-11
-export type DecoratorVersionKind =
-  | "2023-11"
-  | "2023-05"
-  | "2023-01"
-  | "2022-03"
-  | "2021-12";
+export type DecoratorVersionKind = "2023-11";
 
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
@@ -214,10 +208,8 @@ function addProxyAccessorsFor(
   targetKey: t.PrivateName,
   isComputed: boolean,
   isStatic: boolean,
-  version: DecoratorVersionKind,
 ): void {
-  const thisArg =
-    version === "2023-11" && isStatic ? className : t.thisExpression();
+  const thisArg = isStatic ? className : t.thisExpression();
 
   const getterBody = t.blockStatement([
     t.returnStatement(
@@ -272,22 +264,7 @@ function addProxyAccessorsFor(
 
 function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
-  version: DecoratorVersionKind,
 ): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
-  if (version !== "2023-11" && version !== "2023-05" && version !== "2023-01") {
-    return [
-      template.expression.ast`
-        function () {
-          return this.${t.cloneNode(targetKey)};
-        }
-      ` as t.FunctionExpression,
-      template.expression.ast`
-        function (value) {
-          this.${t.cloneNode(targetKey)} = value;
-        }
-      ` as t.FunctionExpression,
-    ];
-  }
   return [
     template.expression.ast`
       o => o.${t.cloneNode(targetKey)}
@@ -604,7 +581,6 @@ const METHOD = 2;
 const GETTER = 3;
 const SETTER = 4;
 
-const STATIC_OLD_VERSION = 5; // Before 2023-05
 const STATIC = 8; // 1 << 3
 const DECORATORS_HAVE_THIS = 16; // 1 << 4
 
@@ -684,19 +660,17 @@ type GenerateDecorationListResult = {
  *
  * @param {t.Decorator[]} decorators
  * @param {((t.Expression | undefined)[])} decoratorsThis decorator this values
- * @param {DecoratorVersionKind} version
  * @returns {GenerateDecorationListResult}
  */
 function generateDecorationList(
   decorators: t.Decorator[],
   decoratorsThis: (t.Expression | undefined)[],
-  version: DecoratorVersionKind,
 ): GenerateDecorationListResult {
   const decsCount = decorators.length;
   const haveOneThis = decoratorsThis.some(Boolean);
   const decs: t.Expression[] = [];
   for (let i = 0; i < decsCount; i++) {
-    if (version === "2023-11" && haveOneThis) {
+    if (haveOneThis) {
       decs.push(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
       );
@@ -709,13 +683,12 @@ function generateDecorationList(
 
 function generateDecorationExprs(
   decorationInfo: DecoratorInfo[],
-  version: DecoratorVersionKind,
 ): t.ArrayExpression {
   return t.arrayExpression(
     decorationInfo.map(el => {
       let flag = el.kind;
       if (el.isStatic) {
-        flag += version === "2023-11" ? STATIC : STATIC_OLD_VERSION;
+        flag += STATIC;
       }
       if (el.decoratorsHaveThis) flag += DECORATORS_HAVE_THIS;
 
@@ -746,7 +719,6 @@ function extractElementLocalAssignments(decorationInfo: DecoratorInfo[]) {
 }
 
 function addCallAccessorsFor(
-  version: DecoratorVersionKind,
   element: NodePath,
   key: t.PrivateName,
   getId: t.Identifier,
@@ -1011,7 +983,6 @@ function checkPrivateMethodUpdateError(
  * - If className is an Identifier, it is the reference to the name derived from NamedEvaluation
  * - If className is a StringLiteral, it is derived from NamedEvaluation on literal computed keys
  * @param propertyVisitor The visitor that should be applied on property prior to the transform.
- * @param version The decorator version.
  * @returns The transformed class path or undefined if there are no decorators.
  */
 function transformClass(
@@ -1021,7 +992,6 @@ function transformClass(
   ignoreFunctionLength: boolean,
   className: string | t.Identifier | t.StringLiteral | undefined,
   propertyVisitor: Visitor<PluginPass>,
-  version: DecoratorVersionKind,
 ): NodePath | undefined {
   const body = path.get("body.body");
 
@@ -1105,9 +1075,7 @@ function transformClass(
             element as NodePath<t.ClassAccessorProperty>,
             state,
           );
-          if (version === "2023-11") {
-            break;
-          }
+          break;
         /* fallthrough */
         default:
           if (elementNode.static) {
@@ -1163,7 +1131,6 @@ function transformClass(
         newId,
         computed,
         isStatic,
-        version,
       );
     }
 
@@ -1210,7 +1177,7 @@ function transformClass(
     for (const decorator of decorators) {
       const { expression } = decorator;
       let object;
-      if (version === "2023-11" && t.isMemberExpression(expression)) {
+      if (t.isMemberExpression(expression)) {
         if (t.isSuper(expression.object)) {
           object = t.thisExpression();
         } else if (scopeParent.isStatic(expression.object)) {
@@ -1253,7 +1220,6 @@ function transformClass(
     const { haveThis, decs } = generateDecorationList(
       classDecorators,
       decoratorsThis,
-      version,
     );
     classDecorationsFlag = haveThis ? 1 : 0;
     classDecorations = decs;
@@ -1359,7 +1325,6 @@ function transformClass(
         const { decs, haveThis } = generateDecorationList(
           decorators,
           decoratorsThis,
-          version,
         );
         decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
@@ -1457,12 +1422,12 @@ function transformClass(
           const [newPath] = element.replaceWith(newField);
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(newId, version);
+            privateMethods = extractProxyAccessorsFor(newId);
 
             const getId = generateLetUidIdentifier(scopeParent, `get_${name}`);
             const setId = generateLetUidIdentifier(scopeParent, `set_${name}`);
 
-            addCallAccessorsFor(version, newPath, key, getId, setId, isStatic);
+            addCallAccessorsFor(newPath, key, getId, setId, isStatic);
 
             locals = [newFieldInitId, getId, setId];
           } else {
@@ -1477,7 +1442,6 @@ function transformClass(
               newId,
               isComputed,
               isStatic,
-              version,
             );
             locals = [newFieldInitId];
           }
@@ -1495,7 +1459,7 @@ function transformClass(
           locals = [initId];
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(key, version);
+            privateMethods = extractProxyAccessorsFor(key);
           }
         } else if (isPrivate) {
           const callId = generateLetUidIdentifier(scopeParent, `call_${name}`);
@@ -1596,7 +1560,7 @@ function transformClass(
         staticFieldInitializerExpressions = [];
       }
 
-      if (hasDecorators && version === "2023-11") {
+      if (hasDecorators) {
         if (kind === FIELD || kind === ACCESSOR) {
           const initExtraId = generateLetUidIdentifier(
             scopeParent,
@@ -1680,10 +1644,7 @@ function transformClass(
   const sortedElementDecoratorInfo =
     toSortedDecoratorInfo(elementDecoratorInfo);
 
-  const elementDecorations = generateDecorationExprs(
-    elementDecoratorInfo,
-    version,
-  );
+  const elementDecorations = generateDecorationExprs(elementDecoratorInfo);
 
   const elementLocals: t.Identifier[] = extractElementLocalAssignments(
     sortedElementDecoratorInfo,
@@ -2347,7 +2308,6 @@ export default function (
       ignoreFunctionLength,
       className,
       namedEvaluationVisitor,
-      version,
     );
     if (newPath) {
       VISITED.add(newPath);
