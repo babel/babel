@@ -2522,7 +2522,6 @@ export default abstract class StatementParser extends ExpressionParser {
       node.source = this.parseImportSource();
       this.checkExport(node);
       this.maybeParseImportAttributes(node);
-      this.checkJSONModuleImport(node);
     } else if (expect) {
       this.unexpected();
     }
@@ -2744,24 +2743,6 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseIdentifier(true);
   }
 
-  isJSONModuleImport(
-    node: Undone<
-      N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
-    >,
-  ): boolean {
-    if (node.assertions != null) {
-      return node.assertions.some(({ key, value }) => {
-        return (
-          value.value === "json" &&
-          (key.type === "Identifier"
-            ? key.name === "type"
-            : key.value === "type")
-        );
-      });
-    }
-    return false;
-  }
-
   checkImportReflection(node: Undone<N.ImportDeclaration>) {
     const { specifiers } = node;
     const singleBindingType =
@@ -2791,40 +2772,6 @@ export default abstract class StatementParser extends ExpressionParser {
           Errors.ImportReflectionHasAssertion,
           specifiers[0].loc.start,
         );
-      }
-    }
-  }
-
-  checkJSONModuleImport(
-    node: Undone<
-      N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
-    >,
-  ) {
-    // @ts-expect-error Fixme: node.type must be undefined because they are undone
-    if (this.isJSONModuleImport(node) && node.type !== "ExportAllDeclaration") {
-      // @ts-expect-error specifiers may not index node
-      const { specifiers } = node;
-      if (specifiers != null) {
-        // @ts-expect-error refine specifier types
-        const nonDefaultNamedSpecifier = specifiers.find(specifier => {
-          let imported;
-          if (specifier.type === "ExportSpecifier") {
-            imported = specifier.local;
-          } else if (specifier.type === "ImportSpecifier") {
-            imported = specifier.imported;
-          }
-          if (imported !== undefined) {
-            return imported.type === "Identifier"
-              ? imported.name !== "default"
-              : imported.value !== "default";
-          }
-        });
-        if (nonDefaultNamedSpecifier !== undefined) {
-          this.raise(
-            Errors.ImportJSONBindingNotDefault,
-            nonDefaultNamedSpecifier.loc.start,
-          );
-        }
       }
     }
   }
@@ -3007,7 +2954,6 @@ export default abstract class StatementParser extends ExpressionParser {
     node.source = this.parseImportSource();
     this.maybeParseImportAttributes(node);
     this.checkImportReflection(node);
-    this.checkJSONModuleImport(node);
 
     this.semicolon();
     this.sawUnambiguousESM = true;
