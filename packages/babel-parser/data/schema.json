@@ -32,27 +32,10 @@
       },
       "type": "object"
     },
-    "ImportAttributesPluginOptions": {
-      "properties": {
-        "deprecatedAssertSyntax": {
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "PipelineOperatorPluginOptions": {
       "properties": {
         "proposal": {
-          "enum": ["fsharp", "minimal", "smart"],
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "RecordAndTuplePluginOptions": {
-      "properties": {
-        "syntaxType": {
-          "enum": ["bar", "hash"],
+          "enum": ["fsharp", "hack"],
           "type": "string"
         }
       },
@@ -142,37 +125,11 @@
           {
             "items": [
               {
-                "enum": ["importAttributes"],
-                "type": "string"
-              },
-              {
-                "$ref": "#/definitions/ImportAttributesPluginOptions"
-              }
-            ],
-            "additionalItems": false,
-            "type": "array"
-          },
-          {
-            "items": [
-              {
                 "enum": ["pipelineOperator"],
                 "type": "string"
               },
               {
                 "$ref": "#/definitions/PipelineOperatorPluginOptions"
-              }
-            ],
-            "additionalItems": false,
-            "type": "array"
-          },
-          {
-            "items": [
-              {
-                "enum": ["recordAndTuple"],
-                "type": "string"
-              },
-              {
-                "$ref": "#/definitions/RecordAndTuplePluginOptions"
               }
             ],
             "additionalItems": false,
@@ -223,7 +180,6 @@
               "flowComments",
               "functionBind",
               "functionSent",
-              "importAttributes",
               "importMeta",
               "jsx",
               "moduleBlocks",
