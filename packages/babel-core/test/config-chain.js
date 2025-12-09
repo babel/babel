@@ -3,7 +3,6 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
-import rimraf from "rimraf";
 import { itSatisfies, itNegate } from "$repo-utils";
 
 import _getTargets from "@babel/helper-compilation-targets";
@@ -87,7 +86,7 @@ async function getTemp(name) {
 
 afterAll(() => {
   for (const dir of tempDirs) {
-    rimraf.sync(dir);
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });
 
