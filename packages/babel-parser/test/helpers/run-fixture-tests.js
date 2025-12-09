@@ -7,8 +7,6 @@ import FixtureError from "./fixture-error.js";
 import toFuzzedOptions from "./to-fuzzed-options.js";
 import { serialize, deserialize } from "./serialization.js";
 import toContextualSyntaxError from "./to-contextual-syntax-error.js";
-import { traverseFast } from "@babel/types";
-import { IS_BABEL_8 } from "$repo-utils";
 
 const { CI, OVERWRITE } = process.env;
 const { stringify, parse: JSONParse } = JSON;
@@ -225,17 +223,6 @@ function parseWithRecovery(parse, source, filename, options) {
       ast.errors = ast.errors.map(error =>
         toContextualSyntaxError(error, source, filename, options),
       );
-    }
-
-    if (!IS_BABEL_8()) {
-      traverseFast(ast, node => {
-        if (node.shorthand) {
-          delete node.extra.shorthand;
-          if (Object.keys(node.extra).length === 0) {
-            delete node.extra;
-          }
-        }
-      });
     }
 
     return { threw: false, ast };

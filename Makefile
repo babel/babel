@@ -197,6 +197,7 @@ new-babel-8-version-create-commit-ci:
 	$(MAKEJS) new-babel-8-version-create-commit-ci
 
 # NOTE: Run make new-version first
+# TODO: Remove --tag next when publishing stable releases
 publish:
 	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
 	read CLEAR; \
@@ -204,11 +205,7 @@ publish:
 		exit 1; \
 	fi
 	$(MAKE) prepublish
-ifeq ("$(BABEL_8_BREAKING)", "true")
-	USE_ESM=true $(YARN) release-tool publish --tag next
-else
-	$(YARN) release-tool publish
-endif
+	$(YARN) release-tool publish --tag next
 	$(MAKE) clean
 
 publish-test:

@@ -19,7 +19,7 @@ import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 const checkDuplicatedNodes =
   _checkDuplicatedNodes.default || _checkDuplicatedNodes;
 
-import { describeGte, commonJS } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 
 import pluginTransformRegenerator from "../lib/index.js";
 
@@ -121,7 +121,7 @@ function enqueue(cmd, args = []) {
         ));
     } else if (cmd === "mocha") {
       // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
-      describeGte("12.0.0")("mocha", () => {
+      describe("mocha", () => {
         it(`${args.join(" ")}`, () =>
           new Promise((resolve, reject) => {
             let stdout = "";

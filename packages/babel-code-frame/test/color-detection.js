@@ -2,8 +2,6 @@ import stripAnsi from "strip-ansi";
 import colors from "picocolors";
 
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
-import { itGte } from "$repo-utils";
-const nodeGte8 = itGte("8.0.0");
 const codeFrame = _codeFrame.default || _codeFrame;
 
 const compose = (f, g) => v => f(g(v));
@@ -130,8 +128,7 @@ describe("highlight", function () {
       );
     });
 
-    // Node.js 6 does not map upper case letter U+10400 to U+10428
-    nodeGte8("unicode capitalized", function () {
+    it("unicode capitalized", function () {
       const gutter = colors.gray;
       const yellow = colors.yellow;
       const cyan = colors.cyan;

@@ -14,7 +14,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 // "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
 const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
-import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
+import { isMJS, loadOptionsAsync } from "./helpers/esm.js";
 
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+
@@ -1211,9 +1211,6 @@ describe("buildConfigChain", function () {
         "babel.config.mjs",
       ])("should load %s asynchronously", async name => {
         const esm = isMJS(name);
-        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
-          return;
-        }
 
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-async-${name}`,
@@ -1242,14 +1239,6 @@ describe("buildConfigChain", function () {
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
         const esm = isMJS(name1) || isMJS(name2);
-        if (
-          esm &&
-          skipUnsupportedESM(
-            `should throw if both ${name1} and ${name2} are used`,
-          )
-        ) {
-          return;
-        }
 
         const { cwd, tmp, config } = await getTemp(
           `babel-test-dup-config-${name1}-${name2}`,
@@ -1333,9 +1322,6 @@ describe("buildConfigChain", function () {
         ].filter(Boolean),
       )("should load %s asynchronously", async name => {
         const esm = isMJS(name);
-        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
-          return;
-        }
 
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-${name}`,
@@ -1380,14 +1366,6 @@ describe("buildConfigChain", function () {
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
         const esm = isMJS(name1) || isMJS(name2);
-        if (
-          esm &&
-          skipUnsupportedESM(
-            `should throw if both ${name1} and ${name2} are used`,
-          )
-        ) {
-          return;
-        }
 
         const { cwd, tmp, config } = await getTemp(
           `babel-test-dup-config-${name1}-${name2}`,
@@ -1426,12 +1404,6 @@ describe("buildConfigChain", function () {
         "should show helpful errors for $config",
         async ({ config, dir, error }) => {
           const esm = isMJS(config);
-          if (
-            esm &&
-            skipUnsupportedESM(`should show helpful errors for ${config}`)
-          ) {
-            return;
-          }
 
           const filename = fixture("config-files", dir, "src.js");
 

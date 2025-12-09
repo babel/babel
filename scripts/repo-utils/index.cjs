@@ -15,9 +15,7 @@ function bool(value) {
 
 exports.repoRoot = path.resolve(__dirname, "../../");
 
-const USE_ESM = true;
-exports.USE_ESM = USE_ESM;
-exports.IS_BABEL_8 = () => true;
+exports.IS_BABEL_9 = () => bool(process.env.BABEL_9_BREAKING);
 
 if (typeof jest !== "undefined") {
   const dummy = () => {};
@@ -26,8 +24,6 @@ if (typeof jest !== "undefined") {
   exports.itDummy = dummy;
   exports.itBabel8 = bool(process.env.BABEL_9_BREAKING) ? dummy : it;
   exports.itBabel9 = bool(process.env.BABEL_9_BREAKING) ? it : dummy;
-  exports.itNoESM = USE_ESM ? dummy : it;
-  exports.itESM = USE_ESM ? it : dummy;
   exports.itGte = function (version) {
     return semver.gte(process.version, version) ? it : dummy;
   };
