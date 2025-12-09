@@ -345,7 +345,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     charcodes: "npm:^0.2.0"
     import-meta-resolve: "npm:^4.1.0"
-    js-tokens: "npm:^8.0.0"
+    js-tokens: "npm:^10.0.0"
     picocolors: "npm:^1.1.1"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
@@ -12848,6 +12848,13 @@ __metadata:
   bin:
     jest: ./bin/jest.js
   checksum: 10/d328ad00821dd50e3ed771352bec9d6679ba30a73923a00ee5ec22d10348cbd66ff3e05317d430b7d1954e3714a3d42ed025b574cf01e7451a612332f5b83230
+  languageName: node
+  linkType: hard
+
+"js-tokens@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "js-tokens@npm:10.0.0"
+  checksum: 10/88f536ec89f076fc230d29df255b3c55531237669d746d1868fca716b1e3f5f2e4abf8e5b8701903216e3f00d2dc3918d078b35da87772d433ab6a513c3bf76d
   languageName: node
   linkType: hard
 
