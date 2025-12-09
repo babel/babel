@@ -1,4 +1,4 @@
-import stripAnsi from "strip-ansi";
+import { stripVTControlCharacters } from "node:util";
 import colors from "picocolors";
 
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
@@ -25,14 +25,14 @@ describe("highlight", function () {
     test("opts.highlightCode", function () {
       const rawLines = "console.log('babel')";
       const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-      const stripped = stripAnsi(result);
+      const stripped = stripVTControlCharacters(result);
       expect(result.length).toBeGreaterThan(stripped.length);
       expect(stripped).toEqual(
         ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
       );
 
       const codeResult = result.match(/console.*?babel/)[0];
-      const codeStripped = stripAnsi(codeResult);
+      const codeStripped = stripVTControlCharacters(codeResult);
       expect(codeResult.length).toBeGreaterThan(codeStripped.length);
     });
 
@@ -61,7 +61,7 @@ describe("highlight", function () {
           message: "Message about things",
         },
       );
-      const stripped = stripAnsi(result);
+      const stripped = stripVTControlCharacters(result);
       expect(result.length).toBeGreaterThan(stripped.length);
       expect(stripped).toEqual(
         // prettier-ignore
@@ -168,7 +168,7 @@ describe("highlight", function () {
     test("opts.highlightCode", function () {
       const rawLines = "console.log('babel')";
       const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-      const stripped = stripAnsi(result);
+      const stripped = stripVTControlCharacters(result);
       expect(result).toBe(stripped);
       expect(stripped).toEqual(
         ["> 1 | console.log('babel')", "    |         ^"].join("\n"),

@@ -1,4 +1,4 @@
-import stripAnsi from "strip-ansi";
+import { stripVTControlCharacters } from "node:util";
 import _codeFrame, { codeFrameColumns, highlight } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
@@ -417,7 +417,7 @@ describe("@babel/code-frame", function () {
     const raw = "const a = 1";
     const highlighted = highlight(raw);
 
-    expect(stripAnsi(highlighted)).toBe(raw);
+    expect(stripVTControlCharacters(highlighted)).toBe(raw);
     expect(highlighted.length).toBeGreaterThan(raw.length);
   });
 });

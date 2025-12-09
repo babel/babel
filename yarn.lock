@@ -347,7 +347,6 @@ __metadata:
     import-meta-resolve: "npm:^4.1.0"
     js-tokens: "npm:^8.0.0"
     picocolors: "npm:^1.1.1"
-    strip-ansi: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 
