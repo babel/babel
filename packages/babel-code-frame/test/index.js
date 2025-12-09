@@ -1,4 +1,4 @@
-import { stripAnsi as stripVTControlCharacters } from "node:util";
+import { stripVTControlCharacters } from "node:util";
 import _codeFrame, { codeFrameColumns, highlight } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
