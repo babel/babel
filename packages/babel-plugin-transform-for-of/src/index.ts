@@ -80,9 +80,7 @@ export default declare((api, options: Options) => {
             return;
           }
 
-          const right = skipTransparentExprWrapperNodes(
-            path.node.right,
-          ) as t.Expression;
+          const right = skipTransparentExprWrapperNodes(path.node.right);
           const i = scope.generateUidIdentifier("i");
           let array: t.Identifier | t.ThisExpression =
             scope.maybeGenerateMemoised(right, true);
