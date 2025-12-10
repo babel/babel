@@ -16,7 +16,6 @@ type Transform = {
     opts: InputOptions | undefined | null,
     callback: FileResultCallback,
   ): void;
-  (code: string, opts?: InputOptions | null): FileResult | null;
 };
 
 const transformRunner = gensync(function* transform(
@@ -29,7 +28,6 @@ const transformRunner = gensync(function* transform(
   return yield* run(config, code);
 });
 
-// @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
 export const transform: Transform = function transform(
   code,
   optsOrCallback?: InputOptions | null | undefined | FileResultCallback,
