@@ -9,7 +9,7 @@ export function convertFile(
   tokLabels: Record<string, any>,
   visitorKeys: Record<string, string[]>,
 ) {
-  ast.tokens = convertTokens(ast.tokens as any, code, tokLabels);
+  ast.tokens = convertTokens(ast.tokens, code, tokLabels);
   convertComments(ast.comments);
   convertAST(ast, visitorKeys);
   return ast as unknown as AST.Program;

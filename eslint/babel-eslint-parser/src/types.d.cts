@@ -15,6 +15,7 @@ export type Options = Linter.ParserOptions & { babelOptions: InputOptions };
 export type BabelToken = tokenizerToken & {
   type: ExportedTokenType;
 };
+export type { Comment } from "../../../packages/babel-parser/src/types";
 export type { ParseResult } from "../../../packages/babel-core/src/parser";
 export type { AST } from "eslint";
 
