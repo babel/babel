@@ -11,7 +11,9 @@
 
 import {
   transformFromAstSync as babelTransformFromAstSync,
+  transformFromAstAsync as babelTransformFromAstAsync,
   transformSync as babelTransformSync,
+  transformAsync as babelTransformAsync,
   buildExternalHelpers as babelBuildExternalHelpers,
   type PluginObject,
   type PresetObject,
@@ -177,12 +179,24 @@ export function transform(code: string, options: InputOptions) {
   return babelTransformSync(code, processOptions(options));
 }
 
+export function transformAsync(code: string, options: InputOptions) {
+  return babelTransformAsync(code, processOptions(options));
+}
+
 export function transformFromAst(
   ast: Parameters<typeof babelTransformFromAstSync>[0],
   code: string,
   options: InputOptions,
 ) {
   return babelTransformFromAstSync(ast, code, processOptions(options));
+}
+
+export function transformFromAstAsync(
+  ast: Parameters<typeof babelTransformFromAstAsync>[0],
+  code: string,
+  options: InputOptions,
+) {
+  return babelTransformFromAstAsync(ast, code, processOptions(options));
 }
 
 export const buildExternalHelpers = babelBuildExternalHelpers;
