@@ -146,9 +146,6 @@
       "@babel/plugin-proposal-function-sent": [
         "./packages/babel-plugin-proposal-function-sent/src"
       ],
-      "@babel/plugin-proposal-import-attributes-to-assertions": [
-        "./packages/babel-plugin-proposal-import-attributes-to-assertions/src"
-      ],
       "@babel/plugin-proposal-import-defer": [
         "./packages/babel-plugin-proposal-import-defer/src"
       ],

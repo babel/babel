@@ -162,9 +162,6 @@
       "path": "./packages/babel-plugin-proposal-function-sent"
     },
     {
-      "path": "./packages/babel-plugin-proposal-import-attributes-to-assertions"
-    },
-    {
       "path": "./packages/babel-plugin-proposal-import-defer"
     },
     {
