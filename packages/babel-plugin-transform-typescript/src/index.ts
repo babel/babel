@@ -171,8 +171,8 @@ export default declare((api, opts: Options) => {
       const assigns: t.ExpressionStatement[] = [];
       const { scope } = path;
       for (const paramPath of path.get("params")) {
-        const param = paramPath.node;
-        if (param.type === "TSParameterProperty") {
+        if (paramPath.isTSParameterProperty()) {
+          const param = paramPath.node;
           const parameter = param.parameter;
           if (PARSED_PARAMS.has(parameter)) continue;
           PARSED_PARAMS.add(parameter);
@@ -195,7 +195,7 @@ export default declare((api, opts: Options) => {
             ` as t.ExpressionStatement,
           );
 
-          paramPath.replaceWith(paramPath.get("parameter"));
+          paramPath.replaceWith(param.parameter);
           scope.registerBinding("param", paramPath);
         }
       }

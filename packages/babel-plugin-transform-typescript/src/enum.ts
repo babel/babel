@@ -306,7 +306,9 @@ function computeConstantValue(
       case "NumericLiteral":
         return expr.value;
       case "ParenthesizedExpression":
-        return evaluate(path.get("expression"));
+        return evaluate(
+          (path as NodePath<t.ParenthesizedExpression>).get("expression"),
+        );
       case "Identifier":
         return evaluateRef(path, prevMembers, seen);
       case "TemplateLiteral": {
