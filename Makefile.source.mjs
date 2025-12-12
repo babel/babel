@@ -567,7 +567,7 @@ function bumpVersionsToBabel8Pre() {
         if (babel8Condition?.peerDependencies?.["@babel/core"]) {
           babel8Condition.peerDependencies["@babel/core"] = `^${nextVersion}`;
         }
-        if (name === "babel-eslint-plugin") {
+        if (name === "babel-eslint-plugin" && babel8Condition) {
           babel8Condition.peerDependencies["@babel/eslint-parser"] =
             `^${nextVersion}`;
         }
