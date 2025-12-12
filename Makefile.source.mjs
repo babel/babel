@@ -8,7 +8,6 @@ import {
   existsSync,
   mkdirSync,
 } from "node:fs";
-import semver from "semver";
 import { execaSync } from "execa";
 
 mod.enableCompileCache?.();
@@ -535,78 +534,4 @@ target["new-version"] = function () {
 
   exec("git", ["pull", "--rebase"]);
   yarn(["release-tool", "version", "-f", "@babel/standalone"]);
-};
-
-target["new-babel-8-version"] = function () {
-  exec("git", ["pull", "--rebase"]);
-
-  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
-  const nextVersion = semver.inc(pkg.version_babel8, "prerelease", "beta");
-  pkg.version_babel8 = nextVersion;
-  writeFileSync("./package.json", JSON.stringify(pkg, null, 2) + "\n");
-  exec("git", ["add", "./package.json"]);
-  exec("git", ["commit", "-m", "Bump Babel 8 version to " + nextVersion]);
-  exec("git", ["tag", `v${nextVersion}`, "-m", `v${nextVersion}`]);
-
-  return nextVersion;
-};
-
-function bumpVersionsToBabel8Pre() {
-  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
-  const nextVersion = pkg.version_babel8;
-
-  SOURCES.forEach(source => {
-    readdirSync(source).forEach(name => {
-      const pkgPath = `${source}/${name}/package.json`;
-      if (existsSync(pkgPath)) {
-        const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
-        if (pkg.peerDependencies?.["@babel/core"]) {
-          pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
-        }
-        const babel8Condition = pkg.conditions?.["BABEL_8_BREAKING"][0];
-        if (babel8Condition?.peerDependencies?.["@babel/core"]) {
-          babel8Condition.peerDependencies["@babel/core"] = `^${nextVersion}`;
-        }
-        if (name === "babel-eslint-plugin") {
-          babel8Condition.peerDependencies["@babel/eslint-parser"] =
-            `^${nextVersion}`;
-        }
-        writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
-      }
-    });
-  });
-
-  env(() => yarn(["install"]), {
-    YARN_ENABLE_IMMUTABLE_INSTALLS: false,
-  });
-
-  return nextVersion;
-}
-
-target["new-babel-8-version-create-commit-ci"] = function () {
-  const nextVersion = bumpVersionsToBabel8Pre();
-  yarn([
-    "release-tool",
-    "version",
-    nextVersion,
-    "--all",
-    "--tag-version-prefix",
-    "tmp.v",
-    "--yes",
-  ]);
-};
-
-target["new-babel-8-version-create-commit"] = function () {
-  const nextVersion = bumpVersionsToBabel8Pre();
-  exec("git", ["checkout", "-b", `release/temp/v${nextVersion}`]);
-  yarn([
-    "release-tool",
-    "version",
-    nextVersion,
-    "--all",
-    "--tag-version-prefix",
-    "tmp.v",
-  ]);
-
-  console.log("Run `BABEL_8_BREAKING=true make publish` to finish publishing");
 };
