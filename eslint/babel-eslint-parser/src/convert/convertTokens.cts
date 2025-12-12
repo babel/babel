@@ -1,5 +1,16 @@
-import type { BabelToken } from "../types.cts";
+import type { BabelToken, Comment } from "../types.cts";
 import type * as t from "@babel/types";
+
+interface ConvertedToken {
+  type: string;
+  range?: [number, number];
+  value?: string;
+  regex?: {
+    pattern: string;
+    flags: string;
+  };
+  loc?: t.SourceLocation | null;
+}
 
 function convertToken(
   token: BabelToken,
@@ -9,16 +20,7 @@ function convertToken(
   const { type } = token;
   const { label } = type;
 
-  const newToken: {
-    type: string;
-    range?: [number, number];
-    value?: string;
-    regex?: {
-      pattern: string;
-      flags: string;
-    };
-    loc?: t.SourceLocation | null;
-  } = token as any;
+  const newToken: ConvertedToken = token as unknown as ConvertedToken;
   newToken.range = [token.start, token.end];
 
   if (label === tl.name) {
@@ -143,17 +145,16 @@ function convertToken(
 }
 
 export = function convertTokens(
-  tokens: BabelToken[],
+  tokens: (BabelToken | Comment)[],
   code: string,
   tokLabels: Record<string, any>,
 ) {
-  const result = [];
+  const result: ConvertedToken[] = [];
   const templateTypeMergedTokens = tokens;
   // The last token is always tt.eof and should be skipped
   for (let i = 0, { length } = templateTypeMergedTokens; i < length - 1; i++) {
     const token = templateTypeMergedTokens[i];
     const tokenType = token.type;
-    // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
     if (tokenType === "CommentLine" || tokenType === "CommentBlock") {
       continue;
     }

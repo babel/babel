@@ -45,6 +45,9 @@ export function skipTransparentExprWrappers(
   return path;
 }
 
+export function skipTransparentExprWrapperNodes<T extends t.Node>(
+  node: T,
+): T extends t.Expression ? t.Expression : T;
 export function skipTransparentExprWrapperNodes(
   node: t.Expression | t.Super,
 ): t.Expression | t.Super {

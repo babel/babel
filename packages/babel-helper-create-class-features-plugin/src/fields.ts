@@ -623,8 +623,14 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
       if (isMethod && !setId) {
         return t.memberExpression(
-          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
-          t.sequenceExpression([member.node.object, readOnlyError(file, name)]),
+          t.sequenceExpression([
+            // The object must not be super since the property is a private name
+            member.node.object as Exclude<
+              t.MemberExpression["object"],
+              t.Super
+            >,
+            readOnlyError(file, name),
+          ]),
           t.identifier("_"),
         );
       }

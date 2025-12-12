@@ -18,7 +18,6 @@ type Parse = {
     opts: InputOptions | undefined | null,
     callback: FileParseCallback,
   ): void;
-  (code: string, opts?: InputOptions | null): ParseResult | null;
 };
 
 const parseRunner = gensync(function* parse(
@@ -34,7 +33,6 @@ const parseRunner = gensync(function* parse(
   return yield* parser(config.passes, normalizeOptions(config), code);
 });
 
-// @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
 export const parse: Parse = function parse(
   code,
   opts?,
