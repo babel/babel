@@ -1263,7 +1263,7 @@ interface ImportDeclaration <: Node {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: StringLiteral;
-  assertions?: [ ImportAttribute ];
+  attribtues?: [ ImportAttribute ];
 }
 ```
 
@@ -1332,7 +1332,7 @@ interface ExportNamedDeclaration <: ExportDeclaration {
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
   source: StringLiteral | null;
-  assertions?: [ ImportAttribute ];
+  attributes?: [ ImportAttribute ];
 }
 ```
 
@@ -1392,7 +1392,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 interface ExportAllDeclaration <: ExportDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
-  assertions?: [ ImportAttribute ];
+  attributes?: [ ImportAttribute ];
 }
 ```
 

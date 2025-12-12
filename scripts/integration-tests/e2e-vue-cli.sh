@@ -41,7 +41,7 @@ sed -i 's%toMatch(`regenerator-runtime/runtime`)%toMatch(`@babel/runtime/helpers
 
 # Babel 8 adjustments
   # This option is renamed in Babel 8
-  sed -i 's/legacy: decoratorsLegacy !== false/version: decoratorsLegacy === false ? "legacy": "2021-12"/g' packages/@vue/babel-preset-app/index.js
+  sed -i 's/legacy: decoratorsLegacy !== false/version: decoratorsLegacy === false ? "legacy": "2023-11"/g' packages/@vue/babel-preset-app/index.js
 
   # Delete once https://github.com/jestjs/jest/pull/14109 is released
   sed -i "s/blacklist/denylist/g" node_modules/babel-plugin-jest-hoist/build/index.js

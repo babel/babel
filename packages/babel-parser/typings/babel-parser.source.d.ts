@@ -6,9 +6,7 @@ export type {
 export type {
   ParserOptions,
   ParserPlugin,
-  DecoratorsPluginOptions,
   PipelineOperatorPluginOptions,
-  RecordAndTuplePluginOptions,
   FlowPluginOptions,
   TypeScriptPluginOptions,
   ParseError,

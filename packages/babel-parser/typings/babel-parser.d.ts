@@ -35,9 +35,10 @@ type Plugin$1 =
   | IF_BABEL_7<"classProperties">
   | IF_BABEL_7<"classStaticBlock">
   | IF_BABEL_7<"decimal">
+  | "decorators"
   | "decorators-legacy"
-  | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
+  | "deferredImportEvaluation"
   | "destructuringPrivate"
   | IF_BABEL_7<"deprecatedImportAssert">
   | "doExpressions"
@@ -73,33 +74,22 @@ type Plugin$1 =
   | ParserPluginWithOptions[0];
 
 type ParserPluginWithOptions =
-  | ["decorators", DecoratorsPluginOptions]
   | ["discardBinding", { syntaxType: "void" }]
   | ["estree", { classFeatures?: boolean }]
   | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
   | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
-  | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 
 type PluginConfig = Plugin$1 | ParserPluginWithOptions;
-
-interface DecoratorsPluginOptions {
-  decoratorsBeforeExport?: boolean;
-  allowCallParenthesized?: boolean;
-}
 
 interface PipelineOperatorPluginOptions {
   proposal: BABEL_8_BREAKING extends false
     ? "minimal" | "fsharp" | "hack" | "smart"
     : "fsharp" | "hack";
   topicToken?: "%" | "#" | "@@" | "^^" | "^";
-}
-
-interface RecordAndTuplePluginOptions {
-  syntaxType: "bar" | "hash";
 }
 
 type FlowPluginOptions = BABEL_8_BREAKING extends true
@@ -258,4 +248,4 @@ declare const tokTypes: {
   [name: string]: any;
 };
 
-export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type PluginConfig as ParserPlugin, type PipelineOperatorPluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };

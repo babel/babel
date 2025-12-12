@@ -1009,8 +1009,6 @@ export interface ImportDeclaration extends NodeBase {
   importKind?: "type" | "typeof" | "value"; // TODO: Not in spec,
   phase?: null | "source" | "defer";
   attributes?: ImportAttribute[];
-  // @deprecated
-  assertions?: ImportAttribute[];
   module?: boolean;
 }
 
@@ -1041,8 +1039,6 @@ export interface ExportNamedDeclaration extends NodeBase {
   source: Literal | undefined | null;
   exportKind?: "type" | "value"; // TODO: Not in spec,
   attributes?: ImportAttribute[];
-  // @deprecated
-  assertions?: ImportAttribute[];
 }
 
 export interface ExportSpecifier extends NodeBase {
@@ -1077,7 +1073,6 @@ export interface ExportAllDeclaration extends NodeBase {
   type: "ExportAllDeclaration";
   source: Literal;
   exportKind?: "type" | "value"; // TODO: Not in spec,
-  assertions?: ImportAttribute[];
   attributes?: ImportAttribute[];
 }
 

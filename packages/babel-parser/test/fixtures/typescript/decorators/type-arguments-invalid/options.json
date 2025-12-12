@@ -1,4 +1,4 @@
 {
-  "plugins": ["typescript", ["decorators", { "decoratorsBeforeExport": true }]],
+  "plugins": ["typescript", "decorators"],
   "throws": "Unexpected token, expected \"(\" (2:0)"
 }

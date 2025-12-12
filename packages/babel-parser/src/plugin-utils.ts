@@ -17,26 +17,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         "Cannot use the decorators and decorators-legacy plugin together",
       );
     }
-
-    const decoratorsBeforeExport =
-      pluginsMap.get("decorators").decoratorsBeforeExport;
-    if (
-      decoratorsBeforeExport != null &&
-      typeof decoratorsBeforeExport !== "boolean"
-    ) {
-      throw new Error(
-        "'decoratorsBeforeExport' must be a boolean, if specified.",
-      );
-    }
-
-    const allowCallParenthesized =
-      pluginsMap.get("decorators").allowCallParenthesized;
-    if (
-      allowCallParenthesized != null &&
-      typeof allowCallParenthesized !== "boolean"
-    ) {
-      throw new Error("'allowCallParenthesized' must be a boolean.");
-    }
   }
 
   if (pluginsMap.has("flow") && pluginsMap.has("typescript")) {

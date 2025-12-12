@@ -598,14 +598,6 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  decoratorsEnabledBeforeExport(): boolean {
-    if (this.hasPlugin("decorators-legacy")) return true;
-    return (
-      this.hasPlugin("decorators") &&
-      this.getPluginOption("decorators", "decoratorsBeforeExport") !== false
-    );
-  }
-
   // Attach the decorators to the given class.
   // NOTE: This method changes the .start location of the class, and thus
   // can affect comment attachment. Calling it before or after finalizing
@@ -619,22 +611,9 @@ export default abstract class StatementParser extends ExpressionParser {
   ): T {
     if (maybeDecorators) {
       if (classNode.decorators?.length) {
-        // Note: decorators attachment is only attempred multiple times
+        // Note: decorators attachment is only attempted multiple times
         // when the class is part of an export declaration.
-        if (
-          typeof this.getPluginOption(
-            "decorators",
-            "decoratorsBeforeExport",
-          ) !== "boolean"
-        ) {
-          // If `decoratorsBeforeExport` was set to `true` or `false`, we
-          // already threw an error about decorators not being in a valid
-          // position.
-          this.raise(
-            Errors.DecoratorsBeforeAfterExport,
-            classNode.decorators[0],
-          );
-        }
+        this.raise(Errors.DecoratorsBeforeAfterExport, classNode.decorators[0]);
         classNode.decorators.unshift(...maybeDecorators);
       } else {
         classNode.decorators = maybeDecorators;
@@ -658,10 +637,6 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.match(tt._export)) {
       if (!allowExport) {
         this.unexpected();
-      }
-
-      if (!this.decoratorsEnabledBeforeExport()) {
-        this.raise(Errors.DecoratorExportClass, this.state.startLoc);
       }
     } else if (!this.canHaveLeadingDecorator()) {
       throw this.raise(Errors.UnexpectedLeadingDecorator, this.state.startLoc);
@@ -689,11 +664,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
         const paramsStartLoc = this.state.startLoc;
         node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
-        if (
-          this.getPluginOption("decorators", "allowCallParenthesized") ===
-            false &&
-          node.expression !== expr
-        ) {
+        if (node.expression !== expr) {
           this.raise(
             Errors.DecoratorArgumentsOutsideParentheses,
             paramsStartLoc,
@@ -2415,12 +2386,6 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (this.match(tt.at)) {
-      if (
-        this.hasPlugin("decorators") &&
-        this.getPluginOption("decorators", "decoratorsBeforeExport") === true
-      ) {
-        this.raise(Errors.DecoratorBeforeExport, this.state.startLoc);
-      }
       return this.parseClass(
         this.maybeTakeDecorators(
           this.parseDecorators(false),
@@ -2522,7 +2487,6 @@ export default abstract class StatementParser extends ExpressionParser {
       node.source = this.parseImportSource();
       this.checkExport(node);
       this.maybeParseImportAttributes(node);
-      this.checkJSONModuleImport(node);
     } else if (expect) {
       this.unexpected();
     }
@@ -2535,12 +2499,6 @@ export default abstract class StatementParser extends ExpressionParser {
     if (type === tt.at) {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
-        if (
-          this.getPluginOption("decorators", "decoratorsBeforeExport") === true
-        ) {
-          this.raise(Errors.DecoratorBeforeExport, this.state.startLoc);
-        }
-
         return true;
       }
     }
@@ -2744,25 +2702,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseIdentifier(true);
   }
 
-  isJSONModuleImport(
-    node: Undone<
-      N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
-    >,
-  ): boolean {
-    if (node.assertions != null) {
-      return node.assertions.some(({ key, value }) => {
-        return (
-          value.value === "json" &&
-          (key.type === "Identifier"
-            ? key.name === "type"
-            : key.value === "type")
-        );
-      });
-    }
-    return false;
-  }
-
-  checkImportReflection(node: Undone<N.ImportDeclaration>) {
+  checkImportPhase(node: Undone<N.ImportDeclaration>) {
     const { specifiers } = node;
     const singleBindingType =
       specifiers.length === 1 ? specifiers[0].type : null;
@@ -2780,51 +2720,6 @@ export default abstract class StatementParser extends ExpressionParser {
           Errors.DeferImportRequiresNamespace,
           specifiers[0].loc.start,
         );
-      }
-    } else if (node.module) {
-      if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(Errors.ImportReflectionNotBinding, specifiers[0].loc.start);
-      }
-      // @ts-expect-error comparing undefined and number
-      if (node.assertions?.length > 0) {
-        this.raise(
-          Errors.ImportReflectionHasAssertion,
-          specifiers[0].loc.start,
-        );
-      }
-    }
-  }
-
-  checkJSONModuleImport(
-    node: Undone<
-      N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
-    >,
-  ) {
-    // @ts-expect-error Fixme: node.type must be undefined because they are undone
-    if (this.isJSONModuleImport(node) && node.type !== "ExportAllDeclaration") {
-      // @ts-expect-error specifiers may not index node
-      const { specifiers } = node;
-      if (specifiers != null) {
-        // @ts-expect-error refine specifier types
-        const nonDefaultNamedSpecifier = specifiers.find(specifier => {
-          let imported;
-          if (specifier.type === "ExportSpecifier") {
-            imported = specifier.local;
-          } else if (specifier.type === "ImportSpecifier") {
-            imported = specifier.imported;
-          }
-          if (imported !== undefined) {
-            return imported.type === "Identifier"
-              ? imported.name !== "default"
-              : imported.value !== "default";
-          }
-        });
-        if (nonDefaultNamedSpecifier !== undefined) {
-          this.raise(
-            Errors.ImportJSONBindingNotDefault,
-            nonDefaultNamedSpecifier.loc.start,
-          );
-        }
       }
     }
   }
@@ -2849,10 +2744,6 @@ export default abstract class StatementParser extends ExpressionParser {
         }
       }
       return;
-    }
-
-    if (this.hasPlugin("importReflection")) {
-      (node as N.ImportDeclaration).module = false;
     }
 
     if (phase === "source") {
@@ -3006,8 +2897,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node.specifiers ??= [];
     node.source = this.parseImportSource();
     this.maybeParseImportAttributes(node);
-    this.checkImportReflection(node);
-    this.checkJSONModuleImport(node);
+    this.checkImportPhase(node);
 
     this.semicolon();
     this.sawUnambiguousESM = true;
