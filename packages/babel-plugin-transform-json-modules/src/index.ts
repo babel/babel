@@ -80,9 +80,7 @@ export default declare((api, options: Options) => {
             );
           }
           if (attributes.length > 1) {
-            const paths = decl.node.attributes
-              ? decl.get("attributes")
-              : decl.get("assertions");
+            const paths = decl.get("attributes");
             const index = getAttributeKey(attributes[0]) === "type" ? 1 : 0;
             throw paths[index].buildCodeFrameError(
               "Unknown attribute for JSON modules.",
