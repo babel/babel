@@ -27,7 +27,7 @@ const config = {
 
   setupFiles: ["@cspotcode/source-map-support/register"],
 
-  testRegex: `./(packages|codemods)/[^/]+/test/.+\\.m?js$`,
+  testRegex: `./(packages|codemods|eslint)/[^/]+/test/.+\\.m?js$`,
   testPathIgnorePatterns: [
     "/node_modules/",
     "/test/fixtures/",
