@@ -1,4 +1,4 @@
-declare module m {
+declare module "m" {
   class C {
     field = "field";
   }

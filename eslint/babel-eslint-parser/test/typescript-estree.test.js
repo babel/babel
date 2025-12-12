@@ -293,8 +293,17 @@ function deeplyMakePlainObject(obj) {
         ["property signature", "var v: { foo: string }"],
         ["index signature", "declare class C { [x: string]: unknown }"],
 
-        ["module declaration", "module m { foo: string }"],
-        ["module declaration with declare", "declare module m { foo: string }"],
+        ["module declaration", "module 'm' { foo: string }"],
+        [
+          "module declaration with declare",
+          "declare module 'm' { foo: string }",
+        ],
+
+        ["namespace declaration", "namespace m { foo: string }"],
+        [
+          "namespace declaration with declare",
+          "declare namespace m { foo: string }",
+        ],
 
         ["export assignment", "export = foo"],
 
