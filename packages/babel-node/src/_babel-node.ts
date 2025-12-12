@@ -5,7 +5,6 @@ import repl from "node:repl";
 import * as babel from "@babel/core";
 import vm from "node:vm";
 import "core-js/stable/index.js";
-import "regenerator-runtime/runtime.js";
 // @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
 import { fileURLToPath } from "node:url";
