@@ -1,4 +1,4 @@
-declare module N {
+declare namespace N {
   export const not_enum = N[not + enum];
   export const binary_expression = 1 + 2;
   export const regex = /1/;

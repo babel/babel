@@ -553,7 +553,30 @@ defineType("TSModuleDeclaration", {
       validate: assertOneOf("global", "module", "namespace"),
     },
     declare: validateOptional(bool),
-    id: validateType("TSEntityName", "StringLiteral"),
+    id: {
+      validate: chain(
+        assertNodeType("TSEntityName", "StringLiteral"),
+        Object.assign(
+          function (
+            node: t.TSModuleDeclaration,
+            key: string,
+            val: t.TSEntityName | t.StringLiteral,
+          ) {
+            if (node.kind === "module" && !is("StringLiteral", val)) {
+              throw new TypeError(
+                `TSModuleDeclaration of kind 'module' must have a StringLiteral id.`,
+              );
+            }
+            if (node.kind === "namespace" && is("StringLiteral", val)) {
+              throw new TypeError(
+                `TSModuleDeclaration of kind 'namespace' cannot have a StringLiteral id.`,
+              );
+            }
+          } satisfies ValidatorImpl,
+          { oneOfNodeTypes: ["TSEntityName", "StringLiteral"] as const },
+        ) satisfies ValidatorOneOfNodeTypes,
+      ),
+    },
     body: validateType("TSModuleBlock"),
   },
 });
