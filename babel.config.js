@@ -156,6 +156,10 @@ module.exports = function (api) {
       ["@babel/preset-typescript", presetTsOpts],
     ],
     plugins: [
+      env === "standalone" && [
+        "@babel/transform-object-rest-spread",
+        { useBuiltIns: true },
+      ],
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
       require("./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs"),
     ].filter(Boolean),
