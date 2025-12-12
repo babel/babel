@@ -1,52 +1,52 @@
 {
   "type": "File",
-  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":33}},
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":36}},
   "program": {
     "type": "Program",
-    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":33}},
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":36}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSModuleDeclaration",
-        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
-        "kind": "module",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "kind": "namespace",
         "id": {
           "type": "Identifier",
-          "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"M"},
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"M"},
           "name": "M"
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
+          "start":12,"end":15,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":15,"index":15}},
           "body": []
         }
       },
       {
         "type": "TSImportEqualsDeclaration",
-        "start":13,"end":26,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":13,"index":26}},
+        "start":16,"end":29,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":13,"index":29}},
         "importKind": "value",
         "id": {
           "type": "Identifier",
-          "start":20,"end":21,"loc":{"start":{"line":2,"column":7,"index":20},"end":{"line":2,"column":8,"index":21},"identifierName":"a"},
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":8,"index":24},"identifierName":"a"},
           "name": "a"
         },
         "moduleReference": {
           "type": "Identifier",
-          "start":24,"end":25,"loc":{"start":{"line":2,"column":11,"index":24},"end":{"line":2,"column":12,"index":25},"identifierName":"M"},
+          "start":27,"end":28,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":12,"index":28},"identifierName":"M"},
           "name": "M"
         }
       },
       {
         "type": "VariableDeclaration",
-        "start":27,"end":33,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":3,"column":6,"index":33}},
+        "start":30,"end":36,"loc":{"start":{"line":3,"column":0,"index":30},"end":{"line":3,"column":6,"index":36}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":31,"end":32,"loc":{"start":{"line":3,"column":4,"index":31},"end":{"line":3,"column":5,"index":32}},
+            "start":34,"end":35,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":5,"index":35}},
             "id": {
               "type": "Identifier",
-              "start":31,"end":32,"loc":{"start":{"line":3,"column":4,"index":31},"end":{"line":3,"column":5,"index":32},"identifierName":"a"},
+              "start":34,"end":35,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":5,"index":35},"identifierName":"a"},
               "name": "a"
             },
             "init": null

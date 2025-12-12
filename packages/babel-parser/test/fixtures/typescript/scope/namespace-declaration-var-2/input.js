@@ -1,5 +1,5 @@
 declare class foo {
 }
-module bar {
+namespace bar {
   export var foo: any;
 }

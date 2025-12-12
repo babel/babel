@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":13,"index":73}},
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":61}},
   "program": {
     "type": "Program",
-    "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":13,"index":73}},
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":13,"index":61}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -57,26 +57,11 @@
       },
       {
         "type": "TSModuleDeclaration",
-        "start":34,"end":45,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":11,"index":45}},
-        "kind": "module",
-        "id": {
-          "type": "Identifier",
-          "start":41,"end":42,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":8,"index":42},"identifierName":"M"},
-          "name": "M"
-        },
-        "body": {
-          "type": "TSModuleBlock",
-          "start":43,"end":45,"loc":{"start":{"line":3,"column":9,"index":43},"end":{"line":3,"column":11,"index":45}},
-          "body": []
-        }
-      },
-      {
-        "type": "TSModuleDeclaration",
-        "start":46,"end":59,"loc":{"start":{"line":4,"column":0,"index":46},"end":{"line":4,"column":13,"index":59}},
+        "start":34,"end":47,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":13,"index":47}},
         "kind": "module",
         "id": {
           "type": "StringLiteral",
-          "start":53,"end":56,"loc":{"start":{"line":4,"column":7,"index":53},"end":{"line":4,"column":10,"index":56}},
+          "start":41,"end":44,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":10,"index":44}},
           "extra": {
             "rawValue": "m",
             "raw": "\"m\""
@@ -85,17 +70,17 @@
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":57,"end":59,"loc":{"start":{"line":4,"column":11,"index":57},"end":{"line":4,"column":13,"index":59}},
+          "start":45,"end":47,"loc":{"start":{"line":3,"column":11,"index":45},"end":{"line":3,"column":13,"index":47}},
           "body": []
         }
       },
       {
         "type": "TSModuleDeclaration",
-        "start":60,"end":73,"loc":{"start":{"line":5,"column":0,"index":60},"end":{"line":5,"column":13,"index":73}},
+        "start":48,"end":61,"loc":{"start":{"line":4,"column":0,"index":48},"end":{"line":4,"column":13,"index":61}},
         "kind": "module",
         "id": {
           "type": "StringLiteral",
-          "start":67,"end":70,"loc":{"start":{"line":5,"column":7,"index":67},"end":{"line":5,"column":10,"index":70}},
+          "start":55,"end":58,"loc":{"start":{"line":4,"column":7,"index":55},"end":{"line":4,"column":10,"index":58}},
           "extra": {
             "rawValue": "n",
             "raw": "'n'"
@@ -104,7 +89,7 @@
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":71,"end":73,"loc":{"start":{"line":5,"column":11,"index":71},"end":{"line":5,"column":13,"index":73}},
+          "start":59,"end":61,"loc":{"start":{"line":4,"column":11,"index":59},"end":{"line":4,"column":13,"index":61}},
           "body": []
         }
       }

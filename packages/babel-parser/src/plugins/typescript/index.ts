@@ -2063,13 +2063,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
         node.kind = "global";
-
         node.id = this.parseIdentifier();
-      } else if (this.match(tt.string)) {
+      } else {
         node.kind = "module";
         node.id = super.parseStringLiteral(this.state.value);
-      } else {
-        this.unexpected();
       }
       if (this.match(tt.braceL)) {
         this.scope.enter(ScopeFlag.TS_MODULE);
@@ -2287,12 +2284,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         case tt._module:
           if (this.tsCheckLineTerminator(next)) {
-            if (this.match(tt.string)) {
-              return this.tsParseAmbientExternalModuleDeclaration(node);
-            } else if (tokenIsIdentifier(this.state.type)) {
-              node.kind = "module";
-              return this.tsParseModuleOrNamespaceDeclaration(node);
-            }
+            return this.tsParseAmbientExternalModuleDeclaration(node);
           }
           break;
 
@@ -3074,7 +3066,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             break;
           }
           case tt._module: {
-            if (this.nextTokenIsIdentifierOrStringLiteralOnSameLine()) {
+            if (this.nextTokenIsStringLiteralOnSameLine()) {
               const node = this.startNode<N.TsModuleDeclaration>();
               this.next(); // eat 'module'
               return this.tsParseDeclaration(
@@ -4524,13 +4516,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    nextTokenIsIdentifierOrStringLiteralOnSameLine(): boolean {
+    nextTokenIsStringLiteralOnSameLine(): boolean {
       const next = this.nextTokenInLineStart();
       const nextCh = this.codePointAtPos(next);
       return (
-        this.chStartsBindingIdentifier(nextCh, next) ||
-        nextCh === charCodes.quotationMark ||
-        nextCh === charCodes.apostrophe
+        nextCh === charCodes.quotationMark || nextCh === charCodes.apostrophe
       );
     }
   };
