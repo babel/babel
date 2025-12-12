@@ -15,6 +15,7 @@
   "dependencies": {
     "core-js-pure": "^3.43.0"
   },
+  "sideEffects": false,
   "exports": {
     "./helpers/OverloadYield": {
       "node": "./helpers/OverloadYield.js",
