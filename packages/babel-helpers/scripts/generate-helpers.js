@@ -117,7 +117,7 @@ const helpers: Record<string, Helper> = {
     const { minVersion } = minVersionMatch.groups;
 
     const internal = code.includes("@internal");
-    const onlyBabel7 = code.includes("@onlyBabel7");
+    const onlyBabel8 = code.includes("@onlyBabel8");
     const mangleFns = code.includes("@mangleFns");
     const noMangleFns = [];
 
@@ -170,8 +170,8 @@ const helpers: Record<string, Helper> = {
   ),
 `;
 
-    if (onlyBabel7) {
-      // TODO(Babel 8): Remove Babel-7-specific helpers
+    if (onlyBabel8 && process.env.BABEL_9_BREAKING) {
+      // This helper is only for Babel 8
     } else {
       output += helperStr;
     }
