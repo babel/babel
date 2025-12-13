@@ -615,12 +615,18 @@ export function ObjectTypeAnnotation(
 
     this.space();
 
-    this.printJoin(props, true, true, undefined, undefined, () => {
-      if (props.length !== 1 || node.inexact) {
-        this.token(",");
-        this.space();
-      }
-    });
+    this.printJoin(
+      props,
+      true,
+      true,
+      () => {
+        if (props.length !== 1 || node.inexact) {
+          this.token(",");
+          this.space();
+        }
+      },
+      true,
+    );
 
     this.space();
   }

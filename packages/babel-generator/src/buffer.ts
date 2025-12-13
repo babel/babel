@@ -1,35 +1,30 @@
 import type SourceMap from "./source-map.ts";
+import type { SourceLocation } from "@babel/types";
 
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charcodes from "charcodes";
 
-export type Pos = {
-  line: number;
-  column: number;
-  index: number;
-};
-export type Loc = {
-  start?: Pos;
-  end?: Pos;
-  filename?: string;
-};
-type SourcePos = {
+export type Loc = SourceLocation;
+export type Pos = SourceLocation["start"];
+
+type SourcePosition = {
   line: number | undefined;
   column: number | undefined;
   identifierName: string | undefined;
+  identifierNamePos: Pos | undefined;
   filename: string | undefined;
 };
-type InternalSourcePos = SourcePos & { identifierNamePos: Pos | undefined };
+
+const spaceIndents: string[] = [];
+for (let i = 0; i < 32; i++) {
+  spaceIndents.push(" ".repeat(i * 2));
+}
 
 export default class Buffer {
   constructor(map: SourceMap | null, indentChar: string) {
     this._map = map;
     this._indentChar = indentChar;
-
-    for (let i = 0; i < 64; i++) {
-      this._fastIndentations.push(indentChar.repeat(i));
-    }
   }
 
   _map: SourceMap | null = null;
@@ -39,14 +34,13 @@ export default class Buffer {
   _last = 0;
   _canMarkIdName = true;
   _indentChar = "";
-  _fastIndentations: string[] = [];
-  _queuedChar: number = 0;
+  _queuedChar: typeof charcodes.space | typeof charcodes.semicolon | 0 = 0;
 
   _position = {
     line: 1,
     column: 0,
   };
-  _sourcePosition: InternalSourcePos = {
+  _sourcePosition: SourcePosition = {
     identifierName: undefined,
     identifierNamePos: undefined,
     line: undefined,
@@ -59,15 +53,32 @@ export default class Buffer {
    */
 
   get() {
-    this._flush();
+    const { _map, _last } = this;
+    if (this._queuedChar !== charcodes.space) {
+      this._flush();
+    }
 
-    const map = this._map;
+    // Whatever trim is used here should not execute a regex against the
+    // source string since it may be arbitrarily large after all transformations
+    const code =
+      _last === charcodes.lineFeed
+        ? (this._buf + this._str).trimRight()
+        : this._buf + this._str;
+
+    // Creating objects with getters is expensive.
+    if (_map === null) {
+      return {
+        code: code,
+        decodedMap: undefined,
+        map: null,
+        rawMappings: undefined,
+      };
+    }
+
     const result = {
-      // Whatever trim is used here should not execute a regex against the
-      // source string since it may be arbitrarily large after all transformations
-      code: (this._buf + this._str).trimRight(),
+      code: code,
       // Decoded sourcemap is free to generate.
-      decodedMap: map?.getDecoded(),
+      decodedMap: _map.getDecoded(),
       // Used as a marker for backwards compatibility. We moved input map merging
       // into the generator. We cannot merge the input map a second time, so the
       // presence of this field tells us we've already done the work.
@@ -76,7 +87,7 @@ export default class Buffer {
       },
       // Encoding the sourcemap is moderately CPU expensive.
       get map() {
-        const resultMap = map ? map.get() : null;
+        const resultMap = _map.get();
         result.map = resultMap;
         return resultMap;
       },
@@ -85,7 +96,7 @@ export default class Buffer {
       },
       // Retrieving the raw mappings is very memory intensive.
       get rawMappings() {
-        const mappings = map?.getRawMappings();
+        const mappings = _map.getRawMappings();
         result.rawMappings = mappings;
         return mappings;
       },
@@ -114,7 +125,7 @@ export default class Buffer {
   /**
    * Add a string to the buffer than can be reverted.
    */
-  queue(char: number): void {
+  queue(char: typeof charcodes.space | typeof charcodes.semicolon): void {
     this._flush();
     this._queuedChar = char;
   }
@@ -129,16 +140,13 @@ export default class Buffer {
 
   _appendChar(char: number, repeat: number, useSourcePos: boolean): void {
     this._last = char;
-    const sourcePos = this._sourcePosition;
 
     if (char === -1) {
-      const fastIndentation = this._fastIndentations[repeat];
-      if (fastIndentation !== undefined) {
-        this._str += fastIndentation;
-      } else {
-        this._str +=
-          repeat > 1 ? this._indentChar.repeat(repeat) : this._indentChar;
-      }
+      const indent =
+        repeat > 64
+          ? this._indentChar.repeat(repeat)
+          : spaceIndents[repeat / 2];
+      this._str += indent;
     } else {
       this._str +=
         repeat > 1
@@ -147,29 +155,33 @@ export default class Buffer {
     }
 
     const isSpace = char === charcodes.space;
-
+    const position = this._position;
     if (char !== charcodes.lineFeed) {
-      if (useSourcePos) {
-        this._mark(
-          sourcePos.line,
-          sourcePos.column,
-          isSpace ? undefined : sourcePos.identifierName,
-          isSpace ? undefined : sourcePos.identifierNamePos,
-          sourcePos.filename,
-        );
-      } else {
-        this._mark(undefined, undefined, undefined, undefined, undefined);
+      if (this._map) {
+        const sourcePos = this._sourcePosition;
+        if (useSourcePos && sourcePos) {
+          this._map.mark(
+            position,
+            sourcePos.line,
+            sourcePos.column,
+            isSpace ? undefined : sourcePos.identifierName,
+            isSpace ? undefined : sourcePos.identifierNamePos,
+            sourcePos.filename,
+          );
+
+          if (!isSpace && this._canMarkIdName) {
+            sourcePos.identifierName = undefined;
+            sourcePos.identifierNamePos = undefined;
+          }
+        } else {
+          this._map.mark(position);
+        }
       }
 
-      this._position.column += repeat;
+      position.column += repeat;
     } else {
-      this._position.line++;
-      this._position.column = 0;
-    }
-
-    if (useSourcePos && !isSpace && this._canMarkIdName) {
-      sourcePos.identifierName = undefined;
-      sourcePos.identifierNamePos = undefined;
+      position.line++;
+      position.column = 0;
     }
   }
 
@@ -190,7 +202,9 @@ export default class Buffer {
       this._str += str;
     }
 
-    if (!maybeNewline && !this._map) {
+    const hasMap = this._map !== null;
+
+    if (!maybeNewline && !hasMap) {
       position.column += len;
       return;
     }
@@ -215,8 +229,15 @@ export default class Buffer {
 
     // If the string starts with a newline char, then adding a mark is redundant.
     // This catches both "no newlines" and "newline after several chars".
-    if (i !== 0) {
-      this._mark(line, column, identifierName, identifierNamePos, filename);
+    if (hasMap && i !== 0) {
+      this._map!.mark(
+        position,
+        line,
+        column,
+        identifierName,
+        identifierNamePos,
+        filename,
+      );
     }
 
     // Now, find each remaining newline char in the string.
@@ -229,28 +250,14 @@ export default class Buffer {
       // unless this is the last char.
       // When manually adding multi-line content (such as a comment), `line` will be `undefined`.
       if (last < len && line !== undefined) {
-        this._mark(++line, 0, undefined, undefined, filename);
+        line++;
+        if (hasMap) {
+          this._map!.mark(position, line, 0, undefined, undefined, filename);
+        }
       }
       i = str.indexOf("\n", last);
     }
     position.column += len - last;
-  }
-
-  _mark(
-    line: number | undefined,
-    column: number | undefined,
-    identifierName: string | undefined,
-    identifierNamePos: Pos | undefined,
-    filename: string | undefined,
-  ): void {
-    this._map?.mark(
-      this._position,
-      line,
-      column,
-      identifierName,
-      identifierNamePos,
-      filename,
-    );
   }
 
   removeLastSemicolon(): void {
@@ -273,7 +280,7 @@ export default class Buffer {
   }
 
   hasContent(): boolean {
-    return this._queuedChar !== 0 || this._last !== 0;
+    return this._last !== 0 /*|| this._queuedChar !== 0*/;
   }
 
   /**
@@ -306,16 +313,15 @@ export default class Buffer {
     }
 
     this.source("start", loc);
-    // @ts-expect-error identifierName is not defined
     const identifierName = loc.identifierName;
     const sourcePos = this._sourcePosition;
-    if (identifierName) {
+    if (identifierName != null) {
       this._canMarkIdName = false;
       sourcePos.identifierName = identifierName;
     }
     cb();
 
-    if (identifierName) {
+    if (identifierName != null) {
       this._canMarkIdName = true;
       sourcePos.identifierName = undefined;
       sourcePos.identifierNamePos = undefined;

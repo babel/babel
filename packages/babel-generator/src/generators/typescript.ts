@@ -341,7 +341,9 @@ export function TSTypeQuery(this: Printer, node: t.TSTypeQuery) {
 }
 
 export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
-  printBraced(this, node, () => this.printJoin(node.members, true, true));
+  printBraced(this, node, () =>
+    this.printJoin(node.members, true, true, undefined, undefined, true),
+  );
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
@@ -450,7 +452,7 @@ export function TSIndexedAccessType(
 export function TSMappedType(this: Printer, node: t.TSMappedType) {
   const { nameType, optional, readonly, typeAnnotation } = node;
   this.token("{");
-  const exit = this.enterDelimited();
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
   this.space();
   if (readonly) {
     tokenIfPlusMinus(this, readonly);
@@ -472,17 +474,17 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   this.space();
   if (process.env.BABEL_8_BREAKING) {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST shape
-    this.print(node.constraint);
+    this.print(node.constraint, undefined, true);
   } else {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST shape
-    this.print(node.typeParameter.constraint);
+    this.print(node.typeParameter.constraint, undefined, true);
   }
 
   if (nameType) {
     this.space();
     this.word("as");
     this.space();
-    this.print(nameType);
+    this.print(nameType, undefined, true);
   }
 
   this.token("]");
@@ -495,10 +497,10 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   if (typeAnnotation) {
     this.token(":");
     this.space();
-    this.print(typeAnnotation);
+    this.print(typeAnnotation, undefined, true);
   }
   this.space();
-  exit();
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   this.token("}");
 }
 
@@ -557,7 +559,9 @@ export function TSInterfaceDeclaration(
 }
 
 export function TSInterfaceBody(this: Printer, node: t.TSInterfaceBody) {
-  printBraced(this, node, () => this.printJoin(node.body, true, true));
+  printBraced(this, node, () =>
+    this.printJoin(node.body, true, true, undefined, undefined, true),
+  );
 }
 
 export function TSTypeAliasDeclaration(
@@ -580,22 +584,26 @@ export function TSTypeAliasDeclaration(
   this.semicolon();
 }
 
-function TSTypeExpression(
-  this: Printer,
-  node: t.TSAsExpression | t.TSSatisfiesExpression,
-) {
-  const { type, expression, typeAnnotation } = node;
+export function TSAsExpression(this: Printer, node: t.TSAsExpression) {
+  const { expression, typeAnnotation } = node;
   this.print(expression, true);
   this.space();
-  this.word(type === "TSAsExpression" ? "as" : "satisfies");
+  this.word("as");
   this.space();
   this.print(typeAnnotation);
 }
 
-export {
-  TSTypeExpression as TSAsExpression,
-  TSTypeExpression as TSSatisfiesExpression,
-};
+export function TSSatisfiesExpression(
+  this: Printer,
+  node: t.TSSatisfiesExpression,
+) {
+  const { expression, typeAnnotation } = node;
+  this.print(expression, true);
+  this.space();
+  this.word("satisfies");
+  this.space();
+  this.print(typeAnnotation);
+}
 
 export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   const { typeAnnotation, expression } = node;
@@ -651,6 +659,8 @@ export function TSEnumBody(this: Printer, node: t.TSEnumBody) {
       this.shouldPrintTrailingComma("}") ??
         (process.env.BABEL_8_BREAKING ? false : true),
       true,
+      true,
+      undefined,
       true,
     ),
   );
@@ -721,7 +731,7 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  printBraced(this, node, () => this.printSequence(node.body, true));
+  printBraced(this, node, () => this.printSequence(node.body, true, true));
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
@@ -859,9 +869,9 @@ export function _tsPrintClassMemberModifiers(
 
 function printBraced(printer: Printer, node: t.Node, cb: () => void) {
   printer.token("{");
-  const exit = printer.enterDelimited();
+  const oldNoLineTerminatorAfterNode = printer.enterDelimited();
   cb();
-  exit();
+  printer._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   printer.rightBrace(node);
 }
 
