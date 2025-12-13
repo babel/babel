@@ -16,7 +16,6 @@ const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
-const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 const pluginToggleBooleanFlag = require("./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs");
 
 function normalize(src) {
@@ -228,19 +227,20 @@ module.exports = function (api) {
           [
             pluginRequiredVersionMacro,
             {
-              allowAny: !process.env.IS_PUBLISH || env === "standalone",
-              overwrite(requiredVersion, filename) {
-                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
-                if (process.env.BABEL_8_BREAKING) {
-                  return packageJson.version;
-                }
-                const match = filename.match(/packages[\\/](.+?)[\\/]/);
-                if (
-                  match &&
-                  babel7_8compat["babel7plugins-babel8core"].includes(match[1])
-                ) {
-                  return `${requiredVersion} || >8.0.0-alpha <8.0.0-beta`;
-                }
+              // allowAny: !process.env.IS_PUBLISH || env === "standalone",
+              // eslint-disable-next-line no-unused-vars
+              overwrite(_requiredVersion, _filename) {
+                // TODO: Allow ranges when releasing a stable version
+                return packageJson.version;
+
+                // if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
+                // const match = filename.match(/packages[\\/](.+?)[\\/]/);
+                // if (
+                //   match &&
+                //   babel7_8compat["babel8plugins-babel7core"].includes(match[1])
+                // ) {
+                //   requiredVersion = `${requiredVersion} || >8.0.0-alpha <8.0.0-rc`;
+                // }
               },
             },
           ],
@@ -541,18 +541,13 @@ function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
           );
         }
 
+        let version =
+          overwrite(arg, this.filename) ?? String(path.node.arguments[0].value);
         if (allowAny) {
-          path.replaceWith(t.stringLiteral("*"));
-          return;
+          version += " || *";
         }
 
-        const version = overwrite(arg, this.filename);
-        if (version != null) {
-          path.replaceWith(t.stringLiteral(version));
-          return;
-        }
-
-        path.replaceWith(path.node.arguments[0]);
+        path.replaceWith(t.stringLiteral(version));
       },
     },
   };
