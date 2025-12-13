@@ -1,12 +1,10 @@
 import * as parens from "./parentheses.ts";
-import {
-  FLIPPED_ALIAS_KEYS,
-  VISITOR_KEYS,
-  isCallExpression,
-  isMemberExpression,
-  isParenthesizedExpression,
-} from "@babel/types";
+import { FLIPPED_ALIAS_KEYS, VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
+
+import { generatorInfosMap, generatorNamesRecord } from "../nodes.ts";
+
+const { NewExpressionId, DecoratorId } = generatorNamesRecord;
 
 export const enum TokenContext {
   normal = 0,
@@ -20,7 +18,7 @@ export const enum TokenContext {
   // This flag lives across the token boundary, and will
   // be reset after forIn or forInit head is printed
   forInOrInitHeadAccumulate = 1 << 7,
-  forInOrInitHeadAccumulatePassThroughMask = 0x80,
+  forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
 }
 
 type NodeHandler<R> = (
@@ -30,6 +28,7 @@ type NodeHandler<R> = (
   //   ? Extract<typeof t[K], { type: "string" }>
   //   : t.Node,
   parent: t.Node,
+  parentId: number,
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R | undefined;
@@ -40,18 +39,13 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
   const map = new Map<string, NodeHandler<R>>();
 
   function add(type: string, func: NodeHandler<R>) {
-    const fn = map.get(type);
-    map.set(
-      type,
-      fn
-        ? function (node, parent, tokenContext, getRawIdentifier) {
-            return (
-              fn(node, parent, tokenContext, getRawIdentifier) ??
-              func(node, parent, tokenContext, getRawIdentifier)
-            );
-          }
-        : func,
-    );
+    if (map.has(type)) {
+      throw new Error(`Handler for type ${type} already exists`);
+    }
+    map.set(type, func);
+    if (generatorInfosMap.has(type)) {
+      generatorInfosMap.get(type)![2] = func;
+    }
   }
 
   for (const type of Object.keys(obj)) {
@@ -73,30 +67,34 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
 export const expandedParens = expandAliases(parens);
 
 function isOrHasCallExpression(node: t.Node): boolean {
-  if (isCallExpression(node)) {
-    return true;
+  switch (node.type) {
+    case "CallExpression":
+      return true;
+    case "MemberExpression":
+      return isOrHasCallExpression(node.object);
   }
-
-  return isMemberExpression(node) && isOrHasCallExpression(node.object);
+  return false;
 }
 
 export function parentNeedsParens(
   node: t.Node,
-  parent: t.Node | null,
+  parent: any,
+  parentId: number,
 ): boolean {
-  if (!parent) return false;
-
-  switch (parent.type) {
-    case "NewExpression":
+  switch (parentId) {
+    case NewExpressionId:
       if (parent.callee === node) {
         if (isOrHasCallExpression(node)) return true;
       }
       break;
-    case "Decorator":
+    case DecoratorId:
       return (
         !isDecoratorMemberExpression(node) &&
-        !(isCallExpression(node) && isDecoratorMemberExpression(node.callee)) &&
-        !isParenthesizedExpression(node)
+        !(
+          node.type === "CallExpression" &&
+          isDecoratorMemberExpression(node.callee)
+        ) &&
+        node.type !== "ParenthesizedExpression"
       );
   }
   return false;

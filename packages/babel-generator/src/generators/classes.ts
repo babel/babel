@@ -84,14 +84,12 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   if (node.body.length === 0) {
     this.token("}");
   } else {
-    this.newline();
-
     const separator = classBodyEmptySemicolonsPrinter(this, node);
     separator?.(-1); // print leading semicolons in preserveFormat mode
 
-    const exit = this.enterDelimited();
-    this.printJoin(node.body, true, true, separator, true);
-    exit();
+    const oldNoLineTerminatorAfterNode = this.enterDelimited();
+    this.printJoin(node.body, true, true, separator, true, true);
+    this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
@@ -146,7 +144,7 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
       ) &&
       tok.start < end!
     ) {
-      printer.token(";", undefined, occurrenceCount++);
+      printer.tokenChar(charCodes.semicolon, occurrenceCount++);
       k++;
     }
   };

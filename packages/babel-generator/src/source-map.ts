@@ -101,8 +101,8 @@ export default class SourceMap {
 
   mark(
     generated: { line: number; column: number },
-    line: number | undefined,
-    column: number | undefined,
+    line?: number,
+    column?: number,
     identifierName?: string | null,
     identifierNamePos?: { line: number; column: number },
     filename?: string | null,

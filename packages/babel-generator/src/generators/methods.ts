@@ -36,7 +36,7 @@ export function _parameters(
   parameters: t.Function["params"],
   endToken: number,
 ) {
-  const exit = this.enterDelimited();
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
 
   const trailingComma = this.shouldPrintTrailingComma(endToken);
 
@@ -51,16 +51,23 @@ export function _parameters(
   }
 
   this.tokenChar(endToken);
-  exit();
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
 }
 
 export function _param(
   this: Printer,
   parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
 ) {
-  // @ts-expect-error decorators is not in VoidPattern
-  this.printJoin(parameter.decorators);
-  this.print(parameter);
+  this.printJoin(
+    // @ts-expect-error decorators is not in VoidPattern
+    parameter.decorators,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    true,
+  );
+  this.print(parameter, undefined, true);
   if (
     // @ts-expect-error optional is not in TSParameterProperty
     parameter.optional
@@ -71,6 +78,8 @@ export function _param(
   this.print(
     // @ts-expect-error typeAnnotation is not in TSParameterProperty
     parameter.typeAnnotation,
+    undefined,
+    true,
   ); // TS / flow
 }
 
