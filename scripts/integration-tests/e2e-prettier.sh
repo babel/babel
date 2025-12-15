@@ -36,7 +36,7 @@ yarn install --no-immutable
 yarn info
 
 # Babel 8 related adjustments
-  sed -i "s/ts-expect-error//g" ./src/language-json/parser-json.js
+  sed -i "s/ts-expect-error//g" ./src/language-json/parse/json.js
 
   sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
   sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
