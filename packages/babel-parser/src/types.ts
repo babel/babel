@@ -3,6 +3,7 @@ import type { Token } from "./tokenizer/index.ts";
 import type { SourceLocation } from "./util/location.ts";
 import type { PlaceholderTypes } from "./plugins/placeholders.ts";
 import type { ParseError } from "./parse-error.ts";
+import type { ExportedTokenType } from "./tokenizer/types.ts";
 
 /*
  * If making any changes to the AST, update:
@@ -249,10 +250,12 @@ export interface BigIntLiteral extends NodeBase {
   value: bigint;
 }
 
+export type ExportedToken = Omit<Token, "type"> & { type: ExportedTokenType };
+
 export interface ParserOutput {
   comments: Comment[];
   errors: ParseError<any>[];
-  tokens?: (Token | Comment)[];
+  tokens?: (ExportedToken | Comment)[];
 }
 // Programs
 
@@ -711,10 +714,6 @@ export interface CallOrNewBase extends NodeBase {
   // For ESTree
   optional: boolean;
   typeArguments: TypeParameterInstantiationBase | undefined | null;
-  /**
-   * @deprecated
-   */
-  typeParameters?: TypeParameterInstantiationBase | null; // TODO: Not in spec
 }
 
 export interface CallExpression extends CallOrNewBase {
@@ -761,10 +760,6 @@ export interface TaggedTemplateExpression extends NodeBase {
   tag: Expression;
   quasi: TemplateLiteral;
   typeArguments?: TypeParameterInstantiationBase | null; // TODO: Not in spec
-  /**
-   * @deprecated
-   */
-  typeParameters?: TypeParameterInstantiationBase | null; // TODO: Not in spec
 }
 
 export interface TemplateElement extends NodeBase {
@@ -837,8 +832,7 @@ export interface ClassBase extends HasDecorators {
   decorators?: Decorator[];
   // TODO: All not in spec
   typeParameters?: TypeParameterDeclarationBase | null;
-  superTypeParameters?: TypeParameterInstantiationBase | null; // babel 7
-  superTypeArguments?: TypeParameterInstantiationBase | null; // babel 8
+  superTypeArguments?: TypeParameterInstantiationBase | null;
   abstract?: boolean;
   implements?: TSClassImplements[] | undefined | null | FlowClassImplements[];
 }
@@ -1090,10 +1084,6 @@ export interface JSXOpeningElement extends NodeBase {
   type: "JSXOpeningElement";
   name: JSXNamespacedName | JSXMemberExpression;
   typeArguments?: TypeParameterInstantiationBase | null; // TODO: Not in spec,
-  /**
-   * @deprecated
-   */
-  typeParameters?: TypeParameterInstantiationBase | null; // TODO: Not in spec,
   attributes: (JSXAttribute | JSXSpreadAttribute)[];
   selfClosing: boolean;
 }
@@ -1146,8 +1136,7 @@ export interface TypeParameter extends NodeBase {
 
 export interface TsTypeParameter extends NodeBase {
   type: "TSTypeParameter";
-  // TODO(Babel 8): remove string type support
-  name: string | Identifier;
+  name: Identifier;
   in?: boolean;
   out?: boolean;
   const?: boolean;
@@ -1370,10 +1359,6 @@ export interface EstreeImportExpression extends NodeBase {
   type: "ImportExpression";
   source: Expression;
   options?: Expression | null;
-  /**
-   * @deprecated Use options instead
-   */
-  attributes?: Expression | null;
 }
 
 export interface EstreePrivateIdentifier extends NodeBase {
@@ -1472,6 +1457,12 @@ export type TsSignatureDeclaration =
   | TsConstructorType;
 
 export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
+  returnType: TsTypeAnnotation | undefined | null;
+  typeAnnotation: TsTypeAnnotation | undefined | null;
+}
+
+export interface TsSignatureDeclarationBase
+  extends TsSignatureDeclarationOrIndexSignatureBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
   params: (
     | Identifier
@@ -1480,8 +1471,11 @@ export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
     | ArrayPattern
     | VoidPattern
   )[];
-  returnType: TsTypeAnnotation | undefined | null;
-  // TODO(Babel 8): Remove
+  typeParameters: TsTypeParameterDeclaration | undefined | null;
+}
+
+export interface TsIndexSignatureBase
+  extends TsSignatureDeclarationOrIndexSignatureBase {
   parameters: (
     | Identifier
     | RestElement
@@ -1489,12 +1483,6 @@ export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
     | ArrayPattern
     | VoidPattern
   )[];
-  typeAnnotation: TsTypeAnnotation | undefined | null;
-}
-
-export interface TsSignatureDeclarationBase
-  extends TsSignatureDeclarationOrIndexSignatureBase {
-  typeParameters: TsTypeParameterDeclaration | undefined | null;
 }
 
 // ================
@@ -1542,8 +1530,7 @@ export interface TsMethodSignature
 }
 
 // *Not* a ClassMemberBase: Can't have accessibility, can't be abstract, can't be optional.
-export interface TsIndexSignature
-  extends TsSignatureDeclarationOrIndexSignatureBase {
+export interface TsIndexSignature extends TsIndexSignatureBase {
   readonly?: boolean;
   static?: boolean;
   type: "TSIndexSignature";
@@ -1647,10 +1634,6 @@ export interface TsTypeReference extends TsTypeBase {
   type: "TSTypeReference";
   typeName: TsEntityName;
   typeArguments?: TsTypeParameterInstantiation;
-  /**
-   * @deprecated
-   */
-  typeParameters?: TsTypeParameterInstantiation;
 }
 
 export interface TsTypePredicate extends TsTypeBase {
@@ -1665,10 +1648,6 @@ export interface TsTypeQuery extends TsTypeBase {
   type: "TSTypeQuery";
   exprName: TsEntityName | TsImportType;
   typeArguments?: TsTypeParameterInstantiation;
-  /**
-   * @deprecated
-   */
-  typeParameters?: TsTypeParameterInstantiation;
 }
 
 export interface TsTypeLiteral extends TsTypeBase {
@@ -1775,16 +1754,9 @@ export interface TsLiteralType extends TsTypeBase {
 
 export interface TsImportType extends TsTypeBase {
   type: "TSImportType";
-  /** Only in Babel 7 */
-  argument: TsLiteralType;
-  /** Only in Babel 8 */
   source: StringLiteral;
   qualifier?: TsEntityName | null;
   typeArguments?: TsTypeParameterInstantiation | null;
-  /**
-   * @deprecated
-   */
-  typeParameters?: TsTypeParameterInstantiation;
   options?: Expression | null;
 }
 
@@ -1830,10 +1802,6 @@ export interface TsEnumDeclaration extends DeclarationBase {
   const?: boolean;
   id: Identifier;
   body: TsEnumBody;
-  /**
-   * @deprecated
-   */
-  members?: TsEnumMember[];
 }
 
 export interface TsEnumBody extends NodeBase {
@@ -1877,8 +1845,6 @@ export interface TsImportEqualsDeclaration extends NodeBase {
   id: Identifier;
   importKind: "type" | "value";
   moduleReference: TsModuleReference;
-  /** @deprecated */
-  isExport: boolean;
 }
 
 export type TsModuleReference = TsEntityName | TsExternalModuleReference;
@@ -1931,10 +1897,6 @@ export interface TsInstantiationExpression extends NodeBase {
   type: "TSInstantiationExpression";
   expression: Expression;
   typeArguments?: TsTypeParameterInstantiation;
-  /**
-   * @deprecated
-   */
-  typeParameters?: TsTypeParameterInstantiation;
 }
 
 // ================

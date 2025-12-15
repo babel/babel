@@ -1,4 +1,3 @@
-import type { TokContext } from "./context.ts";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -57,8 +56,6 @@ export class ExportedTokenType {
   prefix: boolean;
   postfix: boolean;
   binop: number | undefined | null;
-  // todo(Babel 8): remove updateContext from exposed token layout
-  declare updateContext: ((context: TokContext[]) => void) | undefined | null;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
@@ -133,18 +130,9 @@ export type InternalTokenTypes = typeof tt;
 export const tt = {
   // Punctuation token types.
   bracketL: createToken("[", { beforeExpr, startsExpr }),
-  // TODO: Remove this in Babel 8
-  bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
-  // TODO: Remove this in Babel 8
-  bracketBarL: createToken("[|", { beforeExpr, startsExpr }),
   bracketR: createToken("]"),
-  // TODO: Remove this in Babel 8
-  bracketBarR: createToken("|]"),
   braceL: createToken("{", { beforeExpr, startsExpr }),
-  // TODO: Remove this in Babel 8
   braceBarL: createToken("{|", { beforeExpr, startsExpr }),
-  // TODO: Remove this in Babel 8
-  braceHashL: createToken("#{", { beforeExpr, startsExpr }),
   braceR: createToken("}"),
   braceBarR: createToken("|}"),
   parenL: createToken("(", { beforeExpr, startsExpr }),
@@ -335,8 +323,6 @@ export const tt = {
   string: createToken("string", { startsExpr }),
   num: createToken("num", { startsExpr }),
   bigint: createToken("bigint", { startsExpr }),
-  // TODO: Remove this in Babel 8
-  decimal: createToken("decimal", { startsExpr }),
   // end: isLiteralPropertyName
   regexp: createToken("regexp", { startsExpr }),
   privateName: createToken("#name", { startsExpr }),
@@ -364,7 +350,7 @@ export function tokenIsKeywordOrIdentifier(token: TokenType): boolean {
 }
 
 export function tokenIsLiteralPropertyName(token: TokenType): boolean {
-  return token >= tt._in && token <= tt.decimal;
+  return token >= tt._in && token <= tt.bigint;
 }
 
 export function tokenComesBeforeExpression(token: TokenType): boolean {

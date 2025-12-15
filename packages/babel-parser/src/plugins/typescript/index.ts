@@ -940,12 +940,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         this.tsFillSignature(tt.colon, method);
         this.tsParseTypeMemberSemicolon();
-        const paramsKey = "params";
-        const returnTypeKey = "returnType";
         if (method.kind === "get") {
-          if (method[paramsKey].length > 0) {
+          if (method.params.length > 0) {
             this.raise(Errors.BadGetterArity, this.state.curPosition());
-            if (this.isThisParam(method[paramsKey][0])) {
+            if (this.isThisParam(method.params[0])) {
               this.raise(
                 TSErrors.AccessorCannotDeclareThisParameter,
                 this.state.curPosition(),
@@ -953,10 +951,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             }
           }
         } else if (method.kind === "set") {
-          if (method[paramsKey].length !== 1) {
+          if (method.params.length !== 1) {
             this.raise(Errors.BadSetterArity, this.state.curPosition());
           } else {
-            const firstParameter = method[paramsKey][0];
+            const firstParameter = method.params[0];
             if (this.isThisParam(firstParameter)) {
               this.raise(
                 TSErrors.AccessorCannotDeclareThisParameter,
@@ -979,10 +977,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               );
             }
           }
-          if (method[returnTypeKey]) {
+          if (method.returnType) {
             this.raise(
               TSErrors.SetAccessorCannotHaveReturnType,
-              method[returnTypeKey],
+              method.returnType,
             );
           }
         } else {
@@ -1108,7 +1106,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       this.expect(tt.bracketL);
 
-      node.key = this.tsParseTypeParameterName() as N.Identifier;
+      node.key = this.tsParseTypeParameterName();
       node.constraint = this.tsExpectThenParseType(tt._in);
 
       node.nameType = this.eatContextual(tt._as) ? this.tsParseType() : null;
@@ -3666,7 +3664,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               TSErrors.SingleTypeParameterWithoutTrailingComma,
               createPositionWithColumnOffset(parameter.loc.end, 1),
               {
-                typeParameterName: (parameter.name as N.Identifier).name,
+                typeParameterName: parameter.name.name,
               },
             );
           }
@@ -4184,9 +4182,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return method;
     }
 
-    tsParseTypeParameterName(): N.Identifier | string {
-      const typeName: N.Identifier = this.parseIdentifier();
-      return typeName;
+    tsParseTypeParameterName() {
+      return this.parseIdentifier();
     }
 
     shouldParseAsAmbientContext(): boolean {
