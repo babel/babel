@@ -52,7 +52,7 @@ export default class File {
 
   /**
    * Provide backward-compatible access to the interpreter directive handling
-   * in Babel 6.x. If you are writing a plugin for Babel 7.x, it would be
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x or higher, it would be
    * best to use 'program.interpreter' directly.
    */
   get shebang(): string {

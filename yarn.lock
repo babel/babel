@@ -480,6 +480,11 @@ __metadata:
     semver: "npm:^7.3.4"
     ts-node: "npm:^11.0.0-beta.1"
     tsx: "npm:^4.20.3"
+  peerDependencies:
+    "@babel/preset-typescript": ^8.0.0-0
+  peerDependenciesMeta:
+    "@babel/preset-typescript":
+      optional: true
   languageName: unknown
   linkType: soft
 
