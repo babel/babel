@@ -14,8 +14,7 @@ export function File(this: Printer, node: t.File) {
 export function Program(this: Printer, node: t.Program) {
   // An empty Program doesn't have any inner tokens, so
   // we must explicitly print its inner comments.
-  this.noIndentInnerCommentsHere();
-  this.printInnerComments();
+  this.printInnerComments(false);
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {

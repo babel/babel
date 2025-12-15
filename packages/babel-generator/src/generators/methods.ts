@@ -164,7 +164,7 @@ export function _functionHead(
       // We prevent inner comments from being printed here,
       // so that they are always consistently printed in the
       // same place regardless of the function type.
-      this._endsWithInnerRaw = false;
+      this._innerCommentsState = 0 /* INNER_COMMENT_STATE.DISALLOWED */;
     }
     this.space();
   }
@@ -174,7 +174,7 @@ export function _functionHead(
       // We prevent inner comments from being printed here,
       // so that they are always consistently printed in the
       // same place regardless of the function type.
-      this._endsWithInnerRaw = false;
+      this._innerCommentsState = 0 /* INNER_COMMENT_STATE.DISALLOWED */;
     }
     this.token("*");
   }
