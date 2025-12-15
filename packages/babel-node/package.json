@@ -26,7 +26,6 @@
     "@babel/register": "workspace:^",
     "commander": "^12.1.0",
     "core-js": "^3.30.2",
-    "regenerator-runtime": "^0.14.0",
     "v8flags": "^4.0.1"
   },
   "peerDependencies": {
