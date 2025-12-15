@@ -54,30 +54,30 @@ const {
 
 const PRECEDENCE = new Map([
   ["||", 0],
-  ["??", 0],
-  ["&&", 1],
-  ["|", 2],
-  ["^", 3],
-  ["&", 4],
-  ["==", 5],
-  ["===", 5],
-  ["!=", 5],
-  ["!==", 5],
-  ["<", 6],
-  [">", 6],
-  ["<=", 6],
-  [">=", 6],
-  ["in", 6],
-  ["instanceof", 6],
-  [">>", 7],
-  ["<<", 7],
-  [">>>", 7],
-  ["+", 8],
-  ["-", 8],
-  ["*", 9],
-  ["/", 9],
-  ["%", 9],
-  ["**", 10],
+  ["??", 1],
+  ["&&", 2],
+  ["|", 3],
+  ["^", 4],
+  ["&", 5],
+  ["==", 6],
+  ["===", 6],
+  ["!=", 6],
+  ["!==", 6],
+  ["<", 7],
+  [">", 7],
+  ["<=", 7],
+  [">=", 7],
+  ["in", 7],
+  ["instanceof", 7],
+  [">>", 8],
+  ["<<", 8],
+  [">>>", 8],
+  ["+", 9],
+  ["-", 9],
+  ["*", 10],
+  ["/", 10],
+  ["%", 10],
+  ["**", 11],
 ]);
 
 function isTSTypeExpression(nodeId: number) {
@@ -100,17 +100,21 @@ const isClassExtendsClause = (
 };
 
 const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
-  return (
-    ((parentId === MemberExpressionId ||
-      parentId === OptionalMemberExpressionId) &&
-      parent.object === node) ||
-    ((parentId === CallExpressionId ||
-      parentId === OptionalCallExpressionId ||
-      parentId === NewExpressionId) &&
-      parent.callee === node) ||
-    (parentId === TaggedTemplateExpressionId && parent.tag === node) ||
-    parentId === TSNonNullExpressionId
-  );
+  switch (parentId) {
+    case MemberExpressionId:
+    case OptionalMemberExpressionId:
+      return parent.object === node;
+    case CallExpressionId:
+    case OptionalCallExpressionId:
+    case NewExpressionId:
+      return parent.callee === node;
+    case TaggedTemplateExpressionId:
+      return parent.tag === node;
+    case TSNonNullExpressionId:
+      return true;
+  }
+
+  return false;
 };
 
 export function NullableTypeAnnotation(
@@ -176,11 +180,17 @@ export function DoExpression(
   return !node.async && (tokenContext & TokenContext.expressionStatement) > 0;
 }
 
-function Binary(
+const enum BinaryLikeType {
+  Binary = 0,
+  Logical = 1,
+  TypeScript = 2,
+}
+
+function BinaryLike(
   node: t.Binary | t.TSAsExpression | t.TSSatisfiesExpression,
   parent: any,
   parentId: number,
-  isTS: boolean,
+  nodeType: BinaryLikeType,
 ): boolean {
   if (isClassExtendsClause(node, parent, parentId)) {
     return true;
@@ -202,16 +212,26 @@ function Binary(
       break;
     case TSAsExpressionId:
     case TSSatisfiesExpressionId:
-      parentPos = PRECEDENCE.get("in");
+      parentPos = 7; /* in */
   }
   if (parentPos !== undefined) {
-    const nodePos = PRECEDENCE.get(isTS ? "in" : (node as t.Binary).operator)!;
+    const nodePos =
+      nodeType === BinaryLikeType.TypeScript
+        ? 7 /* in */
+        : PRECEDENCE.get((node as t.Binary).operator)!;
+    if (parentPos > nodePos) return true;
     if (
-      // Logical expressions with the same precedence don't need parens.
-      (parentPos === nodePos &&
-        parentId === BinaryExpressionId &&
-        parent.right === node) ||
-      parentPos > nodePos
+      parentPos === nodePos &&
+      parentId === BinaryExpressionId &&
+      (nodePos === 11 /* ** */ ? parent.left === node : parent.right === node)
+    ) {
+      return true;
+    }
+    if (
+      nodeType === BinaryLikeType.Logical &&
+      parentId === LogicalExpressionId &&
+      // 1: ??
+      ((nodePos === 1 && parentPos !== 1) || (parentPos === 1 && nodePos !== 1))
     ) {
       return true;
     }
@@ -262,7 +282,7 @@ export function TSAsExpression(
   ) {
     return true;
   }
-  return Binary(node, parent, parentId, true);
+  return BinaryLike(node, parent, parentId, BinaryLikeType.TypeScript);
 }
 
 export { TSAsExpression as TSSatisfiesExpression };
@@ -399,15 +419,7 @@ export function BinaryExpression(
   parentId: number,
   tokenContext: number,
 ): boolean {
-  if (
-    parentId === BinaryExpressionId &&
-    node.operator === "**" &&
-    parent.operator === "**"
-  ) {
-    return parent.left === node;
-  }
-
-  if (Binary(node, parent, parentId, false)) return true;
+  if (BinaryLike(node, parent, parentId, BinaryLikeType.Binary)) return true;
 
   // for ((1 in []);;);
   // for (var x = (1 in []) in 2);
@@ -422,18 +434,7 @@ export function LogicalExpression(
   parent: any,
   parentId: number,
 ): boolean {
-  if (Binary(node, parent, parentId, false)) return true;
-
-  if (isTSTypeExpression(parentId)) return true;
-  if (parentId !== LogicalExpressionId) return false;
-  switch (node.operator) {
-    case "||":
-      return parent.operator === "??" || parent.operator === "&&";
-    case "&&":
-      return parent.operator === "??";
-    case "??":
-      return parent.operator !== "??";
-  }
+  return BinaryLike(node, parent, parentId, BinaryLikeType.Logical);
 }
 
 export function SequenceExpression(
@@ -585,9 +586,8 @@ export function AssignmentExpression(
     isObjectPattern(node.left)
   ) {
     return true;
-  } else {
-    return ConditionalExpression(node, parent, parentId);
   }
+  return ConditionalExpression(node, parent, parentId);
 }
 
 export function Identifier(
@@ -660,8 +660,8 @@ export function Identifier(
   // `for (async of => {};;)`, so we need to add extra parentheses.
   return (
     parentId === ForOfStatementId &&
-    !parent.await &&
+    parent.left === node &&
     node.name === "async" &&
-    parent.left === node
+    !parent.await
   );
 }

@@ -140,7 +140,7 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
 export { ArrayExpression as ArrayPattern };
 
 export function RegExpLiteral(this: Printer, node: t.RegExpLiteral) {
-  this.word(`/${node.pattern}/${node.flags}`, false, true);
+  this.word(`/${node.pattern}/${node.flags}`, false);
 }
 
 export function BooleanLiteral(this: Printer, node: t.BooleanLiteral) {

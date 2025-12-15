@@ -190,7 +190,7 @@ export default class Buffer {
     const position = this._position;
     const sourcePos = this._sourcePosition;
 
-    this._last = -1;
+    this._last = -1; /* LAST_CHAR_KINDS.NORMAL */
 
     if (++this._appendCount > 4096) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -266,7 +266,10 @@ export default class Buffer {
     }
   }
 
-  getLastChar(): number {
+  getLastChar(checkQueue?: boolean): number {
+    if (!checkQueue) {
+      return this._last;
+    }
     const queuedChar = this._queuedChar;
     return queuedChar !== 0 ? queuedChar : this._last;
   }
