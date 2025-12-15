@@ -170,11 +170,6 @@
       "import": "./helpers/esm/createSuper.js",
       "default": "./helpers/createSuper.js"
     },
-    "./helpers/decorate": {
-      "node": "./helpers/decorate.js",
-      "import": "./helpers/esm/decorate.js",
-      "default": "./helpers/decorate.js"
-    },
     "./helpers/defaults": {
       "node": "./helpers/defaults.js",
       "import": "./helpers/esm/defaults.js",
