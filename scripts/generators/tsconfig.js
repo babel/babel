@@ -46,13 +46,15 @@ const packagesHaveScripts = new Set([
 /**
  * Get the TypeScript typing dependencies for a package
  * @param {string} pkgName
- * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string> }} pkgJSON
+ * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string>, peerDependenciesMeta?: Record<string, { optional: boolean }> }} pkgJSON
  * @returns {Set<string>}
  */
 const packageTypingDependencies = (pkgName, pkgJSON) => {
   const dependencies = new Set([
     ...Object.keys(pkgJSON.dependencies ?? {}),
-    ...Object.keys(pkgJSON.peerDependencies ?? {}),
+    ...Object.keys(pkgJSON.peerDependencies ?? {}).filter(
+      dep => pkgJSON.peerDependenciesMeta?.[dep].optional !== true
+    ),
   ]);
   switch (pkgName) {
     case "@babel/standalone":
