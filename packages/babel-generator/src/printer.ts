@@ -3,7 +3,7 @@
 import Buffer from "./buffer.ts";
 import type { Loc, Pos } from "./buffer.ts";
 import { isLastChild, parentNeedsParens } from "./node/index.ts";
-import { generatorInfosMap, generatorNamesRecord } from "./nodes.ts";
+import { generatorInfosMap } from "./nodes.ts";
 import type * as t from "@babel/types";
 import {
   isExpression,
@@ -30,19 +30,6 @@ const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
 const HAS_NEWLINE_OR_BlOCK_COMMENT_END = /[\n\r\u2028\u2029]|\*\//;
-
-const {
-  ProgramId,
-  FileId,
-  FunctionExpressionId,
-  ExpressionStatementId,
-  VariableDeclaratorId,
-  AssignmentExpressionId,
-  ReturnStatementId,
-  CallExpressionId,
-  OptionalCallExpressionId,
-  NewExpressionId,
-} = generatorNamesRecord;
 
 function commentIsNewline(c: t.Comment) {
   return c.type === "CommentLine" || HAS_NEWLINE.test(c.value);
@@ -795,7 +782,7 @@ class Printer {
       (parenthesized && flags & PRINTER_FLAGS.PRESERVE_FORMAT) ||
       (parenthesized &&
         flags & PRINTER_FLAGS.RETAIN_FUNCTION_PARENS &&
-        nodeId === FunctionExpressionId) ||
+        nodeId === __node("FunctionExpression")) ||
       (parent &&
         (parentNeedsParens(node, parent, parentId!) ||
           // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
@@ -803,10 +790,10 @@ class Printer {
             needsParens(
               node,
               parent,
-              parentId,
+              parentId!,
               this.tokenContext,
               flags & PRINTER_FLAGS.PRESERVE_FORMAT
-                ? this._boundGetRawIdentifier
+                ? this._boundGetRawIdentifier!
                 : undefined,
             ))));
 
@@ -817,14 +804,14 @@ class Printer {
       node.leadingComments[0].type === "CommentBlock"
     ) {
       switch (parentId) {
-        case ExpressionStatementId:
-        case VariableDeclaratorId:
-        case AssignmentExpressionId:
-        case ReturnStatementId:
+        case __node("ExpressionStatement"):
+        case __node("VariableDeclarator"):
+        case __node("AssignmentExpression"):
+        case __node("ReturnStatement"):
           break;
-        case CallExpressionId:
-        case OptionalCallExpressionId:
-        case NewExpressionId:
+        case __node("CallExpression"):
+        case __node("OptionalCallExpression"):
+        case __node("NewExpression"):
           // @ts-expect-error checked by parentTypeId
           if (parent.callee !== node) break;
         // falls through
@@ -879,7 +866,7 @@ class Printer {
     this._printLeadingComments(node, parent);
 
     this.exactSource(
-      nodeId === ProgramId || nodeId === FileId ? null : loc,
+      nodeId === __node("Program") || nodeId === __node("File") ? null : loc,
       printMethod.bind(this, node, parent),
     );
 

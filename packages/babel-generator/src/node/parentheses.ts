@@ -1,6 +1,5 @@
 import {
   isMemberExpression,
-  isObjectPattern,
   isOptionalMemberExpression,
   isYieldExpression,
   isStatement,
@@ -8,49 +7,6 @@ import {
 import type * as t from "@babel/types";
 
 import { TokenContext } from "./index.ts";
-import { generatorNamesRecord } from "../nodes.ts";
-
-const {
-  TSAsExpressionId,
-  TSSatisfiesExpressionId,
-  TSTypeAssertionId,
-  BinaryExpressionId,
-  LogicalExpressionId,
-  UnaryExpressionId,
-  SpreadElementId,
-  AwaitExpressionId,
-  ConditionalExpressionId,
-  SequenceExpressionId,
-  ParenthesizedExpressionId,
-  MemberExpressionId,
-  OptionalMemberExpressionId,
-  TemplateLiteralId,
-  ClassDeclarationId,
-  ForOfStatementId,
-  ExportDefaultDeclarationId,
-  CallExpressionId,
-  TSArrayTypeId,
-  TSOptionalTypeId,
-  TSIndexedAccessTypeId,
-  TSTypeOperatorId,
-  TSIntersectionTypeId,
-  TSUnionTypeId,
-  OptionalCallExpressionId,
-  NewExpressionId,
-  TSInstantiationExpressionId,
-  AssignmentExpressionId,
-  ArrayTypeAnnotationId,
-  UnionTypeAnnotationId,
-  IntersectionTypeAnnotationId,
-  TaggedTemplateExpressionId,
-  TSNonNullExpressionId,
-  ClassExpressionId,
-  AssignmentPatternId,
-  NullableTypeAnnotationId,
-  IndexedAccessTypeId,
-  TSConditionalTypeId,
-  TSTypeParameterId,
-} = generatorNamesRecord;
 
 const PRECEDENCE = new Map([
   ["||", 0],
@@ -82,9 +38,9 @@ const PRECEDENCE = new Map([
 
 function isTSTypeExpression(nodeId: number) {
   return (
-    nodeId === TSAsExpressionId ||
-    nodeId === TSSatisfiesExpressionId ||
-    nodeId === TSTypeAssertionId
+    nodeId === __node("TSAsExpression") ||
+    nodeId === __node("TSSatisfiesExpression") ||
+    nodeId === __node("TSTypeAssertion")
   );
 }
 
@@ -94,23 +50,24 @@ const isClassExtendsClause = (
   parentId: number,
 ): parent is t.Class => {
   return (
-    (parentId === ClassDeclarationId || parentId === ClassExpressionId) &&
+    (parentId === __node("ClassDeclaration") ||
+      parentId === __node("ClassExpression")) &&
     parent.superClass === node
   );
 };
 
 const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   switch (parentId) {
-    case MemberExpressionId:
-    case OptionalMemberExpressionId:
+    case __node("MemberExpression"):
+    case __node("OptionalMemberExpression"):
       return parent.object === node;
-    case CallExpressionId:
-    case OptionalCallExpressionId:
-    case NewExpressionId:
+    case __node("CallExpression"):
+    case __node("OptionalCallExpression"):
+    case __node("NewExpression"):
       return parent.callee === node;
-    case TaggedTemplateExpressionId:
+    case __node("TaggedTemplateExpression"):
       return parent.tag === node;
-    case TSNonNullExpressionId:
+    case __node("TSNonNullExpression"):
       return true;
   }
 
@@ -122,7 +79,7 @@ export function NullableTypeAnnotation(
   parent: any,
   parentId: number,
 ): boolean {
-  return parentId === ArrayTypeAnnotationId;
+  return parentId === __node("ArrayTypeAnnotation");
 }
 
 export function FunctionTypeAnnotation(
@@ -133,11 +90,11 @@ export function FunctionTypeAnnotation(
 ): boolean {
   return (
     // (() => A) | (() => B)
-    parentId === UnionTypeAnnotationId ||
+    parentId === __node("UnionTypeAnnotation") ||
     // (() => A) & (() => B)
-    parentId === IntersectionTypeAnnotationId ||
+    parentId === __node("IntersectionTypeAnnotation") ||
     // (() => A)[]
-    parentId === ArrayTypeAnnotationId ||
+    parentId === __node("ArrayTypeAnnotation") ||
     (tokenContext & TokenContext.arrowFlowReturnType) > 0
   );
 }
@@ -177,7 +134,7 @@ export function DoExpression(
   tokenContext: number,
 ): boolean {
   // `async do` can start an expression statement
-  return !node.async && (tokenContext & TokenContext.expressionStatement) > 0;
+  return (tokenContext & TokenContext.expressionStatement) > 0 && !node.async;
 }
 
 const enum BinaryLikeType {
@@ -198,20 +155,20 @@ function BinaryLike(
 
   if (
     hasPostfixPart(node, parent, parentId) ||
-    parentId === UnaryExpressionId ||
-    parentId === SpreadElementId ||
-    parentId === AwaitExpressionId
+    parentId === __node("UnaryExpression") ||
+    parentId === __node("SpreadElement") ||
+    parentId === __node("AwaitExpression")
   ) {
     return true;
   }
   let parentPos: number | undefined;
   switch (parentId) {
-    case BinaryExpressionId:
-    case LogicalExpressionId:
+    case __node("BinaryExpression"):
+    case __node("LogicalExpression"):
       parentPos = PRECEDENCE.get(parent.operator);
       break;
-    case TSAsExpressionId:
-    case TSSatisfiesExpressionId:
+    case __node("TSAsExpression"):
+    case __node("TSSatisfiesExpression"):
       parentPos = 7; /* in */
   }
   if (parentPos !== undefined) {
@@ -222,14 +179,14 @@ function BinaryLike(
     if (parentPos > nodePos) return true;
     if (
       parentPos === nodePos &&
-      parentId === BinaryExpressionId &&
+      parentId === __node("BinaryExpression") &&
       (nodePos === 11 /* ** */ ? parent.left === node : parent.right === node)
     ) {
       return true;
     }
     if (
       nodeType === BinaryLikeType.Logical &&
-      parentId === LogicalExpressionId &&
+      parentId === __node("LogicalExpression") &&
       // 1: ??
       ((nodePos === 1 && parentPos !== 1) || (parentPos === 1 && nodePos !== 1))
     ) {
@@ -245,10 +202,10 @@ export function UnionTypeAnnotation(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case ArrayTypeAnnotationId:
-    case NullableTypeAnnotationId:
-    case IntersectionTypeAnnotationId:
-    case UnionTypeAnnotationId:
+    case __node("ArrayTypeAnnotation"):
+    case __node("NullableTypeAnnotation"):
+    case __node("IntersectionTypeAnnotation"):
+    case __node("UnionTypeAnnotation"):
       return true;
   }
   return false;
@@ -261,7 +218,7 @@ export function OptionalIndexedAccessType(
   parent: any,
   parentId: number,
 ): boolean {
-  return parentId === IndexedAccessTypeId && parent.objectType === node;
+  return parentId === __node("IndexedAccessType") && parent.objectType === node;
 }
 
 export function TSAsExpression(
@@ -270,13 +227,14 @@ export function TSAsExpression(
   parentId: number,
 ): boolean {
   if (
-    (parentId === AssignmentExpressionId || parentId === AssignmentPatternId) &&
+    (parentId === __node("AssignmentExpression") ||
+      parentId === __node("AssignmentPattern")) &&
     parent.left === node
   ) {
     return true;
   }
   if (
-    parentId === BinaryExpressionId &&
+    parentId === __node("BinaryExpression") &&
     (parent.operator === "|" || parent.operator === "&") &&
     node === parent.left
   ) {
@@ -295,19 +253,19 @@ export function TSConditionalType(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case TSArrayTypeId:
-    case TSOptionalTypeId:
-    case TSTypeOperatorId:
+    case __node("TSArrayType"):
+    case __node("TSOptionalType"):
+    case __node("TSTypeOperator"):
     // for `infer K extends (L extends M ? M : ...)`
     // fallthrough
-    case TSTypeParameterId:
+    case __node("TSTypeParameter"):
       return true;
-    case TSIndexedAccessTypeId:
+    case __node("TSIndexedAccessType"):
       return parent.objectType === node;
-    case TSIntersectionTypeId:
-    case TSUnionTypeId:
+    case __node("TSIntersectionType"):
+    case __node("TSUnionType"):
       return parent.types[0] === node;
-    case TSConditionalTypeId:
+    case __node("TSConditionalType"):
       return parent.checkType === node || parent.extendsType === node;
   }
   return false;
@@ -319,12 +277,12 @@ export function TSUnionType(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case TSIntersectionTypeId:
-    case TSTypeOperatorId:
-    case TSArrayTypeId:
-    case TSOptionalTypeId:
+    case __node("TSIntersectionType"):
+    case __node("TSTypeOperator"):
+    case __node("TSArrayType"):
+    case __node("TSOptionalType"):
       return true;
-    case TSIndexedAccessTypeId:
+    case __node("TSIndexedAccessType"):
       return parent.objectType === node;
   }
   return false;
@@ -336,7 +294,8 @@ export function TSIntersectionType(
   parentId: number,
 ): boolean {
   return (
-    parentId === TSTypeOperatorId || TSTypeOperator(node, parent, parentId)
+    parentId === __node("TSTypeOperator") ||
+    TSTypeOperator(node, parent, parentId)
   );
 }
 
@@ -349,7 +308,8 @@ export function TSInferType(
     return true;
   }
   if (
-    (parentId === TSIntersectionTypeId || parentId === TSUnionTypeId) &&
+    (parentId === __node("TSIntersectionType") ||
+      parentId === __node("TSUnionType")) &&
     node.typeParameter.constraint &&
     parent.types[0] === node
   ) {
@@ -364,10 +324,10 @@ export function TSTypeOperator(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case TSArrayTypeId:
-    case TSOptionalTypeId:
+    case __node("TSArrayType"):
+    case __node("TSOptionalType"):
       return true;
-    case TSIndexedAccessTypeId:
+    case __node("TSIndexedAccessType"):
       if (parent.objectType === node) {
         return true;
       }
@@ -381,10 +341,10 @@ export function TSInstantiationExpression(
   parentId: number,
 ) {
   switch (parentId) {
-    case CallExpressionId:
-    case OptionalCallExpressionId:
-    case NewExpressionId:
-    case TSInstantiationExpressionId:
+    case __node("CallExpression"):
+    case __node("OptionalCallExpression"):
+    case __node("NewExpression"):
+    case __node("TSInstantiationExpression"):
       return (
         (process.env.BABEL_8_BREAKING
           ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
@@ -405,8 +365,8 @@ export function TSFunctionType(
   if (TSUnionType(node, parent, parentId)) return true;
 
   return (
-    parentId === TSUnionTypeId ||
-    (parentId === TSConditionalTypeId &&
+    parentId === __node("TSUnionType") ||
+    (parentId === __node("TSConditionalType") &&
       (parent.checkType === node || parent.extendsType === node))
   );
 }
@@ -443,21 +403,22 @@ export function SequenceExpression(
   parentId: number,
 ): boolean {
   if (
-    parentId === SequenceExpressionId ||
-    parentId === ParenthesizedExpressionId ||
-    (parentId === MemberExpressionId && parent.property === node) ||
-    (parentId === OptionalMemberExpressionId && parent.property === node) ||
-    parentId === TemplateLiteralId
+    parentId === __node("SequenceExpression") ||
+    parentId === __node("ParenthesizedExpression") ||
+    (parentId === __node("MemberExpression") && parent.property === node) ||
+    (parentId === __node("OptionalMemberExpression") &&
+      parent.property === node) ||
+    parentId === __node("TemplateLiteral")
   ) {
     return false;
   }
-  if (parentId === ClassDeclarationId) {
+  if (parentId === __node("ClassDeclaration")) {
     return true;
   }
-  if (parentId === ForOfStatementId) {
+  if (parentId === __node("ForOfStatement")) {
     return parent.right === node;
   }
-  if (parentId === ExportDefaultDeclarationId) {
+  if (parentId === __node("ExportDefaultDeclaration")) {
     return true;
   }
 
@@ -470,13 +431,13 @@ export function YieldExpression(
   parentId: number,
 ): boolean {
   return (
-    parentId === BinaryExpressionId ||
-    parentId === LogicalExpressionId ||
-    parentId === UnaryExpressionId ||
-    parentId === SpreadElementId ||
+    parentId === __node("BinaryExpression") ||
+    parentId === __node("LogicalExpression") ||
+    parentId === __node("UnaryExpression") ||
+    parentId === __node("SpreadElement") ||
     hasPostfixPart(node, parent, parentId) ||
-    (parentId === AwaitExpressionId && isYieldExpression(node)) ||
-    (parentId === ConditionalExpressionId && node === parent.test) ||
+    (parentId === __node("AwaitExpression") && isYieldExpression(node)) ||
+    (parentId === __node("ConditionalExpression") && node === parent.test) ||
     isClassExtendsClause(node, parent, parentId) ||
     isTSTypeExpression(parentId)
   );
@@ -497,7 +458,7 @@ export function ClassExpression(
   );
 }
 
-export function UnaryLike(
+function UnaryLike(
   node:
     | t.UnaryLike
     | t.TSTypeAssertion
@@ -509,12 +470,14 @@ export function UnaryLike(
 ): boolean {
   return (
     hasPostfixPart(node, parent, parentId) ||
-    (parentId === BinaryExpressionId &&
+    (parentId === __node("BinaryExpression") &&
       parent.operator === "**" &&
       parent.left === node) ||
     isClassExtendsClause(node, parent, parentId)
   );
 }
+
+export { UnaryLike as UnaryExpression, UnaryLike as SpreadElement };
 
 export function FunctionExpression(
   node: t.FunctionExpression,
@@ -538,13 +501,13 @@ export function ConditionalExpression(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case UnaryExpressionId:
-    case SpreadElementId:
-    case BinaryExpressionId:
-    case LogicalExpressionId:
-    case AwaitExpressionId:
+    case __node("UnaryExpression"):
+    case __node("SpreadElement"):
+    case __node("BinaryExpression"):
+    case __node("LogicalExpression"):
+    case __node("AwaitExpression"):
       return true;
-    case ConditionalExpressionId:
+    case __node("ConditionalExpression"):
       if (parent.test === node) {
         return true;
       }
@@ -565,9 +528,9 @@ export function OptionalMemberExpression(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case CallExpressionId:
+    case __node("CallExpression"):
       return parent.callee === node;
-    case MemberExpressionId:
+    case __node("MemberExpression"):
       return parent.object === node;
   }
   return false;
@@ -583,7 +546,7 @@ export function AssignmentExpression(
 ): boolean {
   if (
     needsParenBeforeExpressionBrace(tokenContext) &&
-    isObjectPattern(node.left)
+    node.left.type === "ObjectPattern"
   ) {
     return true;
   }
@@ -604,7 +567,7 @@ export function Identifier(
   // 13.15.2 AssignmentExpression RS: Evaluation
   // (fn) = function () {};
   if (
-    parentId === AssignmentExpressionId &&
+    parentId === __node("AssignmentExpression") &&
     node.extra?.parenthesized &&
     parent.left === node
   ) {
@@ -620,8 +583,8 @@ export function Identifier(
   // fast path
   if (
     tokenContext & TokenContext.forOfHead ||
-    ((parentId === MemberExpressionId ||
-      parentId === OptionalMemberExpressionId) &&
+    ((parentId === __node("MemberExpression") ||
+      parentId === __node("OptionalMemberExpression")) &&
       tokenContext &
         (TokenContext.expressionStatement |
           TokenContext.forInitHead |
@@ -659,7 +622,7 @@ export function Identifier(
   // token sequence `for (async of`, because it would be ambiguous with
   // `for (async of => {};;)`, so we need to add extra parentheses.
   return (
-    parentId === ForOfStatementId &&
+    parentId === __node("ForOfStatement") &&
     parent.left === node &&
     node.name === "async" &&
     !parent.await

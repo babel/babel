@@ -1,10 +1,8 @@
 import * as parens from "./parentheses.ts";
-import { FLIPPED_ALIAS_KEYS, VISITOR_KEYS } from "@babel/types";
+import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
 
-import { generatorInfosMap, generatorNamesRecord } from "../nodes.ts";
-
-const { NewExpressionId, DecoratorId } = generatorNamesRecord;
+import { generatorInfosMap } from "../nodes.ts";
 
 export const enum TokenContext {
   normal = 0,
@@ -21,7 +19,7 @@ export const enum TokenContext {
   forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
 }
 
-type NodeHandler<R> = (
+export type NodeHandler<R> = (
   node: t.Node,
   // todo:
   // node: K extends keyof typeof t
@@ -33,38 +31,12 @@ type NodeHandler<R> = (
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R | undefined;
 
-export type NodeHandlers<R> = Partial<Record<string, NodeHandler<R>>>;
-
-function expandAliases<R>(obj: NodeHandlers<R>) {
-  const map = new Map<string, NodeHandler<R>>();
-
-  function add(type: string, func: NodeHandler<R>) {
-    if (map.has(type)) {
-      throw new Error(`Handler for type ${type} already exists`);
-    }
-    map.set(type, func);
-    if (generatorInfosMap.has(type)) {
-      generatorInfosMap.get(type)![2] = func;
-    }
+for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
+  const func = parens[type];
+  if (generatorInfosMap.has(type)) {
+    generatorInfosMap.get(type)![2] = func;
   }
-
-  for (const type of Object.keys(obj)) {
-    const aliases = FLIPPED_ALIAS_KEYS[type];
-    if (aliases) {
-      for (const alias of aliases) {
-        add(alias, obj[type]!);
-      }
-    } else {
-      add(type, obj[type]!);
-    }
-  }
-
-  return map;
 }
-
-// Rather than using `t.is` on each object property, we pre-expand any type aliases
-// into concrete types so that the 'find' call below can be as fast as possible.
-export const expandedParens = expandAliases(parens);
 
 function isOrHasCallExpression(node: t.Node): boolean {
   switch (node.type) {
@@ -82,12 +54,12 @@ export function parentNeedsParens(
   parentId: number,
 ): boolean {
   switch (parentId) {
-    case NewExpressionId:
+    case __node("NewExpression"):
       if (parent.callee === node) {
         if (isOrHasCallExpression(node)) return true;
       }
       break;
-    case DecoratorId:
+    case __node("Decorator"):
       return (
         !isDecoratorMemberExpression(node) &&
         !(
