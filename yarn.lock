@@ -622,6 +622,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-annotate-as-pure@npm:^7.27.1":
+  version: 7.27.3
+  resolution: "@babel/helper-annotate-as-pure@npm:7.27.3"
+  dependencies:
+    "@babel/types": "npm:^7.27.3"
+  checksum: 10/63863a5c936ef82b546ca289c9d1b18fabfc24da5c4ee382830b124e2e79b68d626207febc8d4bffc720f50b2ee65691d7d12cc0308679dee2cd6bdc926b7190
+  languageName: node
+  linkType: hard
+
 "@babel/helper-annotate-as-pure@npm:^8.0.0-beta.3":
   version: 8.0.0-beta.3
   resolution: "@babel/helper-annotate-as-pure@npm:8.0.0-beta.3"
@@ -639,6 +648,16 @@ __metadata:
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
+
+"@babel/helper-builder-react-jsx@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/helper-builder-react-jsx@npm:7.27.1"
+  dependencies:
+    "@babel/helper-annotate-as-pure": "npm:^7.27.1"
+    "@babel/types": "npm:^7.27.1"
+  checksum: 10/b84452533af521970d1969f887d82066283831f8d96657148e628215223627b224d9ac2ea456eae7ca713f507c9bb6bf72a0afa625db8c01dc61cb0ac1da2d25
+  languageName: node
+  linkType: hard
 
 "@babel/helper-builder-react-jsx@workspace:^, @babel/helper-builder-react-jsx@workspace:packages/babel-helper-builder-react-jsx":
   version: 0.0.0-use.local
@@ -3290,18 +3309,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-compat@workspace:^, @babel/plugin-transform-react-jsx-compat@workspace:packages/babel-plugin-transform-react-jsx-compat":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-react-jsx-compat@workspace:packages/babel-plugin-transform-react-jsx-compat"
+"@babel/plugin-transform-react-jsx-compat@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-transform-react-jsx-compat@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-builder-react-jsx": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-builder-react-jsx": "npm:^7.27.1"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/40ed4825ecff830190545ce3fbfadeac37583e1fa3b15557553df794c9c614dcbeb5d212e7c682c69bf1f46d0b2978e770fdf0b714cf46f4f4f6f30699fb4351
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-transform-react-jsx-development@workspace:^, @babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development":
   version: 0.0.0-use.local
@@ -3315,31 +3333,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-self@workspace:^, @babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self"
+"@babel/plugin-transform-react-jsx-self@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-transform-react-jsx-self@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/72cbae66a58c6c36f7e12e8ed79f292192d858dd4bb00e9e89d8b695e4c5cb6ef48eec84bffff421a5db93fd10412c581f1cccdb00264065df76f121995bdb68
+  languageName: node
+  linkType: hard
 
-"@babel/plugin-transform-react-jsx-source@workspace:^, @babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source"
+"@babel/plugin-transform-react-jsx-source@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-transform-react-jsx-source@npm:7.27.1"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 10/e2843362adb53692be5ee9fa07a386d2d8883daad2063a3575b3c373fc14cdf4ea7978c67a183cb631b4c9c8d77b2f48c24c088f8e65cc3600cb8e97d72a7161
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-transform-react-jsx@workspace:^, @babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx":
   version: 0.0.0-use.local
@@ -4111,10 +4125,10 @@ __metadata:
     "@babel/plugin-transform-react-display-name": "workspace:^"
     "@babel/plugin-transform-react-inline-elements": "workspace:^"
     "@babel/plugin-transform-react-jsx": "workspace:^"
-    "@babel/plugin-transform-react-jsx-compat": "workspace:^"
+    "@babel/plugin-transform-react-jsx-compat": "npm:^7.27.1"
     "@babel/plugin-transform-react-jsx-development": "workspace:^"
-    "@babel/plugin-transform-react-jsx-self": "workspace:^"
-    "@babel/plugin-transform-react-jsx-source": "workspace:^"
+    "@babel/plugin-transform-react-jsx-self": "npm:^7.27.1"
+    "@babel/plugin-transform-react-jsx-source": "npm:^7.27.1"
     "@babel/plugin-transform-regenerator": "workspace:^"
     "@babel/plugin-transform-regexp-modifiers": "workspace:^"
     "@babel/plugin-transform-reserved-words": "workspace:^"

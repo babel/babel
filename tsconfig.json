@@ -396,16 +396,7 @@
       "path": "./packages/babel-plugin-transform-react-jsx"
     },
     {
-      "path": "./packages/babel-plugin-transform-react-jsx-compat"
-    },
-    {
       "path": "./packages/babel-plugin-transform-react-jsx-development"
-    },
-    {
-      "path": "./packages/babel-plugin-transform-react-jsx-self"
-    },
-    {
-      "path": "./packages/babel-plugin-transform-react-jsx-source"
     },
     {
       "path": "./packages/babel-plugin-transform-react-pure-annotations"

@@ -383,17 +383,8 @@
       "@babel/plugin-transform-react-jsx/lib/development": [
         "./packages/babel-plugin-transform-react-jsx/src/development.ts"
       ],
-      "@babel/plugin-transform-react-jsx-compat": [
-        "./packages/babel-plugin-transform-react-jsx-compat/src"
-      ],
       "@babel/plugin-transform-react-jsx-development": [
         "./packages/babel-plugin-transform-react-jsx-development/src"
-      ],
-      "@babel/plugin-transform-react-jsx-self": [
-        "./packages/babel-plugin-transform-react-jsx-self/src"
-      ],
-      "@babel/plugin-transform-react-jsx-source": [
-        "./packages/babel-plugin-transform-react-jsx-source/src"
       ],
       "@babel/plugin-transform-react-pure-annotations": [
         "./packages/babel-plugin-transform-react-pure-annotations/src"
@@ -481,6 +472,15 @@
       ],
       "@babel/plugin-codemod-optional-catch-binding": [
         "./codemods/babel-plugin-codemod-optional-catch-binding/src"
+      ],
+      "@babel/plugin-transform-react-jsx-compat": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-transform-react-jsx-self": [
+        "./lib/archived-libs.d.ts"
+      ],
+      "@babel/plugin-transform-react-jsx-source": [
+        "./lib/archived-libs.d.ts"
       ],
       "@babel/plugin-proposal-record-and-tuple": [
         "./lib/archived-libs.d.ts"
