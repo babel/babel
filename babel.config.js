@@ -74,7 +74,6 @@ module.exports = function (api) {
   let targets = {};
   let replaceTSImportExtension = true;
   let ignoreLib = true;
-  let needsPolyfillsForOldNode = false;
 
   const nodeVersion = "20.19";
   // The vast majority of our src files are modules, but we use
@@ -100,7 +99,6 @@ module.exports = function (api) {
         "packages/babel-runtime/regenerator"
       );
       targets = { ie: 7 };
-      needsPolyfillsForOldNode = true;
       break;
     case "rollup":
       replaceTSImportExtension = false;
@@ -112,27 +110,21 @@ module.exports = function (api) {
         "packages/babel-compat-data"
       );
       targets = { node: nodeVersion };
-      needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     // fall through
     case "production":
       // Config during builds before publish.
       targets = { node: nodeVersion };
-      needsPolyfillsForOldNode = true;
       break;
     case "test":
       targets = { node: "current" };
-      needsPolyfillsForOldNode = true;
       break;
     case "development":
       envOpts.debug = true;
       targets = { node: "current" };
       break;
   }
-
-  // Never apply polyfills when compiling for Babel 8
-  needsPolyfillsForOldNode = false;
 
   const config = {
     targets,
@@ -164,8 +156,10 @@ module.exports = function (api) {
       ["@babel/preset-typescript", presetTsOpts],
     ],
     plugins: [
-      ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
-
+      env === "standalone" && [
+        "@babel/transform-object-rest-spread",
+        { useBuiltIns: true },
+      ],
       require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
       require("./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs"),
     ].filter(Boolean),
@@ -244,19 +238,7 @@ module.exports = function (api) {
               },
             },
           ],
-
-          needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
-      },
-      {
-        test: sources.map(source => normalize(source.replace("/src", "/test"))),
-        plugins: [
-          [
-            "@babel/transform-modules-commonjs",
-            { importInterop: importInteropTest },
-          ],
-          "@babel/plugin-transform-dynamic-import",
-        ],
       },
       {
         test: unambiguousSources.map(normalize),
@@ -278,22 +260,6 @@ module.exports = function (api) {
   return config;
 };
 
-function importInteropTest(source) {
-  // This file will soon have an esm entrypoint
-  if (source === "@babel/helper-plugin-test-runner") {
-    return "none";
-  }
-  if (
-    // non-test files
-    !source.startsWith(".") ||
-    // lib files
-    /(?:\.\.\/)+(?:babel-[a-z-]+\/)?lib/.test(source)
-  ) {
-    return "node";
-  }
-  return "babel";
-}
-
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
   return Boolean(value) && value !== "false" && value !== "0";
@@ -314,134 +280,20 @@ function bool(value) {
 // `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
 /** @param {import("@babel/core")} api */
-function pluginPolyfillsOldNode({ template, types: t }) {
+// eslint-disable-next-line no-unused-vars
+function pluginPolyfillsOldNode() {
   const polyfills = [
-    {
-      name: "require.resolve",
-      necessary({ node, parent }) {
-        return (
-          t.isCallExpression(parent, { callee: node }) &&
-          parent.arguments.length > 1
-        );
-      },
-      supported({ parent: { arguments: args } }) {
-        return (
-          t.isObjectExpression(args[1]) &&
-          args[1].properties.length === 1 &&
-          t.isIdentifier(args[1].properties[0].key, { name: "paths" }) &&
-          t.isArrayExpression(args[1].properties[0].value) &&
-          args[1].properties[0].value.elements.length === 1
-        );
-      },
-      // require.resolve's paths option has been introduced in Node.js 8.9
-      // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
-      replacement: template({ syntacticPlaceholders: true })`
-        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "8.9")
-          ? require.resolve
-          : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
-              let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
-              if (f) return f;
-              f = new Error(\`Cannot resolve module '\${r}'\`);
-              f.code = "MODULE_NOT_FOUND";
-              throw f;
-            }
-      `,
-    },
-    {
-      // NOTE: This polyfills depends on the "make-dir" library. Any package
-      // using fs.mkdirSync must have "make-dir" as a dependency.
-      name: "fs.mkdirSync",
-      necessary({ node, parent }) {
-        return (
-          t.isCallExpression(parent, { callee: node }) &&
-          parent.arguments.length > 1
-        );
-      },
-      supported({ parent: { arguments: args } }) {
-        return (
-          t.isObjectExpression(args[1]) &&
-          args[1].properties.length === 1 &&
-          t.isIdentifier(args[1].properties[0].key, { name: "recursive" }) &&
-          t.isBooleanLiteral(args[1].properties[0].value, { value: true })
-        );
-      },
-      // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
-      // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
-      replacement: template`
-        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "10.12")
-          ? fs.mkdirSync
-          : require("make-dir").sync
-      `,
-    },
-    {
-      // NOTE: This polyfills depends on the "node-environment-flags"
-      // library. Any package using process.allowedNodeEnvironmentFlags
-      // must have "node-environment-flags" as a dependency.
-      name: "process.allowedNodeEnvironmentFlags",
-      necessary({ parent, node }) {
-        // To avoid infinite replacement loops
-        return !t.isLogicalExpression(parent, { operator: "||", left: node });
-      },
-      supported: () => true,
-      // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
-      // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
-      replacement: template`
-        process.allowedNodeEnvironmentFlags || require("node-environment-flags")
-      `,
-    },
-    {
-      name: "Object.hasOwn",
-      necessary: () => true,
-      supported: path =>
-        path.parentPath.isCallExpression({ callee: path.node }),
-      // Object.hasOwn has been introduced in Node.js 16.9.0
-      // https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#v8-93
-      replacement: template`hasOwnProperty.call`,
-    },
-    {
-      name: "Object.entries",
-      necessary({ parent, node }) {
-        // To avoid infinite replacement loops
-        return !t.isLogicalExpression(parent, { operator: "||", left: node });
-      },
-      supported: path =>
-        path.parentPath.isCallExpression({ callee: path.node }),
-      replacement: template`Object.entries || (o => Object.keys(o).map(k => [k, o[k]]))`,
-    },
-    {
-      name: "fs.rmSync",
-      necessary({ node, parent }) {
-        // To avoid infinite replacement loops
-        return !t.isLogicalExpression(parent, { operator: "||", left: node });
-      },
-      supported({ parent: { arguments: args } }) {
-        return (
-          t.isObjectExpression(args[1]) &&
-          args[1].properties.length === 2 &&
-          t.isIdentifier(args[1].properties[0].key, { name: "force" }) &&
-          t.isBooleanLiteral(args[1].properties[0].value, { value: true }) &&
-          t.isIdentifier(args[1].properties[1].key, { name: "recursive" }) &&
-          t.isBooleanLiteral(args[1].properties[1].value, { value: true })
-        );
-      },
-      // fs.rmSync has been introduced in Node.js 14.14
-      // https://nodejs.org/api/fs.html#fsrmsyncpath-options
-      replacement: template`
-        fs.rmSync || function d(/* path */ p) {
-            if (fs.existsSync(p)) {
-              fs.readdirSync(p).forEach(function (f) {
-                const /* currentPath */ c = p + "/" + f;
-                if (fs.lstatSync(c).isDirectory()) {
-                  d(c);
-                } else {
-                  fs.unlinkSync(c);
-                }
-              });
-              fs.rmdirSync(p);
-            }
-          }
-      `,
-    },
+    // EXAMPLE:
+    // {
+    //   name: "Object.entries",
+    //   necessary({ parent, node }) {
+    //     // To avoid infinite replacement loops
+    //     return !t.isLogicalExpression(parent, { operator: "||", left: node });
+    //   },
+    //   supported: path =>
+    //     path.parentPath.isCallExpression({ callee: path.node }),
+    //   replacement: template`Object.entries || (o => Object.keys(o).map(k => [k, o[k]]))`,
+    // },
   ];
 
   return {
