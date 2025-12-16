@@ -241,7 +241,7 @@ export default function getTargets(
   }
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
-  // These values offers defaults of the `browsers` field.
+  // These values offer defaults of the `browsers` field.
   if (esmodules && !browsers?.length) {
     browsers = Object.keys(ESM_SUPPORT)
       .map(
