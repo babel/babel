@@ -63,7 +63,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     strictMode,
     noInterop,
     importInterop = noInterop ? "none" : "babel",
-    // TODO(Babel 8): After that `lazy` implementation is moved to the CJS
+    // TODO(Babel 9): After that `lazy` implementation is moved to the CJS
     // transform, remove this parameter.
     lazy,
     getWrapperPayload = Lazy.toGetWrapperPayload(lazy ?? false),

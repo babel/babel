@@ -28,12 +28,8 @@ export function resolveTargets(options: InputOptions, root: string): Targets {
   if (typeof optTargets === "string" || Array.isArray(optTargets)) {
     targets = { browsers: optTargets };
   } else if (optTargets) {
-    if ("esmodules" in optTargets) {
-      targets = { ...optTargets, esmodules: "intersect" };
-    } else {
-      // https://github.com/microsoft/TypeScript/issues/17002
-      targets = optTargets as InputTargets;
-    }
+    // https://github.com/microsoft/TypeScript/issues/17002
+    targets = optTargets as InputTargets;
   }
 
   const { browserslistConfigFile } = options;

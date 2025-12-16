@@ -279,7 +279,7 @@ function getModuleMetadata(
         // @ts-expect-error lazy is not listed in the type.
         // This is needed for compatibility with older version of the commonjs
         // plugins.
-        // TODO(Babel 8): Remove this
+        // TODO(Babel 9): Remove this
         get lazy() {
           return this.wrap === "lazy";
         },

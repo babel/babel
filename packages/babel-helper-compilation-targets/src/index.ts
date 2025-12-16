@@ -235,24 +235,21 @@ export default function getTargets(
     }
 
     if (browsers == null) {
-      // In Babel 8, if no targets are passed, we use browserslist's defaults.
+      // If no targets are passed, we use browserslist's defaults.
       browsers = ["defaults"];
     }
   }
 
-  if (esmodules) {
-    esmodules = "intersect";
-  }
-
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
-  // These values OVERRIDE the `browsers` field.
-  if (esmodules && (esmodules !== "intersect" || !browsers?.length)) {
+  // These values offers defaults of the `browsers` field.
+  if (esmodules && !browsers?.length) {
     browsers = Object.keys(ESM_SUPPORT)
       .map(
         (browser: keyof typeof ESM_SUPPORT) =>
           `${browser} >= ${ESM_SUPPORT[browser]}`,
       )
       .join(", ");
+    // skip `esmodules` processing below since `browsers` is already set
     esmodules = false;
   }
 
@@ -265,7 +262,7 @@ export default function getTargets(
       options.browserslistEnv,
     );
 
-    if (esmodules === "intersect") {
+    if (esmodules) {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
         if (browser !== "deno" && browser !== "ie") {
           const esmSupportVersion =
