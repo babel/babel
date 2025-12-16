@@ -3,7 +3,6 @@ import type { Handler } from "gensync";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
-import semver from "semver";
 import { createDebug } from "obug";
 
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
@@ -185,26 +184,14 @@ function ensureTsSupport<T>(
   let handler: NodeJS.RequireExtensions[""] = function (m, filename) {
     // If we want to support `.ts`, `.d.ts` must be handled specially.
     if (handler && filename.endsWith(".cts")) {
-      try {
-        // @ts-expect-error Undocumented API
-        return m._compile(
-          transformFileSync(filename, {
-            ...opts,
-            filename,
-          }).code,
+      // @ts-expect-error Undocumented API
+      return m._compile(
+        transformFileSync(filename, {
+          ...opts,
           filename,
-        );
-      } catch (error) {
-        // TODO(Babel 8): Add this as an optional peer dependency
-        // eslint-disable-next-line import/no-extraneous-dependencies
-        const packageJson = require("@babel/preset-typescript/package.json");
-        if (semver.lt(packageJson.version, "7.21.4")) {
-          console.error(
-            "`.cts` configuration file failed to load, please try to update `@babel/preset-typescript`.",
-          );
-        }
-        throw error;
-      }
+        }).code,
+        filename,
+      );
     }
     return require.extensions[".js"](m, filename);
   };

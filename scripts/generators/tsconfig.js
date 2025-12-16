@@ -46,13 +46,15 @@ const packagesHaveScripts = new Set([
 /**
  * Get the TypeScript typing dependencies for a package
  * @param {string} pkgName
- * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string> }} pkgJSON
+ * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string>, peerDependenciesMeta?: Record<string, { optional: boolean }> }} pkgJSON
  * @returns {Set<string>}
  */
 const packageTypingDependencies = (pkgName, pkgJSON) => {
   const dependencies = new Set([
     ...Object.keys(pkgJSON.dependencies ?? {}),
-    ...Object.keys(pkgJSON.peerDependencies ?? {}),
+    ...Object.keys(pkgJSON.peerDependencies ?? {}).filter(
+      dep => pkgJSON.peerDependenciesMeta?.[dep].optional !== true
+    ),
   ]);
   switch (pkgName) {
     case "@babel/standalone":
@@ -104,9 +106,9 @@ function getTsPkgs(subRoot) {
       try {
         fs.rmSync(new URL(relative + "/tsconfig.json", rootURL));
       } catch {}
-      // Babel 8 exports > Babel 7 exports > {}
+      // Babel 9 exports > Babel 8 exports > {}
       const exports =
-        packageJSON.conditions?.BABEL_8_BREAKING?.[0]?.exports ??
+        packageJSON.conditions?.BABEL_9_BREAKING?.[0]?.exports ??
         packageJSON.exports ??
         {};
       /**
@@ -154,11 +156,6 @@ function getTsPkgs(subRoot) {
         }
       );
       const dependencies = packageTypingDependencies(name, packageJSON);
-      if (name === "@babel/core") {
-        // This dependency is only used in Babel 7, and does not affect
-        // types. Remove it to avoid a cycle.
-        dependencies.delete("@babel/helper-module-transforms");
-      }
       dependencyAliases.forEach((alias, dep) => {
         if (dependencies.has(dep)) dependencies.add(alias);
       });
