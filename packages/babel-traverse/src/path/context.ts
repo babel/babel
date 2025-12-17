@@ -57,7 +57,7 @@ export function _call(this: NodePath, fns?: Function[]): boolean {
 }
 
 export function isDenylisted(this: NodePath): boolean {
-  return this.opts.denylist?.includes(this.node.type);
+  return !!this.opts.denylist?.includes(this.node.type);
 }
 
 function restoreContext(path: NodePath, context: TraversalContext) {
