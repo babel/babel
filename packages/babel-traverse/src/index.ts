@@ -8,10 +8,12 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import * as cache from "./cache.ts";
-import type NodePath from "./path/index.ts";
+import NodePath from "./path/index.ts";
+import type NodePath_Final from "./path/index.ts";
 import type { default as Scope, Binding } from "./scope/index.ts";
 import type { ExplodedVisitor, Visitor, VisitorBase } from "./types.ts";
 import { traverseNode } from "./traverse-node.ts";
+import Hub from "./hub.ts";
 
 export type { ExplodedVisitor, Visitor, VisitorBase, Binding };
 export { default as NodePath } from "./path/index.ts";
@@ -86,7 +88,9 @@ function traverse<Options extends TraverseOptions>(
     opts as ExplodedVisitor,
     scope,
     state,
-    parentPath,
+    !parentPath && (parent.type === "Program" || parent.type === "File")
+      ? (new NodePath(new Hub(), parent) as NodePath_Final)
+      : parentPath,
     /* skipKeys */ undefined,
     visitSelf,
   );
