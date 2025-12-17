@@ -284,7 +284,7 @@ function isExecutionUncertainInList(paths: NodePath[], maxIndex: number) {
   return false;
 }
 
-// TODO(Babel 8)
+// TODO(Babel 9)
 // This can be { before: boolean, after: boolean, unknown: boolean }.
 // This allows transforms like the tdz one to treat cases when the status
 // is both before and unknown/after like if it were before.

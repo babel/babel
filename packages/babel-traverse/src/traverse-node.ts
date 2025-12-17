@@ -70,8 +70,7 @@ function _visit(ctx: TraversalContext, path: NodePath) {
   }
   const opts = ctx.opts;
 
-  // @ts-expect-error TODO(Babel 8): Remove blacklist
-  const denylist = opts.denylist ?? opts.blacklist;
+  const denylist = opts.denylist;
   if (denylist?.includes(node.type)) {
     return false;
   }
@@ -92,7 +91,7 @@ function _visit(ctx: TraversalContext, path: NodePath) {
     if (_call.call(path, opts[node.type]?.enter)) return path.shouldStop;
   }
 
-  path.shouldStop = _traverse(
+  path.shouldStop = traverseNode(
     path.node,
     opts,
     path.scope,
@@ -111,7 +110,18 @@ function _visit(ctx: TraversalContext, path: NodePath) {
   return path.shouldStop;
 }
 
-function _traverse<S>(
+/**
+ * Traverse the children of given node
+ * @param {Node} node
+ * @param {TraverseOptions} opts The traverse options used to create a new traversal context
+ * @param {scope} scope A traversal scope used to create a new traversal context. When opts.noScope is true, scope should not be provided
+ * @param {any} state A user data storage provided as the second callback argument for traversal visitors
+ * @param {NodePath} path A NodePath of given node
+ * @param {Record<string, boolean>} skipKeys A map from key names to whether that should be skipped during traversal. The skipKeys are applied to every descendants
+ * @param {boolean} visitSelf Whether to visit the given node itself
+ * @returns {boolean} Whether the traversal stops early
+ */
+export function traverseNode<S = unknown>(
   node: t.Node,
   opts: ExplodedTraverseOptions<S>,
   scope?: Scope | null,
@@ -163,48 +173,6 @@ function _traverse<S>(
       ) {
         return true;
       }
-    }
-  }
-
-  return false;
-}
-
-/**
- * Traverse the children of given node
- * @param {Node} node
- * @param {TraverseOptions} opts The traverse options used to create a new traversal context
- * @param {scope} scope A traversal scope used to create a new traversal context. When opts.noScope is true, scope should not be provided
- * @param {any} state A user data storage provided as the second callback argument for traversal visitors
- * @param {NodePath} path A NodePath of given node
- * @param {Record<string, boolean>} skipKeys A map from key names to whether that should be skipped during traversal. The skipKeys are applied to every descendants
- * @returns {boolean} Whether the traversal stops early
-
- * @note This function does not visit the given `node`.
- */
-export function traverseNode<S = unknown>(
-  node: t.Node,
-  opts: ExplodedTraverseOptions<S>,
-  scope?: Scope | null,
-  state?: S,
-  path?: NodePath,
-  skipKeys?: Record<string, boolean> | null,
-  visitSelf?: boolean,
-): boolean {
-  return _traverse(node, opts, scope, state, path, skipKeys, visitSelf);
-
-  const keys = VISITOR_KEYS[node.type];
-  if (!keys) return false;
-
-  const context = new TraversalContext<S>(scope, opts, state as S, path);
-  if (visitSelf) {
-    if (skipKeys?.[path!.parentKey]) return false;
-    return context.visitQueue([path!]);
-  }
-
-  for (const key of keys) {
-    if (skipKeys?.[key]) continue;
-    if (context.visit(node, key)) {
-      return true;
     }
   }
 
