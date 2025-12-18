@@ -75,7 +75,7 @@ module.exports = function (api) {
   let replaceTSImportExtension = true;
   let ignoreLib = true;
 
-  const nodeVersion = "6.9";
+  const nodeVersion = "20.19";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
