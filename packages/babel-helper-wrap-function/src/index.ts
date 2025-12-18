@@ -210,7 +210,7 @@ function plainFunction(
 export default function wrapFunction(
   path: NodePath<t.Function>,
   callId: t.Expression,
-  // TODO(Babel 8): Consider defaulting to false for spec compliance
+  // TODO(Babel 9): Consider defaulting to false for spec compliance
   noNewArrows: boolean = true,
   ignoreFunctionLength: boolean = false,
 ) {
