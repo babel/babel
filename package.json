@@ -67,7 +67,6 @@
     "globals": "^15.9.0",
     "gulp": "^5.0.0",
     "husky": "^9.0.11",
-    "import-meta-resolve": "^4.1.0",
     "is-ci": "^3.0.1",
     "jest": "^30.1.1",
     "jest-light-runner": "^0.7.9",

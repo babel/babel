@@ -9,7 +9,6 @@
   "exclude": [
     "packages/babel-standalone/**",
     "packages/babel-types/**/generated/*",
-    "packages/babel-helpers/*/helpers/*",
-    "packages/babel-core/*/vendor/*"
+    "packages/babel-helpers/*/helpers/*"
   ]
 }
