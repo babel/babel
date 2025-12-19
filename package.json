@@ -80,7 +80,6 @@
     "prettier": "^3.5.2",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
-    "rollup-plugin-dts-5": "npm:rollup-plugin-dts@^5.3.1",
     "rollup-plugin-polyfill-node": "^0.13.0",
     "semver": "^7.7.3",
     "shelljs": "^0.8.5",
@@ -107,7 +106,6 @@
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
     "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
