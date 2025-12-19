@@ -34,7 +34,6 @@ Using plugins:
   transform-literals { android }
   transform-function-name { android }
   transform-arrow-functions { android }
-  transform-block-scoped-functions { android }
   transform-classes { android }
   transform-object-super { android }
   transform-shorthand-properties { android }
@@ -47,6 +46,7 @@ Using plugins:
   transform-spread { android }
   transform-destructuring { android }
   transform-block-scoping { android }
+  transform-block-scoped-functions { android }
   transform-typeof-symbol { android }
   transform-new-target { android }
   transform-regenerator { android }

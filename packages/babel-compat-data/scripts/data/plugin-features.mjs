@@ -65,9 +65,6 @@ const es2015 = {
       ],
     ],
   },
-  "transform-block-scoped-functions": {
-    features: ["block-level function declaration"],
-  },
   "transform-classes": {
     features: [
       "class",
@@ -127,6 +124,9 @@ const es2015 = {
       // so we must compile them when compiling generators.
       "generators",
     ],
+  },
+  "transform-block-scoped-functions": {
+    features: ["block-level function declaration"],
   },
   "transform-typeof-symbol": {
     features: [
