@@ -1,4 +1,4 @@
-# 8 invalid programs did not produce a parsing error
+# 9 invalid programs did not produce a parsing error
 
 collisionArgumentsArrowFunctions.ts
 collisionArgumentsFunction.ts
@@ -7,10 +7,11 @@ dynamicImportTrailingComma.ts
 exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
 regularExpressionAnnexB.ts
+requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
 
 
-# 130 valid programs produced a parsing error
+# 131 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -113,6 +114,7 @@ mismatchedClassConstructorVariable.ts
 misspelledNewMetaProperty.ts
 modifiersOnInterfaceIndexSignature1.ts
 moduleDuplicateIdentifiers.ts
+moduleKeywordDeprecated.ts
 modulePreserve2.ts
 moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
