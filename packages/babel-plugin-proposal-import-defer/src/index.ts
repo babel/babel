@@ -3,7 +3,7 @@ import type { types as t, Scope } from "@babel/core";
 import { defineCommonJSHook } from "@babel/plugin-transform-modules-commonjs";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.23.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.23.0 || ^8.0.0"));
   // We need the explicit type annotation otherwise when using t.assert* ts
   // reports that 'Assertions require every name in the call target to be
   // declared with an explicit type annotation'

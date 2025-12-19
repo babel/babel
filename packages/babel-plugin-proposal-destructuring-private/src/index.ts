@@ -11,7 +11,7 @@ import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring"
 import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
-  assertVersion(REQUIRED_VERSION("^7.17.0"));
+  assertVersion(REQUIRED_VERSION("^7.17.0 || ^8.0.0"));
   const {
     assignmentExpression,
     assignmentPattern,
