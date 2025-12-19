@@ -67,11 +67,14 @@ export class TokenMap {
 
   findMatching(
     node: t.Node,
-    test: string,
+    test: string | number,
     occurrenceCount: number = 0,
   ): Token | null {
     const indexes = this._nodesToTokenIndexes.get(node);
     if (indexes) {
+      if (typeof test === "number") {
+        test = String.fromCharCode(test);
+      }
       let i = 0;
       const count = occurrenceCount;
 
