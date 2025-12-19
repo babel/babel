@@ -16,7 +16,6 @@ const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
-const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 const pluginToggleBooleanFlag = require("./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs");
 
 function normalize(src) {
@@ -222,7 +221,7 @@ module.exports = function (api) {
           [
             pluginRequiredVersionMacro,
             {
-              overwrite(requiredVersion, filename) {
+              overwrite(requiredVersion) {
                 if (!process.env.IS_PUBLISH || env === "standalone") {
                   if (bool(process.env.BABEL_9_BREAKING)) {
                     // Match packages/babel-core/src/index.ts
@@ -231,14 +230,7 @@ module.exports = function (api) {
                   return packageJson.version;
                 }
                 if (requiredVersion === 7) {
-                  requiredVersion = "^7.0.0-0 || ^8.0.0-0";
-                }
-                const match = filename.match(/packages[\\/](.+?)[\\/]/);
-                if (
-                  match &&
-                  babel7_8compat["babel7plugins-babel8core"].includes(match[1])
-                ) {
-                  requiredVersion = `${requiredVersion} || >8.0.0-alpha <8.0.0-z`;
+                  requiredVersion = "^7.0.0-0 || ^8.0.0";
                 }
                 if (packageJson.version.includes("-")) {
                   // for pre-releases

@@ -6,7 +6,7 @@ import { visitors } from "@babel/traverse";
 import rewriteForAwait from "./for-await.ts";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const yieldStarVisitor = visitors.environmentVisitor<PluginPass>({
     ArrowFunctionExpression(path) {

@@ -5,7 +5,7 @@ export interface Options {
 }
 
 export default declare((api, { deprecatedAssertSyntax }: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.22.0 || ^8.0.0-0"));
+  api.assertVersion(REQUIRED_VERSION("^7.22.0 || ^8.0.0"));
 
   if (
     deprecatedAssertSyntax != null &&

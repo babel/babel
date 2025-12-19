@@ -6,7 +6,7 @@ export interface Options {
 }
 
 export default declare((api, { loose = false }: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
   const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
   const pureGetters = api.assumption("pureGetters") ?? false;
 
