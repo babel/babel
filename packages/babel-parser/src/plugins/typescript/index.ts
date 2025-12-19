@@ -129,6 +129,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Index signatures cannot have the 'static' modifier.",
   InitializerNotAllowedInAmbientContext:
     "Initializers are not allowed in ambient contexts.",
+  InlineModuleDeclarationMustUseString:
+    "`module ... {}` declarations must have a string name. Use `namespace ... {}` instead.",
   InvalidHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
     `'${token}' list can only include identifiers or qualified-names with optional type arguments.`,
   InvalidModifierOnAwaitUsingDeclaration: (modifier: TsModifier) =>
@@ -2034,7 +2036,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSModuleBlock");
     }
 
-    tsParseModuleOrNamespaceDeclaration(
+    tsParseNamespaceDeclaration(
       node: Undone<N.TsModuleDeclaration>,
     ): N.TsModuleDeclaration {
       node.id = this.tsParseEntityName(
@@ -2290,7 +2292,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             tokenIsIdentifier(this.state.type)
           ) {
             node.kind = "namespace";
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+            return this.tsParseNamespaceDeclaration(node);
           }
           break;
 
@@ -3058,6 +3060,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               return this.tsParseDeclaration(
                 node,
                 tt._module,
+                false,
+                decorators,
+              ) as N.TsModuleDeclaration;
+            } else if (this.nextTokenIsIdentifierOnSameLine()) {
+              this.raise(
+                TSErrors.InlineModuleDeclarationMustUseString,
+                this.state.startLoc,
+              );
+              const node = this.startNode<N.TsModuleDeclaration>();
+              this.next(); // eat 'module'
+              return this.tsParseDeclaration(
+                node,
+                tt._namespace, // Parse as a namespace to allow identifier
                 false,
                 decorators,
               ) as N.TsModuleDeclaration;
