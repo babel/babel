@@ -15,6 +15,7 @@ on:
         options:
           - prerelease
           - "8.0.0-beta.4"
+          - "8.0.0-rc.1"
 
 permissions:
   contents: read
