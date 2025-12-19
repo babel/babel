@@ -230,7 +230,9 @@ module.exports = function (api) {
                   }
                   return packageJson.version;
                 }
-                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
+                if (requiredVersion === 7) {
+                  requiredVersion = "^7.0.0-0 || ^8.0.0-0";
+                }
                 const match = filename.match(/packages[\\/](.+?)[\\/]/);
                 if (
                   match &&
