@@ -294,7 +294,7 @@ __metadata:
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
     glob: "npm:^12.0.0"
-    semver: "npm:^6.3.1"
+    semver: "npm:^7.7.3"
     slash: "npm:^3.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -477,7 +477,7 @@ __metadata:
     gensync: "npm:^1.0.0-beta.2"
     json5: "npm:^2.2.3"
     obug: "npm:^2.1.1"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
     ts-node: "npm:^11.0.0-beta.1"
     tsx: "npm:^4.20.3"
   peerDependencies:
@@ -501,7 +501,7 @@ __metadata:
     eslint: "npm:^9.21.0"
     eslint-scope: "npm:^7.1.1"
     eslint-visitor-keys: "npm:^3.3.0"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
     typescript-eslint: "npm:^8.48.0"
   peerDependencies:
     "@babel/core": ^7.11.0
@@ -717,7 +717,7 @@ __metadata:
     "@types/semver": "npm:^5.5.0"
     browserslist: "npm:^4.24.0"
     lru-cache: "npm:^7.14.1"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
   languageName: unknown
   linkType: soft
 
@@ -753,7 +753,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@types/charcodes": "npm:^0.2.0"
     charcodes: "npm:^0.2.0"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -780,7 +780,7 @@ __metadata:
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     regexpu-core: "npm:^6.3.1"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -817,7 +817,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@jridgewell/gen-mapping": "npm:^0.3.12"
     "@types/semver": "npm:^7.3.4"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -3906,7 +3906,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.13.0"
     core-js-compat: "npm:^3.43.0"
-    semver: "npm:^7.3.4"
+    semver: "npm:^7.7.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -7523,7 +7523,7 @@ __metadata:
     rollup-plugin-dts: "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch"
     rollup-plugin-dts-5: "npm:rollup-plugin-dts@^5.3.1"
     rollup-plugin-polyfill-node: "npm:^0.13.0"
-    semver: "npm:^6.3.1"
+    semver: "npm:^7.7.3"
     shelljs: "npm:^0.8.5"
     terser: "npm:^5.43.1"
     test262-stream: "npm:^1.4.0"
@@ -15938,12 +15938,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.3, semver@npm:^7.7.2":
-  version: 7.7.2
-  resolution: "semver@npm:7.7.2"
+"semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.3, semver@npm:^7.7.2, semver@npm:^7.7.3":
+  version: 7.7.3
+  resolution: "semver@npm:7.7.3"
   bin:
     semver: bin/semver.js
-  checksum: 10/7a24cffcaa13f53c09ce55e05efe25cd41328730b2308678624f8b9f5fc3093fc4d189f47950f0b811ff8f3c3039c24a2c36717ba7961615c682045bf03e1dda
+  checksum: 10/8dbc3168e057a38fc322af909c7f5617483c50caddba135439ff09a754b20bdd6482a5123ff543dad4affa488ecf46ec5fb56d61312ad20bb140199b88dfaea9
   languageName: node
   linkType: hard
 
