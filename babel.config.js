@@ -224,6 +224,10 @@ module.exports = function (api) {
             {
               overwrite(requiredVersion, filename) {
                 if (!process.env.IS_PUBLISH || env === "standalone") {
+                  if (bool(process.env.BABEL_9_BREAKING)) {
+                    // Match packages/babel-core/src/index.ts
+                    return packageJson.version + "999999999";
+                  }
                   return packageJson.version;
                 }
                 if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
