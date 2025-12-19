@@ -129,7 +129,7 @@ export default class Renamer {
     // );
   }
 
-  rename(/* Babel 7 - block?: t.Pattern | t.Scopable */) {
+  rename() {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
 

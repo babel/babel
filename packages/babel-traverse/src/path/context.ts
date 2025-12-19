@@ -57,9 +57,7 @@ export function _call(this: NodePath, fns?: Function[]): boolean {
 }
 
 export function isDenylisted(this: NodePath): boolean {
-  // @ts-expect-error TODO(Babel 8): Remove blacklist
-  const denylist = this.opts.denylist ?? this.opts.blacklist;
-  return denylist?.includes(this.node.type);
+  return !!this.opts.denylist?.includes(this.node.type);
 }
 
 function restoreContext(path: NodePath, context: TraversalContext) {

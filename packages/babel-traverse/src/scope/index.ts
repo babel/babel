@@ -638,11 +638,7 @@ class Scope {
     }
   }
 
-  rename(
-    oldName: string,
-    newName? // prettier-ignore
-    /* Babel 7 - block?: t.Pattern | t.Scopable */ :string,
-  ) {
+  rename(oldName: string, newName?: string) {
     const binding = this.getBinding(oldName);
     if (binding) {
       newName ||= this.generateUidIdentifier(oldName).name;

@@ -164,7 +164,7 @@ export function arrowFunctionToExpression(
   {
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
-    // TODO(Babel 8): Consider defaulting to `false` for spec compliance
+    // TODO(Babel 9): Consider defaulting to `false` for spec compliance
     noNewArrows = true,
   }: {
     allowInsertArrow?: boolean | void;
@@ -252,7 +252,7 @@ const getSuperCallsVisitor = environmentVisitor<{
  */
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
-  // TODO(Babel 8): Consider defaulting to `false` for spec compliance
+  // TODO(Babel 9): Consider defaulting to `false` for spec compliance
   noNewArrows: boolean | void = true,
   allowInsertArrow: boolean | void = true,
   allowInsertArrowWithRest: boolean | void = true,
