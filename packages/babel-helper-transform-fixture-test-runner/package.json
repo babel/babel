@@ -20,7 +20,6 @@
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.28",
-    "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^30.0.0",
     "lru-cache": "^7.14.1",
     "resolve": "2.0.0-next.5"

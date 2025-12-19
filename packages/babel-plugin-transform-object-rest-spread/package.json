@@ -20,8 +20,7 @@
     "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/plugin-transform-destructuring": "workspace:^",
-    "@babel/plugin-transform-parameters": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/plugin-transform-parameters": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
