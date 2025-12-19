@@ -53,7 +53,6 @@ export default defineConfig([
       "packages/babel-standalone/babel.js",
       "packages/babel-standalone/babel.min.js",
       "packages/babel-parser/test/expressions",
-      "packages/babel-core/src/vendor",
       "packages/babel-parser/typings/**/*",
       "packages/babel-plugin-transform-regenerator/test/regenerator-fixtures",
       "eslint/*/lib",

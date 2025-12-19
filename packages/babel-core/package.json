@@ -58,6 +58,7 @@
     "@types/gensync": "^1.0.0",
     "convert-source-map": "^2.0.0",
     "gensync": "^1.0.0-beta.2",
+    "import-meta-resolve": "^4.2.0",
     "json5": "^2.2.3",
     "obug": "^2.1.1",
     "semver": "^7.7.3"

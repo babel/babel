@@ -22,7 +22,6 @@ const config = {
     "<rootDir>/packages/babel-standalone/.*",
     "<rootDir>/packages/babel-types/.*/generated/.*",
     "<rootDir>/packages/babel-helpers/.*/helpers/.*",
-    "<rootDir>/packages/babel-core/.*/vendor/.*",
   ],
 
   setupFiles: ["@cspotcode/source-map-support/register"],

@@ -22,7 +22,6 @@ import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
-import { resolve as importMetaResolve } from "import-meta-resolve";
 
 // @ts-expect-error no types
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
@@ -982,60 +981,9 @@ gulp.task("bundle-dts", () => buildRollupDts(dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
-gulp.task("build-vendor", async () => {
-  const input = fileURLToPath(
-    importMetaResolve("import-meta-resolve", import.meta.url)
-  );
-  const output = "./packages/babel-core/src/vendor/import-meta-resolve.js";
-
-  const bundle = await rollup({
-    input,
-    onwarn(warning, warn) {
-      if (warning.code === "CIRCULAR_DEPENDENCY") return;
-      warn(warning);
-    },
-    plugins: [
-      rollupCommonJs({ defaultIsModuleExports: true }),
-      rollupNodeResolve({
-        extensions: [".js", ".mjs", ".cjs", ".json"],
-        preferBuiltins: true,
-      }),
-      {
-        // Remove the node: prefix from imports, so that it works in old Node.js version
-        // TODO(Babel 8): This can be removed.
-        name: "rollup-babel-internal-remove-node-import-prefix",
-        transform: code => code.replace(/(?<=from ["'])node:/g, ""),
-      },
-    ],
-  });
-
-  await bundle.write({
-    file: output,
-    format: "es",
-    sourcemap: false,
-    exports: "named",
-    banner: String.raw`
-/****************************************************************************\
- *                         NOTE FROM BABEL AUTHORS                          *
- * This file is inlined from https://github.com/wooorm/import-meta-resolve, *
- * because we need to compile it to CommonJS.                               *
-\****************************************************************************/
-
-/*
-${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
-`,
-  });
-
-  fs.writeFileSync(
-    output.replace(".js", ".d.ts"),
-    `export function resolve(specifier: string, parent: string): string;`
-  );
-});
-
 gulp.task(
   "build",
   gulp.series(
-    "build-vendor",
     gulp.parallel("build-rollup", "build-babel"),
     gulp.parallel(
       "generate-type-helpers",
@@ -1059,7 +1007,6 @@ gulp.task("build-no-bundle-watch", () => buildBabel(false));
 gulp.task(
   "build-dev",
   gulp.series(
-    "build-vendor",
     "build-no-bundle",
     gulp.parallel(
       "generate-standalone",

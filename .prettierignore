@@ -2,7 +2,6 @@ package.json
 packages/babel-preset-env/data
 packages/babel-compat-data/data
 packages/babel-compat-data/scripts/data/overlapping-plugins.js
-packages/babel-core/src/vendor/**
 **/test/fixtures/**
 packages/babel-standalone/examples/**
 packages/babel-parser/test/expressions/**
