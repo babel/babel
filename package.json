@@ -48,6 +48,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^29.5.11",
     "@types/node": "^22.10.5",
+    "@typescript/native-preview": "7.0.0-dev.20251219.1",
     "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.1",
     "c8": "^10.0.0",

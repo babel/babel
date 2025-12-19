@@ -193,7 +193,6 @@ export type CmdOptions = {
 };
 
 export default function parseArgv(args: string[]): CmdOptions | null {
-  //
   program.parse(args);
 
   const opts = program.opts();

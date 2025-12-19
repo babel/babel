@@ -53,7 +53,7 @@ export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
 
 export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
 
-const NodePath_Final = class NodePath {
+class NodePath {
   constructor(hub: HubInterface | undefined, parent: t.Node) {
     this.parent = parent;
     this.hub = hub!;
@@ -207,7 +207,7 @@ const NodePath_Final = class NodePath {
   get parentKey(): string {
     return (this.listKey || this.key) as string;
   }
-};
+}
 
 const methods = {
   // NodePath_ancestry
@@ -311,7 +311,7 @@ const methods = {
   addComments: NodePath_comments.addComments,
 };
 
-Object.assign(NodePath_Final.prototype, methods);
+Object.assign(NodePath.prototype, methods);
 
 // we can not use `import { TYPES } from "@babel/types"` here
 // because the transformNamedBabelTypesImportToDestructuring plugin in babel.config.js
@@ -322,12 +322,12 @@ for (const type of t.TYPES) {
   // @ts-expect-error typeKey must present in t
   const fn = t[typeKey];
   // @ts-expect-error augmenting NodePath prototype
-  NodePath_Final.prototype[typeKey] = function (opts: any) {
+  NodePath.prototype[typeKey] = function (opts: any) {
     return fn(this.node, opts);
   };
 
   // @ts-expect-error augmenting NodePath prototype
-  NodePath_Final.prototype[`assert${type}`] = function (opts: any) {
+  NodePath.prototype[`assert${type}`] = function (opts: any) {
     if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
@@ -335,7 +335,7 @@ for (const type of t.TYPES) {
 }
 
 // Register virtual types validators after base types validators
-Object.assign(NodePath_Final.prototype, NodePath_virtual_types_validator);
+Object.assign(NodePath.prototype, NodePath_virtual_types_validator);
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
   if (type.startsWith("_")) continue;
@@ -375,7 +375,7 @@ interface NodePathOverwrites {
 
 type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
-interface NodePath<
+interface _NodePath<
   N extends t.Node | null,
   T extends t.Node["type"] | null = N extends null
     ? null
@@ -383,7 +383,7 @@ interface NodePath<
   P extends t.Node = T extends null
     ? never
     : NonNullable<t.ParentMaps[NonNullable<T>]>,
-> extends InstanceType<typeof NodePath_Final>,
+> extends InstanceType<typeof NodePath>,
     NodePathAssertions,
     NodePathValidators,
     NodePathMixins,
@@ -400,7 +400,9 @@ interface NodePath<
 // This trick is necessary so that
 // NodePath_Final<A | B> is the same as NodePath_Final<A> | NodePath_Final<B>
 type NodePath_Final<T extends t.Node | null = t.Node> = T extends any
-  ? NodePath<T>
+  ? _NodePath<T>
   : never;
 
-export { NodePath_Final as default, type NodePath as NodePath_Internal };
+const NodePath_Final: typeof NodePath = NodePath;
+
+export { NodePath_Final as default, type _NodePath as NodePath_Internal };
