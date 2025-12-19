@@ -222,12 +222,11 @@ module.exports = function (api) {
           [
             pluginRequiredVersionMacro,
             {
-              allowAny: !process.env.IS_PUBLISH || env === "standalone",
               overwrite(requiredVersion, filename) {
-                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
-                if (process.env.BABEL_8_BREAKING) {
+                if (!process.env.IS_PUBLISH || env === "standalone") {
                   return packageJson.version;
                 }
+                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
                 const match = filename.match(/packages[\\/](.+?)[\\/]/);
                 if (
                   match &&
@@ -365,7 +364,7 @@ function pluginPackageJsonMacro({ types: t }) {
   };
 }
 
-function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
+function pluginRequiredVersionMacro({ types: t }, { overwrite }) {
   const fnName = "REQUIRED_VERSION";
 
   return {
@@ -391,11 +390,6 @@ function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
           throw path.buildCodeFrameError(
             `"${fnName}" expects a literal argument.`
           );
-        }
-
-        if (allowAny) {
-          path.replaceWith(t.stringLiteral("*"));
-          return;
         }
 
         const version = overwrite(arg, this.filename);
