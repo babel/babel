@@ -24,7 +24,7 @@
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
     "@babel/traverse": "workspace:^",
-    "semver": "^7.3.4"
+    "semver": "^7.7.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"

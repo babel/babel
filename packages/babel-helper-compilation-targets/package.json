@@ -29,7 +29,7 @@
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.24.0",
     "lru-cache": "^7.14.1",
-    "semver": "^7.3.4"
+    "semver": "^7.7.3"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^",

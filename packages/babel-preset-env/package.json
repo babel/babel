@@ -79,7 +79,7 @@
     "@babel/preset-modules": "0.1.6-no-external-plugins",
     "babel-plugin-polyfill-corejs3": "^0.13.0",
     "core-js-compat": "^3.43.0",
-    "semver": "^7.3.4"
+    "semver": "^7.7.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

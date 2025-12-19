@@ -40,7 +40,7 @@
   "dependencies": {
     "eslint-scope": "^7.1.1",
     "eslint-visitor-keys": "^3.3.0",
-    "semver": "^7.3.4"
+    "semver": "^7.7.3"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

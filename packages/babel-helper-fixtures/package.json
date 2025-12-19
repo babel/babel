@@ -16,7 +16,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@jridgewell/gen-mapping": "^0.3.12",
-    "semver": "^7.3.4"
+    "semver": "^7.7.3"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
