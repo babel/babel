@@ -1035,8 +1035,7 @@ describe("api", function () {
   });
 
   it("exports the version", function () {
-    // TODO: This should be 8, not 7
-    expect(babel.version[0]).toBe("7");
+    expect(babel.version[0]).toBe("8");
   });
 
   itBabel9("the version ends with 999999999", () => {
