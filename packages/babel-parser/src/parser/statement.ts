@@ -30,6 +30,7 @@ import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
 import { LoopLabelKind } from "../tokenizer/state.ts";
+import type { ExportedToken } from "../types.ts";
 
 const loopLabel = { kind: LoopLabelKind.Loop } as const,
   switchLabel = { kind: LoopLabelKind.Switch } as const;
@@ -55,23 +56,21 @@ const loneSurrogate = /[\uD800-\uDFFF]/u;
 const keywordRelationalOperator = /in(?:stanceof)?/y;
 
 /**
- * Convert tokens for backward Babel 7 compat.
- * tt.privateName => tt.hash + tt.name
- * tt.templateTail => tt.backquote/tt.braceR + tt.template + tt.backquote
- * tt.templateNonTail => tt.backquote/tt.braceR + tt.template + tt.dollarBraceL
+ * Prepare exported tokens.
+ * The internal token type will be replaced by the exported one with more metadata.
  * For performance reasons this routine mutates `tokens`, it is okay
  * here since we execute `parseTopLevel` once for every file.
  */
-function babel7CompatTokens(tokens: (Token | N.Comment)[]) {
+export function createExportedTokens(tokens: (Token | N.Comment)[]) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const { type } = token;
     if (typeof type === "number") {
-      // @ts-expect-error: we manipulate `token` for performance reasons
-      token.type = getExportedToken(type);
+      // we manipulate `token` for performance reasons
+      (token as unknown as ExportedToken).type = getExportedToken(type);
     }
   }
-  return tokens;
+  return tokens as unknown as (ExportedToken | N.Comment)[];
 }
 export default abstract class StatementParser extends ExpressionParser {
   // ### Statement parsing
@@ -94,7 +93,7 @@ export default abstract class StatementParser extends ExpressionParser {
     file.comments = this.comments;
 
     if (this.optionFlags & OptionFlags.Tokens) {
-      file.tokens = babel7CompatTokens(this.tokens);
+      file.tokens = createExportedTokens(this.tokens);
     }
 
     return this.finishNode(file, "File");

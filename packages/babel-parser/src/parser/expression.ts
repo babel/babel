@@ -65,6 +65,7 @@ import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 
 import { OptionFlags, type SourceType } from "../options.ts";
+import { createExportedTokens } from "./statement.ts";
 
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -172,7 +173,7 @@ export default abstract class ExpressionParser extends LValParser {
     expr.comments = this.comments;
     expr.errors = this.state.errors;
     if (this.optionFlags & OptionFlags.Tokens) {
-      expr.tokens = this.tokens;
+      expr.tokens = createExportedTokens(this.tokens);
     }
     return expr;
   }
