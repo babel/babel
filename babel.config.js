@@ -238,12 +238,13 @@ module.exports = function (api) {
                   match &&
                   babel7_8compat["babel7plugins-babel8core"].includes(match[1])
                 ) {
-                  return `${requiredVersion} || >8.0.0-alpha`;
+                  requiredVersion = `${requiredVersion} || >8.0.0-alpha <8.0.0-z`;
                 }
                 if (packageJson.version.includes("-")) {
                   // for pre-releases
-                  return `${requiredVersion} || ${packageJson.version}`;
+                  requiredVersion = `${requiredVersion} || ${packageJson.version}`;
                 }
+                return requiredVersion;
               },
             },
           ],
