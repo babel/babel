@@ -66,6 +66,7 @@ import type Parser from "./index.ts";
 
 import { OptionFlags, type SourceType } from "../options.ts";
 import { createExportedTokens } from "./statement.ts";
+import type { PipelineOperatorPluginOptions } from "../typings";
 
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -1400,9 +1401,8 @@ export default abstract class ExpressionParser extends LValParser {
         return this.hasPlugin([
           "pipelineOperator",
           {
-            // @ts-expect-error token must have a label
             topicToken: tokenLabelName(tokenType),
-          },
+          } as PipelineOperatorPluginOptions,
         ]);
       }
       default:
