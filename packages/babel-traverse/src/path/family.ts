@@ -362,9 +362,11 @@ type Trav<
     ? R extends []
       ? Node[K]
       : Node[K] extends t.Node | t.Node[] | null | undefined
-        ? TravD<Node[K] & {}, R> | null
+        ? null | undefined extends Node[K]
+          ? TravD<Node[K] & {}, R> | null
+          : TravD<Node[K] & {}, R>
         : never
-    : never
+    : null
   : never;
 
 type TravD<
@@ -396,7 +398,11 @@ function get<T extends NodePath<t.Node>, K extends string>(
   this: T,
   key: K,
   context?: true | TraversalContext,
-): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
+): string extends K
+  ? NodePath<t.Node | null> | NodePath<t.Node | null>[]
+  : T extends any
+    ? ToNodePath<Trav<T["node"], Split<K>>>
+    : never;
 
 function get(
   this: NodePath,
@@ -417,6 +423,7 @@ function get(
     return _getKey.call(this, key, context);
   } else {
     // "foo.bar"
+    // @ts-expect-error this may be NodePath<null>
     return _getPattern.call(this, parts, context);
   }
 }
@@ -456,8 +463,8 @@ export function _getPattern(
   this: NodePath,
   parts: string[],
   context?: TraversalContext,
-): NodePath | NodePath[] {
-  let path: NodePath | NodePath[] = this;
+) {
+  let path: NodePath<t.Node | null> | NodePath<t.Node | null>[] = this;
   for (const part of parts) {
     if (part === ".") {
       // @ts-expect-error todo(flow-ts): Can path be an array here?
@@ -467,6 +474,7 @@ export function _getPattern(
         // @ts-expect-error part may not index path
         path = path[part];
       } else {
+        // @ts-expect-error path may be NodePath<null>
         path = path.get(part, context);
       }
     }
