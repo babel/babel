@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { Transform as TransformStream } from "node:stream";
 import { callbackify } from "node:util";
-import colors from "picocolors";
+import colors from "node-style-text";
 // @ts-expect-error no types
 import gulp from "gulp";
 import { rollup } from "rollup";

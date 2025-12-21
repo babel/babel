@@ -4,7 +4,7 @@ import { transformAsync } from "@babel/core";
 import { mkdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { log } from "./scripts/utils/logger.js";
-import colors from "picocolors";
+import colors from "node-style-text";
 
 /** * Check if the source file needs to be compiled based on its modification time
  * compared to the destination file.
