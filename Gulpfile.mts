@@ -253,12 +253,7 @@ function generateStandalone() {
 
 function createWorker(useWorker: boolean) {
   const numWorkers = Math.ceil(Math.max(cpus().length, 1) / 2) - 1;
-  if (
-    numWorkers === 0 ||
-    !useWorker ||
-    // For some reason, on CircleCI the workers hang indefinitely.
-    process.env.CIRCLECI
-  ) {
+  if (numWorkers === 0 || !useWorker) {
     // @ts-expect-error no types
     return import("./babel-worker.mjs");
   }
