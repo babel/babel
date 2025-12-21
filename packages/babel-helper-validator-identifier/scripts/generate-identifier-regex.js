@@ -1,18 +1,23 @@
-"use strict";
-
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
-const version = "17.0.0";
+import packageJson from "../package.json" with { type: "json" };
 
-const start = require(
-  "@unicode/unicode-" + version + "/Binary_Property/ID_Start/code-points.js"
-).filter(function (ch) {
+const unicodePackageNamePrefix = "@unicode/unicode-";
+const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
+  name.startsWith(unicodePackageNamePrefix)
+);
+
+const start = (
+  await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)
+).default.filter(function (ch) {
   return ch > 0x7f;
 });
 let last = -1;
-const cont = require(
-  "@unicode/unicode-" + version + "/Binary_Property/ID_Continue/code-points.js"
-).filter(function (ch) {
+const cont = (
+  await import(
+    `${unicodePackageName}/Binary_Property/ID_Continue/code-points.js`
+  )
+).default.filter(function (ch) {
   return ch > 0x7f && search(start, ch, last + 1) === -1;
 });
 
