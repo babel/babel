@@ -1,4 +1,4 @@
-import colors from "picocolors";
+import colors from "node-style-text";
 
 export default async function testRunner({ title, testcases }) {
   console.log(title);

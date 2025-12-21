@@ -5,7 +5,7 @@ const { transformAsync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("node:fs");
 const path = require("node:path");
 const { log } = require("./scripts/utils/logger.cjs");
-const colors = require("picocolors");
+const colors = require("node-style-text");
 
 /** * Check if the source file needs to be compiled based on its modification time
  * compared to the destination file.
