@@ -23,17 +23,9 @@ const renameVisitor: Visitor<Renamer> = {
       if (path.isMethod()) {
         path.requeueComputedKeyAndDecorators();
       }
-    }
-  },
-
-  // Switch statements introduce a new scope for their cases, but the discriminant
-  // is evaluated in the parent scope. When renaming a variable in the parent
-  // scope, we need to rename references in the discriminant even if the switch
-  // body creates a shadowing variable.
-  SwitchStatement(path, state) {
-    const { discriminant } = path.node;
-    if (t.isIdentifier(discriminant) && discriminant.name === state.oldName) {
-      discriminant.name = state.newName;
+      if (path.isSwitchStatement()) {
+        path.context.maybeQueue(path.get("discriminant"));
+      }
     }
   },
 
