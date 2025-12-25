@@ -61,3 +61,23 @@ function test4(e) {
     }
 }
 console.log(test4({ f: () => "test" }));
+
+// Test 5: switch(id(e))
+function id(v) {
+    return v;
+}
+
+function test5(e) {
+    let i = e;
+    {
+        const e = i[0];
+        switch (id(e)) {
+            case "n":
+                const e = 1;
+                return true;
+            default:
+                return false;
+        }
+    }
+}
+console.log(test5("nn"));

@@ -75,3 +75,22 @@ function test4(e) {
 console.log(test4({
   f: () => "test"
 }));
+
+// Test 5: switch(id(e))
+function id(v) {
+  return v;
+}
+function test5(e) {
+  var i = e;
+  {
+    var _e9 = i[0];
+    switch (id(_e9)) {
+      case "n":
+        var _e0 = 1;
+        return true;
+      default:
+        return false;
+    }
+  }
+}
+console.log(test5("nn"));
