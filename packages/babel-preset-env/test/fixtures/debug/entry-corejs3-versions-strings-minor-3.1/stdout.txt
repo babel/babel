@@ -10,7 +10,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { chrome < 134, ie, node < 24 }
+  transform-explicit-resource-management { chrome < 143, ie, node < 25 }
   transform-duplicate-named-capturing-groups-regex { chrome < 126, ie, node < 23 }
   transform-regexp-modifiers { chrome < 125, ie, node < 23 }
   transform-unicode-sets-regex { chrome < 112, ie, node < 20 }
