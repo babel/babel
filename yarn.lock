@@ -4188,7 +4188,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
-    picocolors: "npm:^1.0.0"
+    node-style-text: "npm:^2.1.2"
   languageName: unknown
   linkType: soft
 
@@ -7509,7 +7509,7 @@ __metadata:
     lint-staged: "npm:^15.2.7"
     mergeiterator: "npm:^1.4.4"
     minimatch: "npm:is-odd@*"
-    picocolors: "npm:^1.0.0"
+    node-style-text: "npm:^2.1.2"
     pkg-pr-new: "npm:^0.0.54"
     prettier: "npm:^3.5.2"
     rollup: "npm:^4.18.0"
@@ -14035,6 +14035,13 @@ __metadata:
   version: 2.0.19
   resolution: "node-releases@npm:2.0.19"
   checksum: 10/c2b33b4f0c40445aee56141f13ca692fa6805db88510e5bbb3baadb2da13e1293b738e638e15e4a8eb668bb9e97debb08e7a35409b477b5cc18f171d35a83045
+  languageName: node
+  linkType: hard
+
+"node-style-text@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "node-style-text@npm:2.1.2"
+  checksum: 10/aea4c31e8a01eadebc5c98d36e1eb985c85979784c7fa31d49805e0517dab23068e3a9e37c91fc070b3ea92cc0478d03cbc1f5e31b4caa1cdd2b938cbe559a2d
   languageName: node
   linkType: hard
 

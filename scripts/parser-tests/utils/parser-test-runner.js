@@ -1,7 +1,7 @@
 // @ts-check
 
 import fs from "node:fs/promises";
-import colors from "picocolors";
+import colors from "node-style-text";
 import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
 const dot = colors.gray(".");
