@@ -32,7 +32,7 @@ function mapLast<T>(arr: T[], fn: (value: T) => T): T[] {
 }
 
 export default declare(({ types: t, template, traverse, assertVersion }) => {
-  assertVersion(REQUIRED_VERSION("^7.12.0 || ^8.0.0-0"));
+  assertVersion(REQUIRED_VERSION("^7.12.0 || ^8.0.0"));
 
   const rawNamedEvaluationVisitor = buildNamedEvaluationVisitor(
     (path: NodePath) => {

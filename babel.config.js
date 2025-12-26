@@ -16,7 +16,6 @@ const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
-const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 const pluginToggleBooleanFlag = require("./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs");
 
 function normalize(src) {
@@ -222,19 +221,22 @@ module.exports = function (api) {
           [
             pluginRequiredVersionMacro,
             {
-              allowAny: !process.env.IS_PUBLISH || env === "standalone",
-              overwrite(requiredVersion, filename) {
-                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
-                if (process.env.BABEL_8_BREAKING) {
+              overwrite(requiredVersion) {
+                if (!process.env.IS_PUBLISH || env === "standalone") {
+                  if (bool(process.env.BABEL_9_BREAKING)) {
+                    // Match packages/babel-core/src/index.ts
+                    return packageJson.version + "999999999";
+                  }
                   return packageJson.version;
                 }
-                const match = filename.match(/packages[\\/](.+?)[\\/]/);
-                if (
-                  match &&
-                  babel7_8compat["babel7plugins-babel8core"].includes(match[1])
-                ) {
-                  return `${requiredVersion} || >8.0.0-alpha <8.0.0-beta`;
+                if (requiredVersion === 7) {
+                  requiredVersion = "^7.0.0-0 || ^8.0.0";
                 }
+                if (packageJson.version.includes("-")) {
+                  // for pre-releases
+                  requiredVersion = `${requiredVersion} || ${packageJson.version}`;
+                }
+                return requiredVersion;
               },
             },
           ],
@@ -365,7 +367,7 @@ function pluginPackageJsonMacro({ types: t }) {
   };
 }
 
-function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
+function pluginRequiredVersionMacro({ types: t }, { overwrite }) {
   const fnName = "REQUIRED_VERSION";
 
   return {
@@ -391,11 +393,6 @@ function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
           throw path.buildCodeFrameError(
             `"${fnName}" expects a literal argument.`
           );
-        }
-
-        if (allowAny) {
-          path.replaceWith(t.stringLiteral("*"));
-          return;
         }
 
         const version = overwrite(arg, this.filename);
