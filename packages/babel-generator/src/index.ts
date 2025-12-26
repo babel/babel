@@ -203,44 +203,15 @@ export interface GeneratorOptions {
   sourceFileName?: string;
 
   /**
-   * Set to true to run jsesc with "json": true to print "\u00A9" vs. "©";
-   * @deprecated use `jsescOptions: { json: true }` instead
-   */
-  jsonCompatibleStrings?: boolean;
-
-  /**
-   * Set to true to enable support for experimental decorators syntax before
-   * module exports. If not specified, decorators will be printed in the same
-   * position as they were in the input source code.
-   * @deprecated Removed in Babel 8
-   */
-  decoratorsBeforeExport?: boolean;
-
-  /**
    * Options for outputting jsesc representation.
    */
   jsescOption?: jsescOptions;
-
-  /**
-   * For use with the recordAndTuple token.
-   * @deprecated It will be removed in Babel 8.
-   */
-  recordAndTupleSyntaxType?: "bar" | "hash";
 
   /**
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
   topicToken?: "%" | "#" | "@@" | "^^" | "^";
-
-  /**
-   * The import attributes syntax style:
-   * - "with"        : `import { a } from "b" with { type: "json" };`
-   * - "assert"      : `import { a } from "b" assert { type: "json" };`
-   * - "with-legacy" : `import { a } from "b" with type: "json";`
-   * @deprecated Removed in Babel 8.
-   */
-  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 }
 
 export interface GeneratorResult {

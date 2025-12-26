@@ -19,9 +19,7 @@ export default declare((api, { deprecatedAssertSyntax }: Options) => {
   return {
     name: "syntax-import-attributes",
 
-    manipulateOptions({ parserOpts, generatorOpts }) {
-      generatorOpts.importAttributesKeyword ??= "with";
-
+    manipulateOptions({ parserOpts }) {
       const importAssertionsPluginIndex =
         parserOpts.plugins.indexOf("importAssertions");
       if (importAssertionsPluginIndex !== -1) {
