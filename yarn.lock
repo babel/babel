@@ -3617,7 +3617,6 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/runtime": "workspace:^"
-    "@babel/runtime-corejs2": "npm:^7.24.0"
     "@babel/runtime-corejs3": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3998,16 +3997,6 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
-
-"@babel/runtime-corejs2@npm:^7.24.0":
-  version: 7.24.0
-  resolution: "@babel/runtime-corejs2@npm:7.24.0"
-  dependencies:
-    core-js: "npm:^2.6.12"
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10/9faf18fa00924886e10e86de712860a00efb63355195a7fa23ac5af0aacd8dc0fa5a8b883e6159987ee09386ffdf42bb53be1e38d1ce369edbce645a39078c89
-  languageName: node
-  linkType: hard
 
 "@babel/runtime-corejs3@workspace:^, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
   version: 0.0.0-use.local
@@ -8629,13 +8618,6 @@ __metadata:
   version: 3.43.0
   resolution: "core-js-pure@npm:3.43.0"
   checksum: 10/c45d667569ab64a0a30d6262ada926d30a5f7ad9f94d488e56484b351ca919b13481d4e2ed065bc6b11a8cca8288175a244b2f9efbcd02f9a8a52726aaf2a838
-  languageName: node
-  linkType: hard
-
-"core-js@npm:^2.6.12":
-  version: 2.6.12
-  resolution: "core-js@npm:2.6.12"
-  checksum: 10/7c624eb00a59c74c769d5d80f751f3bf1fc6201205b6562f27286ad5e00bbca1483f2f7eb0c2854b86f526ef5c7dc958b45f2ff536f8a31b8e9cb1a13a96efca
   languageName: node
   linkType: hard
 
