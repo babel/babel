@@ -23,6 +23,9 @@ const renameVisitor: Visitor<Renamer> = {
       if (path.isMethod()) {
         path.requeueComputedKeyAndDecorators();
       }
+      if (path.isSwitchStatement()) {
+        path.context.maybeQueue(path.get("discriminant"));
+      }
     }
   },
 
