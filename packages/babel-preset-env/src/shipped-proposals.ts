@@ -1,4 +1,3 @@
-// TODO(Babel 8): Remove this file
 /* eslint sort-keys: "error" */
 // These mappings represent the transform plugins that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
