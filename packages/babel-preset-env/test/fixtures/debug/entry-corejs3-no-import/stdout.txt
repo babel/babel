@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { node < 24 }
+  transform-explicit-resource-management { node < 25 }
   transform-duplicate-named-capturing-groups-regex { node < 23 }
   transform-regexp-modifiers { node < 23 }
   transform-unicode-sets-regex { node < 20 }
