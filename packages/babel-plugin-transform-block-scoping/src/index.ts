@@ -9,7 +9,11 @@ import {
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
-import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3.ts";
+import {
+  annexB33FunctionsVisitor,
+  isVarScope,
+  isStrict,
+} from "./annex-B_3_3.ts";
 
 export interface Options {
   tdz?: boolean;
@@ -165,10 +169,12 @@ export default declare((api, opts: Options) => {
 
 const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
   Scope(path, { names }) {
-    for (const name of names) {
-      const binding = path.scope.getOwnBinding(name);
-      if (binding?.kind === "hoisted") {
-        path.scope.rename(name);
+    if (isStrict(path)) {
+      for (const name of names) {
+        const binding = path.scope.getOwnBinding(name);
+        if (binding?.kind === "hoisted") {
+          path.scope.rename(name);
+        }
       }
     }
   },

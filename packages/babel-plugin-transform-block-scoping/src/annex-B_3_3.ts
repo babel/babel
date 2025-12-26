@@ -76,7 +76,7 @@ export function isVarScope(scope: Scope) {
   return scope.path.isFunctionParent() || scope.path.isProgram();
 }
 
-function isStrict(path: NodePath) {
+export function isStrict(path: NodePath) {
   return !!path.find(({ node }) => {
     if (t.isProgram(node)) {
       if (node.sourceType === "module") return true;
