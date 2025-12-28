@@ -20,15 +20,17 @@ negative:
 ---*/
 
 expect(() => {
-  switch (0) {
-    default:
-      var _x2 = function () {
-        return _x.apply(this, arguments);
-      };
-      var _x = function () {
+  {
+    var _x2 = function _x() {
         _x = babelHelpers.wrapAsyncGenerator(function* () {});
         return _x.apply(this, arguments);
+      },
+      _x3 = function x() {
+        return _x2.apply(this, arguments);
       };
+    switch (0) {
+      default:
+    }
   }
   x;
 }).toThrow(ReferenceError);
