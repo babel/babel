@@ -14,7 +14,7 @@ export interface Options {
 
 export default declare((api, options: Options) => {
   const { types: t, template } = api;
-  api.assertVersion(REQUIRED_VERSION("^7.22.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.22.0 || ^8.0.0"));
 
   const targets = api.targets();
 

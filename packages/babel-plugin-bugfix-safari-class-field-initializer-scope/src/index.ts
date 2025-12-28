@@ -83,7 +83,7 @@ function wrapInitializer(
 }
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.16.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.16.0 || ^8.0.0"));
 
   return {
     name: "plugin-bugfix-safari-class-field-initializer-scope",

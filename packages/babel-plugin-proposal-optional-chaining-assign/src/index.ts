@@ -5,7 +5,7 @@ import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expr
 import { transformOptionalChain } from "@babel/plugin-transform-optional-chaining";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.22.5"));
+  api.assertVersion(REQUIRED_VERSION("^7.22.5 || ^8.0.0"));
 
   const assumptions = {
     noDocumentAll: api.assumption("noDocumentAll") ?? false,
