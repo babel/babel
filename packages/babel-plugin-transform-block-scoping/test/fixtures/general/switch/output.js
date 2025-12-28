@@ -19,6 +19,6 @@ switch (true) {
     var _c = 4;
     var _d = 5;
   case false:
+    var f = function () {};
     class _e {}
-    function f() {}
 }

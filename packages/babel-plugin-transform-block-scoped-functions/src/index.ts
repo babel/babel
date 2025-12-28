@@ -8,27 +8,21 @@ export default declare(api => {
     parentPath: NodePath,
     paths: NodePath<t.Statement>[],
   ) {
-    // eslint-disable-next-line no-var
-    var isInStrictMode = parentPath.isInStrictMode();
+    const isInStrictMode = parentPath.isInStrictMode();
 
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
 
-      if (
-        !isInStrictMode &&
-        !(
-          path.node.async ||
-          path.node.generator ||
-          path.getData(
-            "@babel/plugin-transform-async-generator-functions/async_generator_function",
-          )
-        )
-      ) {
-        continue;
-      }
+      const useLet =
+        isInStrictMode ||
+        path.node.async ||
+        path.node.generator ||
+        path.getData(
+          "@babel/plugin-transform-async-generator-functions/async_generator_function",
+        );
 
       const func = path.node;
-      const declar = t.variableDeclaration("let", [
+      const declar = t.variableDeclaration(useLet ? "let" : "var", [
         t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
 

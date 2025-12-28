@@ -1,6 +1,6 @@
 if (true) {
-  function run() {
+  var run = function run() {
     return true;
-  }
+  };
 }
 expect(run()).toBe(true);

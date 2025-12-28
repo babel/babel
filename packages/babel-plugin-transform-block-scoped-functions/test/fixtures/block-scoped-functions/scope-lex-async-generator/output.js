@@ -25,10 +25,10 @@ expect(() => {
       var _x2 = function () {
         return _x.apply(this, arguments);
       };
-      function _x() {
+      var _x = function () {
         _x = babelHelpers.wrapAsyncGenerator(function* () {});
         return _x.apply(this, arguments);
-      }
+      };
   }
   x;
 }).toThrow(ReferenceError);
