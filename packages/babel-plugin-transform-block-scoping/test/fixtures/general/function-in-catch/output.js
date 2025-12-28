@@ -1,7 +1,7 @@
 try {
   foo();
 } catch (x) {
-  function harmless(x) {
+  var harmless = function (x) {
     return x;
-  }
+  };
 }

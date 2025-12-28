@@ -9,7 +9,6 @@ import {
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
-import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3.ts";
 
 export interface Options {
   tdz?: boolean;
@@ -31,8 +30,6 @@ export default declare((api, opts: Options) => {
     name: "transform-block-scoping",
 
     visitor: traverse.visitors.merge<PluginPass>([
-      // TODO: Consider adding an option to control Annex B behavior.
-      annexB33FunctionsVisitor,
       {
         Loop(path: NodePath<t.Loop>, state) {
           const isForStatement = path.isForStatement();
@@ -271,4 +268,8 @@ function isBlockScoped(
   }
 
   return true;
+}
+
+export function isVarScope(scope: Scope) {
+  return scope.path.isFunctionParent() || scope.path.isProgram();
 }
