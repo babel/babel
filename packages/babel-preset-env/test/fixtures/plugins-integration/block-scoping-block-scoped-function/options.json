@@ -1,6 +1,0 @@
-{
-  "targets": "node 0.10",
-  "presets": [
-    "env"
-  ]
-}
