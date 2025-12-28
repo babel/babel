@@ -53,35 +53,33 @@ export default declare(api => {
         transformStatementList(path, path.get("body"));
       },
 
-      SwitchStatement: {
-        exit(path) {
-          const { node } = path;
+      SwitchStatement(path) {
+        const { node } = path;
 
-          const fns: t.FunctionDeclaration[] = [];
-          for (const caseNode of node.cases) {
-            const { consequent } = caseNode;
-            for (let i = consequent.length - 1; i >= 0; i--) {
-              if (t.isFunctionDeclaration(consequent[i])) {
-                fns.push(consequent[i] as t.FunctionDeclaration);
-                consequent.splice(i, 1);
-              }
+        const fns: t.FunctionDeclaration[] = [];
+        for (const caseNode of node.cases) {
+          const { consequent } = caseNode;
+          for (let i = consequent.length - 1; i >= 0; i--) {
+            if (t.isFunctionDeclaration(consequent[i])) {
+              fns.push(consequent[i] as t.FunctionDeclaration);
+              consequent.splice(i, 1);
             }
           }
+        }
 
-          if (!fns.length) return;
+        if (!fns.length) return;
 
-          path.replaceWith(
-            t.blockStatement([
-              t.variableDeclaration(
-                "let",
-                fns.map(fn =>
-                  t.variableDeclarator(t.cloneNode(fn.id), t.toExpression(fn)),
-                ),
+        path.replaceWith(
+          t.blockStatement([
+            t.variableDeclaration(
+              "let",
+              fns.map(fn =>
+                t.variableDeclarator(t.cloneNode(fn.id), t.toExpression(fn)),
               ),
-              node,
-            ]),
-          );
-        },
+            ),
+            node,
+          ]),
+        );
       },
     },
   };
