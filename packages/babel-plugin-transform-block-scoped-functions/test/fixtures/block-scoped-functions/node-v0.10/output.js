@@ -39,11 +39,13 @@ function nonStrictMode() {
   function c() {
     return 1;
   }
-  switch (0) {
-    case 1:
-      var c = function () {
-        return 2;
-      };
+  {
+    var _c = function c() {
+      return 2;
+    };
+    switch (0) {
+      case 1:
+    }
   }
   console.assert(c() === 1);
 }
