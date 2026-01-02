@@ -2,21 +2,21 @@
 
 Using targets:
 {
-  "android": "137",
-  "chrome": "137",
-  "edge": "137",
-  "firefox": "140",
-  "ios": "18.4",
-  "opera": "116",
+  "android": "142",
+  "chrome": "142",
+  "edge": "142",
+  "firefox": "145",
+  "ios": "26.1",
+  "opera": "124",
   "opera_mobile": "80",
-  "safari": "18.4",
-  "samsung": "27"
+  "safari": "26.1",
+  "samsung": "28"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { firefox < 141, ios, opera, opera_mobile, safari, samsung }
+  transform-explicit-resource-management { ios, opera, opera_mobile, safari, samsung }
   transform-duplicate-named-capturing-groups-regex { opera_mobile, samsung }
   transform-regexp-modifiers { ios, opera_mobile, safari }
   transform-export-namespace-from { }
