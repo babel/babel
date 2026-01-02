@@ -8,27 +8,21 @@ export default declare(api => {
     parentPath: NodePath,
     paths: NodePath<t.Statement>[],
   ) {
-    // eslint-disable-next-line no-var
-    var isInStrictMode = parentPath.isInStrictMode();
+    const isInStrictMode = parentPath.isInStrictMode();
 
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
 
-      if (
-        !isInStrictMode &&
-        !(
-          path.node.async ||
-          path.node.generator ||
-          path.getData(
-            "@babel/plugin-transform-async-generator-functions/async_generator_function",
-          )
-        )
-      ) {
-        continue;
-      }
+      const useLet =
+        isInStrictMode ||
+        path.node.async ||
+        path.node.generator ||
+        path.getData(
+          "@babel/plugin-transform-async-generator-functions/async_generator_function",
+        );
 
       const func = path.node;
-      const declar = t.variableDeclaration("let", [
+      const declar = t.variableDeclaration(useLet ? "let" : "var", [
         t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
 
@@ -59,8 +53,33 @@ export default declare(api => {
         transformStatementList(path, path.get("body"));
       },
 
-      SwitchCase(path) {
-        transformStatementList(path, path.get("consequent"));
+      SwitchStatement(path) {
+        const { node } = path;
+
+        const fns: t.FunctionDeclaration[] = [];
+        for (const caseNode of node.cases) {
+          const { consequent } = caseNode;
+          for (let i = consequent.length - 1; i >= 0; i--) {
+            if (t.isFunctionDeclaration(consequent[i])) {
+              fns.push(consequent[i] as t.FunctionDeclaration);
+              consequent.splice(i, 1);
+            }
+          }
+        }
+
+        if (!fns.length) return;
+
+        path.replaceWith(
+          t.blockStatement([
+            t.variableDeclaration(
+              "let",
+              fns.map(fn =>
+                t.variableDeclarator(t.cloneNode(fn.id), t.toExpression(fn)),
+              ),
+            ),
+            node,
+          ]),
+        );
       },
     },
   };
