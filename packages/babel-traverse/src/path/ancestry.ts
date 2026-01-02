@@ -65,11 +65,7 @@ export function getStatementParent(this: NodePath): NodePath<t.Statement> {
     }
   } while (path);
 
-  // The additional check for the existence of path.node is required due to PR#17672:
-  // If a Program/File is traversed w/o a parentPath, an empty NodePath is passed to traverseNode.
-  // The following condition would then always be false because path.isProgram and path.isFile are
-  // false as path.type and path.node are null for the path that has been found
-  if (path && (!path.node || path.isProgram() || path.isFile())) {
+  if (path && (path.isProgram() || path.isFile())) {
     throw new Error(
       "File/Program node, we can't possibly find a statement parent to this",
     );
