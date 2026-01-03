@@ -371,6 +371,20 @@ describe("traverse", function () {
       expect(result).toBe(true);
     });
 
+    it("#11350: this.hub should not be undefined while traversing a program or file", function () {
+      const ast = parse("try {} catch (e) {}");
+      traverse(ast, {
+        enter(path) {
+          expect(
+            path.hub.buildError(path.node, "This should work"),
+          ).toStrictEqual(TypeError("This should work"));
+          // otherwise, this throws '"Cannot read properties of undefined (reading 'buildError')"'
+          expect(path.getPathLocation()).toBe("program");
+          path.stop();
+        },
+      });
+    });
+
     it("traverse no parent path", function () {
       const code = `
         var foo = {
