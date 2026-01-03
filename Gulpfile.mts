@@ -34,7 +34,7 @@ import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-
 // @ts-expect-error no types
 import formatCode from "./scripts/utils/formatCode.js";
 // @ts-expect-error no types
-import { log } from "./scripts/utils/logger.cjs";
+import { log } from "./scripts/utils/logger.js";
 import { commonJS } from "$repo-utils";
 
 import type { NodePath, PluginItem, types } from "@babel/core";
@@ -259,20 +259,25 @@ function createWorker(useWorker: boolean) {
     // For some reason, on CircleCI the workers hang indefinitely.
     process.env.CIRCLECI
   ) {
-    return require("./babel-worker.cjs");
+    // @ts-expect-error no types
+    return import("./babel-worker.mjs");
   }
-  const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
-    enableWorkerThreads: true,
-    numWorkers,
-    exposedMethods: ["transform"],
-  });
+  const worker = new JestWorker(
+    new URL("./babel-worker.mjs", import.meta.url),
+    {
+      enableWorkerThreads: true,
+      numWorkers,
+      exposedMethods: ["transform"],
+    }
+  );
+
   worker.getStdout().pipe(process.stdout);
   worker.getStderr().pipe(process.stderr);
   return worker;
 }
 
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
-  const worker = createWorker(useWorker);
+  const worker = await createWorker(useWorker);
   const files = new Glob(defaultSourcesGlob, {
     ignore: ignore.map(p => `${p.src}/**`),
     posix: true,
