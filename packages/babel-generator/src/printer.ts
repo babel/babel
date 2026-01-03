@@ -70,28 +70,12 @@ export type Format = {
     adjustMultilineComment: boolean;
     style: string;
   };
-  /**
-   * @deprecated Removed in Babel 8, syntax type is always 'hash'
-   */
-  recordAndTupleSyntaxType?: GeneratorOptions["recordAndTupleSyntaxType"];
   jsescOption: jsescOptions;
-  /**
-   * @deprecated Removed in Babel 8, use `jsescOption` instead
-   */
-  jsonCompatibleStrings?: boolean;
   /**
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
   topicToken?: GeneratorOptions["topicToken"];
-  /**
-   * The import attributes syntax style:
-   * - "with"        : `import { a } from "b" with { type: "json" };`
-   * - "assert"      : `import { a } from "b" assert { type: "json" };`
-   * - "with-legacy" : `import { a } from "b" with type: "json";`
-   * @deprecated Removed in Babel 8.
-   */
-  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };
 
 interface AddNewlinesOptions {
