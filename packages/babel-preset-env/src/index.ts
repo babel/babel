@@ -20,15 +20,11 @@ import {
 
 import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
 
-import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-// TODO(Babel 8): Just use the default import
-const pluginCoreJS3 = (_pluginCoreJS3.default ||
-  _pluginCoreJS3) as typeof _pluginCoreJS3.default;
+import pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 
 import getTargets, {
   prettifyTargets,
   filterItems,
-  isRequired,
 } from "@babel/helper-compilation-targets";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
@@ -37,11 +33,14 @@ import { declarePreset } from "@babel/helper-plugin-utils";
 import type { BuiltInsOption, ModuleOption, Options } from "./types.d.ts";
 export type { Options };
 
-// TODO: Remove in Babel 8
+/**
+ * @deprecated Use `isRequired` from `@babel/helper-compilation-targets` instead.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function isPluginRequired(targets: Targets, support: Targets) {
-  return isRequired("fake-name", targets, {
-    compatData: { "fake-name": support },
-  });
+  throw new Error(
+    "`isPluginRequired` has been removed in Babel 8. Please use `isRequired` from `@babel/helper-compilation-targets` instead.",
+  );
 }
 
 function filterStageFromList(
@@ -179,17 +178,17 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
-  // TODO(Babel 8): Fallback to true
+  // TODO(Babel 9): Fallback to true
   return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
-  // TODO(Babel 8): Fallback to true
+  // TODO(Babel 9): Fallback to true
   return !!caller?.supportsDynamicImport;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
-  // TODO(Babel 8): Fallback to null
+  // TODO(Babel 9): Fallback to null
   return !!caller?.supportsExportNamespaceFrom;
 }
 
@@ -264,7 +263,7 @@ export default declarePreset((api, opts: Options) => {
 
   // If the caller does not support export-namespace-from, we forcefully add
   // the plugin to `includes`.
-  // TODO(Babel 8): stop doing this, similarly to how we don't do this for any
+  // TODO(Babel 9): stop doing this, similarly to how we don't do this for any
   // other plugin. We can consider adding bundlers as targets in the future,
   // but we should not have a one-off special case for this plugin.
   if (

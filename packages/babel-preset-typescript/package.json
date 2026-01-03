@@ -19,7 +19,6 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
-    "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^"
   },

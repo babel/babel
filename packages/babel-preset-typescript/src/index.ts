@@ -1,6 +1,5 @@
 import { declarePreset } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
-import syntaxJSX from "@babel/plugin-syntax-jsx";
 import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
 import normalizeOptions from "./normalize-options.ts";
 import type { Options } from "./normalize-options.ts";
@@ -11,11 +10,9 @@ export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const {
-    allExtensions,
     ignoreExtensions,
     allowNamespaces,
     disallowAmbiguousJSXLike,
-    isTSX,
     jsxPragma,
     jsxPragmaFrag,
     onlyRemoveTypeImports,
@@ -32,31 +29,31 @@ export default declarePreset((api, opts: Options) => {
     optimizeConstEnums,
   });
 
-  const getPlugins = (isTSX: boolean, disallowAmbiguousJSXLike: boolean) => {
+  const getPlugins = (disallowAmbiguousJSXLike: boolean) => {
     const tsPlugin: PluginItem = [
       transformTypeScript,
       pluginOptions(disallowAmbiguousJSXLike),
     ];
-    return isTSX ? [tsPlugin, syntaxJSX] : [tsPlugin];
+    return [tsPlugin];
   };
 
-  const disableExtensionDetect = allExtensions || ignoreExtensions;
+  const disableExtensionDetect = ignoreExtensions;
 
   return {
     plugins: rewriteImportExtensions ? [pluginRewriteTSImports] : [],
     overrides: disableExtensionDetect
-      ? [{ plugins: getPlugins(isTSX, disallowAmbiguousJSXLike) }]
+      ? [{ plugins: getPlugins(disallowAmbiguousJSXLike) }]
       : // Only set 'test' if explicitly requested, since it requires that
         // Babel is being called with a filename.
         [
           {
             test: filename => filename == null || filename.endsWith(".ts"),
-            plugins: getPlugins(false, false),
+            plugins: getPlugins(false),
           },
           {
             test: filename => filename?.endsWith(".mts"),
             sourceType: "module",
-            plugins: getPlugins(false, true),
+            plugins: getPlugins(true),
           },
           {
             test: filename => filename?.endsWith(".cts"),
@@ -70,7 +67,7 @@ export default declarePreset((api, opts: Options) => {
             test: filename => filename?.endsWith(".tsx"),
             // disallowAmbiguousJSXLike is a no-op when parsing TSX, since it's
             // always disallowed.
-            plugins: getPlugins(true, false),
+            plugins: getPlugins(false),
           },
         ],
   };

@@ -33,7 +33,6 @@ export type Options = {
   modules: ModuleOption;
   shippedProposals: boolean;
   targets: {
-    uglify?: boolean;
     esmodules?: boolean;
   } & InputTargets;
   useBuiltIns: BuiltInsOption;
