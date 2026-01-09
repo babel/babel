@@ -187,27 +187,6 @@ new-version-checklist:
 new-version:
 	$(MAKEJS) new-version
 
-new-babel-8-version:
-	$(MAKEJS) new-babel-8-version
-
-new-babel-8-version-create-commit:
-	$(MAKEJS) new-babel-8-version-create-commit
-
-new-babel-8-version-create-commit-ci:
-	$(MAKEJS) new-babel-8-version-create-commit-ci
-
-# NOTE: Run make new-version first
-# TODO: Remove --tag next when publishing stable releases
-publish:
-	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
-	read CLEAR; \
-	if [ "_$$CLEAR" != "_y" ]; then \
-		exit 1; \
-	fi
-	$(MAKE) prepublish
-	$(YARN) release-tool publish --tag next
-	$(MAKE) clean
-
 publish-test:
 ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
