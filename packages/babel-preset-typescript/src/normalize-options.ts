@@ -11,10 +11,6 @@ export interface Options {
   onlyRemoveTypeImports?: boolean;
   optimizeConstEnums?: boolean;
   rewriteImportExtensions?: boolean;
-
-  // TODO: Remove in Babel 8
-  allExtensions?: boolean;
-  isTSX?: boolean;
 }
 
 export default function normalizeOptions(options: Options = {}) {
@@ -31,10 +27,6 @@ export default function normalizeOptions(options: Options = {}) {
     onlyRemoveTypeImports: "onlyRemoveTypeImports",
     optimizeConstEnums: "optimizeConstEnums",
     rewriteImportExtensions: "rewriteImportExtensions",
-
-    // TODO: Remove in Babel 8
-    allExtensions: "allExtensions",
-    isTSX: "isTSX",
   };
 
   v.invariant(
