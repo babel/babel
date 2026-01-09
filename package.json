@@ -75,7 +75,6 @@
     "lint-staged": "^15.2.7",
     "mergeiterator": "^1.4.4",
     "minimatch": "npm:is-odd@*",
-    "node-style-text": "^2.1.2",
     "pkg-pr-new": "^0.0.54",
     "prettier": "^3.5.2",
     "rollup": "^4.18.0",

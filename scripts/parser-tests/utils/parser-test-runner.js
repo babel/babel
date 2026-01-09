@@ -1,10 +1,10 @@
 // @ts-check
 
 import fs from "node:fs/promises";
-import colors from "node-style-text";
+import { styleText } from "node:util";
 import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
-const dot = colors.gray(".");
+const dot = styleText("gray", ".");
 
 /**
  * @typedef {Object} Summary
@@ -294,11 +294,11 @@ class TestRunner {
 
     console.log(`Testing complete (${summary.count} tests).`);
     console.log("Summary:");
-    console.log(colors.green(goodnews.join("\n").replace(/^/gm, " ✔ ")));
+    console.log(styleText("green", goodnews.join("\n").replace(/^/gm, " ✔ ")));
 
     if (!summary.passed) {
       console.log("");
-      console.log(colors.red(badnews.join("\n").replace(/^/gm, " ✘ ")));
+      console.log(styleText("red", badnews.join("\n").replace(/^/gm, " ✘ ")));
       console.log("");
       console.log("Details:");
       console.log(badnewsDetails.join("\n").replace(/^/gm, "   "));

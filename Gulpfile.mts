@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { Transform as TransformStream } from "node:stream";
 import { callbackify } from "node:util";
-import colors from "node-style-text";
+import { styleText } from "node:util";
 // @ts-expect-error no types
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -109,7 +109,7 @@ async function generateHelpers(
     path.join(dest, filename)
   );
   fs.writeFileSync(path.join(dest, filename), result, { mode: 0o644 });
-  log(`${colors.green("✔")} Generated ${message}`);
+  log(`${styleText("green", "✔")} Generated ${message}`);
 }
 
 type TypesHelperKind =
@@ -362,7 +362,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           /@babel\/preset-modules\/.*/,
         ];
 
-        log(`Compiling '${colors.cyan(input)}' with rollup ...`);
+        log(`Compiling '${styleText("cyan", input)}' with rollup ...`);
         const bundle = await rollup({
           input,
           external: buildStandalone ? [] : external,
@@ -589,15 +589,17 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
 
         if (!process.env.IS_PUBLISH) {
           log(
-            colors.yellow(
-              `Skipped minification of '${colors.cyan(
+            styleText(
+              "yellow",
+              `Skipped minification of '${styleText(
+                "cyan",
                 outputFile
               )}' because not publishing`
             )
           );
           return undefined;
         }
-        log(`Minifying '${colors.cyan(outputFile)}'...`);
+        log(`Minifying '${styleText("cyan", outputFile)}'...`);
 
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
@@ -629,7 +631,7 @@ function buildRollupDts(packages: string[]) {
     banner: string,
     packageName: string
   ) {
-    log(`Bundling '${colors.cyan(output)}' with rollup ...`);
+    log(`Bundling '${styleText("cyan", output)}' with rollup ...`);
 
     let external;
     if (packageName) {

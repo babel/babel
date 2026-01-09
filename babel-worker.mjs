@@ -3,8 +3,8 @@
 import { transformAsync } from "@babel/core";
 import { mkdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { styleText } from "node:util";
 import { log } from "./scripts/utils/logger.js";
-import colors from "node-style-text";
 
 /** * Check if the source file needs to be compiled based on its modification time
  * compared to the destination file.
@@ -34,7 +34,7 @@ export async function transform(src, dest, opts = {}) {
   if (!needCompile(src, dest)) {
     return;
   }
-  log(`Compiling '${colors.cyan(src)}'...`);
+  log(`Compiling '${styleText("cyan", src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
   const { code, map } = await transformAsync(content, {
     filename: src,
