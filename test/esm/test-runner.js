@@ -1,4 +1,4 @@
-import colors from "picocolors";
+import { styleText } from "node:util";
 
 export default async function testRunner({ title, testcases }) {
   console.log(title);
@@ -6,9 +6,9 @@ export default async function testRunner({ title, testcases }) {
   for (const [subtitle, testcase] of testcases) {
     try {
       await testcase();
-      console.log(colors.green(indent + "✓ " + subtitle));
+      console.log(styleText("green", indent + "✓ " + subtitle));
     } catch (e) {
-      console.log(colors.red(indent + "✗ " + subtitle));
+      console.log(styleText("red", indent + "✗ " + subtitle));
       console.error(e);
       process.exitCode = 1;
     }

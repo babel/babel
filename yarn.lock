@@ -4177,7 +4177,6 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
-    picocolors: "npm:^1.0.0"
   languageName: unknown
   linkType: soft
 
@@ -7535,7 +7534,6 @@ __metadata:
     lint-staged: "npm:^15.2.7"
     mergeiterator: "npm:^1.4.4"
     minimatch: "npm:is-odd@*"
-    picocolors: "npm:^1.0.0"
     pkg-pr-new: "npm:^0.0.54"
     prettier: "npm:^3.5.2"
     rollup: "npm:^4.18.0"
