@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":295,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":24,"index":295}},
+  "start":0,"end":268,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":24,"index":268}},
   "program": {
     "type": "Program",
-    "start":0,"end":295,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":24,"index":295}},
+    "start":0,"end":268,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":24,"index":268}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -141,47 +141,23 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":155,"end":181,"loc":{"start":{"line":6,"column":0,"index":155},"end":{"line":6,"column":26,"index":181}},
+        "start":155,"end":184,"loc":{"start":{"line":6,"column":0,"index":155},"end":{"line":6,"column":29,"index":184}},
         "exportKind": "type",
         "specifiers": [],
         "source": null,
         "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
-          "start":162,"end":181,"loc":{"start":{"line":6,"column":7,"index":162},"end":{"line":6,"column":26,"index":181}},
-          "kind": "module",
-          "id": {
-            "type": "Identifier",
-            "start":177,"end":178,"loc":{"start":{"line":6,"column":22,"index":177},"end":{"line":6,"column":23,"index":178},"identifierName":"M"},
-            "name": "M"
-          },
-          "body": {
-            "type": "TSModuleBlock",
-            "start":179,"end":181,"loc":{"start":{"line":6,"column":24,"index":179},"end":{"line":6,"column":26,"index":181}},
-            "body": []
-          },
-          "declare": true
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start":182,"end":211,"loc":{"start":{"line":7,"column":0,"index":182},"end":{"line":7,"column":29,"index":211}},
-        "exportKind": "type",
-        "specifiers": [],
-        "source": null,
-        "attributes": [],
-        "declaration": {
-          "type": "TSModuleDeclaration",
-          "start":189,"end":211,"loc":{"start":{"line":7,"column":7,"index":189},"end":{"line":7,"column":29,"index":211}},
+          "start":162,"end":184,"loc":{"start":{"line":6,"column":7,"index":162},"end":{"line":6,"column":29,"index":184}},
           "kind": "namespace",
           "id": {
             "type": "Identifier",
-            "start":207,"end":208,"loc":{"start":{"line":7,"column":25,"index":207},"end":{"line":7,"column":26,"index":208},"identifierName":"N"},
+            "start":180,"end":181,"loc":{"start":{"line":6,"column":25,"index":180},"end":{"line":6,"column":26,"index":181},"identifierName":"N"},
             "name": "N"
           },
           "body": {
             "type": "TSModuleBlock",
-            "start":209,"end":211,"loc":{"start":{"line":7,"column":27,"index":209},"end":{"line":7,"column":29,"index":211}},
+            "start":182,"end":184,"loc":{"start":{"line":6,"column":27,"index":182},"end":{"line":6,"column":29,"index":184}},
             "body": []
           },
           "declare": true
@@ -189,22 +165,22 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":212,"end":238,"loc":{"start":{"line":8,"column":0,"index":212},"end":{"line":8,"column":26,"index":238}},
+        "start":185,"end":211,"loc":{"start":{"line":7,"column":0,"index":185},"end":{"line":7,"column":26,"index":211}},
         "exportKind": "type",
         "specifiers": [],
         "source": null,
         "attributes": [],
         "declaration": {
           "type": "TSEnumDeclaration",
-          "start":219,"end":238,"loc":{"start":{"line":8,"column":7,"index":219},"end":{"line":8,"column":26,"index":238}},
+          "start":192,"end":211,"loc":{"start":{"line":7,"column":7,"index":192},"end":{"line":7,"column":26,"index":211}},
           "id": {
             "type": "Identifier",
-            "start":232,"end":235,"loc":{"start":{"line":8,"column":20,"index":232},"end":{"line":8,"column":23,"index":235},"identifierName":"foo"},
+            "start":205,"end":208,"loc":{"start":{"line":7,"column":20,"index":205},"end":{"line":7,"column":23,"index":208},"identifierName":"foo"},
             "name": "foo"
           },
           "body": {
             "type": "TSEnumBody",
-            "start":236,"end":238,"loc":{"start":{"line":8,"column":24,"index":236},"end":{"line":8,"column":26,"index":238}},
+            "start":209,"end":211,"loc":{"start":{"line":7,"column":24,"index":209},"end":{"line":7,"column":26,"index":211}},
             "members": []
           },
           "declare": true
@@ -212,28 +188,28 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":239,"end":270,"loc":{"start":{"line":9,"column":0,"index":239},"end":{"line":9,"column":31,"index":270}},
+        "start":212,"end":243,"loc":{"start":{"line":8,"column":0,"index":212},"end":{"line":8,"column":31,"index":243}},
         "exportKind": "type",
         "specifiers": [],
         "source": null,
         "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
-          "start":246,"end":270,"loc":{"start":{"line":9,"column":7,"index":246},"end":{"line":9,"column":31,"index":270}},
+          "start":219,"end":243,"loc":{"start":{"line":8,"column":7,"index":219},"end":{"line":8,"column":31,"index":243}},
           "declarations": [
             {
               "type": "VariableDeclarator",
-              "start":258,"end":269,"loc":{"start":{"line":9,"column":19,"index":258},"end":{"line":9,"column":30,"index":269}},
+              "start":231,"end":242,"loc":{"start":{"line":8,"column":19,"index":231},"end":{"line":8,"column":30,"index":242}},
               "id": {
                 "type": "Identifier",
-                "start":258,"end":269,"loc":{"start":{"line":9,"column":19,"index":258},"end":{"line":9,"column":30,"index":269},"identifierName":"bar"},
+                "start":231,"end":242,"loc":{"start":{"line":8,"column":19,"index":231},"end":{"line":8,"column":30,"index":242},"identifierName":"bar"},
                 "name": "bar",
                 "typeAnnotation": {
                   "type": "TSTypeAnnotation",
-                  "start":261,"end":269,"loc":{"start":{"line":9,"column":22,"index":261},"end":{"line":9,"column":30,"index":269}},
+                  "start":234,"end":242,"loc":{"start":{"line":8,"column":22,"index":234},"end":{"line":8,"column":30,"index":242}},
                   "typeAnnotation": {
                     "type": "TSStringKeyword",
-                    "start":263,"end":269,"loc":{"start":{"line":9,"column":24,"index":263},"end":{"line":9,"column":30,"index":269}}
+                    "start":236,"end":242,"loc":{"start":{"line":8,"column":24,"index":236},"end":{"line":8,"column":30,"index":242}}
                   }
                 }
               },
@@ -246,21 +222,21 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":271,"end":295,"loc":{"start":{"line":10,"column":0,"index":271},"end":{"line":10,"column":24,"index":295}},
+        "start":244,"end":268,"loc":{"start":{"line":9,"column":0,"index":244},"end":{"line":9,"column":24,"index":268}},
         "exportKind": "type",
         "specifiers": [],
         "source": null,
         "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
-          "start":278,"end":295,"loc":{"start":{"line":10,"column":7,"index":278},"end":{"line":10,"column":24,"index":295}},
+          "start":251,"end":268,"loc":{"start":{"line":9,"column":7,"index":251},"end":{"line":9,"column":24,"index":268}},
           "declarations": [
             {
               "type": "VariableDeclarator",
-              "start":290,"end":294,"loc":{"start":{"line":10,"column":19,"index":290},"end":{"line":10,"column":23,"index":294}},
+              "start":263,"end":267,"loc":{"start":{"line":9,"column":19,"index":263},"end":{"line":9,"column":23,"index":267}},
               "id": {
                 "type": "Identifier",
-                "start":290,"end":294,"loc":{"start":{"line":10,"column":19,"index":290},"end":{"line":10,"column":23,"index":294},"identifierName":"_bar"},
+                "start":263,"end":267,"loc":{"start":{"line":9,"column":19,"index":263},"end":{"line":9,"column":23,"index":267},"identifierName":"_bar"},
                 "name": "_bar"
               },
               "init": null

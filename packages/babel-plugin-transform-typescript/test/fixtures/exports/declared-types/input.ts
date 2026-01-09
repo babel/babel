@@ -3,20 +3,18 @@ declare function f(): void;
 declare class C {}
 declare enum E {}
 declare module "m" {}
-declare module M {}
 declare namespace N {}
 export interface I {}
 export type T = number;
 export class C2 {}
 
 export { x, f, E, C }; // Not-even E
-export { M, N, I as I1, T as T1 }; // everything removed
+export { N, I as I1, T as T1 }; // everything removed
 export {
   x as x2,
   f as f2,
   C as CC2,
   E as E2,
-  M as M2,
   N as N2,
   I as I2,
   T as T2,

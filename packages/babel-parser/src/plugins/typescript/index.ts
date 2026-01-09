@@ -129,6 +129,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Index signatures cannot have the 'static' modifier.",
   InitializerNotAllowedInAmbientContext:
     "Initializers are not allowed in ambient contexts.",
+  InlineModuleDeclarationMustUseString:
+    "`module ... {}` declarations must have a string name. Use `namespace ... {}` instead.",
   InvalidHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
     `'${token}' list can only include identifiers or qualified-names with optional type arguments.`,
   InvalidModifierOnAwaitUsingDeclaration: (modifier: TsModifier) =>
@@ -2034,7 +2036,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSModuleBlock");
     }
 
-    tsParseModuleOrNamespaceDeclaration(
+    tsParseNamespaceDeclaration(
       node: Undone<N.TsModuleDeclaration>,
     ): N.TsModuleDeclaration {
       node.id = this.tsParseEntityName(
@@ -2059,13 +2061,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsModuleDeclaration {
       if (this.isContextual(tt._global)) {
         node.kind = "global";
-
         node.id = this.parseIdentifier();
-      } else if (this.match(tt.string)) {
+      } else {
         node.kind = "module";
         node.id = super.parseStringLiteral(this.state.value);
-      } else {
-        this.unexpected();
       }
       if (this.match(tt.braceL)) {
         this.scope.enter(ScopeFlag.TS_MODULE);
@@ -2283,12 +2282,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         case tt._module:
           if (this.tsCheckLineTerminator(next)) {
-            if (this.match(tt.string)) {
-              return this.tsParseAmbientExternalModuleDeclaration(node);
-            } else if (tokenIsIdentifier(this.state.type)) {
-              node.kind = "module";
-              return this.tsParseModuleOrNamespaceDeclaration(node);
-            }
+            return this.tsParseAmbientExternalModuleDeclaration(node);
           }
           break;
 
@@ -2298,7 +2292,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             tokenIsIdentifier(this.state.type)
           ) {
             node.kind = "namespace";
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+            return this.tsParseNamespaceDeclaration(node);
           }
           break;
 
@@ -3060,12 +3054,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             break;
           }
           case tt._module: {
-            if (this.nextTokenIsIdentifierOrStringLiteralOnSameLine()) {
+            if (this.nextTokenIsStringLiteralOnSameLine()) {
               const node = this.startNode<N.TsModuleDeclaration>();
               this.next(); // eat 'module'
               return this.tsParseDeclaration(
                 node,
                 tt._module,
+                false,
+                decorators,
+              ) as N.TsModuleDeclaration;
+            } else if (this.nextTokenIsIdentifierOnSameLine()) {
+              this.raise(
+                TSErrors.InlineModuleDeclarationMustUseString,
+                this.state.startLoc,
+              );
+              const node = this.startNode<N.TsModuleDeclaration>();
+              this.next(); // eat 'module'
+              return this.tsParseDeclaration(
+                node,
+                tt._namespace, // Parse as a namespace to allow identifier
                 false,
                 decorators,
               ) as N.TsModuleDeclaration;
@@ -4509,13 +4516,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    nextTokenIsIdentifierOrStringLiteralOnSameLine(): boolean {
+    nextTokenIsStringLiteralOnSameLine(): boolean {
       const next = this.nextTokenInLineStart();
       const nextCh = this.codePointAtPos(next);
       return (
-        this.chStartsBindingIdentifier(nextCh, next) ||
-        nextCh === charCodes.quotationMark ||
-        nextCh === charCodes.apostrophe
+        nextCh === charCodes.quotationMark || nextCh === charCodes.apostrophe
       );
     }
   };

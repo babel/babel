@@ -473,14 +473,13 @@ function bootstrapParserTests(name, repoURL, subPaths) {
     "clone",
     "--filter=blob:none",
     "--sparse",
-    "--single-branch",
-    "--shallow-since='2 years ago'",
+    "--revision",
+    getParserTestsCommit(name),
     repoURL,
     dir,
   ]);
 
   exec("git", ["sparse-checkout", "set", ...subPaths], dir);
-  exec("git", ["checkout", "-q", getParserTestsCommit(name)], dir);
 }
 
 target["bootstrap-test262"] = function () {
