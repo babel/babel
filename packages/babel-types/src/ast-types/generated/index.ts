@@ -638,7 +638,7 @@ export type ObjectMethod = ObjectMethodComputed | ObjectMethodNonComputed;
 
 export interface ObjectPropertyComputed extends BaseNode {
   type: "ObjectProperty";
-  value: Expression | PatternLike;
+  value: Expression;
   shorthand: boolean;
   decorators?: Decorator[] | null;
   computed: true;
@@ -646,7 +646,7 @@ export interface ObjectPropertyComputed extends BaseNode {
 }
 export interface ObjectPropertyNonComputed extends BaseNode {
   type: "ObjectProperty";
-  value: Expression | PatternLike;
+  value: Expression;
   shorthand: boolean;
   decorators?: Decorator[] | null;
   computed: false;
