@@ -17,7 +17,7 @@ interface Options extends SyntaxOptions {
 export type { Options };
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0-0"));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   // Options are validated in @babel/plugin-syntax-decorators
 
@@ -30,7 +30,7 @@ export default declare((api, options: Options) => {
       visitor: legacyVisitor,
     };
   } else if (!version || version === "2023-11") {
-    api.assertVersion(REQUIRED_VERSION("^7.0.2 || ^8.0.0-0"));
+    api.assertVersion(REQUIRED_VERSION("^7.0.2 || ^8.0.0"));
     return createClassFeaturePlugin({
       name: "proposal-decorators",
 

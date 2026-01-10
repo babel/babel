@@ -30,7 +30,7 @@ export default declare(function (
   { assertVersion, assumption },
   options: Options,
 ) {
-  assertVersion(REQUIRED_VERSION("^7.27.0"));
+  assertVersion(REQUIRED_VERSION("^7.27.0 || ^8.0.0"));
   options = validatePluginOptions(options);
   const ignoreFunctionLength = assumption("ignoreFunctionLength");
   return {

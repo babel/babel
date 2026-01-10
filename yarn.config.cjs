@@ -135,25 +135,6 @@ function enforceType({ Yarn }) {
 }
 
 /**
- * Enforces that @babel/runtime-corejs2 must depend on core-js 2
-gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', 'dependencies') :-
-  % Get the workspace name
-  % The rule works for @babel/runtime-corejs2 only
-  workspace_ident(WorkspaceCwd, '@babel/runtime-corejs2').
- * @param {Context} context
- */
-function enforceRuntimeCorejs2DependsOnCorejs2({ Yarn }) {
-  const workspace =
-    Yarn.workspace({ ident: "@babel/runtime-corejs2" }) ?? undefined;
-  const dep = Yarn.dependency({ workspace, ident: "core-js" });
-  if (dep === null) {
-    workspace?.error("@babel/runtime-corejs2 must depend on core-js");
-    return;
-  }
-  dep.update("^2.6.12");
-}
-
-/**
  * Enforces that a dependency doesn't appear in both `dependencies` and `devDependencies`
 gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') :-
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'devDependencies'),
@@ -319,7 +300,6 @@ module.exports = {
     enforceType(ctx);
     enforceExports(ctx);
     enforceNoDualTypeDependencies(ctx);
-    enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);
     if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
       enforceBabelCoreVersionFor78Compat(

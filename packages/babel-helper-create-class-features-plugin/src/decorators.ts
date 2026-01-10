@@ -2277,7 +2277,7 @@ export default function (
   version: DecoratorVersionKind,
   inherits: PluginObject["inherits"],
 ): PluginObject {
-  assertVersion(REQUIRED_VERSION("^7.21.0"));
+  assertVersion(REQUIRED_VERSION("^7.21.0 || ^8.0.0"));
 
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;

@@ -2,36 +2,36 @@
 
 Using targets:
 {
-  "android": "137",
+  "android": "142",
   "chrome": "109",
-  "edge": "136",
-  "firefox": "128",
-  "ios": "16.6",
-  "opera": "116",
+  "edge": "141",
+  "firefox": "140",
+  "ios": "18.5",
+  "opera": "124",
   "opera_mobile": "80",
-  "safari": "18.4",
-  "samsung": "27"
+  "safari": "26.1",
+  "samsung": "28"
 }
 
 Using modules transform: false
 
 Using plugins:
   transform-explicit-resource-management { chrome < 134, firefox < 141, ios, opera, opera_mobile, safari, samsung }
-  transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, ios < 17.4, opera_mobile, samsung }
-  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari }
-  transform-unicode-sets-regex { chrome < 112, ios < 17 }
+  transform-duplicate-named-capturing-groups-regex { chrome < 126, opera_mobile, samsung }
+  transform-regexp-modifiers { chrome < 125, ios, opera_mobile, safari }
+  transform-unicode-sets-regex { chrome < 112 }
 corejs3: `DEBUG` option
 
 Using targets: {
-  "android": "137",
+  "android": "142",
   "chrome": "109",
-  "edge": "136",
-  "firefox": "128",
-  "ios": "16.6",
-  "opera": "116",
+  "edge": "141",
+  "firefox": "140",
+  "ios": "18.5",
+  "opera": "124",
   "opera_mobile": "80",
-  "safari": "18.4",
-  "samsung": "27"
+  "safari": "26.1",
+  "samsung": "28"
 }
 
 Using polyfills with `usage-global` method:

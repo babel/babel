@@ -8,7 +8,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.23.0 || ^8.0.0-0"));
+  api.assertVersion(REQUIRED_VERSION("^7.23.0 || ^8.0.0"));
 
   v.validateTopLevelOptions(options, { version: "version" });
   const { version } = options;

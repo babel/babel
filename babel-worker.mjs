@@ -1,11 +1,10 @@
 // @ts-check
 
-"use strict";
-const { transformAsync } = require("@babel/core");
-const { mkdirSync, statSync, readFileSync, writeFileSync } = require("node:fs");
-const path = require("node:path");
-const { log } = require("./scripts/utils/logger.cjs");
-const colors = require("picocolors");
+import { transformAsync } from "@babel/core";
+import { mkdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { styleText } from "node:util";
+import { log } from "./scripts/utils/logger.js";
 
 /** * Check if the source file needs to be compiled based on its modification time
  * compared to the destination file.
@@ -30,12 +29,12 @@ function needCompile(src, dest) {
   return srcStat.mtimeMs >= destStat.mtimeMs;
 }
 
-exports.transform = async function transform(src, dest, opts = {}) {
+export async function transform(src, dest, opts = {}) {
   mkdirSync(path.dirname(dest), { recursive: true });
   if (!needCompile(src, dest)) {
     return;
   }
-  log(`Compiling '${colors.cyan(src)}'...`);
+  log(`Compiling '${styleText("cyan", src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
   const { code, map } = await transformAsync(content, {
     filename: src,
@@ -63,4 +62,4 @@ exports.transform = async function transform(src, dest, opts = {}) {
     // @ts-expect-error code must not be for our project source
     writeFileSync(dest, code, "utf8");
   }
-};
+}

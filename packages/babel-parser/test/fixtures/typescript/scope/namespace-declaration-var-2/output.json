@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":59}},
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":62}},
   "program": {
     "type": "Program",
-    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":59}},
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":62}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -25,41 +25,41 @@
       },
       {
         "type": "TSModuleDeclaration",
-        "start":22,"end":59,"loc":{"start":{"line":3,"column":0,"index":22},"end":{"line":5,"column":1,"index":59}},
-        "kind": "module",
+        "start":22,"end":62,"loc":{"start":{"line":3,"column":0,"index":22},"end":{"line":5,"column":1,"index":62}},
+        "kind": "namespace",
         "id": {
           "type": "Identifier",
-          "start":29,"end":32,"loc":{"start":{"line":3,"column":7,"index":29},"end":{"line":3,"column":10,"index":32},"identifierName":"bar"},
+          "start":32,"end":35,"loc":{"start":{"line":3,"column":10,"index":32},"end":{"line":3,"column":13,"index":35},"identifierName":"bar"},
           "name": "bar"
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":33,"end":59,"loc":{"start":{"line":3,"column":11,"index":33},"end":{"line":5,"column":1,"index":59}},
+          "start":36,"end":62,"loc":{"start":{"line":3,"column":14,"index":36},"end":{"line":5,"column":1,"index":62}},
           "body": [
             {
               "type": "ExportNamedDeclaration",
-              "start":37,"end":57,"loc":{"start":{"line":4,"column":2,"index":37},"end":{"line":4,"column":22,"index":57}},
+              "start":40,"end":60,"loc":{"start":{"line":4,"column":2,"index":40},"end":{"line":4,"column":22,"index":60}},
               "exportKind": "value",
               "specifiers": [],
               "source": null,
               "attributes": [],
               "declaration": {
                 "type": "VariableDeclaration",
-                "start":44,"end":57,"loc":{"start":{"line":4,"column":9,"index":44},"end":{"line":4,"column":22,"index":57}},
+                "start":47,"end":60,"loc":{"start":{"line":4,"column":9,"index":47},"end":{"line":4,"column":22,"index":60}},
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
-                    "start":48,"end":56,"loc":{"start":{"line":4,"column":13,"index":48},"end":{"line":4,"column":21,"index":56}},
+                    "start":51,"end":59,"loc":{"start":{"line":4,"column":13,"index":51},"end":{"line":4,"column":21,"index":59}},
                     "id": {
                       "type": "Identifier",
-                      "start":48,"end":56,"loc":{"start":{"line":4,"column":13,"index":48},"end":{"line":4,"column":21,"index":56},"identifierName":"foo"},
+                      "start":51,"end":59,"loc":{"start":{"line":4,"column":13,"index":51},"end":{"line":4,"column":21,"index":59},"identifierName":"foo"},
                       "name": "foo",
                       "typeAnnotation": {
                         "type": "TSTypeAnnotation",
-                        "start":51,"end":56,"loc":{"start":{"line":4,"column":16,"index":51},"end":{"line":4,"column":21,"index":56}},
+                        "start":54,"end":59,"loc":{"start":{"line":4,"column":16,"index":54},"end":{"line":4,"column":21,"index":59}},
                         "typeAnnotation": {
                           "type": "TSAnyKeyword",
-                          "start":53,"end":56,"loc":{"start":{"line":4,"column":18,"index":53},"end":{"line":4,"column":21,"index":56}}
+                          "start":56,"end":59,"loc":{"start":{"line":4,"column":18,"index":56},"end":{"line":4,"column":21,"index":59}}
                         }
                       }
                     },

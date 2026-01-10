@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(REQUIRED_VERSION("^7.13.0"));
+  assertVersion(REQUIRED_VERSION("^7.13.0 || ^8.0.0"));
 
   return {
     name: "proposal-async-do-expressions",

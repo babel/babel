@@ -1,7 +1,7 @@
-declare module LongNameModule {
+declare namespace LongNameModule {
   export type SomeType = number;
   export const foo: number;
-  module Inner {
+  namespace Inner {
     export type T = string;
     export const bar: boolean;
   }

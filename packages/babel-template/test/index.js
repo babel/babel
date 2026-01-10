@@ -505,8 +505,8 @@ describe("@babel/template", function () {
 
     it("works in const declaration inside for-of without init", () => {
       const output = template("for (const %%LHS%% of %%RHS%%){}")({
-        LHS: t.ObjectPattern([
-          t.ObjectProperty(t.identifier("x"), t.identifier("x")),
+        LHS: t.objectPattern([
+          t.objectProperty(t.identifier("x"), t.identifier("x")),
         ]),
         RHS: t.identifier("y"),
       });

@@ -1,5 +1,5 @@
 import TraversalContext from "./context.ts";
-import type { ExplodedTraverseOptions } from "./index.ts";
+import { Hub, type ExplodedTraverseOptions } from "./index.ts";
 import NodePath from "./path/index.ts";
 import type Scope from "./scope/index.ts";
 import type * as t from "@babel/types";
@@ -139,6 +139,13 @@ export function traverseNode<S = unknown>(
     return _visitPaths(ctx, [path!]);
   }
 
+  const hub =
+    path == null
+      ? node.type === "Program" || node.type === "File"
+        ? new Hub()
+        : undefined
+      : path.hub;
+
   for (const key of keys) {
     if (skipKeys?.[key]) continue;
     // @ts-expect-error key must present in node
@@ -155,6 +162,7 @@ export function traverseNode<S = unknown>(
           container: prop,
           key: i,
           listKey: key,
+          hub,
         });
         paths.push(childPath);
       }
@@ -168,6 +176,7 @@ export function traverseNode<S = unknown>(
             container: node,
             key,
             listKey: null,
+            hub,
           }),
         ])
       ) {

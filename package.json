@@ -1,7 +1,6 @@
 {
   "name": "babel",
-  "version": "7.28.5",
-  "version_babel8": "8.0.0-beta.3",
+  "version": "8.0.0-beta.3",
   "private": true,
   "type": "commonjs",
   "scripts": {
@@ -75,7 +74,6 @@
     "lint-staged": "^15.2.7",
     "mergeiterator": "^1.4.4",
     "minimatch": "npm:is-odd@*",
-    "picocolors": "^1.0.0",
     "pkg-pr-new": "^0.0.54",
     "prettier": "^3.5.2",
     "rollup": "^4.18.0",
@@ -98,10 +96,10 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "npm:4.25.1",
-    "caniuse-lite": "npm:1.0.30001731",
-    "core-js-compat": "npm:3.45.0",
-    "electron-to-chromium": "npm:1.5.197",
+    "browserslist": "4.28.1",
+    "caniuse-lite": "1.0.30001762",
+    "core-js-compat": "3.47.0",
+    "electron-to-chromium": "1.5.267",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
