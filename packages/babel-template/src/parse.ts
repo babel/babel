@@ -14,7 +14,7 @@ import {
 import type * as t from "@babel/types";
 import type { TraversalAncestors } from "@babel/types";
 import { parse } from "@babel/parser";
-import { codeFrameColumns } from "@babel/code-frame";
+import { codeFrameColumns } from "../../babel-code-frame/src/code-frame.ts";
 import type { TemplateOpts, ParserOpts } from "./options.ts";
 import type { Formatter } from "./formatters.ts";
 

@@ -1,7 +1,7 @@
 import * as helpers from "@babel/helpers";
 import { NodePath } from "@babel/traverse";
 import type { HubInterface, Scope } from "@babel/traverse";
-import { codeFrameColumns } from "@babel/code-frame";
+import { codeFrameColumns } from "../../../../babel-code-frame/src/code-frame.ts";
 import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
 import semver from "semver";

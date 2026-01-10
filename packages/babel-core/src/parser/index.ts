@@ -1,6 +1,6 @@
 import type { Handler } from "gensync";
 import { parse, type ParseResult } from "@babel/parser";
-import { codeFrameColumns } from "@babel/code-frame";
+import { codeFrameColumns } from "../../../babel-code-frame/src/code-frame.ts";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";
 import type { ResolvedOptions } from "../config/validation/options.ts";

@@ -13,7 +13,7 @@ import {
   type TestFile,
   type TaskOptions,
 } from "@babel/helper-fixtures";
-import { codeFrameColumns } from "@babel/code-frame";
+import { codeFrameColumns } from "../../babel-code-frame/src/code-frame.ts";
 import * as helpers from "./helpers.ts";
 import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "node:assert";
