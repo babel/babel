@@ -58,7 +58,7 @@ jobs:
       - name: Create new version
         run: |
           make new-version-checklist
-          yarn release-tool version -f @babel/standalone --yes preminor
+          yarn release-tool version -f @babel/standalone --yes ${{ github.event.inputs.version }}
 
       - name: Compute temporary branch name
         id: branch-name
