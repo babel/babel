@@ -32,7 +32,7 @@ jobs:
       - name: This release will publish the following packages
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            yarn release-tool version --dry ${{ github.event.inputs.version }}
+            yarn release-tool version --dry --all ${{ github.event.inputs.version }}
           else
             git diff --name-only HEAD^..HEAD
           fi;
@@ -58,7 +58,7 @@ jobs:
       - name: Create new version
         run: |
           make new-version-checklist
-          yarn release-tool version -f @babel/standalone --yes ${{ github.event.inputs.version }}
+          yarn release-tool version -f @babel/standalone --all --yes ${{ github.event.inputs.version }}
 
       - name: Compute temporary branch name
         id: branch-name
