@@ -24,6 +24,27 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.28.6 (2026-01-12)
+
+#### :bug: Bug Fix
+* `babel-cli`, `babel-code-frame`, `babel-core`, `babel-helper-check-duplicate-nodes`, `babel-helper-fixtures`, `babel-helper-plugin-utils`, `babel-node`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-property-mutators`, `babel-preset-env`, `babel-traverse`, `babel-types`
+  * [#17589](https://github.com/babel/babel/pull/17589) Improve Unicode handling in code-frame tokenizer ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`
+  * [#17556](https://github.com/babel/babel/pull/17556) fix: `transform-regenerator` correctly handles scope ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-react-jsx`
+  * [#17538](https://github.com/babel/babel/pull/17538) fix: Keep jsx comments ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-core`, `babel-standalone`
+  * [#17606](https://github.com/babel/babel/pull/17606) Polish(standalone): improve message on invalid preset/plugin ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-plugin-bugfix-v8-static-class-fields-redefine-readonly`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-import-attributes-to-assertions`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-syntax-async-do-expressions`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-destructuring-private`, `babel-plugin-syntax-do-expressions`, `babel-plugin-syntax-explicit-resource-management`, `babel-plugin-syntax-export-default-from`, `babel-plugin-syntax-flow`, `babel-plugin-syntax-function-bind`, `babel-plugin-syntax-function-sent`, `babel-plugin-syntax-import-assertions`, `babel-plugin-syntax-import-attributes`, `babel-plugin-syntax-import-defer`, `babel-plugin-syntax-import-source`, `babel-plugin-syntax-jsx`, `babel-plugin-syntax-module-blocks`, `babel-plugin-syntax-optional-chaining-assign`, `babel-plugin-syntax-partial-application`, `babel-plugin-syntax-pipeline-operator`, `babel-plugin-syntax-throw-expressions`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-explicit-resource-management`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-json-strings`, `babel-plugin-transform-logical-assignment-operators`, `babel-plugin-transform-nullish-coalescing-operator`, `babel-plugin-transform-numeric-separator`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-optional-catch-binding`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-regexp-modifiers`, `babel-plugin-transform-unicode-property-regex`, `babel-plugin-transform-unicode-sets-regex`
+  * [#17580](https://github.com/babel/babel/pull/17580) Allow Babel 8 in compatible Babel 7 plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-plugin-transform-react-jsx`
+  * [#17555](https://github.com/babel/babel/pull/17555) perf: Use lighter traversal for jsx `__source,__self` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.28.5 (2025-10-23)
 
 #### :eyeglasses: Spec Compliance
