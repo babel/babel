@@ -16,6 +16,75 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-beta.4 (2026-01-12)
+
+#### :boom: Breaking Change
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`, `babel-types`
+  * [#17659](https://github.com/babel/babel/pull/17659) Drop support for TS `module <identifier>` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`, `babel-preset-typescript`
+  * [#17670](https://github.com/babel/babel/pull/17670) breaking(preset-env): remove `isPluginRequired` export ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#17666](https://github.com/babel/babel/pull/17666) [Babel 8]: Ensure `parseExpression` with `tokens: true` returns the exported tokens ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17671](https://github.com/babel/babel/pull/17671) breaking(traverse): remove `blacklist` option ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-react-jsx-compat`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx-source`, `babel-standalone`
+  * [#17620](https://github.com/babel/babel/pull/17620) [Babel 8] Remove `plugin-transform-react-{compat,source,self}` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-node`
+  * [#17639](https://github.com/babel/babel/pull/17639) Remove `regenerator-runtime` from `@babel/node` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helper-create-class-features-plugin`, `babel-parser`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-plugin-transform-class-properties`, `babel-standalone`, `babel-traverse`
+  * [#17643](https://github.com/babel/babel/pull/17643) [Babel 8] Remove decorator parser plugin options ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-import-attributes-to-assertions`
+  * [#17650](https://github.com/babel/babel/pull/17650) [Babel 8] Archive proposal-import-attributes-to-assertions ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#17633](https://github.com/babel/babel/pull/17633) Remove corejs2 and legacy files from compat-data ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-runtime-corejs3`, `babel-runtime`
+  * [#17635](https://github.com/babel/babel/pull/17635) Remove `./regenerator` entrypoint from `@babel/runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#17610](https://github.com/babel/babel/pull/17610) [babel 8] Rename `TSImportType.argument` to `.source` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-import-attributes-to-assertions`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-transform-json-modules`, `babel-types`
+  * [#17603](https://github.com/babel/babel/pull/17603) [babel 8] Fully remove import assertions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-syntax-record-and-tuple`, `babel-standalone`, `babel-traverse`, `babel-types`
+  * [#17528](https://github.com/babel/babel/pull/17528) Fully remove Records and Tuples support ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-compat-data`, `babel-preset-env`
+  * [#16475](https://github.com/babel/babel/pull/16475) Fix order of `transform-block-scoped-functions` in `preset-env` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#17568](https://github.com/babel/babel/pull/17568) Fix traverse NodePath caching ([@coderaiser](https://github.com/coderaiser))
+  * [#17570](https://github.com/babel/babel/pull/17570) [Babel 8] fix: Correctly handle export references ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-runtime-corejs3`, `babel-runtime`
+  * [#17529](https://github.com/babel/babel/pull/17529) [babel 8] Add `sideEffects: false` to babel-runtime ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-cli`, `babel-code-frame`, `babel-compat-data`, `babel-core`, `babel-generator`, `babel-helper-annotate-as-pure`, `babel-helper-builder-react-jsx`, `babel-helper-check-duplicate-nodes`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-fixtures`, `babel-helper-globals`, `babel-helper-import-to-platform-api`, `babel-helper-member-expression-to-functions`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-optimise-call-expression`, `babel-helper-plugin-test-runner`, `babel-helper-plugin-utils`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-simple-access`, `babel-helper-skip-transparent-expression-wrappers`, `babel-helper-string-parser`, `babel-helper-transform-fixture-test-runner`, `babel-helper-validator-identifier`, `babel-helper-validator-option`, `babel-helper-wrap-function`, `babel-helpers`, `babel-node`, `babel-parser`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-plugin-bugfix-safari-class-field-initializer-scope`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-bugfix-v8-static-class-fields-redefine-readonly`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-do-expressions`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-discard-binding`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-import-defer`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-proposal-optional-chaining-assign`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-syntax-async-do-expressions`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-destructuring-private`, `babel-plugin-syntax-do-expressions`, `babel-plugin-syntax-explicit-resource-management`, `babel-plugin-syntax-export-default-from`, `babel-plugin-syntax-flow`, `babel-plugin-syntax-function-bind`, `babel-plugin-syntax-function-sent`, `babel-plugin-syntax-import-assertions`, `babel-plugin-syntax-import-attributes`, `babel-plugin-syntax-import-defer`, `babel-plugin-syntax-import-source`, `babel-plugin-syntax-jsx`, `babel-plugin-syntax-module-blocks`, `babel-plugin-syntax-optional-chaining-assign`, `babel-plugin-syntax-partial-application`, `babel-plugin-syntax-pipeline-operator`, `babel-plugin-syntax-throw-expressions`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-explicit-resource-management`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-export-namespace-from`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-function-name`, `babel-plugin-transform-instanceof`, `babel-plugin-transform-jscript`, `babel-plugin-transform-json-modules`, `babel-plugin-transform-json-strings`, `babel-plugin-transform-literals`, `babel-plugin-transform-logical-assignment-operators`, `babel-plugin-transform-member-expression-literals`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-new-target`, `babel-plugin-transform-nullish-coalescing-operator`, `babel-plugin-transform-numeric-separator`, `babel-plugin-transform-object-assign`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-object-set-prototype-of-to-assign`, `babel-plugin-transform-object-super`, `babel-plugin-transform-optional-catch-binding`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-parameters`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-property-literals`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-react-pure-annotations`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-regexp-modifiers`, `babel-plugin-transform-reserved-words`, `babel-plugin-transform-runtime`, `babel-plugin-transform-shorthand-properties`, `babel-plugin-transform-spread`, `babel-plugin-transform-sticky-regex`, `babel-plugin-transform-strict-mode`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-escapes`, `babel-plugin-transform-unicode-property-regex`, `babel-plugin-transform-unicode-regex`, `babel-plugin-transform-unicode-sets-regex`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-typescript`, `babel-register`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#17660](https://github.com/babel/babel/pull/17660) Update publishing process for Babel 8 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-object-rest-spread`
+  * [#17676](https://github.com/babel/babel/pull/17676) Remove unused deps ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-code-frame`, `babel-core`
+  * [#17677](https://github.com/babel/babel/pull/17677) Stop vendoring import-meta-resolve ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#17665](https://github.com/babel/babel/pull/17665) chore: add preset-typescript as optional peer dep ([@JLHwung](https://github.com/JLHwung))
+  * [#17569](https://github.com/babel/babel/pull/17569) Add `BABEL_7_TO_8_DANGEROUSLY_DISABLE_VERSION_CHECK` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17661](https://github.com/babel/babel/pull/17661) Remove `@onlyBabel7` helpers ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-generator`, `babel-helper-create-class-features-plugin`, `babel-helper-skip-transparent-expression-wrappers`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-for-of`, `babel-plugin-transform-typescript`
+  * [#17651](https://github.com/babel/babel/pull/17651) cleanup `@ts-expect-error(Babel 7 vs Babel 8)` comments (Part 1) ([@JLHwung](https://github.com/JLHwung))
+* `babel-code-frame`
+  * [#17645](https://github.com/babel/babel/pull/17645) Bump js-tokens to v10 ([@fisker](https://github.com/fisker))
+* `babel-parser`
+  * [#17641](https://github.com/babel/babel/pull/17641) [Babel 8] Parser cleanup ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-traverse`
+  * [#17638](https://github.com/babel/babel/pull/17638) refactor: replace debug with obug ([@sxzz](https://github.com/sxzz))
+* `babel-helper-builder-react-jsx`
+  * [#17621](https://github.com/babel/babel/pull/17621) [babel 8] Remove `@babel/types` dep from helper-builder-react-jsx ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`
+  * [#17597](https://github.com/babel/babel/pull/17597) Record and tuple cleanup ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-types`
+  * [#17594](https://github.com/babel/babel/pull/17594) [Babel 8]: Bump glob to v12 ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#17590](https://github.com/babel/babel/pull/17590) [Babel 8] chore: bump glob to v11 ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.0-beta.3 (2025-10-23)
 
 #### :boom: Breaking Change
