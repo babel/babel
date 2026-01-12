@@ -42,7 +42,6 @@ jobs:
       contents: write # for Git to git push
     name: Create git tag and commit
     runs-on: ubuntu-latest
-    needs: check-release-type
     if: github.event_name == 'workflow_dispatch'
     outputs:
       branch: ${{ steps.branch-name.outputs.branch }}
@@ -133,13 +132,7 @@ jobs:
     name: Create GitHub release draft
     runs-on: ubuntu-latest
     needs:
-      - check-release-type
       - git-version
-    # The default condition is success(), but this is false when one of the previous jobs is skipped
-    if: |
-      always() &&
-      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
-      needs.check-release-type.result == 'success'
     outputs:
       is-main: ${{ steps.is-main.outputs.result == 1 }}
       changelog: ${{ steps.changelog.outputs.changelog }}
@@ -200,7 +193,6 @@ jobs:
       - npm-release
       - github-release
       - git-version
-      - check-release-type
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
