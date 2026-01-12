@@ -4,8 +4,6 @@ import { types as t } from "@babel/core";
 
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
 
-// TODO(Babel 8): Remove this
-
 export interface Options {
   absoluteRuntime?: boolean;
   corejs?: string | number | { version: string | number; proposals?: boolean };
