@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-logical-assignment-operators",
-  "version": "7.28.5",
+  "version": "7.28.6",
   "description": "Transforms logical assignment operators into short-circuited assignments",
   "repository": {
     "type": "git",

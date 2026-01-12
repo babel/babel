@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-do-expressions",
-  "version": "7.27.1",
+  "version": "7.28.6",
   "description": "Allow parsing of do expressions",
   "repository": {
     "type": "git",
