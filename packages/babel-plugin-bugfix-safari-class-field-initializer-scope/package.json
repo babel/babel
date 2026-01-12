@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-safari-class-field-initializer-scope",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Wrap class field initializers with IIFE to workaround https://webkit.org/b/236843",
   "repository": {
     "type": "git",

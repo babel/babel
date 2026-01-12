@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.cjs",
   "type": "module",

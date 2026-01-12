@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-import-wasm-source",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Transform source phase imports (`import source ... from '...'`) to work in browsers and Node.js, assuming that the imported source is a WebAssembly module.",
   "repository": {
     "type": "git",

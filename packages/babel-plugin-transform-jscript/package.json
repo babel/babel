@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-jscript",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Babel plugin to fix buggy JScript named function expressions",
   "repository": {
     "type": "git",

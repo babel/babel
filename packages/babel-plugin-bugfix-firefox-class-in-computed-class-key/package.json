@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-firefox-class-in-computed-class-key",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Wraps classes defined in computed keys of other classes affected by https://bugzilla.mozilla.org/show_bug.cgi?id=1887677",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-function-name",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Apply ES2015 function.name semantics to all functions",
   "repository": {
     "type": "git",

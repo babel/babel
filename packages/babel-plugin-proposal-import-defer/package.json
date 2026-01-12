@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-import-defer",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Support `import defer` when compiling to CommonJS",
   "repository": {
     "type": "git",

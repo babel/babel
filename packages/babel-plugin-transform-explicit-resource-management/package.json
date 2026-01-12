@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-explicit-resource-management",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Compile `using` and `await using` declarations to ES2015",
   "repository": {
     "type": "git",

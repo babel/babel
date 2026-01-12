@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-source",
-  "version": "8.0.0-beta.3",
+  "version": "8.0.0-beta.4",
   "description": "Allow parsing of the `import source` proposal.",
   "repository": {
     "type": "git",
