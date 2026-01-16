@@ -976,16 +976,16 @@ export function classDeclaration(
 }
 export function exportAllDeclaration(
   source: t.StringLiteral,
-  assertions: any,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.ExportAllDeclaration {
   const node: t.ExportAllDeclaration = {
     type: "ExportAllDeclaration",
     source,
-    assertions,
+    attributes,
   };
   const defs = NODE_FIELDS.ExportAllDeclaration;
   validate(defs.source, node, "source", source, 1);
-  validate(defs.assertions, node, "assertions", assertions);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function exportDefaultDeclaration(

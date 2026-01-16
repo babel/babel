@@ -1466,7 +1466,7 @@ export const importAttributes = {
 };
 
 defineType("ExportAllDeclaration", {
-  visitor: ["source", "assertions"],
+  visitor: ["source", "attributes"],
   aliases: [
     "Statement",
     "Declaration",

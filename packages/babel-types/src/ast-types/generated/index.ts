@@ -863,7 +863,6 @@ export interface ClassDeclaration extends BaseNode {
 export interface ExportAllDeclaration extends BaseNode {
   type: "ExportAllDeclaration";
   source: StringLiteral;
-  assertions: any;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
