@@ -217,7 +217,7 @@ module.exports = function (api) {
         plugins: ["babel-plugin-transform-charcodes"],
       },
       {
-        test: ["packages/babel-generator"].map(normalize),
+        test: ["packages/babel-generator/src"].map(normalize),
         plugins: [pluginGeneratorOptimization],
       },
       convertESM && {
@@ -963,25 +963,60 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
  * @returns {import("@babel/core").PluginObject}
  */
 function pluginGeneratorOptimization({ types: t }) {
+  const generatorNames = [];
+  fs.globSync(
+    pathUtils.join(__dirname, "./packages/babel-generator/src/generators/*.ts")
+  ).forEach(file => {
+    if (file.endsWith("deprecated.ts")) return;
+    const content = fs.readFileSync(file, "utf8");
+    const ast = parseSync(content, {
+      configFile: false,
+      parserOpts: { plugins: ["typescript"] },
+    });
+    t.traverseFast(ast, node => {
+      let name;
+      if (t.isExportSpecifier(node)) {
+        name = t.isStringLiteral(node.exported)
+          ? node.exported.value
+          : node.exported.name;
+      } else if (
+        t.isExportNamedDeclaration(node) &&
+        t.isFunctionDeclaration(node.declaration)
+      ) {
+        name = node.declaration.id.name;
+      }
+      if (name && !name.startsWith("_")) generatorNames.push(name);
+    });
+  });
+  generatorNames.sort();
   return {
     visitor: {
       CallExpression: {
         exit(path) {
-          const node = path.node;
-          if (
-            t.isMemberExpression(node.callee) &&
-            t.isThisExpression(node.callee.object)
-          ) {
-            const args = node.arguments;
+          const { callee, arguments: args } = path.node;
+          if (t.isIdentifier(callee) && callee.name === "__node") {
+            t.assertStringLiteral(args[0]);
+            const type = args[0].value;
+            const generatorIndex = generatorNames.indexOf(type);
+            if (generatorIndex === -1) {
+              throw path.buildCodeFrameError(`Unknown generator type: ${type}`);
+            }
+            path.replaceWith(t.numericLiteral(generatorIndex));
+            return;
+          }
 
+          if (
+            t.isMemberExpression(callee) &&
+            t.isThisExpression(callee.object)
+          ) {
             if (
-              node.callee.property.name === "token" &&
+              callee.property.name === "token" &&
               args.length === 1 &&
               t.isStringLiteral(args[0])
             ) {
               const str = args[0].value;
               if (str.length === 1) {
-                node.callee.property.name = "tokenChar";
+                callee.property.name = "tokenChar";
                 args[0] = t.numericLiteral(str.charCodeAt(0));
               }
             }

@@ -14,13 +14,12 @@ export function File(this: Printer, node: t.File) {
 export function Program(this: Printer, node: t.Program) {
   // An empty Program doesn't have any inner tokens, so
   // we must explicitly print its inner comments.
-  this.noIndentInnerCommentsHere();
-  this.printInnerComments();
+  this.printInnerComments(false);
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {
     const newline = node.body.length ? 2 : 1;
-    this.printSequence(node.directives, undefined, newline);
+    this.printSequence(node.directives, undefined, undefined, newline);
     if (!node.directives[directivesLen - 1].trailingComments?.length) {
       this.newline(newline);
     }
@@ -31,20 +30,20 @@ export function Program(this: Printer, node: t.Program) {
 
 export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
-  const exit = this.enterDelimited();
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {
     const newline = node.body.length ? 2 : 1;
-    this.printSequence(node.directives, true, newline);
+    this.printSequence(node.directives, true, true, newline);
     if (!node.directives[directivesLen - 1].trailingComments?.length) {
       this.newline(newline);
     }
   }
 
-  this.printSequence(node.body, true);
+  this.printSequence(node.body, true, true);
 
-  exit();
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   this.rightBrace(node);
 }
 
@@ -87,7 +86,7 @@ export function InterpreterDirective(
   node: t.InterpreterDirective,
 ) {
   this.token(`#!${node.value}`);
-  this.newline(1, true);
+  this._newline();
 }
 
 export function Placeholder(this: Printer, node: t.Placeholder) {

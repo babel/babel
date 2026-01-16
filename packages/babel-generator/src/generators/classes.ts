@@ -8,6 +8,10 @@ import type * as t from "@babel/types";
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
+import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
+import { _tsPrintClassMemberModifiers } from "./typescript.ts";
+import { _variance } from "./flow.ts";
+import { _methodHead } from "./methods.ts";
 
 export function ClassDeclaration(
   this: Printer,
@@ -19,7 +23,8 @@ export function ClassDeclaration(
 
   if (
     !inExport ||
-    !this._shouldPrintDecoratorsBeforeExport(
+    !_shouldPrintDecoratorsBeforeExport.call(
+      this,
       parent as t.ExportDeclaration & { declaration: t.ClassDeclaration },
     )
   ) {
@@ -79,14 +84,12 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   if (node.body.length === 0) {
     this.token("}");
   } else {
-    this.newline();
-
     const separator = classBodyEmptySemicolonsPrinter(this, node);
     separator?.(-1); // print leading semicolons in preserveFormat mode
 
-    const exit = this.enterDelimited();
-    this.printJoin(node.body, true, true, separator, true);
-    exit();
+    const oldNoLineTerminatorAfterNode = this.enterDelimited();
+    this.printJoin(node.body, true, true, separator, true, true);
+    this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
@@ -141,7 +144,7 @@ function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
       ) &&
       tok.start < end!
     ) {
-      printer.token(";", undefined, occurrenceCount++);
+      printer.tokenChar(charCodes.semicolon, occurrenceCount++);
       k++;
     }
   };
@@ -157,14 +160,14 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
     if (endLine) this.catchUp(endLine);
   }
 
-  this.tsPrintClassMemberModifiers(node);
+  _tsPrintClassMemberModifiers.call(this, node);
 
   if (node.computed) {
     this.token("[");
     this.print(node.key);
     this.token("]");
   } else {
-    this._variance(node);
+    _variance.call(this, node);
     this.print(node.key);
   }
 
@@ -198,7 +201,7 @@ export function ClassAccessorProperty(
   if (endLine) this.catchUp(endLine);
 
   // TS does not support class accessor property yet
-  this.tsPrintClassMemberModifiers(node);
+  _tsPrintClassMemberModifiers.call(this, node);
 
   this.word("accessor", true);
   this.space();
@@ -209,7 +212,7 @@ export function ClassAccessorProperty(
     this.token("]");
   } else {
     // Todo: Flow does not support class accessor property yet.
-    this._variance(node);
+    _variance.call(this, node);
     this.print(node.key);
   }
 
@@ -236,7 +239,7 @@ export function ClassPrivateProperty(
   node: t.ClassPrivateProperty,
 ) {
   this.printJoin(node.decorators);
-  this.tsPrintClassMemberModifiers(node);
+  _tsPrintClassMemberModifiers.call(this, node);
   this.print(node.key);
   // TS
   if (node.optional) {
@@ -256,13 +259,13 @@ export function ClassPrivateProperty(
 }
 
 export function ClassMethod(this: Printer, node: t.ClassMethod) {
-  this._classMethodHead(node);
+  _classMethodHead.call(this, node);
   this.space();
   this.print(node.body);
 }
 
 export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
-  this._classMethodHead(node);
+  _classMethodHead.call(this, node);
   this.space();
   this.print(node.body);
 }
@@ -280,8 +283,8 @@ export function _classMethodHead(
     if (endLine) this.catchUp(endLine);
   }
 
-  this.tsPrintClassMemberModifiers(node);
-  this._methodHead(node);
+  _tsPrintClassMemberModifiers.call(this, node);
+  _methodHead.call(this, node);
 }
 
 export function StaticBlock(this: Printer, node: t.StaticBlock) {
