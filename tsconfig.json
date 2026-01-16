@@ -348,9 +348,6 @@
       "path": "./packages/babel-plugin-transform-numeric-separator"
     },
     {
-      "path": "./packages/babel-plugin-transform-object-assign"
-    },
-    {
       "path": "./packages/babel-plugin-transform-object-rest-spread"
     },
     {
