@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { firefox < 141 }
+  transform-explicit-resource-management { firefox < 147 }
   transform-duplicate-named-capturing-groups-regex { firefox < 129 }
   transform-regexp-modifiers { firefox < 132 }
   transform-unicode-sets-regex { firefox < 116 }
