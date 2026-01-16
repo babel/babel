@@ -471,7 +471,8 @@ function _evaluate(path: NodePath, state: State): any {
         object.isIdentifier() &&
         property.isIdentifier() &&
         isValidObjectCallee(object.node.name) &&
-        !isInvalidMethod(property.node.name)
+        !isInvalidMethod(property.node.name) &&
+        !path.scope.getBinding(object.node.name)
       ) {
         context = global[object.node.name];
         const key = property.node.name;
