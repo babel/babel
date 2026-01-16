@@ -22,9 +22,11 @@ var err1, err2;
   } catch (exception) {
     err1 = exception;
   }
-  switch (1) {
-    default:
-      let f = function () {};
+  {
+    let f = function f() {};
+    switch (1) {
+      default:
+    }
   }
   try {
     f;
