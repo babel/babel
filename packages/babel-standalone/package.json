@@ -79,7 +79,6 @@
     "@babel/plugin-transform-new-target": "workspace:^",
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^",
     "@babel/plugin-transform-numeric-separator": "workspace:^",
-    "@babel/plugin-transform-object-assign": "^7.27.1",
     "@babel/plugin-transform-object-rest-spread": "workspace:^",
     "@babel/plugin-transform-object-set-prototype-of-to-assign": "workspace:^",
     "@babel/plugin-transform-object-super": "workspace:^",

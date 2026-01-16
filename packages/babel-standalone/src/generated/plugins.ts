@@ -73,7 +73,6 @@ import transformModulesSystemjs from "@babel/plugin-transform-modules-systemjs";
 import transformModulesUmd from "@babel/plugin-transform-modules-umd";
 import transformNamedCapturingGroupsRegex from "@babel/plugin-transform-named-capturing-groups-regex";
 import transformNewTarget from "@babel/plugin-transform-new-target";
-import transformObjectAssign from "@babel/plugin-transform-object-assign";
 import transformObjectSuper from "@babel/plugin-transform-object-super";
 import transformObjectSetPrototypeOfToAssign from "@babel/plugin-transform-object-set-prototype-of-to-assign";
 import transformParameters from "@babel/plugin-transform-parameters";
@@ -177,7 +176,6 @@ export {
   transformModulesUmd,
   transformNamedCapturingGroupsRegex,
   transformNewTarget,
-  transformObjectAssign,
   transformObjectSuper,
   transformObjectSetPrototypeOfToAssign,
   transformParameters,
@@ -283,7 +281,6 @@ export const all: Record<string, any> = {
   "transform-modules-umd": transformModulesUmd,
   "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
   "transform-new-target": transformNewTarget,
-  "transform-object-assign": transformObjectAssign,
   "transform-object-super": transformObjectSuper,
   "transform-object-set-prototype-of-to-assign":
     transformObjectSetPrototypeOfToAssign,
