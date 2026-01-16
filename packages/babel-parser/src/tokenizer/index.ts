@@ -371,11 +371,14 @@ export default abstract class Tokenizer extends CommentsParser {
           }
         // fall through
         case charCodes.lineFeed:
-        case charCodes.lineSeparator:
-        case charCodes.paragraphSeparator:
           ++this.state.pos;
           ++this.state.curLine;
           this.state.lineStart = this.state.pos;
+          break;
+
+        case charCodes.lineSeparator:
+        case charCodes.paragraphSeparator:
+          ++this.state.pos;
           break;
 
         case charCodes.slash:
