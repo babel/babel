@@ -20,7 +20,11 @@ import FlowScopeHandler from "./scope.ts";
 import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
-import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import {
+  Errors,
+  ParseErrorEnum,
+  type ParseErrorTemplates,
+} from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 
@@ -45,7 +49,7 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const FlowErrors = ParseErrorEnum`flow`({
+export const FlowErrorTemplates = {
   AmbiguousConditionalArrow:
     "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
   AmbiguousDeclareModuleKind:
@@ -217,8 +221,10 @@ const FlowErrors = ParseErrorEnum`flow`({
   UnsupportedStatementInDeclareModule:
     "Only declares and type imports are allowed inside declare module.",
   UnterminatedFlowComment: "Unterminated flow-comment.",
-});
+} satisfies ParseErrorTemplates;
 /* eslint-disable sort-keys */
+
+const FlowErrors = ParseErrorEnum`flow`(FlowErrorTemplates);
 
 function isEsModuleType(bodyElement: N.Node): boolean {
   return (

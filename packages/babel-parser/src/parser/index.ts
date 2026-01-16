@@ -78,8 +78,7 @@ export default class Parser extends StatementParser {
     const file = this.startNode<N.File>();
     const program = this.startNode<N.Program>();
     this.nextToken();
-    // @ts-expect-error define later
-    file.errors = null;
+    file.errors = [];
     const result = this.parseTopLevel(file, program);
     result.errors = this.state.errors;
     result.comments.length = this.state.commentsLen;
