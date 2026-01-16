@@ -65,7 +65,8 @@ export default function stringifyValidator(
             return (
               shapeKey +
               (isOptional ? "?: " : ": ") +
-              stringifyValidator(propertyDefinition.validate, nodePrefix)
+              stringifyValidator(propertyDefinition.validate, nodePrefix) +
+              (isOptional ? " | null" : "")
             );
           }
           return null;

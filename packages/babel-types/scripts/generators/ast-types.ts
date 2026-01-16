@@ -1,10 +1,6 @@
 // @ts-expect-error: Could not find type declarations for babel-types
 import * as _t from "../../lib/index.js";
-import {
-  isNullable,
-  hasDefault,
-  sortFieldNames,
-} from "../utils/fieldHelpers.ts";
+import { sortFieldNames } from "../utils/fieldHelpers.ts";
 import stringifyValidator, {
   isValueType,
 } from "../utils/stringifyValidator.ts";
@@ -24,7 +20,7 @@ function registerParentMaps(parent: string, nodes: string[]) {
     if (!parentMaps.has(node)) {
       parentMaps.set(node, new Set());
     }
-    parentMaps.get(node).add(parent);
+    parentMaps.get(node)!.add(parent);
   }
 }
 
@@ -133,7 +129,7 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
 
       let typeAnnotation = stringifyValidator(field.validate, "");
 
-      if (isNullable(field) && !hasDefault(field)) {
+      if (field.optional) {
         typeAnnotation += " | null";
       }
 
@@ -211,7 +207,7 @@ export interface ${deprecatedAlias[type]} extends BaseNode {
 
   const parentMapsKeys = [...parentMaps.keys()].sort();
   for (const type of parentMapsKeys) {
-    const deduplicated = [...parentMaps.get(type)].sort();
+    const deduplicated = [...parentMaps.get(type)!].sort();
     code += `  ${type}: ${deduplicated.join(" | ")};\n`;
   }
   code += "}\n\n";

@@ -11,7 +11,7 @@ export default function getAssignmentIdentifiers(
   node: t.Node | t.Node[],
 ): Record<string, t.Identifier> {
   // null represents holes in an array pattern
-  const search: (t.Node | null)[] = [].concat(node);
+  const search: (t.Node | null)[] = ([] as t.Node[]).concat(node);
   const ids = Object.create(null);
 
   while (search.length) {

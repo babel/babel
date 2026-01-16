@@ -44,6 +44,7 @@ function getBindingIdentifiers(
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
 ): Record<string, t.Identifier> | Record<string, t.Identifier[]> {
+  // @ts-expect-error FIXME: disallow Node[]
   const search: t.Node[] = [].concat(node);
   const ids = Object.create(null);
 
@@ -84,7 +85,7 @@ function getBindingIdentifiers(
 
     if (outerOnly) {
       if (isFunctionDeclaration(id)) {
-        search.push(id.id);
+        search.push(id.id!);
         continue;
       }
 
