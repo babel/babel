@@ -484,14 +484,7 @@ export function TSLiteralType(this: Printer, node: t.TSLiteralType) {
   this.print(node.literal);
 }
 
-export function TSClassImplements(
-  this: Printer,
-  // TODO(Babel 8): Just use t.TSClassImplements
-  node: t.Node & {
-    expression: t.TSEntityName;
-    typeArguments?: t.TSTypeParameterInstantiation;
-  },
-) {
+export function TSClassImplements(this: Printer, node: t.TSClassImplements) {
   this.print(node.expression);
   this.print(node.typeArguments);
 }
