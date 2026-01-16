@@ -1,14 +1,7 @@
-import picocolors, { createColors } from "picocolors";
-import type { Colors, Formatter } from "picocolors/types";
+import { styleText } from "node:util";
 
 export function isColorSupported() {
-  return (
-    // See https://github.com/alexeyraspopov/picocolors/issues/62
-    typeof process === "object" &&
-      (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false")
-      ? false
-      : picocolors.isColorSupported
-  );
+  return styleText("red", "-") !== "-";
 }
 
 export type InternalTokenType =
@@ -23,38 +16,44 @@ export type InternalTokenType =
   | "invalid";
 
 type UITokens = "gutter" | "marker" | "message";
+type Formatter = (input: string) => string;
 
 export type Defs = Record<InternalTokenType | UITokens | "reset", Formatter>;
 
-const compose: <T, U, V>(f: (gv: U) => V, g: (v: T) => U) => (v: T) => V =
-  (f, g) => v =>
-    f(g(v));
+const createFormatter = (
+  format: Parameters<typeof styleText>[0],
+  enabled: boolean,
+): Formatter =>
+  enabled
+    ? (input: string) =>
+        styleText(format, String(input ?? ""), { validateStream: false })
+    : String;
 
 /**
  * Styles for token types.
  */
-function buildDefs(colors: Colors): Defs {
+function buildDefs(enabled: boolean): Defs {
   return {
-    keyword: colors.cyan,
-    capitalized: colors.yellow,
-    jsxIdentifier: colors.yellow,
-    punctuator: colors.yellow,
-    number: colors.magenta,
-    string: colors.green,
-    regex: colors.magenta,
-    comment: colors.gray,
-    invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
+    keyword: createFormatter("cyan", enabled),
+    capitalized: createFormatter("yellow", enabled),
+    jsxIdentifier: createFormatter("yellow", enabled),
+    punctuator: createFormatter("yellow", enabled),
+    number: createFormatter("magenta", enabled),
+    string: createFormatter("green", enabled),
+    regex: createFormatter("magenta", enabled),
+    comment: createFormatter("gray", enabled),
+    invalid: createFormatter(["white", "bgRed", "bold"], enabled),
 
-    gutter: colors.gray,
-    marker: compose(colors.red, colors.bold),
-    message: compose(colors.red, colors.bold),
+    gutter: createFormatter("gray", enabled),
+    marker: createFormatter(["red", "bold"], enabled),
+    message: createFormatter(["red", "bold"], enabled),
 
-    reset: colors.reset,
+    reset: createFormatter("reset", enabled),
   };
 }
 
-const defsOn = buildDefs(createColors(true));
-const defsOff = buildDefs(createColors(false));
+const defsOn = buildDefs(true);
+const defsOff = buildDefs(false);
 
 export function getDefs(enabled: boolean): Defs {
   return enabled ? defsOn : defsOff;

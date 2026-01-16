@@ -14,11 +14,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-code-frame"
   },
-  "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^",
-    "js-tokens": "^10.0.0",
-    "picocolors": "^1.1.1"
+    "js-tokens": "^10.0.0"
   },
   "devDependencies": {
     "charcodes": "^0.2.0"
@@ -29,6 +27,7 @@
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
+      "browser": "./lib/browser.js",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"

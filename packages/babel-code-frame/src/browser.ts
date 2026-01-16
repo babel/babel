@@ -1,26 +1,44 @@
-import { getDefs, isColorSupported } from "./defs.ts";
-import { highlight } from "./highlight.ts";
+import { type Defs } from "./defs.ts";
 import {
   Options,
   codeFrameColumns as codeFrameColumnsInternal,
   NodeLocation,
 } from "./code-frame.ts";
 
-export { highlight, type Options };
+export { type Options };
 
 let deprecationWarningShown = false;
+
+const defs: Defs = {
+  keyword: String,
+  capitalized: String,
+  jsxIdentifier: String,
+  punctuator: String,
+  number: String,
+  string: String,
+  regex: String,
+  comment: String,
+  invalid: String,
+
+  gutter: String,
+  marker: String,
+  message: String,
+
+  reset: String,
+};
+
+export const highlight = String;
 
 export const codeFrameColumns = (
   rawLines: string,
   loc: NodeLocation,
   opts: Options = {},
 ) => {
-  const shouldHighlight =
-    opts.forceColor || (isColorSupported() && opts.highlightCode);
-  const defs = getDefs(shouldHighlight);
+  // const shouldHighlight = opts.forceColor || opts.highlightCode;
+  // silently ignore or throw error?
 
   return codeFrameColumnsInternal(rawLines, loc, opts, {
-    shouldHighlight,
+    shouldHighlight: false,
     defs,
     highlight,
   });
@@ -42,15 +60,9 @@ export default function (
     const message =
       "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
 
-    if (process.emitWarning) {
-      // A string is directly supplied to emitWarning, because when supplying an
-      // Error object node throws in the tests because of different contexts
-      process.emitWarning(message, "DeprecationWarning");
-    } else {
-      const deprecationError = new Error(message);
-      deprecationError.name = "DeprecationWarning";
-      console.warn(new Error(message));
-    }
+    const deprecationError = new Error(message);
+    deprecationError.name = "DeprecationWarning";
+    console.warn(new Error(message));
   }
 
   colNumber = Math.max(colNumber, 0);
