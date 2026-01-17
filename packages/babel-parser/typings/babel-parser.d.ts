@@ -7,12 +7,6 @@ declare const UnparenthesizedPipeBodyDescriptions: Set<"AssignmentExpression" | 
 type GetSetMemberType<T extends Set<any>> = T extends Set<infer M> ? M : unknown;
 type UnparenthesizedPipeBodyTypes = GetSetMemberType<typeof UnparenthesizedPipeBodyDescriptions>;
 declare const _default$4: {
-    PipelineBodyNoArrow?: string | undefined;
-    PipelineBodySequenceExpression?: string | undefined;
-    PipelineHeadSequenceExpression?: string | undefined;
-    PipelineTopicUnused?: string | undefined;
-    PrimaryTopicNotAllowed?: string | undefined;
-    PrimaryTopicRequiresSmartPipeline?: string | undefined;
     PipeBodyIsTighter: string;
     PipeTopicRequiresHackPipes: string;
     PipeTopicUnbound: string;
@@ -73,10 +67,8 @@ declare const _default$2: {
         kind: "await using" | "const" | "destructuring" | "using";
     }) => string;
     DecoratorArgumentsOutsideParentheses: string;
-    DecoratorBeforeExport: string;
     DecoratorsBeforeAfterExport: string;
     DecoratorConstructor: string;
-    DecoratorExportClass: string;
     DecoratorSemicolon: string;
     DecoratorStaticBlock: string;
     DeferImportRequiresNamespace: string;
@@ -108,22 +100,17 @@ declare const _default$2: {
     }) => string;
     IllegalLanguageModeDirective: string;
     IllegalReturn: string;
-    ImportAttributesUseAssert: string;
     ImportBindingIsString: ({ importName }: {
         importName: string;
     }) => string;
     ImportCallArity: string;
     ImportCallNotNewExpression: string;
     ImportCallSpreadArgument: string;
-    ImportJSONBindingNotDefault: string;
-    ImportReflectionHasAssertion: string;
-    ImportReflectionNotBinding: string;
     IncompatibleRegExpUVFlags: string;
     InvalidBigIntLiteral: string;
     InvalidCodePoint: string;
     InvalidCoverDiscardElement: string;
     InvalidCoverInitializedName: string;
-    InvalidDecimal: string;
     InvalidDigit: ({ radix }: {
         radix: number;
     }) => string;
@@ -154,7 +141,6 @@ declare const _default$2: {
         identifierName: string;
     }) => string;
     InvalidPropertyBindingPattern: string;
-    InvalidRecordProperty: string;
     InvalidRestAssignmentPattern: string;
     LabelRedeclaration: ({ labelName }: {
         labelName: string;
@@ -173,7 +159,6 @@ declare const _default$2: {
     }) => string;
     MissingUnicodeEscape: string;
     MixingCoalesceWithLogical: string;
-    ModuleAttributeDifferentFromType: string;
     ModuleAttributeInvalidValue: string;
     ModuleAttributesWithDuplicateKeys: ({ key }: {
         key: string;
@@ -202,10 +187,6 @@ declare const _default$2: {
     PrivateNameRedeclaration: ({ identifierName }: {
         identifierName: string;
     }) => string;
-    RecordExpressionBarIncorrectEndSyntaxType: string;
-    RecordExpressionBarIncorrectStartSyntaxType: string;
-    RecordExpressionHashIncorrectStartSyntaxType: string;
-    RecordNoProto: string;
     RestTrailingComma: string;
     SloppyFunction: string;
     SloppyFunctionAnnexB: string;
@@ -214,11 +195,7 @@ declare const _default$2: {
     SuperNotAllowed: string;
     SuperPrivateField: string;
     TrailingDecorator: string;
-    TupleExpressionBarIncorrectEndSyntaxType: string;
-    TupleExpressionBarIncorrectStartSyntaxType: string;
-    TupleExpressionHashIncorrectStartSyntaxType: string;
     UnexpectedArgumentPlaceholder: string;
-    UnexpectedAwaitAfterPipelineBody: string;
     UnexpectedDigitAfterHash: string;
     UnexpectedImportExport: string;
     UnexpectedKeyword: ({ keyword }: {
@@ -402,11 +379,11 @@ declare const TSErrorTemplates: {
         propertyName: string;
     }) => string;
     AccessorCannotBeOptional: string;
-    AccesorCannotDeclareThisParameter: string;
-    AccesorCannotHaveTypeParameters: string;
+    AccessorCannotDeclareThisParameter: string;
+    AccessorCannotHaveTypeParameters: string;
     ClassMethodHasDeclare: string;
     ClassMethodHasReadonly: string;
-    ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference: string;
+    ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference: string;
     ConstructorHasTypeParameters: string;
     DeclareAccessor: ({ kind }: {
         kind: "get" | "set";
@@ -426,7 +403,6 @@ declare const TSErrorTemplates: {
     EmptyTypeParameters: string;
     ExpectedAmbientAfterExportDeclare: string;
     ImportAliasHasImportType: string;
-    ImportReflectionHasImportType: string;
     IncompatibleModifiers: ({ modifiers, }: {
         modifiers: [TsModifier, TsModifier];
     }) => string;
@@ -438,6 +414,7 @@ declare const TSErrorTemplates: {
     IndexSignatureHasOverride: string;
     IndexSignatureHasStatic: string;
     InitializerNotAllowedInAmbientContext: string;
+    InlineModuleDeclarationMustUseString: string;
     InvalidHeritageClauseType: ({ token }: {
         token: "extends" | "implements";
     }) => string;
@@ -470,9 +447,9 @@ declare const TSErrorTemplates: {
     ReadonlyForMethodSignature: string;
     ReservedArrowTypeParam: string;
     ReservedTypeAssertion: string;
-    SetAccesorCannotHaveOptionalParameter: string;
-    SetAccesorCannotHaveRestParameter: string;
-    SetAccesorCannotHaveReturnType: string;
+    SetAccessorCannotHaveOptionalParameter: string;
+    SetAccessorCannotHaveRestParameter: string;
+    SetAccessorCannotHaveReturnType: string;
     SingleTypeParameterWithoutTrailingComma: ({ typeParameterName, }: {
         typeParameterName: string;
     }) => string;
@@ -549,7 +526,6 @@ declare const FlowErrorTemplates: {
         enumName: string;
     }) => string;
     GetterMayNotHaveThisParam: string;
-    ImportReflectionHasImportType: string;
     ImportTypeShorthandOnlyInPureImport: string;
     InexactInsideExact: string;
     InexactInsideNonObject: string;
@@ -559,7 +535,6 @@ declare const FlowErrorTemplates: {
     NestedDeclareModule: string;
     NestedFlowComment: string;
     PatternIsOptional: {
-        reasonCode?: string | undefined;
         message: string;
     };
     SetterMayNotHaveThisParam: string;
