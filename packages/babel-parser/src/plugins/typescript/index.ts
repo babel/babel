@@ -21,7 +21,11 @@ import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
-import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import {
+  Errors,
+  ParseErrorEnum,
+  type ParseErrorTemplates,
+} from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
@@ -65,7 +69,7 @@ type ModifierBase = {
 } & Partial<Record<TsModifier, boolean | undefined | null>>;
 
 /* eslint sort-keys: "error" */
-const TSErrors = ParseErrorEnum`typescript`({
+export const TSErrorTemplates = {
   AbstractMethodHasImplementation: ({ methodName }: { methodName: string }) =>
     `Method '${methodName}' cannot have an implementation because it is marked abstract.`,
   AbstractPropertyHasInitializer: ({
@@ -223,9 +227,10 @@ const TSErrors = ParseErrorEnum`typescript`({
     `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${type}.`,
   UsingDeclarationInAmbientContext: (kind: "using" | "await using") =>
     `'${kind}' declarations are not allowed in ambient contexts.`,
-});
-
+} satisfies ParseErrorTemplates;
 /* eslint-disable sort-keys */
+
+const TSErrors = ParseErrorEnum`typescript`(TSErrorTemplates);
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
 // It also doesn't handle "intrinsic", since usually it's not a keyword.

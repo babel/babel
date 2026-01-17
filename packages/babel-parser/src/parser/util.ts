@@ -165,7 +165,7 @@ export default abstract class UtilParser extends Tokenizer {
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, ParseError<any>, boolean, false, State>
+    | TryParse<T | null, ParseError, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: {
       node: T | null;

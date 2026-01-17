@@ -36,8 +36,14 @@ interface ParseErrorSpecification<ErrorDetails> {
   pos: number;
 }
 
-export type ParseError<ErrorDetails> = SyntaxError &
+export type ParseErrorGeneric<ErrorDetails> = SyntaxError &
   ParseErrorSpecification<ErrorDetails>;
+
+export type ParseError = SyntaxError & {
+  missingPlugin?: string | string[];
+  loc: Position;
+  pos: number;
+} & ErrorObjects;
 
 // By `ParseErrorConstructor`, we mean something like the new-less style
 // `ErrorConstructor`[1], since `ParseError`'s are not themselves actually
@@ -47,7 +53,7 @@ export type ParseError<ErrorDetails> = SyntaxError &
 export type ParseErrorConstructor<ErrorDetails> = (
   loc: Position,
   details: ErrorDetails,
-) => ParseError<ErrorDetails>;
+) => ParseError;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
 
@@ -76,7 +82,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     reasonCode === "MissingPlugin" || reasonCode === "MissingOneOfPlugins";
 
   return function constructor(loc: Position, details: ErrorDetails) {
-    const error: ParseError<ErrorDetails> = new SyntaxError() as any;
+    const error = new SyntaxError() as ParseErrorGeneric<ErrorDetails>;
 
     error.code = code as ParseErrorCode;
     error.reasonCode = reasonCode;
@@ -104,7 +110,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
 
     Object.defineProperty(error, "message", {
       configurable: true,
-      get(this: ParseError<ErrorDetails>): string {
+      get(this: ParseErrorGeneric<ErrorDetails>): string {
         const message = `${toMessage(details)} (${loc.line}:${loc.column})`;
         this.message = message;
         return message;
@@ -114,7 +120,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
       },
     });
 
-    return error;
+    return error as ParseError;
   };
 }
 
@@ -225,6 +231,10 @@ import StandardErrors from "./parse-error/standard-errors.ts";
 import StrictModeErrors from "./parse-error/strict-mode-errors.ts";
 import ParseExpressionErrors from "./parse-error/parse-expression-errors.ts";
 import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors.ts";
+import type { TSErrorTemplates } from "./plugins/typescript/index.ts";
+import type { FlowErrorTemplates } from "./plugins/flow/index.ts";
+import type { JsxErrorTemplates } from "./plugins/jsx/index.ts";
+import type { PlaceholderErrorTemplates } from "./plugins/placeholders.ts";
 
 export const Errors = {
   ...ParseErrorEnum(ModuleErrors),
@@ -233,5 +243,33 @@ export const Errors = {
   ...ParseErrorEnum(ParseExpressionErrors),
   ...ParseErrorEnum`pipelineOperator`(PipelineOperatorErrors),
 };
+
+type ErrorToObject<T> = {
+  [K in keyof T]: {
+    code: T[K] extends { code: string }
+      ? T[K]["code"]
+      : "BABEL_PARSER_SYNTAX_ERROR";
+    reasonCode: K;
+    details: T[K] extends { message: string | ToMessage<any> }
+      ? T[K]["message"] extends ToMessage<any>
+        ? Parameters<T[K]["message"]>[0]
+        : object
+      : T[K] extends ToMessage<any>
+        ? Parameters<T[K]>[0]
+        : object;
+  };
+};
+type ErrorToObjects<T, U = ErrorToObject<T>> = U[keyof U];
+
+type ErrorObjects =
+  | ErrorToObjects<typeof ModuleErrors>
+  | ErrorToObjects<typeof StandardErrors>
+  | ErrorToObjects<typeof StrictModeErrors>
+  | ErrorToObjects<typeof ParseExpressionErrors>
+  | ErrorToObjects<typeof PipelineOperatorErrors>
+  | ErrorToObjects<typeof TSErrorTemplates>
+  | ErrorToObjects<typeof FlowErrorTemplates>
+  | ErrorToObjects<typeof JsxErrorTemplates>
+  | ErrorToObjects<typeof PlaceholderErrorTemplates>;
 
 export type { LValAncestor } from "./parse-error/standard-errors.ts";

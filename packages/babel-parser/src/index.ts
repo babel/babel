@@ -11,7 +11,8 @@ export type {
   TypeScriptPluginOptions,
 } from "./typings.ts";
 import Parser, { type PluginsMap } from "./parser/index.ts";
-import type { ParseError as ParseErrorGeneric } from "./parse-error.ts";
+import type { ParseError } from "./parse-error.ts";
+export type { ParseError };
 
 import type { ExportedTokenType } from "./tokenizer/types.ts";
 import {
@@ -28,10 +29,9 @@ export type { Expression, File };
 
 export type ParserOptions = Partial<Options>;
 
-export type ParseError = ParseErrorGeneric<object>;
 export type ParseResult<Result extends File | Expression = File> = Result & {
   comments: File["comments"];
-  errors: null | ParseError[];
+  errors: ParseError[];
   tokens?: File["tokens"];
 };
 

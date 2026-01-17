@@ -4,8 +4,7 @@ import { Position } from "../util/location.ts";
 
 import { types as ct, type TokContext } from "./context.ts";
 import { tt, type TokenType } from "./types.ts";
-import type { Errors } from "../parse-error.ts";
-import type { ParseError } from "../parse-error.ts";
+import type { Errors, ParseError } from "../parse-error.ts";
 
 export type DeferredStrictError =
   | typeof Errors.StrictNumericEscape
@@ -68,7 +67,7 @@ export default class State {
     );
   }
 
-  errors: ParseError<any>[] = [];
+  errors: ParseError[] = [];
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;
