@@ -12,6 +12,8 @@ type t6<T> = T extends Array<infer K extends (T extends string ? string : never)
 type t7<T> = (T extends string[] ? T : never) extends string[] ? T : never;
 type t8<T> = T extends (T extends string[] ? T : never) ? string[] : never;
 
+type t9<T> = Promise<T> | (T extends any ? Promise<T> : never);
+
 // These parentheses should be stripped
 type s0<T> = [...(T extends string[] ? T : never)];
 type s1<T> = ""[(T extends string[] ? "toString" : "valueOf")];
