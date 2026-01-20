@@ -24,7 +24,7 @@ If you want an already configured online IDE to contribute to Babel, you can use
   - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/main/packages/babel-parser/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://babeljs.io/docs/en/next/babel-parser.html#output).
   - Check out [`/doc`](https://github.com/babel/babel/tree/main/doc) for information about Babel's internals
   - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
-  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
+  - Check out [AST Explorer](https://ast-explorer.dev/#eNolicENgCAQBFsx+6YC6vAnPgCJwZxwATExhN4942tmdzoIGoe9bfUl8gUFlsNZF0jciwuyoJs0TQY1t+LD/HAw0LLPvDUSV39mantM9WvLatLAeAHAxB59) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help wanted](https://github.com/babel/babel/labels/help%20wanted) and/or [good first issue](https://github.com/babel/babel/labels/good%20first%20issue).
 - Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can [sign up here](https://slack.babeljs.io/)
   for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
