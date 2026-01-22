@@ -2658,7 +2658,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseSubscript(
       base: N.Expression,
-
       startLoc: Position,
       noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
@@ -3624,7 +3623,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
-      // handle `extends f<<T>
+      if (node.superClass) {
+        if (node.superClass.type === "TSInstantiationExpression") {
+          const tsInstantiationExpression = node.superClass;
+          const superClass = tsInstantiationExpression.expression;
+          // Take comments because the TSInstantiationExpression node will be removed from the AST.
+          this.takeSurroundingComments(
+            superClass,
+            superClass.start,
+            superClass.end,
+          );
+
+          const superTypeArguments = tsInstantiationExpression.typeArguments!;
+          this.takeSurroundingComments(
+            superTypeArguments,
+            superTypeArguments.start,
+            superTypeArguments.end,
+          );
+
+          node.superClass = superClass;
+          node.superTypeArguments = superTypeArguments;
       if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
         if (process.env.BABEL_8_BREAKING) {
           node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
