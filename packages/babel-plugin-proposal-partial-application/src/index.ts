@@ -108,6 +108,20 @@ export default declare(api => {
             );
             object = t.cloneNode(receiverLVal);
           }
+          if (t.isThisExpression(receiverLVal)) {
+            // Memoize `this` as the function wrapper may overwrite the `this` binding.
+            const thisExpressionId =
+              path.scope.generateUidIdentifierBasedOnNode(receiverLVal);
+            scope.push({ id: t.cloneNode(thisExpressionId) });
+            sequenceParts.push(
+              t.assignmentExpression(
+                "=",
+                t.cloneNode(thisExpressionId),
+                receiverLVal,
+              ),
+            );
+            receiverLVal = thisExpressionId;
+          }
           sequenceParts.push(
             t.assignmentExpression(
               "=",
