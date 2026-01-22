@@ -1,15 +1,14 @@
 import * as t from "@babel/types";
 
-import _Printer from "../lib/printer.js";
-const Printer = _Printer.default || _Printer;
+import * as generators from "../lib/generators/index.js";
 
 describe("Printer", () => {
   it("completeness", function () {
     Object.keys(t.VISITOR_KEYS).forEach(function (type) {
-      expect(Printer.prototype[type]).toBeTruthy();
+      expect(generators[type]).toBeTruthy();
     });
 
-    Object.keys(Printer.prototype).forEach(function (type) {
+    Object.keys(generators).forEach(function (type) {
       if (!/[A-Z]/.test(type[0])) return;
 
       expect(t.VISITOR_KEYS).toHaveProperty(type);

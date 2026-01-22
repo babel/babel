@@ -9,6 +9,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { TokenContext } from "../node/index.ts";
+import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
 
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -103,7 +104,7 @@ export function ExportAllDeclaration(
   if (node.attributes?.length) {
     this.print(node.source, true);
     this.space();
-    this._printAttributes(node, false);
+    _printAttributes.call(this, node, false);
   } else {
     this.print(node.source);
   }
@@ -117,7 +118,8 @@ function maybePrintDecoratorsBeforeExport(
 ) {
   if (
     isClassDeclaration(node.declaration) &&
-    printer._shouldPrintDecoratorsBeforeExport(
+    _shouldPrintDecoratorsBeforeExport.call(
+      printer,
       node as t.ExportNamedDeclaration & { declaration: t.ClassDeclaration },
     )
   ) {
@@ -183,7 +185,7 @@ export function ExportNamedDeclaration(
       if (node.attributes?.length) {
         this.print(node.source, true);
         this.space();
-        this._printAttributes(node, hasBrace);
+        _printAttributes.call(this, node, hasBrace);
       } else {
         this.print(node.source);
       }
@@ -269,7 +271,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   if (node.attributes?.length) {
     this.print(node.source, true);
     this.space();
-    this._printAttributes(node, hasBrace);
+    _printAttributes.call(this, node, hasBrace);
   } else {
     this.print(node.source);
   }

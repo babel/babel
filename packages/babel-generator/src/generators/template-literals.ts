@@ -39,5 +39,5 @@ export function _printTemplate<T extends t.Node>(
 }
 
 export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
-  this._printTemplate(node, node.expressions);
+  _printTemplate.call(this, node, node.expressions);
 }
