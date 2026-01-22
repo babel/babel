@@ -4,6 +4,10 @@ let yy = 0;
 const x6 = f<true>
 interface I {}
 
+var x7 = f<true>
+{
+  let x8 = f<true>;
+}
 let x10 = f<true>
 this.bar()
 
