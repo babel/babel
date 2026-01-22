@@ -6,11 +6,15 @@ type t2<T> = T extends Array<[(infer K)?]> ? K : never;
 type t3<T> = T extends Array<(infer K extends string) | boolean> ? K : never;
 type t4<T> = T extends Array<(infer K extends string) & boolean> ? K : never;
 
-// These parentheses should be stripped
+type t5<T> = T extends Array<T extends "N" ? T : never | (infer K extends string)> ? K : never;
+type t6<T> = T extends Array<T extends "N" ? T : never & (infer K extends string)> ? K : never;
+
+// The outer parentheses should be stripped
 type s0<T> = T extends Array<(infer K) | boolean> ? K : never;
 type s1<T> = T extends Array<(infer K) & boolean> ? K : never;
-type s2<T> = T extends Array<boolean | (infer K extends string)> ? K : never;
-type s3<T> = T extends Array<boolean & (infer K extends string)> ? K : never;
+
+type s2<T> = T extends Array<T extends "N" ? T : (never | (infer K extends string))> ? K : never;
+type s3<T> = T extends Array<T extends "N" ? T : (never & (infer K extends string))> ? K : never;
 
 type s4<T> = T extends Array<infer K extends (infer L extends string)> ? K : never;
 

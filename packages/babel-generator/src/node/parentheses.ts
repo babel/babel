@@ -250,13 +250,9 @@ export function TSConditionalType(
     parentType === "TSOptionalType" ||
     parentType === "TSTypeOperator" ||
     // for `infer K extends (L extends M ? M : ...)`
-    parentType === "TSTypeParameter"
-  ) {
-    return true;
-  }
-  if (
-    (parentType === "TSIntersectionType" || parentType === "TSUnionType") &&
-    parent.types[0] === node
+    parentType === "TSTypeParameter" ||
+    parentType === "TSIntersectionType" ||
+    parentType === "TSUnionType"
   ) {
     return true;
   }
@@ -303,10 +299,7 @@ export function TSInferType(node: t.TSInferType, parent: t.Node): boolean {
     return true;
   }
   if (node.typeParameter.constraint) {
-    if (
-      (parentType === "TSIntersectionType" || parentType === "TSUnionType") &&
-      parent.types[0] === node
-    ) {
+    if (parentType === "TSIntersectionType" || parentType === "TSUnionType") {
       return true;
     }
   }
