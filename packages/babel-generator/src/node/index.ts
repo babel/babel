@@ -1,18 +1,8 @@
-import * as whitespace from "./whitespace.ts";
 import * as parens from "./parentheses.ts";
-import {
-  FLIPPED_ALIAS_KEYS,
-  VISITOR_KEYS,
-  isCallExpression,
-  isDecorator,
-  isExpressionStatement,
-  isMemberExpression,
-  isNewExpression,
-  isParenthesizedExpression,
-} from "@babel/types";
+import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
 
-import type { WhitespaceFlag } from "./whitespace.ts";
+import { generatorInfosMap } from "../nodes.ts";
 
 export const enum TokenContext {
   normal = 0,
@@ -26,123 +16,60 @@ export const enum TokenContext {
   // This flag lives across the token boundary, and will
   // be reset after forIn or forInit head is printed
   forInOrInitHeadAccumulate = 1 << 7,
-  forInOrInitHeadAccumulatePassThroughMask = 0x80,
+  forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
 }
 
-type NodeHandler<R> = (
+export type NodeHandler<R> = (
   node: t.Node,
   // todo:
   // node: K extends keyof typeof t
   //   ? Extract<typeof t[K], { type: "string" }>
   //   : t.Node,
   parent: t.Node,
+  parentId: number,
   tokenContext?: number,
   getRawIdentifier?: (node: t.Identifier) => string,
 ) => R | undefined;
 
-export type NodeHandlers<R> = Partial<Record<string, NodeHandler<R>>>;
-
-function expandAliases<R>(obj: NodeHandlers<R>) {
-  const map = new Map<string, NodeHandler<R>>();
-
-  function add(type: string, func: NodeHandler<R>) {
-    const fn = map.get(type);
-    map.set(
-      type,
-      fn
-        ? function (node, parent, stack, getRawIdentifier) {
-            return (
-              fn(node, parent, stack, getRawIdentifier) ??
-              func(node, parent, stack, getRawIdentifier)
-            );
-          }
-        : func,
-    );
+for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
+  const func = parens[type];
+  if (generatorInfosMap.has(type)) {
+    generatorInfosMap.get(type)![2] = func;
   }
-
-  for (const type of Object.keys(obj)) {
-    const aliases = FLIPPED_ALIAS_KEYS[type];
-    if (aliases) {
-      for (const alias of aliases) {
-        add(alias, obj[type]!);
-      }
-    } else {
-      add(type, obj[type]!);
-    }
-  }
-
-  return map;
 }
-
-// Rather than using `t.is` on each object property, we pre-expand any type aliases
-// into concrete types so that the 'find' call below can be as fast as possible.
-const expandedParens = expandAliases(parens);
-const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
 
 function isOrHasCallExpression(node: t.Node): boolean {
-  if (isCallExpression(node)) {
-    return true;
+  switch (node.type) {
+    case "CallExpression":
+      return true;
+    case "MemberExpression":
+      return isOrHasCallExpression(node.object);
   }
-
-  return isMemberExpression(node) && isOrHasCallExpression(node.object);
-}
-
-export function needsWhitespace(
-  node: t.Node,
-  parent: t.Node,
-  type: WhitespaceFlag,
-): boolean {
-  if (!node) return false;
-
-  if (isExpressionStatement(node)) {
-    node = node.expression;
-  }
-
-  const flag = expandedWhitespaceNodes.get(node.type)?.(node, parent);
-
-  if (typeof flag === "number") {
-    return (flag & type) !== 0;
-  }
-
   return false;
 }
 
-export function needsWhitespaceBefore(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, 1);
-}
-
-export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, 2);
-}
-
-export function needsParens(
+export function parentNeedsParens(
   node: t.Node,
-  parent: t.Node | null,
-  tokenContext?: number,
-  getRawIdentifier?: (node: t.Identifier) => string,
+  parent: any,
+  parentId: number,
 ): boolean {
-  if (!parent) return false;
-
-  if (isNewExpression(parent) && parent.callee === node) {
-    if (isOrHasCallExpression(node)) return true;
+  switch (parentId) {
+    case __node("NewExpression"):
+      if (parent.callee === node) {
+        if (isOrHasCallExpression(node)) return true;
+      }
+      break;
+    case __node("Decorator"):
+      return (
+        !isDecoratorMemberExpression(node) &&
+        !(
+          node.type === "CallExpression" &&
+          isDecoratorMemberExpression(node.callee)
+        ) &&
+        node.type !== "ParenthesizedExpression"
+      );
   }
-
-  if (isDecorator(parent)) {
-    return (
-      !isDecoratorMemberExpression(node) &&
-      !(isCallExpression(node) && isDecoratorMemberExpression(node.callee)) &&
-      !isParenthesizedExpression(node)
-    );
-  }
-
-  return (
-    expandedParens.get(node.type)?.(
-      node,
-      parent,
-      tokenContext,
-      getRawIdentifier,
-    ) || false
-  );
+  return false;
 }
 
 function isDecoratorMemberExpression(node: t.Node): boolean {

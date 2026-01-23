@@ -474,7 +474,9 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
               preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
-            src === "packages/babel-parser" &&
+            ["packages/babel-parser", "packages/babel-generator"].includes(
+              src
+            ) &&
               getBabelOutputPlugin({
                 configFile: false,
                 babelrc: false,
@@ -517,14 +519,19 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                               !vals.has(node.property.name)
                             ) {
                               all = false;
-                              return;
                             }
-                            parentPath.replaceWith(
-                              t.numericLiteral(vals.get(node.property.name))
-                            );
                           });
 
-                          if (all) path.remove();
+                          if (all) {
+                            binding.referencePaths.forEach(({ parentPath }) => {
+                              const { node } = parentPath;
+                              parentPath.replaceWith(
+                                // @ts-expect-error checked above
+                                t.numericLiteral(vals.get(node.property.name))
+                              );
+                            });
+                            path.remove();
+                          }
                         },
                       },
                     };
