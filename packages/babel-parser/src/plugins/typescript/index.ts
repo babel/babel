@@ -3634,7 +3634,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             superClass.end,
           );
 
-          const superTypeArguments = tsInstantiationExpression.typeArguments!;
+          const superTypeArguments = tsInstantiationExpression.typeParameters!;
           this.takeSurroundingComments(
             superTypeArguments,
             superTypeArguments.start,
@@ -3642,12 +3642,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           );
 
           node.superClass = superClass;
-          node.superTypeArguments = superTypeArguments;
-      if (node.superClass && (this.match(tt.lt) || this.match(tt.bitShiftL))) {
-        if (process.env.BABEL_8_BREAKING) {
-          node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
-        } else {
-          node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
+          node.superTypeParameters = superTypeArguments;
+        } else if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
+          if (process.env.BABEL_8_BREAKING) {
+            node.superTypeArguments = this.tsParseTypeArgumentsInExpression();
+          } else {
+            node.superTypeParameters = this.tsParseTypeArgumentsInExpression();
+          }
         }
       }
       if (this.eatContextual(tt._implements)) {

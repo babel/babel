@@ -48,7 +48,7 @@
             }
           ]
         },
-        "superTypeArguments": {
+        "superTypeParameters": {
           "type": "TSTypeParameterInstantiation",
           "start":42,"end":59,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":59,"index":59}},
           "params": [
