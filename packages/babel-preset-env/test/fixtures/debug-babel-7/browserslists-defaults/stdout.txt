@@ -2,24 +2,24 @@
 
 Using targets:
 {
-  "android": "137",
+  "android": "143",
   "chrome": "109",
-  "edge": "136",
-  "firefox": "128",
-  "ios": "16.6",
-  "opera": "116",
+  "edge": "142",
+  "firefox": "140",
+  "ios": "18.5",
+  "opera": "124",
   "opera_mobile": "80",
-  "safari": "18.4",
-  "samsung": "27"
+  "safari": "26.1",
+  "samsung": "28"
 }
 
 Using modules transform: auto
 
 Using plugins:
   transform-explicit-resource-management { chrome < 134, firefox < 141, ios, opera, opera_mobile, safari, samsung }
-  transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, ios < 17.4, opera_mobile, samsung }
-  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari }
-  transform-unicode-sets-regex { chrome < 112, ios < 17 }
+  transform-duplicate-named-capturing-groups-regex { chrome < 126, opera_mobile, samsung }
+  transform-regexp-modifiers { chrome < 125, ios, opera_mobile, safari }
+  transform-unicode-sets-regex { chrome < 112 }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
