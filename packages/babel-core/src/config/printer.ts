@@ -71,7 +71,7 @@ const Formatter = {
 function descriptorToConfig<API>(
   d: UnloadedDescriptor<API>,
 ): string | [string, object] | [string, object, string] {
-  let name: string = d.file?.request;
+  let name: string | undefined = d.file?.request;
   if (name == null) {
     if (typeof d.value === "object") {
       // @ts-expect-error FIXME

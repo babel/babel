@@ -264,7 +264,11 @@ export type MatchItem =
   | RegExp
   | ((
       path: string | undefined,
-      context: { dirname: string; caller: CallerMetadata; envName: string },
+      context: {
+        dirname: string;
+        caller: CallerMetadata | undefined;
+        envName: string;
+      },
     ) => unknown);
 
 export type MaybeDefaultProperty<T> = T | { default: T };
@@ -476,10 +480,7 @@ function assertNoDuplicateSourcemap(opts: any): void {
   }
 }
 
-function assertEnvSet(
-  loc: OptionPath,
-  value: unknown,
-): void | EnvSet<InputOptions> {
+function assertEnvSet(loc: OptionPath, value: unknown) {
   if (loc.parent.type === "env") {
     throw new Error(`${msg(loc)} is not allowed inside of another .env block`);
   }
@@ -501,13 +502,10 @@ function assertEnvSet(
       validateNested(envLoc, env);
     }
   }
-  return obj;
+  return obj as EnvSet<InputOptions> | undefined | null;
 }
 
-function assertOverridesList(
-  loc: OptionPath,
-  value: unknown[],
-): undefined | InputOptions[] {
+function assertOverridesList(loc: OptionPath, value: unknown[]) {
   if (loc.parent.type === "env") {
     throw new Error(`${msg(loc)} is not allowed inside an .env block`);
   }
@@ -531,7 +529,7 @@ function assertOverridesList(
       validateNested(overridesLoc, env);
     }
   }
-  return arr;
+  return arr as InputOptions[] | null | undefined;
 }
 
 export function checkNoUnwrappedItemOptionPairs<API>(

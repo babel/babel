@@ -23,8 +23,8 @@ export default class TraversalContext<S = unknown> {
   declare scope: Scope | null | undefined;
   declare state: S;
   declare opts: ExplodedTraverseOptions<S>;
-  queue: NodePath[] | null = null;
-  priorityQueue: NodePath[] | null = null;
+  queue: NodePath<t.Node | null>[] | null = null;
+  priorityQueue: NodePath<t.Node | null>[] | null = null;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -72,7 +72,7 @@ export default class TraversalContext<S = unknown> {
     });
   }
 
-  maybeQueue(path: NodePath, notPriority?: boolean) {
+  maybeQueue(path: NodePath<t.Node | null>, notPriority?: boolean) {
     if (this.queue) {
       if (notPriority) {
         this.queue.push(path);
@@ -112,7 +112,7 @@ export default class TraversalContext<S = unknown> {
     }
   }
 
-  visitQueue(queue: NodePath[]): boolean {
+  visitQueue(queue: NodePath<t.Node | null>[]): boolean {
     // set queue
     this.queue = queue;
     this.priorityQueue = [];
@@ -144,6 +144,7 @@ export default class TraversalContext<S = unknown> {
 
       // ensure we don't visit the same node twice
       const { node } = path;
+      // @ts-expect-error node may be null
       if (visited.has(node)) continue;
       if (node) visited.add(node);
 

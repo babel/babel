@@ -93,7 +93,8 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
 
       passPairs.push([plugin, pass]);
       passes.push(pass);
-      visitors.push(plugin.visitor);
+      // FIXME: plugin.visitor may be undefined
+      visitors.push(plugin.visitor!);
     }
 
     for (const [plugin, pass] of passPairs) {

@@ -14,7 +14,7 @@ export default function generateCode(
   outputMap: GeneratorResult["map"] | null;
 } {
   const { opts, ast, code, inputMap } = file;
-  const { generatorOpts } = opts;
+  const generatorOpts = opts.generatorOpts!;
 
   generatorOpts.inputSourceMap = inputMap?.toObject();
 
@@ -59,7 +59,7 @@ export default function generateCode(
     /**
      * @see mergeSourceMap
      */
-    outputMap = { ...result.map };
+    outputMap = { ...result.map! };
   } else {
     if (outputMap) {
       if (inputMap) {
@@ -67,7 +67,7 @@ export default function generateCode(
         outputMap = mergeSourceMap(
           inputMap.toObject(),
           outputMap,
-          generatorOpts.sourceFileName,
+          generatorOpts.sourceFileName!,
         );
       } else {
         // We cannot output a decoded map, so retrieve the encoded form. Because

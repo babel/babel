@@ -69,7 +69,7 @@ function CallSite(filename: string): CallSite {
     getMethodName: () => undefined,
     getTypeName: () => undefined,
     toString: () => filename,
-  } as CallSite);
+  } as unknown as CallSite);
 }
 
 export function injectVirtualStackFrame(error: Error, filename: string) {
@@ -151,7 +151,7 @@ function setupPrepareStackTrace() {
         if (status === "hiding") {
           status = "showing";
           if (virtualFrames.has(err)) {
-            newTrace.unshift(...virtualFrames.get(err));
+            newTrace.unshift(...virtualFrames.get(err)!);
           }
         } else if (status === "unknown") {
           // Unexpected internal error, show the full stack trace

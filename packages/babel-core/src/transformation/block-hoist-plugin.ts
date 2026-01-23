@@ -63,7 +63,7 @@ export default function loadBlockHoistPlugin(): Plugin {
     LOADED_PLUGIN = new Plugin(
       {
         ...blockHoistPlugin,
-        visitor: traverse.explode(blockHoistPlugin.visitor),
+        visitor: traverse.explode(blockHoistPlugin.visitor!),
       },
       {},
     );

@@ -40,7 +40,7 @@ export const parse: Parse = function parse(
 ) {
   if (typeof opts === "function") {
     callback = opts;
-    opts = undefined as InputOptions;
+    opts = undefined;
   }
 
   if (callback === undefined) {
@@ -50,6 +50,7 @@ export const parse: Parse = function parse(
   }
 
   beginHiddenCallStack(parseRunner.errback)(code, opts, callback);
+  return null;
 };
 
 export function parseSync(...args: Parameters<typeof parseRunner.sync>) {

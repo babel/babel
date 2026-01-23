@@ -41,7 +41,7 @@ export function resolveTargets(options: InputOptions, root: string): Targets {
     ignoreBrowserslistConfig = browserslistConfigFile === false;
   }
 
-  return getTargets(targets, {
+  return getTargets(targets!, {
     ignoreBrowserslistConfig,
     configFile,
     configPath: root,
