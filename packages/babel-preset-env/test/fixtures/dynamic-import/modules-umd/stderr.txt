@@ -1,1 +1,0 @@
-Dynamic import can only be transformed when transforming ES modules to AMD, CommonJS or SystemJS.

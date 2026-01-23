@@ -1,1 +1,0 @@
-example.inner?.greet<string>()

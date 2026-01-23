@@ -1,2 +1,0 @@
-enum as {}
-enum satisfies {}

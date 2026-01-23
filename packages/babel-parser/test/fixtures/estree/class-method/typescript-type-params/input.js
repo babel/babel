@@ -1,4 +1,0 @@
-class Class {
-  method
-<T>() {}
-}

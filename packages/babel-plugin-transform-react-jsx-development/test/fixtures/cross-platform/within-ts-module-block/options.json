@@ -1,9 +1,0 @@
-{
-  "BABEL_8_BREAKING": true,
-  "plugins": [
-    "transform-react-jsx-development",
-    "syntax-typescript",
-    "syntax-jsx"
-  ],
-  "sourceType": "module"
-}

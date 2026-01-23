@@ -3,7 +3,7 @@
     [
       "env",
       {
-        "configPath": "packages/babel-preset-env/test/fixtures/preset-options/browserslist-default-via-config",
+        "configPath": "packages/babel-preset-env/test/fixtures/preset-options-babel-7/browserslist-default-via-config",
         "modules": false
       }
     ]

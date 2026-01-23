@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": true,
-  "presets": [["env", { "loose": true }]],
-  "throws": "@babel/preset-env: The 'loose' and 'spec' options have been removed, and you should configure granular compiler assumptions instead. See https://babeljs.io/assumptions for more information."
-}
