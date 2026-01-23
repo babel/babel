@@ -2,9 +2,9 @@
 
 Using targets:
 {
-  "android": "142",
+  "android": "143",
   "chrome": "109",
-  "edge": "141",
+  "edge": "142",
   "firefox": "140",
   "ios": "18.5",
   "opera": "124",
@@ -23,9 +23,9 @@ Using plugins:
 corejs3: `DEBUG` option
 
 Using targets: {
-  "android": "142",
+  "android": "143",
   "chrome": "109",
-  "edge": "141",
+  "edge": "142",
   "firefox": "140",
   "ios": "18.5",
   "opera": "124",

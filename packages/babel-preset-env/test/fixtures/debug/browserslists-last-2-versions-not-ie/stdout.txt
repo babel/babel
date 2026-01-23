@@ -2,10 +2,10 @@
 
 Using targets:
 {
-  "android": "142",
-  "chrome": "142",
-  "edge": "142",
-  "firefox": "145",
+  "android": "143",
+  "chrome": "143",
+  "edge": "143",
+  "firefox": "146",
   "ios": "26.1",
   "opera": "124",
   "opera_mobile": "80",

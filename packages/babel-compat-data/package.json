@@ -28,8 +28,8 @@
   ],
   "devDependencies": {
     "@mdn/browser-compat-data": "^6.0.8",
-    "core-js-compat": "^3.43.0",
-    "electron-to-chromium": "^1.5.140"
+    "core-js-compat": "^3.48.0",
+    "electron-to-chromium": "^1.5.278"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
