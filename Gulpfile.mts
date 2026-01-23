@@ -22,6 +22,7 @@ import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
+import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
 
 // @ts-expect-error no types
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
@@ -624,7 +625,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
   );
 }
 
-function buildRollupDts(packages: string[]) {
+async function buildRollupDts(packages: string[]) {
   async function build(
     input: string,
     output: string,
@@ -696,10 +697,12 @@ function buildRollupDts(packages: string[]) {
     await build(input, output, "", packageName);
   });
 
+  const parserDts = "packages/babel-parser/typings/babel-parser.d.ts";
+
   tasks.push(
     build(
       "packages/babel-parser/typings/babel-parser.source.d.ts",
-      "packages/babel-parser/typings/babel-parser.d.ts",
+      parserDts,
       "// This file is auto-generated! Do not modify it directly.\n" +
         "// Run `yarn gulp bundle-dts` to re-generate it.\n" +
         // @typescript-eslint/no-redundant-type-constituents can be removed once we drop the IF_BABEL_7 type
@@ -708,7 +711,13 @@ function buildRollupDts(packages: string[]) {
     )
   );
 
-  return Promise.all(tasks);
+  await Promise.all(tasks);
+  patchErrorInfo(parserDts);
+  await build(parserDts, parserDts, "", "packages/babel-parser");
+  fs.writeFileSync(
+    parserDts,
+    await formatCode(fs.readFileSync(parserDts, "utf8"), parserDts)
+  );
 }
 
 function* packagesIterator(exclude: Set<string>) {

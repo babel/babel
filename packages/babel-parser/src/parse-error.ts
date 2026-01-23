@@ -43,7 +43,7 @@ export type ParseError = SyntaxError & {
   missingPlugin?: string | string[];
   loc: Position;
   pos: number;
-} & ErrorObjects;
+} & ErrorInfo;
 
 // By `ParseErrorConstructor`, we mean something like the new-less style
 // `ErrorConstructor`[1], since `ParseError`'s are not themselves actually
@@ -259,17 +259,48 @@ type ErrorToObject<T> = {
         : object;
   };
 };
-type ErrorToObjects<T, U = ErrorToObject<T>> = U[keyof U];
 
-type ErrorObjects =
-  | ErrorToObjects<typeof ModuleErrors>
-  | ErrorToObjects<typeof StandardErrors>
-  | ErrorToObjects<typeof StrictModeErrors>
-  | ErrorToObjects<typeof ParseExpressionErrors>
-  | ErrorToObjects<typeof PipelineOperatorErrors>
-  | ErrorToObjects<typeof TSErrorTemplates>
-  | ErrorToObjects<typeof FlowErrorTemplates>
-  | ErrorToObjects<typeof JsxErrorTemplates>
-  | ErrorToObjects<typeof PlaceholderErrorTemplates>;
+type __ExtractMe = typeof ModuleErrors &
+  typeof StandardErrors &
+  typeof StrictModeErrors &
+  typeof ParseExpressionErrors &
+  typeof PipelineOperatorErrors &
+  typeof TSErrorTemplates &
+  typeof FlowErrorTemplates &
+  typeof JsxErrorTemplates &
+  typeof PlaceholderErrorTemplates;
+
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+type __PatchMe = never & Decompress<ErrorInfoCompressed>;
+
+type ErrorsObjects = ErrorToObject<__ExtractMe>;
+
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+type ErrorInfo = __PatchMe | ErrorsObjects[keyof ErrorsObjects];
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+type ErrorInfoCompressed = {};
+
+type Decompress<T extends object> = {
+  [K in keyof T]: T[K] extends [infer Param, infer Code]
+    ? {
+        code: Code;
+        reasonCode: K;
+        details: Param;
+      }
+    : T[K] extends [infer Param]
+      ? {
+          code: "BABEL_PARSER_SYNTAX_ERROR";
+          reasonCode: K;
+          details: Param;
+        }
+      : T[K] extends []
+        ? {
+            code: "BABEL_PARSER_SYNTAX_ERROR";
+            reasonCode: K;
+            details: object;
+          }
+        : never;
+};
 
 export type { LValAncestor } from "./parse-error/standard-errors.ts";
