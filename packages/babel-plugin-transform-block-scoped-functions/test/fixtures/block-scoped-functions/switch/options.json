@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-block-scoped-functions",
+    "transform-block-scoping"
+  ]
+}
