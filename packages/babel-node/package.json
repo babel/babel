@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/register": "workspace:^",
     "commander": "^12.1.0",
-    "core-js": "^3.30.2",
+    "core-js": "^3.48.0",
     "v8flags": "^4.0.1"
   },
   "peerDependencies": {
