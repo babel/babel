@@ -2,6 +2,9 @@
 
 const semver = require("semver");
 
+// Disable browserslist old data warning for 7.x branch
+process.env.BROWSERSLIST_IGNORE_OLD_DATA = "1";
+
 const nodeVersion = process.versions.node;
 const supportsESMAndJestLightRunner = semver.satisfies(
   nodeVersion,
