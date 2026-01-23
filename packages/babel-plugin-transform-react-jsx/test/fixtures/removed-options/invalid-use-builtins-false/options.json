@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": true,
-  "plugins": [["transform-react-jsx", { "useBuiltIns": false }]],
-  "throws": "@babel/plugin-transform-react-jsx: Since \"useBuiltIns\" is removed in Babel 8, you can remove it from the config."
-}

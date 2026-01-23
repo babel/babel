@@ -1,2 +1,0 @@
-@decorator<string>()
-class Test {}

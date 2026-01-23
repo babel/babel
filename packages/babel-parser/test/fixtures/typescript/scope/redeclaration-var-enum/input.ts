@@ -1,2 +1,0 @@
-let Foo;
-enum Foo {}

@@ -1,4 +1,0 @@
-{
-  "validateLogs": true,
-  "presets": [["env", { "modules": "systemjs", "targets": { "browsers": "ie 6" } }]]
-}

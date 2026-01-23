@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": true,
-  "tokens": true,
-  "plugins": ["jsx", "flow"]
-}

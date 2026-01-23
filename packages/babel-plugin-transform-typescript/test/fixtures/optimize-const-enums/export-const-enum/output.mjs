@@ -1,4 +1,0 @@
-export const A = {
-  y: 0
-};
-let x = A.y;
