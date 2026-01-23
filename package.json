@@ -18,7 +18,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@6.0.0-git.20260123.hash-4dbd137d0c786ef96ea7113e82e17950bfb1c8a6",
   "_": "The dependency on minimatch (npm:is-odd@*) is to avoid hoisting of the real minimatch, which causes type issues",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
@@ -104,9 +104,9 @@
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
+    "interpret@^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "interpret@^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "interpret@^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"
