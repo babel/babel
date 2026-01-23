@@ -1,28 +1,10 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
-import { traverseNode } from "../traverse-node.ts";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
 import { _markRemoved } from "./removal.ts";
 import type TraversalContext from "../context.ts";
-import type { VisitPhase } from "../types.ts";
 import type NodePath from "./index.ts";
 import * as t from "@babel/types";
-
-export function call(this: NodePath, key: VisitPhase): boolean {
-  const opts = this.opts;
-
-  this.debug(key);
-
-  if (this.node) {
-    if (_call.call(this, opts[key])) return true;
-  }
-
-  if (this.node) {
-    return _call.call(this, opts[this.node.type]?.[key]);
-  }
-
-  return false;
-}
 
 export function _call(this: NodePath, fns?: Function[]): boolean {
   if (!fns) return false;
@@ -58,56 +40,6 @@ export function _call(this: NodePath, fns?: Function[]): boolean {
 
 export function isDenylisted(this: NodePath): boolean {
   return !!this.opts.denylist?.includes(this.node.type);
-}
-
-function restoreContext(path: NodePath, context: TraversalContext) {
-  if (path.context !== context) {
-    path.context = context;
-    path.state = context.state;
-    path.opts = context.opts;
-  }
-}
-
-export function visit(this: NodePath<t.Node | null>): boolean {
-  if (!this.node) {
-    return false;
-  }
-
-  if (this.isDenylisted()) {
-    return false;
-  }
-
-  if (this.opts.shouldSkip?.(this)) {
-    return false;
-  }
-
-  const currentContext = this.context;
-  // Note: We need to check "this.shouldSkip" first because
-  // another visitor can set it to true. Usually .shouldSkip is false
-  // before calling the enter visitor, but it can be true in case of
-  // a requeued node (e.g. by .replaceWith()) that is then marked
-  // with .skip().
-  if (this.shouldSkip || call.call(this, "enter")) {
-    this.debug("Skip...");
-    return this.shouldStop;
-  }
-  restoreContext(this, currentContext);
-
-  this.debug("Recursing into...");
-  this.shouldStop = traverseNode(
-    this.node,
-    this.opts,
-    this.scope,
-    this.state,
-    this,
-    this.skipKeys,
-  );
-
-  restoreContext(this, currentContext);
-
-  call.call(this, "exit");
-
-  return this.shouldStop;
 }
 
 export function skip(this: NodePath) {

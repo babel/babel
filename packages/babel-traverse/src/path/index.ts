@@ -271,7 +271,6 @@ const methods = {
 
   // NodePath_context
   isDenylisted: NodePath_context.isDenylisted,
-  visit: NodePath_context.visit,
   skip: NodePath_context.skip,
   skipKey: NodePath_context.skipKey,
   stop: NodePath_context.stop,

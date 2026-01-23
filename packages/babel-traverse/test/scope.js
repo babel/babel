@@ -526,7 +526,7 @@ describe("scope", () => {
     describe("reference paths", () => {
       it("param referenced in function body", function () {
         const path = getIdentifierPath("function square(n) { return n * n}");
-        const referencePaths = path.context.scope.bindings.n.referencePaths;
+        const referencePaths = path.scope.bindings.n.referencePaths;
         expect(referencePaths).toHaveLength(2);
         expect(referencePaths[0].node.loc.start).toEqual({
           line: 1,

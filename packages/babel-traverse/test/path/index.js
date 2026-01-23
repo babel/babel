@@ -158,7 +158,6 @@ describe("NodePath", () => {
           "toComputedKey",
           "unshiftContainer",
           "unwrapFunctionEnvironment",
-          "visit",
           "willIMaybeExecuteBefore",
         ]
       `);

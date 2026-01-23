@@ -136,7 +136,7 @@ export function traverseNode<S = unknown>(
   const keys = VISITOR_KEYS[node.type];
   if (!keys?.length) return false;
 
-  const ctx = new TraversalContext(scope, opts, state, path);
+  const ctx = new TraversalContext(opts, state);
   if (visitSelf) {
     if (skipKeys?.[path!.parentKey]) return false;
     return _visitPaths(ctx, [path!]);
