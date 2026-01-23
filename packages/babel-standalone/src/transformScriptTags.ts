@@ -14,7 +14,7 @@ import type { InputOptions } from "@babel/core";
 let headEl: HTMLHeadElement;
 let inlineScriptCount = 0;
 
-type Browsers = string | ReadonlyArray<string>;
+type Browsers = string | readonly string[];
 
 type CompilationResult = {
   async: boolean;
