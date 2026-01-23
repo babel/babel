@@ -142,6 +142,7 @@ defineType("TSMethodSignature", {
     ...namedTypeElementCommon(),
     kind: {
       validate: assertOneOf("method", "get", "set"),
+      default: "method",
     },
   },
 });
@@ -550,7 +551,8 @@ defineType("TSModuleDeclaration", {
   visitor: ["id", "body"],
   fields: {
     kind: {
-      validate: assertOneOf("global", "module", "namespace"),
+      validate: assertOneOf("global", "namespace"),
+      default: "namespace",
     },
     declare: validateOptional(bool),
     id: {
@@ -562,11 +564,6 @@ defineType("TSModuleDeclaration", {
             key: string,
             val: t.TSEntityName | t.StringLiteral,
           ) {
-            if (node.kind === "module" && !is("StringLiteral", val)) {
-              throw new TypeError(
-                `TSModuleDeclaration of kind 'module' must have a StringLiteral id.`,
-              );
-            }
             if (node.kind === "namespace" && is("StringLiteral", val)) {
               throw new TypeError(
                 `TSModuleDeclaration of kind 'namespace' cannot have a StringLiteral id.`,

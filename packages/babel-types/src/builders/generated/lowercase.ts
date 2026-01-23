@@ -905,8 +905,7 @@ export function arrowFunctionExpression(
     params,
     body,
     async,
-    //@ts-expect-error FIXME in Babel 8
-    expression: null,
+    expression: body.type !== "BlockStatement",
   };
   const defs = NODE_FIELDS.ArrowFunctionExpression;
   validate(defs.params, node, "params", params, 1);
@@ -1536,6 +1535,9 @@ export function classPrivateMethod(
     params,
     body,
     static: _static,
+    async: false,
+    computed: false,
+    generator: false,
   };
   const defs = NODE_FIELDS.ClassPrivateMethod;
   validate(defs.kind, node, "kind", kind);
@@ -1997,8 +1999,7 @@ export function objectTypeCallProperty(
   const node: t.ObjectTypeCallProperty = {
     type: "ObjectTypeCallProperty",
     value,
-    //@ts-expect-error FIXME in Babel 8
-    static: null,
+    static: false,
   };
   const defs = NODE_FIELDS.ObjectTypeCallProperty;
   validate(defs.value, node, "value", value, 1);
@@ -2016,8 +2017,7 @@ export function objectTypeIndexer(
     key,
     value,
     variance,
-    //@ts-expect-error FIXME in Babel 8
-    static: null,
+    static: false,
   };
   const defs = NODE_FIELDS.ObjectTypeIndexer;
   validate(defs.id, node, "id", id, 1);
@@ -2036,16 +2036,11 @@ export function objectTypeProperty(
     key,
     value,
     variance,
-    //@ts-expect-error FIXME in Babel 8
-    kind: null,
-    //@ts-expect-error FIXME in Babel 8
-    method: null,
-    //@ts-expect-error FIXME in Babel 8
-    optional: null,
-    //@ts-expect-error FIXME in Babel 8
-    proto: null,
-    //@ts-expect-error FIXME in Babel 8
-    static: null,
+    kind: "init",
+    method: false,
+    optional: false,
+    proto: false,
+    static: false,
   };
   const defs = NODE_FIELDS.ObjectTypeProperty;
   validate(defs.key, node, "key", key, 1);
@@ -2187,19 +2182,20 @@ export function typeCastExpression(
   return node;
 }
 export function typeParameter(
+  name: string,
   bound: t.TypeAnnotation | null = null,
   _default: t.FlowType | null = null,
   variance: t.Variance | null = null,
 ): t.TypeParameter {
   const node: t.TypeParameter = {
     type: "TypeParameter",
+    name,
     bound,
     default: _default,
     variance,
-    //@ts-expect-error FIXME in Babel 8
-    name: null,
   };
   const defs = NODE_FIELDS.TypeParameter;
+  validate(defs.name, node, "name", name);
   validate(defs.bound, node, "bound", bound, 1);
   validate(defs.default, node, "default", _default, 1);
   validate(defs.variance, node, "variance", variance, 1);
@@ -2276,10 +2272,8 @@ export function enumBooleanBody(
   const node: t.EnumBooleanBody = {
     type: "EnumBooleanBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
-    explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
-    hasUnknownMembers: null,
+    explicitType: false,
+    hasUnknownMembers: false,
   };
   const defs = NODE_FIELDS.EnumBooleanBody;
   validate(defs.members, node, "members", members, 1);
@@ -2291,10 +2285,8 @@ export function enumNumberBody(
   const node: t.EnumNumberBody = {
     type: "EnumNumberBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
-    explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
-    hasUnknownMembers: null,
+    explicitType: false,
+    hasUnknownMembers: false,
   };
   const defs = NODE_FIELDS.EnumNumberBody;
   validate(defs.members, node, "members", members, 1);
@@ -2306,10 +2298,8 @@ export function enumStringBody(
   const node: t.EnumStringBody = {
     type: "EnumStringBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
-    explicitType: null,
-    //@ts-expect-error FIXME in Babel 8
-    hasUnknownMembers: null,
+    explicitType: false,
+    hasUnknownMembers: false,
   };
   const defs = NODE_FIELDS.EnumStringBody;
   validate(defs.members, node, "members", members, 1);
@@ -2321,22 +2311,24 @@ export function enumSymbolBody(
   const node: t.EnumSymbolBody = {
     type: "EnumSymbolBody",
     members,
-    //@ts-expect-error FIXME in Babel 8
-    hasUnknownMembers: null,
+    hasUnknownMembers: false,
   };
   const defs = NODE_FIELDS.EnumSymbolBody;
   validate(defs.members, node, "members", members, 1);
   return node;
 }
-export function enumBooleanMember(id: t.Identifier): t.EnumBooleanMember {
+export function enumBooleanMember(
+  id: t.Identifier,
+  init: t.BooleanLiteral,
+): t.EnumBooleanMember {
   const node: t.EnumBooleanMember = {
     type: "EnumBooleanMember",
     id,
-    //@ts-expect-error FIXME in Babel 8
-    init: null,
+    init,
   };
   const defs = NODE_FIELDS.EnumBooleanMember;
   validate(defs.id, node, "id", id, 1);
+  validate(defs.init, node, "init", init, 1);
   return node;
 }
 export function enumNumberMember(
@@ -2398,8 +2390,7 @@ export function optionalIndexedAccessType(
     type: "OptionalIndexedAccessType",
     objectType,
     indexType,
-    //@ts-expect-error FIXME in Babel 8
-    optional: null,
+    optional: false,
   };
   const defs = NODE_FIELDS.OptionalIndexedAccessType;
   validate(defs.objectType, node, "objectType", objectType, 1);
@@ -2744,6 +2735,8 @@ export function tsDeclareFunction(
     typeParameters,
     params,
     returnType,
+    async: false,
+    generator: false,
   };
   const defs = NODE_FIELDS.TSDeclareFunction;
   validate(defs.id, node, "id", id, 1);
@@ -2797,6 +2790,11 @@ export function tsDeclareMethod(
     typeParameters,
     params,
     returnType,
+    async: false,
+    computed: false,
+    generator: false,
+    kind: "method",
+    static: false,
   } as t.TSDeclareMethod;
   const defs = NODE_FIELDS.TSDeclareMethod;
   validate(defs.decorators, node, "decorators", decorators, 1);
@@ -2862,6 +2860,7 @@ export function tsPropertySignature(
     type: "TSPropertySignature",
     key,
     typeAnnotation,
+    computed: false,
   };
   const defs = NODE_FIELDS.TSPropertySignature;
   validate(defs.key, node, "key", key, 1);
@@ -2880,8 +2879,8 @@ export function tsMethodSignature(
     typeParameters,
     params,
     returnType,
-    //@ts-expect-error FIXME in Babel 8
-    kind: null,
+    computed: false,
+    kind: "method",
   };
   const defs = NODE_FIELDS.TSMethodSignature;
   validate(defs.key, node, "key", key, 1);
@@ -3429,8 +3428,7 @@ export function tsModuleDeclaration(
     type: "TSModuleDeclaration",
     id,
     body,
-    //@ts-expect-error FIXME in Babel 8
-    kind: null,
+    kind: "namespace",
   };
   const defs = NODE_FIELDS.TSModuleDeclaration;
   validate(defs.id, node, "id", id, 1);

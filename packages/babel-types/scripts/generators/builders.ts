@@ -168,17 +168,21 @@ const { NODE_FIELDS } = utils;
 
     const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
     const builderNames = BUILDER_KEYS[type];
-    const objectFields: [string, string, boolean?][] = [
-      ["type", JSON.stringify(type)],
-    ];
+    const objectFields: [string, string][] = [["type", JSON.stringify(type)]];
     fieldNames.forEach(fieldName => {
+      if (type === "ArrowFunctionExpression" && fieldName === "expression") {
+        // special handling of this to keep it in sync with the body node
+        objectFields.push(["expression", `body.type !== "BlockStatement"`]);
+        return;
+      }
+
       const field = NODE_FIELDS[type][fieldName];
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = toBindingIdentifierName(fieldName);
         objectFields.push([fieldName, bindingIdentifierName]);
       } else if (!field.optional) {
         const def = JSON.stringify(field.default);
-        objectFields.push([fieldName, def, field.default === null]);
+        objectFields.push([fieldName, def]);
       }
     });
 
@@ -201,11 +205,7 @@ const { NODE_FIELDS } = utils;
     }function ${formattedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
 
     const nodeObjectExpression = `{\n${objectFields
-      .map(
-        ([k, v, usedDefault]) =>
-          (usedDefault ? "//@ts-expect-error FIXME in Babel 8\n" : "") +
-          (k === v ? `    ${k},` : `    ${k}: ${v},`)
-      )
+      .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
       .join("\n")}\n  }`;
 
     if (builderNames.length > 0) {

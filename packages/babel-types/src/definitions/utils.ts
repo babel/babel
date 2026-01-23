@@ -101,6 +101,13 @@ export function validateOptional(validate: Validator): FieldOptions {
   return { validate, optional: true };
 }
 
+export function validateDefault(
+  validate: Validator,
+  defaultValue: any,
+): FieldOptions {
+  return { validate, default: defaultValue, optional: false };
+}
+
 export function validateOptionalType(...typeNames: NodeTypes[]): FieldOptions {
   return { validate: assertNodeType(...typeNames), optional: true };
 }
@@ -358,6 +365,11 @@ export function defineAliasedType(...aliases: string[]) {
 export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
+  const visitor: string[] = opts.visitor || inherits.visitor || [];
+  const aliases: string[] = opts.aliases || inherits.aliases || [];
+  const builder: string[] =
+    opts.builder || inherits.builder || opts.visitor || [];
+
   let fields = opts.fields;
   if (!fields) {
     fields = {};
@@ -383,11 +395,6 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
     }
   }
 
-  const visitor: string[] = opts.visitor || inherits.visitor || [];
-  const aliases: string[] = opts.aliases || inherits.aliases || [];
-  const builder: string[] =
-    opts.builder || inherits.builder || opts.visitor || [];
-
   for (const k of Object.keys(opts)) {
     if (!validTypeOpts.has(k)) {
       throw new Error(`Unknown type option "${k}" on ${type}`);
@@ -406,11 +413,12 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   for (const key of Object.keys(fields)) {
     const field = fields[key];
 
-    if (field.default !== undefined && !builder.includes(key)) {
-      field.optional = true;
+    if (field.default === null) {
+      field.optional ??= true;
     }
     if (field.default === undefined) {
       field.default = null;
+      field.optional ??= false;
     } else if (!field.validate && field.default != null) {
       field.validate = assertValueType(getType(field.default));
     }
