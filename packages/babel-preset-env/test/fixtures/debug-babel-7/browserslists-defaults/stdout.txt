@@ -5,7 +5,7 @@ Using targets:
   "android": "143",
   "chrome": "109",
   "edge": "142",
-  "firefox": "140",
+  "firefox": "128",
   "ios": "18.5",
   "opera": "124",
   "opera_mobile": "80",
@@ -17,8 +17,8 @@ Using modules transform: auto
 
 Using plugins:
   transform-explicit-resource-management { chrome < 134, firefox < 141, ios, opera, opera_mobile, safari, samsung }
-  transform-duplicate-named-capturing-groups-regex { chrome < 126, opera_mobile, samsung }
-  transform-regexp-modifiers { chrome < 125, ios, opera_mobile, safari }
+  transform-duplicate-named-capturing-groups-regex { chrome < 126, firefox < 129, opera_mobile, samsung }
+  transform-regexp-modifiers { chrome < 125, firefox < 132, ios, opera_mobile, safari }
   transform-unicode-sets-regex { chrome < 112 }
   syntax-class-static-block
   syntax-private-property-in-object
