@@ -211,25 +211,6 @@ export function TopicReference(this: Printer) {
   }
 }
 
-// Smart-mix pipe operator
-export function PipelineTopicExpression(
-  this: Printer,
-  node: t.PipelineTopicExpression,
-) {
-  this.print(node.expression);
-}
-
-export function PipelineBareFunction(
-  this: Printer,
-  node: t.PipelineBareFunction,
-) {
-  this.print(node.callee);
-}
-
-export function PipelinePrimaryTopicReference(this: Printer) {
-  this.token("#");
-}
-
 // discard binding
 export function VoidPattern(this: Printer) {
   this.word("void");
