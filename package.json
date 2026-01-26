@@ -100,6 +100,7 @@
     "caniuse-lite": "1.0.30001766",
     "core-js-compat": "3.48.0",
     "electron-to-chromium": "1.5.278",
+    "sha.js": "2.4.12",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
