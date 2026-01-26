@@ -18,7 +18,6 @@ import type { ReadonlyDeepArray } from "./helpers/deep-array.ts";
 
 import { endHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
 import ConfigError from "../errors/config-error.ts";
-import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
 const debug = createDebug("babel:config:config-chain");
 
@@ -41,6 +40,7 @@ import type {
   OptionsAndDescriptors,
   ValidatedFile,
 } from "./config-descriptors.ts";
+import type { PluginAPI, PresetAPI } from "./index.ts";
 
 export type ConfigChain = {
   plugins: UnloadedDescriptor<PluginAPI>[];

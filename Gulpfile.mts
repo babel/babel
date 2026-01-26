@@ -484,9 +484,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                   compact: false,
                 },
                 plugins: [
-                  function babelPluginInlineConstNumericObjects(api) {
-                    // @ts-expect-error FIXME: add `types` in types
-                    const t = api.types as typeof types;
+                  function babelPluginInlineConstNumericObjects({ types: t }) {
                     return {
                       visitor: {
                         VariableDeclarator(path) {

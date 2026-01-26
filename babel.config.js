@@ -545,7 +545,7 @@ function pluginBabelParserTokenType({
 }
 
 /**
- * @param {import("@babel/core")} pluginAPI
+ * @param {import("@babel/core").PluginAPI} pluginAPI
  * @returns {import("@babel/core").PluginObject}
  */
 function pluginGeneratorOptimization({ types: t }) {
