@@ -34,17 +34,11 @@ const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
 // @ts-expect-error Map signature is not recognized by TS
 const featuresToPlugins = new Map([
-  ["import-assertions", "importAssertions"],
-  ["import-attributes", "importAttributes"],
   ["import-defer", "deferredImportEvaluation"],
   [
     "decorators",
-    [
-      ["decorators", { version: "2022-03", decoratorsBeforeExport: false }],
-      "decoratorAutoAccessors",
-    ],
+    [["decorators", { version: "2023-11" }], "decoratorAutoAccessors"],
   ],
-  ["explicit-resource-management", "explicitResourceManagement"],
   ["source-phase-imports", "sourcePhaseImports"],
   ["source-phase-imports-module-source", "sourcePhaseImports"],
 ]);
