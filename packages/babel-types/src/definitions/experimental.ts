@@ -1,7 +1,9 @@
 import defineType, { assertNodeType, assertValueType } from "./utils.ts";
 
+// https://github.com/tc39/proposal-partial-application
 defineType("ArgumentPlaceholder", {});
 
+// https://github.com/tc39/proposal-bind-operator
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
@@ -15,6 +17,7 @@ defineType("BindExpression", {
   },
 });
 
+// https://github.com/tc39/proposal-decorators
 defineType("Decorator", {
   visitor: ["expression"],
   fields: {
@@ -24,6 +27,7 @@ defineType("Decorator", {
   },
 });
 
+// https://github.com/tc39/proposal-do-expressions
 defineType("DoExpression", {
   visitor: ["body"],
   builder: ["body", "async"],
@@ -39,6 +43,7 @@ defineType("DoExpression", {
   },
 });
 
+// https://github.com/tc39/proposal-export-default-from
 defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
@@ -61,36 +66,7 @@ defineType("ModuleExpression", {
 });
 
 // https://github.com/tc39/proposal-pipeline-operator
-// https://github.com/js-choi/proposal-hack-pipes
 defineType("TopicReference", {
-  aliases: ["Expression"],
-});
-
-// https://github.com/tc39/proposal-pipeline-operator
-// https://github.com/js-choi/proposal-smart-pipes
-defineType("PipelineTopicExpression", {
-  builder: ["expression"],
-  visitor: ["expression"],
-  fields: {
-    expression: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-  aliases: ["Expression"],
-});
-
-defineType("PipelineBareFunction", {
-  builder: ["callee"],
-  visitor: ["callee"],
-  fields: {
-    callee: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-  aliases: ["Expression"],
-});
-
-defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
 });
 
