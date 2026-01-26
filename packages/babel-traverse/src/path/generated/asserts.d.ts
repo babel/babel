@@ -559,19 +559,6 @@ export interface NodePathAssertions {
   assertPatternLike<Opts extends Options<t.PatternLike>>(
     opts?: Opts,
   ): asserts this is NodePath<t.PatternLike & Opts>;
-  assertPipelineBareFunction<Opts extends Options<t.PipelineBareFunction>>(
-    opts?: Opts,
-  ): asserts this is NodePath<t.PipelineBareFunction & Opts>;
-  assertPipelinePrimaryTopicReference<
-    Opts extends Options<t.PipelinePrimaryTopicReference>,
-  >(
-    opts?: Opts,
-  ): asserts this is NodePath<t.PipelinePrimaryTopicReference & Opts>;
-  assertPipelineTopicExpression<
-    Opts extends Options<t.PipelineTopicExpression>,
-  >(
-    opts?: Opts,
-  ): asserts this is NodePath<t.PipelineTopicExpression & Opts>;
   assertPlaceholder<Opts extends Options<t.Placeholder>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Placeholder & Opts>;

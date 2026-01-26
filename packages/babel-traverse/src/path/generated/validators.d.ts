@@ -1154,29 +1154,6 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.PatternLike & Opts>;
-  isPipelineBareFunction(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.PipelineBareFunction>;
-  isPipelineBareFunction<Opts extends Options<t.PipelineBareFunction>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.PipelineBareFunction & Opts>;
-  isPipelinePrimaryTopicReference(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.PipelinePrimaryTopicReference>;
-  isPipelinePrimaryTopicReference<
-    Opts extends Options<t.PipelinePrimaryTopicReference>,
-  >(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.PipelinePrimaryTopicReference & Opts>;
-  isPipelineTopicExpression(
-    this: NodePath<t.Node | null>,
-  ): this is NodePath<t.PipelineTopicExpression>;
-  isPipelineTopicExpression<Opts extends Options<t.PipelineTopicExpression>>(
-    this: NodePath<t.Node | null>,
-    opts: Opts,
-  ): this is NodePath<t.PipelineTopicExpression & Opts>;
   isPlaceholder(this: NodePath<t.Node | null>): this is NodePath<t.Placeholder>;
   isPlaceholder<Opts extends Options<t.Placeholder>>(
     this: NodePath<t.Node | null>,

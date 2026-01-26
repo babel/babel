@@ -41,7 +41,6 @@ export const IMPORTOREXPORTDECLARATION_TYPES =
   FLIPPED_ALIAS_KEYS["ImportOrExportDeclaration"];
 export const EXPORTDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ExportDeclaration"];
 export const MODULESPECIFIER_TYPES = FLIPPED_ALIAS_KEYS["ModuleSpecifier"];
-export const ACCESSOR_TYPES = FLIPPED_ALIAS_KEYS["Accessor"];
 export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
 export const FLOW_TYPES = FLIPPED_ALIAS_KEYS["Flow"];
 export const FLOWTYPE_TYPES = FLIPPED_ALIAS_KEYS["FlowType"];
@@ -53,6 +52,7 @@ export const ENUMBODY_TYPES = FLIPPED_ALIAS_KEYS["EnumBody"];
 export const ENUMMEMBER_TYPES = FLIPPED_ALIAS_KEYS["EnumMember"];
 export const JSX_TYPES = FLIPPED_ALIAS_KEYS["JSX"];
 export const MISCELLANEOUS_TYPES = FLIPPED_ALIAS_KEYS["Miscellaneous"];
+export const ACCESSOR_TYPES = FLIPPED_ALIAS_KEYS["Accessor"];
 export const TYPESCRIPT_TYPES = FLIPPED_ALIAS_KEYS["TypeScript"];
 export const TSTYPEELEMENT_TYPES = FLIPPED_ALIAS_KEYS["TSTypeElement"];
 export const TSTYPE_TYPES = FLIPPED_ALIAS_KEYS["TSType"];

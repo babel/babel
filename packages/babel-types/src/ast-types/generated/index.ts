@@ -183,9 +183,6 @@ export type Node =
   | OptionalIndexedAccessType
   | OptionalMemberExpression
   | ParenthesizedExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
-  | PipelineTopicExpression
   | Placeholder
   | PrivateName
   | Program
@@ -1125,49 +1122,6 @@ export interface ClassPropertyNonComputed extends BaseNode {
 }
 export type ClassProperty = ClassPropertyComputed | ClassPropertyNonComputed;
 
-export interface ClassAccessorPropertyComputed extends BaseNode {
-  type: "ClassAccessorProperty";
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
-  decorators?: Decorator[] | null;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean | null;
-  readonly?: boolean | null;
-  variance?: Variance | null;
-  computed: true;
-  key: Expression;
-}
-export interface ClassAccessorPropertyNonComputed extends BaseNode {
-  type: "ClassAccessorProperty";
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
-  decorators?: Decorator[] | null;
-  static: boolean;
-  abstract?: boolean | null;
-  accessibility?: "public" | "private" | "protected" | null;
-  declare?: boolean | null;
-  definite?: boolean | null;
-  optional?: boolean | null;
-  override?: boolean | null;
-  readonly?: boolean | null;
-  variance?: Variance | null;
-  computed: false;
-  key:
-    | Identifier
-    | StringLiteral
-    | NumericLiteral
-    | BigIntLiteral
-    | PrivateName;
-}
-export type ClassAccessorProperty =
-  | ClassAccessorPropertyComputed
-  | ClassAccessorPropertyNonComputed;
-
 export interface ClassPrivateProperty extends BaseNode {
   type: "ClassPrivateProperty";
   key: PrivateName;
@@ -1744,6 +1698,49 @@ export interface BindExpression extends BaseNode {
   callee: Expression;
 }
 
+export interface ClassAccessorPropertyComputed extends BaseNode {
+  type: "ClassAccessorProperty";
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
+  decorators?: Decorator[] | null;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean | null;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+  computed: true;
+  key: Expression;
+}
+export interface ClassAccessorPropertyNonComputed extends BaseNode {
+  type: "ClassAccessorProperty";
+  value?: Expression | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | null;
+  decorators?: Decorator[] | null;
+  static: boolean;
+  abstract?: boolean | null;
+  accessibility?: "public" | "private" | "protected" | null;
+  declare?: boolean | null;
+  definite?: boolean | null;
+  optional?: boolean | null;
+  override?: boolean | null;
+  readonly?: boolean | null;
+  variance?: Variance | null;
+  computed: false;
+  key:
+    | Identifier
+    | StringLiteral
+    | NumericLiteral
+    | BigIntLiteral
+    | PrivateName;
+}
+export type ClassAccessorProperty =
+  | ClassAccessorPropertyComputed
+  | ClassAccessorPropertyNonComputed;
+
 export interface Decorator extends BaseNode {
   type: "Decorator";
   expression: Expression;
@@ -1767,20 +1764,6 @@ export interface ModuleExpression extends BaseNode {
 
 export interface TopicReference extends BaseNode {
   type: "TopicReference";
-}
-
-export interface PipelineTopicExpression extends BaseNode {
-  type: "PipelineTopicExpression";
-  expression: Expression;
-}
-
-export interface PipelineBareFunction extends BaseNode {
-  type: "PipelineBareFunction";
-  callee: Expression;
-}
-
-export interface PipelinePrimaryTopicReference extends BaseNode {
-  type: "PipelinePrimaryTopicReference";
 }
 
 export interface VoidPattern extends BaseNode {
@@ -2319,7 +2302,6 @@ export type Standardized =
   | OptionalMemberExpression
   | OptionalCallExpression
   | ClassProperty
-  | ClassAccessorProperty
   | ClassPrivateProperty
   | ClassPrivateMethod
   | PrivateName
@@ -2366,9 +2348,6 @@ export type Expression =
   | DoExpression
   | ModuleExpression
   | TopicReference
-  | PipelineTopicExpression
-  | PipelineBareFunction
-  | PipelinePrimaryTopicReference
   | TSInstantiationExpression
   | TSAsExpression
   | TSSatisfiesExpression
@@ -2608,8 +2587,8 @@ export type ObjectMember = ObjectMethod | ObjectProperty;
 export type Property =
   | ObjectProperty
   | ClassProperty
-  | ClassAccessorProperty
-  | ClassPrivateProperty;
+  | ClassPrivateProperty
+  | ClassAccessorProperty;
 export type UnaryLike = UnaryExpression | SpreadElement;
 export type Pattern =
   | AssignmentPattern
@@ -2633,7 +2612,6 @@ export type ModuleSpecifier =
   | ImportSpecifier
   | ExportNamespaceSpecifier
   | ExportDefaultSpecifier;
-export type Accessor = ClassAccessorProperty;
 export type Private = ClassPrivateProperty | ClassPrivateMethod | PrivateName;
 export type Flow =
   | AnyTypeAnnotation
@@ -2781,6 +2759,7 @@ export type JSX =
   | JSXOpeningFragment
   | JSXClosingFragment;
 export type Miscellaneous = Placeholder | V8IntrinsicIdentifier;
+export type Accessor = ClassAccessorProperty;
 export type TypeScript =
   | TSParameterProperty
   | TSDeclareFunction
@@ -2953,7 +2932,6 @@ export interface Aliases {
   ImportOrExportDeclaration: ImportOrExportDeclaration;
   ExportDeclaration: ExportDeclaration;
   ModuleSpecifier: ModuleSpecifier;
-  Accessor: Accessor;
   Private: Private;
   Flow: Flow;
   FlowType: FlowType;
@@ -2964,6 +2942,7 @@ export interface Aliases {
   EnumMember: EnumMember;
   JSX: JSX;
   Miscellaneous: Miscellaneous;
+  Accessor: Accessor;
   TypeScript: TypeScript;
   TSTypeElement: TSTypeElement;
   TSType: TSType;
@@ -3040,8 +3019,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3152,8 +3129,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3216,8 +3191,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3292,8 +3265,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3356,8 +3327,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3421,8 +3390,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3485,8 +3452,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3574,8 +3539,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3703,8 +3666,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3786,8 +3747,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3862,8 +3821,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4151,8 +4108,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4464,8 +4419,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4619,8 +4572,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | Placeholder
     | PrivateName
     | QualifiedTypeIdentifier
@@ -4724,8 +4675,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4810,8 +4759,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4990,8 +4937,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5059,8 +5004,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5153,8 +5096,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5218,8 +5159,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -5284,8 +5223,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5373,8 +5310,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5437,8 +5372,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5501,8 +5434,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5667,8 +5598,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5732,8 +5661,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5888,8 +5815,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5977,8 +5902,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6041,200 +5964,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSClassImplements
-    | TSDeclareMethod
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSInterfaceHeritage
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TypeCastExpression
-    | UnaryExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
-  PipelineBareFunction:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSClassImplements
-    | TSDeclareMethod
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSInterfaceHeritage
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TypeCastExpression
-    | UnaryExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
-  PipelinePrimaryTopicReference:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSClassImplements
-    | TSDeclareMethod
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSInterfaceHeritage
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TypeCastExpression
-    | UnaryExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
-  PipelineTopicExpression:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6312,8 +6041,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6409,8 +6136,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6493,8 +6218,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6697,8 +6420,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7031,8 +6752,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -7276,8 +6995,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7483,8 +7200,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7701,8 +7416,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7997,8 +7710,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8062,8 +7773,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8127,8 +7836,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8236,8 +7943,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8379,8 +8084,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8504,8 +8207,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8594,8 +8295,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8749,8 +8448,6 @@ export interface ParentMaps {
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
-    | PipelineBareFunction
-    | PipelineTopicExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement

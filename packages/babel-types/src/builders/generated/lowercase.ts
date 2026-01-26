@@ -1434,73 +1434,6 @@ export function classProperty(
   validate(defs.static, node, "static", _static);
   return node;
 }
-export function classAccessorProperty(
-  key: t.Expression,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
-  decorators?: t.Decorator[] | null,
-  computed?: true,
-  _static?: boolean,
-): Extract<t.ClassAccessorProperty, { computed: true }>;
-export function classAccessorProperty(
-  key:
-    | t.Identifier
-    | t.StringLiteral
-    | t.NumericLiteral
-    | t.BigIntLiteral
-    | t.PrivateName,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
-  decorators?: t.Decorator[] | null,
-  computed?: false,
-  _static?: boolean,
-): Extract<t.ClassAccessorProperty, { computed: false }>;
-export function classAccessorProperty(
-  key:
-    | t.Identifier
-    | t.StringLiteral
-    | t.NumericLiteral
-    | t.BigIntLiteral
-    | t.Expression
-    | t.PrivateName,
-  value?: t.Expression | null,
-  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
-  decorators?: t.Decorator[] | null,
-  computed?: boolean,
-  _static?: boolean,
-): t.ClassAccessorProperty;
-export function classAccessorProperty(
-  key:
-    | t.Identifier
-    | t.StringLiteral
-    | t.NumericLiteral
-    | t.BigIntLiteral
-    | t.Expression
-    | t.PrivateName,
-  value: t.Expression | null = null,
-  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | null = null,
-  decorators: t.Decorator[] | null = null,
-  computed: boolean = false,
-  _static: boolean = false,
-): t.ClassAccessorProperty {
-  const node = {
-    type: "ClassAccessorProperty",
-    key,
-    value,
-    typeAnnotation,
-    decorators,
-    computed,
-    static: _static,
-  } as t.ClassAccessorProperty;
-  const defs = NODE_FIELDS.ClassAccessorProperty;
-  validate(defs.key, node, "key", key, 1);
-  validate(defs.value, node, "value", value, 1);
-  validate(defs.typeAnnotation, node, "typeAnnotation", typeAnnotation, 1);
-  validate(defs.decorators, node, "decorators", decorators, 1);
-  validate(defs.computed, node, "computed", computed);
-  validate(defs.static, node, "static", _static);
-  return node;
-}
 export function classPrivateProperty(
   key: t.PrivateName,
   value: t.Expression | null = null,
@@ -2632,6 +2565,73 @@ export function bindExpression(
   validate(defs.callee, node, "callee", callee, 1);
   return node;
 }
+export function classAccessorProperty(
+  key: t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
+  decorators?: t.Decorator[] | null,
+  computed?: true,
+  _static?: boolean,
+): Extract<t.ClassAccessorProperty, { computed: true }>;
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
+  decorators?: t.Decorator[] | null,
+  computed?: false,
+  _static?: boolean,
+): Extract<t.ClassAccessorProperty, { computed: false }>;
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression
+    | t.PrivateName,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
+  decorators?: t.Decorator[] | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassAccessorProperty;
+export function classAccessorProperty(
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.Expression
+    | t.PrivateName,
+  value: t.Expression | null = null,
+  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | null = null,
+  decorators: t.Decorator[] | null = null,
+  computed: boolean = false,
+  _static: boolean = false,
+): t.ClassAccessorProperty {
+  const node = {
+    type: "ClassAccessorProperty",
+    key,
+    value,
+    typeAnnotation,
+    decorators,
+    computed,
+    static: _static,
+  } as t.ClassAccessorProperty;
+  const defs = NODE_FIELDS.ClassAccessorProperty;
+  validate(defs.key, node, "key", key, 1);
+  validate(defs.value, node, "value", value, 1);
+  validate(defs.typeAnnotation, node, "typeAnnotation", typeAnnotation, 1);
+  validate(defs.decorators, node, "decorators", decorators, 1);
+  validate(defs.computed, node, "computed", computed);
+  validate(defs.static, node, "static", _static);
+  return node;
+}
 export function decorator(expression: t.Expression): t.Decorator {
   const node: t.Decorator = {
     type: "Decorator",
@@ -2678,33 +2678,6 @@ export function moduleExpression(body: t.Program): t.ModuleExpression {
 export function topicReference(): t.TopicReference {
   return {
     type: "TopicReference",
-  };
-}
-export function pipelineTopicExpression(
-  expression: t.Expression,
-): t.PipelineTopicExpression {
-  const node: t.PipelineTopicExpression = {
-    type: "PipelineTopicExpression",
-    expression,
-  };
-  const defs = NODE_FIELDS.PipelineTopicExpression;
-  validate(defs.expression, node, "expression", expression, 1);
-  return node;
-}
-export function pipelineBareFunction(
-  callee: t.Expression,
-): t.PipelineBareFunction {
-  const node: t.PipelineBareFunction = {
-    type: "PipelineBareFunction",
-    callee,
-  };
-  const defs = NODE_FIELDS.PipelineBareFunction;
-  validate(defs.callee, node, "callee", callee, 1);
-  return node;
-}
-export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference {
-  return {
-    type: "PipelinePrimaryTopicReference",
   };
 }
 export function voidPattern(): t.VoidPattern {
