@@ -1,5 +1,6 @@
 import pathUtils from "node:path";
 import fs from "node:fs";
+import type { PluginItem } from "@babel/core";
 import {
   parseSync,
   type InputOptions,
@@ -253,12 +254,12 @@ export default function (api: ConfigAPI) {
               },
             },
           ],
-        ].filter(Boolean),
+        ].filter(Boolean) as PluginItem[],
       },
       {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
-      },
+      } satisfies InputOptions,
     ].filter(Boolean),
   };
 
@@ -575,7 +576,7 @@ function pluginBabelParserTokenType({
         }
       },
     },
-  } satisfies PluginObject;
+  } as PluginObject;
 }
 
 function pluginGeneratorOptimization({ types: t }: PluginAPI) {
