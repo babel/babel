@@ -32,9 +32,7 @@
     "semver": "^7.7.3"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@types/lru-cache": "^5.1.1",
-    "@types/semver": "^5.5.0"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
