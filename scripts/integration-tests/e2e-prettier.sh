@@ -41,6 +41,8 @@ yarn info
   sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
   sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
   sed -i 's#TSImportType:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+  sed -i 's#ExportAllDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+  sed -i 's#ImportDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
   find tests/format/typescript/interface2 -type f -exec sed -i -e 's/declare module/declare namespace/g' {} \;
 
   rm tests/format/js/import-assertions/format.test.js
