@@ -16052,7 +16052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sha.js@npm:2.4.12":
+"sha.js@npm:^2.4.0, sha.js@npm:^2.4.8, sha.js@npm:~2.4.4":
   version: 2.4.12
   resolution: "sha.js@npm:2.4.12"
   dependencies:
