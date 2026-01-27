@@ -161,13 +161,10 @@ program.option(
   "--out-file-extension [string]",
   "Use a specific extension for the output files",
 );
+program.argument("[files...]", "List of files to compile.");
 
 program.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
-program.usage("[options] <files ...>");
-// register an empty action handler so that program.js can throw on
-// unknown options _after_ args
-// see https://github.com/tj/program.js/issues/561#issuecomment-522209408
-program.action(() => {});
+program.usage("[options] [files...]");
 
 export type CmdOptions = {
   babelOptions: InputOptions;

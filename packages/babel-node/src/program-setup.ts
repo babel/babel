@@ -54,6 +54,10 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
+program.argument(
+  "[arguments...]",
+  "Path to the script for evaluation or arguments passed to the script.",
+);
 
 program.version(PACKAGE_JSON.version);
 program.usage(`[options] [ -e "script" | script.js ] [--] [arguments]`);

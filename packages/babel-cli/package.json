@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "@jridgewell/trace-mapping": "^0.3.28",
-    "commander": "^12.1.0",
+    "commander": "^14.0.2",
     "convert-source-map": "^2.0.0",
     "glob": "^13.0.0",
     "slash": "^5.1.0"
