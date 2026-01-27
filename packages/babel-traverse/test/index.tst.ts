@@ -1,5 +1,5 @@
 import { expect, it, describe } from "tstyche";
-import type { NodePath } from "../src/index.ts";
+import type { NodePath, Visitor } from "../src/index.ts";
 import type * as t from "@babel/types";
 
 describe("traverse", () => {
@@ -63,6 +63,22 @@ describe("traverse", () => {
       if (path.isBindingIdentifier()) {
         expect(path).type.toBe<NodePath<t.Identifier>>();
       }
+    });
+  });
+
+  describe("Visitor", () => {
+    it.todo("Union types", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const visitor: Visitor<unknown> = {
+        // @ts-expect-error Type '(this: unknown, path: NodePath_Final<ImportDeclaration | ExportDeclaration>) => void' is not assignable to type 'VisitNode<unknown, Node>
+        "ImportDeclaration|ExportDeclaration"(
+          path: NodePath<t.ImportDeclaration | t.ExportDeclaration>,
+        ) {
+          expect(path).type.toBe<
+            NodePath<t.ImportDeclaration | t.ExportDeclaration>
+          >();
+        },
+      };
     });
   });
 
