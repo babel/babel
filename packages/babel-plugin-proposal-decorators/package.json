@@ -32,7 +32,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^",
     "array.prototype.concat": "^1.0.2",
-    "babel-plugin-polyfill-es-shims": "^0.10.8",
+    "babel-plugin-polyfill-es-shims": "^0.10.9",
     "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {

@@ -28,7 +28,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
-    "core-js": "^3.35.0"
+    "core-js": "^3.48.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-systemjs",
   "engines": {
