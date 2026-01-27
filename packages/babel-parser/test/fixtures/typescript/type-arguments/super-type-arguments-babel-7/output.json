@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":2,"index":62}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":2,"index":62}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":23}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "superTypeParameters": {
+          "type": "TSTypeParameterInstantiation",
+          "start":17,"end":20,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":20,"index":20}},
+          "params": [
+            {
+              "type": "TSTypeReference",
+              "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}},
+              "typeName": {
+                "type": "Identifier",
+                "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          ]
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":21,"end":23,"loc":{"start":{"line":2,"column":0,"index":21},"end":{"line":2,"column":2,"index":23}},
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":25,"end":62,"loc":{"start":{"line":4,"column":0,"index":25},"end":{"line":8,"column":2,"index":62}},
+        "id": {
+          "type": "Identifier",
+          "start":31,"end":32,"loc":{"start":{"line":4,"column":6,"index":31},"end":{"line":4,"column":7,"index":32},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "MemberExpression",
+          "start":41,"end":56,"loc":{"start":{"line":5,"column":0,"index":41},"end":{"line":7,"column":2,"index":56}},
+          "object": {
+            "type": "CallExpression",
+            "start":41,"end":53,"loc":{"start":{"line":5,"column":0,"index":41},"end":{"line":6,"column":2,"index":53}},
+            "callee": {
+              "type": "Identifier",
+              "start":41,"end":42,"loc":{"start":{"line":5,"column":0,"index":41},"end":{"line":5,"column":1,"index":42},"identifierName":"B"},
+              "name": "B"
+            },
+            "arguments": [],
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":42,"end":50,"loc":{"start":{"line":5,"column":1,"index":42},"end":{"line":5,"column":9,"index":50}},
+              "params": [
+                {
+                  "type": "TSStringKeyword",
+                  "start":43,"end":49,"loc":{"start":{"line":5,"column":2,"index":43},"end":{"line":5,"column":8,"index":49}}
+                }
+              ]
+            }
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":55,"end":56,"loc":{"start":{"line":7,"column":1,"index":55},"end":{"line":7,"column":2,"index":56},"identifierName":"C"},
+            "name": "C"
+          }
+        },
+        "superTypeParameters": {
+          "type": "TSTypeParameterInstantiation",
+          "start":56,"end":59,"loc":{"start":{"line":7,"column":2,"index":56},"end":{"line":7,"column":5,"index":59}},
+          "params": [
+            {
+              "type": "TSTypeReference",
+              "start":57,"end":58,"loc":{"start":{"line":7,"column":3,"index":57},"end":{"line":7,"column":4,"index":58}},
+              "typeName": {
+                "type": "Identifier",
+                "start":57,"end":58,"loc":{"start":{"line":7,"column":3,"index":57},"end":{"line":7,"column":4,"index":58},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          ]
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":60,"end":62,"loc":{"start":{"line":8,"column":0,"index":60},"end":{"line":8,"column":2,"index":62}},
+          "body": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
