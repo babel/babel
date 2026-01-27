@@ -259,6 +259,41 @@ jobs:
         env:
           BABEL_ENV: test
 
+  test-exec-tests:
+    name: Test (exec tests with Node.js v6)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use old Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 6
+      - name: Get old Node.js path
+        id: node-path
+        run: echo "path=$(which node)" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Run tests
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+          EXEC_TESTS_NODE: 6
+          EXEC_TESTS_NODE_PATH: ${{ steps.node-path.outputs.path }}
+
   build-babel9:
     name: Build Babel 9 Artifacts
     needs: prepare-yarn-cache
