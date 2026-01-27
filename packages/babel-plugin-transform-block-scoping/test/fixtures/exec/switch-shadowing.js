@@ -80,4 +80,4 @@ function test5(e) {
         }
     }
 }
-console.log(test5("nn"));
+expect(test5("nn")).toBe(true);
