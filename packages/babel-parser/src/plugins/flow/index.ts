@@ -3239,7 +3239,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseSubscript(
       base: N.Expression,
-
       startLoc: Position,
       noCalls: boolean | undefined | null,
       subscriptState: N.ParseSubscriptState,
@@ -3291,13 +3290,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseSubscript(
-        base,
-
-        startLoc,
-        noCalls,
-        subscriptState,
-      );
+      return super.parseSubscript(base, startLoc, noCalls, subscriptState);
     }
 
     parseNewCallee(node: N.NewExpression): void {
