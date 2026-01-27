@@ -1,5 +1,5 @@
 import expect = require("expect-24");
-import resolveFrom = require("resolve-from");
+import resolve = require("resolve");
 import vm = require("vm");
 import LruCache = require("lru-cache");
 import path = require("path");
@@ -109,7 +109,10 @@ function runModuleInTestContext(
   context: vm.Context,
   moduleCache: any,
 ) {
-  const filename = resolveFrom(path.dirname(relativeFilename), id);
+  const filename = resolve.sync(id, {
+    basedir: path.dirname(relativeFilename),
+  });
+
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
   // the context's global scope.
   if (filename === id) return require(id);
