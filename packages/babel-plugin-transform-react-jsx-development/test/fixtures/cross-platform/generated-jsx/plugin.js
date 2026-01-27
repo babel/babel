@@ -5,9 +5,9 @@ module.exports = function ({ types: t }) {
         enter(path) {
           path.pushContainer(
             "body",
-            t.JSXElement(
-              t.JSXOpeningElement(t.jsxIdentifier("div"), [], false),
-              t.JSXClosingElement(t.jsxIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               []
             )
           );
