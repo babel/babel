@@ -298,12 +298,12 @@ function generateMapAliasToNodeTypes() {
         result.set(alias, []);
       }
 
-      const nodeTypes = result.get(alias);
+      const nodeTypes = result.get(alias)!;
       nodeTypes.push(nodeType);
     }
   }
   for (const deprecated of Object.keys(t.DEPRECATED_ALIASES)) {
-    result.set(deprecated, result.get(t.DEPRECATED_ALIASES[deprecated]));
+    result.set(deprecated, result.get(t.DEPRECATED_ALIASES[deprecated])!);
   }
   return result;
 }
@@ -312,7 +312,7 @@ const mapAliasToNodeTypes = generateMapAliasToNodeTypes();
 readme.push("### Aliases");
 readme.push("");
 for (const alias of [...mapAliasToNodeTypes.keys()].sort()) {
-  const nodeTypes = mapAliasToNodeTypes.get(alias);
+  const nodeTypes = mapAliasToNodeTypes.get(alias)!;
   nodeTypes.sort();
   if (!(alias in aliasDescriptions)) {
     if (alias in t.DEPRECATED_ALIASES) {

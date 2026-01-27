@@ -621,7 +621,7 @@ defineType("NumericLiteral", {
               // TODO(@nicolo-ribaudo) Fix regenerator to not pass negative
               // numbers here.
               if (!IS_STANDALONE) {
-                if (!new Error().stack.includes("regenerator")) {
+                if (!new Error().stack!.includes("regenerator")) {
                   throw error;
                 }
               }
@@ -1309,9 +1309,30 @@ defineType("ArrowFunctionExpression", {
   ],
   fields: {
     ...functionCommon(),
+    generator: {
+      // NOTE: This is not actually supoprte by arrow function, but since it
+      // comes from functionCommon() also supporting it as a field here in the
+      // type definitions makes usage of t.Function simpler.
+      // Make it optional at least, defautling to `null`.
+      default: null,
+      optional: true,
+      validate: Object.assign(
+        ((node, key, val) => {
+          if (val) {
+            throw new TypeError(
+              "ArrowFunctionExpression cannot be a generator",
+            );
+          }
+        }) satisfies ValidatorImpl,
+        { type: "boolean" as const },
+      ),
+    },
     ...functionTypeAnnotationCommon(),
     expression: {
       // https://github.com/babel/babylon/issues/505
+      //
+      // NOTE: In the generated builder we compute the value of this field based
+      // on the body.
       validate: assertValueType("boolean"),
     },
     body: {
@@ -1466,8 +1487,7 @@ export const importAttributes = {
 };
 
 defineType("ExportAllDeclaration", {
-  builder: ["source"],
-  visitor: ["source", "attributes", "assertions"],
+  visitor: ["source", "attributes"],
   aliases: [
     "Statement",
     "Declaration",
@@ -1781,6 +1801,7 @@ defineType("MetaProperty", {
 export const classMethodOrPropertyCommon = () => ({
   abstract: {
     validate: assertValueType("boolean"),
+    default: false,
     optional: true,
   },
   accessibility: {
@@ -1791,6 +1812,8 @@ export const classMethodOrPropertyCommon = () => ({
     default: false,
   },
   override: {
+    optional: true,
+    validate: assertValueType("boolean"),
     default: false,
   },
   computed: {

@@ -10,7 +10,7 @@ import {
 import type * as t from "../index.ts";
 
 function isMemberExpressionLike(
-  node: t.Node,
+  node: t.Node | undefined | null,
 ): node is t.MemberExpression | t.MetaProperty {
   return isMemberExpression(node) || isMetaProperty(node);
 }

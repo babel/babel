@@ -168,8 +168,14 @@ const { NODE_FIELDS } = utils;
 
     const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
     const builderNames = BUILDER_KEYS[type];
-    const objectFields = [["type", JSON.stringify(type)]];
+    const objectFields: [string, string][] = [["type", JSON.stringify(type)]];
     fieldNames.forEach(fieldName => {
+      if (type === "ArrowFunctionExpression" && fieldName === "expression") {
+        // special handling of this to keep it in sync with the body node
+        objectFields.push(["expression", `body.type !== "BlockStatement"`]);
+        return;
+      }
+
       const field = NODE_FIELDS[type][fieldName];
       if (builderNames.includes(fieldName)) {
         const bindingIdentifierName = toBindingIdentifierName(fieldName);
