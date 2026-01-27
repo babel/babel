@@ -192,7 +192,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          name: babel-7
+          name: babel-8
 
   test:
     name: Test on Node.js ${{matrix.node-version}}
@@ -285,8 +285,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: babel-artifact
-      - name: Extract artifacts
-        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Run tests
         run: yarn jest --ci
         env:
