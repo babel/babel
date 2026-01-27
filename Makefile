@@ -58,6 +58,9 @@ build-plugin-transform-runtime-dist:
 watch:
 	$(MAKEJS) watch
 
+watch-perf:
+	$(MAKEJS) watch-perf
+
 code-quality: lint
 
 tscheck:
