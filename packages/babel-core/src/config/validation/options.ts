@@ -31,14 +31,13 @@ import type {
   OptionPath,
 } from "./option-assertions.ts";
 import type { UnloadedDescriptor } from "../config-descriptors.ts";
-import type { PluginAPI } from "../helpers/config-api.ts";
 import type { ParserOptions } from "@babel/parser";
 import type { GeneratorOptions } from "@babel/generator";
 import type { VisitWrapper } from "@babel/traverse";
 import ConfigError from "../../errors/config-error.ts";
 import type { PluginObject } from "./plugins.ts";
 import type Plugin from "../plugin.ts";
-import type { PresetAPI } from "../index.ts";
+import type { PresetAPI, PluginAPI } from "../index.ts";
 import type { PresetObject } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
