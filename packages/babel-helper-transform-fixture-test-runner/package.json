@@ -20,12 +20,13 @@
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.28",
+    "expect-24": "npm:expect@^24.9.0",
     "jest-diff": "^30.0.0",
-    "lru-cache": "^7.14.1",
+    "lru-cache": "^5.1.1",
     "resolve": "2.0.0-next.5"
   },
   "devDependencies": {
-    "@types/fs-readdir-recursive": "^1.1.0"
+    "@types/lru-cache": "^5.1.1"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
