@@ -372,6 +372,7 @@ maybeWriteFile(
           "./lib/libdom-minimal.d.ts",
           "dts/**/*.d.ts",
           "*.mts",
+          "*.ts",
           "packages/*/test/*.tst.ts",
         ],
         exclude: ["dts/**/*.tst.d.ts"],
