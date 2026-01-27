@@ -5,5 +5,6 @@ export default function inheritTrailingComments(
   child: t.Node,
   parent: t.Node,
 ): void {
-  inherit("trailingComments", child, parent);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  inherit("trailingComments", child!, parent!);
 }
