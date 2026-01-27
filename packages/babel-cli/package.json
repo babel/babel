@@ -27,8 +27,8 @@
     "@jridgewell/trace-mapping": "^0.3.28",
     "commander": "^12.1.0",
     "convert-source-map": "^2.0.0",
-    "glob": "^12.0.0",
-    "slash": "^3.0.0"
+    "glob": "^13.0.0",
+    "slash": "^5.1.0"
   },
   "optionalDependencies": {
     "chokidar": "^3.6.0"
