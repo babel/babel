@@ -54,4 +54,30 @@ describeGte("16.0.0")("transformScriptTags", () => {
       });
     });
   });
+  it("should support data-targets attribute", () => {
+    const input = `globalThis ?? window; /\\p{ASCII}/v`;
+    const targets = "chrome 84"; // Chrome 84 supports nullish coalescing but not the `v` flag in regexps.
+    const dom = new JSDOM(
+      `<!DOCTYPE html><head><script>${standaloneSource}</script><script type="text/babel" data-targets="${targets}">${input}</script></head>`,
+      { runScripts: "dangerously" },
+    );
+    return new Promise((resolve, reject) => {
+      dom.window.addEventListener("DOMContentLoaded", () => {
+        try {
+          const transformedScriptElement =
+            dom.window.document.head.children.item(2);
+          expect(
+            transformedScriptElement.getAttribute("data-targets"),
+          ).toBeNull();
+          expect(transformedScriptElement.innerHTML).toContain(
+            `globalThis ?? window;
+/\\p{ASCII}/u;`,
+          );
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  });
 });

@@ -14,6 +14,8 @@ import type { InputOptions } from "@babel/core";
 let headEl: HTMLHeadElement;
 let inlineScriptCount = 0;
 
+type Browsers = string | readonly string[];
+
 type CompilationResult = {
   async: boolean;
   type: string;
@@ -26,6 +28,7 @@ type CompilationResult = {
   // todo: refine plugins/presets
   plugins: InputOptions["plugins"];
   presets: InputOptions["presets"];
+  targets: Browsers;
   url: string | null;
 };
 
@@ -54,7 +57,10 @@ function transformCode(
  * Builds the Babel options for transforming the specified script, using some
  * sensible default presets and plugins if none were explicitly provided.
  */
-function buildBabelOptions(script: CompilationResult, filename: string) {
+function buildBabelOptions(
+  script: CompilationResult,
+  filename: string,
+): InputOptions {
   let presets = script.presets;
   if (!presets) {
     if (script.type === "module") {
@@ -63,9 +69,6 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
         [
           "env",
           {
-            targets: {
-              esmodules: true,
-            },
             modules: false,
           },
         ],
@@ -84,12 +87,21 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
     ];
   }
 
+  const targets: InputOptions["targets"] = {
+    browsers: script.targets,
+  };
+
+  if (script.type === "module") {
+    targets.esmodules = "intersect";
+  }
+
   return {
     filename,
     presets,
     plugins,
     sourceMaps: "inline" as const,
     sourceFileName: filename,
+    targets,
   };
 }
 
@@ -141,9 +153,9 @@ function load(
 /**
  * Converts a comma-separated data attribute string into an array of values. If
  * the string is empty, returns an empty array. If the string is not defined,
- * returns null.
+ * returns undefined.
  */
-function getPluginsOrPresetsFromScript(
+function parseFromScriptAttribute(
   script: HTMLScriptElement,
   attributeName: string,
 ) {
@@ -155,7 +167,7 @@ function getPluginsOrPresetsFromScript(
   if (!rawValue) {
     // Any other falsy value (null, undefined) means we're not overriding this
     // setting, and should use the default.
-    return null;
+    return undefined;
   }
   return rawValue.split(",").map(item => item.trim());
 }
@@ -194,8 +206,9 @@ function loadScripts(
       nonce: script.nonce,
       error: false,
       executed: false,
-      plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),
-      presets: getPluginsOrPresetsFromScript(script, "data-presets"),
+      plugins: parseFromScriptAttribute(script, "data-plugins"),
+      presets: parseFromScriptAttribute(script, "data-presets"),
+      targets: parseFromScriptAttribute(script, "data-targets"),
       loaded: false,
       url: null,
       content: null,
