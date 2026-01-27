@@ -24,7 +24,7 @@ const defaultOptions = {
 
 function cleanCache() {
   try {
-    fs.unlinkSync(testCacheFilename);
+    fs.rmSync(testCacheFilename, { recursive: true, force: true });
   } catch (e) {
     // It is convenient to always try to clear
   }

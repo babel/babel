@@ -1,7 +1,3 @@
-"use strict";
-
-const cache = require("./cache.cjs");
-
 function initialize(babel: typeof import("@babel/core")) {
   exports.init = null;
   exports.version = babel.version;
@@ -9,8 +5,12 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.loadOptionsAsync = babel.loadOptionsAsync;
   exports.transformAsync = babel.transformAsync;
   exports.getEnv = babel.getEnv;
-
-  cache.initializeCacheFilename();
 }
 
-exports.init = import("@babel/core").then(initialize);
+exports.init = (async function () {
+  await import("@babel/core").then(initialize).catch(err => {
+    throw err;
+  });
+
+  exports.cache = new (await import("./cache.mjs")).default();
+})();

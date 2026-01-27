@@ -30,6 +30,10 @@ class Client implements IClient {
   ): { code: string; map: object } | null {
     return this.#send(ACTIONS.TRANSFORM, { code, filename });
   }
+
+  close() {
+    this.#send(ACTIONS.CLOSE, undefined);
+  }
 }
 
 // We need to run Babel in a worker because require hooks must

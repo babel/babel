@@ -43,7 +43,7 @@ const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = [
-  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts}`,
+  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts,!(*.d).mts}`,
   "!./packages/babel-helpers/src/helpers/*",
 ];
 
@@ -76,6 +76,7 @@ function mapSrcToLib(srcPath: string): string {
   const parts = srcPath
     .replace(/(?<!\.d)\.ts$/, ".js")
     .replace(/(?<!\.d)\.cts$/, ".cjs")
+    .replace(/(?<!\.d)\.mts$/, ".mjs")
     .split("/");
   parts[2] = "lib";
   return parts.join("/");

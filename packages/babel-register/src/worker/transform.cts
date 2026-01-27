@@ -2,9 +2,9 @@
 import cloneDeep = require("clone-deep");
 import path = require("node:path");
 import fs = require("node:fs");
+import crypto = require("node:crypto");
 
 const babel = require("./babel-core.cjs");
-const registerCache = require("./cache.cjs");
 
 const nmRE = escapeRegExp(path.sep + "node_modules" + path.sep);
 
@@ -14,15 +14,44 @@ function escapeRegExp(string: string) {
 
 type CacheItem = { value: { code: string; map: any }; mtime: number };
 
-let cache: Record<string, CacheItem>;
+const id = (value: unknown) => value;
+async function cacheLookup(opts: unknown, filename: string) {
+  if (!babel.cache.enabled) {
+    return { cached: null, store: id };
+  }
+
+  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+
+  const env = babel.getEnv();
+  if (env) cacheKey += `:${env}`;
+  cacheKey = crypto.createHash("sha1").update(cacheKey).digest("hex");
+
+  const cached = await babel.cache.get(cacheKey);
+  const fileMtime = +fs.statSync(filename).mtime;
+
+  if (cached?.mtime === fileMtime) {
+    return { cached: cached.value, store: id };
+  }
+
+  return {
+    cached: null,
+    async store(value: CacheItem["value"]) {
+      await babel.cache.set(cacheKey, {
+        value,
+        mtime: fileMtime,
+      });
+      return value;
+    },
+  };
+}
+
 let transformOpts: any;
-function setOptions(opts: any) {
-  if (opts.cache === false && cache) {
-    registerCache.clear();
-    cache = null;
-  } else if (opts.cache !== false && !cache) {
-    registerCache.load();
-    cache = registerCache.get();
+async function setOptions(opts: any) {
+  const cache = babel.cache;
+  if (opts.cache === false && cache.enabled) {
+    await cache.disable();
+  } else if (opts.cache !== false && !cache.enabled) {
+    await cache.enable();
   }
 
   delete opts.cache;
@@ -65,7 +94,7 @@ async function transform(input: string, filename: string) {
   // Bail out ASAP if the file has been ignored.
   if (opts === null) return null;
 
-  const { cached, store } = cacheLookup(opts, filename);
+  const { cached, store } = await cacheLookup(opts, filename);
   if (cached) return cached;
 
   const { code, map } = await babel.transformAsync(input, {
@@ -74,34 +103,7 @@ async function transform(input: string, filename: string) {
     ast: false,
   });
 
-  return store({ code, map });
+  return await store({ code, map });
 }
 
 export = { setOptions, transform };
-
-const id = (value: unknown) => value;
-
-function cacheLookup(opts: unknown, filename: string) {
-  if (!cache) return { cached: null, store: id };
-
-  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
-
-  const env = babel.getEnv();
-  if (env) cacheKey += `:${env}`;
-
-  const cached = cache[cacheKey];
-  const fileMtime = +fs.statSync(filename).mtime;
-
-  if (cached?.mtime === fileMtime) {
-    return { cached: cached.value, store: id };
-  }
-
-  return {
-    cached: null,
-    store(value: CacheItem["value"]) {
-      cache[cacheKey] = { value, mtime: fileMtime };
-      registerCache.setDirty();
-      return value;
-    },
-  };
-}
