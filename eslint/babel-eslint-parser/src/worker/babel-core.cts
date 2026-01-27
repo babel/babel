@@ -17,4 +17,6 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.createConfigItemSync = babel.createConfigItemSync;
 }
 
-exports.init = import("@babel/core").then(initialize);
+exports.init = import("@babel/core").then(initialize).catch(err => {
+  throw err;
+});
