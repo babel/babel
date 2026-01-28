@@ -23,6 +23,9 @@
       "@babel/core": [
         "./packages/babel-core/src"
       ],
+      "@babel/external-helpers-cli": [
+        "./packages/babel-external-helpers-cli/src"
+      ],
       "@babel/generator": [
         "./packages/babel-generator/src"
       ],

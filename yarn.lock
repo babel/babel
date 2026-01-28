@@ -302,7 +302,6 @@ __metadata:
       optional: true
   bin:
     babel: ./bin/babel.js
-    babel-external-helpers: ./bin/babel-external-helpers.js
   languageName: unknown
   linkType: soft
 
@@ -573,6 +572,20 @@ __metadata:
     eslint-plugin-import: "npm:^2.31.0"
     globals: "npm:^15.9.0"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
+  languageName: unknown
+  linkType: soft
+
+"@babel/external-helpers-cli@workspace:packages/babel-external-helpers-cli":
+  version: 0.0.0-use.local
+  resolution: "@babel/external-helpers-cli@workspace:packages/babel-external-helpers-cli"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
+    commander: "npm:^14.0.2"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  bin:
+    babel-external-helpers: ./bin/babel-external-helpers.js
   languageName: unknown
   linkType: soft
 

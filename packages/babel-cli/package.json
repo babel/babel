@@ -3,7 +3,7 @@
   "version": "8.0.0-beta.4",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
-  "homepage": "https://babel.dev/docs/en/next/babel-cli",
+  "homepage": "https://babel.dev/docs/babel-cli",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
@@ -44,8 +44,7 @@
     "semver": "^7.7.3"
   },
   "bin": {
-    "babel": "./bin/babel.js",
-    "babel-external-helpers": "./bin/babel-external-helpers.js"
+    "babel": "./bin/babel.js"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
