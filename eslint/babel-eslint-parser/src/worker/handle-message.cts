@@ -1,4 +1,4 @@
-import babel = require("./babel-core.cts");
+import babel = require("@babel/core");
 import maybeParse = require("./maybeParse.cts");
 import astInfo = require("./ast-info.cts");
 import config = require("./configuration.cts");

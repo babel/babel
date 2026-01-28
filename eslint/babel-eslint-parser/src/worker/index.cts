@@ -1,4 +1,3 @@
-import babel = require("./babel-core.cts");
 import handleMessage = require("./handle-message.cts");
 
 import worker_threads = require("worker_threads");
@@ -10,8 +9,6 @@ worker_threads.parentPort.addListener(
     let response;
 
     try {
-      if (babel.init) await babel.init;
-
       response = { result: await handleMessage(action, payload) };
     } catch (error) {
       response = { error, errorData: { ...error } };
