@@ -290,11 +290,11 @@ __metadata:
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
     chokidar: "npm:^3.6.0"
-    commander: "npm:^12.1.0"
+    commander: "npm:^14.0.2"
     convert-source-map: "npm:^2.0.0"
-    glob: "npm:^12.0.0"
+    glob: "npm:^13.0.0"
     semver: "npm:^7.7.3"
-    slash: "npm:^3.0.0"
+    slash: "npm:^5.1.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -1270,7 +1270,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
-    commander: "npm:^12.1.0"
+    commander: "npm:^14.0.2"
     core-js: "npm:^3.48.0"
     v8flags: "npm:^4.0.1"
   peerDependencies:
@@ -8508,6 +8508,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^14.0.2":
+  version: 14.0.2
+  resolution: "commander@npm:14.0.2"
+  checksum: 10/2d202db5e5f9bb770112a3c1579b893d17ac6f6d932183077308bdd96d0f87f0bbe6a68b5b9ed2cf3b2514be6bb7de637480703c0e2db9741ee1b383237deb26
+  languageName: node
+  linkType: hard
+
 "commander@npm:^2.20.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
@@ -10985,6 +10992,17 @@ __metadata:
   bin:
     glob: dist/esm/bin.mjs
   checksum: 10/6e21b3f1f1fa635836d45e54bbe50704884cc3e310e0cc011cfb5429db65a030e12936d99b07e66236370efe45dc8c8b26fa5334dbf555d6f8709e0315c77c30
+  languageName: node
+  linkType: hard
+
+"glob@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "glob@npm:13.0.0"
+  dependencies:
+    minimatch: "npm:^10.1.1"
+    minipass: "npm:^7.1.2"
+    path-scurry: "npm:^2.0.0"
+  checksum: 10/de390721d29ee1c9ea41e40ec2aa0de2cabafa68022e237dc4297665a5e4d650776f2573191984ea1640aba1bf0ea34eddef2d8cbfbfc2ad24b5fb0af41d8846
   languageName: node
   linkType: hard
 
@@ -16225,6 +16243,13 @@ __metadata:
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
   checksum: 10/94a93fff615f25a999ad4b83c9d5e257a7280c90a32a7cb8b4a87996e4babf322e469c42b7f649fd5796edd8687652f3fb452a86dc97a816f01113183393f11c
+  languageName: node
+  linkType: hard
+
+"slash@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "slash@npm:5.1.0"
+  checksum: 10/2c41ec6fb1414cd9bba0fa6b1dd00e8be739e3fe85d079c69d4b09ca5f2f86eafd18d9ce611c0c0f686428638a36c272a6ac14799146a8295f259c10cc45cde4
   languageName: node
   linkType: hard
 
