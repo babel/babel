@@ -5,6 +5,7 @@ import type { ExplodedTraverseOptions } from "./index.ts";
 import type * as t from "@babel/types";
 import type { Visitor } from "./types.ts";
 import { popContext, pushContext, resync } from "./path/context.ts";
+import Hub from "./hub.ts";
 
 export default class TraversalContext<S = unknown> {
   constructor(
@@ -61,14 +62,23 @@ export default class TraversalContext<S = unknown> {
     key: string | number,
     listKey?: string,
   ): NodePath {
+    const { parentPath } = this;
+    const hub =
+      parentPath == null
+        ? node.type === "Program" || node.type === "File"
+          ? new Hub()
+          : undefined
+        : parentPath.hub;
+
     // We don't need to `.setContext()` here, since `.visitQueue()` already
     // calls `.pushContext`.
     return NodePath.get({
-      parentPath: this.parentPath,
+      parentPath,
       parent: node,
       container,
       key: key,
       listKey,
+      hub,
     });
   }
 
