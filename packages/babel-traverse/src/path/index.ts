@@ -73,8 +73,12 @@ const NodePath_Final = class NodePath {
   declare scope: Scope;
 
   contexts: TraversalContext[] = [];
-  state: any = null;
-  declare opts: ExplodedTraverseOptions;
+  get state(): any {
+    return this.context?.state;
+  }
+  get opts(): ExplodedTraverseOptions {
+    return this.context?.opts;
+  }
 
   @bit.storage _traverseFlags: number = 0;
   @bit(REMOVED) accessor removed = false;
@@ -87,24 +91,19 @@ const NodePath_Final = class NodePath {
   listKey: string | null | undefined = null;
   key: string | number | null = null;
   node: t.Node | null = null;
-  type: t.Node["type"] | null = null;
+  get type(): t.Node["type"] | null {
+    return this.node ? this.node.type : null;
+  }
   _store: Map<t.Node, NodePath_Final> | null = null;
 
-  static get({
-    hub,
-    parentPath,
-    parent,
-    container,
-    listKey,
-    key,
-  }: {
-    hub?: HubInterface;
-    parentPath: NodePath_Final | null | undefined;
-    parent: t.Node;
-    container: t.Node | t.Node[];
-    listKey?: string | null;
-    key: string | number;
-  }): NodePath_Final {
+  static get(
+    parent: t.Node,
+    container: t.Node | t.Node[],
+    key: string | number,
+    listKey?: string | null,
+    parentPath?: NodePath_Final | null,
+    hub?: HubInterface,
+  ): NodePath_Final {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }

@@ -199,7 +199,6 @@ export function replaceWith(
 
   // replace the node
   _replaceWith.call(this, replacement);
-  this.type = replacement.type;
 
   // potentially create new scope
   setScope.call(this);

@@ -42,15 +42,7 @@ export default function traverseForScope(
     }
 
     const path =
-      inPath ||
-      NodePath.get({
-        hub,
-        parentPath,
-        parent,
-        container,
-        listKey,
-        key,
-      });
+      inPath || NodePath.get(parent, container, key, listKey, parentPath, hub);
 
     _forceSetScope.call(path);
 

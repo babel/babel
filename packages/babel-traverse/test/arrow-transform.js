@@ -13,8 +13,13 @@ function assertConversion(
   const inputAst = wrapMethod(input, methodName, extend);
   const outputAst = wrapMethod(output, methodName, extend);
 
-  const rootPath = NodePath.get({
-    hub: {
+  const rootPath = NodePath.get(
+    inputAst,
+    inputAst,
+    "program",
+    undefined,
+    undefined,
+    {
       addHelper(helperName) {
         return t.memberExpression(
           t.identifier("babelHelpers"),
@@ -22,11 +27,7 @@ function assertConversion(
         );
       },
     },
-    parentPath: null,
-    parent: inputAst,
-    container: inputAst,
-    key: "program",
-  }).setContext();
+  ).setContext();
 
   rootPath.traverse({
     ClassMethod(path) {

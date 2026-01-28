@@ -301,13 +301,13 @@ export function getSibling(
   this: NodePath<t.Node | null>,
   key: string | number,
 ): NodePath {
-  return NodePath.get({
-    parentPath: this.parentPath,
-    parent: this.parent,
-    container: this.container!,
-    listKey: this.listKey!,
-    key: key,
-  }).setContext(this.context);
+  return NodePath.get(
+    this.parent,
+    this.container!,
+    key,
+    this.listKey,
+    this.parentPath,
+  ).setContext(this.context);
 }
 
 export function getPrevSibling(this: NodePath<t.Node | null>): NodePath {
@@ -444,21 +444,10 @@ export function _getKey<T extends t.Node>(
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
     return container.map((_, i) => {
-      return NodePath.get({
-        listKey: key,
-        parentPath: this,
-        parent: node,
-        container: container,
-        key: i,
-      }).setContext(context);
+      return NodePath.get(node, container, i, key, this).setContext(context);
     });
   } else {
-    return NodePath.get({
-      parentPath: this,
-      parent: node,
-      container: node,
-      key: key,
-    }).setContext(context);
+    return NodePath.get(node, node, key, undefined, this).setContext(context);
   }
 }
 

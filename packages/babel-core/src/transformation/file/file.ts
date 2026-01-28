@@ -42,13 +42,14 @@ export default class File {
     this.ast = ast;
     this.inputMap = inputMap;
 
-    this.path = NodePath.get({
-      hub: this.hub,
-      parentPath: null,
-      parent: this.ast,
-      container: this.ast,
-      key: "program",
-    }).setContext() as NodePath<t.Program>;
+    this.path = NodePath.get(
+      this.ast,
+      this.ast,
+      "program",
+      undefined,
+      undefined,
+      this.hub,
+    ).setContext() as NodePath<t.Program>;
     this.scope = this.path.scope;
   }
 

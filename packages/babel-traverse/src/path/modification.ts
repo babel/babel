@@ -372,13 +372,9 @@ export function unshiftContainer<
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
   const container = (this.node as N)[listKey] as t.Node[];
-  const path = NodePath.get({
-    parentPath: this,
-    parent: this.node,
-    container,
-    listKey,
-    key: 0,
-  }).setContext(this.context);
+  const path = NodePath.get(this.node, container, 0, listKey, this).setContext(
+    this.context,
+  );
 
   return _containerInsertBefore.call(path, verifiedNodes) as NodePaths<Nodes>;
 }
@@ -396,13 +392,13 @@ export function pushContainer<
   // nodes, effectively inlining it
 
   const container = (this.node as N)[listKey] as t.Node[];
-  const path = NodePath.get({
-    parentPath: this,
-    parent: this.node,
+  const path = NodePath.get(
+    this.node,
     container,
+    container.length,
     listKey,
-    key: container.length,
-  }).setContext(this.context);
+    this,
+  ).setContext(this.context);
 
   return path.replaceWithMultiple(verifiedNodes) as NodePaths<Nodes>;
 }

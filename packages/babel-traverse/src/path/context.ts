@@ -63,8 +63,6 @@ export function isDenylisted(this: NodePath): boolean {
 function restoreContext(path: NodePath, context: TraversalContext) {
   if (path.context !== context) {
     path.context = context;
-    path.state = context.state;
-    path.opts = context.opts;
   }
 }
 
@@ -190,9 +188,6 @@ export function setContext<S = unknown>(
 
   if (context) {
     this.context = context;
-    this.state = context.state;
-    // Discard the S type parameter from context.opts
-    this.opts = context.opts as typeof this.opts;
   }
 
   setScope.call(this);
@@ -312,7 +307,6 @@ export function setKey(this: NodePath, key: string | number) {
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key];
-  this.type = this.node?.type;
 }
 
 export function requeue(this: NodePath<t.Node | null>, pathToQueue = this) {

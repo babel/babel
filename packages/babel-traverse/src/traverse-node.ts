@@ -136,7 +136,7 @@ export function traverseNode<S = unknown>(
   const keys = VISITOR_KEYS[node.type];
   if (!keys?.length) return false;
 
-  const ctx = new TraversalContext(scope, opts, state, path);
+  const ctx = new TraversalContext(scope, opts, state);
   if (visitSelf) {
     if (skipKeys?.[path!.parentKey]) return false;
     return _visitPaths(ctx, [path!]);
@@ -159,30 +159,12 @@ export function traverseNode<S = unknown>(
       if (!prop.length) continue;
       const paths = [];
       for (let i = 0; i < prop.length; i++) {
-        const childPath = NodePath.get({
-          parentPath: path,
-          parent: node,
-          container: prop,
-          key: i,
-          listKey: key,
-          hub,
-        });
+        const childPath = NodePath.get(node, prop, i, key, path, hub);
         paths.push(childPath);
       }
       if (_visitPaths(ctx, paths)) return true;
     } else {
-      if (
-        _visitPaths(ctx, [
-          NodePath.get({
-            parentPath: path,
-            parent: node,
-            container: node,
-            key,
-            listKey: null,
-            hub,
-          }),
-        ])
-      ) {
+      if (_visitPaths(ctx, [NodePath.get(node, node, key, null, path, hub)])) {
         return true;
       }
     }

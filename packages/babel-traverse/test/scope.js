@@ -36,14 +36,8 @@ function createNode(node) {
   // This puts the path into the cache internally
   // We afterwards traverse ast, as we need to start traversing
   // at the File node and not the Program node
-  NodePath.get({
-    hub: {
-      buildError: (_, msg) => new Error(msg),
-    },
-    parentPath: null,
-    parent: ast,
-    container: ast,
-    key: "program",
+  NodePath.get(ast, ast, "program", undefined, undefined, {
+    buildError: (_, msg) => new Error(msg),
   }).setContext();
 
   return ast;
