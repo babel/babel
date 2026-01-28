@@ -1,1 +1,0 @@
-error: option '-l, --whitelist <whitelist>' argument missing

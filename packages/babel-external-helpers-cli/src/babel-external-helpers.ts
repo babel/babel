@@ -13,8 +13,13 @@ function collect(value: string, previousValue: string[]): string[] {
 }
 
 program.option(
-  "-l, --whitelist <whitelist>",
-  "Whitelist of helpers to ONLY include",
+  "-l, --allowlist <allowlist>",
+  "Allowlist of helpers to ONLY include",
+  collect,
+);
+program.option(
+  "-w, --whitelist <whitelist>",
+  "Deprecated: use --allowlist instead",
   collect,
 );
 program.option(
@@ -27,4 +32,6 @@ program.usage("[options]");
 program.parse(process.argv);
 const opts = program.opts();
 
-console.log(buildExternalHelpers(opts.whitelist, opts.outputType));
+console.log(
+  buildExternalHelpers(opts.allowlist ?? opts.whitelist, opts.outputType),
+);
