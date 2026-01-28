@@ -53,7 +53,7 @@ export default function* parser(
     const startLine = parserOpts?.startLine;
     const startColumn = parserOpts?.startColumn;
 
-    if (startLine != null || startColumn != null) {
+    if (startColumn != null) {
       code = " ".repeat(startColumn) + code;
     }
 
