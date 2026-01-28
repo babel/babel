@@ -43,7 +43,7 @@ class Client implements IClient {
 // (which is done for each file) can be asynchronous
 class WorkerClient extends Client {
   #worker = new worker_threads.Worker(
-    path.resolve(__dirname, "./worker/index.cjs"),
+    path.resolve(__dirname, "./worker/index.mjs"),
     { env: markInRegisterWorker(process.env) },
   );
 
