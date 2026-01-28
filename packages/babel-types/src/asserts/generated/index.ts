@@ -513,12 +513,6 @@ export function assertClassProperty(
 ): asserts node is t.ClassProperty {
   assert("ClassProperty", node, opts);
 }
-export function assertClassAccessorProperty(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.ClassAccessorProperty {
-  assert("ClassAccessorProperty", node, opts);
-}
 export function assertClassPrivateProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -1053,6 +1047,12 @@ export function assertBindExpression(
 ): asserts node is t.BindExpression {
   assert("BindExpression", node, opts);
 }
+export function assertClassAccessorProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ClassAccessorProperty {
+  assert("ClassAccessorProperty", node, opts);
+}
 export function assertDecorator(
   node: object | null | undefined,
   opts?: object | null,
@@ -1082,24 +1082,6 @@ export function assertTopicReference(
   opts?: object | null,
 ): asserts node is t.TopicReference {
   assert("TopicReference", node, opts);
-}
-export function assertPipelineTopicExpression(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelineTopicExpression {
-  assert("PipelineTopicExpression", node, opts);
-}
-export function assertPipelineBareFunction(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelineBareFunction {
-  assert("PipelineBareFunction", node, opts);
-}
-export function assertPipelinePrimaryTopicReference(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.PipelinePrimaryTopicReference {
-  assert("PipelinePrimaryTopicReference", node, opts);
 }
 export function assertVoidPattern(
   node: object | null | undefined,
@@ -1725,12 +1707,6 @@ export function assertModuleSpecifier(
 ): asserts node is t.ModuleSpecifier {
   assert("ModuleSpecifier", node, opts);
 }
-export function assertAccessor(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.Accessor {
-  assert("Accessor", node, opts);
-}
 export function assertPrivate(
   node: object | null | undefined,
   opts?: object | null,
@@ -1790,6 +1766,12 @@ export function assertMiscellaneous(
   opts?: object | null,
 ): asserts node is t.Miscellaneous {
   assert("Miscellaneous", node, opts);
+}
+export function assertAccessor(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.Accessor {
+  assert("Accessor", node, opts);
 }
 export function assertTypeScript(
   node: object | null | undefined,

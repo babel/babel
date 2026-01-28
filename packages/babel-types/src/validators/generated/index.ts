@@ -1440,24 +1440,6 @@ export function isClassProperty<Opts extends Options<t.ClassProperty>>(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isClassAccessorProperty(
-  node: t.Node | null | undefined,
-): node is t.ClassAccessorProperty;
-export function isClassAccessorProperty<
-  Opts extends Options<t.ClassAccessorProperty>,
->(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.ClassAccessorProperty & Opts;
-export function isClassAccessorProperty<
-  Opts extends Options<t.ClassAccessorProperty>,
->(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassAccessorProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
 export function isClassPrivateProperty(
   node: t.Node | null | undefined,
 ): node is t.ClassPrivateProperty;
@@ -3014,6 +2996,24 @@ export function isBindExpression<Opts extends Options<t.BindExpression>>(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isClassAccessorProperty(
+  node: t.Node | null | undefined,
+): node is t.ClassAccessorProperty;
+export function isClassAccessorProperty<
+  Opts extends Options<t.ClassAccessorProperty>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ClassAccessorProperty & Opts;
+export function isClassAccessorProperty<
+  Opts extends Options<t.ClassAccessorProperty>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  if (!node) return false;
+
+  if (node.type !== "ClassAccessorProperty") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isDecorator(
   node: t.Node | null | undefined,
 ): node is t.Decorator;
@@ -3097,60 +3097,6 @@ export function isTopicReference<Opts extends Options<t.TopicReference>>(
   if (!node) return false;
 
   if (node.type !== "TopicReference") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isPipelineTopicExpression(
-  node: t.Node | null | undefined,
-): node is t.PipelineTopicExpression;
-export function isPipelineTopicExpression<
-  Opts extends Options<t.PipelineTopicExpression>,
->(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.PipelineTopicExpression & Opts;
-export function isPipelineTopicExpression<
-  Opts extends Options<t.PipelineTopicExpression>,
->(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PipelineTopicExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isPipelineBareFunction(
-  node: t.Node | null | undefined,
-): node is t.PipelineBareFunction;
-export function isPipelineBareFunction<
-  Opts extends Options<t.PipelineBareFunction>,
->(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.PipelineBareFunction & Opts;
-export function isPipelineBareFunction<
-  Opts extends Options<t.PipelineBareFunction>,
->(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PipelineBareFunction") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isPipelinePrimaryTopicReference(
-  node: t.Node | null | undefined,
-): node is t.PipelinePrimaryTopicReference;
-export function isPipelinePrimaryTopicReference<
-  Opts extends Options<t.PipelinePrimaryTopicReference>,
->(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.PipelinePrimaryTopicReference & Opts;
-export function isPipelinePrimaryTopicReference<
-  Opts extends Options<t.PipelinePrimaryTopicReference>,
->(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PipelinePrimaryTopicReference") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
@@ -4448,7 +4394,6 @@ export function isStandardized<Opts extends Options<t.Standardized>>(
     case "OptionalMemberExpression":
     case "OptionalCallExpression":
     case "ClassProperty":
-    case "ClassAccessorProperty":
     case "ClassPrivateProperty":
     case "ClassPrivateMethod":
     case "PrivateName":
@@ -4526,9 +4471,6 @@ export function isExpression<Opts extends Options<t.Expression>>(
     case "DoExpression":
     case "ModuleExpression":
     case "TopicReference":
-    case "PipelineTopicExpression":
-    case "PipelineBareFunction":
-    case "PipelinePrimaryTopicReference":
     case "TSInstantiationExpression":
     case "TSAsExpression":
     case "TSSatisfiesExpression":
@@ -5363,8 +5305,8 @@ export function isProperty<Opts extends Options<t.Property>>(
   switch (node.type) {
     case "ObjectProperty":
     case "ClassProperty":
-    case "ClassAccessorProperty":
     case "ClassPrivateProperty":
+    case "ClassAccessorProperty":
       break;
     default:
       return false;
@@ -5511,26 +5453,6 @@ export function isModuleSpecifier<Opts extends Options<t.ModuleSpecifier>>(
     case "ImportSpecifier":
     case "ExportNamespaceSpecifier":
     case "ExportDefaultSpecifier":
-      break;
-    default:
-      return false;
-  }
-
-  return opts == null || shallowEqual(node, opts);
-}
-export function isAccessor(node: t.Node | null | undefined): node is t.Accessor;
-export function isAccessor<Opts extends Options<t.Accessor>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.Accessor & Opts;
-export function isAccessor<Opts extends Options<t.Accessor>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  switch (node.type) {
-    case "ClassAccessorProperty":
       break;
     default:
       return false;
@@ -5876,6 +5798,26 @@ export function isMiscellaneous<Opts extends Options<t.Miscellaneous>>(
   switch (node.type) {
     case "Placeholder":
     case "V8IntrinsicIdentifier":
+      break;
+    default:
+      return false;
+  }
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isAccessor(node: t.Node | null | undefined): node is t.Accessor;
+export function isAccessor<Opts extends Options<t.Accessor>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.Accessor & Opts;
+export function isAccessor<Opts extends Options<t.Accessor>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  switch (node.type) {
+    case "ClassAccessorProperty":
       break;
     default:
       return false;
