@@ -32,6 +32,9 @@ const renameVisitor: Visitor<Renamer> = {
           path.requeueComputedKeyAndDecorators();
         }
       }
+      if (path.isSwitchStatement()) {
+        path.context.maybeQueue(path.get("discriminant"));
+      }
     }
   },
 
