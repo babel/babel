@@ -24,7 +24,7 @@ program.option(
 );
 program.option(
   "-t, --output-type <type>",
-  "Type of output (global|umd|var)",
+  "Type of output (global|umd|var|module)",
   "global",
 );
 
