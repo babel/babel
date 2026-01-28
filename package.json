@@ -13,7 +13,7 @@
     "test": "make test",
     "test-only": "make test-only",
     "version": "yarn --immutable-cache && git add yarn.lock",
-    "test:esm": "node test/esm/index.js",
+    "test:esm": "node test/esm/index.ts",
     "test:runtime:generate-absolute-runtime": "node test/runtime-integration/generate-absolute-runtime.cjs",
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
