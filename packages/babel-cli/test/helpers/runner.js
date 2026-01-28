@@ -50,10 +50,7 @@ export const runParallel = buildParallelProcessTests(
     fixtureLoc,
     function (test) {
       test.binLoc = path.join(__dirname, "../../lib", test.suiteName);
-      if (
-        test.suiteName !== "babel-external-helpers" &&
-        !test.opts.noDefaultPlugins
-      ) {
+      if (!test.opts.noDefaultPlugins) {
         test.opts.args.push("--presets", presetLocs, "--plugins", pluginLocs);
       }
     },
