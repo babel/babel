@@ -1,9 +1,11 @@
 import type { IClient, Options } from "./types.cts";
-
-import path = require("node:path");
 import types = require("./types.cts");
-
 import ACTIONS = types.ACTIONS;
+
+import worker_threads = require("node:worker_threads");
+import path = require("node:path");
+
+const { markInRegisterWorker } = require("./is-in-register-worker.cjs");
 
 class Client implements IClient {
   #send;
@@ -40,21 +42,9 @@ class Client implements IClient {
 // run synchronously, but many steps of Babel's config loading
 // (which is done for each file) can be asynchronous
 class WorkerClient extends Client {
-  // These two require() calls are in deferred so that they are not imported in
-  // older Node.js versions (which don't support workers).
-  // TODO: Hoist them in Babel 8.
-
-  static get #worker_threads() {
-    return require("node:worker_threads") as typeof import("worker_threads");
-  }
-
-  static get #markInRegisterWorker() {
-    return require("./is-in-register-worker.cjs").markInRegisterWorker;
-  }
-
-  #worker = new WorkerClient.#worker_threads.Worker(
+  #worker = new worker_threads.Worker(
     path.resolve(__dirname, "./worker/index.cjs"),
-    { env: WorkerClient.#markInRegisterWorker(process.env) },
+    { env: markInRegisterWorker(process.env) },
   );
 
   #signal = new Int32Array(new SharedArrayBuffer(4));
@@ -62,7 +52,7 @@ class WorkerClient extends Client {
   constructor() {
     super((action, payload) => {
       this.#signal[0] = 0;
-      const subChannel = new WorkerClient.#worker_threads.MessageChannel();
+      const subChannel = new worker_threads.MessageChannel();
 
       this.#worker.postMessage(
         { signal: this.#signal, port: subChannel.port1, action, payload },
@@ -70,9 +60,7 @@ class WorkerClient extends Client {
       );
 
       Atomics.wait(this.#signal, 0, 0);
-      const { message } = WorkerClient.#worker_threads.receiveMessageOnPort(
-        subChannel.port2,
-      );
+      const { message } = worker_threads.receiveMessageOnPort(subChannel.port2);
 
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;

@@ -1,10 +1,13 @@
 // @ts-expect-error no types
-import cloneDeep = require("clone-deep");
-import path = require("node:path");
-import fs = require("node:fs");
-import crypto = require("node:crypto");
+import cloneDeep from "clone-deep";
+import path from "node:path";
+import fs from "node:fs";
+import crypto from "node:crypto";
 
-const babel = require("./babel-core.cjs");
+import Cache from "./cache.mts";
+import { getEnv, loadOptionsAsync, transformAsync, version } from "@babel/core";
+
+const cache = new Cache();
 
 const nmRE = escapeRegExp(path.sep + "node_modules" + path.sep);
 
@@ -16,17 +19,17 @@ type CacheItem = { value: { code: string; map: any }; mtime: number };
 
 const id = (value: unknown) => value;
 async function cacheLookup(opts: unknown, filename: string) {
-  if (!babel.cache.enabled) {
+  if (!cache.enabled) {
     return { cached: null, store: id };
   }
 
-  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+  let cacheKey = `${JSON.stringify(opts)}:${version}`;
 
-  const env = babel.getEnv();
+  const env = getEnv();
   if (env) cacheKey += `:${env}`;
   cacheKey = crypto.createHash("sha1").update(cacheKey).digest("hex");
 
-  const cached = await babel.cache.get(cacheKey);
+  const cached = (await cache.get(cacheKey)) as CacheItem | undefined;
   const fileMtime = +fs.statSync(filename).mtime;
 
   if (cached?.mtime === fileMtime) {
@@ -36,7 +39,7 @@ async function cacheLookup(opts: unknown, filename: string) {
   return {
     cached: null,
     async store(value: CacheItem["value"]) {
-      await babel.cache.set(cacheKey, {
+      await cache.set(cacheKey, {
         value,
         mtime: fileMtime,
       });
@@ -47,7 +50,6 @@ async function cacheLookup(opts: unknown, filename: string) {
 
 let transformOpts: any;
 async function setOptions(opts: any) {
-  const cache = babel.cache;
   if (opts.cache === false && cache.enabled) {
     await cache.disable();
   } else if (opts.cache !== false && !cache.enabled) {
@@ -84,7 +86,7 @@ async function setOptions(opts: any) {
 }
 
 async function transform(input: string, filename: string) {
-  const opts = await babel.loadOptionsAsync({
+  const opts = await loadOptionsAsync({
     // sourceRoot can be overwritten
     sourceRoot: path.dirname(filename) + path.sep,
     ...cloneDeep(transformOpts),
@@ -97,7 +99,8 @@ async function transform(input: string, filename: string) {
   const { cached, store } = await cacheLookup(opts, filename);
   if (cached) return cached;
 
-  const { code, map } = await babel.transformAsync(input, {
+  // @ts-expect-error TODO: transformAsync does not accept the return type of loadOptionsAsync
+  const { code, map } = await transformAsync(input, {
     ...opts,
     sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
     ast: false,
@@ -106,4 +109,8 @@ async function transform(input: string, filename: string) {
   return await store({ code, map });
 }
 
-export = { setOptions, transform };
+function disableCache() {
+  return cache.disable();
+}
+
+export { setOptions, transform, disableCache };
