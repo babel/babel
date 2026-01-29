@@ -55,7 +55,12 @@ type HistoryItem = [version: string, description: string];
 
 const APIHistory: Record<string, HistoryItem[]> = {
   ClassProperty: [["v7.6.0", "Supports `static`"]],
-  ImportDeclaration: [["v7.20.0", "Supports `module`"]],
+  ExportAllDeclaration: [["v7.29.0", "Supports `attributes`"]],
+  ExportNamedDeclaration: [["v7.29.0", "Supports `attributes`"]],
+  ImportDeclaration: [
+    ["v7.20.0", "Supports `module`"],
+    ["v7.29.0", "Supports `attributes`"],
+  ],
   ImportOrExportDeclaration: [["v7.21.0", "Introduced"]],
   ModuleDeclaration: [["v7.21.0", "Deprecated"]],
   TSSatisfiesExpression: [["v7.20.0", "Introduced"]],
