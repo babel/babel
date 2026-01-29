@@ -1,7 +1,7 @@
 import * as commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
 
-const program = commander.program;
+const { program, InvalidArgumentError } = commander;
 function collect(value: string, previousValue: string[]): string[] {
   const values = value.split(",");
 
@@ -18,9 +18,13 @@ program.option(
   collect,
 );
 program.option(
-  "-w, --whitelist <whitelist>",
-  "Deprecated: use --allowlist instead",
-  collect,
+  "--whitelist <whitelist>",
+  "Removed: use --allowlist instead",
+  () => {
+    throw new InvalidArgumentError(
+      "This option has been removed, please use -l or --allowlist instead.",
+    );
+  },
 );
 program.option(
   "-t, --output-type <type>",
@@ -32,6 +36,4 @@ program.usage("[options]");
 program.parse(process.argv);
 const opts = program.opts();
 
-console.log(
-  buildExternalHelpers(opts.allowlist ?? opts.whitelist, opts.outputType),
-);
+console.log(buildExternalHelpers(opts.allowlist, opts.outputType));
