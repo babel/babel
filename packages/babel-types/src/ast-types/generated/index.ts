@@ -829,9 +829,9 @@ export interface ClassDeclaration extends BaseNode {
 export interface ExportAllDeclaration extends BaseNode {
   type: "ExportAllDeclaration";
   source: StringLiteral;
+  attributes?: ImportAttribute[] | null;
   /** @deprecated */
   assertions?: ImportAttribute[] | null;
-  attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
 
@@ -854,9 +854,9 @@ export interface ExportNamedDeclaration extends BaseNode {
     | ExportNamespaceSpecifier
   )[];
   source?: StringLiteral | null;
+  attributes?: ImportAttribute[] | null;
   /** @deprecated */
   assertions?: ImportAttribute[] | null;
-  attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
 }
 
@@ -883,9 +883,9 @@ export interface ImportDeclaration extends BaseNode {
     | ImportNamespaceSpecifier
   )[];
   source: StringLiteral;
+  attributes?: ImportAttribute[] | null;
   /** @deprecated */
   assertions?: ImportAttribute[] | null;
-  attributes?: ImportAttribute[] | null;
   importKind?: "type" | "typeof" | "value" | null;
   module?: boolean | null;
   phase?: "source" | "defer" | null;

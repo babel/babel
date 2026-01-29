@@ -890,13 +890,16 @@ export function classDeclaration(
 }
 export function exportAllDeclaration(
   source: t.StringLiteral,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.ExportAllDeclaration {
   const node: t.ExportAllDeclaration = {
     type: "ExportAllDeclaration",
     source,
+    attributes,
   };
   const defs = NODE_FIELDS.ExportAllDeclaration;
   validate(defs.source, node, "source", source, 1);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function exportDefaultDeclaration(
@@ -922,17 +925,20 @@ export function exportNamedDeclaration(
     | t.ExportNamespaceSpecifier
   )[] = [],
   source: t.StringLiteral | null = null,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.ExportNamedDeclaration {
   const node: t.ExportNamedDeclaration = {
     type: "ExportNamedDeclaration",
     declaration,
     specifiers,
     source,
+    attributes,
   };
   const defs = NODE_FIELDS.ExportNamedDeclaration;
   validate(defs.declaration, node, "declaration", declaration, 1);
   validate(defs.specifiers, node, "specifiers", specifiers, 1);
   validate(defs.source, node, "source", source, 1);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function exportSpecifier(
@@ -976,15 +982,18 @@ export function importDeclaration(
     | t.ImportNamespaceSpecifier
   )[],
   source: t.StringLiteral,
+  attributes: t.ImportAttribute[] | null = null,
 ): t.ImportDeclaration {
   const node: t.ImportDeclaration = {
     type: "ImportDeclaration",
     specifiers,
     source,
+    attributes,
   };
   const defs = NODE_FIELDS.ImportDeclaration;
   validate(defs.specifiers, node, "specifiers", specifiers, 1);
   validate(defs.source, node, "source", source, 1);
+  validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
 export function importDefaultSpecifier(
