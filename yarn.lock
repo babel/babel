@@ -267,7 +267,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   bin:
-    babel-external-helpers: ./bin/babel-external-helpers.js
+    babel-build-external-helpers: ./bin/babel-build-external-helpers.js
   languageName: unknown
   linkType: soft
 
