@@ -12,8 +12,9 @@
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-This file contains the changelog starting from v7.15.0.
+This file contains the changelog from v7.15.0 to v7.28.5.
 
+- See [CHANGELOG.md on the v7.x branch](https://github.com/babel/babel/blob/7.x/CHANGELOG.md) for v7.28.6 to the end of the v7 release line.
 - See [CHANGELOG - v7.0.0 to v7.14.9](/.github/CHANGELOG-v7.0.0-v7.14.9.md) for v7.0.0 to v7.14.9 changes.
 - See [CHANGELOG - v7 prereleases](/.github/CHANGELOG-v7-prereleases.md) for v7.0.0-alpha.1 to v7.0.0-rc.4 changes.
 - See [CHANGELOG - v4](/.github/CHANGELOG-v4.md), [CHANGELOG - v5](/.github/CHANGELOG-v5.md), and [CHANGELOG - v6](/.github/CHANGELOG-v6.md) for v4.x-v6.x changes.
