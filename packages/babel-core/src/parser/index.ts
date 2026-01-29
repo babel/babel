@@ -50,6 +50,13 @@ export default function* parser(
       // err.code will be changed to BABEL_PARSE_ERROR later.
     }
 
+    const startLine = parserOpts?.startLine;
+    const startColumn = parserOpts?.startColumn;
+
+    if (startColumn != null) {
+      code = " ".repeat(startColumn) + code;
+    }
+
     const { loc, missingPlugin } = err;
     if (loc) {
       const codeFrame = codeFrameColumns(
@@ -62,6 +69,7 @@ export default function* parser(
         },
         {
           highlightCode,
+          startLine,
         },
       );
       if (missingPlugin) {
