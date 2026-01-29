@@ -33,7 +33,7 @@ const normalizeOutput = function (str, cwd) {
 };
 
 export const runParallel = buildParallelProcessTests(
-  "babel-external-helpers-cli",
+  "babel-build-external-helpers",
   buildProcessTests(
     fixtureLoc,
     function (test) {
