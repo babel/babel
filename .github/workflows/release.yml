@@ -37,11 +37,31 @@ jobs:
             git diff --name-only HEAD^..HEAD
           fi;
 
+  ensure-npm-packages-exist:
+    name: Ensure npm packages exist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - name: Ensure npm packages exist --check-only
+        run: |
+          node ./scripts/ensure-packages-exist.js
+
   git-version:
     permissions:
       contents: write # for Git to git push
     name: Create git tag and commit
     runs-on: ubuntu-latest
+    needs:
+      - ensure-npm-packages-exist
     if: github.event_name == 'workflow_dispatch'
     outputs:
       branch: ${{ steps.branch-name.outputs.branch }}
@@ -76,13 +96,15 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - git-version
+      - ensure-npm-packages-exist
     environment: npm
     permissions:
       id-token: write
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
-      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.ensure-npm-packages-exist.result == 'success'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -133,6 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - git-version
+      - ensure-npm-packages-exist
     outputs:
       is-main: ${{ steps.is-main.outputs.result == 1 }}
       changelog: ${{ steps.changelog.outputs.changelog }}
