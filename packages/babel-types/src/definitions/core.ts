@@ -1663,7 +1663,7 @@ defineType("ClassDeclaration", {
 
 export const importAttributes = {
   attributes: {
-    default: [] as [],
+    optional: true,
     validate: arrayOfType("ImportAttribute"),
   },
 };
