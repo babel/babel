@@ -2,6 +2,9 @@
 {
   "compilerOptions": {
     "paths": {
+      "@babel/build-external-helpers": [
+        "./packages/babel-build-external-helpers/src"
+      ],
       "@babel/cli": [
         "./packages/babel-cli/src"
       ],
@@ -22,9 +25,6 @@
       ],
       "@babel/core": [
         "./packages/babel-core/src"
-      ],
-      "@babel/external-helpers-cli": [
-        "./packages/babel-external-helpers-cli/src"
       ],
       "@babel/generator": [
         "./packages/babel-generator/src"

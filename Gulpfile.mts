@@ -738,7 +738,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       "babel-standalone",
       // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
       "babel-cli",
-      "babel-external-helpers-cli",
+      "babel-build-external-helpers",
       // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
       // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
       "babel-register",
@@ -804,7 +804,7 @@ const dtsBundles = Array.from(
     new Set([
       // CLIs
       "packages/babel-cli",
-      "packages/babel-external-helpers-cli",
+      "packages/babel-build-external-helpers",
       "packages/babel-node",
       // This will be just JSON
       "packages/babel-compat-data",
