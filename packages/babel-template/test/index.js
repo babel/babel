@@ -368,6 +368,24 @@ describe("@babel/template", function () {
     });
   });
 
+  it("error stack", () => {
+    let error;
+    try {
+      function create() {
+        return template(``);
+      }
+      function call(tpl) {
+        tpl({
+          FOO: t.numericLiteral(1),
+        });
+      }
+      call(create());
+    } catch (e) {
+      error = e;
+    }
+    expect(error.stack).toMatch("=============\n    at create");
+  });
+
   describe(".syntacticPlaceholders", () => {
     it("works in function body", () => {
       const output = template(`function f() %%A%%`)({

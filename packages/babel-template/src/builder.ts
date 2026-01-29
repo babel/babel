@@ -103,27 +103,17 @@ function extendedTrace<Arg, Result>(
 ): (_: Arg) => Result {
   // Since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
-  let rootStack = "";
-  try {
-    // error stack gets populated in IE only on throw
-    // (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
-    throw new Error();
-  } catch (error) {
-    if (error.stack) {
-      // error.stack does not exists in IE <= 9
-      // We slice off the top 3 items in the stack to remove the call to
-      // 'extendedTrace', and the anonymous builder function, with the final
-      // stripped line being the error message itself since we threw it
-      // in the first place and it doesn't matter.
-      rootStack = error.stack.split("\n").slice(3).join("\n");
-    }
-  }
+  const rootErr = new Error();
 
   return (arg: Arg) => {
     try {
       return fn(arg);
     } catch (err) {
-      err.stack += `\n    =============\n${rootStack}`;
+      // We slice off the top 3 items in the stack to remove the call to
+      // 'extendedTrace', and the anonymous builder function, with the final
+      // stripped line being the error message itself since we threw it
+      // in the first place and it doesn't matter.
+      err.stack += `\n    =============\n${rootErr.stack.split("\n").slice(3).join("\n")}`;
       throw err;
     }
   };
