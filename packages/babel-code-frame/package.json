@@ -15,6 +15,10 @@
     "directory": "packages/babel-code-frame"
   },
   "main": "./lib/index.js",
+  "browser": {
+    "./lib/index.js": "./lib/index-browser.js",
+    "./src/index.ts": "./src/index-browser.ts"
+  },
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^",
     "js-tokens": "^10.0.0"
