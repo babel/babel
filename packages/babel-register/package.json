@@ -37,11 +37,9 @@
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
+      "browser": "./lib/browser.cjs",
       "default": "./lib/index.cjs"
     },
     "./package.json": "./package.json"
-  },
-  "browser": {
-    "./lib/index.cjs": "./lib/browser.cjs"
   }
 }

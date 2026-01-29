@@ -37,14 +37,6 @@
     "type": "opencollective",
     "url": "https://opencollective.com/babel"
   },
-  "browser": {
-    "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
-    "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
-    "./lib/transform-file.js": "./lib/transform-file-browser.js",
-    "./src/config/files/index.ts": "./src/config/files/index-browser.ts",
-    "./src/config/resolve-targets.ts": "./src/config/resolve-targets-browser.ts",
-    "./src/transform-file.ts": "./src/transform-file-browser.ts"
-  },
   "dependencies": {
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
@@ -91,6 +83,35 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "imports": {
+    "#config/files": {
+      "babel-src": {
+        "browser": "./src/config/files/index-browser.ts",
+        "default": "./src/config/files/index.ts"
+      },
+      "types": "./lib/config/files/index.d.ts",
+      "browser": "./lib/config/files/index-browser.js",
+      "default": "./lib/config/files/index.js"
+    },
+    "#config/resolve-targets": {
+      "babel-src": {
+        "browser": "./src/config/resolve-targets-browser.ts",
+        "default": "./src/config/resolve-targets.ts"
+      },
+      "types": "./lib/config/resolve-targets.d.ts",
+      "browser": "./lib/config/resolve-targets-browser.js",
+      "default": "./lib/config/resolve-targets.js"
+    },
+    "#transform-file": {
+      "babel-src": {
+        "browser": "./src/transform-file-browser.ts",
+        "default": "./src/transform-file.ts"
+      },
+      "types": "./lib/transform-file.d.ts",
+      "browser": "./lib/transform-file-browser.js",
+      "default": "./lib/transform-file.js"
+    }
   },
   "type": "module"
 }

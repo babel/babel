@@ -26,8 +26,11 @@ import {
   findRelativeConfig,
   findRootConfig,
   loadConfig,
-} from "./files/index.ts";
-import type { ConfigFile, IgnoreFile, FilePackageData } from "./files/index.ts";
+  type ConfigFile,
+  type IgnoreFile,
+  type FilePackageData,
+  // eslint-disable-next-line import/no-unresolved, import/extensions
+} from "#config/files";
 
 import { makeWeakCacheSync, makeStrongCacheSync } from "./caching.ts";
 

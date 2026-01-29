@@ -18,9 +18,12 @@ import {
   findConfigUpwards,
   resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
-} from "./files/index.ts";
-import type { ConfigFile, IgnoreFile } from "./files/index.ts";
-import { resolveTargets } from "./resolve-targets.ts";
+  type ConfigFile,
+  type IgnoreFile,
+  // eslint-disable-next-line import/no-unresolved, import/extensions
+} from "#config/files";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { resolveTargets } from "#config/resolve-targets";
 
 function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   switch (rootMode) {

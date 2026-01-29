@@ -2,7 +2,8 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import getRuntimePath, { resolveFSPath } from "#get-runtime-path";
 
 export interface Options {
   absoluteRuntime?: boolean;

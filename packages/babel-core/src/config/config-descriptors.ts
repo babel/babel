@@ -1,7 +1,8 @@
 import gensync, { type Handler } from "gensync";
 import { once } from "../gensync-utils/functional.ts";
 
-import { loadPlugin, loadPreset } from "./files/index.ts";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { loadPlugin, loadPreset } from "#config/files";
 
 import { getItemDescriptor } from "./item.ts";
 

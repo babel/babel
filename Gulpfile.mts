@@ -468,7 +468,10 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
             rollupNodeResolve({
               extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
               browser: buildStandalone,
-              exportConditions: buildStandalone ? ["browser"] : [],
+              // Used in some package.json#imports
+              exportConditions: buildStandalone
+                ? ["babel-src", "browser"]
+                : ["babel-src"],
               // It needs to be set to 'false' when using rollupNodePolyfills
               // https://github.com/rollup/plugins/issues/772
               preferBuiltins: !buildStandalone,
@@ -739,8 +742,8 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
       "babel-cli",
       "babel-build-external-helpers",
-      // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
-      // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
+      // todo: These package use #import conditions, that we want to leave unbundled.
+      // Eventually figure out how to bundle the rest.
       "babel-register",
       "babel-core",
       "babel-plugin-transform-runtime",
