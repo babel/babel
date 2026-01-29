@@ -1,19 +1,17 @@
-import babel = require("@babel/core");
-import convert = require("../convert/index.cts");
-import astInfo = require("./ast-info.cts");
-import extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
+import { createConfigItemAsync, parseAsync } from "@babel/core";
+import { convertError, convertFile } from "../convert/index.ts";
+import { getTokLabels, getVisitorKeys } from "../ast-info.ts";
+import extractParserOptionsPlugin from "./extract-parser-options-plugin.ts";
 
 import type { InputOptions, ConfigItem } from "@babel/core";
-import type { AST, ParseResult } from "../types.cts";
-
-const { getVisitorKeys, getTokLabels } = astInfo;
+import type { AST, ParseResult } from "../types";
 
 const ref = {};
 let extractParserOptionsConfigItem: ConfigItem<any>;
 
 const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
-export = async function asyncMaybeParse(
+export default async function maybeParse(
   code: string,
   options: InputOptions,
 ): Promise<{
@@ -21,9 +19,9 @@ export = async function asyncMaybeParse(
   parserOptions: ParseResult | null;
 }> {
   if (!extractParserOptionsConfigItem) {
-    extractParserOptionsConfigItem = await babel.createConfigItemAsync(
+    extractParserOptionsConfigItem = await createConfigItemAsync(
       [extractParserOptionsPlugin, ref],
-      { dirname: __dirname, type: "plugin" },
+      { dirname: import.meta.dirname, type: "plugin" },
     );
   }
   const { plugins } = options;
@@ -33,7 +31,7 @@ export = async function asyncMaybeParse(
 
   try {
     return {
-      parserOptions: await babel.parseAsync(code, options),
+      parserOptions: await parseAsync(code, options),
       ast: null,
     };
   } catch (err) {
@@ -46,13 +44,13 @@ export = async function asyncMaybeParse(
   options.plugins = plugins;
 
   try {
-    ast = await babel.parseAsync(code, options);
+    ast = await parseAsync(code, options);
   } catch (err) {
-    throw convert.convertError(err);
+    throw convertError(err);
   }
 
   return {
-    ast: convert.convertFile(ast, code, getTokLabels(), getVisitorKeys()),
+    ast: convertFile(ast, code, getTokLabels(), getVisitorKeys()),
     parserOptions: null,
   };
-};
+}

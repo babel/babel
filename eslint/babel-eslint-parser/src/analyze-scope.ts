@@ -1,4 +1,6 @@
-import type { Client } from "./client.cts";
+import type { Client } from "./client.ts";
+
+import * as eslintScope from "eslint-scope";
 
 const {
   Definition,
@@ -6,8 +8,9 @@ const {
   Referencer: OriginalReferencer,
   Scope,
   ScopeManager,
-} = require("eslint-scope") as import("./types.cts").Scope;
-const { getKeys: fallback } = require("eslint-visitor-keys");
+} = eslintScope as unknown as import("./types").Scope;
+
+import { getKeys as fallback } from "eslint-visitor-keys";
 
 let visitorKeysMap: Record<string, string[]>;
 function getVisitorValues(nodeType: string, client: Client) {
@@ -368,7 +371,11 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-export = function analyzeScope(ast: any, parserOptions: any, client: Client) {
+export default function analyzeScope(
+  ast: any,
+  parserOptions: any,
+  client: Client,
+) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -389,4 +396,4 @@ export = function analyzeScope(ast: any, parserOptions: any, client: Client) {
   referencer.visit(ast);
 
   return scopeManager as any;
-};
+}

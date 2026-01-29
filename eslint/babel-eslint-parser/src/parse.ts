@@ -1,9 +1,11 @@
-"use strict";
+import semver from "semver";
+import type { Options } from "./types";
+import { version } from "@babel/core";
+import type { Client } from "./client.ts";
+import { convertError, convertFile } from "./convert/index.ts";
+import { createRequire } from "node:module";
 
-import semver = require("semver");
-import convert = require("./convert/index.cts");
-import type { Options } from "./types.cts";
-import type { Client } from "./client.cts";
+const require = createRequire(import.meta.url);
 
 const babelParser = require(
   require.resolve("@babel/parser", {
@@ -13,13 +15,13 @@ const babelParser = require(
 
 let isRunningMinSupportedCoreVersion: boolean = null;
 
-export = function parse(code: string, options: Options, client: Client) {
+export default function parse(code: string, options: Options, client: Client) {
   // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
   const minSupportedCoreVersion = REQUIRED_VERSION(">=7.2.0 || ^8.0.0");
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
-      client.getVersion(),
+      version,
       minSupportedCoreVersion,
     );
   }
@@ -28,7 +30,7 @@ export = function parse(code: string, options: Options, client: Client) {
     throw new Error(
       `@babel/eslint-parser@${
         PACKAGE_JSON.version
-      } does not support @babel/core@${client.getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
+      } does not support @babel/core@${version}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 
@@ -37,13 +39,13 @@ export = function parse(code: string, options: Options, client: Client) {
   if (ast) return ast;
 
   try {
-    return convert.convertFile(
+    return convertFile(
       babelParser.parse(code, parserOptions),
       code,
       client.getTokLabels(),
       client.getVisitorKeys(),
     );
   } catch (err) {
-    throw convert.convertError(err);
+    throw convertError(err);
   }
-};
+}

@@ -1,5 +1,5 @@
-import type { BabelToken, Comment } from "../types.cts";
-import type * as t from "@babel/types";
+import type { BabelToken, Comment } from "../types";
+import type { types as t } from "@babel/core";
 
 interface ConvertedToken {
   type: string;
@@ -144,7 +144,7 @@ function convertToken(
   return newToken;
 }
 
-export = function convertTokens(
+export default function convertTokens(
   tokens: (BabelToken | Comment)[],
   code: string,
   tokLabels: Record<string, any>,
@@ -163,4 +163,4 @@ export = function convertTokens(
   }
 
   return result;
-};
+}

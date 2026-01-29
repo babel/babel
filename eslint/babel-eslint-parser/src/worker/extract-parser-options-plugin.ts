@@ -1,7 +1,7 @@
-export = function extractParserOptionsPlugin() {
+export default function extractParserOptionsPlugin() {
   return {
     parserOverride(code: string, opts: any) {
       return opts;
     },
   };
-};
+}

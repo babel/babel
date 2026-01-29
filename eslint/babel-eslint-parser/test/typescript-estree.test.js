@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFileSync } from "node:fs";
-import { parseForESLint } from "../lib/index.cjs";
+import { parseForESLint } from "../lib/index.js";
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import unpad from "dedent";
 import { ESLint } from "eslint";

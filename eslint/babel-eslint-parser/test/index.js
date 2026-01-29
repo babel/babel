@@ -1,7 +1,7 @@
 import path from "node:path";
 import * as escope from "eslint-scope";
 import unpad from "dedent";
-import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
+import { parseForESLint as parseForESLintOriginal } from "../lib/index.js";
 import { ESLint } from "eslint";
 import { commonJS } from "$repo-utils";
 

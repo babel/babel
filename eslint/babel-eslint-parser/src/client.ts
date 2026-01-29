@@ -1,6 +1,12 @@
-import type { Options } from "./types.cts";
+import path from "node:path";
+import {
+  Worker,
+  SHARE_ENV,
+  MessageChannel,
+  receiveMessageOnPort,
+} from "node:worker_threads";
 
-import path = require("path");
+import type { Options } from "./types";
 
 export const enum ACTIONS {
   GET_VERSION = "GET_VERSION",
@@ -52,14 +58,9 @@ export class Client {
 // If ESLint starts supporting async parsers, we can move
 // everything back to the main thread.
 export class WorkerClient extends Client {
-  static #worker_threads_cache: typeof import("worker_threads");
-  static get #worker_threads() {
-    return (WorkerClient.#worker_threads_cache ??= require("node:worker_threads"));
-  }
-
-  #worker = new WorkerClient.#worker_threads.Worker(
-    path.resolve(__dirname, "../lib/worker/index.cjs"),
-    { env: WorkerClient.#worker_threads.SHARE_ENV },
+  #worker = new Worker(
+    path.resolve(import.meta.dirname, "../lib/worker/index.js"),
+    { env: SHARE_ENV },
   );
 
   constructor() {
@@ -70,7 +71,7 @@ export class WorkerClient extends Client {
       // https://github.com/babel/babel/pull/14541
       const signal = new Int32Array(new SharedArrayBuffer(8));
 
-      const subChannel = new WorkerClient.#worker_threads.MessageChannel();
+      const subChannel = new MessageChannel();
 
       this.#worker.postMessage(
         { signal, port: subChannel.port1, action, payload },
@@ -78,9 +79,7 @@ export class WorkerClient extends Client {
       );
 
       Atomics.wait(signal, 0, 0);
-      const { message } = WorkerClient.#worker_threads.receiveMessageOnPort(
-        subChannel.port2,
-      );
+      const { message } = receiveMessageOnPort(subChannel.port2);
 
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;

@@ -1,9 +1,10 @@
-import normalizeESLintConfig = require("./configuration.cts");
-import analyzeScope = require("./analyze-scope.cts");
-import baseParse = require("./parse.cts");
+import normalizeESLintConfig from "./configuration.ts";
+import analyzeScope from "./analyze-scope.ts";
+import baseParse from "./parse.ts";
 
-import Clients = require("./client.cts");
-const client = new Clients.WorkerClient();
+import { WorkerClient } from "./client.ts";
+import { getVisitorKeys } from "./ast-info.ts";
+const client = new WorkerClient();
 
 export const meta = {
   name: PACKAGE_JSON.name,
@@ -19,5 +20,11 @@ export function parseForESLint(code: string, options = {}) {
   const ast = baseParse(code, normalizedOptions, client);
   const scopeManager = analyzeScope(ast, normalizedOptions, client);
 
-  return { ast, scopeManager, visitorKeys: client.getVisitorKeys() };
+  return { ast, scopeManager, visitorKeys: getVisitorKeys() };
 }
+
+export default {
+  meta,
+  parse,
+  parseForESLint,
+};

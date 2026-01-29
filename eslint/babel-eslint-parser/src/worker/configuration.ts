@@ -1,7 +1,7 @@
-import babel = require("@babel/core");
-import ESLINT_VERSION = require("../utils/eslint-version.cts");
+import { loadPartialConfigAsync, loadPartialConfigSync } from "@babel/core";
+import ESLINT_VERSION from "../utils/eslint-version.ts";
 import type { InputOptions, NormalizedOptions } from "@babel/core";
-import type { Options } from "../types.cts";
+import type { Options } from "../types";
 import type { PartialConfig } from "../../../../packages/babel-core/src/config";
 
 /**
@@ -93,7 +93,7 @@ export async function normalizeBabelParseConfig(
   options: Options,
 ): Promise<InputOptions | NormalizedOptions> {
   const parseOptions = normalizeParserOptions(options);
-  const config = await babel.loadPartialConfigAsync(parseOptions);
+  const config = await loadPartialConfigAsync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }
 
@@ -101,6 +101,6 @@ export function normalizeBabelParseConfigSync(
   options: Options,
 ): InputOptions | NormalizedOptions {
   const parseOptions = normalizeParserOptions(options);
-  const config = babel.loadPartialConfigSync(parseOptions);
+  const config = loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }

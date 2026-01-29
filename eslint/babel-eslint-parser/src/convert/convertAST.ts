@@ -1,6 +1,6 @@
-import type * as t from "@babel/types";
-import ESLINT_VERSION = require("../utils/eslint-version.cts");
-import type { ParseResult } from "../types.d.cts";
+import type { types as t } from "@babel/core";
+import ESLINT_VERSION from "../utils/eslint-version.ts";
+import type { ParseResult } from "../types";
 
 function* it<T>(children: T | T[]) {
   if (Array.isArray(children)) yield* children;
@@ -185,10 +185,10 @@ function convertProgramNode(ast: ParseResult) {
   }
 }
 
-export = function convertAST(
+export default function convertAST(
   ast: ParseResult,
   visitorKeys: Record<string, string[]>,
 ) {
   convertNodes(ast, visitorKeys);
   convertProgramNode(ast);
-};
+}

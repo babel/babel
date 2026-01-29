@@ -1,6 +1,6 @@
-import type { Comment } from "@babel/types";
+import type { types as t } from "@babel/core";
 
-export = function convertComments(comments: Comment[]) {
+export default function convertComments(comments: t.Comment[]) {
   for (const comment of comments) {
     // @ts-expect-error eslint
     comment.type = comment.type === "CommentBlock" ? "Block" : "Line";
@@ -11,4 +11,4 @@ export = function convertComments(comments: Comment[]) {
     // @ts-expect-error eslint
     comment.range ||= [comment.start, comment.end];
   }
-};
+}
