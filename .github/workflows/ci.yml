@@ -701,6 +701,6 @@ jobs:
           cache: "yarn"
       - name: Install
         run: yarn install
-      - name: Ensure npm packages exist --check-only
+      - name: Ensure npm packages exist
         run: |
-          node ./scripts/ensure-packages-exist.js
+          node ./scripts/ensure-packages-exist.js --check-only
