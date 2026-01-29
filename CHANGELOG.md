@@ -14,6 +14,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 This file contains the changelog starting from v8.0.0-alpha.0.
 
+- See [CHANGELOG - v7.15.0 to v7.28.5](/.github/CHANGELOG-v7.15.0-v7.28.5.md) for v7.15.0 to v7.28.5 changes (the last common release between the v8 and v7 release lines was v7.28.5).
+- See [CHANGELOG - v7.0.0 to v7.14.9](/.github/CHANGELOG-v7.0.0-v7.14.9.md) for v7.0.0 to v7.14.9 changes.
+- See [CHANGELOG - v7 prereleases](/.github/CHANGELOG-v7-prereleases.md) for v7.0.0-alpha.1 to v7.0.0-rc.4 changes.
+- See [CHANGELOG - v4](/.github/CHANGELOG-v4.md), [CHANGELOG - v5](/.github/CHANGELOG-v5.md), and [CHANGELOG - v6](/.github/CHANGELOG-v6.md) for v4.x-v6.x changes.
+- See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
+- See [Babylon's CHANGELOG](packages/babel-parser/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
+- See [`babel-eslint`'s releases](https://github.com/babel/babel-eslint/releases) for the changelog before `@babel/eslint-parser` 7.8.0.
+- See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-babel/releases) for the changelog before `@babel/eslint-plugin` 7.8.0.
+
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
 ## v8.0.0-beta.4 (2026-01-12)
@@ -567,3 +576,7 @@ This release does not include any changes specific to Babel 8, but it ports all 
   * [#12656](https://github.com/babel/babel/pull/12656) [babel 8] Update `globals`, `find-cache-dir` and `slash` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 * `babel-plugin-syntax-typescript`
   * [#12607](https://github.com/babel/babel/pull/12607) chore: do not push objectRestSpread parser option in Babel 8 ([@JLHwung](https://github.com/JLHwung))
+
+---
+
+See [CHANGELOG - v7.15.0 to v7.28.5](/.github/CHANGELOG-v7.15.0-v7.28.5.md) for v7.15.0 to v7.28.5 changes (the last common release between the v8 and v7 release lines was v7.28.5).

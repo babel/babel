@@ -234,13 +234,13 @@ jobs:
         uses: babel/actions/update-changelog@v2
         with:
           changelog: ${{ needs.github-release.outputs.changelog }}
-          filename: .github/CHANGELOG-v8.md
+          filename: CHANGELOG.md
 
       - name: Commit CHANGELOG.md
         run: |
-          git add .github/CHANGELOG-v8.md
+          git add CHANGELOG.md
           git -c user.name="Babel Bot" -c user.email="babel-bot@users.noreply.github.com" \
-            commit -m "Add ${{ needs.github-release.outputs.version }} to .github/CHANGELOG-v8.md [skip ci]" --no-verify --quiet
+            commit -m "Add ${{ needs.github-release.outputs.version }} to CHANGELOG.md [skip ci]" --no-verify --quiet
 
       - name: Push to GitHub
         run: |
