@@ -7,7 +7,7 @@ type NonArrayIterable<V, T extends Iterable<V> = Iterable<V>> = T extends any[]
   : Iterable<V>;
 
 export default function _unsupportedIterableToArray<T>(
-  o: RelativeIndexable<T> /* string | typedarray */ | ArrayLike<T> | Set<T>,
+  o: string | NodeJS.TypedArray | ArrayLike<T> | Set<T>,
   minLen?: number | null,
 ): T[];
 export default function _unsupportedIterableToArray<T, K>(
