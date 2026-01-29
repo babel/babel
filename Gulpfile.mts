@@ -8,7 +8,7 @@ import { callbackify } from "node:util";
 import { styleText } from "node:util";
 // @ts-expect-error no types
 import gulp from "gulp";
-import { rollup } from "rollup";
+import { rollup, type InputPluginOption } from "rollup";
 import {
   babel as rollupBabel,
   getBabelOutputPlugin,
@@ -642,6 +642,7 @@ function buildRollupDts(packages: string[]) {
     log(`Bundling '${styleText("cyan", output)}' with rollup ...`);
 
     let external;
+    let imports;
     if (packageName) {
       const pkgJSON = require("./" + packageName + "/package.json");
       const {
@@ -655,21 +656,43 @@ function buildRollupDts(packages: string[]) {
         // TODO: These should all be moved to dependencies
         ...Object.keys(devDependencies),
       ].map(dep => new RegExp(`^${dep}(?:/.+)?$`));
+
+      imports = pkgJSON.imports;
     }
 
     const bundle = await rollup({
       input,
-      plugins: [
-        {
-          name: "rollup-babel-internal-define-BABEL_8_BREAKING",
-          transform: code =>
-            code.replace(
-              /type BABEL_8_BREAKING\s*=\s*boolean/g,
-              `type BABEL_8_BREAKING = true`
-            ),
-        },
-        rollupDts(),
-      ],
+      plugins: (
+        [
+          {
+            name: "rollup-babel-internal-define-BABEL_8_BREAKING",
+            transform: code =>
+              code.replace(
+                /type BABEL_8_BREAKING\s*=\s*boolean/g,
+                `type BABEL_8_BREAKING = true`
+              ),
+          },
+          rollupDts(),
+          imports && {
+            name: "resolve-dts-package.json-imports",
+            resolveId: {
+              order: "post",
+              handler(importee: string, importer: string | undefined) {
+                if (importer && importee.startsWith("#")) {
+                  const mapped = imports?.[importee]?.types?.replace(
+                    "/lib/",
+                    "/src/"
+                  );
+                  if (mapped) {
+                    return require.resolve(`./dts/${packageName}/${mapped}`);
+                  }
+                  return null;
+                }
+              },
+            },
+          },
+        ] satisfies InputPluginOption
+      ).filter(Boolean),
       external,
       onwarn(warning) {
         if (
