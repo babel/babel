@@ -685,3 +685,22 @@ jobs:
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
+
+  ensure-npm-packages-exist:
+    name: Ensure npm packages exist
+    needs: yarn-validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - name: Ensure npm packages exist --check-only
+        run: |
+          node ./scripts/ensure-packages-exist.js
