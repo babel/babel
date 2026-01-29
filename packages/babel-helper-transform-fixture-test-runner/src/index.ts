@@ -497,17 +497,6 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      if (
-        !process.env.IS_PUBLISH &&
-        process.env.TEST_babel7plugins_babel8core
-      ) {
-        // Make sure that the ESM version of @babel/core is always loaded
-        // for babel7-8 interop tests.
-        // In `eval` so that it doesn't cause a syntax error when running
-        // tests in old Node.js.
-        beforeAll(() => eval('import("@babel/core")').catch(console.error));
-      }
-
       for (const task of testSuite.tests) {
         if (
           suiteOpts.ignoreTasks?.includes(task.title) ||

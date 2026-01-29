@@ -1,4 +1,4 @@
-import babel = require("./babel-core.cts");
+import babel = require("@babel/core");
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types.cts";

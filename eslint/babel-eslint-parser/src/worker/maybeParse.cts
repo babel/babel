@@ -1,4 +1,4 @@
-import babel = require("./babel-core.cts");
+import babel = require("@babel/core");
 import convert = require("../convert/index.cts");
 import astInfo = require("./ast-info.cts");
 import extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");

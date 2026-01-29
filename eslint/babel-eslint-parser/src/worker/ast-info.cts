@@ -1,5 +1,5 @@
 import _ESLINT_VISITOR_KEYS = require("eslint-visitor-keys");
-import babel = require("./babel-core.cts");
+import babel = require("@babel/core");
 
 const ESLINT_VISITOR_KEYS = _ESLINT_VISITOR_KEYS.KEYS;
 
