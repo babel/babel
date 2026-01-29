@@ -40,6 +40,7 @@ function captureShortStackTrace(skip: number, length: number) {
   const shortStackTrace = stackTrace.slice(1 + skip, 1 + skip + length);
   return {
     internal: /[\\/]@babel[\\/]/.test(shortStackTrace[1].getFileName()!),
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     trace: shortStackTrace.map(frame => `    at ${frame}`).join("\n"),
   };
 }
