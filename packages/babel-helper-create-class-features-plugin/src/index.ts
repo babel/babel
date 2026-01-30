@@ -259,7 +259,6 @@ export function createClassFeaturePlugin({
             instanceNodes,
             (referenceVisitor, state) => {
               for (const prop of props) {
-                // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
                 if (t.isStaticBlock(prop.node) || prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
               }
