@@ -15,10 +15,6 @@
   "keywords": [
     "babel-plugin"
   ],
-  "browser": {
-    "./lib/get-runtime-path/index.js": "./lib/get-runtime-path/browser.js",
-    "./src/get-runtime-path/index.ts": "./src/get-runtime-path/browser.ts"
-  },
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
@@ -46,6 +42,17 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "imports": {
+    "#get-runtime-path": {
+      "babel-src": {
+        "browser": "./src/get-runtime-path/browser.ts",
+        "default": "./src/get-runtime-path/index.ts"
+      },
+      "types": "./lib/get-runtime-path/index.d.ts",
+      "browser": "./lib/get-runtime-path/browser.js",
+      "default": "./lib/get-runtime-path/index.js"
+    }
   },
   "type": "module"
 }

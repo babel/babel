@@ -2,70 +2,21 @@
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
-import { createRequire } from "node:module";
 
-const require = createRequire(import.meta.url);
 const monorepoRoot = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   ".."
 );
 
-const BABEL_SRC_REGEXP =
-  path.sep === "/"
-    ? /packages\/(babel-[^/]+)\/src\//
-    : /packages\\(babel-[^\\]+)\\src\\/;
-
 /**
  * Rollup plugin to load Babel source files directly from the monorepo.
- * It resolves Babel packages to their `src` directory and handles the `browser`
- * field in `package.json`.
+ * It resolves Babel packages to their `src` directory.
  * It also resolves `@babel/runtime/regenerator` to the correct path.
  * @returns {import("rollup").Plugin} - The Rollup plugin.
  */
 export default function () {
   return {
     name: "babel-source",
-    load(id) {
-      const matches = id.match(BABEL_SRC_REGEXP);
-      if (matches) {
-        // check if browser field exists for this file and replace
-        const packageFolder = path.join(monorepoRoot, "packages", matches[1]);
-        const packageJson = require(path.join(packageFolder, "package.json"));
-
-        if (packageJson.browser && typeof packageJson.browser === "object") {
-          for (const nodeFile in packageJson.browser) {
-            const browserFileAsJs = packageJson.browser[nodeFile].replace(
-              /^(\.\/)?lib\//,
-              "src/"
-            );
-
-            const browserFileAsTs = browserFileAsJs.replace(/.js$/, ".ts");
-            const browserFile = fs.existsSync(browserFileAsTs)
-              ? browserFileAsTs
-              : browserFileAsJs;
-
-            const nodeFileSrcAsJs = path.normalize(
-              nodeFile.replace(/^[./]?lib\//, "src/")
-            );
-            const nodeFileSrcAsTs = nodeFileSrcAsJs.replace(/.js$/, ".ts");
-            const nodeFileSrc = fs.existsSync(nodeFileSrcAsTs)
-              ? nodeFileSrcAsTs
-              : nodeFileSrcAsJs;
-
-            if (id.endsWith(nodeFileSrc)) {
-              if (browserFile === false) {
-                return "";
-              }
-              return fs.readFileSync(
-                path.join(packageFolder, path.normalize(browserFile)),
-                "utf8"
-              );
-            }
-          }
-        }
-      }
-      return null;
-    },
     resolveId(importee) {
       if (importee === "@babel/runtime/regenerator") {
         return path.join(

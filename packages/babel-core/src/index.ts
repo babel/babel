@@ -6,7 +6,8 @@ export { default as File } from "./transformation/file/file.ts";
 export type { default as PluginPass } from "./transformation/plugin-pass.ts";
 export { default as buildExternalHelpers } from "./tools/build-external-helpers.ts";
 
-import * as resolvers from "./config/files/index.ts";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import * as resolvers from "#config/files";
 // For backwards-compatibility, we expose the resolvers
 // with the old API.
 export const resolvePlugin = (name: string, dirname: string) =>
@@ -80,7 +81,8 @@ export {
   transformFile,
   transformFileAsync,
   transformFileSync,
-} from "./transform-file.ts";
+  // eslint-disable-next-line import/no-unresolved, import/extensions
+} from "#transform-file";
 export {
   transformFromAst,
   transformFromAstAsync,

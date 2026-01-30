@@ -3,9 +3,6 @@ import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "node:path";
 import generator from "@babel/generator";
 
-import _Plugin from "../lib/config/plugin.js";
-const Plugin = _Plugin.default || _Plugin;
-
 import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
@@ -402,7 +399,7 @@ describe("api", function () {
       },
 
       plugins: [
-        new Plugin({
+        () => ({
           name: "foobar",
           visitor: {
             "Program|Identifier": function () {
@@ -429,7 +426,7 @@ describe("api", function () {
           function () {
             return {
               plugins: [
-                new Plugin({
+                () => ({
                   visitor: {
                     Function: function (path) {
                       const alias = path.scope
