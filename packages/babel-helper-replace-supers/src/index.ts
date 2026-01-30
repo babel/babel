@@ -371,7 +371,7 @@ export default class ReplaceSupers {
       path.isObjectMethod() ||
       // @ts-expect-error static is not in ClassPrivateMethod
       path.node.static ||
-      path.isStaticBlock?.();
+      path.isStaticBlock();
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;

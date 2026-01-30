@@ -1305,14 +1305,13 @@ export function buildFieldsInitNodes(
       ts.assertFieldTransformed(prop);
     }
 
-    // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
-    const isStatic = !t.isStaticBlock?.(prop.node) && prop.node.static;
+    const isStatic = !t.isStaticBlock(prop.node) && prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;
     const isField = prop.isProperty();
     const isMethod = !isField;
-    const isStaticBlock = prop.isStaticBlock?.();
+    const isStaticBlock = prop.isStaticBlock();
 
     if (isStatic) classRefFlags |= ClassRefFlag.ForDefine;
 

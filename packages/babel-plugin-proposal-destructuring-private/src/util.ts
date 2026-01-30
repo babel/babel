@@ -82,7 +82,6 @@ function growRestExcludingKeys(
             case "NumericLiteral":
               return String(key.value);
             case "BigIntLiteral":
-              // In Babel 8, value is bigint; in Babel 7, it's string
               return String(key.value);
             default:
               return null;

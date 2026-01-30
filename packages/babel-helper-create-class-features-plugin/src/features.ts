@@ -107,11 +107,10 @@ export function shouldTransform(path: NodePath<t.Class>, file: File): boolean {
     if (!privateFieldPath && el.isClassPrivateProperty()) {
       privateFieldPath = el;
     }
-    // NOTE: path.isClassPrivateMethod() it isn't supported in <7.2.0
-    if (!privateMethodPath && el.isClassPrivateMethod?.()) {
+    if (!privateMethodPath && el.isClassPrivateMethod()) {
       privateMethodPath = el;
     }
-    if (!staticBlockPath && el.isStaticBlock?.()) {
+    if (!staticBlockPath && el.isStaticBlock()) {
       staticBlockPath = el;
     }
   }
