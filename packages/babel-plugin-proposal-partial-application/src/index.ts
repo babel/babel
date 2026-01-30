@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
 import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
@@ -68,7 +69,7 @@ export default declare(api => {
 
   return {
     name: "proposal-partial-application",
-    manipulateOptions: (_, parser) => parser.plugins.push("partialApplication"),
+    inherits: syntaxPartialApplication,
 
     visitor: {
       // Todo: support partial application in NewExpression/OptionalCallExpression.
