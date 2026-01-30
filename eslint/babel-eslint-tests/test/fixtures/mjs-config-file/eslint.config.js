@@ -1,6 +1,6 @@
 module.exports = {
   languageOptions: {
-    parser: require("@babel/eslint-parser/experimental-worker"),
+    parser: require("@babel/eslint-parser"),
     parserOptions: {
       babelOptions: {
         configFile: __dirname + "/babel.config.mjs",

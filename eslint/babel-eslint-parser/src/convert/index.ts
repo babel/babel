@@ -1,7 +1,7 @@
-import convertTokens = require("./convertTokens.cts");
-import convertComments = require("./convertComments.cts");
-import convertAST = require("./convertAST.cts");
-import type { AST, ParseResult } from "../types.cts";
+import convertTokens from "./convertTokens.ts";
+import convertComments from "./convertComments.ts";
+import convertAST from "./convertAST.ts";
+import type { AST, ParseResult } from "../types";
 
 export function convertFile(
   ast: ParseResult,

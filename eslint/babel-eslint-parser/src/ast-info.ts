@@ -1,7 +1,5 @@
-import _ESLINT_VISITOR_KEYS = require("eslint-visitor-keys");
-import babel = require("@babel/core");
-
-const ESLINT_VISITOR_KEYS = _ESLINT_VISITOR_KEYS.KEYS;
+import { KEYS as ESLINT_VISITOR_KEYS } from "eslint-visitor-keys";
+import { types, tokTypes } from "@babel/core";
 
 let visitorKeys: Record<string, string[]>;
 export function getVisitorKeys() {
@@ -28,7 +26,7 @@ export function getVisitorKeys() {
     // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
     visitorKeys = {
       ...newTypes,
-      ...babel.types.VISITOR_KEYS,
+      ...types.VISITOR_KEYS,
       ...conflictTypes,
     };
   }
@@ -38,6 +36,6 @@ export function getVisitorKeys() {
 let tokLabels;
 export function getTokLabels() {
   return (tokLabels ||= Object.fromEntries(
-    Object.entries(babel.tokTypes).map(([key, tok]) => [key, tok.label]),
+    Object.entries(tokTypes).map(([key, tok]) => [key, tok.label]),
   ));
 }

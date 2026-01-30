@@ -6,7 +6,7 @@ import {
   eslintConfigCompat,
   babelESLintParserPath,
 } from "./eslintConfigCompat.cjs";
-import * as parser from "../../../babel-eslint-parser/lib/index.cjs";
+import * as parser from "../../../babel-eslint-parser/lib/index.js";
 import babelEslintParser from "@babel/eslint-parser";
 import globals from "globals";
 

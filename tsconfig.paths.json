@@ -464,9 +464,6 @@
       "@babel/eslint-parser": [
         "./eslint/babel-eslint-parser/src"
       ],
-      "@babel/eslint-parser/experimental-worker": [
-        "./eslint/babel-eslint-parser/src/experimental-worker.cts"
-      ],
       "@babel/plugin-codemod-object-assign-to-object-spread": [
         "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src"
       ],

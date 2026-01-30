@@ -19,17 +19,13 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "type": "module",
-  "types": "./types.d.cts",
+  "types": "./types.d.ts",
   "exports": {
     ".": {
-      "default": "./lib/index.cjs",
-      "types": "./types.d.cts"
-    },
-    "./experimental-worker": {
-      "default": "./lib/experimental-worker.cjs",
-      "types": "./types.d.cts"
+      "default": "./lib/index.js",
+      "types": "./types.d.ts"
     },
     "./package.json": "./package.json"
   },

@@ -1,4 +1,5 @@
-import type { Client } from "./client.cts";
+import { types as t } from "@babel/core";
+import * as eslintScope from "eslint-scope";
 
 const {
   Definition,
@@ -6,17 +7,16 @@ const {
   Referencer: OriginalReferencer,
   Scope,
   ScopeManager,
-} = require("eslint-scope") as import("./types.cts").Scope;
-const { getKeys: fallback } = require("eslint-visitor-keys");
+} = eslintScope as unknown as import("./types").Scope;
+
+import { getKeys as fallback } from "eslint-visitor-keys";
 
 let visitorKeysMap: Record<string, string[]>;
-function getVisitorValues(nodeType: string, client: Client) {
+function getVisitorValues(nodeType: string) {
   if (visitorKeysMap) return visitorKeysMap[nodeType];
 
-  const { FLOW_FLIPPED_ALIAS_KEYS, VISITOR_KEYS } = client.getTypesInfo();
-
   const flowFlippedAliasKeys = new Set(
-    FLOW_FLIPPED_ALIAS_KEYS.concat([
+    t.FLIPPED_ALIAS_KEYS.Flow.concat([
       "ArrayPattern",
       "ClassDeclaration",
       "ClassExpression",
@@ -28,13 +28,17 @@ function getVisitorValues(nodeType: string, client: Client) {
     ]),
   );
 
-  visitorKeysMap = Object.entries(VISITOR_KEYS).reduce((acc, [key, value]) => {
-    if (!flowFlippedAliasKeys.has(value)) {
+  visitorKeysMap = Object.entries(t.VISITOR_KEYS).reduce(
+    (acc, [key, value]) => {
       // @ts-expect-error FIXME: value is not assignable to type string[]
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
+      if (!flowFlippedAliasKeys.has(value)) {
+        // @ts-expect-error FIXME: value is not assignable to type string[]
+        acc[key] = value;
+      }
+      return acc;
+    },
+    {},
+  );
 
   return visitorKeysMap[nodeType];
 }
@@ -69,11 +73,8 @@ class PatternVisitor extends OriginalPatternVisitor {
 }
 
 class Referencer extends OriginalReferencer {
-  #client;
-
-  constructor(options: any, scopeManager: any, client: Client) {
+  constructor(options: any, scopeManager: any) {
     super(options, scopeManager);
-    this.#client = client;
   }
 
   // inherits.
@@ -304,7 +305,7 @@ class Referencer extends OriginalReferencer {
     }
 
     // get property to check (params, id, etc...)
-    const visitorValues = getVisitorValues(node.type, this.#client);
+    const visitorValues = getVisitorValues(node.type);
     if (!visitorValues) {
       return;
     }
@@ -368,7 +369,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-export = function analyzeScope(ast: any, parserOptions: any, client: Client) {
+export default function analyzeScope(ast: any, parserOptions: any) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -380,13 +381,13 @@ export = function analyzeScope(ast: any, parserOptions: any, client: Client) {
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion,
     fallback,
-    childVisitorKeys: client.getVisitorKeys(),
+    childVisitorKeys: t.VISITOR_KEYS,
   };
 
   const scopeManager = new ScopeManager(options);
-  const referencer = new Referencer(options, scopeManager, client);
+  const referencer = new Referencer(options, scopeManager);
 
   referencer.visit(ast);
 
   return scopeManager as any;
-};
+}

@@ -1,6 +1,6 @@
-import type { Options } from "./types.cts";
+import type { Options } from "./types";
 
-export = function normalizeESLintConfig(options: any) {
+export default function normalizeESLintConfig(options: any) {
   const {
     babelOptions = {},
     // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
@@ -11,10 +11,14 @@ export = function normalizeESLintConfig(options: any) {
   } = options;
 
   return {
-    babelOptions: { cwd: process.cwd(), ...babelOptions },
+    babelOptions: {
+      cwd: process.cwd(),
+      ...babelOptions,
+      browserslistConfigFile: false,
+    },
     ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
     sourceType,
     requireConfigFile,
     ...otherOptions,
   } as Options;
-};
+}
