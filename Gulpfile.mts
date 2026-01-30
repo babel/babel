@@ -339,7 +339,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
       async ({
         src,
         format,
-        input,
+        inputs,
         dest,
         name,
         filename,
@@ -347,10 +347,15 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
       }) => {
         const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
-        const { dependencies = {}, peerDependencies = {} } = pkgJSON;
+        const {
+          dependencies = {},
+          peerDependencies = {},
+          imports = {},
+        } = pkgJSON;
         const external = [
           ...Object.keys(dependencies),
           ...Object.keys(peerDependencies),
+          ...Object.keys(imports),
           // @babel/compat-data sub exports
           /@babel\/compat-data\/.*/,
           // @babel/helper-globals sub exports
@@ -362,9 +367,22 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           /@babel\/preset-modules\/.*/,
         ];
 
-        log(`Compiling '${styleText("cyan", input)}' with rollup ...`);
+        log(
+          `Compiling '${styleText("cyan", inputs.join(", "))}' with rollup ...`
+        );
         const bundle = await rollup({
-          input,
+          input: Object.fromEntries(
+            inputs.map(inputName => [
+              filename ||
+                // packages/babel-foo/src/bar/baz.ts -> bar/baz.js
+                inputName
+                  .split("/")
+                  .slice(3)
+                  .join("/")
+                  .replace(/(\.[cm]?)ts$/, "$1js"),
+              inputName,
+            ])
+          ),
           external: buildStandalone ? [] : external,
           // all node modules are resolved as if they were placed in the n_m folder of package root
           preserveSymlinks: true,
@@ -557,10 +575,10 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           ].filter(Boolean),
         });
 
-        const outputFile = path.join(src, dest, filename || "index.js");
         await bundle.write({
           esModule: true,
-          file: outputFile,
+          dir: path.join(src, dest),
+          entryFileNames: "[name]",
           format,
           importAttributesKey: "with",
           name,
@@ -595,13 +613,19 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           return;
         }
 
+        if (!filename) {
+          throw new Error("filename is required for babel-standalone");
+        }
+
+        const outputFile = path.join(src, dest, filename!);
+
         if (!process.env.IS_PUBLISH) {
           log(
             styleText(
               "yellow",
               `Skipped minification of '${styleText(
                 "cyan",
-                outputFile
+                path.join(src, dest, filename!)
               )}' because not publishing`
             )
           );
@@ -610,7 +634,8 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         log(`Minifying '${styleText("cyan", outputFile)}'...`);
 
         await bundle.write({
-          file: outputFile.replace(/\.js$/, ".min.js"),
+          entryFileNames: filename!.replace(/\.js$/, ".min.js"),
+          dir: path.join(src, dest),
           format,
           esModule: true,
           interop: "compat",
@@ -755,6 +780,24 @@ function* packagesIterator(exclude: Set<string>) {
   }
 }
 
+type DeepStringsObject = null | string | { [key: string]: DeepStringsObject };
+
+function* getPackageExports(
+  exports: DeepStringsObject,
+  conditions: Set<string>,
+  pathFilter: RegExp
+): IterableIterator<string> {
+  if (typeof exports === "string") {
+    if (pathFilter.test(exports)) yield exports;
+  } else if (exports !== null) {
+    for (const [key, value] of Object.entries(exports)) {
+      if (conditions.has(key) || key.startsWith(".") || key.startsWith("#")) {
+        yield* getPackageExports(value, conditions, pathFilter);
+      }
+    }
+  }
+}
+
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
   const noBundle = new Set(
     [
@@ -768,30 +811,54 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       // todo: These package use #import conditions, that we want to leave unbundled.
       // Eventually figure out how to bundle the rest.
       "babel-register",
-      "babel-core",
-      "babel-plugin-transform-runtime",
       // @babel/node invokes internal lib/_babel-node.js
       "babel-node",
       // todo: test/helpers/define-helper requires internal lib/helpers access
       "babel-helpers",
-      // multiple exports
-      "babel-plugin-transform-react-jsx",
       // rollup bug https://github.com/babel/babel/pull/16001
       "babel-helper-builder-react-jsx",
       // exit-loader.cjs
       "babel-helper-transform-fixture-test-runner",
+      // Many entry points
+      "babel-runtime",
+      "babel-runtime-corejs3",
     ].map(n => `packages/${n}`)
   );
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
-    if (pkgJSON.main) {
+    if (pkgJSON.exports) {
+      const entryPoints = Array.from(
+        getPackageExports(
+          pkgJSON.exports,
+          new Set(["browser", "default"]),
+          /\.(?:js|mjs|cjs)$/
+        )
+      );
+      if (!entryPoints.length) {
+        continue;
+      }
+      if (pkgJSON.imports) {
+        entryPoints.push(
+          ...getPackageExports(
+            pkgJSON.imports,
+            new Set(["browser", "default"]),
+            /\.(?:js|mjs|cjs)$/
+          )
+        );
+      }
+
       yield {
         src,
         format: "esm",
         dest: "lib",
-        input: getIndexFromPackage(src),
+        inputs: entryPoints.map(lib =>
+          path.join(
+            src,
+            lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
+          )
+        ),
       };
     } else if (pkgJSON.bin) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -806,7 +873,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
           format: "esm",
           dest: "lib",
           filename,
-          input,
+          inputs: [input],
         };
       }
     }
@@ -817,7 +884,7 @@ type PackageInfo = {
   src: string;
   format: "cjs" | "esm" | "umd";
   dest: string;
-  input: string;
+  inputs: string[];
   name?: string;
   filename?: string;
   envName?: string;
@@ -853,7 +920,7 @@ const standaloneBundle = [
     dest: "",
     version: babelVersion,
     envName: "standalone",
-    input: getIndexFromPackage("packages/babel-standalone"),
+    inputs: [getIndexFromPackage("packages/babel-standalone")],
   },
 ];
 

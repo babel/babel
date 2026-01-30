@@ -111,7 +111,9 @@
       "types": "./lib/transform-file.d.ts",
       "browser": "./lib/transform-file-browser.js",
       "default": "./lib/transform-file.js"
-    }
+    },
+    "#hack-for-rollup-inlining-order-1": "./lib/errors/rewrite-stack-trace.js",
+    "#hack-for-rollup-inlining-order-2": "./lib/config/caching.js"
   },
   "type": "module"
 }
