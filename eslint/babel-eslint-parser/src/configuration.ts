@@ -11,7 +11,11 @@ export default function normalizeESLintConfig(options: any) {
   } = options;
 
   return {
-    babelOptions: { cwd: process.cwd(), ...babelOptions },
+    babelOptions: {
+      cwd: process.cwd(),
+      ...babelOptions,
+      browserslistConfigFile: false,
+    },
     ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
     sourceType,
     requireConfigFile,

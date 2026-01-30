@@ -81,7 +81,6 @@ function getDefaultParserOptions(options: InputOptions): InputOptions {
     ...options,
     babelrc: false,
     configFile: false,
-    browserslistConfigFile: false,
     ignore: null,
     only: null,
   };
