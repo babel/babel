@@ -16,8 +16,9 @@
   "main": "./lib/index.cjs",
   "dependencies": {
     "@cspotcode/source-map-support": "^0.8.1",
+    "cacache": "20.0.3",
     "clone-deep": "^4.0.1",
-    "find-cache-dir": "^3.3.1",
+    "find-cache-directory": "^6.0.0",
     "pirates": "^4.0.6"
   },
   "peerDependencies": {
@@ -27,7 +28,7 @@
     "@babel/core": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
-    "browserify": "^16.5.2"
+    "@types/cacache": "^20.0.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen",
@@ -40,8 +41,5 @@
       "default": "./lib/index.cjs"
     },
     "./package.json": "./package.json"
-  },
-  "browser": {
-    "./lib/index.cjs": "./lib/browser.cjs"
   }
 }

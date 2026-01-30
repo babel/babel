@@ -24,7 +24,7 @@ const defaultOptions = {
 
 function cleanCache() {
   try {
-    fs.unlinkSync(testCacheFilename);
+    fs.rmSync(testCacheFilename, { recursive: true, force: true });
   } catch (e) {
     // It is convenient to always try to clear
   }
@@ -106,9 +106,7 @@ describe("@babel/register", function () {
       });
     }
 
-    const { setupRegister } = buildTests(
-      require.resolve("../experimental-worker"),
-    );
+    const { setupRegister } = buildTests(require.resolve("../lib/index.cjs"));
 
     it("works with mjs config files", () => {
       setupRegister({
