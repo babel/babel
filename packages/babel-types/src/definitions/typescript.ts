@@ -332,9 +332,6 @@ defineType("TSTypeOperator", {
   fields: {
     operator: {
       validate: assertOneOf("keyof", "readonly", "unique"),
-      // "keyof" is not a good default, but as this field is required better
-      // pick one. We need it for backwards compatibility with older versions
-      // of Babel 7.
       default: undefined,
     },
     typeAnnotation: validateType("TSType"),

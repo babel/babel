@@ -277,7 +277,6 @@ export default declare(api => {
             comments = [];
           }
 
-          // superTypeParameters is for compatibility with Babel 7
           if (node.superTypeArguments) {
             const superTypeArguments = path.get(
               "superTypeArguments",
