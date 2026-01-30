@@ -33,7 +33,10 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
     input: inputPath,
 
     plugins: [
-      nodeResolve({ preferBuiltins: true }),
+      nodeResolve({
+        exportConditions: ["node", "default", "module", "import"],
+        preferBuiltins: true,
+      }),
       commonjs({
         dynamicRequireTargets: dynamicRequireTargets,
       }),
