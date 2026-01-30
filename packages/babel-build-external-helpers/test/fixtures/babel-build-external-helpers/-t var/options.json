@@ -1,0 +1,3 @@
+{
+  "args": ["-l", "nonexistent", "-t", "var"]
+}

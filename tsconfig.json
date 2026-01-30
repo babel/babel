@@ -28,6 +28,9 @@
       "path": "./eslint/babel-eslint-parser"
     },
     {
+      "path": "./packages/babel-build-external-helpers"
+    },
+    {
       "path": "./packages/babel-cli"
     },
     {

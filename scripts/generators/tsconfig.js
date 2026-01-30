@@ -89,6 +89,7 @@ function getTsPkgs(subRoot) {
         // They are special-cased because them dose not have a index.ts
         name === "@babel/register" ||
         name === "@babel/cli" ||
+        name === "@babel/build-external-helpers" ||
         name === "@babel/node" ||
         name === "@babel/eslint-parser" ||
         // @babel/compat-data is used by preset-env

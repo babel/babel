@@ -10,18 +10,6 @@ const { __dirname } = commonJS(import.meta.url);
 const fixtureLoc = path.join(__dirname, "../fixtures");
 const rootDir = path.resolve(__dirname, "../../../..");
 
-const getPath = name => path.join(rootDir, "packages", name, "lib/index.js");
-
-const presetLocs = [getPath("babel-preset-react")];
-
-const pluginLocs = [
-  "babel-plugin-transform-arrow-functions",
-  "babel-plugin-transform-strict-mode",
-  "babel-plugin-transform-modules-commonjs",
-]
-  .map(getPath)
-  .join(",");
-
 function escapeRegExp(string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
@@ -45,14 +33,11 @@ const normalizeOutput = function (str, cwd) {
 };
 
 export const runParallel = buildParallelProcessTests(
-  "babel-cli",
+  "babel-build-external-helpers",
   buildProcessTests(
     fixtureLoc,
     function (test) {
       test.binLoc = path.join(__dirname, "../../lib", test.suiteName);
-      if (!test.opts.noDefaultPlugins) {
-        test.opts.args.push("--presets", presetLocs, "--plugins", pluginLocs);
-      }
     },
     function (test, tmpDir, stdout, stderr) {
       return {

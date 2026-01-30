@@ -1,0 +1,3 @@
+{
+  "args": ["--allowlist", "nonexistent", "--output-type", "var"]
+}
