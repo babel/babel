@@ -237,3 +237,7 @@ export default function (
 
   return codeFrameColumns(rawLines, location, opts);
 }
+
+export function highlight(code: string) {
+  return code;
+}

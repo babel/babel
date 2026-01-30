@@ -347,6 +347,8 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         filename,
         envName = "rollup",
       }) => {
+        inputs = inputs.map(input => input.replaceAll("\\", "/"));
+
         const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const {
