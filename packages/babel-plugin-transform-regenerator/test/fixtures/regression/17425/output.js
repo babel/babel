@@ -22,6 +22,4 @@ var replay = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-return expect(function () {
-  return replay();
-}).rejects.toThrow('@kira throw');
+return expect(replay()).rejects.toThrow('@kira throw');

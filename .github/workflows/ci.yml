@@ -192,7 +192,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          name: babel-7
+          name: babel-8
 
   test:
     name: Test on Node.js ${{matrix.node-version}}
@@ -258,6 +258,31 @@ jobs:
         run: yarn jest --ci
         env:
           BABEL_ENV: test
+
+  test-exec-tests:
+    name: Test (exec tests with Node.js v6)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Run tests
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+          EXEC_TESTS_NODE: 6
 
   build-babel9:
     name: Build Babel 9 Artifacts

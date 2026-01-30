@@ -1,231 +1,25 @@
 /* eslint-env jest */
 import * as babel from "@babel/core";
-import {
-  buildExternalHelpers,
-  type InputOptions,
-  type FileResult,
-} from "@babel/core";
+import type { FileResult } from "@babel/core";
 import {
   default as getFixtures,
   resolveOptionPluginOrPreset,
-  readFile,
   type Test,
   type TestFile,
   type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
-import * as helpers from "./helpers.ts";
 import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "node:assert";
-import fs, { readFileSync, realpathSync } from "node:fs";
+import fs from "node:fs";
 import path from "node:path";
-import vm from "node:vm";
-import LruCache from "lru-cache";
 import { fileURLToPath } from "node:url";
 import { diff } from "jest-diff";
-import type { ChildProcess } from "node:child_process";
-import { spawn } from "node:child_process";
-import os from "node:os";
-import * as resolve from "resolve";
-
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url);
-const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { createHash } from "node:crypto";
-
-type Module = {
-  id: string;
-  exports: Record<string, unknown>;
-};
+import { runCodeMayInWorker } from "./exec.ts";
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
-
-const cachedScripts = new LruCache<
-  string,
-  { code: string; cachedData?: Buffer }
->({ max: 10 });
-const contextModuleCache = new WeakMap();
-
-// We never want our tests to accidentally load the root
-// babel.config.js file, so we disable config loading by
-// default. Tests can still set `configFile: true | string`
-// to re-enable config loading.
-function transformWithoutConfigFile(code: string, opts: InputOptions) {
-  return babel.transformSync(code, {
-    browserslistConfigFile: false,
-    configFile: false,
-    babelrc: false,
-    caller: {
-      name: "babel-helper-transform-fixture-test-runner/sync",
-      supportsStaticESM: false,
-      supportsDynamicImport: false,
-      supportsExportNamespaceFrom: false,
-    },
-    ...opts,
-  });
-}
-function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
-  return babel.transformAsync(code, {
-    browserslistConfigFile: false,
-    configFile: false,
-    babelrc: false,
-    caller: {
-      name: "babel-helper-transform-fixture-test-runner/async",
-      supportsStaticESM: false,
-      supportsDynamicImport: false,
-      supportsExportNamespaceFrom: false,
-    },
-    ...opts,
-  });
-}
-
-export function createTestContext() {
-  const context = vm.createContext({
-    ...helpers,
-    process: process,
-    transform: transformWithoutConfigFile,
-    transformAsync: transformAsyncWithoutConfigFile,
-    setTimeout: setTimeout,
-    setImmediate: setImmediate,
-    expect,
-  });
-  context.global = context;
-
-  const moduleCache = Object.create(null);
-  contextModuleCache.set(context, moduleCache);
-
-  // Populate the "babelHelpers" global with Babel's helper utilities.
-  runCacheableScriptInTestContext(
-    path.join(
-      path.dirname(fileURLToPath(import.meta.url)),
-      "babel-helpers-in-memory.js",
-    ),
-    buildExternalHelpers,
-    context,
-    moduleCache,
-  );
-
-  return context;
-}
-
-function runCacheableScriptInTestContext(
-  filename: string,
-  srcFn: () => string,
-  context: vm.Context,
-  moduleCache: any,
-): Module {
-  let cached = cachedScripts.get(filename);
-  if (!cached) {
-    const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
-    cached = {
-      code,
-      cachedData: undefined,
-    };
-    cachedScripts.set(filename, cached);
-  }
-
-  const script = new vm.Script(cached.code, {
-    filename,
-    lineOffset: -1,
-    cachedData: cached.cachedData,
-  });
-  cached.cachedData = script.createCachedData();
-
-  const module = {
-    id: filename,
-    exports: {},
-  };
-  moduleCache[filename] = module;
-
-  const req = (id: string) =>
-    runModuleInTestContext(id, filename, context, moduleCache);
-  const dirname = path.dirname(filename);
-
-  script
-    .runInContext(context)
-    .call(module.exports, module.exports, req, module, filename, dirname);
-
-  return module;
-}
-
-/**
- * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
- * This allows us to run our unittests
- */
-function runModuleInTestContext(
-  id: string,
-  relativeFilename: string,
-  context: vm.Context,
-  moduleCache: any,
-) {
-  const filename = resolve.sync(id, {
-    basedir: path.dirname(relativeFilename),
-  });
-
-  // Expose Node-internal modules if the tests want them. Note, this will not execute inside
-  // the context's global scope.
-  if (filename === id) return require(id);
-
-  // Modules can only evaluate once per context, so the moduleCache is a
-  // stronger cache guarantee than the LRU's Script cache.
-  if (moduleCache[filename]) return moduleCache[filename].exports;
-
-  return runCacheableScriptInTestContext(
-    filename,
-    () => fs.readFileSync(filename, "utf8"),
-    context,
-    moduleCache,
-  ).exports;
-}
-
-let sharedTestContext: vm.Context;
-
-/**
- * Run the given snippet of code inside a CommonJS module.
- *
- * Exposed for unit tests, not for use as an API.
- */
-export function runCodeInTestContext(
-  code: string,
-  opts: {
-    filename: string;
-    timeout?: number;
-  },
-  context = (sharedTestContext ??= createTestContext()),
-) {
-  const filename = opts.filename;
-  const dirname = path.dirname(filename);
-  const moduleCache = contextModuleCache.get(context);
-  const req = (id: string) =>
-    runModuleInTestContext(id, filename, context, moduleCache);
-
-  const module: Module = {
-    id: filename,
-    exports: {},
-  };
-
-  const oldCwd = process.cwd();
-  try {
-    if (opts.filename) process.chdir(path.dirname(opts.filename));
-
-    // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
-    // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
-    // rely on 'this === global'.
-    const src = `((function(exports, require, module, __filename, __dirname, opts) {\n${code}\n})).apply(global, global.__callArgs);`;
-    context.__callArgs = [module.exports, req, module, filename, dirname, opts];
-    return vm.runInContext(src, context, {
-      filename,
-      displayErrors: true,
-      lineOffset: -1,
-      timeout: opts.timeout ?? 10000,
-    });
-  } finally {
-    context.__callArgs = undefined;
-    process.chdir(oldCwd);
-  }
-}
 
 async function maybeMockConsole<R>(
   validateLogs: boolean,
@@ -284,14 +78,13 @@ async function run(task: Test) {
 
   let execCode = exec.code;
   let result: FileResult;
-  let resultExec;
-
   let execErr: Error;
 
   if (execCode) {
-    const context = createTestContext();
     const execOpts = getOpts(exec);
-
+    if (execOpts.targets?.node === "current" && process.env.EXEC_TESTS_NODE) {
+      execOpts.targets.node = process.env.EXEC_TESTS_NODE;
+    }
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
     ({ result } = await maybeMockConsole(validateLogs, () =>
@@ -302,7 +95,7 @@ async function run(task: Test) {
     execCode = result.code;
 
     try {
-      resultExec = runCodeInTestContext(execCode, execOpts, context);
+      await runCodeMayInWorker(execCode, execOpts);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       if (typeof err === "object" && err.message) {
@@ -414,10 +207,6 @@ async function run(task: Test) {
       );
     }
   }
-
-  if (execCode && resultExec) {
-    return resultExec;
-  }
 }
 
 function validateFile(
@@ -435,7 +224,7 @@ function validateFile(
     throw new Error(
       `Expected ${expectedLoc} to match transform output.\n` +
         `To autogenerate a passing version of this file, delete ` +
-        ` the file and re-run the tests.\n\n` +
+        `the file and re-run the tests.\n\n` +
         `Diff:\n\n${diff(expectedCode, actualCode, { expand: false })}`,
     );
   }
@@ -563,402 +352,11 @@ Actual Error: ${err.message}`,
   }
 }
 
-export type ProcessTestOpts = {
-  args: string[];
-  executor?: string;
-  ipc?: boolean;
-  ipcMessage?: string;
-  stdout?: string;
-  stderr?: string;
-  stdin?: string;
-  stdoutPath?: string;
-  stderrPath?: string;
-  stdoutContains?: boolean;
-  stderrContains?: boolean;
-  testLoc?: string;
-  outFiles?: Record<string, string>;
-  inFiles?: Record<string, string>;
-  noBabelrc?: boolean;
-  minNodeVersion?: number;
-  env?: Record<string, string>;
-  BABEL_8_BREAKING?: boolean;
-};
-
-export type ProcessTest = {
-  suiteName: string;
-  testName: string;
-  skip: boolean;
-  fn: Function;
-  opts: ProcessTestOpts;
-  binLoc?: string;
-};
-
-export type ProcessTestBeforeHook = (test: ProcessTest, tmpDir: string) => void;
-export type ProcessTestAfterHook = (
-  test: ProcessTest,
-  tmpDir: string,
-  stdout: string,
-  stderr: string,
-) => {
-  stdout: string;
-  stderr: string;
-};
-
-// https://github.com/nodejs/node/issues/11422#issue-208189446
-const tmpDir = realpathSync(os.tmpdir());
-
-const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
-  const files: Record<string, string> = {};
-  if (fs.existsSync(loc)) {
-    fs.readdirSync(loc, { withFileTypes: true, recursive: true })
-      .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
-      .forEach(dirent => {
-        const fullpath = path.join(dirent.parentPath, dirent.name);
-        files[path.relative(loc, fullpath)] = readFile(fullpath);
-      });
-  }
-
-  return files;
-};
-
-const outputFileSync = function (filePath: string, data: string) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, data);
-};
-
-function deleteDir(path: string): void {
-  fs.rmSync(path, { force: true, recursive: true });
-}
-
-const pathFilter = function (x: string) {
-  return path.basename(x) !== ".DS_Store";
-};
-
-const assertTest = function (
-  stdout: string,
-  stderr: string,
-  ipcMessage: unknown,
-  opts: ProcessTestOpts,
-  tmpDir: string,
-) {
-  const expectStderr = opts.stderr.trim();
-  stderr = stderr.trim();
-
-  try {
-    if (opts.stderr) {
-      if (opts.stderrContains) {
-        expect(stderr).toContain(expectStderr);
-      } else {
-        expect(stderr).toBe(expectStderr);
-      }
-    } else if (stderr) {
-      throw new Error("stderr:\n" + stderr);
-    }
-  } catch (e) {
-    if (!process.env.OVERWRITE) throw e;
-    console.log(`Updated test file: ${opts.stderrPath}`);
-    outputFileSync(opts.stderrPath, stderr + "\n");
-  }
-
-  const expectStdout = opts.stdout.trim();
-  stdout = stdout.trim();
-  stdout = stdout.replace(/\\/g, "/");
-
-  try {
-    if (opts.stdout) {
-      if (opts.stdoutContains) {
-        expect(stdout).toContain(expectStdout);
-      } else {
-        expect(stdout).toBe(expectStdout);
-      }
-    } else if (stdout) {
-      throw new Error("stdout:\n" + stdout);
-    }
-  } catch (e) {
-    if (!process.env.OVERWRITE) throw e;
-    console.log(`Updated test file: ${opts.stdoutPath}`);
-    outputFileSync(opts.stdoutPath, stdout + "\n");
-  }
-
-  if (opts.ipc) {
-    expect(ipcMessage).toEqual(opts.ipcMessage);
-  }
-
-  if (opts.outFiles) {
-    const actualFiles = readDir(tmpDir, pathFilter);
-
-    Object.keys(actualFiles).forEach(function (filename) {
-      try {
-        if (
-          // saveInFiles always creates an empty .babelrc, so lets exclude for now
-          filename !== ".babelrc" &&
-          filename !== ".babelignore" &&
-          !Object.hasOwn(opts.inFiles, filename)
-        ) {
-          const expected = opts.outFiles[filename];
-          const actual = actualFiles[filename];
-
-          expect(actual).toBe(expected || "");
-        }
-      } catch (e) {
-        if (!process.env.OVERWRITE) {
-          e.message += "\n at " + filename;
-          throw e;
-        }
-        const expectedLoc = path.join(opts.testLoc, "out-files", filename);
-        console.log(`Updated test file: ${expectedLoc}`);
-        outputFileSync(expectedLoc, actualFiles[filename]);
-      }
-    });
-
-    Object.keys(opts.outFiles).forEach(function (filename) {
-      expect(actualFiles).toHaveProperty([filename]);
-    });
-  }
-};
-
-export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
-  return function (curr: number, total: number) {
-    const sliceLength = Math.ceil(tests.length / total);
-    const sliceStart = curr * sliceLength;
-    const sliceEnd = sliceStart + sliceLength;
-    const testsSlice = tests.slice(sliceStart, sliceEnd);
-
-    describe(`${name} [${curr}/${total}]`, function () {
-      it("dummy", () => {});
-      for (const test of testsSlice) {
-        (test.skip ? it.skip : it)(
-          test.suiteName + " " + test.testName,
-          test.fn as any,
-        );
-      }
-    });
-  };
-}
-
-export function buildProcessTests(
-  dir: string,
-  beforeHook: ProcessTestBeforeHook,
-  afterHook?: ProcessTestAfterHook,
-) {
-  const tests: ProcessTest[] = [];
-
-  fs.readdirSync(dir).forEach(function (suiteName) {
-    if (suiteName.startsWith(".") || suiteName === "package.json") return;
-
-    const suiteLoc = path.join(dir, suiteName);
-
-    fs.readdirSync(suiteLoc).forEach(function (testName) {
-      if (testName.startsWith(".")) return;
-
-      const testLoc = path.join(suiteLoc, testName);
-
-      let opts: ProcessTestOpts = {
-        args: [],
-      };
-
-      const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) {
-        const taskOpts = JSON.parse(readFileSync(optionsLoc, "utf8"));
-        if (taskOpts.os) {
-          let os = taskOpts.os;
-
-          if (!Array.isArray(os) && typeof os !== "string") {
-            throw new Error(
-              `'os' should be either string or string array: ${taskOpts.os}`,
-            );
-          }
-
-          if (typeof os === "string") {
-            os = [os];
-          }
-
-          if (!os.includes(process.platform)) {
-            return;
-          }
-
-          delete taskOpts.os;
-        }
-        opts = { args: [], ...taskOpts };
-      }
-
-      const executorLoc = path.join(testLoc, "executor.js");
-      if (fs.existsSync(executorLoc)) {
-        opts.executor = executorLoc;
-      }
-
-      opts.stderrPath = path.join(testLoc, "stderr.txt");
-      opts.stdoutPath = path.join(testLoc, "stdout.txt");
-      for (const key of ["stdout", "stdin", "stderr"] as const) {
-        const loc = path.join(testLoc, key + ".txt");
-        if (fs.existsSync(loc)) {
-          opts[key] = readFile(loc);
-        } else {
-          opts[key] = opts[key] || "";
-        }
-      }
-
-      opts.testLoc = testLoc;
-      opts.outFiles = readDir(path.join(testLoc, "out-files"), pathFilter);
-      opts.inFiles = readDir(path.join(testLoc, "in-files"), pathFilter);
-
-      const babelrcLoc = path.join(testLoc, ".babelrc");
-      const babelIgnoreLoc = path.join(testLoc, ".babelignore");
-      if (fs.existsSync(babelrcLoc)) {
-        // copy .babelrc file to tmp directory
-        opts.inFiles[".babelrc"] = readFile(babelrcLoc);
-      } else if (!opts.noBabelrc) {
-        opts.inFiles[".babelrc"] = "{}";
-      }
-      if (fs.existsSync(babelIgnoreLoc)) {
-        // copy .babelignore file to tmp directory
-        opts.inFiles[".babelignore"] = readFile(babelIgnoreLoc);
-      }
-
-      const skip =
-        (opts.minNodeVersion &&
-          parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
-        opts.BABEL_8_BREAKING === false;
-      const test: ProcessTest = {
-        suiteName,
-        testName,
-        skip,
-        opts,
-        fn: function (callback: Function) {
-          const tmpLoc = path.join(
-            tmpDir,
-            "babel-process-test",
-            createHash("sha1").update(testLoc).digest("hex"),
-          );
-          deleteDir(tmpLoc);
-          fs.mkdirSync(tmpLoc, { recursive: true });
-
-          const { inFiles } = opts;
-          for (const filename of Object.keys(inFiles)) {
-            outputFileSync(path.join(tmpLoc, filename), inFiles[filename]);
-          }
-
-          try {
-            beforeHook(test, tmpLoc);
-
-            if (test.binLoc === undefined) {
-              throw new Error("test.binLoc is undefined");
-            }
-
-            let args = opts.executor
-              ? [
-                  "--require",
-                  path.join(dirname, "./exit-loader.cjs"),
-                  test.binLoc,
-                ]
-              : [test.binLoc];
-
-            args = args.concat(opts.args);
-            const env = {
-              ...process.env,
-              FORCE_COLOR: "false",
-              ...(parseInt(process.versions.node) >= 22 && {
-                NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
-              }),
-              ...opts.env,
-            };
-            const child = spawn(process.execPath, args, {
-              env,
-              cwd: tmpLoc,
-              stdio:
-                opts.executor || opts.ipc
-                  ? ["pipe", "pipe", "pipe", "ipc"]
-                  : "pipe",
-            });
-
-            let stderr = "";
-            let stdout = "";
-            let ipcMessage: unknown;
-
-            child.on("close", function () {
-              let err;
-
-              try {
-                const result = afterHook
-                  ? afterHook(test, tmpLoc, stdout, stderr)
-                  : { stdout, stderr };
-                assertTest(
-                  result.stdout,
-                  result.stderr,
-                  ipcMessage,
-                  opts,
-                  tmpLoc,
-                );
-              } catch (e) {
-                err = e;
-              } finally {
-                try {
-                  deleteDir(tmpLoc);
-                } catch (error) {
-                  console.error(error);
-                }
-              }
-
-              if (err) {
-                err.message =
-                  args.map(arg => `"${arg}"`).join(" ") + ": " + err.message;
-              }
-
-              callback(err);
-            });
-
-            if (opts.ipc) {
-              child.on("message", function (message) {
-                ipcMessage = message;
-              });
-            }
-
-            if (opts.stdin) {
-              child.stdin.write(opts.stdin);
-              child.stdin.end();
-            }
-
-            const captureOutput = (proc: ChildProcess) => {
-              proc.stderr.on("data", function (chunk) {
-                stderr += chunk;
-              });
-
-              proc.stdout.on("data", function (chunk) {
-                stdout += chunk;
-              });
-            };
-
-            if (opts.executor) {
-              const executor = spawn(process.execPath, [opts.executor], {
-                cwd: tmpLoc,
-              });
-
-              child.stdout.pipe(executor.stdin);
-              child.stderr.pipe(executor.stdin);
-
-              executor.on("close", function () {
-                child.send("exit");
-              });
-
-              captureOutput(executor);
-            } else {
-              captureOutput(child);
-            }
-          } catch (e) {
-            deleteDir(tmpLoc);
-            throw e;
-          }
-        },
-      };
-      tests.push(test);
-    });
-  });
-
-  tests.sort(function (testA, testB) {
-    const nameA = testA.suiteName + "/" + testA.testName;
-    const nameB = testB.suiteName + "/" + testB.testName;
-    return nameA.localeCompare(nameB);
-  });
-
-  return tests;
-}
+export { createTestContext, runCodeInTestContext, runCode } from "./worker.cts";
+export { buildProcessTests, buildParallelProcessTests } from "./process.ts";
+export type {
+  ProcessTestOpts,
+  ProcessTest,
+  ProcessTestBeforeHook,
+  ProcessTestAfterHook,
+} from "./process.ts";

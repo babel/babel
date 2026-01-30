@@ -8,7 +8,19 @@ import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 
 const require = createRequire(import.meta.url);
 
+const EXEC_TESTS_NODE = process.env.EXEC_TESTS_NODE || "";
+
 const nodeVersion = semver.clean(process.version.slice(1));
+let runnerNodeVersion = semver.clean(
+  EXEC_TESTS_NODE.includes(".") ? EXEC_TESTS_NODE : EXEC_TESTS_NODE + ".99.99",
+);
+if (EXEC_TESTS_NODE) {
+  if (!runnerNodeVersion) {
+    throw new Error(`Invalid EXEC_TESTS_NODE: ${EXEC_TESTS_NODE}`);
+  }
+} else {
+  runnerNodeVersion = nodeVersion;
+}
 
 function humanize(val: string, noext?: boolean) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -271,7 +283,7 @@ function pushTask(
       );
     }
 
-    if (semver.lt(nodeVersion, minimumVersion)) {
+    if (semver.lt(runnerNodeVersion, minimumVersion)) {
       if (test.actual.code) {
         test.exec.code = null;
       } else {
@@ -292,7 +304,10 @@ function pushTask(
       );
     }
 
-    if (semver.lt(nodeVersion, minimumVersion)) {
+    if (
+      semver.lt(nodeVersion, minimumVersion) ||
+      semver.lt(runnerNodeVersion, minimumVersion)
+    ) {
       return;
     }
 
