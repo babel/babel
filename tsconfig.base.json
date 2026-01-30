@@ -22,7 +22,12 @@
     "stripInternal": true
   },
   "exclude": ["./packages/babel-helpers/src/helpers/**/*"],
-  "references": [{
-    "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
-  }]
+  "references": [
+    {
+      "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
+    },
+    {
+      "path": "./tsconfig.tstyche.json"
+    }
+  ]
 }

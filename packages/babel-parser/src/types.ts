@@ -254,7 +254,7 @@ export type ExportedToken = Omit<Token, "type"> & { type: ExportedTokenType };
 
 export interface ParserOutput {
   comments: Comment[];
-  errors: ParseError<any>[];
+  errors: ParseError[];
   tokens?: (ExportedToken | Comment)[];
 }
 // Programs
