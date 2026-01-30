@@ -1,14 +1,14 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeFileSync } from "node:fs";
 import { buildExternalHelpers } from "@babel/core";
 import { createTestContext, runCodeInTestContext } from "./worker.cts";
-import { writeFileSync } from "node:fs";
+import getNode from "get-node";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const EXEC_TESTS_NODE = process.env.EXEC_TESTS_NODE;
-const EXEC_TESTS_NODE_PATH = process.env.EXEC_TESTS_NODE_PATH;
 
 let id = 0;
 const tasks = new Map<
@@ -29,28 +29,19 @@ export async function runCodeMayInWorker(
     return runCodeInTestContext(code, opts, ctx);
   }
 
+  const nodePath = (await getNode(EXEC_TESTS_NODE)).path;
+
   return new Promise((resolve, reject) => {
     if (!(global as any).worker) {
       const workerFile = path.join(dirname, "worker.cjs");
       // Avoid data race when running tests in parallel
       const helpersFile = path.join(dirname, `babel-helpers-${process.pid}.js`);
       writeFileSync(helpersFile, buildExternalHelpers());
-      const worker = ((global as any).worker = EXEC_TESTS_NODE_PATH
-        ? spawn(EXEC_TESTS_NODE_PATH, [
-            workerFile,
-            "$BABEL_WORKER$",
-            helpersFile,
-          ])
-        : spawn("fnm", [
-            "exec",
-            "--using",
-            EXEC_TESTS_NODE,
-            "--",
-            "node",
-            workerFile,
-            "$BABEL_WORKER$",
-            helpersFile,
-          ]));
+      const worker = ((global as any).worker = spawn(nodePath, [
+        workerFile,
+        "$BABEL_WORKER$",
+        helpersFile,
+      ]));
       worker.unref();
       let stderr = "";
       worker.on("error", err => {

@@ -1,4 +1,12 @@
 // @ts-check
+const child_process = require("node:child_process");
+
+// Avoid multiple threads downloading concurrently during testing.
+if (process.env.EXEC_TESTS_NODE) {
+  child_process.spawnSync(
+    `./node_modules/.bin/get-node ${process.env.EXEC_TESTS_NODE}`
+  );
+}
 
 const isPublishBundle = process.env.IS_PUBLISH;
 
