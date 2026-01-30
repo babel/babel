@@ -46,6 +46,7 @@ export type ParseError<ErrorDetails> = SyntaxError &
 // 1. https://github.com/microsoft/TypeScript/blob/v4.5.5/lib/lib.es5.d.ts#L1027
 export type ParseErrorConstructor<ErrorDetails> = (
   loc: Position,
+  pos: number,
   details: ErrorDetails,
 ) => ParseError<ErrorDetails>;
 
@@ -75,13 +76,17 @@ function toParseErrorConstructor<ErrorDetails extends object>({
   const hasMissingPlugin =
     reasonCode === "MissingPlugin" || reasonCode === "MissingOneOfPlugins";
 
-  return function constructor(loc: Position, details: ErrorDetails) {
+  return function constructor(
+    loc: Position,
+    pos: number,
+    details: ErrorDetails,
+  ) {
     const error: ParseError<ErrorDetails> = new SyntaxError() as any;
 
     error.code = code as ParseErrorCode;
     error.reasonCode = reasonCode;
     error.loc = loc;
-    error.pos = loc.index;
+    error.pos = pos;
 
     error.syntaxPlugin = syntaxPlugin;
     if (hasMissingPlugin) {
@@ -93,8 +98,8 @@ function toParseErrorConstructor<ErrorDetails extends object>({
       details?: ErrorDetails;
     };
     defineHidden(error, "clone", function clone(overrides: Overrides = {}) {
-      const { line, column, index } = overrides.loc ?? loc;
-      return constructor(new Position(line, column, index), {
+      const { line, column, index = pos } = overrides.loc ?? loc;
+      return constructor(new Position(line, column), index, {
         ...details,
         ...overrides.details,
       });

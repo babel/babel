@@ -83,6 +83,8 @@ export class Token {
   declare loc: SourceLocation;
 }
 
+export let locDataCache: Uint32Array;
+
 // ## Tokenizer
 
 export default abstract class Tokenizer extends CommentsParser {
@@ -99,6 +101,50 @@ export default abstract class Tokenizer extends CommentsParser {
     this.length = input.length;
     this.comments = [];
     this.isLookahead = false;
+
+    if (process.env.IS_PUBLISH) {
+      if (
+        !locDataCache ||
+        locDataCache.length < (this.length + 1) * 2 ||
+        options.locations === "packed"
+      ) {
+        locDataCache = new Uint32Array((this.length + 1) * 2);
+      }
+    } else {
+      locDataCache = new Uint32Array((this.length + 1) * 2);
+      if (options.locations !== "packed") {
+        locDataCache.fill(4294967295);
+      }
+    }
+
+    this.locData = locDataCache;
+  }
+
+  setLoc(loc: Position) {
+    const dataIndex = this.offsetToSourcePos(loc.index);
+    this.locData[dataIndex * 2] = loc.line;
+    this.locData[dataIndex * 2 + 1] = loc.column;
+  }
+
+  getLoc(locIndex: number): Position {
+    const dataIndex = this.offsetToSourcePos(locIndex);
+    if (!process.env.IS_PUBLISH) {
+      if (
+        this.locData[dataIndex * 2] === 4294967295 ||
+        this.locData[dataIndex * 2 + 1] === 4294967295
+      ) {
+        throw new Error(
+          "Attempted to get location data for an index that has not been set",
+        );
+      }
+    }
+
+    const loc = new Position(
+      this.locData[dataIndex * 2],
+      this.locData[dataIndex * 2 + 1],
+      locIndex,
+    );
+    return loc;
   }
 
   pushToken(token: Token | N.Comment) {
@@ -1388,11 +1434,24 @@ export default abstract class Tokenizer extends CommentsParser {
    */
   raise<ErrorDetails = object>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
-    at: Position | Undone<Node>,
+    at: Position | Undone<Node> | number,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError<ErrorDetails> {
-    const loc = at instanceof Position ? at : at.loc.start;
-    const error = toParseError(loc, details);
+    const loc =
+      at instanceof Position
+        ? at
+        : typeof at === "number"
+          ? this.getLoc(at)
+          : this.optionFlags & OptionFlags.Locations
+            ? at.loc.start
+            : this.getLoc(at.start);
+    const pos =
+      at instanceof Position
+        ? loc.index
+        : typeof at === "number"
+          ? at
+          : at.start;
+    const error = toParseError(loc, pos, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
@@ -1411,19 +1470,24 @@ export default abstract class Tokenizer extends CommentsParser {
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError<ErrorDetails> | never {
-    const loc = at instanceof Position ? at : at.loc.start;
-    const pos = loc.index;
+    const loc =
+      at instanceof Position
+        ? at
+        : this.optionFlags & OptionFlags.Locations
+          ? at.loc.start
+          : this.getLoc(at.start);
+    const pos = at instanceof Position ? loc.index : at.start;
     const errors = this.state.errors;
 
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
-      if (error.loc.index === pos) {
-        return (errors[i] = toParseError(loc, details));
+      if (error.pos === pos) {
+        return (errors[i] = toParseError(loc, pos, details));
       }
-      if (error.loc.index < pos) break;
+      if (error.pos < pos) break;
     }
 
-    return this.raise(toParseError, at, details);
+    return this.raise(toParseError, loc, details);
   }
 
   // updateContext is used by the jsx plugin
@@ -1431,7 +1495,7 @@ export default abstract class Tokenizer extends CommentsParser {
   updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
-  unexpected(loc?: Position | null, type?: TokenType): any {
+  unexpected(loc?: Position | number | null, type?: TokenType): any {
     throw this.raise(
       Errors.UnexpectedToken,
       loc != null ? loc : this.state.startLoc,
@@ -1441,7 +1505,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectPlugin(pluginName: Plugin, loc?: Position): true {
+  expectPlugin(pluginName: Plugin, loc?: Position | number): true {
     if (this.hasPlugin(pluginName)) {
       return true;
     }

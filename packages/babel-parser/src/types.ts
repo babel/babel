@@ -256,6 +256,7 @@ export interface ParserOutput {
   comments: Comment[];
   errors: ParseError<any>[];
   tokens?: (ExportedToken | Comment)[];
+  locData?: Uint32Array;
 }
 // Programs
 
