@@ -431,7 +431,13 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
             rollupReplace({
               preventAssignment: true,
               values: {
-                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                ...(buildStandalone
+                  ? {
+                      "process.env.NODE_ENV": JSON.stringify(
+                        process.env.NODE_ENV
+                      ),
+                    }
+                  : {}),
                 BABEL_VERSION: JSON.stringify(babelVersion),
                 VERSION: JSON.stringify(version),
               },
@@ -617,7 +623,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           throw new Error("filename is required for babel-standalone");
         }
 
-        const outputFile = path.join(src, dest, filename!);
+        const outputFile = path.join(src, dest, filename);
 
         if (!process.env.IS_PUBLISH) {
           log(
@@ -625,7 +631,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
               "yellow",
               `Skipped minification of '${styleText(
                 "cyan",
-                path.join(src, dest, filename!)
+                outputFile
               )}' because not publishing`
             )
           );
@@ -634,7 +640,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         log(`Minifying '${styleText("cyan", outputFile)}'...`);
 
         await bundle.write({
-          entryFileNames: filename!.replace(/\.js$/, ".min.js"),
+          entryFileNames: filename.replace(/\.js$/, ".min.js"),
           dir: path.join(src, dest),
           format,
           esModule: true,
