@@ -1,4 +1,4 @@
-import { loadPartialConfigAsync, loadPartialConfigSync } from "@babel/core";
+import { loadPartialConfigAsync } from "@babel/core";
 import ESLINT_VERSION from "../utils/eslint-version.ts";
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types";
@@ -9,7 +9,7 @@ import type { PartialConfig } from "../../../../packages/babel-core/src/config";
  *
  * @returns {Array} Merged parser plugin descriptors
  */
-function getParserPlugins(
+export function getParserPlugins(
   babelOptions: InputOptions,
 ): InputOptions["parserOpts"]["plugins"] {
   const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
@@ -27,8 +27,6 @@ function getParserPlugins(
 function normalizeParserOptions(options: Options): InputOptions & {
   showIgnoredFiles?: boolean;
 } {
-  // Babel <= 7.28.0 does not support `sourceType: "commonjs"`.
-
   return {
     sourceType: options.sourceType,
     filename: options.filePath,
@@ -94,13 +92,5 @@ export async function normalizeBabelParseConfig(
 ): Promise<InputOptions | NormalizedOptions> {
   const parseOptions = normalizeParserOptions(options);
   const config = await loadPartialConfigAsync(parseOptions);
-  return validateResolvedConfig(config, options, parseOptions);
-}
-
-export function normalizeBabelParseConfigSync(
-  options: Options,
-): InputOptions | NormalizedOptions {
-  const parseOptions = normalizeParserOptions(options);
-  const config = loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
 }

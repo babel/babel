@@ -9,12 +9,7 @@ import {
 import type { Options } from "./types";
 
 export const enum ACTIONS {
-  GET_VERSION = "GET_VERSION",
-  GET_TYPES_INFO = "GET_TYPES_INFO",
-  GET_VISITOR_KEYS = "GET_VISITOR_KEYS",
-  GET_TOKEN_LABELS = "GET_TOKEN_LABELS",
   MAYBE_PARSE = "MAYBE_PARSE",
-  MAYBE_PARSE_SYNC = "MAYBE_PARSE_SYNC",
 }
 
 export class Client {
@@ -22,26 +17,6 @@ export class Client {
 
   constructor(send: Function) {
     this.#send = send;
-  }
-
-  #vCache: string;
-  getVersion() {
-    return (this.#vCache ??= this.#send(ACTIONS.GET_VERSION, undefined));
-  }
-
-  #tiCache: any;
-  getTypesInfo() {
-    return (this.#tiCache ??= this.#send(ACTIONS.GET_TYPES_INFO, undefined));
-  }
-
-  #vkCache: any;
-  getVisitorKeys() {
-    return (this.#vkCache ??= this.#send(ACTIONS.GET_VISITOR_KEYS, undefined));
-  }
-
-  #tlCache: any;
-  getTokLabels() {
-    return (this.#tlCache ??= this.#send(ACTIONS.GET_TOKEN_LABELS, undefined));
   }
 
   maybeParse(code: string, options: Options) {

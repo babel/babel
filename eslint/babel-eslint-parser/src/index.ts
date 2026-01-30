@@ -2,9 +2,7 @@ import normalizeESLintConfig from "./configuration.ts";
 import analyzeScope from "./analyze-scope.ts";
 import baseParse from "./parse.ts";
 
-import { WorkerClient } from "./client.ts";
 import { getVisitorKeys } from "./ast-info.ts";
-const client = new WorkerClient();
 
 export const meta = {
   name: PACKAGE_JSON.name,
@@ -12,13 +10,13 @@ export const meta = {
 };
 
 export function parse(code: string, options = {}) {
-  return baseParse(code, normalizeESLintConfig(options), client);
+  return baseParse(code, normalizeESLintConfig(options));
 }
 
 export function parseForESLint(code: string, options = {}) {
   const normalizedOptions = normalizeESLintConfig(options);
-  const ast = baseParse(code, normalizedOptions, client);
-  const scopeManager = analyzeScope(ast, normalizedOptions, client);
+  const ast = baseParse(code, normalizedOptions);
+  const scopeManager = analyzeScope(ast, normalizedOptions);
 
   return { ast, scopeManager, visitorKeys: getVisitorKeys() };
 }
