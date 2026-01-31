@@ -1,4 +1,5 @@
 import { existsSync, copyFileSync } from "node:fs";
+// @ts-expect-error no types
 import isCI from "is-ci";
 import husky from "husky";
 
