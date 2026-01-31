@@ -1,3 +1,5 @@
+import type { Defs } from "./defs";
+
 type Location = {
   column: number;
   line: number;
@@ -114,4 +116,88 @@ export function getMarkerLines(
   }
 
   return { start, end, markerLines };
+}
+
+export function _codeFrameColumns(
+  rawLines: string,
+  loc: NodeLocation,
+  opts: Options = {},
+  colorOpts?: {
+    defs: Pick<Defs, "gutter" | "marker" | "message" | "reset">;
+    highlight: (code: string) => string;
+  },
+): string {
+  const { defs, highlight } = colorOpts || {
+    defs: {
+      gutter: String,
+      marker: String,
+      message: String,
+      reset: String,
+    },
+    highlight: String,
+  };
+
+  const startLineBaseZero = (opts.startLine || 1) - 1;
+
+  const lines = rawLines.split(NEWLINE);
+  const { start, end, markerLines } = getMarkerLines(
+    loc,
+    lines,
+    opts,
+    startLineBaseZero,
+  );
+  const hasColumns = loc.start && typeof loc.start.column === "number";
+
+  const numberMaxWidth = String(end + startLineBaseZero).length;
+
+  const highlightedLines = highlight(rawLines);
+
+  let frame = highlightedLines
+    .split(NEWLINE, end)
+    .slice(start, end)
+    .map((line, index) => {
+      const number = start + 1 + index;
+      const paddedNumber = ` ${number + startLineBaseZero}`.slice(
+        -numberMaxWidth,
+      );
+      const gutter = ` ${paddedNumber} |`;
+      const hasMarker = markerLines[number];
+      const lastMarkerLine = !markerLines[number + 1];
+      if (hasMarker) {
+        let markerLine = "";
+        if (Array.isArray(hasMarker)) {
+          const markerSpacing = line
+            .slice(0, Math.max(hasMarker[0] - 1, 0))
+            .replace(/[^\t]/g, " ");
+          const numberOfMarkers = hasMarker[1] || 1;
+
+          markerLine = [
+            "\n ",
+            defs.gutter(gutter.replace(/\d/g, " ")),
+            " ",
+            markerSpacing,
+            defs.marker("^").repeat(numberOfMarkers),
+          ].join("");
+
+          if (lastMarkerLine && opts.message) {
+            markerLine += " " + defs.message(opts.message);
+          }
+        }
+        return [
+          defs.marker(">"),
+          defs.gutter(gutter),
+          line.length > 0 ? ` ${line}` : "",
+          markerLine,
+        ].join("");
+      } else {
+        return ` ${defs.gutter(gutter)}${line.length > 0 ? ` ${line}` : ""}`;
+      }
+    })
+    .join("\n");
+
+  if (opts.message && !hasColumns) {
+    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
+  }
+
+  return defs.reset(frame);
 }

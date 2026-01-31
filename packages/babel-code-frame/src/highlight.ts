@@ -9,7 +9,7 @@ import {
   isKeyword,
 } from "@babel/helper-validator-identifier";
 
-import { getDefs, type InternalTokenType } from "./defs.ts";
+import { defs, type InternalTokenType } from "./defs.ts";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -143,8 +143,6 @@ function* tokenize(text: string): Generator<Token> {
 
 export function highlight(text: string) {
   if (text === "") return "";
-
-  const defs = getDefs(true);
 
   let highlighted = "";
 

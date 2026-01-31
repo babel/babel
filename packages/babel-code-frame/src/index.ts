@@ -1,10 +1,9 @@
 import {
-  getMarkerLines,
-  NEWLINE,
+  _codeFrameColumns,
   type NodeLocation,
   type Options,
 } from "./common.ts";
-import { getDefs, isColorSupported } from "./defs.ts";
+import { defs, isColorSupported } from "./defs.ts";
 import { highlight } from "./highlight.ts";
 
 export { highlight };
@@ -20,74 +19,18 @@ export function codeFrameColumns(
 ): string {
   const shouldHighlight =
     opts.forceColor || (isColorSupported() && opts.highlightCode);
-  const startLineBaseZero = (opts.startLine || 1) - 1;
-  const defs = getDefs(shouldHighlight);
 
-  const lines = rawLines.split(NEWLINE);
-  const { start, end, markerLines } = getMarkerLines(
+  return _codeFrameColumns(
+    rawLines,
     loc,
-    lines,
     opts,
-    startLineBaseZero,
-  );
-  const hasColumns = loc.start && typeof loc.start.column === "number";
-
-  const numberMaxWidth = String(end + startLineBaseZero).length;
-
-  const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
-
-  let frame = highlightedLines
-    .split(NEWLINE, end)
-    .slice(start, end)
-    .map((line, index) => {
-      const number = start + 1 + index;
-      const paddedNumber = ` ${number + startLineBaseZero}`.slice(
-        -numberMaxWidth,
-      );
-      const gutter = ` ${paddedNumber} |`;
-      const hasMarker = markerLines[number];
-      const lastMarkerLine = !markerLines[number + 1];
-      if (hasMarker) {
-        let markerLine = "";
-        if (Array.isArray(hasMarker)) {
-          const markerSpacing = line
-            .slice(0, Math.max(hasMarker[0] - 1, 0))
-            .replace(/[^\t]/g, " ");
-          const numberOfMarkers = hasMarker[1] || 1;
-
-          markerLine = [
-            "\n ",
-            defs.gutter(gutter.replace(/\d/g, " ")),
-            " ",
-            markerSpacing,
-            defs.marker("^").repeat(numberOfMarkers),
-          ].join("");
-
-          if (lastMarkerLine && opts.message) {
-            markerLine += " " + defs.message(opts.message);
-          }
+    shouldHighlight
+      ? {
+          defs,
+          highlight,
         }
-        return [
-          defs.marker(">"),
-          defs.gutter(gutter),
-          line.length > 0 ? ` ${line}` : "",
-          markerLine,
-        ].join("");
-      } else {
-        return ` ${defs.gutter(gutter)}${line.length > 0 ? ` ${line}` : ""}`;
-      }
-    })
-    .join("\n");
-
-  if (opts.message && !hasColumns) {
-    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
-  }
-
-  if (shouldHighlight) {
-    return defs.reset(frame);
-  } else {
-    return frame;
-  }
+      : undefined,
+  );
 }
 
 /**
