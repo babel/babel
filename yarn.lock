@@ -516,7 +516,7 @@ __metadata:
     typescript-eslint: "npm:^8.48.0"
   peerDependencies:
     "@babel/core": ^7.11.0
-    eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
+    eslint: ^9.0.0
   languageName: unknown
   linkType: soft
 
