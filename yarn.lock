@@ -548,7 +548,7 @@ __metadata:
     eslint-rule-composer: "npm:^0.3.0"
   peerDependencies:
     "@babel/eslint-parser": ^7.11.0
-    eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
+    eslint: ^9.0.0
   languageName: unknown
   linkType: soft
 
