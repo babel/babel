@@ -137,9 +137,7 @@ export default defineConfig([
         allowAutomaticSingleRunInference: true,
         projectService: {
           allowDefaultProject: [
-            "packages/babel-helpers/src/helpers/applyDecs2305.ts",
             "scripts/repo-utils/index.d.cts",
-            "scripts/babel-plugin-bit-decorator/types.d.ts",
             "eslint/*/types.d.cts",
           ],
         },

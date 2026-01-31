@@ -58,7 +58,7 @@ export default async function (
 }
 
 async function getCircleciJobId(branch: string) {
-  let resp = (await (
+  let resp = await (
     await fetch(
       "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=" +
         branch,
@@ -66,7 +66,7 @@ async function getCircleciJobId(branch: string) {
         method: "GET",
       }
     )
-  ).json()) as any;
+  ).json();
   const pipeline = resp.items[0].id;
 
   resp = await (
