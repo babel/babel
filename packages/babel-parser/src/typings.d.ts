@@ -38,7 +38,6 @@ export type Plugin =
   | IF_BABEL_7<"objectRestSpread">
   | IF_BABEL_7<"optionalCatchBinding">
   | IF_BABEL_7<"optionalChaining">
-  | "partialApplication"
   | "placeholders"
   | IF_BABEL_7<"privateIn">
   | IF_BABEL_7<"regexpUnicodeSets">
@@ -54,6 +53,7 @@ export type ParserPluginWithOptions =
   | IF_BABEL_7<["importAttributes", { deprecatedAssertSyntax: boolean }]>
   | IF_BABEL_7<["moduleAttributes", { version: "may-2020" }]>
   | ["optionalChainingAssign", { version: "2023-07" }]
+  | ["partialApplication", PartialApplicationPluginOptions]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
@@ -62,6 +62,10 @@ export type PluginConfig = Plugin | ParserPluginWithOptions;
 
 export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
   Extract<ParserPluginWithOptions, [PluginName, any]>[1];
+
+export interface PartialApplicationPluginOptions {
+  version: "2018-07";
+}
 
 export interface PipelineOperatorPluginOptions {
   proposal: BABEL_8_BREAKING extends false

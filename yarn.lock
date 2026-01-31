@@ -1647,6 +1647,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-partial-application": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2068,7 +2069,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application":
+"@babel/plugin-syntax-partial-application@workspace:^, @babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application"
   dependencies:
