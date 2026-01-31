@@ -2760,6 +2760,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             tokenType === tt.bitShiftR ||
             // a<b>c is (a<b)>c
             (tokenType !== tt.parenL &&
+              tokenType !== tt._as &&
+              tokenType !== tt._satisfies &&
               tokenCanStartExpression(tokenType) &&
               !this.hasPrecedingLineBreak())
           ) {
