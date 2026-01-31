@@ -16,9 +16,6 @@ export type UnparenthesizedPipeBodyTypes = GetSetMemberType<
 >;
 
 export default {
-  // This error is only used by the smart-mix proposal
-  PipeBodyIsTighter:
-    "Unexpected yield after pipeline body; any yield expression acting as Hack-style pipe body must be parenthesized due to its loose operator precedence.",
   PipeTopicRequiresHackPipes:
     'Topic references are only supported when using the `"proposal": "hack"` version of the pipeline proposal.',
   PipeTopicUnbound:
