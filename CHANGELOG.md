@@ -25,6 +25,74 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-rc.1 (2026-01-31)
+
+#### :boom: Breaking Change
+* Other
+  * [#17763](https://github.com/babel/babel/pull/17763) Drop support for eslint v7-v8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#17755](https://github.com/babel/babel/pull/17755) Make `eslint-parser/experimental-worker` the default ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-register`
+  * [#17762](https://github.com/babel/babel/pull/17762) Remove `browser` entrypoint for `@babel/register` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`, `babel-plugin-proposal-partial-application`, `babel-plugin-syntax-partial-application`
+  * [#17760](https://github.com/babel/babel/pull/17760) [Babel 8]: partial-application plugin requires "version" option ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-plugin-transform-runtime`, `babel-register`
+  * [#17756](https://github.com/babel/babel/pull/17756) Use `package.json#imports` for browser-specific code ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-build-external-helpers`, `babel-cli`
+  * [#17746](https://github.com/babel/babel/pull/17746) [Babel 8] Extract babel-build-external-helpers ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17722](https://github.com/babel/babel/pull/17722) Remove `NodePath#visit` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-cli`, `babel-node`
+  * [#17741](https://github.com/babel/babel/pull/17741) [Babel 8] Disallow excess arguments in babel-external-helpers ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-plugin-proposal-pipeline-operator`, `babel-traverse`, `babel-types`
+  * [#17732](https://github.com/babel/babel/pull/17732) [Babel 8] Remove smart pipeline support and remove accessor property from Standardized alias ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-object-assign`, `babel-standalone`
+  * [#17619](https://github.com/babel/babel/pull/17619) [Babel 8] Remove `@babel/plugin-transform-object-assign` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#17701](https://github.com/babel/babel/pull/17701) [Babel 8]: clean up unused preset-env data entries ([@JLHwung](https://github.com/JLHwung))
+
+#### :rocket: New Feature
+* `babel-code-frame`, `babel-core`
+  * [#17070](https://github.com/babel/babel/pull/17070) feat: Allow specifying `startLine` in code frame ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#17423](https://github.com/babel/babel/pull/17423) Add attributes to import/export builder ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#17653](https://github.com/babel/babel/pull/17653) feat(standalone): export async transform ([@JLHwung](https://github.com/JLHwung))
+  * [#17482](https://github.com/babel/babel/pull/17482) feat: read standalone targets from `data-targets` ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#17761](https://github.com/babel/babel/pull/17761) fix(parser): correctly parse type assertions in `extends` clause ([@wulu007](https://github.com/wulu007))
+  * [#17720](https://github.com/babel/babel/pull/17720) fix(parser): improve super type argument parsing ([@JLHwung](https://github.com/JLHwung))
+* `babel-register`
+  * [#17229](https://github.com/babel/babel/pull/17229) [Babel 8] Refactor register cache ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#17702](https://github.com/babel/babel/pull/17702) fix(babel-traverse): check variable shadowing for global object callees ([@wulu007](https://github.com/wulu007))
+* `babel-core`
+  * [#17733](https://github.com/babel/babel/pull/17733) fix: Correct the type of plugin parameter ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-proposal-partial-application`
+  * [#17662](https://github.com/babel/babel/pull/17662) fix(partial-app): support super method call ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-preset-env`
+  * [#17691](https://github.com/babel/babel/pull/17691) Fix hoisting of function declarations in loops and switch ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#17717](https://github.com/babel/babel/pull/17717) fix: improve parentheses rule of conditional ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#17531](https://github.com/babel/babel/pull/17531) Improve @babel/parser error types ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-code-frame`, `babel-helpers`, `babel-node`, `babel-types`
+  * [#17678](https://github.com/babel/babel/pull/17678) Replace `picocolors` with `node:util.styleText()` in `@babel/code-frame` ([@fisker](https://github.com/fisker))
+* Other
+  * [#17751](https://github.com/babel/babel/pull/17751) Add CI check to make sure packages exist on npm ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-transform-fixture-test-runner`
+  * [#17743](https://github.com/babel/babel/pull/17743) Use `require(esm)` for `@babel/core` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-template`
+  * [#17748](https://github.com/babel/babel/pull/17748) chore: Improve template exception handling ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-generator`, `babel-runtime-corejs3`
+  * [#17718](https://github.com/babel/babel/pull/17718) [Babel 8] Improve generator performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-beta.4 (2026-01-12)
 
 #### :boom: Breaking Change
