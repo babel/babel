@@ -25,6 +25,27 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.0 (2026-01-31)
+
+#### :rocket: New Feature
+* `babel-types`
+  * [#17750](https://github.com/babel/babel/pull/17750) [7.x backport] Add attributes import declaration builder ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#17663](https://github.com/babel/babel/pull/17663) [7.x backport] feat(standalone): export async transform ([@JLHwung](https://github.com/JLHwung))
+  * [#17725](https://github.com/babel/babel/pull/17725) [7.x backport] feat: read standalone targets from data-targets ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#17765](https://github.com/babel/babel/pull/17765) fix(parser): correctly parse type assertions in `extends` clause ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#17723](https://github.com/babel/babel/pull/17723) [7.x backport] fix(parser): improve super type argument parsing ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#17708](https://github.com/babel/babel/pull/17708) fix(traverse): provide a hub when traversing a File or Program and no parentPath is given ([@simbahax](https://github.com/simbahax))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#17737](https://github.com/babel/babel/pull/17737) [7.x backport] fix: Rename switch discriminant references when body creates shadowing variable ([@magic-akari](https://github.com/magic-akari))
+
+#### :running_woman: Performance
+* `babel-generator`, `babel-runtime-corejs3`
+  * [#17642](https://github.com/babel/babel/pull/17642) [Babel 7] Improve generator performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.28.6 (2026-01-12)
 
 #### :bug: Bug Fix
