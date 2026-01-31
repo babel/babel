@@ -20,7 +20,7 @@ const target = new Proxy((global as any).target, {
     return Reflect.set(obj, prop, value, receiver);
   },
   get: function (obj, prop, receiver) {
-    print(`make ${prop as string}`);
+    console.log(`make ${prop as string}`);
     return Reflect.get(obj, prop, receiver);
   },
 });
@@ -31,10 +31,6 @@ const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
 
 shell.config.verbose = true;
 
-function print(...msgs: string[]) {
-  console.log(console, ...msgs);
-}
-
 function exec(
   executable: string,
   args: string[],
@@ -42,7 +38,7 @@ function exec(
   inheritStdio = true,
   noExit = false
 ): string {
-  print(
+  console.log(
     `${executable
       .replaceAll(YARN_PATH, "yarn")
       .replaceAll(NODE_PATH, "node")} ${args.join(" ")}`
@@ -478,7 +474,7 @@ function bootstrapParserTests(
   const dir = "./build/" + name.toLowerCase();
 
   shell.rm("-rf", dir);
-  print("mkdir -p build");
+  console.log("mkdir -p build");
   mkdirSync("build", { recursive: true });
 
   exec("git", [
