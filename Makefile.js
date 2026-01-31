@@ -1,4 +1,4 @@
-// source hash: fc9b2d5db99e08d4427362717d7aa6e4377a88e4
+// source hash: 626c8b02a55cc66db5530b9a4ddc1e6c88e0408b
 /* eslint-disable */
 // prettier-ignore
 import e from"os";
@@ -11643,7 +11643,7 @@ const XS = global,
   JS = XS.which("yarn").stdout,
   ZS = process.execPath;
 function eE(...e) {
-  console.log.apply(console, e);
+  console.log(console, ...e);
 }
 function tE(e, t, r, n = !0, o = !1) {
   eE(`${e.replaceAll(JS, "yarn").replaceAll(ZS, "node")} ${t.join(" ")}`);
@@ -11719,11 +11719,10 @@ function sE(e, t, r) {
       "--sparse",
       "--revision",
       (function (e) {
-        const t = p("./Makefile", "utf8").match(
-          new RegExp(`${e}_COMMIT = (\\w{40})`)
-        )[1];
-        if (!t) throw new Error(`Could not find ${e}_COMMIT in Makefile`);
-        return t;
+        const t = p("./Makefile", "utf8"),
+          r = new RegExp(`${e}_COMMIT = (\\w{40})`).exec(t)[1];
+        if (!r) throw new Error(`Could not find ${e}_COMMIT in Makefile`);
+        return r;
       })(e),
       t,
       n,

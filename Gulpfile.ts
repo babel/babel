@@ -166,7 +166,7 @@ async function applyBabelToSource(
       experimental_preserveFormat: true,
       ...options?.generatorOpts,
     },
-  }).then(res => formatCode(res!.code, filename));
+  }).then(res => formatCode(res!.code!, filename));
 }
 
 function applyBabelToGlob(glob: any, options: any) {
