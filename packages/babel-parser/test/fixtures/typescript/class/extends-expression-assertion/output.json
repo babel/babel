@@ -26,7 +26,7 @@
               "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"B"},
               "name": "B"
             },
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21}},
               "params": [
@@ -56,7 +56,7 @@
             "parenStart": 16
           }
         },
-        "superTypeArguments": {
+        "superTypeParameters": {
           "type": "TSTypeParameterInstantiation",
           "start":27,"end":30,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":30,"index":30}},
           "params": [
@@ -96,7 +96,7 @@
               "start":52,"end":53,"loc":{"start":{"line":2,"column":18,"index":52},"end":{"line":2,"column":19,"index":53},"identifierName":"B"},
               "name": "B"
             },
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":53,"end":63,"loc":{"start":{"line":2,"column":19,"index":53},"end":{"line":2,"column":29,"index":63}},
               "params": [
@@ -108,7 +108,7 @@
                     "start":54,"end":59,"loc":{"start":{"line":2,"column":20,"index":54},"end":{"line":2,"column":25,"index":59},"identifierName":"Array"},
                     "name": "Array"
                   },
-                  "typeArguments": {
+                  "typeParameters": {
                     "type": "TSTypeParameterInstantiation",
                     "start":59,"end":62,"loc":{"start":{"line":2,"column":25,"index":59},"end":{"line":2,"column":28,"index":62}},
                     "params": [
@@ -166,7 +166,7 @@
               "start":91,"end":92,"loc":{"start":{"line":3,"column":18,"index":91},"end":{"line":3,"column":19,"index":92},"identifierName":"B"},
               "name": "B"
             },
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":92,"end":97,"loc":{"start":{"line":3,"column":19,"index":92},"end":{"line":3,"column":24,"index":97}},
               "params": [
@@ -225,7 +225,7 @@
               "start":125,"end":126,"loc":{"start":{"line":4,"column":18,"index":125},"end":{"line":4,"column":19,"index":126},"identifierName":"B"},
               "name": "B"
             },
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":126,"end":129,"loc":{"start":{"line":4,"column":19,"index":126},"end":{"line":4,"column":22,"index":129}},
               "params": [
