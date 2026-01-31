@@ -1,4 +1,4 @@
-// @ts-check
+import type { getOctokit, context as _context } from "@actions/github";
 
 const COMMENT_PREFIX =
   "Build successful! You can test your changes in the REPL here: ";
@@ -7,10 +7,11 @@ const COMMENT_PREFIX =
  * Updates the REPL comment on a pull request with the latest build link.
  * This function retrieves the CircleCI job ID for the current pull request,
  * constructs the REPL URL, and either updates an existing comment or creates a new one.
- * @param {ReturnType<import("@actions/github").getOctokit>} github
- * @param {import("@actions/github").context} context
  */
-export default async function (github, context) {
+export default async function (
+  github: ReturnType<typeof getOctokit>,
+  context: typeof _context
+) {
   const { owner, repo } = context.repo;
   const pull_number = context.issue.number;
 
@@ -56,8 +57,8 @@ export default async function (github, context) {
   }
 }
 
-async function getCircleciJobId(branch) {
-  let resp = await (
+async function getCircleciJobId(branch: string) {
+  let resp = (await (
     await fetch(
       "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=" +
         branch,
@@ -65,7 +66,7 @@ async function getCircleciJobId(branch) {
         method: "GET",
       }
     )
-  ).json();
+  ).json()) as any;
   const pipeline = resp.items[0].id;
 
   resp = await (
@@ -93,6 +94,6 @@ async function getCircleciJobId(branch) {
   throw new Error("CircleCI job failed");
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

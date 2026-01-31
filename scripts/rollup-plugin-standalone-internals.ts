@@ -1,5 +1,3 @@
-// @ts-check
-
 import { fileURLToPath } from "node:url";
 import pluginConfig from "../packages/babel-standalone/scripts/pluginConfig.json" with { type: "json" };
 
@@ -9,7 +7,7 @@ const standaloneURL = new URL("../packages/babel-standalone/", import.meta.url);
  * @param {string} path - The original file path.
  * @returns {string} - The @babel/standalone file path.
  */
-const inStandalone = path =>
+const inStandalone = (path: string): string =>
   fileURLToPath(new URL(path, standaloneURL)).replace(/\\/g, "/");
 const { noopPlugins, unexposedNoopPlugins } = pluginConfig;
 
@@ -24,7 +22,8 @@ const pluginUtilsShimPath = inStandalone("./src/plugin-utils-shim.ts");
  * @param {string} str - The kebab-case string.
  * @returns {string} - The camelCase string.
  */
-const toCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
+const toCamel = (str: string): string =>
+  str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
 /**
  * @typedef {Map<string, string>} InternalPluginsMap
@@ -33,7 +32,7 @@ const toCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
  * code to be returned by the Rollup plugin.
  */
 // @ts-expect-error TS does not recognize the dynamic nature of the map
-const internalPlugins = new Map([
+const internalPlugins = new Map<string, string>([
   ...noopPlugins.map(plugin => [
     `@babel/plugin-${plugin}`,
     `export { ${toCamel(plugin)} as default } from "${generatedPluginsPath}"`,
@@ -49,7 +48,7 @@ const internalPlugins = new Map([
  * `@babel/helper-plugin-utils`.
  * @returns {import("rollup").Plugin} - The Rollup plugin.
  */
-export default function () {
+export default function (): import("rollup").Plugin {
   return {
     name: "standalone-internals",
     load(id) {

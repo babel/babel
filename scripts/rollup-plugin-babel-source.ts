@@ -1,4 +1,3 @@
-// @ts-check
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -14,7 +13,7 @@ const monorepoRoot = path.join(
  * It also resolves `@babel/runtime/regenerator` to the correct path.
  * @returns {import("rollup").Plugin} - The Rollup plugin.
  */
-export default function () {
+export default function (): import("rollup").Plugin {
   return {
     name: "babel-source",
     resolveId(importee) {
@@ -28,8 +27,8 @@ export default function () {
         );
       }
 
-      const matches = importee.match(
-        /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*))?$/
+      const matches = /^@babel\/(?<pkg>[^/]+)(?:\/lib\/(?<internal>.*))?$/.exec(
+        importee
       );
       if (!matches) return null;
       // @ts-expect-error pkg and internal are the names of capturing groups
@@ -44,7 +43,7 @@ export default function () {
           path.join(packageFolder, "package.json"),
           "utf8"
         );
-      } catch (e) {
+      } catch (_) {
         // Some Babel packages aren't in this repository
         return null;
       }

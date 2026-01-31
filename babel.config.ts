@@ -11,12 +11,9 @@ import {
   type ConfigAPI,
 } from "@babel/core";
 import packageJson from "./package.json" with { type: "json" };
-// @ts-expect-error no types
-import pluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs";
-// @ts-expect-error no types
-import pluginBitDecorator from "./scripts/babel-plugin-bit-decorator/plugin.cjs";
-// @ts-expect-error no types
-import pluginTransformNodeProtocolImport from "./scripts/babel-plugin-transform-node-protocol-import/plugin.cjs";
+import pluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.ts";
+import pluginBitDecorator from "./scripts/babel-plugin-bit-decorator/plugin.ts";
+import pluginTransformNodeProtocolImport from "./scripts/babel-plugin-transform-node-protocol-import/plugin.ts";
 import { commonJS } from "$repo-utils";
 
 let jestSnapshot = false;
@@ -175,7 +172,7 @@ export default function (api: ConfigAPI) {
       ],
       pluginBitDecorator,
       pluginTransformNodeProtocolImport,
-    ].filter(Boolean),
+    ].filter(Boolean) as PluginItem[],
     overrides: [
       {
         test: ["packages/babel-parser"].map(normalize),

@@ -24,18 +24,12 @@ import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
 import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
 
-// @ts-expect-error no types
-import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
-// @ts-expect-error no types
-import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
-// @ts-expect-error no types
-import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.js";
-// @ts-expect-error no types
-import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.cjs";
-// @ts-expect-error no types
-import formatCode from "./scripts/utils/formatCode.js";
-// @ts-expect-error no types
-import { log } from "./scripts/utils/logger.js";
+import rollupBabelSource from "./scripts/rollup-plugin-babel-source.ts";
+import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.ts";
+import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.ts";
+import babelPluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.ts";
+import formatCode from "./scripts/utils/formatCode.ts";
+import { log } from "./scripts/utils/logger.ts";
 import { commonJS } from "$repo-utils";
 
 import type { NodePath, PluginItem, types } from "@babel/core";
@@ -253,7 +247,7 @@ function generateStandalone() {
     .pipe(gulp.dest(dest));
 }
 
-function createWorker(useWorker: boolean) {
+function createWorker(useWorker: boolean): any {
   const numWorkers = Math.ceil(Math.max(cpus().length, 1) / 2) - 1;
   if (
     numWorkers === 0 ||
@@ -261,17 +255,13 @@ function createWorker(useWorker: boolean) {
     // For some reason, on CircleCI the workers hang indefinitely.
     process.env.CIRCLECI
   ) {
-    // @ts-expect-error no types
-    return import("./babel-worker.mjs");
+    return import("./babel-worker.ts");
   }
-  const worker = new JestWorker(
-    new URL("./babel-worker.mjs", import.meta.url),
-    {
-      enableWorkerThreads: true,
-      numWorkers,
-      exposedMethods: ["transform"],
-    }
-  );
+  const worker = new JestWorker(new URL("./babel-worker.ts", import.meta.url), {
+    enableWorkerThreads: true,
+    numWorkers,
+    exposedMethods: ["transform"],
+  });
 
   worker.getStdout().pipe(process.stdout);
   worker.getStderr().pipe(process.stderr);
@@ -582,7 +572,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                     "throw new Error('Babel internal error');",
                 },
               }),
-          ].filter(Boolean),
+          ].filter(Boolean) as InputPluginOption[],
         });
 
         await bundle.write({
