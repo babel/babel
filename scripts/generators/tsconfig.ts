@@ -1,12 +1,11 @@
-// @ts-check
 import fs from "node:fs";
 import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" with { type: "json" };
 
-function importJSON(path) {
+function importJSON(path: URL) {
   return JSON.parse(fs.readFileSync(path, "utf8"));
 }
 
-function maybeWriteFile(url, contents) {
+function maybeWriteFile(url: URL, contents: string) {
   try {
     if (fs.readFileSync(url, "utf8") === contents) return;
   } catch {}
@@ -37,20 +36,18 @@ const dependencyAliases = new Map([
   ["regenerator-transform", "@babel/helper-plugin-utils"],
 ]);
 
-const packagesHaveScripts = new Set([
-  "@babel/parser",
-  "@babel/types",
-  "@babel/traverse",
-  "@babel/plugin-transform-runtime",
-]);
-
 /**
  * Get the TypeScript typing dependencies for a package
- * @param {string} pkgName
- * @param {{ dependencies?: Record<string, string>, devDependencies?: Record<string, string>, peerDependencies?: Record<string, string>, peerDependenciesMeta?: Record<string, { optional: boolean }> }} pkgJSON
- * @returns {Set<string>}
  */
-const packageTypingDependencies = (pkgName, pkgJSON) => {
+const packageTypingDependencies = (
+  pkgName: string,
+  pkgJSON: {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+    peerDependencies?: Record<string, string>;
+    peerDependenciesMeta?: Record<string, { optional: boolean }>;
+  }
+) => {
   const dependencies = new Set([
     ...Object.keys(pkgJSON.dependencies ?? {}),
     ...Object.keys(pkgJSON.peerDependencies ?? {}).filter(
@@ -71,13 +68,20 @@ const packageTypingDependencies = (pkgName, pkgJSON) => {
   }
   return dependencies;
 };
+
+type TsPackageInfo = {
+  name: string;
+  relative: string;
+  subExports: [string, string][];
+  dependencies: Set<string>;
+  dfsOutIndex: number;
+  cycleRoot: string;
+};
+
 /**
  * Get TypeScript packages meta info in a subdirectory
- * @param {string} subRoot
- * @typedef {{name: string, relative: string, subExports: Array<[string, string]>, dependencies: Set<string>, dfsOutIndex: number, cycleRoot: string}} TsPackageInfo
- * @returns {Array<[string, TsPackageInfo]>}
  */
-function getTsPkgs(subRoot) {
+function getTsPkgs(subRoot: string): [string, TsPackageInfo][] {
   return fs
     .readdirSync(new URL(subRoot, rootURL))
     .filter(name => name.startsWith("babel-"))
@@ -109,17 +113,16 @@ function getTsPkgs(subRoot) {
         fs.rmSync(new URL(relative + "/tsconfig.json", rootURL));
       } catch {}
       // Babel 9 exports > Babel 8 exports > {}
-      const exports =
+      const exports: Record<string, any> =
         packageJSON.conditions?.BABEL_9_BREAKING?.[0]?.exports ??
         packageJSON.exports ??
         {};
       /**
-       * @type {Array<[string, string]>}
        * @description The sub-exports of the package, where the key is the export name
        * and the value is the path to the export, relative to the package root.
        */
       const subExports = Object.entries(exports).flatMap(
-        ([_export, exportPath]) => {
+        ([_export, exportPath]): [string, string][] => {
           // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
           if (name === "@babel/standalone") {
             return [["", "/src"]];
@@ -191,18 +194,13 @@ tsPkgs.forEach(({ dependencies }) => {
 });
 
 const seen = new Set();
-/**
- * @type {Array<string>}
- */
-const stack = [];
+const stack: string[] = [];
 let index = 0;
 for (const name of roots) {
   /**
    * Depth-first search
-   * @param {TsPackageInfo} node
-   * @returns
    */
-  (function dfs(node) {
+  (function dfs(node: TsPackageInfo) {
     if (seen.has(node)) {
       if (stack.includes(node.cycleRoot)) {
         for (
@@ -219,13 +217,11 @@ for (const name of roots) {
     seen.add(node);
     stack.push(node.name);
     for (const dep of node.dependencies) {
-      // @ts-expect-error dep must be a key in tsPkgs
-      dfs(tsPkgs.get(dep));
+      dfs(tsPkgs.get(dep)!);
     }
     stack.pop();
     node.dfsOutIndex = index++;
-    // @ts-expect-error name must be a key in tsPkgs
-  })(tsPkgs.get(name));
+  })(tsPkgs.get(name)!);
 }
 
 // Find strongly connected components
@@ -261,9 +257,8 @@ const topoSorted = Array.from(tsPkgs.values()).sort((a, b) => {
 const projectsFolders = new Map();
 
 for (let i = 0; i < topoSorted.length; i++) {
-  const root = tsPkgs.get(topoSorted[i].cycleRoot);
+  const root = tsPkgs.get(topoSorted[i].cycleRoot)!;
   const chunk = [topoSorted[i]];
-  // @ts-expect-error root must not be undefined
   const index = root.dfsOutIndex;
   while (i + 1 < topoSorted.length && topoSorted[i + 1].dfsOutIndex === index) {
     i++;
@@ -271,10 +266,9 @@ for (let i = 0; i < topoSorted.length; i++) {
   }
   chunk.sort();
 
-  const allDeps = new Set();
+  const allDeps = new Set<string>();
   chunk.forEach(({ name, dependencies }) => {
     dependencies.forEach(allDeps.add, allDeps);
-    // @ts-expect-error root must not be undefined
     projectsFolders.set(name, root.relative);
   });
   chunk.forEach(({ name }) => allDeps.delete(name));
@@ -282,22 +276,24 @@ for (let i = 0; i < topoSorted.length; i++) {
   const tsConfig = buildTSConfig(
     chunk,
     allDeps,
-    // @ts-expect-error root must not be undefined
     fs.existsSync(new URL(root.relative + "/tsconfig.overrides.json", rootURL)),
-    // @ts-expect-error root must not be undefined
-    packagesHaveScripts.has(root.name)
+    fs.existsSync(new URL(root.relative + "/scripts", rootURL))
   );
 
   maybeWriteFile(
-    // @ts-expect-error root must not be undefined
     new URL(root.relative + "/tsconfig.json", rootURL),
-    "/* This file is automatically generated by scripts/generators/tsconfig.js */\n" +
+    "/* This file is automatically generated by scripts/generators/tsconfig.ts */\n" +
       JSON.stringify(tsConfig, null, 2)
   );
 }
 
-function buildTSConfig(pkgs, allDeps, hasOverrides, hasScripts) {
-  const paths = {};
+function buildTSConfig(
+  pkgs: TsPackageInfo[],
+  allDeps: Set<string>,
+  hasOverrides: boolean,
+  hasScripts: boolean
+) {
+  const paths: Record<string, string[]> = {};
   const referencePaths = new Set();
 
   for (const name of allDeps) {
@@ -331,7 +327,7 @@ function buildTSConfig(pkgs, allDeps, hasOverrides, hasScripts) {
 
 maybeWriteFile(
   new URL("tsconfig.paths.json", rootURL),
-  "/* This file is automatically generated by scripts/generators/tsconfig.js */\n" +
+  "/* This file is automatically generated by scripts/generators/tsconfig.ts */\n" +
     JSON.stringify(
       {
         compilerOptions: {
@@ -366,7 +362,7 @@ maybeWriteFile(
 
 maybeWriteFile(
   new URL("tsconfig.json", rootURL),
-  "/* This file is automatically generated by scripts/generators/tsconfig.js */\n" +
+  "/* This file is automatically generated by scripts/generators/tsconfig.ts */\n" +
     JSON.stringify(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
@@ -378,6 +374,7 @@ maybeWriteFile(
           "dts/**/*.d.ts",
           "*.mts",
           "*.ts",
+          "scripts/**/*.ts",
           "packages/*/test/*.tst.ts",
         ],
         exclude: ["dts/**/*.tst.d.ts"],

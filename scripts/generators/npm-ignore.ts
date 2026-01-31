@@ -1,5 +1,3 @@
-// @ts-check
-
 import { glob } from "glob";
 import { repoRoot } from "$repo-utils";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -13,7 +11,7 @@ const commonIgnore = [
   "tsconfig.tsbuildinfo",
 ];
 
-const extraIgnore = {
+const extraIgnore: Record<string, string[]> = {
   "babel-plugin-proposal-decorators": ["CONTRIB.md"],
   "babel-compat-data": ["build"],
 };

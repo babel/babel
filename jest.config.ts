@@ -1,9 +1,8 @@
-// @ts-check
+import type { Config } from "jest";
 
 const isPublishBundle = process.env.IS_PUBLISH;
 
-/** @type {import('jest').Config} */
-const config = {
+export default {
   runner: "jest-light-runner",
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
@@ -66,6 +65,4 @@ const config = {
   // package should be declared explicitly in the package.json
   // Yarn will generate correct file links so that Jest can resolve correctly
   moduleNameMapper: {},
-};
-
-module.exports = config;
+} satisfies Config;

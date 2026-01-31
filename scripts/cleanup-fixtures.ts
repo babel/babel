@@ -1,5 +1,3 @@
-// @ts-check
-
 import { glob } from "glob";
 import { repoRoot } from "$repo-utils";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";

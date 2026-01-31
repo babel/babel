@@ -1,29 +1,40 @@
-module.exports = pluginToggleBooleanFlag;
+import type {
+  NodePath,
+  PluginAPI,
+  PluginObject,
+  types as t,
+} from "@babel/core";
+export default pluginToggleBooleanFlag;
 
 /**
  * If `value` is null, it will leave the conditions in code. It will remove
  * them in attributes by replacing them with <if true> || <if false>
- *
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObject}
  */
-function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
+function pluginToggleBooleanFlag(
+  { types: t, template }: PluginAPI,
+  { name, value }: { name: string; value: boolean | null }
+): PluginObject {
   if (typeof value !== "boolean" && value !== null) {
     throw new Error(`.value must be a boolean, or null`);
   }
 
-  function parseExpression(source) {
+  function parseExpression(source: string) {
     // eslint-disable-next-line regexp/no-useless-assertions
     return template.expression(source, { placeholderPattern: /(?!.)./ })({});
   }
 
-  /**
-   * @param {import("@babel/core").types.Expression} test
-   */
-  function evaluate(test, value) {
+  function evaluate(test: t.Expression, value: boolean): any {
     const res = {
-      replace: replacement => ({ replacement, value: null, unrelated: false }),
-      value: value => ({ replacement: null, value, unrelated: false }),
+      replace: (replacement: t.Expression) => ({
+        replacement,
+        value: null,
+        unrelated: false,
+      }),
+      value: (value: boolean) => ({
+        replacement: null,
+        value,
+        unrelated: false,
+      }),
       unrelated: () => ({ replacement: test, value: null, unrelated: true }),
     };
 
@@ -36,7 +47,7 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
-          ? res.replacement(t.unaryExpression("!", arg.replacement))
+          ? res.replace(t.unaryExpression("!", arg.replacement))
           : res.value(!arg.value);
     }
 
@@ -77,10 +88,13 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
 
   return {
     visitor: {
-      "IfStatement|ConditionalExpression"(path) {
+      // @ts-expect-error FIXME: type error
+      "IfStatement|ConditionalExpression"(
+        path: NodePath<t.IfStatement | t.ConditionalExpression>
+      ) {
         if (value === null) return;
 
-        let test = path.get("test");
+        let test = path.get("test") as NodePath<t.Expression>;
 
         // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
         // tests, to properly cast the env variable to a boolean.
@@ -89,7 +103,7 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
           test.get("callee").isIdentifier({ name: "bool" }) &&
           test.get("arguments").length === 1
         ) {
-          test = test.get("arguments")[0];
+          test = test.get("arguments")[0] as NodePath<t.Expression>;
         }
 
         const res = evaluate(test.node, value);
@@ -139,10 +153,9 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
       ImportDeclaration(path) {
         if (!path.node.attributes) return;
 
-        /** @type {null | import("@babel/core").NodePath<import("@babel/core").types.ImportAttribute>} */
         const ifAttribute = path
           .get("attributes")
-          .find(attr => attr.node.key.name === "if");
+          .find(attr => (attr.node.key as t.Identifier).name === "if");
         if (ifAttribute == null) {
           return;
         }
@@ -179,7 +192,7 @@ function pluginToggleBooleanFlag({ types: t, template }, { name, value }) {
           }
 
           res = {
-            replacement: t.binaryExpression(
+            replacement: t.logicalExpression(
               "||",
               ifTrue.replacement,
               ifFalse.replacement

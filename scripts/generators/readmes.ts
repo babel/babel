@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Since we moved our documentation to our website repo, we want to point to the
  * website from the docs in this repo
@@ -18,24 +17,26 @@ const packageDir = join(cwd, "packages");
 
 const packages = readdirSync(packageDir);
 
-const isDep = name =>
+const isDep = (name: string) =>
   name.startsWith("@babel/runtime") ||
   name.startsWith("@babel/helper-") ||
   name === "@babel/compat-data";
 
-const getWebsiteLink = n => `https://babeljs.io/docs/${n}`;
-const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
-const getIssueLabelLink = l => {
+const getWebsiteLink = (n: string) => `https://babeljs.io/docs/${n}`;
+const getPackageJson = (pkg: string) =>
+  require(join(packageDir, pkg, "package.json"));
+const getIssueLabelLink = (l: string) => {
   if (!l) return "";
   return `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
     l
   )}%22+is%3Aopen`;
 };
-const getNpmInstall = name =>
+const getNpmInstall = (name: string) =>
   `npm install ${isDep(name) ? "--save" : "--save-dev"} ${name}`;
-const getYarnAdd = name => `yarn add ${name}${isDep(name) ? "" : " --dev"}`;
+const getYarnAdd = (name: string) =>
+  `yarn add ${name}${isDep(name) ? "" : " --dev"}`;
 
-const labels = {
+const labels: Record<string, string> = {
   "babel-preset-flow": "area: flow",
   "babel-preset-node": "area: node",
   "babel-preset-react": "area: react",
@@ -52,7 +53,17 @@ const labels = {
   "babel-standalone": "pkg: standalone",
 };
 
-const generateReadme = ({ websiteLink, issuesLink, name, description }) =>
+const generateReadme = ({
+  websiteLink,
+  issuesLink,
+  name,
+  description,
+}: {
+  websiteLink: string;
+  issuesLink: string;
+  name: string;
+  description: string;
+}) =>
   `# ${name}
 
 > ${description}

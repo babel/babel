@@ -5858,6 +5858,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/shelljs@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@types/shelljs@npm:0.10.0"
+  dependencies:
+    "@types/node": "npm:*"
+    fast-glob: "npm:^3.3.2"
+  checksum: 10/d7c24375eaec7dd3bca71e15dc7be0d8912a3bb37b4ed5df73e54216aedd675b326b66c8baa70a7097731ccd12b45395e4d633626d0c3105e676794524bc09d1
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^2.0.0, @types/stack-utils@npm:^2.0.3":
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
@@ -7500,6 +7510,7 @@ __metadata:
     "@rollup/plugin-terser": "npm:^0.4.4"
     "@types/jest": "npm:^29.5.11"
     "@types/node": "npm:^25.0.3"
+    "@types/shelljs": "npm:^0.10.0"
     "@yarnpkg/types": "npm:^4.0.0"
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^10.0.0"

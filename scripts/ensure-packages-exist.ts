@@ -1,4 +1,3 @@
-// @ts-check
 /* eslint-disable n/no-process-exit */
 
 import { execSync } from "node:child_process";
@@ -49,7 +48,7 @@ console.log(
   Workflow filename: release.yml
   Environment name: npm
 They can also run locally the following command:
-  node scripts/ensure-packages-exist.js`
+  node scripts/ensure-packages-exist.ts`
 );
 
 if (process.argv.includes("--check-only")) {

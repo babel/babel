@@ -1,5 +1,3 @@
-// @ts-check
-
 import * as prettier from "prettier";
 
 /**
@@ -8,7 +6,10 @@ import * as prettier from "prettier";
  * @param {string} filename - The name of the file being formatted.
  * @returns {Promise<string>} - The formatted code.
  */
-export default async function formatCode(code, filename) {
+export default async function formatCode(
+  code: string,
+  filename: string
+): Promise<string> {
   const prettierConfig = await prettier.resolveConfig(filename);
   if (!prettierConfig) {
     throw new Error(
