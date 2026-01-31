@@ -3,10 +3,6 @@ import {
   type NodeLocation,
   type Options,
 } from "./common.ts";
-import { defs, isColorSupported } from "./defs.ts";
-import { highlight } from "./highlight.ts";
-
-export { highlight };
 
 let deprecationWarningShown = false;
 
@@ -17,20 +13,7 @@ export function codeFrameColumns(
   loc: NodeLocation,
   opts: Options = {},
 ): string {
-  const shouldHighlight =
-    opts.forceColor || (isColorSupported() && opts.highlightCode);
-
-  return _codeFrameColumns(
-    rawLines,
-    loc,
-    opts,
-    shouldHighlight
-      ? {
-          defs,
-          highlight,
-        }
-      : undefined,
-  );
+  return _codeFrameColumns(rawLines, loc, opts);
 }
 
 /**
@@ -49,15 +32,9 @@ export default function (
     const message =
       "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
 
-    if (process.emitWarning) {
-      // A string is directly supplied to emitWarning, because when supplying an
-      // Error object node throws in the tests because of different contexts
-      process.emitWarning(message, "DeprecationWarning");
-    } else {
-      const deprecationError = new Error(message);
-      deprecationError.name = "DeprecationWarning";
-      console.warn(new Error(message));
-    }
+    const deprecationError = new Error(message);
+    deprecationError.name = "DeprecationWarning";
+    console.warn(new Error(message));
   }
 
   colNumber = Math.max(colNumber, 0);
@@ -67,4 +44,8 @@ export default function (
   };
 
   return codeFrameColumns(rawLines, location, opts);
+}
+
+export function highlight(code: string) {
+  return code;
 }

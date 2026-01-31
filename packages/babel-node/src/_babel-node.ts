@@ -130,6 +130,7 @@ if (opts.eval || opts.print) {
 
   global.exports = module.exports;
   global.module = module;
+  // @ts-expect-error missing require.extensions
   global.require = module.require.bind(module);
 
   const result = _eval(code, global.__filename);

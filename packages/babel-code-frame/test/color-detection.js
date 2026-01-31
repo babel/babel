@@ -1,20 +1,24 @@
-import { stripVTControlCharacters } from "node:util";
-import colors from "picocolors";
+import { stripVTControlCharacters, styleText } from "node:util";
 
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
-const compose = (f, g) => v => f(g(v));
+const gutter = input => styleText("gray", input, { validateStream: false });
+const yellow = input => styleText("yellow", input, { validateStream: false });
+const marker = input =>
+  styleText(["red", "bold"], input, { validateStream: false });
+const reset = input => styleText("reset", input, { validateStream: false });
+const cyan = input => styleText("cyan", input, { validateStream: false });
 
 function stubColorSupport(supported) {
-  const originalIsColorSupported = colors.isColorSupported;
+  const original = process.env.FORCE_COLOR;
 
   beforeEach(function () {
-    colors.isColorSupported = supported;
+    process.env.FORCE_COLOR = supported ? "" : "false";
   });
 
   afterEach(function () {
-    colors.isColorSupported = originalIsColorSupported;
+    process.env.FORCE_COLOR = original;
   });
 }
 
@@ -39,10 +43,10 @@ describe("highlight", function () {
     test("opts.highlightCode with multiple columns and lines", function () {
       // prettier-ignore
       const rawLines = [
-      "function a(b, c) {",
-      "  return b + c;",
-      "}"
-    ].join("\n");
+        "function a(b, c) {",
+        "  return b + c;",
+        "}"
+      ].join("\n");
 
       const result = codeFrameColumns(
         rawLines,
@@ -77,9 +81,6 @@ describe("highlight", function () {
     });
 
     test("opts.forceColor", function () {
-      const marker = compose(colors.red, colors.bold);
-      const gutter = colors.gray;
-
       const rawLines = ["", "", "", ""].join("\n");
       expect(
         codeFrame(rawLines, 3, null, {
@@ -88,7 +89,7 @@ describe("highlight", function () {
           forceColor: true,
         }),
       ).toEqual(
-        colors.reset(
+        reset(
           [
             " " + gutter(" 2 |"),
             marker(">") + gutter(" 3 |"),
@@ -99,9 +100,6 @@ describe("highlight", function () {
     });
 
     test("jsx", function () {
-      const gutter = colors.gray;
-      const yellow = colors.yellow;
-
       const rawLines = ["<div />"].join("\n");
 
       expect(
@@ -114,7 +112,7 @@ describe("highlight", function () {
         ),
       ).toEqual(
         JSON.stringify(
-          colors.reset(
+          reset(
             " " +
               gutter(" 1 |") +
               " " +
@@ -129,10 +127,6 @@ describe("highlight", function () {
     });
 
     it("unicode capitalized", function () {
-      const gutter = colors.gray;
-      const yellow = colors.yellow;
-      const cyan = colors.cyan;
-
       const rawLines = ["var 𐐔𐐯𐑅𐐨𐑉𐐯𐐻, deseret;"].join("\n");
 
       expect(
@@ -145,7 +139,7 @@ describe("highlight", function () {
         ),
       ).toEqual(
         JSON.stringify(
-          colors.reset(
+          reset(
             " " +
               gutter(" 1 |") +
               " " +
@@ -176,9 +170,6 @@ describe("highlight", function () {
     });
 
     test("opts.forceColor", function () {
-      const marker = compose(colors.red, colors.bold);
-      const gutter = colors.gray;
-
       const rawLines = ["", "", "", ""].join("\n");
       expect(
         codeFrame(rawLines, 3, null, {
@@ -187,7 +178,7 @@ describe("highlight", function () {
           forceColor: true,
         }),
       ).toEqual(
-        colors.reset(
+        reset(
           [
             " " + gutter(" 2 |"),
             marker(">") + gutter(" 3 |"),
