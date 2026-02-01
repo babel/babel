@@ -296,7 +296,6 @@ type ErrorInfoCompressed = {
   StrictWith: [];
   ParseExpressionEmptyInput: [];
   ParseExpressionExpectsEOF: [{ unexpected: number }];
-  PipeBodyIsTighter: [];
   PipeTopicRequiresHackPipes: [];
   PipeTopicUnbound: [];
   PipeTopicUnconfiguredToken: [{ token: string }];
