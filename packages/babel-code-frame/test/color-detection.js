@@ -1,7 +1,6 @@
 import { stripVTControlCharacters, styleText } from "node:util";
 
-import _codeFrame, { codeFrameColumns } from "../lib/index.js";
-const codeFrame = _codeFrame.default || _codeFrame;
+import { codeFrameColumns } from "../lib/index.js";
 
 const gutter = input => styleText("gray", input, { validateStream: false });
 const yellow = input => styleText("yellow", input, { validateStream: false });
@@ -28,7 +27,11 @@ describe("highlight", function () {
 
     test("opts.highlightCode", function () {
       const rawLines = "console.log('babel')";
-      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
+      const result = codeFrameColumns(
+        rawLines,
+        { start: { line: 1, column: 9 } },
+        { highlightCode: true },
+      );
       const stripped = stripVTControlCharacters(result);
       expect(result.length).toBeGreaterThan(stripped.length);
       expect(stripped).toEqual(
@@ -83,11 +86,15 @@ describe("highlight", function () {
     test("opts.forceColor", function () {
       const rawLines = ["", "", "", ""].join("\n");
       expect(
-        codeFrame(rawLines, 3, null, {
-          linesAbove: 1,
-          linesBelow: 1,
-          forceColor: true,
-        }),
+        codeFrameColumns(
+          rawLines,
+          { start: { line: 3, column: null } },
+          {
+            linesAbove: 1,
+            linesBelow: 1,
+            forceColor: true,
+          },
+        ),
       ).toEqual(
         reset(
           [
@@ -104,11 +111,15 @@ describe("highlight", function () {
 
       expect(
         JSON.stringify(
-          codeFrame(rawLines, 0, null, {
-            linesAbove: 1,
-            linesBelow: 1,
-            forceColor: true,
-          }),
+          codeFrameColumns(
+            rawLines,
+            { start: { line: 0, column: null } },
+            {
+              linesAbove: 1,
+              linesBelow: 1,
+              forceColor: true,
+            },
+          ),
         ),
       ).toEqual(
         JSON.stringify(
@@ -131,11 +142,15 @@ describe("highlight", function () {
 
       expect(
         JSON.stringify(
-          codeFrame(rawLines, 0, null, {
-            linesAbove: 1,
-            linesBelow: 1,
-            forceColor: true,
-          }),
+          codeFrameColumns(
+            rawLines,
+            { start: { line: 0, column: null } },
+            {
+              linesAbove: 1,
+              linesBelow: 1,
+              forceColor: true,
+            },
+          ),
         ),
       ).toEqual(
         JSON.stringify(
@@ -161,7 +176,11 @@ describe("highlight", function () {
 
     test("opts.highlightCode", function () {
       const rawLines = "console.log('babel')";
-      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
+      const result = codeFrameColumns(
+        rawLines,
+        { start: { line: 1, column: 9 } },
+        { highlightCode: true },
+      );
       const stripped = stripVTControlCharacters(result);
       expect(result).toBe(stripped);
       expect(stripped).toEqual(
@@ -172,11 +191,15 @@ describe("highlight", function () {
     test("opts.forceColor", function () {
       const rawLines = ["", "", "", ""].join("\n");
       expect(
-        codeFrame(rawLines, 3, null, {
-          linesAbove: 1,
-          linesBelow: 1,
-          forceColor: true,
-        }),
+        codeFrameColumns(
+          rawLines,
+          { start: { line: 3, column: null } },
+          {
+            linesAbove: 1,
+            linesBelow: 1,
+            forceColor: true,
+          },
+        ),
       ).toEqual(
         reset(
           [
