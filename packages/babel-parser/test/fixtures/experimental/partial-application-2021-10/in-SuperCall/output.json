@@ -1,0 +1,130 @@
+{
+  "type": "File",
+  "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":86}},
+  "errors": [
+    "SyntaxError: Unexpected argument placeholder. (3:16)",
+    "SyntaxError: Unexpected argument placeholder. (3:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":86}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":86}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"Bar"},
+          "name": "Bar"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":22,"end":86,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":6,"column":1,"index":86}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":26,"end":84,"loc":{"start":{"line":2,"column":2,"index":26},"end":{"line":5,"column":3,"index":84}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":26,"end":37,"loc":{"start":{"line":2,"column":2,"index":26},"end":{"line":2,"column":13,"index":37},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":38,"end":39,"loc":{"start":{"line":2,"column":14,"index":38},"end":{"line":2,"column":15,"index":39},"identifierName":"x"},
+                  "name": "x"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":40,"end":84,"loc":{"start":{"line":2,"column":16,"index":40},"end":{"line":5,"column":3,"index":84}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":46,"end":64,"loc":{"start":{"line":3,"column":4,"index":46},"end":{"line":3,"column":22,"index":64}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":46,"end":63,"loc":{"start":{"line":3,"column":4,"index":46},"end":{"line":3,"column":21,"index":63}},
+                      "callee": {
+                        "type": "Super",
+                        "start":46,"end":51,"loc":{"start":{"line":3,"column":4,"index":46},"end":{"line":3,"column":9,"index":51}}
+                      },
+                      "arguments": [
+                        {
+                          "type": "Identifier",
+                          "start":52,"end":53,"loc":{"start":{"line":3,"column":10,"index":52},"end":{"line":3,"column":11,"index":53},"identifierName":"x"},
+                          "name": "x"
+                        },
+                        {
+                          "type": "NumericLiteral",
+                          "start":55,"end":56,"loc":{"start":{"line":3,"column":13,"index":55},"end":{"line":3,"column":14,"index":56}},
+                          "extra": {
+                            "rawValue": 1,
+                            "raw": "1"
+                          },
+                          "value": 1
+                        },
+                        {
+                          "type": "ArgumentPlaceholder",
+                          "start":58,"end":59,"loc":{"start":{"line":3,"column":16,"index":58},"end":{"line":3,"column":17,"index":59}}
+                        },
+                        {
+                          "type": "ArgumentPlaceholder",
+                          "start":61,"end":62,"loc":{"start":{"line":3,"column":19,"index":61},"end":{"line":3,"column":20,"index":62}}
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start":69,"end":80,"loc":{"start":{"line":4,"column":4,"index":69},"end":{"line":4,"column":15,"index":80}},
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start":69,"end":79,"loc":{"start":{"line":4,"column":4,"index":69},"end":{"line":4,"column":14,"index":79}},
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start":69,"end":75,"loc":{"start":{"line":4,"column":4,"index":69},"end":{"line":4,"column":10,"index":75}},
+                        "object": {
+                          "type": "ThisExpression",
+                          "start":69,"end":73,"loc":{"start":{"line":4,"column":4,"index":69},"end":{"line":4,"column":8,"index":73}}
+                        },
+                        "computed": false,
+                        "property": {
+                          "type": "Identifier",
+                          "start":74,"end":75,"loc":{"start":{"line":4,"column":9,"index":74},"end":{"line":4,"column":10,"index":75},"identifierName":"x"},
+                          "name": "x"
+                        }
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start":78,"end":79,"loc":{"start":{"line":4,"column":13,"index":78},"end":{"line":4,"column":14,"index":79},"identifierName":"x"},
+                        "name": "x"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
