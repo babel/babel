@@ -8,8 +8,6 @@ import { highlight } from "./highlight.ts";
 
 export { highlight };
 
-let deprecationWarningShown = false;
-
 export type { Options };
 
 export function codeFrameColumns(
