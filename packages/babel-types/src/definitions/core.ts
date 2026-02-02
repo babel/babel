@@ -219,6 +219,7 @@ defineType("CallExpression", {
     arguments: validateArrayOfType(
       "Expression",
       "SpreadElement",
+      // Todo(Babel 9): Remove ArgumentPlaceholder when we drop support of the 2018-07 version of partial-application
       "ArgumentPlaceholder",
     ),
     typeArguments: {
@@ -2158,6 +2159,7 @@ defineType("OptionalCallExpression", {
     arguments: validateArrayOfType(
       "Expression",
       "SpreadElement",
+      // Todo(Babel 9): Remove ArgumentPlaceholder when we drop support of the 2018-07 version of partial-application
       "ArgumentPlaceholder",
     ),
     optional: {
