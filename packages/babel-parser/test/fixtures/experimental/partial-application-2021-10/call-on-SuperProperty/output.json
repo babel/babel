@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":79}},
   "program": {
     "type": "Program",
-    "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":79}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+        "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":79}},
         "id": {
           "type": "Identifier",
           "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
@@ -18,11 +18,11 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":10,"end":78,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":5,"column":1,"index":78}},
+          "start":10,"end":79,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":5,"column":1,"index":79}},
           "body": [
             {
               "type": "ClassMethod",
-              "start":16,"end":76,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":4,"column":5,"index":76}},
+              "start":16,"end":77,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":4,"column":5,"index":77}},
               "static": false,
               "key": {
                 "type": "Identifier",
@@ -37,14 +37,14 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start":30,"end":76,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":4,"column":5,"index":76}},
+                "start":30,"end":77,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":4,"column":5,"index":77}},
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start":40,"end":70,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":38,"index":70}},
+                    "start":40,"end":71,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":39,"index":71}},
                     "expression": {
                       "type": "CallExpression",
-                      "start":40,"end":69,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":37,"index":69}},
+                      "start":40,"end":70,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":38,"index":70}},
                       "callee": {
                         "type": "Identifier",
                         "start":40,"end":43,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":11,"index":43},"identifierName":"baz"},
@@ -57,14 +57,14 @@
                         },
                         {
                           "type": "ArrowFunctionExpression",
-                          "start":50,"end":68,"loc":{"start":{"line":3,"column":18,"index":50},"end":{"line":3,"column":36,"index":68}},
+                          "start":50,"end":69,"loc":{"start":{"line":3,"column":18,"index":50},"end":{"line":3,"column":37,"index":69}},
                           "id": null,
                           "generator": false,
                           "async": false,
                           "params": [],
                           "body": {
-                            "type": "CallExpression",
-                            "start":56,"end":68,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":36,"index":68}},
+                            "type": "PartialCallExpression",
+                            "start":56,"end":69,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":37,"index":69}},
                             "callee": {
                               "type": "MemberExpression",
                               "start":56,"end":65,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":33,"index":65}},
@@ -82,7 +82,7 @@
                             "arguments": [
                               {
                                 "type": "ArgumentPlaceholder",
-                                "start":66,"end":67,"loc":{"start":{"line":3,"column":34,"index":66},"end":{"line":3,"column":35,"index":67}}
+                                "start":67,"end":68,"loc":{"start":{"line":3,"column":35,"index":67},"end":{"line":3,"column":36,"index":68}}
                               }
                             ]
                           }
