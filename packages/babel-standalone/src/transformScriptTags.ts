@@ -92,7 +92,7 @@ function buildBabelOptions(
   };
 
   if (script.type === "module") {
-    targets.esmodules = "intersect";
+    targets.esmodules = true;
   }
 
   return {
