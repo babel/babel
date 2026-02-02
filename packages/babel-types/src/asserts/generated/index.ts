@@ -1041,6 +1041,30 @@ export function assertArgumentPlaceholder(
 ): asserts node is t.ArgumentPlaceholder {
   assert("ArgumentPlaceholder", node, opts);
 }
+export function assertRestPlaceholder(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.RestPlaceholder {
+  assert("RestPlaceholder", node, opts);
+}
+export function assertPartialCallExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PartialCallExpression {
+  assert("PartialCallExpression", node, opts);
+}
+export function assertPartialNewExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PartialNewExpression {
+  assert("PartialNewExpression", node, opts);
+}
+export function assertOptionalPartialCallExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.OptionalPartialCallExpression {
+  assert("OptionalPartialCallExpression", node, opts);
+}
 export function assertBindExpression(
   node: object | null | undefined,
   opts?: object | null,

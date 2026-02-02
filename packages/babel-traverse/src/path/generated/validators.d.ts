@@ -1137,6 +1137,15 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.OptionalMemberExpression & Opts>;
+  isOptionalPartialCallExpression(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.OptionalPartialCallExpression>;
+  isOptionalPartialCallExpression<
+    Opts extends Options<t.OptionalPartialCallExpression>,
+  >(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.OptionalPartialCallExpression & Opts>;
   isParenthesizedExpression(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.ParenthesizedExpression>;
@@ -1144,6 +1153,20 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.ParenthesizedExpression & Opts>;
+  isPartialCallExpression(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.PartialCallExpression>;
+  isPartialCallExpression<Opts extends Options<t.PartialCallExpression>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.PartialCallExpression & Opts>;
+  isPartialNewExpression(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.PartialNewExpression>;
+  isPartialNewExpression<Opts extends Options<t.PartialNewExpression>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.PartialNewExpression & Opts>;
   isPattern(this: NodePath<t.Node | null>): this is NodePath<t.Pattern>;
   isPattern<Opts extends Options<t.Pattern>>(
     this: NodePath<t.Node | null>,
@@ -1210,6 +1233,13 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.RestElement & Opts>;
+  isRestPlaceholder(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.RestPlaceholder>;
+  isRestPlaceholder<Opts extends Options<t.RestPlaceholder>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.RestPlaceholder & Opts>;
   isRestProperty(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.RestProperty>;

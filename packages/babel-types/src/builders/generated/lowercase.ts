@@ -2552,10 +2552,81 @@ export function v8IntrinsicIdentifier(name: string): t.V8IntrinsicIdentifier {
   validate(defs.name, node, "name", name);
   return node;
 }
-export function argumentPlaceholder(): t.ArgumentPlaceholder {
-  return {
+export function argumentPlaceholder(
+  ordinal: t.NumericLiteral | null = null,
+): t.ArgumentPlaceholder {
+  const node: t.ArgumentPlaceholder = {
     type: "ArgumentPlaceholder",
+    ordinal,
   };
+  const defs = NODE_FIELDS.ArgumentPlaceholder;
+  validate(defs.ordinal, node, "ordinal", ordinal, 1);
+  return node;
+}
+export function restPlaceholder(): t.RestPlaceholder {
+  return {
+    type: "RestPlaceholder",
+  };
+}
+export function partialCallExpression(
+  callee: t.Expression,
+  _arguments: (
+    | t.Expression
+    | t.SpreadElement
+    | t.ArgumentPlaceholder
+    | t.RestPlaceholder
+  )[],
+): t.PartialCallExpression {
+  const node: t.PartialCallExpression = {
+    type: "PartialCallExpression",
+    callee,
+    arguments: _arguments,
+  };
+  const defs = NODE_FIELDS.PartialCallExpression;
+  validate(defs.callee, node, "callee", callee, 1);
+  validate(defs.arguments, node, "arguments", _arguments, 1);
+  return node;
+}
+export function partialNewExpression(
+  callee: t.Expression,
+  _arguments: (
+    | t.Expression
+    | t.SpreadElement
+    | t.ArgumentPlaceholder
+    | t.RestPlaceholder
+  )[],
+): t.PartialNewExpression {
+  const node: t.PartialNewExpression = {
+    type: "PartialNewExpression",
+    callee,
+    arguments: _arguments,
+  };
+  const defs = NODE_FIELDS.PartialNewExpression;
+  validate(defs.callee, node, "callee", callee, 1);
+  validate(defs.arguments, node, "arguments", _arguments, 1);
+  return node;
+}
+export function optionalPartialCallExpression(
+  callee: t.Expression,
+  _arguments: (
+    | t.Expression
+    | t.SpreadElement
+    | t.ArgumentPlaceholder
+    | t.RestPlaceholder
+  )[],
+  optional: boolean,
+): t.OptionalPartialCallExpression {
+  const node: t.OptionalPartialCallExpression = {
+    type: "OptionalPartialCallExpression",
+    callee,
+    arguments: _arguments,
+    optional,
+  };
+  const defs = NODE_FIELDS.OptionalPartialCallExpression;
+  validate(defs.callee, node, "callee", callee, 1);
+  validate(defs.arguments, node, "arguments", _arguments, 1);
+  validate(defs.optional, node, "optional", optional);
+  return node;
 }
 export function bindExpression(
   object: t.Expression,
