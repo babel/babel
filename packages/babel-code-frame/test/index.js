@@ -1,11 +1,12 @@
 import { stripVTControlCharacters } from "node:util";
-import _codeFrame, { codeFrameColumns, highlight } from "../lib/index.js";
-const codeFrame = _codeFrame.default || _codeFrame;
+import { codeFrameColumns, highlight } from "../lib/index.js";
 
 describe("@babel/code-frame", function () {
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    expect(codeFrame(rawLines, 2, 16)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -17,7 +18,9 @@ describe("@babel/code-frame", function () {
 
   test("optional column number", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    expect(codeFrame(rawLines, 2, null)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: null } }),
+    ).toEqual(
       ["  1 | class Foo {", "> 2 |   constructor()", "  3 | };"].join("\n"),
     );
   });
@@ -36,7 +39,9 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 7, column: 2 } }),
+    ).toEqual(
       [
         "   5 |  * @param b Number",
         "   6 |  * @returns Number",
@@ -63,7 +68,9 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 6, 2)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 6, column: 2 } }),
+    ).toEqual(
       [
         "  4 |  * @param a Number",
         "  5 |  * @param b Number",
@@ -82,7 +89,9 @@ describe("@babel/code-frame", function () {
       "\t  \t\t    constructor\t(\t)",
       "\t};",
     ].join("\n");
-    expect(codeFrame(rawLines, 2, 25)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 25 } }),
+    ).toEqual(
       [
         "  1 | \tclass Foo {",
         "> 2 | \t  \t\t    constructor\t(\t)",
@@ -106,7 +115,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 2 } },
+        { linesAbove: 1 },
+      ),
+    ).toEqual(
       [
         "   6 |  * @returns Number",
         ">  7 |  */",
@@ -132,7 +147,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesBelow: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 2 } },
+        { linesBelow: 1 },
+      ),
+    ).toEqual(
       [
         "  5 |  * @param b Number",
         "  6 |  * @returns Number",
@@ -157,7 +178,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 2 } },
+        { linesAbove: 1, linesBelow: 1 },
+      ),
+    ).toEqual(
       ["  6 |  * @returns Number", "> 7 |  */", "    |  ^", "  8 |"].join("\n"),
     );
   });
