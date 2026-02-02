@@ -6,13 +6,66 @@ import type * as t from "../index.ts";
 import defineType, {
   arrayOfType,
   assertNodeType,
+  assertOptionalChainStart,
   assertValueType,
   chain,
   type ValidatorImpl,
 } from "./utils.ts";
 
 // https://github.com/tc39/proposal-partial-application
-defineType("ArgumentPlaceholder", {});
+defineType("ArgumentPlaceholder", {
+  visitor: ["ordinal"],
+  fields: {
+    ordinal: {
+      validate: assertNodeType("NumericLiteral"),
+      optional: true,
+    },
+  },
+});
+
+defineType("RestPlaceholder", {});
+
+defineType("PartialCallExpression", {
+  visitor: ["callee", "arguments"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: arrayOfType(
+        "Expression",
+        "SpreadElement",
+        "ArgumentPlaceholder",
+        "RestPlaceholder",
+      ),
+    },
+  },
+});
+
+defineType("PartialNewExpression", { inherits: "PartialCallExpression" });
+
+defineType("OptionalPartialCallExpression", {
+  visitor: ["callee", "arguments"],
+  builder: ["callee", "arguments", "optional"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: arrayOfType(
+        "Expression",
+        "SpreadElement",
+        "ArgumentPlaceholder",
+        "RestPlaceholder",
+      ),
+    },
+    optional: {
+      validate: chain(assertValueType("boolean"), assertOptionalChainStart()),
+    },
+  },
+});
 
 // https://github.com/tc39/proposal-bind-operator
 defineType("BindExpression", {
