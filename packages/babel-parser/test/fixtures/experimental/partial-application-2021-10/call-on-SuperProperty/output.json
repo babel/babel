@@ -1,0 +1,103 @@
+{
+  "type": "File",
+  "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":78}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":78,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":5,"column":1,"index":78}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":16,"end":76,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":4,"column":5,"index":76}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":16,"end":27,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":15,"index":27},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":30,"end":76,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":4,"column":5,"index":76}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":40,"end":70,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":38,"index":70}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":40,"end":69,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":37,"index":69}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":40,"end":43,"loc":{"start":{"line":3,"column":8,"index":40},"end":{"line":3,"column":11,"index":43},"identifierName":"baz"},
+                        "name": "baz"
+                      },
+                      "arguments": [
+                        {
+                          "type": "ThisExpression",
+                          "start":44,"end":48,"loc":{"start":{"line":3,"column":12,"index":44},"end":{"line":3,"column":16,"index":48}}
+                        },
+                        {
+                          "type": "ArrowFunctionExpression",
+                          "start":50,"end":68,"loc":{"start":{"line":3,"column":18,"index":50},"end":{"line":3,"column":36,"index":68}},
+                          "id": null,
+                          "generator": false,
+                          "async": false,
+                          "params": [],
+                          "body": {
+                            "type": "CallExpression",
+                            "start":56,"end":68,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":36,"index":68}},
+                            "callee": {
+                              "type": "MemberExpression",
+                              "start":56,"end":65,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":33,"index":65}},
+                              "object": {
+                                "type": "Super",
+                                "start":56,"end":61,"loc":{"start":{"line":3,"column":24,"index":56},"end":{"line":3,"column":29,"index":61}}
+                              },
+                              "computed": false,
+                              "property": {
+                                "type": "Identifier",
+                                "start":62,"end":65,"loc":{"start":{"line":3,"column":30,"index":62},"end":{"line":3,"column":33,"index":65},"identifierName":"bar"},
+                                "name": "bar"
+                              }
+                            },
+                            "arguments": [
+                              {
+                                "type": "ArgumentPlaceholder",
+                                "start":66,"end":67,"loc":{"start":{"line":3,"column":34,"index":66},"end":{"line":3,"column":35,"index":67}}
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
