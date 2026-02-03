@@ -143,7 +143,7 @@ export default class Buffer {
 
     if (char === -1) {
       const indent =
-        repeat > 64
+        repeat >= 64
           ? this._indentChar.repeat(repeat)
           : spaceIndents[repeat / 2];
       this._str += indent;
