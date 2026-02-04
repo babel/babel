@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/dot-notation */
+
 import "shelljs/make.js";
 import path from "node:path";
 import mod from "node:module";
@@ -12,34 +14,31 @@ import { execaSync } from "execa";
 
 mod.enableCompileCache?.();
 
-/**
- * @type {import("shelljs")}
- */
-const shell = global;
-const target = new Proxy(global.target, {
-  // eslint-disable-next-line no-unused-vars
-  set: function (obj, prop, value) {
-    return Reflect.set(...arguments);
+const shell = global as any as typeof import("shelljs");
+const target = new Proxy((global as any).target, {
+  set: function (obj, prop, value, receiver) {
+    return Reflect.set(obj, prop, value, receiver);
   },
-  // eslint-disable-next-line no-unused-vars
   get: function (obj, prop, receiver) {
-    print(`make ${prop}`);
-    return Reflect.get(...arguments);
+    console.log(`make ${prop as string}`);
+    return Reflect.get(obj, prop, receiver);
   },
 });
 const SOURCES = ["packages", "codemods", "eslint"];
 
-const YARN_PATH = shell.which("yarn").stdout;
+const YARN_PATH = shell.which("yarn")!.stdout;
 const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
 
 shell.config.verbose = true;
 
-function print(...msgs) {
-  console.log.apply(console, msgs);
-}
-
-function exec(executable, args, cwd, inheritStdio = true, noExit = false) {
-  print(
+function exec(
+  executable: string,
+  args: string[],
+  cwd?: string,
+  inheritStdio = true,
+  noExit = false
+): string {
+  console.log(
     `${executable
       .replaceAll(YARN_PATH, "yarn")
       .replaceAll(NODE_PATH, "node")} ${args.join(" ")}`
@@ -50,8 +49,8 @@ function exec(executable, args, cwd, inheritStdio = true, noExit = false) {
       stdio: inheritStdio ? "inherit" : undefined,
       cwd: cwd && path.resolve(cwd),
       env: process.env,
-    }).stdout;
-  } catch (error) {
+    }).stdout!;
+  } catch (error: any) {
     if (inheritStdio && error.exitCode !== 0) {
       console.error(
         new Error(
@@ -67,15 +66,20 @@ function exec(executable, args, cwd, inheritStdio = true, noExit = false) {
   }
 }
 
-function yarn(args, cwd, inheritStdio, noExit) {
+function yarn(
+  args: string[],
+  cwd?: string,
+  inheritStdio?: boolean,
+  noExit?: boolean
+) {
   return exec(YARN_PATH, args, cwd, inheritStdio, noExit);
 }
 
-function node(args, cwd, inheritStdio) {
+function node(args: string[], cwd?: string, inheritStdio?: boolean) {
   return exec(NODE_PATH, args, cwd, inheritStdio);
 }
 
-function env(fun, env) {
+function env(fun: () => void, env: NodeJS.ProcessEnv) {
   const envBak = process.env;
   process.env = { ...envBak, ...env };
   fun();
@@ -226,7 +230,7 @@ target["prepublish-build"] = function () {
   target["clean-lib"]();
   target["clean-runtime-helpers"]();
 
-  node(["scripts/generators/npm-ignore.js"]);
+  node(["scripts/generators/npm-ignore.ts"]);
 
   env(
     () => {
@@ -279,7 +283,7 @@ target["prepublish-prepare-dts-no-clean"] = function () {
 
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
-  node(["scripts/parallel-tsc/tsc.js", "."]);
+  node(["scripts/parallel-tsc/tsc.ts", "."]);
   target["tscheck-helpers"]();
 };
 
@@ -295,8 +299,8 @@ target["clean-ts"] = function () {
 };
 
 target["generate-tsconfig"] = function () {
-  node(["scripts/generators/tsconfig.js"]);
-  node(["scripts/generators/archived-libs-typings.js"]);
+  node(["scripts/generators/tsconfig.ts"]);
+  node(["scripts/generators/archived-libs-typings.ts"]);
 };
 
 target["generate-type-helpers"] = function () {
@@ -315,14 +319,14 @@ target["build-typescript-legacy-typings"] = function () {
 };
 
 target["clone-license"] = function () {
-  node(["scripts/clone-license.js"]);
+  node(["scripts/clone-license.ts"]);
 };
 
 /**
  * DEV
  */
 
-function eslint(...extraArgs) {
+function eslint(...extraArgs: string[]) {
   const eslintArgs = [
     "--format",
     "codeframe",
@@ -376,7 +380,7 @@ function eslint(...extraArgs) {
             ),
           { BABEL_ENV: "test" }
         );
-      } catch (e) {
+      } catch (e: any) {
         err = e;
       }
     }
@@ -455,10 +459,14 @@ target["test-cov"] = function () {
   );
 };
 
-function bootstrapParserTests(name, repoURL, subPaths) {
-  function getParserTestsCommit(id) {
+function bootstrapParserTests(
+  name: string,
+  repoURL: string,
+  subPaths: string[]
+) {
+  function getParserTestsCommit(id: string): string {
     const content = readFileSync("./Makefile", "utf8");
-    const commit = content.match(new RegExp(`${id}_COMMIT = (\\w{40})`))[1];
+    const commit = new RegExp(`${id}_COMMIT = (\\w{40})`).exec(content)![1];
     if (!commit) throw new Error(`Could not find ${id}_COMMIT in Makefile`);
     return commit;
   }
@@ -466,7 +474,7 @@ function bootstrapParserTests(name, repoURL, subPaths) {
   const dir = "./build/" + name.toLowerCase();
 
   shell.rm("-rf", dir);
-  print("mkdir -p build");
+  console.log("mkdir -p build");
   mkdirSync("build", { recursive: true });
 
   exec("git", [

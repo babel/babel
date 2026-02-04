@@ -1,5 +1,3 @@
-// @ts-check
-
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
@@ -23,8 +21,8 @@ const entryProjectsPaths = new Set(
   process.argv.slice(2).map(project => resolvePath(process.cwd(), project))
 );
 
-const ready = new Set();
-const projectToDependencies = new Map();
+const ready = new Set<string>();
+const projectToDependencies = new Map<string, Set<string>>();
 {
   const queue = Array.from(entryProjectsPaths);
   for (let i = 0; i < queue.length; i++) {
@@ -34,7 +32,7 @@ const projectToDependencies = new Map();
     const tsconfig = JSON5.parse(
       readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
     );
-    const references = tsconfig.references.map(({ path }) =>
+    const references = tsconfig.references.map(({ path }: { path: string }) =>
       resolvePath(project, path)
     );
 
@@ -47,7 +45,7 @@ const projectToDependencies = new Map();
   }
 }
 
-const projectToDependents = new Map();
+const projectToDependents = new Map<string, Set<string>>();
 {
   for (const [project, references] of projectToDependencies) {
     for (const reference of references) {
@@ -73,9 +71,9 @@ class Pool {
   #maxWeight;
   #getWeight;
 
-  #running = new Map();
-  #pending = [];
-  #emptyListeners = [];
+  #running = new Map<cp.ChildProcess, number>();
+  #pending: string[] = [];
+  #emptyListeners: (() => void)[] = [];
   #queued = false;
 
   constructor({
@@ -87,6 +85,19 @@ class Pool {
     showOutput,
     maxWeight,
     taskWeight,
+  }: {
+    filename: string;
+    concurrency: number;
+    onTaskStart: (tasks: string[], weight: number) => void;
+    onTaskDone: (
+      tasks: string[],
+      code: number,
+      duration: number
+    ) => Promise<void>;
+    onTaskError: (tasks: string[]) => void;
+    showOutput: (tasks: string[]) => boolean;
+    maxWeight: number;
+    taskWeight: (task: string) => number;
   }) {
     this.#filename = filename;
     this.#concurrency = concurrency;
@@ -98,7 +109,7 @@ class Pool {
     this.#getWeight = taskWeight;
   }
 
-  run(task) {
+  run(task: string) {
     this.#pending.push(task);
     if (!this.#queued) {
       this.#queued = true;
@@ -129,10 +140,11 @@ class Pool {
       stdio: this.#showOutput(tasks) ? "inherit" : "ignore",
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     taskProcess.once("exit", async code => {
-      const startTime = this.#running.get(taskProcess);
+      const startTime = this.#running.get(taskProcess)!;
       const duration = performance.now() - startTime;
-      await this.#onTaskDone(tasks, code, duration);
+      await this.#onTaskDone(tasks, code!, duration);
       this.#running.delete(taskProcess);
 
       // Spin the event loop so that #run can pick up the next task
@@ -162,7 +174,7 @@ class Pool {
   }
 
   get waitForEmpty() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       this.#emptyListeners.push(resolve);
     });
   }
@@ -181,16 +193,18 @@ const pool = new Pool({
   showOutput(projects) {
     return projects.some(task => entryProjectsPaths.has(task));
   },
-  // eslint-disable-next-line no-unused-vars
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTaskStart(projects, weight) {},
   async onTaskDone(projects, code, duration) {
     if (code !== 0) process.exitCode = code;
 
     await Promise.all(
       projects.map(async project => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         const { include: projectFiles } = JSON5.parse(
           readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
-        );
+        ) as { include?: string[] };
         if (!projectFiles) return;
         const globPatterns = projectFiles
           .filter(file => file.endsWith("*.ts"))

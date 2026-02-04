@@ -61,7 +61,7 @@ export default defineConfig([
       "scripts/integration-tests/fixtures",
       "test/runtime-integration/*/output.js",
       "test/runtime-integration/*/output-absolute.js",
-      "Makefile.mjs",
+      "Makefile.js",
       "packages/babel-types/src/constants/generated/index.ts",
       "test/esm/index.ts",
       ...(process.env.IS_PUBLISH ? testFiles : []),
@@ -137,9 +137,7 @@ export default defineConfig([
         allowAutomaticSingleRunInference: true,
         projectService: {
           allowDefaultProject: [
-            "packages/babel-helpers/src/helpers/applyDecs2305.ts",
             "scripts/repo-utils/index.d.cts",
-            "scripts/babel-plugin-bit-decorator/types.d.ts",
             "eslint/*/types.d.cts",
           ],
         },

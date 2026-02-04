@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
-            const { default: repl } = await import('${{ github.workspace }}/scripts/actions/repl.js');
+            const { default: repl } = await import('${{ github.workspace }}/scripts/actions/repl.ts');
             await repl(github, context);

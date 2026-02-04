@@ -1,10 +1,8 @@
-// @ts-check
-
 import { transformAsync } from "@babel/core";
 import { mkdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { styleText } from "node:util";
-import { log } from "./scripts/utils/logger.js";
+import { log } from "./scripts/utils/logger.ts";
 
 /** * Check if the source file needs to be compiled based on its modification time
  * compared to the destination file.
@@ -14,11 +12,11 @@ import { log } from "./scripts/utils/logger.js";
  * @param {string} dest - The destination file path.
  * @returns {boolean}
  */
-function needCompile(src, dest) {
+function needCompile(src: string, dest: string): boolean {
   let destStat;
   try {
     destStat = statSync(dest);
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === "ENOENT") {
       return true;
     } else {
@@ -29,24 +27,23 @@ function needCompile(src, dest) {
   return srcStat.mtimeMs >= destStat.mtimeMs;
 }
 
-export async function transform(src, dest, opts = {}) {
+export async function transform(src: string, dest: string, opts: any = {}) {
   mkdirSync(path.dirname(dest), { recursive: true });
   if (!needCompile(src, dest)) {
     return;
   }
   log(`Compiling '${styleText("cyan", src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
-  const { code, map } = await transformAsync(content, {
+  const { code, map } = (await transformAsync(content, {
     filename: src,
     sourceFileName: path.relative(path.dirname(dest), src),
     caller: {
       // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
-      // @ts-expect-error improve caller metadata typings
       supportsDynamicImport: true,
       name: "babel-worker",
     },
     ...opts,
-  });
+  }))!;
 
   if (map) {
     writeFileSync(

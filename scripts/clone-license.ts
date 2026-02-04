@@ -1,5 +1,3 @@
-// @ts-check
-
 import { readFileSync, writeFileSync } from "node:fs";
 import shell from "shelljs";
 import path from "node:path";
@@ -12,8 +10,8 @@ console.log(LICENSE);
 
 shell.ls("-d", "./packages/*/").forEach(dir => {
   if (
-    !dir.match(
-      /.*packages\/babel-(helpers|parser|plugin-transform-regenerator)\/?$/
+    !/.*packages\/babel-(?:helpers|parser|plugin-transform-regenerator)\/?$/.exec(
+      dir
     )
   ) {
     writeFileSync(path.join(dir, "LICENSE"), LICENSE);
@@ -21,7 +19,7 @@ shell.ls("-d", "./packages/*/").forEach(dir => {
 });
 
 shell.ls("-d", "./eslint/*/").forEach(dir => {
-  if (!dir.match(/.*eslint\/(babel-eslint-plugin)\/?$/)) {
+  if (!/.*eslint\/babel-eslint-plugin\/?$/.exec(dir)) {
     writeFileSync(path.join(dir, "LICENSE"), LICENSE);
   }
 });
