@@ -417,7 +417,16 @@ export default abstract class StatementParser extends ExpressionParser {
           ),
           true,
         );
-
+      case tt._struct:
+        if (!this.state.containsEsc && this.nextTokenIsIdentifierOnSameLine()) {
+          this.expectPlugin("structs");
+          if (!allowDeclaration) this.unexpected();
+          return this.parseStructDeclaration(
+            node as Undone<N.StructDeclaration>,
+            false,
+          );
+        }
+        break;
       case tt._if:
         return this.parseIfStatement(node as Undone<N.IfStatement>);
       case tt._return:
@@ -2144,7 +2153,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   parseClassId(
-    node: Undone<N.Class>,
+    node: Undone<N.Class | N.StructDeclaration>,
     isStatement: boolean,
     optionalId?: boolean | null,
     bindingType: BindingFlag = BindingFlag.TYPE_CLASS,
@@ -2164,8 +2173,60 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   // https://tc39.es/ecma262/#prod-ClassHeritage
-  parseClassSuper(this: Parser, node: Undone<N.Class>): void {
+  parseClassSuper(
+    this: Parser,
+    node: Undone<N.Class | N.StructDeclaration>,
+  ): void {
     node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
+  }
+
+  parseStructDeclaration(
+    this: Parser,
+    node: Undone<N.StructDeclaration>,
+    optionalId?: boolean | null,
+  ): N.StructDeclaration {
+    this.next(); // 'struct'
+
+    // A struct definition is always strict mode code.
+    const oldStrict = this.state.strict;
+    this.state.strict = true;
+
+    this.parseClassId(node, true, optionalId);
+    this.parseClassSuper(node);
+    // this.state.strict is restored in parseStructBody
+    node.body = this.parseStructBody(!!node.superClass, oldStrict);
+
+    return this.finishNode(node, "StructDeclaration");
+  }
+
+  parseStructBody(
+    this: Parser,
+    hadSuperClass: boolean,
+    oldStrict: boolean,
+  ): N.StructBody {
+    this.classScope.enter();
+
+    const state: N.ParseClassMemberState = {
+      hadConstructor: false,
+      hadSuperClass,
+    };
+    const structBody = this.startNode<N.StructBody>();
+    structBody.body = [];
+    this.expect(tt.braceL);
+
+    while (!this.match(tt.braceR)) {
+      if (this.eat(tt.semi)) {
+        continue;
+      }
+      const member = this.startNode<N.ClassMember>();
+      this.parseClassMember(structBody, member, state);
+    }
+
+    this.state.strict = oldStrict;
+    this.next(); // eat `}`
+    this.classScope.exit();
+
+    return this.finishNode(structBody, "StructBody");
   }
 
   // Parses module export declaration.
@@ -2384,6 +2445,21 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.parseClass(expr as Undone<N.ClassExpression>, true, true);
     }
 
+    if (this.isContextual(tt._struct)) {
+      const next = this.nextTokenInLineStart();
+      const nextCh = this.codePointAtPos(next);
+      if (
+        nextCh === charCodes.leftCurlyBrace ||
+        this.chStartsBindingIdentifier(nextCh, next)
+      ) {
+        this.expectPlugin("structs");
+        return this.parseStructDeclaration(
+          expr as Undone<N.StructDeclaration>,
+          true,
+        );
+      }
+    }
+
     if (this.match(tt.at)) {
       return this.parseClass(
         this.maybeTakeDecorators(
@@ -2424,6 +2500,17 @@ export default abstract class StatementParser extends ExpressionParser {
       );
       return node;
     }
+    if (
+      this.isContextual(tt._struct) &&
+      this.nextTokenIsIdentifierOnSameLine()
+    ) {
+      this.expectPlugin("structs");
+      const node = this.parseStructDeclaration(
+        this.startNode<N.StructDeclaration>(),
+        false,
+      );
+      return node;
+    }
     return this.parseStatementListItem() as N.Declaration;
   }
 
@@ -2434,7 +2521,7 @@ export default abstract class StatementParser extends ExpressionParser {
         return false;
       }
       if (
-        (type === tt._type || type === tt._interface) &&
+        (type === tt._type || type === tt._interface || type === tt._struct) &&
         !this.state.containsEsc
       ) {
         // If we see any variable name other than `from` after `type` keyword,
@@ -2448,7 +2535,9 @@ export default abstract class StatementParser extends ExpressionParser {
           (this.chStartsBindingIdentifier(nextChar, next) &&
             !this.input.startsWith("from", next))
         ) {
-          this.expectOnePlugin(["flow", "typescript"]);
+          if (type !== tt._struct) {
+            this.expectOnePlugin(["flow", "typescript"]);
+          }
           return false;
         }
       }
@@ -2518,7 +2607,8 @@ export default abstract class StatementParser extends ExpressionParser {
       type === tt._function ||
       type === tt._class ||
       this.isLet() ||
-      this.isAsyncFunction()
+      this.isAsyncFunction() ||
+      (this.isContextual(tt._struct) && this.nextTokenIsIdentifierOnSameLine())
     );
   }
 

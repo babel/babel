@@ -98,6 +98,8 @@ export type Expression =
   | DoExpression
   | ModuleExpression
   | TopicReference
+  | StructDeclaration
+  | StructBody
   | TsInstantiationExpression
   | TsAsExpression
   | TsSatisfiesExpression
@@ -132,6 +134,7 @@ export type Statement =
   | ExportNamedDeclaration
   | ForOfStatement
   | ImportDeclaration
+  | StructDeclaration
   | FlowDeclareClass
   | FlowDeclareFunction
   | FlowDeclareInterface
@@ -165,6 +168,7 @@ export type Declaration =
   | VariableDeclaration
   | ClassDeclaration
   | FunctionDeclaration
+  | StructDeclaration
   | TsImportEqualsDeclaration
   | TsInterfaceDeclaration
   | TsTypeAliasDeclaration
@@ -963,6 +967,18 @@ export interface ClassDeclaration extends OptClassDeclaration {
 // DeclarationBase: For TS-ESLint
 export interface ClassExpression extends ClassBase, DeclarationBase {
   type: "ClassExpression";
+}
+
+export interface StructDeclaration extends DeclarationBase {
+  type: "StructDeclaration";
+  id: Identifier;
+  superClass: Expression | null;
+  body: StructBody;
+}
+
+export interface StructBody extends NodeBase {
+  type: "StructBody";
+  body: (ClassMember | StaticBlock)[];
 }
 
 export interface MetaProperty extends NodeBase {
@@ -2074,6 +2090,8 @@ export type Node =
   | StaticBlock
   | StringLiteral
   | StringLiteralTypeAnnotation
+  | StructDeclaration
+  | StructBody
   | Super
   | SwitchCase
   | SwitchStatement

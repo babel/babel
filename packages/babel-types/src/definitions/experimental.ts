@@ -8,6 +8,7 @@ import defineType, {
   assertNodeType,
   assertValueType,
   chain,
+  validateArrayOfType,
   type ValidatorImpl,
 } from "./utils.ts";
 
@@ -161,4 +162,38 @@ defineType("TopicReference", {
 // https://github.com/tc39/proposal-discard-binding
 defineType("VoidPattern", {
   aliases: ["Pattern", "PatternLike", "FunctionParameter"],
+});
+
+// https://github.com/tc39/proposal-structs
+defineType("StructDeclaration", {
+  visitor: ["id", "superClass", "body"],
+  aliases: ["Scopable", "Statement", "Declaration"],
+  fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+      // The id may be omitted if this is the child of an
+      // ExportDefaultDeclaration.
+      optional: true,
+    },
+    body: {
+      validate: assertNodeType("StructBody"),
+    },
+    superClass: {
+      optional: true,
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("StructBody", {
+  visitor: ["body"],
+  fields: {
+    body: validateArrayOfType(
+      "ClassMethod",
+      "ClassPrivateMethod",
+      "ClassProperty",
+      "ClassPrivateProperty",
+      "StaticBlock",
+    ),
+  },
 });
