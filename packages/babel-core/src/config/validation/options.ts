@@ -275,7 +275,7 @@ export type MaybeDefaultProperty<T> = T | { default: T };
 export type PluginTarget =
   | string
   | MaybeDefaultProperty<
-      (api: PluginAPI, options?: object, dirname?: string) => PluginObject
+      (api: PluginAPI, options: object, dirname: string) => PluginObject
     >;
 export type PluginItem =
   | ConfigItem<PluginAPI>
@@ -286,7 +286,7 @@ export type PluginItem =
 export type PresetTarget =
   | string
   | MaybeDefaultProperty<
-      (api: PresetAPI, options?: object, dirname?: string) => PresetObject
+      (api: PresetAPI, options: object, dirname: string) => PresetObject
     >;
 export type PresetItem =
   | ConfigItem<PresetAPI>
