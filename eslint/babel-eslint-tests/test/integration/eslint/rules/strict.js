@@ -1,17 +1,10 @@
-import { Linter, ESLint } from "eslint";
+import { Linter } from "eslint";
 import fs from "node:fs";
 import path from "node:path";
 import * as parser from "../../../../../babel-eslint-parser/lib/index.js";
 import { fileURLToPath } from "node:url";
-import {
-  babelESLintParserPath,
-  eslintConfigCompat,
-} from "../../../helpers/eslintConfigCompat.cjs";
 
 const linter = new Linter();
-if (parseInt(ESLint.version, 10) < 9) {
-  linter.defineParser(babelESLintParserPath, parser);
-}
 
 const paths = {
   fixtures: path.join(
@@ -44,7 +37,7 @@ function lint(opts) {
   return new Promise((resolve, reject) => {
     readFixture(opts.fixture, (err, src) => {
       if (err) return reject(err);
-      resolve(linter.verify(src, eslintConfigCompat(opts.eslint)));
+      resolve(linter.verify(src, opts.eslint));
     });
   });
 }

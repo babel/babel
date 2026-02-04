@@ -1,12 +1,5 @@
 const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
-const eslintVersion = eslint.ESLint.version;
-
-const rule = (
-  parseInt(eslintVersion, 10) >= 9
-    ? require("eslint/use-at-your-own-risk").builtinRules
-    : new eslint.Linter().getRules()
-).get("new-cap");
+const rule = require("eslint/use-at-your-own-risk").builtinRules.get("new-cap");
 
 /**
  * Returns whether a node is under a decorator or not.

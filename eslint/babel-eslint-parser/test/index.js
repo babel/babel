@@ -2,7 +2,6 @@ import path from "node:path";
 import * as escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.js";
-import { ESLint } from "eslint";
 import { commonJS } from "$repo-utils";
 
 function parseForESLint(code, options) {
@@ -16,8 +15,6 @@ function parseForESLint(code, options) {
   });
 }
 
-const ESLINT_VERSION = ESLint.version;
-const isESLint8 = ESLINT_VERSION.startsWith("8.");
 const { __dirname: dirname, require } = commonJS(import.meta.url);
 
 const BABEL_OPTIONS = {
@@ -35,13 +32,6 @@ const PROPS_TO_REMOVE = [
   { key: "identifierName", type: null },
   // For legacy estree AST
   { key: "attributes", type: "ImportExpression" },
-];
-const PROPS_TO_REMOVE_ESLINT_LT_9 = [
-  // old espree doesn't support these
-  { key: "attributes", type: "ImportDeclaration" },
-  { key: "attributes", type: "ExportNamedDeclaration" },
-  { key: "attributes", type: "ExportAllDeclaration" },
-  { key: "options", type: "ImportExpression" },
 ];
 
 function deeplyRemoveProperties(obj, props) {
@@ -93,42 +83,20 @@ describe("Babel and Espree", () => {
   function parseAndAssertSame(code, babelEcmaFeatures = null) {
     code = unpad(code);
 
-    if (isESLint8) {
-      // ESLint 8
-      const espreeAST = espree.parse(code, {
-        ...espreeOptions,
-        ecmaVersion: 2024,
-      });
+    const espreeAST = espree.parse(code, {
+      ...espreeOptions,
+      ecmaVersion: "latest",
+    });
 
-      const babelAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: BABEL_OPTIONS,
-        ecmaFeatures: babelEcmaFeatures,
-      }).ast;
+    const babelAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+      ecmaFeatures: babelEcmaFeatures,
+    }).ast;
 
-      deeplyRemoveProperties(babelAST, [
-        ...PROPS_TO_REMOVE,
-        ...PROPS_TO_REMOVE_ESLINT_LT_9,
-      ]);
-      expect(babelAST).toEqual(espreeAST);
-    } else {
-      // ESLint 9
-      const espreeAST = espree.parse(code, {
-        ...espreeOptions,
-        ecmaVersion: "latest",
-      });
-
-      const babelAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: BABEL_OPTIONS,
-        ecmaFeatures: babelEcmaFeatures,
-      }).ast;
-
-      deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
-      expect(babelAST).toEqual(espreeAST);
-    }
+    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+    expect(babelAST).toEqual(espreeAST);
   }
 
   beforeAll(() => {

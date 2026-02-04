@@ -1,12 +1,7 @@
 const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
-const eslintVersion = eslint.ESLint.version;
-
-const rule = (
-  parseInt(eslintVersion, 10) >= 9
-    ? require("eslint/use-at-your-own-risk").builtinRules
-    : new eslint.Linter().getRules()
-).get("no-unused-expressions");
+const rule = require("eslint/use-at-your-own-risk").builtinRules.get(
+  "no-unused-expressions",
+);
 
 /**
  * @param {ASTNode} node - any node
@@ -49,22 +44,7 @@ function isInDoStatement(node) {
   return false;
 }
 
-/**
- * @param {ASTNode} node - any node
- * @returns {boolean} whether the given node is an optional call expression,
- * https://github.com/tc39/proposal-optional-chaining
- */
-function isOptionalCallExpression(node) {
-  return (
-    !!node &&
-    node.type === "ExpressionStatement" &&
-    node.expression.type === "ChainExpression" &&
-    node.expression.expression.type === "CallExpression"
-  );
-}
-
 module.exports = ruleComposer.filterReports(
   rule,
-  problem =>
-    !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node),
+  problem => !isInDoStatement(problem.node),
 );

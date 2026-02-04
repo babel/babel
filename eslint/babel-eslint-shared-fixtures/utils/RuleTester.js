@@ -1,7 +1,4 @@
 const { RuleTester } = require("eslint");
-const {
-  eslintConfigCompat,
-} = require("../../babel-eslint-tests/test/helpers/eslintConfigCompat.cjs");
 
 const defaultConfig = {
   languageOptions: {
@@ -16,6 +13,6 @@ const defaultConfig = {
   },
 };
 
-RuleTester.setDefaultConfig(eslintConfigCompat(defaultConfig));
+RuleTester.setDefaultConfig(defaultConfig);
 
 module.exports = RuleTester;

@@ -1,5 +1,4 @@
 import { loadPartialConfigAsync } from "@babel/core";
-import ESLINT_VERSION from "../utils/eslint-version.ts";
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types";
 import type { PartialConfig } from "../../../../packages/babel-core/src/config";
@@ -13,7 +12,7 @@ export function getParserPlugins(
   babelOptions: InputOptions,
 ): InputOptions["parserOpts"]["plugins"] {
   const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
-  const estreeOptions = { classFeatures: ESLINT_VERSION >= 8 };
+  const estreeOptions = { classFeatures: true };
   for (const plugin of babelParserPlugins) {
     if (Array.isArray(plugin) && plugin[0] === "estree") {
       Object.assign(estreeOptions, plugin[1]);
