@@ -25,6 +25,13 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.1 (2026-02-04)
+
+#### :bug: Bug Fix
+* `babel-standalone`
+  * [#17771](https://github.com/babel/babel/pull/17771) [7.x backport] fix: ensure `targets.esmodules` is validated ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#17776](https://github.com/babel/babel/pull/17776) [7.x backport] Fix undefined when 64 indents ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.29.0 (2026-01-31)
 
 #### :rocket: New Feature
