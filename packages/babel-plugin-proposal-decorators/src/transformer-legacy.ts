@@ -37,7 +37,15 @@ const buildGetObjectInitializer = template(`
   PROPERTY: t.Literal;
 }) => t.ExpressionStatement;
 
-const WARNING_CALLS = new WeakSet();
+type WARNING_CALL = t.CallExpression & {
+  arguments: [t.Identifier, t.ThisExpression];
+};
+
+const WARNING_CALLS = new WeakSet<WARNING_CALL>();
+
+function isWarningCall(node: t.Node): node is WARNING_CALL {
+  return WARNING_CALLS.has(node as WARNING_CALL);
+}
 
 // legacy decorator does not support ClassAccessorProperty
 type ClassDecoratableElement =
@@ -223,7 +231,7 @@ function applyTargetDecorators(
         [descriptor, t.thisExpression()],
       );
 
-      WARNING_CALLS.add(node.value);
+      WARNING_CALLS.add(node.value as WARNING_CALL);
 
       acc.push(
         t.assignmentExpression(
@@ -353,7 +361,7 @@ const visitor: Visitor<PluginPass> = {
   },
 
   AssignmentExpression(path, state) {
-    if (!WARNING_CALLS.has(path.node.right)) return;
+    if (!isWarningCall(path.node.right)) return;
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
@@ -365,15 +373,15 @@ const visitor: Visitor<PluginPass> = {
             // @ts-expect-error todo(flow->ts) typesafe NodePath.get
             path.get("left.property").node.value,
         ),
-        t.cloneNode(path.get("right.arguments")[0].node),
-        t.cloneNode(path.get("right.arguments")[1].node),
+        t.cloneNode(path.node.right.arguments[0]),
+        t.cloneNode(path.node.right.arguments[1]),
       ]),
     );
   },
 
   CallExpression(path, state) {
     if (path.node.arguments.length !== 3) return;
-    if (!WARNING_CALLS.has(path.node.arguments[2])) return;
+    if (!isWarningCall(path.node.arguments[2])) return;
 
     // If the class properties plugin isn't enabled, this line will add an unused helper
     // to the code. It's not ideal, but it's ok since the configuration is not valid anyway.
@@ -386,8 +394,8 @@ const visitor: Visitor<PluginPass> = {
       t.callExpression(state.addHelper("initializerDefineProperty"), [
         t.cloneNode(path.get("arguments")[0].node),
         t.cloneNode(path.get("arguments")[1].node),
-        t.cloneNode(path.get("arguments.2.arguments")[0].node),
-        t.cloneNode(path.get("arguments.2.arguments")[1].node),
+        t.cloneNode(path.node.arguments[2].arguments[0]),
+        t.cloneNode(path.node.arguments[2].arguments[1]),
       ]),
     );
   },
