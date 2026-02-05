@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+        "expression": {
+          "type": "PartialNewExpression",
+          "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"f"},
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8}},
+              "value": 0,
+              "raw": "0"
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}}
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":13,"end":15,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":15}},
+              "ordinal": {
+                "type": "Literal",
+                "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15}},
+                "value": 1,
+                "raw": "1"
+              }
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":17,"end":20,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":20}}
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

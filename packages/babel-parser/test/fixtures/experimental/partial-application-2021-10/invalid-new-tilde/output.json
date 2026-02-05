@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+  "errors": [
+    "SyntaxError: The \"new\" partial application must specify arguments parentheses, such as \"new F~()\". (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+        "expression": {
+          "type": "PartialNewExpression",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"C"},
+            "name": "C"
+          },
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
