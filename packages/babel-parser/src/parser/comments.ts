@@ -208,6 +208,12 @@ export default class CommentsParser extends BaseParser {
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
             break;
+          case "TSInterfaceBody":
+            adjustInnerComments(node, node.body, commentWS);
+            break;
+          case "TSTypeParameterDeclaration":
+            adjustInnerComments(node, node.params, commentWS);
+            break;
           default: {
             setInnerComments(node, comments);
           }
