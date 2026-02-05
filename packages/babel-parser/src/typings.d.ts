@@ -35,7 +35,7 @@ export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
   Extract<ParserPluginWithOptions, [PluginName, any]>[1];
 
 export interface PartialApplicationPluginOptions {
-  version: "2018-07";
+  version: "2018-07" | "2021-10";
 }
 
 export interface PipelineOperatorPluginOptions {
