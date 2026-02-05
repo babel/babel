@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":24,"index":66}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":24,"index":66}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2},"identifierName":"f1"},
+            "name": "f1"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":24,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":14,"index":24}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":10,"end":24,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":14,"index":24}},
+          "callee": {
+            "type": "Identifier",
+            "start":10,"end":12,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":3,"column":2,"index":12},"identifierName":"f2"},
+            "name": "f2"
+          },
+          "arguments": [
+            {
+              "type": "SpreadElement",
+              "start":14,"end":18,"loc":{"start":{"line":3,"column":4,"index":14},"end":{"line":3,"column":8,"index":18}},
+              "argument": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":3,"column":7,"index":17},"end":{"line":3,"column":8,"index":18},"identifierName":"a"},
+                "name": "a"
+              }
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":20,"end":23,"loc":{"start":{"line":3,"column":10,"index":20},"end":{"line":3,"column":13,"index":23}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":26,"end":40,"loc":{"start":{"line":5,"column":0,"index":26},"end":{"line":5,"column":14,"index":40}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":26,"end":40,"loc":{"start":{"line":5,"column":0,"index":26},"end":{"line":5,"column":14,"index":40}},
+          "callee": {
+            "type": "Identifier",
+            "start":26,"end":28,"loc":{"start":{"line":5,"column":0,"index":26},"end":{"line":5,"column":2,"index":28},"identifierName":"f3"},
+            "name": "f3"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":30,"end":33,"loc":{"start":{"line":5,"column":4,"index":30},"end":{"line":5,"column":7,"index":33}}
+            },
+            {
+              "type": "SpreadElement",
+              "start":35,"end":39,"loc":{"start":{"line":5,"column":9,"index":35},"end":{"line":5,"column":13,"index":39}},
+              "argument": {
+                "type": "Identifier",
+                "start":38,"end":39,"loc":{"start":{"line":5,"column":12,"index":38},"end":{"line":5,"column":13,"index":39},"identifierName":"a"},
+                "name": "a"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":42,"end":66,"loc":{"start":{"line":7,"column":0,"index":42},"end":{"line":7,"column":24,"index":66}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":42,"end":66,"loc":{"start":{"line":7,"column":0,"index":42},"end":{"line":7,"column":24,"index":66}},
+          "callee": {
+            "type": "Identifier",
+            "start":42,"end":44,"loc":{"start":{"line":7,"column":0,"index":42},"end":{"line":7,"column":2,"index":44},"identifierName":"f4"},
+            "name": "f4"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":46,"end":49,"loc":{"start":{"line":7,"column":4,"index":46},"end":{"line":7,"column":7,"index":49}}
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":51,"end":52,"loc":{"start":{"line":7,"column":9,"index":51},"end":{"line":7,"column":10,"index":52}}
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":54,"end":56,"loc":{"start":{"line":7,"column":12,"index":54},"end":{"line":7,"column":14,"index":56}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":55,"end":56,"loc":{"start":{"line":7,"column":13,"index":55},"end":{"line":7,"column":14,"index":56}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            },
+            {
+              "type": "SpreadElement",
+              "start":58,"end":62,"loc":{"start":{"line":7,"column":16,"index":58},"end":{"line":7,"column":20,"index":62}},
+              "argument": {
+                "type": "Identifier",
+                "start":61,"end":62,"loc":{"start":{"line":7,"column":19,"index":61},"end":{"line":7,"column":20,"index":62},"identifierName":"a"},
+                "name": "a"
+              }
+            },
+            {
+              "type": "Identifier",
+              "start":64,"end":65,"loc":{"start":{"line":7,"column":22,"index":64},"end":{"line":7,"column":23,"index":65},"identifierName":"a"},
+              "name": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

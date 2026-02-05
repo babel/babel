@@ -230,7 +230,7 @@ export default (superClass: typeof Parser) =>
     parseLiteral<T extends N.Literal>(value: any, type: T["type"]): T {
       const node = super.parseLiteral<T>(value, type);
       // @ts-expect-error mutating AST types
-      node.raw = node.extra.raw;
+      node.raw = super.getLiteralRaw(node);
       delete node.extra;
 
       return node;
@@ -483,6 +483,18 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
+    finishPartialCallExpression<
+      T extends N.PartialCallExpression | N.OptionalPartialCallExpression,
+    >(unfinished: Undone<T>, optional: boolean): T {
+      const node = super.finishPartialCallExpression(unfinished, optional);
+      if (node.type === "OptionalPartialCallExpression") {
+        this.castNodeTo(node, "PartialCallExpression");
+      } else {
+        node.optional = false;
+      }
+      return node;
+    }
+
     toReferencedArguments(
       node /* isParenthesizedExpr?: boolean, */ :
         | N.CallExpression
@@ -655,5 +667,12 @@ export default (superClass: typeof Parser) =>
     ): void {
       super.resetEndLocation(node, endLoc);
       toESTreeLocation(node);
+    }
+
+    /* ============================================================ *
+     * parser/util.ts                                               *
+     * ============================================================ */
+    getLiteralRaw(node: N.NumericLiteral): string {
+      return (node as unknown as N.EstreeLiteral).raw;
     }
   };

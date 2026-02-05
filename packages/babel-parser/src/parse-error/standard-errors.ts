@@ -219,7 +219,6 @@ export default {
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
   SuperPrivateField: "Private fields can't be accessed on super.",
   TrailingDecorator: "Decorators must be attached to a class element.",
-  UnexpectedArgumentPlaceholder: "Unexpected argument placeholder.",
   UnexpectedDigitAfterHash: "Unexpected digit after hash token.",
   UnexpectedImportExport:
     "'import' and 'export' may only appear at the top level.",

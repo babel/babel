@@ -98,6 +98,9 @@ export type Expression =
   | DoExpression
   | ModuleExpression
   | TopicReference
+  | PartialCallExpression
+  | PartialNewExpression
+  | OptionalPartialCallExpression
   | TsInstantiationExpression
   | TsAsExpression
   | TsSatisfiesExpression
@@ -464,6 +467,11 @@ export interface VariableDeclarator extends NodeBase {
 
 export interface ArgumentPlaceholder extends NodeBase {
   type: "ArgumentPlaceholder";
+  ordinal?: NumericLiteral;
+}
+
+export interface RestPlaceholder extends NodeBase {
+  type: "RestPlaceholder";
 }
 
 export interface Decorator extends NodeBase {
@@ -695,6 +703,12 @@ export interface OptionalCallExpression extends CallOrNewBase {
   type: "OptionalCallExpression";
   optional: boolean;
 }
+
+export interface OptionalPartialCallExpression extends PartialCallOrNewBase {
+  type: "OptionalPartialCallExpression";
+  optional: boolean;
+}
+
 export interface BindExpression extends NodeBase {
   type: "BindExpression";
   object: Expression | undefined | null;
@@ -722,6 +736,26 @@ export interface CallExpression extends CallOrNewBase {
 
 export interface NewExpression extends CallOrNewBase {
   type: "NewExpression";
+}
+
+export interface PartialCallExpression extends PartialCallOrNewBase {
+  type: "PartialCallExpression";
+  // For ESTree
+  optional: boolean;
+}
+
+export interface PartialNewExpression extends PartialCallOrNewBase {
+  type: "PartialNewExpression";
+}
+
+export interface PartialCallOrNewBase extends NodeBase {
+  callee: Expression;
+  arguments: readonly (
+    | ArgumentPlaceholder
+    | RestPlaceholder
+    | SpreadElement
+    | Expression
+  )[];
 }
 
 export interface ImportExpression extends NodeBase {
@@ -2062,12 +2096,16 @@ export type Node =
   | ObjectProperty
   | OptionalCallExpression
   | OptionalMemberExpression
+  | OptionalPartialCallExpression
   | ParenthesizedExpression
+  | PartialCallExpression
+  | PartialNewExpression
   | Placeholder
   | PrivateName
   | Program
   | RegExpLiteral
   | RestElement
+  | RestPlaceholder
   | ReturnStatement
   | SequenceExpression
   | SpreadElement

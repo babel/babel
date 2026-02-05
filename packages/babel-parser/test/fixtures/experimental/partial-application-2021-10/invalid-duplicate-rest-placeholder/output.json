@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":39}},
+  "errors": [
+    "SyntaxError: The partial application can have only one rest placeholder. (3:2)",
+    "SyntaxError: The partial application can have only one rest placeholder. (8:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":18}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":18}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"f"},
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":6,"end":9,"loc":{"start":{"line":2,"column":2,"index":6},"end":{"line":2,"column":5,"index":9}}
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":13,"end":16,"loc":{"start":{"line":3,"column":2,"index":13},"end":{"line":3,"column":5,"index":16}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":20,"end":39,"loc":{"start":{"line":6,"column":0,"index":20},"end":{"line":9,"column":1,"index":39}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":20,"end":39,"loc":{"start":{"line":6,"column":0,"index":20},"end":{"line":9,"column":1,"index":39}},
+          "callee": {
+            "type": "Identifier",
+            "start":20,"end":21,"loc":{"start":{"line":6,"column":0,"index":20},"end":{"line":6,"column":1,"index":21},"identifierName":"g"},
+            "name": "g"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":26,"end":29,"loc":{"start":{"line":7,"column":2,"index":26},"end":{"line":7,"column":5,"index":29}}
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":33,"end":36,"loc":{"start":{"line":8,"column":2,"index":33},"end":{"line":8,"column":5,"index":36}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
