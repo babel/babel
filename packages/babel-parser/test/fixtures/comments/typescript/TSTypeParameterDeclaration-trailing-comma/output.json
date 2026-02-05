@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":10,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":10,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":10,"index":40}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":10,"end":31,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":31}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":12,"end":13,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":1,"index":13}},
+              "name": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":1,"index":13},"identifierName":"T"},
+                "name": "T"
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " 1 ",
+                  "start":13,"end":20,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":8,"index":20}}
+                },
+                {
+                  "type": "CommentBlock",
+                  "value": " 2 ",
+                  "start":22,"end":29,"loc":{"start":{"line":2,"column":10,"index":22},"end":{"line":2,"column":17,"index":29}}
+                }
+              ]
+            }
+          ],
+          "extra": {
+            "trailingComma": 20
+          }
+        },
+        "params": [
+          {
+            "type": "Identifier",
+            "start":32,"end":36,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":6,"index":36},"identifierName":"a"},
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":33,"end":36,"loc":{"start":{"line":3,"column":3,"index":33},"end":{"line":3,"column":6,"index":36}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":35,"end":36,"loc":{"start":{"line":3,"column":5,"index":35},"end":{"line":3,"column":6,"index":36}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":35,"end":36,"loc":{"start":{"line":3,"column":5,"index":35},"end":{"line":3,"column":6,"index":36},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":38,"end":40,"loc":{"start":{"line":3,"column":8,"index":38},"end":{"line":3,"column":10,"index":40}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " 1 ",
+      "start":13,"end":20,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":8,"index":20}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 2 ",
+      "start":22,"end":29,"loc":{"start":{"line":2,"column":10,"index":22},"end":{"line":2,"column":17,"index":29}}
+    }
+  ]
+}
