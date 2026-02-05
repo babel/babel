@@ -178,6 +178,7 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.properties, commentWS);
             break;
           case "CallExpression":
+          case "NewExpression":
           case "OptionalCallExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
