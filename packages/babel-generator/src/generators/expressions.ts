@@ -73,7 +73,13 @@ export function ConditionalExpression(
 
 function _printExpressionArguments(
   this: Printer,
-  node: t.CallExpression | t.NewExpression | t.OptionalCallExpression,
+  node:
+    | t.CallExpression
+    | t.NewExpression
+    | t.OptionalCallExpression
+    | t.OptionalPartialCallExpression
+    | t.PartialCallExpression
+    | t.PartialNewExpression,
 ) {
   this.token("(");
   const oldNoLineTerminatorAfterNode = this.enterDelimited();
@@ -117,6 +123,18 @@ export function NewExpression(
     return;
   }
 
+  _printExpressionArguments.call(this, node);
+}
+
+export function PartialNewExpression(
+  this: Printer,
+  node: t.PartialNewExpression,
+) {
+  this.word("new");
+  this.space();
+  this.print(node.callee, true);
+
+  this.token("~");
   _printExpressionArguments.call(this, node);
 }
 
@@ -201,6 +219,30 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
 
   this.print(node.typeArguments);
 
+  _printExpressionArguments.call(this, node);
+}
+
+export function OptionalPartialCallExpression(
+  this: Printer,
+  node: t.OptionalPartialCallExpression,
+) {
+  this.print(node.callee, !node.optional);
+
+  if (node.optional) {
+    this.token("?.", true);
+  }
+
+  this.token("~");
+  _printExpressionArguments.call(this, node);
+}
+
+export function PartialCallExpression(
+  this: Printer,
+  node: t.PartialCallExpression,
+) {
+  this.print(node.callee, true);
+
+  this.token("~");
   _printExpressionArguments.call(this, node);
 }
 
