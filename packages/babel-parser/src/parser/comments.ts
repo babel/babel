@@ -205,10 +205,6 @@ export default class CommentsParser extends BaseParser {
           case "ImportDeclaration":
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
-          case "TSEnumDeclaration":
-            setInnerComments(node, comments);
-
-            break;
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
             break;
