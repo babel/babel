@@ -1,0 +1,22 @@
+foo?.~(?);
+foo?.~(?, x);
+foo?.~(x, ?);
+foo?.~(?, x, ?);
+obj.foo?.~(x, ?);
+obj.foo?.~(?, x);
+obj?.foo~(?, x, ?)~(?1, ...);
+class foo {
+  constructor() {
+      baz(this, () => super.bar?.~(?));
+  }
+}
+obj?.foo~
+(
+  ?,
+  x,
+  ?,
+)~
+(
+  ?1,
+  ...,
+);
