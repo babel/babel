@@ -2,11 +2,11 @@
   "type": "File",
   "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":26,"index":80}},
   "errors": [
+    "SyntaxError: This syntax requires partial application plugin with version \"2018-07\", but got \"2021-10\". (1:6)",
     "SyntaxError: Binding invalid left-hand side in function parameter list. (1:6)",
-    "SyntaxError: This syntax requires partial application plugin with version \"2018-07\", but got \"2021-10\". (3:6)",
     "SyntaxError: Binding invalid left-hand side in function parameter list. (3:6)",
+    "SyntaxError: This syntax requires partial application plugin with version \"2018-07\", but got \"2021-10\". (5:6)",
     "SyntaxError: Binding invalid left-hand side in function parameter list. (5:6)",
-    "SyntaxError: This syntax requires partial application plugin with version \"2018-07\", but got \"2021-10\". (7:6)",
     "SyntaxError: Binding invalid left-hand side in function parameter list. (7:6)"
   ],
   "program": {
