@@ -33,6 +33,7 @@
   "Reflect.construct",
   "Reflect.set",
   "Reflect.setPrototypeOf",
+  "RegExp.escape",
   "Set",
   "Set-methods",
   "ShadowRealm",
