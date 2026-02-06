@@ -70,7 +70,7 @@ import { createExportedTokens } from "./statement.ts";
 export const enum PlaceholderParsingFlags {
   None = 0,
   AllowPlaceholder = 1 << 0,
-  RequireVersion2018_07 = 1 << 1,
+  UseVersion2018_07 = 1 << 1,
 }
 
 export default abstract class ExpressionParser extends LValParser {
@@ -893,7 +893,7 @@ export default abstract class ExpressionParser extends LValParser {
       node.arguments = this.parseCallExpressionArguments();
     } else {
       node.arguments = this.parseCallExpressionArguments(
-        PlaceholderParsingFlags.RequireVersion2018_07 |
+        PlaceholderParsingFlags.UseVersion2018_07 |
           (base.type !== "Super"
             ? PlaceholderParsingFlags.AllowPlaceholder
             : PlaceholderParsingFlags.None),
@@ -2737,21 +2737,20 @@ export default abstract class ExpressionParser extends LValParser {
           nextChar === charCodes.comma
         ) {
           this.expectPlugin("partialApplication");
-          if (
-            placeholderFlags & PlaceholderParsingFlags.RequireVersion2018_07 &&
-            this.getPluginOption("partialApplication", "version") !== "2018-07"
+          if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
+            this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
+          } else if (
+            placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
+            this.getPluginOption("partialApplication", "version") === "2018-07"
           ) {
             this.raise(
               Errors.IncorrectPartialApplicationVersion,
               this.state.startLoc,
               {
-                expected: "2018-07",
-                actual: this.getPluginOption("partialApplication", "version")!,
+                expected: "2021-10",
+                actual: "2018-07",
               },
             );
-          }
-          if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
-            this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
           }
           return this.parseRestPlaceholder();
         }
@@ -2765,8 +2764,20 @@ export default abstract class ExpressionParser extends LValParser {
       this.expectPlugin("partialApplication");
       if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
         this.raise(Errors.UnexpectedArgumentPlaceholder, this.state.startLoc);
+      } else if (
+        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
+        this.getPluginOption("partialApplication", "version") !== "2018-07"
+      ) {
+        this.raise(
+          Errors.IncorrectPartialApplicationVersion,
+          this.state.startLoc,
+          {
+            expected: "2018-07",
+            actual: this.getPluginOption("partialApplication", "version")!,
+          },
+        );
       }
-      return this.parseArgumentPlaceholder();
+      return this.parseArgumentPlaceholder(placeholderFlags);
     } else {
       elt = this.parseMaybeAssignAllowInOrVoidPattern(
         close,
@@ -3189,10 +3200,25 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseMaybeAssignAllowIn(refExpressionErrors, afterLeftParse);
   }
 
-  parseArgumentPlaceholder(): N.ArgumentPlaceholder {
+  parseArgumentPlaceholder(
+    placeholderFlags: PlaceholderParsingFlags,
+  ): N.ArgumentPlaceholder {
     const node = this.startNode<N.ArgumentPlaceholder>();
     this.next(); // eat `?`
     if (this.match(tt.num)) {
+      if (
+        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
+        this.getPluginOption("partialApplication", "version") === "2018-07"
+      ) {
+        this.raise(
+          Errors.IncorrectPartialApplicationVersion,
+          this.state.startLoc,
+          {
+            expected: "2021-10",
+            actual: "2018-07",
+          },
+        );
+      }
       const ordinal = this.parseNumericLiteral(this.state.value);
       if (!this.isDecimalIntegerLiteral(ordinal)) {
         this.raise(
