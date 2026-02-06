@@ -12,7 +12,9 @@
     "dts/**/*.d.ts",
     "*.mts",
     "*.ts",
-    "packages/*/test/*.tst.ts"
+    "packages/*/test/*.tst.ts",
+    "scripts/*/*.ts",
+    "scripts/*.ts"
   ],
   "exclude": [
     "dts/**/*.tst.d.ts"

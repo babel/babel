@@ -379,6 +379,8 @@ maybeWriteFile(
           "*.mts",
           "*.ts",
           "packages/*/test/*.tst.ts",
+          "scripts/*/*.ts",
+          "scripts/*.ts",
         ],
         exclude: ["dts/**/*.tst.d.ts"],
         references: Array.from(new Set(projectsFolders.values()))
