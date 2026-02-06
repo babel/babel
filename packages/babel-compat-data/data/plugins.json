@@ -1,10 +1,10 @@
 {
   "transform-explicit-resource-management": {
-    "chrome": "134",
-    "edge": "134",
-    "firefox": "141",
-    "node": "24",
-    "electron": "35.0"
+    "chrome": "143",
+    "edge": "143",
+    "firefox": "147",
+    "node": "25",
+    "electron": "40.0"
   },
   "transform-duplicate-named-capturing-groups-regex": {
     "chrome": "126",
