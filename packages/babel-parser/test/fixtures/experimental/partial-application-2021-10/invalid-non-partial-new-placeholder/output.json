@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+  "errors": [
+    "SyntaxError: Unexpected argument placeholder. (1:8)",
+    "SyntaxError: Unexpected rest placeholder. (1:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"Foo"},
+            "name": "Foo"
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}}
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
