@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { chrome < 134, firefox < 141, ios, opera, opera_mobile, safari, samsung }
+  transform-explicit-resource-management { chrome < 143, edge < 143, firefox < 147, ios, opera, opera_mobile, safari, samsung }
   transform-duplicate-named-capturing-groups-regex { chrome < 126, opera_mobile, samsung }
   transform-regexp-modifiers { chrome < 125, ios, opera_mobile, safari }
   transform-unicode-sets-regex { chrome < 112 }

@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: false
 
 Using plugins:
-  transform-explicit-resource-management { chrome < 134 }
+  transform-explicit-resource-management { chrome < 143 }
   transform-duplicate-named-capturing-groups-regex { chrome < 126 }
   transform-regexp-modifiers { chrome < 125 }
   transform-unicode-sets-regex { chrome < 112 }
