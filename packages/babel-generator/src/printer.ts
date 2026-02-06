@@ -398,13 +398,15 @@ class Printer {
   /**
    * Writes a simple token.
    *
-   * @param {string} str The string to append.
-   * @param {boolean} [maybeNewline=false] Wether `str` might potentially
+   * @param str The string to append.
+   * @param [maybeNewline=false] Whether `str` might potentially
    *    contain a line terminator or not.
-   * @param {number} [occurrenceCount=0] The occurrence count of this token in
+   * @param [occurrenceCount=0] The occurrence count of this token in
    *    the current node. This is used when printing in `preserveFormat` mode,
    *    to know which token we should map to (for example, to disambiguate the
    *    commas in an array literal).
+   * @param [mayNeedSpace=false] Check whether a whitespace might be
+   *    needed after this token, and if so, add a whitespace after it.
    */
   token(
     str: string,
