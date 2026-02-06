@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { ios, opera, opera_mobile, safari, samsung }
+  transform-explicit-resource-management { firefox < 147, ios, opera, opera_mobile, safari, samsung }
   transform-duplicate-named-capturing-groups-regex { opera_mobile, samsung }
   transform-regexp-modifiers { ios, opera_mobile, safari }
   transform-export-namespace-from { }

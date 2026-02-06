@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { edge < 134 }
+  transform-explicit-resource-management { edge < 143 }
   transform-duplicate-named-capturing-groups-regex { edge < 126 }
   transform-regexp-modifiers { edge < 125 }
   transform-unicode-sets-regex { edge < 112 }
