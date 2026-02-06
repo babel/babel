@@ -136,7 +136,9 @@
               {
                 "$ref": "#/definitions/PartialApplicationPluginOptions"
               }
-            ]
+            ],
+            "additionalItems": false,
+            "type": "array"
           },
           {
             "items": [
