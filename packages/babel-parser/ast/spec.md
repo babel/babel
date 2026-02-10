@@ -95,6 +95,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ArrayPattern](#arraypattern)
   - [RestElement](#restelement)
   - [AssignmentPattern](#assignmentpattern)
+  - [VoidPattern](#voidpattern)
 - [Classes](#classes)
   - [ClassBody](#classbody)
   - [ClassMethod](#classmethod)
@@ -118,6 +119,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
     - [ExportNamespaceSpecifier](#exportnamespacespecifier)
+    - [ExportDefaultSpecifier](#exportdefaultspecifier)
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
@@ -1123,6 +1125,16 @@ interface AssignmentPattern <: Pattern {
 }
 ```
 
+## VoidPattern
+
+```js
+interface VoidPattern <: Pattern {
+  type: "VoidPattern";
+}
+```
+
+A `void` binding used in the [discard binding proposal](https://github.com/tc39/proposal-discard-binding).
+
 # Classes
 
 ```js
@@ -1366,6 +1378,17 @@ interface ExportNamespaceSpecifier <: ModuleSpecifier {
 ```
 
 A namespace export specifier, e.g., `* as foo` in `export * as foo from "mod.js"`.
+
+### ExportDefaultSpecifier
+
+```js
+interface ExportDefaultSpecifier <: ModuleSpecifier {
+  type: "ExportDefaultSpecifier";
+  exported: Identifier;
+}
+```
+
+A default export specifier used in the [export default from proposal](https://github.com/tc39/proposal-export-default-from).
 
 ### ExportDefaultDeclaration
 
