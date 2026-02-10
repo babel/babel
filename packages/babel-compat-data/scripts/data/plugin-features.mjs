@@ -117,7 +117,20 @@ const es2015 = {
     ],
   },
   "transform-destructuring": {
-    features: ["destructuring, assignment", "destructuring, declarations"],
+    features: [
+      [
+        "destructuring, assignment",
+        {
+          exclude: ["rest with identical number of elements in RHS"],
+        },
+      ],
+      [
+        "destructuring, declarations",
+        {
+          exclude: ["rest with identical number of elements in RHS"],
+        },
+      ],
+    ],
   },
   "transform-block-scoping": {
     features: [

@@ -54,6 +54,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -219,6 +220,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -280,6 +282,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -1075,6 +1078,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "7",
+    "rhino": "1.9",
     "opera_mobile": "43",
     "electron": "1.7"
   },
@@ -1216,7 +1220,6 @@
     "deno": "1",
     "ios": "11.3",
     "samsung": "8",
-    "rhino": "1.7.15",
     "opera_mobile": "46",
     "electron": "3.0"
   },
@@ -1452,6 +1455,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "37",
     "electron": "1.1"
   },
@@ -1465,6 +1469,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "37",
     "electron": "1.1"
   },
@@ -1968,6 +1973,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -1981,6 +1987,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -1994,6 +2001,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2007,6 +2015,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2020,6 +2029,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2033,6 +2043,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2046,6 +2057,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2059,6 +2071,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -2072,6 +2085,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
