@@ -1,10 +1,10 @@
 {
   "transform-explicit-resource-management": {
-    "chrome": "134",
-    "edge": "134",
+    "chrome": "141",
+    "edge": "141",
     "firefox": "141",
-    "node": "24",
-    "electron": "35.0"
+    "node": "25",
+    "electron": "39.0"
   },
   "transform-duplicate-named-capturing-groups-regex": {
     "chrome": "126",
@@ -14,6 +14,7 @@
     "safari": "17.4",
     "node": "23",
     "ios": "17.4",
+    "rhino": "1.9",
     "electron": "31.0"
   },
   "transform-regexp-modifiers": {
@@ -273,6 +274,7 @@
     "deno": "1",
     "ios": "11.3",
     "samsung": "9",
+    "rhino": "1.9",
     "opera_mobile": "47",
     "electron": "3.0"
   },
@@ -286,6 +288,7 @@
     "deno": "1",
     "ios": "11.3",
     "samsung": "9",
+    "rhino": "1.9",
     "opera_mobile": "47",
     "electron": "3.0"
   },
@@ -326,6 +329,7 @@
     "deno": "1",
     "ios": "13",
     "samsung": "3.4",
+    "rhino": "1.9",
     "opera_mobile": "28",
     "electron": "0.21"
   },
