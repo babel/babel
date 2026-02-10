@@ -35,6 +35,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -157,6 +158,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "3.4",
+    "rhino": "1.9",
     "opera_mobile": "28",
     "electron": "0.21"
   },
