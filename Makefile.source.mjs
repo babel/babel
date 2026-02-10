@@ -473,8 +473,9 @@ function bootstrapParserTests(name, repoURL, subPaths) {
     "clone",
     "--filter=blob:none",
     "--sparse",
-    "--revision",
-    getParserTestsCommit(name),
+    "--depth",
+    "1",
+    "--revision=" + getParserTestsCommit(name),
     repoURL,
     dir,
   ]);
