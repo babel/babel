@@ -13,7 +13,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-explicit-resource-management { chrome < 134, edge < 134, firefox < 141, ie, ios, safari }
+  transform-explicit-resource-management { chrome < 141, edge < 141, firefox < 141, ie, ios, safari }
   transform-duplicate-named-capturing-groups-regex { chrome < 126, edge < 126, firefox < 129, ie, ios < 17.4, safari < 17.4 }
   transform-regexp-modifiers { chrome < 125, edge < 125, firefox < 132, ie, ios, safari }
   transform-unicode-sets-regex { chrome < 112, edge < 112, firefox < 116, ie, ios < 17, safari < 17 }
@@ -50,7 +50,7 @@ Using plugins:
   transform-unicode-escapes { firefox < 53, ie, safari < 9 }
   transform-unicode-regex { ie, ios < 12, safari < 12 }
   transform-spread { ie, ios < 10, safari < 10 }
-  transform-destructuring { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
+  transform-destructuring { edge < 15, firefox < 53, ie, ios < 14.5, safari < 14.1 }
   transform-block-scoping { edge < 14, firefox < 53, ie, ios < 10, safari < 10 }
   transform-typeof-symbol { ie, safari < 9 }
   transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
