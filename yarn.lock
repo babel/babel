@@ -1401,6 +1401,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@workspace:packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@workspace:packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:^8.0.0-beta.3":
   version: 8.0.0-beta.3
   resolution: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:8.0.0-beta.3"
