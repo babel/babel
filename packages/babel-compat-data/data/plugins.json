@@ -527,10 +527,10 @@
     "opera": "38",
     "edge": "15",
     "firefox": "53",
-    "safari": "14.1",
+    "safari": "10",
     "node": "6.5",
     "deno": "1",
-    "ios": "14.5",
+    "ios": "10",
     "samsung": "5",
     "opera_mobile": "41",
     "electron": "1.2"
