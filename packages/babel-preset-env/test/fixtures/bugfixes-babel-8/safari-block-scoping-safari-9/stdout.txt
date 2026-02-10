@@ -37,7 +37,7 @@ Using plugins:
   transform-sticky-regex { safari < 10 }
   transform-unicode-regex { safari < 12 }
   transform-spread { safari < 10 }
-  transform-destructuring { safari < 14.1 }
+  transform-destructuring { safari < 10 }
   transform-block-scoping { safari < 10 }
   transform-new-target { safari < 10 }
   transform-regenerator { safari < 10 }

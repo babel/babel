@@ -19,7 +19,6 @@ Using plugins:
   transform-logical-assignment-operators { safari < 14 }
   transform-nullish-coalescing-operator { safari < 13.1 }
   transform-optional-chaining { safari < 13.1 }
-  transform-destructuring { safari < 14.1 }
   transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
 
