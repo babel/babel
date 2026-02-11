@@ -34,6 +34,9 @@
       "path": "../../packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
     },
     {
+      "path": "../../packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array"
+    },
+    {
       "path": "../../packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining"
     },
     {

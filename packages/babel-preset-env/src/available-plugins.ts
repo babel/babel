@@ -60,6 +60,7 @@ import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/trans
 import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing/index.js";
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing/index.js";
 import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
+import bugfixSafariRestDestructuringRhsArray from "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array";
 import bugfixSafariClassFieldInitializerScope from "@babel/plugin-bugfix-safari-class-field-initializer-scope";
 import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
 import bugfixV8StaticClassFieldsRedefineReadonly from "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly";
@@ -77,6 +78,8 @@ const availablePlugins = {
   "bugfix/transform-safari-for-shadowing": () => bugfixSafariForShadowing,
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
     () => bugfixSafariIdDestructuringCollisionInFunctionExpression,
+  "bugfix/transform-safari-rest-destructuring-rhs-array": () =>
+    bugfixSafariRestDestructuringRhsArray,
   "bugfix/transform-tagged-template-caching": () => bugfixTaggedTemplateCaching,
   "bugfix/transform-v8-spread-parameters-in-optional-chaining": () =>
     bugfixV8SpreadParametersInOptionalChaining,
