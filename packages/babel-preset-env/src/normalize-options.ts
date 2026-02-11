@@ -48,10 +48,6 @@ const getValidIncludesAndExcludes = (
   return Array.from(set);
 };
 
-function flatMap<T, U>(array: T[], fn: (item: T) => U[]): U[] {
-  return Array.prototype.concat.apply([], array.map(fn));
-}
-
 export const normalizePluginName = (plugin: string) =>
   plugin.replace(/^(?:@babel\/|babel-)(?:plugin-)?/, "");
 
@@ -65,7 +61,7 @@ const expandIncludesAndExcludes = (
   const filterableItems = getValidIncludesAndExcludes(type, corejs);
 
   const invalidFilters: PluginListOption = [];
-  const selectedPlugins = flatMap(filterList, filter => {
+  const selectedPlugins = filterList.flatMap(filter => {
     let re: RegExp;
     if (typeof filter === "string") {
       try {
