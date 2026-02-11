@@ -1,12 +1,13 @@
 {
   "validateLogs": true,
-  "targets": "safari 15",
+  "targets": "firefox 149",
   "presets": [
     [
       "env",
       {
+        "bugfixes": true,
         "debug": true,
-        "exclude": ["bugfix/.+"],
+        "include": ["bugfix/.+"],
         "modules": false
       }
     ]

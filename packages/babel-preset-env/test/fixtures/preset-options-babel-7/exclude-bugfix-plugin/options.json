@@ -5,6 +5,7 @@
     [
       "env",
       {
+        "bugfixes": true,
         "debug": true,
         "exclude": ["bugfix/transform-firefox-class-in-computed-class-key"],
         "modules": false
