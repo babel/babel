@@ -9,6 +9,7 @@
           "chrome": "40"
         },
         "exclude": [
+          "bugfix/transform-safari-rest-destructuring-rhs-array",
           "transform-destructuring",
           "transform-arrow-functions"
         ]

@@ -1,0 +1,12 @@
+{
+  "validateLogs": true,
+  "targets": "safari 13.1",
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true
+      }
+    ]
+  ]
+}
