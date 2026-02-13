@@ -71,6 +71,24 @@ export function ConditionalExpression(
   this.print(node.alternate);
 }
 
+function _printExpressionArguments(
+  this: Printer,
+  node: t.CallExpression | t.NewExpression | t.OptionalCallExpression,
+) {
+  this.token("(");
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
+  this.printList(
+    node.arguments,
+    this.shouldPrintTrailingComma(")"),
+    undefined,
+    undefined,
+    undefined,
+    true,
+  );
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
+  this.rightParens(node);
+}
+
 export function NewExpression(
   this: Printer,
   node: t.NewExpression,
@@ -109,18 +127,7 @@ export function NewExpression(
     return;
   }
 
-  this.token("(");
-  const oldNoLineTerminatorAfterNode = this.enterDelimited();
-  this.printList(
-    node.arguments,
-    this.shouldPrintTrailingComma(")"),
-    undefined,
-    undefined,
-    undefined,
-    true,
-  );
-  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
-  this.rightParens(node);
+  _printExpressionArguments.call(this, node);
 }
 
 export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
@@ -204,18 +211,7 @@ export function OptionalCallExpression(
 
   this.print(node.typeArguments);
 
-  this.token("(");
-  const oldNoLineTerminatorAfterNode = this.enterDelimited();
-  this.printList(
-    node.arguments,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    true,
-  );
-  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
-  this.rightParens(node);
+  _printExpressionArguments.call(this, node);
 }
 
 export function CallExpression(this: Printer, node: t.CallExpression) {
@@ -226,18 +222,8 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
     // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters); // legacy TS AST
   }
-  this.token("(");
-  const oldNoLineTerminatorAfterNode = this.enterDelimited();
-  this.printList(
-    node.arguments,
-    this.shouldPrintTrailingComma(")"),
-    undefined,
-    undefined,
-    undefined,
-    true,
-  );
-  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
-  this.rightParens(node);
+
+  _printExpressionArguments.call(this, node);
 }
 
 export function Import(this: Printer) {
