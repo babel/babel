@@ -3259,13 +3259,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // An apparent conditional expression could actually be an optional parameter in an arrow function.
     parseConditional(
       expr: N.Expression,
-
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      if (this.state.maybeInArrowParameters) {
+      if (refExpressionErrors != null) {
         const nextCh = this.lookaheadCharCode();
         // These tokens cannot start an expression, so if one of them follows
         // ? then we are probably in an arrow function parameters list and we
@@ -3276,8 +3275,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           nextCh === charCodes.colon || // (a?: b) => c
           nextCh === charCodes.rightParenthesis // (a?) => c
         ) {
-          /*:: invariant(refExpressionErrors != null) */
-          this.setOptionalParametersError(refExpressionErrors!);
+          this.setOptionalParametersError(refExpressionErrors);
           return expr;
         }
       }
