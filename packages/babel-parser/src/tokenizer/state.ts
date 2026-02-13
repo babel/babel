@@ -87,7 +87,6 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  @bit accessor maybeInArrowParameters = false;
   @bit accessor inType = false;
   @bit accessor noAnonFunctionType = false;
   @bit accessor hasFlowComment = false;

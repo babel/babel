@@ -1486,8 +1486,6 @@ export default abstract class StatementParser extends ExpressionParser {
       node.id = this.parseFunctionId(requireId);
     }
 
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    this.state.maybeInArrowParameters = false;
     this.scope.enter(ScopeFlag.FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
@@ -1512,7 +1510,6 @@ export default abstract class StatementParser extends ExpressionParser {
       this.registerFunctionStatementId(node as T);
     }
 
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     return node as T;
   }
 

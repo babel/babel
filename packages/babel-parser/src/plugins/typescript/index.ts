@@ -2326,9 +2326,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.ArrowFunctionExpression | undefined {
       if (!this.match(tt.lt)) return;
 
-      const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-      this.state.maybeInArrowParameters = true;
-
       const res: Undone<N.ArrowFunctionExpression> | undefined | null =
         this.tsTryParseAndCatch(() => {
           const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
@@ -2341,8 +2338,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.expect(tt.arrow);
           return node;
         });
-
-      this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
       if (!res) return;
 
