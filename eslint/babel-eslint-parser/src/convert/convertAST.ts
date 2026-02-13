@@ -1,5 +1,6 @@
 import type { types as t } from "@babel/core";
 import type { ParseResult } from "../types";
+import eslintVersion from "../utils/eslint-version.ts";
 
 function* it<T>(children: T | T[]) {
   if (Array.isArray(children)) yield* children;
@@ -55,18 +56,11 @@ const convertNodesVisitor = {
       }
     } else {
       // To minimize the jest-diff noise comparing Babel AST and third-party AST,
-      // here we generate a deep copy of loc without identifierName and index
+      // here we remove identifierName and index from the position information
       if (node.loc) {
-        node.loc = {
-          end: {
-            column: node.loc.end.column,
-            line: node.loc.end.line,
-          },
-          start: {
-            column: node.loc.start.column,
-            line: node.loc.start.line,
-          },
-        } as any;
+        // @ts-expect-error `index` is generated from Babel parser
+        delete node.loc?.index;
+        delete node.loc?.identifierName;
       }
     }
 
@@ -147,34 +141,36 @@ function convertProgramNode(ast: ParseResult) {
   delete ast.program;
   delete ast.errors;
 
-  if (ast.comments.length) {
-    const lastComment = ast.comments[ast.comments.length - 1];
+  if (eslintVersion < 10) {
+    if (ast.comments.length) {
+      const lastComment = ast.comments[ast.comments.length - 1];
 
-    if (ast.tokens.length) {
-      const lastToken = ast.tokens[ast.tokens.length - 1];
+      if (ast.tokens.length) {
+        const lastToken = ast.tokens[ast.tokens.length - 1];
 
-      if (lastComment.end > lastToken.end) {
-        // If there is a comment after the last token, the program ends at the
-        // last token and not the comment
-        ast.range[1] = lastToken.end;
-        ast.loc.end.line = lastToken.loc.end.line;
-        ast.loc.end.column = lastToken.loc.end.column;
+        if (lastComment.end > lastToken.end) {
+          // If there is a comment after the last token, the program ends at the
+          // last token and not the comment
+          ast.range[1] = lastToken.end;
+          ast.loc.end.line = lastToken.loc.end.line;
+          ast.loc.end.column = lastToken.loc.end.column;
 
-        ast.end = lastToken.end;
+          ast.end = lastToken.end;
+        }
+      }
+    } else {
+      if (!ast.tokens.length) {
+        ast.loc.start.line = 1;
+        ast.loc.end.line = 1;
       }
     }
-  } else {
-    if (!ast.tokens.length) {
-      ast.loc.start.line = 1;
-      ast.loc.end.line = 1;
+
+    if (body?.length) {
+      ast.loc.start.line = body[0].loc.start.line;
+      ast.range[0] = body[0].start;
+
+      ast.start = body[0].start;
     }
-  }
-
-  if (body?.length) {
-    ast.loc.start.line = body[0].loc.start.line;
-    ast.range[0] = body[0].start;
-
-    ast.start = body[0].start;
   }
 }
 
