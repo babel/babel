@@ -41,3 +41,4 @@ a.foo?.(bar())?.baz;
 a.foo?.(bar("test"))?.baz;
 a.foo(bar?.())?.baz;
 a.foo(bar?.("test"))?.baz;
+a?.foo("foo", "bar")("baz");
