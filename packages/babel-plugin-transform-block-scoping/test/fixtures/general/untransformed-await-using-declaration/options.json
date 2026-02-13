@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": ["transform-block-scoping", "syntax-explicit-resource-management"],
+  "plugins": ["transform-block-scoping"],
   "throws": "The await using declaration should be first transformed by `@babel/plugin-transform-explicit-resource-management`."
 }
