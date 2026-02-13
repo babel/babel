@@ -346,8 +346,9 @@ export default abstract class LValParser extends NodeUtils {
     }
   }
 
-  // Convert list of expression atoms to a list of
-
+  /**
+   * Convert list of maybe-pattern atoms to a list of expression atoms.
+   */
   toReferencedList(
     exprList:
       | readonly (
@@ -382,33 +383,6 @@ export default abstract class LValParser extends NodeUtils {
         | null
       )[] {
     return exprList;
-  }
-
-  toReferencedListDeep(
-    exprList:
-      | readonly (
-          | Expression
-          | SpreadElement
-          | VoidPattern
-          | AssignmentPattern
-          | null
-        )[]
-      | readonly (
-          | Expression
-          | RestElement
-          | VoidPattern
-          | AssignmentPattern
-          | null
-        )[],
-    isParenthesizedExpr?: boolean,
-  ): void {
-    this.toReferencedList(exprList, isParenthesizedExpr);
-
-    for (const expr of exprList) {
-      if (expr?.type === "ArrayExpression") {
-        this.toReferencedListDeep(expr.elements);
-      }
-    }
   }
 
   // Parses spread element.

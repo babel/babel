@@ -909,19 +909,12 @@ export default abstract class ExpressionParser extends LValParser {
         this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
-      this.toReferencedArguments(finishedNode);
+      this.toReferencedList(node.arguments);
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return finishedNode;
-  }
-
-  toReferencedArguments(
-    node: N.CallExpression | N.OptionalCallExpression,
-    isParenthesizedExpr?: boolean,
-  ) {
-    this.toReferencedListDeep(node.arguments, isParenthesizedExpr);
   }
 
   // MemberExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
@@ -1759,7 +1752,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (spreadStartLoc) this.unexpected(spreadStartLoc);
     this.checkExpressionErrors(refExpressionErrors, true);
 
-    this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
+    this.toReferencedList(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
       val = this.startNodeAt<N.SequenceExpression>(innerStartLoc);
       val.expressions = exprList as N.Expression[];

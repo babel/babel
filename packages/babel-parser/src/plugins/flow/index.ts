@@ -2494,12 +2494,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.ArrayExpression {
       const node = super.parseArrayLike(close, refExpressionErrors);
 
-      // This could be an array pattern:
-      //   ([a: string, b: string]) => {}
-      // In this case, we don't have to call toReferencedList. We will
-      // call it, if needed, when we are sure that it is a parenthesized
-      // expression by calling toReferencedListDeep.
-      if (refExpressionErrors != null && !this.state.maybeInArrowParameters) {
+      // Check if there is any unparenthesized type cast
+      if (node.type === "ArrayExpression") {
         this.toReferencedList(node.elements);
       }
 
