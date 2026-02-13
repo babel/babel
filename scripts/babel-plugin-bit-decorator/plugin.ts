@@ -1,14 +1,15 @@
-// @ts-check
-module.exports = pluginBabelBitDecorator;
+import type { PluginAPI, PluginObject, types as t } from "@babel/core";
+export default pluginBabelBitDecorator;
 
 /**
  * Babel plugin to transform @bit decorators into class accessors.
  * It replaces @bit decorators with getter and setter methods that manipulate
  * a storage field defined with @bit.storage.
- * @param {import("@babel/core").PluginAPI} api
- * @returns {import("@babel/core").PluginObject}
  */
-function pluginBabelBitDecorator({ types: t, template }) {
+function pluginBabelBitDecorator({
+  types: t,
+  template,
+}: PluginAPI): PluginObject {
   const bodyTemplate = template.statement({ allowReturnOutsideFunction: true });
 
   return {
@@ -24,8 +25,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
         for (const element of path.get("body.body")) {
           if (
             (element.isClassProperty() || element.isClassPrivateProperty()) &&
-            element.node.decorators &&
-            element.node.decorators.some(dec =>
+            element.node.decorators?.some(dec =>
               t.matchesPattern(dec.expression, "bit.storage")
             )
           ) {
@@ -49,7 +49,6 @@ function pluginBabelBitDecorator({ types: t, template }) {
               element.node.decorators &&
               element
                 .get("decorators")
-                // @ts-expect-error decorators has been checked above
                 .find(
                   ({ node: dec }) =>
                     t.isIdentifier(dec.expression, { name: "bit" }) ||
@@ -88,6 +87,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
             if (
               t.isCallExpression(dec.node.expression) &&
               dec.node.expression.arguments.length > 0 &&
+              // @ts-expect-error arguments has been checked above
               (val = dec.get("expression.arguments.0").evaluate().value) !==
                 nextMask
             ) {
@@ -105,22 +105,20 @@ function pluginBabelBitDecorator({ types: t, template }) {
                 "get",
                 element.node.key,
                 [],
-                // @ts-expect-error bodyTemplate is block statement
                 bodyTemplate.ast`{
                   return (
                     this.${t.cloneNode(storageName)} & ${t.numericLiteral(nextMask)}
                   ) > 0;
-                }`
+                }` as t.BlockStatement
               ),
               t.classMethod(
                 "set",
                 element.node.key,
                 [t.identifier("v")],
-                // @ts-expect-error bodyTemplate is block statement
                 bodyTemplate.ast`{
                   if (v) this.${t.cloneNode(storageName)} |= ${t.numericLiteral(nextMask)};
                   else this.${t.cloneNode(storageName)} &= ${t.valueToNode(~nextMask)};
-                }`
+                }` as t.BlockStatement
               ),
             ]);
 

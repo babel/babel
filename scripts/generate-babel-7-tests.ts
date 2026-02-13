@@ -1,10 +1,9 @@
-// @ts-check
 /**
  * Usage:
  * # Update AST/output.js for Babel 8
  * OVERWRITE=1 BABEL_8_BREAKING=1 yarn jest
  * # Run this script to create all Babel 7 tests required for the Babel 8 AST changes
- * node ./scripts/generate-babel-7-tests.mjs
+ * node ./scripts/generate-babel-7-tests.ts
  * # Update AST/output.js for Babel 7
  * OVERWRITE=1 yarn jest
  */
@@ -33,7 +32,7 @@ function getUnstagedModifiedTestOutput() {
       }
     }
     return files;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error getting git status:", error.message);
     return [];
   }
@@ -44,7 +43,7 @@ function getUnstagedModifiedTestOutput() {
  * @param {string} jsonFile - The path to the JSON file.
  * @param {object} inputProperties - The properties to assign.
  */
-function assignJSONFile(jsonFile, inputProperties) {
+function assignJSONFile(jsonFile: string, inputProperties: object) {
   let options = inputProperties;
   const jsonFileExists = existsSync(jsonFile);
   if (jsonFileExists) {
@@ -53,14 +52,14 @@ function assignJSONFile(jsonFile, inputProperties) {
         ...JSON.parse(readFileSync(jsonFile, "utf-8")),
         ...inputProperties,
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error reading ${jsonFile}:`, error.message);
     }
   }
   try {
     writeFileSync(jsonFile, JSON.stringify(options, null, 2) + "\n", "utf-8");
     console.log(`${jsonFileExists ? "Updated" : "Created"} ${jsonFile}`);
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Error writing ${jsonFile}:`, error.message);
   }
 }
@@ -69,7 +68,7 @@ function assignJSONFile(jsonFile, inputProperties) {
  * Update the options.json files for Babel 8 breaking changes.
  * @param {string[]} files - The files to update.
  */
-function updateBabel8BreakingTrue(files) {
+function updateBabel8BreakingTrue(files: string[]) {
   for (const file of files) {
     const dirPath = dirname(file);
     const optionsPath = join(dirPath, "options.json");
@@ -81,7 +80,7 @@ function updateBabel8BreakingTrue(files) {
  * Create Babel 7 tests for the given files.
  * @param {string[]} files - The files to create tests for.
  */
-function createBabel7Tests(files) {
+function createBabel7Tests(files: string[]) {
   for (const file of files) {
     const dirPath = dirname(file);
     const parentDir = dirname(dirPath);
@@ -95,7 +94,7 @@ function createBabel7Tests(files) {
         console.log(`Created Babel 7 copy at ${babel7Dir}`);
       }
       assignJSONFile(optionsPath, { BABEL_8_BREAKING: false });
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error processing ${dirPath}:`, error.message);
     }
   }

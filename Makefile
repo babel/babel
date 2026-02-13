@@ -11,13 +11,13 @@ COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
 YARN := yarn
 NODE := $(YARN) node
-MAKEJS := node Makefile.mjs
+MAKEJS := node Makefile.js
 
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-Makefile.mjs: Makefile.source.mjs yarn.lock .yarn/install-state.gz
-	$(NODE) ./scripts/pack-script.js
+Makefile.js: Makefile.source.ts yarn.lock .yarn/install-state.gz
+	$(NODE) ./scripts/pack-script.ts
 
 build:
 	$(MAKEJS) build
@@ -70,7 +70,7 @@ lint-ci:
 	$(MAKEJS) lint-ci
 
 generate-readme:
-	$(NODE) scripts/generators/readmes.js
+	$(NODE) scripts/generators/readmes.ts
 
 lint:
 	$(MAKEJS) lint

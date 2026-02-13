@@ -21,7 +21,7 @@ for (const root of ["packages", "codemods", "eslint"]) {
   }
 }
 
-async function traverseFixtures(dirURL) {
+async function traverseFixtures(dirURL: URL) {
   try {
     const optionsURL = new URL("options.json", dirURL);
     const optionsRaw = readFileSync(optionsURL, "utf-8");
@@ -40,7 +40,7 @@ async function traverseFixtures(dirURL) {
           optionsURL,
           optionsRaw
             .replace(
-              /^(\s*)"BABEL_8_BREAKING"\s*:\s*true\s*(?:,\s*)?[\r\n]+/m,
+              /^\s*"BABEL_8_BREAKING"\s*:\s*true\s*(?:,\s*)?[\r\n]+/m,
               ""
             )
             // Remove trailing comma from the property before BABEL_8_BREAKING

@@ -1,21 +1,20 @@
-// @ts-check
-module.exports = pluginBabelTransformNodeProtocolImports;
+import type { PluginAPI, PluginObject } from "@babel/core";
+export default pluginBabelTransformNodeProtocolImports;
 
 /**
  * Remove leading `node:` from the input string
- * @param {string} input
- * @returns {string}
  */
-function replaceNodeProtocol(input) {
+function replaceNodeProtocol(input: string): string {
   return input.replace(/^node:/, "");
 }
 
 /**
  * Plugin definition
- * @param {import("@babel/core").PluginAPI} api
- * @returns {import("@babel/core").PluginObject}
  */
-function pluginBabelTransformNodeProtocolImports({ types: t, targets }) {
+function pluginBabelTransformNodeProtocolImports({
+  types: t,
+  targets,
+}: PluginAPI): PluginObject {
   let target;
   // Skip this plugin for Node.js >= 16, api.targets could be undefined in e2e-old-babel test
   if (

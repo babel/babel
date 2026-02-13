@@ -1,12 +1,10 @@
-// @ts-check
-
 /**
  * Rollup plugin to conditionally include/exclude dependencies based on the
  * BABEL_9_BREAKING flag.
  * @param {boolean} value - The flag to determine inclusion or exclusion.
  * @returns {import("rollup").Plugin} - The Rollup plugin.
  */
-export default function (value) {
+export default function (value: boolean): import("rollup").Plugin {
   const re = value
     ? /^(.*?-BABEL_9_BREAKING)-false$/
     : /^(.*?-BABEL_9_BREAKING)-true$/;

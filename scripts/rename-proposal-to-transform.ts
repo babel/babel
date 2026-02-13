@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// @ts-check
 
 import path from "node:path";
 import fs from "node:fs";
@@ -12,7 +11,7 @@ if (process.argv.length < 3) {
   );
 }
 // @ts-expect-error argv[2] has been checked above
-const oldName = process.argv[2].match(/proposal-[\w-]+/)[0];
+const oldName = /proposal-[\w-]+/.exec(process.argv[2])[0];
 const newName = process.argv[3] || oldName.replace("proposal-", "transform-");
 
 const oldPackageFolder = path.resolve(process.cwd(), process.argv[2]);
@@ -42,7 +41,7 @@ pluginName: {
   let indexContents;
   try {
     indexContents = fs.readFileSync(indexPath, "utf8");
-  } catch (error) {
+  } catch (_) {
     console.warn("Could not find src/index.ts, skipping...");
     break pluginName;
   }
@@ -66,7 +65,7 @@ readme: {
   let indexContents;
   try {
     indexContents = fs.readFileSync(readmePath, "utf8");
-  } catch (error) {
+  } catch (_) {
     console.warn("Could not find README.md, skipping...");
     break readme;
   }
@@ -108,7 +107,7 @@ await globRename([
  * Rename all occurrences of given pattern(s) in files matching a glob pattern.
  * @param {string | string[]} pattern - The glob pattern to match files.
  */
-async function globRename(pattern) {
+async function globRename(pattern: string | string[]) {
   for await (const filename of new Glob(pattern, {})) {
     const oldContents = fs.readFileSync(filename, "utf8");
     const newContents = oldContents.replaceAll(oldName, newName);

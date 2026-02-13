@@ -53,7 +53,7 @@ jobs:
         run: yarn install
       - name: Ensure npm packages exist
         run: |
-          node ./scripts/ensure-packages-exist.js --check-only
+          node ./scripts/ensure-packages-exist.ts --check-only
 
   git-version:
     permissions:
