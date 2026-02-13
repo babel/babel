@@ -197,9 +197,6 @@
       "path": "./packages/babel-plugin-syntax-do-expressions"
     },
     {
-      "path": "./packages/babel-plugin-syntax-explicit-resource-management"
-    },
-    {
       "path": "./packages/babel-plugin-syntax-export-default-from"
     },
     {
@@ -210,12 +207,6 @@
     },
     {
       "path": "./packages/babel-plugin-syntax-function-sent"
-    },
-    {
-      "path": "./packages/babel-plugin-syntax-import-assertions"
-    },
-    {
-      "path": "./packages/babel-plugin-syntax-import-attributes"
     },
     {
       "path": "./packages/babel-plugin-syntax-import-defer"
