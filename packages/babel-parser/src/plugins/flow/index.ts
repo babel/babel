@@ -2448,19 +2448,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.toAssignable(node, isLHS);
     }
 
-    // turn type casts that we found in function parameter head into type annotated params
-    toAssignableList(
-      exprList: N.Expression[],
-      trailingCommaLoc: Position | undefined | null,
+    /**
+     * turn type casts that we found in function parameter head into type annotated params
+     */
+    toAssignableListItem(
+      exprList: (N.Expression | N.SpreadElement | N.RestElement)[],
+      index: number,
       isLHS: boolean,
     ): void {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr?.type === "TypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
-        }
+      const node = exprList[index];
+      if (node.type === "TypeCastExpression") {
+        exprList[index] = this.typeCastToParameter(node);
       }
-      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
+      super.toAssignableListItem(exprList, index, isLHS);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the
