@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+  "errors": [
+    "SyntaxError: This syntax requires partial application plugin with version \"2018-07\", but got \"2021-10\". (1:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"Foo"},
+            "name": "Foo"
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}}
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -12,6 +12,7 @@ import type {
   ObjectMethod,
   ObjectProperty,
   PrivateName,
+  NumericLiteral,
 } from "../types.d.ts";
 import { hasNewLine } from "../util/whitespace.ts";
 import { isIdentifierChar } from "../util/identifier.ts";
@@ -398,6 +399,24 @@ export default abstract class UtilParser extends Tokenizer {
     if (privateKeyLoc !== null) {
       this.expectPlugin("destructuringPrivate", privateKeyLoc);
     }
+  }
+
+  getLiteralRaw(node: NumericLiteral): string {
+    return node.extra!.raw;
+  }
+
+  // https://tc39.es/ecma262/#prod-DecimalLiteral
+  // Unlike the spec, this routine also rejects the NonOctalDecimalIntegerLiteral production
+  isDecimalIntegerLiteral(node: NumericLiteral): boolean {
+    const raw = this.getLiteralRaw(node);
+    return (
+      // Fast path for single digit
+      raw.length === 1 ||
+      // Fast path for two digits starting with 1-9
+      (raw.length === 2 && node.value >= 10) ||
+      // Slow path for all other cases
+      /^[1-9][0-9_]+$/.test(raw)
+    );
   }
 }
 

@@ -81,7 +81,7 @@ export function setInnerComments(node: Undone<Node>, comments: Comment[]) {
  */
 function adjustInnerComments(
   node: Undone<Node>,
-  elements: (Node | null)[],
+  elements: readonly (Node | null)[],
   commentWS: CommentWhitespace,
 ) {
   let lastElement = null;
@@ -178,7 +178,11 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.properties, commentWS);
             break;
           case "CallExpression":
+          case "NewExpression":
           case "OptionalCallExpression":
+          case "OptionalPartialCallExpression":
+          case "PartialCallExpression":
+          case "PartialNewExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
           case "ImportExpression":
@@ -194,6 +198,7 @@ export default class CommentsParser extends BaseParser {
           case "ObjectMethod":
           case "ClassMethod":
           case "ClassPrivateMethod":
+          case "TSTypeParameterDeclaration":
             adjustInnerComments(node, node.params, commentWS);
             break;
           case "ArrayExpression":
@@ -204,12 +209,11 @@ export default class CommentsParser extends BaseParser {
           case "ImportDeclaration":
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
-          case "TSEnumDeclaration":
-            setInnerComments(node, comments);
-
-            break;
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
+            break;
+          case "TSInterfaceBody":
+            adjustInnerComments(node, node.body, commentWS);
             break;
           default: {
             setInnerComments(node, comments);

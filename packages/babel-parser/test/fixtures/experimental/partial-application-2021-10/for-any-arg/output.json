@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":17,"index":30}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":17,"index":30}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6}}
+            },
+            {
+              "type": "Identifier",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":30,"loc":{"start":{"line":3,"column":0,"index":13},"end":{"line":3,"column":17,"index":30}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":13,"end":30,"loc":{"start":{"line":3,"column":0,"index":13},"end":{"line":3,"column":17,"index":30}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":13,"end":20,"loc":{"start":{"line":3,"column":0,"index":13},"end":{"line":3,"column":7,"index":20}},
+            "object": {
+              "type": "Identifier",
+              "start":13,"end":16,"loc":{"start":{"line":3,"column":0,"index":13},"end":{"line":3,"column":3,"index":16},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":17,"end":20,"loc":{"start":{"line":3,"column":4,"index":17},"end":{"line":3,"column":7,"index":20},"identifierName":"foo"},
+              "name": "foo"
+            }
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":22,"end":23,"loc":{"start":{"line":3,"column":9,"index":22},"end":{"line":3,"column":10,"index":23}}
+            },
+            {
+              "type": "Identifier",
+              "start":25,"end":26,"loc":{"start":{"line":3,"column":12,"index":25},"end":{"line":3,"column":13,"index":26},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":28,"end":29,"loc":{"start":{"line":3,"column":15,"index":28},"end":{"line":3,"column":16,"index":29}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

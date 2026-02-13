@@ -283,7 +283,10 @@ export function assertOptionalChainStart(): Validator {
     let current = node;
     while (node) {
       const { type } = current;
-      if (type === "OptionalCallExpression") {
+      if (
+        type === "OptionalCallExpression" ||
+        type === "OptionalPartialCallExpression"
+      ) {
         if (current.optional) return;
         current = current.callee;
         continue;

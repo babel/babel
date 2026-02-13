@@ -548,11 +548,22 @@ export interface NodePathAssertions {
   >(
     opts?: Opts,
   ): asserts this is NodePath<t.OptionalMemberExpression & Opts>;
+  assertOptionalPartialCallExpression<
+    Opts extends Options<t.OptionalPartialCallExpression>,
+  >(
+    opts?: Opts,
+  ): asserts this is NodePath<t.OptionalPartialCallExpression & Opts>;
   assertParenthesizedExpression<
     Opts extends Options<t.ParenthesizedExpression>,
   >(
     opts?: Opts,
   ): asserts this is NodePath<t.ParenthesizedExpression & Opts>;
+  assertPartialCallExpression<Opts extends Options<t.PartialCallExpression>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.PartialCallExpression & Opts>;
+  assertPartialNewExpression<Opts extends Options<t.PartialNewExpression>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.PartialNewExpression & Opts>;
   assertPattern<Opts extends Options<t.Pattern>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Pattern & Opts>;
@@ -591,6 +602,9 @@ export interface NodePathAssertions {
   assertRestElement<Opts extends Options<t.RestElement>>(
     opts?: Opts,
   ): asserts this is NodePath<t.RestElement & Opts>;
+  assertRestPlaceholder<Opts extends Options<t.RestPlaceholder>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.RestPlaceholder & Opts>;
   assertRestProperty<Opts extends Options<t.RestProperty>>(
     opts?: Opts,
   ): asserts this is NodePath<t.RestProperty & Opts>;
