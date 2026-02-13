@@ -385,9 +385,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
     );
     const fixtures = getFixtures(parserTestFixtureRoot);
     const FAILURES = new Set([
-      // Pending release https://github.com/microsoft/TypeScript/pull/61764
-      "typescript/explicit-resource-management/valid-for-using-declaration-binding-of/input.js",
-
       // ts-eslint/tsc does not support arrow generic in tsx mode
       "typescript/arrow-function/async-await-null/input.ts",
       "typescript/arrow-function/async-generic-after-await/input.ts",
