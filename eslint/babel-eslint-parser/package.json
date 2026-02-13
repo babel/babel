@@ -41,7 +41,6 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@types/eslint": "^8.56.2",
     "@types/estree": "^1.0.5",
     "@typescript-eslint/scope-manager": "^8.55.0",
     "dedent": "^1.5.3",
