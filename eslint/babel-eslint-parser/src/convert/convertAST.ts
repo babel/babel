@@ -1,5 +1,4 @@
 import type { types as t } from "@babel/core";
-import ESLINT_VERSION from "../utils/eslint-version.ts";
 import type { ParseResult } from "../types";
 
 function* it<T>(children: T | T[]) {
@@ -123,13 +122,11 @@ const convertNodesVisitor = {
           q.loc.end.column += 2;
         }
 
-        if (ESLINT_VERSION >= 8) {
-          q.start -= 1;
-          if (q.tail) {
-            q.end += 1;
-          } else {
-            q.end += 2;
-          }
+        q.start -= 1;
+        if (q.tail) {
+          q.end += 1;
+        } else {
+          q.end += 2;
         }
       }
     }
@@ -163,9 +160,7 @@ function convertProgramNode(ast: ParseResult) {
         ast.loc.end.line = lastToken.loc.end.line;
         ast.loc.end.column = lastToken.loc.end.column;
 
-        if (ESLINT_VERSION >= 8) {
-          ast.end = lastToken.end;
-        }
+        ast.end = lastToken.end;
       }
     }
   } else {
@@ -179,9 +174,7 @@ function convertProgramNode(ast: ParseResult) {
     ast.loc.start.line = body[0].loc.start.line;
     ast.range[0] = body[0].start;
 
-    if (ESLINT_VERSION >= 8) {
-      ast.start = body[0].start;
-    }
+    ast.start = body[0].start;
   }
 }
 
