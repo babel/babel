@@ -31,21 +31,20 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.11.0",
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
-    "eslint-scope": "^7.1.1",
-    "eslint-visitor-keys": "^3.3.0",
+    "eslint-scope": "^9.1.0",
+    "eslint-visitor-keys": "^5.0.0",
     "semver": "^7.7.3"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@types/eslint": "^8.56.2",
     "@types/estree": "^1.0.5",
-    "@typescript-eslint/scope-manager": "^6.19.0",
+    "@typescript-eslint/scope-manager": "^8.55.0",
     "dedent": "^1.5.3",
-    "eslint": "^9.21.0",
-    "typescript-eslint": "^8.48.0"
+    "eslint": "^10.0.0",
+    "typescript-eslint": "^8.55.0"
   }
 }
