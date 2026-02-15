@@ -146,7 +146,6 @@ export default declare(api => {
 
   return {
     name: "transform-explicit-resource-management",
-    manipulateOptions: (_, p) => p.plugins.push("explicitResourceManagement"),
 
     visitor: traverse.visitors.merge([
       transformUsingDeclarationsVisitor,
