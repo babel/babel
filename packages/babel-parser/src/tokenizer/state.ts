@@ -94,6 +94,7 @@ export default class State {
   @bit accessor isAmbientContext = false;
   @bit accessor inAbstractClass = false;
   @bit accessor inDisallowConditionalTypesContext = false;
+  @bit accessor inConditionalConsequent = false;
 
   // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {
