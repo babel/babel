@@ -514,7 +514,7 @@ __metadata:
     semver: "npm:^7.7.3"
     typescript-eslint: "npm:^8.55.0"
   peerDependencies:
-    "@babel/core": ^7.11.0
+    "@babel/core": "workspace:^"
     eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
@@ -1460,7 +1460,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1471,7 +1471,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
