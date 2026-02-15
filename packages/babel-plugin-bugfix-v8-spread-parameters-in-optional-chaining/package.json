@@ -30,7 +30,7 @@
     "@babel/plugin-transform-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.13.0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

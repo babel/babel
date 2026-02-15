@@ -265,7 +265,7 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     commander: "npm:^14.0.2"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   bin:
     babel-build-external-helpers: ./bin/babel-build-external-helpers.js
   languageName: unknown
@@ -310,7 +310,7 @@ __metadata:
     semver: "npm:^7.7.3"
     slash: "npm:^5.1.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   dependenciesMeta:
     chokidar:
       optional: true
@@ -677,7 +677,7 @@ __metadata:
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -765,7 +765,7 @@ __metadata:
     charcodes: "npm:^0.2.0"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -792,7 +792,7 @@ __metadata:
     regexpu-core: "npm:^6.3.1"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -829,7 +829,7 @@ __metadata:
     "@types/semver": "npm:^7.3.4"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -888,7 +888,7 @@ __metadata:
     "@babel/helper-module-imports": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -976,7 +976,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1029,7 +1029,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1055,7 +1055,7 @@ __metadata:
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1081,7 +1081,7 @@ __metadata:
     "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1285,7 +1285,7 @@ __metadata:
     core-js: "npm:^3.48.0"
     v8flags: "npm:^4.0.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   bin:
     babel-node: ./bin/babel-node.js
   languageName: unknown
@@ -1349,7 +1349,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1373,7 +1373,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1397,7 +1397,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1425,7 +1425,7 @@ __metadata:
     "@babel/plugin-transform-optional-chaining": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.13.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1449,7 +1449,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1483,7 +1483,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1495,7 +1495,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.13.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1513,7 +1513,7 @@ __metadata:
     babel-plugin-polyfill-es-shims: "npm:^0.10.9"
     object.getownpropertydescriptors: "npm:^2.1.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1531,7 +1531,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.17.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1544,7 +1544,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.17.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1556,7 +1556,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1568,7 +1568,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1580,7 +1580,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1593,7 +1593,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1606,7 +1606,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1620,7 +1620,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.22.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1635,7 +1635,7 @@ __metadata:
     "@babel/plugin-syntax-optional-chaining-assign": "workspace:^"
     "@babel/plugin-transform-optional-chaining": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.22.5
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1648,7 +1648,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-partial-application": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1662,7 +1662,7 @@ __metadata:
     "@babel/plugin-proposal-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1688,7 +1688,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1699,7 +1699,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1765,7 +1765,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1776,7 +1776,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1787,7 +1787,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1798,7 +1798,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1809,7 +1809,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1820,7 +1820,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1831,7 +1831,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1864,7 +1864,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1897,7 +1897,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1941,7 +1941,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1963,7 +1963,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2019,7 +2019,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2041,7 +2041,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2052,7 +2052,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2085,7 +2085,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2130,7 +2130,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2155,7 +2155,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2184,7 +2184,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
     core-js-pure: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2211,7 +2211,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2234,7 +2234,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2258,7 +2258,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2283,7 +2283,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2312,7 +2312,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.12.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2345,7 +2345,7 @@ __metadata:
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2369,7 +2369,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2393,7 +2393,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2418,7 +2418,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2441,7 +2441,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2467,7 +2467,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2490,7 +2490,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2515,7 +2515,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2538,7 +2538,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2561,7 +2561,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2575,7 +2575,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2588,7 +2588,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2613,7 +2613,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2638,7 +2638,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2650,7 +2650,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2662,7 +2662,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2689,7 +2689,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
   peerDependencies:
-    "@babel/core": ^7.22.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2712,7 +2712,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2735,7 +2735,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2759,7 +2759,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2782,7 +2782,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2808,7 +2808,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2834,7 +2834,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2863,7 +2863,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2889,7 +2889,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2915,7 +2915,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2940,7 +2940,7 @@ __metadata:
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2963,7 +2963,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2988,7 +2988,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3019,7 +3019,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3031,7 +3031,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3056,7 +3056,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3079,7 +3079,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3106,7 +3106,7 @@ __metadata:
     "@babel/plugin-transform-block-scoping": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3129,7 +3129,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3154,7 +3154,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3181,7 +3181,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3204,7 +3204,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3216,7 +3216,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3228,7 +3228,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3240,7 +3240,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3252,7 +3252,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3265,7 +3265,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3289,7 +3289,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/plugin-transform-react-jsx": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3328,7 +3328,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3341,7 +3341,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3377,7 +3377,7 @@ __metadata:
     recast: "npm:^0.23.3"
     uglify-js: "npm:^3.14.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3401,7 +3401,7 @@ __metadata:
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3424,7 +3424,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3454,7 +3454,7 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3477,7 +3477,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3502,7 +3502,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3525,7 +3525,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3537,7 +3537,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3560,7 +3560,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3585,7 +3585,7 @@ __metadata:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3618,7 +3618,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3641,7 +3641,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3666,7 +3666,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3691,7 +3691,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3716,7 +3716,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3867,7 +3867,7 @@ __metadata:
     core-js-compat: "npm:^3.48.0"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3882,7 +3882,7 @@ __metadata:
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     babel-plugin-syntax-hermes-parser: "npm:^0.19.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3912,7 +3912,7 @@ __metadata:
     "@babel/plugin-transform-react-jsx-development": "workspace:^"
     "@babel/plugin-transform-react-pure-annotations": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3942,7 +3942,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3960,7 +3960,7 @@ __metadata:
     find-cache-directory: "npm:^6.0.0"
     pirates: "npm:^4.0.6"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 

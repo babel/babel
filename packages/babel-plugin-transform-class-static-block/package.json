@@ -27,7 +27,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.12.0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

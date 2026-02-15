@@ -23,7 +23,7 @@
     "@types/semver": "^7.3.4"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

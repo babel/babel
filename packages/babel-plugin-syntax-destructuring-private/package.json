@@ -20,7 +20,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
