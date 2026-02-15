@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, File } from "@babel/core";
-import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 import {
   importToPlatformApi,
   buildParallelStaticImports,
@@ -59,8 +58,6 @@ export default declare((api, options: Options) => {
 
   return {
     name: "transform-json-modules",
-
-    inherits: syntaxImportAttributes,
 
     visitor: {
       Program(path) {

@@ -1792,17 +1792,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-explicit-resource-management@workspace:^, @babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-export-default-from@workspace:^, @babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from"
@@ -1847,17 +1836,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-import-attributes@npm:^7.24.7":
   version: 7.27.1
   resolution: "@babel/plugin-syntax-import-attributes@npm:7.27.1"
@@ -1879,18 +1857,6 @@ __metadata:
   checksum: 10/e2b9467ac8d5b36106f5df8940da70fdc22a19c5ea3aa0e82c0cc929f6c838e5c1d5290b00f2c5e98f34d20cdacd2de839c807baa24746a153942a76d82503a6
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-import-attributes@workspace:^, @babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer":
   version: 0.0.0-use.local
@@ -2722,7 +2688,6 @@ __metadata:
     "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
   peerDependencies:
     "@babel/core": ^7.22.0
@@ -4044,13 +4009,10 @@ __metadata:
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
-    "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-function-bind": "workspace:^"
     "@babel/plugin-syntax-function-sent": "workspace:^"
-    "@babel/plugin-syntax-import-assertions": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
     "@babel/plugin-syntax-import-reflection": "npm:^7.24.7"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-module-blocks": "workspace:^"
