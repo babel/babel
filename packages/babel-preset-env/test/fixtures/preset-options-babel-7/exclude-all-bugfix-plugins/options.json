@@ -1,0 +1,15 @@
+{
+  "validateLogs": true,
+  "targets": "safari 15",
+  "presets": [
+    [
+      "env",
+      {
+        "bugfixes": true,
+        "debug": true,
+        "exclude": ["bugfix/.+"],
+        "modules": false
+      }
+    ]
+  ]
+}
