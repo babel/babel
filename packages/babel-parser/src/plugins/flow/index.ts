@@ -2061,13 +2061,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseConditional(
       expr: N.Expression,
-
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      if (this.state.maybeInArrowParameters) {
+      if (refExpressionErrors != null) {
         const nextCh = this.lookaheadCharCode();
         // These tokens cannot start an expression, so if one of them follows
         // ? then we are probably in an arrow function parameters list and we
@@ -2078,8 +2077,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           nextCh === charCodes.colon || // (a?: b) => c
           nextCh === charCodes.rightParenthesis // (a?) => c
         ) {
-          /*:: invariant(refExpressionErrors != null) */
-          this.setOptionalParametersError(refExpressionErrors!);
+          this.setOptionalParametersError(refExpressionErrors);
           return expr;
         }
       }
@@ -2448,19 +2446,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.toAssignable(node, isLHS);
     }
 
-    // turn type casts that we found in function parameter head into type annotated params
-    toAssignableList(
-      exprList: N.Expression[],
-      trailingCommaLoc: Position | undefined | null,
+    /**
+     * turn type casts that we found in function parameter head into type annotated params
+     */
+    toAssignableListItem(
+      exprList: (N.Expression | N.SpreadElement | N.RestElement)[],
+      index: number,
       isLHS: boolean,
     ): void {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr?.type === "TypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
-        }
+      const node = exprList[index];
+      if (node.type === "TypeCastExpression") {
+        exprList[index] = this.typeCastToParameter(node);
       }
-      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
+      super.toAssignableListItem(exprList, index, isLHS);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the
@@ -2494,12 +2492,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.ArrayExpression {
       const node = super.parseArrayLike(close, refExpressionErrors);
 
-      // This could be an array pattern:
-      //   ([a: string, b: string]) => {}
-      // In this case, we don't have to call toReferencedList. We will
-      // call it, if needed, when we are sure that it is a parenthesized
-      // expression by calling toReferencedListDeep.
-      if (refExpressionErrors != null && !this.state.maybeInArrowParameters) {
+      // Check if there is any unparenthesized type cast
+      if (node.type === "ArrayExpression") {
         this.toReferencedList(node.elements);
       }
 
