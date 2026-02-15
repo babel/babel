@@ -20,7 +20,7 @@
     "@babel/helper-validator-option": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.17.0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

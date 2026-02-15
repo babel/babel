@@ -22,7 +22,7 @@
     "pirates": "^4.0.6"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

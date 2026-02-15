@@ -23,7 +23,7 @@
     "@babel/plugin-transform-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.22.5"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

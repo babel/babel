@@ -30,7 +30,7 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@babel/core": "^7.11.0",
+    "@babel/core": "workspace:^",
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {

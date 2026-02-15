@@ -37,7 +37,7 @@
     "@babel/plugin-syntax-import-source": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.22.0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

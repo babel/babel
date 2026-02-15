@@ -21,7 +21,7 @@
     "@babel/core": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "exports": {
     ".": {
