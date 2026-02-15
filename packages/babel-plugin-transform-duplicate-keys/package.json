@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-duplicate-keys",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Compile objects with duplicate keys to valid strict ES5",
   "repository": {
     "type": "git",

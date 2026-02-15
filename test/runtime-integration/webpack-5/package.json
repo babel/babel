@@ -8,5 +8,5 @@
     "webpack-cli": "^4.10.0"
   },
   "type": "commonjs",
-  "version": "8.0.0-rc.1"
+  "version": "8.0.0-rc.2"
 }

@@ -26,5 +26,5 @@
     "@babel/types": "workspace:^",
     "benchmark": "^2.1.4"
   },
-  "version": "8.0.0-rc.1"
+  "version": "8.0.0-rc.2"
 }

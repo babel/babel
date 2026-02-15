@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-destructuring-private",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Allow parsing of destructuring private fields",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "A JavaScript parser",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-flow-strip-types",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Strip flow type annotations from your output code.",
   "repository": {
     "type": "git",
