@@ -272,27 +272,28 @@ export type MatchItem =
 
 export type MaybeDefaultProperty<T> = T | { default: T };
 
-export type PluginTarget =
+export type PluginTarget<Option = object> =
   | string
   | MaybeDefaultProperty<
-      (api: PluginAPI, options: object, dirname: string) => PluginObject
+      (api: PluginAPI, options: Option, dirname: string) => PluginObject
     >;
-export type PluginItem =
+export type PluginItem<Option = object> =
   | ConfigItem<PluginAPI>
-  | PluginTarget
-  | [PluginTarget, object]
-  | [PluginTarget, object, string];
+  | PluginTarget<Option>
+  | [PluginTarget<Option>, Partial<Option>]
+  | [PluginTarget<Option>, Partial<Option>, string];
 
-export type PresetTarget =
+export type PresetTarget<Option = object> =
   | string
   | MaybeDefaultProperty<
-      (api: PresetAPI, options: object, dirname: string) => PresetObject
+      (api: PresetAPI, options: Option, dirname: string) => PresetObject
     >;
-export type PresetItem =
+
+export type PresetItem<Option = object> =
   | ConfigItem<PresetAPI>
-  | PresetTarget
-  | [PresetTarget, object]
-  | [PresetTarget, object, string];
+  | PresetTarget<Option>
+  | [PresetTarget<Option>, Partial<Option>]
+  | [PresetTarget<Option>, Partial<Option>, string];
 
 export type ConfigApplicableTest = MatchItem | MatchItem[];
 
