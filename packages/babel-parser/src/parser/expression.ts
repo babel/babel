@@ -533,9 +533,7 @@ export default abstract class ExpressionParser extends LValParser {
             });
 
           case "fsharp":
-            return this.withSoloAwaitPermittingContext(() => {
-              return this.parseFSharpPipelineBody(prec);
-            });
+            return this.parseFSharpPipelineBody(prec);
         }
 
       // Falls through.
@@ -2901,17 +2899,6 @@ export default abstract class ExpressionParser extends LValParser {
       return callback();
     } finally {
       this.state.topicContext = outerContextTopicState;
-    }
-  }
-
-  withSoloAwaitPermittingContext<T>(callback: () => T): T {
-    const outerContextSoloAwaitState = this.state.soloAwait;
-    this.state.soloAwait = true;
-
-    try {
-      return callback();
-    } finally {
-      this.state.soloAwait = outerContextSoloAwaitState;
     }
   }
 
