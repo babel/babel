@@ -3282,7 +3282,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      this.expect(tt.question);
+      this.next(); // eat `?`
       const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
       node.test = expr;
       // While parsing the consequent, set a flag to prevent treating
