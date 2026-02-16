@@ -2958,7 +2958,12 @@ export default abstract class ExpressionParser extends LValParser {
     if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
       this.next();
       ret = this.parseAwait(startLoc, true);
-      if (tokenIsOperator(this.state.type) && !this.match(tt.pipeline)) {
+      const nextOp = this.state.type;
+      if (
+        tokenIsOperator(nextOp) &&
+        nextOp !== tt.pipeline &&
+        (this.prodParam.hasIn || nextOp !== tt._in)
+      ) {
         this.raise(Errors.PipelineUnparenthesized, startLoc);
       }
     } else {
