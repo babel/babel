@@ -116,6 +116,9 @@
       "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
         "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"
       ],
+      "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array": [
+        "./packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array/src"
+      ],
       "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": [
         "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src"
       ],

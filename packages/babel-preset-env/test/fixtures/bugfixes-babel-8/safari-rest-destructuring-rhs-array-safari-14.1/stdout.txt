@@ -2,25 +2,25 @@
 
 Using targets:
 {
-  "safari": "13"
+  "safari": "14.1"
 }
 
-Using modules transform: false
+Using modules transform: auto
 
 Using plugins:
   transform-explicit-resource-management { safari }
   transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
   transform-regexp-modifiers { safari }
   transform-unicode-sets-regex { safari < 17 }
+  bugfix/transform-v8-static-class-fields-redefine-readonly { safari < 15 }
+  bugfix/transform-firefox-class-in-computed-class-key { safari < 16 }
+  bugfix/transform-safari-class-field-initializer-scope { safari < 16 }
   transform-class-static-block { safari < 16.4 }
   transform-private-property-in-object { safari < 15 }
-  transform-class-properties { safari < 14.1 }
   transform-private-methods { safari < 15 }
-  transform-logical-assignment-operators { safari < 14 }
-  transform-nullish-coalescing-operator { safari < 13.1 }
-  transform-optional-chaining { safari < 13.1 }
-  transform-export-namespace-from { safari < 14.1 }
+  transform-export-namespace-from { }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
-  bugfix/transform-safari-rest-destructuring-rhs-array { safari < 14.1 }
+  transform-modules-commonjs
+  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

@@ -17,6 +17,7 @@ Using plugins:
   bugfix/transform-safari-block-shadowing { }
   bugfix/transform-safari-for-shadowing { }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { }
+  bugfix/transform-safari-rest-destructuring-rhs-array { }
   bugfix/transform-tagged-template-caching { }
   bugfix/transform-v8-spread-parameters-in-optional-chaining { }
 
