@@ -30,6 +30,8 @@ export const enum ParamKind {
   PARAM_RETURN = 0b0100,
   // track [In] production parameter
   PARAM_IN = 0b1000,
+  // Mark most productions as not being directly in F# pipeline body
+  PARAM_NOT_FSHARP_DIRECT_BODY = 0b10000,
 }
 
 // todo(flow->ts) - check if more granular type can be used,
@@ -70,14 +72,20 @@ export default class ProductionParameterHandler {
   get hasIn(): boolean {
     return (this.currentFlags() & ParamKind.PARAM_IN) > 0;
   }
+
+  get inFSharpDirectBody(): boolean {
+    return (this.currentFlags() & ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY) === 0;
+  }
 }
 
 export function functionFlags(
   isAsync: boolean,
   isGenerator: boolean,
+  isArrow: boolean = false,
 ): ParamKind {
   return (
     (isAsync ? ParamKind.PARAM_AWAIT : 0) |
-    (isGenerator ? ParamKind.PARAM_YIELD : 0)
+    (isGenerator ? ParamKind.PARAM_YIELD : 0) |
+    (!isArrow ? ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY : 0)
   );
 }

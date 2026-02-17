@@ -466,7 +466,7 @@ export default abstract class ExpressionParser extends LValParser {
       if (prec > minPrec) {
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
-          if (this.state.inFSharpPipelineDirectBody) {
+          if (this.prodParam.inFSharpDirectBody) {
             // PrivateName must be followed by `in`, but we have `|>`
             return left as N.Expression;
           }
@@ -2372,12 +2372,14 @@ export default abstract class ExpressionParser extends LValParser {
     trailingCommaLoc?: Position | null,
   ): N.ArrowFunctionExpression {
     this.scope.enter(ScopeFlag.FUNCTION | ScopeFlag.ARROW);
-    let flags = functionFlags(isAsync, false);
+    let flags = functionFlags(isAsync, false, true);
     // ConciseBody[In] :
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
     //   { FunctionBody[~Yield, ~Await] }
-    if (!this.match(tt.braceL) && this.prodParam.hasIn) {
-      flags |= ParamKind.PARAM_IN;
+    if (!this.match(tt.braceL)) {
+      flags |=
+        this.prodParam.currentFlags() &
+        (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY);
     }
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
@@ -2901,9 +2903,12 @@ export default abstract class ExpressionParser extends LValParser {
 
   allowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
-    const prodParamToSet = ParamKind.PARAM_IN & ~flags;
+    const prodParamToSet =
+      (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY) & ~flags;
     if (prodParamToSet) {
-      this.prodParam.enter(flags | ParamKind.PARAM_IN);
+      this.prodParam.enter(
+        flags | ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY,
+      );
       try {
         return callback();
       } finally {
@@ -2916,8 +2921,11 @@ export default abstract class ExpressionParser extends LValParser {
   disallowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
     const prodParamToClear = ParamKind.PARAM_IN & flags;
-    if (prodParamToClear) {
-      this.prodParam.enter(flags & ~ParamKind.PARAM_IN);
+    const prodParamToSet = ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY & ~flags;
+    if (prodParamToClear || prodParamToSet) {
+      this.prodParam.enter(
+        (flags & ~ParamKind.PARAM_IN) | ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY,
+      );
       try {
         return callback();
       } finally {
@@ -2947,6 +2955,9 @@ export default abstract class ExpressionParser extends LValParser {
     this.state.potentialArrowAt = this.state.start;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = true;
+    this.prodParam.enter(
+      this.prodParam.currentFlags() & ~ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY,
+    );
 
     let ret;
     if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
@@ -2965,7 +2976,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-
+    this.prodParam.exit();
     return ret;
   }
 
