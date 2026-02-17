@@ -2879,24 +2879,22 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   // Enable topic references from outer contexts within Hack-style pipe bodies.
-  // The function modifies the parser's topic-context state to enable or disable
+  // The function modifies the parser's hack pipeline flags to enable or disable
   // the use of topic references.
   // The function then calls a callback, then resets the parser
-  // to the old topic-context state that it had before the function was called.
+  // to the old hack pipeline flags that it had before the function was called.
 
   withTopicBindingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContext;
-    this.state.topicContext = {
-      // Enable the use of the primary topic reference.
-      maxNumOfResolvableTopics: 1,
-      // Hide the use of any topic references from outer contexts.
-      maxTopicIndex: null,
-    };
+    const oldInHackPipelineBody = this.state.inHackPipelineBody;
+    this.state.inHackPipelineBody = true;
+    const oldSeenTopicReference = this.state.seenTopicReference;
+    this.state.seenTopicReference = false;
 
     try {
       return callback();
     } finally {
-      this.state.topicContext = outerContextTopicState;
+      this.state.inHackPipelineBody = oldInHackPipelineBody;
+      this.state.seenTopicReference = oldSeenTopicReference;
     }
   }
 
@@ -2942,18 +2940,15 @@ export default abstract class ExpressionParser extends LValParser {
   // Register the use of a topic reference within the current
   // topic-binding context.
   registerTopicReference(): void {
-    this.state.topicContext.maxTopicIndex = 0;
+    this.state.seenTopicReference = true;
   }
 
   topicReferenceIsAllowedInCurrentContext(): boolean {
-    return this.state.topicContext.maxNumOfResolvableTopics >= 1;
+    return this.state.inHackPipelineBody;
   }
 
   topicReferenceWasUsedInCurrentContext(): boolean {
-    return (
-      this.state.topicContext.maxTopicIndex != null &&
-      this.state.topicContext.maxTopicIndex >= 0
-    );
+    return this.state.seenTopicReference;
   }
 
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {
