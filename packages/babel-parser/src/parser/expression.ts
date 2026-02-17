@@ -969,8 +969,6 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression[] {
     const elts: N.Expression[] = [];
     let first = true;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
 
     while (!this.eat(tt.parenR)) {
       if (first) {
@@ -995,8 +993,6 @@ export default abstract class ExpressionParser extends LValParser {
         ),
       );
     }
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return elts;
   }
@@ -1663,9 +1659,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     this.expressionScope.enter(newArrowHeadScope());
 
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
-
     const innerStartLoc = this.state.startLoc;
     const exprList: (
       | N.Expression
@@ -1717,8 +1710,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     const innerEndLoc = this.state.lastTokEndLoc!;
     this.expect(tt.parenR);
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
       this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
@@ -1939,8 +1930,6 @@ export default abstract class ExpressionParser extends LValParser {
     isPattern: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): T {
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
     let sawProto = false;
     let first = true;
     const node = this.startNode<N.ObjectExpression | N.ObjectPattern>();
@@ -1973,7 +1962,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.next();
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     const type = isPattern ? "ObjectPattern" : "ObjectExpression";
     // @ts-expect-error type is well defined
     return this.finishNode(node, type);
@@ -2343,8 +2331,6 @@ export default abstract class ExpressionParser extends LValParser {
     close: TokenType,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ArrayExpression {
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
     const node = this.startNode<N.ArrayExpression>();
     this.next();
     node.elements = this.parseExprList(
@@ -2353,7 +2339,6 @@ export default abstract class ExpressionParser extends LValParser {
       refExpressionErrors,
       node,
     );
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(node, "ArrayExpression");
   }
 
@@ -2953,8 +2938,6 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     this.state.potentialArrowAt = this.state.start;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = true;
     this.prodParam.enter(
       this.prodParam.currentFlags() & ~ParamKind.PARAM_NOT_FSHARP_DIRECT_BODY,
     );
@@ -2975,7 +2958,6 @@ export default abstract class ExpressionParser extends LValParser {
       ret = this.parseExprOp(this.parseMaybeUnaryOrPrivate(), startLoc, prec);
     }
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     this.prodParam.exit();
     return ret;
   }
