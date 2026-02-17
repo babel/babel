@@ -90,7 +90,10 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
             //      not visible to the (sync) yield*.
             //      The other part of this implementation is in asyncGeneratorDelegate.
             var nextKey: "return" | "next" =
-              key === "return" ? "return" : "next";
+              key === "return" &&
+              (value as OverloadYield<IteratorReturnResult<T>>).k
+                ? key
+                : "next";
             if (
               !(value as OverloadYield<IteratorReturnResult<T>>).k ||
               arg.done
@@ -104,28 +107,27 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
             }
           }
 
-          settle(result.done ? "return" : "normal", arg);
+          settle(!!result.done, arg);
         },
         function (err) {
           resume("throw", err);
         },
       );
     } catch (err) {
-      settle("throw", err);
+      settle(2, err);
     }
   }
 
-  function settle(type: AsyncIteratorMethod | "normal", value: any) {
-    switch (type) {
-      case "return":
-        front!.resolve({ value: value, done: true });
-        break;
-      case "throw":
-        front!.reject(value);
-        break;
-      default:
-        front!.resolve({ value: value, done: false });
-        break;
+  /**
+   * type == true -> return
+   * type == false -> normal
+   * type == 2 -> throw
+   */
+  function settle(type: true | false | 2, value: any) {
+    if (type === 2) {
+      front!.reject(value);
+    } else {
+      front!.resolve({ value: value, done: type });
     }
 
     front = front!.next;
