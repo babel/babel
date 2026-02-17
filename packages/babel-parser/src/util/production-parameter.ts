@@ -76,11 +76,9 @@ export default class ProductionParameterHandler {
 export function functionFlags(
   isAsync: boolean,
   isGenerator: boolean,
-  isArrow: boolean = false,
 ): ParamKind {
   return (
     (isAsync ? ParamKind.PARAM_AWAIT : 0) |
-    (isGenerator ? ParamKind.PARAM_YIELD : 0) |
-    (!isArrow ? ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY : 0)
+    (isGenerator ? ParamKind.PARAM_YIELD : 0)
   );
 }

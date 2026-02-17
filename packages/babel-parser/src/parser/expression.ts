@@ -2363,7 +2363,7 @@ export default abstract class ExpressionParser extends LValParser {
     trailingCommaLoc?: Position | null,
   ): N.ArrowFunctionExpression {
     this.scope.enter(ScopeFlag.FUNCTION | ScopeFlag.ARROW);
-    let flags = functionFlags(isAsync, false, true);
+    let flags = functionFlags(isAsync, false);
     // ConciseBody[In] :
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
     //   { FunctionBody[~Yield, ~Await] }
