@@ -370,14 +370,16 @@ maybeWriteFile(
           strict: true,
         },
         include: [
-          "./lib/libdom-minimal.d.ts",
-          "dts/**/*.d.ts",
+          "lib/libdom-minimal.d.ts",
+          "dts/codemods/*/src/**/*.ts",
+          "dts/eslint/*/src/**/*.ts",
+          "dts/packages/*/src/**/*.ts",
           "*.mts",
           "*.ts",
           "scripts/**/*.ts",
           "packages/*/test/*.tst.ts",
         ],
-        exclude: ["dts/**/*.tst.d.ts"],
+        exclude: [],
         references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),
