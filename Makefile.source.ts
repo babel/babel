@@ -295,7 +295,7 @@ target["tscheck"] = function () {
 };
 
 target["tscheck-babel-parser"] = function () {
-  yarn(["tsc", "-p", "./packages/babel-parser/tsconfig.json"]);
+  node(["scripts/parallel-tsc/tsc.ts", "./packages/babel-parser"]);
 };
 
 target["tscheck-helpers"] = function () {
