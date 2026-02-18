@@ -126,6 +126,7 @@ clean-all:
 
 
 build-no-bundle-ci: bootstrap-only
+	$(MAKE) bundle-babel-parser-dts
 	$(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
