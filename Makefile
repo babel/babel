@@ -34,6 +34,9 @@ generate-tsconfig:
 generate-type-helpers:
 	$(MAKEJS) generate-type-helpers
 
+bundle-babel-parser-dts:
+	$(MAKEJS) bundle-babel-parser-dts
+
 build-flow-typings:
 	$(MAKEJS) build-flow-typings
 

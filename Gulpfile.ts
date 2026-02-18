@@ -760,7 +760,7 @@ async function buildBabelParserDts() {
     "packages/babel-parser/typings/babel-parser.source.d.ts",
     parserDts,
     "// This file is auto-generated! Do not modify it directly.\n" +
-      "// Run `yarn gulp bundle-dts` to re-generate it.\n" +
+      "// Run `make bundle-babel-parser-dts` to re-generate it.\n" +
       // @typescript-eslint/no-redundant-type-constituents can be removed once we drop the IF_BABEL_7 type
       "/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */",
     "packages/babel-parser"
