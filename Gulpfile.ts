@@ -657,118 +657,117 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
   );
 }
 
-async function buildRollupDts(packages: string[]) {
-  async function build(
-    input: string,
-    output: string,
-    banner: string,
-    packageName: string
-  ) {
-    log(`Bundling '${styleText("cyan", output)}' with rollup ...`);
+async function buildRollupDts(
+  input: string,
+  output: string,
+  banner: string,
+  packageName: string
+) {
+  log(`Bundling '${styleText("cyan", output)}' with rollup ...`);
 
-    let external;
-    let imports;
-    if (packageName) {
-      const pkgJSON = require("./" + packageName + "/package.json");
-      const {
-        dependencies = {},
-        devDependencies = {},
-        peerDependencies = {},
-      } = pkgJSON;
-      external = [
-        ...Object.keys(dependencies),
-        ...Object.keys(peerDependencies),
-        // TODO: These should all be moved to dependencies
-        ...Object.keys(devDependencies),
-      ].map(dep => new RegExp(`^${dep}(?:/.+)?$`));
+  let external;
+  let imports;
+  if (packageName) {
+    const pkgJSON = require("./" + packageName + "/package.json");
+    const {
+      dependencies = {},
+      devDependencies = {},
+      peerDependencies = {},
+    } = pkgJSON;
+    external = [
+      ...Object.keys(dependencies),
+      ...Object.keys(peerDependencies),
+      // TODO: These should all be moved to dependencies
+      ...Object.keys(devDependencies),
+    ].map(dep => new RegExp(`^${dep}(?:/.+)?$`));
 
-      imports = pkgJSON.imports;
-    }
-
-    const bundle = await rollup({
-      input,
-      plugins: (
-        [
-          {
-            name: "rollup-babel-internal-define-BABEL_8_BREAKING",
-            transform: code =>
-              code.replace(
-                /type BABEL_8_BREAKING\s*=\s*boolean/g,
-                `type BABEL_8_BREAKING = true`
-              ),
-          },
-          rollupDts(),
-          imports && {
-            name: "resolve-dts-package.json-imports",
-            resolveId: {
-              order: "post",
-              handler(importee: string, importer: string | undefined) {
-                if (importer && importee.startsWith("#")) {
-                  const mapped = imports?.[importee]?.types?.replace(
-                    "/lib/",
-                    "/src/"
-                  );
-                  if (mapped) {
-                    return require.resolve(`./dts/${packageName}/${mapped}`);
-                  }
-                  return null;
-                }
-              },
-            },
-          },
-        ] satisfies InputPluginOption
-      ).filter(Boolean),
-      external,
-      onwarn(warning) {
-        if (
-          warning.code === "UNUSED_EXTERNAL_IMPORT" &&
-          // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
-          warning.names.length === 1 &&
-          // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
-          warning.names[0] === "default"
-        ) {
-          // rollup-plugin-dts doesn't like default imports when they are just re-exported
-          return;
-        }
-        if (warning.code === "UNRESOLVED_IMPORT" && warning.exporter === "vm") {
-          // TODO: We probably need @types/node
-          return;
-        }
-        console.warn(warning);
-      },
-    });
-
-    await bundle.write({
-      file: output,
-      format: "es",
-      banner,
-    });
+    imports = pkgJSON.imports;
   }
 
-  const tasks = packages.map(async (packageName: string) => {
-    const input = `${mapToDts(packageName)}/src/index.d.ts`;
-    const output = `${packageName}/lib/index.d.ts`;
-
-    await build(input, output, "", packageName);
+  const bundle = await rollup({
+    input,
+    plugins: (
+      [
+        {
+          name: "rollup-babel-internal-define-BABEL_8_BREAKING",
+          transform: code =>
+            code.replace(
+              /type BABEL_8_BREAKING\s*=\s*boolean/g,
+              `type BABEL_8_BREAKING = true`
+            ),
+        },
+        rollupDts(),
+        imports && {
+          name: "resolve-dts-package.json-imports",
+          resolveId: {
+            order: "post",
+            handler(importee: string, importer: string | undefined) {
+              if (importer && importee.startsWith("#")) {
+                const mapped = imports?.[importee]?.types?.replace(
+                  "/lib/",
+                  "/src/"
+                );
+                if (mapped) {
+                  return require.resolve(`./dts/${packageName}/${mapped}`);
+                }
+                return null;
+              }
+            },
+          },
+        },
+      ] satisfies InputPluginOption
+    ).filter(Boolean),
+    external,
+    onwarn(warning) {
+      if (
+        warning.code === "UNUSED_EXTERNAL_IMPORT" &&
+        // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
+        warning.names.length === 1 &&
+        // @ts-expect-error warning.names are defined when code is UNUSED_EXTERNAL_IMPORT
+        warning.names[0] === "default"
+      ) {
+        // rollup-plugin-dts doesn't like default imports when they are just re-exported
+        return;
+      }
+      if (warning.code === "UNRESOLVED_IMPORT" && warning.exporter === "vm") {
+        // TODO: We probably need @types/node
+        return;
+      }
+      console.warn(warning);
+    },
   });
 
-  const parserDts = "packages/babel-parser/typings/babel-parser.d.ts";
+  await bundle.write({
+    file: output,
+    format: "es",
+    banner,
+  });
+}
 
-  tasks.push(
-    build(
-      "packages/babel-parser/typings/babel-parser.source.d.ts",
-      parserDts,
-      "// This file is auto-generated! Do not modify it directly.\n" +
-        "// Run `yarn gulp bundle-dts` to re-generate it.\n" +
-        // @typescript-eslint/no-redundant-type-constituents can be removed once we drop the IF_BABEL_7 type
-        "/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */",
-      "packages/babel-parser"
-    )
+async function buildPackagesDts(packages: string[]) {
+  await Promise.all(
+    packages.map(async packageName => {
+      const input = `${mapToDts(packageName)}/src/index.d.ts`;
+      const output = `${packageName}/lib/index.d.ts`;
+      await buildRollupDts(input, output, "", packageName);
+    })
+  );
+}
+
+async function buildBabelParserDts() {
+  const parserDts = "packages/babel-parser/typings/babel-parser.d.ts";
+  await buildRollupDts(
+    "packages/babel-parser/typings/babel-parser.source.d.ts",
+    parserDts,
+    "// This file is auto-generated! Do not modify it directly.\n" +
+      "// Run `yarn gulp bundle-dts` to re-generate it.\n" +
+      // @typescript-eslint/no-redundant-type-constituents can be removed once we drop the IF_BABEL_7 type
+      "/* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */",
+    "packages/babel-parser"
   );
 
-  await Promise.all(tasks);
   patchErrorInfo(parserDts);
-  await build(parserDts, parserDts, "", "packages/babel-parser");
+  await buildRollupDts(parserDts, parserDts, "", "packages/babel-parser");
   fs.writeFileSync(
     parserDts,
     await formatCode(fs.readFileSync(parserDts, "utf8"), parserDts)
@@ -1092,7 +1091,12 @@ gulp.task(
   gulp.series("generate-standalone", "rollup-babel-standalone")
 );
 
-gulp.task("bundle-dts", () => buildRollupDts(dtsBundles));
+gulp.task("bundle-babel-parser-dts", () => buildBabelParserDts());
+gulp.task("bundle-babel-packages-dts", () => buildPackagesDts(dtsBundles));
+gulp.task(
+  "bundle-dts",
+  gulp.parallel("bundle-babel-parser-dts", "bundle-babel-packages-dts")
+);
 
 gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
@@ -1131,7 +1135,8 @@ gulp.task(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed
         "build-no-bundle"
-      )
+      ),
+      "bundle-babel-parser-dts"
     )
   )
 );
@@ -1143,6 +1148,10 @@ function watch() {
   gulp.watch(
     ["./packages/babel-helpers/src/helpers/*"],
     gulp.task("generate-runtime-helpers")
+  );
+  gulp.watch(
+    ["./packages/babel-parser/src/**/*.ts"],
+    gulp.task("bundle-babel-parser-dts")
   );
 }
 
