@@ -163,7 +163,6 @@ target["bootstrap"] = function () {
 };
 
 target["build"] = function () {
-  target["bundle-babel-parser-dts"]();
   target["build-no-bundle"]();
 
   if (process.env.BABEL_COVERAGE !== "true") {
@@ -178,6 +177,7 @@ target["build-standalone"] = function () {
 target["build-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
+  target["bundle-babel-parser-dts"]();
 
   yarn(["gulp", "build"]);
 
@@ -187,6 +187,7 @@ target["build-bundle"] = function () {
 target["build-no-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
+  target["bundle-babel-parser-dts"]();
 
   env(
     () => {
