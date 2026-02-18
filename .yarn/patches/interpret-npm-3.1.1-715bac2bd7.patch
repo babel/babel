@@ -1,12 +1,76 @@
 diff --git a/index.js b/index.js
-index b951fd9e47ecfd4c902ace0cc301fa17cfab6289..076b648c9fbeb5e0807c3ed71458b40a6b53120e 100644
+index b951fd9e47ecfd4c902ace0cc301fa17cfab6289..c321f62ebf13f2ed9b7d9496ad76003805ced81e 100644
 --- a/index.js
 +++ b/index.js
-@@ -521,6 +521,7 @@ var jsVariantExtensions = [
-   '.litcoffee',
-   '.mdx',
-   '.mjs',
-+  '.mts',
-   '.sucrase.js',
-   '.sucrase.jsx',
-   '.sucrase.ts',
+@@ -363,69 +363,8 @@ var extensions = {
+       hook.install(config);
+     },
+   },
+-  '.ts': [
+-    'ts-node/register',
+-    'sucrase/register/ts',
+-    {
+-      module: '@babel/register',
+-      register: function (hook, config) {
+-        config = config || {
+-          rootMode: 'upward-optional',
+-          overrides: [
+-            {
+-              only: [endsInTs],
+-              presets: ['@babel/preset-env', '@babel/preset-typescript'],
+-            },
+-          ],
+-        };
+-
+-        hook(
+-          Object.assign({}, config, {
+-            extensions: '.ts',
+-          })
+-        );
+-      },
+-    },
+-    {
+-      module: 'esbuild-register/dist/node',
+-      register: function (mod, config) {
+-        config = config || {
+-          target: 'node' + process.version.slice(1),
+-          hookMatcher: endsInTs,
+-        };
+-
+-        mod.register(
+-          Object.assign({}, config, {
+-            extensions: ['.ts'],
+-          })
+-        );
+-      },
+-    },
+-    {
+-      module: '@swc/register',
+-      register: function (hook, config) {
+-        config = config || {
+-          only: [endsInTs],
+-          ignore: [isNodeModules],
+-          jsc: {
+-            parser: {
+-              syntax: 'typescript',
+-            },
+-          },
+-          module: {
+-            type: 'commonjs',
+-          },
+-        };
+-
+-        hook(
+-          Object.assign({}, config, {
+-            extensions: '.ts',
+-          })
+-        );
+-      },
+-    },
+-  ],
+-  '.cts': ['ts-node/register'],
++  '.ts': null,
++  '.cts': null,
+   '.tsx': [
+     'ts-node/register',
+     'sucrase/register/tsx',

@@ -11188,8 +11188,8 @@ __metadata:
 
 "interpret@patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch":
   version: 3.1.1
-  resolution: "interpret@patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch::version=3.1.1&hash=068949"
-  checksum: 10/4337ee1e3cf25aa414deaea09e957bca9e9e15ff938491008240745e17e098b3d809cb457747746298f46a28472aaadecac7668b7ad66522015167175ac1e9ce
+  resolution: "interpret@patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch::version=3.1.1&hash=e76d24"
+  checksum: 10/a786ac2748d893b713a6f7754291216d650fa7d9e1b915246bc287919f575a50f3eab89aa1bde26de059c0afcc765d9635fa3cddb2a9a84120bf1d7faaddb34d
   languageName: node
   linkType: hard
 
