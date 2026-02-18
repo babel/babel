@@ -163,6 +163,7 @@ target["bootstrap"] = function () {
 };
 
 target["build"] = function () {
+  target["bundle-babel-parser-dts"]();
   target["build-no-bundle"]();
 
   if (process.env.BABEL_COVERAGE !== "true") {
@@ -275,6 +276,11 @@ target["prepublish-prepare-dts"] = function () {
   target["prepublish-prepare-dts-no-clean"]();
 };
 
+target["bundle-babel-parser-dts"] = function () {
+  target["tscheck-babel-parser"]();
+  yarn(["gulp", "bundle-babel-parser-dts"]);
+};
+
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
@@ -285,6 +291,10 @@ target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.ts", "."]);
   target["tscheck-helpers"]();
+};
+
+target["tscheck-babel-parser"] = function () {
+  yarn(["tsc", "-p", "./packages/babel-parser/tsconfig.json"]);
 };
 
 target["tscheck-helpers"] = function () {
