@@ -37,9 +37,11 @@ export default function _asyncIterator<T>(
 }
 
 // AsyncFromSyncIterator is actually a class that implements AsyncIterator interface
-declare class AsyncFromSyncIterator<T = any, TReturn = any, TNext = undefined>
-  implements AsyncIterator<T, TReturn, TNext>
-{
+declare class AsyncFromSyncIterator<
+  T = any,
+  TReturn = any,
+  TNext = undefined,
+> implements AsyncIterator<T, TReturn, TNext> {
   s: Iterator<T>;
   n: Iterator<T>["next"];
   constructor(s: Iterator<T>);

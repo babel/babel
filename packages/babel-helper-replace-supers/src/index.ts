@@ -62,17 +62,16 @@ const enum Flags {
   Call = 0b10,
 }
 
-interface SpecHandler
-  extends Pick<
-    Handler,
-    | "memoise"
-    | "get"
-    | "set"
-    | "destructureSet"
-    | "call"
-    | "optionalCall"
-    | "delete"
-  > {
+interface SpecHandler extends Pick<
+  Handler,
+  | "memoise"
+  | "get"
+  | "set"
+  | "destructureSet"
+  | "call"
+  | "optionalCall"
+  | "delete"
+> {
   _get?(
     this: Handler & SpecHandler,
     superMember: SuperMember,

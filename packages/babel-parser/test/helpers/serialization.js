@@ -85,7 +85,8 @@ const CompactRegExp = new RegExp(
 export function serialize(value) {
   let extended = false;
   const toExtended = (name, data) => (
-    (extended = true), { [SerializationKey]: name, ...data }
+    (extended = true),
+    { [SerializationKey]: name, ...data }
   );
   const encode = (key, value) =>
     typeof value === "bigint"

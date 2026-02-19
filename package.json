@@ -78,7 +78,7 @@
     "open": "^11.0.0",
     "p-limit": "^7.2.0",
     "pkg-pr-new": "^0.0.54",
-    "prettier": "^3.5.2",
+    "prettier": "^3.8.1",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
     "rollup-plugin-polyfill-node": "^0.13.0",
@@ -86,7 +86,7 @@
     "shelljs": "^0.8.5",
     "terser": "^5.43.1",
     "test262-stream": "^1.4.0",
-    "tstyche": "^5.0.1",
+    "tstyche": "^6.2.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.2"
   },
@@ -115,9 +115,9 @@
     "yarn": ">=1.4.0"
   },
   "lint-staged": {
-    "./Makefile.source.mjs": [
+    "./Makefile.source.ts": [
       "node ./scripts/pack-script.js --auto",
-      "git add Makefile.mjs"
+      "git add Makefile.js"
     ],
     "*.{js,cjs,mjs,ts,cts,mts}": [
       "eslint --format=codeframe --cache --cache-strategy=content --flag unstable_native_nodejs_ts_config"

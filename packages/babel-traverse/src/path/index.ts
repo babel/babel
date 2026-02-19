@@ -382,7 +382,9 @@ interface NodePath<
   P extends t.Node = T extends null
     ? never
     : NonNullable<t.ParentMaps[NonNullable<T>]>,
-> extends InstanceType<typeof NodePath_Final>,
+>
+  extends
+    InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,
     NodePathMixins,

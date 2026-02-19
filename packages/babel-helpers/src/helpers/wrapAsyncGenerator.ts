@@ -13,9 +13,11 @@ export default function _wrapAsyncGenerator(fn: GeneratorFunction) {
 
 type AsyncIteratorMethod = "next" | "throw" | "return";
 
-declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
-  implements globalThis.AsyncGenerator<T, TReturn, TNext>
-{
+declare class AsyncGenerator<
+  T = unknown,
+  TReturn = any,
+  TNext = unknown,
+> implements globalThis.AsyncGenerator<T, TReturn, TNext> {
   _invoke: (
     key: AsyncIteratorMethod,
     arg: IteratorResult<T>,
