@@ -1631,7 +1631,6 @@ function transformClass(
         ),
       );
     }
-    fieldInitializerExpressions = [];
   }
 
   if (staticFieldInitializerExpressions.length > 0) {
@@ -1911,7 +1910,6 @@ function transformClass(
         ),
       );
     }
-    computedKeyAssignments = [];
   }
 
   applyDecsBody.push(

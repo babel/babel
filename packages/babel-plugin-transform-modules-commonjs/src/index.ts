@@ -7,7 +7,6 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-  getModuleName,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 import type { PluginPass, Visitor, Scope, NodePath } from "@babel/core";
@@ -210,10 +209,6 @@ export default declare((api, options: Options) => {
               scope: path.scope,
             });
           }
-
-          let moduleName = getModuleName(this.file.opts, options);
-          // @ts-expect-error todo(flow->ts): do not reuse variables
-          if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const hooks = makeInvokers(this.file);
 

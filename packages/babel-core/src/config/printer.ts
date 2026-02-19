@@ -28,7 +28,7 @@ const Formatter = {
     callerName?: string | null,
     filepath?: string | null,
   ): string {
-    let title = "";
+    let title: string;
     if (type === ChainFormatter.Programmatic) {
       title = "programmatic options";
       if (callerName) {
