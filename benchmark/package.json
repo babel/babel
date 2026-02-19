@@ -27,7 +27,7 @@
     "@babel/preset-typescript": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "@codspeed/tinybench-plugin": "^5.2.0",
+    "@codspeed/tinybench-plugin": "patch:@codspeed/tinybench-plugin@npm%3A5.2.0#~/.yarn/patches/@codspeed-tinybench-plugin-npm-5.2.0-0f08ab6480.patch",
     "benchmark": "^2.1.4",
     "glob": "^10.3.10",
     "tinybench": "^6.0.0"

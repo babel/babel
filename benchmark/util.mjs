@@ -92,6 +92,7 @@ class Benchmark {
       new Bench({
         time: 5000,
         warmup: false,
+        retainSamples: true,
       })
     );
   }
