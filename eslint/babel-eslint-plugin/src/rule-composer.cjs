@@ -68,17 +68,15 @@ function normalizeMessagePlaceholders(descriptor, messageIds) {
   }
 
   const normalizedData = Object.create(null);
-  const interpolatedMessage = message.replace(
-    /\{\{\s*([^{}]+?)\s*\}\}/g,
-    (fullMatch, term) => {
-      if (term in descriptor.data) {
-        normalizedData[term] = descriptor.data[term];
-        return descriptor.data[term];
-      }
+  const interpolatedMessage = message.replace(/\{\{[^{}]+\}\}/g, fullMatch => {
+    const term = fullMatch.slice(2, -2).trim();
+    if (term in descriptor.data) {
+      normalizedData[term] = descriptor.data[term];
+      return descriptor.data[term];
+    }
 
-      return fullMatch;
-    },
-  );
+    return fullMatch;
+  });
 
   return {
     message: interpolatedMessage,
