@@ -41,7 +41,6 @@
     "eslint": "^9.0.0"
   },
   "devDependencies": {
-    "clone-deep": "^4.0.1",
     "eslint": "^10.0.0"
   }
 }

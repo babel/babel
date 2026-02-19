@@ -540,7 +540,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
-    clone-deep: "npm:^4.0.1"
     eslint: "npm:^10.0.0"
   peerDependencies:
     "@babel/eslint-parser": ^7.11.0
