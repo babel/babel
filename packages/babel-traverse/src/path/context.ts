@@ -203,8 +203,9 @@ export function _resyncList(this: NodePath) {
 export function _resyncRemoved(this: NodePath) {
   if (
     this.key == null ||
+    !this.container ||
     // @ts-expect-error this.key should present in this.container
-    this.container?.[this.key] !== this.node
+    this.container[this.key] !== this.node
   ) {
     _markRemoved.call(this);
   }

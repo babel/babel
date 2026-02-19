@@ -52,7 +52,7 @@ function safeRemove(path: NodePath) {
   const ids = path.getBindingIdentifiers();
   for (const name of Object.keys(ids)) {
     const binding = path.scope.getBinding(name);
-    if (binding?.identifier === ids[name]) {
+    if (binding && binding.identifier === ids[name]) {
       binding.scope.removeBinding(name);
     }
   }

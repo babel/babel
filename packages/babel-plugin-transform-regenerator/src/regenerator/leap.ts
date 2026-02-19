@@ -117,7 +117,7 @@ export class LeapManager {
       if (loc) {
         if (label) {
           // @ts-expect-error entry.label may not exist
-          if (entry.label?.name === label.name) {
+          if (entry.label && entry.label.name === label.name) {
             return loc;
           }
         } else if (entry instanceof LabeledEntry) {
