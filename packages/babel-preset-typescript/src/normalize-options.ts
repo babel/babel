@@ -14,8 +14,6 @@ export interface Options {
 }
 
 export default function normalizeOptions(options: Options = {}) {
-  let { allowNamespaces = true, jsxPragma, onlyRemoveTypeImports } = options;
-
   const TopLevelOptions: {
     [Key in keyof Omit<Options, "allowDeclareFields">]-?: Key;
   } = {
@@ -43,17 +41,17 @@ export default function normalizeOptions(options: Options = {}) {
   );
 
   v.validateTopLevelOptions(options, TopLevelOptions);
-  allowNamespaces = v.validateBooleanOption(
+  const allowNamespaces = v.validateBooleanOption(
     TopLevelOptions.allowNamespaces,
     options.allowNamespaces,
     true,
   );
-  jsxPragma = v.validateStringOption(
+  const jsxPragma = v.validateStringOption(
     TopLevelOptions.jsxPragma,
     options.jsxPragma,
     "React",
   );
-  onlyRemoveTypeImports = v.validateBooleanOption(
+  const onlyRemoveTypeImports = v.validateBooleanOption(
     TopLevelOptions.onlyRemoveTypeImports,
     options.onlyRemoveTypeImports,
     true,

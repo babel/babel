@@ -2006,7 +2006,7 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ObjectMember | N.SpreadElement {
-    let decorators = [];
+    const decorators = [];
     if (this.match(tt.at)) {
       if (this.hasPlugin("decorators")) {
         this.raise(Errors.UnsupportedPropertyDecorator, this.state.startLoc);
@@ -2031,7 +2031,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     if (decorators.length) {
       prop.decorators = decorators;
-      decorators = [];
     }
 
     prop.method = false;

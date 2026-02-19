@@ -1476,7 +1476,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     flowParseFunctionTypeParam(first: boolean): N.FlowFunctionTypeParam {
       let name = null;
       let optional = false;
-      let typeAnnotation = null;
+      let typeAnnotation: N.FlowType;
       const node = this.startNode<N.FlowFunctionTypeParam>();
       const lh = this.lookahead();
       const isThis = this.state.type === tt._this;
@@ -2087,7 +2087,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const originalNoArrowAt = this.state.noArrowAt;
       const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
       let { consequent, failed } = this.tryParseConditionalConsequent();
-      let [valid, invalid] = this.getArrowLikeExpressions(consequent);
+      const result = this.getArrowLikeExpressions(consequent);
+      let valid = result[0];
+      const invalid = result[1];
 
       if (failed || invalid.length > 0) {
         const noArrowAt = [...originalNoArrowAt];
@@ -2101,7 +2103,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
 
           ({ consequent, failed } = this.tryParseConditionalConsequent());
-          [valid, invalid] = this.getArrowLikeExpressions(consequent);
+          [valid] = this.getArrowLikeExpressions(consequent);
         }
 
         if (failed && valid.length > 1) {
@@ -2117,7 +2119,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.state = state;
           noArrowAt.push(valid[0].start);
           this.state.noArrowAt = noArrowAt;
-          ({ consequent, failed } = this.tryParseConditionalConsequent());
+          ({ consequent } = this.tryParseConditionalConsequent());
         }
       }
 

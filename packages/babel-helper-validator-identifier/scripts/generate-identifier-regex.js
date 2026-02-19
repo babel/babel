@@ -65,9 +65,11 @@ const startData = generate(start);
 const contData = generate(cont);
 
 console.log("/* prettier-ignore */");
-console.log('let nonASCIIidentifierStartChars = "' + startData.nonASCII + '";');
+console.log(
+  'const nonASCIIidentifierStartChars = "' + startData.nonASCII + '";'
+);
 console.log("/* prettier-ignore */");
-console.log('let nonASCIIidentifierChars = "' + contData.nonASCII + '";');
+console.log('const nonASCIIidentifierChars = "' + contData.nonASCII + '";');
 console.log("/* prettier-ignore */");
 console.log(
   "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"
