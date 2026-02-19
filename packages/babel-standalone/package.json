@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
@@ -29,13 +29,10 @@
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-destructuring-private": "workspace:^",
     "@babel/plugin-syntax-do-expressions": "workspace:^",
-    "@babel/plugin-syntax-explicit-resource-management": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
     "@babel/plugin-syntax-flow": "workspace:^",
     "@babel/plugin-syntax-function-bind": "workspace:^",
     "@babel/plugin-syntax-function-sent": "workspace:^",
-    "@babel/plugin-syntax-import-assertions": "workspace:^",
-    "@babel/plugin-syntax-import-attributes": "workspace:^",
     "@babel/plugin-syntax-import-reflection": "^7.24.7",
     "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-syntax-module-blocks": "workspace:^",

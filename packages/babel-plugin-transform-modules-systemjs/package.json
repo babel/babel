@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-systemjs",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "This plugin transforms ES2015 modules to SystemJS",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

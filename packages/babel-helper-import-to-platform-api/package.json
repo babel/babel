@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-import-to-platform-api",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Helper function to transform import statements to platform-specific APIs",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "@babel/helper-module-imports": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
   "devDependencies": {

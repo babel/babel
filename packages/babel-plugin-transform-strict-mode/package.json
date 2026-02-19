@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-strict-mode",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "This plugin places a 'use strict'; directive at the top of all files to enable strict mode",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

@@ -265,7 +265,7 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     commander: "npm:^14.0.2"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   bin:
     babel-build-external-helpers: ./bin/babel-build-external-helpers.js
   languageName: unknown
@@ -310,7 +310,7 @@ __metadata:
     semver: "npm:^7.7.3"
     slash: "npm:^5.1.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   dependenciesMeta:
     chokidar:
       optional: true
@@ -505,18 +505,17 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@types/eslint": "npm:^8.56.2"
     "@types/estree": "npm:^1.0.5"
-    "@typescript-eslint/scope-manager": "npm:^6.19.0"
+    "@typescript-eslint/scope-manager": "npm:^8.55.0"
     dedent: "npm:^1.5.3"
-    eslint: "npm:^9.21.0"
-    eslint-scope: "npm:^7.1.1"
-    eslint-visitor-keys: "npm:^3.3.0"
+    eslint: "npm:^10.0.0"
+    eslint-scope: "npm:^9.1.0"
+    eslint-visitor-keys: "npm:^5.0.0"
     semver: "npm:^7.7.3"
-    typescript-eslint: "npm:^8.48.0"
+    typescript-eslint: "npm:^8.55.0"
   peerDependencies:
-    "@babel/core": ^7.11.0
-    eslint: ^9.0.0
+    "@babel/core": "workspace:^"
+    eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
 
@@ -678,7 +677,7 @@ __metadata:
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -766,7 +765,7 @@ __metadata:
     charcodes: "npm:^0.2.0"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -793,7 +792,7 @@ __metadata:
     regexpu-core: "npm:^6.3.1"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -830,7 +829,7 @@ __metadata:
     "@types/semver": "npm:^7.3.4"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -889,7 +888,7 @@ __metadata:
     "@babel/helper-module-imports": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -977,7 +976,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1030,7 +1029,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1056,7 +1055,7 @@ __metadata:
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1082,7 +1081,7 @@ __metadata:
     "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1286,7 +1285,7 @@ __metadata:
     core-js: "npm:^3.48.0"
     v8flags: "npm:^4.0.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   bin:
     babel-node: ./bin/babel-node.js
   languageName: unknown
@@ -1350,7 +1349,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1374,7 +1373,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1398,7 +1397,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1426,7 +1425,7 @@ __metadata:
     "@babel/plugin-transform-optional-chaining": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.13.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1450,7 +1449,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1461,7 +1460,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1472,7 +1471,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1484,7 +1483,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1496,7 +1495,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.13.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1514,7 +1513,7 @@ __metadata:
     babel-plugin-polyfill-es-shims: "npm:^0.10.9"
     object.getownpropertydescriptors: "npm:^2.1.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1532,7 +1531,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.17.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1545,7 +1544,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.17.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1557,7 +1556,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1569,7 +1568,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1581,7 +1580,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1594,7 +1593,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1607,7 +1606,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1621,7 +1620,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.22.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1636,7 +1635,7 @@ __metadata:
     "@babel/plugin-syntax-optional-chaining-assign": "workspace:^"
     "@babel/plugin-transform-optional-chaining": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.22.5
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1649,7 +1648,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-partial-application": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1663,7 +1662,7 @@ __metadata:
     "@babel/plugin-proposal-record-and-tuple": "npm:^7.27.1"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1689,7 +1688,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1700,7 +1699,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1766,7 +1765,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1777,7 +1776,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1788,18 +1787,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
-"@babel/plugin-syntax-explicit-resource-management@workspace:^, @babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management"
-  dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
 
@@ -1810,7 +1798,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1821,7 +1809,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1832,7 +1820,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1843,18 +1831,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
-"@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
-  dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
 
@@ -1880,18 +1857,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-attributes@workspace:^, @babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-attributes@workspace:packages/babel-plugin-syntax-import-attributes"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer"
@@ -1899,7 +1864,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1932,7 +1897,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1976,7 +1941,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1998,7 +1963,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2054,7 +2019,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2076,7 +2041,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2087,7 +2052,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2120,7 +2085,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2165,7 +2130,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2190,7 +2155,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2219,7 +2184,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
     core-js-pure: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2246,7 +2211,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2269,7 +2234,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2293,7 +2258,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2318,7 +2283,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2347,7 +2312,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.12.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2380,7 +2345,7 @@ __metadata:
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2404,7 +2369,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2428,7 +2393,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2453,7 +2418,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2476,7 +2441,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2502,7 +2467,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2525,7 +2490,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2550,7 +2515,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2573,7 +2538,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2596,7 +2561,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2610,7 +2575,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2623,7 +2588,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2648,7 +2613,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2673,7 +2638,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2685,7 +2650,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2697,7 +2662,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2722,10 +2687,9 @@ __metadata:
     "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
   peerDependencies:
-    "@babel/core": ^7.22.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2748,7 +2712,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2771,7 +2735,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2795,7 +2759,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2818,7 +2782,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2844,7 +2808,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2870,7 +2834,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2899,7 +2863,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2925,7 +2889,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2951,7 +2915,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     core-js: "npm:^3.48.0"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2976,7 +2940,7 @@ __metadata:
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2999,7 +2963,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3024,7 +2988,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3055,7 +3019,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3067,7 +3031,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3092,7 +3056,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3115,7 +3079,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3142,7 +3106,7 @@ __metadata:
     "@babel/plugin-transform-block-scoping": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3165,7 +3129,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3190,7 +3154,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3217,7 +3181,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3240,7 +3204,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3252,7 +3216,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3264,7 +3228,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3276,7 +3240,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3288,7 +3252,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3301,7 +3265,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3325,7 +3289,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/plugin-transform-react-jsx": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3364,7 +3328,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3377,7 +3341,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3413,7 +3377,7 @@ __metadata:
     recast: "npm:^0.23.3"
     uglify-js: "npm:^3.14.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3437,7 +3401,7 @@ __metadata:
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3460,7 +3424,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3490,7 +3454,7 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:^"
     babel-plugin-polyfill-corejs3: "npm:^0.14.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3513,7 +3477,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3538,7 +3502,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3561,7 +3525,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3573,7 +3537,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3596,7 +3560,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3621,7 +3585,7 @@ __metadata:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3654,7 +3618,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3677,7 +3641,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3702,7 +3666,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3727,7 +3691,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3752,7 +3716,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3903,7 +3867,7 @@ __metadata:
     core-js-compat: "npm:^3.48.0"
     semver: "npm:^7.7.3"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3918,7 +3882,7 @@ __metadata:
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     babel-plugin-syntax-hermes-parser: "npm:^0.19.1"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3948,7 +3912,7 @@ __metadata:
     "@babel/plugin-transform-react-jsx-development": "workspace:^"
     "@babel/plugin-transform-react-pure-annotations": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3978,7 +3942,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3996,7 +3960,7 @@ __metadata:
     find-cache-directory: "npm:^6.0.0"
     pirates: "npm:^4.0.6"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -4044,13 +4008,10 @@ __metadata:
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
-    "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-function-bind": "workspace:^"
     "@babel/plugin-syntax-function-sent": "workspace:^"
-    "@babel/plugin-syntax-import-assertions": "workspace:^"
-    "@babel/plugin-syntax-import-attributes": "workspace:^"
     "@babel/plugin-syntax-import-reflection": "npm:^7.24.7"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-module-blocks": "workspace:^"
@@ -4485,21 +4446,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint-community/eslint-utils@npm:^4.1.2, @eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0, @eslint-community/eslint-utils@npm:^4.7.0, @eslint-community/eslint-utils@npm:^4.8.0":
-  version: 4.9.0
-  resolution: "@eslint-community/eslint-utils@npm:4.9.0"
+"@eslint-community/eslint-utils@npm:^4.1.2, @eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0, @eslint-community/eslint-utils@npm:^4.7.0, @eslint-community/eslint-utils@npm:^4.8.0, @eslint-community/eslint-utils@npm:^4.9.1":
+  version: 4.9.1
+  resolution: "@eslint-community/eslint-utils@npm:4.9.1"
   dependencies:
     eslint-visitor-keys: "npm:^3.4.3"
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-  checksum: 10/89b1eb3137e14c379865e60573f524fcc0ee5c4b0c7cd21090673e75e5a720f14b92f05ab2d02704c2314b67e67b6f96f3bb209ded6b890ced7b667aa4bf1fa2
+  checksum: 10/863b5467868551c9ae34d03eefe634633d08f623fc7b19d860f8f26eb6f303c1a5934253124163bee96181e45ed22bf27473dccc295937c3078493a4a8c9eddd
   languageName: node
   linkType: hard
 
-"@eslint-community/regexpp@npm:^4.10.0, @eslint-community/regexpp@npm:^4.12.1, @eslint-community/regexpp@npm:^4.6.0, @eslint-community/regexpp@npm:^4.8.0, @eslint-community/regexpp@npm:^4.9.1":
-  version: 4.12.1
-  resolution: "@eslint-community/regexpp@npm:4.12.1"
-  checksum: 10/c08f1dd7dd18fbb60bdd0d85820656d1374dd898af9be7f82cb00451313402a22d5e30569c150315b4385907cdbca78c22389b2a72ab78883b3173be317620cc
+"@eslint-community/regexpp@npm:^4.10.0, @eslint-community/regexpp@npm:^4.12.1, @eslint-community/regexpp@npm:^4.12.2, @eslint-community/regexpp@npm:^4.6.0, @eslint-community/regexpp@npm:^4.8.0, @eslint-community/regexpp@npm:^4.9.1":
+  version: 4.12.2
+  resolution: "@eslint-community/regexpp@npm:4.12.2"
+  checksum: 10/049b280fddf71dd325514e0a520024969431dc3a8b02fa77476e6820e9122f28ab4c9168c11821f91a27982d2453bcd7a66193356ea84e84fb7c8d793be1ba0c
   languageName: node
   linkType: hard
 
@@ -4514,6 +4475,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/config-array@npm:^0.23.0":
+  version: 0.23.1
+  resolution: "@eslint/config-array@npm:0.23.1"
+  dependencies:
+    "@eslint/object-schema": "npm:^3.0.1"
+    debug: "npm:^4.3.1"
+    minimatch: "npm:^10.1.1"
+  checksum: 10/05ce12761f8dd18431fe924aede6ffba38c78cbbfebad98c81feaff019d5134208c93ef46a4b2ea4e5384b11165429d94ea903cbe30fe4beab00749db41fe94b
+  languageName: node
+  linkType: hard
+
 "@eslint/config-helpers@npm:^0.4.1":
   version: 0.4.1
   resolution: "@eslint/config-helpers@npm:0.4.1"
@@ -4523,12 +4495,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/config-helpers@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "@eslint/config-helpers@npm:0.5.2"
+  dependencies:
+    "@eslint/core": "npm:^1.1.0"
+  checksum: 10/131fc509c65544aacaf8efdf5e5edea40cc2d0c179b468a270fbf69f89b34c51c4765f4db37fd5f594c318029aac0b759feedac1cc6677fe41aeba75aadbf6ab
+  languageName: node
+  linkType: hard
+
 "@eslint/core@npm:^0.16.0":
   version: 0.16.0
   resolution: "@eslint/core@npm:0.16.0"
   dependencies:
     "@types/json-schema": "npm:^7.0.15"
   checksum: 10/3cea45971b2d0114267b6101b673270b5d8047448cc7a8cbfdca0b0245e9d5e081cb25f13551dc7d55a090f98c13b33f0c4999f8ee8ab058537e6037629a0f71
+  languageName: node
+  linkType: hard
+
+"@eslint/core@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@eslint/core@npm:1.1.0"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.15"
+  checksum: 10/f62724beacbb5fdd3560816a4edbbf832485cbec9516b76037fdf2cc2d75011e546e305a22feaa6bed4c1a26d069dc953979aa3c8c28eccf0a746a5ac53483b0
   languageName: node
   linkType: hard
 
@@ -4563,6 +4553,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/object-schema@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@eslint/object-schema@npm:3.0.1"
+  checksum: 10/4a9db1ff49bd0293928bba72f745c9ca3f9cc85fb8868781644aa93f1fee47470d0914247eddf6aa93655c23a78168d5abff495de52ba4ea2143c88a435fb9fa
+  languageName: node
+  linkType: hard
+
 "@eslint/plugin-kit@npm:^0.4.0":
   version: 0.4.0
   resolution: "@eslint/plugin-kit@npm:0.4.0"
@@ -4570,6 +4567,16 @@ __metadata:
     "@eslint/core": "npm:^0.16.0"
     levn: "npm:^0.4.1"
   checksum: 10/2c37ca00e352447215aeadcaff5765faead39695f1cb91cd3079a43261b234887caf38edc462811bb3401acf8c156c04882f87740df936838290c705351483be
+  languageName: node
+  linkType: hard
+
+"@eslint/plugin-kit@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@eslint/plugin-kit@npm:0.6.0"
+  dependencies:
+    "@eslint/core": "npm:^1.1.0"
+    levn: "npm:^0.4.1"
+  checksum: 10/9c4e2901248ce092674b939fce9104a81d16222ed23c1b6057a5aaea8ec2fa802bcc9fbaf667e54a4206aca21f70c8b943ee14e6010530a46a4fcb64c41537b1
   languageName: node
   linkType: hard
 
@@ -5703,13 +5710,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:^8.56.2":
+"@types/eslint@npm:*":
   version: 8.56.2
   resolution: "@types/eslint@npm:8.56.2"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
   checksum: 10/9e4805e770ea90a561e1f69e5edce28b8f66e92e290705100e853c7c252cf87bef654168d0d47fc60c0effbe4517dd7a8d2fa6d3f04c7f831367d568009fd368
+  languageName: node
+  linkType: hard
+
+"@types/esrecurse@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "@types/esrecurse@npm:4.3.1"
+  checksum: 10/ada5798554b76ac466e90fff26a769b65f905666f32988dcd1b6cf8288896e0fb53080843fd644bf731d16719a6e09b155d623ce36545b75abdd99bb6dcec114
   languageName: node
   linkType: hard
 
@@ -5919,24 +5933,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:8.48.0"
+"@typescript-eslint/eslint-plugin@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:8.55.0"
   dependencies:
-    "@eslint-community/regexpp": "npm:^4.10.0"
-    "@typescript-eslint/scope-manager": "npm:8.48.0"
-    "@typescript-eslint/type-utils": "npm:8.48.0"
-    "@typescript-eslint/utils": "npm:8.48.0"
-    "@typescript-eslint/visitor-keys": "npm:8.48.0"
-    graphemer: "npm:^1.4.0"
-    ignore: "npm:^7.0.0"
+    "@eslint-community/regexpp": "npm:^4.12.2"
+    "@typescript-eslint/scope-manager": "npm:8.55.0"
+    "@typescript-eslint/type-utils": "npm:8.55.0"
+    "@typescript-eslint/utils": "npm:8.55.0"
+    "@typescript-eslint/visitor-keys": "npm:8.55.0"
+    ignore: "npm:^7.0.5"
     natural-compare: "npm:^1.4.0"
-    ts-api-utils: "npm:^2.1.0"
+    ts-api-utils: "npm:^2.4.0"
   peerDependencies:
-    "@typescript-eslint/parser": ^8.48.0
+    "@typescript-eslint/parser": ^8.55.0
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/c9cd87c72da7bb7f6175fdb53a4c08a26e61a3d9d1024960d193276217b37ca1e8e12328a57751ed9380475e11e198f9715e172126ea7d3b3da9948d225db92b
+  checksum: 10/b654130700b45077c6892f703c14e964d1facb76e1816e38d0707501e7f331ff0acf2b0b88daa2c5f4fffeabd2f04a5a723e1a28ff4e88bc267e60515584ce3a
   languageName: node
   linkType: hard
 
@@ -5956,19 +5969,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/parser@npm:8.48.0"
+"@typescript-eslint/parser@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/parser@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/scope-manager": "npm:8.48.0"
-    "@typescript-eslint/types": "npm:8.48.0"
-    "@typescript-eslint/typescript-estree": "npm:8.48.0"
-    "@typescript-eslint/visitor-keys": "npm:8.48.0"
-    debug: "npm:^4.3.4"
+    "@typescript-eslint/scope-manager": "npm:8.55.0"
+    "@typescript-eslint/types": "npm:8.55.0"
+    "@typescript-eslint/typescript-estree": "npm:8.55.0"
+    "@typescript-eslint/visitor-keys": "npm:8.55.0"
+    debug: "npm:^4.4.3"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/5919642345c79a43e57a85e0e69d1f56b5756b3fdb3586ec6371969604f589adc188338c8f12a787456edc3b38c70586d8209cffcf45e35e5a5ebd497c5f4257
+  checksum: 10/f6140b163ce1fd460fbcc51c79fdaf2825d95764741c2d73271416e13d2302c25fa578fc1e46cb0f4a78867264f7df5ed424c500737cc49084fe0af8ad33c541
   languageName: node
   linkType: hard
 
@@ -5985,16 +5998,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/project-service@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/project-service@npm:8.48.0"
+"@typescript-eslint/project-service@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/project-service@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/tsconfig-utils": "npm:^8.48.0"
-    "@typescript-eslint/types": "npm:^8.48.0"
-    debug: "npm:^4.3.4"
+    "@typescript-eslint/tsconfig-utils": "npm:^8.55.0"
+    "@typescript-eslint/types": "npm:^8.55.0"
+    debug: "npm:^4.4.3"
   peerDependencies:
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/5853a2f57bf8a26b70c1fe5a906c1890ad4f0fca127218a7805161fc9ad547af97f4a600f32f5acdf2f2312b156affca2bea84af9a433215cbcc2056b6a27c77
+  checksum: 10/50f5b65b2c7901c78cf5c3353e46cf84710d304c9b0211b8484e67345158660a50b492d4b774a07aac9b74a4289cb9ff3b637ae37619bbd5ccace5d20806688e
   languageName: node
   linkType: hard
 
@@ -6008,23 +6021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/scope-manager@npm:8.48.0"
+"@typescript-eslint/scope-manager@npm:8.55.0, @typescript-eslint/scope-manager@npm:^8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/scope-manager@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/types": "npm:8.48.0"
-    "@typescript-eslint/visitor-keys": "npm:8.48.0"
-  checksum: 10/963af7af235e940467504969c565b359ca454a156eba0d5af2e4fd9cca4294947187e1a85107ff05801688ac85b5767d2566414cbef47a03c23f7b46527decca
-  languageName: node
-  linkType: hard
-
-"@typescript-eslint/scope-manager@npm:^6.19.0":
-  version: 6.21.0
-  resolution: "@typescript-eslint/scope-manager@npm:6.21.0"
-  dependencies:
-    "@typescript-eslint/types": "npm:6.21.0"
-    "@typescript-eslint/visitor-keys": "npm:6.21.0"
-  checksum: 10/fe91ac52ca8e09356a71dc1a2f2c326480f3cccfec6b2b6d9154c1a90651ab8ea270b07c67df5678956c3bbf0bbe7113ab68f68f21b20912ea528b1214197395
+    "@typescript-eslint/types": "npm:8.55.0"
+    "@typescript-eslint/visitor-keys": "npm:8.55.0"
+  checksum: 10/6da96d6459f6c53a5337071ac71e78ce7922928c00f3d1dafe2a8eafcac194bca815d178c0ca1b69f89ca9c5a24d6c0e9131ed4447d64a6511295909553e3960
   languageName: node
   linkType: hard
 
@@ -6037,12 +6040,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/tsconfig-utils@npm:8.48.0, @typescript-eslint/tsconfig-utils@npm:^8.46.2, @typescript-eslint/tsconfig-utils@npm:^8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/tsconfig-utils@npm:8.48.0"
+"@typescript-eslint/tsconfig-utils@npm:8.55.0, @typescript-eslint/tsconfig-utils@npm:^8.46.2, @typescript-eslint/tsconfig-utils@npm:^8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/tsconfig-utils@npm:8.55.0"
   peerDependencies:
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/e480cd80498c4119a8c5bc413a22abf4bf365b3674ff95f5513292ede31e4fd8118f50d76a786de702696396a43c0c7a4d0c2ccd1c2c7db61bd941ba74495021
+  checksum: 10/281764b85f6bcae6de9865b5133b7be313f212bffe63cb3b5f09f94a2b7c7bfc83319935ed044de4b95f9043a16553d027107de6cb6f0c6e75fba900e26eb831
   languageName: node
   linkType: hard
 
@@ -6062,26 +6065,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/type-utils@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/type-utils@npm:8.48.0"
+"@typescript-eslint/type-utils@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/type-utils@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/types": "npm:8.48.0"
-    "@typescript-eslint/typescript-estree": "npm:8.48.0"
-    "@typescript-eslint/utils": "npm:8.48.0"
-    debug: "npm:^4.3.4"
-    ts-api-utils: "npm:^2.1.0"
+    "@typescript-eslint/types": "npm:8.55.0"
+    "@typescript-eslint/typescript-estree": "npm:8.55.0"
+    "@typescript-eslint/utils": "npm:8.55.0"
+    debug: "npm:^4.4.3"
+    ts-api-utils: "npm:^2.4.0"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/dfda42624d534f9fed270bd5c76c9c0bb879cccd3dfbfc2977c84489860fbc204f10bca5c69f3ac856cc4342c12f8947293e7449d3391af289620d7ec79ced0d
-  languageName: node
-  linkType: hard
-
-"@typescript-eslint/types@npm:6.21.0":
-  version: 6.21.0
-  resolution: "@typescript-eslint/types@npm:6.21.0"
-  checksum: 10/e26da86d6f36ca5b6ef6322619f8ec55aabcd7d43c840c977ae13ae2c964c3091fc92eb33730d8be08927c9de38466c5323e78bfb270a9ff1d3611fe821046c5
+  checksum: 10/0d13b5eedfae55feb3ea4e16d20a20ba79b3126d7ad526016967fa16062415b048c1aa1ee6255a34d4752d683cef2e47c7411bcb4495b9f00e1f3435804c0589
   languageName: node
   linkType: hard
 
@@ -6092,10 +6088,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:8.48.0, @typescript-eslint/types@npm:^8.46.2, @typescript-eslint/types@npm:^8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/types@npm:8.48.0"
-  checksum: 10/cd14a7ecd1cb6af94e059a713357b9521ffab08b2793a7d33abda7006816e77f634d49d1ec6f1b99b47257a605347d691bd02b2b11477c9c328f2a27f52a664f
+"@typescript-eslint/types@npm:8.55.0, @typescript-eslint/types@npm:^8.46.2, @typescript-eslint/types@npm:^8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/types@npm:8.55.0"
+  checksum: 10/4069e8691d0651e298ec78908401cc792a11e29809da3e5f3eeba0e76509a2b394563ee0932a7c5d8cad19accc4f7d835dcd8b4faa4372e6af013df322a3bd58
   languageName: node
   linkType: hard
 
@@ -6119,22 +6115,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/typescript-estree@npm:8.48.0"
+"@typescript-eslint/typescript-estree@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/typescript-estree@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/project-service": "npm:8.48.0"
-    "@typescript-eslint/tsconfig-utils": "npm:8.48.0"
-    "@typescript-eslint/types": "npm:8.48.0"
-    "@typescript-eslint/visitor-keys": "npm:8.48.0"
-    debug: "npm:^4.3.4"
-    minimatch: "npm:^9.0.4"
-    semver: "npm:^7.6.0"
+    "@typescript-eslint/project-service": "npm:8.55.0"
+    "@typescript-eslint/tsconfig-utils": "npm:8.55.0"
+    "@typescript-eslint/types": "npm:8.55.0"
+    "@typescript-eslint/visitor-keys": "npm:8.55.0"
+    debug: "npm:^4.4.3"
+    minimatch: "npm:^9.0.5"
+    semver: "npm:^7.7.3"
     tinyglobby: "npm:^0.2.15"
-    ts-api-utils: "npm:^2.1.0"
+    ts-api-utils: "npm:^2.4.0"
   peerDependencies:
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/8ee6b9e98dd72d567b8842a695578b2098bd8cdcf5628d2819407a52b533a5a139ba9a5620976641bc4553144a1b971d75f2df218a7c281fe674df25835e9e22
+  checksum: 10/219468b2bfc5abd3ee057ac6bc6bf5cb58da4accd5455dbf6f1cdce150c794a13677b1f82adb6f80b2488c8df40d4c0730c42df9f7e924ce122d9a6b933055c3
   languageName: node
   linkType: hard
 
@@ -6153,28 +6149,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:8.48.0, @typescript-eslint/utils@npm:^8.0.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/utils@npm:8.48.0"
+"@typescript-eslint/utils@npm:8.55.0, @typescript-eslint/utils@npm:^8.0.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/utils@npm:8.55.0"
   dependencies:
-    "@eslint-community/eslint-utils": "npm:^4.7.0"
-    "@typescript-eslint/scope-manager": "npm:8.48.0"
-    "@typescript-eslint/types": "npm:8.48.0"
-    "@typescript-eslint/typescript-estree": "npm:8.48.0"
+    "@eslint-community/eslint-utils": "npm:^4.9.1"
+    "@typescript-eslint/scope-manager": "npm:8.55.0"
+    "@typescript-eslint/types": "npm:8.55.0"
+    "@typescript-eslint/typescript-estree": "npm:8.55.0"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/980b9faeaae0357bd7c002b15ab3bbcb7d5e4558be5df7980cf5221b41570a1a7b7d71ea2fcc8b1387f6c0db948d01468e6dcb31230d6757e28ac2ee5d8be4cf
-  languageName: node
-  linkType: hard
-
-"@typescript-eslint/visitor-keys@npm:6.21.0":
-  version: 6.21.0
-  resolution: "@typescript-eslint/visitor-keys@npm:6.21.0"
-  dependencies:
-    "@typescript-eslint/types": "npm:6.21.0"
-    eslint-visitor-keys: "npm:^3.4.1"
-  checksum: 10/30422cdc1e2ffad203df40351a031254b272f9c6f2b7e02e9bfa39e3fc2c7b1c6130333b0057412968deda17a3a68a578a78929a8139c6acef44d9d841dc72e1
+  checksum: 10/a2218103328905977a67735b55b30dc851084bd086e7f469355f8056577ec79eb30fc42cec16f1881803c764a0ee60aeb62fe0caa4c407bdba3fd72f67c2d114
   languageName: node
   linkType: hard
 
@@ -6188,13 +6174,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/visitor-keys@npm:8.48.0":
-  version: 8.48.0
-  resolution: "@typescript-eslint/visitor-keys@npm:8.48.0"
+"@typescript-eslint/visitor-keys@npm:8.55.0":
+  version: 8.55.0
+  resolution: "@typescript-eslint/visitor-keys@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/types": "npm:8.48.0"
+    "@typescript-eslint/types": "npm:8.55.0"
     eslint-visitor-keys: "npm:^4.2.1"
-  checksum: 10/f9eaff8225b3b00e486e0221bd596b08a3ed463f31fab88221256908f6208c48f745281b7b92e6358d25e1dbdc37c6c2f4b42503403c24b071165bafd9a35d52
+  checksum: 10/c35f2b1b69d103edb78dca5ba28acb2454c2eb75a97e4c90a205059df73790185627326c8816b671d5734f1d966196ece605cf592dfa10d323ec6530b3260140
   languageName: node
   linkType: hard
 
@@ -9767,16 +9753,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-scope@npm:^7.1.1":
-  version: 7.2.2
-  resolution: "eslint-scope@npm:7.2.2"
-  dependencies:
-    esrecurse: "npm:^4.3.0"
-    estraverse: "npm:^5.2.0"
-  checksum: 10/5c660fb905d5883ad018a6fea2b49f3cb5b1cbf2cd4bd08e98646e9864f9bc2c74c0839bed2d292e90a4a328833accc197c8f0baed89cbe8d605d6f918465491
-  languageName: node
-  linkType: hard
-
 "eslint-scope@npm:^8.4.0":
   version: 8.4.0
   resolution: "eslint-scope@npm:8.4.0"
@@ -9787,7 +9763,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1, eslint-visitor-keys@npm:^3.4.3":
+"eslint-scope@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "eslint-scope@npm:9.1.0"
+  dependencies:
+    "@types/esrecurse": "npm:^4.3.1"
+    "@types/estree": "npm:^1.0.8"
+    esrecurse: "npm:^4.3.0"
+    estraverse: "npm:^5.2.0"
+  checksum: 10/a96888fa3bc4ac9d4d685768a061c53884b86da7626a4c91caebf309e342b8a7eca509d599969c958e0afe7df12809e430b983bb89c1ef67208c3f99e9899a6b
+  languageName: node
+  linkType: hard
+
+"eslint-visitor-keys@npm:^3.4.3":
   version: 3.4.3
   resolution: "eslint-visitor-keys@npm:3.4.3"
   checksum: 10/3f357c554a9ea794b094a09bd4187e5eacd1bc0d0653c3adeb87962c548e6a1ab8f982b86963ae1337f5d976004146536dcee5d0e2806665b193fbfbf1a9231b
@@ -9798,6 +9786,58 @@ __metadata:
   version: 4.2.1
   resolution: "eslint-visitor-keys@npm:4.2.1"
   checksum: 10/3ee00fc6a7002d4b0ffd9dc99e13a6a7882c557329e6c25ab254220d71e5c9c4f89dca4695352949ea678eb1f3ba912a18ef8aac0a7fe094196fd92f441bfce2
+  languageName: node
+  linkType: hard
+
+"eslint-visitor-keys@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "eslint-visitor-keys@npm:5.0.0"
+  checksum: 10/05334d637c73d02f644b8dbfd6f555f049a229654b543b4b701944051072808d944368164c8b291cecb60e157a54d05f221eb45945a1bdd06c3e0e298ddb4678
+  languageName: node
+  linkType: hard
+
+"eslint@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "eslint@npm:10.0.0"
+  dependencies:
+    "@eslint-community/eslint-utils": "npm:^4.8.0"
+    "@eslint-community/regexpp": "npm:^4.12.2"
+    "@eslint/config-array": "npm:^0.23.0"
+    "@eslint/config-helpers": "npm:^0.5.2"
+    "@eslint/core": "npm:^1.1.0"
+    "@eslint/plugin-kit": "npm:^0.6.0"
+    "@humanfs/node": "npm:^0.16.6"
+    "@humanwhocodes/module-importer": "npm:^1.0.1"
+    "@humanwhocodes/retry": "npm:^0.4.2"
+    "@types/estree": "npm:^1.0.6"
+    ajv: "npm:^6.12.4"
+    cross-spawn: "npm:^7.0.6"
+    debug: "npm:^4.3.2"
+    escape-string-regexp: "npm:^4.0.0"
+    eslint-scope: "npm:^9.1.0"
+    eslint-visitor-keys: "npm:^5.0.0"
+    espree: "npm:^11.1.0"
+    esquery: "npm:^1.7.0"
+    esutils: "npm:^2.0.2"
+    fast-deep-equal: "npm:^3.1.3"
+    file-entry-cache: "npm:^8.0.0"
+    find-up: "npm:^5.0.0"
+    glob-parent: "npm:^6.0.2"
+    ignore: "npm:^5.2.0"
+    imurmurhash: "npm:^0.1.4"
+    is-glob: "npm:^4.0.0"
+    json-stable-stringify-without-jsonify: "npm:^1.0.1"
+    minimatch: "npm:^10.1.1"
+    natural-compare: "npm:^1.4.0"
+    optionator: "npm:^0.9.3"
+  peerDependencies:
+    jiti: "*"
+  peerDependenciesMeta:
+    jiti:
+      optional: true
+  bin:
+    eslint: bin/eslint.js
+  checksum: 10/61d9477cfa778e3becde21a560d08dfad7acec49d992f3d3b01bb151bab760efcf1c93e000eb2f8d71d01a29e4b5b4636e7616ed3da278bf24fb03c184fd14a2
   languageName: node
   linkType: hard
 
@@ -9861,6 +9901,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"espree@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "espree@npm:11.1.0"
+  dependencies:
+    acorn: "npm:^8.15.0"
+    acorn-jsx: "npm:^5.3.2"
+    eslint-visitor-keys: "npm:^5.0.0"
+  checksum: 10/00215a8ed1faa7caf18f9b67a9ff266643d07e49b97056d90be7323c69fec90c887e478282578243a5cfc33b39a414ec598a9300f9f1f536ef1dbaafa2da7e09
+  languageName: node
+  linkType: hard
+
 "esprima@npm:^4.0.0, esprima@npm:~4.0.0":
   version: 4.0.1
   resolution: "esprima@npm:4.0.1"
@@ -9871,12 +9922,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esquery@npm:^1.5.0, esquery@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "esquery@npm:1.6.0"
+"esquery@npm:^1.5.0, esquery@npm:^1.6.0, esquery@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "esquery@npm:1.7.0"
   dependencies:
     estraverse: "npm:^5.1.0"
-  checksum: 10/c587fb8ec9ed83f2b1bc97cf2f6854cc30bf784a79d62ba08c6e358bf22280d69aee12827521cf38e69ae9761d23fb7fde593ce315610f85655c139d99b05e5a
+  checksum: 10/4afaf3089367e1f5885caa116ef386dffd8bfd64da21fd3d0e56e938d2667cfb2e5400ab4a825aa70e799bb3741e5b5d63c0b94d86e2d4cf3095c9e64b2f5a15
   languageName: node
   linkType: hard
 
@@ -11382,7 +11433,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^7.0.0":
+"ignore@npm:^7.0.0, ignore@npm:^7.0.5":
   version: 7.0.5
   resolution: "ignore@npm:7.0.5"
   checksum: 10/f134b96a4de0af419196f52c529d5c6120c4456ff8a6b5a14ceaaa399f883e15d58d2ce651c9b69b9388491d4669dda47285d307e827de9304a53a1824801bc6
@@ -17012,12 +17063,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-api-utils@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "ts-api-utils@npm:2.1.0"
+"ts-api-utils@npm:^2.1.0, ts-api-utils@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "ts-api-utils@npm:2.4.0"
   peerDependencies:
     typescript: ">=4.8.4"
-  checksum: 10/02e55b49d9617c6eebf8aadfa08d3ca03ca0cd2f0586ad34117fdfc7aa3cd25d95051843fde9df86665ad907f99baed179e7a117b11021417f379e4d2614eacd
+  checksum: 10/d6b2b3b6caad8d2f4ddc0c3785d22bb1a6041773335a1c71d73a5d67d11d993763fe8e4faefc4a4d03bb42b26c6126bbcf2e34826baed1def5369d0ebad358fa
   languageName: node
   linkType: hard
 
@@ -17298,18 +17349,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.48.0":
-  version: 8.48.0
-  resolution: "typescript-eslint@npm:8.48.0"
+"typescript-eslint@npm:^8.55.0":
+  version: 8.55.0
+  resolution: "typescript-eslint@npm:8.55.0"
   dependencies:
-    "@typescript-eslint/eslint-plugin": "npm:8.48.0"
-    "@typescript-eslint/parser": "npm:8.48.0"
-    "@typescript-eslint/typescript-estree": "npm:8.48.0"
-    "@typescript-eslint/utils": "npm:8.48.0"
+    "@typescript-eslint/eslint-plugin": "npm:8.55.0"
+    "@typescript-eslint/parser": "npm:8.55.0"
+    "@typescript-eslint/typescript-estree": "npm:8.55.0"
+    "@typescript-eslint/utils": "npm:8.55.0"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <6.0.0"
-  checksum: 10/9be54df60faf3b5a6d255032b4478170b6f64e38b8396475a2049479d1e3c1f5a23a18bb4d2d6ff685ef92ff8f2af28215772fe33b48148a8cf83a724d0778d1
+  checksum: 10/60f8c9a57a5ce2b1ce74a4287ce03171440a911c451755a5c8192a2f0770e89b629836e6ab455ffbf165e64c18e254926156627ff314bcd8e4fd3d7badfc40be
   languageName: node
   linkType: hard
 

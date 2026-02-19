@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-block-scoped-functions",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Babel plugin to ensure function declarations at the block level are block scoped",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": ["proposal-import-wasm-source", "syntax-import-attributes"],
+  "plugins": ["proposal-import-wasm-source"],
   "throws": "`import source` with import attributes cannot be compiled."
 }

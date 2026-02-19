@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Turn JSX into React function calls",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "@babel/types": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

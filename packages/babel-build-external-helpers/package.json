@@ -1,6 +1,6 @@
 {
   "name": "@babel/build-external-helpers",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "A command line interface to build Babel external helpers.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/babel-build-external-helpers",
@@ -22,7 +22,7 @@
     "commander": "^14.0.2"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

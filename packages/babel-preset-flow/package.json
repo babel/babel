@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-flow",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Babel preset for all Flow plugins.",
   "author": "The Babel Team (https://babel.dev/team)",
   "repository": {
@@ -25,7 +25,7 @@
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

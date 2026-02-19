@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-parameters",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Compile ES2015 default and rest parameters to ES5",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

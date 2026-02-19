@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -22,7 +22,7 @@
     "pirates": "^4.0.6"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-globals",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "A collection of JavaScript globals for Babel internal usage",

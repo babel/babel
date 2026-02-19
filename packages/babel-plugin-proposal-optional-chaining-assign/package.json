@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-optional-chaining-assign",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Transform optional chaining on the left-hand side of assignment expressions",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "@babel/plugin-transform-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.22.5"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

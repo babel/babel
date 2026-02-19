@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-unicode-sets-regex",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Compile regular expressions' unicodeSets (v) flag.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-sets-regex",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

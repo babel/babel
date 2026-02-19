@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-sent",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Compile the function.sent meta property to valid ES2015 code",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/helper-wrap-function": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

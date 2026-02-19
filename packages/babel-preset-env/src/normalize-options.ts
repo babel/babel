@@ -1,6 +1,9 @@
 import semver, { type SemVer } from "semver";
 import corejs3Polyfills from "core-js-compat/data.json" with { type: "json" };
-import { plugins as pluginsList } from "./plugins-compat-data.ts";
+import {
+  plugins as pluginsList,
+  pluginsBugfixes as bugfixPluginsList,
+} from "./plugins-compat-data.ts";
 import moduleTransformations from "./module-transformations.ts";
 import {
   TopLevelOptions,
@@ -19,7 +22,10 @@ import type {
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
-const allPluginsList = Object.keys(pluginsList);
+const allPluginsList = [
+  ...Object.keys(pluginsList),
+  ...Object.keys(bugfixPluginsList),
+];
 
 // NOTE: Since module plugins are handled separately compared to other plugins (via the "modules" option) it
 // should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
@@ -42,10 +48,6 @@ const getValidIncludesAndExcludes = (
   return Array.from(set);
 };
 
-function flatMap<T, U>(array: T[], fn: (item: T) => U[]): U[] {
-  return Array.prototype.concat.apply([], array.map(fn));
-}
-
 export const normalizePluginName = (plugin: string) =>
   plugin.replace(/^(?:@babel\/|babel-)(?:plugin-)?/, "");
 
@@ -59,7 +61,7 @@ const expandIncludesAndExcludes = (
   const filterableItems = getValidIncludesAndExcludes(type, corejs);
 
   const invalidFilters: PluginListOption = [];
-  const selectedPlugins = flatMap(filterList, filter => {
+  const selectedPlugins = filterList.flatMap(filter => {
     let re: RegExp;
     if (typeof filter === "string") {
       try {
