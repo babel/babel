@@ -74,9 +74,8 @@ describe("getTargets", () => {
       delete process.env.BROWSERSLIST_CONFIG;
     });
     it("should provide fallback to any targets option", () => {
-      process.env.BROWSERSLIST_CONFIG = require.resolve(
-        "./fixtures/.browserslistrc",
-      );
+      process.env.BROWSERSLIST_CONFIG =
+        require.resolve("./fixtures/.browserslistrc");
       expect(getTargets()).toEqual({ firefox: "30.0.0", chrome: "70.0.0" });
     });
   });

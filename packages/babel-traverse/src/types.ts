@@ -20,8 +20,7 @@ export interface ExplVisitNode<S, P extends t.Node> {
 }
 
 export interface ExplodedVisitor<S = unknown>
-  extends ExplVisitorBase<S>,
-    ExplVisitNode<S, t.Node> {
+  extends ExplVisitorBase<S>, ExplVisitNode<S, t.Node> {
   _exploded: true;
   _verified: true;
 }
@@ -52,7 +51,8 @@ interface VisitorVirtualAliases<S> {
 
 // TODO: Do not export this? Or give it a better name?
 export interface VisitorBase<S>
-  extends VisitNodeObject<S, t.Node>,
+  extends
+    VisitNodeObject<S, t.Node>,
     VisitorBaseNodes<S>,
     VisitorBaseAliases<S>,
     VisitorVirtualAliases<S>,

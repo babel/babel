@@ -886,16 +886,13 @@ export interface ClassMethodOrDeclareMethodCommon extends ClassMemberBase {
 }
 
 export interface ClassMethod
-  extends MethodBase,
-    ClassMethodOrDeclareMethodCommon {
+  extends MethodBase, ClassMethodOrDeclareMethodCommon {
   type: "ClassMethod";
   variance?: FlowVariance | null; // TODO: Not in spec
 }
 
 export interface ClassPrivateMethod
-  extends NodeBase,
-    ClassMethodOrDeclareMethodCommon,
-    MethodBase {
+  extends NodeBase, ClassMethodOrDeclareMethodCommon, MethodBase {
   type: "ClassPrivateMethod";
   key: PrivateName;
   computed: false;
@@ -935,8 +932,7 @@ export interface ClassPrivateProperty extends NodeBase {
 }
 
 export interface ClassAccessorProperty
-  extends ClassMemberBase,
-    DeclarationBase {
+  extends ClassMemberBase, DeclarationBase {
   type: "ClassAccessorProperty";
   key: Expression | PrivateName;
   value: Expression | undefined | null;
@@ -948,9 +944,7 @@ export interface ClassAccessorProperty
 }
 
 export interface OptClassDeclaration
-  extends ClassBase,
-    DeclarationBase,
-    HasDecorators {
+  extends ClassBase, DeclarationBase, HasDecorators {
   type: "ClassDeclaration";
   // TypeScript only
   abstract?: boolean;
@@ -1122,8 +1116,7 @@ export interface TypeParameterDeclaration extends TypeParameterDeclarationBase {
   params: TypeParameter[];
 }
 
-export interface TsTypeParameterDeclaration
-  extends TypeParameterDeclarationBase {
+export interface TsTypeParameterDeclaration extends TypeParameterDeclarationBase {
   type: "TSTypeParameterDeclaration";
   params: TsTypeParameter[];
 }
@@ -1148,14 +1141,12 @@ export interface TypeParameterInstantiationBase extends NodeBase {
   params: Node[];
 }
 
-export interface TypeParameterInstantiation
-  extends TypeParameterInstantiationBase {
+export interface TypeParameterInstantiation extends TypeParameterInstantiationBase {
   type: "TypeParameterInstantiation";
   params: FlowType[];
 }
 
-export interface TsTypeParameterInstantiation
-  extends TypeParameterInstantiationBase {
+export interface TsTypeParameterInstantiation extends TypeParameterInstantiationBase {
   type: "TSTypeParameterInstantiation";
   params: TsType[];
 }
@@ -1435,8 +1426,7 @@ export interface TSDeclareFunction extends OptTSDeclareFunction {
 }
 
 export interface TSDeclareMethod
-  extends FunctionBase,
-    ClassMethodOrDeclareMethodCommon {
+  extends FunctionBase, ClassMethodOrDeclareMethodCommon {
   type: "TSDeclareMethod";
   kind: MethodKind;
 }
@@ -1461,8 +1451,7 @@ export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }
 
-export interface TsSignatureDeclarationBase
-  extends TsSignatureDeclarationOrIndexSignatureBase {
+export interface TsSignatureDeclarationBase extends TsSignatureDeclarationOrIndexSignatureBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
   params: (
     | Identifier
@@ -1474,8 +1463,7 @@ export interface TsSignatureDeclarationBase
   typeParameters: TsTypeParameterDeclaration | undefined | null;
 }
 
-export interface TsIndexSignatureBase
-  extends TsSignatureDeclarationOrIndexSignatureBase {
+export interface TsIndexSignatureBase extends TsSignatureDeclarationOrIndexSignatureBase {
   parameters: (
     | Identifier
     | RestElement
@@ -1500,8 +1488,7 @@ export interface TsCallSignatureDeclaration extends TsSignatureDeclarationBase {
   type: "TSCallSignatureDeclaration";
 }
 
-export interface TsConstructSignatureDeclaration
-  extends TsSignatureDeclarationBase {
+export interface TsConstructSignatureDeclaration extends TsSignatureDeclarationBase {
   type: "TSConstructSignatureDeclaration";
 }
 
@@ -1523,8 +1510,7 @@ export interface TsPropertySignature extends TsNamedTypeElementBase {
 }
 
 export interface TsMethodSignature
-  extends TsSignatureDeclarationBase,
-    TsNamedTypeElementBase {
+  extends TsSignatureDeclarationBase, TsNamedTypeElementBase {
   type: "TSMethodSignature";
   kind: "method" | "get" | "set";
 }
@@ -1540,26 +1526,22 @@ export interface TsIndexSignature extends TsIndexSignatureBase {
 }
 
 export interface EstreeTSEmptyBodyFunctionExpression
-  extends BodilessFunctionOrMethodBase,
-    DeclarationBase {
+  extends BodilessFunctionOrMethodBase, DeclarationBase {
   type: "TSEmptyBodyFunctionExpression";
   body: null;
 }
 
-export interface EstreeTSAbstractMethodDefinition
-  extends EstreeMethodDefinitionBase {
+export interface EstreeTSAbstractMethodDefinition extends EstreeMethodDefinitionBase {
   type: "TSAbstractMethodDefinition";
   value: EstreeTSEmptyBodyFunctionExpression;
 }
 
-export interface EstreeTSAbstractPropertyDefinition
-  extends EstreePropertyDefinitionBase {
+export interface EstreeTSAbstractPropertyDefinition extends EstreePropertyDefinitionBase {
   type: "TSAbstractPropertyDefinition";
   value: null;
 }
 
-export interface EstreeTSAbstractAccessorProperty
-  extends EstreePropertyDefinitionBase {
+export interface EstreeTSAbstractAccessorProperty extends EstreePropertyDefinitionBase {
   type: "TSAbstractAccessorProperty";
   value: null;
 }
@@ -1623,8 +1605,7 @@ export interface TsFunctionType extends TsTypeBase, TsSignatureDeclarationBase {
 }
 
 export interface TsConstructorType
-  extends TsTypeBase,
-    TsSignatureDeclarationBase {
+  extends TsTypeBase, TsSignatureDeclarationBase {
   type: "TSConstructorType";
   typeAnnotation: TsTypeAnnotation;
   abstract: boolean;
@@ -1903,8 +1884,9 @@ export interface TsInstantiationExpression extends NodeBase {
 // Babel placeholders %%foo%%
 // ================
 
-export interface Placeholder<N extends PlaceholderTypes = PlaceholderTypes>
-  extends NodeBase {
+export interface Placeholder<
+  N extends PlaceholderTypes = PlaceholderTypes,
+> extends NodeBase {
   type: "Placeholder";
   name: Identifier;
   expectedNode: N;

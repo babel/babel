@@ -82,9 +82,8 @@ describe("babel-preset-env", () => {
   });
 
   it("should add .browserslistrc to external dependencies when configPath is specified", () => {
-    const browserslistConfigFile = require.resolve(
-      "./regressions/.browserslistrc",
-    );
+    const browserslistConfigFile =
+      require.resolve("./regressions/.browserslistrc");
     const { externalDependencies } = babel.transformSync("", {
       configFile: false,
       presets: [
@@ -103,9 +102,8 @@ describe("babel-preset-env", () => {
       delete process.env.BROWSERSLIST_CONFIG;
     });
     it("should add process.env.BROWSERSLIST_CONFIG to external dependencies using preset-env's resolveTarget", () => {
-      const browserslistConfigFile = require.resolve(
-        "./regressions/.browserslistrc",
-      );
+      const browserslistConfigFile =
+        require.resolve("./regressions/.browserslistrc");
       process.env.BROWSERSLIST_CONFIG = browserslistConfigFile;
       const { externalDependencies } = babel.transformSync("", {
         configFile: false,
