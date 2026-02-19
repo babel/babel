@@ -38,7 +38,7 @@
     "@babel/preset-typescript": "next",
     "@babel/runtime": "next",
     "@cspotcode/source-map-support": "^0.8.1",
-    "@eslint/js": "^9.38.0",
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
