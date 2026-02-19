@@ -8,13 +8,10 @@ import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
-import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
-import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 import syntaxImportReflection from "@babel/plugin-syntax-import-reflection";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxModuleBlocks from "@babel/plugin-syntax-module-blocks";
@@ -111,13 +108,10 @@ export {
   syntaxDecorators,
   syntaxDestructuringPrivate,
   syntaxDoExpressions,
-  syntaxExplicitResourceManagement,
   syntaxExportDefaultFrom,
   syntaxFlow,
   syntaxFunctionBind,
   syntaxFunctionSent,
-  syntaxImportAssertions,
-  syntaxImportAttributes,
   syntaxImportReflection,
   syntaxJsx,
   syntaxModuleBlocks,
@@ -215,13 +209,10 @@ export const all: Record<string, any> = {
   "syntax-decorators": syntaxDecorators,
   "syntax-destructuring-private": syntaxDestructuringPrivate,
   "syntax-do-expressions": syntaxDoExpressions,
-  "syntax-explicit-resource-management": syntaxExplicitResourceManagement,
   "syntax-export-default-from": syntaxExportDefaultFrom,
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
-  "syntax-import-assertions": syntaxImportAssertions,
-  "syntax-import-attributes": syntaxImportAttributes,
   "syntax-import-reflection": syntaxImportReflection,
   "syntax-jsx": syntaxJsx,
   "syntax-module-blocks": syntaxModuleBlocks,

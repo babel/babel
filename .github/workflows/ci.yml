@@ -520,6 +520,32 @@ jobs:
       - name: Test Node.js ${{ matrix.node-version }}
         run: node test/runtime-integration/node.cjs
 
+  eslint-version-test:
+    name: Test @babel/eslint-* with ESLint
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        eslint-version: [9.0.0]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v4
+        with:
+          name: babel-artifact
+      - name: Downgrade ESLint to ${{ matrix.eslint-version }}
+        run: yarn up eslint@${{ matrix.eslint-version }}
+      - name: Run babel/eslint tests
+        run: node ./node_modules/.bin/jest eslint
+
   test262-prepare:
     name: test262 - Prepare for running in parallel
     runs-on: ubuntu-latest

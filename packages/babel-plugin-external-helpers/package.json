@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-external-helpers",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "This plugin contains helper functions that’ll be placed at the top of the generated code",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

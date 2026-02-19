@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Helper functions on Babel compilation targets",

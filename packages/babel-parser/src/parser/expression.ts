@@ -856,10 +856,8 @@ export default abstract class ExpressionParser extends LValParser {
     state: N.ParseSubscriptState,
     optional: boolean,
   ): N.Expression {
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     let refExpressionErrors: ExpressionErrors | null = null;
 
-    this.state.maybeInArrowParameters = true;
     this.next(); // eat `(`
 
     const node = this.startNodeAt<N.CallExpression | N.OptionalCallExpression>(
@@ -909,19 +907,10 @@ export default abstract class ExpressionParser extends LValParser {
         this.checkExpressionErrors(refExpressionErrors, true);
         this.expressionScope.exit();
       }
-      this.toReferencedArguments(finishedNode);
+      this.toReferencedList(node.arguments);
     }
 
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-
     return finishedNode;
-  }
-
-  toReferencedArguments(
-    node: N.CallExpression | N.OptionalCallExpression,
-    isParenthesizedExpr?: boolean,
-  ) {
-    this.toReferencedListDeep(node.arguments, isParenthesizedExpr);
   }
 
   // MemberExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
@@ -1676,9 +1665,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     this.expressionScope.enter(newArrowHeadScope());
 
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.maybeInArrowParameters = true;
     this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartLoc = this.state.startLoc;
@@ -1733,7 +1720,6 @@ export default abstract class ExpressionParser extends LValParser {
     const innerEndLoc = this.state.lastTokEndLoc!;
     this.expect(tt.parenR);
 
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
@@ -1759,7 +1745,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (spreadStartLoc) this.unexpected(spreadStartLoc);
     this.checkExpressionErrors(refExpressionErrors, true);
 
-    this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
+    this.toReferencedList(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
       val = this.startNodeAt<N.SequenceExpression>(innerStartLoc);
       val.expressions = exprList as N.Expression[];
@@ -2398,18 +2384,14 @@ export default abstract class ExpressionParser extends LValParser {
     }
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
 
     if (params) {
-      this.state.maybeInArrowParameters = true;
       this.setArrowFunctionParameters(node, params, trailingCommaLoc);
     }
-    this.state.maybeInArrowParameters = false;
     this.parseFunctionBody(node, true);
 
     this.prodParam.exit();
     this.scope.exit();
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return this.finishNode(node, "ArrowFunctionExpression");
   }

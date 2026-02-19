@@ -1,6 +1,6 @@
 {
   "name": "@babel/generator",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Turns an AST into code.",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",

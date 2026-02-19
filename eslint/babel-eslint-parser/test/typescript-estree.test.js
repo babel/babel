@@ -4,6 +4,9 @@ import { parseForESLint } from "../lib/index.js";
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import unpad from "dedent";
 import { commonJS } from "$repo-utils";
+import { ESLint } from "eslint";
+
+const ESLINT_VERSION = parseInt(ESLint.version.split(".")[0], 10);
 
 const { require, __dirname } = commonJS(import.meta.url);
 
@@ -45,6 +48,41 @@ function fixTSESLintTokens(ast) {
         break;
       default:
         break;
+    }
+  }
+}
+
+function babelASTToESLint9ProgramLocation(ast) {
+  if (ESLINT_VERSION >= 10) {
+    const body = ast.body;
+    if (ast.comments.length) {
+      const lastComment = ast.comments[ast.comments.length - 1];
+
+      if (ast.tokens.length) {
+        const lastToken = ast.tokens[ast.tokens.length - 1];
+
+        if (lastComment.end > lastToken.end) {
+          // If there is a comment after the last token, the program ends at the
+          // last token and not the comment
+          ast.range[1] = lastToken.end;
+          ast.loc.end.line = lastToken.loc.end.line;
+          ast.loc.end.column = lastToken.loc.end.column;
+
+          ast.end = lastToken.end;
+        }
+      }
+    } else {
+      if (!ast.tokens.length) {
+        ast.loc.start.line = 1;
+        ast.loc.end.line = 1;
+      }
+    }
+
+    if (body?.length) {
+      ast.loc.start.line = body[0].loc.start.line;
+      ast.range[0] = body[0].start;
+
+      ast.start = body[0].start;
     }
   }
 }
@@ -146,7 +184,9 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
       },
     }).ast;
 
+    babelASTToESLint9ProgramLocation(babelAST);
     deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
+
     if (withoutTokens) {
       delete babelAST.tokens;
       delete tsEstreeAST.tokens;
@@ -345,9 +385,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
     );
     const fixtures = getFixtures(parserTestFixtureRoot);
     const FAILURES = new Set([
-      // Pending release https://github.com/microsoft/TypeScript/pull/61764
-      "typescript/explicit-resource-management/valid-for-using-declaration-binding-of/input.js",
-
       // ts-eslint/tsc does not support arrow generic in tsx mode
       "typescript/arrow-function/async-await-null/input.ts",
       "typescript/arrow-function/async-generic-after-await/input.ts",

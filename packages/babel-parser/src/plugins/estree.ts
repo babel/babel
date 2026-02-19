@@ -483,20 +483,6 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    toReferencedArguments(
-      node /* isParenthesizedExpr?: boolean, */ :
-        | N.CallExpression
-        | N.OptionalCallExpression
-        | N.EstreeImportExpression,
-    ) {
-      // ImportExpressions do not have an arguments array.
-      if (node.type === "ImportExpression") {
-        return;
-      }
-
-      super.toReferencedArguments(node);
-    }
-
     parseExport(
       unfinished: Undone<N.AnyExport>,
       decorators: N.Decorator[] | null,

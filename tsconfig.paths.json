@@ -179,9 +179,6 @@
       "@babel/plugin-syntax-do-expressions": [
         "./packages/babel-plugin-syntax-do-expressions/src"
       ],
-      "@babel/plugin-syntax-explicit-resource-management": [
-        "./packages/babel-plugin-syntax-explicit-resource-management/src"
-      ],
       "@babel/plugin-syntax-export-default-from": [
         "./packages/babel-plugin-syntax-export-default-from/src"
       ],
@@ -193,12 +190,6 @@
       ],
       "@babel/plugin-syntax-function-sent": [
         "./packages/babel-plugin-syntax-function-sent/src"
-      ],
-      "@babel/plugin-syntax-import-assertions": [
-        "./packages/babel-plugin-syntax-import-assertions/src"
-      ],
-      "@babel/plugin-syntax-import-attributes": [
-        "./packages/babel-plugin-syntax-import-attributes/src"
       ],
       "@babel/plugin-syntax-import-defer": [
         "./packages/babel-plugin-syntax-import-defer/src"

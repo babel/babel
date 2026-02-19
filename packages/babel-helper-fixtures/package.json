@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-fixtures",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Helper function to support fixtures",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "@types/semver": "^7.3.4"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

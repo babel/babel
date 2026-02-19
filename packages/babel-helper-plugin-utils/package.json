@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-utils",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "General utilities for plugins to use",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-plugin-utils",
@@ -21,7 +21,7 @@
     "@babel/core": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "exports": {
     ".": {

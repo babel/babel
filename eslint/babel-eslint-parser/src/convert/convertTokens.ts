@@ -129,16 +129,10 @@ function convertToken(
   }
   if (!process.env.IS_PUBLISH) {
     // To minimize the jest-diff noise comparing Babel AST and third-party AST,
-    // here we generate a deep copy of loc without identifierName and index
+    // here we generate a copy of loc without identifierName and index
     newToken.loc = {
-      end: {
-        column: newToken.loc.end.column,
-        line: newToken.loc.end.line,
-      },
-      start: {
-        column: newToken.loc.start.column,
-        line: newToken.loc.start.line,
-      },
+      end: newToken.loc.end,
+      start: newToken.loc.start,
     } as any;
   }
   return newToken;

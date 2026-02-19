@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-replace-supers",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Helper function to replace supers",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/core": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

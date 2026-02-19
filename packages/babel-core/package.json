@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.2",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
