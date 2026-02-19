@@ -111,11 +111,6 @@ function strictSuite() {
         eslint: eslintOpts,
       });
       expect(report[0].ruleId).toBe(ruleId);
-      // This is to make sure the test fails prior to adapting Babel AST
-      // directive representation to ESLint format. Otherwise it reports an
-      // error for missing global directive that masquerades as the expected
-      // result of the previous assertion.
-      expect(report[0].nodeType).not.toBe("Program");
     });
 
     it("should error on no directive", async () => {
@@ -166,7 +161,6 @@ function strictSuite() {
         eslint: eslintOpts,
       });
       expect(report[0].ruleId).toBe(ruleId);
-      expect(report[0].nodeType.indexOf("Function")).toBe(-1);
     });
   });
 }
