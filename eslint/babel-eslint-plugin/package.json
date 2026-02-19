@@ -40,7 +40,6 @@
     "@babel/eslint-parser": "^7.11.0",
     "eslint": "^9.0.0"
   },
-  "dependencies": {},
   "devDependencies": {
     "clone-deep": "^4.0.1",
     "eslint": "^10.0.0"
