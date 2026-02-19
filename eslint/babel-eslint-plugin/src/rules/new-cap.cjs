@@ -1,4 +1,4 @@
-const ruleComposer = require("eslint-rule-composer");
+const ruleComposer = require("../rule-composer.cjs");
 const rule = require("eslint/use-at-your-own-risk").builtinRules.get("new-cap");
 
 /**
