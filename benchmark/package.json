@@ -27,10 +27,10 @@
     "@babel/preset-typescript": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "@codspeed/tinybench-plugin": "^5.0.1",
+    "@codspeed/tinybench-plugin": "^5.2.0",
     "benchmark": "^2.1.4",
     "glob": "^10.3.10",
-    "tinybench": "^5.1.0"
+    "tinybench": "^6.0.0"
   },
   "version": "8.0.0-rc.2"
 }

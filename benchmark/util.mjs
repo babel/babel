@@ -101,14 +101,15 @@ class Benchmark {
   async run() {
     this.bench.addEventListener("cycle", function (event) {
       const task = event.task;
-      const timeMs = task.result.mean;
+      const { latency, throughput } = task.result;
+      const timeMs = latency.mean;
       const time =
         timeMs < 10
           ? `${Math.round(timeMs * 1000) / 1000}ms`
           : `${Math.round(timeMs)}ms`;
-      const msg = `${task.name}: ${formatNumber(task.result.hz)} ops/sec ±${
-        Math.round(task.result.rme * 100) / 100
-      }% ${task.result.samples.length} runs (${time})`;
+      const msg = `${task.name}: ${formatNumber(throughput.mean)} ops/sec ±${
+        Math.round(latency.rme * 100) / 100
+      }% ${latency.samplesCount} runs (${time})`;
       console.log(msg);
 
       globalThis.gc?.();
@@ -151,17 +152,17 @@ function addBenchCase(name, baseline, current, args) {
 setTimeout(async () => {
   if (onlyCurrent) {
     currentCases.forEach(({ name, fn }) => {
-      bench.add(name, fn);
+      bench.add(name, fn, { async: false });
     });
   } else if (onlyBaseline) {
     baselineCases.forEach(({ name, fn }) => {
-      bench.add(name, fn);
+      bench.add(name, fn, { async: false });
     });
   } else {
     assert.strictEqual(baselineCases.length, currentCases.length);
     for (let i = 0; i < baselineCases.length; i++) {
-      bench.add(currentCases[i].name, currentCases[i].fn);
-      bench.add(baselineCases[i].name, baselineCases[i].fn);
+      bench.add(currentCases[i].name, currentCases[i].fn, { async: false });
+      bench.add(baselineCases[i].name, baselineCases[i].fn, { async: false });
     }
   }
 
