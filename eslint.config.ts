@@ -201,6 +201,10 @@ export default defineConfig([
           checksConditionals: false,
         },
       ],
+      "@typescript-eslint/prefer-optional-chain": [
+        "error",
+        { requireNullish: true },
+      ],
       "require-await": "off",
       "@typescript-eslint/require-await": "error",
 
