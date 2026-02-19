@@ -8,7 +8,7 @@ declare class Position {
   line: number;
   column: number;
   index: number;
-  constructor(line: number, col: number, index: number);
+  constructor(line: number, col: number, index?: number);
 }
 //# sourceMappingURL=module-errors.d.ts.map
 
@@ -551,6 +551,10 @@ interface Options {
    * Adds a ranges property to each node: [node.start, node.end]
    */
   ranges?: boolean;
+  /**
+   * Adds a locations property to each node: [node.loc]
+   */
+  locations?: boolean | "packed";
   /**
    * Adds all parsed tokens to a tokens property on the File node.
    */
