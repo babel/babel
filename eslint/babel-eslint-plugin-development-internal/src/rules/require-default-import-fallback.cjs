@@ -9,7 +9,7 @@ module.exports = {
   create(ctx) {
     return {
       ImportDeclaration(node) {
-        const filename = ctx.getFilename();
+        const filename = ctx.filename || ctx.getFilename();
         const src = node.source.value;
         if (
           // Not a source file in the monorepo

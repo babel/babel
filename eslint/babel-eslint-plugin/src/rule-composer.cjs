@@ -145,8 +145,8 @@ module.exports = Object.freeze({
   filterReports(rule, predicate) {
     return Object.freeze({
       create(context) {
-        const filename = context.getFilename();
-        const sourceCode = context.getSourceCode();
+        const filename = context.filename || context.getFilename();
+        const sourceCode = context.sourceCode || context.getSourceCode();
         const settings = context.settings;
         const options = context.options;
         return getRuleCreateFunc(rule)(
