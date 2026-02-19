@@ -84,7 +84,7 @@ export {
   transformFile,
   transformFileAsync,
   transformFileSync,
-  // eslint-disable-next-line import/no-unresolved, import/extensions
+  // eslint-disable-next-line import/no-unresolved
 } from "#transform-file";
 export {
   transformFromAst,

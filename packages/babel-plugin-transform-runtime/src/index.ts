@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-// eslint-disable-next-line import/no-unresolved, import/extensions
+// eslint-disable-next-line import/no-unresolved
 import getRuntimePath, { resolveFSPath } from "#get-runtime-path";
 
 export interface Options {

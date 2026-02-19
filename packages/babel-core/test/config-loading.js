@@ -189,7 +189,6 @@ describe("@babel/core config loading", () => {
         }),
       ]);
 
-      // eslint-disable-next-line jest/no-standalone-expect
       expect(config1.options.plugins).toEqual(config2.options.plugins);
     });
   });
