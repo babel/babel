@@ -520,7 +520,7 @@ __metadata:
     eslint: "npm:^9.21.0"
   peerDependencies:
     "@babel/eslint-parser": ">=7.11.0"
-    eslint: ">=7.5.0"
+    eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
   languageName: unknown
   linkType: soft
 
