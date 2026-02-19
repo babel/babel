@@ -767,7 +767,6 @@ class Printer {
         nodeId === __node("FunctionExpression")) ||
       (parent &&
         (parentNeedsParens(node, parent, parentId!) ||
-          // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           (needsParens != null &&
             needsParens(
               node,
