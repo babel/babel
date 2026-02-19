@@ -309,7 +309,6 @@ export default defineConfig([
         "error",
         { version: "20.19.0", ignores: ["module"] },
       ],
-      "@babel/development-internal/require-default-import-fallback": "error",
       "import/no-unresolved": "error",
     },
   },
