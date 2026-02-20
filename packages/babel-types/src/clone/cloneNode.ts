@@ -36,15 +36,17 @@ function cloneIfNodeOrArray(
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T extends t.Node>(
+export default function cloneNode<T extends t.Node | undefined | null>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
 ): T {
+  if (!node) return node;
+
   return cloneNodeInternal(node, deep, withoutLoc, new Map());
 }
 
-function cloneNodeInternal<T extends t.Node>(
+function cloneNodeInternal<T extends t.Node | undefined | null>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,

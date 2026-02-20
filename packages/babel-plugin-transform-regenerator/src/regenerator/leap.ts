@@ -16,12 +16,12 @@ export class FunctionEntry extends Entry {
 export class LoopEntry extends Entry {
   breakLoc: t.NumericLiteral;
   continueLoc: t.NumericLiteral;
-  label: t.Identifier;
+  label: t.Identifier | null;
 
   constructor(
     breakLoc: t.NumericLiteral,
     continueLoc: t.NumericLiteral,
-    label: t.Identifier = null,
+    label: t.Identifier | null = null,
   ) {
     super();
     this.breakLoc = breakLoc;
@@ -41,8 +41,8 @@ export class SwitchEntry extends Entry {
 
 export class TryEntry extends Entry {
   firstLoc: t.NumericLiteral;
-  catchEntry: CatchEntry;
-  finallyEntry: FinallyEntry;
+  catchEntry: CatchEntry | null;
+  finallyEntry: FinallyEntry | null;
 
   constructor(
     firstLoc: t.NumericLiteral,
@@ -109,7 +109,10 @@ export class LeapManager {
     }
   }
 
-  _findLeapLocation(property: "breakLoc" | "continueLoc", label: t.Identifier) {
+  _findLeapLocation(
+    property: "breakLoc" | "continueLoc",
+    label: t.Identifier | null | undefined,
+  ) {
     for (let i = this.entryStack.length - 1; i >= 0; --i) {
       const entry = this.entryStack[i];
       // @ts-expect-error Element implicitly has an 'any' type
@@ -128,14 +131,14 @@ export class LeapManager {
         }
       }
     }
-    return null;
+    throw new Error("unreachable");
   }
 
-  getBreakLoc(label: t.Identifier) {
+  getBreakLoc(label: t.Identifier | null | undefined) {
     return this._findLeapLocation("breakLoc", label);
   }
 
-  getContinueLoc(label: t.Identifier) {
+  getContinueLoc(label: t.Identifier | null | undefined) {
     return this._findLeapLocation("continueLoc", label);
   }
 }

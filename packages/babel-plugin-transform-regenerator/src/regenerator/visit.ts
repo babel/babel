@@ -163,7 +163,7 @@ export const getVisitor = (): Visitor<PluginPass> => ({
         do {
           if (currentScope.hasOwnBinding("Promise"))
             currentScope.rename("Promise");
-        } while ((currentScope = currentScope.parent));
+        } while ((currentScope = currentScope.parent!));
 
         wrapArgs.push(t.identifier("Promise"));
       }
@@ -267,7 +267,7 @@ function getOuterFnExpr(
   if (!node.id) {
     // Default-exported function declarations, and function expressions may not
     // have a name to reference, so we explicitly add one.
-    node.id = funPath.scope.parent.generateUidIdentifier("callee");
+    node.id = funPath.scope.parent!.generateUidIdentifier("callee");
   }
 
   if (

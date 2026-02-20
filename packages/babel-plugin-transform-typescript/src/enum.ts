@@ -62,7 +62,7 @@ export default function transpileEnum(
           )[0],
         );
       }
-      ENUMS.set(path.scope.getBindingIdentifier(name), data);
+      ENUMS.set(path.scope.getBindingIdentifier(name)!, data);
       break;
     }
 
@@ -157,7 +157,7 @@ export function isSyntacticallyString(expr: t.Expression): boolean {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = Map<string, number | string>;
+type PreviousEnumMembers = Map<string, number | string | undefined>;
 
 type EnumSelfReferenceVisitorState = {
   seen: PreviousEnumMembers;
@@ -166,7 +166,7 @@ type EnumSelfReferenceVisitorState = {
 };
 
 function ReferencedIdentifier(
-  expr: NodePath<t.Identifier>,
+  expr: NodePath<t.Identifier | t.JSXIdentifier>,
   state: EnumSelfReferenceVisitorState,
 ) {
   const { seen, path, t } = state;
@@ -187,7 +187,10 @@ function ReferencedIdentifier(
     }
 
     expr.replaceWith(
-      t.memberExpression(t.cloneNode(path.node.id), t.cloneNode(expr.node)),
+      t.memberExpression(
+        t.cloneNode(path.node.id),
+        t.cloneNode(expr.node as t.Identifier),
+      ),
     );
     expr.skip();
   }
@@ -198,7 +201,7 @@ const enumSelfReferenceVisitor = {
 };
 
 export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
-  const bindingIdentifier = path.scope.getBindingIdentifier(path.node.id.name);
+  const bindingIdentifier = path.scope.getBindingIdentifier(path.node.id.name)!;
   const seen: PreviousEnumMembers = ENUMS.get(bindingIdentifier) ?? new Map();
 
   // Start at -1 so the first enum member is its increment, 0.
@@ -213,7 +216,9 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
     memberPath => {
       const member = memberPath.node;
       const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
-      const initializerPath = memberPath.get("initializer");
+      const initializerPath = memberPath.get(
+        "initializer",
+      ) as NodePath<t.Expression>;
       const initializer = member.initializer;
       let value: t.Expression;
       if (initializer) {
@@ -313,7 +318,7 @@ function computeConstantValue(
         return evaluateRef(path, prevMembers, seen);
       case "TemplateLiteral": {
         if (expr.quasis.length === 1) {
-          return expr.quasis[0].value.cooked;
+          return expr.quasis[0].value.cooked ?? undefined;
         }
 
         const paths = (path as NodePath<t.TemplateLiteral>).get("expressions");
@@ -338,7 +343,7 @@ function computeConstantValue(
 
   function evaluateRef(
     path: NodePath,
-    prevMembers: PreviousEnumMembers,
+    prevMembers: PreviousEnumMembers | undefined,
     seen: Set<t.Identifier>,
   ): number | string | undefined {
     if (path.isMemberExpression()) {
@@ -353,7 +358,7 @@ function computeConstantValue(
         return;
       }
       const bindingIdentifier = path.scope.getBindingIdentifier(obj.name);
-      const data = ENUMS.get(bindingIdentifier);
+      const data = ENUMS.get(bindingIdentifier!);
       if (!data) return;
       // @ts-expect-error checked above
       return data.get(prop.computed ? prop.value : prop.name);

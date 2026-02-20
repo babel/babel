@@ -4,7 +4,7 @@ export const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 
 export function isGlobalType({ scope }: NodePath, name: string) {
   if (scope.hasBinding(name)) return false;
-  if (GLOBAL_TYPES.get(scope).has(name)) return true;
+  if (GLOBAL_TYPES.get(scope)!.has(name)) return true;
 
   console.warn(
     `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
@@ -20,5 +20,5 @@ export function isGlobalType({ scope }: NodePath, name: string) {
 }
 
 export function registerGlobalType(programScope: Scope, name: string) {
-  GLOBAL_TYPES.get(programScope).add(name);
+  GLOBAL_TYPES.get(programScope)!.add(name);
 }

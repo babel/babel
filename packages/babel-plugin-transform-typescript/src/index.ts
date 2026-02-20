@@ -24,7 +24,7 @@ function isInType(path: NodePath) {
     case "TSQualifiedName":
       return (
         // `import foo = ns.bar` is transformed to `var foo = ns.bar` and should not be removed
-        path.parentPath.findParent(path => path.type !== "TSQualifiedName")
+        path.parentPath.findParent(path => path.type !== "TSQualifiedName")!
           .type !== "TSImportEqualsDeclaration"
       );
     case "ExportSpecifier":
@@ -351,7 +351,7 @@ export default declare((api, opts: Options) => {
             }
 
             if (stmt.isExportDeclaration()) {
-              stmt = stmt.get("declaration");
+              stmt = stmt.get("declaration") as NodePath<t.Declaration>;
             }
 
             if (stmt.isVariableDeclaration({ declare: true })) {

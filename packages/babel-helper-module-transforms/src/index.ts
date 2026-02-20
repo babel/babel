@@ -152,7 +152,7 @@ export function wrapInterop(
   programPath: NodePath<t.Program>,
   expr: t.Expression,
   type: InteropType,
-): t.CallExpression {
+): t.CallExpression | null {
   if (type === "none") {
     return null;
   }
@@ -280,7 +280,7 @@ function buildReexportsFromMeta(
   meta: ModuleMetadata,
   metadata: SourceModuleMetadata,
   constantReexports: boolean,
-  wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
+  wrapReference: (ref: t.Identifier, payload: unknown) => t.Expression | null,
 ): t.Statement[] {
   let namespace: t.Expression = t.identifier(metadata.name);
   namespace = wrapReference(namespace, metadata.wrap) ?? namespace;
