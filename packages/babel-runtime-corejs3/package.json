@@ -207,6 +207,11 @@
       "import": "./helpers/esm/identity.js",
       "default": "./helpers/identity.js"
     },
+    "./helpers/immutableUint8Array": {
+      "node": "./helpers/immutableUint8Array.js",
+      "import": "./helpers/esm/immutableUint8Array.js",
+      "default": "./helpers/immutableUint8Array.js"
+    },
     "./helpers/importDeferProxy": {
       "node": "./helpers/importDeferProxy.js",
       "import": "./helpers/esm/importDeferProxy.js",
