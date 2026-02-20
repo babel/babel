@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-bytes-modules", "syntax-import-defer"],
+  "throws": "Bytes modules do not support phase modifiers."
+}
