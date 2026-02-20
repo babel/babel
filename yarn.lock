@@ -1494,6 +1494,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    babel-plugin-polyfill-corejs3: "npm:^0.14.0"
+  peerDependencies:
+    "@babel/core": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-decorators@workspace:^, @babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators"
