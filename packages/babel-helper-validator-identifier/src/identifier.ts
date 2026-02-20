@@ -2,7 +2,7 @@
 
 /*
 Reason to disable eslint rules:
-  - no-misleading-character-class: This rule is disabled because it will check if a combining mark (\p{Mc}\p{Me}\p{Mn}) is following a base character. It is possible that an identifier char is not following a base character.
+  - no-misleading-character-class: This rule is disabled because it will check if a combining mark (\p{M}) is following a base character. It is possible that an identifier char is not following a base character.
   - regexp/no-misleading-unicode-character: The regexp plugin uses Intl.Segementer to check whether a grapheme cluster can be represented by multiple code points and then report if there is such case. It is possible that two consecutive identifier chars may form a GC, but the intention here is to explicitly form a character set from the given character sets
   - regexp/no-obscure-range: The regexps in this file are soup of "obscure" Unicode characters.
   - regexp/use-ignore-case: This rule is disabled because if we used ignoreCase, the regex will depend on the runtime's Unicode support, which may cause different behavior in different environments.
