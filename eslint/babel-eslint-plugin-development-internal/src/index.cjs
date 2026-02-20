@@ -5,7 +5,6 @@ const meta = {
 
 const rules = {
   "report-error-message-format": require("./rules/report-error-message-format.cjs"),
-  "require-default-import-fallback": require("./rules/require-default-import-fallback.cjs"),
 };
 
 exports.meta = meta;

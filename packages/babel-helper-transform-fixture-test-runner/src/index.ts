@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import * as babel from "@babel/core";
 import {
   buildExternalHelpers,

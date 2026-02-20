@@ -19,7 +19,6 @@ ruleTester.run("@babel/no-unused-expressions", rule, {
         {
           message:
             "Expected an assignment or function call and instead saw an expression.",
-          type: "ExpressionStatement",
         },
       ],
     },
@@ -29,7 +28,6 @@ ruleTester.run("@babel/no-unused-expressions", rule, {
         {
           message:
             "Expected an assignment or function call and instead saw an expression.",
-          type: "ExpressionStatement",
         },
       ],
     },

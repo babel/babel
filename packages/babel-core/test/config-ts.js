@@ -17,14 +17,12 @@ describe("@babel/core config with ts", () => {
       ),
     });
 
-    // eslint-disable-next-line jest/no-standalone-expect
     expect(config.options.targets).toMatchInlineSnapshot(`
         Object {
           "node": "12.0.0",
         }
       `);
 
-    // eslint-disable-next-line jest/no-standalone-expect
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 

@@ -54,6 +54,7 @@ function fixTSESLintTokens(ast) {
 
 function babelASTToESLint9ProgramLocation(ast) {
   if (ESLINT_VERSION >= 10) {
+    // Pending upstream fix for https://github.com/typescript-eslint/typescript-eslint/issues/11026
     const body = ast.body;
     if (ast.comments.length) {
       const lastComment = ast.comments[ast.comments.length - 1];

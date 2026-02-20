@@ -207,7 +207,6 @@ function ensureTsSupport<T>(
 
 function getTSPreset(filepath: string) {
   try {
-    // eslint-disable-next-line import/no-extraneous-dependencies
     return require("@babel/preset-typescript");
   } catch (error) {
     if (error.code !== "MODULE_NOT_FOUND") throw error;
