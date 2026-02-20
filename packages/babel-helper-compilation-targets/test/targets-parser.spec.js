@@ -396,11 +396,11 @@ describe("getTargets", () => {
 
   describe("exception", () => {
     it("throws when version is not a semver", () => {
-      expect(() =>
-        getTargets({ chrome: "seventy-two" }),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"@babel/helper-compilation-targets: 'seventy-two' is not a valid value for 'targets.chrome'."`,
-      );
+      expect(() => getTargets({ chrome: "seventy-two" }))
+        .toThrowErrorMatchingInlineSnapshot(`
+        "@babel/helper-compilation-targets: 'seventy-two' is not a valid value for 'targets.chrome'.
+        Cause: @babel/helper-compilation-targets: 'seventy-two' is not a valid version"
+      `);
     });
   });
 });

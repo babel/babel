@@ -67,16 +67,12 @@ export default function removeTypeDuplicates(
       const name = getQualifiedName(node.typeName);
 
       if (generics.has(name)) {
-        let existing: t.TypeScript = generics.get(name)!;
-
-        const existingTypeArguments = existing[typeArgumentsKey];
+        const existingTypeArguments = generics.get(name)![typeArgumentsKey];
         if (existingTypeArguments) {
           existingTypeArguments.params.push(...typeArguments.params);
           existingTypeArguments.params = removeTypeDuplicates(
             existingTypeArguments.params,
           );
-        } else {
-          existing = typeArguments;
         }
       } else {
         generics.set(name, node);
