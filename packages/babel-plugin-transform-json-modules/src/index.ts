@@ -98,7 +98,7 @@ export default declare((api, options: Options) => {
           }
           id ??= path.scope.generateUidIdentifier("_");
 
-          let fetch = helper.buildFetch(decl.node.source, path);
+          let fetch = helper.buildFetch(decl.node.source, this.file);
 
           if (needsNS) {
             if (helper.needsAwait) {

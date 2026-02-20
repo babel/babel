@@ -1,23 +1,27 @@
-import { types as t, template, type NodePath } from "@babel/core";
+import { types as t, template, type File } from "@babel/core";
 import type { Targets } from "@babel/helper-compilation-targets";
 import { addNamed } from "@babel/helper-module-imports";
 
 import getSupport from "./platforms-support.ts";
 
-function imp(path: NodePath, name: string, module: string) {
-  return addNamed(path, name, module, { importedType: "es6" });
+function imp(file: File, name: string, module: string) {
+  return addNamed(file.path, name, module, { importedType: "es6" });
 }
 
 export interface Pieces {
-  commonJS?: (require: t.Expression, specifier: t.Expression) => t.Expression;
-  webFetch: (fetch: t.Expression) => t.Expression;
-  nodeFsSync: (read: t.Expression) => t.Expression;
-  nodeFsAsync: () => t.Expression;
+  commonJS?: (
+    require: t.Expression,
+    specifier: t.Expression,
+    file: File,
+  ) => t.Expression;
+  webFetch: (fetch: t.Expression, file: File) => t.Expression;
+  nodeFsSync: (read: t.Expression, file: File) => t.Expression;
+  nodeFsAsync: (file: File) => t.Expression;
 }
 
 export interface Builders {
-  buildFetch: (specifier: t.Expression, path: NodePath) => t.Expression;
-  buildFetchAsync: (specifier: t.Expression, path: NodePath) => t.Expression;
+  buildFetch: (specifier: t.Expression, file: File) => t.Expression;
+  buildFetchAsync: (specifier: t.Expression, file: File) => t.Expression;
   needsAwait: boolean;
 }
 
@@ -42,11 +46,8 @@ export function importToPlatformApi(
   } = getSupport(targets);
   const supportIsomorphicCJS = transformers.commonJS != null;
 
-  let buildFetchAsync: (
-    specifier: t.Expression,
-    path: NodePath,
-  ) => t.Expression;
-  let buildFetchSync: typeof buildFetchAsync;
+  let buildFetchAsync: Builders["buildFetchAsync"];
+  let buildFetchSync: Builders["buildFetch"];
 
   // "p" stands for pattern matching :)
   const p = ({
@@ -96,21 +97,23 @@ export function importToPlatformApi(
     })
   ) {
     case p({ toCJS: true, supportIsomorphicCJS: true }):
-      buildFetchSync = specifier =>
-        transformers.commonJS(t.identifier("require"), specifier);
+      buildFetchSync = (specifier, file) =>
+        transformers.commonJS(t.identifier("require"), specifier, file);
       break;
     case p({ web: true, node: true }):
-      buildFetchAsync = specifier => {
+      buildFetchAsync = (specifier, file) => {
         const web = transformers.webFetch(
           t.callExpression(t.identifier("fetch"), [
             (webSupportsIMR ? imr : imrWithFallback)(t.cloneNode(specifier)),
           ]),
+          file,
         );
         const node = supportIsomorphicCJS
           ? template.expression.ast`
               import("module").then(module => ${transformers.commonJS(
                 template.expression.ast`module.createRequire(import.meta.url)`,
                 specifier,
+                file,
               )})
             `
           : nodeSupportsIMR
@@ -120,7 +123,7 @@ export function importToPlatformApi(
                     t.identifier("fs"),
                     template.expression.ast`new URL(${imr(specifier)})`,
                   )}
-                ).then(${transformers.nodeFsAsync()})
+                ).then(${transformers.nodeFsAsync(file)})
               `
             : template.expression.ast`
                 Promise.all([import("fs"), import("module")])
@@ -132,7 +135,7 @@ export function importToPlatformApi(
                       `,
                     )}
                   )
-                  .then(${transformers.nodeFsAsync()})
+                  .then(${transformers.nodeFsAsync(file)})
               `;
 
         return template.expression.ast`
@@ -143,25 +146,30 @@ export function importToPlatformApi(
       };
       break;
     case p({ web: true, node: false, webIMR: true }):
-      buildFetchAsync = specifier =>
+      buildFetchAsync = (specifier, file) =>
         transformers.webFetch(
           t.callExpression(t.identifier("fetch"), [imr(specifier)]),
+          file,
         );
       break;
     case p({ web: true, node: false, webIMR: false }):
-      buildFetchAsync = specifier =>
+      buildFetchAsync = (specifier, file) =>
         transformers.webFetch(
           t.callExpression(t.identifier("fetch"), [imrWithFallback(specifier)]),
+          file,
         );
       break;
     case p({ web: false, node: true, toCJS: true }):
-      buildFetchSync = specifier =>
-        transformers.nodeFsSync(template.expression.ast`
+      buildFetchSync = (specifier, file) =>
+        transformers.nodeFsSync(
+          template.expression.ast`
             require("fs").readFileSync(require.resolve(${specifier}))
-          `);
-      buildFetchAsync = specifier => template.expression.ast`
+          `,
+          file,
+        );
+      buildFetchAsync = (specifier, file) => template.expression.ast`
             require("fs").promises.readFile(require.resolve(${specifier}))
-              .then(${transformers.nodeFsAsync()})
+              .then(${transformers.nodeFsAsync(file)})
           `;
       break;
     case p({
@@ -170,44 +178,54 @@ export function importToPlatformApi(
       toCJS: false,
       supportIsomorphicCJS: true,
     }):
-      buildFetchSync = (specifier, path) =>
+      buildFetchSync = (specifier, file) =>
         transformers.commonJS(
           template.expression.ast`
-            ${imp(path, "createRequire", "module")}(import.meta.url)
+            ${imp(file, "createRequire", "module")}(import.meta.url)
           `,
           specifier,
+          file,
         );
       break;
     case p({ web: false, node: true, toCJS: false, nodeIMR: true }):
-      buildFetchSync = (specifier, path) =>
-        transformers.nodeFsSync(template.expression.ast`
-            ${imp(path, "readFileSync", "fs")}(
+      buildFetchSync = (specifier, file) =>
+        transformers.nodeFsSync(
+          template.expression.ast`
+            ${imp(file, "readFileSync", "fs")}(
               new URL(${imr(specifier)})
             )
-          `);
-      buildFetchAsync = (specifier, path) =>
+          `,
+          file,
+        );
+      buildFetchAsync = (specifier, file) =>
         template.expression.ast`
-          ${imp(path, "promises", "fs")}
+          ${imp(file, "promises", "fs")}
             .readFile(new URL(${imr(specifier)}))
-            .then(${transformers.nodeFsAsync()})
+            .then(${transformers.nodeFsAsync(file)})
         `;
       break;
     case p({ web: false, node: true, toCJS: false, nodeIMR: false }):
-      buildFetchSync = (specifier, path) =>
-        transformers.nodeFsSync(template.expression.ast`
-            ${imp(path, "readFileSync", "fs")}(
-              ${imp(path, "createRequire", "module")}(import.meta.url)
+      buildFetchSync = (specifier, file) =>
+        transformers.nodeFsSync(
+          template.expression.ast`
+            ${imp(file, "readFileSync", "fs")}(
+              ${imp(file, "createRequire", "module")}(import.meta.url)
                 .resolve(${specifier})
             )
-          `);
-      buildFetchAsync = (specifier, path) =>
-        transformers.webFetch(template.expression.ast`
-            ${imp(path, "promises", "fs")}
+          `,
+          file,
+        );
+      buildFetchAsync = (specifier, file) =>
+        transformers.webFetch(
+          template.expression.ast`
+            ${imp(file, "promises", "fs")}
               .readFile(
-                ${imp(path, "createRequire", "module")}(import.meta.url)
+                ${imp(file, "createRequire", "module")}(import.meta.url)
                   .resolve(${specifier})
               )
-          `);
+          `,
+          file,
+        );
       break;
     default:
       throw new Error("Internal Babel error: unreachable code.");
@@ -232,8 +250,9 @@ export function importToPlatformApi(
   let buildFetch = buildFetchSync;
   if (!buildFetchSync) {
     if (toCommonJS) {
-      buildFetch = (specifier, path) => {
-        throw path.buildCodeFrameError(
+      buildFetch = (specifier, file) => {
+        throw file.buildCodeFrameError(
+          specifier,
           "Cannot compile to CommonJS, since it would require top-level await.",
         );
       };

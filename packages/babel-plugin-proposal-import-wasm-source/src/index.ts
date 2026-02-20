@@ -23,7 +23,7 @@ export default declare(api => {
       template.expression.ast`WebAssembly.compileStreaming(${fetch})`,
     nodeFsSync: (read: t.Expression) =>
       template.expression.ast`new WebAssembly.Module(${read})`,
-    nodeFsAsync: template.expression`WebAssembly.compile`,
+    nodeFsAsync: () => template.expression.ast`WebAssembly.compile`,
   };
 
   const getHelper = (file: File) => {
@@ -74,7 +74,7 @@ export default declare(api => {
 
           data.push({
             id: specifier.local,
-            fetch: helper.buildFetch(decl.node.source, path),
+            fetch: helper.buildFetch(decl.node.source, this.file),
           });
           decl.remove();
         }
@@ -93,7 +93,7 @@ export default declare(api => {
         }
 
         path.replaceWith(
-          getHelper(this.file).buildFetchAsync(path.node.source, path),
+          getHelper(this.file).buildFetchAsync(path.node.source, this.file),
         );
       },
     },
