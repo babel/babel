@@ -198,7 +198,20 @@ export function normalizeCoreJSOption(
   return { version, proposals };
 }
 
-export default function normalizeOptions(opts: Options) {
+export default function normalizeOptions(opts: Options): {
+  configPath: string;
+  corejs: NormalizedCorejsOption;
+  debug: boolean;
+  include: string[];
+  exclude: string[];
+  forceAllTransforms: boolean;
+  ignoreBrowserslistConfig: boolean;
+  modules: ModuleOption;
+  shippedProposals: boolean;
+  targets: Options["targets"];
+  useBuiltIns: BuiltInsOption;
+  browserslistEnv?: string;
+} {
   v.invariant(
     !Object.hasOwn(opts, "bugfixes"),
     "The 'bugfixes' option has been removed, and now bugfix plugins are" +

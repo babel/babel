@@ -48,7 +48,7 @@
     "@types/jest": "^29.5.11",
     "@types/node": "^25.0.3",
     "@types/shelljs": "^0.10.0",
-    "@typescript/native-preview": "7.0.0-dev.20260219.1",
+    "@typescript/native-preview": "7.0.0-dev.20260221.1",
     "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.1",
     "c8": "^10.0.0",
