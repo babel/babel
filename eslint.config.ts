@@ -138,7 +138,7 @@ export default defineConfig([
         projectService: {
           allowDefaultProject: [
             "scripts/repo-utils/index.d.cts",
-            "eslint/*/types.d.cts",
+            "eslint/*/types.d.*",
           ],
         },
       },
