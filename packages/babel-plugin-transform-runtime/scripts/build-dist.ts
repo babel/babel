@@ -124,8 +124,6 @@ function writeCorejsExports(
   const pkgJson = require(pkgJsonPath);
   const exports = pkgJson.exports;
   // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
-  // Node < 17
-  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
   // Node >= 17
   exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
   for (const corejsPath of paths) {

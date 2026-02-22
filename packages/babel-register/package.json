@@ -36,10 +36,6 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.cjs"
-    },
     "./package.json": "./package.json"
   }
 }
