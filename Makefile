@@ -34,6 +34,9 @@ generate-tsconfig:
 generate-type-helpers:
 	$(MAKEJS) generate-type-helpers
 
+bundle-babel-parser-dts:
+	$(MAKEJS) bundle-babel-parser-dts
+
 build-flow-typings:
 	$(MAKEJS) build-flow-typings
 
@@ -123,6 +126,7 @@ clean-all:
 
 
 build-no-bundle-ci: bootstrap-only
+	$(MAKE) bundle-babel-parser-dts
 	$(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist

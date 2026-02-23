@@ -177,6 +177,7 @@ target["build-standalone"] = function () {
 target["build-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
+  target["bundle-babel-parser-dts"]();
 
   yarn(["gulp", "build"]);
 
@@ -186,6 +187,7 @@ target["build-bundle"] = function () {
 target["build-no-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
+  target["bundle-babel-parser-dts"]();
 
   env(
     () => {
@@ -275,6 +277,11 @@ target["prepublish-prepare-dts"] = function () {
   target["prepublish-prepare-dts-no-clean"]();
 };
 
+target["bundle-babel-parser-dts"] = function () {
+  target["tscheck-babel-parser"]();
+  yarn(["gulp", "bundle-babel-parser-dts"]);
+};
+
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
@@ -285,6 +292,10 @@ target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.ts", "."]);
   target["tscheck-helpers"]();
+};
+
+target["tscheck-babel-parser"] = function () {
+  node(["scripts/parallel-tsc/tsc.ts", "./packages/babel-parser"]);
 };
 
 target["tscheck-helpers"] = function () {

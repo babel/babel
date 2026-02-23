@@ -1,7 +1,7 @@
 import { File, Expression } from "@babel/types";
 
 // This file is auto-generated! Do not modify it directly.
-// Run `yarn gulp bundle-dts` to re-generate it.
+// Run `make bundle-babel-parser-dts` to re-generate it.
 /* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */
 
 declare class Position {
