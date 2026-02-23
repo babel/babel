@@ -90,7 +90,7 @@ export default function transpileConstEnum(
       }
       if (!entriesMap.has(key)) return;
 
-      path.replaceWith(t.cloneNode(entriesMap.get(key)));
+      path.replaceWith(t.cloneNode(entriesMap.get(key)!));
     },
   });
 

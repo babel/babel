@@ -10,7 +10,10 @@ export function hoist(
 ) {
   t.assertFunction(funPath.node);
 
-  const vars: Record<string, t.Identifier> = { __proto__: null };
+  const vars: Record<string, t.Identifier> = {
+    // @ts-expect-error __proto__: null
+    __proto__: null,
+  };
 
   function varDeclToExpr(
     { node: vdec }: NodePath,
@@ -20,9 +23,9 @@ export function hoist(
     // TODO assert.equal(vdec.kind, "var");
     const exprs: t.Expression[] = [];
 
-    vdec.declarations.forEach(function (
-      dec: t.VariableDeclarator & { id: t.Identifier },
-    ) {
+    (
+      vdec.declarations as (t.VariableDeclarator & { id: t.Identifier })[]
+    ).forEach(function (dec) {
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
       vars[dec.id.name] = t.identifier(dec.id.name);
@@ -80,18 +83,18 @@ export function hoist(
     ForXStatement: function (path) {
       const left = path.get("left");
       if (left.isVariableDeclaration()) {
-        left.replaceWith(varDeclToExpr(left, true));
+        left.replaceWith(varDeclToExpr(left, true)!);
       }
     },
 
     FunctionDeclaration: function (path) {
       const node = path.node;
-      vars[node.id.name] = node.id;
+      vars[node.id!.name] = node.id!;
 
       const assignment = t.expressionStatement(
         t.assignmentExpression(
           "=",
-          t.cloneNode(node.id),
+          t.cloneNode(node.id!),
           t.functionExpression(
             path.scope.generateUidIdentifierBasedOnNode(node),
             node.params,
@@ -118,7 +121,7 @@ export function hoist(
 
         // Remove the binding, to avoid "duplicate declaration" errors when it will
         // be injected again.
-        path.scope.removeBinding(node.id.name);
+        path.scope.removeBinding(node.id!.name);
       }
 
       // Don't hoist variables out of inner functions.
@@ -136,7 +139,10 @@ export function hoist(
     },
   });
 
-  const paramNames: Record<string, t.Identifier> = { __proto__: null };
+  const paramNames: Record<string, t.Identifier> = {
+    // @ts-expect-error __proto__: null
+    __proto__: null,
+  };
   funPath.get("params").forEach(function (paramPath) {
     const param = paramPath.node;
     if (t.isIdentifier(param)) {

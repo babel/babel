@@ -111,7 +111,7 @@ function resolveImportInterop(
  */
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath<t.Program>,
-  exportName: string,
+  exportName: string | undefined,
   {
     importInterop,
     initializeReexports = false,
@@ -126,8 +126,8 @@ export default function normalizeModuleAndLoadMetadata(
       metadata: SourceModuleMetadata,
       importNodes: t.Node[],
     ) => unknown;
-    esNamespaceOnly: boolean;
-    filename: string;
+    esNamespaceOnly: boolean | undefined;
+    filename: string | undefined;
   },
 ): ModuleMetadata {
   if (!exportName) {
@@ -286,12 +286,12 @@ function getModuleMetadata(
 
         referenced: false,
       };
-      sourceData.set(source, data);
+      sourceData.set(source, data!);
       importNodes.set(source, [node]);
     } else {
-      importNodes.get(source).push(node);
+      importNodes.get(source)!.push(node);
     }
-    return data;
+    return data!;
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
@@ -424,7 +424,7 @@ function getModuleMetadata(
       metadata.wrap = getWrapperPayload(
         source,
         metadata,
-        importNodes.get(source),
+        importNodes.get(source)!,
       );
     }
   }
@@ -460,7 +460,7 @@ function getLocalExportMetadata(
       }
       if (child.isExportNamedDeclaration()) {
         if (child.node.declaration) {
-          child = child.get("declaration");
+          child = child.get("declaration") as NodePath;
         } else if (
           initializeReexports &&
           child.node.source &&
@@ -538,7 +538,7 @@ function getLocalExportMetadata(
         });
       } else {
         child.get("specifiers").forEach(spec => {
-          const local = spec.get("local");
+          const local = spec.get("local") as NodePath<t.Identifier>;
           const exported = spec.get("exported");
           const localMetadata = getLocalMetadata(local);
           const exportName = getExportSpecifierName(exported, stringSpecifiers);
@@ -555,7 +555,9 @@ function getLocalExportMetadata(
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
-        getLocalMetadata(declaration.get("id")).names.push("default");
+        getLocalMetadata(
+          declaration.get("id") as NodePath<t.Identifier>,
+        ).names.push("default");
       } else {
         // These should have been removed by the nameAnonymousExports() call.
         throw declaration.buildCodeFrameError(

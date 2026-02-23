@@ -13,7 +13,7 @@ function makePredicate(
   propertyName: string,
   knownTypes: Record<string, boolean>,
 ) {
-  function onlyChildren(node: t.Node) {
+  function onlyChildren(node: t.Node): boolean {
     t.assertNode(node);
 
     // Assume no side effects until we find out otherwise.

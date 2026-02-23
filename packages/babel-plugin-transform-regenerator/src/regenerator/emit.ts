@@ -1,4 +1,4 @@
-/* eslint-disable no-case-declarations */
+/* eslint-disable no-case-declarations, @typescript-eslint/no-unnecessary-type-assertion */
 import assert from "node:assert";
 import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
@@ -304,7 +304,7 @@ export class Emitter {
     self.listing.forEach(function (stmt, i) {
       if (self.marked[i]) {
         cases.push(
-          t.switchCase(t.numericLiteral(self.indexMap.get(i)), (current = [])),
+          t.switchCase(t.numericLiteral(self.indexMap.get(i)!), (current = [])),
         );
         alreadyEnded = false;
       }
@@ -422,11 +422,14 @@ export class Emitter {
     }
   }
 
-  explodeStatement(path: NodePath<t.Statement>, labelId: t.Identifier = null) {
+  explodeStatement(
+    path: NodePath<t.Statement>,
+    labelId: t.Identifier | null = null,
+  ) {
     const stmt = path.node;
     const self = this;
     let before: t.NumericLiteral,
-      after: t.NumericLiteral,
+      after: t.NumericLiteral | null,
       head: t.NumericLiteral;
 
     // Explode BlockStatement nodes even if they do not contain a yield,
@@ -530,13 +533,16 @@ export class Emitter {
         if (path.node.init) {
           // We pass true here to indicate that if stmt.init is an expression
           // then we do not care about its result.
-          self.explode(path.get("init"), true);
+          self.explode(path.get("init") as NodePath<t.Expression>, true);
         }
 
         self.mark(head);
 
         if (path.node.test) {
-          self.jumpIfNot(self.explodeExpression(path.get("test")), after);
+          self.jumpIfNot(
+            self.explodeExpression(path.get("test") as NodePath<t.Expression>),
+            after,
+          );
         } else {
           // No test means continue unconditionally.
         }
@@ -553,7 +559,7 @@ export class Emitter {
         if (path.node.update) {
           // We pass true here to indicate that if stmt.update is an
           // expression then we do not care about its result.
-          self.explode(path.get("update"), true);
+          self.explode(path.get("update") as NodePath<t.Expression>, true);
         }
 
         self.jump(head);
@@ -699,7 +705,7 @@ export class Emitter {
         if (elseLoc) {
           self.jump(after);
           self.mark(elseLoc);
-          self.explodeStatement(path.get("alternate"));
+          self.explodeStatement(path.get("alternate") as NodePath<t.Statement>);
         }
 
         self.mark(after);
@@ -709,7 +715,9 @@ export class Emitter {
       case "ReturnStatement":
         self.emitAbruptCompletion({
           type: OperatorType.Return,
-          value: self.explodeExpression(path.get("argument")),
+          value: self.explodeExpression(
+            path.get("argument") as NodePath<t.Expression>,
+          ),
         });
 
         break;
@@ -757,12 +765,14 @@ export class Emitter {
             } else {
               // If there is no finally block, then we need to jump over the
               // catch block to the fall-through location.
-              self.jump(after);
+              self.jump(after!);
             }
 
             self.updateContextPrevLoc(self.mark(catchLoc));
 
-            const bodyPath = path.get("handler.body");
+            const bodyPath = path.get(
+              "handler.body",
+            ) as NodePath<t.BlockStatement>;
             const safeParam = self.makeTempVar();
 
             this.emitAssign(safeParam, self.contextProperty("v"));
@@ -774,7 +784,7 @@ export class Emitter {
                 handler.param.name,
             });
 
-            self.leapManager.withEntry(catchEntry, function () {
+            self.leapManager.withEntry(catchEntry!, function () {
               self.explodeStatement(bodyPath);
             });
           }
@@ -782,14 +792,16 @@ export class Emitter {
           if (finallyLoc) {
             self.updateContextPrevLoc(self.mark(finallyLoc));
 
-            self.leapManager.withEntry(finallyEntry, function () {
-              self.explodeStatement(path.get("finalizer"));
+            self.leapManager.withEntry(finallyEntry!, function () {
+              self.explodeStatement(
+                path.get("finalizer") as NodePath<t.BlockStatement>,
+              );
             });
 
             self.emit(
               t.returnStatement(
                 t.callExpression(self.contextProperty("f"), [
-                  finallyEntry.firstLoc,
+                  finallyEntry!.firstLoc,
                 ]),
               ),
             );
@@ -835,7 +847,10 @@ export class Emitter {
 
     this.emit(
       t.returnStatement(
-        t.callExpression(this.contextProperty("a"), abruptArgs),
+        t.callExpression(
+          this.contextProperty("a"),
+          abruptArgs as t.Expression[],
+        ),
       ),
     );
 
@@ -897,7 +912,7 @@ export class Emitter {
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
   explodeViaTempVar(
-    tempVar: t.MemberExpression | t.Identifier,
+    tempVar: t.MemberExpression | t.Identifier | null,
     childPath: NodePath<t.Expression>,
     hasLeapingChildren: boolean,
     ignoreChildResult?: boolean,
@@ -1155,7 +1170,7 @@ export class Emitter {
           }
         });
 
-        return result;
+        return result!;
 
       case "LogicalExpression":
         after = this.loc();
@@ -1165,7 +1180,7 @@ export class Emitter {
         }
 
         const left = self.explodeViaTempVar(
-          result,
+          result!,
           path.get("left"),
           hasLeapingChildren,
         );
@@ -1178,7 +1193,7 @@ export class Emitter {
         }
 
         self.explodeViaTempVar(
-          result,
+          result!,
           path.get("right"),
           hasLeapingChildren,
           ignoreResult,
@@ -1186,7 +1201,7 @@ export class Emitter {
 
         self.mark(after);
 
-        return result;
+        return result!;
 
       case "ConditionalExpression":
         const elseLoc = this.loc();
@@ -1200,7 +1215,7 @@ export class Emitter {
         }
 
         self.explodeViaTempVar(
-          result,
+          result!,
           path.get("consequent"),
           hasLeapingChildren,
           ignoreResult,
@@ -1209,7 +1224,7 @@ export class Emitter {
 
         self.mark(elseLoc);
         self.explodeViaTempVar(
-          result,
+          result!,
           path.get("alternate"),
           hasLeapingChildren,
           ignoreResult,
@@ -1217,7 +1232,7 @@ export class Emitter {
 
         self.mark(after);
 
-        return result;
+        return result!;
 
       case "UnaryExpression":
         return finish(
@@ -1301,7 +1316,10 @@ export class Emitter {
       case "YieldExpression":
         after = this.loc();
         const arg =
-          path.node.argument && self.explodeExpression(path.get("argument"));
+          path.node.argument &&
+          self.explodeExpression(
+            path.get("argument") as NodePath<t.Expression>,
+          );
 
         if (arg && path.node.delegate) {
           const ret = t.returnStatement(
@@ -1355,11 +1373,11 @@ export class Emitter {
     });
 
     const hasLeapingChildren = explodingChildren.some(child =>
-      meta.containsLeap(child.node),
+      meta.containsLeap(child.node!),
     );
 
     for (let i = 0; i < explodingChildren.length; i++) {
-      const child = explodingChildren[i];
+      const child = explodingChildren[i] as NodePath<t.Expression>;
       const isLast = i === explodingChildren.length - 1;
 
       if (isLast) {

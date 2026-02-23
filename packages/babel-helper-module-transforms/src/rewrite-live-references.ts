@@ -104,7 +104,7 @@ export default function rewriteLiveReferences(
     imported, // local / import
     exported, // local name => exported name list
     buildImportReference([source, importName, localName], identNode) {
-      const meta = metadata.source.get(source);
+      const meta = metadata.source.get(source)!;
       meta.referenced = true;
 
       if (localName) {
@@ -200,7 +200,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
           init,
           path.scope,
         );
-        requeueInParent(decl.get("init"));
+        requeueInParent(decl.get("init") as NodePath);
       } else {
         for (const localName of Object.keys(
           decl.getOuterBindingIdentifiers(),
@@ -234,7 +234,7 @@ const buildBindingExportAssignmentExpression = (
 ) => {
   const exportsObjectName = metadata.exportName;
   for (
-    let currentScope = scope;
+    let currentScope: Scope | undefined = scope;
     currentScope != null;
     currentScope = currentScope.parent
   ) {
