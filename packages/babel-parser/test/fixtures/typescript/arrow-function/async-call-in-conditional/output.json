@@ -1,0 +1,262 @@
+{
+  "type": "File",
+  "start":0,"end":379,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":39,"index":379}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":379,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":39,"index":379}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":183,"end":208,"loc":{"start":{"line":4,"column":0,"index":183},"end":{"line":4,"column":25,"index":208}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":183,"end":207,"loc":{"start":{"line":4,"column":0,"index":183},"end":{"line":4,"column":24,"index":207}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":183,"end":187,"loc":{"start":{"line":4,"column":0,"index":183},"end":{"line":4,"column":4,"index":187}},
+            "value": true
+          },
+          "consequent": {
+            "type": "CallExpression",
+            "start":190,"end":198,"loc":{"start":{"line":4,"column":7,"index":190},"end":{"line":4,"column":15,"index":198}},
+            "callee": {
+              "type": "Identifier",
+              "start":190,"end":195,"loc":{"start":{"line":4,"column":7,"index":190},"end":{"line":4,"column":12,"index":195},"identifierName":"async"},
+              "name": "async"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start":196,"end":197,"loc":{"start":{"line":4,"column":13,"index":196},"end":{"line":4,"column":14,"index":197},"identifierName":"a"},
+                "name": "a"
+              }
+            ]
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":201,"end":207,"loc":{"start":{"line":4,"column":18,"index":201},"end":{"line":4,"column":24,"index":207}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":201,"end":202,"loc":{"start":{"line":4,"column":18,"index":201},"end":{"line":4,"column":19,"index":202},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":206,"end":207,"loc":{"start":{"line":4,"column":23,"index":206},"end":{"line":4,"column":24,"index":207},"identifierName":"b"},
+              "name": "b"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/babel/babel/issues/17547",
+            "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " `async(a)` in a ternary consequent followed by `:` should be",
+            "start":47,"end":110,"loc":{"start":{"line":2,"column":0,"index":47},"end":{"line":2,"column":63,"index":110}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " parsed as a call expression, not as an async arrow with return type.",
+            "start":111,"end":182,"loc":{"start":{"line":3,"column":0,"index":111},"end":{"line":3,"column":71,"index":182}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":209,"end":242,"loc":{"start":{"line":5,"column":0,"index":209},"end":{"line":5,"column":33,"index":242}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":213,"end":241,"loc":{"start":{"line":5,"column":4,"index":213},"end":{"line":5,"column":32,"index":241}},
+            "id": {
+              "type": "Identifier",
+              "start":213,"end":214,"loc":{"start":{"line":5,"column":4,"index":213},"end":{"line":5,"column":5,"index":214},"identifierName":"_"},
+              "name": "_"
+            },
+            "init": {
+              "type": "ConditionalExpression",
+              "start":217,"end":241,"loc":{"start":{"line":5,"column":8,"index":217},"end":{"line":5,"column":32,"index":241}},
+              "test": {
+                "type": "BooleanLiteral",
+                "start":217,"end":221,"loc":{"start":{"line":5,"column":8,"index":217},"end":{"line":5,"column":12,"index":221}},
+                "value": true
+              },
+              "consequent": {
+                "type": "CallExpression",
+                "start":224,"end":232,"loc":{"start":{"line":5,"column":15,"index":224},"end":{"line":5,"column":23,"index":232}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":224,"end":229,"loc":{"start":{"line":5,"column":15,"index":224},"end":{"line":5,"column":20,"index":229},"identifierName":"async"},
+                  "name": "async"
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "start":230,"end":231,"loc":{"start":{"line":5,"column":21,"index":230},"end":{"line":5,"column":22,"index":231},"identifierName":"a"},
+                    "name": "a"
+                  }
+                ]
+              },
+              "alternate": {
+                "type": "ArrowFunctionExpression",
+                "start":235,"end":241,"loc":{"start":{"line":5,"column":26,"index":235},"end":{"line":5,"column":32,"index":241}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":235,"end":236,"loc":{"start":{"line":5,"column":26,"index":235},"end":{"line":5,"column":27,"index":236},"identifierName":"b"},
+                    "name": "b"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start":240,"end":241,"loc":{"start":{"line":5,"column":31,"index":240},"end":{"line":5,"column":32,"index":241},"identifierName":"b"},
+                  "name": "b"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Parenthesized async arrow with return type should still work",
+            "start":244,"end":307,"loc":{"start":{"line":7,"column":0,"index":244},"end":{"line":7,"column":63,"index":307}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " inside a ternary consequent.",
+            "start":308,"end":339,"loc":{"start":{"line":8,"column":0,"index":308},"end":{"line":8,"column":31,"index":339}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":340,"end":379,"loc":{"start":{"line":9,"column":0,"index":340},"end":{"line":9,"column":39,"index":379}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":344,"end":378,"loc":{"start":{"line":9,"column":4,"index":344},"end":{"line":9,"column":38,"index":378}},
+            "id": {
+              "type": "Identifier",
+              "start":344,"end":345,"loc":{"start":{"line":9,"column":4,"index":344},"end":{"line":9,"column":5,"index":345},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "ConditionalExpression",
+              "start":348,"end":378,"loc":{"start":{"line":9,"column":8,"index":348},"end":{"line":9,"column":38,"index":378}},
+              "test": {
+                "type": "BooleanLiteral",
+                "start":348,"end":352,"loc":{"start":{"line":9,"column":8,"index":348},"end":{"line":9,"column":12,"index":352}},
+                "value": true
+              },
+              "consequent": {
+                "type": "ArrowFunctionExpression",
+                "start":356,"end":373,"loc":{"start":{"line":9,"column":16,"index":356},"end":{"line":9,"column":33,"index":373}},
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":365,"end":368,"loc":{"start":{"line":9,"column":25,"index":365},"end":{"line":9,"column":28,"index":368}},
+                  "typeAnnotation": {
+                    "type": "TSTypeReference",
+                    "start":367,"end":368,"loc":{"start":{"line":9,"column":27,"index":367},"end":{"line":9,"column":28,"index":368}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":367,"end":368,"loc":{"start":{"line":9,"column":27,"index":367},"end":{"line":9,"column":28,"index":368},"identifierName":"b"},
+                      "name": "b"
+                    }
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": true,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":363,"end":364,"loc":{"start":{"line":9,"column":23,"index":363},"end":{"line":9,"column":24,"index":364},"identifierName":"a"},
+                    "name": "a"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start":372,"end":373,"loc":{"start":{"line":9,"column":32,"index":372},"end":{"line":9,"column":33,"index":373},"identifierName":"a"},
+                  "name": "a"
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 355
+                }
+              },
+              "alternate": {
+                "type": "NumericLiteral",
+                "start":377,"end":378,"loc":{"start":{"line":9,"column":37,"index":377},"end":{"line":9,"column":38,"index":378}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Parenthesized async arrow with return type should still work",
+            "start":244,"end":307,"loc":{"start":{"line":7,"column":0,"index":244},"end":{"line":7,"column":63,"index":307}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " inside a ternary consequent.",
+            "start":308,"end":339,"loc":{"start":{"line":8,"column":0,"index":308},"end":{"line":8,"column":31,"index":339}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " https://github.com/babel/babel/issues/17547",
+      "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " `async(a)` in a ternary consequent followed by `:` should be",
+      "start":47,"end":110,"loc":{"start":{"line":2,"column":0,"index":47},"end":{"line":2,"column":63,"index":110}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " parsed as a call expression, not as an async arrow with return type.",
+      "start":111,"end":182,"loc":{"start":{"line":3,"column":0,"index":111},"end":{"line":3,"column":71,"index":182}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Parenthesized async arrow with return type should still work",
+      "start":244,"end":307,"loc":{"start":{"line":7,"column":0,"index":244},"end":{"line":7,"column":63,"index":307}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " inside a ternary consequent.",
+      "start":308,"end":339,"loc":{"start":{"line":8,"column":0,"index":308},"end":{"line":8,"column":31,"index":339}}
+    }
+  ]
+}

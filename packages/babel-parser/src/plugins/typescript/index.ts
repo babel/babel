@@ -3275,7 +3275,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseConditional(expr, startLoc, refExpressionErrors);
+      this.next(); // eat `?`
+      const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
+      node.test = expr;
+      // While parsing the consequent, set a flag to prevent treating
+      // `:` as an arrow return type annotation. In `a ? async(b) : c`,
+      // the `:` is the ternary separator, not a return type annotation.
+      const oldInConditionalConsequent = this.state.inConditionalConsequent;
+      this.state.inConditionalConsequent = true;
+      node.consequent = this.parseMaybeAssignAllowIn();
+      this.state.inConditionalConsequent = oldInConditionalConsequent;
+      this.expect(tt.colon);
+      node.alternate = this.parseMaybeAssign();
+      return this.finishNode(node, "ConditionalExpression");
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
@@ -4063,7 +4075,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     shouldParseAsyncArrow(): boolean {
-      return this.match(tt.colon) || super.shouldParseAsyncArrow();
+      if (this.match(tt.colon)) {
+        // When inside a ternary consequent at the top nesting level,
+        // `:` is the ternary separator, not a return type annotation.
+        if (this.state.inConditionalConsequent) return false;
+        return true;
+      }
+      return super.shouldParseAsyncArrow();
+    }
+
+    // Reset inConditionalConsequent inside parenthesized expressions,
+    // since `:` inside parens can never be a ternary separator.
+    parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+      const oldInConditionalConsequent = this.state.inConditionalConsequent;
+      this.state.inConditionalConsequent = false;
+      const result = super.parseParenAndDistinguishExpression(canBeArrow);
+      this.state.inConditionalConsequent = oldInConditionalConsequent;
+      return result;
     }
 
     canHaveLeadingDecorator() {
