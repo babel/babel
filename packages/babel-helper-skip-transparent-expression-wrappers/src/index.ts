@@ -40,7 +40,7 @@ export function skipTransparentExprWrappers(
   path: NodePath<t.Expression>,
 ): NodePath<t.Expression> {
   while (isTransparentExprWrapper(path.node)) {
-    path = path.get("expression");
+    path = (path as NodePath<TransparentExprWrapper>).get("expression");
   }
   return path;
 }

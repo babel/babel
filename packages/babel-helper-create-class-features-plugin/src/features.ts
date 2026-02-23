@@ -88,7 +88,7 @@ function setLoose(file: File, feature: number, loose: boolean) {
 }
 
 export function shouldTransform(path: NodePath<t.Class>, file: File): boolean {
-  let decoratorPath: NodePath<t.Decorator> | null = null;
+  let decoratorPath: NodePath<t.Decorator | null> | null = null;
   let publicFieldPath: NodePath<t.ClassProperty> | null = null;
   let privateFieldPath: NodePath<t.ClassPrivateProperty> | null = null;
   let privateMethodPath: NodePath<t.ClassPrivateMethod> | null = null;

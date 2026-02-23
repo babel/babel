@@ -8,7 +8,6 @@ function replacePropertySuper(
   getObjectRef: () => t.Identifier,
   file: File,
 ) {
-  // @ts-expect-error todo(flow->ts):
   const replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
     methodPath: path,

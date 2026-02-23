@@ -545,7 +545,10 @@ class Scope {
     return uid;
   }
 
-  generateUidBasedOnNode(node: t.Node, defaultName?: string) {
+  generateUidBasedOnNode(
+    node: t.Node | undefined | null,
+    defaultName?: string,
+  ) {
     const parts: NodePart[] = [];
     gatherNodeParts(node, parts);
 
@@ -559,7 +562,10 @@ class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(node: t.Node, defaultName?: string) {
+  generateUidIdentifierBasedOnNode(
+    node: t.Node | undefined | null,
+    defaultName?: string,
+  ) {
     return identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
