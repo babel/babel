@@ -58,6 +58,7 @@ type State = {
   requireId?: t.Identifier;
   resolveId?: t.Identifier;
   rejectId?: t.Identifier;
+  moduleId?: t.Identifier;
 };
 
 export default declare<State>((api, options: Options) => {
@@ -122,8 +123,28 @@ export default declare<State>((api, options: Options) => {
           ),
         );
       },
+      MemberExpression(path, state: State) {
+        if (!this.file.has("@babel/plugin-transform-import-meta")) return;
+
+        if (
+          path.get("object").isMetaProperty() &&
+          t.isIdentifier(path.node.property)
+        ) {
+          if (path.node.property.name === "url") {
+            state.moduleId ??= path.scope.generateUidIdentifier("module");
+            path.replaceWith(
+              t.memberExpression(state.moduleId, t.identifier("uri")),
+            );
+          } else if (path.node.property.name === "resolve") {
+            state.requireId ??= path.scope.generateUidIdentifier("require");
+            path.replaceWith(
+              t.memberExpression(state.requireId, t.identifier("toUrl")),
+            );
+          }
+        }
+      },
       Program: {
-        exit(path, { requireId }) {
+        exit(path, { requireId, moduleId }) {
           if (!isModule(path)) {
             if (requireId) {
               injectWrapper(
@@ -165,6 +186,11 @@ export default declare<State>((api, options: Options) => {
             amdArgs.push(t.stringLiteral("exports"));
 
             importNames.push(t.identifier(meta.exportName));
+          }
+
+          if (moduleId) {
+            amdArgs.push(t.stringLiteral("module"));
+            importNames.push(t.cloneNode(moduleId));
           }
 
           for (const [source, metadata] of meta.source) {
