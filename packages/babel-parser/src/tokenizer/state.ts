@@ -88,7 +88,6 @@ export default class State {
   @bit accessor seenTopicReference = false;
 
   // For the F#-style pipelines plugin
-  @bit accessor soloAwait = false;
   @bit accessor inFSharpPipelineDirectBody = false;
 
   // Labels in scope.

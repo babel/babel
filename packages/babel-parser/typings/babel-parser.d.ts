@@ -273,6 +273,7 @@ type ErrorInfoCompressed = {
         | "YieldExpression";
     },
   ];
+  PipelineUnparenthesized: [];
   AbstractMethodHasImplementation: [{ methodName: string }];
   AbstractPropertyHasInitializer: [{ propertyName: string }];
   AccessorCannotBeOptional: [];

@@ -28,4 +28,6 @@ export default {
     `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
       type,
     })}; please wrap it in parentheses.`,
+  PipelineUnparenthesized:
+    "Cannot mix binary operator with solo-await F#-style pipeline. Please wrap the pipeline in parentheses.",
 } satisfies ParseErrorTemplates;

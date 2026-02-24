@@ -533,9 +533,7 @@ export default abstract class ExpressionParser extends LValParser {
             });
 
           case "fsharp":
-            return this.withSoloAwaitPermittingContext(() => {
-              return this.parseFSharpPipelineBody(prec);
-            });
+            return this.parseFSharpPipelineBody(prec);
         }
 
       // Falls through.
@@ -2758,7 +2756,11 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Parses await expression inside async function.
 
-  parseAwait(this: Parser, startLoc: Position): N.AwaitExpression {
+  parseAwait(
+    this: Parser,
+    startLoc: Position,
+    soloAwait?: boolean,
+  ): N.AwaitExpression {
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
@@ -2781,7 +2783,7 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
 
-    if (!this.state.soloAwait) {
+    if (!soloAwait) {
       node.argument = this.parseMaybeUnary(null, true);
     }
 
@@ -2897,17 +2899,6 @@ export default abstract class ExpressionParser extends LValParser {
     }
   }
 
-  withSoloAwaitPermittingContext<T>(callback: () => T): T {
-    const outerContextSoloAwaitState = this.state.soloAwait;
-    this.state.soloAwait = true;
-
-    try {
-      return callback();
-    } finally {
-      this.state.soloAwait = outerContextSoloAwaitState;
-    }
-  }
-
   allowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
     const prodParamToSet = ParamKind.PARAM_IN & ~flags;
@@ -2957,11 +2948,21 @@ export default abstract class ExpressionParser extends LValParser {
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = true;
 
-    const ret = this.parseExprOp(
-      this.parseMaybeUnaryOrPrivate(),
-      startLoc,
-      prec,
-    );
+    let ret;
+    if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
+      this.next();
+      ret = this.parseAwait(startLoc, true);
+      const nextOp = this.state.type;
+      if (
+        tokenIsOperator(nextOp) &&
+        nextOp !== tt.pipeline &&
+        (this.prodParam.hasIn || nextOp !== tt._in)
+      ) {
+        this.raise(Errors.PipelineUnparenthesized, startLoc);
+      }
+    } else {
+      ret = this.parseExprOp(this.parseMaybeUnaryOrPrivate(), startLoc, prec);
+    }
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
