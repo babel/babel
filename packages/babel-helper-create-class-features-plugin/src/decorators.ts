@@ -2254,7 +2254,7 @@ export function buildNamedEvaluationVisitor(
         }
       }
     },
-  } satisfies Visitor<PluginPass>;
+  } as Visitor<PluginPass>;
 }
 
 function isDecoratedAnonymousClassExpression(path: NodePath) {
@@ -2314,6 +2314,8 @@ export default function (
     name: "proposal-decorators",
     inherits: inherits,
 
+    // @ts-expect-error Type has no properties in common with type
+    // 'ExplVisitNode<PluginPass<object>, ExportDefaultDeclaration>'
     visitor: {
       ExportDefaultDeclaration(path, state) {
         const { declaration } = path.node;
