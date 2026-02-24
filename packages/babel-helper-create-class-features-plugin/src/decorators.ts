@@ -1,4 +1,4 @@
-import type { NodePath, Scope, Visitor } from "@babel/core";
+import type { NodePath, Scope, Visitor, VisitorBase } from "@babel/core";
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
@@ -2266,7 +2266,7 @@ export function buildNamedEvaluationVisitor(
         }
       }
     },
-  } as Visitor<PluginPass>;
+  } as VisitorBase<PluginPass>;
 }
 
 function isDecoratedAnonymousClassExpression(path: NodePath) {
@@ -2294,12 +2294,11 @@ export default function (
   const ignoreFunctionLength =
     assumption("ignoreFunctionLength") ?? loose ?? false;
 
-  const namedEvaluationVisitor: Visitor<PluginPass> =
-    buildNamedEvaluationVisitor(
-      isDecoratedAnonymousClassExpression,
-      // @ts-expect-error Checked by isDecoratedAnonymousClassExpression
-      visitClass,
-    );
+  const namedEvaluationVisitor = buildNamedEvaluationVisitor(
+    isDecoratedAnonymousClassExpression,
+    // @ts-expect-error Checked by isDecoratedAnonymousClassExpression
+    visitClass,
+  );
 
   function visitClass(
     path: NodePath<t.Class>,
@@ -2366,7 +2365,7 @@ export default function (
         visitClass(path, state, undefined);
       },
 
-      ...(namedEvaluationVisitor as any),
+      ...namedEvaluationVisitor,
     },
   };
 }
