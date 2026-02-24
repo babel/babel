@@ -369,7 +369,9 @@ type Trav<
           ? TravD<Node[K] & {}, R> | null
           : TravD<Node[K] & {}, R>
         : never
-    : null
+    : `${any}` extends K
+      ? t.Node | null
+      : null
   : never;
 
 type TravD<
