@@ -29,8 +29,9 @@ export { default as template } from "@babel/template";
 // Visitor is only a type, so we need to use this workaround to prevent
 // rollup-plugin-dts from breaking it.
 // TODO: Figure out how to fix this upstream.
-export type { NodePath, Scope, VisitorBase } from "@babel/traverse";
+export type { NodePath, Scope } from "@babel/traverse";
 export type Visitor<S = unknown> = import("@babel/traverse").Visitor<S>;
+export type VisitorBase<S = unknown> = import("@babel/traverse").VisitorBase<S>;
 
 export {
   createConfigItem,
