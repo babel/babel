@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -40,7 +40,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -72,7 +72,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -123,7 +123,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -148,7 +148,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -172,7 +172,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -208,7 +208,7 @@ jobs:
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -246,7 +246,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -272,7 +272,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -306,7 +306,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -330,7 +330,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -366,7 +366,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -390,7 +390,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -417,7 +417,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -483,7 +483,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -534,7 +534,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -556,7 +556,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v4
@@ -593,7 +593,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
       - name: Install
         run: yarn install
@@ -699,7 +699,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install

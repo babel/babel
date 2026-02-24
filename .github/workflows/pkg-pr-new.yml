@@ -20,10 +20,9 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "*"
+          node-version: "25.6.1"
           cache: "yarn"
       - name: Build
         run: make prepublish
       - name: Publish
         run: yarn pkg-pr-new publish --only-templates --yarn './codemods/*' './eslint/*' './packages/*'
-

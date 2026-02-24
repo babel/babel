@@ -25,7 +25,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: "*"
+          node-version: "25.6.1"
           cache: "yarn"
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
@@ -68,7 +68,7 @@ jobs:
       - name: Use Node.js ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
+          node-version: ${{ matrix.project == 'create-react-app' && '22' || '25.6.1' }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
