@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import "../lib/babel-external-helpers.js";
+import "../lib/babel-build-external-helpers.js";
