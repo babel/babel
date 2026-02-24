@@ -264,7 +264,7 @@ class Referencer extends OriginalReferencer {
   _createScopeVariable(node: any, name: any) {
     this.currentScope().variableScope.__define(
       name,
-      new Definition("Variable", name, node, null, null, null),
+      new Definition("Variable", name, node),
     );
   }
 

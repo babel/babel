@@ -8,10 +8,10 @@ type GetDependency = (name: string) => t.Expression;
 function deep(obj: any, path: string, value?: unknown) {
   try {
     const parts = path.split(".");
-    let last = parts.shift();
+    let last = parts.shift()!;
     while (parts.length > 0) {
       obj = obj[last];
-      last = parts.shift();
+      last = parts.shift()!;
     }
     if (arguments.length > 2) {
       obj[last] = value;

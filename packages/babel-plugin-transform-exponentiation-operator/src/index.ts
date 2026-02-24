@@ -64,7 +64,7 @@ export default declare(api => {
           const { property, computed } = node.left;
 
           if (computed) {
-            const prop = maybeMemoize(property, scope);
+            const prop = maybeMemoize(property, scope)!;
             member1 = t.memberExpression(object.assign, prop.assign, true);
             member2 = t.memberExpression(object.ref, prop.ref, true);
           } else {

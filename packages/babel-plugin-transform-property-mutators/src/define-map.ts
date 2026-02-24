@@ -5,7 +5,7 @@ type DefineMap = {
   _key: t.Expression;
   get?: t.Expression;
   set?: t.Expression;
-  kind: "get" | "set";
+  kind?: "get" | "set";
 };
 
 export type MutatorMap = Record<string, DefineMap>;

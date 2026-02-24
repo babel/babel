@@ -17,7 +17,7 @@ export function getInclusionReasons(
   return (Object.keys(targetVersions) as Target[]).reduce(
     (result, env) => {
       const minVersion = getLowestImplementedVersion(minVersions, env);
-      const targetVersion = targetVersions[env];
+      const targetVersion = targetVersions[env]!;
 
       if (!minVersion) {
         result[env] = prettifyVersion(targetVersion);

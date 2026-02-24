@@ -82,7 +82,13 @@ export default declare(api => {
         const { node } = path;
         if (!isCreateClass(node)) return;
 
-        let id: t.LVal | t.Expression | t.PrivateName | t.VoidPattern | null;
+        let id:
+          | t.LVal
+          | t.Expression
+          | t.PrivateName
+          | t.VoidPattern
+          | null
+          | undefined;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
         path.find(function (path) {
@@ -99,6 +105,7 @@ export default declare(api => {
 
           // we've got an id! no need to continue
           if (id) return true;
+          return false;
         });
 
         // ensure that we have an identifier we can inherit from

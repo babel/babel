@@ -270,7 +270,7 @@ export default function getTargets(
             ESM_SUPPORT[browser === "opera_mobile" ? "op_mob" : browser];
 
           if (esmSupportVersion) {
-            const version = queryBrowsers[browser];
+            const version = queryBrowsers[browser]!;
             queryBrowsers[browser] = getHighestUnreleased(
               version,
               semverify(esmSupportVersion),
@@ -292,7 +292,7 @@ export default function getTargets(
   const result: Targets = {};
   const decimalWarnings = [];
   for (const target of Object.keys(targets).sort() as Target[]) {
-    const value = targets[target];
+    const value = targets[target]!;
 
     // Warn when specifying minor/patch as a decimal
     if (typeof value === "number" && value % 1 !== 0) {

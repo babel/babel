@@ -63,7 +63,7 @@ const getTokenType = function (
         return "capitalized";
       }
     } else {
-      const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
+      const firstChar = String.fromCodePoint(tokenValue.codePointAt(0)!);
       if (firstChar !== firstChar.toLowerCase()) {
         return "capitalized";
       }

@@ -7,7 +7,7 @@ export function prettifyVersion(version: string) {
     return version;
   }
 
-  const { major, minor, patch } = semver.parse(version);
+  const { major, minor, patch } = semver.parse(version)!;
 
   const parts = [major];
 
@@ -23,8 +23,8 @@ export function prettifyVersion(version: string) {
 }
 
 export function prettifyTargets(targets: Targets): Targets {
-  return Object.keys(targets).reduce((results, target: Target) => {
-    let value = targets[target];
+  return Object.keys(targets).reduce((results, target) => {
+    let value = targets[target as Target];
 
     const unreleasedLabel =
       // @ts-expect-error undefined is strictly compared with string later
@@ -33,7 +33,7 @@ export function prettifyTargets(targets: Targets): Targets {
       value = prettifyVersion(value);
     }
 
-    results[target] = value;
+    results[target as Target] = value;
     return results;
   }, {} as Targets);
 }

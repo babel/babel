@@ -83,9 +83,8 @@ export function createRegExpFeaturePlugin({
           return;
         }
 
-        const namedCaptureGroups: Record<string, number | number[]> = {
-          __proto__: null,
-        };
+        const namedCaptureGroups: Record<string, number | number[]> =
+          Object.create(null);
         if (regexpuOptions.namedGroups === "transform") {
           regexpuOptions.onNamedGroup = (name, index) => {
             const prev = namedCaptureGroups[name];

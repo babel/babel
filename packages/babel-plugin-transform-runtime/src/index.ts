@@ -137,7 +137,7 @@ export default declare((api, options: Options, dirname) => {
       function addDefaultImport(
         source: string,
         nameHint: string,
-        blockHoist: number,
+        blockHoist: number | undefined,
         isHelper = false,
       ) {
         // If something on the page adds a helper when the file is an ES6

@@ -17,7 +17,7 @@ export default function shouldStoreRHSInTemporaryVariable(
         element !== null && element.type !== "VoidPattern",
     );
     if (nonNullElements.length > 1) return true;
-    else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]);
+    else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]!);
   } else if (node.type === "ObjectPattern") {
     const { properties } = node;
     if (properties.length > 1) return true;

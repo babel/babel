@@ -60,7 +60,9 @@ class WorkerClient extends Client {
       );
 
       Atomics.wait(this.#signal, 0, 0);
-      const { message } = worker_threads.receiveMessageOnPort(subChannel.port2);
+      const { message } = worker_threads.receiveMessageOnPort(
+        subChannel.port2,
+      )!;
 
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;

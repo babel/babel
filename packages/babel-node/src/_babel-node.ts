@@ -50,9 +50,9 @@ let hasTopLevelAwait = false;
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
     Program(path) {
-      hasTopLevelAwait = path.node.extra.topLevelAwait as boolean;
+      hasTopLevelAwait = path.node.extra?.topLevelAwait as boolean;
 
-      let hasExpressionStatement: boolean;
+      let hasExpressionStatement: boolean | undefined;
       for (const bodyPath of path.get("body")) {
         if (bodyPath.isExpressionStatement()) {
           hasExpressionStatement = true;
@@ -105,7 +105,7 @@ const _eval = function (code: string, filename: string) {
       allowAwaitOutsideFunction: true,
     },
     plugins: (opts.plugins || []).concat([replPlugin]),
-  }).code;
+  })!.code!;
 
   if (hasTopLevelAwait) {
     code = `(async () => { ${code} })()`;
@@ -243,5 +243,6 @@ function replStart() {
   });
   const NODE_REPL_HISTORY = process.env.NODE_REPL_HISTORY;
 
+  // @ts-expect-error setupHistory may be undefined
   replServer.setupHistory(NODE_REPL_HISTORY, () => {});
 }

@@ -16,7 +16,7 @@ export default declare(api => {
     YieldExpression({ node }, state) {
       if (!node.delegate) return;
       const asyncIter = t.callExpression(state.addHelper("asyncIterator"), [
-        node.argument,
+        node.argument!,
       ]);
       node.argument = t.callExpression(
         state.addHelper("asyncGeneratorDelegate"),
@@ -62,7 +62,7 @@ export default declare(api => {
       p.replaceWithMultiple(build.node);
 
       // TODO: Avoid crawl
-      p.scope.parent.crawl();
+      p.scope.parent!.crawl();
     },
   });
 

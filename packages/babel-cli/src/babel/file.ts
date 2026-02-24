@@ -50,7 +50,7 @@ export default async function ({
       });
 
       code += result.code + "\n";
-      offset += countNewlines(result.code) + 1;
+      offset += countNewlines(result.code!) + 1;
     }
 
     const map = new AnyMap({

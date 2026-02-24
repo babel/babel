@@ -5,7 +5,7 @@ export default declare(api => {
   return {
     name: "syntax-import-source",
 
-    manipulateOptions({ parserOpts }) {
+    manipulateOptions(_, parserOpts) {
       parserOpts.plugins.push("sourcePhaseImports");
       parserOpts.createImportExpressions = true;
     },

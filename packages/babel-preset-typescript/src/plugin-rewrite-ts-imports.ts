@@ -1,9 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { types as t, NodePath, PluginPass } from "@babel/core";
+import type { types as t, NodePath, PluginPass, Visitor } from "@babel/core";
 
 export default declare(function ({ types: t }) {
   function maybeReplace(
-    source: t.ArgumentPlaceholder | t.Expression,
+    source: t.ArgumentPlaceholder | t.Expression | null | undefined,
     path: NodePath,
     state: PluginPass,
   ) {
@@ -53,12 +53,16 @@ export default declare(function ({ types: t }) {
           ? node.importKind
           : node.exportKind;
         if (kind === "value") {
-          maybeReplace(node.source, path.get("source"), state);
+          maybeReplace(
+            node.source,
+            path.get("source") as NodePath<t.StringLiteral>,
+            state,
+          );
         }
       },
       ImportExpression(path, state) {
         maybeReplace(path.node.source, path.get("source"), state);
       },
-    },
+    } as Visitor<PluginPass>,
   };
 });

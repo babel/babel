@@ -2,15 +2,15 @@ import { loadPartialConfigAsync } from "@babel/core";
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types";
 import type { PartialConfig } from "../../../../packages/babel-core/src/config";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import type { ParserPlugin } from "@babel/parser";
 
 /**
  * Merge user supplied estree plugin options to default estree plugin options
  *
  * @returns {Array} Merged parser plugin descriptors
  */
-export function getParserPlugins(
-  babelOptions: InputOptions,
-): InputOptions["parserOpts"]["plugins"] {
+export function getParserPlugins(babelOptions: InputOptions): ParserPlugin[] {
   const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
   const estreeOptions = { classFeatures: true };
   for (const plugin of babelParserPlugins) {
@@ -61,7 +61,7 @@ function validateResolvedConfig(
       if (!config.hasFilesystemConfig()) {
         let error = `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`;
 
-        if (config.options.filename.includes("node_modules")) {
+        if (config.options.filename!.includes("node_modules")) {
           error += `\nIf you have a .babelrc.js file or use package.json#babel, keep in mind that it's not used when parsing dependencies. If you want your config to be applied to your whole app, consider using babel.config.js or babel.config.json instead.`;
         }
 
@@ -80,8 +80,8 @@ function getDefaultParserOptions(options: InputOptions): InputOptions {
     ...options,
     babelrc: false,
     configFile: false,
-    ignore: null,
-    only: null,
+    ignore: undefined,
+    only: undefined,
   };
 }
 
@@ -90,5 +90,5 @@ export async function normalizeBabelParseConfig(
 ): Promise<InputOptions | NormalizedOptions> {
   const parseOptions = normalizeParserOptions(options);
   const config = await loadPartialConfigAsync(parseOptions);
-  return validateResolvedConfig(config, options, parseOptions);
+  return validateResolvedConfig(config!, options, parseOptions);
 }

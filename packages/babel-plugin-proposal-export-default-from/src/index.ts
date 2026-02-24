@@ -14,7 +14,7 @@ export default declare(api => {
         const { specifiers, source } = node;
         if (!t.isExportDefaultSpecifier(specifiers[0])) return;
 
-        const { exported } = specifiers.shift();
+        const { exported } = specifiers.shift()!;
 
         if (specifiers.every(s => t.isExportSpecifier(s))) {
           specifiers.unshift(

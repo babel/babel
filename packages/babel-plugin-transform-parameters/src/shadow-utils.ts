@@ -16,7 +16,7 @@ export const iifeVisitor: Visitor<State> = {
 
     if (
       name === "eval" ||
-      (scope.getBinding(name) === state.scope.parent.getBinding(name) &&
+      (scope.getBinding(name) === state.scope.parent!.getBinding(name) &&
         state.scope.hasOwnBinding(name))
     ) {
       state.needsOuterBinding = true;

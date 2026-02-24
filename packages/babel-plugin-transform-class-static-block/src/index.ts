@@ -133,7 +133,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
             !parentPath.isStatement()
           );
           if (parentPath) {
-            namedEvaluationVisitor[parentPath.type]?.enter.forEach(f =>
+            namedEvaluationVisitor[parentPath.type]?.enter!.forEach(f =>
               f.call(this, parentPath, this),
             );
           }

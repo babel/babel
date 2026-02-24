@@ -93,7 +93,7 @@ export function transformRepl(filename: string, code: string, opts: any) {
   return new Promise<FileResult>((resolve, reject) => {
     babel.transform(code, opts, (err, result) => {
       if (err) reject(err);
-      else resolve(result);
+      else resolve(result!);
     });
   });
 }

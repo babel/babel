@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/core";
 
-function needsWrapping(node: t.Node): boolean {
+function needsWrapping(node: t.Node | null): boolean {
   if (t.isLiteral(node) && !t.isTemplateLiteral(node)) {
     return false;
   }

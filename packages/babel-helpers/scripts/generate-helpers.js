@@ -90,6 +90,7 @@ function helper(minVersion: string, source: string, metadata: HelperMetadata): H
 
 export { helpers as default };
 const helpers: Record<string, Helper> = {
+  // @ts-expect-error __proto__: null
   __proto__: null,
 `;
 

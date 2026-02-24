@@ -51,8 +51,8 @@ const convertNodesVisitor = {
     }
 
     if (process.env.IS_PUBLISH) {
-      if (node.loc.identifierName) {
-        delete node.loc.identifierName;
+      if (node.loc!.identifierName) {
+        delete node.loc!.identifierName;
       }
     } else {
       // To minimize the jest-diff noise comparing Babel AST and third-party AST,
@@ -75,10 +75,12 @@ const convertNodesVisitor = {
     // flow: prevent "no-undef"
     // for "Component" in: "let x: React.Component"
     if (node.type === "QualifiedTypeIdentifier") {
+      // @ts-expect-error eslint
       delete node.id;
     }
     // for "b" in: "var a: { b: Foo }"
     if (node.type === "ObjectTypeProperty") {
+      // @ts-expect-error eslint
       delete node.key;
     }
     // for "indexer" in: "var a: {[indexer: string]: number}"
@@ -102,7 +104,12 @@ const convertNodesVisitor = {
       node.type === "TSTemplateLiteralType"
     ) {
       for (let i = 0; i < node.quasis.length; i++) {
-        const q = node.quasis[i];
+        const q = node.quasis[i] as t.TemplateElement & {
+          loc: t.SourceLocation;
+          range: [number, number];
+          start: number;
+          end: number;
+        };
         q.range[0] -= 1;
         if (q.tail) {
           q.range[1] += 1;
@@ -138,36 +145,38 @@ function convertProgramNode(ast: ParseResult) {
     sourceType: ast.program.sourceType,
     body,
   });
+  // @ts-expect-error eslint
   delete ast.program;
+  // @ts-expect-error eslint
   delete ast.errors;
 
   if (eslintVersion < 10) {
-    if (ast.comments.length) {
-      const lastComment = ast.comments[ast.comments.length - 1];
+    if (ast.comments!.length) {
+      const lastComment = ast.comments![ast.comments!.length - 1];
 
-      if (ast.tokens.length) {
-        const lastToken = ast.tokens[ast.tokens.length - 1];
+      if (ast.tokens!.length) {
+        const lastToken = ast.tokens![ast.tokens!.length - 1];
 
-        if (lastComment.end > lastToken.end) {
+        if (lastComment.end! > lastToken.end) {
           // If there is a comment after the last token, the program ends at the
           // last token and not the comment
-          ast.range[1] = lastToken.end;
-          ast.loc.end.line = lastToken.loc.end.line;
-          ast.loc.end.column = lastToken.loc.end.column;
+          ast.range![1] = lastToken.end;
+          ast.loc!.end.line = lastToken.loc.end.line;
+          ast.loc!.end.column = lastToken.loc.end.column;
 
           ast.end = lastToken.end;
         }
       }
     } else {
-      if (!ast.tokens.length) {
-        ast.loc.start.line = 1;
-        ast.loc.end.line = 1;
+      if (!ast.tokens!.length) {
+        ast.loc!.start.line = 1;
+        ast.loc!.end.line = 1;
       }
     }
 
     if (body?.length) {
-      ast.loc.start.line = body[0].loc.start.line;
-      ast.range[0] = body[0].start;
+      ast.loc!.start.line = body[0].loc!.start.line;
+      ast.range![0] = body[0].start!;
 
       ast.start = body[0].start;
     }

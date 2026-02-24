@@ -44,7 +44,7 @@ export default declare(api => {
         },
       },
       ObjectExpression(path, state) {
-        let objectRef: t.Identifier;
+        let objectRef: t.Identifier | undefined;
         const getObjectRef = () =>
           (objectRef = objectRef || path.scope.generateUidIdentifier("obj"));
 
@@ -57,7 +57,7 @@ export default declare(api => {
         if (objectRef) {
           const scopePath = path.findParent(
             p => p.isFunction() || p.isProgram() || p.isLoop(),
-          );
+          )!;
           const useLet = scopePath.isLoop();
           // For transform-block-scoping
           if (useLet) {

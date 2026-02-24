@@ -47,6 +47,6 @@ export default declarePreset((api, opts: Options) => {
       ] satisfies PluginItem,
       transformReactDisplayName,
       pure !== false && transformReactPure,
-    ].filter(Boolean),
+    ].filter(Boolean) as PluginItem[],
   };
 });

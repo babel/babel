@@ -8,7 +8,7 @@ export default function ({ types: t }: PluginAPI): PluginObject {
         if (path.node.param === null || !t.isIdentifier(path.node.param)) {
           return;
         }
-        const binding = path.scope.getOwnBinding(path.node.param.name);
+        const binding = path.scope.getOwnBinding(path.node.param.name)!;
         if (binding.constantViolations.length > 0) {
           return;
         }

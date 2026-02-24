@@ -20,7 +20,7 @@ export default declarePreset((api, opts: Options) => {
     rewriteImportExtensions,
   } = normalizeOptions(opts);
 
-  const pluginOptions = (disallowAmbiguousJSXLike: boolean) => ({
+  const pluginOptions = (disallowAmbiguousJSXLike: boolean | undefined) => ({
     allowNamespaces,
     disallowAmbiguousJSXLike,
     jsxPragma,
@@ -29,7 +29,7 @@ export default declarePreset((api, opts: Options) => {
     optimizeConstEnums,
   });
 
-  const getPlugins = (disallowAmbiguousJSXLike: boolean) => {
+  const getPlugins = (disallowAmbiguousJSXLike: boolean | undefined) => {
     const tsPlugin: PluginItem = [
       transformTypeScript,
       pluginOptions(disallowAmbiguousJSXLike),

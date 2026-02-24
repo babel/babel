@@ -19,11 +19,11 @@ export default declare(api => {
 
         if (index === 1) {
           nodes.push(
-            t.exportNamedDeclaration(null, [specifiers.shift()], node.source),
+            t.exportNamedDeclaration(null, [specifiers.shift()!], node.source),
           );
         }
 
-        const specifier = specifiers.shift();
+        const specifier = specifiers.shift()!;
         const { exported } = specifier;
         const uid = scope.generateUidIdentifier(
           // @ts-expect-error Identifier ?? StringLiteral
@@ -33,7 +33,7 @@ export default declare(api => {
         nodes.push(
           t.importDeclaration(
             [t.importNamespaceSpecifier(uid)],
-            t.cloneNode(node.source),
+            t.cloneNode(node.source!),
           ),
           t.exportNamedDeclaration(null, [
             t.exportSpecifier(t.cloneNode(uid), exported),

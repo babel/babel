@@ -84,7 +84,7 @@ export default declare(api => {
           node.kind = "const";
         }
         for (const decl of node.declarations) {
-          const currentInit = decl.init;
+          const currentInit = decl.init!;
           decl.init = t.callExpression(
             t.memberExpression(
               t.cloneNode(ctx),
@@ -165,7 +165,8 @@ export default declare(api => {
               continue;
             }
 
-            let node: t.Statement | t.Declaration = stmt.node;
+            let node: t.Statement | t.Declaration | undefined | null =
+              stmt.node;
             let shouldRemove = true;
 
             if (stmt.isExportDefaultDeclaration()) {
@@ -217,7 +218,7 @@ export default declare(api => {
             }
 
             if (t.isClassDeclaration(node)) {
-              const { id } = node;
+              const id = node.id!;
               node.id = t.cloneNode(id);
               innerBlockBody.push(
                 t.variableDeclaration("var", [

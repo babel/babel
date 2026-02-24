@@ -48,7 +48,7 @@ export default declare((api, options: Options) => {
   }
 
   function getHoistingScope(scope: Scope) {
-    while (!isHoistingScope(scope)) scope = scope.parent;
+    while (!isHoistingScope(scope)) scope = scope.parent!;
     return scope;
   }
 
@@ -61,7 +61,7 @@ export default declare((api, options: Options) => {
         // If a binding is declared in an inner function, it doesn't affect hoisting.
         if (declares(node, scope)) return;
 
-        scope = scope.parent;
+        scope = scope.parent!;
       }
 
       while (scope) {
@@ -74,7 +74,7 @@ export default declare((api, options: Options) => {
         // higher.
         if (declares(node, scope)) break;
 
-        scope = scope.parent;
+        scope = scope.parent!;
       }
 
       state.targetScope = getHoistingScope(scope);
@@ -257,6 +257,6 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(replacement);
       },
-    },
+    } as Visitor,
   };
 });

@@ -210,7 +210,7 @@ export function wrapLoopBody(
   if (fnParent) {
     const { async, generator } = fnParent.node as t.Function;
     fn.async = async;
-    fn.generator = generator;
+    fn.generator = generator ?? false;
     if (generator) call = t.yieldExpression(call, true);
     else if (async) call = t.awaitExpression(call);
   }

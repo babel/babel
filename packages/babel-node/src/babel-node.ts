@@ -52,8 +52,8 @@ const babelNodePath = path.join(
 );
 
 (async () => {
-  const babelOptions = new Set([]);
-  const babelOptionsWithValue = new Set([]);
+  const babelOptions = new Set<string>([]);
+  const babelOptionsWithValue = new Set<string>([]);
   for (const option of program.options) {
     const hasValue = option.flags.includes("[");
     if (option.short) {
@@ -115,7 +115,7 @@ const babelNodePath = path.join(
           `but ${they} ${are} defined after the script name. Up to Babel 7 ${they} would have ` +
           `been passed to Babel, while now ${they} ${are} passed to the script itself.\n` +
           `  If the intention is to pass ${them} to Babel, move ${them} before the filename:\n` +
-          `    babel-node ${programArgs.join(" ")} ${ambiguousArgs.join(" ")} ${fileName} ${unambiguousArgs.join(" ")}\n` +
+          `    babel-node ${programArgs.join(" ")} ${ambiguousArgs.join(" ")} ${fileName} ${unambiguousArgs!.join(" ")}\n` +
           `  If passing ${them} to the script is intended, you can silence this warning by explicitly ` +
           `using the -- separator before the script name:\n` +
           `    babel-node ${programArgs.join(" ")} -- ${fileName} ${userArgs.join(" ")}`,
@@ -129,7 +129,7 @@ const babelNodePath = path.join(
     babelNodePath,
     ...babelArgs,
     "--",
-    fileName,
+    fileName!,
     ...userArgs,
   ]);
 })().catch(err => {
@@ -168,7 +168,7 @@ async function spawn(args: string[]) {
       });
     });
     if (shouldPassthroughIPC) {
-      proc.on("message", message => process.send(message));
+      proc.on("message", message => process.send!(message));
     }
     process.on("SIGINT", () => proc.kill("SIGINT"));
     process.on("SIGTERM", () => proc.kill("SIGTERM"));

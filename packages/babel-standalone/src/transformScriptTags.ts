@@ -18,7 +18,7 @@ type Browsers = string | readonly string[];
 
 type CompilationResult = {
   async: boolean;
-  type: string;
+  type?: string;
   error: boolean;
   loaded: boolean;
   content: string | null;
@@ -26,9 +26,9 @@ type CompilationResult = {
   // nonce is undefined in browsers that don't support the nonce global attribute
   nonce: string | undefined;
   // todo: refine plugins/presets
-  plugins: InputOptions["plugins"];
-  presets: InputOptions["presets"];
-  targets: Browsers;
+  plugins?: InputOptions["plugins"];
+  presets?: InputOptions["presets"];
+  targets?: Browsers;
   url: string | null;
 };
 
@@ -50,7 +50,7 @@ function transformCode(
     }
   }
 
-  return transformFn(script.content, buildBabelOptions(script, source)).code;
+  return transformFn(script.content!, buildBabelOptions(script, source))!.code!;
 }
 
 /**
@@ -195,7 +195,7 @@ function loadScripts(
     const result: CompilationResult = {
       // script.async is always true for non-JavaScript script tags
       async: script.hasAttribute("async"),
-      type: script.getAttribute("data-type"),
+      type: script.getAttribute("data-type") ?? undefined,
       nonce: script.nonce,
       error: false,
       executed: false,
@@ -249,7 +249,7 @@ export function runScripts(
   // Array.prototype.slice cannot be used on NodeList on IE8
   const jsxScripts = [];
   for (let i = 0; i < scripts.length; i++) {
-    const script = scripts.item(i);
+    const script = scripts.item(i)!;
     // Support the old type="text/jsx;harmony=true"
     const type = script.type.split(";")[0];
     if (scriptTypes.has(type)) {

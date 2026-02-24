@@ -25,7 +25,7 @@ export default async function maybeParse(
     );
   }
   const { plugins } = options;
-  options.plugins = plugins.concat(extractParserOptionsConfigItem);
+  options.plugins = plugins!.concat(extractParserOptionsConfigItem);
 
   let ast;
 
@@ -50,7 +50,8 @@ export default async function maybeParse(
   }
 
   return {
-    ast: convertFile(ast, code, getTokLabels(), getVisitorKeys()),
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    ast: convertFile(ast!, code, getTokLabels(), getVisitorKeys()),
     parserOptions: null,
   };
 }

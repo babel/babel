@@ -37,7 +37,7 @@ class AssignmentMemoiser {
   get(key: t.Expression) {
     if (!this.has(key)) return;
 
-    const record = this._map.get(key);
+    const record = this._map.get(key)!;
     const { value } = record;
 
     record.count--;
@@ -68,7 +68,7 @@ function toNonOptional(
     if (path.node.optional && callee.isOptionalMemberExpression()) {
       // object must be a conditional expression because the optional private access in object has been transformed
       const object = callee.node.object as t.ConditionalExpression;
-      const context = path.scope.maybeGenerateMemoised(object);
+      const context = path.scope.maybeGenerateMemoised(object)!;
       callee
         .get("object")
         .replaceWith(assignmentExpression("=", context, object));
@@ -279,7 +279,7 @@ const handle = {
         })
       ) {
         const { object } = regular;
-        context = member.scope.maybeGenerateMemoised(object);
+        context = member.scope.maybeGenerateMemoised(object)!;
         if (context) {
           regular.object = assignmentExpression(
             "=",
@@ -351,7 +351,7 @@ const handle = {
       }
 
       // context and isDeleteOperation can not be both truthy
-      if (context) {
+      if (context!) {
         const endParent = endParentPath.node as t.OptionalCallExpression;
         endParentPath.replaceWith(
           optionalCallExpression(
@@ -383,7 +383,7 @@ const handle = {
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The second access (the set) should do the memo
       // assignment.
-      this.memoise(member, 2);
+      this.memoise!(member, 2);
 
       const ref = scope.generateUidIdentifierBasedOnNode(node);
       scope.push({ id: ref });
@@ -525,7 +525,7 @@ function handleAssignment(
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The first access (the get) should do the memo
       // assignment.
-      state.memoise(member, 1);
+      state.memoise!(member, 1);
       parentPath.replaceWith(
         logicalExpression(
           operatorTrunc as t.LogicalExpression["operator"],
@@ -535,7 +535,7 @@ function handleAssignment(
       );
     } else {
       // Here, the second access (the set) is evaluated first.
-      state.memoise(member, 2);
+      state.memoise!(member, 2);
       parentPath.replaceWith(
         state.set(
           member,

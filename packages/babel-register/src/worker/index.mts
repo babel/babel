@@ -4,7 +4,7 @@ import handleMessage from "./handle-message.mts";
 
 import { parentPort, type MessagePort } from "node:worker_threads";
 
-parentPort.addListener(
+parentPort!.addListener(
   "message",
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises

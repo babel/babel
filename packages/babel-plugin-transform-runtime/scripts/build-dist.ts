@@ -154,7 +154,7 @@ function writeHelperFile(
     buildHelper(runtimeName, fullPath, helperName, {
       esm,
       polyfillProvider,
-    })
+    })!
   );
 
   return esm ? `./helpers/esm/${fileName}` : `./helpers/${fileName}`;
@@ -273,7 +273,7 @@ function buildHelper(
   const helper = helpers.get(
     helperName,
     (dep: string) => dependencies[dep],
-    null,
+    undefined,
     bindings,
     esm ? adjustEsmHelperAst : adjustCjsHelperAst
   );
@@ -285,11 +285,11 @@ function buildHelper(
     presets: [[presetEnv, { modules: false }]],
     plugins: [
       polyfillProvider,
-      [transformRuntime, { version: runtimeVersion }] satisfies PluginItem,
-      [runtimeRewritePlugin, { runtimeName, helperName }] satisfies PluginItem,
+      [transformRuntime, { version: runtimeVersion }],
+      [runtimeRewritePlugin, { runtimeName, helperName }],
       esm ? null : addDefaultCJSExport,
-    ].filter(Boolean),
-  }).code;
+    ].filter(Boolean) as PluginItem[],
+  })!.code;
 }
 
 function runtimeRewritePlugin(

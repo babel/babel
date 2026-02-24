@@ -24,7 +24,7 @@ export default declare((api, options: Options) => {
     commonJS: options.uncheckedRequire
       ? (require: t.Expression, specifier: t.Expression) =>
           t.callExpression(require, [specifier])
-      : null,
+      : undefined,
     webFetch: (fetch: t.Expression) =>
       template.expression.ast`${fetch}.then(r => r.json())`,
     nodeFsSync: (read: t.Expression) =>
@@ -50,7 +50,9 @@ export default declare((api, options: Options) => {
     return t.isIdentifier(key) ? key.name : key.value;
   }
 
-  function hasTypeJson(attributes: t.ImportAttribute[]) {
+  function hasTypeJson(
+    attributes: t.ImportAttribute[] | undefined,
+  ): attributes is t.ImportAttribute[] {
     return !!attributes?.some(
       attr => getAttributeKey(attr) === "type" && attr.value.value === "json",
     );

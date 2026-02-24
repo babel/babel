@@ -82,7 +82,7 @@ export default declare((api, options: Options) => {
 
           const right = skipTransparentExprWrapperNodes(path.node.right);
           const i = scope.generateUidIdentifier("i");
-          let array: t.Identifier | t.ThisExpression =
+          let array: t.Identifier | t.ThisExpression | null =
             scope.maybeGenerateMemoised(right, true);
           if (
             !array &&
