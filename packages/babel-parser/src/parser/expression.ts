@@ -470,8 +470,8 @@ export default abstract class ExpressionParser extends LValParser {
             // Within the F#-style pipeline body, parseExprOps calls parseExprOp
             // with minPrec = 0, such that any |> directly within a ConciseBody
             // marks the end of the arrow function. We check here instead of
-            // parseExprOps so that the check don't have to be evaluated even
-            // if pipeline operators are not used at all.
+            // parseExprOps so that the check doesn't have to be invoked if
+            // pipeline operators are not used at all.
 
             // PrivateName must be followed by `in`, but we have `|>`
             return left as N.Expression;
