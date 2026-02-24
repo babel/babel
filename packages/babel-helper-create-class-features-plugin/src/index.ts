@@ -41,7 +41,7 @@ interface Options {
   loose?: boolean;
   inherits?: PluginObject["inherits"];
   manipulateOptions?: PluginObject["manipulateOptions"];
-  api?: PluginAPI;
+  api: PluginAPI;
   decoratorVersion?: DecoratorVersionKind | "2018-09";
 }
 
@@ -63,7 +63,7 @@ export function createClassFeaturePlugin({
   const noUninitializedPrivateFieldAccess =
     api.assumption("noUninitializedPrivateFieldAccess") ?? false;
   const constantSuper = api.assumption("constantSuper");
-  const noDocumentAll = api.assumption("noDocumentAll");
+  const noDocumentAll = api.assumption("noDocumentAll") ?? false;
 
   if (privateFieldsAsProperties && privateFieldsAsSymbols) {
     throw new Error(
@@ -109,7 +109,7 @@ export function createClassFeaturePlugin({
     inherits,
 
     pre(file) {
-      enableFeature(file, feature, loose);
+      enableFeature(file, feature, loose ?? false);
 
       if (
         !file.get(versionKey) ||
@@ -203,7 +203,7 @@ export function createClassFeaturePlugin({
           ref = path.scope.generateUidIdentifier(innerBinding?.name || "Class");
         }
 
-        const classRefForDefine = ref ?? t.cloneNode(innerBinding);
+        const classRefForDefine = ref! ?? t.cloneNode(innerBinding);
 
         const privateNamesMap = buildPrivateNamesMap(
           classRefForDefine.name,
@@ -240,7 +240,8 @@ export function createClassFeaturePlugin({
           classBindingNode,
           wrapClass,
         } = buildFieldsInitNodes(
-          ref,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          ref!,
           path.node.superClass,
           props,
           privateNamesMap,
@@ -255,7 +256,7 @@ export function createClassFeaturePlugin({
         if (instanceNodes.length > 0) {
           injectInitialization(
             path,
-            constructor,
+            constructor!,
             instanceNodes,
             (referenceVisitor, state) => {
               for (const prop of props) {
@@ -275,7 +276,7 @@ export function createClassFeaturePlugin({
         }
         if (pureStaticNodes.length > 0) {
           wrappedPath
-            .find(parent => parent.isStatement() || parent.isDeclaration())
+            .find(parent => parent.isStatement() || parent.isDeclaration())!
             .insertAfter(pureStaticNodes);
         }
         if (classBindingNode != null && pathIsClassDeclaration) {

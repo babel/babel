@@ -31,6 +31,7 @@ export { default as template } from "@babel/template";
 // TODO: Figure out how to fix this upstream.
 export type { NodePath, Scope } from "@babel/traverse";
 export type Visitor<S = unknown> = import("@babel/traverse").Visitor<S>;
+export type VisitorBase<S = unknown> = import("@babel/traverse").VisitorBase<S>;
 
 export {
   createConfigItem,

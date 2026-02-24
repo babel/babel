@@ -1,4 +1,4 @@
-import type { NodePath, Scope, Visitor } from "@babel/core";
+import type { NodePath, Scope, Visitor, VisitorBase } from "@babel/core";
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
@@ -136,7 +136,7 @@ function replaceClassWithVar(
   const id = path.node.id;
   const scope = path.scope;
   if (path.type === "ClassDeclaration") {
-    const className = id.name;
+    const className = id!.name;
     const varId = scope.generateUidIdentifierBasedOnNode(id);
     const classId = t.identifier(className);
 
@@ -150,11 +150,11 @@ function replaceClassWithVar(
 
     if (id) {
       className = id.name;
-      varId = generateLetUidIdentifier(scope.parent, className);
+      varId = generateLetUidIdentifier(scope.parent!, className);
       scope.rename(className, varId.name);
     } else {
       varId = generateLetUidIdentifier(
-        scope.parent,
+        scope.parent!,
         typeof className === "string" ? className : "decorated_class",
       );
     }
@@ -178,7 +178,7 @@ function replaceClassWithVar(
 
 function generateClassProperty(
   key: t.PrivateName | t.Identifier,
-  value: t.Expression | undefined,
+  value: t.Expression | undefined | null,
   isStatic: boolean,
 ): t.ClassPrivateProperty | t.ClassProperty {
   if (key.type === "PrivateName") {
@@ -372,7 +372,7 @@ function appendExpressionsToComputedKey(
   if (completion.isConstantExpression()) {
     prependExpressionsToComputedKey(expressions, fieldPath);
   } else {
-    const scopeParent = key.scope.parent;
+    const scopeParent = key.scope.parent!;
     const maybeAssignment = memoiseComputedKey(
       completion.node,
       scopeParent,
@@ -905,7 +905,7 @@ function hasInstancePrivateAccess(path: NodePath, privateNames: string[]) {
   if (privateNames.length > 0) {
     const privateNameVisitor = privateNameVisitorFactory<
       PrivateNameVisitorState<null>,
-      null
+      any
     >({
       PrivateName(path, state) {
         if (state.privateNamesMap.has(path.node.id.name)) {
@@ -931,7 +931,7 @@ function checkPrivateMethodUpdateError(
 ) {
   const privateNameVisitor = privateNameVisitorFactory<
     PrivateNameVisitorState<null>,
-    null
+    any
   >({
     PrivateName(path, state) {
       if (!state.privateNamesMap.has(path.node.id.name)) return;
@@ -1003,7 +1003,7 @@ function transformClass(
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
   const classAssignments: t.AssignmentExpression[] = [];
-  const scopeParent: Scope = path.scope.parent;
+  const scopeParent: Scope = path.scope.parent!;
   const memoiseExpression = (
     expression: t.Expression,
     hint: string,
@@ -1014,8 +1014,8 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
-  let protoInitLocal: t.Identifier;
-  let staticInitLocal: t.Identifier;
+  let protoInitLocal: t.Identifier | undefined;
+  let staticInitLocal: t.Identifier | undefined;
   const classIdName = path.node.id?.name;
   // Whether to generate a setFunctionName call to preserve the class name
   const setClassName = typeof className === "object" ? className : undefined;
@@ -1092,7 +1092,7 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
-      elemDecsUseFnContext ||= elementNode.decorators.some(
+      elemDecsUseFnContext ||= elementNode.decorators!.some(
         usesFunctionContextOrYieldAwait,
       );
     } else if (elementNode.type === "ClassAccessorProperty") {
@@ -1124,7 +1124,7 @@ function transformClass(
       assignIdForAnonymousClass(path, className);
 
       addProxyAccessorsFor(
-        path.node.id,
+        path.node.id!,
         newPath,
         getterKey,
         setterKey,
@@ -1159,8 +1159,9 @@ function transformClass(
   let constructorPath: NodePath<t.ClassMethod> | undefined;
   const decoratedPrivateMethods = new Set<string>();
 
-  let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
-  let decoratorReceiverId: t.Identifier | null = null;
+  let classInitLocal: t.Identifier | undefined,
+    classIdLocal: t.Identifier | undefined;
+  let decoratorReceiverId: t.Identifier | undefined;
 
   // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
   type HandleDecoratorsResult = {
@@ -1173,7 +1174,7 @@ function transformClass(
   function handleDecorators(decorators: t.Decorator[]): HandleDecoratorsResult {
     let hasSideEffects = false;
     let usesFnContext = false;
-    const decoratorsThis: (t.Expression | null)[] = [];
+    const decoratorsThis: (t.Expression | undefined)[] = [];
     for (const decorator of decorators) {
       const { expression } = decorator;
       let object;
@@ -1204,7 +1205,7 @@ function transformClass(
   let needsDeclarationForClassBinding = false;
   let classDecorationsFlag = 0;
   let classDecorations: t.Expression[] = [];
-  let classDecorationsId: t.Identifier;
+  let classDecorationsId: t.Identifier | undefined;
   let computedKeyAssignments: t.AssignmentExpression[] = [];
   if (classDecorators) {
     classInitLocal = generateLetUidIdentifier(scopeParent, "initClass");
@@ -1271,10 +1272,10 @@ function transformClass(
     }
   } else {
     assignIdForAnonymousClass(path, className);
-    classIdLocal = t.cloneNode(path.node.id);
+    classIdLocal = t.cloneNode(path.node.id!);
   }
 
-  let lastInstancePrivateName: t.PrivateName;
+  let lastInstancePrivateName: t.PrivateName | null = null;
   let needsInstancePrivateBrandCheck = false;
 
   let fieldInitializerExpressions = [];
@@ -1433,7 +1434,7 @@ function transformClass(
           } else {
             assignIdForAnonymousClass(path, className);
             addProxyAccessorsFor(
-              path.node.id,
+              path.node.id!,
               newPath,
               t.cloneNode(key),
               t.isAssignmentExpression(key)
@@ -1505,12 +1506,13 @@ function transformClass(
 
         elementDecoratorInfo.push({
           kind,
-          decoratorsArray,
-          decoratorsHaveThis,
+          decoratorsArray: decoratorsArray!,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          decoratorsHaveThis: decoratorsHaveThis!,
           name: nameExpr,
           isStatic,
-          privateMethods,
-          locals,
+          privateMethods: privateMethods!,
+          locals: locals!,
         });
 
         if (element.node) {
@@ -1566,7 +1568,7 @@ function transformClass(
             scopeParent,
             `init_extra_${name}`,
           );
-          locals.push(initExtraId);
+          locals!.push(initExtraId);
           const initExtraCall = t.callExpression(
             t.cloneNode(initExtraId),
             isStatic ? [] : [t.thisExpression()],
@@ -1595,7 +1597,7 @@ function transformClass(
         break;
       }
     }
-    if (lastComputedElement != null) {
+    if (lastComputedElement! != null) {
       appendExpressionsToComputedKey(
         computedKeyAssignments,
         lastComputedElement,
@@ -1615,7 +1617,7 @@ function transformClass(
         insertExpressionsAfterSuperCallAndOptimize(
           fieldInitializerExpressions,
           constructorPath,
-          protoInitLocal,
+          protoInitLocal!,
         );
       } else {
         prependExpressionsToConstructor(
@@ -1667,7 +1669,7 @@ function transformClass(
 
   const staticClosures: t.AssignmentExpression[] = [];
   if (classDecorators) {
-    classLocals.push(classIdLocal, classInitLocal);
+    classLocals.push(classIdLocal, classInitLocal!);
     const statics: (
       | t.ClassProperty
       | t.ClassPrivateProperty
@@ -1704,7 +1706,7 @@ function transformClass(
       ) {
         const valuePath = (
           element as NodePath<t.ClassProperty | t.ClassPrivateProperty>
-        ).get("value");
+        ).get("value") as NodePath<t.Expression>;
         if (hasInstancePrivateAccess(valuePath, instancePrivateNames)) {
           const fieldValueClosureId = memoiseExpression(
             fieldInitializerToClosure(valuePath.node),
@@ -1841,9 +1843,9 @@ function transformClass(
 
       const [newPath] = path.replaceWith(newExpr);
 
-      // update originalClassPath according to the new AST
+      // @ts-expect-error update originalClassPath according to the new AST
       originalClassPath = (
-        newPath.get("callee").get("body") as NodePath<t.Class>
+        newPath.get("callee").get("body") as NodePath<t.ClassBody>
       ).get("body.0.key");
     }
   }
@@ -1867,7 +1869,9 @@ function transformClass(
   const applyDecsBody = applyDecoratorWrapper.body;
   if (computedKeyAssignments.length > 0) {
     const elements = originalClassPath.get("body.body");
-    let firstPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
+    let firstPublicElement:
+      | NodePath<t.ClassProperty | t.ClassMethod>
+      | undefined;
     for (const path of elements) {
       if (
         (path.isClassProperty() || path.isClassMethod()) &&
@@ -1945,7 +1949,7 @@ function transformClass(
   path.insertBefore(classAssignments.map(expr => t.expressionStatement(expr)));
 
   if (needsDeclarationForClassBinding) {
-    const classBindingInfo = scopeParent.getBinding(classIdLocal.name);
+    const classBindingInfo = scopeParent.getBinding(classIdLocal.name)!;
     if (!classBindingInfo.constantViolations.length) {
       // optimization: reuse the inner class binding if the outer class binding is not mutated
       path.insertBefore(
@@ -2006,7 +2010,7 @@ function createLocalsAssignment(
   classDecorationsFlag: t.NumericLiteral,
   maybePrivateBrandName: t.PrivateName | null,
   setClassName: t.Identifier | t.StringLiteral | undefined,
-  superClass: null | t.Expression,
+  superClass: undefined | null | t.Expression,
   state: PluginPass,
 ) {
   let lhs, rhs;
@@ -2110,7 +2114,7 @@ export function buildNamedEvaluationVisitor(
         return t.stringLiteral(keyValue);
       }
       default: {
-        const ref = propertyPath.scope.maybeGenerateMemoised(key);
+        const ref = propertyPath.scope.maybeGenerateMemoised(key)!;
         propertyPath
           .get("key")
           .replaceWith(
@@ -2128,7 +2132,9 @@ export function buildNamedEvaluationVisitor(
     VariableDeclarator(path, state) {
       const id = path.node.id;
       if (id.type === "Identifier") {
-        const initializer = skipTransparentExprWrappers(path.get("init"));
+        const initializer = skipTransparentExprWrappers(
+          path.get("init") as NodePath<t.Expression>,
+        );
         if (needsName(initializer)) {
           const name = id.name;
           visitor(initializer, state, name);
@@ -2198,7 +2204,9 @@ export function buildNamedEvaluationVisitor(
     },
     ClassPrivateProperty(path, state) {
       const { node } = path;
-      const initializer = skipTransparentExprWrappers(path.get("value"));
+      const initializer = skipTransparentExprWrappers(
+        path.get("value") as NodePath<t.Expression>,
+      );
       if (needsName(initializer)) {
         const className = t.stringLiteral("#" + node.key.id.name);
         visitor(initializer, state, className);
@@ -2207,7 +2215,9 @@ export function buildNamedEvaluationVisitor(
     ClassAccessorProperty(path, state) {
       const { node } = path;
       const id = node.key;
-      const initializer = skipTransparentExprWrappers(path.get("value"));
+      const initializer = skipTransparentExprWrappers(
+        path.get("value") as NodePath<t.Expression>,
+      );
       if (needsName(initializer)) {
         if (!node.computed) {
           if (id.type === "Identifier") {
@@ -2236,7 +2246,9 @@ export function buildNamedEvaluationVisitor(
     ClassProperty(path, state) {
       const { node } = path;
       const id = node.key;
-      const initializer = skipTransparentExprWrappers(path.get("value"));
+      const initializer = skipTransparentExprWrappers(
+        path.get("value") as NodePath<t.Expression>,
+      );
       if (needsName(initializer)) {
         if (!node.computed) {
           if (id.type === "Identifier") {
@@ -2254,7 +2266,7 @@ export function buildNamedEvaluationVisitor(
         }
       }
     },
-  } satisfies Visitor<PluginPass>;
+  } as VisitorBase<PluginPass>;
 }
 
 function isDecoratedAnonymousClassExpression(path: NodePath) {
@@ -2278,14 +2290,15 @@ export default function (
   assertVersion(REQUIRED_VERSION("^7.21.0 || ^8.0.0"));
 
   const VISITED = new WeakSet<NodePath>();
-  const constantSuper = assumption("constantSuper") ?? loose;
-  const ignoreFunctionLength = assumption("ignoreFunctionLength") ?? loose;
+  const constantSuper = assumption("constantSuper") ?? loose ?? false;
+  const ignoreFunctionLength =
+    assumption("ignoreFunctionLength") ?? loose ?? false;
 
-  const namedEvaluationVisitor: Visitor<PluginPass> =
-    buildNamedEvaluationVisitor(
-      isDecoratedAnonymousClassExpression,
-      visitClass,
-    );
+  const namedEvaluationVisitor = buildNamedEvaluationVisitor(
+    isDecoratedAnonymousClassExpression,
+    // @ts-expect-error Checked by isDecoratedAnonymousClassExpression
+    visitClass,
+  );
 
   function visitClass(
     path: NodePath<t.Class>,

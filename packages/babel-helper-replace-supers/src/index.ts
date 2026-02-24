@@ -336,18 +336,15 @@ type ReplaceSupersOptionsBase = {
   file: File;
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
-  refToPreserve?: t.Identifier;
+  refToPreserve?: t.Identifier | null;
 };
 
-type ReplaceSupersOptions = ReplaceSupersOptionsBase &
-  (
-    | { objectRef?: undefined; getObjectRef: () => t.Node }
-    | { objectRef: t.Node; getObjectRef?: undefined }
-  ) &
-  (
-    | { superRef?: undefined; getSuperRef: () => t.Node }
-    | { superRef: t.Node; getSuperRef?: undefined }
-  );
+type ReplaceSupersOptions = ReplaceSupersOptionsBase & {
+  objectRef?: t.Node | undefined;
+  getObjectRef?: () => t.Node;
+  superRef?: t.Node | null;
+  getSuperRef?: () => t.Node;
+};
 
 interface ReplaceState {
   file: File;

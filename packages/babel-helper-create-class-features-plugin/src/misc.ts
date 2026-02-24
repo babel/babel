@@ -14,13 +14,11 @@ const findBareSupers = visitors.environmentVisitor<
 });
 
 const referenceVisitor: Visitor<{ scope: Scope }> = {
-  "TSTypeAnnotation|TypeAnnotation"(
-    path: NodePath<t.TSTypeAnnotation | t.TypeAnnotation>,
-  ) {
+  "TSTypeAnnotation|TypeAnnotation"(path) {
     path.skip();
   },
 
-  ReferencedIdentifier(path: NodePath<t.Identifier>, { scope }) {
+  ReferencedIdentifier(path, { scope }) {
     if (scope.hasOwnBinding(path.node.name)) {
       scope.rename(path.node.name);
       path.skip();
@@ -29,7 +27,7 @@ const referenceVisitor: Visitor<{ scope: Scope }> = {
 };
 
 type HandleClassTDZState = {
-  classBinding: Scope.Binding;
+  classBinding: Scope.Binding | null | undefined;
   file: File;
 };
 
@@ -52,7 +50,9 @@ function handleClassTDZ(
 }
 
 const classFieldDefinitionEvaluationTDZVisitor: Visitor<HandleClassTDZState> = {
-  ReferencedIdentifier: handleClassTDZ,
+  ReferencedIdentifier: handleClassTDZ as (
+    path: NodePath<t.Identifier | t.JSXIdentifier>,
+  ) => void,
   "TSTypeAnnotation|TypeAnnotation"(path) {
     path.skip();
   },
