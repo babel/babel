@@ -74,10 +74,13 @@ export function validate(opts: unknown): TemplateOpts {
   }
 
   if (opts != null && Object.hasOwn(opts as object, "placeholderWhitelist")) {
-    throw new Error(
-      "The 'placeholderWhitelist' option has been renamed to " +
-        "'placeholderAllowlist'. Please update your configuration.",
-    );
+    if (!Object.hasOwn(opts as object, "placeholderAllowlist")) {
+      throw new Error(
+        "The 'placeholderWhitelist' option has been renamed to " +
+          "'placeholderAllowlist'. Please update your configuration.",
+      );
+    }
+    // Both options provided: new option takes precedence (supports Babel 7/8 cross-version compat)
   }
 
   const {
