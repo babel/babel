@@ -97,6 +97,7 @@ export default defineConfig([
       "no-unused-vars": ["error", { caughtErrors: "none" }],
       "no-var": "error",
       "prefer-const": "error",
+      "prefer-rest-params": "off",
     },
   },
   {
