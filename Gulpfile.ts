@@ -577,6 +577,9 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
 
         await bundle.write({
           esModule: true,
+          hoistTransitiveImports: false,
+          minifyInternalExports: false,
+          freeze: false,
           dir: path.join(src, dest),
           entryFileNames: "[name]",
           format,
