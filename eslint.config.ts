@@ -97,7 +97,6 @@ export default defineConfig([
       "no-unused-vars": ["error", { caughtErrors: "none" }],
       "no-var": "error",
       "prefer-const": "error",
-      "prefer-rest-params": "off",
     },
   },
   {
@@ -214,6 +213,8 @@ export default defineConfig([
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/unbound-method": "off",
+      // typescriptEslint.configs.recommendedTypeChecked enabled it.
+      "prefer-rest-params": "off",
 
       // https://github.com/typescript-eslint/typescript-eslint/issues/5014
       "@typescript-eslint/no-inferrable-types": "off",
