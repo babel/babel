@@ -61,11 +61,11 @@ function buildLiteralData<T>(
   const metadata = parseAndBuildMetadata(formatter, formatter.code(code), {
     parser: opts.parser,
 
-    // Explicitly include our generated names in the whitelist so users never
+    // Explicitly include our generated names in the allowlist so users never
     // have to think about whether their placeholder pattern will match.
-    placeholderWhitelist: new Set(
+    placeholderAllowlist: new Set(
       names.concat(
-        opts.placeholderWhitelist ? Array.from(opts.placeholderWhitelist) : [],
+        opts.placeholderAllowlist ? Array.from(opts.placeholderAllowlist) : [],
       ),
     ),
     placeholderPattern: opts.placeholderPattern,

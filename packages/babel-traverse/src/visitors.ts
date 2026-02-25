@@ -348,8 +348,7 @@ function shouldIgnoreKey(key: string): key is
   | "shouldSkip"
   | "denylist"
   | "noScope"
-  | "skipKeys"
-  | "blacklist" {
+  | "skipKeys" {
   // internal/hidden key
   if (key.startsWith("_")) return true;
 

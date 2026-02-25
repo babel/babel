@@ -40,7 +40,7 @@ export default function parseAndBuildMetadata<T>(
   opts: TemplateOpts,
 ): Metadata {
   const {
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
@@ -57,7 +57,7 @@ export default function parseAndBuildMetadata<T>(
   const state: MetadataState = {
     syntactic: { placeholders: [], placeholderNames: new Set() },
     legacy: { placeholders: [], placeholderNames: new Set() },
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
     syntacticPlaceholders,
   };
@@ -100,12 +100,12 @@ function placeholderVisitorHandler(
 
   if (
     hasSyntacticPlaceholders &&
-    (state.placeholderPattern != null || state.placeholderWhitelist != null)
+    (state.placeholderPattern != null || state.placeholderAllowlist != null)
   ) {
     // This check is also in options.js. We need it there to handle the default
     // .syntacticPlaceholders behavior.
     throw new Error(
-      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+      "'.placeholderAllowlist' and '.placeholderPattern' aren't compatible" +
         " with '.syntacticPlaceholders: true'",
     );
   }
@@ -114,7 +114,7 @@ function placeholderVisitorHandler(
     !hasSyntacticPlaceholders &&
     (state.placeholderPattern === false ||
       !(state.placeholderPattern || PATTERN).test(name)) &&
-    !state.placeholderWhitelist?.has(name)
+    !state.placeholderAllowlist?.has(name)
   ) {
     return;
   }
@@ -184,7 +184,7 @@ type MetadataState = {
     placeholders: Placeholder[];
     placeholderNames: Set<string>;
   };
-  placeholderWhitelist?: Set<string>;
+  placeholderAllowlist?: Set<string>;
   placeholderPattern?: RegExp | false;
   syntacticPlaceholders?: boolean;
 };
