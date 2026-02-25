@@ -9,6 +9,13 @@ export interface Options {
 export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
+  if (Object.hasOwn(options, "whitelist")) {
+    throw new Error(
+      "The 'whitelist' option has been renamed to 'allowlist'. " +
+        "Please update your configuration.",
+    );
+  }
+
   const { helperVersion = "7.0.0-beta.0", allowlist = false } = options;
 
   if (

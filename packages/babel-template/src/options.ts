@@ -73,6 +73,13 @@ export function validate(opts: unknown): TemplateOpts {
     throw new Error("Unknown template options.");
   }
 
+  if (opts != null && Object.hasOwn(opts as object, "placeholderWhitelist")) {
+    throw new Error(
+      "The 'placeholderWhitelist' option has been renamed to " +
+        "'placeholderAllowlist'. Please update your configuration.",
+    );
+  }
+
   const {
     placeholderAllowlist,
     placeholderPattern,

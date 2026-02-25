@@ -360,6 +360,13 @@ function shouldIgnoreKey(key: string): key is
     return true;
   }
 
+  if (key === "blacklist") {
+    throw new Error(
+      "The 'blacklist' visitor option has been renamed to 'denylist'. " +
+        "Please update your configuration.",
+    );
+  }
+
   return false;
 }
 
