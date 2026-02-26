@@ -640,8 +640,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     const expr = this.parseUpdate(
-      // @ts-expect-error using "Undone" node as "done"
-      node,
+      node as Undone<N.UpdateExpression>,
       update,
       refExpressionErrors,
     );
@@ -663,17 +662,14 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-UpdateExpression
   parseUpdate(
     this: Parser,
-    node: N.Expression,
+    node: Undone<N.UpdateExpression>,
     update: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (update) {
-      const updateExpressionNode = node as Undone<N.UpdateExpression>;
-      this.checkLVal(
-        updateExpressionNode.argument,
-        this.finishNode(updateExpressionNode, "UpdateExpression"),
-      );
-      return node;
+      const result = this.finishNode(node, "UpdateExpression");
+      this.checkLVal(result.argument, result);
+      return result;
     }
 
     const startLoc = this.state.startLoc;
