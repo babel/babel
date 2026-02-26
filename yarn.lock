@@ -2536,20 +2536,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-flow-comments@workspace:^, @babel/plugin-transform-flow-comments@workspace:packages/babel-plugin-transform-flow-comments":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-flow-comments@workspace:packages/babel-plugin-transform-flow-comments"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-flow": "workspace:^"
-  peerDependencies:
-    "@babel/core": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-transform-flow-strip-types@workspace:^, @babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types"
@@ -4004,7 +3990,6 @@ __metadata:
     "@babel/plugin-transform-explicit-resource-management": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
-    "@babel/plugin-transform-flow-comments": "workspace:^"
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     "@babel/plugin-transform-for-of": "workspace:^"
     "@babel/plugin-transform-function-name": "workspace:^"

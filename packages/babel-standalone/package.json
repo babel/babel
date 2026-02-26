@@ -57,7 +57,6 @@
     "@babel/plugin-transform-explicit-resource-management": "workspace:^",
     "@babel/plugin-transform-exponentiation-operator": "workspace:^",
     "@babel/plugin-transform-export-namespace-from": "workspace:^",
-    "@babel/plugin-transform-flow-comments": "workspace:^",
     "@babel/plugin-transform-flow-strip-types": "workspace:^",
     "@babel/plugin-transform-for-of": "workspace:^",
     "@babel/plugin-transform-function-name": "workspace:^",
