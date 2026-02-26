@@ -2725,21 +2725,18 @@ export function tsDeclareFunction(
   return node;
 }
 export function tsDeclareMethod(
-  decorators: t.Decorator[] | null | undefined,
   key: t.Expression,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType?: t.TSTypeAnnotation | null,
 ): Extract<t.TSDeclareMethod, { computed: true }>;
 export function tsDeclareMethod(
-  decorators: t.Decorator[] | null | undefined,
   key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType?: t.TSTypeAnnotation | null,
 ): Extract<t.TSDeclareMethod, { computed: false }>;
 export function tsDeclareMethod(
-  decorators: t.Decorator[] | null | undefined,
   key:
     | t.Identifier
     | t.StringLiteral
@@ -2751,7 +2748,6 @@ export function tsDeclareMethod(
   returnType?: t.TSTypeAnnotation | null,
 ): t.TSDeclareMethod;
 export function tsDeclareMethod(
-  decorators: t.Decorator[] | null | undefined = null,
   key:
     | t.Identifier
     | t.StringLiteral
@@ -2764,7 +2760,6 @@ export function tsDeclareMethod(
 ): t.TSDeclareMethod {
   const node = {
     type: "TSDeclareMethod",
-    decorators,
     key,
     typeParameters,
     params,
@@ -2776,7 +2771,6 @@ export function tsDeclareMethod(
     static: false,
   } as t.TSDeclareMethod;
   const defs = NODE_FIELDS.TSDeclareMethod;
-  validate(defs.decorators, node, "decorators", decorators, 1);
   validate(defs.key, node, "key", key, 1);
   validate(defs.typeParameters, node, "typeParameters", typeParameters, 1);
   validate(defs.params, node, "params", params, 1);

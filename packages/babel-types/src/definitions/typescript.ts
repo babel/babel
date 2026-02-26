@@ -74,10 +74,10 @@ defineType("TSDeclareFunction", {
 });
 
 defineType("TSDeclareMethod", {
-  visitor: ["decorators", "key", "typeParameters", "params", "returnType"],
+  visitor: ["key", "typeParameters", "params", "returnType"],
   ...classMethodOrPropertyUnionShapeCommon(),
   fields: {
-    ...classMethodOrDeclareMethodCommon(),
+    ...classMethodOrDeclareMethodCommon(false),
     ...tSFunctionTypeAnnotationCommon(),
   },
 });

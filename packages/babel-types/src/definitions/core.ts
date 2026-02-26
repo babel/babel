@@ -1854,7 +1854,7 @@ export const classMethodOrPropertyCommon = () => ({
   },
 });
 
-export const classMethodOrDeclareMethodCommon = () => ({
+export const classMethodOrDeclareMethodCommon = (allowDecorators = true) => ({
   ...functionCommon(),
   ...classMethodOrPropertyCommon(),
   params: validateArrayOfType("FunctionParameter", "TSParameterProperty"),
@@ -1869,10 +1869,14 @@ export const classMethodOrDeclareMethodCommon = () => ({
     ),
     optional: true,
   },
-  decorators: {
-    validate: arrayOfType("Decorator"),
-    optional: true,
-  },
+  ...(allowDecorators
+    ? {
+        decorators: {
+          validate: arrayOfType("Decorator"),
+          optional: true,
+        },
+      }
+    : {}),
 });
 
 defineType("ClassMethod", {
