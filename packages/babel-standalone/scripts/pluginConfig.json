@@ -71,7 +71,6 @@
     "transform-dotall-regex",
     "transform-duplicate-keys",
     "transform-exponentiation-operator",
-    "transform-flow-comments",
     "transform-flow-strip-types",
     "transform-for-of",
     "transform-function-name",
