@@ -1,0 +1,51 @@
+{
+  "name": "@babel/plugin-proposal-bytes-modules",
+  "version": "8.0.0-rc.2",
+  "description": "Transform bytes modules imports (`import '...' with { type: 'bytes' }`) to work in browsers and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-bytes-modules"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-bytes-modules",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "import",
+    "source",
+    "phase",
+    "wasm",
+    "WebAssembly",
+    "assertions",
+    "proposal",
+    "stage-3"
+  ],
+  "dependencies": {
+    "@babel/helper-import-to-platform-api": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "^0.14.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "module"
+}
