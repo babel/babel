@@ -1812,7 +1812,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const expression = super.parseExprSubscripts();
+          const expression =
+            ((this.state.canStartArrow = false), super.parseExprSubscripts());
           if (!tsIsEntityName(expression)) {
             this.raise(
               TSErrors.InvalidHeritageClauseType,
