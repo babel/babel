@@ -146,11 +146,9 @@ export default abstract class ExpressionParser extends LValParser {
 
   shouldExitDescending(
     expr: N.Expression | N.PrivateName,
-    potentialArrowAt: number,
   ): expr is N.ArrowFunctionExpression {
     return (
-      expr.type === "ArrowFunctionExpression" &&
-      this.offsetToSourcePos(expr.start) === potentialArrowAt
+      expr.type === "ArrowFunctionExpression" && !expr.extra?.parenthesized
     );
   }
 
@@ -285,12 +283,8 @@ export default abstract class ExpressionParser extends LValParser {
       refExpressionErrors = new ExpressionErrors();
       ownExpressionErrors = true;
     }
-    const { type } = this.state;
 
-    if (type === tt.parenL || tokenIsIdentifier(type)) {
-      this.state.potentialArrowAt = this.state.start;
-    }
-
+    this.state.canStartArrow = true;
     let left = this.parseMaybeConditional(refExpressionErrors);
     if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startLoc);
@@ -373,10 +367,9 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors: ExpressionErrors,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprOps(refExpressionErrors);
 
-    if (this.shouldExitDescending(expr, potentialArrowAt)) {
+    if (this.shouldExitDescending(expr)) {
       return expr;
     }
 
@@ -418,12 +411,12 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors: ExpressionErrors,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseMaybeUnaryOrPrivate(refExpressionErrors);
 
-    if (this.shouldExitDescending(expr, potentialArrowAt)) {
+    if (this.shouldExitDescending(expr)) {
       return expr;
     }
+    this.state.canStartArrow = false;
 
     return this.parseExprOp(expr, startLoc, -1);
   }
@@ -616,6 +609,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (tokenIsPrefix(this.state.type)) {
       node.operator = this.state.value;
       node.prefix = true;
+      this.state.canStartArrow = false;
 
       if (this.match(tt._throw)) {
         this.expectPlugin("throwExpressions");
@@ -646,8 +640,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     const expr = this.parseUpdate(
-      // @ts-expect-error using "Undone" node as "done"
-      node,
+      node as Undone<N.UpdateExpression>,
       update,
       refExpressionErrors,
     );
@@ -669,17 +662,14 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-UpdateExpression
   parseUpdate(
     this: Parser,
-    node: N.Expression,
+    node: Undone<N.UpdateExpression>,
     update: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (update) {
-      const updateExpressionNode = node as Undone<N.UpdateExpression>;
-      this.checkLVal(
-        updateExpressionNode.argument,
-        this.finishNode(updateExpressionNode, "UpdateExpression"),
-      );
-      return node;
+      const result = this.finishNode(node, "UpdateExpression");
+      this.checkLVal(result.argument, result);
+      return result;
     }
 
     const startLoc = this.state.startLoc;
@@ -703,10 +693,9 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprAtom(refExpressionErrors);
 
-    if (this.shouldExitDescending(expr, potentialArrowAt)) {
+    if (this.shouldExitDescending(expr)) {
       return expr;
     }
 
@@ -942,7 +931,7 @@ export default abstract class ExpressionParser extends LValParser {
       !this.canInsertSemicolon() &&
       // check there are no escape sequences, such as \u{61}sync
       base.end - base.start === 5 &&
-      this.offsetToSourcePos(base.start) === this.state.potentialArrowAt
+      this.state.canStartArrow
     );
   }
 
@@ -1116,8 +1105,9 @@ export default abstract class ExpressionParser extends LValParser {
         return this.parseBooleanLiteral(false);
 
       case tt.parenL: {
-        const canBeArrow = this.state.potentialArrowAt === this.state.start;
-        return this.parseParenAndDistinguishExpression(canBeArrow);
+        return this.parseParenAndDistinguishExpression(
+          this.state.canStartArrow,
+        );
       }
 
       case tt.bracketL: {
@@ -1227,8 +1217,7 @@ export default abstract class ExpressionParser extends LValParser {
           ) {
             return this.parseModuleExpression();
           }
-          const canBeArrow = this.state.potentialArrowAt === this.state.start;
-          const containsEsc = this.state.containsEsc;
+          const { canStartArrow, containsEsc } = this.state;
           const id = this.parseIdentifier();
 
           if (
@@ -1248,7 +1237,7 @@ export default abstract class ExpressionParser extends LValParser {
               // arrow function. (Peeking ahead for "=" lets us avoid a more
               // expensive full-token lookahead on this common path.)
               if (
-                canBeArrow &&
+                canStartArrow &&
                 this.lookaheadCharCode() === charCodes.equalsTo
               ) {
                 // although `id` is not used in async arrow unary function,
@@ -1269,7 +1258,7 @@ export default abstract class ExpressionParser extends LValParser {
           }
 
           if (
-            canBeArrow &&
+            canStartArrow &&
             this.match(tt.arrow) &&
             !this.canInsertSemicolon()
           ) {
@@ -1660,7 +1649,7 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList
   parseParenAndDistinguishExpression(
     this: Parser,
-    canBeArrow: boolean,
+    canStartArrow: boolean,
   ): N.Expression {
     const startLoc = this.state.startLoc;
 
@@ -1723,7 +1712,7 @@ export default abstract class ExpressionParser extends LValParser {
     let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
       this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
     if (
-      canBeArrow &&
+      canStartArrow &&
       this.shouldParseArrow(exprList) &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
@@ -2951,7 +2940,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {
     const startLoc = this.state.startLoc;
 
-    this.state.potentialArrowAt = this.state.start;
     this.prodParam.enter(
       this.prodParam.currentFlags() &
         ~ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
@@ -2970,6 +2958,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.PipelineUnparenthesized, startLoc);
       }
     } else {
+      this.state.canStartArrow = true;
       ret = this.parseExprOp(this.parseMaybeUnaryOrPrivate(), startLoc, prec);
     }
 

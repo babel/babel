@@ -1812,7 +1812,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         () => {
-          const expression = super.parseExprSubscripts();
+          const expression =
+            ((this.state.canStartArrow = false), super.parseExprSubscripts());
           if (!tsIsEntityName(expression)) {
             this.raise(
               TSErrors.InvalidHeritageClauseType,
@@ -4086,10 +4087,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // Reset inConditionalConsequent inside parenthesized expressions,
     // since `:` inside parens can never be a ternary separator.
-    parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+    parseParenAndDistinguishExpression(canStartArrow: boolean): N.Expression {
       const oldInConditionalConsequent = this.state.inConditionalConsequent;
       this.state.inConditionalConsequent = false;
-      const result = super.parseParenAndDistinguishExpression(canBeArrow);
+      const result = super.parseParenAndDistinguishExpression(canStartArrow);
       this.state.inConditionalConsequent = oldInConditionalConsequent;
       return result;
     }

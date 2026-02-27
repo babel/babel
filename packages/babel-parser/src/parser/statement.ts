@@ -691,7 +691,8 @@ export default abstract class StatementParser extends ExpressionParser {
         node.expression = this.parseMaybeDecoratorArguments(expr, startLoc);
       }
     } else {
-      node.expression = this.parseExprSubscripts();
+      node.expression =
+        ((this.state.canStartArrow = false), this.parseExprSubscripts());
     }
     return this.finishNode(node, "Decorator");
   }
@@ -2175,7 +2176,9 @@ export default abstract class StatementParser extends ExpressionParser {
 
   // https://tc39.es/ecma262/#prod-ClassHeritage
   parseClassSuper(this: Parser, node: Undone<N.Class>): void {
-    node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
+    node.superClass = this.eat(tt._extends)
+      ? ((this.state.canStartArrow = false), this.parseExprSubscripts())
+      : null;
   }
 
   // Parses module export declaration.

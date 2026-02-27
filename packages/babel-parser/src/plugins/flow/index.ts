@@ -3175,9 +3175,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+    parseParenAndDistinguishExpression(canStartArrow: boolean): N.Expression {
       return super.parseParenAndDistinguishExpression(
-        canBeArrow &&
+        canStartArrow &&
           !this.state.noArrowAt.includes(
             this.sourceToOffsetPos(this.state.start),
           ),
