@@ -269,9 +269,6 @@
       "@babel/plugin-transform-export-namespace-from": [
         "./packages/babel-plugin-transform-export-namespace-from/src"
       ],
-      "@babel/plugin-transform-flow-comments": [
-        "./packages/babel-plugin-transform-flow-comments/src"
-      ],
       "@babel/plugin-transform-flow-strip-types": [
         "./packages/babel-plugin-transform-flow-strip-types/src"
       ],

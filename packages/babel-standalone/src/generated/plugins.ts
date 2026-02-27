@@ -55,7 +55,6 @@ import transformDestructuring from "@babel/plugin-transform-destructuring";
 import transformDotallRegex from "@babel/plugin-transform-dotall-regex";
 import transformDuplicateKeys from "@babel/plugin-transform-duplicate-keys";
 import transformExponentiationOperator from "@babel/plugin-transform-exponentiation-operator";
-import transformFlowComments from "@babel/plugin-transform-flow-comments";
 import transformFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 import transformForOf from "@babel/plugin-transform-for-of";
 import transformFunctionName from "@babel/plugin-transform-function-name";
@@ -155,7 +154,6 @@ export {
   transformDotallRegex,
   transformDuplicateKeys,
   transformExponentiationOperator,
-  transformFlowComments,
   transformFlowStripTypes,
   transformForOf,
   transformFunctionName,
@@ -257,7 +255,6 @@ export const all: Record<string, any> = {
   "transform-dotall-regex": transformDotallRegex,
   "transform-duplicate-keys": transformDuplicateKeys,
   "transform-exponentiation-operator": transformExponentiationOperator,
-  "transform-flow-comments": transformFlowComments,
   "transform-flow-strip-types": transformFlowStripTypes,
   "transform-for-of": transformForOf,
   "transform-function-name": transformFunctionName,
