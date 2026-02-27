@@ -86,6 +86,7 @@ const sideEffectTypes = {
 // These types are the direct cause of all leaps in control flow.
 const leapTypes = {
   YieldExpression: true,
+  AwaitExpression: true,
   BreakStatement: true,
   ContinueStatement: true,
   ReturnStatement: true,

@@ -1349,6 +1349,26 @@ export class Emitter {
 
         return self.contextProperty("v");
 
+      case "AwaitExpression": {
+        after = this.loc();
+        const arg = self.explodeExpression(path.get("argument"));
+
+        self.emitAssign(self.contextProperty("n"), after);
+
+        const helper = self.pluginPass.addHelper("awaitAsyncGenerator");
+
+        const ret = t.returnStatement(
+          t.cloneNode(t.callExpression(helper, [arg])) || null,
+        );
+        // Preserve the `yield` location so that source mappings for the statements
+        // link back to the yield properly.
+        ret.loc = expr.loc;
+        self.emit(ret);
+        self.mark(after);
+
+        return self.contextProperty("v");
+      }
+
       case "ClassExpression":
         return finish(self.explodeClass(path));
 

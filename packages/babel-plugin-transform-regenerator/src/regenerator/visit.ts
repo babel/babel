@@ -55,11 +55,6 @@ export const getVisitor = (): Visitor<PluginPass> => ({
       path.ensureBlock();
       const bodyBlockPath = path.get("body");
 
-      if (node.async) {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        bodyBlockPath.traverse(awaitVisitor, this);
-      }
-
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       bodyBlockPath.traverse(functionSentVisitor, {
         context: contextId,
@@ -372,31 +367,5 @@ const functionSentVisitor: Visitor<{
         t.memberExpression(t.cloneNode(state.context), t.identifier("v")),
       );
     }
-  },
-};
-
-const awaitVisitor: Visitor<PluginPass> = {
-  Function: function (path) {
-    path.skip(); // Don't descend into nested function scopes.
-  },
-
-  AwaitExpression: function (path) {
-    // Convert await expressions to yield expressions.
-    const argument = path.node.argument;
-
-    const helper =
-      // This is slightly tricky: newer versions of the `regeneratorRuntime`
-      // helper support using `awaitAsyncGenerator` as an alternative to
-      // `regeneratorRuntime().awrap`. There is no direct way to test if we
-      // have that part of the helper available, but we know that it has been
-      // introduced in the same version as `regeneratorKeys`.
-
-      this.addHelper("awaitAsyncGenerator");
-    // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
-    // causes the argument to be wrapped in such a way that the runtime
-    // can distinguish between awaited and merely yielded values.
-    path.replaceWith(
-      t.yieldExpression(t.callExpression(helper, [argument]), false),
-    );
   },
 };
