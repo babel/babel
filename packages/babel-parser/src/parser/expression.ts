@@ -1237,7 +1237,7 @@ export default abstract class ExpressionParser extends LValParser {
               // arrow function. (Peeking ahead for "=" lets us avoid a more
               // expensive full-token lookahead on this common path.)
               if (
-                canBeArrow &&
+                canStartArrow &&
                 this.lookaheadCharCode() === charCodes.equalsTo
               ) {
                 // although `id` is not used in async arrow unary function,
@@ -2940,7 +2940,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {
     const startLoc = this.state.startLoc;
 
-    this.state.potentialArrowAt = this.state.start;
     this.prodParam.enter(
       this.prodParam.currentFlags() &
         ~ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
