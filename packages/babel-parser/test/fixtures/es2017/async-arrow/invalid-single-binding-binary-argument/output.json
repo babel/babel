@@ -1,6 +1,9 @@
 {
   "type": "File",
   "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:13)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
@@ -9,10 +12,10 @@
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
         "expression": {
           "type": "LogicalExpression",
-          "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
           "left": {
             "type": "BooleanLiteral",
             "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
@@ -20,24 +23,33 @@
           },
           "operator": "||",
           "right": {
-            "type": "ArrowFunctionExpression",
-            "start":8,"end":21,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":21,"index":21}},
-            "id": null,
-            "generator": false,
-            "async": true,
-            "params": [
-              {
-                "type": "Identifier",
-                "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"x"},
-                "name": "x"
-              }
-            ],
-            "body": {
-              "type": "BlockStatement",
-              "start":19,"end":21,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":21,"index":21}},
-              "body": [],
-              "directives": []
+            "type": "Identifier",
+            "start":8,"end":13,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":13,"index":13},"identifierName":"async"},
+            "name": "async"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"x"},
+              "name": "x"
             }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":19,"end":21,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":21,"index":21}},
+            "body": [],
+            "directives": []
           }
         }
       }
