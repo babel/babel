@@ -577,8 +577,13 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
 
         await bundle.write({
           esModule: true,
+          hoistTransitiveImports: false,
+          minifyInternalExports: false,
+          freeze: false,
+          generatedCode: buildStandalone ? "es5" : "es2015",
           dir: path.join(src, dest),
           entryFileNames: "[name]",
+          chunkFileNames: "[name]-shared.js",
           format,
           importAttributesKey: "with",
           name,
