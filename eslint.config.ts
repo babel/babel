@@ -79,10 +79,6 @@ export default defineConfig([
           babelrc: false,
           browserslistConfigFile: false,
           configFile: false,
-          // Todo: Remove the parserOpts here after the proposal gets stage 4.
-          parserOpts: {
-            plugins: ["importAttributes"],
-          },
         },
       },
       globals: {
@@ -147,17 +143,13 @@ export default defineConfig([
       "@typescript-eslint": typescriptEslint.plugin,
     },
     rules: {
-      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "no-dupe-class-members": "off",
       "@typescript-eslint/no-dupe-class-members": "error",
-      "no-undef": "off",
-      "no-redeclare": "off",
       "@typescript-eslint/ban-ts-comment": [
         "error",
         {
@@ -205,7 +197,6 @@ export default defineConfig([
         "error",
         { requireNullish: true },
       ],
-      "require-await": "off",
       "@typescript-eslint/require-await": "error",
 
       // Todo: Investigate, for each of these, whether we want them
@@ -222,6 +213,7 @@ export default defineConfig([
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/unbound-method": "off",
+      // typescriptEslint.configs.recommendedTypeChecked enabled it.
       "prefer-rest-params": "off",
 
       // https://github.com/typescript-eslint/typescript-eslint/issues/5014

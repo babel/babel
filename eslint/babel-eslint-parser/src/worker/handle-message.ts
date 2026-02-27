@@ -10,6 +10,4 @@ export default async function handleMessage(action: ACTIONS, payload: any) {
         await normalizeBabelParseConfig(payload.options),
       );
   }
-
-  throw new Error(`Unknown internal parser worker action: ${action}`);
 }

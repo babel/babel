@@ -18,6 +18,8 @@
     "resolveJsonModule": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "incremental": true,
