@@ -1180,6 +1180,9 @@ export default abstract class Tokenizer extends CommentsParser {
       next = this.input.charCodeAt(this.state.pos);
     }
 
+    // remove "_" for numeric literal separator. It should not include "n" for bigint literal
+    const str = this.input.slice(start, this.state.pos).replaceAll("_", "");
+
     if (next === charCodes.lowercaseN) {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
@@ -1193,9 +1196,6 @@ export default abstract class Tokenizer extends CommentsParser {
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
-
-    // remove "_" for numeric literal separator, and trailing `m` or `n`
-    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
 
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
