@@ -88,7 +88,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Checkout the temporary branch
