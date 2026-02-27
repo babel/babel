@@ -130,6 +130,7 @@ type ErrorInfoCompressed = {
   DeclarationMissingInitializer: [
     { kind: "await using" | "const" | "destructuring" | "using" },
   ];
+  DecoratorAbstractMethod: [];
   DecoratorArgumentsOutsideParentheses: [];
   DecoratorsBeforeAfterExport: [];
   DecoratorConstructor: [];

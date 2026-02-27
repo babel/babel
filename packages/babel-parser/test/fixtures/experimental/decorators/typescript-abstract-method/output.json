@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":50}},
+  "errors": [
+    "SyntaxError: Decorators can't be used with an abstract method. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":50}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":50}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17},"identifierName":"C5"},
+          "name": "C5"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":50,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":4,"column":1,"index":50}},
+          "body": [
+            {
+              "type": "TSDeclareMethod",
+              "start":22,"end":48,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":3,"column":23,"index":48}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":22,"end":24,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":4,"index":24}},
+                  "expression": {
+                    "type": "Identifier",
+                    "start":23,"end":24,"loc":{"start":{"line":2,"column":3,"index":23},"end":{"line":2,"column":4,"index":24},"identifierName":"a"},
+                    "name": "a"
+                  }
+                }
+              ],
+              "abstract": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":36,"end":39,"loc":{"start":{"line":3,"column":11,"index":36},"end":{"line":3,"column":14,"index":39},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":41,"end":47,"loc":{"start":{"line":3,"column":16,"index":41},"end":{"line":3,"column":22,"index":47}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":43,"end":47,"loc":{"start":{"line":3,"column":18,"index":43},"end":{"line":3,"column":22,"index":47}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

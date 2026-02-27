@@ -1426,7 +1426,7 @@ export interface TSDeclareFunction extends OptTSDeclareFunction {
 }
 
 export interface TSDeclareMethod
-  extends FunctionBase, ClassMethodOrDeclareMethodCommon {
+  extends FunctionBase, Omit<ClassMethodOrDeclareMethodCommon, "decorators"> {
   type: "TSDeclareMethod";
   kind: MethodKind;
 }

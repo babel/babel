@@ -1792,7 +1792,6 @@ export interface TSDeclareFunction extends BaseNode {
 
 export interface TSDeclareMethodComputed extends BaseNode {
   type: "TSDeclareMethod";
-  decorators?: Decorator[] | null;
   typeParameters?: TSTypeParameterDeclaration | null;
   params: (FunctionParameter | TSParameterProperty)[];
   returnType?: TSTypeAnnotation | null;
@@ -1810,7 +1809,6 @@ export interface TSDeclareMethodComputed extends BaseNode {
 }
 export interface TSDeclareMethodNonComputed extends BaseNode {
   type: "TSDeclareMethod";
-  decorators?: Decorator[] | null;
   typeParameters?: TSTypeParameterDeclaration | null;
   params: (FunctionParameter | TSParameterProperty)[];
   returnType?: TSTypeAnnotation | null;
@@ -4068,7 +4066,6 @@ export interface ParentMaps {
     | ObjectProperty
     | Placeholder
     | RestElement
-    | TSDeclareMethod
     | TSParameterProperty;
   Directive: BlockStatement | Program;
   DirectiveLiteral: Directive;

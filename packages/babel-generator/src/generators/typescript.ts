@@ -115,7 +115,7 @@ export function TSDeclareFunction(
 }
 
 export function TSDeclareMethod(this: Printer, node: t.TSDeclareMethod) {
-  _classMethodHead.call(this, node);
+  _classMethodHead.call(this, node, false);
   this.semicolon();
 }
 

@@ -1650,13 +1650,26 @@ export default abstract class StatementParser extends ExpressionParser {
 
       if (
         // @ts-expect-error Fixme
-        member.kind === "constructor" &&
-        // @ts-expect-error Fixme
         member.decorators &&
         // @ts-expect-error Fixme
         member.decorators.length > 0
       ) {
-        this.raise(Errors.DecoratorConstructor, member);
+        if (
+          this.hasPlugin("typescript") &&
+          (this.hasPlugin("estree")
+            ? // @ts-expect-error Fixme
+              member.type === "TSAbstractMethodDefinition"
+            : // @ts-expect-error Fixme
+              member.type === "TSDeclareMethod")
+        ) {
+          this.raise(Errors.DecoratorAbstractMethod, member);
+        }
+        if (
+          // @ts-expect-error Fixme
+          member.kind === "constructor"
+        ) {
+          this.raise(Errors.DecoratorConstructor, member);
+        }
       }
     }
 

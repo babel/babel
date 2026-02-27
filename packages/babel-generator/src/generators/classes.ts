@@ -267,8 +267,11 @@ export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
 export function _classMethodHead(
   this: Printer,
   node: t.ClassMethod | t.ClassPrivateMethod | t.TSDeclareMethod,
+  allowDecorators = true,
 ) {
-  this.printJoin(node.decorators);
+  if (allowDecorators) {
+    this.printJoin((node as t.ClassMethod | t.ClassPrivateMethod).decorators);
+  }
 
   if (!this.format.preserveFormat) {
     // catch up to method key, avoid line break
