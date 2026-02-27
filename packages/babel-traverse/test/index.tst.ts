@@ -62,6 +62,14 @@ describe("traverse", () => {
       expect(body).type.toBe<NodePath<t.Node | null>>();
     });
 
+    it("should support const string type", () => {
+      const path = {} as NodePath<t.ClassDeclaration>;
+      const key = "body" as const;
+      const statement = path.get(`body.${key}`);
+      const statement2 = path.get(`body.body`);
+      expect(statement).type.toBe(statement2);
+    });
+
     it("falsy path", () => {
       const path = {} as NodePath<t.ClassDeclaration>;
       const body = path.get(`body.x`);
