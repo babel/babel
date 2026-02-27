@@ -513,7 +513,13 @@ export default abstract class ExpressionParser extends LValParser {
       if (prec > minPrec) {
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
-          if (this.state.inFSharpPipelineDirectBody) {
+          if (this.prodParam.inFSharpPipelineDirectBody) {
+            // Within the F#-style pipeline body, parseExprOps calls parseExprOp
+            // with minPrec = 0, such that any |> directly within a ConciseBody
+            // marks the end of the arrow function. We check here instead of
+            // parseExprOps so that the check doesn't have to be invoked if
+            // pipeline operators are not used at all.
+
             // PrivateName must be followed by `in`, but we have `|>`
             return left as N.Expression;
           }
@@ -1088,8 +1094,6 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression[] {
     const elts: N.Expression[] = [];
     let first = true;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
 
     while (!this.eat(tt.parenR)) {
       if (first) {
@@ -1114,8 +1118,6 @@ export default abstract class ExpressionParser extends LValParser {
         ),
       );
     }
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return elts;
   }
@@ -1845,9 +1847,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.expressionScope.enter(newArrowHeadScope());
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.maybeInArrowParameters = true;
-    this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartLoc = this.state.startLoc;
     const exprList: (
@@ -1902,7 +1902,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.expect(tt.parenR);
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
       this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
@@ -2139,8 +2138,6 @@ export default abstract class ExpressionParser extends LValParser {
     if (isRecord) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
     let sawProto = false;
     let first = true;
     const node = this.startNode<
@@ -2195,7 +2192,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.next();
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
     if (isPattern) {
       type = "ObjectPattern";
@@ -2581,8 +2577,6 @@ export default abstract class ExpressionParser extends LValParser {
     if (isTuple) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
     const node = this.startNode<N.ArrayExpression | N.TupleExpression>();
     this.next();
     node.elements = this.parseExprList(
@@ -2591,7 +2585,6 @@ export default abstract class ExpressionParser extends LValParser {
       refExpressionErrors,
       node,
     );
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(
       node,
       isTuple ? "TupleExpression" : "ArrayExpression",
@@ -2618,8 +2611,10 @@ export default abstract class ExpressionParser extends LValParser {
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
     //   { FunctionBody[~Yield, ~Await] }
     const hasBlockBody = this.match(tt.braceL);
-    if (!hasBlockBody && this.prodParam.hasIn) {
-      flags |= ParamKind.PARAM_IN;
+    if (!hasBlockBody) {
+      flags |=
+        this.prodParam.currentFlags() &
+        (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY);
     }
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
@@ -3262,9 +3257,15 @@ export default abstract class ExpressionParser extends LValParser {
 
   allowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
-    const prodParamToSet = ParamKind.PARAM_IN & ~flags;
+    const prodParamToSet =
+      (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY) &
+      ~flags;
     if (prodParamToSet) {
-      this.prodParam.enter(flags | ParamKind.PARAM_IN);
+      this.prodParam.enter(
+        flags |
+          ParamKind.PARAM_IN |
+          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
+      );
       try {
         return callback();
       } finally {
@@ -3277,8 +3278,13 @@ export default abstract class ExpressionParser extends LValParser {
   disallowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
     const prodParamToClear = ParamKind.PARAM_IN & flags;
-    if (prodParamToClear) {
-      this.prodParam.enter(flags & ~ParamKind.PARAM_IN);
+    const prodParamToSet =
+      ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY & ~flags;
+    if (prodParamToClear || prodParamToSet) {
+      this.prodParam.enter(
+        (flags & ~ParamKind.PARAM_IN) |
+          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
+      );
       try {
         return callback();
       } finally {
@@ -3309,8 +3315,10 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     this.state.potentialArrowAt = this.state.start;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = true;
+    this.prodParam.enter(
+      this.prodParam.currentFlags() &
+        ~ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
+    );
 
     const ret = this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
@@ -3318,8 +3326,7 @@ export default abstract class ExpressionParser extends LValParser {
       prec,
     );
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-
+    this.prodParam.exit();
     return ret;
   }
 

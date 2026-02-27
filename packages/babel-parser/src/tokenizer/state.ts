@@ -112,7 +112,6 @@ export default class State {
 
   // For the F#-style pipelines plugin
   @bit accessor soloAwait = false;
-  @bit accessor inFSharpPipelineDirectBody = false;
 
   // Labels in scope.
   labels: {
