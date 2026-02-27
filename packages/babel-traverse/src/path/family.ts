@@ -345,7 +345,7 @@ export function getAllPrevSiblings(this: NodePath<t.Node | null>): NodePath[] {
 }
 
 // convert "1" to 1 (string index to number index)
-type MaybeToIndex<T extends string> = T extends `${bigint}` ? number : T;
+type MaybeToIndex<T extends string> = T extends `${number}` ? number : T;
 
 type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
 
@@ -369,7 +369,9 @@ type Trav<
           ? TravD<Node[K] & {}, R> | null
           : TravD<Node[K] & {}, R>
         : never
-    : null
+    : string extends K
+      ? t.Node | null
+      : null
   : never;
 
 type TravD<
