@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "decorators",
+    "structs"
+  ],
+  "throws": "Unexpected token (2:2)"
+}

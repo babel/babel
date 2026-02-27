@@ -161,6 +161,8 @@ export interface ExplVisitorBase<S> {
   StringLiteral?: ExplVisitNode<S, t.StringLiteral>;
   StringLiteralTypeAnnotation?: ExplVisitNode<S, t.StringLiteralTypeAnnotation>;
   StringTypeAnnotation?: ExplVisitNode<S, t.StringTypeAnnotation>;
+  StructBody?: ExplVisitNode<S, t.StructBody>;
+  StructDeclaration?: ExplVisitNode<S, t.StructDeclaration>;
   Super?: ExplVisitNode<S, t.Super>;
   SwitchCase?: ExplVisitNode<S, t.SwitchCase>;
   SwitchStatement?: ExplVisitNode<S, t.SwitchStatement>;
@@ -424,6 +426,8 @@ export interface VisitorBaseNodes<S> {
   StringLiteral?: VisitNode<S, t.StringLiteral>;
   StringLiteralTypeAnnotation?: VisitNode<S, t.StringLiteralTypeAnnotation>;
   StringTypeAnnotation?: VisitNode<S, t.StringTypeAnnotation>;
+  StructBody?: VisitNode<S, t.StructBody>;
+  StructDeclaration?: VisitNode<S, t.StructDeclaration>;
   Super?: VisitNode<S, t.Super>;
   SwitchCase?: VisitNode<S, t.SwitchCase>;
   SwitchStatement?: VisitNode<S, t.SwitchStatement>;

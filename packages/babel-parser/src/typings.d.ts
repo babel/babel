@@ -16,6 +16,7 @@ export type Plugin =
   | "moduleBlocks"
   | "placeholders"
   | "sourcePhaseImports"
+  | "structs"
   | "throwExpressions"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
