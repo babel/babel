@@ -87,9 +87,6 @@ export default class State {
   @bit accessor inHackPipelineBody = false;
   @bit accessor seenTopicReference = false;
 
-  // For the F#-style pipelines plugin
-  @bit accessor inFSharpPipelineDirectBody = false;
-
   // Labels in scope.
   labels: {
     kind: LoopLabelKind | null;
