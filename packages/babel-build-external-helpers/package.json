@@ -28,9 +28,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
   },
-  "bin": {
-    "babel-build-external-helpers": "./bin/babel-build-external-helpers.js"
-  },
+  "bin": "./bin/babel-build-external-helpers.mjs",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
