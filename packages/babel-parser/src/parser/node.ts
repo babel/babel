@@ -18,8 +18,10 @@ class Node implements NodeBase {
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
-    if (parser?.optionFlags & OptionFlags.Ranges) this.range = [pos, 0];
-    if (parser?.filename) this.loc.filename = parser.filename;
+    if (parser != null) {
+      if (parser.optionFlags & OptionFlags.Ranges) this.range = [pos, 0];
+      if (parser.filename) this.loc.filename = parser.filename;
+    }
   }
 
   type: string = "";
@@ -66,7 +68,7 @@ export abstract class NodeUtils extends UtilParser {
     type: T["type"],
     endLoc: Position,
   ): T {
-    if (process.env.NODE_ENV !== "production" && node.end > 0) {
+    if (!process.env.IS_PUBLISH && node.end > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
           " Instead use resetEndLocation() or change type directly.",
