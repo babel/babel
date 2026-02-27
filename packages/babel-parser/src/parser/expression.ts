@@ -1247,7 +1247,10 @@ export default abstract class ExpressionParser extends LValParser {
               // If the next token begins with "=", commit to parsing an async
               // arrow function. (Peeking ahead for "=" lets us avoid a more
               // expensive full-token lookahead on this common path.)
-              if (this.lookaheadCharCode() === charCodes.equalsTo) {
+              if (
+                canBeArrow &&
+                this.lookaheadCharCode() === charCodes.equalsTo
+              ) {
                 // although `id` is not used in async arrow unary function,
                 // we don't need to reset `async`'s trailing comments because
                 // it will be attached to the upcoming async arrow binding identifier
