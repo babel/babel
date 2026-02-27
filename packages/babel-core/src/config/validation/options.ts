@@ -280,8 +280,8 @@ export type PluginTarget<Option = object> =
 export type PluginItem<Option = object> =
   | ConfigItem<PluginAPI>
   | PluginTarget<Option>
-  | [PluginTarget<Option>, Partial<Option>]
-  | [PluginTarget<Option>, Partial<Option>, string];
+  | [PluginTarget<Option>, Option]
+  | [PluginTarget<Option>, Option, string];
 
 export type PresetTarget<Option = object> =
   | string
@@ -292,8 +292,8 @@ export type PresetTarget<Option = object> =
 export type PresetItem<Option = object> =
   | ConfigItem<PresetAPI>
   | PresetTarget<Option>
-  | [PresetTarget<Option>, Partial<Option>]
-  | [PresetTarget<Option>, Partial<Option>, string];
+  | [PresetTarget<Option>, Option]
+  | [PresetTarget<Option>, Option, string];
 
 export type ConfigApplicableTest = MatchItem | MatchItem[];
 

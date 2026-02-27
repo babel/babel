@@ -192,7 +192,7 @@ function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
   return !!caller?.supportsExportNamespaceFrom;
 }
 
-export default declarePreset((api, opts: Options) => {
+export default declarePreset((api, opts: Partial<Options>) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
   const babelTargets = api.targets();
