@@ -28,7 +28,7 @@ export default declare(api => {
         ) {
           // optimise `typeof foo === "string"` since we can determine that they'll never
           // need to handle symbols
-          const opposite = path.getOpposite();
+          const opposite = path.getOpposite()!;
           if (
             opposite.isStringLiteral() &&
             opposite.node.value !== "symbol" &&
@@ -45,6 +45,7 @@ export default declare(api => {
               "@babel/helpers - typeof"
             );
           }
+          return false;
         });
 
         if (isUnderHelper) return;

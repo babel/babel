@@ -50,7 +50,7 @@ export default declare((api, opts: Options) => {
         };
 
         const body = path.get("body");
-        let bodyScope: Scope | null;
+        let bodyScope: Scope | null | undefined;
         if (body.isBlockStatement()) {
           bodyScope = body.scope;
         }
@@ -76,14 +76,14 @@ export default declare((api, opts: Options) => {
             let binding = headScope.getOwnBinding(name);
             if (!binding) {
               headScope.crawl();
-              binding = headScope.getOwnBinding(name);
+              binding = headScope.getOwnBinding(name)!;
             }
             const { usages, capturedInClosure, hasConstantViolations } =
               getUsageInBody(binding, path);
 
             if (
-              headScope.parent.hasBinding(name) ||
-              headScope.parent.hasGlobal(name)
+              headScope.parent!.hasBinding(name) ||
+              headScope.parent!.hasGlobal(name)
             ) {
               // If the binding is not captured, there is no need
               // of adding it to the closure param. However, rename
@@ -149,7 +149,7 @@ export default declare((api, opts: Options) => {
         const { scope } = path.parentPath;
         if (
           !isVarScope(scope) &&
-          scope.parent.hasBinding(id.name, { noUids: true })
+          scope.parent!.hasBinding(id.name, { noUids: true })
         ) {
           path.scope.rename(id.name);
         }
@@ -215,8 +215,8 @@ function transformBlockScopedVariable(
         // UID, it has been used to declare the current variable in
         // a nested scope and thus we don't need to assume that it
         // may be declared (but not registered yet) in an upper one.
-        blockScope.parent.hasBinding(name, { noUids: true }) ||
-        blockScope.parent.hasGlobal(name)
+        blockScope.parent!.hasBinding(name, { noUids: true }) ||
+        blockScope.parent!.hasGlobal(name)
       ) {
         newName = blockScope.generateUid(name);
         blockScope.rename(name, newName);
@@ -252,7 +252,7 @@ function isInLoop(path: NodePath<t.Node>): boolean {
 }
 
 function isBlockScoped(
-  path: NodePath<t.Node>,
+  path: NodePath<t.Node | null>,
 ): path is NodePath<t.VariableDeclaration> {
   const { node } = path;
   if (!t.isVariableDeclaration(node)) return false;

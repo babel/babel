@@ -79,7 +79,7 @@ export function transformVoidPattern(
 }
 
 function* iterateVoidPatternsInLVal(
-  path: NodePath<t.LVal | t.PatternLike>,
+  path: NodePath<t.LVal | t.PatternLike | null>,
 ): Generator<NodePath<t.VoidPattern>> {
   switch (path.type) {
     case "ArrayPattern":
@@ -145,7 +145,7 @@ export function removeTrailingVoidPatternsFromParams(
 
 // https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
 export function isAnonymousFunctionDefinition(
-  node: t.Node,
+  node: t.Node | null,
 ): node is
   | t.ClassExpression
   | t.ArrowFunctionExpression
@@ -163,7 +163,9 @@ export function isAnonymousFunctionDefinition(
  * @param path The init of the variable declarator
  * @param state The plugin pass object
  */
-export function handleUsingNamedEvaluation(path: NodePath<t.Expression>) {
+export function handleUsingNamedEvaluation(
+  path: NodePath<t.Expression | null>,
+) {
   if (isAnonymousFunctionDefinition(path.node)) {
     path.replaceWith(t.sequenceExpression([t.numericLiteral(0), path.node]));
   }

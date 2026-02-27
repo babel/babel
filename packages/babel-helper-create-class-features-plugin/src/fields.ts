@@ -402,7 +402,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       const { object } = member.node as { object: t.Expression };
 
       if (this.memoiser.has(object)) {
-        return t.cloneNode(this.memoiser.get(object));
+        return t.cloneNode(this.memoiser.get(object)!);
       }
 
       return t.cloneNode(object);

@@ -131,8 +131,8 @@ function convertToken(
     // To minimize the jest-diff noise comparing Babel AST and third-party AST,
     // here we generate a copy of loc without identifierName and index
     newToken.loc = {
-      end: newToken.loc.end,
-      start: newToken.loc.start,
+      end: newToken.loc!.end,
+      start: newToken.loc!.start,
     } as any;
   }
   return newToken;

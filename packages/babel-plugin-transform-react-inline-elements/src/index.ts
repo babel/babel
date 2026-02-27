@@ -31,7 +31,7 @@ export default declare(api => {
       const tagName = state.tagName;
       const args = state.args;
       if (t.react.isCompatTag(tagName)) {
-        args.push(t.stringLiteral(tagName));
+        args.push(t.stringLiteral(tagName!));
       } else {
         args.push(state.tagExpr);
       }

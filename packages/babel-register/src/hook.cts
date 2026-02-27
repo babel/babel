@@ -12,6 +12,7 @@ function installSourceMapSupport() {
   sourceMapSupport.install({
     handleUncaughtExceptions: false,
     environment: "node",
+    // @ts-expect-error FIXME: url can be null?
     retrieveSourceMap(filename: string) {
       const map = maps?.[filename];
       if (map) {

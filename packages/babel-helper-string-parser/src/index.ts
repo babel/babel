@@ -220,7 +220,7 @@ function readEscapedChar(
     default:
       if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
         const startPos = pos - 1;
-        const match = /^[0-7]+/.exec(input.slice(startPos, pos + 2));
+        const match = /^[0-7]+/.exec(input.slice(startPos, pos + 2))!;
 
         let octalStr = match[0];
 

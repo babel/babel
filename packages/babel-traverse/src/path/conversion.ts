@@ -135,7 +135,7 @@ export function ensureBlock(
  * you have wrapped some set of items in an IIFE or other function, but want "this", "arguments", and super"
  * to continue behaving as expected.
  */
-export function unwrapFunctionEnvironment(this: NodePath) {
+export function unwrapFunctionEnvironment(this: NodePath<t.Node | null>) {
   if (
     !this.isArrowFunctionExpression() &&
     !this.isFunctionExpression() &&

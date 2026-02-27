@@ -70,7 +70,7 @@ export default declare(api => {
               ) {
                 scope.rename(name);
               }
-              scope = scope.parent;
+              scope = scope.parent!;
             }
           }
 

@@ -57,7 +57,9 @@ export function getMarkerLines(
   markerLines: MarkerLines;
 } {
   const startLoc: Location = {
+    // @ts-expect-error default value
     column: 0,
+    // @ts-expect-error default value
     line: -1,
     ...loc.start,
   };

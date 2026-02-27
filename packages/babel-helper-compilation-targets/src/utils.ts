@@ -76,7 +76,7 @@ export function getHighestUnreleased(
 export function getLowestImplementedVersion(
   plugin: Targets,
   environment: Target,
-): string {
+): string | undefined {
   const result = plugin[environment];
   // When Android support data is absent, use Chrome data as fallback
   if (!result && environment === "android") {

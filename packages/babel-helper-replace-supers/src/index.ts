@@ -109,7 +109,7 @@ const specHandlers: SpecHandler = {
   prop(this: Handler & SpecHandler, superMember: SuperMember) {
     const { computed, property } = superMember.node;
     if (this.memoiser.has(property)) {
-      return cloneNode(this.memoiser.get(property));
+      return cloneNode(this.memoiser.get(property)!);
     }
 
     if (computed) {
@@ -220,7 +220,7 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    return this._call(superMember, args, false);
+    return this._call!(superMember, args, false);
   },
 
   optionalCall(
@@ -228,7 +228,7 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    return this._call(superMember, args, true);
+    return this._call!(superMember, args, true);
   },
 
   delete(this: Handler & SpecHandler, superMember: SuperMember) {
@@ -377,14 +377,14 @@ export default class ReplaceSupers {
 
   declare file: File;
   declare isDerivedConstructor: boolean;
-  declare constantSuper: boolean;
+  declare constantSuper: boolean | undefined;
   declare isPrivateMethod: boolean;
   declare isStatic: boolean;
   declare methodPath: NodePath;
   declare opts: ReplaceSupersOptions;
 
   getObjectRef() {
-    return cloneNode(this.opts.objectRef || this.opts.getObjectRef());
+    return cloneNode(this.opts.objectRef || this.opts.getObjectRef!());
   }
 
   getSuperRef() {

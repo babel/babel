@@ -35,7 +35,7 @@ export default declare((api, options: Options) => {
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
         : prop.key;
-    const fn = getValue(prop);
+    const fn = getValue(prop)!;
 
     return t.callExpression(state.addHelper("defineAccessor"), [
       t.stringLiteral(type),
@@ -80,7 +80,7 @@ export default declare((api, options: Options) => {
             prop.key,
             prop.computed || t.isLiteral(prop.key),
           ),
-          getValue(prop),
+          getValue(prop)!,
         ),
       ),
     );
@@ -115,7 +115,7 @@ export default declare((api, options: Options) => {
     // To prevent too deep AST structures in case of large objects
     const CHUNK_LENGTH_CAP = 10;
 
-    let currentChunk: t.ObjectMember[] = null;
+    let currentChunk: t.ObjectMember[] | null = null;
     const computedPropsChunks: t.ObjectMember[][] = [];
     for (const prop of computedProps) {
       if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
@@ -142,7 +142,7 @@ export default declare((api, options: Options) => {
             // PrivateName must not be in ObjectExpression
             t.toComputedKey(prop) as t.Expression,
             // the value of ObjectProperty in ObjectExpression must be an expression
-            getValue(prop),
+            getValue(prop)!,
           ]);
         }
       }

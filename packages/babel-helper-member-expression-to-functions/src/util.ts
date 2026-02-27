@@ -42,6 +42,7 @@ export function willPathCastToBoolean(path: NodePath): boolean {
   return (
     parentPath.isConditional({ test: node }) ||
     parentPath.isUnaryExpression({ operator: "!" }) ||
+    // @ts-expect-error FIXME: test should allow t.Node
     parentPath.isForStatement({ test: node }) ||
     parentPath.isWhile({ test: node })
   );

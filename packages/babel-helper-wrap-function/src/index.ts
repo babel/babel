@@ -180,7 +180,8 @@ function plainFunction(
   const wrapperArgs = {
     NAME: functionId || null,
     // TODO: Use `functionId` rather than `hadName` for the condition
-    REF: path.scope.generateUidIdentifier(hadName ? functionId.name : "ref"),
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    REF: path.scope.generateUidIdentifier(hadName ? functionId!.name : "ref"),
     FUNCTION: built,
     PARAMS: params,
   };

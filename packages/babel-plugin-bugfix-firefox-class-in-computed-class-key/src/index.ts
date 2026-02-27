@@ -4,7 +4,7 @@ import { declare } from "@babel/helper-plugin-utils";
 export default declare(({ types: t, assertVersion }) => {
   assertVersion(REQUIRED_VERSION(7));
 
-  function containsClassExpression(path: NodePath<t.Node>) {
+  function containsClassExpression(path: NodePath<t.Node | null>) {
     if (t.isClassExpression(path.node)) return true;
     if (t.isFunction(path.node)) return false;
     const state = { found: false };

@@ -17,8 +17,8 @@ export default declare(api => {
             !t.isValidES3Identifier(prop.name)
           ) {
             // foo.default -> foo["default"]
-            node.property = t.stringLiteral(prop.name);
-            node.computed = true;
+            (node as t.MemberExpression).property = t.stringLiteral(prop.name);
+            (node as t.MemberExpression).computed = true;
           }
         },
       },

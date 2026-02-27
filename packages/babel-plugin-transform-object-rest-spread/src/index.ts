@@ -43,7 +43,7 @@ export default declare((api, opts: Options) => {
   }
 
   function* iterateObjectRestElement(
-    path: NodePath<t.LVal | t.PatternLike | t.TSParameterProperty>,
+    path: NodePath<t.LVal | t.PatternLike | t.TSParameterProperty | null>,
   ): Generator<NodePath<t.RestElement>> {
     switch (path.type) {
       case "ArrayPattern":
@@ -217,7 +217,7 @@ export default declare((api, opts: Options) => {
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references > 0 ||
+        path.scope.getBinding(bindingName)!.references > 0 ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
@@ -335,7 +335,7 @@ export default declare((api, opts: Options) => {
 
       if (!hasTemplateLiteral && !t.isProgram(path.scope.block)) {
         // Hoist definition of excluded keys, so that it's not created each time.
-        const program = path.findParent(path => path.isProgram());
+        const program = path.findParent(path => path.isProgram())!;
         const id = path.scope.generateUidIdentifier("excluded");
 
         program.scope.push({
@@ -363,7 +363,7 @@ export default declare((api, opts: Options) => {
   function replaceRestElement(
     parentPath: NodePath<t.Function | t.CatchClause>,
     paramPath: NodePath<
-      t.Function["params"][number] | t.AssignmentPattern["left"]
+      t.Function["params"][number] | t.AssignmentPattern["left"] | null
     >,
     container?: t.VariableDeclaration[],
   ): void {
@@ -470,6 +470,7 @@ export default declare((api, opts: Options) => {
             path,
             ignoreFunctionLength,
             shouldTransformParam,
+            // @ts-expect-error strictFunctionTypes
             replaceRestElement,
           );
         }
@@ -592,15 +593,16 @@ export default declare((api, opts: Options) => {
 
           let ref = originalPath.node.init;
           const refPropertyPath: NodePath<t.ObjectProperty>[] = [];
-          let kind;
+          let kind: "const" | "let" | "var" | undefined;
 
           path.findParent((path: NodePath): boolean => {
             if (path.isObjectProperty()) {
               refPropertyPath.unshift(path);
             } else if (path.isVariableDeclarator()) {
-              kind = path.parentPath.node.kind;
+              kind = path.parentPath.node.kind as "const" | "let" | "var";
               return true;
             }
+            return false;
           });
 
           const impureObjRefComputedDeclarators = replaceImpureComputedKeys(
@@ -620,7 +622,7 @@ export default declare((api, opts: Options) => {
             }
 
             ref = t.memberExpression(
-              ref,
+              ref!,
               t.cloneNode(keyForMemberExpression),
               prop.node.computed || t.isLiteral(keyPath.node),
             );
@@ -650,13 +652,13 @@ export default declare((api, opts: Options) => {
             t.variableDeclarator(argument, callExpression),
           )[0];
 
-          path.scope.registerBinding(kind, insertionPath);
+          path.scope.registerBinding(kind!, insertionPath);
 
           if (objectPatternPath.node.properties.length === 0) {
             objectPatternPath
               .findParent(
                 path => path.isObjectProperty() || path.isVariableDeclarator(),
-              )
+              )!
               .remove();
           }
         });
@@ -809,7 +811,7 @@ export default declare((api, opts: Options) => {
         if (objectPatterns.length > 0) {
           const patternParentPath = path.findParent(
             path => !(path.isPattern() || path.isObjectProperty()),
-          );
+          )!;
           const patternParent = patternParentPath.node;
           switch (patternParent.type) {
             case "VariableDeclarator":
@@ -850,7 +852,7 @@ export default declare((api, opts: Options) => {
           helper = file.addHelper("objectSpread2");
         }
 
-        let exp: t.CallExpression = null;
+        let exp: t.CallExpression | null = null;
         let props: t.ObjectMember[] = [];
 
         function make() {
@@ -884,7 +886,7 @@ export default declare((api, opts: Options) => {
         for (const prop of path.node.properties) {
           if (t.isSpreadElement(prop)) {
             make();
-            exp.arguments.push(prop.argument);
+            exp!.arguments.push(prop.argument);
           } else {
             props.push(prop);
           }
@@ -892,7 +894,7 @@ export default declare((api, opts: Options) => {
 
         if (props.length) make();
 
-        path.replaceWith(exp);
+        path.replaceWith(exp!);
       },
     },
   };

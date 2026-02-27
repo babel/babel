@@ -113,7 +113,7 @@ function extendedTrace<Arg, Result>(
       // 'extendedTrace', and the anonymous builder function, with the final
       // stripped line being the error message itself since we threw it
       // in the first place and it doesn't matter.
-      err.stack += `\n    =============\n${rootErr.stack.split("\n").slice(3).join("\n")}`;
+      err.stack += `\n    =============\n${rootErr.stack!.split("\n").slice(3).join("\n")}`;
       throw err;
     }
   };

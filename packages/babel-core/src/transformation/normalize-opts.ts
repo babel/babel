@@ -24,7 +24,7 @@ export default function normalizeOptions(
 
   const opts = config.options;
 
-  const options: ResolvedOptions = {
+  const options = {
     ...opts,
 
     parserOpts: {
@@ -58,12 +58,12 @@ export default function normalizeOptions(
 
       ...opts.generatorOpts,
     },
-  };
+  } satisfies ResolvedOptions;
 
   for (const plugins of config.passes) {
     for (const plugin of plugins) {
       if (plugin.manipulateOptions) {
-        plugin.manipulateOptions(options, options.parserOpts!);
+        plugin.manipulateOptions(options, options.parserOpts);
       }
     }
   }

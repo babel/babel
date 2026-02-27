@@ -31,7 +31,7 @@ export default declare((api, opt: Options) => {
   function unshadow(name: string, targetScope: Scope, scope: Scope) {
     while (scope !== targetScope) {
       if (scope.hasOwnBinding(name)) scope.rename(name);
-      scope = scope.parent;
+      scope = scope.parent!;
     }
   }
 
@@ -115,7 +115,7 @@ export default declare((api, opt: Options) => {
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.
-      enableFeature(this.file, FEATURES.privateIn, loose);
+      enableFeature(this.file, FEATURES.privateIn, loose ?? false);
     },
     visitor: {
       BinaryExpression(path, state) {
@@ -126,9 +126,9 @@ export default declare((api, opt: Options) => {
 
         const { name } = node.left.id;
 
-        let privateElement: NodePath<
-          t.ClassPrivateMethod | t.ClassPrivateProperty
-        >;
+        let privateElement:
+          | NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty>
+          | undefined;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 
@@ -149,8 +149,8 @@ export default declare((api, opt: Options) => {
           return;
         }
 
-        if (privateElement.node.type === "ClassPrivateMethod") {
-          if (privateElement.node.static) {
+        if (privateElement!.node.type === "ClassPrivateMethod") {
+          if (privateElement!.node.static) {
             if (outerClass.node.id) {
               unshadow(outerClass.node.id.name, outerClass.scope, path.scope);
             } else {
@@ -188,7 +188,7 @@ export default declare((api, opt: Options) => {
             fieldsWeakSets,
             outerClass,
             privateElement as NodePath<t.ClassPrivateProperty>,
-            privateElement.node.key.id.name,
+            privateElement!.node.key.id.name,
             injectToFieldInit,
           );
 

@@ -3,7 +3,7 @@ import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expr
 import { types as t, template } from "@babel/core";
 import type { File, NodePath, Scope } from "@babel/core";
 
-type ListElement = t.SpreadElement | t.Expression;
+type ListElement = t.SpreadElement | t.Expression | null;
 
 export interface Options {
   allowArrayLike?: boolean;
@@ -62,7 +62,7 @@ export default declare((api, options: Options) => {
     return spread.elements.includes(null);
   }
 
-  function hasSpread(nodes: t.Node[]): boolean {
+  function hasSpread(nodes: (t.Node | null)[]): boolean {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
         return true;
@@ -180,7 +180,7 @@ export default declare((api, options: Options) => {
           nodes = build(args, scope, this.file);
         }
 
-        const first = nodes.shift();
+        const first = nodes.shift()!;
         if (nodes.length) {
           node.arguments.push(
             t.callExpression(
@@ -227,7 +227,7 @@ export default declare((api, options: Options) => {
 
         const nodes = build(node.arguments as ListElement[], scope, this.file);
 
-        const first = nodes.shift();
+        const first = nodes.shift()!;
 
         let args: t.Expression;
         if (nodes.length) {

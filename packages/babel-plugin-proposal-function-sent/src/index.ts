@@ -44,7 +44,7 @@ export default declare(api => {
       MetaProperty(path, state) {
         if (!isFunctionSent(path.node)) return;
 
-        const fnPath = path.getFunctionParent();
+        const fnPath = path.getFunctionParent()!;
 
         if (!fnPath.node.generator) {
           throw new Error("Parent generator function not found");

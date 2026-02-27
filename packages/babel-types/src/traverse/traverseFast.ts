@@ -15,7 +15,7 @@ export default function traverseFast<Options = object>(
     node: t.Node,
     opts?: Options,
   ) => void | typeof traverseFast.skip | typeof traverseFast.stop,
-  opts?: Options,
+  opts?: Options | null,
 ): boolean {
   if (!node) return false;
 

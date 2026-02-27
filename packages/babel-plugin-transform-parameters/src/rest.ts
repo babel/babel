@@ -295,6 +295,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
+  // @ts-expect-error FIXME: Allow `{number}` in get arguments
   const restPath = path.get(
     `params.${node.params.length - 1}.argument`,
   ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
@@ -348,7 +349,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     references: [],
     offset: paramsCount,
     argumentsNode: argsId,
-    outerBinding: scope.getBindingIdentifier(rest.name),
+    outerBinding: scope.getBindingIdentifier(rest.name)!,
     candidates: [],
     name: rest.name,
     deopted: false,
@@ -428,6 +429,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
         // Stop crawling up if this is a function.
         return path.isFunction();
       }
+      return false;
     });
 
     target.insertBefore(loop);

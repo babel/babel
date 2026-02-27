@@ -42,7 +42,7 @@ export type ConfigAPI = {
   env: EnvFunction;
   async: () => boolean;
   assertVersion: typeof assertVersion;
-  caller?: CallerFactory;
+  caller: CallerFactory;
 };
 
 export type PresetAPI = {
@@ -87,7 +87,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
     env,
     async: () => false,
-    caller,
+    caller: caller as CallerFactory,
     assertVersion,
   };
 }

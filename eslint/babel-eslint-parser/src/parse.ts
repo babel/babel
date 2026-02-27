@@ -15,7 +15,7 @@ const babelParser = require(
   }),
 );
 
-let isRunningMinSupportedCoreVersion: boolean = null;
+let isRunningMinSupportedCoreVersion: boolean | null = null;
 
 let client: Client;
 

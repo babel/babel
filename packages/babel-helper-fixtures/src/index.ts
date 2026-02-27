@@ -229,10 +229,10 @@ function pushTask(
           taskOpts.SKIP_babel7plugins_babel8core) ||
         false,
     options: taskOpts,
-    doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
+    doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE ?? false,
     externalHelpers: taskOpts.externalHelpers ?? true,
-    validateLogs: taskOpts.validateLogs,
-    ignoreOutput: taskOpts.ignoreOutput,
+    validateLogs: taskOpts.validateLogs ?? false,
+    ignoreOutput: taskOpts.ignoreOutput ?? false,
     stdout: buildTestFile(stdoutLoc),
     stderr: buildTestFile(stderrLoc),
     exec: buildTestFile(execLoc, execLocAlias),

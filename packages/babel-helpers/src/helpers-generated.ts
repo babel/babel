@@ -35,6 +35,7 @@ function helper(
 
 export { helpers as default };
 const helpers: Record<string, Helper> = {
+  // @ts-expect-error __proto__: null
   __proto__: null,
   // size: 47, gzip size: 63
   OverloadYield: helper(

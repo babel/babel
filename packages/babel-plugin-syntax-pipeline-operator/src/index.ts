@@ -20,7 +20,7 @@ export default declare((api, { proposal, topicToken }: Options) => {
     );
   }
 
-  if (proposal === "hack" && !TOPIC_TOKENS.includes(topicToken)) {
+  if (proposal === "hack" && !TOPIC_TOKENS.includes(topicToken!)) {
     const topicTokenList = TOPIC_TOKENS.map(t => `"${t}"`).join(", ");
     throw new Error(
       `The pipeline plugin in "proposal": "hack" mode also requires a "topicToken" option. "topicToken" must be one of: ${topicTokenList}. See <${documentationURL}>.`,

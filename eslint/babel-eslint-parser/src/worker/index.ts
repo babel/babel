@@ -2,7 +2,7 @@ import { parentPort } from "node:worker_threads";
 
 import handleMessage from "./handle-message.ts";
 
-parentPort.addListener(
+parentPort!.addListener(
   "message",
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async ({ signal, port, action, payload }) => {

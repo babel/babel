@@ -23,7 +23,7 @@ export default declare(api => {
 
       const func = path.node;
       const declar = t.variableDeclaration(useLet ? "let" : "var", [
-        t.variableDeclarator(func.id, t.toExpression(func)),
+        t.variableDeclarator(func.id!, t.toExpression(func)),
       ]);
 
       // hoist it up above everything else
@@ -71,7 +71,7 @@ export default declare(api => {
           t.variableDeclaration(
             "let",
             fns.map(fn =>
-              t.variableDeclarator(t.cloneNode(fn.id), t.toExpression(fn)),
+              t.variableDeclarator(t.cloneNode(fn.id!), t.toExpression(fn)),
             ),
           ),
           node,

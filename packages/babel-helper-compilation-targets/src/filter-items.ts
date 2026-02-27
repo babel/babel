@@ -29,7 +29,7 @@ export function targetsSupported(target: Targets, support: Targets) {
       return true;
     }
 
-    const lowestTargetedVersion = target[environment];
+    const lowestTargetedVersion = target[environment]!;
 
     // If targets has unreleased value as a lowest version, then don't require a plugin.
     if (isUnreleasedVersion(lowestTargetedVersion, environment)) {

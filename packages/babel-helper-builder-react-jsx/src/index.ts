@@ -186,7 +186,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     const state: ElementState = {
       tagExpr: tagExpr,
-      tagName: tagName,
+      tagName: tagName!,
       args: args,
       pure: false,
     };

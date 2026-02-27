@@ -778,7 +778,7 @@ export function convertAssignmentExpression(
     addHelper,
   });
 
-  let ref: t.Identifier | void;
+  let ref: t.Identifier | undefined;
   if (
     (!parentPath.isExpressionStatement() &&
       !parentPath.isSequenceExpression()) ||

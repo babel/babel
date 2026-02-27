@@ -256,7 +256,7 @@ export function transform(
       t.booleanLiteral(true),
     );
   } else {
-    let wrapLast;
+    let wrapLast: ((value: t.Expression) => t.Expression) | undefined;
     if (
       parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
       // note that the first condition must implies that `path.optional` is `true`,
@@ -271,12 +271,12 @@ export function transform(
         const object = skipTransparentExprWrapperNodes(
           replacement.object,
         ) as t.Expression;
-        let baseRef: t.Expression;
+        let baseRef: t.Expression | undefined;
         if (!assumptions.pureGetters || !isSimpleMemberExpression(object)) {
           // memoize the context object when getters are not always pure
           // or the object is not a simple member expression
           // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
-          baseRef = scope.maybeGenerateMemoised(object);
+          baseRef = scope.maybeGenerateMemoised(object)!;
           if (baseRef) {
             replacement.object = t.assignmentExpression("=", baseRef, object);
           }

@@ -54,20 +54,20 @@ export default async function ({
         if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
           outputMap = "external";
         } else if (babelOptions.sourceMaps == null) {
-          outputMap = util.hasDataSourcemap(res.code) ? "external" : "both";
+          outputMap = util.hasDataSourcemap(res.code!) ? "external" : "both";
         }
 
         if (outputMap) {
           const mapLoc = dest + ".map";
           if (outputMap === "external") {
-            res.code = util.addSourceMappingUrl(res.code, mapLoc);
+            res.code = util.addSourceMappingUrl(res.code!, mapLoc);
           }
           res.map.file = path.basename(relative);
           outputFileSync(mapLoc, JSON.stringify(res.map));
         }
       }
 
-      outputFileSync(dest, res.code);
+      outputFileSync(dest, res.code!);
       util.chmod(src, dest);
 
       if (cliOptions.verbose) {
@@ -237,7 +237,7 @@ export default async function ({
 
       try {
         const written = await Promise.all(
-          filenames.map(filename => handleFile(filename, getBase(filename))),
+          filenames.map(filename => handleFile(filename, getBase(filename)!)),
         );
 
         compiledFiles += written.filter(Boolean).length;

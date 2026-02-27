@@ -19,6 +19,7 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
+    "strictNullChecks": true,
     "incremental": true,
     "stripInternal": true
   },

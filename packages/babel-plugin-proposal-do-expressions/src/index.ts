@@ -590,7 +590,7 @@ export default declare(api => {
       });
 
       // Skip flattening trailing expressions that are after all the DoExpressions
-      let lastDoExpression: NodePath<t.Expression>;
+      let lastDoExpression: NodePath<t.Expression> | undefined;
       if (!flattenTrailing) {
         while (expressions.length) {
           const path = expressions.pop();

@@ -42,7 +42,7 @@ export default function parseAndBuildMetadata<T>(
   const {
     placeholderWhitelist,
     placeholderPattern,
-    preserveComments,
+    preserveComments = false,
     syntacticPlaceholders,
   } = opts;
 
