@@ -51,7 +51,8 @@ describe("traverse", () => {
       const path = {} as NodePath<t.BlockStatement>;
       const index: number = 0;
       const statement = path.get(`body.${index}`);
-      expect(statement).type.toBe<NodePath<t.Node | null>>();
+      const statement2 = path.get(`body.0`);
+      expect(statement).type.toBe(statement2);
     });
 
     it("should support template literal expressions - string", () => {
