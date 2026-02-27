@@ -292,7 +292,7 @@ jobs:
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
 
   test-windows-mac:
     name: Test on
@@ -616,7 +616,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: "25.6.1"
           check-latest: true
           cache: "yarn"
       - name: Install
