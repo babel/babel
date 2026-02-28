@@ -22,7 +22,7 @@ import type { Scope, HubInterface } from "@babel/traverse";
  */
 export default class ImportBuilder {
   private _statements: t.Statement[] = [];
-  private _resultName: t.Identifier | t.MemberExpression = null;
+  private _resultName: t.Identifier | t.MemberExpression | undefined;
 
   declare _scope: Scope;
   declare _hub: HubInterface;
@@ -37,7 +37,7 @@ export default class ImportBuilder {
   done() {
     return {
       statements: this._statements,
-      resultName: this._resultName,
+      resultName: this._resultName!,
     };
   }
 
@@ -69,7 +69,7 @@ export default class ImportBuilder {
     this._resultName = cloneNode(local);
     return this;
   }
-  default(name: string) {
+  default(name: string | undefined) {
     const id = this._scope.generateUidIdentifier(name);
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
@@ -78,7 +78,7 @@ export default class ImportBuilder {
     this._resultName = cloneNode(id);
     return this;
   }
-  named(name: string, importName: string) {
+  named(name: string | undefined, importName: string) {
     if (importName === "default") return this.default(name);
 
     const id = this._scope.generateUidIdentifier(name);
@@ -90,7 +90,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  var(name: string) {
+  var(name: string | undefined) {
     const id = this._scope.generateUidIdentifier(name);
     let statement = this._statements[this._statements.length - 1];
     if (statement.type !== "ExpressionStatement") {
@@ -119,7 +119,7 @@ export default class ImportBuilder {
     } else if (statement.type === "VariableDeclaration") {
       assert(statement.declarations.length === 1);
       statement.declarations[0].init = callExpression(callee, [
-        statement.declarations[0].init,
+        statement.declarations[0].init!,
       ]);
     } else {
       assert.fail("Unexpected type.");
@@ -137,7 +137,7 @@ export default class ImportBuilder {
     } else if (statement.type === "VariableDeclaration") {
       assert(statement.declarations.length === 1);
       statement.declarations[0].init = memberExpression(
-        statement.declarations[0].init,
+        statement.declarations[0].init!,
         identifier(name),
       );
     } else {
@@ -147,6 +147,6 @@ export default class ImportBuilder {
   }
 
   read(name: string) {
-    this._resultName = memberExpression(this._resultName, identifier(name));
+    this._resultName = memberExpression(this._resultName!, identifier(name));
   }
 }

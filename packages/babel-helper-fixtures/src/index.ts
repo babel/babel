@@ -8,7 +8,7 @@ import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 
 const require = createRequire(import.meta.url);
 
-const nodeVersion = semver.clean(process.version.slice(1));
+const nodeVersion = semver.clean(process.version.slice(1))!;
 
 function humanize(val: string, noext?: boolean) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -16,12 +16,12 @@ function humanize(val: string, noext?: boolean) {
 }
 
 interface TestIO {
-  loc: string;
-  code: string;
+  loc: string | undefined;
+  code: string | undefined;
 }
 
 export interface TestFile extends TestIO {
-  filename: string;
+  filename: string | undefined;
 }
 
 export interface Test {
@@ -29,7 +29,7 @@ export interface Test {
   title: string;
   disabled: boolean | string;
   options: TaskOptions;
-  optionsDir: string;
+  optionsDir: string | undefined;
   doNotSetSourceType: boolean;
   externalHelpers: boolean;
   ignoreOutput: boolean;
@@ -39,7 +39,7 @@ export interface Test {
   actual: TestFile;
   expect: TestFile;
   inputSourceMap?: EncodedSourceMap;
-  sourceMap: string;
+  sourceMap: object | undefined;
   sourceMapFile: TestFile;
   sourceMapVisual: TestFile;
   validateSourceMapVisual: boolean;
@@ -216,12 +216,13 @@ function pushTask(
   }
 
   const sourceMapFile = buildTestFile(sourceMapLoc, true);
-  // TODO: code should not be a object
-  sourceMapFile.code &&= JSON.parse(sourceMapFile.code);
+  const sourceMap = sourceMapFile.code
+    ? JSON.parse(sourceMapFile.code)
+    : undefined;
 
   const test: Test = {
     taskDir,
-    optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
+    optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : undefined,
     title: humanize(taskName, true),
     disabled: taskName.startsWith(".")
       ? true
@@ -238,7 +239,7 @@ function pushTask(
     exec: buildTestFile(execLoc, execLocAlias),
     actual: buildTestFile(actualLoc, true),
     expect: buildTestFile(expectLoc, true),
-    sourceMap: sourceMapFile.code,
+    sourceMap,
     sourceMapFile,
     sourceMapVisual: buildTestFile(sourceMapVisualLoc),
     validateSourceMapVisual:
@@ -249,7 +250,8 @@ function pushTask(
   if (
     test.exec.code &&
     test.actual.code &&
-    path.extname(execLoc) !== path.extname(actualLoc)
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    path.extname(execLoc) !== path.extname(actualLoc!)
   ) {
     throw new Error(
       `Input file extension should match exec file extension: ${execLoc}, ${actualLoc}`,
@@ -273,7 +275,7 @@ function pushTask(
 
     if (semver.lt(nodeVersion, minimumVersion)) {
       if (test.actual.code) {
-        test.exec.code = null;
+        test.exec.code = undefined;
       } else {
         return;
       }

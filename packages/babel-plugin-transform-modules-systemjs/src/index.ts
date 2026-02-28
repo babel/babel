@@ -256,8 +256,7 @@ export default declare<PluginState>((api, options: Options) => {
     },
 
     visitor: {
-      ["CallExpression" +
-        (api.types.importExpression ? "|ImportExpression" : "")](
+      "CallExpression|ImportExpression"(
         this: PluginPass & PluginState,
         path: NodePath<t.CallExpression | t.ImportExpression>,
         state: PluginState,
@@ -333,7 +332,7 @@ export default declare<PluginState>((api, options: Options) => {
           const beforeBody = [];
           const setters: t.Expression[] = [];
           const sources: t.StringLiteral[] = [];
-          const variableIds = [];
+          const variableIds: t.Identifier[] = [];
           const removedPaths = [];
 
           function addExportName(key: string, val: string) {
@@ -346,7 +345,7 @@ export default declare<PluginState>((api, options: Options) => {
             key: "imports" | "exports",
             specifiers: t.ModuleSpecifier[] | t.ExportAllDeclaration,
           ) {
-            let module: ModuleMetadata;
+            let module: ModuleMetadata | undefined;
             modules.forEach(function (m) {
               if (m.key === source) {
                 module = m;
@@ -379,12 +378,12 @@ export default declare<PluginState>((api, options: Options) => {
               beforeBody.push(path.node);
               removedPaths.push(path);
             } else if (path.isClassDeclaration()) {
-              variableIds.push(t.cloneNode(path.node.id));
+              variableIds.push(t.cloneNode(path.node.id!));
               path.replaceWith(
                 t.expressionStatement(
                   t.assignmentExpression(
                     "=",
-                    t.cloneNode(path.node.id),
+                    t.cloneNode(path.node.id!),
                     t.toExpression(path.node),
                   ),
                 ),
@@ -450,22 +449,22 @@ export default declare<PluginState>((api, options: Options) => {
                 path.replaceWith(declar);
 
                 if (t.isFunction(declar)) {
-                  const name = declar.id.name;
+                  const name = declar.id!.name;
                   addExportName(name, name);
                   beforeBody.push(declar);
                   exportNames.push(name);
-                  exportValues.push(t.cloneNode(declar.id));
+                  exportValues.push(t.cloneNode(declar.id!));
                   removedPaths.push(path);
                 } else if (t.isClass(declar)) {
-                  const name = declar.id.name;
+                  const name = declar.id!.name;
                   exportNames.push(name);
                   exportValues.push(scope.buildUndefinedNode());
-                  variableIds.push(t.cloneNode(declar.id));
+                  variableIds.push(t.cloneNode(declar.id!));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
                         "=",
-                        t.cloneNode(declar.id),
+                        t.cloneNode(declar.id!),
                         t.toExpression(declar),
                       ),
                     ),

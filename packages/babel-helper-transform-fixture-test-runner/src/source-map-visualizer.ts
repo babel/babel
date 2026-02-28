@@ -61,15 +61,15 @@ export default function visualize(output: string, map: any) {
     generated: Range;
     source: string;
   }[] = [];
-  let prev: EachMapping = null;
+  let prev: EachMapping | null = null;
   eachMapping(new TraceMap(map), mapping => {
     if (prev === null) {
       prev = mapping;
       return;
     }
     const original = {
-      from: { line: prev.originalLine, column: prev.originalColumn },
-      to: { line: mapping.originalLine, column: mapping.originalColumn },
+      from: { line: prev.originalLine!, column: prev.originalColumn! },
+      to: { line: mapping.originalLine!, column: mapping.originalColumn! },
     };
     const generated = {
       from: { line: prev.generatedLine, column: prev.generatedColumn },
@@ -87,24 +87,24 @@ export default function visualize(output: string, map: any) {
     } else if (generated.to.column < generated.from.column) {
       generated.to.column = generated.from.column;
     }
-    ranges.push({ original, generated, source: prev.source });
+    ranges.push({ original, generated, source: prev.source! });
     prev = mapping;
   });
   // TODO(@nicolo-ribaudo): The "input source map complex" fixture in
   // @babel/core generates a source map with the last mapping that has `null`
   // originalLine, originalColumn, generatedLine, and generatedColumn. Verify if
   // this is expected.
-  if (prev.originalLine) {
+  if (prev!.originalLine) {
     ranges.push({
       original: {
-        from: { line: prev.originalLine, column: prev.originalColumn },
-        to: { line: prev.originalLine, column: Infinity },
+        from: { line: prev!.originalLine, column: prev!.originalColumn! },
+        to: { line: prev!.originalLine, column: Infinity },
       },
       generated: {
-        from: { line: prev.generatedLine, column: prev.generatedColumn },
-        to: { line: prev.generatedLine, column: Infinity },
+        from: { line: prev!.generatedLine, column: prev!.generatedColumn },
+        to: { line: prev!.generatedLine, column: Infinity },
       },
-      source: prev.source,
+      source: prev!.source!,
     });
   }
 
@@ -123,7 +123,7 @@ export default function visualize(output: string, map: any) {
 
   const res = ranges.map(({ original, generated, source }) => {
     const input = simpleCodeFrameRange(
-      sourcesLines.get(source),
+      sourcesLines.get(source)!,
       original.from.line,
       original.from.column,
       original.to.column,

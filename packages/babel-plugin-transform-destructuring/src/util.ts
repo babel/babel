@@ -102,12 +102,12 @@ interface DestructuringTransformerOption {
   addHelper: File["addHelper"];
 }
 export class DestructuringTransformer {
-  private blockHoist: number;
-  private operator: t.AssignmentExpression["operator"];
+  private blockHoist: number | undefined;
+  private operator: t.AssignmentExpression["operator"] | undefined;
   arrayRefSet: Set<string>;
   private nodes: DestructuringTransformerNode[];
   private scope: Scope;
-  private kind: VariableDeclarationKindAllowsPattern;
+  private kind: VariableDeclarationKindAllowsPattern | undefined;
   private iterableIsArray: boolean;
   private arrayLikeIsIterable: boolean;
   private objectRestNoSymbols: boolean;
@@ -159,7 +159,7 @@ export class DestructuringTransformer {
         nodeInit = t.cloneNode(init);
       }
 
-      node = t.variableDeclaration(this.kind, [
+      node = t.variableDeclaration(this.kind!, [
         t.variableDeclarator(
           id as t.Identifier | t.ArrayPattern | t.ObjectPattern,
           nodeInit,
@@ -182,7 +182,7 @@ export class DestructuringTransformer {
     return declar;
   }
 
-  push(id: t.LVal | t.PatternLike, _init: t.Expression | null) {
+  push(id: t.LVal | t.PatternLike | null, _init: t.Expression) {
     const init = t.cloneNode(_init);
     if (t.isObjectPattern(id)) {
       this.pushObjectPattern(id, init);
@@ -250,7 +250,7 @@ export class DestructuringTransformer {
 
   pushAssignmentPattern(
     { left, right }: t.AssignmentPattern,
-    valueRef: t.Expression | null,
+    valueRef: t.Expression,
   ) {
     // handle array init with void 0. This also happens when
     // the value was originally a hole.
@@ -360,7 +360,7 @@ export class DestructuringTransformer {
 
     // Replace impure computed key expressions if we have a rest parameter
     if (hasObjectRest(pattern)) {
-      let copiedPattern: t.ObjectPattern;
+      let copiedPattern: t.ObjectPattern | undefined;
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
         if (t.isRestElement(prop)) {
@@ -406,7 +406,7 @@ export class DestructuringTransformer {
 
     // pattern has less elements than the array and doesn't have a rest so some
     // elements won't be evaluated
-    if (pattern.elements.length > arr.elements.length) return;
+    if (pattern.elements.length > arr.elements.length) return false;
     if (
       pattern.elements.length < arr.elements.length &&
       !hasArrayRest(pattern)
@@ -450,7 +450,7 @@ export class DestructuringTransformer {
     pattern: t.ArrayPattern,
     arr: UnpackableArrayExpression,
   ) {
-    const holeToUndefined = (el: t.Expression) =>
+    const holeToUndefined = (el: t.Expression | null) =>
       el ?? this.scope.buildUndefinedNode();
 
     for (let i = 0; i < pattern.elements.length; i++) {
@@ -657,7 +657,7 @@ export function convertVariableDeclaration(
   for (let i = 0; i < node.declarations.length; i++) {
     const declar = node.declarations[i];
 
-    const patternId = declar.init;
+    const patternId = declar.init!;
     const pattern = declar.id;
 
     const destructuring: DestructuringTransformer =
@@ -730,7 +730,7 @@ export function convertVariableDeclaration(
     // we can optimize them to
     //     babelHelpers.objectDestructuringEmpty(DESTRUCTURED_VALUE);
     const expr = nodesOut[1].expression;
-    expr.arguments = [nodesOut[0].declarations[0].init];
+    expr.arguments = [nodesOut[0].declarations[0].init!];
     nodesOut = [expr];
   } else {
     // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.

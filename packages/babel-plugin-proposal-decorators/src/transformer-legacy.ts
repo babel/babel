@@ -275,7 +275,7 @@ function applyTargetDecorators(
     }
 
     return acc;
-  }, []);
+  }, [] as t.Expression[]);
 
   return t.sequenceExpression([
     t.assignmentExpression("=", t.cloneNode(name), path.node),
@@ -330,7 +330,7 @@ const visitor: Visitor<PluginPass> = {
       const id = decl.node.id as t.Identifier;
 
       // TODO: Maybe add this logic to @babel/traverse
-      const binding = path.scope.getOwnBinding(id.name);
+      const binding = path.scope.getOwnBinding(id.name)!;
       binding.identifier = id;
       binding.path = decl;
     }
@@ -365,8 +365,8 @@ const visitor: Visitor<PluginPass> = {
             // @ts-expect-error todo(flow->ts) typesafe NodePath.get
             path.get("left.property").node.value,
         ),
-        t.cloneNode(path.get("right.arguments")[0].node),
-        t.cloneNode(path.get("right.arguments")[1].node),
+        t.cloneNode(path.get("right.arguments.0").node!),
+        t.cloneNode(path.get("right.arguments.1").node!),
       ]),
     );
   },
@@ -384,10 +384,10 @@ const visitor: Visitor<PluginPass> = {
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
-        t.cloneNode(path.get("arguments")[0].node),
-        t.cloneNode(path.get("arguments")[1].node),
-        t.cloneNode(path.get("arguments.2.arguments")[0].node),
-        t.cloneNode(path.get("arguments.2.arguments")[1].node),
+        t.cloneNode(path.get("arguments.0").node),
+        t.cloneNode(path.get("arguments.1").node),
+        t.cloneNode(path.get("arguments.2.arguments.0").node!),
+        t.cloneNode(path.get("arguments.2.arguments.1").node!),
       ]),
     );
   },

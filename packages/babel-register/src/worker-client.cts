@@ -14,7 +14,7 @@ class Client implements IClient {
     this.#send = send;
   }
 
-  #eCache: string[];
+  #eCache: string[] | undefined;
   getDefaultExtensions(): string[] {
     return (this.#eCache ??= this.#send(
       ACTIONS.GET_DEFAULT_EXTENSIONS,
