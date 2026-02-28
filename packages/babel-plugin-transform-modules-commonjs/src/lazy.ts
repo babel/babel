@@ -22,6 +22,7 @@ export const lazyImportsHook = (lazy: Lazy): CommonJSHook => ({
     if (typeof lazy === "function") {
       return lazy(source) ? "lazy/function" : null;
     }
+    return null;
   },
   buildRequireWrapper(name, init, payload, referenced) {
     if (payload === "lazy/function") {
@@ -34,8 +35,10 @@ export const lazyImportsHook = (lazy: Lazy): CommonJSHook => ({
         }
       `;
     }
+    return null;
   },
   wrapReference(ref, payload) {
     if (payload === "lazy/function") return t.callExpression(ref, []);
+    return null;
   },
 });

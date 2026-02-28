@@ -267,7 +267,7 @@ async function run(task: Test) {
   function getOpts(self: TestFile): any {
     const newOpts = {
       ast: true,
-      cwd: path.dirname(self.loc),
+      cwd: path.dirname(self.loc!),
       filename: self.loc,
       filenameRelative: self.filename,
       sourceFileName: self.filename,
@@ -278,14 +278,14 @@ async function run(task: Test) {
       ...opts,
     };
 
-    return resolveOptionPluginOrPreset(newOpts, optionsDir);
+    return resolveOptionPluginOrPreset(newOpts, optionsDir!);
   }
 
   let execCode = exec.code;
-  let result: FileResult;
+  let result: FileResult | undefined;
   let resultExec;
 
-  let execErr: Error;
+  let execErr: Error | undefined;
 
   if (execCode) {
     const context = createTestContext();
@@ -293,12 +293,14 @@ async function run(task: Test) {
 
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
-    ({ result } = await maybeMockConsole(validateLogs, () =>
-      babel.transformAsync(execCode, execOpts),
-    ));
+    result = (
+      await maybeMockConsole(validateLogs, async () =>
+        babel.transformAsync(execCode!, execOpts),
+      )
+    ).result!;
 
-    checkDuplicateNodes(result.ast);
-    execCode = result.code;
+    checkDuplicateNodes(result.ast!);
+    execCode = result.code!;
 
     try {
       resultExec = runCodeInTestContext(execCode, execOpts, context);
@@ -317,26 +319,25 @@ async function run(task: Test) {
   const inputCode = actual.code;
   const expectedCode = expected.code;
   if (!execCode || inputCode) {
-    let actualLogs;
+    const res = await maybeMockConsole(validateLogs, () =>
+      babel.transformAsync(inputCode!, getOpts(actual)),
+    );
+    result = res.result!;
 
-    ({ result, actualLogs } = await maybeMockConsole(validateLogs, () =>
-      babel.transformAsync(inputCode, getOpts(actual)),
-    ));
-
-    const outputCode = normalizeOutput(result.code, {
+    const outputCode = normalizeOutput(result.code!, {
       normalizePathSeparator: true,
     });
 
-    checkDuplicateNodes(result.ast);
+    checkDuplicateNodes(result.ast!);
     if (!ignoreOutput) {
       if (
-        !expected.code &&
+        !expectedCode &&
         outputCode &&
         !opts.throws &&
-        fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+        fs.statSync(path.dirname(expected.loc!)).isDirectory() &&
         !process.env.CI
       ) {
-        const expectedFile = expected.loc.replace(
+        const expectedFile = expected.loc!.replace(
           /\.m?js$/,
           result.sourceType === "module" ? ".mjs" : ".js",
         );
@@ -346,11 +347,11 @@ async function run(task: Test) {
 
         if (expected.loc !== expectedFile) {
           try {
-            fs.unlinkSync(expected.loc);
+            fs.unlinkSync(expected.loc!);
           } catch (_) {}
         }
       } else {
-        validateFile(outputCode, expected.loc, expectedCode);
+        validateFile(outputCode, expected.loc!, expectedCode!);
 
         if (inputCode) {
           expect(expected.loc).toMatch(
@@ -367,14 +368,14 @@ async function run(task: Test) {
       };
 
       validateFile(
-        normalizeOutput(actualLogs.stdout, normalizationOpts),
-        stdout.loc,
-        stdout.code,
+        normalizeOutput(res.actualLogs.stdout, normalizationOpts),
+        stdout.loc!,
+        stdout.code!,
       );
       validateFile(
-        normalizeOutput(actualLogs.stderr, normalizationOpts),
-        stderr.loc,
-        stderr.code,
+        normalizeOutput(res.actualLogs.stderr, normalizationOpts),
+        stderr.loc!,
+        stderr.code!,
       );
     }
   }
@@ -384,7 +385,7 @@ async function run(task: Test) {
   }
 
   if (task.validateSourceMapVisual === true) {
-    const visual = visualizeSourceMap(result.code, result.map);
+    const visual = visualizeSourceMap(result!.code!, result!.map);
     try {
       expect(visual).toEqual(task.sourceMapVisual.code);
     } catch (e) {
@@ -400,7 +401,7 @@ async function run(task: Test) {
 
   if (opts.sourceMaps === true) {
     try {
-      expect(result.map).toEqual(task.sourceMap);
+      expect(result!.map).toEqual(task.sourceMap);
     } catch (e) {
       if (!process.env.OVERWRITE && task.sourceMap) throw e;
 
@@ -409,7 +410,7 @@ async function run(task: Test) {
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(
         task.sourceMapFile.loc,
-        JSON.stringify(result.map, null, 2),
+        JSON.stringify(result!.map, null, 2),
       );
     }
   }
@@ -567,16 +568,16 @@ export type ProcessTestOpts = {
   executor?: string;
   ipc?: boolean;
   ipcMessage?: string;
-  stdout?: string;
-  stderr?: string;
-  stdin?: string;
-  stdoutPath?: string;
-  stderrPath?: string;
+  stdout: string;
+  stderr: string;
+  stdin: string;
+  stdoutPath: string;
+  stderrPath: string;
   stdoutContains?: boolean;
   stderrContains?: boolean;
-  testLoc?: string;
-  outFiles?: Record<string, string>;
-  inFiles?: Record<string, string>;
+  testLoc: string;
+  outFiles: Record<string, string>;
+  inFiles: Record<string, string>;
   noBabelrc?: boolean;
   minNodeVersion?: number;
   env?: Record<string, string>;
@@ -754,6 +755,14 @@ export function buildProcessTests(
 
       let opts: ProcessTestOpts = {
         args: [],
+        stdout: "",
+        stderr: "",
+        stdin: "",
+        stdoutPath: "",
+        stderrPath: "",
+        testLoc: "",
+        outFiles: {},
+        inFiles: {},
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
@@ -913,16 +922,16 @@ export function buildProcessTests(
             }
 
             if (opts.stdin) {
-              child.stdin.write(opts.stdin);
-              child.stdin.end();
+              child.stdin!.write(opts.stdin);
+              child.stdin!.end();
             }
 
             const captureOutput = (proc: ChildProcess) => {
-              proc.stderr.on("data", function (chunk) {
+              proc.stderr!.on("data", function (chunk) {
                 stderr += chunk;
               });
 
-              proc.stdout.on("data", function (chunk) {
+              proc.stdout!.on("data", function (chunk) {
                 stdout += chunk;
               });
             };
@@ -932,8 +941,8 @@ export function buildProcessTests(
                 cwd: tmpLoc,
               });
 
-              child.stdout.pipe(executor.stdin);
-              child.stderr.pipe(executor.stdin);
+              child.stdout!.pipe(executor.stdin);
+              child.stderr!.pipe(executor.stdin);
 
               executor.on("close", function () {
                 child.send("exit");

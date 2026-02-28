@@ -246,7 +246,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                 return true;
               }
 
-              let fileNameIdentifier: Identifier;
+              let fileNameIdentifier: Identifier | undefined;
               function makeSource(node: t.Node) {
                 const location = node.loc;
                 if (!location) {
@@ -327,7 +327,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           exit(path, file) {
             let callExpr;
             if (get(file, "runtime") === "classic") {
-              callExpr = buildCreateElementFragmentCall(path, file);
+              callExpr = buildCreateElementFragmentCall(path, file)!;
             } else {
               callExpr = buildJSXFragmentCall(path, file);
             }
@@ -621,7 +621,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       // In React.jsx, children is no longer a separate argument, but passed in
       // through the argument object
       if (children?.length > 0) {
-        props.push(buildChildrenProperty(children));
+        props.push(buildChildrenProperty(children)!);
       }
 
       return t.objectExpression(props);
@@ -646,7 +646,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   //@ts-expect-error The children here contains JSXSpreadChild,
                   // which will be thrown later
                   children,
-                ),
+                )!,
               ]
             : [],
         ),
@@ -704,7 +704,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         openingPath.node,
       );
 
-      let tagName: string;
+      let tagName: string | undefined;
       if (t.isIdentifier(tagExpr)) {
         tagName = tagExpr.name;
       } else if (t.isStringLiteral(tagExpr)) {
@@ -712,7 +712,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
 
       if (t.react.isCompatTag(tagName)) {
-        return t.stringLiteral(tagName);
+        return t.stringLiteral(tagName!);
       } else {
         return tagExpr;
       }
@@ -792,7 +792,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     source: string,
   ): () => Identifier | MemberExpression {
     return () => {
-      const actualSource = getSource(source, importName);
+      const actualSource = getSource(source, importName)!;
       if (isModule(path)) {
         let reference = get(pass, `imports/${importName}`);
         if (reference) return t.cloneNode(reference);

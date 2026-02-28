@@ -173,8 +173,7 @@ export default declare((api, options: Options) => {
     },
 
     visitor: {
-      ["CallExpression" +
-        (api.types.importExpression ? "|ImportExpression" : "")](
+      "CallExpression|ImportExpression"(
         this: PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
       ) {
@@ -184,7 +183,7 @@ export default declare((api, options: Options) => {
         let { scope } = path;
         do {
           scope.rename("require");
-        } while ((scope = scope.parent));
+        } while ((scope = scope.parent!));
 
         transformDynamicImport(path, noInterop, this.file);
       },
@@ -240,7 +239,7 @@ export default declare((api, options: Options) => {
               t.stringLiteral(source),
             ]);
 
-            let header: t.Statement;
+            let header: t.Statement | null;
             if (isSideEffectImport(metadata)) {
               if (lazy && metadata.wrap === "function") {
                 throw new Error("Assertion failure");
@@ -252,7 +251,7 @@ export default declare((api, options: Options) => {
                 wrapInterop(path, loadExpr, metadata.interop) || loadExpr;
 
               if (metadata.wrap) {
-                const res = hooks.buildRequireWrapper(
+                const res = hooks.buildRequireWrapper!(
                   metadata.name,
                   init,
                   metadata.wrap,

@@ -98,7 +98,7 @@ export function importToPlatformApi(
   ) {
     case p({ toCJS: true, supportIsomorphicCJS: true }):
       buildFetchSync = (specifier, file) =>
-        transformers.commonJS(t.identifier("require"), specifier, file);
+        transformers.commonJS!(t.identifier("require"), specifier, file);
       break;
     case p({ web: true, node: true }):
       buildFetchAsync = (specifier, file) => {
@@ -110,7 +110,7 @@ export function importToPlatformApi(
         );
         const node = supportIsomorphicCJS
           ? template.expression.ast`
-              import("module").then(module => ${transformers.commonJS(
+              import("module").then(module => ${transformers.commonJS!(
                 template.expression.ast`module.createRequire(import.meta.url)`,
                 specifier,
                 file,
@@ -179,7 +179,7 @@ export function importToPlatformApi(
       supportIsomorphicCJS: true,
     }):
       buildFetchSync = (specifier, file) =>
-        transformers.commonJS(
+        transformers.commonJS!(
           template.expression.ast`
             ${imp(file, "createRequire", "module")}(import.meta.url)
           `,
@@ -231,7 +231,7 @@ export function importToPlatformApi(
       throw new Error("Internal Babel error: unreachable code.");
   }
 
-  buildFetchAsync ??= buildFetchSync;
+  buildFetchAsync ??= buildFetchSync!;
   const buildFetchAsyncWrapped: typeof buildFetchAsync = (expression, path) => {
     if (t.isStringLiteral(expression)) {
       return template.expression.ast`
@@ -247,8 +247,8 @@ export function importToPlatformApi(
     }
   };
 
-  let buildFetch = buildFetchSync;
-  if (!buildFetchSync) {
+  let buildFetch = buildFetchSync!;
+  if (!buildFetchSync!) {
     if (toCommonJS) {
       buildFetch = (specifier, file) => {
         throw file.buildCodeFrameError(
@@ -264,7 +264,7 @@ export function importToPlatformApi(
   return {
     buildFetch,
     buildFetchAsync: buildFetchAsyncWrapped,
-    needsAwait: !buildFetchSync,
+    needsAwait: !buildFetchSync!,
   };
 }
 

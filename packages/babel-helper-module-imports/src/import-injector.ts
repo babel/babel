@@ -149,14 +149,17 @@ export default class ImportInjector {
     this._defaultOpts = this._applyDefaults(importedSource, opts, true);
   }
 
-  addDefault(importedSourceIn: string, opts: Partial<ImportOptions>) {
+  addDefault(
+    importedSourceIn: string,
+    opts: Partial<ImportOptions> | undefined,
+  ) {
     return this.addNamed("default", importedSourceIn, opts);
   }
 
   addNamed(
     importName: string,
     importedSourceIn: string,
-    opts: Partial<ImportOptions>,
+    opts: Partial<ImportOptions> | undefined,
   ) {
     assert(typeof importName === "string");
 
@@ -166,14 +169,20 @@ export default class ImportInjector {
     );
   }
 
-  addNamespace(importedSourceIn: string, opts: Partial<ImportOptions>) {
+  addNamespace(
+    importedSourceIn: string,
+    opts: Partial<ImportOptions> | undefined,
+  ) {
     return this._generateImport(
       this._applyDefaults(importedSourceIn, opts),
       null,
     );
   }
 
-  addSideEffect(importedSourceIn: string, opts: Partial<ImportOptions>) {
+  addSideEffect(
+    importedSourceIn: string,
+    opts: Partial<ImportOptions> | undefined,
+  ) {
     return this._generateImport(
       this._applyDefaults(importedSourceIn, opts),
       void 0,
@@ -181,7 +190,7 @@ export default class ImportInjector {
   }
 
   _applyDefaults(
-    importedSource: string | Partial<ImportOptions>,
+    importedSource: string | Partial<ImportOptions> | undefined,
     opts: Partial<ImportOptions> | undefined,
     isInit = false,
   ) {
@@ -189,7 +198,6 @@ export default class ImportInjector {
     if (typeof importedSource === "string") {
       newOpts = { ...this._defaultOpts, importedSource, ...opts };
     } else {
-      assert(!opts, "Unexpected secondary arguments.");
       newOpts = { ...this._defaultOpts, ...importedSource };
     }
 
@@ -209,7 +217,6 @@ export default class ImportInjector {
     const isNamespace = importName === null;
 
     const {
-      importedSource,
       importedType,
       importedInterop,
       importingInterop,
@@ -223,11 +230,12 @@ export default class ImportInjector {
       // This is ignored when "importPosition" is "after".
       blockHoist,
     } = opts;
+    const importedSource = opts.importedSource!;
 
     // Provide a hint for generateUidIdentifier for the local variable name
     // to use for the import, if the code will generate a simple assignment
     // to a variable.
-    let name = nameHint || importName;
+    let name = (nameHint || importName) ?? undefined;
 
     const isMod = isModule(this._programPath);
     const isModuleForNode = isMod && importingInterop === "node";
@@ -331,7 +339,7 @@ export default class ImportInjector {
         if (isNamespace) {
           builder.default(name || importedSource);
         } else if (isDefault || isNamed) {
-          builder.default(importedSource).read(name);
+          builder.default(importedSource).read(name!);
         }
       } else if (isModuleForBabel) {
         // import * as namespace from ''; namespace
@@ -356,7 +364,7 @@ export default class ImportInjector {
           builder.var(name || importedSource);
         } else if (isDefault || isNamed) {
           if (ensureLiveReference) {
-            builder.var(importedSource).read(name);
+            builder.var(importedSource).read(name!);
           } else {
             builder.prop(importName).var(name);
           }
@@ -377,7 +385,7 @@ export default class ImportInjector {
         } else if (isDefault) {
           builder.default(name);
         } else if (isNamed) {
-          builder.default(importedSource).read(name);
+          builder.default(importedSource).read(name!);
         }
       } else if (isModuleForBabel) {
         // import namespace from '';
@@ -407,7 +415,7 @@ export default class ImportInjector {
           builder.var(name);
         } else if (isNamed) {
           if (ensureLiveReference) {
-            builder.var(importedSource).read(name);
+            builder.var(importedSource).read(name!);
           } else {
             builder.var(name).prop(importName);
           }
@@ -492,7 +500,7 @@ export default class ImportInjector {
       if (isImportDeclaration(statement) && isValueImport(statement)) {
         const source = statement.source.value;
         if (!importDeclarations.has(source)) importDeclarations.set(source, []);
-        importDeclarations.get(source).push(statement);
+        importDeclarations.get(source)!.push(statement);
       }
     }
 
@@ -561,7 +569,7 @@ function maybeAppendImportSpecifiers(
         identifier("default"),
       );
     } else {
-      target.specifiers.unshift(source.specifiers.shift());
+      target.specifiers.unshift(source.specifiers.shift()!);
     }
   }
 
