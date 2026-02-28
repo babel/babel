@@ -133,6 +133,27 @@ describe("@babel/template", function () {
       expect(result.type).toBe("ExpressionStatement");
       expect(result.expression).toBe(id);
     });
+    it("should throw when using deprecated placeholderWhitelist without placeholderAllowlist", () => {
+      expect(() => {
+        template("FOO;", { placeholderWhitelist: new Set(["FOO"]) });
+      }).toThrow(/placeholderWhitelist.*renamed.*placeholderAllowlist/);
+    });
+
+    it("should not throw when both placeholderWhitelist and placeholderAllowlist are provided", () => {
+      const id = t.identifier("someIdent");
+      const result = template(
+        `
+          some_id;
+        `,
+        {
+          placeholderWhitelist: new Set(["some_id"]),
+          placeholderAllowlist: new Set(["some_id"]),
+        },
+      )({ some_id: id });
+
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression).toBe(id);
+    });
 
     it("should allow passing in a RegExp to match replacement patterns", () => {
       const id = t.identifier("someIdent");
