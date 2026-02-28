@@ -34,13 +34,17 @@ export function defineCommonJSHook(file: File, hook: CommonJSHook) {
   hooks.push(hook);
 }
 
-function findMap<T, U>(arr: T[] | null, cb: (el: T) => U): U | null {
+function findMap<T, U>(
+  arr: T[] | null,
+  cb: (el: T) => U,
+): NonNullable<U> | null {
   if (arr) {
     for (const el of arr) {
       const res = cb(el);
-      if (res != null) return res;
+      if (res != null) return res ?? null;
     }
   }
+  return null;
 }
 
 export function makeInvokers(

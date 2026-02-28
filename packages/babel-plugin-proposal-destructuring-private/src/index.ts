@@ -53,7 +53,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         "body",
         variableDeclaration,
       );
-      params.push(...transformedParams);
+      params.push(...(transformedParams as (t.Identifier | t.RestElement)[]));
       // preserve function.length
       // (b, p1) => {}
       // transforms to
@@ -80,7 +80,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         .get("body")
         .unshiftContainer(
           "body",
-          variableDeclaration("let", [variableDeclarator(node.param, ref)]),
+          variableDeclaration("let", [variableDeclarator(node.param!, ref)]),
         );
       node.param = cloneNode(ref);
       scope.crawl();
