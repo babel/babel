@@ -3,24 +3,34 @@ import { types as t } from "@babel/core";
 
 export interface Options {
   helperVersion?: string;
-  whitelist?: false | string[];
+  allowlist?: false | string[];
 }
 
 export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  const { helperVersion = "7.0.0-beta.0", whitelist = false } = options;
+  if (Object.hasOwn(options, "whitelist")) {
+    if (!Object.hasOwn(options, "allowlist")) {
+      throw new Error(
+        "The 'whitelist' option has been renamed to 'allowlist'. " +
+          "Please update your configuration.",
+      );
+    }
+    // Both options provided: new option takes precedence (supports Babel 7/8 cross-version compat)
+  }
+
+  const { helperVersion = "7.0.0-beta.0", allowlist = false } = options;
 
   if (
-    whitelist !== false &&
-    (!Array.isArray(whitelist) || whitelist.some(w => typeof w !== "string"))
+    allowlist !== false &&
+    (!Array.isArray(allowlist) || allowlist.some(w => typeof w !== "string"))
   ) {
     throw new Error(
-      ".whitelist must be undefined, false, or an array of strings",
+      ".allowlist must be undefined, false, or an array of strings",
     );
   }
 
-  const helperWhitelist = whitelist ? new Set(whitelist) : null;
+  const helperAllowlist = allowlist ? new Set(allowlist) : null;
 
   return {
     name: "external-helpers",
@@ -36,11 +46,12 @@ export default declare((api, options: Options) => {
           return;
         }
 
-        // babelCore.buildExternalHelpers() allows a whitelist of helpers that
-        // will be inserted into the external helpers list. That same whitelist
-        // should be passed into the plugin here in that case, so that we can
-        // avoid referencing 'babelHelpers.XX' when the helper does not exist.
-        if (helperWhitelist && !helperWhitelist.has(name)) return;
+        // babelCore.buildExternalHelpers() allows an allowlist of helpers
+        // that will be inserted into the external helpers list. That same
+        // allowlist should be passed into the plugin here in that case, so
+        // that we can avoid referencing 'babelHelpers.XX' when the helper
+        // does not exist.
+        if (helperAllowlist && !helperAllowlist.has(name)) return;
 
         return t.memberExpression(
           t.identifier("babelHelpers"),

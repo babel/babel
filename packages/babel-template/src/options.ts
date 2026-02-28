@@ -13,13 +13,13 @@ export type PublicOpts = {
    *
    * This option can be used when using %%foo%% style placeholders.
    */
-  placeholderWhitelist?: Set<string>;
+  placeholderAllowlist?: Set<string>;
   /**
    * A pattern to search for when looking for Identifier and StringLiteral
    * nodes that can be replaced.
    *
    * 'false' will disable placeholder searching entirely, leaving only the
-   * 'placeholderWhitelist' value to find replacements.
+   * 'placeholderAllowlist' value to find replacements.
    *
    * Defaults to /^[_$A-Z0-9]+$/.
    *
@@ -33,7 +33,7 @@ export type PublicOpts = {
   preserveComments?: boolean;
   /**
    * 'true' to use %%foo%% style placeholders, 'false' to use legacy placeholders
-   * described by placeholderPattern or placeholderWhitelist.
+   * described by placeholderPattern or placeholderAllowlist.
    * When it is not set, it behaves as 'true' if there are syntactic placeholders,
    * otherwise as 'false'.
    */
@@ -42,7 +42,7 @@ export type PublicOpts = {
 
 export type TemplateOpts = {
   parser: ParserOpts;
-  placeholderWhitelist?: Set<string>;
+  placeholderAllowlist?: Set<string>;
   placeholderPattern?: RegExp | false;
   preserveComments?: boolean;
   syntacticPlaceholders?: boolean;
@@ -50,7 +50,7 @@ export type TemplateOpts = {
 
 export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
   const {
-    placeholderWhitelist = a.placeholderWhitelist,
+    placeholderAllowlist = a.placeholderAllowlist,
     placeholderPattern = a.placeholderPattern,
     preserveComments = a.preserveComments,
     syntacticPlaceholders = a.syntacticPlaceholders,
@@ -61,7 +61,7 @@ export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
       ...a.parser,
       ...b.parser,
     },
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
@@ -73,17 +73,27 @@ export function validate(opts: unknown): TemplateOpts {
     throw new Error("Unknown template options.");
   }
 
+  if (opts != null && Object.hasOwn(opts, "placeholderWhitelist")) {
+    if (!Object.hasOwn(opts, "placeholderAllowlist")) {
+      throw new Error(
+        "The 'placeholderWhitelist' option has been renamed to " +
+          "'placeholderAllowlist'. Please update your configuration.",
+      );
+    }
+    // Both options provided: new option takes precedence (supports Babel 7/8 cross-version compat)
+  }
+
   const {
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
     ...parser
   } = opts || ({} as any);
 
-  if (placeholderWhitelist != null && !(placeholderWhitelist instanceof Set)) {
+  if (placeholderAllowlist != null && !(placeholderAllowlist instanceof Set)) {
     throw new Error(
-      "'.placeholderWhitelist' must be a Set, null, or undefined",
+      "'.placeholderAllowlist' must be a Set, null, or undefined",
     );
   }
 
@@ -113,17 +123,17 @@ export function validate(opts: unknown): TemplateOpts {
   }
   if (
     syntacticPlaceholders === true &&
-    (placeholderWhitelist != null || placeholderPattern != null)
+    (placeholderAllowlist != null || placeholderPattern != null)
   ) {
     throw new Error(
-      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+      "'.placeholderAllowlist' and '.placeholderPattern' aren't compatible" +
         " with '.syntacticPlaceholders: true'",
     );
   }
 
   return {
     parser,
-    placeholderWhitelist: placeholderWhitelist || undefined,
+    placeholderAllowlist: placeholderAllowlist || undefined,
     placeholderPattern:
       placeholderPattern == null ? undefined : placeholderPattern,
     preserveComments: preserveComments == null ? undefined : preserveComments,

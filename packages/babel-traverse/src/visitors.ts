@@ -54,6 +54,19 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   // @ts-expect-error `visitor` will be cast to ExplodedVisitor by this function
   visitor._exploded = true;
 
+  // Handle deprecated 'blacklist' option: only error if 'denylist' is not also provided.
+  // If both are present, 'denylist' takes precedence (supports Babel 7/8 cross-version compat).
+  if (Object.hasOwn(visitor as object, "blacklist")) {
+    if (!Object.hasOwn(visitor as object, "denylist")) {
+      throw new Error(
+        "The 'blacklist' visitor option has been renamed to 'denylist'. " +
+          "Please update your configuration.",
+      );
+    }
+    // Both provided — 'denylist' will be used; 'blacklist' key is silently ignored.
+    delete (visitor as any).blacklist;
+  }
+
   // normalise pipes
   for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
@@ -348,8 +361,7 @@ function shouldIgnoreKey(key: string): key is
   | "shouldSkip"
   | "denylist"
   | "noScope"
-  | "skipKeys"
-  | "blacklist" {
+  | "skipKeys" {
   // internal/hidden key
   if (key.startsWith("_")) return true;
 
@@ -359,6 +371,13 @@ function shouldIgnoreKey(key: string): key is
   // ignore other options
   if (key === "denylist" || key === "noScope" || key === "skipKeys") {
     return true;
+  }
+
+  if (key === "blacklist") {
+    throw new Error(
+      "The 'blacklist' visitor option has been renamed to 'denylist'. " +
+        "Please update your configuration.",
+    );
   }
 
   return false;

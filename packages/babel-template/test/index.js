@@ -121,13 +121,34 @@ describe("@babel/template", function () {
       expect(result[1].expression).toEqual(id);
     });
 
-    it("should allow passing in a whitelist of replacement names", () => {
+    it("should allow passing in an allowlist of replacement names", () => {
       const id = t.identifier("someIdent");
       const result = template(
         `
           some_id;
         `,
-        { placeholderWhitelist: new Set(["some_id"]) },
+        { placeholderAllowlist: new Set(["some_id"]) },
+      )({ some_id: id });
+
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression).toBe(id);
+    });
+    it("should throw when using deprecated placeholderWhitelist without placeholderAllowlist", () => {
+      expect(() => {
+        template("FOO;", { placeholderWhitelist: new Set(["FOO"]) });
+      }).toThrow(/placeholderWhitelist.*renamed.*placeholderAllowlist/);
+    });
+
+    it("should not throw when both placeholderWhitelist and placeholderAllowlist are provided", () => {
+      const id = t.identifier("someIdent");
+      const result = template(
+        `
+          some_id;
+        `,
+        {
+          placeholderWhitelist: new Set(["some_id"]),
+          placeholderAllowlist: new Set(["some_id"]),
+        },
       )({ some_id: id });
 
       expect(result.type).toBe("ExpressionStatement");
@@ -176,7 +197,7 @@ describe("@babel/template", function () {
       }).toThrow(
         `Error: No substitution given for "ANOTHER_ID". If this is not meant to be a
             placeholder you may want to consider passing one of the following options to @babel/template:
-            - { placeholderPattern: false, placeholderWhitelist: new Set(['ANOTHER_ID'])}
+            - { placeholderPattern: false, placeholderAllowlist: new Set(['ANOTHER_ID'])}
             - { placeholderPattern: /^ANOTHER_ID$/ }`,
       );
     });
@@ -416,11 +437,11 @@ describe("@babel/template", function () {
       }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
 
-    it("whitelist", () => {
+    it("allowlist", () => {
       expect(() => {
         template(`%%A%% + %%B%%`, {
           placeholderPattern: false,
-          placeholderWhitelist: new Set(["B"]),
+          placeholderAllowlist: new Set(["B"]),
         })();
       }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
