@@ -20,6 +20,7 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "incremental": true,
     "stripInternal": true
   },
