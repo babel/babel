@@ -2,8 +2,7 @@
 {
   "extends": [
     "../../tsconfig.base.json",
-    "../../tsconfig.paths.json",
-    "./tsconfig.overrides.json"
+    "../../tsconfig.paths.json"
   ],
   "include": [
     "./src/**/*.ts",
