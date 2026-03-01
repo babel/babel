@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "transform-react-jsx-development",
+    ["transform-react-jsx-development", { "developmentSourceSelf": true }],
     "syntax-typescript",
     "syntax-jsx"
   ],

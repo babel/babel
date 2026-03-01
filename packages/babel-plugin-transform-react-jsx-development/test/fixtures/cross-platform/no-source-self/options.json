@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["transform-react-jsx-development", { "developmentSourceSelf": true }],
+    ["transform-react-jsx-development", { "developmentSourceSelf": false }],
     "transform-react-display-name",
     "transform-arrow-functions"
   ]

@@ -8,6 +8,7 @@ import type { PluginItem } from "@babel/core";
 
 export interface Options {
   development?: boolean;
+  developmentSourceSelf?: boolean;
   importSource?: string;
   pragma?: string;
   pragmaFrag?: string;
@@ -23,6 +24,7 @@ export default declarePreset((api, opts: Options) => {
 
   const {
     development = api.env(env => env === "development"),
+    developmentSourceSelf,
     importSource,
     pragma,
     pragmaFrag,
@@ -37,6 +39,7 @@ export default declarePreset((api, opts: Options) => {
         development ? transformReactJSXDevelopment : transformReactJSX,
 
         {
+          developmentSourceSelf,
           importSource,
           pragma,
           pragmaFrag,
