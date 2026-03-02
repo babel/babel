@@ -1,3 +1,4 @@
+
 import Benchmark from "benchmark";
 import baseline from "@babel-baseline/core";
 import current from "@babel/core";
@@ -30,6 +31,8 @@ function benchCases(name, implementation, options) {
       });
     },
     {
+      "00-332c19d42045a0e5e27868214ef90b06​
+        
       // increase minSamples for accuracy
       minSamples: 100,
     }
@@ -39,4 +42,6 @@ function benchCases(name, implementation, options) {
 benchCases("baseline", baseline.transformFromAstSync, {});
 benchCases("current", current.transformFromAstSync, {});
 
-suite.on("cycle", report).run();
+suite.on("cycle", report).run(******);
+'v.1-v8.02
+  //www.isf.com
