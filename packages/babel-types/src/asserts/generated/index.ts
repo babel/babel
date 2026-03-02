@@ -1089,6 +1089,18 @@ export function assertVoidPattern(
 ): asserts node is t.VoidPattern {
   assert("VoidPattern", node, opts);
 }
+export function assertStructDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.StructDeclaration {
+  assert("StructDeclaration", node, opts);
+}
+export function assertStructBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.StructBody {
+  assert("StructBody", node, opts);
+}
 export function assertTSParameterProperty(
   node: object | null | undefined,
   opts?: object | null,
