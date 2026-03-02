@@ -13,10 +13,10 @@ A monorepo, muhahahahahaha. See the [monorepo design doc](/doc/design/monorepo.m
 
 | Package | Version |
 |---------|---------|
-| [`@babel/core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/@babel/core.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/core) |
-| [`@babel/parser`](/packages/babel-parser) | [![npm](https://img.shields.io/npm/v/@babel/parser.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/parser) |
-| [`@babel/traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/@babel/traverse.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/traverse) |
-| [`@babel/generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/@babel/generator.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/generator) |
+| [`@babel/core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/@babel/core.svg?maxAge=3600)](https://npmx.dev/package/@babel/core) |
+| [`@babel/parser`](/packages/babel-parser) | [![npm](https://img.shields.io/npm/v/@babel/parser.svg?maxAge=3600)](https://npmx.dev/package/@babel/parser) |
+| [`@babel/traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/@babel/traverse.svg?maxAge=3600)](https://npmx.dev/package/@babel/traverse) |
+| [`@babel/generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/@babel/generator.svg?maxAge=3600)](https://npmx.dev/package/@babel/generator) |
 
 [`@babel/core`](/packages/babel-core) is the Babel compiler itself; it exposes the `babel.transform` method, where `transformedCode = transform(src).code`.
 
@@ -36,13 +36,13 @@ Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/
 
 | Package | Version |
 |---------|---------|
-| [`@babel/cli`](/packages/babel-cli) | [![npm](https://img.shields.io/npm/v/@babel/cli.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/cli) |
-| [`@babel/types`](/packages/babel-types) | [![npm](https://img.shields.io/npm/v/@babel/types.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/types) |
-| [`@babel/runtime`](/packages/babel-runtime) | [![npm](https://img.shields.io/npm/v/@babel/runtime.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/runtime) |
-| [`@babel/register`](/packages/babel-register) | [![npm](https://img.shields.io/npm/v/@babel/register.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/register) |
-| [`@babel/template`](/packages/babel-template) | [![npm](https://img.shields.io/npm/v/@babel/template.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/template) |
-| [`@babel/helpers`](/packages/babel-helpers) | [![npm](https://img.shields.io/npm/v/@babel/helpers.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/helpers) |
-| [`@babel/code-frame`](/packages/babel-code-frame) | [![npm](https://img.shields.io/npm/v/@babel/code-frame.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/code-frame) |
+| [`@babel/cli`](/packages/babel-cli) | [![npm](https://img.shields.io/npm/v/@babel/cli.svg?maxAge=3600)](https://npmx.dev/package/@babel/cli) |
+| [`@babel/types`](/packages/babel-types) | [![npm](https://img.shields.io/npm/v/@babel/types.svg?maxAge=3600)](https://npmx.dev/package/@babel/types) |
+| [`@babel/runtime`](/packages/babel-runtime) | [![npm](https://img.shields.io/npm/v/@babel/runtime.svg?maxAge=3600)](https://npmx.dev/package/@babel/runtime) |
+| [`@babel/register`](/packages/babel-register) | [![npm](https://img.shields.io/npm/v/@babel/register.svg?maxAge=3600)](https://npmx.dev/package/@babel/register) |
+| [`@babel/template`](/packages/babel-template) | [![npm](https://img.shields.io/npm/v/@babel/template.svg?maxAge=3600)](https://npmx.dev/package/@babel/template) |
+| [`@babel/helpers`](/packages/babel-helpers) | [![npm](https://img.shields.io/npm/v/@babel/helpers.svg?maxAge=3600)](https://npmx.dev/package/@babel/helpers) |
+| [`@babel/code-frame`](/packages/babel-code-frame) | [![npm](https://img.shields.io/npm/v/@babel/code-frame.svg?maxAge=3600)](https://npmx.dev/package/@babel/code-frame) |
 
 - [`@babel/cli`](/packages/babel-cli) is the CLI tool that runs `@babel/core` and helps with outputting to a directory, a file, stdout and more (also includes `@babel/node` cli). Check out the [docs](https://babeljs.io/docs/usage/cli/).
 - [`@babel/types`](/packages/babel-types) is used to validate, build and change AST nodes.
@@ -60,15 +60,15 @@ The transformer[s] used in Babel are the independent pieces of code that transfo
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [`@babel/preset-env`](/packages/babel-preset-env) | [![npm](https://img.shields.io/npm/v/@babel/preset-env.svg?maxAge=?maxAge=3600)](https://www.npmjs.com/package/@babel/preset-env) | automatically determines plugins and polyfills you need based on your supported environments |
+| [`@babel/preset-env`](/packages/babel-preset-env) | [![npm](https://img.shields.io/npm/v/@babel/preset-env.svg?maxAge=3600)](https://npmx.dev/package/@babel/preset-env) | automatically determines plugins and polyfills you need based on your supported environments |
 
-> You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
+> You can find community maintained presets on [npm](https://npmx.dev/search?q=babel-preset)
 
 ### [Plugins](http://babeljs.io/docs/plugins)
 
 Plugins are the heart of Babel and what make it work.
 
-> You can find community plugins on [npm](https://www.npmjs.com/search?q=babel-plugin).
+> You can find community plugins on [npm](https://npmx.dev/search?q=babel-plugin).
 
 #### Transform Plugins
 
