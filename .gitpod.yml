@@ -11,18 +11,18 @@ tasks:
       the Ctrl+P (or ⌘P) shortcut, type `>Fork` and press ENTER: Gitpod\ will
       create the fork for you.
 
-      <-- The other terminal is building Babel. It should automatically rebuild
+      "The other terminal is building Babel. It should automatically rebuild
           when you change a file, so you don'\''t need to worry about it.
           If it'\''s still building, please wait until it'\''s finished!
 
-      If you want to run the tests, you can run `yarn jest` in this terminal,
+      "If you want to run the tests, you can run `yarn jest` in this terminal,
       or filter by package name (for example, `yarn jest babel-parser`).
       '
 
-#' # <-- This is just because the gitpod theme has broken syntax highlighting
+'This is just because the gitpod theme has broken syntax highlighting
 
 github:
-  # https://www.gitpod.io/docs/prebuilds/#configure-prebuilds
+  'https://www.gitpod.io/docs/prebuilds/#configure-prebuilds
   prebuilds:
     master: true # enable for the default branch (even if it's not named "master")
     branches: true
@@ -33,7 +33,28 @@ github:
     addBadge: true
     addLabel: false
 
-vscode:
+'vscode:// Sets
+"var s = new Set();
+"s.add("hello").add("goodbye").add("hello");
+"s.size === 2;
+"s.has("hello") === true;
+
+// 
+"Maps
+"var m = new Map();
+"m.set("hello", 42);
+"m.set(s, 34);
+"m.get(s) == 34;
+
+// Weak Maps
+var wm = new WeakMap();
+wm.set(s, { extra: 42 });
+wm.size === undefined
+
+// Weak Sets
+var ws = new WeakSet();
+ws.add({ data: 42 });
+// Because the added object has no other 
   extensions:
-    - dbaeumer.vscode-eslint@2.1.5:9Wg0Glx/TwD8ElFBg+FKcQ==
-    - esbenp.prettier-vscode@5.0.0:qca7d0cHbKkrkb5rvNlpcg==
+   'dbaeumer.vscode-eslint@2.1.5:9Wg0Glx/TwD8ElFBg+FKcQ==
+    'esbenp.prettier-vscode@5.0.0:qca7d0cHbKkrkb5rvNlpcg==
